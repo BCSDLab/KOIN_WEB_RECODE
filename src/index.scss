@@ -1,1 +1,3 @@
-@import 'node_modules/reset-css/sass/_reset.scss';
+/* stylelint-disable scss/at-import-no-partial-leading-underscore */
+@import "node_modules/reset-css/sass/_reset";
+/* stylelint-enable scss/at-import-no-partial-leading-underscore */
