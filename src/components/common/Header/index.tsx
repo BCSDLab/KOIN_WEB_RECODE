@@ -4,24 +4,47 @@ import CATEGORY, { ICategory, ISubMenu } from 'static/category';
 import cn from 'utils/ts/classnames';
 import styles from './Header.module.scss';
 
+const ID: { [key: string]: string; } = {
+  PANEL: 'megamenu-panel',
+  LABEL1: 'megamenu-label-1',
+  LABEL2: 'megamenu-label-2',
+};
+
 const useMegaMenu = (category: ICategory[]) => {
   const [panelMenuList, setPanelMenuList] = useState<ISubMenu[] | null>();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const createOnChangeMenu = (title: string) => () => {
     const selectedSubMenu = category
       .find((categoryInfo) => categoryInfo.title === title)?.submenu ?? null;
     setPanelMenuList(selectedSubMenu);
+    setIsExpanded(true);
+  };
+  const onFocusPanel = () => {
+    setIsExpanded(true);
+  };
+  const onBlurMegaMenu = () => {
+    setIsExpanded(false);
   };
 
   return {
     panelMenuList,
+    isExpanded,
     createOnChangeMenu,
+    onFocusPanel,
+    onBlurMegaMenu,
   };
 };
 
 function Header() {
   const { pathname } = useLocation();
-  const { panelMenuList, createOnChangeMenu } = useMegaMenu(CATEGORY);
+  const {
+    panelMenuList,
+    isExpanded,
+    createOnChangeMenu,
+    onFocusPanel,
+    onBlurMegaMenu,
+  } = useMegaMenu(CATEGORY);
   // TODO: Auth 모듈이 만들어지면 그 때 변경
   const [token] = useState(false);
 
@@ -45,9 +68,11 @@ function Header() {
             [styles['Header__mega-menu']]: true,
             [styles.MegaMenu]: true,
           })}
+          onBlur={onBlurMegaMenu}
+          onMouseOut={onBlurMegaMenu}
         >
           <ul className={styles['MegaMenu__trigger-list']}>
-            {CATEGORY.map((category) => (
+            {CATEGORY.map((category, index) => (
               <li
                 key={category.title}
               >
@@ -58,13 +83,24 @@ function Header() {
                   onClick={createOnChangeMenu(category.title)}
                   onFocus={createOnChangeMenu(category.title)}
                   onMouseOver={createOnChangeMenu(category.title)}
+                  aria-expanded={isExpanded}
+                  aria-controls={ID[`LABEL${index + 1}`]}
                 >
-                  {category.title}
+                  <span>
+                    {category.title}
+                  </span>
                 </button>
               </li>
             ))}
           </ul>
-          <div className={styles.MegaMenu__panel}>
+          <div
+            id={ID.PANEL}
+            className={styles.MegaMenu__panel}
+            onFocus={onFocusPanel}
+            onMouseOver={onFocusPanel}
+            aria-hidden={!isExpanded}
+            aria-labelledby={Array.from({ length: 2 }, (_, index) => ID[`LABEL${index + 1}`]).join(' ')}
+          >
             <ul className={styles.MegaMenu__content}>
               {panelMenuList?.map((menu) => (
                 <li className={styles.MegaMenu__menu}>
