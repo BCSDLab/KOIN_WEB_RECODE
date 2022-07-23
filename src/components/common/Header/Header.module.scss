@@ -18,7 +18,7 @@
     left: 0;
     z-index: 20;
     border-bottom: none;
-    animation: slide-enter .3s ease-out;
+    animation: slide-left-enter .3s ease-out;
 
     &--main {
       height: 77px;
@@ -32,8 +32,8 @@
     margin: 0 auto;
     display: flex;
     align-items: center;
-    @media (max-width: 576px) {
-      display: none;
+    @include media-breakpoint(mobile) {
+      width: auto;
     }
   }
 
@@ -105,7 +105,6 @@
   &__trigger {
     display: block;
     border: none;
-    outline: none;
     float: left;
     padding: 0 20px;
     height: 80px;
@@ -176,7 +175,261 @@
   }
 }
 
-@keyframes slide-enter {
+.MobileHeader {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  text-align: center;
+  .Header--main & {
+    padding: 20px;
+  }
+  &__icon {
+    position: absolute;
+    top: 16px;
+    padding: 0;
+    border: 0;
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    cursor: pointer;
+
+    & > img {
+      width: 24px;
+      height: 24px;
+    }
+    .Header--main & {
+      top: 24px;
+    }
+
+    &--left {
+      left: 16px;
+    }
+    &--right {
+      right: 16px;
+      .Header--main & {
+        right: 26px;
+      }
+    }
+  }
+
+  &__title {
+    font-size: 16px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .Header--main & {
+      justify-content: flex-start;
+    }
+
+    & > img {
+      width: 58px;
+      height: 32px;
+    }
+  }
+
+  &__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 100vw;
+    height: 100vh;
+    min-width: 360px;
+    padding-bottom: 40px;
+    background-color: #fff;
+    z-index: 20;
+    overflow: scroll;
+    transform: translateX(100%);
+    transition: all .3s cubic-bezier(0, 0, 0.2, 1);
+
+    &--show {
+      transform: translateX(0);
+    }
+  }
+
+  &__user {
+    width: 100%;
+    height: 111px;
+    box-sizing: border-box;
+    color: #175c8e;
+    font-size: 14px;
+    font-family: NanumSquare;
+    padding: 0 16px;
+    background: #fff;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    left: 0;
+  }
+
+  &__backspace {
+    display: block;
+    margin: 18px 0 8px -2px;
+    padding: 0;
+    border: 0;
+    width: 28px;
+    height: 28px;
+    background-color: transparent;
+    cursor: pointer;
+
+    & > img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__greet {
+    font-size: 16px;
+    display: block;
+    max-width: 240px;
+    text-align: left;
+    margin-bottom: 16px;
+    font-weight: bold;
+
+    & > span {
+      font-size: 13px;
+      font-weight: normal;
+    }
+  }
+
+  &__my-info {
+    display: flex;
+    margin-right: auto;
+    width: 80px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: normal;
+    color: black;
+    line-height: 24px;
+
+    :before {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      margin-right: 4px;
+      content: '';
+      background: url("http://static.koreatech.in/assets/img/ic-bottom_myinfo.png") center/24px 24px;
+    }
+
+    & > a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+  }
+
+  &__link {
+    margin-right: 15px;
+    font-size: 15px;
+    height: 12px;
+    color: #252525;
+    text-decoration: none;
+    cursor: pointer;
+
+    & + & {
+      margin-left: 15px;
+      margin-right: 0;
+    }
+
+    .MobileHeader__my-info + & {
+      margin-left: 9px;
+      text-align: left;
+    }
+
+    & > a {
+      background-color: transparent;
+      color: inherit;
+      text-decoration: inherit;
+    }
+    & > button {
+      padding: 0;
+      border: 0;
+      background-color: transparent;
+      color: inherit;
+      text-decoration: inherit;
+      cursor: pointer;
+    }
+  }
+
+  &__auth-menu {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 15px;
+    font-weight: normal;
+    color: #252525;
+
+    .MobileHeader__panel--logged-in & {
+      justify-content: space-around;
+    }
+  }
+  &__category-title {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 16px 5px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: normal;
+    color: #858585;
+    background-color: #f7f7f7;
+    text-align: left;
+  }
+  &__sub-menus {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    list-style: none;
+  }
+
+  &__sub-menu {
+    display: block;
+    padding: 8px 20px;
+    width: 50%;
+    font-size: 15px;
+    background: #fff;
+    box-sizing: border-box;
+    border-collapse: collapse;
+    text-decoration: none;
+    text-align: left;
+    color: #252525;
+    font-weight: 500;
+    cursor: pointer;
+
+    & > a {
+      color: inherit;
+      text-decoration: inherit;
+
+      &:hover {
+        color: #f7941e;
+        font-weight: 700;
+        outline: none;
+      }
+    }
+  }
+
+  &__logo {
+    position: absolute;
+    &--koin {
+      right: 16px;
+      top: 16px;
+      width: 40px;
+      height: 40px;
+    }
+
+    &--bcsd {
+      right: 16px;
+      bottom: 20px;
+      width: 33px;
+      height: 33px;
+    }
+  }
+}
+
+@keyframes slide-left-enter {
   0% {
     opacity: 0;
     -webkit-transform: translateX(-100%);
