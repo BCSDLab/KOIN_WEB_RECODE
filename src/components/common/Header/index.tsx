@@ -5,7 +5,7 @@ import CATEGORY, { ICategory, ISubMenu } from 'static/category';
 import useBoolean from 'utils/hooks/useBoolean';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
-import styles from './header.module.scss';
+import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
   PANEL: 'megamenu-panel',
