@@ -4,6 +4,9 @@
 /* stylelint-enable scss/at-import-no-partial-leading-underscore */
 #root {
   min-width: 1148px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 
   @include media-breakpoint(mobile) {
     min-width: 360px;
