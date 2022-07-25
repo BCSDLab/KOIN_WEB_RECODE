@@ -6,15 +6,15 @@ import styles from './Footer.module.scss';
 function Footer(): JSX.Element {
   const isMobile = useMediaQuery();
   return (
-    <footer className={styles.Footer}>
-      <div className={styles.Footer__content}>
+    <footer className={styles.footer}>
+      <div className={styles.footer__content}>
         {!isMobile && (
-          <ul className={styles.Footer__services}>
+          <ul className={styles.footer__services}>
             {CATEGORY
               .map((categoryInfo) => categoryInfo.submenu)
               .flat()
               .map((subMenuInfo) => (
-                <li className={styles.Footer__service}>
+                <li className={styles.footer__service}>
                   <Link to={subMenuInfo.link}>
                     {subMenuInfo.title}
                   </Link>
@@ -22,9 +22,9 @@ function Footer(): JSX.Element {
               ))}
           </ul>
         )}
-        <div className={styles.Sitemap}>
+        <div className={styles.sitemap}>
           <Link
-            className={styles.Sitemap__logo}
+            className={styles.sitemap__logo}
             to="/"
           >
             <img
@@ -33,50 +33,50 @@ function Footer(): JSX.Element {
             />
           </Link>
           {!isMobile ? (
-            <ul className={styles.Sitemap__content}>
-              <li className={styles.Sitemap__link}>
+            <ul className={styles.sitemap__content}>
+              <li className={styles.sitemap__link}>
                 <a href="https://bcsdlab.com" target="_blank" rel="noreferrer">BCSD Lab 바로가기</a>
               </li>
-              <li className={styles.Sitemap__link}>
+              <li className={styles.sitemap__link}>
                 <a href="https://koreatech.ac.kr" target="_blank" rel="noreferrer">코리아텍 바로가기</a>
               </li>
-              <li className={styles.Sitemap__link}>
+              <li className={styles.sitemap__link}>
                 <a href="https://portal.koreatech.ac.kr" target="_blank" rel="noreferrer">아우누리 바로가기</a>
               </li>
-              <li className={styles.Sitemap__link}>
+              <li className={styles.sitemap__link}>
                 <Link to="/privacy-policy">개인정보 처리방침</Link>
               </li>
             </ul>
           ) : (
-            <ul className={styles.Sitemap__content}>
-              <li className={styles.Sitemap__link}>
+            <ul className={styles.sitemap__content}>
+              <li className={styles.sitemap__link}>
                 <a href="https://koreatech.ac.kr" target="_blank" rel="noreferrer">코리아텍 바로가기</a>
               </li>
-              <li className={styles.Sitemap__link}>
+              <li className={styles.sitemap__link}>
                 <a href="https://portal.koreatech.ac.kr" target="_blank" rel="noreferrer">아우누리 바로가기</a>
               </li>
-              <li className={styles.Sitemap__link}>
+              <li className={styles.sitemap__link}>
                 <a href="https://bcsdlab.com" target="_blank" rel="noreferrer">BCSD Lab 바로가기</a>
               </li>
-              <li className={styles.Sitemap__link}>
+              <li className={styles.sitemap__link}>
                 <Link to="/privacy-policy">개인정보 처리방침</Link>
               </li>
             </ul>
           )}
-          <div className={styles['Sitemap__icon-links']}>
+          <div className={styles['sitemap__icon-links']}>
             <a
-              className={styles['Sitemap__icon-link']}
+              className={styles['sitemap__icon-link']}
               href="https://portal.koreatech.ac.kr"
               target="_blank"
               rel="noreferrer"
             >
               <img src="https://static.koreatech.in/upload/fead6221d535ff547d4801081ee8f2e3.png" alt="facebook" />
             </a>
-            <Link className={styles['Sitemap__icon-link']} to="/">
+            <Link className={styles['sitemap__icon-link']} to="/">
               <img src="https://static.koreatech.in/upload/1aae9a021f0338527c28e5c3d0518fa1.png" alt="home" />
             </Link>
           </div>
-          <span className={styles.Sitemap__copyright}>
+          <span className={styles.sitemap__copyright}>
             COPYRIGHT ⓒ&nbsp;
             {
               new Date().getFullYear()

@@ -4,10 +4,10 @@ $media: (
 
 @mixin media-breakpoint($breakpoint) {
   @each $breakpointName, $size in $media {
-      @if $breakpoint == $breakpointName {
-          @media screen and (max-width: $size) {
-              @content;
-          }
+    @if $breakpoint == $breakpointName {
+      @media screen and (max-width: $size) {
+        @content;
       }
+    }
   }
 }

@@ -1,6 +1,6 @@
-@import 'src/utils/scss/media.scss';
+@import "src/utils/scss/media";
 
-.Footer {
+.footer {
   margin-top: auto;
   width: 100%;
   background-color: #3e3e3e;
@@ -8,20 +8,17 @@
   font-size: 13px;
   vertical-align: middle;
 
-  @include media-breakpoint(mobile) {
-  }
-
   &__content {
-
     width: 1132px;
     margin-left: auto;
     margin-right: auto;
     padding-top: 44px;
     padding-bottom: 30px;
+
     @include media-breakpoint(mobile) {
       display: block;
       width: auto;
-      padding: 21px 16px 18px 16px;
+      padding: 21px 16px 18px;
     }
   }
 
@@ -40,14 +37,14 @@
     }
 
     & > a {
-      font-family: NanumSquareR,sans-serif;
+      font-family: NanumSquareR, sans-serif;
       font-size: 15px;
       font-weight: bold;
       font-style: normal;
       font-stretch: normal;
       text-decoration: none;
       line-height: 1.7;
-      letter-spacing: .8px;
+      letter-spacing: 0.8px;
       text-align: left;
       color: #9fa9b3;
       cursor: pointer;
@@ -55,7 +52,7 @@
   }
 }
 
-.Sitemap {
+.sitemap {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -64,6 +61,7 @@
   @include media-breakpoint(mobile) {
     justify-content: center;
   }
+
   &__logo {
     display: inline-block;
     width: 72px;
@@ -75,6 +73,7 @@
       width: 100%;
       height: 100%;
     }
+
     @include media-breakpoint(mobile) {
       order: 2;
       margin-right: 20px;
@@ -97,7 +96,7 @@
     height: 30px;
     box-sizing: border-box;
     border-radius: 28px;
-    font-family: NanumSquare,sans-serif;
+    font-family: NanumSquare, sans-serif;
     border: solid 1px #9fa9b3;
     font-size: 15px;
     font-weight: normal;
@@ -111,9 +110,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     & > a {
-      color: currentColor;
+      color: currentcolor;
       text-decoration: none;
+
       &:hover {
         font-weight: bold;
       }
@@ -127,19 +128,21 @@
       border: 0;
       width: calc(50% - 8px);
       height: auto;
-      font-family: NanumSquareR,sans-serif;
+      font-family: NanumSquareR, sans-serif;
       font-size: 10px;
       font-weight: normal;
       line-height: 1.2;
+
       &:nth-child(2n + 1) {
         justify-content: right;
 
-        &:after {
+        &::after {
           position: absolute;
           margin-right: -9px;
           content: "|";
         }
       }
+
       &:nth-child(2n) {
         justify-content: left;
       }
@@ -147,7 +150,6 @@
   }
 
   &__icon-links {
-
     @include media-breakpoint(mobile) {
       order: 4;
     }
@@ -155,6 +157,7 @@
 
   &__icon-link {
     margin-right: 30px;
+
     & > img {
       height: 30px;
     }
@@ -162,8 +165,10 @@
     &:last-child {
       margin-right: 0;
     }
+
     @include media-breakpoint(mobile) {
       margin-right: 16px;
+
       & > img {
         height: 20px;
       }
@@ -173,7 +178,7 @@
   &__copyright {
     margin-top: 20px;
     width: 100%;
-    font-family: NanumSquareR,sans-serif;
+    font-family: NanumSquareR, sans-serif;
     line-height: 1.08;
     letter-spacing: 0.15px;
     color: #b5b5b5;
@@ -184,11 +189,11 @@
       margin-right: 17px;
       margin-top: 0;
       width: auto;
-      font-family: NanumSquareR,sans-serif;
+      font-family: NanumSquareR, sans-serif;
       font-size: 9px;
       font-weight: normal;
       line-height: 1.11;
-      letter-spacing: -.57px;
+      letter-spacing: -0.57px;
       text-align: left;
       color: #7d7d7d;
     }
