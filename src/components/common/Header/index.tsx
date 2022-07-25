@@ -109,8 +109,7 @@ function Header() {
                 {isMain ? (
                   <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
                 ) : (CATEGORY
-                  .map((categoryValue) => categoryValue.submenu)
-                  .flat()
+                  .flatMap((categoryValue) => categoryValue.submenu)
                   .find((subMenuValue) => subMenuValue.link === pathname)
                   ?.title ?? ''
                 )}

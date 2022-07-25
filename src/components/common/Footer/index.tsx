@@ -11,8 +11,7 @@ function Footer(): JSX.Element {
         {!isMobile && (
           <ul className={styles.footer__services}>
             {CATEGORY
-              .map((categoryInfo) => categoryInfo.submenu)
-              .flat()
+              .flatMap((categoryInfo) => categoryInfo.submenu)
               .map((subMenuInfo) => (
                 <li className={styles.footer__service}>
                   <Link to={subMenuInfo.link}>
