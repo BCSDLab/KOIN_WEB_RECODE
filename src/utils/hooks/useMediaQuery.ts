@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const MOBILE_QUERY = '(max-width: 576px)';
 
@@ -10,19 +10,20 @@ export default function useMediaQuery(query = MOBILE_QUERY): boolean {
     }
     return false;
   };
-  const [matches, setMatches] = useState(getMatches(query));
-
-  function handleChange() {
-    setMatches(getMatches(query));
-  }
+  const [matches, setMatches] = useState(() => getMatches(query));
+  const matchMediaRef = useRef<MediaQueryList | null>(null);
 
   useEffect(() => {
     const matchMedia = window.matchMedia(query);
+    matchMediaRef.current = matchMedia;
+    function handleChange() {
+      setMatches(getMatches(query));
+    }
     handleChange();
     matchMedia.addEventListener('change', handleChange);
 
     return () => {
-      matchMedia.removeEventListener('change', handleChange);
+      matchMediaRef.current?.removeEventListener('change', handleChange);
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
