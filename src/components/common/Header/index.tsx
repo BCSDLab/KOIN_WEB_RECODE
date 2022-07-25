@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import CATEGORY, { ICategory, ISubMenu } from 'static/category';
-import useBoolean from 'utils/hooks/useBoolean';
+import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import styles from './Header.module.scss';
@@ -40,7 +40,7 @@ const useMegaMenu = (category: ICategory[]) => {
 };
 
 const useMobileSidebar = (pathname: string, isMobile: boolean) => {
-  const [isExpanded, expandSidebar, hideSidebar] = useBoolean(false);
+  const [isExpanded, expandSidebar, hideSidebar] = useBooleanState(false);
 
   useEffect(() => {
     if (!isMobile) {
