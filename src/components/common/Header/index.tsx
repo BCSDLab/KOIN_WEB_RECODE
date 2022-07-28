@@ -299,7 +299,7 @@ function Header() {
               >
                 <ul className={styles.megamenu__content}>
                   {panelMenuList?.map((menu) => (
-                    <li className={styles.megamenu__menu}>
+                    <li className={styles.megamenu__menu} key={menu.title}>
                       {/* TODO: 키보드 Focus 접근성 향상 */}
                       <Link className={styles.megamenu__link} to={menu.link}>
                         {menu.title}
