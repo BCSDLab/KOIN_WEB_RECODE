@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import CATEGORY, { ICategory, ISubMenu } from 'static/category';
@@ -26,7 +26,13 @@ const useMegaMenu = (category: ICategory[]) => {
   const onFocusPanel = () => {
     setIsExpanded(true);
   };
-  const onBlurMegaMenu = () => {
+  const hideMegaMenu = (
+    event: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLElement>,
+  ) => {
+    if (event.type === 'mouseout') {
+      const { currentTarget } = event;
+      currentTarget.blur();
+    }
     setIsExpanded(false);
   };
 
@@ -35,7 +41,7 @@ const useMegaMenu = (category: ICategory[]) => {
     isExpanded,
     createOnChangeMenu,
     onFocusPanel,
-    onBlurMegaMenu,
+    hideMegaMenu,
   };
 };
 
@@ -66,7 +72,7 @@ function Header() {
     isExpanded: isMegaMenuExpanded,
     createOnChangeMenu,
     onFocusPanel,
-    onBlurMegaMenu,
+    hideMegaMenu,
   } = useMegaMenu(CATEGORY);
   const isMobile = useMediaQuery();
   const {
@@ -256,8 +262,8 @@ function Header() {
                 [styles['header__mega-menu']]: true,
                 [styles.megamenu]: true,
               })}
-              onBlur={onBlurMegaMenu}
-              onMouseOut={onBlurMegaMenu}
+              onBlur={hideMegaMenu}
+              onMouseOut={hideMegaMenu}
             >
               <ul className={styles['megamenu__trigger-list']}>
                 {CATEGORY.map((category, index) => (
@@ -270,7 +276,9 @@ function Header() {
                       type="button"
                       onClick={createOnChangeMenu(category.title)}
                       onFocus={createOnChangeMenu(category.title)}
+                      onBlur={hideMegaMenu}
                       onMouseOver={createOnChangeMenu(category.title)}
+                      onMouseOut={hideMegaMenu}
                       aria-expanded={isMegaMenuExpanded}
                       aria-controls={ID[`LABEL${index + 1}`]}
                     >
@@ -291,7 +299,7 @@ function Header() {
               >
                 <ul className={styles.megamenu__content}>
                   {panelMenuList?.map((menu) => (
-                    <li className={styles.megamenu__menu}>
+                    <li className={styles.megamenu__menu} key={menu.title}>
                       {/* TODO: 키보드 Focus 접근성 향상 */}
                       <Link className={styles.megamenu__link} to={menu.link}>
                         {menu.title}

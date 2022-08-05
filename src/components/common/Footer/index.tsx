@@ -13,7 +13,7 @@ function Footer(): JSX.Element {
             {CATEGORY
               .flatMap((categoryInfo) => categoryInfo.submenu)
               .map((subMenuInfo) => (
-                <li className={styles.footer__service}>
+                <li className={styles.footer__service} key={subMenuInfo.title}>
                   <Link to={subMenuInfo.link}>
                     {subMenuInfo.title}
                   </Link>
