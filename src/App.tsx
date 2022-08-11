@@ -1,15 +1,16 @@
-import Footer from 'components/common/Footer';
-import Header from './components/common/Header';
+import AuthPage from 'pages/AuthPage';
+import LoginPage from 'pages/AuthPage/LoginPage';
+import BoardPage from 'pages/BoardPage';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <>
-      <Header />
-      <main>
-        test
-      </main>
-      <Footer />
-    </>
+    <Routes>
+      <Route path="/" element={<BoardPage />} />
+      <Route path="auth/*" element={<AuthPage />}>
+        <Route index element={<LoginPage />} />
+      </Route>
+    </Routes>
   );
 }
 
