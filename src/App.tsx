@@ -7,7 +7,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<BoardPage />} />
-      <Route path="auth/*" element={<AuthPage />}>
+      <Route path="login/*" element={<AuthPage />}>
         <Route index element={<LoginPage />} />
       </Route>
     </Routes>
