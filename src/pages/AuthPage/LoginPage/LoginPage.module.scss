@@ -1,0 +1,35 @@
+@import "src/utils/scss/media";
+
+.template{
+
+  &__content {
+    width: 390px;
+    margin: 80px auto 50px; 
+    display: flex;
+    flex-direction: column; 
+
+    @include media-breakpoint(mobile) {
+        width: 360px;
+        margin: 80px auto;
+    }
+  }
+    
+
+  &__copyright {
+    font-family: NanumSquareR, sans-serif;
+    margin-top: 28px;
+    color: rgb(125, 125, 125);
+    letter-spacing: -0.7px;
+    font-size: 13px;
+    text-align: center;
+
+    @include media-breakpoint(mobile) {
+      margin-top: 8px;
+      width: auto;
+      font-family: NanumSquareR, sans-serif;
+      font-size: 11px;
+      font-weight: normal;
+      color: #7d7d7d;
+    }
+  }
+}
