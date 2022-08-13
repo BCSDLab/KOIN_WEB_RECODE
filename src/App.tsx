@@ -1,5 +1,5 @@
-import AuthPage from 'pages/AuthPage';
-import LoginPage from 'pages/AuthPage/LoginPage';
+import AuthPage from 'pages/Auth';
+import LoginPage from 'pages/Auth/LoginPage';
 import BoardPage from 'pages/BoardPage';
 import { Routes, Route } from 'react-router-dom';
 
