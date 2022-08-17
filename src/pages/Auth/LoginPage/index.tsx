@@ -1,52 +1,65 @@
 import React from 'react';
-import LoginForm from 'components/Auth/LoginForm/LoginForm';
+import { Link } from 'react-router-dom';
 import styles from './LoginPage.module.scss';
 
+interface IClassUser {
+  userId: HTMLInputElement | null
+  password: HTMLInputElement | null
+}
+
+const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
+
 function LoginPage() {
-  const [loginInfo, setLoginInfo] = React.useState({
-    userId: '',
-    password: '',
+  const loginRef = React.useRef<IClassUser>({
+    userId: null,
+    password: null,
   });
-  const emailLocalPartRegex = React.useMemo(() => /^[a-z_0-9]{1,12}$/, []);
-  const emailRef = React.useRef();
-  const passwordRef = React.useRef();
 
-  const onChange = React.useCallback((e: any) => {
-    setLoginInfo({
-      ...loginInfo,
-      [e.target.name]: e.target.value,
-    });
-  }, [loginInfo]);
-
-  const onSubmit = React.useCallback((e: any) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { userId, password } = loginInfo;
-    if (!userId || !userId.length) {
+    const { userId, password } = loginRef.current;
+    if (userId != null) {
+      emailLocalPartRegex.test(userId.value);
+      console.log(userId);
       return;
     }
-    if (!password || !password.length) {
-      return;
+    if (password != null) {
+      console.log(password.value);
     }
-    if (userId.indexOf('@koreatech.ac.kr') !== -1) {
-      return;
-    }
-    if (!emailLocalPartRegex.test(userId)) {
-      console.log(emailLocalPartRegex);
-    }
-    /*
-    TODO : 로그인 api 콜
-    */
-  }, [loginInfo, emailLocalPartRegex]);
+  };
 
   return (
     <div className={styles.template}>
-      <LoginForm
-        loginInfo={loginInfo}
-        onChange={onChange}
-        onSubmit={onSubmit}
-        emailRef={emailRef}
-        passwordRef={passwordRef}
-      />
+      <form className={styles.loginform} onSubmit={onSubmit}>
+        <input
+          ref={(inputRef) => { loginRef.current.userId = inputRef; }}
+          className={styles.styledinput}
+          autoComplete="username"
+          name="userId"
+          placeholder="아이디를 입력하세요"
+        />
+        <input
+          ref={(inputRef) => { loginRef.current.password = inputRef; }}
+          className={styles.styledinput}
+          autoComplete="current-password"
+          name="password"
+          placeholder="비밀번호를 입력하세요"
+        />
+        <button type="submit" className={styles.loginform__button}>
+          로그인
+        </button>
+      </form>
+      <div className={styles.autologin}>
+        <label className={styles.autologin__text} htmlFor="autoLoginCheckBox">
+          <input className={styles.autologin__checkbox} type="checkbox" id="autoLoginCheckBox" />
+          자동 로그인
+        </label>
+      </div>
+      <div className={styles.help}>
+        <a className={styles.help__finduser} href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp">아이디 찾기</a>
+        <Link className={styles.help__findpassword} to="/findpw">비밀번호 찾기</Link>
+        <Link className={styles.help__signup} to="/signup">회원가입</Link>
+      </div>
       <span className={styles.template__copyright}>
         COPYRIGHT ⓒ&nbsp;
         {
