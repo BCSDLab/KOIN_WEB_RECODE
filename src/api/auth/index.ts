@@ -1,4 +1,6 @@
-import { APIClient } from "api/apiClient";
-import * as AuthAPI from './api';
+import { APIClient } from 'api/apiClient';
+import AuthAPI from './login';
 
-export const login = APIClient.of(AuthAPI.Login)
+const login = APIClient.of(AuthAPI);
+
+export default login;

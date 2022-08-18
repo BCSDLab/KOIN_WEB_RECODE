@@ -1,8 +1,8 @@
-import { APIResponse } from "api/interfaces/APIResponse"
+import { APIResponse } from 'api/interfaces/APIResponse';
 
 export type LoginRequest = {
-    userId: string
-    password: string
-}
+  portal_account: string
+  password: string
+};
 
 export interface LoginResponse extends APIResponse {}

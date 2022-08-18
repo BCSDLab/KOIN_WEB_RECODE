@@ -83,9 +83,8 @@ export class APIClient {
 
   private errorMiddleware(error: APIError): void {
     // 인증 오류 발생 시 로그인 페이지로 쫓아냄
-    if (error.status === 401) {
-      console.error('auth error');
-    }
+    // eslint-disable-next-line no-useless-return
+    if (error.status === 401) return;
   }
 
   // Convert axios error into APIError
@@ -95,7 +94,7 @@ export class APIClient {
       message: error.message,
       raw: error,
       response: error.response,
-    }
+    };
   }
 
   // Create headers

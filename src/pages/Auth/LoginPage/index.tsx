@@ -1,7 +1,7 @@
 import React from 'react';
 import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
-import * as api from 'api';
+import * as api from '../../../api';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -17,7 +17,7 @@ function LoginPage() {
     password: null,
   });
 
-  const postLogin = useMutation(api.auth.login, {
+  const postLogin = useMutation(api.auth.default, {
     onSuccess: () => {
       console.log('success');
     },
@@ -33,8 +33,8 @@ function LoginPage() {
     }
     emailLocalPartRegex.test(userId.value);
     postLogin.mutate({
-      id: userId.value,
-      password: password.value,
+      portal_account: userId.value,
+      password: password?.value,
     });
   };
 
@@ -51,6 +51,7 @@ function LoginPage() {
         <input
           ref={(inputRef) => { loginRef.current.password = inputRef; }}
           className={styles.styledinput}
+          type="password"
           autoComplete="current-password"
           name="password"
           placeholder="비밀번호를 입력하세요"
