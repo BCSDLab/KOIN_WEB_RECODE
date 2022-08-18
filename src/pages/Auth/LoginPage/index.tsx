@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
+import sha256 from 'utils/ts/SHA-256';
 import * as api from '../../../api';
 import styles from './LoginPage.module.scss';
 
@@ -22,7 +23,7 @@ function LoginPage() {
       console.log('success');
     },
   });
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { userId, password } = loginRef.current;
     if (userId === null) {
@@ -32,9 +33,11 @@ function LoginPage() {
       return;
     }
     emailLocalPartRegex.test(userId.value);
+    const hashedPassword = await sha256(password?.value);
+
     postLogin.mutate({
       portal_account: userId.value,
-      password: password?.value,
+      password: hashedPassword,
     });
   };
 
