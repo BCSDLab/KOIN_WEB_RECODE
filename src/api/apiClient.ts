@@ -89,14 +89,13 @@ export class APIClient {
   }
 
   // Convert axios error into APIError
-  // eslint-disable-next-line class-methods-use-this
   private normalizeError(error: AxiosError): APIError {
     return {
       status: error.response?.status!,
       message: error.message,
       raw: error,
       response: error.response,
-    };
+    }
   }
 
   // Create headers
