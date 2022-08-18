@@ -1,5 +1,7 @@
 import React from 'react';
+import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
+import * as api from 'api';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -15,17 +17,25 @@ function LoginPage() {
     password: null,
   });
 
+  const postLogin = useMutation(api.auth.login, {
+    onSuccess: () => {
+      console.log('success');
+    },
+  });
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { userId, password } = loginRef.current;
-    if (userId != null) {
-      emailLocalPartRegex.test(userId.value);
-      console.log(userId);
+    if (userId === null) {
       return;
     }
-    if (password != null) {
-      console.log(password.value);
+    if (password === null) {
+      return;
     }
+    emailLocalPartRegex.test(userId.value);
+    postLogin.mutate({
+      id: userId.value,
+      password: password.value,
+    });
   };
 
   return (
