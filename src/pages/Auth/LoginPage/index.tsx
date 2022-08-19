@@ -1,6 +1,7 @@
+import { LoginResponse } from 'api/auth/entity';
 import React from 'react';
 import { useMutation } from 'react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import sha256 from 'utils/ts/SHA-256';
 import * as api from '../../../api';
 import styles from './LoginPage.module.scss';
@@ -17,10 +18,11 @@ function LoginPage() {
     userId: null,
     password: null,
   });
-
-  const postLogin = useMutation(api.auth.default, {
-    onSuccess: () => {
-      console.log('success');
+  const navigate = useNavigate();
+  const postLogin = useMutation(api.auth.login, {
+    onSuccess: (data: LoginResponse) => {
+      localStorage.setItem('AUTH_TOKEN_KEY', data.token);
+      navigate('/');
     },
   });
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
