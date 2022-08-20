@@ -1,10 +1,8 @@
-import { LoginResponse } from 'api/auth/entity';
 import React from 'react';
-import { useMutation } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import sha256 from 'utils/ts/SHA-256';
-import * as api from '../../../api';
 import styles from './LoginPage.module.scss';
+import useLogin from '../../../utils/hooks/useLogin';
 
 interface IClassUser {
   userId: HTMLInputElement | null
@@ -18,13 +16,7 @@ function LoginPage() {
     userId: null,
     password: null,
   });
-  const navigate = useNavigate();
-  const postLogin = useMutation(api.auth.login, {
-    onSuccess: (data: LoginResponse) => {
-      localStorage.setItem('AUTH_TOKEN_KEY', data.token);
-      navigate('/');
-    },
-  });
+  const postLogin = useLogin();
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { userId, password } = loginRef.current;
