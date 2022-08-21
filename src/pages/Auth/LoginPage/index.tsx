@@ -16,7 +16,11 @@ function LoginPage() {
     userId: null,
     password: null,
   });
-  const postLogin = useLogin();
+  const [isAutoLoginFlag, setIsAutoLoginFlag] = React.useState(false);
+  const postLogin = useLogin({ isAutoLoginFlag });
+  const onToggleAutoLoginFlag = React.useCallback(() => {
+    setIsAutoLoginFlag(!isAutoLoginFlag);
+  }, [isAutoLoginFlag]);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { userId, password } = loginRef.current;
@@ -58,8 +62,8 @@ function LoginPage() {
         </button>
       </form>
       <div className={styles.autologin}>
-        <label className={styles.autologin__text} htmlFor="autoLoginCheckBox">
-          <input className={styles.autologin__checkbox} type="checkbox" id="autoLoginCheckBox" />
+        <label className={styles.autologin__text} onChange={onToggleAutoLoginFlag} htmlFor="autoLoginCheckBox">
+          <input className={styles.autologin__checkbox} onClick={onToggleAutoLoginFlag} checked={isAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
           자동 로그인
         </label>
       </div>
