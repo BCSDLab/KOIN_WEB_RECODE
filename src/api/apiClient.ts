@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { getCookie } from 'utils/ts/cookie';
 // eslint-disable-next-line import/no-cycle
 import { APIRequest } from './interfaces/APIRequest';
 import { APIResponse } from './interfaces/APIResponse';
@@ -100,8 +101,7 @@ export class APIClient {
   // Create headers
   private createHeaders<U extends APIResponse>(request: APIRequest<U>): any {
     const headers: Record<string, string> = {};
-    const authToken = localStorage.getItem('AUTH_TOKEN_KEY');
-
+    const authToken = getCookie('AUTH_TOKEN_KEY');
     // 인증 토큰 삽입
     if (authToken) {
       headers.Authorization = `Bearer ${authToken}`;

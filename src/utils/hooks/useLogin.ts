@@ -1,5 +1,5 @@
 import { LoginResponse } from 'api/auth/entity';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { setCookie } from 'utils/ts/cookie';
 import * as api from '../../api';
@@ -10,13 +10,15 @@ interface State {
 
 export default function useLogin(state : State) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const postLogin = useMutation(api.auth.login, {
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
-        localStorage.setItem('AUTH_TOKEN_KEY', data.token);
+        setCookie('AUTH_TOKEN_KEY', data.token, 3);
       } else {
-        setCookie('AUTH_TOKEN_KEY', data.token);
+        setCookie('AUTH_TOKEN_KEY', data.token, 0);
       }
+      queryClient.invalidateQueries('postLogin');
       navigate('/');
     },
   });
