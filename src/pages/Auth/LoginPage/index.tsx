@@ -19,7 +19,6 @@ function LoginPage() {
   const [isAutoLoginFlag, setIsAutoLoginFlag] = React.useState(false);
   const postLogin = useLogin({ isAutoLoginFlag });
   const onToggleAutoLoginFlag = React.useCallback(() => {
-    console.log(isAutoLoginFlag);
     setIsAutoLoginFlag(!isAutoLoginFlag);
   }, [isAutoLoginFlag]);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
