@@ -1,4 +1,4 @@
-@import 'src/utils/scss/media';
+@import "src/utils/scss/media";
 
 .template {
   display: flex;
@@ -9,7 +9,7 @@
   &__copyright {
     font-family: NanumSquareR, sans-serif;
     margin-top: 28px;
-    color: rgb(125, 125, 125);
+    color: gray;
     letter-spacing: -0.7px;
     font-size: 13px;
     text-align: center;
@@ -34,8 +34,7 @@
     border-radius: 0;
     line-height: 1.3;
     background-color: #175c8e;
-    color: #ffffff;
-    font-family: NanumSquare;
+    color: #fff;
     font-size: 20px;
     letter-spacing: -1px;
     font-weight: 700;
@@ -44,7 +43,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     &:disabled {
       background: #e5eaf0;
       border: solid 1px #d2dae2;
@@ -57,7 +56,6 @@
       height: 36px;
       font-size: 15px;
     }
-  
   }
 }
 
@@ -93,8 +91,6 @@
   }
 }
 
-
-
 .autologin {
   width: 100%;
   height: 43px;
@@ -114,21 +110,9 @@
     color: #858585;
     letter-spacing: -0.6px;
     cursor: pointer;
-    
     display: inline-block;
-    cursor: pointer;
     position: relative;
     padding-left: 24px;
-  
-    &__checkbox:checked ~ &__oncheck {
-      content: "";
-      background-image: url("https://static.koreatech.in/assets/img/check.png");
-      background-size: cover
-    }
-    
-    @include media-breakpoint(mobile) {
-        margin-top: 18px;
-    }
 
     &__checkbox {
       margin-top: 14px;
@@ -145,9 +129,19 @@
       position: absolute;
       left: 0;
       top: 0;
-      background-color: #ffffff;
+      background-color: #fff;
       border: 1px solid #d2dae2;
       line-height: 13px;
+    }
+
+    &__checkbox:checked ~ &__oncheck {
+      content: "";
+      background-image: url("https://static.koreatech.in/assets/img/check.png");
+      background-size: cover;
+    }
+
+    @include media-breakpoint(mobile) {
+      margin-top: 18px;
     }
   }
 }
@@ -166,7 +160,7 @@
     width: 320px;
     margin: 0 auto;
   }
-  
+
   &__finduser {
     text-decoration: none;
     color: #858585;
@@ -181,7 +175,7 @@
     color: #858585;
     padding-right: 19px;
     padding-left: 14px;
-    cursor: pointer; 
+    cursor: pointer;
   }
 
   &__findpassword {
@@ -192,5 +186,4 @@
     cursor: pointer;
     border-right: 1px #d2dae2 solid;
   }
-
 }
