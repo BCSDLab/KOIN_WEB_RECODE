@@ -1,9 +1,13 @@
-export function setCookie(name: string, val: any) {
+export function setCookie(name: string, val: any, day: number) {
   const date = new Date();
   const value = val;
-
-  date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
-  document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+  // day가 없는 경우 세션쿠키로 설정
+  if (day) {
+    date.setTime(date.getTime() + (day * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+  } else {
+    document.cookie = `${name}=${value}; path=/`;
+  }
 }
 
 // eslint-disable-next-line consistent-return
