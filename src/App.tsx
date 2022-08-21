@@ -6,10 +6,10 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
+import { getCookie } from 'utils/ts/cookie';
 
 function App() {
-  const token = localStorage.getItem('AUTH_TOKEN_KEY');
-
+  const token = getCookie('AUTH_TOKEN_KEY');
   return (
     <Routes>
       <Route path="/" element={<BoardPage />} />
