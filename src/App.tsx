@@ -12,7 +12,7 @@ import { useRecoilState } from 'recoil';
 import { getCookie } from 'utils/ts/cookie';
 
 function App() {
-  const [token, setToken] = useRecoilState<string>(tokenState);
+  const [token, setToken] = useRecoilState(tokenState);
   React.useEffect(() => {
     const cookieToken = getCookie('AUTH_TOKEN_KEY');
     if (cookieToken) {
