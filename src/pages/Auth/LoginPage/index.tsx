@@ -1,6 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import useLogin from 'utils/hooks/useLogin';
+import { LoginResponse } from 'api/auth/entity';
+import { tokenState } from 'utils/recoil';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import { useRecoilState } from 'recoil';
+import { setCookie } from 'utils/ts/cookie';
+import * as api from 'api';
+import sha256 from 'utils/ts/SHA-256';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -8,17 +14,85 @@ interface IClassUser {
   password: HTMLInputElement | null
 }
 
+interface IsAutoLogin {
+  isAutoLoginFlag: boolean
+}
+
+interface UserInfo {
+  userId: string
+  password: string
+}
+
+const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
+
+const useAutoLoginFlag = () => {
+  const [isAutoLoginFlag, setIsAutoLoginFlag] = React.useState(false);
+  const onToggleAutoLoginFlag = () => {
+    setIsAutoLoginFlag(!isAutoLoginFlag);
+  };
+  return {
+    isAutoLoginFlag,
+    onToggleAutoLoginFlag,
+  };
+};
+
+const useLogin = (state: IsAutoLogin) => {
+  const [, setToken] = useRecoilState(tokenState);
+  const navigate = useNavigate();
+  const postLogin = useMutation(api.auth.default, {
+    onSuccess: (data: LoginResponse) => {
+      if (state.isAutoLoginFlag) {
+        setCookie('AUTH_TOKEN_KEY', data.token, 3);
+      } else {
+        setCookie('AUTH_TOKEN_KEY', data.token, 0);
+      }
+      setToken(data.token);
+      navigate('/');
+    },
+  });
+
+  const useSubmit = async (userInfo: UserInfo) => {
+    if (userInfo.userId === null) {
+      // eslint-disable-next-line no-alert
+      alert('계정을 입력해주세요');
+      return;
+    }
+    if (userInfo.password === null) {
+      // eslint-disable-next-line no-alert
+      alert('비밀번호를 입력해주세요');
+      return;
+    }
+    if (userInfo.userId.indexOf('@koreatech.ac.kr') !== -1) {
+      // eslint-disable-next-line no-alert
+      alert('계정명은 @koreatech.ac.kr을 빼고 입력해주세요.'); // 모든 alert는 Toast로 교체 예정
+      return;
+    }
+    if (!emailLocalPartRegex.test(userInfo.userId)) {
+      // eslint-disable-next-line no-alert
+      alert('아우누리 계정 형식이 아닙니다.');
+      return;
+    }
+    const hashedPassword = await sha256(userInfo.password);
+
+    postLogin.mutate({
+      portal_account: userInfo.userId,
+      password: hashedPassword,
+    });
+  };
+  return useSubmit;
+};
+
 function LoginPage() {
   const loginRef = React.useRef<IClassUser>({
     userId: null,
     password: null,
   });
-  const [isAutoLoginFlag, setIsAutoLoginFlag] = React.useState(false);
+  const {
+    isAutoLoginFlag,
+    onToggleAutoLoginFlag,
+  } = useAutoLoginFlag();
   const submitLogin = useLogin({ isAutoLoginFlag });
-  const onToggleAutoLoginFlag = () => {
-    setIsAutoLoginFlag(!isAutoLoginFlag);
-  };
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { userId, password } = loginRef.current;
     submitLogin({
