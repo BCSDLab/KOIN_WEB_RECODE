@@ -103,45 +103,39 @@
   }
 
   &__label {
-    margin-top: 14px;
-    padding-bottom: 2px;
-    text-align: left;
+    margin-top: 10px;
     font-size: 12px;
     color: #858585;
     letter-spacing: -0.6px;
     cursor: pointer;
     display: inline-block;
     position: relative;
-    padding-left: 24px;
-  }
-  &__input {
-    margin-top: 14px;
-    border-radius: 0;
-    margin-right: 10px;
-    cursor: pointer;
-    display: none;
-  }
-
-  &__checkbox {
-    content: "";
-    width: 14px;
-    height: 14px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background-color: #fff;
-    border: 1px solid #d2dae2;
-    line-height: 13px;
-  }
-
-  &__input:checked ~ &__checkbox {
-    content: "";
-    background-image: url("https://static.koreatech.in/assets/img/check.png");
-    background-size: cover;
+    line-height: 16px;
+    user-select: none;
   }
 
   @include media-breakpoint(mobile) {
     margin-top: 18px;
+  }
+
+  &__checkbox {
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+    margin: 0 8px 0 0;
+    position: relative;
+    top: 3px;
+    background-color: #fff;
+    border: 1px solid #d2dae2;
+    border-radius: 0;
+    appearance: none;
+    box-sizing: content-box;
+  }
+
+  &__checkbox:checked {
+    content: "";
+    background-image: url("https://static.koreatech.in/assets/img/check.png");
+    background-size: cover;
   }
 }
 
