@@ -13,7 +13,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<BoardPage />} />
-      <Route path="auth/*" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
+      <Route path="/auth/*" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
         <Route index element={<LoginPage />} />
       </Route>
     </Routes>
