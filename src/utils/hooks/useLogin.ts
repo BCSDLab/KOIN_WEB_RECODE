@@ -11,7 +11,7 @@ interface State {
 }
 
 export default function useLogin(state : State) {
-  const [token, setToken] = useRecoilState<string>(tokenState);
+  const [, setToken] = useRecoilState<string>(tokenState);
   const navigate = useNavigate();
   const postLogin = useMutation(api.auth.default, {
     onSuccess: (data: LoginResponse) => {
@@ -21,7 +21,6 @@ export default function useLogin(state : State) {
         setCookie('AUTH_TOKEN_KEY', data.token, 0);
       }
       setToken(data.token);
-      console.log(token);
       navigate('/');
     },
   });

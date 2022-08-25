@@ -18,7 +18,6 @@ function App() {
     if (cookieToken) {
       setToken(String(cookieToken));
     }
-    console.log(token);
   });
 
   return (

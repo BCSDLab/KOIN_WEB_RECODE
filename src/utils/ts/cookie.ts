@@ -17,7 +17,7 @@ export function getCookie(name: string) {
   if (parts.length === 2) {
     return parts.pop()?.split(';').shift();
   }
-  return console.log('do not exist cookie');
+  return false;
 }
 
 export function deleteCookie(name: string) {
