@@ -1,7 +1,7 @@
 @import "src/utils/scss/media";
 
 .template {
-  width: 100%;
+  min-width: 100vw;
   min-height: 100vh;
   display: flex;
   -webkit-box-pack: center;
@@ -12,7 +12,6 @@
 
   @include media-breakpoint(mobile) {
     text-align: center;
-    display: block;
   }
 
   &__content {
@@ -20,7 +19,7 @@
     margin: 80px auto 50px;
 
     @include media-breakpoint(mobile) {
-      width: 360px;
+      min-width: 360px;
       margin: 80px auto;
     }
   }
