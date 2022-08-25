@@ -63,8 +63,7 @@ function LoginPage() {
       </form>
       <div className={styles.autologin}>
         <label className={styles.autologin__label} htmlFor="autoLoginCheckBox">
-          <input className={styles.autologin__label__checkbox} checked={isAutoLoginFlag} onChange={onToggleAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
-          <span className={styles.autologin__label__oncheck} />
+          <input className={styles.autologin__checkbox} checked={isAutoLoginFlag} onChange={onToggleAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
           자동 로그인
         </label>
       </div>
