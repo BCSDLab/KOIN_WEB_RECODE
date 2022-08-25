@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import sha256 from 'utils/ts/SHA-256';
 import useLogin from 'utils/hooks/useLogin';
 import styles from './LoginPage.module.scss';
 
@@ -9,33 +8,22 @@ interface IClassUser {
   password: HTMLInputElement | null
 }
 
-const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
-
 function LoginPage() {
   const loginRef = React.useRef<IClassUser>({
     userId: null,
     password: null,
   });
   const [isAutoLoginFlag, setIsAutoLoginFlag] = React.useState(false);
-  const postLogin = useLogin({ isAutoLoginFlag });
+  const submitLogin = useLogin({ isAutoLoginFlag });
   const onToggleAutoLoginFlag = () => {
     setIsAutoLoginFlag(!isAutoLoginFlag);
   };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { userId, password } = loginRef.current;
-    if (userId === null) {
-      return;
-    }
-    if (password === null) {
-      return;
-    }
-    emailLocalPartRegex.test(userId.value);
-    const hashedPassword = await sha256(password?.value);
-
-    postLogin.mutate({
-      portal_account: userId.value,
-      password: hashedPassword,
+    submitLogin({
+      userId: userId!.value,
+      password: password!.value,
     });
   };
 
