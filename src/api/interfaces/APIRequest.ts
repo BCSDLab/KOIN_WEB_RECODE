@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
 // eslint-disable-next-line import/no-cycle
-import { UnionHttpMethod, HTTPMethod } from '../apiClient';
+import { HTTPMethod } from '../apiClient';
 import { APIResponse } from './APIResponse';
 
 export type APIRequest<R extends APIResponse> = {
   response: R
   path: string
-  method: UnionHttpMethod<typeof HTTPMethod>
+  method: HTTPMethod
   params?: any
   data?: any
   baseURL?: string

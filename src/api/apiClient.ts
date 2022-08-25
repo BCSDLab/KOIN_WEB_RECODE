@@ -8,14 +8,14 @@ import { APIError } from './interfaces/APIError';
 
 const API_URL = process.env.REACT_APP_API_PATH;
 
-export const HTTPMethod = {
+export const HTTP_METHOD = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE',
-} as const;
+};
 
-export type UnionHttpMethod<T> = T[keyof T];
+export type HTTPMethod = typeof HTTP_METHOD[keyof typeof HTTP_METHOD];
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -112,8 +112,8 @@ export class APIClient {
 
     // json body 사용
     if (
-      request.method === HTTPMethod.POST
-      || request.method === HTTPMethod.PUT
+      request.method === HTTP_METHOD.POST
+      || request.method === HTTP_METHOD.PUT
     ) {
       headers['Content-Type'] = 'application/json';
     }
