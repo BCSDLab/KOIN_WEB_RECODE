@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import sha256 from 'utils/ts/SHA-256';
+import useLogin from 'utils/hooks/useLogin';
 import styles from './LoginPage.module.scss';
-import useLogin from '../../../utils/hooks/useLogin';
 
 interface IClassUser {
   userId: HTMLInputElement | null
@@ -18,9 +18,9 @@ function LoginPage() {
   });
   const [isAutoLoginFlag, setIsAutoLoginFlag] = React.useState(false);
   const postLogin = useLogin({ isAutoLoginFlag });
-  const onToggleAutoLoginFlag = React.useCallback(() => {
+  const onToggleAutoLoginFlag = () => {
     setIsAutoLoginFlag(!isAutoLoginFlag);
-  }, [isAutoLoginFlag]);
+  };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { userId, password } = loginRef.current;
@@ -44,14 +44,14 @@ function LoginPage() {
       <form className={styles.loginform} onSubmit={onSubmit}>
         <input
           ref={(inputRef) => { loginRef.current.userId = inputRef; }}
-          className={styles.styledinput}
+          className={styles['form-input']}
           autoComplete="username"
           name="userId"
           placeholder="아이디를 입력하세요"
         />
         <input
           ref={(inputRef) => { loginRef.current.password = inputRef; }}
-          className={styles.styledinput}
+          className={styles['form-input']}
           type="password"
           autoComplete="current-password"
           name="password"
@@ -61,9 +61,9 @@ function LoginPage() {
           로그인
         </button>
       </form>
-      <div className={styles.autologin}>
-        <label className={styles.autologin__label} htmlFor="autoLoginCheckBox">
-          <input className={styles.autologin__checkbox} checked={isAutoLoginFlag} onChange={onToggleAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
+      <div aria-hidden="true" className={styles['auto-login']}>
+        <label className={styles['auto-login__label']} htmlFor="autoLoginCheckBox">
+          <input className={styles['auto-login__checkbox']} checked={isAutoLoginFlag} onChange={onToggleAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
           자동 로그인
         </label>
       </div>

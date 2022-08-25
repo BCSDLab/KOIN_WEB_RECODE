@@ -1,3 +1,4 @@
+// reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { getCookie } from 'utils/ts/cookie';
 // eslint-disable-next-line import/no-cycle
@@ -7,12 +8,14 @@ import { APIError } from './interfaces/APIError';
 
 const API_URL = process.env.REACT_APP_API_PATH;
 
-export enum HTTPMethod {
-  GET = 'GET',
-  POST = 'POST',
-  DELETE = 'DELETE',
-  PUT = 'PUT',
-}
+export const HTTPMethod = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+} as const;
+
+export type UnionHttpMethod<T> = T[keyof T];
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -121,15 +124,5 @@ export class APIClient {
     }
 
     return headers;
-  }
-
-  private getCsrfToken() {
-    const csrfTokenEntry = document.cookie
-      .split(' ')
-      .map((e) => e.split('='))
-      .find(([key]) => key === 'csrftoken');
-
-    const csrfToken = csrfTokenEntry ? csrfTokenEntry[1] : null;
-    return csrfToken;
   }
 }

@@ -10,12 +10,14 @@ export function setCookie(name: string, val: any, day: number) {
   }
 }
 
-// eslint-disable-next-line consistent-return
 export function getCookie(name: string) {
-  const value = `${document.cookie}`;
+  const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
 
-  return parts.pop()?.split(';').shift();
+  if (parts.length === 2) {
+    return parts.pop()?.split(';').shift();
+  }
+  return console.log('do not exist cookie');
 }
 
 export function deleteCookie(name: string) {
