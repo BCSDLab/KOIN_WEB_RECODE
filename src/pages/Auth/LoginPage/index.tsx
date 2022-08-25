@@ -51,7 +51,7 @@ function LoginPage() {
         />
         <input
           ref={(inputRef) => { loginRef.current.password = inputRef; }}
-          className={styles['form--input']}
+          className={styles['form-input']}
           type="password"
           autoComplete="current-password"
           name="password"
