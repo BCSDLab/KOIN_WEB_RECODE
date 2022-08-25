@@ -61,10 +61,10 @@ function LoginPage() {
           로그인
         </button>
       </form>
-      <div aria-hidden="true" className={styles.autologin}>
-        <label className={styles.autologin__label} htmlFor="autoLoginCheckBox">
-          <input className={styles.autologin__input} checked={isAutoLoginFlag} onChange={onToggleAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
-          <span className={styles.autologin__checkbox} />
+      <div aria-hidden="true" className={styles['auto-login']}>
+        <label className={styles['auto-login__label']} htmlFor="autoLoginCheckBox">
+          <input className={styles['auto-login__input']} checked={isAutoLoginFlag} onChange={onToggleAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
+          <span className={styles['auto-login__checkbox']} />
           자동 로그인
         </label>
       </div>
