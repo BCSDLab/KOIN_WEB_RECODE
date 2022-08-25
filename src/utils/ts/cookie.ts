@@ -13,8 +13,7 @@ export function setCookie(name: string, val: any, day: number) {
 export function getCookie(name: string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
-  console.log(parts.length);
-  console.log(parts.length === 2);
+
   if (parts.length === 2) {
     return parts.pop()?.split(';').shift();
   }
