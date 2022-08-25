@@ -1,7 +1,9 @@
 import { LoginResponse } from 'api/auth/entity';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { setCookie } from 'utils/ts/cookie';
+import { useRecoilState } from 'recoil';
+import { tokenState } from 'utils/recoil';
 import * as api from 'api';
 
 interface State {
@@ -9,8 +11,8 @@ interface State {
 }
 
 export default function useLogin(state : State) {
+  const [token, setToken] = useRecoilState<string>(tokenState);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const postLogin = useMutation(api.auth.default, {
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
@@ -18,7 +20,8 @@ export default function useLogin(state : State) {
       } else {
         setCookie('AUTH_TOKEN_KEY', data.token, 0);
       }
-      queryClient.invalidateQueries('postLogin');
+      setToken(data.token);
+      console.log(token);
       navigate('/');
     },
   });

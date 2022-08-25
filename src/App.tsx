@@ -1,3 +1,4 @@
+import React from 'react';
 import AuthPage from 'pages/Auth';
 import LoginPage from 'pages/Auth/LoginPage';
 import BoardPage from 'pages/BoardPage';
@@ -6,10 +7,20 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
+import { tokenState } from 'utils/recoil';
+import { useRecoilState } from 'recoil';
 import { getCookie } from 'utils/ts/cookie';
 
 function App() {
-  const token = getCookie('AUTH_TOKEN_KEY');
+  const [token, setToken] = useRecoilState<string>(tokenState);
+  React.useEffect(() => {
+    const cookieToken = getCookie('AUTH_TOKEN_KEY');
+    if (cookieToken) {
+      setToken(String(cookieToken));
+    }
+    console.log(token);
+  });
+
   return (
     <Routes>
       <Route path="/" element={<BoardPage />} />
