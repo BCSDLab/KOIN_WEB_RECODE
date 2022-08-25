@@ -44,14 +44,14 @@ function LoginPage() {
       <form className={styles.loginform} onSubmit={onSubmit}>
         <input
           ref={(inputRef) => { loginRef.current.userId = inputRef; }}
-          className={styles.styledinput}
+          className={styles['form-input']}
           autoComplete="username"
           name="userId"
           placeholder="아이디를 입력하세요"
         />
         <input
           ref={(inputRef) => { loginRef.current.password = inputRef; }}
-          className={styles.styledinput}
+          className={styles['form--input']}
           type="password"
           autoComplete="current-password"
           name="password"
@@ -61,10 +61,10 @@ function LoginPage() {
           로그인
         </button>
       </form>
-      <div className={styles.autologin}>
+      <div aria-hidden="true" className={styles.autologin}>
         <label className={styles.autologin__label} htmlFor="autoLoginCheckBox">
-          <input className={styles.autologin__label__checkbox} checked={isAutoLoginFlag} onChange={onToggleAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
-          <span className={styles.autologin__label__oncheck} />
+          <input className={styles.autologin__input} checked={isAutoLoginFlag} onChange={onToggleAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
+          <span className={styles.autologin__checkbox} />
           자동 로그인
         </label>
       </div>
