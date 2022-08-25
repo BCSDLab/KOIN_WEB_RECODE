@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import sha256 from 'utils/ts/SHA-256';
+import useLogin from 'utils/hooks/useLogin';
 import styles from './LoginPage.module.scss';
-import useLogin from '../../../utils/hooks/useLogin';
 
 interface IClassUser {
   userId: HTMLInputElement | null
