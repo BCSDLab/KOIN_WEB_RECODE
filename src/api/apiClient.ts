@@ -13,7 +13,7 @@ export const HTTP_METHOD = {
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE',
-};
+} as const;
 
 export type HTTPMethod = typeof HTTP_METHOD[keyof typeof HTTP_METHOD];
 
