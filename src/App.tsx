@@ -11,7 +11,7 @@ import { tokenState } from 'utils/recoil';
 import { useRecoilState } from 'recoil';
 import { getCookie } from 'utils/ts/cookie';
 
-function App() {
+const useTokenState = () => {
   const [token, setToken] = useRecoilState(tokenState);
   React.useEffect(() => {
     const cookieToken = getCookie('AUTH_TOKEN_KEY');
@@ -19,7 +19,11 @@ function App() {
       setToken(String(cookieToken));
     }
   });
+  return token;
+};
 
+function App() {
+  const token = useTokenState();
   return (
     <Routes>
       <Route path="/" element={<BoardPage />} />
