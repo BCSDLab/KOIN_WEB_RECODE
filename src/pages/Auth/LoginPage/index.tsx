@@ -26,14 +26,6 @@ interface UserInfo {
 
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 
-const useAutoLoginFlag = () => {
-  const [isAutoLoginFlag, , ,setIsAutoLoginFlag] = useBooleanState(false);
-  return {
-    isAutoLoginFlag,
-    setIsAutoLoginFlag,
-  };
-};
-
 const useLogin = (state: IsAutoLogin) => {
   const [, setToken] = useRecoilState(tokenState);
   const navigate = useNavigate();
@@ -85,10 +77,7 @@ function LoginPage() {
     userId: null,
     password: null,
   });
-  const {
-    isAutoLoginFlag,
-    setIsAutoLoginFlag,
-  } = useAutoLoginFlag();
+  const [isAutoLoginFlag, , , toggleIsAutoLoginFlag] = useBooleanState(false);
   const submitLogin = useLogin({ isAutoLoginFlag });
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -123,7 +112,7 @@ function LoginPage() {
       </form>
       <div aria-hidden="true" className={styles['auto-login']}>
         <label className={styles['auto-login__label']} htmlFor="autoLoginCheckBox">
-          <input className={styles['auto-login__checkbox']} checked={isAutoLoginFlag} onChange={setIsAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
+          <input className={styles['auto-login__checkbox']} checked={isAutoLoginFlag} onChange={toggleIsAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
           자동 로그인
         </label>
       </div>
