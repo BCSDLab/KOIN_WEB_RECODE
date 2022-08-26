@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
+import useBooleanState from 'utils/hooks/useBooleanState';
 import * as api from 'api';
 import sha256 from 'utils/ts/SHA-256';
 import styles from './LoginPage.module.scss';
@@ -26,13 +27,10 @@ interface UserInfo {
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 
 const useAutoLoginFlag = () => {
-  const [isAutoLoginFlag, setIsAutoLoginFlag] = React.useState(false);
-  const onToggleAutoLoginFlag = () => {
-    setIsAutoLoginFlag(!isAutoLoginFlag);
-  };
+  const [isAutoLoginFlag, , ,setIsAutoLoginFlag] = useBooleanState(false);
   return {
     isAutoLoginFlag,
-    onToggleAutoLoginFlag,
+    setIsAutoLoginFlag,
   };
 };
 
@@ -89,7 +87,7 @@ function LoginPage() {
   });
   const {
     isAutoLoginFlag,
-    onToggleAutoLoginFlag,
+    setIsAutoLoginFlag,
   } = useAutoLoginFlag();
   const submitLogin = useLogin({ isAutoLoginFlag });
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -125,14 +123,14 @@ function LoginPage() {
       </form>
       <div aria-hidden="true" className={styles['auto-login']}>
         <label className={styles['auto-login__label']} htmlFor="autoLoginCheckBox">
-          <input className={styles['auto-login__checkbox']} checked={isAutoLoginFlag} onChange={onToggleAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
+          <input className={styles['auto-login__checkbox']} checked={isAutoLoginFlag} onChange={setIsAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
           자동 로그인
         </label>
       </div>
       <div className={styles.help}>
-        <a className={styles.help__finduser} href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp">아이디 찾기</a>
-        <Link className={styles.help__findpassword} to="/findpw">비밀번호 찾기</Link>
-        <Link className={styles.help__signup} to="/signup">회원가입</Link>
+        <a className={styles.help__link} href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp">아이디 찾기</a>
+        <Link className={styles.help__link} to="/findpw">비밀번호 찾기</Link>
+        <Link className={styles.help__link} to="/signup">회원가입</Link>
       </div>
       <span className={styles.template__copyright}>
         COPYRIGHT ⓒ&nbsp;
