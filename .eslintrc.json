@@ -32,7 +32,9 @@
       	"@typescript-eslint"
     ],
     "rules": {
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "max-classes-per-file": "off",
+      "class-methods-use-this": "off"
     },
     "settings": {
       "import/resolver": {

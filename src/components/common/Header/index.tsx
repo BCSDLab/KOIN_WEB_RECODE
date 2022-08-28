@@ -197,7 +197,7 @@ function Header() {
                             className={styles.mobileheader__link}
                           >
                             <Link
-                              to="/login"
+                              to="/auth"
                             >
                               로그인
                             </Link>
@@ -318,7 +318,7 @@ function Header() {
                     </Link>
                   </li>
                   <li className={styles['header__auth-link']}>
-                    <Link to="/login">
+                    <Link to="/auth">
                       로그인
                     </Link>
                   </li>
