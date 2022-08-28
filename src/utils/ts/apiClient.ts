@@ -2,9 +2,9 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { getCookie } from 'utils/ts/cookie';
 // eslint-disable-next-line import/no-cycle
-import { APIRequest } from './interfaces/APIRequest';
-import { APIResponse } from './interfaces/APIResponse';
-import { APIError } from './interfaces/APIError';
+import { APIRequest } from 'interfaces/APIRequest';
+import { APIResponse } from 'interfaces/APIResponse';
+import { APIError } from 'interfaces/APIError';
 
 const API_URL = process.env.REACT_APP_API_PATH;
 

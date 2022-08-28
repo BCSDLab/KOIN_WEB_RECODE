@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 // eslint-disable-next-line import/no-cycle
-import { HTTPMethod } from '../apiClient';
+import { HTTPMethod } from 'utils/ts/apiClient';
 import { APIResponse } from './APIResponse';
 
 export type APIRequest<R extends APIResponse> = {

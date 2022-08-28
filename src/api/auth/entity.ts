@@ -1,4 +1,4 @@
-import { APIResponse } from 'api/interfaces/APIResponse';
+import { APIResponse } from 'interfaces/APIResponse';
 
 export type LoginRequest = {
   portal_account: string
