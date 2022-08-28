@@ -6,7 +6,7 @@ function AuthPage() {
     <div className={styles.template}>
       <div className={styles.template__content}>
         <Link className={styles.template__logo} to="/">
-          <img className={styles.template__logo__img} src="https://static.koreatech.in/assets/img/logo_primary.png" alt="logo" />
+          <img className={styles.template__img} src="https://static.koreatech.in/assets/img/logo_primary.png" alt="logo" />
         </Link>
         <Outlet />
       </div>

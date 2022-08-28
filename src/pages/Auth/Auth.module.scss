@@ -32,14 +32,14 @@
       margin-bottom: 60px;
       margin-right: 17px;
     }
+  }
 
-    &__img {
-      width: 125px;
-      cursor: pointer;
+  &__img {
+    width: 125px;
+    cursor: pointer;
 
-      @include media-breakpoint(mobile) {
-        width: 105px;
-      }
+    @include media-breakpoint(mobile) {
+      width: 105px;
     }
   }
 }
