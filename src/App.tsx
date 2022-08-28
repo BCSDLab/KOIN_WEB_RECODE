@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthPage from 'pages/Auth';
+import AuthPage from 'pages/Auth/AuthPage';
 import LoginPage from 'pages/Auth/LoginPage';
 import BoardPage from 'pages/BoardPage';
 import {
