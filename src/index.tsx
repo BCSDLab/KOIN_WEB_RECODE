@@ -4,6 +4,7 @@ import './index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
+import Toast from 'components/common/Toast';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -27,6 +28,7 @@ root.render(
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
           <App />
+          <Toast />
         </QueryClientProvider>
       </BrowserRouter>
     </RecoilRoot>
