@@ -1,0 +1,17 @@
+@import "src/utils/scss/media";
+
+.header {
+  width: 100%;
+  height: 32px;
+  font-size: 30px;
+  font-family: NanumSquare, serif;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: #175c8e;
+  text-align: left;
+  margin-bottom: 19px;
+
+  @include media-breakpoint(mobile) {
+    display: none;
+  }
+}
