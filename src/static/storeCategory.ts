@@ -5,7 +5,7 @@ export interface IStoreCategory {
   image: string;
 }
 
-const STORECATEGORY:IStoreCategory[] = [
+const STORE_CATEGORY:IStoreCategory[] = [
   {
     title: '치킨',
     state: 'chicken',
@@ -62,4 +62,4 @@ const STORECATEGORY:IStoreCategory[] = [
   },
 ];
 
-export default STORECATEGORY;
+export default STORE_CATEGORY;
