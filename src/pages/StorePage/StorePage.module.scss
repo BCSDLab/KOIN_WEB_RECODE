@@ -155,3 +155,91 @@
     }
   }
 }
+
+.option {
+  display: flex;
+  height: 24px;
+  margin-top: 20px;
+  font-family: NanumBarunGothic, serif;
+
+  @include media-breakpoint(mobile) {
+    flex-wrap: wrap;
+    margin-top: 24px;
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 32px);
+    height: auto;
+  }
+
+  &__count {
+    flex: none;
+    float: left;
+    font-size: 12px;
+    color: #858585;
+    letter-spacing: -0.6px;
+
+    @include media-breakpoint(mobile) {
+      width: 100%;
+      margin-bottom: 33px;
+      text-align: left;
+    }
+  }
+  &__checkbox {
+    margin-left: auto;
+    display: flex;
+    width: auto;
+    :nth-child(3){
+      margin-right: 0;
+    }
+    @include media-breakpoint(mobile) {
+      width: 100%;
+      margin-bottom: 33px;
+    }
+  }
+}
+
+.option-checkbox {
+  width: fit-content;
+  color: #175c8e;
+  letter-spacing: -0.6px;
+  margin-right: 25px;
+  :not(:last-of-type){
+    margin-right: 0;
+  }
+
+  @include media-breakpoint(mobile) {
+    margin-bottom: 15px;
+  }
+
+  &__label {
+    font-size: 12px;
+    top: -3px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+
+  }
+
+  &__input {
+    cursor: pointer;
+    width: 12px;
+    height: 12px;
+    margin: 0 8px 0 0;
+    position: relative;
+    top: 3px;
+    background-color: #fff;
+    border: 1px solid #d2dae2;
+    border-radius: 0;
+    appearance: none;
+    box-sizing: content-box;
+
+    &__input:checked {
+      content: "";
+      border: 1px solid #175c8e;
+      background-image: url("https://static.koreatech.in/assets/img/check.png");
+      background-size: cover;
+    }
+  }
+
+
+}
