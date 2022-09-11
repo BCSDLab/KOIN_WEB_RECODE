@@ -56,6 +56,9 @@ function StorePage() {
           }
         </div>
       </div>
+      <div className={styles.storelist}>
+        test
+      </div>
     </div>
   );
 }
