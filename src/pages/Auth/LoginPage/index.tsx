@@ -6,7 +6,7 @@ import { useMutation } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
-import * as api from 'api';
+import { auth } from 'api';
 import sha256 from 'utils/ts/SHA-256';
 import styles from './LoginPage.module.scss';
 
@@ -29,7 +29,7 @@ const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 const useLogin = (state: IsAutoLogin) => {
   const [, setToken] = useRecoilState(tokenState);
   const navigate = useNavigate();
-  const postLogin = useMutation(api.auth.default, {
+  const postLogin = useMutation(auth.login, {
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
         setCookie('AUTH_TOKEN_KEY', data.token, 3);

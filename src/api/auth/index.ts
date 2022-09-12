@@ -1,6 +1,8 @@
 import { APIClient } from 'utils/ts/apiClient';
-import AuthAPI from './login';
+import { Login, NicknameDuplicateCheck, Signup } from './APIDetail';
 
-const login = APIClient.of(AuthAPI);
+export const login = APIClient.of(Login);
 
-export default login;
+export const nicknameDuplicateCheck = APIClient.of(NicknameDuplicateCheck);
+
+export const signup = APIClient.of(Signup);
