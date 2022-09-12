@@ -313,7 +313,7 @@ function Header() {
               {!isLoggedin ? (
                 <>
                   <li className={styles['header__auth-link']}>
-                    <Link to="/signup">
+                    <Link to="/auth/signup">
                       회원가입
                     </Link>
                   </li>
