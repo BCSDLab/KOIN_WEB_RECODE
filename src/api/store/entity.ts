@@ -6,7 +6,7 @@ export type storeDetail = {
 };
 
 export interface storeListResponse extends APIResponse {
-  shop:
+  shops:
     {
     // weekend_open_time: null 
       created_at : string,
