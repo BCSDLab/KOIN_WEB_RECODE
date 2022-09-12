@@ -1,5 +1,13 @@
+import React from 'react';
 import STORE_CATEGORY from 'static/storeCategory';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import * as api from 'api';
 import styles from './StorePage.module.scss';
+
+interface IClassStoreName {
+  storeName: HTMLInputElement | null
+}
 
 const CHECK_BOX = [
   {
@@ -16,7 +24,39 @@ const CHECK_BOX = [
   },
 ];
 
+const useStore = () => {
+  const { data: storeList } = useQuery(
+    'storeList',
+    api.store.default,
+    { retry: 0 },
+  );
+  return storeList;
+};
+
+const useFilteredStoreList = (storeName: string) => {
+  const storeList = useStore();
+  storeList?.shops.filter((store: any) => store.name.includes(storeName));
+};
+
+const useParameter = (data: any) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  navigate(location.pathname, {
+    state: {
+      store: data,
+    },
+  });
+
+  return location;
+};
+
 function StorePage() {
+  const storeRef = React.useRef<IClassStoreName>({
+    storeName: null,
+  });
+  const storeList = useFilteredStoreList('dk');
+  console.log(storeList);
   return (
     <div className={styles.list_section}>
       <div className={styles.header}>
@@ -26,7 +66,10 @@ function StorePage() {
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
           {STORE_CATEGORY.map((value) => (
-            <div className={styles.category__menu} key={value.tag}>
+            <div
+              className={styles.category__menu}
+              key={value.tag}
+            >
               <img className={styles.category__image} src={value.image} alt="category_img" />
               {value.title}
             </div>
@@ -34,7 +77,13 @@ function StorePage() {
         </div>
       </div>
       <div className={styles.search_bar}>
-        <input className={styles.search_bar__input} type="text" name="search" placeholder="상점명을 입력하세요" />
+        <input
+          ref={(inputRef) => { storeRef.current.storeName = inputRef; }}
+          className={styles.search_bar__input}
+          type="text"
+          name="search"
+          placeholder="상점명을 입력하세요"
+        />
         <img className={styles.search_bar__icon} src="https://static.koreatech.in/assets/img/search.png" alt="search_icon" />
       </div>
       <div className={styles.option}>
