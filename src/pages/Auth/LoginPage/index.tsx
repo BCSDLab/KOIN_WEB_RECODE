@@ -8,8 +8,8 @@ import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { auth } from 'api';
 import sha256 from 'utils/ts/SHA-256';
-import styles from './LoginPage.module.scss';
 import showToast from 'utils/ts/showToast';
+import styles from './LoginPage.module.scss';
 
 interface IClassUser {
   userId: HTMLInputElement | null
