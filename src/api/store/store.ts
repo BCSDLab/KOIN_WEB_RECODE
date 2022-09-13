@@ -1,8 +1,8 @@
 import { APIRequest } from 'interfaces/APIRequest';
 import { HTTP_METHOD } from 'utils/ts/apiClient';
-import { storeListResponse } from './entity';
+import { StoreListResponse } from './entity';
 
-export default class StoreList<R extends storeListResponse> implements APIRequest<R> {
+export default class StoreList<R extends StoreListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/shops';
