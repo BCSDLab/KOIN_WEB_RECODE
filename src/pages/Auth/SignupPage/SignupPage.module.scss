@@ -134,6 +134,11 @@
   display: flex;
   flex-wrap: wrap;
 
+  @include media.media-breakpoint(mobile) {
+    width: 320px;
+    margin: 0 auto;
+  }
+
   &__advice {
     display: block;
     width: 100%;
