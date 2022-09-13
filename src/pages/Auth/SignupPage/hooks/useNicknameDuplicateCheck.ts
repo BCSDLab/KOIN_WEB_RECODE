@@ -33,7 +33,7 @@ const useNicknameDuplicateCheck = () => {
           showToast('error', '사용 불가능한 닉네임입니다.');
           return;
         }
-        if (responseError.status === 409) {
+        if (responseError.status === 412) {
           showToast('error', '올바르지 않은 닉네임 형식입니다.');
           return;
         }
