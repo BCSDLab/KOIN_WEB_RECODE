@@ -9,6 +9,7 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import { auth } from 'api';
 import sha256 from 'utils/ts/SHA-256';
 import styles from './LoginPage.module.scss';
+import showToast from 'utils/ts/showToast';
 
 interface IClassUser {
   userId: HTMLInputElement | null
@@ -43,23 +44,19 @@ const useLogin = (state: IsAutoLogin) => {
 
   const useSubmit = async (userInfo: UserInfo) => {
     if (userInfo.userId === null) {
-      // eslint-disable-next-line no-alert
-      alert('계정을 입력해주세요');
+      showToast('error', '계정을 입력해주세요');
       return;
     }
     if (userInfo.password === null) {
-      // eslint-disable-next-line no-alert
-      alert('비밀번호를 입력해주세요');
+      showToast('error', '비밀번호를 입력해주세요');
       return;
     }
     if (userInfo.userId.indexOf('@koreatech.ac.kr') !== -1) {
-      // eslint-disable-next-line no-alert
-      alert('계정명은 @koreatech.ac.kr을 빼고 입력해주세요.'); // 모든 alert는 Toast로 교체 예정
+      showToast('error', '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.'); // 모든 alert는 Toast로 교체 예정
       return;
     }
     if (!emailLocalPartRegex.test(userInfo.userId)) {
-      // eslint-disable-next-line no-alert
-      alert('아우누리 계정 형식이 아닙니다.');
+      showToast('error', '아우누리 계정 형식이 아닙니다.');
       return;
     }
     const hashedPassword = await sha256(userInfo.password);
