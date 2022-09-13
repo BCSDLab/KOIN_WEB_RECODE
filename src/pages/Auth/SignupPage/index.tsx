@@ -392,47 +392,44 @@ const TermsCheckboxs = React.forwardRef<ICustomFormInput | null, ICustomFormInpu
         [styles['signup__section--flex-end']]: true,
       })}
     >
-      <input
-        id="terms-all"
-        className={styles.signup__checkbox}
-        type="checkbox"
-        checked={terms.privacy && terms.usage}
-        onChange={onChangeAllTerms}
-        name={name}
-      />
       <label
         className={cn({
           [styles['signup__checkbox-label']]: true,
           [styles['signup__checkbox-label--large']]: true,
         })}
-        htmlFor="terms-all"
       >
+        <input
+          id="terms-all"
+          className={styles.signup__checkbox}
+          type="checkbox"
+          checked={terms.privacy && terms.usage}
+          onChange={onChangeAllTerms}
+          name={name}
+        />
         아래 이용약관에 모두 동의합니다.
       </label>
-      <input
-        id="terms-privacy"
-        className={styles.signup__checkbox}
-        type="checkbox"
-        checked={terms.privacy}
-        onChange={onChangePrivacyTerm}
-      />
       <label
         className={styles['signup__checkbox-label']}
-        htmlFor="terms-privacy"
       >
+        <input
+          id="terms-privacy"
+          className={styles.signup__checkbox}
+          type="checkbox"
+          checked={terms.privacy}
+          onChange={onChangePrivacyTerm}
+        />
         개인정보 이용약관에 동의합니다.
       </label>
-      <input
-        id="terms-usage"
-        className={styles.signup__checkbox}
-        type="checkbox"
-        checked={terms.usage}
-        onChange={onChangeUsageTerm}
-      />
       <label
         className={styles['signup__checkbox-label']}
-        htmlFor="terms-usage"
       >
+        <input
+          id="terms-usage"
+          className={styles.signup__checkbox}
+          type="checkbox"
+          checked={terms.usage}
+          onChange={onChangeUsageTerm}
+        />
         코인 이용약관에 동의합니다.
       </label>
     </div>
