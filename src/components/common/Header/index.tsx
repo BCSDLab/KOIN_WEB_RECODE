@@ -187,7 +187,7 @@ function Header() {
                             className={styles.mobileheader__link}
                           >
                             <Link
-                              to="/signup"
+                              to="/auth/signup"
                             >
                               회원가입
                             </Link>
