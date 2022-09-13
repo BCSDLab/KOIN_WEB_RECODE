@@ -1,4 +1,4 @@
-@import "src/utils/scss/media";
+@use "src/utils/scss/media" as media;
 
 .footer {
   margin-top: auto;
@@ -15,7 +15,7 @@
     padding-top: 44px;
     padding-bottom: 30px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       display: block;
       width: auto;
       padding: 21px 16px 18px;
@@ -58,7 +58,7 @@
   align-items: center;
   justify-content: space-between;
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     justify-content: center;
   }
 
@@ -74,7 +74,7 @@
       height: 100%;
     }
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       order: 2;
       margin-right: 20px;
       width: 35px;
@@ -85,7 +85,7 @@
     display: flex;
     list-style: none;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       flex-wrap: wrap;
       justify-content: space-between;
       width: 100%;
@@ -120,7 +120,7 @@
       }
     }
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       margin: 0;
       display: flex;
       align-items: flex-start;
@@ -150,7 +150,7 @@
   }
 
   &__icon-links {
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       order: 4;
     }
   }
@@ -166,7 +166,7 @@
       margin-right: 0;
     }
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       margin-right: 16px;
 
       & > img {
@@ -184,7 +184,7 @@
     color: #b5b5b5;
     text-align: center;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       order: 3;
       margin-right: 17px;
       margin-top: 0;

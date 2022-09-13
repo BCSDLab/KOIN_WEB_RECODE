@@ -1,4 +1,4 @@
-@import "src/utils/scss/media";
+@use "src/utils/scss/media";
 
 .form-input {
   width: 100%;
@@ -30,7 +30,7 @@
     color: #fff;
   }
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     width: 320px;
     height: 36px;
     padding-left: 16px;
@@ -43,7 +43,7 @@
   &--half {
     width: 192px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 155px;
     }
   }
@@ -78,7 +78,7 @@
     align-items: center;
     border: 1px solid #d2dae2;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 155px;
       font-size: 14px;
       height: 36px;
@@ -124,7 +124,7 @@
       color: #fff;
     }
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 155px;
     }
   }
@@ -147,7 +147,7 @@
     margin-bottom: 16px;
     margin-left: 5px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 320px;
       margin: 0 auto 12px;
     }
@@ -160,7 +160,7 @@
       flex-wrap: nowrap;
       width: 100%;
 
-      @include media-breakpoint(mobile) {
+      @include media.media-breakpoint(mobile) {
         margin: 0 auto;
         width: 320px;
       }
@@ -191,7 +191,7 @@
       width: 79px;
       margin-left: 6px;
 
-      @include media-breakpoint(mobile) {
+      @include media.media-breakpoint(mobile) {
         width: 75px;
         height: 36px;
       }
@@ -209,7 +209,7 @@
       font-size: 20px;
       font-weight: bold;
 
-      @include media-breakpoint(mobile) {
+      @include media.media-breakpoint(mobile) {
         font-size: 15px;
       }
     }
@@ -281,7 +281,7 @@
     font-size: 13px;
     text-align: center;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       margin-top: 8px;
       width: auto;
       font-size: 11px;
@@ -301,7 +301,7 @@
     margin-bottom: 11px;
     cursor: pointer;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 320px;
       margin: 0 auto 12px;
     }
@@ -321,7 +321,7 @@
     color: #858585;
     height: 102px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       box-sizing: border-box;
       width: 320px;
       height: 127px;
