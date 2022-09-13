@@ -3,6 +3,8 @@ import STORE_CATEGORY from 'static/storeCategory';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import * as api from 'api';
+import cn from 'utils/ts/classnames';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './StorePage.module.scss';
 
 interface IClassStoreName {
@@ -30,33 +32,31 @@ const useStore = () => {
     api.store.default,
     { retry: 0 },
   );
-  return storeList;
+  return storeList?.shops;
 };
 
-const useFilteredStoreList = (storeName: string) => {
-  const storeList = useStore();
-  storeList?.shops.filter((store: any) => store.name.includes(storeName));
-};
+const getOpenCloseTime = (open_time: string | null, close_time : string | null) => {
+  if (open_time === null && close_time === null) return '운영정보없음';
 
-const useParameter = (data: any) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  navigate(location.pathname, {
-    state: {
-      store: data,
-    },
-  });
-
-  return location;
+  return `${open_time}~${close_time}`;
 };
 
 function StorePage() {
   const storeRef = React.useRef<IClassStoreName>({
     storeName: null,
   });
-  const storeList = useFilteredStoreList('dk');
-  console.log(storeList);
+  const storeList = useStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isMobile = useMediaQuery();
+  const onClickEvent = (data: any) => {
+    navigate(location.pathname, {
+      state: {
+        store: data,
+      },
+    });
+  };
+
   return (
     <div className={styles.list_section}>
       <div className={styles.header}>
@@ -66,13 +66,15 @@ function StorePage() {
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
           {STORE_CATEGORY.map((value) => (
-            <div
+            <button
               className={styles.category__menu}
+              type="submit"
+              onClick={() => onClickEvent(value.tag)}
               key={value.tag}
             >
               <img className={styles.category__image} src={value.image} alt="category_img" />
               {value.title}
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -105,8 +107,45 @@ function StorePage() {
           }
         </div>
       </div>
-      <div className={styles.storelist}>
-        test
+      <div className={styles['store-list']}>
+        {
+          storeList?.map((store) => (
+            <div className={styles['store-list__item']} key={store.id}>
+              <div className={styles['store-list__title']}>{store.name}</div>
+              <div className={styles['store-list__phone']}>
+                전화번호
+                <span>{store.phone}</span>
+              </div>
+              <div className={styles['store-list__open-time']}>
+                운영시간
+                <span>{getOpenCloseTime(store.open_time, store.close_time)}</span>
+              </div>
+              <div className={styles['store-item']}>
+                <div className={cn({
+                  [styles['store-item__option']]: true,
+                  [styles['store-item__option--disabled']]: !store.delivery,
+                })}
+                >
+                  {!isMobile ? '#배달가능' : '배달'}
+                </div>
+                <div className={cn({
+                  [styles['store-item__option']]: true,
+                  [styles['store-item__option--disabled']]: !store.pay_card,
+                })}
+                >
+                  {!isMobile ? '#카드가능' : '카드'}
+                </div>
+                <div className={cn({
+                  [styles['store-item__option']]: true,
+                  [styles['store-item__option--disabled']]: !store.pay_bank,
+                })}
+                >
+                  {!isMobile ? '#계좌이체가능' : '계좌이체'}
+                </div>
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
   );
