@@ -77,18 +77,19 @@
   }
 
   &__menu {
-    flex: none;
+    flex: 0 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     font-family: NanumBarunGothic, serif;
     font-weight: normal;
+    padding: 0;
     font-size: 15px;
     line-height: 1.2;
     height: 100%;
     background-color: #fff;
-    color: #252525;
+    color: rgb(37, 37, 37);
     margin-right: 35px;
     border: 0;
     cursor: pointer;
@@ -103,6 +104,7 @@
       letter-spacing: -0.8px;
       width: 64px;
       padding-top: 11px;
+      margin-right: 2px;
     }
   }
 
@@ -197,7 +199,9 @@
 
     @include media-breakpoint(mobile) {
       width: 100%;
-      margin-bottom: 33px;
+      display: flex;
+      justify-content: flex-end;
+      height: 24px;
     }
   }
 }
@@ -246,18 +250,34 @@
   }
 }
 
+.store-mobile-header {
+  background-color: #e6ecf2;
+  color: #a1a1a1;
+  line-height: 1.46;
+  width: 100%;
+  height: 31px;
+  display: flex;
+  align-items: center;
+
+  &::before {
+    content: "상점목록";
+    font-size: 13px;
+    margin-left: 16px;
+  }
+}
+
 .store-list {
   width: 1131px;
   min-height: 58vh;
   margin-top: 15px;
   margin-bottom: 30px;
   height: 100%;
-  display: flex block;
+  display: grid;
   flex-flow: wrap;
   flex-direction: row;
   grid-template-columns: repeat(3, 358px);
-  grid-gap: 29px;
-  grid-row-gap: 30px;
+  grid-gap: 30px;
+  grid-column-gap: 29px;
   grid-auto-rows: 176px;
 
   @include media-breakpoint(mobile) {
@@ -346,6 +366,10 @@
       margin-left: 17px;
       color: #858585;
     }
+
+    @include media-breakpoint(mobile) {
+      display: none;
+    }
   }
 
   &__open-time {
@@ -359,6 +383,37 @@
       display: inline-block;
       margin-left: 17px;
       color: #858585;
+    }
+
+    @include media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+}
+
+.store-none-open {
+  background-color: rgba(0 0 0 / 40%);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  &:after {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    font-family: NotoSansCJKKR;
+    position: absolute;
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+    content: "준비중";
+    justify-content: center;
+    align-items: center;
+
+    @include media-breakpoint(mobile) {
+      font-size: 15px;
     }
   }
 }

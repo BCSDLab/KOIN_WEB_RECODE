@@ -41,6 +41,18 @@ const getOpenCloseTime = (open_time: string | null, close_time : string | null) 
   return `${open_time}~${close_time}`;
 };
 
+const isStoreOpen = (open_time: string | null, close_time : string | null) => {
+  if (open_time === null || close_time === null) return false;
+
+  const date = new Date();
+  const openTimeNum = open_time.replace(':', '');
+  const closeTimeNum = close_time.replace(':', '');
+  const nowTimeNum = `${date.getHours()} ${date.getMinutes()}`;
+
+  if (nowTimeNum <= openTimeNum && nowTimeNum >= closeTimeNum) return true;
+  return false;
+};
+
 function StorePage() {
   const storeRef = React.useRef<IClassStoreName>({
     storeName: null,
@@ -107,10 +119,12 @@ function StorePage() {
           }
         </div>
       </div>
+      {isMobile && <div className={styles['store-mobile-header']} />}
       <div className={styles['store-list']}>
         {
           storeList?.map((store) => (
             <div className={styles['store-list__item']} key={store.id}>
+              { isStoreOpen(store.open_time, store.close_time) && <div className={styles['store-none-open']} />}
               <div className={styles['store-list__title']}>{store.name}</div>
               <div className={styles['store-list__phone']}>
                 전화번호
