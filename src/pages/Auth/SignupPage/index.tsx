@@ -64,14 +64,16 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
   });
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const isCurrentValidEntries = Object.entries(refCollection.current).map((refValue) => {
-      if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
-      const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
-        ? refValue[1].ref.valid
-        : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', refCollection) ?? true;
-      return [refValue[0], isCurrentNameValid];
-    });
-    const invalidFormEntry = isCurrentValidEntries.find((entry) => entry[1] !== true);
+    const isCurrentValidEntries = Object.entries(refCollection.current)
+      .map((refValue): [string, string | true] => {
+        if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
+        const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
+          ? refValue[1].ref.valid
+          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', refCollection) ?? true;
+        return [refValue[0], isCurrentNameValid];
+      });
+    const invalidFormEntry = isCurrentValidEntries
+      .find((entry): entry is [string, string] => entry[1] !== true);
     if (!invalidFormEntry) {
       const formValue = Object.entries(refCollection?.current).map((nameValue) => {
         if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
@@ -82,8 +84,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       submitForm(Object.fromEntries(formValue));
       return;
     }
-    // string인 것이 확정됩니다. TypeScript로 어떻게 표현해야 할지 모르겠네요.
-    showToast('error', invalidFormEntry[1] as string);
+    showToast('error', invalidFormEntry[1]);
   };
   return {
     register,
