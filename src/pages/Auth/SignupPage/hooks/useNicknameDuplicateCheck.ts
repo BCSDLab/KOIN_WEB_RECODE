@@ -1,8 +1,6 @@
-import { auth } from 'api';
-import { APIError } from 'interfaces/APIError';
 import React from 'react';
-import { useQuery } from 'react-query';
 import showToast from 'utils/ts/showToast';
+import useNicknameCheckServer from './useNicknameCheckServer';
 
 const NICKNAME_REGEX = /admin|관리자/;
 
@@ -23,24 +21,7 @@ const useNicknameDuplicateCheck = () => {
     }
     setNickname(targetNickname);
   };
-  const { data, error, status } = useQuery(
-    ['nickname-duplicate-check', nickname],
-    ({ queryKey }) => auth.nicknameDuplicateCheck(queryKey[1]),
-    {
-      enabled: !!nickname,
-      onError: (responseError: APIError) => {
-        if (responseError.status === 409) {
-          showToast('error', '사용 불가능한 닉네임입니다.');
-          return;
-        }
-        if (responseError.status === 412) {
-          showToast('error', '올바르지 않은 닉네임 형식입니다.');
-          return;
-        }
-        showToast('error', '네트워크 연결을 확인해주세요.');
-      },
-    },
-  );
+  const { data, error, status } = useNicknameCheckServer(nickname);
 
   return {
     changeTargetNickname,
