@@ -9,6 +9,9 @@ const useNicknameCheckServer = (nickname: string) => {
     ({ queryKey }) => auth.nicknameDuplicateCheck(queryKey[1]),
     {
       enabled: !!nickname,
+      onSuccess: () => {
+        showToast('success', '사용 가능한 닉네임입니다.');
+      },
       onError: (responseError: APIError) => {
         if (responseError.status === 409) {
           showToast('error', '사용 불가능한 닉네임입니다.');
