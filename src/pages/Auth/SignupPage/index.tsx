@@ -352,7 +352,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
   );
 });
 
-const TermsCheckboxs = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
+const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
   name,
   required,
 }, ref) => {
@@ -522,7 +522,7 @@ function SignupPage() {
           })}
         />
         <GenderListbox {...register('gender')} />
-        <TermsCheckboxs {...register('terms', { required: true })} />
+        <TermsCheckboxes {...register('terms', { required: true })} />
         <button
           type="submit"
           disabled={status === 'loading'}
