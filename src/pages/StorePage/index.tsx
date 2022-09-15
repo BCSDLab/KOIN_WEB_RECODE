@@ -1,6 +1,6 @@
 import React from 'react';
 import STORE_CATEGORY from 'static/storeCategory';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import * as api from 'api';
 import cn from 'utils/ts/classnames';
@@ -58,15 +58,20 @@ function StorePage() {
     storeName: null,
   });
   const storeList = useStore();
-  const navigate = useNavigate();
-  const location = useLocation();
   const isMobile = useMediaQuery();
-  const onClickEvent = (data: any) => {
-    navigate(location.pathname, {
-      state: {
-        store: data,
-      },
-    });
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const setParamsClickHandler = (key: string, value: string, isDelete: boolean) => {
+    if (isDelete) {
+      const param = searchParams.get(key);
+      if (param) {
+        searchParams.delete(key);
+        setSearchParams(searchParams);
+        return;
+      }
+    }
+    searchParams.set(key, value);
+    setSearchParams(searchParams);
   };
 
   return (
@@ -79,13 +84,16 @@ function StorePage() {
         <div className={styles.category__wrapper}>
           {STORE_CATEGORY.map((value) => (
             <button
-              className={styles.category__menu}
-              type="submit"
-              onClick={() => onClickEvent(value.tag)}
+              className={cn({
+                [styles.category__menu]: true,
+                [styles['category__menu--check']]: value.tag === searchParams.get('category'),
+              })}
+              type="button"
+              onClick={() => setParamsClickHandler('category', value.tag, false)}
               key={value.tag}
             >
               <img className={styles.category__image} src={value.image} alt="category_img" />
-              {value.title}
+              <span>{value.title}</span>
             </button>
           ))}
         </div>
@@ -97,13 +105,19 @@ function StorePage() {
           type="text"
           name="search"
           placeholder="상점명을 입력하세요"
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') console.log('clickEnter');
+          }}
         />
         <img className={styles.search_bar__icon} src="https://static.koreatech.in/assets/img/search.png" alt="search_icon" />
       </div>
       <div className={styles.option}>
         <div className={styles.option__count}>
           총
-          <b> 여러 개의 업체가</b>
+          <b>
+            {storeList?.length}
+            개의 업체가
+          </b>
           있습니다.
         </div>
         <div className={styles.option__checkbox}>
@@ -111,7 +125,13 @@ function StorePage() {
             CHECK_BOX.map((item) => (
               <div key={item.id} className={styles['option-checkbox']}>
                 <label htmlFor={item.id} className={styles['option-checkbox__label']}>
-                  <input id={item.id} type="checkbox" className={styles['option-checkbox__input']} />
+                  <input
+                    id={item.id}
+                    type="checkbox"
+                    defaultChecked={searchParams.get(item.id) ? true : undefined}
+                    className={styles['option-checkbox__input']}
+                    onChange={() => setParamsClickHandler(item.id, item.content, true)}
+                  />
                   {item.content}
                 </label>
               </div>

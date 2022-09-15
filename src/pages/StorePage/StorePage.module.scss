@@ -70,6 +70,7 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    width: calc(100% - 182px);
 
     @include media-breakpoint(mobile) {
       width: 330px;
@@ -80,19 +81,29 @@
     flex: 0 0 auto;
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
     font-family: NanumBarunGothic, serif;
     font-weight: normal;
-    padding: 0;
     font-size: 15px;
+    text-align: center;
+    background-color: #fff;
+    border: 0;
     line-height: 1.2;
     height: 100%;
-    background-color: #fff;
-    color: rgb(37 37 37);
+    width: 70px;
+    padding: 0;
+    color: rgb(37, 37, 37);
     margin-right: 35px;
-    border: 0;
     cursor: pointer;
+
+    & span {
+      text-align: center;
+      width: 100%;
+    }
+
+    &--check {
+      color: #f7941e;
+    }
 
     @media (min-width: 577px) {
       &:hover {
@@ -241,7 +252,7 @@
     appearance: none;
     box-sizing: content-box;
 
-    &__input:checked {
+    &:checked {
       content: "";
       border: 1px solid #175c8e;
       background-image: url("https://static.koreatech.in/assets/img/check.png");
