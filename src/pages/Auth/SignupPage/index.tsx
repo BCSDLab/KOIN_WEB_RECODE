@@ -1,4 +1,5 @@
 import React, { useImperativeHandle } from 'react';
+import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import cn from 'utils/ts/classnames';
 import useBooleanState from 'utils/hooks/useBooleanState';
@@ -438,7 +439,11 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
 });
 
 const useSignupForm = () => {
-  const { status, mutate } = useSignup();
+  const navigate = useNavigate();
+  const onSuccess = () => {
+    navigate('/');
+  };
+  const { status, mutate } = useSignup({ onSuccess });
   const submitForm: ISubmitForm = (formValue) => {
     const payload = {
       // 필수정보
