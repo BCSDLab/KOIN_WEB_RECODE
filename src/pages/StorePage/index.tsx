@@ -11,28 +11,59 @@ interface IClassStoreName {
   storeName: HTMLInputElement | null
 }
 
+// interface IClassCheckBox {
+//   delivery: string | boolean
+//   card: string | boolean
+//   bank: string | boolean
+// }
+
 const CHECK_BOX = [
   {
     id: 'delivery',
     content: '배달 가능',
+    value: '1',
   },
   {
     id: 'card',
     content: '카드결제 가능',
+    value: '1',
   },
   {
     id: 'bank',
     content: '계좌이체 가능',
+    value: '1',
   },
 ];
 
-const useStore = () => {
+const checkedFilter = (checked : string | undefined) => {
+  if (checked === undefined) {
+    return false;
+  }
+  return true;
+};
+
+const checkedState = (params: any) => {
+  if (params.delivery === undefined
+    && params.bank === undefined
+    && params.card === undefined) {
+    return true;
+  }
+  return false;
+};
+
+const useStore = (params: any) => {
   const { data: storeList } = useQuery(
     'storeList',
     api.store.default,
     { retry: 0 },
   );
-  return storeList?.shops;
+  return storeList?.shops.filter(
+    (store) => (store.category === undefined || store.category === params.category)
+    && (checkedState(params) ? true : ((store.pay_bank && checkedFilter(params.bank))
+      || (store.pay_card && checkedFilter(params.card))
+      || (store.delivery && checkedFilter(params.delivery))))
+    && store.name.includes(params.storeName ? params.storeName : ''),
+  );
 };
 
 const getOpenCloseTime = (open_time: string | null, close_time : string | null) => {
@@ -57,11 +88,11 @@ function StorePage() {
   const storeRef = React.useRef<IClassStoreName>({
     storeName: null,
   });
-  const storeList = useStore();
-  const isMobile = useMediaQuery();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const setParamsClickHandler = (key: string, value: string, isDelete: boolean) => {
+  const params = Object.fromEntries(searchParams);
+  const storeList = useStore(params);
+  const isMobile = useMediaQuery();
+  const setParamsHandler = (key: string, value: string, isDelete: boolean) => {
     if (isDelete) {
       const param = searchParams.get(key);
       if (param) {
@@ -89,7 +120,7 @@ function StorePage() {
                 [styles['category__menu--check']]: value.tag === searchParams.get('category'),
               })}
               type="button"
-              onClick={() => setParamsClickHandler('category', value.tag, false)}
+              onClick={() => setParamsHandler('category', value.tag, false)}
               key={value.tag}
             >
               <img className={styles.category__image} src={value.image} alt="category_img" />
@@ -106,7 +137,7 @@ function StorePage() {
           name="search"
           placeholder="상점명을 입력하세요"
           onKeyPress={(e) => {
-            if (e.key === 'Enter') console.log('clickEnter');
+            if (e.key === 'Enter') setParamsHandler('storeName', e.target.value, true);
           }}
         />
         <img className={styles.search_bar__icon} src="https://static.koreatech.in/assets/img/search.png" alt="search_icon" />
@@ -130,7 +161,7 @@ function StorePage() {
                     type="checkbox"
                     defaultChecked={searchParams.get(item.id) ? true : undefined}
                     className={styles['option-checkbox__input']}
-                    onChange={() => setParamsClickHandler(item.id, item.content, true)}
+                    onChange={() => setParamsHandler(item.id, item.value, true)}
                   />
                   {item.content}
                 </label>
