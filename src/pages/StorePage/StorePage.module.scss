@@ -411,10 +411,10 @@
   top: 0;
 
   &::after {
+    // font-family: NotoSansCJKKR;추가 요망
     width: 100%;
     height: 100%;
     display: flex;
-    // font-family: NotoSansCJKKR;
     position: absolute;
     font-size: 20px;
     font-weight: 500;
