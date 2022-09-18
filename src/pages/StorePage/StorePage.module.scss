@@ -1,10 +1,10 @@
-@import "src/utils/scss/media";
+@use "src/utils/scss/media";
 
 .list_section {
   width: 1131px;
   margin: 63px auto 0;
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     width: 100%;
     margin-top: 30px;
   }
@@ -21,7 +21,7 @@
   text-align: left;
   margin-bottom: 19px;
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     display: none;
   }
 }
@@ -36,7 +36,7 @@
   border-bottom: 1px #175c8e solid;
   margin-bottom: 25px;
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     justify-content: center;
     width: calc(100% - 34px);
     padding: 10px 0 14px;
@@ -57,7 +57,7 @@
     letter-spacing: -0.8px;
     width: 182px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       justify-content: flex-start;
       width: 100%;
       font-size: 15px;
@@ -72,7 +72,7 @@
     flex-wrap: wrap;
     width: calc(100% - 182px);
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 330px;
     }
   }
@@ -111,7 +111,7 @@
       }
     }
 
-    @media (max-width: 576px) {
+    @include media.media-breakpoint(mobile) {
       letter-spacing: -0.8px;
       width: 64px;
       padding-top: 11px;
@@ -125,7 +125,7 @@
     border-width: 50%;
     margin: 0 auto 13px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 50px;
       height: 50px;
     }
@@ -147,7 +147,7 @@
     padding-left: 20px;
     padding-right: 40px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: calc(100% - 95px);
     }
 
@@ -163,7 +163,7 @@
     bottom: 10px;
     z-index: 1;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       right: 25px;
       bottom: 10px;
     }
@@ -176,7 +176,7 @@
   margin-top: 20px;
   font-family: NanumBarunGothic, serif;
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     flex-wrap: wrap;
     margin-top: 24px;
     margin-left: auto;
@@ -192,7 +192,7 @@
     color: #858585;
     letter-spacing: -0.6px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 100%;
       margin-bottom: 33px;
       text-align: left;
@@ -208,7 +208,7 @@
       margin-right: 0;
     }
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 100%;
       display: flex;
       justify-content: flex-end;
@@ -227,7 +227,7 @@
     margin-right: 0;
   }
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     margin-bottom: 15px;
   }
 
@@ -291,7 +291,7 @@
   grid-column-gap: 29px;
   grid-auto-rows: 176px;
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     margin-left: auto;
     margin-right: auto;
     width: calc(100% - 32px);
@@ -313,7 +313,7 @@
       border: 1px #f7941e solid;
     }
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: auto;
       height: auto;
       padding: 0 16px;
@@ -344,7 +344,7 @@
       color: #f7941e;
     }
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       height: auto;
       width: auto;
       max-width: 120px;
@@ -378,7 +378,7 @@
       color: #858585;
     }
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       display: none;
     }
   }
@@ -396,7 +396,7 @@
       color: #858585;
     }
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       display: none;
     }
   }
@@ -423,7 +423,7 @@
     justify-content: center;
     align-items: center;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       font-size: 15px;
     }
   }
@@ -434,7 +434,7 @@
   align-items: center;
   height: 24px;
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     margin-left: auto;
   }
 
@@ -447,7 +447,7 @@
     background: #f7931e;
     color: white;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       font-size: 11px;
       background: transparent;
       color: #f7931e;
@@ -459,7 +459,7 @@
     &--disabled {
       display: none;
 
-      @include media-breakpoint(mobile) {
+      @include media.media-breakpoint(mobile) {
         color: #d2dae2;
       }
     }
