@@ -7,6 +7,12 @@ export interface IStoreCategory {
 
 const STORE_CATEGORY:IStoreCategory[] = [
   {
+    title: '전체보기',
+    state: 'ALL',
+    tag: 'ALL',
+    image: 'https://static.koreatech.in/assets/img/img-rest-etc.png',
+  },
+  {
     title: '치킨',
     state: 'chicken',
     tag: 'S005',
@@ -42,12 +48,12 @@ const STORE_CATEGORY:IStoreCategory[] = [
     tag: 'S008',
     image: 'https://static.koreatech.in/assets/img/img-rest-normal.png',
   },
-  {
-    title: '카페',
-    state: 'cafe',
-    tag: 'S010',
-    image: 'https://static.koreatech.in/assets/img/img-rest-cafe.png',
-  },
+  // {
+  //   title: '카페',
+  //   state: 'cafe',
+  //   tag: 'S010',
+  //   image: 'https://static.koreatech.in/assets/img/img-rest-cafe.png',
+  // },
   {
     title: '미용실',
     state: 'callban',

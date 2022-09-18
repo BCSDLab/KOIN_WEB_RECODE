@@ -52,7 +52,7 @@ const useStore = (params: any) => {
     { retry: 0 },
   );
   return storeList?.shops.filter(
-    (store) => (params.category === undefined || store.category === params.category)
+    (store) => (params.category === (undefined || 'ALL') || store.category === params.category)
     && (checkedState(params) ? true : ((store.pay_bank && checkedFilter(params.bank))
       || (store.pay_card && checkedFilter(params.card))
       || (store.delivery && checkedFilter(params.delivery))))
