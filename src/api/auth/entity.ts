@@ -27,4 +27,22 @@ export interface LoginResponse extends APIResponse {
   }
 }
 
-export interface RefreshResponse extends APIResponse { }
+export interface NicknameDuplicateCheckResponse extends APIResponse {
+  'success': string;
+}
+
+export interface SignupRequest {
+  portal_account: string,
+  password: string,
+  // options
+  name?: string,
+  nickname?: string,
+  gender?: string,
+  major?: string,
+  student_number?: string,
+  phone_number?: string,
+  identity?: number,
+  is_graduated?: boolean,
+}
+
+export interface SignupResponse extends APIResponse { }
