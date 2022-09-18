@@ -11,12 +11,6 @@ interface IClassStoreName {
   storeName: HTMLInputElement | null
 }
 
-// interface IClassCheckBox {
-//   delivery: string | boolean
-//   card: string | boolean
-//   bank: string | boolean
-// }
-
 const CHECK_BOX = [
   {
     id: 'delivery',
@@ -58,7 +52,7 @@ const useStore = (params: any) => {
     { retry: 0 },
   );
   return storeList?.shops.filter(
-    (store) => (store.category === undefined || store.category === params.category)
+    (store) => (params.category === undefined || store.category === params.category)
     && (checkedState(params) ? true : ((store.pay_bank && checkedFilter(params.bank))
       || (store.pay_card && checkedFilter(params.card))
       || (store.delivery && checkedFilter(params.delivery))))
