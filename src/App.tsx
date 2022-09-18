@@ -30,8 +30,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<BoardPage />} />
-        <Route path="/store" element={<StorePage />} />
+        <Route path="/" element={<BoardPage />}>
+          <Route path="/store" element={<StorePage />} />
+        </Route>
         <Route path="auth" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
           <Route index element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
