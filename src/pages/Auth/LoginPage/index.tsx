@@ -6,8 +6,9 @@ import { useMutation } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
-import * as api from 'api';
+import { auth } from 'api';
 import sha256 from 'utils/ts/SHA-256';
+import showToast from 'utils/ts/showToast';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -29,7 +30,7 @@ const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 const useLogin = (state: IsAutoLogin) => {
   const [, setToken] = useRecoilState(tokenState);
   const navigate = useNavigate();
-  const postLogin = useMutation(api.auth.default, {
+  const postLogin = useMutation(auth.login, {
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
         setCookie('AUTH_TOKEN_KEY', data.token, 3);
@@ -43,23 +44,19 @@ const useLogin = (state: IsAutoLogin) => {
 
   const useSubmit = async (userInfo: UserInfo) => {
     if (userInfo.userId === null) {
-      // eslint-disable-next-line no-alert
-      alert('계정을 입력해주세요');
+      showToast('error', '계정을 입력해주세요');
       return;
     }
     if (userInfo.password === null) {
-      // eslint-disable-next-line no-alert
-      alert('비밀번호를 입력해주세요');
+      showToast('error', '비밀번호를 입력해주세요');
       return;
     }
     if (userInfo.userId.indexOf('@koreatech.ac.kr') !== -1) {
-      // eslint-disable-next-line no-alert
-      alert('계정명은 @koreatech.ac.kr을 빼고 입력해주세요.'); // 모든 alert는 Toast로 교체 예정
+      showToast('error', '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.'); // 모든 alert는 Toast로 교체 예정
       return;
     }
     if (!emailLocalPartRegex.test(userInfo.userId)) {
-      // eslint-disable-next-line no-alert
-      alert('아우누리 계정 형식이 아닙니다.');
+      showToast('error', '아우누리 계정 형식이 아닙니다.');
       return;
     }
     const hashedPassword = await sha256(userInfo.password);

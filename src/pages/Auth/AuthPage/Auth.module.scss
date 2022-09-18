@@ -1,7 +1,7 @@
-@import "src/utils/scss/media";
+@use "src/utils/scss/media" as media;
 
 .template {
-  min-width: 100vw;
+  min-width: 100%;
   min-height: 100vh;
   display: flex;
   -webkit-box-pack: center;
@@ -10,7 +10,7 @@
   align-items: center;
   text-align: center;
 
-  @include media-breakpoint(mobile) {
+  @include media.media-breakpoint(mobile) {
     text-align: center;
   }
 
@@ -18,7 +18,7 @@
     width: 390px;
     margin: 80px auto 50px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       min-width: 360px;
       margin: 80px auto;
     }
@@ -28,7 +28,7 @@
     display: inline-block;
     margin-bottom: 40px;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       margin-bottom: 60px;
       margin-right: 17px;
     }
@@ -38,7 +38,7 @@
     width: 125px;
     cursor: pointer;
 
-    @include media-breakpoint(mobile) {
+    @include media.media-breakpoint(mobile) {
       width: 105px;
     }
   }
