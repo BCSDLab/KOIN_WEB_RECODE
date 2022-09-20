@@ -135,7 +135,7 @@ function StorePage() {
           name="search"
           placeholder="상점명을 입력하세요"
           onKeyPress={(e) => {
-            if (e.key === 'Enter') setParamsHandler('storeName', e.target.value, true);
+            if (e.key === 'Enter') setParamsHandler('storeName', e.target.value, (searchParams.get('storeName') === undefined));
           }}
         />
         <img className={styles.search_bar__icon} src="https://static.koreatech.in/assets/img/search.png" alt="search_icon" />
