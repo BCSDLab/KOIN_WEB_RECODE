@@ -138,7 +138,13 @@ function StorePage() {
             if (e.key === 'Enter') setParamsHandler('storeName', e.target.value, (searchParams.get('storeName') === undefined));
           }}
         />
-        <img className={styles.search_bar__icon} src="https://static.koreatech.in/assets/img/search.png" alt="search_icon" />
+        <button
+          className={styles.search_bar__icon}
+          type="button"
+          onClick={() => { setParamsHandler('storeName', storeRef.current.storeName?.value ?? '', (searchParams.get('storeName') === undefined)); }}
+        >
+          <img className={styles.serach_icon} src="https://static.koreatech.in/assets/img/search.png" alt="store_icon" />
+        </button>
       </div>
       <div className={styles.option}>
         <div className={styles.option__count}>

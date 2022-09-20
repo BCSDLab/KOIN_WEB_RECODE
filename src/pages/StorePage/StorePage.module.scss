@@ -160,13 +160,26 @@
     position: absolute;
     height: 24px;
     right: 11px;
-    bottom: 10px;
+    bottom: 13px;
     z-index: 1;
+    border: 0;
+    background-color: #fff;
 
     @include media.media-breakpoint(mobile) {
       right: 25px;
       bottom: 10px;
     }
+  }
+}
+
+.serach_icon {
+  height: 24px;
+  z-index: 0;
+  border: 0;
+  background-color: #fff;
+
+  @include media.media-breakpoint(mobile) {
+
   }
 }
 
