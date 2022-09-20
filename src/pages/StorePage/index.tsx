@@ -174,12 +174,12 @@ function StorePage() {
           }
         </div>
       </div>
-      {isMobile && <div className={styles['store-mobile-header']} />}
+      {isMobile && <div className={styles['store-mobile-header']}>상점목록</div>}
       <div className={styles['store-list']}>
         {
           storeList?.map((store) => (
             <div className={styles['store-list__item']} key={store.id}>
-              { isStoreOpen(store.open_time, store.close_time) && <div className={styles['store-none-open']} />}
+              {isStoreOpen(store.open_time, store.close_time) && <div className={styles['store-none-open']} />}
               <div className={styles['store-list__title']}>{store.name}</div>
               <div className={styles['store-list__phone']}>
                 전화번호

@@ -177,10 +177,6 @@
   z-index: 0;
   border: 0;
   background-color: #fff;
-
-  @include media.media-breakpoint(mobile) {
-
-  }
 }
 
 .option {
@@ -282,12 +278,8 @@
   height: 31px;
   display: flex;
   align-items: center;
-
-  &::before {
-    content: "상점목록";
-    font-size: 13px;
-    margin-left: 16px;
-  }
+  font-size: 13px;
+  padding-left: 16px;
 }
 
 .store-list {
