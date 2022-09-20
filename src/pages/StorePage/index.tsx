@@ -95,12 +95,12 @@ function StorePage() {
       const param = searchParams.get(key);
       if (param) {
         searchParams.delete(key);
-        setSearchParams(searchParams);
+        setSearchParams(searchParams, { replace: true });
         return;
       }
     }
     searchParams.set(key, value);
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   };
 
   return (
