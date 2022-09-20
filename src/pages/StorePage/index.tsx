@@ -70,12 +70,16 @@ const isStoreOpen = (open_time: string | null, close_time : string | null) => {
   if (open_time === null || close_time === null) return false;
 
   const date = new Date();
-  const openTimeNum = open_time.replace(':', '');
-  const closeTimeNum = close_time.replace(':', '');
-  const nowTimeNum = `${date.getHours()} ${date.getMinutes()}`;
+  const openTimeNum = Number(open_time.replace(':', ''));
+  const closeTimeNum = Number(close_time.replace(':', ''));
+  const nowTimeNum = date.getHours() * 100 + date.getMinutes();
 
-  if (nowTimeNum <= openTimeNum && nowTimeNum >= closeTimeNum) return true;
-  return false;
+  if (nowTimeNum >= openTimeNum) {
+    if (closeTimeNum < 3 ? closeTimeNum + 2400 > nowTimeNum : (nowTimeNum <= closeTimeNum)) {
+      return false;
+    }
+  }
+  return true;
 };
 
 function StorePage() {
