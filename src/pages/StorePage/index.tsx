@@ -74,12 +74,8 @@ const isStoreOpen = (open_time: string | null, close_time : string | null) => {
   const closeTimeNum = Number(close_time.replace(':', ''));
   const nowTimeNum = date.getHours() * 100 + date.getMinutes();
 
-  if (nowTimeNum >= openTimeNum) {
-    if (closeTimeNum < 300 ? closeTimeNum + 2400 > nowTimeNum : (nowTimeNum <= closeTimeNum)) {
-      return false;
-    }
-  }
-  return true;
+  if (closeTimeNum <= nowTimeNum || openTimeNum >= nowTimeNum) return true;
+  return false;
 };
 
 function StorePage() {
