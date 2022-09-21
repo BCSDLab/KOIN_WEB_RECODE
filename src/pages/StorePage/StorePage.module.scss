@@ -463,9 +463,10 @@
 
     &--disabled {
       display: none;
-
+      
       @include media.media-breakpoint(mobile) {
         color: #d2dae2;
+        display: block;
       }
     }
   }
