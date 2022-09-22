@@ -459,14 +459,9 @@
       margin: 0 6px;
       padding: 0;
       border: 0;
-    }
 
-    &--disabled {
-      display: none;
-      
-      @include media.media-breakpoint(mobile) {
+      &[aria-hidden="true"] {
         color: #d2dae2;
-        display: block;
       }
     }
   }

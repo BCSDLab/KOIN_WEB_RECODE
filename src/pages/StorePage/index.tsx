@@ -173,27 +173,12 @@ function StorePage() {
                 <span>{getOpenCloseTime(store.open_time, store.close_time)}</span>
               </div>
               <div className={styles['store-item']}>
-                <div className={cn({
-                  [styles['store-item__option']]: true,
-                  [styles['store-item__option--disabled']]: !store.delivery,
-                })}
-                >
-                  {!isMobile ? '#배달가능' : '배달'}
-                </div>
-                <div className={cn({
-                  [styles['store-item__option']]: true,
-                  [styles['store-item__option--disabled']]: !store.pay_card,
-                })}
-                >
-                  {!isMobile ? '#카드가능' : '카드'}
-                </div>
-                <div className={cn({
-                  [styles['store-item__option']]: true,
-                  [styles['store-item__option--disabled']]: !store.pay_bank,
-                })}
-                >
-                  {!isMobile ? '#계좌이체가능' : '계좌이체'}
-                </div>
+                {(store.delivery || isMobile)
+                && <div className={styles['store-item__option']} aria-hidden={!store.delivery}>{!isMobile ? '#배달가능' : '배달'}</div>}
+                {(store.pay_card || isMobile)
+                && <div className={styles['store-item__option']} aria-hidden={!store.pay_card}>{!isMobile ? '#카드가능' : '카드'}</div>}
+                {(store.pay_bank || isMobile)
+                && <div className={styles['store-item__option']} aria-hidden={!store.pay_bank}>{!isMobile ? '#계좌이체가능' : '계좌이체'}</div>}
               </div>
             </div>
           ))
