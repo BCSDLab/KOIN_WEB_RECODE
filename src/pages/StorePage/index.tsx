@@ -87,7 +87,7 @@ function StorePage() {
   const isMobile = useMediaQuery();
 
   return (
-    <div className={styles.list_section}>
+    <div className={styles.section}>
       <div className={styles.header}>
         주변 상점
       </div>
@@ -126,7 +126,7 @@ function StorePage() {
           type="button"
           onClick={() => { setParams('storeName', storeRef.current.storeName?.value ?? '', (searchParams.get('storeName') === undefined)); }}
         >
-          <img className={styles.serach_icon} src="https://static.koreatech.in/assets/img/search.png" alt="store_icon" />
+          <img className={styles['search-icon']} src="https://static.koreatech.in/assets/img/search.png" alt="store_icon" />
         </button>
       </div>
       <div className={styles.option}>
