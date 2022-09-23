@@ -7,10 +7,6 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useParamsHandler from './hooks/useParamsHandler';
 import styles from './StorePage.module.scss';
 
-interface IClassStoreName {
-  storeName: HTMLInputElement | null
-}
-
 const CHECK_BOX = [
   {
     id: 'delivery',
@@ -79,9 +75,7 @@ const isStoreOpen = (open_time: string | null, close_time : string | null) => {
 };
 
 function StorePage() {
-  const storeRef = React.useRef<IClassStoreName>({
-    storeName: null,
-  });
+  const storeRef = React.useRef<HTMLInputElement | null>(null);
   const { params, searchParams, setParams } = useParamsHandler();
   const storeList = useStore(params);
   const isMobile = useMediaQuery();
@@ -112,8 +106,9 @@ function StorePage() {
       </div>
       <div className={styles.search_bar}>
         <input
-          ref={(inputRef) => { storeRef.current.storeName = inputRef; }}
+          ref={storeRef}
           className={styles.search_bar__input}
+          defaultValue={searchParams.get('storeName') === undefined ? '' : searchParams.get('storeName') ?? ''}
           type="text"
           name="search"
           placeholder="상점명을 입력하세요"
@@ -124,7 +119,7 @@ function StorePage() {
         <button
           className={styles.search_bar__icon}
           type="button"
-          onClick={() => { setParams('storeName', storeRef.current.storeName?.value ?? '', (searchParams.get('storeName') === undefined)); }}
+          onClick={() => { setParams('storeName', storeRef.current?.value ?? '', (searchParams.get('storeName') === undefined)); }}
         >
           <img className={styles['search-icon']} src="https://static.koreatech.in/assets/img/search.png" alt="store_icon" />
         </button>
