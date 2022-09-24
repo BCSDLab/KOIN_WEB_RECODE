@@ -127,10 +127,10 @@ function StorePage() {
       <div className={styles.option}>
         <div className={styles.option__count}>
           총
-          <b>
+          <strong>
             {storeList?.length}
             개의 업체가
-          </b>
+          </strong>
           있습니다.
         </div>
         <div className={styles.option__checkbox}>
