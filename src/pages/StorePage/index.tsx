@@ -93,7 +93,7 @@ function StorePage() {
             <button
               className={cn({
                 [styles.category__menu]: true,
-                [styles['category__menu--check']]: value.tag === searchParams.get('category'),
+                [styles['category__menu--selected']]: value.tag === searchParams.get('category'),
               })}
               type="button"
               onClick={() => setParams('category', value.tag, false)}
