@@ -95,6 +95,8 @@ function StorePage() {
                 [styles.category__menu]: true,
                 [styles['category__menu--selected']]: value.tag === searchParams.get('category'),
               })}
+              role="radio"
+              aria-checked={searchParams.get('category') === value.tag}
               type="button"
               onClick={() => setParams('category', value.tag, false)}
               key={value.tag}
@@ -141,9 +143,7 @@ function StorePage() {
                 <label htmlFor={item.id} className={styles['option-checkbox__label']}>
                   <input
                     id={item.id}
-                    role="radio"
                     type="checkbox"
-                    aria-checked="true"
                     checked={searchParams.get(item.id) ? true : undefined}
                     className={styles['option-checkbox__input']}
                     onChange={() => setParams(item.id, item.value, true)}
