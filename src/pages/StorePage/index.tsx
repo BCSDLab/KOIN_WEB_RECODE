@@ -1,6 +1,7 @@
 import React from 'react';
 import STORE_CATEGORY from 'static/storeCategory';
 import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
 import * as api from 'api';
 import cn from 'utils/ts/classnames';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -156,7 +157,7 @@ function StorePage() {
       <div className={styles['store-list']}>
         {
           storeList?.map((store) => (
-            <div className={styles['store-list__item']} key={store.id}>
+            <Link to="./:id" className={styles['store-list__item']} key={store.id}>
               {isStoreOpen(store.open_time, store.close_time) && <div className={styles['store-none-open']} />}
               <div className={styles['store-list__title']}>{store.name}</div>
               <div className={styles['store-list__phone']}>
@@ -175,7 +176,7 @@ function StorePage() {
                 {(store.pay_bank || isMobile)
                 && <div className={styles['store-item__option']} aria-hidden={!store.pay_bank}>{!isMobile ? '#계좌이체가능' : '계좌이체'}</div>}
               </div>
-            </div>
+            </Link>
           ))
         }
       </div>
