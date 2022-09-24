@@ -164,6 +164,7 @@
     z-index: 1;
     border: 0;
     background-color: #fff;
+    cursor: pointer;
 
     @include media.media-breakpoint(mobile) {
       right: 25px;
