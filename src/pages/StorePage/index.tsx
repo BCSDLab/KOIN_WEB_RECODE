@@ -141,8 +141,10 @@ function StorePage() {
                 <label htmlFor={item.id} className={styles['option-checkbox__label']}>
                   <input
                     id={item.id}
+                    role="radio"
                     type="checkbox"
-                    defaultChecked={searchParams.get(item.id) ? true : undefined}
+                    aria-checked="true"
+                    checked={searchParams.get(item.id) ? true : undefined}
                     className={styles['option-checkbox__input']}
                     onChange={() => setParams(item.id, item.value, true)}
                   />
