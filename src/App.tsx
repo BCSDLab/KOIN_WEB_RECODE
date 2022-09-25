@@ -10,6 +10,7 @@ import {
 import { tokenState } from 'utils/recoil';
 import { useRecoilState } from 'recoil';
 import { getCookie } from 'utils/ts/cookie';
+import StorePage from 'pages/StorePage';
 import Toast from 'components/common/Toast';
 import SignupPage from 'pages/Auth/SignupPage';
 
@@ -29,7 +30,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<BoardPage />} />
+        <Route path="/" element={<BoardPage />}>
+          <Route path="/store" element={<StorePage />} />
+        </Route>
         <Route path="auth" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
           <Route index element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
@@ -37,6 +40,7 @@ function App() {
       </Routes>
       <Toast />
     </>
+
   );
 }
 
