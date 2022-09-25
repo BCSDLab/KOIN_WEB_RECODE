@@ -70,7 +70,8 @@ const isStoreOpen = (open_time: string | null, close_time : string | null) => {
   const closeTimeNum = Number(close_time.replace(':', ''));
   const nowTimeNum = date.getHours() * 100 + date.getMinutes();
 
-  if (closeTimeNum <= nowTimeNum || openTimeNum >= nowTimeNum) return true;
+  if (openTimeNum > closeTimeNum ? openTimeNum >= nowTimeNum || closeTimeNum >= nowTimeNum
+    : openTimeNum >= nowTimeNum || closeTimeNum <= nowTimeNum) return true;
   return false;
 };
 
