@@ -101,8 +101,9 @@
       width: 100%;
     }
 
-    &--check {
+    &--selected {
       color: #f7941e;
+      font-weight: 700;
     }
 
     @media (min-width: 577px) {
@@ -164,6 +165,7 @@
     z-index: 1;
     border: 0;
     background-color: #fff;
+    cursor: pointer;
 
     @include media.media-breakpoint(mobile) {
       right: 25px;

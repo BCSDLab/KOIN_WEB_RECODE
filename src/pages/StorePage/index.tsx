@@ -1,6 +1,7 @@
 import React from 'react';
 import STORE_CATEGORY from 'static/storeCategory';
 import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
 import * as api from 'api';
 import cn from 'utils/ts/classnames';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -93,8 +94,10 @@ function StorePage() {
             <button
               className={cn({
                 [styles.category__menu]: true,
-                [styles['category__menu--check']]: value.tag === searchParams.get('category'),
+                [styles['category__menu--selected']]: value.tag === searchParams.get('category'),
               })}
+              role="radio"
+              aria-checked={searchParams.get('category') === value.tag}
               type="button"
               onClick={() => setParams('category', value.tag, false)}
               key={value.tag}
@@ -128,10 +131,10 @@ function StorePage() {
       <div className={styles.option}>
         <div className={styles.option__count}>
           총
-          <b>
+          <strong>
             {storeList?.length}
             개의 업체가
-          </b>
+          </strong>
           있습니다.
         </div>
         <div className={styles.option__checkbox}>
@@ -142,7 +145,7 @@ function StorePage() {
                   <input
                     id={item.id}
                     type="checkbox"
-                    defaultChecked={searchParams.get(item.id) ? true : undefined}
+                    checked={searchParams.get(item.id) ? true : undefined}
                     className={styles['option-checkbox__input']}
                     onChange={() => setParams(item.id, item.value, true)}
                   />
@@ -157,7 +160,7 @@ function StorePage() {
       <div className={styles['store-list']}>
         {
           storeList?.map((store) => (
-            <div className={styles['store-list__item']} key={store.id}>
+            <Link to="./:id" className={styles['store-list__item']} key={store.id}>
               {isStoreOpen(store.open_time, store.close_time) && <div className={styles['store-none-open']} />}
               <div className={styles['store-list__title']}>{store.name}</div>
               <div className={styles['store-list__phone']}>
@@ -176,7 +179,7 @@ function StorePage() {
                 {(store.pay_bank || isMobile)
                 && <div className={styles['store-item__option']} aria-hidden={!store.pay_bank}>{!isMobile ? '#계좌이체가능' : '계좌이체'}</div>}
               </div>
-            </div>
+            </Link>
           ))
         }
       </div>
