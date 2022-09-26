@@ -160,7 +160,7 @@ function StorePage() {
       <div className={styles['store-list']}>
         {
           storeList?.map((store) => (
-            <Link to="./:id" className={styles['store-list__item']} key={store.id}>
+            <Link to={`/store/${store.permalink}`} className={styles['store-list__item']} key={store.id}>
               {isStoreOpen(store.open_time, store.close_time) && <div className={styles['store-none-open']} />}
               <div className={styles['store-list__title']}>{store.name}</div>
               <div className={styles['store-list__phone']}>

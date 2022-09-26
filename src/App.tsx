@@ -10,9 +10,10 @@ import {
 import { tokenState } from 'utils/recoil';
 import { useRecoilState } from 'recoil';
 import { getCookie } from 'utils/ts/cookie';
-import StorePage from 'pages/StorePage';
+import StorePage from 'pages/Store/StorePage';
 import Toast from 'components/common/Toast';
 import SignupPage from 'pages/Auth/SignupPage';
+import StoreDetailPage from 'pages/Store/StoreDetailPage';
 
 const useTokenState = () => {
   const [token, setToken] = useRecoilState(tokenState);
@@ -32,6 +33,7 @@ function App() {
       <Routes>
         <Route path="/" element={<BoardPage />}>
           <Route path="/store" element={<StorePage />} />
+          <Route path="/store/:id" element={<StoreDetailPage />} />
         </Route>
         <Route path="auth" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
           <Route index element={<LoginPage />} />
