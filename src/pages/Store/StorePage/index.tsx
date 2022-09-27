@@ -45,7 +45,7 @@ const checkedState = (params: any) => {
 const useStore = (params: any) => {
   const { data: storeList } = useQuery(
     'storeList',
-    api.store.default,
+    api.store.getStoreList,
     { retry: 0 },
   );
   return storeList?.shops.filter(

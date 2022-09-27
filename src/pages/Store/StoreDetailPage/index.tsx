@@ -6,14 +6,13 @@ function StoreDetailPage() {
   const params = useParams();
   const isMobile = useMediaQuery();
 
-  console.log(params.id);
   return (
     <div className={styles.template}>
       <div className={styles.section}>
         {!isMobile && <div className={styles.section__header}>주변 상점</div>}
         <div className={styles['section__store-info']}>
           <div className={styles['store-info']}>
-            <div className={styles['store-info__name']}>상점 이름</div>
+            <div className={styles['store-info__name']}>{params.id}</div>
             <div className={styles['store-info__detail']}>
               <span>전화번호</span>
               <br />

@@ -1,6 +1,6 @@
 import { APIClient } from 'utils/ts/apiClient';
-import StoreListAPI from './store';
+import { StoreList, StoreDetailInfo } from './APIDetail';
 
-const getStoreList = APIClient.of(StoreListAPI);
+export const getStoreList = APIClient.of(StoreList);
 
-export default getStoreList;
+export const getStoreDetailInfo = APIClient.of(StoreDetailInfo);
