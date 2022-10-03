@@ -13,7 +13,11 @@ export class StoreList<R extends StoreListResponse> implements APIRequest<R> {
 export class StoreDetailInfo<R extends StoreDetailResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/shops/:id';
-
   response!: R;
+
+  path = 'shops/:id';
+
+  constructor(id: any) {
+    this.path = `shops/${id}`;
+  }
 }

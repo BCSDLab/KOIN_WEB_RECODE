@@ -1,11 +1,24 @@
 import { useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
+import { useQuery } from 'react-query';
+import * as api from 'api';
 import styles from './StoreDetailPage.module.scss';
+
+const useStoreDetail = (params: any) => {
+  const { data: storeDetail } = useQuery(
+    ['storeDetail', params],
+    ({ queryKey }) => api.store.getStoreDetailInfo(queryKey[1]),
+    { retry: 0 },
+  );
+
+  return storeDetail;
+};
 
 function StoreDetailPage() {
   const params = useParams();
   const isMobile = useMediaQuery();
-
+  const storeDetailInfo = useStoreDetail(params.id);
+  console.log(storeDetailInfo);
   return (
     <div className={styles.template}>
       <div className={styles.section}>
