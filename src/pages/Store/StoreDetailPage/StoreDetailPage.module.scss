@@ -109,7 +109,7 @@
 
   &__tag {
     margin: auto 0 24px;
-  
+
     & span {
       display: inline-block;
       border: 1px #f7941e solid;
@@ -140,7 +140,6 @@
 }
 
 .store-button-wrapper {
-
   display: flex;
 
   @include media.media-breakpoint(mobile) {
@@ -148,7 +147,7 @@
     justify-content: flex-end;
     width: 100%;
   }
-  
+
   &__button {
     color: #fff;
     font-size: 15px;
@@ -162,7 +161,7 @@
     & + & {
       margin-left: 3px;
     }
-  
+
     &--call {
       background-color: #175c8e;
       border: 1px solid #175c8e;
@@ -175,7 +174,7 @@
 
     @include media.media-breakpoint(mobile) {
       padding: 6px 12px;
-  
+
       & + & {
         margin-left: 5px;
       }
@@ -205,14 +204,15 @@
     height: 330px;
     cursor: pointer;
     image-orientation: from-image;
-    
+
     &:nth-child(n+2) {
       display: none;
     }
+
     @include media.media-breakpoint(mobile) {
       width: 159px;
       height: 159px;
-      
+
       & + & {
         display: block;
         margin-left: 10px;
@@ -222,27 +222,25 @@
 }
 
 .menu-title {
+  text-align: left;
   font-size: 20px;
-  line-height: 0.8;
-  letter-spacing: -1.5px;
+  letter-spacing: -1px;
+  line-height: 1.69;
   color: #252525;
-  margin-bottom: 18px;
+  margin: 63px 0 12px;
+  font-weight: 700;
 
   @include media.media-breakpoint(mobile) {
-    font-weight: bold;
-    letter-spacing: normal;
+    margin-top: 31px;
   }
 }
 
 .menu-info {
-  display: -ms-flexbox;
-  flex-direction: row;
-  flex-wrap: wrap;
   display: grid;
+  flex-flow: row wrap;
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: 74px;
-  grid-row-gap: 11px;
-  grid-column-gap: 14px;
+  grid-gap: 11px 14px;
   height: 100%;
   margin-bottom: 24px;
 
@@ -268,12 +266,11 @@
   line-height: 1.5;
   color: #252525;
   word-wrap: break-word;
-  
+
   & span {
     margin-left: auto;
     font-size: 15px;
     font-weight: bold;
-    font-family: Verdana, NanumSquare;
     letter-spacing: -0.8px;
     color: #175c8e;
   }
@@ -285,7 +282,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    
+
     & span {
       font-size: 13px;
     }

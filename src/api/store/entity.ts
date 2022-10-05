@@ -1,5 +1,4 @@
 import { APIResponse } from 'interfaces/APIResponse';
-import { blob } from 'stream/consumers';
 
 export interface StoreDetailResponse extends APIResponse {
   weekend_open_time: string | null,
@@ -36,7 +35,7 @@ export interface StoreDetailResponse extends APIResponse {
   delivery: boolean,
   delivery_price: number,
   close_time: string,
-};
+}
 
 export interface StoreListResponse extends APIResponse {
   shops:
