@@ -1,8 +1,7 @@
 import { useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import { useQuery } from 'react-query';
 import cn from 'utils/ts/classnames';
-import * as api from 'api';
+import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
@@ -16,43 +15,52 @@ function StoreDetailPage() {
         {!isMobile && <div className={styles.section__header}>주변 상점</div>}
         <div className={styles['section__store-info']}>
           <div className={styles['store-info']}>
-            <div className={styles['store-info__name']}>{params.id}</div>
+            <div className={styles['store-info__name']}>{storeDetail?.name}</div>
             <div className={styles['store-info__detail']}>
               <span>전화번호</span>
+              { storeDetail?.phone }
               <br />
               <span>운영시간</span>
+              { storeDetail?.open_time ? `${storeDetail.open_time} ~ ${storeDetail.close_time}` : '-'}
               <br />
               <span>주소정보</span>
+              { storeDetail?.address }
               <br />
               <span>배달요금</span>
-              <div className={styles['store-info__etc']}>
+              { storeDetail?.delivery_price.toLocaleString() }
+              원
+              <br />
+              <div className={styles['store-info-etc']}>
                 <span>기타정보</span>
-              </div>
-              <div className={styles['store-info__tag']}>
-                <span>#배달가능</span>
-                <span>#카드가능</span>
-                <span>#계좌이체가능</span>
-              </div>
-              <div className={styles['store-button-wrapper']}>
-                <div className={cn({
-                  [styles['store-button-wrapper__button']]: true,
-                  [styles['store-button-wrapper__button--call']]: true,
-                })}
-                >
-                  전화하기
+                <div className={styles['store-info-etc__content']}>
+                  { storeDescription }
                 </div>
-                <div className={cn({
-                  [styles['store-button-wrapper__button']]: true,
-                  [styles['store-button-wrapper__button--store-list']]: true,
-                })}
-                >
-                  상점목록
-                </div>
+              </div>
+            </div>
+            <div className={styles['store-info__tag']}>
+              <span>#배달가능</span>
+              <span>#카드가능</span>
+              <span>#계좌이체가능</span>
+            </div>
+            <div className={styles['store-button-wrapper']}>
+              <div className={cn({
+                [styles['store-button-wrapper__button']]: true,
+                [styles['store-button-wrapper__button--call']]: true,
+              })}
+              >
+                전화하기
+              </div>
+              <div className={cn({
+                [styles['store-button-wrapper__button']]: true,
+                [styles['store-button-wrapper__button--store-list']]: true,
+              })}
+              >
+                상점목록
               </div>
             </div>
           </div>
           <div className={styles['store-info-image']}>
-            { storeDetailInfo?.image_urls && storeDetailInfo.image_urls.map((img) => (
+            { storeDetail?.image_urls && storeDetail.image_urls.map((img) => (
               <img
                 className={styles['store-info-image__content']}
                 key={`${img}`}
@@ -62,11 +70,11 @@ function StoreDetailPage() {
             ))}
           </div>
         </div>
-        { storeDetailInfo?.menus.length && (
+        { storeDetail?.menus.length && (
           <>
             <div className={styles['menu-title']}>MENU</div>
             <div className={styles['menu-info']}>
-              { storeDetailInfo.menus.filter((menu) => menu.price_type).map(
+              { storeDetail.menus.filter((menu) => menu.price_type).map(
                 (menu) => menu.price_type.map((price) => ({
                   ...price,
                   name: menu.name,

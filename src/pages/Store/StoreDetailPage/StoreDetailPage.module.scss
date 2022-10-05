@@ -107,13 +107,9 @@
     }
   }
 
-  &__etc {
-    display: flex;
-  }
-
   &__tag {
-    margin: auto 0 37px;
-
+    margin: auto 0 24px;
+  
     & span {
       display: inline-block;
       border: 1px #f7941e solid;
@@ -135,8 +131,16 @@
   }
 }
 
+.store-info-etc {
+  display: flex;
+
+  &__content {
+    display: inline-block;
+  }
+}
+
 .store-button-wrapper {
-  margin-bottom: 13px;
+
   display: flex;
 
   @include media.media-breakpoint(mobile) {
