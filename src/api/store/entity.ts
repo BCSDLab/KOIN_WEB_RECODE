@@ -18,17 +18,16 @@ export interface StoreDetailResponse extends APIResponse {
   chosung: string,
   id: number,
   menus: {
-    // {
-    //   shop_id: number,
-    //   is_deleted: boolean,
-    //   updated_at: string,
-    //   name: string,
-    //   created_at: string,
-    //   price_type: {
-
-    //   }[],
-    //   id: number
-    // },
+    shop_id: number,
+    is_deleted: boolean,
+    updated_at: string,
+    name: string,
+    created_at: string,
+    price_type: {
+      size: string,
+      price: string,
+    }[],
+    id: number,
   }[],
 };
 

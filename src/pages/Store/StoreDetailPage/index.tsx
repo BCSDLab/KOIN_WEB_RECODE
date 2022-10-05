@@ -49,6 +49,26 @@ function StoreDetailPage() {
             </div>
           </div>
         </div>
+        { storeDetailInfo?.menus.length && (
+          <>
+            <div className={styles['menu-title']}>MENU</div>
+            <div className={styles['menu-info']}>
+              { storeDetailInfo.menus.filter((menu) => menu.price_type).map(
+                (menu) => menu.price_type.map((price) => ({
+                  ...price,
+                  name: menu.name,
+                })),
+              ).flat(1)
+                .map((menu) => (
+                  <div className={styles['menu-card']} key={menu.name + menu.size}>
+                    { menu.name }
+                    { menu.size !== '기본' && menu.size}
+                    <span>{ !!menu.price && menu.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
+                  </div>
+                ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
