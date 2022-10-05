@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { useQuery } from 'react-query';
+import cn from 'utils/ts/classnames';
 import * as api from 'api';
 import styles from './StoreDetailPage.module.scss';
 
@@ -42,11 +43,33 @@ function StoreDetailPage() {
                 <span>#카드가능</span>
                 <span>#계좌이체가능</span>
               </div>
-              <div className={styles['store-info-button']}>
-                <div className={styles['store-info-button__call']}>전화하기</div>
-                <div className={styles['store-info-button__store-list']}>상점목록</div>
+              <div className={styles['store-button-wrapper']}>
+                <div className={cn({
+                  [styles['store-button-wrapper__button']]: true,
+                  [styles['store-button-wrapper__button--call']]: true,
+                })}
+                >
+                  전화하기
+                </div>
+                <div className={cn({
+                  [styles['store-button-wrapper__button']]: true,
+                  [styles['store-button-wrapper__button--store-list']]: true,
+                })}
+                >
+                  상점목록
+                </div>
               </div>
             </div>
+          </div>
+          <div className={styles['store-info-image']}>
+            { storeDetailInfo?.image_urls && storeDetailInfo.image_urls.map((img) => (
+              <img
+                className={styles['store-info-image__content']}
+                key={`${img}`}
+                src={`${img}`}
+                alt="상점이미지"
+              />
+            ))}
           </div>
         </div>
         { storeDetailInfo?.menus.length && (
