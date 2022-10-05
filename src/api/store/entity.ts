@@ -8,6 +8,7 @@ export interface StoreDetailResponse extends APIResponse {
   image_urls: {
     // "img/url"
   }[],
+  address: string,
   open_time: string,
   weekend_close_time: string | null,
   pay_bank: boolean,
@@ -29,6 +30,12 @@ export interface StoreDetailResponse extends APIResponse {
     }[],
     id: number,
   }[],
+  name: string,
+  pay_card: boolean,
+  phone: string,
+  delivery: boolean,
+  delivery_price: number,
+  close_time: string,
 };
 
 export interface StoreListResponse extends APIResponse {
