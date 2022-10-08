@@ -14,7 +14,6 @@ function ImageModal({
   const [selectedImage, setSelectedImage] = React.useState(image[0]);
   const selectedIndex = image.findIndex((value) => value === selectedImage);
 
-  console.log(image, hideModal);
   return (
     <div className={styles.background}>
       {selectedIndex !== 0 && (
