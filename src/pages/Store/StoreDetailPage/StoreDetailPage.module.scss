@@ -186,6 +186,9 @@
   width: 330px;
   height: 330px;
   display: flex;
+  border: 0;
+  outline: 0;
+  background-color: #fff;
 
   @include media.media-breakpoint(mobile) {
     display: flex;

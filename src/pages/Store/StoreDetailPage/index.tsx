@@ -59,7 +59,7 @@ function StoreDetailPage() {
               </div>
             </div>
           </div>
-          <div className={styles['store-info-image']}>
+          <button className={styles['store-info-image']} type="button" onClick={() => alert(storeDetail?.image_urls)}>
             { storeDetail?.image_urls && storeDetail.image_urls.map((img) => (
               <img
                 className={styles['store-info-image__content']}
@@ -68,7 +68,7 @@ function StoreDetailPage() {
                 alt="상점이미지"
               />
             ))}
-          </div>
+          </button>
         </div>
         { storeDetail?.menus.length && (
           <>
