@@ -1,14 +1,24 @@
 import { useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
+import useModal from 'utils/hooks/useModal';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
   const params = useParams();
   const isMobile = useMediaQuery();
+  const { showModal } = useModal();
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
 
+  const handleClickImageModal = (img: any) => {
+    showModal({
+      modalType: 'ImageModal',
+      modalProps: {
+        image: img,
+      },
+    });
+  };
   return (
     <div className={styles.template}>
       <div className={styles.section}>
@@ -59,7 +69,7 @@ function StoreDetailPage() {
               </div>
             </div>
           </div>
-          <button className={styles['store-info-image']} type="button" onClick={() => alert(storeDetail?.image_urls)}>
+          <button className={styles['store-info-image']} type="button" onClick={() => handleClickImageModal(storeDetail?.image_urls)}>
             { storeDetail?.image_urls && storeDetail.image_urls.map((img) => (
               <img
                 className={styles['store-info-image__content']}
