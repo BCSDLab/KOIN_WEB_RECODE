@@ -7,7 +7,7 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import { tokenState } from 'utils/recoil';
+import { tokenState } from 'utils/recoil/TokenRecoil';
 import { useRecoilState } from 'recoil';
 import { getCookie } from 'utils/ts/cookie';
 import StorePage from 'pages/Store/StorePage';
