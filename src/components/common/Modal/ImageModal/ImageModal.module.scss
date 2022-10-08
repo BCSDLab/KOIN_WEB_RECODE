@@ -15,5 +15,95 @@
 }
 
 .image {
-  color: white;
+  max-width: 600px;
+  max-height: 100%;
+  cursor: pointer;
+  position: fixed;
+  margin: auto;
+  
+  @media (max-width: 576px) {
+    & {
+      max-width: calc(100% - 68px);
+      max-height: calc(100% - 100px);
+    }
+  }
+}
+
+.arrow-button {
+  width: 60px;
+  height: 60px;
+  outline: none;
+  border: 0;
+  background-size: 24px 24px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-color: #252525;
+  border-radius: 50%;
+  box-sizing: border-box;
+  position: fixed;
+  top: calc((100vh - 60px) / 2);
+  cursor: pointer;
+    
+  &:hover {
+    background-color: #f7941e;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    & {
+      width: 24px;
+      height: 24px;
+      background-color: transparent;
+      top: calc((100vh - 24px) / 2);
+    }
+  
+    &:hover {
+      background-color: transparent;
+    }
+  }  
+
+  &--next {
+    background-image: url('https://static.koreatech.in/assets/img/next-arrow.png');
+    right: 50px;
+
+    @include media.media-breakpoint(mobile) {
+      right: 10px;
+    }
+  }
+
+  &--prev {
+    background-image: url('https://static.koreatech.in/assets/img/prev-arrow.png');
+    left: 50px;
+
+    @include media.media-breakpoint(mobile) {
+      left: 10px;
+    }
+  }
+}
+
+.close {
+  border: 0;
+  outline: 0;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0);
+  top: 33px;
+  right: 62px;
+  width: 33px;
+  height: 41px;
+  cursor: pointer;
+  background-image: url('https://static.koreatech.in/assets/img/close.png');
+
+  @include media.media-breakpoint(mobile) {
+    & {
+      top: 20px;
+      right: 20px;
+      width: 24px;
+      height: 24px;
+      background-size: 24px;
+      background-color: transparent;
+    }
+    
+    &:hover {
+      background-color: transparent;
+    }
+  }
 }
