@@ -1,16 +1,16 @@
 import React from 'react';
-import useModal from 'utils/hooks/useModal';
 import cn from 'utils/ts/classnames';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
   image: {}[]
+  onClose: () => void
 }
 
 function ImageModal({
   image,
+  onClose,
 }: ImageModalProps) {
-  const { hideModal } = useModal();
   const [selectedImage, setSelectedImage] = React.useState(image[0]);
   const selectedIndex = image.findIndex((value) => value === selectedImage);
 
@@ -38,7 +38,7 @@ function ImageModal({
           onClick={() => setSelectedImage(image[selectedIndex + 1])}
         />
       )}
-      <button className={styles.close} type="button" aria-label="close" onClick={hideModal} />
+      <button className={styles.close} type="button" aria-label="close" onClick={() => onClose()} />
       <img className={styles.image} src={`${selectedImage}`} alt="상점이미지" />
     </div>
   );

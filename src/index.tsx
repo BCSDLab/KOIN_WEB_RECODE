@@ -4,7 +4,6 @@ import './index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
-import GlobalModal from 'components/common/Modal/GlobalModal';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -25,7 +24,6 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <RecoilRoot>
-      <GlobalModal />
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
           <App />

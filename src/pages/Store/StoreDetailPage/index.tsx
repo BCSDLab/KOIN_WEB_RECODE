@@ -1,23 +1,20 @@
+import React from 'react';
+import ModalPortal from 'components/common/Modal/ModalPortal';
+import ImageModal from 'components/common/Modal/ImageModal';
 import { useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
-import useModal from 'utils/hooks/useModal';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
+  const [modalOpen, setModalOpen] = React.useState<boolean>();
   const params = useParams();
   const isMobile = useMediaQuery();
-  const { showModal } = useModal();
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
 
-  const handleClickImageModal = (img: any) => {
-    showModal({
-      modalType: 'ImageModal',
-      modalProps: {
-        image: img,
-      },
-    });
+  const handleClickImageModal = () => {
+    setModalOpen(false);
   };
   return (
     <div className={styles.template}>
@@ -69,7 +66,7 @@ function StoreDetailPage() {
               </div>
             </div>
           </div>
-          <button className={styles['store-info-image']} type="button" onClick={() => handleClickImageModal(storeDetail?.image_urls)}>
+          <button className={styles['store-info-image']} type="button" onClick={() => setModalOpen(true)}>
             { storeDetail?.image_urls && storeDetail.image_urls.map((img) => (
               <img
                 className={styles['store-info-image__content']}
@@ -79,6 +76,11 @@ function StoreDetailPage() {
               />
             ))}
           </button>
+          { modalOpen && (
+            <ModalPortal>
+              <ImageModal image={storeDetail!.image_urls} onClose={() => handleClickImageModal()} />
+            </ModalPortal>
+          )}
         </div>
         { storeDetail?.menus.length && (
           <>

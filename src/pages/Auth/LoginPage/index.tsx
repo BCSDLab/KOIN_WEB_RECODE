@@ -1,6 +1,6 @@
 import React from 'react';
 import { LoginResponse } from 'api/auth/entity';
-import { tokenState } from 'utils/recoil/TokenRecoil';
+import { tokenState } from 'utils/recoil';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { useRecoilState } from 'recoil';
