@@ -55,7 +55,7 @@
   }
 }
 
-.store-info {
+.store {
   min-height: 330px;
   display: flex;
   flex-direction: column;
@@ -131,7 +131,7 @@
   }
 }
 
-.store-etc {
+.etc {
   display: flex;
 
   &__content {
@@ -182,7 +182,7 @@
   }
 }
 
-.store-image {
+.image {
   width: 330px;
   height: 330px;
   display: flex;

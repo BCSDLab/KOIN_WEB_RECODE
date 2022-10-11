@@ -24,9 +24,9 @@ function StoreDetailPage() {
       <div className={styles.section}>
         {!isMobile && <div className={styles.section__header}>주변 상점</div>}
         <div className={styles['section__store-info']}>
-          <div className={styles['store-info']}>
-            <div className={styles['store-info__name']}>{storeDetail?.name}</div>
-            <div className={styles['store-info__detail']}>
+          <div className={styles.store}>
+            <div className={styles.store__name}>{storeDetail?.name}</div>
+            <div className={styles.store__detail}>
               <span>전화번호</span>
               { storeDetail?.phone }
               <br />
@@ -40,14 +40,14 @@ function StoreDetailPage() {
               { storeDetail?.delivery_price.toLocaleString() }
               원
               <br />
-              <div className={styles['store-etc']}>
+              <div className={styles.etc}>
                 <span>기타정보</span>
-                <div className={styles['store-etc__content']}>
+                <div className={styles.etc__content}>
                   { storeDescription }
                 </div>
               </div>
             </div>
-            <div className={styles['store-info__tag']}>
+            <div className={styles.store__tag}>
               { storeDetail?.delivery && <span>#배달가능</span> }
               { storeDetail?.pay_card && <span>#카드가능</span> }
               { storeDetail?.pay_bank && <span>#계좌이체가능</span> }
@@ -74,11 +74,11 @@ function StoreDetailPage() {
               </button>
             </div>
           </div>
-          <div className={styles['store-image']}>
+          <div className={styles.image}>
             { storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
-              <button className={styles['store-image__content']} type="button" onClick={() => openModal(storeDetail?.image_urls, index)}>
+              <button className={styles.image__content} type="button" onClick={() => openModal(storeDetail?.image_urls, index)}>
                 <img
-                  className={styles['store-image__content']}
+                  className={styles.image__content}
                   key={`${img}`}
                   src={`${img}`}
                   alt="상점이미지"
