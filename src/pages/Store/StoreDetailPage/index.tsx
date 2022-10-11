@@ -1,7 +1,6 @@
-import React from 'react';
 import ImageModal from 'components/common/Modal/ImageModal';
 import useModalPortal from 'utils/hooks/useModalPortal';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import useStoreDetail from './hooks/useStoreDetail';
@@ -10,6 +9,7 @@ import styles from './StoreDetailPage.module.scss';
 function StoreDetailPage() {
   const params = useParams();
   const isMobile = useMediaQuery();
+  const navigate = useNavigate();
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
   const portalManager = useModalPortal();
 
@@ -50,20 +50,25 @@ function StoreDetailPage() {
               <span>#계좌이체가능</span>
             </div>
             <div className={styles['store-button-wrapper']}>
-              <div className={cn({
-                [styles['store-button-wrapper__button']]: true,
-                [styles['store-button-wrapper__button--call']]: true,
-              })}
+              <a
+                className={cn({
+                  [styles['store-button-wrapper__button']]: true,
+                  [styles['store-button-wrapper__button--call']]: true,
+                })}
+                href={`tel:${storeDetail?.phone}`}
               >
                 전화하기
-              </div>
-              <div className={cn({
-                [styles['store-button-wrapper__button']]: true,
-                [styles['store-button-wrapper__button--store-list']]: true,
-              })}
+              </a>
+              <button
+                className={cn({
+                  [styles['store-button-wrapper__button']]: true,
+                  [styles['store-button-wrapper__button--store-list']]: true,
+                })}
+                type="button"
+                onClick={() => navigate('/store')}
               >
                 상점목록
-              </div>
+              </button>
             </div>
           </div>
           <button className={styles['store-info-image']} type="button" onClick={() => openModal(storeDetail!.image_urls)}>
