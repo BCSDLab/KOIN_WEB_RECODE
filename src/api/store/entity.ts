@@ -40,9 +40,7 @@ export interface StoreListResponse extends APIResponse {
   { // weekend_open_time: null
     created_at : string,
     description : string,
-    image_urls: {
-    // "https://staxtic.koreatech.in/upload/market/2022/03/26/0e650fe1-811b-411e-9a82-0dd4f43c42ca-1648289492264.jpg"*/
-    }[],
+    image_urls: string[],
     open_time: string,
     // weekend_close_time: null,
     pay_bank: boolean,
