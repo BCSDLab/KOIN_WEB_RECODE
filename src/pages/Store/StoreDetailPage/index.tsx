@@ -3,6 +3,7 @@ import useModalPortal from 'utils/hooks/useModalPortal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
+import { Portal } from 'components/common/Modal/PortalProvider';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
@@ -14,7 +15,9 @@ function StoreDetailPage() {
   const portalManager = useModalPortal();
 
   const openModal = (img: {}[]) => {
-    portalManager.open((modalOpen: any) => <ImageModal image={img} onClose={modalOpen.close} />);
+    portalManager.open((modalOpen: Portal) => (
+      <ImageModal image={img} onClose={modalOpen.close} />
+    ));
   };
   return (
     <div className={styles.template}>

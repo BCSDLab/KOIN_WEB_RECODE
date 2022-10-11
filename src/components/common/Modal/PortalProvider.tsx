@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 
 export interface Portal {
@@ -17,7 +17,7 @@ interface OpenOptions {
   onClose?: () => void;
 }
 
-type OpenFunc = (
+export type OpenFunc = (
   element: ((portal: Portal) => React.ReactElement) | React.ReactElement,
   options?: OpenOptions
 ) => void;
@@ -32,7 +32,11 @@ export const PortalContext = React.createContext<PortalManager | undefined>(
   undefined,
 );
 
-export const PortalProvider = function PortalProvider({ children }: any) {
+interface ChildrenProps {
+  children: ReactNode
+}
+
+export const PortalProvider = function PortalProvider({ children }: ChildrenProps) {
   const [portals, setPortals] = React.useState<PrivatePortal[]>([]);
 
   const open: OpenFunc = React.useCallback((element, options = {}) => {
