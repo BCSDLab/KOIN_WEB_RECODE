@@ -45,9 +45,9 @@ function StoreDetailPage() {
               </div>
             </div>
             <div className={styles['store-info__tag']}>
-              <span>#배달가능</span>
-              <span>#카드가능</span>
-              <span>#계좌이체가능</span>
+              { storeDetail?.delivery && <span>#배달가능</span> }
+              { storeDetail?.pay_card && <span>#카드가능</span> }
+              { storeDetail?.pay_bank && <span>#계좌이체가능</span> }
             </div>
             <div className={styles['store-button-wrapper']}>
               <a
