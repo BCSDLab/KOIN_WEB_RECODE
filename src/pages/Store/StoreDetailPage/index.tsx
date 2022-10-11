@@ -76,10 +76,9 @@ function StoreDetailPage() {
           </div>
           <div className={styles.image}>
             { storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
-              <button className={styles.image__content} type="button" onClick={() => openModal(storeDetail?.image_urls, index)}>
+              <button className={styles.image__content} key={`${img}`} type="button" onClick={() => openModal(storeDetail?.image_urls, index)}>
                 <img
                   className={styles.image__content}
-                  key={`${img}`}
                   src={`${img}`}
                   alt="상점이미지"
                 />
