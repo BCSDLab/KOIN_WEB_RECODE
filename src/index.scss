@@ -26,9 +26,9 @@
 }
 
 #root {
-  min-width: 1148px;
   display: flex;
   flex-direction: column;
+  min-width: 1148px;
   min-height: 100vh;
 
   /* https://css-tricks.com/snippets/css/system-font-stack/ */
