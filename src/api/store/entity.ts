@@ -4,9 +4,7 @@ export interface StoreDetailResponse extends APIResponse {
   weekend_open_time: string | null,
   created_at: string,
   description: string,
-  image_urls: {
-    // "img/url"
-  }[],
+  image_urls: string[],
   address: string,
   open_time: string,
   weekend_close_time: string | null,
