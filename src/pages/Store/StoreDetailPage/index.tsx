@@ -82,7 +82,7 @@ function StoreDetailPage() {
             ))}
           </button>
         </div>
-        { storeDetail?.menus.length && (
+        { !!storeDetail?.menus.length && (
           <>
             <div className={styles['menu-title']}>MENU</div>
             <div className={styles['menu-info']}>
