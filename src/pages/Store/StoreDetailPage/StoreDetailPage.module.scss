@@ -131,7 +131,7 @@
   }
 }
 
-.store-info-etc {
+.store-etc {
   display: flex;
 
   &__content {
@@ -139,7 +139,7 @@
   }
 }
 
-.store-button-wrapper {
+.button-wrapper {
   display: flex;
 
   @include media.media-breakpoint(mobile) {
@@ -182,13 +182,10 @@
   }
 }
 
-.store-info-image {
+.store-image {
   width: 330px;
   height: 330px;
   display: flex;
-  border: 0;
-  outline: 0;
-  background-color: #fff;
 
   @include media.media-breakpoint(mobile) {
     display: flex;
@@ -207,6 +204,9 @@
     height: 330px;
     cursor: pointer;
     image-orientation: from-image;
+    border: 0;
+    outline: 0;
+    background-color: #fff;
 
     &:nth-child(n+2) {
       display: none;
@@ -219,6 +219,10 @@
       & + & {
         display: block;
         margin-left: 10px;
+      }
+
+      &:last-child {
+        margin-right: 10px;
       }
     }
   }

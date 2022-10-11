@@ -14,9 +14,9 @@ function StoreDetailPage() {
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
   const portalManager = useModalPortal();
 
-  const openModal = (img: {}[]) => {
+  const openModal = (img: {}[], selectImg: number) => {
     portalManager.open((modalOpen: Portal) => (
-      <ImageModal image={img} onClose={modalOpen.close} />
+      <ImageModal image={img} selectImg={selectImg} onClose={modalOpen.close} />
     ));
   };
   return (
@@ -40,9 +40,9 @@ function StoreDetailPage() {
               { storeDetail?.delivery_price.toLocaleString() }
               원
               <br />
-              <div className={styles['store-info-etc']}>
+              <div className={styles['store-etc']}>
                 <span>기타정보</span>
-                <div className={styles['store-info-etc__content']}>
+                <div className={styles['store-etc__content']}>
                   { storeDescription }
                 </div>
               </div>
@@ -52,11 +52,11 @@ function StoreDetailPage() {
               { storeDetail?.pay_card && <span>#카드가능</span> }
               { storeDetail?.pay_bank && <span>#계좌이체가능</span> }
             </div>
-            <div className={styles['store-button-wrapper']}>
+            <div className={styles['button-wrapper']}>
               <a
                 className={cn({
-                  [styles['store-button-wrapper__button']]: true,
-                  [styles['store-button-wrapper__button--call']]: true,
+                  [styles['button-wrapper__button']]: true,
+                  [styles['button-wrapper__button--call']]: true,
                 })}
                 href={`tel:${storeDetail?.phone}`}
               >
@@ -64,8 +64,8 @@ function StoreDetailPage() {
               </a>
               <button
                 className={cn({
-                  [styles['store-button-wrapper__button']]: true,
-                  [styles['store-button-wrapper__button--store-list']]: true,
+                  [styles['button-wrapper__button']]: true,
+                  [styles['button-wrapper__button--store-list']]: true,
                 })}
                 type="button"
                 onClick={() => navigate('/store')}
@@ -74,16 +74,18 @@ function StoreDetailPage() {
               </button>
             </div>
           </div>
-          <button className={styles['store-info-image']} type="button" onClick={() => openModal(storeDetail!.image_urls)}>
-            { storeDetail?.image_urls && storeDetail.image_urls.map((img) => (
-              <img
-                className={styles['store-info-image__content']}
-                key={`${img}`}
-                src={`${img}`}
-                alt="상점이미지"
-              />
+          <div className={styles['store-image']}>
+            { storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
+              <button className={styles['store-image__content']} type="button" onClick={() => openModal(storeDetail?.image_urls, index)}>
+                <img
+                  className={styles['store-image__content']}
+                  key={`${img}`}
+                  src={`${img}`}
+                  alt="상점이미지"
+                />
+              </button>
             ))}
-          </button>
+          </div>
         </div>
         { !!storeDetail?.menus.length && (
           <>
