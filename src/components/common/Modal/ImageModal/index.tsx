@@ -4,16 +4,16 @@ import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
   image: {}[]
-  selectImg: number
+  nowImage: number
   onClose: () => void
 }
 
 function ImageModal({
   image,
-  selectImg,
+  nowImage,
   onClose,
 }: ImageModalProps) {
-  const [selectedImage, setSelectedImage] = React.useState(image[selectImg]);
+  const [selectedImage, setSelectedImage] = React.useState(image[nowImage]);
   const selectedIndex = image.findIndex((value) => value === selectedImage);
 
   return (
