@@ -15,11 +15,11 @@ function StoreDetailPage() {
   const [modalOpen, setModalOpen] = React.useState(false);
   const { showModal } = useModalPortal();
 
-  const turnoff = () => {
+  const onClickCloseModal = () => {
     setModalOpen(false);
   };
 
-  const turnon = () => {
+  const onClickOpenModal = () => {
     setModalOpen(true);
   };
 
@@ -84,7 +84,7 @@ function StoreDetailPage() {
                 <button
                   className={styles.image__content}
                   type="button"
-                  onClick={() => turnon()}
+                  onClick={() => onClickOpenModal()}
                 >
                   <img
                     className={styles.image__content}
@@ -93,11 +93,14 @@ function StoreDetailPage() {
                   />
                 </button>
                 {
-                  modalOpen && (
-                    showModal({
-                      modal: <ImageModal image={imageObject} nowImage={index} onClose={turnoff} />,
-                    })
-                  )
+                  showModal({
+                    modal: <ImageModal
+                      image={imageObject}
+                      nowImage={index}
+                      onClose={onClickCloseModal}
+                    />,
+                    isOpen: modalOpen,
+                  })
                 }
               </div>
             ))}
