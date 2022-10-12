@@ -3,6 +3,7 @@ import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
+import useModalPortal from 'utils/hooks/useModalPortal';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
@@ -12,6 +13,7 @@ function StoreDetailPage() {
   const navigate = useNavigate();
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const { showModal } = useModalPortal();
 
   const turnoff = () => {
     setModalOpen(false);
@@ -92,11 +94,9 @@ function StoreDetailPage() {
                 </button>
                 {
                   modalOpen && (
-                    <ImageModal
-                      image={imageObject}
-                      nowImage={index}
-                      onClose={turnoff}
-                    />
+                    showModal({
+                      modal: <ImageModal image={imageObject} nowImage={index} onClose={turnoff} />,
+                    })
                   )
                 }
               </div>
