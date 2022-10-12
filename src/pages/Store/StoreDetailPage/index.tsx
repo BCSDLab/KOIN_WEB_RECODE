@@ -1,9 +1,8 @@
+import React from 'react';
 import ImageModal from 'components/common/Modal/ImageModal';
-import useModalPortal from 'utils/hooks/useModalPortal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
-import { Portal } from 'components/common/Modal/PortalProvider';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
@@ -12,13 +11,16 @@ function StoreDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
-  const portalManager = useModalPortal();
+  const [modalOpen, setModalOpen] = React.useState(false);
 
-  const openModal = (img: {}[], selectImg: number) => {
-    portalManager.open((modalOpen: Portal) => (
-      <ImageModal image={img} nowImage={selectImg} onClose={modalOpen.close} />
-    ));
+  const turnoff = () => {
+    setModalOpen(false);
   };
+
+  const turnon = () => {
+    setModalOpen(true);
+  };
+
   return (
     <div className={styles.template}>
       <div className={styles.section}>
@@ -75,14 +77,29 @@ function StoreDetailPage() {
             </div>
           </div>
           <div className={styles.image}>
-            { storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
-              <button className={styles.image__content} key={`${img}`} type="button" onClick={() => openModal(storeDetail?.image_urls, index)}>
-                <img
+            { storeDetail?.image_urls && storeDetail.image_urls.map((img, index, imageObject) => (
+              <div key={`${img}`}>
+                <button
                   className={styles.image__content}
-                  src={`${img}`}
-                  alt="상점이미지"
-                />
-              </button>
+                  type="button"
+                  onClick={() => turnon()}
+                >
+                  <img
+                    className={styles.image__content}
+                    src={`${img}`}
+                    alt="상점이미지"
+                  />
+                </button>
+                {
+                  modalOpen && (
+                    <ImageModal
+                      image={imageObject}
+                      nowImage={index}
+                      onClose={turnoff}
+                    />
+                  )
+                }
+              </div>
             ))}
           </div>
         </div>

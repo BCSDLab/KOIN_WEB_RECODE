@@ -4,7 +4,6 @@ import './index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
-import { PortalProvider } from 'components/common/Modal/PortalProvider';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -25,13 +24,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <RecoilRoot>
-      <PortalProvider>
-        <BrowserRouter>
-          <QueryClientProvider client={queryClient}>
-            <App />
-          </QueryClientProvider>
-        </BrowserRouter>
-      </PortalProvider>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>,
 );

@@ -3,7 +3,7 @@ import cn from 'utils/ts/classnames';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
-  image: {}[]
+  image: string[]
   nowImage: number
   onClose: () => void
 }
