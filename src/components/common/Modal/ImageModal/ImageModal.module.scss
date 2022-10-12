@@ -20,7 +20,7 @@
   position: fixed;
   margin: auto;
 
-  @media (max-width: 576px) {
+  @include media.media-breakpoint(mobile) {
     & {
       max-width: calc(100% - 68px);
       max-height: calc(100% - 100px);
