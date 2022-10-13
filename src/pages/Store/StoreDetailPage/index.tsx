@@ -3,7 +3,7 @@ import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
-import useModalPortal from 'utils/hooks/useModalPortal';
+import ModalProvider from 'components/common/Modal/ModalProvider';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
@@ -13,7 +13,6 @@ function StoreDetailPage() {
   const navigate = useNavigate();
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
   const [modalOpen, setModalOpen] = React.useState(false);
-  const { showModal } = useModalPortal();
 
   const onClickCloseModal = () => {
     setModalOpen(false);
@@ -80,27 +79,28 @@ function StoreDetailPage() {
           </div>
           <div className={styles.image}>
             { storeDetail?.image_urls && storeDetail.image_urls.map((img, index, imageObject) => (
-              <div key={`${img}`}>
+              <div key={`${img}`} className={styles.image__content}>
                 <button
-                  className={styles.image__content}
+                  className={styles.image__button}
                   type="button"
                   onClick={() => onClickOpenModal()}
                 >
                   <img
-                    className={styles.image__content}
+                    className={styles.image__poster}
                     src={`${img}`}
                     alt="상점이미지"
                   />
                 </button>
                 {
-                  showModal({
-                    modal: <ImageModal
-                      image={imageObject}
-                      nowImage={index}
-                      onClose={onClickCloseModal}
-                    />,
-                    isOpen: modalOpen,
-                  })
+                  modalOpen && (
+                    <ModalProvider>
+                      <ImageModal
+                        image={imageObject}
+                        nowImage={index}
+                        onClose={onClickCloseModal}
+                      />
+                    </ModalProvider>
+                  )
                 }
               </div>
             ))}

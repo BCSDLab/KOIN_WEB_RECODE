@@ -16,6 +16,16 @@ function ImageModal({
   const [selectedImage, setSelectedImage] = React.useState(image[nowImage]);
   const selectedIndex = image.findIndex((value) => value === selectedImage);
 
+  React.useEffect(() => {
+    const pressEsc = (event: KeyboardEvent) => {
+      if (event.code === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', (event: KeyboardEvent) => pressEsc(event));
+    return () => window.removeEventListener('keydown', (event: KeyboardEvent) => pressEsc(event));
+  }, [onClose]);
+
   return (
     <div className={styles.background}>
       {selectedIndex !== 0 && (
