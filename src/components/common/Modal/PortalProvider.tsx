@@ -29,7 +29,7 @@ interface ProviderProps {
   children: ReactNode
 }
 
-export const PortalProvider = function PortalProvider({ children }: ProviderProps) {
+const PortalProvider = function PortalProvider({ children }: ProviderProps) {
   const [modalPortal, setModalPortal] = React.useState<ReactNode>();
   const el = document.getElementById('modal') as HTMLElement;
 
