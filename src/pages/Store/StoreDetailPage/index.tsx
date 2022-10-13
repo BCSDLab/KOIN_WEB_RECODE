@@ -12,14 +12,16 @@ function StoreDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [selectedPoster, setSelectedPoster] = React.useState(0);
 
   const onClickCloseModal = () => {
-    setModalOpen(false);
+    setIsModalOpen(false);
   };
 
-  const onClickOpenModal = () => {
-    setModalOpen(true);
+  const onClickOpenModal = (index: number) => {
+    setSelectedPoster(index);
+    setIsModalOpen(true);
   };
 
   return (
@@ -78,12 +80,12 @@ function StoreDetailPage() {
             </div>
           </div>
           <div className={styles.image}>
-            { storeDetail?.image_urls && storeDetail.image_urls.map((img, index, imageObject) => (
+            { storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
               <div key={`${img}`} className={styles.image__content}>
                 <button
                   className={styles.image__button}
                   type="button"
-                  onClick={() => onClickOpenModal()}
+                  onClick={() => onClickOpenModal(index)}
                 >
                   <img
                     className={styles.image__poster}
@@ -91,19 +93,19 @@ function StoreDetailPage() {
                     alt="상점이미지"
                   />
                 </button>
-                {
-                  modalOpen && (
-                    <ModalProvider>
-                      <ImageModal
-                        image={imageObject}
-                        nowImage={index}
-                        onClose={onClickCloseModal}
-                      />
-                    </ModalProvider>
-                  )
-                }
               </div>
             ))}
+            {
+              isModalOpen && (
+                <ModalProvider>
+                  <ImageModal
+                    image={storeDetail!.image_urls}
+                    nowImage={selectedPoster}
+                    onClose={onClickCloseModal}
+                  />
+                </ModalProvider>
+              )
+            }
           </div>
         </div>
         { !!storeDetail?.menus.length && (

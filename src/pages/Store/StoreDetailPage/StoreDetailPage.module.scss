@@ -203,6 +203,7 @@
     width: 330px;
     height: 330px;
     cursor: pointer;
+    image-orientation: from-image;
 
     &:nth-child(n+2) {
       display: none;
@@ -241,6 +242,20 @@
 
     &:nth-child(n+2) {
       display: none;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: 159px;
+      height: 159px;
+
+      & + & {
+        display: block;
+        margin-left: 10px;
+      }
+
+      &:last-child {
+        margin-right: 10px;
+      }
     }
   }
 }
