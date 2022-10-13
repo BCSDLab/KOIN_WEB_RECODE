@@ -1,9 +1,9 @@
-import React from 'react';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
-import ModalProvider from 'components/common/Modal/ModalProvider';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import useModalPortal from 'utils/hooks/useModalPortal';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
@@ -12,16 +12,12 @@ function StoreDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [selectedPoster, setSelectedPoster] = React.useState(0);
+  const portalManager = useModalPortal();
 
-  const onClickCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const onClickOpenModal = (index: number) => {
-    setSelectedPoster(index);
-    setIsModalOpen(true);
+  const openModal = (img: string[], index: number) => {
+    portalManager.open((modalOpen: Portal) => (
+      <ImageModal image={img} nowImage={index} onClose={modalOpen.close} />
+    ));
   };
 
   return (
@@ -85,7 +81,7 @@ function StoreDetailPage() {
                 <button
                   className={styles.image__button}
                   type="button"
-                  onClick={() => onClickOpenModal(index)}
+                  onClick={() => openModal(storeDetail!.image_urls, index)}
                 >
                   <img
                     className={styles.image__poster}
@@ -95,17 +91,6 @@ function StoreDetailPage() {
                 </button>
               </div>
             ))}
-            {
-              isModalOpen && (
-                <ModalProvider>
-                  <ImageModal
-                    image={storeDetail!.image_urls}
-                    nowImage={selectedPoster}
-                    onClose={onClickCloseModal}
-                  />
-                </ModalProvider>
-              )
-            }
           </div>
         </div>
         { !!storeDetail?.menus.length && (
