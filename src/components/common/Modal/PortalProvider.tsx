@@ -31,7 +31,6 @@ interface ProviderProps {
 
 const PortalProvider = function PortalProvider({ children }: ProviderProps) {
   const [modalPortal, setModalPortal] = React.useState<ReactNode>();
-  const el = document.getElementById('modal') as HTMLElement;
 
   const open: OpenFunc = React.useCallback((element, options = {}) => {
     const {
@@ -61,7 +60,7 @@ const PortalProvider = function PortalProvider({ children }: ProviderProps) {
     <PortalContext.Provider value={openMemo}>
       { children }
       <>
-        { ReactDOM.createPortal(modalPortal, el) }
+        { ReactDOM.createPortal(modalPortal, document.body) }
       </>
     </PortalContext.Provider>
   );
