@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface ClickEventProps {
+interface KeyboardEventProps {
   onClose: () => void
   handleClickImage: (move: number) => void
 }
 
-function useModalClickEvent({ onClose, handleClickImage }: ClickEventProps) {
+function useModalKeyboardEvent({ onClose, handleClickImage }: KeyboardEventProps) {
   React.useEffect(() => {
     const pressKey = (event: KeyboardEvent) => {
       if (event.code === 'Escape') {
@@ -17,8 +17,8 @@ function useModalClickEvent({ onClose, handleClickImage }: ClickEventProps) {
       }
     };
     window.addEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
-    return () => window.removeEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
+    return window.removeEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
   }, [onClose, handleClickImage]);
 }
 
-export default useModalClickEvent;
+export default useModalKeyboardEvent;
