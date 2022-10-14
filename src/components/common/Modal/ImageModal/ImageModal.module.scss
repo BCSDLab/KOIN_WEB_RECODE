@@ -14,9 +14,8 @@
 }
 
 .image {
-  max-width: 600px;
+  max-width: 574px;
   max-height: 100%;
-  cursor: pointer;
   position: fixed;
   margin: auto;
 
@@ -33,6 +32,7 @@
   height: 60px;
   outline: none;
   border: 0;
+  z-index: 23;
   background-size: 24px 24px;
   background-position: 50% 50%;
   background-repeat: no-repeat;

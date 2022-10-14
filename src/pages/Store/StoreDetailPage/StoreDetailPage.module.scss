@@ -202,7 +202,6 @@
   &__content {
     width: 330px;
     height: 330px;
-    cursor: pointer;
     image-orientation: from-image;
 
     &:nth-child(n+2) {
@@ -228,6 +227,7 @@
     border: 0;
     outline: 0;
     background-color: #fff;
+    cursor: pointer;
 
     &:nth-child(n+2) {
       display: none;
@@ -237,7 +237,6 @@
   &__poster {
     width: 330px;
     height: 330px;
-    cursor: pointer;
     image-orientation: from-image;
 
     &:nth-child(n+2) {
