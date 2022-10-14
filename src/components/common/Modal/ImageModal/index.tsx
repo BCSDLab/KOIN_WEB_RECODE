@@ -3,28 +3,44 @@ import cn from 'utils/ts/classnames';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
-  image: string[]
-  nowImage: number
+  imageList: string[]
+  imageIndex: number
   onClose: () => void
 }
 
 function ImageModal({
-  image,
-  nowImage,
+  imageList,
+  imageIndex,
   onClose,
 }: ImageModalProps) {
-  const [selectedImage, setSelectedImage] = React.useState(image[nowImage]);
-  const selectedIndex = image.findIndex((value) => value === selectedImage);
+  const [selectedImage, setSelectedImage] = React.useState(imageList[imageIndex]);
+  const selectedIndex = imageList.findIndex((value) => value === selectedImage);
+
+  const handleClickImage = React.useCallback((move: number) => {
+    if (move < 0) {
+      return (selectedIndex !== 0 && (
+        setSelectedImage(imageList[selectedIndex + move])
+      ));
+    }
+
+    return (selectedIndex !== imageList.length - 1 && (
+      setSelectedImage(imageList[selectedIndex + move])
+    ));
+  }, [imageList, selectedIndex]);
 
   React.useEffect(() => {
-    const pressEsc = (event: KeyboardEvent) => {
+    const pressKey = (event: KeyboardEvent) => {
       if (event.code === 'Escape') {
         onClose();
+      } else if (event.code === 'ArrowLeft') {
+        handleClickImage(-1);
+      } else if (event.code === 'ArrowRight') {
+        handleClickImage(1);
       }
     };
-    window.addEventListener('keydown', (event: KeyboardEvent) => pressEsc(event));
-    return () => window.removeEventListener('keydown', (event: KeyboardEvent) => pressEsc(event));
-  }, [onClose]);
+    window.addEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
+    return () => window.removeEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
+  }, [onClose, handleClickImage]);
 
   return (
     <div className={styles.background}>
@@ -36,10 +52,10 @@ function ImageModal({
             [styles['arrow-button']]: true,
             [styles['arrow-button--prev']]: true,
           })}
-          onClick={() => setSelectedImage(image[selectedIndex - 1])}
+          onClick={() => handleClickImage(-1)}
         />
       )}
-      {selectedIndex !== image.length - 1 && (
+      {selectedIndex !== imageList.length - 1 && (
         <button
           type="button"
           aria-label="next"
@@ -47,7 +63,7 @@ function ImageModal({
             [styles['arrow-button']]: true,
             [styles['arrow-button--next']]: true,
           })}
-          onClick={() => setSelectedImage(image[selectedIndex + 1])}
+          onClick={() => handleClickImage(1)}
         />
       )}
       <button className={styles.close} type="button" aria-label="close" onClick={() => onClose()} />

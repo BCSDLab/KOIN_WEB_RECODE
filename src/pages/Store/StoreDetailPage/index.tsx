@@ -16,7 +16,7 @@ function StoreDetailPage() {
 
   const openModal = (img: string[], index: number) => {
     portalManager.open((modalOpen: Portal) => (
-      <ImageModal image={img} nowImage={index} onClose={modalOpen.close} />
+      <ImageModal imageList={img} imageIndex={index} onClose={modalOpen.close} />
     ));
   };
 
