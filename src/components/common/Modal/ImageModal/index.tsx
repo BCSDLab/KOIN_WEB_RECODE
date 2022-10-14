@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'utils/ts/classnames';
+import useBackEvent from 'components/common/Modal/hooks/useBackEvent';
 import styles from './ImageModal.module.scss';
 import useModalKeyboardEvent from './hooks/useModalKeyboardEvent';
 
@@ -29,6 +30,8 @@ function ImageModal({
   }, [imageList, selectedIndex]);
 
   useModalKeyboardEvent({ onClose, handleClickImage });
+  useBackEvent(onClose);
+
   React.useEffect(() => {
     const body = document.querySelector('body');
     body!.style.overflow = 'hidden';

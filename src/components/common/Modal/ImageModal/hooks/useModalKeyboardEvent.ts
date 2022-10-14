@@ -17,7 +17,7 @@ function useModalKeyboardEvent({ onClose, handleClickImage }: KeyboardEventProps
       }
     };
     window.addEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
-    return window.removeEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
+    return () => window.removeEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
   }, [onClose, handleClickImage]);
 }
 
