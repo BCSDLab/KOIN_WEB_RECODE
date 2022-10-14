@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'utils/ts/classnames';
 import styles from './ImageModal.module.scss';
+import useModalClickEvent from './hooks/useModalClickEvent';
 
 export interface ImageModalProps {
   imageList: string[]
@@ -15,7 +16,6 @@ function ImageModal({
 }: ImageModalProps) {
   const [selectedImage, setSelectedImage] = React.useState(imageList[imageIndex]);
   const selectedIndex = imageList.findIndex((value) => value === selectedImage);
-
   const handleClickImage = React.useCallback((move: number) => {
     if (move < 0) {
       return (selectedIndex !== 0 && (
@@ -28,19 +28,13 @@ function ImageModal({
     ));
   }, [imageList, selectedIndex]);
 
+  useModalClickEvent({ onClose, handleClickImage });
   React.useEffect(() => {
-    const pressKey = (event: KeyboardEvent) => {
-      if (event.code === 'Escape') {
-        onClose();
-      } else if (event.code === 'ArrowLeft') {
-        handleClickImage(-1);
-      } else if (event.code === 'ArrowRight') {
-        handleClickImage(1);
-      }
-    };
-    window.addEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
-    return () => window.removeEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
-  }, [onClose, handleClickImage]);
+    const body = document.querySelector('body');
+    body!.style.overflow = 'hidden';
+
+    return () => { body!.style.overflow = 'auto'; };
+  }, []);
 
   return (
     <div className={styles.background}>
