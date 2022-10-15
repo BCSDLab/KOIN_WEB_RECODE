@@ -23,7 +23,6 @@ function ImageModal({
         setSelectedImage(imageList[selectedIndex + move])
       ));
     }
-
     return (selectedIndex !== imageList.length - 1 && (
       setSelectedImage(imageList[selectedIndex + move])
     ));
