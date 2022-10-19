@@ -28,8 +28,7 @@ function ImageModal({
     ));
   }, [imageList, selectedIndex]);
 
-  useModalKeyboardEvent({ onClose, handleClickImage });
-  useBackEvent(onClose);
+  useModalKeyboardEvent({ onClose, onChangeImageIndex });
 
   React.useEffect(() => {
     const body = document.querySelector('body');
