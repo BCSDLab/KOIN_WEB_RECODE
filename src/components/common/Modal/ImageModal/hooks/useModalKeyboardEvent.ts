@@ -7,7 +7,7 @@ interface KeyboardEventProps {
 
 function useModalKeyboardEvent({ onClose, handleClickImage }: KeyboardEventProps) {
   React.useEffect(() => {
-    const pressKey = (event: KeyboardEvent) => {
+    function pressKey(event: KeyboardEvent) {
       if (event.code === 'Escape') {
         onClose();
       } else if (event.code === 'ArrowLeft') {
@@ -15,9 +15,11 @@ function useModalKeyboardEvent({ onClose, handleClickImage }: KeyboardEventProps
       } else if (event.code === 'ArrowRight') {
         handleClickImage(1);
       }
+    }
+    window.addEventListener('keydown', pressKey, true);
+    return () => {
+      window.removeEventListener('keydown', pressKey, true);
     };
-    window.addEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
-    return () => window.removeEventListener('keydown', (event: KeyboardEvent) => pressKey(event));
   }, [onClose, handleClickImage]);
 }
 
