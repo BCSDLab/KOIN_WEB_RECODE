@@ -16,13 +16,14 @@ function StoreDetailPage() {
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
   const portalManager = useModalPortal();
 
-  const openModal = (img: string[], index: number) => {
+  const onOpenModal = (img: string[], index: number) => {
     portalManager.open((modalOpen: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={modalOpen.close} />
     ));
   };
   useScrollToTop();
 
+  React.useEffect(() => () => portalManager.onClose(), [portalManager]);
   return (
     <div className={styles.template}>
       <div className={styles.section}>
@@ -88,7 +89,7 @@ function StoreDetailPage() {
                 <button
                   className={styles.image__button}
                   type="button"
-                  onClick={() => openModal(storeDetail!.image_urls, index)}
+                  onClick={() => onOpenModal(storeDetail!.image_urls, index)}
                 >
                   <img
                     className={styles.image__poster}

@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'utils/ts/classnames';
-import useBackEvent from 'components/common/Modal/hooks/useBackEvent';
 import styles from './ImageModal.module.scss';
 import useModalKeyboardEvent from './hooks/useModalKeyboardEvent';
 
@@ -17,7 +16,7 @@ function ImageModal({
 }: ImageModalProps) {
   const [selectedImage, setSelectedImage] = React.useState(imageList[imageIndex]);
   const selectedIndex = imageList.findIndex((value) => value === selectedImage);
-  const handleClickImage = React.useCallback((move: number) => {
+  const onChangeImageIndex = React.useCallback((move: number) => {
     if (move < 0) {
       return (selectedIndex !== 0 && (
         setSelectedImage(imageList[selectedIndex + move])
@@ -47,7 +46,7 @@ function ImageModal({
             [styles['arrow-button']]: true,
             [styles['arrow-button--prev']]: true,
           })}
-          onClick={() => handleClickImage(-1)}
+          onClick={() => onChangeImageIndex(-1)}
         />
       )}
       {selectedIndex !== imageList.length - 1 && (
@@ -58,7 +57,7 @@ function ImageModal({
             [styles['arrow-button']]: true,
             [styles['arrow-button--next']]: true,
           })}
-          onClick={() => handleClickImage(1)}
+          onClick={() => onChangeImageIndex(1)}
         />
       )}
       <button className={styles.close} type="button" aria-label="close" onClick={() => onClose()} />
