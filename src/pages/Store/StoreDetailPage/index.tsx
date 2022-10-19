@@ -1,9 +1,11 @@
+import React from 'react';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/useModalPortal';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
@@ -19,11 +21,16 @@ function StoreDetailPage() {
       <ImageModal imageList={img} imageIndex={index} onClose={modalOpen.close} />
     ));
   };
+  useScrollToTop();
 
   return (
     <div className={styles.template}>
       <div className={styles.section}>
-        {!isMobile && <div className={styles.section__header}>주변 상점</div>}
+        {!isMobile && (
+          <button className={styles.section__header} type="button" onClick={() => navigate('/store')}>
+            주변 상점
+          </button>
+        )}
         <div className={styles['section__store-info']}>
           <div className={styles.store}>
             <div className={styles.store__name}>{storeDetail?.name}</div>

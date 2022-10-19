@@ -22,8 +22,11 @@
   }
 
   &__header {
-    height: 52px;
+    height: 54px;
     text-align: left;
+    border: 0;
+    padding: 0 0 20px;
+    width: 100%;
     border-bottom: 2px #175c8e solid;
     font-size: 30px;
     font-family: NanumSquare, serif;
@@ -31,6 +34,8 @@
     color: #175c8e;
     letter-spacing: -1.5px;
     cursor: pointer;
+    background-color: #fff;
+    outline: none;
   }
 
   &__store-info {
