@@ -17,8 +17,8 @@ function StoreDetailPage() {
   const portalManager = useModalPortal();
 
   const onOpenModal = (img: string[], index: number) => {
-    portalManager.open((modalOpen: Portal) => (
-      <ImageModal imageList={img} imageIndex={index} onClose={modalOpen.close} />
+    portalManager.open((portalOption: Portal) => (
+      <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
     ));
   };
   useScrollToTop();
