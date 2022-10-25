@@ -19,7 +19,7 @@ type CloseFunc = () => void;
 
 export interface PortalManager {
   open: OpenFunc;
-  onClose: CloseFunc;
+  close: CloseFunc;
 }
 
 export const PortalContext = React.createContext<PortalManager | undefined>(
@@ -55,13 +55,13 @@ const PortalProvider = function PortalProvider({ children }: ProviderProps) {
     setModalPortal(privatePortal);
   }, []);
 
-  const openProvider = React.useMemo(() => ({
+  const portalOption = React.useMemo(() => ({
     open,
-    onClose: () => setModalPortal(undefined),
-  }), [open, setModalPortal]);
+    close: () => setModalPortal(undefined),
+  }), [open]);
 
   return (
-    <PortalContext.Provider value={openProvider}>
+    <PortalContext.Provider value={portalOption}>
       { children }
       <>
         { ReactDOM.createPortal(modalPortal, document.body) }

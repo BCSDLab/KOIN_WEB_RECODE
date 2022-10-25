@@ -14,18 +14,18 @@ function ImageModal({
   imageIndex,
   onClose,
 }: ImageModalProps) {
-  const [selectedImage, setSelectedImage] = React.useState(imageList[imageIndex]);
-  const selectedIndex = imageList.findIndex((value) => value === selectedImage);
+  const [selectedIndex, setSelectedIndex] = React.useState(imageIndex);
   const onChangeImageIndex = React.useCallback((move: number) => {
     if (move < 0) {
       return (selectedIndex !== 0 && (
-        setSelectedImage(imageList[selectedIndex + move])
+        setSelectedIndex(selectedIndex + move)
       ));
     }
     return (selectedIndex !== imageList.length - 1 && (
-      setSelectedImage(imageList[selectedIndex + move])
+      setSelectedIndex(selectedIndex + move)
     ));
-  }, [imageList, selectedIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedIndex]); // imageList 의존성 불필요
 
   useModalKeyboardEvent({ onClose, onChangeImageIndex });
 
@@ -41,7 +41,7 @@ function ImageModal({
       {selectedIndex !== 0 && (
         <button
           type="button"
-          aria-label="prev"
+          aria-label="이전 이미지"
           className={cn({
             [styles['arrow-button']]: true,
             [styles['arrow-button--prev']]: true,
@@ -52,7 +52,7 @@ function ImageModal({
       {selectedIndex !== imageList.length - 1 && (
         <button
           type="button"
-          aria-label="next"
+          aria-label="다음 이미지"
           className={cn({
             [styles['arrow-button']]: true,
             [styles['arrow-button--next']]: true,
@@ -60,8 +60,8 @@ function ImageModal({
           onClick={() => onChangeImageIndex(1)}
         />
       )}
-      <button className={styles.close} type="button" aria-label="close" onClick={() => onClose()} />
-      <img className={styles.image} src={`${selectedImage}`} alt="상점이미지" />
+      <button className={styles.close} type="button" aria-label="이미지 닫기" onClick={() => onClose()} />
+      <img className={styles.image} src={`${imageList[selectedIndex]}`} alt="상점이미지" />
     </div>
   );
 }

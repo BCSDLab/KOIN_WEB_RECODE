@@ -16,19 +16,24 @@ function StoreDetailPage() {
   const { storeDetail, storeDescription } = useStoreDetail(params.id);
   const portalManager = useModalPortal();
 
-  const onOpenModal = (img: string[], index: number) => {
+  const onClickImage = (img: string[], index: number) => {
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
     ));
   };
   useScrollToTop();
-
-  React.useEffect(() => () => portalManager.onClose(), [portalManager]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
   return (
     <div className={styles.template}>
       <div className={styles.section}>
         {!isMobile && (
-          <button className={styles.section__header} type="button" onClick={() => navigate('/store')}>
+          <button
+            className={styles.section__header}
+            aria-label="주변 상점 리스트 이동"
+            type="button"
+            onClick={() => navigate('/store')}
+          >
             주변 상점
           </button>
         )}
@@ -67,6 +72,8 @@ function StoreDetailPage() {
                   [styles['button-wrapper__button']]: true,
                   [styles['button-wrapper__button--call']]: true,
                 })}
+                role="button"
+                aria-label="상점 전화하기"
                 href={`tel:${storeDetail?.phone}`}
               >
                 전화하기
@@ -76,6 +83,7 @@ function StoreDetailPage() {
                   [styles['button-wrapper__button']]: true,
                   [styles['button-wrapper__button--store-list']]: true,
                 })}
+                aria-label="상점 목록 이동"
                 type="button"
                 onClick={() => navigate('/store')}
               >
@@ -88,8 +96,9 @@ function StoreDetailPage() {
               <div key={`${img}`} className={styles.image__content}>
                 <button
                   className={styles.image__button}
+                  aria-label="이미지 확대"
                   type="button"
-                  onClick={() => onOpenModal(storeDetail!.image_urls, index)}
+                  onClick={() => onClickImage(storeDetail!.image_urls, index)}
                 >
                   <img
                     className={styles.image__poster}
@@ -112,7 +121,7 @@ function StoreDetailPage() {
                 })),
               ).flat(1)
                 .map((menu) => (
-                  <div className={styles['menu-card']} key={menu.name + menu.size}>
+                  <div className={styles['menu-card']} key={menu.name + menu.price + menu.size}>
                     { menu.name }
                     { menu.size !== '기본' && menu.size}
                     <span>{ !!menu.price && menu.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
