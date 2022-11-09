@@ -45,6 +45,20 @@
   }
 }
 
+.post-section {
+  border-top: 2px solid #175c8e;
+  border-collapse: collapse;
+  font-size: 13px;
+  width: 834px;
+  margin-bottom: 22px;
+  letter-spacing: -0.8px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    border: none;
+  }
+}
+
 .post-header {
   width: 100%;
   height: 44px;
@@ -66,7 +80,6 @@
 
 .post-info {
   height: 100%;
-  border-bottom: 1px #175c8e solid;
   font-size: 15px;
   letter-spacing: -0.6px;
   color: #175c8e;
@@ -91,6 +104,6 @@
   }
 
   &--views {
-    width: 100px;
+    width: 108px;
   }
 }
