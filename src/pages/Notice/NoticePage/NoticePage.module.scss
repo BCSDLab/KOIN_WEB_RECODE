@@ -50,7 +50,6 @@
   border-collapse: collapse;
   font-size: 13px;
   width: 834px;
-  margin-bottom: 22px;
   letter-spacing: -0.8px;
 
   @include media.media-breakpoint(mobile) {
@@ -106,4 +105,116 @@
   &--views {
     width: 108px;
   }
+}
+
+.post-content {
+  height: 68px;
+  cursor: pointer;
+  border-bottom: 1px #d2dae2 solid;
+  display: flex;
+
+  &:hover {
+    background: #f8fafb;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    height: 75px;
+    display: block;
+    border-bottom: 1px solid #ececec;
+  }
+}
+
+.post-id {
+  width: 85px;
+  font-size: 15px;
+  height: 100%;
+  color: #252525;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.post-title {
+  height: 100%;
+  color: #252525;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 412px;
+  font-size: 15px;
+  justify-content: flex-start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.post-author {
+  width: 150px;
+  height: 100%;
+  color: #175c8e;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.post-created_at {
+  width: 70px;
+  height: 100%;
+  color: #252525;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.post-views {
+  width: 108px;
+  height: 100%;
+  color: #252525;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.title-header {
+  font-weight: 600;
+}
+
+.title-content {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title-newTag {
+  margin-left: 10px;
+  width: 14.5px;
+  height: 15px;
+  position: relative;
 }
