@@ -16,6 +16,7 @@ export type HotList = {
 };
 
 export interface NoticeResponse extends APIResponse {
+  totalPage: number
   articles: 
   {
     id: number
