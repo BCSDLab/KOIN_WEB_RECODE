@@ -1,4 +1,6 @@
 import { useQuery } from 'react-query';
+import PageNation from 'components/Post/PageNation';
+import useParamsHandler from 'pages/Notice/hooks/useParamsHandler';
 import * as api from 'api';
 import cn from 'utils/ts/classnames';
 import styles from './NoticePage.module.scss';
@@ -9,7 +11,7 @@ const useArticleList = () => {
     api.notice.PostList,
     { retry: 0 },
   );
-  return articleList?.articles;
+  return articleList;
 };
 
 const useHotArticleList = () => {
@@ -96,6 +98,7 @@ const setDate = (time: string) => {
 function NoticePage() {
   const articleList = useArticleList();
   const hotArticleList = useHotArticleList();
+  const { searchParams } = useParamsHandler();
   console.log(articleList);
   console.log(hotArticleList);
   return (
@@ -147,7 +150,7 @@ function NoticePage() {
         </div>
         <div>
           {
-            articleList?.map((article) => (
+            articleList?.articles.map((article) => (
               <div className={styles['post-content']} key={article.id}>
                 <div className={styles['post-id']}>{ article.id }</div>
                 <div className={styles['post-title']}>
@@ -168,6 +171,10 @@ function NoticePage() {
             ))
             }
         </div>
+        <PageNation
+          totalPageNum={articleList!.totalPage}
+          nowPageNum={searchParams.get('boardId') === null ? 1 : Number(searchParams.get('boardId'))}
+        />
       </div>
       <aside className={styles['hotPost-container']}>
         <div className={styles['hotPost-list']}>
