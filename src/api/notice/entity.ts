@@ -5,6 +5,16 @@ export type getNoticeRequest = {
   page: string
 };
 
+export type HotList = {
+  'board_id': number
+  'comment_count': number
+  'contentSummary': string
+  'title': string
+  'id': number
+  'created_at': string
+  'hit': number
+};
+
 export interface NoticeResponse extends APIResponse {
   articles: 
   {
@@ -19,3 +29,7 @@ export interface NoticeResponse extends APIResponse {
     hit: number
   }[]
 }
+
+export interface HotPostResponse extends APIResponse {
+  [index: number]: HotList;
+};
