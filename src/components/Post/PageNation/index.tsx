@@ -5,10 +5,16 @@ import styles from './PageNation.module.scss';
 
 interface PageNationProps {
   totalPageNum: number
-  nowPageNum: number
 }
 
 const LIMIT_COUNT = [0, 1, 2, 3, 4];
+
+const onNowPageNum = (params: string) => {
+  if (params === undefined) {
+    return 1;
+  }
+  return Number(params);
+};
 
 const movePrevNumber = (moveNumber: number) => {
   if (moveNumber <= 0) {
@@ -43,14 +49,14 @@ const displayCorrectionNum = (totalPageNum: number, nowPageNum: number) => {
 
 function PageNation(props: PageNationProps) {
   const { params, setParams } = useParamsHandler();
-  const { totalPageNum, nowPageNum } = props;
+  const { totalPageNum } = props;
 
   return (
     <div className={styles.container}>
       <button
         type="button"
         className={styles['move-pageSection']}
-        onClick={() => setParams('boardId', movePrevNumber(Number(params.boardId) - 1), false)}
+        onClick={() => setParams('boardId', movePrevNumber(Number(params.boardId) - 1), false, false)}
       >
         이전으로
       </button>
@@ -62,13 +68,13 @@ function PageNation(props: PageNationProps) {
                 type="button"
                 className={cn({
                   [styles['page-number']]: true,
-                  [styles['page-number--selected']]: nowPageNum === (
-                    limit + 1 + displayCorrectionNum(totalPageNum, nowPageNum)
+                  [styles['page-number--selected']]: onNowPageNum(params.boardId) === (
+                    limit + 1 + displayCorrectionNum(totalPageNum, onNowPageNum(params.boardId))
                   ),
                 })}
-                onClick={() => setParams('boardId', String(limit + 1 + displayCorrectionNum(totalPageNum, nowPageNum)), false)}
+                onClick={() => setParams('boardId', String(limit + 1 + displayCorrectionNum(totalPageNum, onNowPageNum(params.boardId))), false, false)}
               >
-                { limit + 1 + displayCorrectionNum(totalPageNum, nowPageNum) }
+                { limit + 1 + displayCorrectionNum(totalPageNum, onNowPageNum(params.boardId)) }
               </button>
             </span>
           ))
@@ -79,9 +85,9 @@ function PageNation(props: PageNationProps) {
                 type="button"
                 className={cn({
                   [styles['page-number']]: true,
-                  [styles['page-number--selected']]: nowPageNum === index + 1,
+                  [styles['page-number--selected']]: onNowPageNum(params.boardId) === index + 1,
                 })}
-                onClick={() => setParams('boardId', String(index + 1), false)}
+                onClick={() => setParams('boardId', String(index + 1), false, true)}
               >
                 { index + 1 }
               </button>
@@ -92,7 +98,7 @@ function PageNation(props: PageNationProps) {
       <button
         type="button"
         className={styles['move-pageSection']}
-        onClick={() => setParams('boardId', moveNextNumber(Number(params.boardId) + 1, Number(totalPageNum)), false)}
+        onClick={() => setParams('boardId', moveNextNumber(Number(params.boardId) + 1, Number(totalPageNum)), false, false)}
       >
         다음으로
       </button>

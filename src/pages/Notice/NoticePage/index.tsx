@@ -13,7 +13,10 @@ function NoticePage() {
   const articleList = useArticleList(params.boardId === undefined ? '1' : params.boardId);
   const hotArticleList = HotPost();
 
-  if (params.totalPageNum === undefined && articleList !== 'loading') setParams('totalPageNum', String(articleList!.totalPage), false, true);
+  React.useEffect(() => {
+    if (params.totalPageNum === undefined && articleList !== 'loading') setParams('totalPageNum', String(articleList!.totalPage), false, true);
+    if (params.boardId === undefined) setParams('boardId', '1', false, true);
+  }, [params, setParams, articleList]);
 
   return (
     <div className={styles.template}>
@@ -37,19 +40,9 @@ function NoticePage() {
             )
           }
         </div>
-        {
-          params.totalPageNum === undefined ? (
-            <div className={styles['loading-container']}>
-              <LoadingSpinner
-                size="10px"
-              />
-            </div>
-          ) : (
-            <PageNation
-              totalPageNum={Number(params.totalPageNum)}
-            />
-          )
-        }
+        <PageNation
+          totalPageNum={articleList === 'loading' ? 5 : articleList!.totalPage}
+        />
       </div>
       { hotArticleList }
     </div>
