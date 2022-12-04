@@ -1,24 +1,23 @@
 import styles from './LoadingSpinner.module.scss';
 
 interface LoadingSpinnerProps {
-  width: string
-  height: string
+  size: string
 }
 
 function LoadingSpinner(props: LoadingSpinnerProps) {
-  const { width, height } = props;
+  const { size } = props;
   return (
     <div
       className={styles['loading-wrapper']}
       style={{
-        width: `${width}`,
-        height: `${height}`,
+        width: `${size}`,
+        height: `${size}`,
       }}
     >
-      <div className={styles['loading-div']} style={{ width: `${width}`, height: `${height}` }} />
-      <div className={styles['loading-div']} style={{ width: `${width}`, height: `${height}` }} />
-      <div className={styles['loading-div']} style={{ width: `${width}`, height: `${height}` }} />
-      <div className={styles['loading-div']} style={{ width: `${width}`, height: `${height}` }} />
+      <div className={styles['loading-div']} style={{ width: `${size}`, height: `${size}` }} />
+      <div className={styles['loading-div']} style={{ width: `${size}`, height: `${size}` }} />
+      <div className={styles['loading-div']} style={{ width: `${size}`, height: `${size}` }} />
+      <div className={styles['loading-div']} style={{ width: `${size}`, height: `${size}` }} />
     </div>
   );
 }

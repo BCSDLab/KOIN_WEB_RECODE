@@ -75,7 +75,7 @@ const useHotArticleList = () => {
 
   return (
     <div className={styles['loading-container']}>
-      <LoadingSpinner width="80px" height="80px" />
+      <LoadingSpinner size="80px" />
     </div>
   );
 };

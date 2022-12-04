@@ -32,8 +32,7 @@ function NoticePage() {
             articleList === 'loading' ? (
               <div className={styles['loading-container']}>
                 <LoadingSpinner
-                  width="200px"
-                  height="200px"
+                  size="200px"
                 />
               </div>
             ) : (
@@ -47,8 +46,7 @@ function NoticePage() {
           params.totalPageNum === undefined ? (
             <div className={styles['loading-container']}>
               <LoadingSpinner
-                width="10px"
-                height="10px"
+                size="10px"
               />
             </div>
           ) : (
