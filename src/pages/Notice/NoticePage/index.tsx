@@ -5,7 +5,7 @@ import PostHeader from 'components/Post/PostHeader';
 import PostList from 'components/Post/PostList';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import useArticleList from 'pages/Notice/hooks/useArticleList';
-import useParamsHandler from 'pages/Notice/hooks/useParamsHandler';
+import useParamsHandler from 'utils/hooks/useParamsHandler';
 import styles from './NoticePage.module.scss';
 
 function NoticePage() {

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import * as api from 'api';
 import cn from 'utils/ts/classnames';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import useParamsHandler from './hooks/useParamsHandler';
+import useParamsHandler from 'utils/hooks/useParamsHandler';
 import styles from './StorePage.module.scss';
 
 const CHECK_BOX = [

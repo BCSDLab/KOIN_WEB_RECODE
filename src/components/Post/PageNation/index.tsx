@@ -1,6 +1,6 @@
 import cn from 'utils/ts/classnames';
 import showToast from 'utils/ts/showToast';
-import useParamsHandler from 'pages/Notice/hooks/useParamsHandler';
+import useParamsHandler from 'utils/hooks/useParamsHandler';
 import styles from './PageNation.module.scss';
 
 interface PageNationProps {
