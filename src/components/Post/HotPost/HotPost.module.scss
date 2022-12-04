@@ -3,12 +3,12 @@
 .hotPost-container {
   float: left;
   width: 258px;
-  
+
   @include media.media-breakpoint(mobile) {
     display: none;
   }
 }
-  
+
 .hotPost-list {
   color: #252525;
   padding: 16px 17px 6px;
@@ -16,7 +16,7 @@
   margin-bottom: 16px;
   text-align: left;
 }
-  
+
 .hotPost-title {
   color: #252525;
   font-size: 15px;
@@ -25,7 +25,7 @@
   letter-spacing: -0.8px;
   margin-bottom: 19px;
 }
-  
+
 .hotPost-content {
   font-size: 13px;
   margin-top: 2px;
@@ -34,7 +34,7 @@
   align-items: center;
   padding-bottom: 9px;
 }
-  
+
 .hotPost-rank {
   color: #175c8e;
   width: 20px;
@@ -47,9 +47,9 @@
   font-size: 15px;
   margin-left: -1px;
 }
-  
+
 .hotPost-item {
-  font-family: NanumBarunGothic,serif;
+  font-family: NanumBarunGothic, serif;
   font-size: 13px;
   color: #252525;
   float: left;
@@ -65,15 +65,14 @@
   flex-wrap: wrap;
   justify-content: space-between;
 }
-  
+
 .link-button {
   width: 48.5%;
   border: 0;
   background-color: #fff;
   cursor: pointer;
 }
-  
+
 .link-image {
   width: 100%;
 }
-  

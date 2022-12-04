@@ -1,37 +1,37 @@
 @use "src/utils/scss/media" as media;
 
 .post-section {
-    border-top: 2px solid #175c8e;
-    border-collapse: collapse;
-    font-size: 13px;
-    width: 834px;
-    letter-spacing: -0.8px;
-   
-    @include media.media-breakpoint(mobile) {
-      width: 100%;
-      border: none;
-    }
+  border-top: 2px solid #175c8e;
+  border-collapse: collapse;
+  font-size: 13px;
+  width: 834px;
+  letter-spacing: -0.8px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    border: none;
   }
-      
+}
+
 .post-header {
   width: 100%;
   height: 44px;
   font-weight: bold;
-      
+
   @include media.media-breakpoint(mobile) {
     display: none;
   }
 }
-      
+
 .post-row {
-  width: 100%; 
+  width: 100%;
   height: 100%;
   font-size: 13px;
   display: flex;
   align-items: center;
   border-bottom: 1px solid #175c8e;
 }
-      
+
 .post-info {
   height: 100%;
   font-size: 15px;
@@ -40,23 +40,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-    
+
   &--number {
     width: 85px;
   }
-      
+
   &--title {
     width: 422px;
   }
-      
+
   &--author {
     width: 149px;
   }
-      
+
   &--date {
     width: 70px;
   }
-      
+
   &--views {
     width: 108px;
   }

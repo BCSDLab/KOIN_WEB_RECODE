@@ -1,7 +1,7 @@
 @use "src/utils/scss/media" as media;
 
 .container {
-  background: #ffffff;
+  background: #fff;
   color: #858585;
   width: 100%;
   display: flex;
@@ -26,12 +26,12 @@
   font-size: 13px;
   letter-spacing: -0.7px;
   cursor: pointer;
-    
+
   &:hover {
     background-color: #175c8e;
     color: white;
   }
-    
+
   @include media.media-breakpoint(mobile) {
     width: 73px;
     height: 30px;
@@ -41,7 +41,7 @@
 
 .page-number {
   border-radius: 0;
-  padding: 7px 12px 7px 12px;
+  padding: 7px 12px;
   margin-left: 1px;
   margin-right: 1px;
   border: 1px #edf0f3 solid;
@@ -54,7 +54,7 @@
     background-color: #175c8e;
     color: white;
   }
-  
+
   @media (max-width: 576px) {
     margin: 0 2px;
   }
