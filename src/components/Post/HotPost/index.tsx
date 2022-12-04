@@ -3,6 +3,12 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import * as api from 'api';
 import styles from './HotPost.module.scss';
 
+type HotPosts = {
+  title: string
+  id: number
+  board_id: number
+};
+
 const LINK_LIST = [
   {
     id: '0',
@@ -43,7 +49,7 @@ const useHotArticleList = () => {
         <div className={styles['hotPost-list']}>
           <div className={styles['hotPost-title']}>가장 많이 본 게시물</div>
           {
-          hotArticleList.map((hotPost: any, index: number) => (
+          hotArticleList.map((hotPost: HotPosts, index: number) => (
             <div className={styles['hotPost-content']} key={hotPost.id + hotPost.board_id}>
               <span className={styles['hotPost-rank']}>{ index + 1 }</span>
               <span className={styles['hotPost-item']}>{ hotPost.title }</span>
