@@ -1,6 +1,10 @@
 import { NoticeList } from 'api/notice/entity';
 import styles from './PostList.module.scss';
 
+type ArticleList = {
+  articles: NoticeList[] | undefined
+};
+
 const convertNoticeTag = (type: number) => {
   switch (type) {
     case 5:
@@ -43,27 +47,36 @@ const setDate = (time: string) => {
   return [`${String(year)}.${String(month)}.${String(date)}`, false];
 };
 
-function PostList(articleList: { articles: any | undefined; }) {
+function PostList(props: ArticleList) {
+  const { articles } = props;
+
   return (
-    articleList.articles?.map((article: NoticeList) => (
-      <div className={styles['post-content']} key={article.id}>
-        <div className={styles['post-id']}>{ article.id }</div>
-        <div className={styles['post-title']}>
-          <div className={styles['title-header']}>{ convertNoticeTag(article.board_id) }</div>
-          <div className={styles['title-content']}>{ article.title }</div>
-          { setDate(article.created_at)[1] && (
-            <img
-              className={styles['title-newTag']}
-              src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
-              alt="new"
-            />
-          )}
-        </div>
-        <div className={styles['post-author']}>{ article.nickname }</div>
-        <div className={styles['post-created_at']}>{ setDate(article.created_at)[0] }</div>
-        <div className={styles['post-views']}>{ article.hit }</div>
-      </div>
-    ))
+    <div>
+      {
+        articles?.map((article: NoticeList) => (
+          <div
+            className={styles['post-content']}
+            key={article.id}
+          >
+            <div className={styles['post-id']}>{ article.id }</div>
+            <div className={styles['post-title']}>
+              <div className={styles['title-header']}>{ convertNoticeTag(article.board_id) }</div>
+              <div className={styles['title-content']}>{ article.title }</div>
+              { setDate(article.created_at)[1] && (
+                <img
+                  className={styles['title-newTag']}
+                  src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
+                  alt="new"
+                />
+              )}
+            </div>
+            <div className={styles['post-author']}>{ article.nickname }</div>
+            <div className={styles['post-created_at']}>{ setDate(article.created_at)[0] }</div>
+            <div className={styles['post-views']}>{ article.hit }</div>
+          </div>
+        ))
+      }
+    </div>
   );
 }
 
