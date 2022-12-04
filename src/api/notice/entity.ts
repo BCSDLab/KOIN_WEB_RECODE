@@ -6,13 +6,13 @@ export type GetNoticeRequest = {
 };
 
 export type HotList = {
-  'board_id': number
-  'comment_count': number
-  'contentSummary': string
-  'title': string
-  'id': number
-  'created_at': string
-  'hit': number
+  board_id: number
+  comment_count: number
+  contentSummary: string
+  title: string
+  id: number
+  created_at: string
+  hit: number
 };
 
 export type NoticeList = {
@@ -29,7 +29,7 @@ export type NoticeList = {
 
 export interface NoticeResponse extends APIResponse {
   totalPage: number
-  articles: NoticeList
+  articles: NoticeList[]
 }
 
 export interface HotPostResponse extends APIResponse {
