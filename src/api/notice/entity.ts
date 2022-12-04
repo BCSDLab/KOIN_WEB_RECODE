@@ -15,20 +15,21 @@ export type HotList = {
   'hit': number
 };
 
+export type NoticeList = {
+  id: number
+  board_id: number
+  title: string
+  content: string
+  nickname: string
+  updated_at: string
+  created_at: string
+  is_delete: boolean
+  hit: number
+}
+
 export interface NoticeResponse extends APIResponse {
   totalPage: number
-  articles: 
-  {
-    id: number
-    board_id: number
-    title: string
-    content: string
-    nickname: string
-    updated_at: string
-    created_at: string
-    is_delete: boolean
-    hit: number
-  }[]
+  articles: NoticeList
 }
 
 export interface HotPostResponse extends APIResponse {
