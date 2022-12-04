@@ -1,6 +1,6 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
-export type getNoticeRequest = {
+export type GetNoticeRequest = {
   boardId: string
   page: string
 };
@@ -25,7 +25,7 @@ export type NoticeList = {
   created_at: string
   is_delete: boolean
   hit: number
-}
+};
 
 export interface NoticeResponse extends APIResponse {
   totalPage: number
@@ -34,4 +34,4 @@ export interface NoticeResponse extends APIResponse {
 
 export interface HotPostResponse extends APIResponse {
   [index: number]: HotList;
-};
+}
