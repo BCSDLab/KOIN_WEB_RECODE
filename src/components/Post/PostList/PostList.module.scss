@@ -49,6 +49,24 @@
   }
 }
 
+.title-header {
+  font-weight: 600;
+}
+
+.title-content {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title-newTag {
+  margin-left: 10px;
+  width: 14.5px;
+  height: 15px;
+  position: relative;
+}
+
 .post-author {
   width: 150px;
   height: 100%;

@@ -13,12 +13,7 @@ function NoticePage() {
   const articleList = useArticleList(params.boardId === undefined ? '1' : params.boardId);
   const hotArticleList = HotPost();
 
-  if (params.totalPageNum === undefined && articleList !== 'loading') setParams('totalPageNum', String(articleList!.totalPage), true);
-  React.useEffect(() => {
-    if (params.boardId === undefined) {
-      setParams('boardId', '1', true);
-    }
-  }, [params.boardId, setParams]);
+  if (params.totalPageNum === undefined && articleList !== 'loading') setParams('totalPageNum', String(articleList!.totalPage), false, true);
 
   return (
     <div className={styles.template}>
@@ -52,7 +47,6 @@ function NoticePage() {
           ) : (
             <PageNation
               totalPageNum={Number(params.totalPageNum)}
-              nowPageNum={Number(params.boardId)}
             />
           )
         }
