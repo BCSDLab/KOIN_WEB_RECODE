@@ -1,0 +1,38 @@
+.lookup {
+  &__container {
+    margin: 63px auto 0;
+    width: 1131px;
+  }
+
+  &__title {
+    font-family: NanumSquare, sans-serif;
+    letter-spacing: -1.5px;
+    font-size: 30px;
+    font-weight: 800;
+    color: #175c8e;
+  }
+
+  &__description {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 24px;
+  }
+
+  &__subtitle {
+    font-family: NanumBarunGothic, sans-serif;
+    font-size: 24px;
+    letter-spacing: -1.2px;
+    font-weight: 300;
+    line-height: 28px;
+  }
+
+  &__select {
+    border: 0;
+    font-size: 24px;
+    margin: 0 4px;
+    font-weight: bold;
+  }
+}
