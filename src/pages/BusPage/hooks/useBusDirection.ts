@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import { directionToEnglish } from 'pages/BusPage/ts/busTimeModules';
 
 const useBusDirection = (directionList: string[]) => {
   const [depart, setDepart] = useState(directionList[0]);
@@ -16,12 +17,12 @@ const useBusDirection = (directionList: string[]) => {
 
   return {
     depart: {
-      value: depart,
+      value: directionToEnglish(depart),
       options: [depart].concat(directionList.filter((name) => name !== depart)),
       handleChange: changeDepart,
     },
     arrival: {
-      value: arrival,
+      value: directionToEnglish(arrival),
       options: [arrival].concat(directionList.filter((name) => name !== arrival)),
       handleChange: changeArrival,
     },

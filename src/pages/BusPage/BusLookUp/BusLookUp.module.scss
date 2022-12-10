@@ -1,8 +1,6 @@
 .lookup {
-  &__container {
-    margin: 63px auto 0;
-    width: 1131px;
-  }
+  margin: 63px auto 0;
+  width: 1131px;
 
   &__title {
     font-family: NanumSquare, sans-serif;
@@ -14,7 +12,7 @@
 
   &__description {
     margin-top: 30px;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -30,9 +28,71 @@
   }
 
   &__select {
+    cursor: pointer;
     border: 0;
+    margin: 0 10px 0 4px;
     font-size: 24px;
-    margin: 0 4px;
     font-weight: bold;
+  }
+}
+
+.cards {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(3, 370px);
+  grid-template-rows: 162px 85px;
+  gap: 5px 9px;
+  color: white;
+
+  &__top-card {
+    padding: 26px 23px 0;
+  }
+
+  &__bottom-card {
+    padding: 23px 23px 0;
+  }
+
+  &__card {
+    &--shuttle {
+      background-color: rgb(247 148 30);
+    }
+
+    &--express {
+      background-color: rgb(124 159 174);
+    }
+
+    &--city {
+      background-color: rgb(77 178 151);
+    }
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+
+    &--description {
+      margin-top: 26px;
+    }
+  }
+
+  &__direction {
+    font-size: 24px;
+    letter-spacing: -1.2px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 11px;
+  }
+
+  &__badge {
+    width: 39px;
+    height: 19px;
+    border: 1px solid white;
+    border-radius: 14px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1px;
+    margin-right: 13px;
   }
 }
