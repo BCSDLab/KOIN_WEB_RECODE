@@ -3,12 +3,11 @@ import cn from 'utils/ts/classnames';
 import useBusDirection from 'pages/BusPage/hooks/useBusDirection';
 import useBusLeftTIme from 'pages/BusPage/hooks/useBusLeftTime';
 import { getBusName, getLeftTimeString, getStartTimeString } from 'pages/BusPage/ts/busModules';
+import { BUS_DIRECTIONS, BUS_TYPES } from 'static/bus';
 import styles from './BusLookUp.module.scss';
 
-const BUS_TYPE = ['shuttle', 'express', 'city'];
-
 function BusLookUp() {
-  const { depart, arrival } = useBusDirection(['한기대', '야우리', '천안역']);
+  const { depart, arrival } = useBusDirection(BUS_DIRECTIONS);
   const { data: busData } = useBusLeftTIme({
     departList: [depart.value, depart.value, depart.value],
     arrivalList: [arrival.value, arrival.value, arrival.value],
@@ -47,7 +46,7 @@ function BusLookUp() {
         </div>
       </div>
       <div className={styles.cards}>
-        {BUS_TYPE.map((type, idx) => (
+        {BUS_TYPES.map((type, idx) => (
           <React.Fragment key={type}>
             <div className={cn({ [styles['cards__top-card']]: true, [styles[`cards__card--${type}`]]: true })}>
               <div className={styles.cards__content}>

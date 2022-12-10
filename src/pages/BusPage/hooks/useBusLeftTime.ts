@@ -1,8 +1,8 @@
 import { getBusInfo } from 'api/bus';
 import { useQueries } from 'react-query';
+import { BUS_TYPES } from 'static/bus';
 
 const BUS_KEY = 'bus_info';
-const BUS_TYPES = ['shuttle', 'express', 'city'];
 
 interface Props {
   departList: string[];
