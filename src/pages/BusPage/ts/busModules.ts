@@ -44,7 +44,7 @@ export const directionToEnglish = (direction: string) => {
 };
 
 export const getBusName = (busType: string) => {
-  if (busType === 'shuttle') return '셔틀버스';
+  if (busType === 'shuttle') return '학교셔틀';
   if (busType === 'express') return '대성고속';
   if (busType === 'city') return '시내버스';
   return '';
