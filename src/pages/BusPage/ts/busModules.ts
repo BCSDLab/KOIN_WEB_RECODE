@@ -15,7 +15,10 @@ export const getLeftTimeString = (second: number | '미운행' | undefined) => {
   } return `${getHour(second)}시간 ${getMinute(second)}분 전`;
 };
 
-export const getStartTimeString = (second: number) => {
+export const getStartTimeString = (second: number | '미운행' | undefined, isMain:boolean = false) => {
+  if (!second) return '';
+  if (second === '미운행') return '';
+
   const hour = getHour(second);
   const minute = getMinute(second);
 
@@ -26,8 +29,10 @@ export const getStartTimeString = (second: number) => {
 
   startHour %= 24;
   startMinute %= 60;
+  const timeString = [String(startHour).padStart(2, '0'), String(startMinute).padStart(2, '0')];
 
-  return `${String(startHour).padStart(2, '0')}시 ${String(startMinute).padStart(2, '0')}분`;
+  if (isMain) return `${timeString[0]}시 ${timeString[1]}분`;
+  return `${timeString[0]}:${timeString[1]}`;
 };
 
 // eslint-disable-next-line consistent-return
@@ -35,5 +40,12 @@ export const directionToEnglish = (direction: string) => {
   if (direction === '한기대') return 'koreatech';
   if (direction === '야우리') return 'terminal';
   if (direction === '천안역') return 'station';
+  return '';
+};
+
+export const getBusName = (busType: string) => {
+  if (busType === 'shuttle') return '셔틀버스';
+  if (busType === 'express') return '대성고속';
+  if (busType === 'city') return '시내버스';
   return '';
 };

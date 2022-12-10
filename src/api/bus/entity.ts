@@ -14,9 +14,11 @@ export interface BusResponse extends APIResponse {
   bus_type: BusType
   next_bus: {
     remain_time: number
+    bus_number?: number
   } | null
   now_bus: {
     remain_time: number
+    bus_number?: number
   } | null
 }
 
@@ -25,7 +27,7 @@ export type BusTimetableResponse = Array<BusRouteInfo>;
 interface BusRouteInfo {
   route_name: string;
   arrival_info: {
-    arrival_time: string;
-    node_name: string;
+    arrival_time: string
+    node_name: string
   }[]
 }
