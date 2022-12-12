@@ -9,7 +9,7 @@ const useArticleList = (board_id: string | undefined) => {
   );
 
   if (isLoading) {
-    return 'loading';
+    return null;
   }
 
   return articleList;

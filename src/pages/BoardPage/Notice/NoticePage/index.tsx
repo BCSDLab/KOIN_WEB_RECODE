@@ -13,7 +13,7 @@ function NoticePage() {
   const articleList = useArticleList(params.boardId ?? '1');
 
   React.useEffect(() => {
-    if (params.totalPageNum === undefined && articleList !== 'loading') setParams('totalPageNum', String(articleList!.totalPage), false, true);
+    if (params.totalPageNum === undefined && articleList !== null) setParams('totalPageNum', String(articleList!.totalPage), false, true);
     if (params.boardId === undefined) setParams('boardId', '1', false, true);
   }, [params, setParams, articleList]);
 
@@ -26,7 +26,7 @@ function NoticePage() {
         <PostHeader />
         <div>
           {
-            articleList === 'loading' ? (
+            articleList === null ? (
               <div className={styles['post-loading']}>
                 <LoadingSpinner
                   size="200px"
@@ -40,7 +40,7 @@ function NoticePage() {
           }
         </div>
         <PageNation
-          totalPageNum={articleList === 'loading' ? 5 : articleList!.totalPage}
+          totalPageNum={articleList === null ? 5 : articleList!.totalPage}
         />
       </div>
       <HotPost />
