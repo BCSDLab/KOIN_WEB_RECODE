@@ -20,31 +20,28 @@ const convertNoticeTag = (type: number) => {
   }
 };
 
-const convertDate = (time: string) => {
-  const times = time.split(' ');
-  const date = times[0].split('-');
-  const tim = times[1].split(':');
-  const created = new Date();
-  created.setFullYear(Number(date[0]));
-  created.setMonth(Number(date[1]) - 1);
-  created.setDate(Number(date[2]));
-  created.setHours(Number(tim[0]));
-  created.setMinutes(Number(tim[1]));
-  created.setSeconds(Number(tim[2]));
-  return created;
+const isCheckNewPost = (created: number[]) => {
+  const today = new Date();
+  console.log(today.getMonth());
+  console.log(created[1] - today.getMonth());
+  console.log(created[0] - today.getFullYear());
+  if (created[0] - today.getFullYear() === 0 && (
+    created[1] - today.getMonth() === 1) && (
+    today.getDate() - created[2] <= 4)
+  ) return true;
+  return false;
 };
 
-const setDate = (time: string) => {
-  const today = new Date();
-  const created = convertDate(time);
-  const year = created.getFullYear();
-  const month = created.getMonth() + 1 < 10 ? `0${created.getMonth() + 1}` : created.getMonth() + 1;
-  const date = created.getDate() < 10 ? `0${created.getDate()}` : created.getDate();
+const convertDate = (time: string) => time.split(' ')[0].replaceAll('-', '.');
 
-  if (Math.floor((Number(today) - Number(created)) / 60 / 1000 / 60) < 4) {
-    return [`${String(year)}.${String(month)}.${String(date)}`, true];
+const setDate = (time: string) => {
+  const created = convertDate(time).split('.').map((item: string) => parseInt(item, 10));
+  console.log(created);
+  console.log(isCheckNewPost(created));
+  if (isCheckNewPost(created)) {
+    return [`${created}`, true];
   }
-  return [`${String(year)}.${String(month)}.${String(date)}`, false];
+  return [`${created}`, false];
 };
 
 function PostList(props: ArticleList) {
