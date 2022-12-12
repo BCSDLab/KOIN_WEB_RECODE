@@ -10,11 +10,11 @@ import { getCookie } from 'utils/ts/cookie';
 import AuthPage from 'pages/Auth/AuthPage';
 import LoginPage from 'pages/Auth/LoginPage';
 import BoardPage from 'pages/BoardPage';
-import StorePage from 'pages/Store/StorePage';
-import NoticePage from 'pages/Notice/NoticePage';
+import StorePage from 'pages/BoardPage/Store/StorePage';
+import NoticePage from 'pages/BoardPage/Notice/NoticePage';
 import Toast from 'components/common/Toast';
 import SignupPage from 'pages/Auth/SignupPage';
-import StoreDetailPage from 'pages/Store/StoreDetailPage';
+import StoreDetailPage from 'pages/BoardPage/Store/StoreDetailPage';
 
 const useTokenState = () => {
   const [token, setToken] = useRecoilState(tokenState);
