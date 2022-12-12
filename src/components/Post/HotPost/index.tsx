@@ -36,7 +36,7 @@ const LINK_LIST = [
   },
 ];
 
-const useHotArticleList = () => {
+function HotPost() {
   const { data: hotArticleList } = useQuery(
     'hotArticleList',
     api.notice.HotPostList,
@@ -84,6 +84,6 @@ const useHotArticleList = () => {
       <LoadingSpinner size="80px" />
     </div>
   );
-};
+}
 
-export default useHotArticleList;
+export default HotPost;
