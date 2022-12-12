@@ -28,7 +28,7 @@ function NoticePage() {
         <div>
           {
             articleList === 'loading' ? (
-              <div className={styles['loading-container']}>
+              <div className={styles['post-loading']}>
                 <LoadingSpinner
                   size="200px"
                 />
