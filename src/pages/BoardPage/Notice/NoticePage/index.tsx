@@ -10,8 +10,7 @@ import styles from './NoticePage.module.scss';
 
 function NoticePage() {
   const { params, setParams } = useParamsHandler();
-  const articleList = useArticleList(params.boardId === undefined ? '1' : params.boardId);
-  const hotArticleList = HotPost();
+  const articleList = useArticleList(params.boardId ?? '1');
 
   React.useEffect(() => {
     if (params.totalPageNum === undefined && articleList !== 'loading') setParams('totalPageNum', String(articleList!.totalPage), false, true);
@@ -44,7 +43,7 @@ function NoticePage() {
           totalPageNum={articleList === 'loading' ? 5 : articleList!.totalPage}
         />
       </div>
-      { hotArticleList }
+      <HotPost />
     </div>
   );
 }
