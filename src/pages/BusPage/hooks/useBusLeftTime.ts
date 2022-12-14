@@ -1,5 +1,7 @@
 import { getBusInfo } from 'api/bus';
-import { useQueries } from 'react-query';
+import { BusResponse } from 'api/bus/entity';
+import { AxiosError } from 'axios';
+import { QueryOptions, useQueries } from 'react-query';
 import { BUS_TYPES } from 'static/bus';
 
 const BUS_KEY = 'bus_info';
@@ -21,14 +23,16 @@ const emptyRouteData = {
 } as const;
 
 const useBusLeftTIme = ({ departList, arrivalList }: Props) => {
-  const queries = BUS_TYPES.map((type, idx) => ({
-    queryKey: [BUS_KEY, type, departList[idx], arrivalList[idx]],
-    queryFn: () => getBusInfo(type, departList[idx], arrivalList[idx]),
-    refetchInterval: 60000,
-    staleTime: 60000,
-    suspense: true,
-    keepPreviousData: true,
-  }));
+  const queries = BUS_TYPES.map<QueryOptions<BusResponse, AxiosError, BusResponse, string[]>>(
+    (type, idx) => ({
+      queryKey: [BUS_KEY, type, departList[idx], arrivalList[idx]],
+      queryFn: ({ queryKey: [, busType, depart, arrival] }) => getBusInfo(busType, depart, arrival),
+      refetchInterval: 60000,
+      staleTime: 60000,
+      suspense: true,
+      keepPreviousData: true,
+    }),
+  );
 
   const results = useQueries(queries);
 
