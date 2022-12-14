@@ -88,7 +88,7 @@ function BusLookUp() {
             <div className={cn({ [styles['cards__bottom-card']]: true, [styles[`cards__card--${type}`]]: true })}>
               <div className={styles.cards__content}>
                 <span className={styles['cards__title--bottom']}>다음버스</span>
-                {typeof busData[idx]?.now_bus?.remain_time === 'number' && (
+                {busData[idx]?.next_bus?.bus_number && (
                   <span className={styles['cards__bus-number']}>{`${busData[idx]?.next_bus?.bus_number}번 버스`}</span>
                 )}
               </div>
