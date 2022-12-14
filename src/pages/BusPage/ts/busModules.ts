@@ -35,7 +35,6 @@ export const getStartTimeString = (second: number | '미운행' | undefined, isM
   return `${timeString[0]}:${timeString[1]}`;
 };
 
-// eslint-disable-next-line consistent-return
 export const directionToEnglish = (direction: string) => {
   if (direction === '한기대') return 'koreatech';
   if (direction === '야우리') return 'terminal';
