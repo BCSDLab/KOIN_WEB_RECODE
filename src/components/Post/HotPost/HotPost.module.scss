@@ -1,78 +1,79 @@
 @use "src/utils/scss/media" as media;
 
-.hotPost-container {
+.hotpost {
   float: left;
   width: 258px;
 
   @include media.media-breakpoint(mobile) {
     display: none;
   }
+
+  &__list {
+    color: #252525;
+    padding: 16px 17px 6px;
+    border: 1px solid #d2dae2;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+
+  &__title {
+    color: #252525;
+    font-size: 15px;
+    font-family: NanumSquare, serif;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    margin-bottom: 19px;
+  }
+
+  &__content {
+    font-size: 13px;
+    margin-top: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-bottom: 9px;
+  }
+
+  &__rank {
+    color: #175c8e;
+    width: 20px;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    font-family: Verdana, serif;
+    line-height: 0.85;
+    letter-spacing: -0.8px;
+    font-size: 15px;
+    margin-left: -1px;
+  }
+
+  &__item {
+    font-family: NanumBarunGothic, serif;
+    font-size: 13px;
+    color: #252525;
+    float: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 25px);
+    padding-left: 6px;
+  }
 }
 
-.hotPost-list {
-  color: #252525;
-  padding: 16px 17px 6px;
-  border: 1px solid #d2dae2;
-  margin-bottom: 16px;
-  text-align: left;
-}
-
-.hotPost-title {
-  color: #252525;
-  font-size: 15px;
-  font-family: NanumSquare, serif;
-  font-weight: 700;
-  letter-spacing: -0.8px;
-  margin-bottom: 19px;
-}
-
-.hotPost-content {
-  font-size: 13px;
-  margin-top: 2px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding-bottom: 9px;
-}
-
-.hotPost-rank {
-  color: #175c8e;
-  width: 20px;
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  font-family: Verdana, serif;
-  line-height: 0.85;
-  letter-spacing: -0.8px;
-  font-size: 15px;
-  margin-left: -1px;
-}
-
-.hotPost-item {
-  font-family: NanumBarunGothic, serif;
-  font-size: 13px;
-  color: #252525;
-  float: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: calc(100% - 25px);
-  padding-left: 6px;
-}
-
-.link-list {
+.link {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
 
-.link-button {
-  width: 48.5%;
-  border: 0;
-  background-color: #fff;
-  cursor: pointer;
-}
+  &__button {
+    width: 48.5%;
+    border: 0;
+    padding: 0;
+    background-color: #fff;
+    cursor: pointer;
+  }
 
-.link-image {
-  width: 100%;
+  &__image {
+    width: 100%;
+  }
 }
