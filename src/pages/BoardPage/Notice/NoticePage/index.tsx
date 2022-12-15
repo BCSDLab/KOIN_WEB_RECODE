@@ -4,18 +4,11 @@ import HotPost from 'components/Post/HotPost';
 import PostHeader from 'components/Post/PostHeader';
 import PostList from 'components/Post/PostList';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import useArticleList from 'pages/BoardPage/Notice/hooks/useArticleList';
-import useParamsHandler from 'utils/hooks/useParamsHandler';
+import useBoardParams from 'pages/BoardPage/Notice/hooks/useBoardParams';
 import styles from './NoticePage.module.scss';
 
 function NoticePage() {
-  const { params, setParams } = useParamsHandler();
-  const articleList = useArticleList(params.boardId ?? '1');
-
-  React.useEffect(() => {
-    if (params.totalPageNum === undefined && articleList !== null) setParams('totalPageNum', String(articleList!.totalPage), { isDelete: false, isReplace: true });
-    if (params.boardId === undefined) setParams('boardId', '1', { isDelete: false, isReplace: true });
-  }, [params, setParams, articleList]);
+  const articleList = useBoardParams();
 
   return (
     <div className={styles.template}>
