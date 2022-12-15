@@ -1,4 +1,3 @@
-import React from 'react';
 import Pagination from 'components/Post/Pagination';
 import HotPost from 'components/Post/HotPost';
 import PostHeader from 'components/Post/PostHeader';
