@@ -1,6 +1,6 @@
 @use "src/utils/scss/media" as media;
 
-.post-section {
+.header {
   border-top: 2px solid #175c8e;
   border-collapse: collapse;
   font-size: 13px;
@@ -11,28 +11,29 @@
     width: 100%;
     border: none;
   }
-}
 
-.post-header {
-  width: 100%;
-  height: 44px;
-  font-weight: bold;
+  &__container {
+    width: 100%;
+    height: 44px;
+    font-weight: bold;
+  
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
 
-  @include media.media-breakpoint(mobile) {
-    display: none;
+  &__row {
+    width: 100%;
+    height: 100%;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #175c8e;
   }
 }
 
-.post-row {
-  width: 100%;
-  height: 100%;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #175c8e;
-}
 
-.post-info {
+.info {
   height: 100%;
   font-size: 15px;
   letter-spacing: -0.6px;

@@ -3,40 +3,40 @@ import styles from './PostHeader.module.scss';
 
 function PostHeader() {
   return (
-    <div className={styles['post-section']}>
-      <div className={styles['post-header']}>
-        <div className={styles['post-row']}>
+    <div className={styles.header}>
+      <div className={styles.header__container}>
+        <div className={styles.header__row}>
           <div className={cn({
-            [styles['post-info']]: true,
-            [styles['post-info--number']]: true,
+            [styles.info]: true,
+            [styles['info--number']]: true,
           })}
           >
             번호
           </div>
           <div className={cn({
-            [styles['post-info']]: true,
-            [styles['post-info--title']]: true,
+            [styles.info]: true,
+            [styles['info--title']]: true,
           })}
           >
             제목
           </div>
           <div className={cn({
-            [styles['post-info']]: true,
-            [styles['post-info--author']]: true,
+            [styles.info]: true,
+            [styles['info--author']]: true,
           })}
           >
             작성자
           </div>
           <div className={cn({
-            [styles['post-info']]: true,
-            [styles['post-info--date']]: true,
+            [styles.info]: true,
+            [styles['info--date']]: true,
           })}
           >
             날짜
           </div>
           <div className={cn({
-            [styles['post-info']]: true,
-            [styles['post-info--views']]: true,
+            [styles.info]: true,
+            [styles['info--views']]: true,
           })}
           >
             조회수
