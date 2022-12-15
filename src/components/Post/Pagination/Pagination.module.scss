@@ -25,12 +25,12 @@
     font-size: 13px;
     letter-spacing: -0.7px;
     cursor: pointer;
-  
+
     &:hover {
       background-color: #175c8e;
       color: white;
     }
-  
+
     @include media.media-breakpoint(mobile) {
       width: 73px;
       height: 30px;
@@ -48,20 +48,19 @@
     cursor: pointer;
     color: #858585;
     background-color: #fff;
-  
+
     &:hover {
       background-color: #175c8e;
       color: white;
     }
-  
+
     @media (max-width: 576px) {
       margin: 0 2px;
     }
-  
+
     &--selected {
       color: #fff;
       background-color: #175c8e;
     }
   }
-    
 }

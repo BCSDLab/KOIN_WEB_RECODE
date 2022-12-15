@@ -24,7 +24,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  
+
     @include media.media-breakpoint(mobile) {
       display: none;
     }
@@ -39,7 +39,7 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-  
+
     @include media.media-breakpoint(mobile) {
       display: none;
     }
@@ -53,7 +53,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  
+
     @include media.media-breakpoint(mobile) {
       display: none;
     }
@@ -66,7 +66,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  
+
     @include media.media-breakpoint(mobile) {
       display: none;
     }
