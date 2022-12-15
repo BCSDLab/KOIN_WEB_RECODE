@@ -1,6 +1,6 @@
 @use "src/utils/scss/media" as media;
 
-.post-content {
+.list {
   height: 68px;
   cursor: pointer;
   border-bottom: 1px #d2dae2 solid;
@@ -15,23 +15,65 @@
     display: block;
     border-bottom: 1px solid #ececec;
   }
-}
 
-.post-id {
-  width: 85px;
-  font-size: 15px;
-  height: 100%;
-  color: #252525;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  &__id {
+    width: 85px;
+    font-size: 15px;
+    height: 100%;
+    color: #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
 
-  @include media.media-breakpoint(mobile) {
-    display: none;
+  &__author {
+    width: 150px;
+    height: 100%;
+    color: #175c8e;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__created_at {
+    width: 70px;
+    height: 100%;
+    color: #252525;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__views {
+    width: 108px;
+    height: 100%;
+    color: #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
   }
 }
 
-.post-title {
+.title {
   height: 100%;
   color: #252525;
   display: flex;
@@ -47,64 +89,22 @@
   @include media.media-breakpoint(mobile) {
     display: none;
   }
-}
 
-.title-header {
-  font-weight: 600;
-}
-
-.title-content {
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.title-newTag {
-  margin-left: 10px;
-  width: 14.5px;
-  height: 15px;
-  position: relative;
-}
-
-.post-author {
-  width: 150px;
-  height: 100%;
-  color: #175c8e;
-  font-size: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-
-  @include media.media-breakpoint(mobile) {
-    display: none;
+  &__header {
+    font-weight: 600;
   }
-}
 
-.post-created_at {
-  width: 70px;
-  height: 100%;
-  color: #252525;
-  font-size: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  @include media.media-breakpoint(mobile) {
-    display: none;
+  &__content {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-}
 
-.post-views {
-  width: 108px;
-  height: 100%;
-  color: #252525;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  @include media.media-breakpoint(mobile) {
-    display: none;
+  &__newTag {
+    margin-left: 10px;
+    width: 14.5px;
+    height: 15px;
+    position: relative;
   }
 }

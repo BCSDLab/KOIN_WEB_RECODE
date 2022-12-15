@@ -22,9 +22,7 @@ const convertNoticeTag = (type: number) => {
 
 const isCheckNewPost = (created: number[]) => {
   const today = new Date();
-  console.log(today.getMonth());
-  console.log(created[1] - today.getMonth());
-  console.log(created[0] - today.getFullYear());
+
   if (created[0] - today.getFullYear() === 0 && (
     created[1] - today.getMonth() === 1) && (
     today.getDate() - created[2] <= 4)
@@ -36,8 +34,7 @@ const convertDate = (time: string) => time.split(' ')[0].replaceAll('-', '.');
 
 const setDate = (time: string) => {
   const created = convertDate(time).split('.').map((item: string) => parseInt(item, 10));
-  console.log(created);
-  console.log(isCheckNewPost(created));
+
   if (isCheckNewPost(created)) {
     return [`${created}`, true];
   }
@@ -52,24 +49,24 @@ function PostList(props: ArticleList) {
       {
         articles?.map((article: NoticeList) => (
           <div
-            className={styles['post-content']}
+            className={styles.list}
             key={article.id}
           >
-            <div className={styles['post-id']}>{ article.id }</div>
-            <div className={styles['post-title']}>
-              <div className={styles['title-header']}>{ convertNoticeTag(article.board_id) }</div>
-              <div className={styles['title-content']}>{ article.title }</div>
+            <div className={styles.list__id}>{ article.id }</div>
+            <div className={styles.title}>
+              <div className={styles.title__header}>{ convertNoticeTag(article.board_id) }</div>
+              <div className={styles.title__content}>{ article.title }</div>
               { setDate(article.created_at)[1] && (
                 <img
-                  className={styles['title-newTag']}
+                  className={styles.title__newTag}
                   src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
                   alt="new"
                 />
               )}
             </div>
-            <div className={styles['post-author']}>{ article.nickname }</div>
-            <div className={styles['post-created_at']}>{ setDate(article.created_at)[0] }</div>
-            <div className={styles['post-views']}>{ article.hit }</div>
+            <div className={styles.list__author}>{ article.nickname }</div>
+            <div className={styles.list__created_at}>{ setDate(article.created_at)[0] }</div>
+            <div className={styles.list__views}>{ article.hit }</div>
           </div>
         ))
       }
