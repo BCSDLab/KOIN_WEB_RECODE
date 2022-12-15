@@ -1,5 +1,5 @@
 import React from 'react';
-import PageNation from 'components/Post/PageNation';
+import Pagination from 'components/Post/Pagination';
 import HotPost from 'components/Post/HotPost';
 import PostHeader from 'components/Post/PostHeader';
 import PostList from 'components/Post/PostList';
@@ -39,7 +39,7 @@ function NoticePage() {
             )
           }
         </div>
-        <PageNation
+        <Pagination
           totalPageNum={articleList === null ? 5 : articleList!.totalPage}
         />
       </div>

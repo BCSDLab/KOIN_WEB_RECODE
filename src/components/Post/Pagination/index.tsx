@@ -1,15 +1,16 @@
 import cn from 'utils/ts/classnames';
 import showToast from 'utils/ts/showToast';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
-import styles from './PageNation.module.scss';
-
-interface PageNationProps {
-  totalPageNum: number
-}
+import usePagination from './hooks/usePagination';
+import styles from './Pagination.module.scss';
 
 const LIMIT_COUNT = [0, 1, 2, 3, 4];
 
-const onNowPageNum = (params: string) => {
+interface PaginationProps {
+  totalPageNum: number
+}
+
+export const changeParamsToNumber = (params: string) => {
   if (params === undefined) {
     return 1;
   }
@@ -34,29 +35,17 @@ const moveNextNumber = (moveNumber: number, totalPageNum: number) => {
   return String(moveNumber);
 };
 
-const displayCorrectionNum = (totalPageNum: number, nowPageNum: number) => {
-  if (totalPageNum <= LIMIT_COUNT.length) return 0;
-
-  if (nowPageNum <= Math.ceil(LIMIT_COUNT.length / 2)) {
-    return 0;
-  }
-  if (totalPageNum - nowPageNum <= Math.floor(LIMIT_COUNT.length / 2)) {
-    return totalPageNum - LIMIT_COUNT.length;
-  }
-
-  return nowPageNum - Math.ceil(LIMIT_COUNT.length / 2);
-};
-
-function PageNation(props: PageNationProps) {
+function Pagination(props: PaginationProps) {
+  const { calcPageSelected, onClickMove } = usePagination();
   const { params, setParams } = useParamsHandler();
   const { totalPageNum } = props;
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pagination}>
       <button
         type="button"
-        className={styles['move-pageSection']}
-        onClick={() => setParams('boardId', movePrevNumber(Number(params.boardId) - 1), false, false)}
+        className={styles.pagination__move}
+        onClick={() => onClickMove(movePrevNumber(Number(params.boardId) - 1))}
       >
         이전으로
       </button>
@@ -67,14 +56,20 @@ function PageNation(props: PageNationProps) {
               <button
                 type="button"
                 className={cn({
-                  [styles['page-number']]: true,
-                  [styles['page-number--selected']]: onNowPageNum(params.boardId) === (
-                    limit + 1 + displayCorrectionNum(totalPageNum, onNowPageNum(params.boardId))
+                  [styles.pagination__number]: true,
+                  [styles['page-number--selected']]: changeParamsToNumber(params.boardId) === (
+                    calcPageSelected(limit, totalPageNum, changeParamsToNumber(params.boardId))
                   ),
                 })}
-                onClick={() => setParams('boardId', String(limit + 1 + displayCorrectionNum(totalPageNum, onNowPageNum(params.boardId))), false, false)}
+                onClick={() => {
+                  onClickMove(String(calcPageSelected(
+                    limit,
+                    totalPageNum,
+                    changeParamsToNumber(params.boardId),
+                  )));
+                }}
               >
-                { limit + 1 + displayCorrectionNum(totalPageNum, onNowPageNum(params.boardId)) }
+                { calcPageSelected(limit, totalPageNum, changeParamsToNumber(params.boardId)) }
               </button>
             </span>
           ))
@@ -84,10 +79,10 @@ function PageNation(props: PageNationProps) {
               <button
                 type="button"
                 className={cn({
-                  [styles['page-number']]: true,
-                  [styles['page-number--selected']]: onNowPageNum(params.boardId) === index + 1,
+                  [styles.pagination__number]: true,
+                  [styles['page-number--selected']]: changeParamsToNumber(params.boardId) === index + 1,
                 })}
-                onClick={() => setParams('boardId', String(index + 1), false, true)}
+                onClick={() => onClickMove(String(index + 1))}
               >
                 { index + 1 }
               </button>
@@ -97,7 +92,7 @@ function PageNation(props: PageNationProps) {
       }
       <button
         type="button"
-        className={styles['move-pageSection']}
+        className={styles.pagination__move}
         onClick={() => setParams('boardId', moveNextNumber(Number(params.boardId) + 1, Number(totalPageNum)), false, false)}
       >
         다음으로
@@ -106,4 +101,4 @@ function PageNation(props: PageNationProps) {
   );
 }
 
-export default PageNation;
+export default Pagination;
