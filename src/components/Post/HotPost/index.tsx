@@ -45,29 +45,29 @@ function HotPost() {
 
   if (hotArticleList instanceof Array) {
     return (
-      <aside className={styles['hotPost-container']}>
-        <div className={styles['hotPost-list']}>
-          <div className={styles['hotPost-title']}>가장 많이 본 게시물</div>
+      <aside className={styles.hotpost}>
+        <div className={styles.hotpost__list}>
+          <div className={styles.hotpost__title}>가장 많이 본 게시물</div>
           {
           hotArticleList.map((hotPost: HotPosts, index: number) => (
-            <div className={styles['hotPost-content']} key={hotPost.id + hotPost.board_id}>
-              <span className={styles['hotPost-rank']}>{ index + 1 }</span>
-              <span className={styles['hotPost-item']}>{ hotPost.title }</span>
+            <div className={styles.hotpost__content} key={hotPost.id + hotPost.board_id}>
+              <span className={styles.hotpost__rank}>{ index + 1 }</span>
+              <span className={styles.hotpost__item}>{ hotPost.title }</span>
             </div>
           ))
           }
         </div>
-        <div className={styles['link-list']}>
+        <div className={styles.link}>
           {
             LINK_LIST.map((link) => (
               <button
                 type="button"
-                className={styles['link-button']}
+                className={styles.link__button}
                 key={link.id}
                 onClick={() => window.open(link.url)}
               >
                 <img
-                  className={styles['link-image']}
+                  className={styles.link__image}
                   src={link.image}
                   alt="alineImg"
                 />
