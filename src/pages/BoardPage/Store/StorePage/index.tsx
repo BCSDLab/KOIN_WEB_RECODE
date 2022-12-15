@@ -99,7 +99,7 @@ function StorePage() {
               role="radio"
               aria-checked={searchParams.get('category') === value.tag}
               type="button"
-              onClick={() => setParams('category', value.tag, false, true)}
+              onClick={() => setParams('category', value.tag, { isDelete: false, isReplace: true })}
               key={value.tag}
             >
               <img className={styles.category__image} src={value.image} alt="category_img" />
@@ -117,13 +117,22 @@ function StorePage() {
           name="search"
           placeholder="상점명을 입력하세요"
           onKeyPress={(e) => {
-            if (e.key === 'Enter') setParams('storeName', e.target.value, (searchParams.get('storeName') === undefined), true);
+            if (e.key === 'Enter') setParams('storeName', e.target.value, { isDelete: (searchParams.get('storeName') === undefined), isReplace: true });
           }}
         />
         <button
           className={styles.search_bar__icon}
           type="button"
-          onClick={() => { setParams('storeName', storeRef.current?.value ?? '', (searchParams.get('storeName') === undefined), true); }}
+          onClick={() => {
+            setParams(
+              'storeName',
+              storeRef.current?.value ?? '',
+              {
+                isDelete: (searchParams.get('storeName') === undefined),
+                isReplace: true,
+              },
+            );
+          }}
         >
           <img className={styles['search-icon']} src="https://static.koreatech.in/assets/img/search.png" alt="store_icon" />
         </button>
@@ -147,7 +156,16 @@ function StorePage() {
                     type="checkbox"
                     checked={searchParams.get(item.id) ? true : undefined}
                     className={styles['option-checkbox__input']}
-                    onChange={() => setParams(item.id, item.value, true, true)}
+                    onChange={() => {
+                      setParams(
+                        item.id,
+                        item.value,
+                        {
+                          isDelete: true,
+                          isReplace: true,
+                        },
+                      );
+                    }}
                   />
                   {item.content}
                 </label>

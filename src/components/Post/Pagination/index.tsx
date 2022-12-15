@@ -93,7 +93,7 @@ function Pagination(props: PaginationProps) {
       <button
         type="button"
         className={styles.pagination__move}
-        onClick={() => setParams('boardId', moveNextNumber(Number(params.boardId) + 1, Number(totalPageNum)), false, false)}
+        onClick={() => setParams('boardId', moveNextNumber(Number(params.boardId) + 1, Number(totalPageNum)), { isDelete: false, isReplace: true })}
       >
         다음으로
       </button>

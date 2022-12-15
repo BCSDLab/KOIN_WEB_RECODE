@@ -13,8 +13,8 @@ function NoticePage() {
   const articleList = useArticleList(params.boardId ?? '1');
 
   React.useEffect(() => {
-    if (params.totalPageNum === undefined && articleList !== null) setParams('totalPageNum', String(articleList!.totalPage), false, true);
-    if (params.boardId === undefined) setParams('boardId', '1', false, true);
+    if (params.totalPageNum === undefined && articleList !== null) setParams('totalPageNum', String(articleList!.totalPage), { isDelete: false, isReplace: true });
+    if (params.boardId === undefined) setParams('boardId', '1', { isDelete: false, isReplace: true });
   }, [params, setParams, articleList]);
 
   return (
