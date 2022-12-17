@@ -1,3 +1,4 @@
+import React from 'react';
 import cn from 'utils/ts/classnames';
 import showToast from 'utils/ts/showToast';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
@@ -53,7 +54,7 @@ function Pagination(props: PaginationProps) {
       {
         LIMIT_COUNT.length - 1 < totalPageNum ? (
           LIMIT_COUNT.map((limit) => (
-            <span key={limit + params.boardId + 1}>
+            <span key={limit}>
               <button
                 type="button"
                 aria-label="page-index-button"
@@ -63,7 +64,7 @@ function Pagination(props: PaginationProps) {
                 })}
                 onClick={() => onClickMove(calcIndexPage(limit, totalPageNum, params.boardId))}
               >
-                { calcIndexPage(limit, totalPageNum, params.boardId) }
+                { calcIndexPage(limit, totalPageNum, params.boardId)}
               </button>
             </span>
           ))

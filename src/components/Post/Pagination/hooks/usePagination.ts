@@ -1,18 +1,18 @@
 import useParamsHandler from 'utils/hooks/useParamsHandler';
 
-const LIMIT_COUNT = [0, 1, 2, 3, 4];
+const PAGE_LIMIT = 5;
 
 const displayCorrectionNum = (totalPageNum: number, nowPageNum: number) => {
-  if (totalPageNum <= LIMIT_COUNT.length) return 0;
+  if (totalPageNum <= PAGE_LIMIT) return 0;
 
-  if (nowPageNum <= Math.ceil(LIMIT_COUNT.length / 2)) {
+  if (nowPageNum <= Math.ceil(PAGE_LIMIT / 2)) {
     return 0;
   }
-  if (totalPageNum - nowPageNum <= Math.floor(LIMIT_COUNT.length / 2)) {
-    return totalPageNum - LIMIT_COUNT.length;
+  if (totalPageNum - nowPageNum <= Math.floor(PAGE_LIMIT / 2)) {
+    return totalPageNum - PAGE_LIMIT;
   }
 
-  return nowPageNum - Math.ceil(LIMIT_COUNT.length / 2);
+  return nowPageNum - Math.ceil(PAGE_LIMIT / 2);
 };
 
 const usePagination = () => {
@@ -27,7 +27,6 @@ const usePagination = () => {
   return {
     calcIndexPage,
     onClickMove,
-    LIMIT_COUNT,
   };
 };
 
