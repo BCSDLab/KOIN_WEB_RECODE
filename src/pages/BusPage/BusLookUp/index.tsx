@@ -46,7 +46,7 @@ function BusLookUp() {
         </div>
       </div>
       <div className={styles.cards}>
-        {BUS_TYPES.map((type, idx) => (
+        {BUS_TYPES.map(({ key: type }, idx) => (
           <React.Fragment key={type}>
             <div className={cn({ [styles['cards__top-card']]: true, [styles[`cards__card--${type}`]]: true })}>
               <div className={styles.cards__content}>

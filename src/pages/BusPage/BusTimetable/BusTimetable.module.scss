@@ -1,0 +1,105 @@
+.template {
+  width: 1131px;
+  margin: 65px auto 0;
+
+  &__title {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    color: #252525;
+    margin-bottom: 22px;
+  }
+
+  &__loading-spinner {
+    margin: 50px auto;
+    background-color: white;
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 60px;
+  list-style: none;
+
+  &__tab {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    letter-spacing: -0.8px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: rgb(133 133 133);
+    background-color: white;
+    border: 1px solid rgb(133 133 133);
+    appearance: none;
+    cursor: pointer;
+
+    &--selected {
+      color: rgb(23 92 142);
+      border-color: rgb(23 92 142);
+      border-bottom: 0;
+    }
+  }
+}
+
+.timetable {
+  width: 100%;
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 67px;
+  table-layout: fixed;
+
+  &__dropdown-wrapper {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__citybus-info {
+    margin-top: 52px;
+    margin-bottom: 10px;
+    height: 20px;
+    color: rgb(133 133 133);
+    letter-spacing: -0.6px;
+    font-size: 12px;
+  }
+
+  &__dropdown {
+    border: 1px solid rgb(210 218 226);
+    height: 42px;
+    padding: 0 10px 0 7px;
+    letter-spacing: -0.8px;
+    font-size: 15px;
+  }
+
+  &__head {
+    border-top: 2px solid rgb(23 92 142);
+    height: 46px;
+    color: rgb(23 92 142);
+    font-weight: bold;
+  }
+
+  &__body {
+    border: solid rgb(23 92 142);
+    border-width: 1px 0;
+  }
+
+  &__row {
+    height: 68px;
+
+    &:hover {
+      font-weight: bold;
+    }
+  }
+
+  &__cell {
+    vertical-align: middle;
+  }
+}
