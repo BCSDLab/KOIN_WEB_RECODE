@@ -36,7 +36,7 @@ const moveNextNumber = (moveNumber: number, totalPageNum: number) => {
 };
 
 function Pagination(props: PaginationProps) {
-  const { calcPageSelected, onClickMove } = usePagination();
+  const { calcIndexPage, onClickMove } = usePagination();
   const { params, setParams } = useParamsHandler();
   const { totalPageNum } = props;
 
@@ -44,6 +44,7 @@ function Pagination(props: PaginationProps) {
     <div className={styles.pagination}>
       <button
         type="button"
+        aria-label="page-index-prev"
         className={styles.pagination__move}
         onClick={() => onClickMove(movePrevNumber(Number(params.boardId) - 1))}
       >
@@ -52,39 +53,33 @@ function Pagination(props: PaginationProps) {
       {
         LIMIT_COUNT.length - 1 < totalPageNum ? (
           LIMIT_COUNT.map((limit) => (
-            <span key={limit}>
+            <span key={limit + params.boardId + 1}>
               <button
                 type="button"
+                aria-label="page-index-button"
                 className={cn({
                   [styles.pagination__number]: true,
-                  [styles['page-number--selected']]: changeParamsToNumber(params.boardId) === (
-                    calcPageSelected(limit, totalPageNum, changeParamsToNumber(params.boardId))
-                  ),
+                  [styles['pagination__number--selected']]: params.boardId === calcIndexPage(limit, totalPageNum, params.boardId),
                 })}
-                onClick={() => {
-                  onClickMove(String(calcPageSelected(
-                    limit,
-                    totalPageNum,
-                    changeParamsToNumber(params.boardId),
-                  )));
-                }}
+                onClick={() => onClickMove(calcIndexPage(limit, totalPageNum, params.boardId))}
               >
-                { calcPageSelected(limit, totalPageNum, changeParamsToNumber(params.boardId)) }
+                { calcIndexPage(limit, totalPageNum, params.boardId) }
               </button>
             </span>
           ))
         ) : (
-          [...Array(totalPageNum)].map((limit, index) => (
-            <span key={limit}>
+          [...Array(totalPageNum)].map((limit) => (
+            <span key={limit + 1}>
               <button
                 type="button"
+                aria-label="page-index-button"
                 className={cn({
                   [styles.pagination__number]: true,
-                  [styles['page-number--selected']]: changeParamsToNumber(params.boardId) === index + 1,
+                  [styles['pagination__number--selected']]: changeParamsToNumber(params.boardId) === limit + 1,
                 })}
-                onClick={() => onClickMove(String(index + 1))}
+                onClick={() => onClickMove(String(limit + 1))}
               >
-                { index + 1 }
+                { limit + 1 }
               </button>
             </span>
           ))
@@ -92,6 +87,7 @@ function Pagination(props: PaginationProps) {
       }
       <button
         type="button"
+        aria-label="page-index-next"
         className={styles.pagination__move}
         onClick={() => setParams('boardId', moveNextNumber(Number(params.boardId) + 1, Number(totalPageNum)), { isDelete: false, isReplace: true })}
       >
