@@ -14,7 +14,7 @@ import StorePage from 'pages/BoardPage/Store/StorePage';
 import NoticePage from 'pages/BoardPage/Notice/NoticePage';
 import Toast from 'components/common/Toast';
 import SignupPage from 'pages/Auth/SignupPage';
-import StoreDetailPage from 'pages/Store/StoreDetailPage';
+import StoreDetailPage from 'pages/BoardPage/Store/StoreDetailPage';
 import BusPage from 'pages/BusPage';
 
 const useTokenState = () => {
