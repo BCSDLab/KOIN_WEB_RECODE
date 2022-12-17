@@ -1,0 +1,133 @@
+.lookup {
+  margin: 63px auto 0;
+  width: 1131px;
+
+  &__title {
+    font-family: NanumSquare, sans-serif;
+    letter-spacing: -1.5px;
+    font-size: 30px;
+    font-weight: 800;
+    color: #175c8e;
+  }
+
+  &__description {
+    margin-top: 30px;
+    margin-bottom: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 24px;
+  }
+
+  &__subtitle {
+    font-family: NanumBarunGothic, sans-serif;
+    font-size: 24px;
+    letter-spacing: -1.2px;
+    font-weight: 300;
+    line-height: 28px;
+  }
+
+  &__select {
+    cursor: pointer;
+    border: 0;
+    margin: 0 10px 0 4px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+}
+
+.cards {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(3, 370px);
+  grid-template-rows: 162px 85px;
+  gap: 5px 9px;
+  color: white;
+
+  &__top-card {
+    padding: 26px 23px 0;
+  }
+
+  &__bottom-card {
+    padding: 23px 23px 0;
+  }
+
+  &__card {
+    &--shuttle {
+      background-color: rgb(247 148 30);
+    }
+
+    &--express {
+      background-color: rgb(124 159 174);
+    }
+
+    &--city {
+      background-color: rgb(77 178 151);
+    }
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+
+    &--description {
+      margin-top: 26px;
+    }
+  }
+
+  &__direction {
+    font-size: 24px;
+    letter-spacing: -1.2px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 11px;
+  }
+
+  &__badge {
+    width: 39px;
+    height: 19px;
+    border: 1px solid white;
+    border-radius: 14px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1px;
+    margin-right: 13px;
+  }
+
+  &__time {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.9px;
+  }
+
+  &__detail {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.6px;
+    margin-left: 10px;
+  }
+
+  &__bus-number {
+    font-size: 14px;
+    letter-spacing: -0.7px;
+  }
+
+  &__bus-icon {
+    position: relative;
+    height: 15px;
+    width: auto;
+    right: 8px;
+    top: 2px;
+  }
+
+  &__bus-type {
+    font-size: 14px;
+  }
+
+  &__title--bottom {
+    height: 20px;
+    font-size: 12px;
+  }
+}
