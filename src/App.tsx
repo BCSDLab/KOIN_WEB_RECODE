@@ -14,6 +14,7 @@ import StorePage from 'pages/Store/StorePage';
 import Toast from 'components/common/Toast';
 import SignupPage from 'pages/Auth/SignupPage';
 import StoreDetailPage from 'pages/Store/StoreDetailPage';
+import BusPage from 'pages/BusPage';
 
 const useTokenState = () => {
   const [token, setToken] = useRecoilState(tokenState);
@@ -34,6 +35,7 @@ function App() {
         <Route path="/" element={<BoardPage />}>
           <Route path="/store" element={<StorePage />} />
           <Route path="/store/:id" element={<StoreDetailPage />} />
+          <Route path="/bus" element={<BusPage />} />
         </Route>
         <Route path="auth" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
           <Route index element={<LoginPage />} />
