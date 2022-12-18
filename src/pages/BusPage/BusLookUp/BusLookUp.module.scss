@@ -81,7 +81,7 @@
 
   @include media.media-breakpoint(mobile) {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 162px 85px);
+    grid-template-rows: repeat(3, 156px 85px);
   }
 
   &__top-card {
@@ -112,6 +112,10 @@
 
     &--description {
       margin-top: 26px;
+
+      @include media.media-breakpoint(mobile) {
+        margin-top: 20px;
+      }
     }
   }
 
