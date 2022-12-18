@@ -22,7 +22,7 @@ function BusLookUp() {
           <br />
           운행수단별로 간단히 비교해드립니다.
         </h2>
-        <div>
+        <div className={styles['lookup__select-line']}>
           <select
             className={styles.lookup__select}
             onChange={depart.handleChange}
