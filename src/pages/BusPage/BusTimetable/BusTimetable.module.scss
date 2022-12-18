@@ -1,6 +1,7 @@
 .template {
   width: 1131px;
   margin: 65px auto 0;
+  min-height: 900px;
 
   &__title {
     font-size: 20px;
@@ -11,7 +12,7 @@
   }
 
   &__loading-spinner {
-    margin: 50px auto;
+    margin: 250px auto;
     background-color: white;
     width: 100px;
     height: 100px;

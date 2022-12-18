@@ -1,3 +1,5 @@
+import { Course } from 'api/bus/entity';
+
 // 시간 반환 함수
 const getHour = (second: number) => Math.floor(second / 60 / 60);
 
@@ -47,4 +49,12 @@ export const getBusName = (busType: string) => {
   if (busType === 'express') return '대성고속';
   if (busType === 'city') return '시내버스';
   return '';
+};
+
+export const getCourseName = (course: Course) => {
+  let name = course.region;
+  if (course.bus_type === 'shuttle') name += ' 셔틀';
+  if (course.direction === 'to') name += ' 등교';
+  if (course.direction === 'from') name += ' 하교';
+  return name;
 };

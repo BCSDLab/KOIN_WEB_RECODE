@@ -1,12 +1,16 @@
 import { Suspense, useState } from 'react';
 import cn from 'utils/ts/classnames';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
-import { BUS_TYPES } from 'static/bus';
+import {
+  BUS_TYPES, CITY_BUS_TIMETABLE, EXPRESS_COURSES, SHUTTLE_COURSES,
+} from 'static/bus';
+import { getCourseName } from 'pages/BusPage/ts/busModules';
+import useBusTimetable from 'pages/BusPage/hooks/useBusTimetable';
+import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
 import styles from './BusTimetable.module.scss';
 
-function Timetable({ headers }: { headers: string[] }) {
+function Timetable({ headers, arrivalList }: { headers: string[], arrivalList: string[][] }) {
   return (
-
     <table className={styles.timetable}>
       <thead className={styles.timetable__head}>
         <tr>
@@ -16,44 +20,85 @@ function Timetable({ headers }: { headers: string[] }) {
       </thead>
 
       <tbody className={styles.timetable__body}>
-        <tr className={styles.timetable__row}>
-          <td className={styles.timetable__cell}>ㅇㅅㅇ</td>
-          <td className={styles.timetable__cell}>ㅇㅅㅇ</td>
-        </tr>
+        {arrivalList.map((arrival) => (
+          <tr className={styles.timetable__row} key={`${arrival[0]} - ${arrival[1]}`}>
+            <td className={styles.timetable__cell}>{arrival[0]}</td>
+            <td className={styles.timetable__cell}>{arrival[1]}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
 }
 
 function ShuttleTimetable() {
-  return (
-    <>
-      <div className={styles['timetable__dropdown-wrapper']}>
-        <select className={styles.timetable__dropdown}>
-          <option value="temp">천안 하교</option>
-        </select>
-        <select className={styles.timetable__dropdown}>
-          <option value="temp">천안역</option>
-          <option value="temp">천안역천안역천안역</option>
-        </select>
-      </div>
+  const { data: timetable, handleCourseChange } = useBusTimetable(SHUTTLE_COURSES);
+  const [selectedRoute, handleRouteChange, resetRoute] = useIndexValueSelect();
 
-      <Timetable headers={BUS_TYPES[0].tableHeaders} />
-    </>
+  return (
+    <div>
+      {timetable?.type === 'shuttle' && (
+        <>
+          <div className={styles['timetable__dropdown-wrapper']}>
+            <select
+              className={styles.timetable__dropdown}
+              onChange={(e) => {
+                handleCourseChange(e);
+                resetRoute();
+              }}
+            >
+              {SHUTTLE_COURSES.map((course, index) => (
+                <option key={getCourseName(course)} value={index}>{getCourseName(course)}</option>
+              ))}
+            </select>
+
+            <select
+              className={styles.timetable__dropdown}
+              onChange={handleRouteChange}
+            >
+              {timetable.info.map((routeInfo, index) => (
+                <option key={routeInfo.route_name} value={index}>{routeInfo.route_name}</option>
+              ))}
+            </select>
+          </div>
+
+          <Timetable
+            headers={BUS_TYPES[0].tableHeaders}
+            arrivalList={
+              timetable.info[selectedRoute].arrival_info.map((arrival) => Object.values(arrival))
+            }
+          />
+        </>
+      )}
+    </div>
   );
 }
 
 function ExpressTimetable() {
-  return (
-    <>
-      <div className={styles['timetable__dropdown-wrapper']}>
-        <select className={styles.timetable__dropdown}>
-          <option value="temp">천안 하교</option>
-        </select>
-      </div>
+  const { data: timetable, handleCourseChange } = useBusTimetable(EXPRESS_COURSES);
 
-      <Timetable headers={BUS_TYPES[1].tableHeaders} />
-    </>
+  return (
+    <div>
+      {timetable?.type === 'express' && (
+        <>
+          <div className={styles['timetable__dropdown-wrapper']}>
+            <select
+              className={styles.timetable__dropdown}
+              onChange={handleCourseChange}
+            >
+              {EXPRESS_COURSES.map((course, index) => (
+                <option key={course.name} value={index}>{course.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <Timetable
+            headers={BUS_TYPES[1].tableHeaders}
+            arrivalList={timetable.info.map((info) => [info.departure, info.arrival])}
+          />
+        </>
+      )}
+    </div>
   );
 }
 
@@ -64,7 +109,7 @@ function CityTimetable() {
         버스번호: 400, 401
       </div>
 
-      <Timetable headers={BUS_TYPES[2].tableHeaders} />
+      <Timetable headers={BUS_TYPES[2].tableHeaders} arrivalList={CITY_BUS_TIMETABLE} />
     </>
   );
 }
@@ -99,9 +144,7 @@ function BusTimetable() {
         {selectedTab.key === 'shuttle' && <ShuttleTimetable />}
         {selectedTab.key === 'express' && <ExpressTimetable />}
         {selectedTab.key === 'city' && <CityTimetable />}
-
       </Suspense>
-
     </section>
   );
 }
