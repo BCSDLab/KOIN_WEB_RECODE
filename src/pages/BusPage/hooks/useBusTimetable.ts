@@ -17,16 +17,14 @@ const useBusTimetable = (courseList: readonly Course[]) => {
     suspense: true,
     select: (response) => {
       if (bus_type === 'express') {
-        const res = response as Array<ExpressInfo>;
         return {
-          info: res,
+          info: response as ExpressInfo[],
           type: 'express' as const,
         };
       }
 
-      const res = response as Array<BusRouteInfo>;
       return {
-        info: res,
+        info: response as BusRouteInfo[],
         type: 'shuttle' as const,
       };
     },
