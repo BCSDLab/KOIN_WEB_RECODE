@@ -11,7 +11,7 @@ import styles from './BusTimetable.module.scss';
 
 function Timetable({ headers, arrivalList }: { headers: string[], arrivalList: string[][] }) {
   return (
-    <table className={styles.timetable}>
+    <table className={styles.timetable} aria-expanded="true">
       <thead className={styles.timetable__head}>
         <tr>
           <th className={styles.timetable__cell}>{headers[0]}</th>
@@ -121,24 +121,22 @@ function BusTimetable() {
     <section className={styles.template}>
       <h2 className={styles.template__title}>전체 시간표 조회</h2>
 
-      <nav>
-        <ul className={styles.tabs}>
-          {BUS_TYPES.map((type) => (
-            <li key={type.key}>
-              <button
-                type="button"
-                onClick={() => setSelectedTab(type)}
-                className={cn({
-                  [styles.tabs__tab]: true,
-                  [styles['tabs__tab--selected']]: selectedTab.key === type.key,
-                })}
-              >
-                {type.tabName}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <ul className={styles.tabs} role="tablist">
+        {BUS_TYPES.map((type) => (
+          <li key={type.key} role="tab" aria-selected={selectedTab.key === type.key}>
+            <button
+              type="button"
+              onClick={() => setSelectedTab(type)}
+              className={cn({
+                [styles.tabs__tab]: true,
+                [styles['tabs__tab--selected']]: selectedTab.key === type.key,
+              })}
+            >
+              {type.tabName}
+            </button>
+          </li>
+        ))}
+      </ul>
 
       <Suspense fallback={<LoadingSpinner className={styles['template__loading-spinner']} />}>
         {selectedTab.key === 'shuttle' && <ShuttleTimetable />}
