@@ -32,8 +32,9 @@ function Timetable({ headers, arrivalList }: { headers: string[], arrivalList: s
 }
 
 function ShuttleTimetable() {
-  const { data: timetable, handleCourseChange } = useBusTimetable(SHUTTLE_COURSES);
+  const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
   const [selectedRoute, handleRouteChange, resetRoute] = useIndexValueSelect();
+  const { data: timetable } = useBusTimetable(SHUTTLE_COURSES[selectedCourseId]);
 
   return (
     <div>
@@ -75,7 +76,8 @@ function ShuttleTimetable() {
 }
 
 function ExpressTimetable() {
-  const { data: timetable, handleCourseChange } = useBusTimetable(EXPRESS_COURSES);
+  const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
+  const { data: timetable } = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
 
   return (
     <div>

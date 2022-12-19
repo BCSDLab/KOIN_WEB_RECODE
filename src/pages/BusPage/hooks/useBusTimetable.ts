@@ -1,15 +1,12 @@
 import { getBusTimetableInfo } from 'api/bus';
 import { BusRouteInfo, Course, ExpressInfo } from 'api/bus/entity';
 import { useQuery } from 'react-query';
-import useIndexValueSelect from './useIndexValueSelect';
 
 const TIMETABLE_KEY = 'timetable';
 
-const useBusTimetable = (courseList: readonly Course[]) => {
-  const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
-
+const useBusTimetable = (course: Course) => {
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { bus_type, direction, region } = courseList[selectedCourseId];
+  const { bus_type, direction, region } = course;
 
   const { data } = useQuery({
     queryKey: [TIMETABLE_KEY, bus_type, direction, region],
@@ -30,7 +27,7 @@ const useBusTimetable = (courseList: readonly Course[]) => {
     },
   });
 
-  return { data, selectedCourse: courseList[selectedCourseId], handleCourseChange };
+  return { data };
 };
 
 export default useBusTimetable;
