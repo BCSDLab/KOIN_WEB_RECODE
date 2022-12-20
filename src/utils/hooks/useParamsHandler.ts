@@ -7,20 +7,20 @@ const useParamsHandler = () => {
     key: string,
     value: string,
     option: {
-      isDelete: boolean,
-      isReplace: boolean,
+      deleteBeforeParam: boolean,
+      replacePage: boolean,
     },
   ) => {
-    if (option.isDelete) {
+    if (option.deleteBeforeParam) {
       const param = searchParams.get(key);
       if (param) {
         searchParams.delete(key);
-        setSearchParams(searchParams, { replace: option.isReplace });
+        setSearchParams(searchParams, { replace: option.replacePage });
         return;
       }
     }
     searchParams.set(key, value);
-    setSearchParams(searchParams, { replace: option.isReplace });
+    setSearchParams(searchParams, { replace: option.replacePage });
   };
   return {
     params,

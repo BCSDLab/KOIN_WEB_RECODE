@@ -90,7 +90,7 @@ function Pagination(props: PaginationProps) {
         type="button"
         aria-label="page-index-next"
         className={styles.pagination__move}
-        onClick={() => setParams('boardId', moveNextNumber(Number(params.boardId) + 1, Number(totalPageNum)), { isDelete: false, isReplace: true })}
+        onClick={() => setParams('boardId', moveNextNumber(Number(params.boardId) + 1, Number(totalPageNum)), { deleteBeforeParam: false, replacePage: true })}
       >
         다음으로
       </button>

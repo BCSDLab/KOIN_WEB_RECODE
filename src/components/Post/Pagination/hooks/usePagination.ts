@@ -22,7 +22,7 @@ const usePagination = () => {
     String(limit + 1 + displayCorrectionNum(totalPageNum, Number(boardId)))
   );
 
-  const onClickMove = (params: string) => setParams('boardId', params, { isDelete: false, isReplace: true });
+  const onClickMove = (params: string) => setParams('boardId', params, { deleteBeforeParam: false, replacePage: true });
 
   return {
     calcIndexPage,

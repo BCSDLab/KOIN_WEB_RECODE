@@ -99,7 +99,7 @@ function StorePage() {
               role="radio"
               aria-checked={searchParams.get('category') === value.tag}
               type="button"
-              onClick={() => setParams('category', value.tag, { isDelete: false, isReplace: true })}
+              onClick={() => setParams('category', value.tag, { deleteBeforeParam: false, replacePage: true })}
               key={value.tag}
             >
               <img className={styles.category__image} src={value.image} alt="category_img" />
@@ -117,7 +117,7 @@ function StorePage() {
           name="search"
           placeholder="상점명을 입력하세요"
           onKeyPress={(e) => {
-            if (e.key === 'Enter') setParams('storeName', e.target.value, { isDelete: (searchParams.get('storeName') === undefined), isReplace: true });
+            if (e.key === 'Enter') setParams('storeName', e.target.value, { deleteBeforeParam: (searchParams.get('storeName') === undefined), replacePage: true });
           }}
         />
         <button
@@ -128,8 +128,8 @@ function StorePage() {
               'storeName',
               storeRef.current?.value ?? '',
               {
-                isDelete: (searchParams.get('storeName') === undefined),
-                isReplace: true,
+                deleteBeforeParam: (searchParams.get('storeName') === undefined),
+                replacePage: true,
               },
             );
           }}
@@ -161,8 +161,8 @@ function StorePage() {
                         item.id,
                         item.value,
                         {
-                          isDelete: true,
-                          isReplace: true,
+                          deleteBeforeParam: true,
+                          replacePage: true,
                         },
                       );
                     }}

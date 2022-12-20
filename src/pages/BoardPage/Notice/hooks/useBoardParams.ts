@@ -7,7 +7,7 @@ const useBoardParams = () => {
   const articleList = useArticleList(params.boardId ?? '1');
 
   React.useEffect(() => {
-    if (params.boardId === undefined) setParams('boardId', '1', { isDelete: false, isReplace: true });
+    if (params.boardId === undefined) setParams('boardId', '1', { deleteBeforeParam: false, replacePage: true });
   }, [params, setParams, articleList]);
 
   return articleList;
