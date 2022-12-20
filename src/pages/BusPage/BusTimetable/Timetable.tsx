@@ -31,72 +31,64 @@ function Template({ headers, arrivalList }: { headers: string[], arrivalList: st
 function ShuttleTimetable() {
   const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
   const [selectedRoute, handleRouteChange, resetRoute] = useIndexValueSelect();
-  const { data: timetable } = useBusTimetable(SHUTTLE_COURSES[selectedCourseId]);
+  const timetable = useBusTimetable(SHUTTLE_COURSES[selectedCourseId]);
 
   return (
     <div>
-      {timetable?.type === 'shuttle' && (
-        <>
-          <div className={styles['timetable__dropdown-wrapper']}>
-            <select
-              className={styles.timetable__dropdown}
-              onChange={(e) => {
-                handleCourseChange(e);
-                resetRoute();
-              }}
-            >
-              {SHUTTLE_COURSES.map((course, index) => (
-                <option key={getCourseName(course)} value={index}>{getCourseName(course)}</option>
-              ))}
-            </select>
+      <div className={styles['timetable__dropdown-wrapper']}>
+        <select
+          className={styles.timetable__dropdown}
+          onChange={(e) => {
+            handleCourseChange(e);
+            resetRoute();
+          }}
+        >
+          {SHUTTLE_COURSES.map((course, index) => (
+            <option key={getCourseName(course)} value={index}>{getCourseName(course)}</option>
+          ))}
+        </select>
 
-            <select
-              className={styles.timetable__dropdown}
-              onChange={handleRouteChange}
-            >
-              {timetable.info.map((routeInfo, index) => (
-                <option key={routeInfo.route_name} value={index}>{routeInfo.route_name}</option>
-              ))}
-            </select>
-          </div>
+        <select
+          className={styles.timetable__dropdown}
+          onChange={handleRouteChange}
+        >
+          {timetable.info.map((routeInfo, index) => (
+            <option key={routeInfo.route_name} value={index}>{routeInfo.route_name}</option>
+          ))}
+        </select>
+      </div>
 
-          <Template
-            headers={BUS_TYPES[0].tableHeaders}
-            arrivalList={
-              timetable.info[selectedRoute].arrival_info.map((arrival) => Object.values(arrival))
-            }
-          />
-        </>
-      )}
+      <Template
+        headers={BUS_TYPES[0].tableHeaders}
+        arrivalList={
+          timetable.info[selectedRoute].arrival_info.map((arrival) => Object.values(arrival))
+        }
+      />
     </div>
   );
 }
 
 function ExpressTimetable() {
   const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
-  const { data: timetable } = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
+  const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
 
   return (
     <div>
-      {timetable?.type === 'express' && (
-        <>
-          <div className={styles['timetable__dropdown-wrapper']}>
-            <select
-              className={styles.timetable__dropdown}
-              onChange={handleCourseChange}
-            >
-              {EXPRESS_COURSES.map((course, index) => (
-                <option key={course.name} value={index}>{course.name}</option>
-              ))}
-            </select>
-          </div>
+      <div className={styles['timetable__dropdown-wrapper']}>
+        <select
+          className={styles.timetable__dropdown}
+          onChange={handleCourseChange}
+        >
+          {EXPRESS_COURSES.map((course, index) => (
+            <option key={course.name} value={index}>{course.name}</option>
+          ))}
+        </select>
+      </div>
 
-          <Template
-            headers={BUS_TYPES[1].tableHeaders}
-            arrivalList={timetable.info.map((info) => [info.departure, info.arrival])}
-          />
-        </>
-      )}
+      <Template
+        headers={BUS_TYPES[1].tableHeaders}
+        arrivalList={timetable.info.map((info) => [info.departure, info.arrival])}
+      />
     </div>
   );
 }

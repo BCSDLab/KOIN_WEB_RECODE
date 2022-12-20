@@ -1,10 +1,26 @@
 import { getBusTimetableInfo } from 'api/bus';
-import { BusRouteInfo, Course, ExpressInfo } from 'api/bus/entity';
+import {
+  BusRouteInfo as ShuttleInfo, Course, ExpressCourse, ExpressInfo, ShuttleCourse,
+} from 'api/bus/entity';
 import { useQuery } from 'react-query';
 
 const TIMETABLE_KEY = 'timetable';
 
-const useBusTimetable = (course: Course) => {
+interface ShuttleTimetable {
+  info: ShuttleInfo[],
+  type: 'shuttle',
+}
+
+interface ExpressTimetable {
+  info: ExpressInfo[]
+  type: 'express',
+}
+
+function useBusTimetable(course: ShuttleCourse): ShuttleTimetable;
+
+function useBusTimetable(course: ExpressCourse): ExpressTimetable;
+
+function useBusTimetable(course: Course): ShuttleTimetable | ExpressTimetable | undefined {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const { bus_type, direction, region } = course;
 
@@ -21,13 +37,13 @@ const useBusTimetable = (course: Course) => {
       }
 
       return {
-        info: response as BusRouteInfo[],
+        info: response as ShuttleInfo[],
         type: 'shuttle' as const,
       };
     },
   });
 
-  return { data };
-};
+  return data;
+}
 
 export default useBusTimetable;

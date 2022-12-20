@@ -6,6 +6,14 @@ export type Direction = 'from' | 'to';
 
 export type CourseBusType = 'shuttle' | 'commuting' | 'express';
 
+export interface ShuttleCourse extends Course {
+  bus_type: 'shuttle' | 'commuting';
+}
+
+export interface ExpressCourse extends Course {
+  bus_type: 'express';
+}
+
 export interface Course {
   bus_type: CourseBusType;
   direction: Direction;
