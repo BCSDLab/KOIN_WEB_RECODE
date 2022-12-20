@@ -21,15 +21,16 @@ function useBusTimetable(course: ShuttleCourse): ShuttleTimetable;
 function useBusTimetable(course: ExpressCourse): ExpressTimetable;
 
 function useBusTimetable(course: Course): ShuttleTimetable | ExpressTimetable | undefined {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { bus_type, direction, region } = course;
+  const { bus_type: busType, direction: busDirection, region: busRegion } = course;
 
   const { data } = useQuery({
-    queryKey: [TIMETABLE_KEY, bus_type, direction, region],
-    queryFn: () => getBusTimetableInfo({ bus_type, direction, region }),
+    queryKey: [TIMETABLE_KEY, busType, busDirection, busRegion] as const,
+    queryFn: (
+      { queryKey: [, bus_type, direction, region] },
+    ) => getBusTimetableInfo({ bus_type, direction, region }),
     suspense: true,
     select: (response) => {
-      if (bus_type === 'express') {
+      if (busType === 'express') {
         return {
           info: response as ExpressInfo[],
           type: 'express' as const,
