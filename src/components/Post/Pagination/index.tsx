@@ -47,7 +47,7 @@ function Pagination(props: PaginationProps) {
         type="button"
         aria-label="page-index-prev"
         className={styles.pagination__move}
-        onClick={() => onClickMove(movePrevNumber(Number(params.boardId) - 1))}
+        onClick={() => onClickMove(movePrevNumber(Number(params.page) - 1))}
       >
         이전으로
       </button>
@@ -60,11 +60,11 @@ function Pagination(props: PaginationProps) {
                 aria-label="page-index-button"
                 className={cn({
                   [styles.pagination__number]: true,
-                  [styles['pagination__number--selected']]: params.boardId === calcIndexPage(limit, totalPageNum, params.boardId),
+                  [styles['pagination__number--selected']]: params.page === calcIndexPage(limit, totalPageNum, params.page),
                 })}
-                onClick={() => onClickMove(calcIndexPage(limit, totalPageNum, params.boardId))}
+                onClick={() => onClickMove(calcIndexPage(limit, totalPageNum, params.page))}
               >
-                { calcIndexPage(limit, totalPageNum, params.boardId)}
+                { calcIndexPage(limit, totalPageNum, params.page)}
               </button>
             </span>
           ))
@@ -76,7 +76,7 @@ function Pagination(props: PaginationProps) {
                 aria-label="page-index-button"
                 className={cn({
                   [styles.pagination__number]: true,
-                  [styles['pagination__number--selected']]: changeParamsToNumber(params.boardId) === limit + 1,
+                  [styles['pagination__number--selected']]: changeParamsToNumber(params.page) === limit + 1,
                 })}
                 onClick={() => onClickMove(String(limit + 1))}
               >
@@ -90,7 +90,7 @@ function Pagination(props: PaginationProps) {
         type="button"
         aria-label="page-index-next"
         className={styles.pagination__move}
-        onClick={() => setParams('boardId', moveNextNumber(Number(params.boardId) + 1, Number(totalPageNum)), { deleteBeforeParam: false, replacePage: true })}
+        onClick={() => setParams('page', moveNextNumber(Number(params.page) + 1, Number(totalPageNum)), { deleteBeforeParam: false, replacePage: true })}
       >
         다음으로
       </button>

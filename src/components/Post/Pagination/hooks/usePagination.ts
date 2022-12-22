@@ -18,11 +18,11 @@ const displayCorrectionNum = (totalPageNum: number, nowPageNum: number) => {
 const usePagination = () => {
   const { setParams } = useParamsHandler();
 
-  const calcIndexPage = (limit: number, totalPageNum: number, boardId: string) => (
-    String(limit + 1 + displayCorrectionNum(totalPageNum, Number(boardId)))
+  const calcIndexPage = (limit: number, totalPageNum: number, page: string) => (
+    String(limit + 1 + displayCorrectionNum(totalPageNum, Number(page)))
   );
 
-  const onClickMove = (params: string) => setParams('boardId', params, { deleteBeforeParam: false, replacePage: true });
+  const onClickMove = (params: string) => setParams('page', params, { deleteBeforeParam: false, replacePage: true });
 
   return {
     calcIndexPage,

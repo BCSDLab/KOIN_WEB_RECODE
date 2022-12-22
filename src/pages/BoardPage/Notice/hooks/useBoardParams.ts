@@ -4,10 +4,10 @@ import useArticleList from './useArticleList';
 
 const useBoardParams = () => {
   const { params, setParams } = useParamsHandler();
-  const articleList = useArticleList(params.boardId ?? '1');
+  const articleList = useArticleList(params.page ?? '1');
 
   React.useEffect(() => {
-    if (params.boardId === undefined) setParams('boardId', '1', { deleteBeforeParam: false, replacePage: true });
+    if (params.page === undefined) setParams('page', '1', { deleteBeforeParam: false, replacePage: true });
   }, [params, setParams, articleList]);
 
   return articleList;
