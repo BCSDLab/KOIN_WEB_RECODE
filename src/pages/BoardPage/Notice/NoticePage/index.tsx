@@ -3,11 +3,11 @@ import HotPost from 'components/Post/HotPost';
 import PostHeader from 'components/Post/PostHeader';
 import PostList from 'components/Post/PostList';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import useBoardParams from 'pages/BoardPage/Notice/hooks/useBoardParams';
+import usePageParams from 'pages/BoardPage/Notice/hooks/usePageParams';
 import styles from './NoticePage.module.scss';
 
 function NoticePage() {
-  const articleList = useBoardParams();
+  const articleList = usePageParams();
 
   return (
     <div className={styles.template}>

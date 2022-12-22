@@ -2,7 +2,7 @@ import React from 'react';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
 import useArticleList from './useArticleList';
 
-const useBoardParams = () => {
+const usePageParams = () => {
   const { params, setParams } = useParamsHandler();
   const articleList = useArticleList(params.page ?? '1');
 
@@ -13,4 +13,4 @@ const useBoardParams = () => {
   return articleList;
 };
 
-export default useBoardParams;
+export default usePageParams;
