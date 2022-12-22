@@ -11,7 +11,7 @@ interface PaginationProps {
   totalPageNum: number
 }
 
-export const changeParamsToNumber = (params: string) => {
+const changeParamsToNumber = (params: string) => {
   if (params === undefined) {
     return 1;
   }
