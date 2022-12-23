@@ -1,10 +1,10 @@
 import { APIRequest } from 'interfaces/APIRequest';
 import { HTTP_METHOD } from 'utils/ts/apiClient';
 import {
-  CoursesResponse, BusResponse, BusTimetableResponse, Direction, BusType,
+  CourseResponse, BusResponse, BusTimetableResponse, Course,
 } from './entity';
 
-export class CourseList<R extends CoursesResponse> implements APIRequest<R> {
+export class CourseList<R extends CourseResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/bus/courses';
@@ -37,7 +37,7 @@ export class BusTimetableInfo<R extends BusTimetableResponse> implements APIRequ
 
   auth = false;
 
-  constructor(bus_type: BusType, direction: Direction, region: string) {
+  constructor({ bus_type, direction, region }: Course) {
     this.path = `/bus/timetable?bus_type=${bus_type}&direction=${direction}&region=${region}`;
   }
 }

@@ -24,7 +24,7 @@ const emptyRouteData = {
 
 const useBusLeftTIme = ({ departList, arrivalList }: Props) => {
   const queries = BUS_TYPES.map<QueryOptions<BusResponse, AxiosError, BusResponse, string[]>>(
-    (type, idx) => ({
+    ({ key: type }, idx) => ({
       queryKey: [BUS_KEY, type, departList[idx], arrivalList[idx]],
       queryFn: ({ queryKey: [, busType, depart, arrival] }) => getBusInfo(busType, depart, arrival),
       refetchInterval: 60000,

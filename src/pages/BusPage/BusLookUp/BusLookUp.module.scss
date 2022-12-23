@@ -1,6 +1,15 @@
+@use "src/utils/scss/media" as media;
+
 .lookup {
   margin: 63px auto 0;
   width: 1131px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    margin: 0;
+    padding: 26px 16px;
+    box-sizing: border-box;
+  }
 
   &__title {
     font-family: NanumSquare, sans-serif;
@@ -8,6 +17,10 @@
     font-size: 30px;
     font-weight: 800;
     color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 20px;
+    }
   }
 
   &__description {
@@ -17,6 +30,14 @@
     justify-content: space-between;
     align-items: flex-end;
     font-size: 24px;
+
+    @include media.media-breakpoint(mobile) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      margin-top: 15px;
+      font-size: 20px;
+    }
   }
 
   &__subtitle {
@@ -25,6 +46,10 @@
     letter-spacing: -1.2px;
     font-weight: 300;
     line-height: 28px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 18px;
+    }
   }
 
   &__select {
@@ -33,6 +58,16 @@
     margin: 0 10px 0 4px;
     font-size: 24px;
     font-weight: bold;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 20px;
+    }
+  }
+
+  &__select-line {
+    @include media.media-breakpoint(mobile) {
+      align-self: flex-end;
+    }
   }
 }
 
@@ -43,6 +78,11 @@
   grid-template-rows: 162px 85px;
   gap: 5px 9px;
   color: white;
+
+  @include media.media-breakpoint(mobile) {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 156px 85px);
+  }
 
   &__top-card {
     padding: 26px 23px 0;
@@ -72,6 +112,10 @@
 
     &--description {
       margin-top: 26px;
+
+      @include media.media-breakpoint(mobile) {
+        margin-top: 20px;
+      }
     }
   }
 
@@ -81,6 +125,10 @@
     display: flex;
     align-items: center;
     margin-bottom: 11px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 20px;
+    }
   }
 
   &__badge {

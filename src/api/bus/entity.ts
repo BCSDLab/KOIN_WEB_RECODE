@@ -4,11 +4,23 @@ export type BusType = 'shuttle' | 'express' | 'city';
 
 export type Direction = 'from' | 'to';
 
-export type CoursesResponse = Array<{
+export type CourseBusType = 'shuttle' | 'commuting' | 'express';
+
+export interface ShuttleCourse extends Course {
   bus_type: 'shuttle' | 'commuting';
-  direction: 'to' | 'from';
+}
+
+export interface ExpressCourse extends Course {
+  bus_type: 'express';
+}
+
+export interface Course {
+  bus_type: CourseBusType;
+  direction: Direction;
   region: string;
-}>;
+}
+
+export type CourseResponse = Course[];
 
 export interface BusResponse extends APIResponse {
   bus_type: BusType;
@@ -22,12 +34,20 @@ export interface BusResponse extends APIResponse {
   } | null;
 }
 
-export type BusTimetableResponse = Array<BusRouteInfo>;
+export type BusTimetableResponse = Array<BusRouteInfo> | Array<ExpressInfo>;
 
-interface BusRouteInfo {
+export interface BusRouteInfo {
   route_name: string;
-  arrival_info: {
-    arrival_time: string;
-    node_name: string;
-  }[];
+  arrival_info: ArrivalInfo[];
+}
+
+export interface ArrivalInfo {
+  arrival_time: string;
+  node_name: string;
+}
+
+export interface ExpressInfo {
+  departure: string;
+  arrival: string;
+  charge: number;
 }
