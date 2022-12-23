@@ -22,7 +22,7 @@ function BusLookUp() {
           <br />
           운행수단별로 간단히 비교해드립니다.
         </h2>
-        <div>
+        <div className={styles['lookup__select-line']}>
           <select
             className={styles.lookup__select}
             onChange={depart.handleChange}
@@ -46,7 +46,7 @@ function BusLookUp() {
         </div>
       </div>
       <div className={styles.cards}>
-        {BUS_TYPES.map((type, idx) => (
+        {BUS_TYPES.map(({ key: type }, idx) => (
           <React.Fragment key={type}>
             <div className={cn({ [styles['cards__top-card']]: true, [styles[`cards__card--${type}`]]: true })}>
               <div className={styles.cards__content}>
