@@ -1,16 +1,14 @@
 import React from 'react';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
-import useArticleList from './useArticleList';
 
 const usePageParams = () => {
   const { params, setParams } = useParamsHandler();
-  const articleList = useArticleList(params.page ?? '1');
 
   React.useEffect(() => {
     if (params.page === undefined) setParams('page', '1', { deleteBeforeParam: false, replacePage: true });
-  }, [params, setParams, articleList]);
+  }, [params, setParams]);
 
-  return articleList;
+  return params.page;
 };
 
 export default usePageParams;
