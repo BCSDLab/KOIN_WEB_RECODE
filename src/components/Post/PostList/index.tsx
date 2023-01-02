@@ -32,7 +32,7 @@ const isCheckNewPost = (created: number[]) => {
 
 const convertDate = (time: string) => time.split(' ')[0].replaceAll('-', '.');
 
-const setDate = (time: string) => {
+const setPostCreateDate = (time: string) => {
   const created = convertDate(time).split('.').map((item: string) => parseInt(item, 10));
 
   if (isCheckNewPost(created)) {
@@ -56,7 +56,7 @@ function PostList(props: ArticleList) {
             <div className={styles.title}>
               <div className={styles.title__header}>{ convertNoticeTag(article.board_id) }</div>
               <div className={styles.title__content}>{ article.title }</div>
-              { setDate(article.created_at)[1] && (
+              { setPostCreateDate(article.created_at)[1] && (
                 <img
                   className={styles.title__newTag}
                   src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
@@ -65,7 +65,9 @@ function PostList(props: ArticleList) {
               )}
             </div>
             <div className={styles.list__author}>{ article.nickname }</div>
-            <div className={styles.list__created_at}>{ setDate(article.created_at)[0] }</div>
+            <div className={styles.list__created_at}>
+              { setPostCreateDate(article.created_at)[0] }
+            </div>
             <div className={styles.list__views}>{ article.hit }</div>
           </div>
         ))
