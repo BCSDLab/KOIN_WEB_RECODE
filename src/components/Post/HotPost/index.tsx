@@ -1,13 +1,10 @@
-import { useQuery } from 'react-query';
-import LoadingSpinner from 'components/common/LoadingSpinner';
-import * as api from 'api';
+import { HotPostResponse } from 'api/notice/entity';
+import { APIError } from 'interfaces/APIError';
 import styles from './HotPost.module.scss';
 
-type HotPosts = {
-  title: string
-  id: number
-  board_id: number
-};
+interface HotPostProps {
+  hotArticleList: HotPostResponse[] & APIError
+}
 
 const LINK_LIST = [
   {
@@ -36,53 +33,41 @@ const LINK_LIST = [
   },
 ];
 
-function HotPost() {
-  const { data: hotArticleList } = useQuery(
-    'hotArticleList',
-    api.notice.HotPostList,
-    { retry: 0 },
-  );
-
-  if (hotArticleList instanceof Array) {
-    return (
-      <aside className={styles.hotpost}>
-        <div className={styles.hotpost__list}>
-          <div className={styles.hotpost__title}>가장 많이 본 게시물</div>
-          {
-          hotArticleList.map((hotPost: HotPosts, index: number) => (
-            <div className={styles.hotpost__content} key={hotPost.id + hotPost.board_id}>
-              <span className={styles.hotpost__rank}>{ index + 1 }</span>
-              <span className={styles.hotpost__item}>{ hotPost.title }</span>
-            </div>
-          ))
-          }
-        </div>
-        <div className={styles.link}>
-          {
-            LINK_LIST.map((link) => (
-              <button
-                type="button"
-                className={styles.link__button}
-                key={link.id}
-                onClick={() => window.open(link.url)}
-              >
-                <img
-                  className={styles.link__image}
-                  src={link.image}
-                  alt="alineImg"
-                />
-              </button>
-            ))
-          }
-        </div>
-      </aside>
-    );
-  }
+function HotPost(HotPostList: HotPostProps) {
+  const { hotArticleList } = HotPostList;
 
   return (
-    <div className={styles['loading-container']}>
-      <LoadingSpinner size="80px" />
-    </div>
+    <aside className={styles.hotpost}>
+      <div className={styles.hotpost__list}>
+        <div className={styles.hotpost__title}>가장 많이 본 게시물</div>
+        {
+        hotArticleList.map((hotPost: HotPostResponse, index: number) => (
+          <div className={styles.hotpost__content} key={hotPost.id + hotPost.board_id}>
+            <span className={styles.hotpost__rank}>{ index + 1 }</span>
+            <span className={styles.hotpost__item}>{ hotPost.title }</span>
+          </div>
+        ))
+        }
+      </div>
+      <div className={styles.link}>
+        {
+          LINK_LIST.map((link) => (
+            <button
+              type="button"
+              className={styles.link__button}
+              key={link.id}
+              onClick={() => window.open(link.url)}
+            >
+              <img
+                className={styles.link__image}
+                src={link.image}
+                alt="alineImg"
+              />
+            </button>
+          ))
+        }
+      </div>
+    </aside>
   );
 }
 
