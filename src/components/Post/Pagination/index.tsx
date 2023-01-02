@@ -38,7 +38,7 @@ function Pagination(props: PaginationProps) {
     <div className={styles.pagination}>
       <button
         type="button"
-        aria-label="page-index-prev"
+        aria-label="이전 페이지로"
         className={styles.pagination__move}
         onClick={() => onClickMove(onHandlePrevPage(Number(params.page) - 1))}
       >
@@ -50,7 +50,7 @@ function Pagination(props: PaginationProps) {
             <span key={limit}>
               <button
                 type="button"
-                aria-label="page-index-button"
+                aria-label="페이지 이동"
                 className={cn({
                   [styles.pagination__number]: true,
                   [styles['pagination__number--selected']]: params.page === calcIndexPage(limit, totalPageNum, params.page),
@@ -66,7 +66,7 @@ function Pagination(props: PaginationProps) {
             <span key={limit + 1}>
               <button
                 type="button"
-                aria-label="page-index-button"
+                aria-label="페이지 이동"
                 className={cn({
                   [styles.pagination__number]: true,
                   [styles['pagination__number--selected']]: Number(params.page) === limit + 1,
@@ -81,7 +81,7 @@ function Pagination(props: PaginationProps) {
       }
       <button
         type="button"
-        aria-label="page-index-next"
+        aria-label="다음 페이지로"
         className={styles.pagination__move}
         onClick={() => setParams('page', onHandleNextPage(Number(params.page) + 1, Number(totalPageNum)), { deleteBeforeParam: false, replacePage: true })}
       >
