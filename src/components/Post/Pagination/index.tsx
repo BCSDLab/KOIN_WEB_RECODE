@@ -12,7 +12,6 @@ interface PaginationProps {
 }
 
 const onHandlePrevPage = (moveNumber: number) => {
-const movePrevNumber = (moveNumber: number) => {
   if (moveNumber <= 0) {
     showToast('error', '첫 페이지입니다.');
     return '1';
@@ -21,7 +20,7 @@ const movePrevNumber = (moveNumber: number) => {
   return String(moveNumber);
 };
 
-const moveNextNumber = (moveNumber: number, totalPageNum: number) => {
+const onHandleNextPage = (moveNumber: number, totalPageNum: number) => {
   if (moveNumber + 1 >= totalPageNum) {
     showToast('error', '마지막 페이지입니다.');
     return String(totalPageNum);
@@ -41,7 +40,7 @@ function Pagination(props: PaginationProps) {
         type="button"
         aria-label="page-index-prev"
         className={styles.pagination__move}
-        onClick={() => onClickMove(movePrevNumber(Number(params.page) - 1))}
+        onClick={() => onClickMove(onHandlePrevPage(Number(params.page) - 1))}
       >
         이전으로
       </button>
