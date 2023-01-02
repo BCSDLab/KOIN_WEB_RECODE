@@ -6,6 +6,11 @@ import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
   list: Array<LectureInfo>;
+  height: number;
+  children: (props: { onClick: () => void }) => React.ReactNode | undefined;
+  selectedLecture: LectureInfo | undefined;
+  onClickRow: ((value: LectureInfo) => void) | undefined;
+  onClickLastColumn: (value: LectureInfo) => void;
 }
 
 const LECTURE_TABLE_HEADER = [
@@ -31,6 +36,11 @@ const useFlexibleWidth = (length: number, initialValue: number[]) => {
 
 function LectureTable({
   list,
+  height,
+  children,
+  selectedLecture,
+  onClickRow,
+  onClickLastColumn,
 }: LectureTableProps): JSX.Element {
   const { widthInfo } = useFlexibleWidth(10, [63, 207, 54, 76, 58, 58, 58, 58, 90, 40]);
   return (
@@ -63,35 +73,59 @@ function LectureTable({
         </div>
         <List
           width={766}
-          height={458}
+          height={height}
           itemSize={34}
           itemCount={list.length}
           itemData={list}
         >
-          {({ index, data: item, style }) => (
+          {({ index, data: items, style }) => (
             <div
-              className={styles.table__row}
+              className={cn({
+                [styles.table__row]: true,
+                [styles['table__row--selected']]: selectedLecture === items[index],
+              })}
+              aria-selected={selectedLecture === items[index]}
               role="row"
-              key={`${item[index].code}-${item[index].lecture_class}`}
+              key={`${items[index].code}-${items[index].lecture_class}`}
               style={style}
             >
-              {LECTURE_TABLE_HEADER.map((headerItem, headerItemIndex) => (
-                <div
-                  style={{
-                    width: `${widthInfo[headerItemIndex]}px`,
-                  }}
-                  className={cn({
-                    [styles.table__col]: true,
-                    [styles['table__col--body']]: true,
-                  })}
-                  role="cell"
-                  key={headerItem.key}
-                >
-                  {headerItem.key === 'professor' && (item[index][headerItem.key] === '' ? '미배정' : item[index][headerItem.key])}
-                  {headerItem.key === null && '추가'}
-                  {headerItem.key !== null && headerItem.key !== 'professor' && item[index][headerItem.key]}
-                </div>
-              ))}
+              <button
+                type="button"
+                role={onClickRow !== undefined ? undefined : 'null'}
+                aria-label={onClickRow !== undefined ? '시간표에서 미리 보기' : undefined}
+                className={styles['table__row-button']}
+                onClick={onClickRow ? () => onClickRow(items[index]) : undefined}
+              >
+                {LECTURE_TABLE_HEADER.map((headerItem, headerItemIndex) => (headerItem.key !== null
+                  && (
+                    <div
+                      style={{
+                        width: `${widthInfo[headerItemIndex]}px`,
+                      }}
+                      className={cn({
+                        [styles.table__col]: true,
+                        [styles['table__col--body']]: true,
+                      })}
+                      role="cell"
+                      key={headerItem.key}
+                    >
+                      {headerItem.key === 'professor' && (items[index][headerItem.key] === '' ? '미배정' : items[index][headerItem.key])}
+                      {headerItem.key === null && '추가'}
+                      {headerItem.key !== null && headerItem.key !== 'professor' && items[index][headerItem.key]}
+                    </div>
+                  )))}
+              </button>
+              <div
+                style={{
+                  width: `${widthInfo[widthInfo.length - 1]}px`,
+                }}
+                className={cn({
+                  [styles.table__col]: true,
+                  [styles['table__col--body']]: true,
+                })}
+              >
+                {children({ onClick: () => onClickLastColumn(items[index]) })}
+              </div>
             </div>
           )}
         </List>

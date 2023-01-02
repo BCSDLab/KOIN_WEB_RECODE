@@ -1,8 +1,8 @@
-import { APIRequest } from 'interfaces/APIRequest';
-import { HTTP_METHOD } from 'utils/ts/apiClient';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
   LectureInfoResponse,
   SemesterResponse,
+  TimeTableInfoResponse,
 } from './entity';
 
 export class LectureList<R extends LectureInfoResponse> implements APIRequest<R> {
@@ -16,12 +16,35 @@ export class LectureList<R extends LectureInfoResponse> implements APIRequest<R>
     [index: string]: string;
   };
 
-  auth = false;
+  auth = true;
 
   constructor(semester_date: string) {
     this.params = {
       semester_date,
     };
+  }
+}
+
+export class TimetableInfo<R extends TimeTableInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/timetables';
+
+  response!: R;
+
+  params: {
+    [index: string]: string;
+  };
+
+  auth = true;
+
+  authorization: string;
+
+  constructor(authorization: string, semester: string) {
+    this.params = {
+      semester,
+    };
+    this.authorization = authorization;
   }
 }
 

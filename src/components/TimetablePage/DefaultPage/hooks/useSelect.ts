@@ -1,4 +1,5 @@
 import React from 'react';
+import { RecoilState, useRecoilState } from 'recoil';
 
 const useSelect = () => {
   const [value, setValue] = React.useState<string | null>(null);
@@ -14,4 +15,21 @@ const useSelect = () => {
   };
 };
 
-export default useSelect;
+const useSelectRecoil = (atom: RecoilState<string>) => {
+  const [value, setValue] = useRecoilState<string>(atom);
+
+  const onChangeSelect = (e: { target: any }) => {
+    const { target } = e;
+    setValue(target?.value);
+  };
+
+  return {
+    value,
+    onChangeSelect,
+  };
+};
+
+export {
+  useSelect,
+  useSelectRecoil,
+};

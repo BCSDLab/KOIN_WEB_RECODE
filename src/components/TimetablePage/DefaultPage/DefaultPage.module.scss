@@ -12,18 +12,27 @@
     margin: 0 0 21px 0;
     padding-bottom: 26px;
     border-bottom: 2px solid #175c8e;
+
+    &--sub {
+      font-size: 20px;
+      line-height: 1.2;
+      border-bottom: 0;
+      color: #175c8e;
+      margin-bottom: 26px;
+    }
   }
 
   &__content {
     display: grid;
     grid-template-columns: 766px 1fr;
     grid-template-rows: 517px 336px;
-    gap: 66px 30px;
+    gap: 66px 28px;
   }
 
   &__filter {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 14px;
   }
 
   &__depart {
@@ -83,5 +92,34 @@
     height: 24px;
     background-color: transparent;
 
+  }
+
+  &__table {
+    &--all {
+      height: 459px;
+    }
+    &--selected {
+      height: 177px;
+    }
+  }
+}
+
+.list {
+  &__button {
+    padding-left: 10px;
+    line-height: 34px;
+    cursor: pointer;
+    border: 0;
+    width: 22px;
+    height: 34px;
+    text-align: center;
+    background-color: transparent;
+
+    & > img {
+      position: relative;
+      top: 6px;
+      right: 1px;
+      width: 22px;
+    }
   }
 }

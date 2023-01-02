@@ -4,10 +4,21 @@ import { SemesterInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { LectureInfo } from 'interfaces/Lecture';
+import {
+  myLectureDaySelector,
+  myLecturesAtom,
+  myLectureTimeSelector,
+  selectedSemesterAtom,
+  selectedTempLectureSelector,
+} from 'utils/recoil/semester';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import showToast from 'utils/ts/showToast';
+import TimeTable from 'components/TimetablePage/TimeTable';
+import ErrorBoundary from 'components/common/ErrorBoundary';
 import useDeptList from './hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 import useSemester from './hooks/useSemester';
-import useSelect from './hooks/useSelect';
+import { useSelect, useSelectRecoil } from './hooks/useSelect';
 import useLectureList from './hooks/useLectureList';
 
 const useSearch = () => {
@@ -65,7 +76,9 @@ type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 function DeptListbox({ value, onChange }: DecidedListboxProps) {
   const deptOptionList = useDeptOptionList();
   React.useEffect(() => {
-    onChange({ target: { value: deptOptionList[0].value } });
+    if (deptOptionList.length !== 0) {
+      onChange({ target: { value: deptOptionList[0].value } });
+    }
   // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -92,14 +105,93 @@ interface CurrentSemesterLectureListProps {
 
 function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListProps) {
   const { data: lectureList, status } = useLectureList(semesterKey);
+  const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
+  const [myLecturesValue, setMyLecturesValue] = useRecoilState(myLecturesAtom);
+  const myLectureTimeValue = useRecoilValue(myLectureTimeSelector);
   return (
     status === 'success' ? (
-      <LectureTable list={lectureList as unknown as Array<LectureInfo>} />
+      <LectureTable
+        height={459}
+        list={(lectureList as unknown as Array<LectureInfo>)}
+        selectedLecture={selectedTempLecture ?? undefined}
+        onClickRow={(clickedLecture: LectureInfo) => setSelectedTempLecture(clickedLecture)}
+        onClickLastColumn={
+          (clickedLecture: LectureInfo) => {
+            if (myLecturesValue.some((lecture) => lecture.code === clickedLecture.code)) {
+              showToast('error', '중첩된 과목입니다.');
+              return;
+            }
+            if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
+              showToast('error', '시간이 중복되어 추가할 수 없습니다.');
+              return;
+            }
+            const { name, ...clickedLectureInfo } = clickedLecture;
+            setMyLecturesValue((oldMyLecturesValue) => oldMyLecturesValue.concat({
+              ...clickedLectureInfo,
+              class_title: name,
+            }));
+          }
+        }
+      >
+        {(props: { onClick: () => void }) => (
+          <button type="button" className={styles.list__button} onClick={props.onClick}>
+            <img src="https://static.koreatech.in/assets/img/ic-add.png" alt="추가" />
+          </button>
+        )}
+      </LectureTable>
     ) : (
       <div>
         Loading...
       </div>
     )
+  );
+}
+
+function CurrentMyLectureList() {
+  const [myLecturesValue, setMyLecturesValue] = useRecoilState(myLecturesAtom);
+  return (
+    <LectureTable
+      height={177}
+      list={myLecturesValue
+        .map(({ class_title, ...myLecture }) => ({ ...myLecture, name: class_title }))}
+      selectedLecture={undefined}
+      onClickRow={undefined}
+      onClickLastColumn={
+        (clickedLecture: LectureInfo) => {
+          const { code: clickedLectureCode } = clickedLecture;
+          setMyLecturesValue(
+            (oldMyLecturesValue) => (
+              oldMyLecturesValue.filter(({ code }) => code !== clickedLectureCode)
+            ),
+          );
+        }
+      }
+    >
+      {(props: { onClick: () => void }) => (
+        <button type="button" className={styles.list__button} onClick={props.onClick}>
+          <img src="https://static.koreatech.in/assets/img/ic-delete.png" alt="제거" />
+        </button>
+      )}
+    </LectureTable>
+  );
+}
+
+function CurrentSemesterTimeTable(): JSX.Element {
+  const selectedSemesterValue = useRecoilValue(selectedSemesterAtom);
+  const myLectureDayValue = useRecoilValue(myLectureDaySelector);
+
+  return selectedSemesterValue ? (
+    <TimeTable
+      lectures={myLectureDayValue}
+      colWidth={55}
+      firstColWidth={52}
+      rowHeight={21}
+      totalHeight={456}
+    />
+  ) : (
+    <div>
+      loading...
+    </div>
   );
 }
 
@@ -117,7 +209,7 @@ function DefaultPage() {
   const {
     value: semesterFilterValue,
     onChangeSelect: onChangeSemesterSelect,
-  } = useSelect();
+  } = useSelectRecoil(selectedSemesterAtom);
 
   return (
     <>
@@ -149,13 +241,14 @@ function DefaultPage() {
               </React.Suspense>
             </div>
           </div>
-          <React.Suspense fallback="loading...">
-            <CurrentSemesterLectureList semesterKey={semesterFilterValue} />
-          </React.Suspense>
+          <ErrorBoundary fallbackClassName="loading">
+            <React.Suspense fallback="loading...">
+              <CurrentSemesterLectureList semesterKey={semesterFilterValue} />
+            </React.Suspense>
+          </ErrorBoundary>
         </div>
         <div>
           <div className={styles.page__filter}>
-
             <div className={styles.page__semester}>
               <React.Suspense fallback="loading...">
                 <SemesterListbox
@@ -169,8 +262,24 @@ function DefaultPage() {
               이미지로 저장하기
             </button>
           </div>
+          <div className={styles.page__timetable}>
+            <ErrorBoundary fallbackClassName="loading">
+              <React.Suspense fallback="loading...">
+                <CurrentSemesterTimeTable />
+              </React.Suspense>
+            </ErrorBoundary>
+          </div>
         </div>
-        <div>내 강의</div>
+        <div>
+          <h3 className={styles['page__title--sub']}>나의 시간표</h3>
+          <div className={styles['page__table--selected']}>
+            <ErrorBoundary fallbackClassName="loading">
+              <React.Suspense fallback="loading...">
+                <CurrentMyLectureList />
+              </React.Suspense>
+            </ErrorBoundary>
+          </div>
+        </div>
         <div>커리큘럼</div>
       </div>
     </>

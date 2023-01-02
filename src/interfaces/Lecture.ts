@@ -10,3 +10,25 @@ export interface LectureInfo {
   design_score: string;
   class_time: Array<number>;
 }
+
+export interface TimeTableLectureInfo {
+  code: string;
+  class_title: string;
+  grades: string;
+  lecture_class: string;
+  regular_number: string;
+  department: string;
+  target: string;
+  professor: string;
+  design_score: string;
+  class_time: Array<number>;
+}
+
+export interface TimeTableDayLectureInfo {
+  name: string;
+  start: number;
+  end: number;
+  lecture_class: string;
+  professor: string;
+  index: number;
+}
