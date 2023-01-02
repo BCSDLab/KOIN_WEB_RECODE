@@ -8,7 +8,7 @@ const useArticleList = (board_id: string | undefined) => {
     { retry: 0 },
   );
 
-  if (isLoading) {
+  if (isLoading || articleList === undefined) {
     return null;
   }
 
