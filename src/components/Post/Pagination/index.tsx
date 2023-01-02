@@ -1,4 +1,3 @@
-import React from 'react';
 import cn from 'utils/ts/classnames';
 import showToast from 'utils/ts/showToast';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
