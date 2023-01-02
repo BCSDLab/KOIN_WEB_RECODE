@@ -11,13 +11,7 @@ interface PaginationProps {
   totalPageNum: number
 }
 
-const changeParamsToNumber = (params: string) => {
-  if (params === undefined) {
-    return 1;
-  }
-  return Number(params);
-};
-
+const onHandlePrevPage = (moveNumber: number) => {
 const movePrevNumber = (moveNumber: number) => {
   if (moveNumber <= 0) {
     showToast('error', '첫 페이지입니다.');
@@ -76,7 +70,7 @@ function Pagination(props: PaginationProps) {
                 aria-label="page-index-button"
                 className={cn({
                   [styles.pagination__number]: true,
-                  [styles['pagination__number--selected']]: changeParamsToNumber(params.page) === limit + 1,
+                  [styles['pagination__number--selected']]: Number(params.page) === limit + 1,
                 })}
                 onClick={() => onClickMove(String(limit + 1))}
               >
@@ -90,7 +84,7 @@ function Pagination(props: PaginationProps) {
         type="button"
         aria-label="page-index-next"
         className={styles.pagination__move}
-        onClick={() => setParams('page', moveNextNumber(Number(params.page) + 1, Number(totalPageNum)), { deleteBeforeParam: false, replacePage: true })}
+        onClick={() => setParams('page', onHandleNextPage(Number(params.page) + 1, Number(totalPageNum)), { deleteBeforeParam: false, replacePage: true })}
       >
         다음으로
       </button>
