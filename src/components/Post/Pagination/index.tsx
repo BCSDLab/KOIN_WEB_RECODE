@@ -32,6 +32,7 @@ function Pagination(props: PaginationProps) {
   const { calcIndexPage, onClickMove } = usePagination();
   const { params, setParams } = useParamsHandler();
   const { totalPageNum } = props;
+  const totalPage = Array.from({ length: totalPageNum }, (v, i) => i + 1);
 
   return (
     <div className={styles.pagination}>
@@ -61,7 +62,7 @@ function Pagination(props: PaginationProps) {
             </span>
           ))
         ) : (
-          [...Array(totalPageNum)].map((limit) => (
+          totalPage.map((limit) => (
             <span key={limit + 1}>
               <button
                 type="button"
