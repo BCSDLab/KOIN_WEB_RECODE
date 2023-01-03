@@ -9,7 +9,7 @@ import styles from './NoticePage.module.scss';
 
 function NoticePage() {
   const paramsPage = usePageParams();
-  const articleList = useArticleList(paramsPage ?? '1');
+  const articleList = useArticleList(paramsPage);
   const hotArticleList = useHotArticleList();
 
   return (
