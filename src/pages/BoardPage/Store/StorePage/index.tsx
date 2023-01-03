@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import * as api from 'api';
 import cn from 'utils/ts/classnames';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import useParamsHandler from './hooks/useParamsHandler';
+import useParamsHandler from 'utils/hooks/useParamsHandler';
 import styles from './StorePage.module.scss';
 
 const CHECK_BOX = [
@@ -99,7 +99,7 @@ function StorePage() {
               role="radio"
               aria-checked={searchParams.get('category') === value.tag}
               type="button"
-              onClick={() => setParams('category', value.tag, false)}
+              onClick={() => setParams('category', value.tag, { deleteBeforeParam: false, replacePage: true })}
               key={value.tag}
             >
               <img className={styles.category__image} src={value.image} alt="category_img" />
@@ -117,13 +117,22 @@ function StorePage() {
           name="search"
           placeholder="상점명을 입력하세요"
           onKeyPress={(e) => {
-            if (e.key === 'Enter') setParams('storeName', e.target.value, (searchParams.get('storeName') === undefined));
+            if (e.key === 'Enter') setParams('storeName', e.target.value, { deleteBeforeParam: (searchParams.get('storeName') === undefined), replacePage: true });
           }}
         />
         <button
           className={styles.search_bar__icon}
           type="button"
-          onClick={() => { setParams('storeName', storeRef.current?.value ?? '', (searchParams.get('storeName') === undefined)); }}
+          onClick={() => {
+            setParams(
+              'storeName',
+              storeRef.current?.value ?? '',
+              {
+                deleteBeforeParam: (searchParams.get('storeName') === undefined),
+                replacePage: true,
+              },
+            );
+          }}
         >
           <img className={styles['search-icon']} src="https://static.koreatech.in/assets/img/search.png" alt="store_icon" />
         </button>
@@ -147,7 +156,16 @@ function StorePage() {
                     type="checkbox"
                     checked={searchParams.get(item.id) ? true : undefined}
                     className={styles['option-checkbox__input']}
-                    onChange={() => setParams(item.id, item.value, true)}
+                    onChange={() => {
+                      setParams(
+                        item.id,
+                        item.value,
+                        {
+                          deleteBeforeParam: true,
+                          replacePage: true,
+                        },
+                      );
+                    }}
                   />
                   {item.content}
                 </label>

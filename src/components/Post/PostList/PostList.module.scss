@@ -1,0 +1,110 @@
+@use "src/utils/scss/media" as media;
+
+.list {
+  height: 68px;
+  cursor: pointer;
+  border-bottom: 1px #d2dae2 solid;
+  display: flex;
+
+  &:hover {
+    background: #f8fafb;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    height: 75px;
+    display: block;
+    border-bottom: 1px solid #ececec;
+  }
+
+  &__id {
+    width: 85px;
+    font-size: 15px;
+    height: 100%;
+    color: #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__author {
+    width: 150px;
+    height: 100%;
+    color: #175c8e;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__created_at {
+    width: 70px;
+    height: 100%;
+    color: #252525;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__views {
+    width: 108px;
+    height: 100%;
+    color: #252525;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+}
+
+.title {
+  height: 100%;
+  color: #252525;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 412px;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+
+  &__header {
+    font-weight: 600;
+  }
+
+  &__content {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__newTag {
+    margin-left: 10px;
+    width: 14.5px;
+    height: 15px;
+    position: relative;
+  }
+}
