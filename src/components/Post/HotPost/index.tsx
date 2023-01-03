@@ -52,18 +52,17 @@ function HotPost(HotPostList: HotPostProps) {
       <div className={styles.link}>
         {
           LINK_LIST.map((link) => (
-            <button
-              type="button"
+            <a
               className={styles.link__button}
               key={link.id}
-              onClick={() => window.open(link.url)}
+              href={link.url}
             >
               <img
                 className={styles.link__image}
                 src={link.image}
                 alt="alineImg"
               />
-            </button>
+            </a>
           ))
         }
       </div>
