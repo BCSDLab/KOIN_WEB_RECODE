@@ -12,9 +12,9 @@ function useHotArticleList() {
     { retry: 0 },
   );
 
-  if (isSuccess) return <HotPost hotArticleList={hotArticleList} />;
+  if (!isSuccess) return <LoadingSpinner size="80px" />;
 
-  return <LoadingSpinner size="80px" />;
+  return <HotPost hotArticleList={hotArticleList} />;
 }
 
 export default useHotArticleList;
