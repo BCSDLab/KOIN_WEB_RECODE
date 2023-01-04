@@ -12,6 +12,7 @@ import LoginPage from 'pages/Auth/LoginPage';
 import BoardPage from 'pages/BoardPage';
 import StorePage from 'pages/BoardPage/Store/StorePage';
 import NoticePage from 'pages/BoardPage/Notice/NoticePage';
+import NoticeDetailPage from 'pages/BoardPage/Notice/NoticeDetailPage';
 import Toast from 'components/common/Toast';
 import SignupPage from 'pages/Auth/SignupPage';
 import StoreDetailPage from 'pages/BoardPage/Store/StoreDetailPage';
@@ -38,6 +39,7 @@ function App() {
           <Route path="/store/:id" element={<StoreDetailPage />} />
           <Route path="/bus" element={<BusPage />} />
           <Route path="/board/notice" element={<NoticePage />} />
+          <Route path="/board/notice/:id" element={<NoticeDetailPage />} />
         </Route>
         <Route path="auth" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
           <Route index element={<LoginPage />} />
