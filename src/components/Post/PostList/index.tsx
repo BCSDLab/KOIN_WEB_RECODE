@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { NoticeList } from 'api/notice/entity';
 import styles from './PostList.module.scss';
 
@@ -48,8 +49,9 @@ function PostList(props: ArticleList) {
     <div>
       {
         articles?.map((article: NoticeList) => (
-          <div
+          <Link
             className={styles.list}
+            to={`/board/notice/${article.id}`}
             key={article.id}
           >
             <div className={styles.list__id}>{ article.id }</div>
@@ -69,7 +71,7 @@ function PostList(props: ArticleList) {
               { setPostCreateDate(article.created_at)[0] }
             </div>
             <div className={styles.list__views}>{ article.hit }</div>
-          </div>
+          </Link>
         ))
       }
     </div>
