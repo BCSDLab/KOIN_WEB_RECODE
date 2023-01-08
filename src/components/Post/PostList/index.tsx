@@ -1,49 +1,17 @@
 import { Link } from 'react-router-dom';
 import { NoticeList } from 'api/notice/entity';
+import setPostCreateDate from 'components/Post/utils/setPostCreateDate';
+import convertNoticeTag from 'components/Post/utils/convertNoticeTag';
+import useParamsHandler from 'utils/hooks/useParamsHandler';
 import styles from './PostList.module.scss';
 
 type ArticleList = {
   articles: NoticeList[] | undefined
 };
 
-const convertNoticeTag = (type: number) => {
-  switch (type) {
-    case 5:
-      return '[일반공지]';
-    case 6:
-      return '[장학공지]';
-    case 7:
-      return '[학사공지]';
-    case 8:
-      return '[취업공지]';
-    default:
-      return '[코인공지]';
-  }
-};
-
-const isCheckNewPost = (created: number[]) => {
-  const today = new Date();
-
-  if (created[0] - today.getFullYear() === 0 && (
-    created[1] - today.getMonth() === 1) && (
-    today.getDate() - created[2] <= 4)
-  ) return true;
-  return false;
-};
-
-const convertDate = (time: string) => time.split(' ')[0].replaceAll('-', '.');
-
-const setPostCreateDate = (time: string) => {
-  const created = convertDate(time).split('.').map((item: string) => parseInt(item, 10));
-
-  if (isCheckNewPost(created)) {
-    return [`${created}`, true];
-  }
-  return [`${created}`, false];
-};
-
 function PostList(props: ArticleList) {
   const { articles } = props;
+  const { params } = useParamsHandler();
 
   return (
     <div>
@@ -51,7 +19,7 @@ function PostList(props: ArticleList) {
         articles?.map((article: NoticeList) => (
           <Link
             className={styles.list}
-            to={`/board/notice/${article.id}`}
+            to={`/board/notice/${params.page ?? '1'}/${article.id}`}
             key={article.id}
           >
             <div className={styles.list__id}>{ article.id }</div>
