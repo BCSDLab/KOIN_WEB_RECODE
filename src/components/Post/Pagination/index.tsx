@@ -33,7 +33,7 @@ function Pagination(props: PaginationProps) {
   const { params, setParams } = useParamsHandler();
   const { totalPageNum } = props;
   const totalPage = Array.from({ length: totalPageNum ?? 5 }, (v, i) => i + 1);
-  console.log(totalPage);
+
   return (
     <div className={styles.pagination}>
       <button

@@ -1,0 +1,65 @@
+@use "src/utils/scss/media" as media;
+
+.header {
+  border-top: 2px solid #175c8e;
+  border-bottom: 1px solid #175c8e;
+  width: 834px;
+  height: 100%;
+  text-align: left;
+  user-select: text;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.title {
+  font-family: NanumBarunGothic, serif;
+  font-size: 20px;
+  letter-spacing: -1px;
+  color: #252525;
+  padding: 26px 20px 7px;
+  width: 794px;
+  word-wrap: break-word;
+
+  &__board_id {
+    font-weight: 600;
+  }
+
+  &__comment_count {
+    font-size: 15px;
+    letter-spacing: -0.8px;
+    color: #175c8e;
+    padding-left: 3px;
+  }
+
+  &__new_tag {
+    width: 13.5px;
+    height: 14px;
+    position: relative;
+    margin-left: 11px;
+    top: 0;
+  }
+}
+
+.content {
+  display: flex;
+  padding-bottom: 27px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  &__author {
+    font-family: NanumBarunGothic, serif;
+    font-size: 13px;
+    letter-spacing: -0.7px;
+    color: #175c8e;
+    margin-right: 16px;
+  }
+
+  &__create_at {
+    font-family: NanumBarunGothic, serif;
+    font-size: 13px;
+    letter-spacing: -0.7px;
+    color: #858585;
+  }
+}
