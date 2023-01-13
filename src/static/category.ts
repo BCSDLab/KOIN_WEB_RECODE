@@ -1,4 +1,4 @@
-export interface ISubMenu {
+export interface SubMenu {
   title: string;
   link: string;
   newFlag: boolean;
@@ -6,13 +6,13 @@ export interface ISubMenu {
   tag: number | null;
 }
 
-export interface ICategory {
+export interface Category {
   title: string;
   planFlag: boolean;
-  submenu: ISubMenu[]
+  submenu: SubMenu[]
 }
 
-const CATEGORY: ICategory[] = [
+const CATEGORY: Category[] = [
   {
     title: '서비스',
     planFlag: false,
