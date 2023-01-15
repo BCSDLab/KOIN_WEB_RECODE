@@ -1,0 +1,107 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+
+  &__title {
+    font-family: NanumSquare, serif;
+    font-size: 17px;
+    font-weight: bold;
+    color: #175c8e;
+    text-decoration: none;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 15px;
+      padding-left: 3px;
+      margin-left: 16px;
+    }
+  }
+}
+
+.cards {
+  width: 848px;
+  display: flex;
+  justify-content: space-between;
+
+  &__card {
+    width: 272px;
+    height: 202px;
+  }
+
+  &__head {
+    height: 38px;
+    padding-top: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+
+    &--shuttle {
+      background-color: rgb(247 148 30);
+    }
+
+    &--express {
+      background-color: rgb(124 159 174);
+    }
+
+    &--city {
+      background-color: rgb(77 178 151);
+    }
+  }
+
+  &__bus-icon {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    top: -1px;
+  }
+
+  &__body {
+    height: 162px;
+    border: 1px solid;
+    border-color: rgb(228 228 228);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__remain-time {
+    margin-top: 41px;
+  }
+
+  &__detail {
+    margin-top: 5px;
+    font-size: 12px;
+    height: 12px;
+  }
+
+  &__directions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    gap: 26px;
+  }
+
+  &__toggle {
+    appearance: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+    padding: 0;
+
+    &--image {
+      height: 16px;
+      width: 16px;
+    }
+  }
+}

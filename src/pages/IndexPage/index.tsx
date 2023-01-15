@@ -9,10 +9,10 @@ function IndexPage() {
   return (
     <main className={styles.template}>
       <IndexStore />
-      <IndexCafeteria />
       <IndexTimetable />
       <IndexBus />
       <IndexNotice />
+      <IndexCafeteria />
     </main>
   );
 }
