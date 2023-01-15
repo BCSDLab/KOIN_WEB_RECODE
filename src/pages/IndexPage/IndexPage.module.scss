@@ -4,4 +4,8 @@
   width: 1132px;
   margin: 0 auto;
   padding: 40px 0;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+  }
 }

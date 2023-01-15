@@ -10,7 +10,7 @@ function IndexStore() {
         {STORE_CATEGORY.map((category) => (
           <Link to={`/store?category=${category.tag}`} key={category.title} className={styles.category__item}>
             <img src={category.image} alt={category.title} className={styles.category__image} />
-            {category.title}
+            {category.title.slice(0, 4)}
           </Link>
         ))}
       </div>
