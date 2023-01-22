@@ -8,6 +8,7 @@ export type GetNoticeRequest = {
 export type NoticeList = {
   id: number
   board_id: number
+  comment_count: number
   title: string
   content: string
   nickname: string

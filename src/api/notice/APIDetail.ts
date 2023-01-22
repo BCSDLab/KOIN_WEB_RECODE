@@ -11,8 +11,8 @@ export class NoticeList<R extends NoticeResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(boardId: string | undefined) {
-    this.path = `/articles?page=${boardId}&boardId=4`;
+  constructor(page: string | undefined) {
+    this.path = `/articles?page=${page}&boardId=4`;
   }
 }
 
