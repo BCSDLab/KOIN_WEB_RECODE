@@ -7,6 +7,8 @@
 
   @include media.media-breakpoint(mobile) {
     order: 2;
+    width: 100%;
+    overflow-x: auto;
   }
 
   &__title {

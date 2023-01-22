@@ -8,6 +8,7 @@
 
   @include media.media-breakpoint(mobile) {
     order: 1;
+    width: 100%;
   }
 
   &__title {
@@ -30,9 +31,31 @@
   display: flex;
   justify-content: space-between;
 
+  @include media.media-breakpoint(mobile) {
+    overflow-x: auto;
+    width: 100%;
+    white-space: nowrap;
+    display: block;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
   &__card {
     width: 272px;
     height: 202px;
+
+    @include media.media-breakpoint(mobile) {
+      display: inline-block;
+      height: auto;
+      width: 75%;
+      transition: 0.3s ease 0s;
+
+      &--sm {
+        transform: scale(0.9);
+      }
+    }
   }
 
   &__head {
@@ -57,13 +80,24 @@
     &--city {
       background-color: rgb(77 178 151);
     }
+
+    @include media.media-breakpoint(mobile) {
+      gap: 5px;
+      font-size: 12px;
+      height: 30px;
+    }
   }
 
   &__bus-icon {
     position: relative;
-    height: 20px;
     width: 20px;
+    height: 20px;
     top: -1px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 16px;
+      height: 16px;
+    }
   }
 
   &__body {
@@ -73,10 +107,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      height: 106px;
+    }
   }
 
   &__remain-time {
     margin-top: 41px;
+    font-weight: bold;
+
+    @include media.media-breakpoint(mobile) {
+      margin-top: 27px;
+    }
   }
 
   &__detail {
@@ -92,6 +135,11 @@
     align-items: center;
     font-size: 14px;
     gap: 26px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+      gap: 11px;
+    }
   }
 
   &__toggle {
