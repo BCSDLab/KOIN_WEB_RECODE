@@ -1,6 +1,8 @@
+import styles from './IndexTimetable.module.scss';
+
 function IndexTimetable() {
   return (
-    <section>
+    <section className={styles.template}>
       indextimetable
     </section>
   );

@@ -5,6 +5,10 @@
   flex-direction: column;
   align-items: flex-start;
 
+  @include media.media-breakpoint(mobile) {
+    order: 2;
+  }
+
   &__title {
     font-family: NanumSquare, serif;
     font-size: 17px;

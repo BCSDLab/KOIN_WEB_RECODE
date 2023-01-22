@@ -6,6 +6,10 @@
   align-items: flex-start;
   gap: 18px;
 
+  @include media.media-breakpoint(mobile) {
+    order: 1;
+  }
+
   &__title {
     font-family: NanumSquare, serif;
     font-size: 17px;

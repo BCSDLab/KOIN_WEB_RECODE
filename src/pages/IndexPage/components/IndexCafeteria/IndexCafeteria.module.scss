@@ -1,0 +1,7 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  @include media.media-breakpoint(mobile) {
+    order: 3;
+  }
+}

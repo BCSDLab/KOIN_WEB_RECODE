@@ -1,6 +1,8 @@
+import styles from './IndexCafeteria.module.scss';
+
 function IndexCafeteria() {
   return (
-    <section>
+    <section className={styles.template}>
       indexCafeteria
     </section>
   );

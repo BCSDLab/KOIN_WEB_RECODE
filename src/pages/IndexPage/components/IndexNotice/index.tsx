@@ -1,6 +1,8 @@
+import styles from './IndexNotice.module.scss';
+
 function IndexNotice() {
   return (
-    <section>
+    <section className={styles.template}>
       indexnotice
     </section>
   );
