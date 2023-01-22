@@ -3,29 +3,28 @@ import { useParams } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import PostDetailHeader from 'components/Post/PostDetail/PostDetailHeader';
 import PostDetailContent from 'components/Post/PostDetail/PostDetailContent';
-import useHotArticleList from 'pages/BoardPage/Notice/hooks/useHotPost';
-// import useNoticeDetail from './hooks/useNoticeDetail';
+import useNoticeDetail from './hooks/useNoticeDetail';
 import styles from './NoticeDetailPage.module.scss';
 
 function NoticeDetailPage() {
   const params = useParams();
-  //   const noticeDetail = useNoticeDetail();
-  const hotArticleList = useHotArticleList();
-  //   console.log(noticeDetail);
+  console.log(params);
+  const noticeDetail = useNoticeDetail(params.page, params.id);
+  console.log(noticeDetail);
   console.log(params.page);
   return (
-    <div className={styles.template}>
-      <div className={styles.content}>
-        <div className={styles.header}>
-          <div className={styles.header__title}>공지사항</div>
-        </div>
-        <Suspense fallback={<LoadingSpinner className={styles['content__loading-spinner']} />}>
-          <PostDetailHeader />
-          <PostDetailContent />
-        </Suspense>
-      </div>
-      { hotArticleList }
-    </div>
+    <Suspense fallback={<LoadingSpinner className={styles['content__loading-spinner']} />}>
+      <PostDetailHeader
+        boardId={noticeDetail!.board_id}
+        title={noticeDetail!.title}
+        createdAt={noticeDetail!.created_at}
+        commentCount={noticeDetail!.comment_count}
+        nickname={noticeDetail!.nickname}
+      />
+      <PostDetailContent
+        content={noticeDetail!.content}
+      />
+    </Suspense>
   );
 }
 

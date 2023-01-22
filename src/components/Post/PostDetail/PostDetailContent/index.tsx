@@ -1,10 +1,14 @@
 import styles from './PostDetailContent.module.scss';
 
-function PostDetailContent() {
+type PostDetailContentProps = {
+  content: string
+};
+
+function PostDetailContent(props: PostDetailContentProps) {
+  const { content } = props;
+
   return (
-    <div className={styles.content}>
-      컨텐츠
-    </div>
+    <div className={styles.content} dangerouslySetInnerHTML={{ __html: content }} />
   );
 }
 
