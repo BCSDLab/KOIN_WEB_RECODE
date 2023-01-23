@@ -55,7 +55,7 @@ function Pagination(props: PaginationProps) {
                   [styles.pagination__number]: true,
                   [styles['pagination__number--selected']]: params.page === calcIndexPage(limit, totalPageNum, params.page),
                 })}
-                onClick={() => onClickMove(calcIndexPage(limit, totalPageNum, params.page))}
+                onClick={() => onClickMove(calcIndexPage(limit, totalPageNum, params.page ?? '1'))}
               >
                 { calcIndexPage(limit, totalPageNum, params.page ?? '1')}
               </button>

@@ -6,15 +6,13 @@ type PostDetailContentProps = {
 
 function PostDetailContent(props: PostDetailContentProps) {
   const { content } = props;
-  function setHtmlContent() {
-    return (
-      <div dangerouslySetInnerHTML={{ __html: content }} />
-    );
-  }
-  console.log(content);
+  // dangerouslySetInnerHTML에 대한 경고콘솔 제거
+  // eslint-disable-next-line
+  const contentParse = () => (<div dangerouslySetInnerHTML={{ __html: content }} />);
+
   return (
     <div className={styles.content}>
-      { setHtmlContent() }
+      { contentParse() }
     </div>
   );
 }

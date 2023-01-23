@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArticleList } from 'api/notice/entity';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import setPostCreateDate from 'components/Post/utils/setPostCreateDate';
 import convertNoticeTag from 'components/Post/utils/convertNoticeTag';
 import styles from './PostList.module.scss';
@@ -10,6 +11,7 @@ type ArticleListProps = {
 
 function PostList(props: ArticleListProps) {
   const { articles } = props;
+  const isMobile = useMediaQuery();
 
   return (
     <div>
@@ -32,7 +34,7 @@ function PostList(props: ArticleListProps) {
                 />
               )}
             </div>
-            <div className={styles.list__author}>{ article.nickname }</div>
+            <div className={styles.list__author}>{ isMobile ? `조회 ${article.hit} · ${article.nickname}` : article.nickname }</div>
             <div className={styles.list__created_at}>
               { setPostCreateDate(article.created_at)[0] }
             </div>
