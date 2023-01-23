@@ -1,25 +1,23 @@
 import { Link } from 'react-router-dom';
-import { NoticeList } from 'api/notice/entity';
+import { ArticleList } from 'api/notice/entity';
 import setPostCreateDate from 'components/Post/utils/setPostCreateDate';
 import convertNoticeTag from 'components/Post/utils/convertNoticeTag';
-import useParamsHandler from 'utils/hooks/useParamsHandler';
 import styles from './PostList.module.scss';
 
-type ArticleList = {
-  articles: NoticeList[] | undefined
+type ArticleListProps = {
+  articles: ArticleList[] | undefined
 };
 
-function PostList(props: ArticleList) {
+function PostList(props: ArticleListProps) {
   const { articles } = props;
-  const { params } = useParamsHandler();
 
   return (
     <div>
       {
-        articles?.map((article: NoticeList) => (
+        articles?.map((article: ArticleList) => (
           <Link
             className={styles.list}
-            to={`/board/notice/${params.page ?? '1'}/${article.id}`}
+            to={`/board/notice/${article.id}`}
             key={article.id}
           >
             <div className={styles.list__id}>{ article.id }</div>

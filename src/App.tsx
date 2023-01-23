@@ -41,7 +41,7 @@ function App() {
           <Route path="/bus" element={<BusPage />} />
           <Route path="/board/notice" element={<Notice />}>
             <Route path="/board/notice/" element={<NoticePage />} />
-            <Route path="/board/notice/:page/:id" element={<NoticeDetailPage />} />
+            <Route path="/board/notice/:id" element={<NoticeDetailPage />} />
           </Route>
         </Route>
         <Route path="auth" element={token ? <Navigate replace to="/" /> : <AuthPage />}>

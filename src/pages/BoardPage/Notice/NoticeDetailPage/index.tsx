@@ -9,7 +9,7 @@ import styles from './NoticeDetailPage.module.scss';
 function NoticeDetailPage() {
   const params = useParams();
   console.log(params);
-  const noticeDetail = useNoticeDetail(params.page, params.id);
+  const noticeDetail = useNoticeDetail(params.id);
   console.log(noticeDetail);
   console.log(params.page);
   return (
