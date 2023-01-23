@@ -2,7 +2,6 @@ import { useQuery } from 'react-query';
 import * as api from 'api';
 
 const useArticleList = (page: string | undefined) => {
-  console.log(page);
   const { isLoading, data: articleList } = useQuery(
     ['articleList', page],
     ({ queryKey }) => api.notice.PostList(queryKey[1]),

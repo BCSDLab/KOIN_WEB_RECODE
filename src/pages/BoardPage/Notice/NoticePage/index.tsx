@@ -10,7 +10,6 @@ function NoticePage() {
   const paramsPage = usePageParams();
   const articleList = useArticleList(paramsPage);
 
-  console.log(articleList);
   return (
     <>
       <PostHeader />

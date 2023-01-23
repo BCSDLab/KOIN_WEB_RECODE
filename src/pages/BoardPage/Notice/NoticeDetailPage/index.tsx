@@ -1,30 +1,25 @@
-import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
-import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import PostDetailHeader from 'components/Post/PostDetail/PostDetailHeader';
 import PostDetailContent from 'components/Post/PostDetail/PostDetailContent';
-import useNoticeDetail from './hooks/useNoticeDetail';
-import styles from './NoticeDetailPage.module.scss';
+import useArticleDetail from 'pages/BoardPage/Notice/hooks/useArticleDetail';
 
 function NoticeDetailPage() {
   const params = useParams();
-  console.log(params);
-  const noticeDetail = useNoticeDetail(params.id);
-  console.log(noticeDetail);
-  console.log(params.page);
+  const articleDetail = useArticleDetail(params.id);
+
   return (
-    <Suspense fallback={<LoadingSpinner className={styles['content__loading-spinner']} />}>
+    <>
       <PostDetailHeader
-        boardId={noticeDetail!.board_id}
-        title={noticeDetail!.title}
-        createdAt={noticeDetail!.created_at}
-        commentCount={noticeDetail!.comment_count}
-        nickname={noticeDetail!.nickname}
+        boardId={articleDetail!.board_id}
+        title={articleDetail!.title}
+        createdAt={articleDetail!.created_at}
+        commentCount={articleDetail!.comment_count}
+        nickname={articleDetail!.nickname}
       />
       <PostDetailContent
-        content={noticeDetail!.content}
+        content={articleDetail!.content}
       />
-    </Suspense>
+    </>
   );
 }
 
