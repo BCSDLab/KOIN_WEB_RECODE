@@ -6,9 +6,16 @@ type PostDetailContentProps = {
 
 function PostDetailContent(props: PostDetailContentProps) {
   const { content } = props;
-
+  function setHtmlContent() {
+    return (
+      <div dangerouslySetInnerHTML={{ __html: content }} />
+    );
+  }
+  console.log(content);
   return (
-    <div className={styles.content} dangerouslySetInnerHTML={{ __html: content }} />
+    <div className={styles.content}>
+      { setHtmlContent() }
+    </div>
   );
 }
 
