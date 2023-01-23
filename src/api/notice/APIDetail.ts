@@ -1,6 +1,10 @@
 import { APIRequest } from 'interfaces/APIRequest';
 import { HTTP_METHOD } from 'utils/ts/apiClient';
-import { NoticeResponse, HotPostResponse } from './entity';
+import {
+  NoticeResponse,
+  HotPostResponse,
+  ArticleList,
+} from './entity';
 
 export class NoticeList<R extends NoticeResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
@@ -13,6 +17,20 @@ export class NoticeList<R extends NoticeResponse> implements APIRequest<R> {
 
   constructor(page: string | undefined) {
     this.path = `/articles?page=${page}&boardId=4`;
+  }
+}
+
+export class GetArticle<R extends ArticleList> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = false;
+
+  constructor(id: string | undefined) {
+    this.path = `/articles/${id}`;
   }
 }
 
