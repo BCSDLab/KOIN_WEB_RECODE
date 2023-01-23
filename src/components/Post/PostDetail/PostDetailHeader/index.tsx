@@ -1,5 +1,6 @@
 import setPostCreateDate from 'components/Post/utils/setPostCreateDate';
 import convertNoticeTag from 'components/Post/utils/convertNoticeTag';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './PostDetailHeader.module.scss';
 
 type PostDetailHeaderProps = {
@@ -8,6 +9,7 @@ type PostDetailHeaderProps = {
   createdAt: string
   commentCount: number
   nickname: string
+  hit: number
 };
 
 function PostDetailHeader(props: PostDetailHeaderProps) {
@@ -17,7 +19,9 @@ function PostDetailHeader(props: PostDetailHeaderProps) {
     createdAt,
     commentCount,
     nickname,
+    hit,
   } = props;
+  const isMobile = useMediaQuery();
 
   return (
     <div className={styles.header}>
@@ -34,7 +38,7 @@ function PostDetailHeader(props: PostDetailHeaderProps) {
         )}
       </div>
       <div className={styles.content}>
-        <div className={styles.content__author}>{nickname}</div>
+        <div className={styles.content__author}>{ isMobile ? `조회 ${hit} · ${nickname}` : nickname }</div>
         <div className={styles.content__create_at}>{createdAt}</div>
       </div>
     </div>

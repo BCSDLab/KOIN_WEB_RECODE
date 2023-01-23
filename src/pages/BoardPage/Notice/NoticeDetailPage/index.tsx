@@ -15,6 +15,7 @@ function NoticeDetailPage() {
         createdAt={articleDetail!.created_at}
         commentCount={articleDetail!.comment_count}
         nickname={articleDetail!.nickname}
+        hit={articleDetail!.hit}
       />
       <PostDetailContent
         content={articleDetail!.content}
