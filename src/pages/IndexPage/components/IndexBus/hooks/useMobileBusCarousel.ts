@@ -10,22 +10,23 @@ const useMobileBusCarousel = () => {
     let walk = 0;
     let startX = 0;
     let scrollValue = 0;
+    const slider = sliderRef.current;
 
     const slideTouchStart = (e:TouchEvent) => {
-      if (sliderRef.current) {
-        startX = e.touches[0].pageX - sliderRef.current.offsetLeft;
-        scrollValue = sliderRef.current.scrollLeft;
+      if (slider) {
+        startX = e.touches[0].pageX - slider.offsetLeft;
+        scrollValue = slider.scrollLeft;
       }
     };
 
     const stopSlide = () => {
-      if (sliderRef.current) {
-        sliderRef.current.scrollLeft = window.innerWidth * 0.625;
+      if (slider) {
+        slider.scrollLeft = window.innerWidth * 0.625;
         if (walk < -120) {
-          setMobileBusTypes((state) => [state[2]].concat(state.slice(0, 2)));
+          setMobileBusTypes((state) => state.slice(1, 3).concat(state[0]));
         }
         if (walk > 120) {
-          setMobileBusTypes((state) => state.slice(1, 3).concat(state[0]));
+          setMobileBusTypes((state) => [state[2]].concat(state.slice(0, 2)));
         }
       }
       walk = 0;
@@ -33,19 +34,28 @@ const useMobileBusCarousel = () => {
 
     const slideTouchMove = (e:TouchEvent) => {
       e.preventDefault();
-      if (sliderRef.current) {
-        walk = (e.touches[0].pageX - sliderRef.current.offsetLeft - startX) * 0.9;
-        sliderRef.current.scrollLeft = scrollValue - walk;
+      if (slider) {
+        walk = (e.touches[0].pageX - slider.offsetLeft - startX) * 0.9;
+        slider.scrollLeft = scrollValue - walk;
       }
     };
 
-    if (sliderRef.current) {
-      sliderRef.current.scrollLeft = window.innerWidth * 0.625;
-      sliderRef.current.addEventListener('touchstart', slideTouchStart);
-      sliderRef.current.addEventListener('touchend', stopSlide);
-      sliderRef.current.addEventListener('touchcancel', stopSlide);
-      sliderRef.current.addEventListener('touchmove', slideTouchMove);
+    if (slider) {
+      slider.scrollLeft = window.innerWidth * 0.625;
+      slider.addEventListener('touchstart', slideTouchStart);
+      slider.addEventListener('touchend', stopSlide);
+      slider.addEventListener('touchcancel', stopSlide);
+      slider.addEventListener('touchmove', slideTouchMove);
     }
+
+    return () => {
+      if (slider) {
+        slider.removeEventListener('touchstart', slideTouchStart);
+        slider.removeEventListener('touchend', stopSlide);
+        slider.removeEventListener('touchcancel', stopSlide);
+        slider.removeEventListener('touchmove', slideTouchMove);
+      }
+    };
   }, []);
 
   const matchToMobileType = <T>(data: Array<T>) => {
