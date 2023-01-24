@@ -37,6 +37,7 @@
     @include media.media-breakpoint(mobile) {
       width: 100%;
       justify-content: flex-start;
+      box-sizing: border-box;
       flex-wrap: nowrap;
       gap: 8px;
       overflow-x: auto;
