@@ -4,9 +4,11 @@ const useIndexBusDirection = () => {
   const [toSchoolList, setToSchoolList] = useState([false, false, false]);
 
   const toggleDirection = (index: number) => {
-    const newList = [...toSchoolList];
-    newList[index] = !newList[index];
-    setToSchoolList(newList);
+    setToSchoolList((value) => {
+      const newValue = [...value];
+      newValue[index] = !value[index];
+      return newValue;
+    });
   };
 
   return { toSchoolList, toggleDirection };
