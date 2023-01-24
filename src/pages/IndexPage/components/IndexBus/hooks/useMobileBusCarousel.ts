@@ -7,8 +7,6 @@ const useMobileBusCarousel = () => {
   const [mobileBusTypes, setMobileBusTypes] = useState([2, 0, 1]);
 
   useEffect(() => {
-    const centerPoint = window.innerWidth * 0.625;
-
     let walk = 0;
     let startX = 0;
     let scrollValue = 0;
@@ -21,16 +19,13 @@ const useMobileBusCarousel = () => {
     };
 
     const stopSlide = () => {
-      if (sliderRef.current && walk) {
-        sliderRef.current.scrollLeft = centerPoint;
-        if (walk < 0) {
-          if (walk < -120) {
-            setMobileBusTypes((state) => [state[2]].concat(state.slice(0, 2)));
-          }
-        } else if (walk > 0) {
-          if (walk > 120) {
-            setMobileBusTypes((state) => state.slice(1, 3).concat(state[0]));
-          }
+      if (sliderRef.current) {
+        sliderRef.current.scrollLeft = window.innerWidth * 0.625;
+        if (walk < -120) {
+          setMobileBusTypes((state) => [state[2]].concat(state.slice(0, 2)));
+        }
+        if (walk > 120) {
+          setMobileBusTypes((state) => state.slice(1, 3).concat(state[0]));
         }
       }
       walk = 0;
@@ -45,7 +40,7 @@ const useMobileBusCarousel = () => {
     };
 
     if (sliderRef.current) {
-      sliderRef.current.scrollLeft = centerPoint;
+      sliderRef.current.scrollLeft = window.innerWidth * 0.625;
       sliderRef.current.addEventListener('touchstart', slideTouchStart);
       sliderRef.current.addEventListener('touchend', stopSlide);
       sliderRef.current.addEventListener('touchcancel', stopSlide);
