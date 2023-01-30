@@ -1,11 +1,11 @@
-export interface IStoreCategory {
+export interface StoreCategory {
   title: string;
   state: string;
   tag: string;
   image: string;
 }
 
-const STORE_CATEGORY:IStoreCategory[] = [
+const STORE_CATEGORY:StoreCategory[] = [
   {
     title: '전체보기',
     state: 'ALL',

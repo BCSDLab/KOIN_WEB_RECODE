@@ -26,8 +26,8 @@ export const getStartTimeString = (second: number | '미운행' | undefined, isM
 
   const today = new Date();
 
-  let startHour = today.getHours() + hour;
   let startMinute = today.getMinutes() + minute;
+  let startHour = today.getHours() + hour + Math.ceil(startMinute / 60);
 
   startHour %= 24;
   startMinute %= 60;

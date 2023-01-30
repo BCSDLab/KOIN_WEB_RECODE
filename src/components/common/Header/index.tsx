@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
-import CATEGORY, { ICategory, ISubMenu } from 'static/category';
+import CATEGORY, { Category, SubMenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
@@ -13,8 +13,8 @@ const ID: { [key: string]: string; } = {
   LABEL2: 'megamenu-label-2',
 };
 
-const useMegaMenu = (category: ICategory[]) => {
-  const [panelMenuList, setPanelMenuList] = useState<ISubMenu[] | null>();
+const useMegaMenu = (category: Category[]) => {
+  const [panelMenuList, setPanelMenuList] = useState<SubMenu[] | null>();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const createOnChangeMenu = (title: string) => () => {
