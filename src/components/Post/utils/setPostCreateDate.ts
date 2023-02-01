@@ -14,9 +14,9 @@ function setPostCreateDate(time: string) {
   const created = convertDate(time).split('.').map((item: string) => parseInt(item, 10));
 
   if (isCheckNewPost(created)) {
-    return [`${created}`, true];
+    return [`${created.join('.')}`, true];
   }
-  return [`${created}`, false];
+  return [`${created.join('.')}`, false];
 }
 
 export default setPostCreateDate;
