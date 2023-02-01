@@ -24,7 +24,7 @@
 
   @include media.media-breakpoint(mobile) {
     font-size: 16px;
-    color: rgba(0 0 0 87%);
+    color: rgb(0 0 0 / 87%);
     letter-spacing: -0.8px;
     line-height: 1.5;
     word-break: break-all;
