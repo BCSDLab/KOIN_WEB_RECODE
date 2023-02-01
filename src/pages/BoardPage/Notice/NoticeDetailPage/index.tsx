@@ -5,22 +5,28 @@ import useArticleDetail from 'pages/BoardPage/Notice/hooks/useArticleDetail';
 
 function NoticeDetailPage() {
   const params = useParams();
-  const articleDetail = useArticleDetail(params.id);
+  const articleDetail = useArticleDetail(params.id!);
 
   return (
-    <>
-      <PostDetailHeader
-        boardId={articleDetail!.board_id}
-        title={articleDetail!.title}
-        createdAt={articleDetail!.created_at}
-        commentCount={articleDetail!.comment_count}
-        nickname={articleDetail!.nickname}
-        hit={articleDetail!.hit}
-      />
-      <PostDetailContent
-        content={articleDetail!.content}
-      />
-    </>
+    <div>
+      {
+        articleDetail && (
+        <>
+          <PostDetailHeader
+            boardId={articleDetail.board_id}
+            title={articleDetail.title}
+            createdAt={articleDetail.created_at}
+            commentCount={articleDetail.comment_count}
+            nickname={articleDetail.nickname}
+            hit={articleDetail.hit}
+          />
+          <PostDetailContent
+            content={articleDetail.content}
+          />
+        </>
+        )
+      }
+    </div>
   );
 }
 
