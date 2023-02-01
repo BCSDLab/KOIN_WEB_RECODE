@@ -28,6 +28,7 @@
     letter-spacing: -0.8px;
     line-height: 1.5;
     word-break: break-all;
+    width: calc(100% - 40px);
   }
 
   &__board_id {
