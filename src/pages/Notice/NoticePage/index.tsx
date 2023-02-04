@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
-import useHotArticleList from 'pages/BoardPage/Notice/hooks/useHotArticle';
+import useHotArticleList from 'pages/Notice/NoticePage/hooks/useHotArticle';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import { Outlet } from 'react-router-dom';
-import styles from './Notice.module.scss';
+import styles from './NoticePage.module.scss';
 
 function Notice() {
   const hotArticleList = useHotArticleList();

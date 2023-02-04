@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ArticleList } from 'api/notice/entity';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import setPostCreateDate from 'components/Post/utils/setPostCreateDate';
-import convertNoticeTag from 'components/Post/utils/convertNoticeTag';
+import setPostCreateDate from 'utils/ts/setPostCreateDate';
+import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import styles from './PostList.module.scss';
 
 type ArticleListProps = {
@@ -16,7 +16,7 @@ function PostList(props: ArticleListProps) {
   return (
     <div>
       {
-        articles?.map((article: ArticleList) => (
+        articles?.map((article) => (
           <Link
             className={styles.list}
             to={`/board/notice/${article.id}`}

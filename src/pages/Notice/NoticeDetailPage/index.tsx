@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
-import PostDetailHeader from 'components/Post/PostDetail/PostDetailHeader';
-import PostDetailContent from 'components/Post/PostDetail/PostDetailContent';
-import useArticleDetail from 'pages/BoardPage/Notice/hooks/useArticleDetail';
+import PostDetailHeader from 'components/Post/PostDetailHeader';
+import PostDetailContent from 'components/Post/PostDetailContent';
+import useArticleDetail from 'pages/Notice/NoticeDetailPage/hooks/useArticleDetail';
 
 function NoticeDetailPage() {
   const params = useParams();

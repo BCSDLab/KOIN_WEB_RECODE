@@ -2,9 +2,9 @@ import Pagination from 'components/Post/Pagination';
 import PostHeader from 'components/Post/PostHeader';
 import PostList from 'components/Post/PostList';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import usePageParams from 'pages/BoardPage/Notice/hooks/usePageParams';
-import useArticleList from 'pages/BoardPage/Notice/hooks/useArticleList';
-import styles from './NoticePage.module.scss';
+import usePageParams from 'pages/Notice/NoticeListPage/hooks/usePageParams';
+import useArticleList from 'pages/Notice/NoticeListPage/hooks/useArticleList';
+import styles from './NoticeListPage.module.scss';
 
 function NoticePage() {
   const paramsPage = usePageParams();
