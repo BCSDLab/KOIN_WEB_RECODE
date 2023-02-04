@@ -1,5 +1,5 @@
-import setPostCreateDate from 'components/Post/utils/setPostCreateDate';
-import convertNoticeTag from 'components/Post/utils/convertNoticeTag';
+import setPostCreateDate from 'utils/ts/setPostCreateDate';
+import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './PostDetailHeader.module.scss';
 
@@ -26,12 +26,12 @@ function PostDetailHeader(props: PostDetailHeaderProps) {
   return (
     <div className={styles.header}>
       <div className={styles.title}>
-        <span className={styles.title__board_id}>{convertNoticeTag(boardId)}</span>
+        <span className={styles['title__board-id']}>{convertNoticeTag(boardId)}</span>
         <span className={styles.title__content}>{title}</span>
-        <span className={styles.title__comment_count}>{`[${commentCount}]`}</span>
+        <span className={styles['title__comment-count']}>{`[${commentCount}]`}</span>
         { setPostCreateDate(createdAt)[1] && (
           <img
-            className={styles.title__new_tag}
+            className={styles['title__new-tag']}
             src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
             alt="new"
           />
@@ -39,7 +39,7 @@ function PostDetailHeader(props: PostDetailHeaderProps) {
       </div>
       <div className={styles.content}>
         <div className={styles.content__author}>{ isMobile ? `조회 ${hit} · ${nickname}` : nickname }</div>
-        <div className={styles.content__create_at}>{createdAt}</div>
+        <div className={styles['content__create-at']}>{createdAt}</div>
       </div>
     </div>
   );
