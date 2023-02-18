@@ -1,0 +1,159 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+
+  @include media.media-breakpoint(mobile) {
+    order: 1;
+    width: 100%;
+  }
+
+  &__title {
+    font-family: NanumSquare, serif;
+    font-size: 17px;
+    font-weight: bold;
+    color: #175c8e;
+    text-decoration: none;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 15px;
+      padding-left: 3px;
+      margin-left: 16px;
+    }
+  }
+}
+
+.cards {
+  width: 848px;
+  display: flex;
+  justify-content: space-between;
+
+  @include media.media-breakpoint(mobile) {
+    overflow-x: auto;
+    width: 100%;
+    white-space: nowrap;
+    display: block;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__card {
+    width: 272px;
+    height: 202px;
+
+    @include media.media-breakpoint(mobile) {
+      display: inline-block;
+      height: auto;
+      width: 75%;
+      transition: 0.3s ease 0s;
+
+      &--sm {
+        transform: scale(0.9);
+      }
+    }
+  }
+
+  &__head {
+    height: 38px;
+    padding-top: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+
+    &--shuttle {
+      background-color: rgb(247 148 30);
+    }
+
+    &--express {
+      background-color: rgb(124 159 174);
+    }
+
+    &--city {
+      background-color: rgb(77 178 151);
+    }
+
+    @include media.media-breakpoint(mobile) {
+      gap: 5px;
+      font-size: 12px;
+      height: 30px;
+    }
+  }
+
+  &__bus-icon {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    top: -1px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__body {
+    height: 162px;
+    border: 1px solid;
+    border-color: rgb(228 228 228);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      height: 106px;
+    }
+  }
+
+  &__remain-time {
+    margin-top: 41px;
+    font-weight: bold;
+
+    @include media.media-breakpoint(mobile) {
+      margin-top: 27px;
+    }
+  }
+
+  &__detail {
+    margin-top: 5px;
+    font-size: 12px;
+    height: 12px;
+  }
+
+  &__directions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    gap: 26px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+      gap: 11px;
+    }
+  }
+
+  &__toggle {
+    appearance: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+    padding: 0;
+
+    &--image {
+      height: 16px;
+      width: 16px;
+    }
+  }
+}
