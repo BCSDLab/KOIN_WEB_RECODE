@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
 import * as api from 'api';
 
-const useArticleList = (board_id: string | undefined) => {
+const useArticleList = (page: string | undefined) => {
   const { isLoading, data: articleList } = useQuery(
-    ['articleList', board_id],
+    ['articleList', page],
     ({ queryKey }) => api.notice.PostList(queryKey[1]),
     { retry: 0 },
   );

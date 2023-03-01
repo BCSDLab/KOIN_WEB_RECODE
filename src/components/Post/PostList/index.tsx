@@ -1,55 +1,25 @@
-import { NoticeList } from 'api/notice/entity';
+import { Link } from 'react-router-dom';
+import { ArticleList } from 'api/notice/entity';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
+import setPostCreateDate from 'utils/ts/setPostCreateDate';
+import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import styles from './PostList.module.scss';
 
-type ArticleList = {
-  articles: NoticeList[] | undefined
+type ArticleListProps = {
+  articles: ArticleList[] | undefined
 };
 
-const convertNoticeTag = (type: number) => {
-  switch (type) {
-    case 5:
-      return '[일반공지]';
-    case 6:
-      return '[장학공지]';
-    case 7:
-      return '[학사공지]';
-    case 8:
-      return '[취업공지]';
-    default:
-      return '[코인공지]';
-  }
-};
-
-const isCheckNewPost = (created: number[]) => {
-  const today = new Date();
-
-  if (created[0] - today.getFullYear() === 0 && (
-    created[1] - today.getMonth() === 1) && (
-    today.getDate() - created[2] <= 4)
-  ) return true;
-  return false;
-};
-
-const convertDate = (time: string) => time.split(' ')[0].replaceAll('-', '.');
-
-const setPostCreateDate = (time: string) => {
-  const created = convertDate(time).split('.').map((item: string) => parseInt(item, 10));
-
-  if (isCheckNewPost(created)) {
-    return [`${created}`, true];
-  }
-  return [`${created}`, false];
-};
-
-function PostList(props: ArticleList) {
+function PostList(props: ArticleListProps) {
   const { articles } = props;
+  const isMobile = useMediaQuery();
 
   return (
     <div>
       {
-        articles?.map((article: NoticeList) => (
-          <div
+        articles?.map((article) => (
+          <Link
             className={styles.list}
+            to={`/board/notice/${article.id}`}
             key={article.id}
           >
             <div className={styles.list__id}>{ article.id }</div>
@@ -64,12 +34,12 @@ function PostList(props: ArticleList) {
                 />
               )}
             </div>
-            <div className={styles.list__author}>{ article.nickname }</div>
+            <div className={styles.list__author}>{ isMobile ? `조회 ${article.hit} · ${article.nickname}` : article.nickname }</div>
             <div className={styles.list__created_at}>
               { setPostCreateDate(article.created_at)[0] }
             </div>
             <div className={styles.list__views}>{ article.hit }</div>
-          </div>
+          </Link>
         ))
       }
     </div>

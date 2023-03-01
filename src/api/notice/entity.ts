@@ -5,9 +5,10 @@ export type GetNoticeRequest = {
   page: string
 };
 
-export type NoticeList = {
+export type ArticleList = {
   id: number
   board_id: number
+  comment_count: number
   title: string
   content: string
   nickname: string
@@ -19,7 +20,7 @@ export type NoticeList = {
 
 export interface NoticeResponse extends APIResponse {
   totalPage: number
-  articles: NoticeList[]
+  articles: ArticleList[]
 }
 
 export interface HotPostResponse extends APIResponse {
