@@ -1,0 +1,27 @@
+.template {
+  width: 1131px;
+  margin: 68px auto 84px;
+  min-height: 900px;
+}
+
+.title {
+  font-family: NanumSquare, sans-serif;
+  letter-spacing: -1.5px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #175c8e;
+  margin-bottom: 21px;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  border-top: 2px solid #175c8e;
+  padding-top: 18px;
+  height: 878px;
+}
+
+.map {
+  width: 752px;
+  height: 100%;
+}
