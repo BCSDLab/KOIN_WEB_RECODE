@@ -1,8 +1,10 @@
 import {
   Container as MapDiv, NaverMap, useNavermaps, Marker,
 } from 'react-naver-maps';
+import ReactDOMServer from 'react-dom/server';
 import useRoomList from './hooks/useRoomList';
 import styles from './RoomPage.module.scss';
+import MarkerIcon from './component/MarkerIcon';
 
 function RoomPage() {
   const navermaps = useNavermaps();
@@ -30,6 +32,9 @@ function RoomPage() {
                 key={room.id}
                 position={new navermaps.LatLng(room.latitude, room.longitude)}
                 title={room.name}
+                icon={{
+                  content: ReactDOMServer.renderToString(<MarkerIcon />),
+                }}
               />
             ))}
           </NaverMap>
