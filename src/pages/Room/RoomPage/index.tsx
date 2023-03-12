@@ -2,16 +2,18 @@ import {
   Container as MapDiv, NaverMap, useNavermaps, Marker,
 } from 'react-naver-maps';
 import ReactDOMServer from 'react-dom/server';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useRoomList from './hooks/useRoomList';
 import styles from './RoomPage.module.scss';
 import MarkerIcon from './component/MarkerIcon';
 
 function RoomPage() {
+  const isMobile = useMediaQuery();
   const navermaps = useNavermaps();
   const roomList = useRoomList();
   return (
     <div className={styles.template}>
-      <h1 className={styles.title}>복덕방</h1>
+      {!isMobile && <h1 className={styles.title}>복덕방</h1>}
       <div className={styles.content}>
         <MapDiv className={styles.map}>
           <NaverMap

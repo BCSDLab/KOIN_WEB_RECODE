@@ -1,7 +1,14 @@
+@use "src/utils/scss/media" as media;
+
 .template {
   width: 1131px;
   margin: 68px auto 84px;
   min-height: 900px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    margin: 0 auto 16px;
+  }
 }
 
 .title {
@@ -10,26 +17,34 @@
   font-size: 30px;
   font-weight: 800;
   color: #175c8e;
-  margin-bottom: 21px;
+  padding-bottom: 21px;
+  border-bottom: 2px solid #175c8e;
 }
 
 .content {
   display: flex;
   flex-direction: row;
-  border-top: 2px solid #175c8e;
   padding-top: 18px;
   height: 878px;
+
+  @include media.media-breakpoint(mobile) {
+    flex-direction: column;
+  }
 }
 
 .map {
   width: 752px;
   height: 100%;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    flex-direction: column;
+  }
 }
 
 .list {
   padding-left: 13px;
   overflow: scroll;
-  width: 363px;
   height: 878px;
   display: grid;
   grid-template-columns: repeat(2, 173px);
@@ -39,9 +54,13 @@
     display: none;
   }
 
+  @include media.media-breakpoint(mobile) {
+    margin-top: 10px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   &__box {
     box-shadow: 0 3px 6px 0 rgba(0 0 0 / 16%);
-    height: 164px;
     border: 1px #d2dae2 solid;
     cursor: pointer;
 
@@ -58,11 +77,14 @@
     font-size: 16px;
     font-weight: bold;
     color: #252525;
+
+    @include media.media-breakpoint(mobile) {
+      height: 61px;
+    }
   }
 }
 
 .fee {
-  height: calc(100% - 116px);
   background-color: #f9f9f9;
   font-size: 12px;
   color: #858585;
