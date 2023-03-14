@@ -1,6 +1,18 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
-export interface RoomDetailResponse extends APIResponse {
+export type LandList = {
+  internal_name: string
+  monthly_fee: string
+  latitude: number
+  longitude: number
+  charter_fee: string
+  name: string
+  id: number
+  softDeleted: boolean
+  room_type: string
+};
+
+export interface LandDetailResponse extends APIResponse {
   opt_electronic_door_locks: boolean,
   opt_tv: boolean,
   monthly_fee: string,
@@ -40,17 +52,6 @@ export interface RoomDetailResponse extends APIResponse {
   permalink: string,
   room_type: string
 }
-export interface RoomListResponse extends APIResponse {
-  lands:
-  {
-    internal_name: string,
-    monthly_fee: string,
-    latitude: number,
-    longitude: number,
-    charter_fee: string,
-    name: string,
-    id: number,
-    softDeleted: boolean,
-    room_type: string,
-  }[]
+export interface LandListResponse extends APIResponse {
+  lands: LandList[]
 }

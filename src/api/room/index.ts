@@ -1,6 +1,6 @@
 import { APIClient } from 'utils/ts/apiClient';
-import { RoomList, RoomDetailInfo } from './APIDetail';
+import { LandList, LandDetailInfo } from './APIDetail';
 
-export const getRoomList = APIClient.of(RoomList);
+export const getRoomList = APIClient.of(LandList);
 
-export const getRoomDetailInfo = APIClient.of(RoomDetailInfo);
+export const getRoomDetailInfo = APIClient.of(LandDetailInfo);

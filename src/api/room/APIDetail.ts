@@ -1,8 +1,8 @@
 import { APIRequest } from 'interfaces/APIRequest';
 import { HTTP_METHOD } from 'utils/ts/apiClient';
-import { RoomListResponse, RoomDetailResponse } from './entity';
+import { LandListResponse, LandDetailResponse } from './entity';
 
-export class RoomList<R extends RoomListResponse> implements APIRequest<R> {
+export class LandList<R extends LandListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/lands';
@@ -10,7 +10,7 @@ export class RoomList<R extends RoomListResponse> implements APIRequest<R> {
   response!: R;
 }
 
-export class RoomDetailInfo<R extends RoomDetailResponse> implements APIRequest<R> {
+export class LandDetailInfo<R extends LandDetailResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   response!: R;
