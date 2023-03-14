@@ -3,7 +3,6 @@
 .template {
   width: 1131px;
   margin: 68px auto 84px;
-  min-height: 900px;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
@@ -49,6 +48,8 @@
   display: grid;
   grid-template-columns: repeat(2, 173px);
   gap: 15px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   &::-webkit-scrollbar {
     display: none;
@@ -57,6 +58,7 @@
   @include media.media-breakpoint(mobile) {
     margin-top: 10px;
     grid-template-columns: repeat(2, 1fr);
+    padding: 0 13px;
   }
 
   &__box {
