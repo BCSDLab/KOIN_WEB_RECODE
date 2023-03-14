@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom, DefaultValue, selector } from 'recoil';
 import { LectureInfo, TimeTableDayLectureInfo, TimeTableLectureInfo } from 'interfaces/Lecture';
 import { getTimeTableInfo } from 'api/timetable';
 import { tokenState } from './index';
@@ -35,16 +35,56 @@ export const myLecturesAtom = atom<TimeTableLectureInfo[]>({
       if (get(selectedSemesterAtom) === '') {
         return [];
       }
-      if (!get(tokenState)) {
-        return JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '[]') as TimeTableLectureInfo[];
-      }
       const timeTableData = await getTimeTableInfo(
         get(tokenState),
         get(selectedSemesterAtom),
       ).then((value) => value.timetable);
       return timeTableData;
     },
+    set: async ({ get, set }, newValue) => {
+      if (newValue instanceof DefaultValue) {
+        return newValue;
+      }
+
+    }
   }),
+  effects: [
+    ({ setSelf, onSet, getLoadable }) => {
+      const token = getLoadable(tokenState)
+      if (token) {
+        return;
+      }
+      const myLecturesStringFromLocalStorage = localStorage.getItem(MY_LECTURES_KEY);
+      if (myLecturesStringFromLocalStorage) {
+        setSelf(
+          JSON.parse(myLecturesStringFromLocalStorage) as TimeTableLectureInfo[],
+        );
+      }
+      onSet((newValue, _, isReset) =>
+        isReset
+          ? localStorage.removeItem(MY_LECTURES_KEY)
+          : localStorage.setItem(MY_LECTURES_KEY, JSON.stringify(newValue))
+      );
+    },
+    ({ setSelf, onSet, getLoadable }) => {
+      const token = getLoadable(tokenState)
+      if (!token) {
+        return;
+      }
+      //TODO
+      const myLecturesStringFromLocalStorage = localStorage.getItem(MY_LECTURES_KEY);
+      if (myLecturesStringFromLocalStorage) {
+        setSelf(
+          JSON.parse(myLecturesStringFromLocalStorage) as TimeTableLectureInfo[],
+        );
+      }
+      onSet((newValue, _, isReset) =>
+        isReset
+          ? localStorage.removeItem(MY_LECTURES_KEY)
+          : localStorage.setItem(MY_LECTURES_KEY, JSON.stringify(newValue))
+      );
+    },
+  ]
 });
 
 export const myLectureTimeSelector = selector({
@@ -55,7 +95,7 @@ export const myLectureTimeSelector = selector({
 
 export const myLectureDaySelector = selector({
   key: 'myLectures/DaySelector',
-  get: ({ get }) => (Array.from({ length: 5 }).map((_, index) => {
+  get: ({ get }) => (Array.from({ length: 5 }, (_, index) => {
     const currentDayInfo = [] as TimeTableDayLectureInfo[];
     get(myLecturesAtom).forEach((lecture, lectureIndex) => {
       const currentDayClassTime = lecture.class_time

@@ -18,3 +18,10 @@ export interface TimeTableInfoResponse extends APIResponse {
   semester: string;
   timetable: TimeTableLectureInfo[];
 }
+
+export interface TimetableAddLectureResponse extends APIResponse { }
+
+export interface TimetableAddLectureRequest {
+  semester: string;
+  timetable: [LectureInfo];
+}
