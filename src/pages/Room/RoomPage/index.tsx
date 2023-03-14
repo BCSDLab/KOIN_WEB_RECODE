@@ -9,7 +9,7 @@ import MarkerIcon from './component/MarkerIcon';
 
 function RoomPage() {
   const isMobile = useMediaQuery();
-  const navermaps = useNavermaps();
+  const naverMaps = useNavermaps();
   const roomList = useRoomList();
   return (
     <div className={styles.template}>
@@ -23,7 +23,7 @@ function RoomPage() {
             zoomControl
             scrollWheel={false}
             zoomControlOptions={{
-              position: navermaps.Position.TOP_LIFT,
+              position: naverMaps.Position.TOP_LIFT,
             }}
             defaultCenter={{ lat: 36.764617, lng: 127.2831540 }}
             defaultZoom={16}
@@ -32,7 +32,7 @@ function RoomPage() {
             {roomList?.lands.map((room) => (
               <Marker
                 key={room.id}
-                position={new navermaps.LatLng(room.latitude, room.longitude)}
+                position={new naverMaps.LatLng(room.latitude, room.longitude)}
                 title={room.name}
                 icon={{
                   content: ReactDOMServer.renderToString(<MarkerIcon />),
