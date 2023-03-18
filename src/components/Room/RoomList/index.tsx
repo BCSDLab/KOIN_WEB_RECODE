@@ -9,25 +9,27 @@ interface LandListProps {
 function RoomList(props: LandListProps) {
   const { lands } = props;
   return (
-    <div className={styles.list}>
+    <ul className={styles.list}>
       {lands?.map((room) => (
-        <Link className={styles.list__link} to={`/room/${room.id}`} key={room.id}>
-          <div className={styles.list__box}>
-            <div className={styles.list__name}>{room.name}</div>
-            <div className={styles.fee}>
-              <div className={styles.fee__info}>
-                <span className={styles.fee__monthly}>월세</span>
-                <span>{room.monthly_fee ? room.monthly_fee : '정보없음'}</span>
-              </div>
-              <div className={styles.fee__info}>
-                <span className={styles.fee__charter}>전세</span>
-                <span>{room.charter_fee ? `${room.charter_fee}만원` : ' - '}</span>
+        <li className={styles.list__item} key={room.id}>
+          <Link className={styles.list__link} to={`/room/${room.id}`}>
+            <div className={styles.list__box}>
+              <div className={styles.list__name}>{room.name}</div>
+              <div className={styles.fee}>
+                <div className={styles.fee__info}>
+                  <span className={styles.fee__monthly}>월세</span>
+                  <span>{room.monthly_fee ? room.monthly_fee : '정보없음'}</span>
+                </div>
+                <div className={styles.fee__info}>
+                  <span className={styles.fee__charter}>전세</span>
+                  <span>{room.charter_fee ? `${room.charter_fee}만원` : ' - '}</span>
+                </div>
               </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
