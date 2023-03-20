@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { LandListResponse } from 'api/room/entity';
 import MarkerIcon from 'components/Room/MarkerIcon';
 
@@ -9,7 +9,7 @@ interface MarkerProps {
 
 function useMarker({ map, roomList }: MarkerProps) {
   const [markerArray, setMarkerArray] = useState<naver.maps.Marker[]>([]);
-  useEffect(() => {
+  const createMarker = useCallback(() => {
     const newMarkers: naver.maps.Marker[] = [];
     if (map) {
       roomList?.lands.map((room) => {
@@ -27,6 +27,10 @@ function useMarker({ map, roomList }: MarkerProps) {
     }
     setMarkerArray(newMarkers);
   }, [map, roomList?.lands]);
+
+  useEffect(() => {
+    createMarker();
+  }, [createMarker]);
 
   return markerArray;
 }
