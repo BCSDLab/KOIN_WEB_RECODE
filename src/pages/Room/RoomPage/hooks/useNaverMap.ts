@@ -1,11 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 function useNaverMap() {
-  const mapRef = useRef<naver.maps.Map | null>(null);
+  const [map, setMap] = useState<naver.maps.Map | null>(null);
 
   useEffect(() => {
-    if (!mapRef.current) {
-      mapRef.current = new naver.maps.Map('map', {
+    if (!map) {
+      const newMaps = new naver.maps.Map('map', {
         center: new naver.maps.LatLng(36.764617, 127.2831540),
         maxZoom: 20,
         minZoom: 15,
@@ -17,10 +17,11 @@ function useNaverMap() {
           position: naver.maps.Position.TOP_LEFT,
         },
       });
+      setMap(newMaps);
     }
-  }, []);
+  }, [map]);
 
-  return mapRef;
+  return map;
 }
 
 export default useNaverMap;
