@@ -1,38 +1,30 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LandListResponse } from 'api/room/entity';
 import MarkerIcon from 'components/Room/MarkerIcon';
 
 interface MarkerProps {
-  map: React.MutableRefObject<naver.maps.Map | null>
+  map: naver.maps.Map | null
   roomList: LandListResponse | undefined
 }
 
 function useMarker({ map, roomList }: MarkerProps) {
   const [markerArray, setMarkerArray] = useState<naver.maps.Marker[]>([]);
 
-  const createMarker = useCallback(() => {
-    const newMarkers: naver.maps.Marker[] = [];
-    if (map.current && roomList) {
-      roomList?.lands.map((room) => {
-        const markers = new naver.maps.Marker({
-          position: new naver.maps.LatLng(room.latitude, room.longitude),
-          title: room.name,
-          map: map.current as naver.maps.Map,
-          icon: {
-            content: MarkerIcon(),
-          },
-        });
-        newMarkers.push(markers);
-        return newMarkers;
-      });
-    }
-    setMarkerArray(newMarkers);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomList]);
-
   useEffect(() => {
-    createMarker();
-  }, [createMarker]);
+    if (!map || !roomList) return;
+    const newMarkers = (roomList.lands ?? []).map((land) => {
+      const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(land.latitude, land.longitude),
+        title: land.name,
+        map,
+        icon: {
+          content: MarkerIcon(),
+        },
+      });
+      return marker;
+    });
+    setMarkerArray(newMarkers);
+  }, [map, roomList]);
 
   return { markerArray };
 }
