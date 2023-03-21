@@ -20,7 +20,7 @@ function useNaverMap() {
     }
   }, []);
 
-  return mapRef.current;
+  return mapRef;
 }
 
 export default useNaverMap;
