@@ -1,6 +1,8 @@
 import { atom, DefaultValue, selector } from 'recoil';
-import { LectureInfo, TimeTableDayLectureInfo, TimeTableLectureInfo } from 'interfaces/Lecture';
-import { getTimeTableInfo } from 'api/timetable';
+import {
+  LectureInfo,
+  TimetableInfoFromLocalStorage,
+} from 'interfaces/Lecture';
 import { tokenState } from './index';
 
 export const selectedTempLectureAtom = atom<LectureInfo | null>({
@@ -27,94 +29,103 @@ export const selectedTempLectureSelector = selector({
 
 const MY_LECTURES_KEY = 'my-lectures';
 
-export const myLecturesAtom = atom<TimeTableLectureInfo[]>({
-  key: 'myLectures',
-  default: selector({
-    key: 'myLectures/default',
-    get: async ({ get }) => {
-      if (get(selectedSemesterAtom) === '') {
-        return [];
-      }
-      const timeTableData = await getTimeTableInfo(
-        get(tokenState),
-        get(selectedSemesterAtom),
-      ).then((value) => value.timetable);
-      return timeTableData;
-    },
-    set: async ({ get, set }, newValue) => {
-      if (newValue instanceof DefaultValue) {
-        return newValue;
-      }
-
+function waitForTruthyValue<T>(getValue: () => T, timeout = 1000): Promise<T> {
+  return new Promise((resolve) => {
+    function endSetTimeoutWhenValueNonNullable() {
+      setTimeout(() => {
+        const value = getValue();
+        if (value) {
+          resolve(value);
+        } else {
+          endSetTimeoutWhenValueNonNullable();
+        }
+      }, timeout);
     }
-  }),
+    endSetTimeoutWhenValueNonNullable();
+  });
+}
+
+export const myLecturesAtom = atom<LectureInfo[] | null>({
+  key: 'myLectures',
+  default: null,
   effects: [
-    ({ setSelf, onSet, getLoadable }) => {
-      const token = getLoadable(tokenState)
-      if (token) {
-        return;
-      }
-      const myLecturesStringFromLocalStorage = localStorage.getItem(MY_LECTURES_KEY);
-      if (myLecturesStringFromLocalStorage) {
-        setSelf(
-          JSON.parse(myLecturesStringFromLocalStorage) as TimeTableLectureInfo[],
-        );
-      }
-      onSet((newValue, _, isReset) =>
-        isReset
-          ? localStorage.removeItem(MY_LECTURES_KEY)
-          : localStorage.setItem(MY_LECTURES_KEY, JSON.stringify(newValue))
-      );
-    },
-    ({ setSelf, onSet, getLoadable }) => {
-      const token = getLoadable(tokenState)
-      if (!token) {
-        return;
-      }
-      //TODO
-      const myLecturesStringFromLocalStorage = localStorage.getItem(MY_LECTURES_KEY);
-      if (myLecturesStringFromLocalStorage) {
-        setSelf(
-          JSON.parse(myLecturesStringFromLocalStorage) as TimeTableLectureInfo[],
-        );
-      }
-      onSet((newValue, _, isReset) =>
-        isReset
-          ? localStorage.removeItem(MY_LECTURES_KEY)
-          : localStorage.setItem(MY_LECTURES_KEY, JSON.stringify(newValue))
-      );
-    },
-  ]
-});
-
-export const myLectureTimeSelector = selector({
-  key: 'myLectures/TimeSelector',
-  get: ({ get }) => (get(myLecturesAtom)
-    .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[])),
-});
-
-export const myLectureDaySelector = selector({
-  key: 'myLectures/DaySelector',
-  get: ({ get }) => (Array.from({ length: 5 }, (_, index) => {
-    const currentDayInfo = [] as TimeTableDayLectureInfo[];
-    get(myLecturesAtom).forEach((lecture, lectureIndex) => {
-      const currentDayClassTime = lecture.class_time
-        .filter((time) => Math.floor(time / 100) === index)
-        .map((time) => time % 100)
-        .sort((a, b) => a - b);
-
-      if (currentDayClassTime.length) {
-        currentDayInfo.push({
-          start: currentDayClassTime[0],
-          end: currentDayClassTime[currentDayClassTime.length - 1],
-          name: lecture.class_title,
-          lecture_class: lecture.lecture_class,
-          professor: lecture.professor,
-          index: lectureIndex,
+    ({ getLoadable, setSelf, onSet }) => {
+      waitForTruthyValue(
+        (() => getLoadable(
+          tokenState,
+        ).contents) as () => string,
+      )
+        .then((value) => {
+          if (value) {
+            return Promise.reject();
+          }
+          return waitForTruthyValue(
+            (() => getLoadable(
+              selectedSemesterAtom,
+            ).contents) as () => string,
+          );
+        })
+        .then((value) => {
+          const savedValue = localStorage.getItem(MY_LECTURES_KEY);
+          if (savedValue != null) {
+            setSelf(JSON.parse(savedValue)[value]);
+          }
         });
-      }
-    });
 
-    return currentDayInfo;
-  })),
+      onSet((newValue, _, isReset) => {
+        if (isReset) {
+          localStorage.removeItem(MY_LECTURES_KEY);
+          return;
+        }
+        if (newValue === null) {
+          return;
+        }
+
+        const timetableInfoList = JSON.parse(
+          localStorage.getItem(MY_LECTURES_KEY) ?? '{}',
+        ) as TimetableInfoFromLocalStorage;
+        timetableInfoList[
+          getLoadable(selectedSemesterAtom).contents
+        ] = newValue ?? [];
+        localStorage.setItem(MY_LECTURES_KEY, JSON.stringify(timetableInfoList));
+      });
+    },
+  ],
+});
+
+export const myLectureAddLectureSelector = selector<LectureInfo>({
+  key: 'myLecture/AddLecture',
+  get: ({ get }) => (get(myLecturesAtom) ?? [])[0], // setter only.
+  set: ({ get, set }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      set(myLecturesAtom, newValue);
+      return;
+    }
+
+    const timetableInfo = get(myLecturesAtom);
+    if (!timetableInfo) {
+      return;
+    }
+    const timetableInfoWithNewValue = timetableInfo.concat(newValue);
+    set(myLecturesAtom, timetableInfoWithNewValue);
+  },
+});
+
+export const myLectureRemoveLectureSelector = selector<LectureInfo>({
+  key: 'myLecture/RemoveLecture',
+  get: ({ get }) => (get(myLecturesAtom) ?? [])[0], // setter only.
+  set: ({ get, set }, newValue) => {
+    if (newValue instanceof DefaultValue) {
+      set(myLecturesAtom, newValue);
+      return;
+    }
+    const timetableInfo = get(myLecturesAtom);
+    if (!timetableInfo) {
+      return;
+    }
+    const timetableInfoWithNewValue = timetableInfo.filter(
+      (lecture) => lecture.code !== newValue.code,
+    );
+    set(myLecturesAtom, timetableInfoWithNewValue);
+  },
 });

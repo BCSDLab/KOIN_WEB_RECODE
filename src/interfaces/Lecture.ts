@@ -12,6 +12,7 @@ export interface LectureInfo {
 }
 
 export interface TimeTableLectureInfo {
+  id: number;
   code: string;
   class_title: string;
   grades: string;
@@ -22,6 +23,10 @@ export interface TimeTableLectureInfo {
   professor: string;
   design_score: string;
   class_time: Array<number>;
+}
+
+export interface TimetableInfoFromLocalStorage {
+  [key: string]: LectureInfo[];
 }
 
 export interface TimeTableDayLectureInfo {

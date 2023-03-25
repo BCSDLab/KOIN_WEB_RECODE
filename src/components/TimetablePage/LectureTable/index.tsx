@@ -1,16 +1,16 @@
-import { LectureInfo } from 'interfaces/Lecture';
+import type { LectureInfo, TimeTableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import { FixedSizeList as List } from 'react-window';
 import cn from 'utils/ts/classnames';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
-  list: Array<LectureInfo>;
+  list: Array<LectureInfo> | Array<TimeTableLectureInfo>;
   height: number;
   children: (props: { onClick: () => void }) => React.ReactNode | undefined;
-  selectedLecture: LectureInfo | undefined;
-  onClickRow: ((value: LectureInfo) => void) | undefined;
-  onClickLastColumn: (value: LectureInfo) => void;
+  selectedLecture: LectureInfo | TimeTableLectureInfo | undefined;
+  onClickRow: ((value: LectureInfo | TimeTableLectureInfo) => void) | undefined;
+  onClickLastColumn: (value: LectureInfo | TimeTableLectureInfo) => void;
 }
 
 const LECTURE_TABLE_HEADER = [
@@ -25,6 +25,8 @@ const LECTURE_TABLE_HEADER = [
   { key: 'department', label: '개설학부' },
   { key: null, label: '' },
 ] as const;
+
+const isLectureInfo = (value: LectureInfo | TimeTableLectureInfo): value is LectureInfo => 'name' in value;
 
 const useFlexibleWidth = (length: number, initialValue: number[]) => {
   const [widthInfo] = React.useState(() => initialValue);
@@ -78,56 +80,62 @@ function LectureTable({
           itemCount={list.length}
           itemData={list}
         >
-          {({ index, data: items, style }) => (
-            <div
-              className={cn({
-                [styles.table__row]: true,
-                [styles['table__row--selected']]: selectedLecture === items[index],
-              })}
-              aria-selected={selectedLecture === items[index]}
-              role="row"
-              key={`${items[index].code}-${items[index].lecture_class}`}
-              style={style}
-            >
-              <button
-                type="button"
-                role={onClickRow !== undefined ? undefined : 'null'}
-                aria-label={onClickRow !== undefined ? '시간표에서 미리 보기' : undefined}
-                className={styles['table__row-button']}
-                onClick={onClickRow ? () => onClickRow(items[index]) : undefined}
-              >
-                {LECTURE_TABLE_HEADER.map((headerItem, headerItemIndex) => (headerItem.key !== null
-                  && (
-                    <div
-                      style={{
-                        width: `${widthInfo[headerItemIndex]}px`,
-                      }}
-                      className={cn({
-                        [styles.table__col]: true,
-                        [styles['table__col--body']]: true,
-                      })}
-                      role="cell"
-                      key={headerItem.key}
-                    >
-                      {headerItem.key === 'professor' && (items[index][headerItem.key] === '' ? '미배정' : items[index][headerItem.key])}
-                      {headerItem.key === null && '추가'}
-                      {headerItem.key !== null && headerItem.key !== 'professor' && items[index][headerItem.key]}
-                    </div>
-                  )))}
-              </button>
+          {({ index, data: items, style }) => {
+            const currentItem = items[index];
+            return (
               <div
-                style={{
-                  width: `${widthInfo[widthInfo.length - 1]}px`,
-                }}
                 className={cn({
-                  [styles.table__col]: true,
-                  [styles['table__col--body']]: true,
+                  [styles.table__row]: true,
+                  [styles['table__row--selected']]: selectedLecture === currentItem,
                 })}
+                aria-selected={selectedLecture === currentItem}
+                role="row"
+                key={`${currentItem.code}-${currentItem.lecture_class}`}
+                style={style}
               >
-                {children({ onClick: () => onClickLastColumn(items[index]) })}
+                <button
+                  type="button"
+                  role={onClickRow !== undefined ? undefined : 'null'}
+                  aria-label={onClickRow !== undefined ? '시간표에서 미리 보기' : undefined}
+                  className={styles['table__row-button']}
+                  onClick={onClickRow ? () => onClickRow(currentItem) : undefined}
+                >
+                  {LECTURE_TABLE_HEADER
+                    .map((headerItem, headerItemIndex) => (headerItem.key !== null
+                    && (
+                      <div
+                        style={{
+                          width: `${widthInfo[headerItemIndex]}px`,
+                        }}
+                        className={cn({
+                          [styles.table__col]: true,
+                          [styles['table__col--body']]: true,
+                        })}
+                        role="cell"
+                        key={headerItem.key}
+                      >
+                        {headerItem.key === 'professor' && (currentItem[headerItem.key] === '' ? '미배정' : currentItem[headerItem.key])}
+                        {headerItem.key === null && '수정'}
+                        {headerItem.key === 'name' && isLectureInfo(currentItem) && currentItem.name}
+                        {headerItem.key === 'name' && !isLectureInfo(currentItem) && currentItem.class_title}
+                        {headerItem.key !== null && headerItem.key !== 'professor' && headerItem.key !== 'name' && currentItem[headerItem.key]}
+                      </div>
+                    )))}
+                </button>
+                <div
+                  style={{
+                    width: `${widthInfo[widthInfo.length - 1]}px`,
+                  }}
+                  className={cn({
+                    [styles.table__col]: true,
+                    [styles['table__col--body']]: true,
+                  })}
+                >
+                  {children({ onClick: () => onClickLastColumn(currentItem) })}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          }}
         </List>
       </div>
     </div>

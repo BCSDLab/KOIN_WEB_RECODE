@@ -8,22 +8,12 @@ import {
   Navigate,
 } from 'react-router-dom';
 import { tokenState } from 'utils/recoil';
-import { useRecoilState } from 'recoil';
-import { getCookie } from 'utils/ts/cookie';
+import { useRecoilValue } from 'recoil';
 import Toast from 'components/common/Toast';
 import SignupPage from 'pages/Auth/SignupPage';
 import TimetablePage from 'pages/TimetablePage';
 
-const useTokenState = () => {
-  const [token, setToken] = useRecoilState(tokenState);
-  React.useEffect(() => {
-    const cookieToken = getCookie('AUTH_TOKEN_KEY');
-    if (cookieToken) {
-      setToken(String(cookieToken));
-    }
-  });
-  return token;
-};
+const useTokenState = () => useRecoilValue(tokenState);
 
 function App() {
   const token = useTokenState();

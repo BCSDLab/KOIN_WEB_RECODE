@@ -3,23 +3,28 @@ import { IDept } from 'api/dept/entity';
 import { SemesterInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import LectureTable from 'components/TimetablePage/LectureTable';
-import { LectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimeTableLectureInfo } from 'interfaces/Lecture';
 import {
-  myLectureDaySelector,
+  myLectureAddLectureSelector,
+  myLectureRemoveLectureSelector,
   myLecturesAtom,
-  myLectureTimeSelector,
   selectedSemesterAtom,
   selectedTempLectureSelector,
 } from 'utils/recoil/semester';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import showToast from 'utils/ts/showToast';
 import TimeTable from 'components/TimetablePage/TimeTable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
+import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import { tokenState } from 'utils/recoil';
 import useDeptList from './hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 import useSemester from './hooks/useSemester';
 import { useSelect, useSelectRecoil } from './hooks/useSelect';
 import useLectureList from './hooks/useLectureList';
+import useTimetableInfoList from './hooks/useTimetableInfoList';
+import useAddTimetableLecture from './hooks/useAddTimetableLecture';
+import useDeleteTimetableLecture from './hooks/useDeleteTimetableLecture';
 
 const useSearch = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -106,30 +111,47 @@ interface CurrentSemesterLectureListProps {
 function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListProps) {
   const { data: lectureList, status } = useLectureList(semesterKey);
   const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
-  const [myLecturesValue, setMyLecturesValue] = useRecoilState(myLecturesAtom);
-  const myLectureTimeValue = useRecoilValue(myLectureTimeSelector);
+  const selectedSemester = useRecoilValue(selectedSemesterAtom);
+  const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
+  const addLectureToLocalStorage = useSetRecoilState(myLectureAddLectureSelector);
+
+  const token = useRecoilValue(tokenState);
+  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
+
+  const isLoaded = status === 'success' && (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
   return (
-    status === 'success' ? (
+    isLoaded ? (
       <LectureTable
         height={459}
         list={(lectureList as unknown as Array<LectureInfo>)}
         selectedLecture={selectedTempLecture ?? undefined}
-        onClickRow={(clickedLecture: LectureInfo) => setSelectedTempLecture(clickedLecture)}
+        onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
         onClickLastColumn={
-          (clickedLecture: LectureInfo) => {
-            if (myLecturesValue.some((lecture) => lecture.code === clickedLecture.code)) {
+          (clickedLecture) => {
+            if ('class_title' in clickedLecture) {
+              return;
+            }
+            const myLecturesValue = token ? myLecturesFromServer : myLecturesFromLocalStorageValue;
+            if (myLecturesValue?.some((lecture) => lecture.code === clickedLecture.code)) {
               showToast('error', '중첩된 과목입니다.');
               return;
             }
+            const myLectureTimeValue = (
+              myLecturesValue as Array<LectureInfo | TimeTableLectureInfo>)
+              .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
             if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
               showToast('error', '시간이 중복되어 추가할 수 없습니다.');
               return;
             }
-            const { name, ...clickedLectureInfo } = clickedLecture;
-            setMyLecturesValue((oldMyLecturesValue) => oldMyLecturesValue.concat({
-              ...clickedLectureInfo,
-              class_title: name,
-            }));
+            if (token) {
+              mutateAddWithServer({
+                semester: selectedSemester,
+                timetable: [{ class_title: clickedLecture.name, ...clickedLecture }],
+              });
+            } else {
+              addLectureToLocalStorage(clickedLecture);
+            }
           }
         }
       >
@@ -148,41 +170,72 @@ function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListP
 }
 
 function CurrentMyLectureList() {
-  const [myLecturesValue, setMyLecturesValue] = useRecoilState(myLecturesAtom);
+  const myLecturesValue = useRecoilValue(myLecturesAtom);
+  const removeLectureFromLocalStorage = useSetRecoilState(myLectureRemoveLectureSelector);
+
+  const selectedSemester = useRecoilValue(selectedSemesterAtom);
+  const token = useRecoilValue(tokenState);
+  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(selectedSemester, token);
+
   return (
-    <LectureTable
-      height={177}
-      list={myLecturesValue
-        .map(({ class_title, ...myLecture }) => ({ ...myLecture, name: class_title }))}
-      selectedLecture={undefined}
-      onClickRow={undefined}
-      onClickLastColumn={
-        (clickedLecture: LectureInfo) => {
-          const { code: clickedLectureCode } = clickedLecture;
-          setMyLecturesValue(
-            (oldMyLecturesValue) => (
-              oldMyLecturesValue.filter(({ code }) => code !== clickedLectureCode)
-            ),
-          );
+    (myLecturesValue !== null || myLecturesFromServer !== undefined) ? (
+      <LectureTable
+        height={177}
+        list={token ? (myLecturesFromServer ?? []) : (myLecturesValue ?? [])}
+        selectedLecture={undefined}
+        onClickRow={undefined}
+        onClickLastColumn={
+        (clickedLecture) => {
+          if ('name' in clickedLecture) {
+            removeLectureFromLocalStorage(clickedLecture);
+            return;
+          }
+          removeLectureFromServer(clickedLecture.id.toString());
         }
       }
-    >
-      {(props: { onClick: () => void }) => (
-        <button type="button" className={styles.list__button} onClick={props.onClick}>
-          <img src="https://static.koreatech.in/assets/img/ic-delete.png" alt="제거" />
-        </button>
-      )}
-    </LectureTable>
-  );
+      >
+        {(props: { onClick: () => void }) => (
+          <button type="button" className={styles.list__button} onClick={props.onClick}>
+            <img src="https://static.koreatech.in/assets/img/ic-delete.png" alt="제거" />
+          </button>
+        )}
+      </LectureTable>
+    ) : (
+      <div>
+        Loading...
+      </div>
+    ));
 }
 
 function CurrentSemesterTimeTable(): JSX.Element {
   const selectedSemesterValue = useRecoilValue(selectedSemesterAtom);
-  const myLectureDayValue = useRecoilValue(myLectureDaySelector);
+  const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
 
-  return selectedSemesterValue ? (
+  const token = useRecoilValue(tokenState);
+  const selectedSemester = useRecoilValue(selectedSemesterAtom);
+  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+
+  const myLectureDayValue = useTimetableDayList(
+    tokenState
+      ? (myLecturesFromServer ?? [])
+      : (myLecturesFromLocalStorageValue ?? []),
+  );
+
+  const selectedLecture = useRecoilValue(selectedTempLectureSelector);
+  const { data: lectureList, status } = useLectureList(selectedSemester);
+  const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
+    ?.filter((lecture) => lecture.code === selectedLecture?.code)
+    ?? [];
+  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
+  const selectedLectureIndex = similarSelectedLecture
+    .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
+
+  return selectedSemesterValue && status === 'success' ? (
     <TimeTable
       lectures={myLectureDayValue}
+      similarSelectedLecture={similarSelectedLectureDayList}
+      selectedLectureIndex={selectedLectureIndex}
       colWidth={55}
       firstColWidth={52}
       rowHeight={21}

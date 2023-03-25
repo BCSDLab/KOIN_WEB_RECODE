@@ -1,3 +1,5 @@
+// 후에 전체 disable 예정. defaultProps는 필요 없음.
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import cn from 'utils/ts/classnames';
 import { TimeTableDayLectureInfo } from 'interfaces/Lecture';
@@ -5,6 +7,8 @@ import styles from './TimeTable.module.scss';
 
 interface TimeTableProps {
   lectures: TimeTableDayLectureInfo[][];
+  selectedLectureIndex?: number;
+  similarSelectedLecture?: TimeTableDayLectureInfo[][];
   firstColWidth: number;
   colWidth: number;
   rowHeight: number;
@@ -18,6 +22,8 @@ const backgroundColor = ['#ffa9b7', '#fdbcf5', '#fedb8f', '#c2eead', '#60e4c1', 
 
 function TimeTable({
   lectures,
+  selectedLectureIndex,
+  similarSelectedLecture,
   firstColWidth,
   colWidth,
   rowHeight,
@@ -112,6 +118,25 @@ function TimeTable({
                   {professor}
                 </span>
               </div>
+            ))}
+            {similarSelectedLecture?.[index].map(({
+              start,
+              end,
+              index: lectureIndex,
+            }) => (
+              <div
+                className={cn({
+                  [styles.timetable__lecture]: true,
+                  [styles['timetable__lecture--selected']]: true,
+                })}
+                key={lectureIndex}
+                style={{
+                  borderWidth: selectedLectureIndex === lectureIndex ? '3px' : '1px',
+                  top: `${start * rowHeight}px`,
+                  width: `${colWidth}px`,
+                  height: `${(end - start + 1) * rowHeight}px`,
+                }}
+              />
             ))}
           </div>
         ))}

@@ -77,6 +77,11 @@
     font-family: 'NanumSquare', serif;
     box-sizing: border-box;
 
+    &--selected {
+      border-color: #000000;
+      border-style: solid;
+    }
+
     & > h4 {
       font-weight: 700;
       margin-bottom: 5px;

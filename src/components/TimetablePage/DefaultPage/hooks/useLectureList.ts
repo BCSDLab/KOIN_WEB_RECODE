@@ -1,5 +1,6 @@
-import { timetable } from 'api';
 import { useQuery } from 'react-query';
+import { timetable } from 'api';
+
 const SEMESTER_INFO_KEY = 'lecture';
 
 const useLectureList = (semesterKey: string | null) => {
