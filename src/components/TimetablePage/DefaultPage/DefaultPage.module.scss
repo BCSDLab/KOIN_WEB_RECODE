@@ -3,13 +3,13 @@
 .page {
   &__title {
     text-align: left;
-    font-family: NanumSquare,serif;
+    font-family: NanumSquare, serif;
     font-size: 30px;
     font-weight: 800;
     color: #175c8e;
     width: 100%;
     height: 32px;
-    margin: 0 0 21px 0;
+    margin: 0 0 21px;
     padding-bottom: 26px;
     border-bottom: 2px solid #175c8e;
 
@@ -70,14 +70,14 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border: 1px solid rgb(23, 92, 142);
+    border: 1px solid rgb(23 92 142);
     padding: 1px 6px;
     width: 170px;
     height: 45px;
-    background-color: rgb(23, 92, 142);
+    background-color: rgb(23 92 142);
     font-size: 15px;
     line-height: 1.6;
-    color: rgb(253, 253, 253);
+    color: rgb(253 253 253);
     cursor: pointer;
 
     & > img {
@@ -93,34 +93,35 @@
   align-items: center;
   padding-left: 20px;
   padding-right: 10px;
-  border: 1px solid rgb(210, 218, 226);
+  border: 1px solid rgb(210 218 226);
   width: 322px;
   height: 42px;
 
   &__input {
-    margin-right: 0px;
+    margin-right: 0;
     border: none;
     width: 249px;
     height: 32px;
     font-size: 15px;
     text-align: left;
-    color: rgb(37, 37, 37);
-    background-color: rgb(255, 255, 255);
+    color: rgb(37 37 37);
+    background-color: rgb(255 255 255);
     position: relative;
   }
+
   &__button {
     border: none;
     padding: 0;
     width: 24px;
     height: 24px;
     background-color: transparent;
-
   }
 
   &__table {
     &--all {
       height: 459px;
     }
+
     &--selected {
       height: 177px;
     }

@@ -1,5 +1,6 @@
 .timetable {
-  background-color: #FFFFFF;
+  background-color: #fff;
+
   &__head {
     background-color: #f1f1f1;
     border-top: solid 1px #d2dae2;
@@ -18,7 +19,7 @@
       height: 100%;
       font-family: NanumBarunGothic, serif;
       letter-spacing: normal;
-      color: #555555;
+      color: #555;
     }
 
     &--time {
@@ -28,10 +29,10 @@
         justify-content: center;
         align-items: center;
       }
+
       & > div > div:first-child {
         display: inline-block;
         text-align: center;
-
         border-right: #dadada 1px solid;
       }
     }
@@ -55,15 +56,17 @@
     margin-top: -1px;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       width: 100%;
     }
+
     &:nth-child(odd)::after {
       border-bottom: #dadada 1px solid;
     }
+
     &:nth-child(even)::after {
-      border-bottom: rgba(218, 218, 218, 0.3) 1px solid;
+      border-bottom: rgb(218 218 218 / 30%) 1px solid;
     }
   }
 
@@ -75,11 +78,11 @@
     z-index: 3;
     padding: 0 2px;
     font-size: 9px;
-    font-family: 'NanumSquare', serif;
+    font-family: NanumSquare, serif;
     box-sizing: border-box;
 
     &--selected {
-      border-color: #000000;
+      border-color: #000;
       border-style: solid;
     }
 
