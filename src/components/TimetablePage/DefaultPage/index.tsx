@@ -13,7 +13,7 @@ import {
 } from 'utils/recoil/semester';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import showToast from 'utils/ts/showToast';
-import TimeTable from 'components/TimetablePage/TimeTable';
+import TimeTable, { TIMETABLE_ID } from 'components/TimetablePage/TimeTable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { tokenState } from 'utils/recoil';
@@ -181,7 +181,7 @@ function CurrentMyLectureList() {
   return (
     (myLecturesValue !== null || myLecturesFromServer !== undefined) ? (
       <LectureTable
-        height={177}
+        height={360}
         list={token ? (myLecturesFromServer ?? []) : (myLecturesValue ?? [])}
         selectedLecture={undefined}
         onClickRow={undefined}
@@ -248,6 +248,32 @@ function CurrentSemesterTimeTable(): JSX.Element {
   );
 }
 
+function Curriculum() {
+  const { data: deptList } = useDeptList();
+  return (
+    <ul className={styles['page__curriculum-list']}>
+      {(deptList as unknown as Array<IDept> | undefined ?? []).map((dept) => (
+        <li>
+          <a
+            className={styles.page__curriculum}
+            href={dept.curriculum_link}
+          >
+            {dept.name}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a
+          className={styles.page__curriculum}
+          href="https://www.koreatech.ac.kr/kor/sub01_03_02.do"
+        >
+          대학 입학 요람
+        </a>
+      </li>
+    </ul>
+  );
+}
+
 function DefaultPage() {
   const {
     searchInputRef,
@@ -310,7 +336,21 @@ function DefaultPage() {
                 />
               </React.Suspense>
             </div>
-            <button type="button" className={styles.page__button}>
+            <button
+              type="button"
+              className={styles.page__button}
+              onClick={() => {
+                import('dom-to-image').then(({ default: domToImage }) => {
+                  domToImage.toJpeg(document.getElementById(TIMETABLE_ID)!, { quality: 0.95 })
+                    .then((dataUrl: string) => {
+                      const link = document.createElement('a');
+                      link.download = 'my-image-name.jpeg';
+                      link.href = dataUrl;
+                      link.click();
+                    });
+                });
+              }}
+            >
               <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
               이미지로 저장하기
             </button>
@@ -333,7 +373,10 @@ function DefaultPage() {
             </ErrorBoundary>
           </div>
         </div>
-        <div>커리큘럼</div>
+        <div>
+          <h3 className={styles['page__title--sub']}>커리큘럼</h3>
+          <Curriculum />
+        </div>
       </div>
     </>
   );

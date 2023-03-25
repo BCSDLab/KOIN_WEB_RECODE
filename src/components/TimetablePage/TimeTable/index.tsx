@@ -20,6 +20,8 @@ const times = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '1
 const days = ['월요일', '화요일', '수요일', '목요일', '금요일'];
 const backgroundColor = ['#ffa9b7', '#fdbcf5', '#fedb8f', '#c2eead', '#60e4c1', '#8ae9ff', '#72b0ff', '#b4bfff', '#e0e5eb', '#175c8e', '#f7941e', '#ffffff'];
 
+export const TIMETABLE_ID = 'timetable-id';
+
 function TimeTable({
   lectures,
   selectedLectureIndex,
@@ -30,7 +32,7 @@ function TimeTable({
   totalHeight,
 }: TimeTableProps) {
   return (
-    <div style={{ height: `${totalHeight}px`, fontSize: `${colWidth / 5}px` }}>
+    <div id={TIMETABLE_ID} className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${colWidth / 5}px` }}>
       <div className={styles.timetable__head} style={{ height: `${rowHeight * 1.5}px` }}>
         <div
           className={cn({

@@ -43,6 +43,29 @@
     width: 150px;
   }
 
+  &__curriculum-list {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  &__curriculum {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    line-height: 40px;
+    font-size: 12px;
+    letter-spacing: -0.2px;
+    color: #252525;
+    width: 158px;
+    height: 38px;
+    border: 1px solid #f7941e;
+    background-color: #fff;
+    margin-bottom: 17px;
+    cursor: pointer;
+  }
+
   &__button {
     display: flex;
     justify-content: space-around;
