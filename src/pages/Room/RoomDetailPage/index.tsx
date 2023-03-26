@@ -50,7 +50,9 @@ function RoomDetailPage() {
             <button className={styles['img-slider__img-arrow']} type="button" onClick={clickLeftArrow}>
               <img src="https://static.koreatech.in/assets/ic-room/left-arrow.png" alt="이전 화살표" />
             </button>
-            <img src={roomDetail?.image_urls[imgIndx]} alt="방 사진" />
+            <div className={styles['img-slider__img']}>
+              <img src={roomDetail?.image_urls[imgIndx]} alt="방 사진" />
+            </div>
             <button
               className={styles['img-slider__img-arrow']}
               type="button"
