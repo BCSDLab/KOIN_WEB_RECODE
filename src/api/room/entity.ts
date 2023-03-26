@@ -25,7 +25,7 @@ export interface LandDetailResponse extends APIResponse {
   is_deleted: boolean,
   updated_at: string,
   id: number,
-  // floor: null,
+  floor: null | number,
   management_fee: string,
   address: string,
   comments: [],
