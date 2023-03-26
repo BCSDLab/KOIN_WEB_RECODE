@@ -7,15 +7,15 @@ export const enum MenuTime {
 
 export type CafeteriaMenu = {
   id: number
-  date: Date
+  date: string
   type: MenuTime
   place: string
   price_card: number
   price_cash: number
   kcal: number
   menu: string[]
-  created_at: Date
-  updated_at: Date
+  created_at: string
+  updated_at: string
 }
 
 export interface CafeteriaMenuResponse {
