@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useClickArrow from './hooks/useClickArrow';
 import useRoomDetail from './hooks/useRoomDetail';
 import styles from './RoomDetailPage.module.scss';
 
@@ -7,6 +8,7 @@ function RoomDetailPage() {
   const isMobile = useMediaQuery();
   const params = useParams();
   const roomDetail = useRoomDetail(params.id);
+  const { imgIndx, clickRightArrow, clickLeftArrow } = useClickArrow();
   return (
     <div className={styles.template}>
       <div>{!isMobile && <h1 className={styles.title}>복덕방</h1>}</div>
@@ -43,6 +45,36 @@ function RoomDetailPage() {
             </tr>
           </tbody>
         </table>
+        {roomDetail?.image_urls ? (
+          <div className={styles['img-slider']}>
+            <button className={styles['img-slider__img-arrow']} type="button" onClick={clickLeftArrow}>
+              <img src="https://static.koreatech.in/assets/ic-room/left-arrow.png" alt="이전 화살표" />
+            </button>
+            <img src={roomDetail?.image_urls[imgIndx]} alt="방 사진" />
+            <button
+              className={styles['img-slider__img-arrow']}
+              type="button"
+              onClick={() => clickRightArrow(roomDetail?.image_urls?.length)}
+            >
+              <img
+                src="https://static.koreatech.in/assets/ic-room/right-arrow.png"
+                alt="이후 화살표"
+              />
+            </button>
+            <div className={styles['img-slider__indx']}>
+              {imgIndx + 1}
+              {' '}
+              /
+              {' '}
+              {roomDetail?.image_urls.length}
+            </div>
+          </div>
+        )
+          : (
+            <div className={styles['info__no-img']}>
+              <img src="https://static.koreatech.in/assets/ic-room/img.png" alt="이미지 없음" />
+            </div>
+          )}
       </div>
     </div>
   );
