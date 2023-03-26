@@ -1,5 +1,8 @@
+import { LandDetailResponse } from 'api/room/entity';
 import { useParams } from 'react-router-dom';
+import OPTION_CATEGORY from 'static/optionCategory';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
+import cn from 'utils/ts/classnames';
 import useClickArrow from './hooks/useClickArrow';
 import useRoomDetail from './hooks/useRoomDetail';
 import styles from './RoomDetailPage.module.scss';
@@ -77,6 +80,27 @@ function RoomDetailPage() {
               <img src="https://static.koreatech.in/assets/ic-room/img.png" alt="이미지 없음" />
             </div>
           )}
+      </div>
+      <div className={styles.info}>
+        <h2 className={styles.info__title}>원룸 옵션</h2>
+        <ul className={styles.option}>
+          {OPTION_CATEGORY.map((option) => (
+            <li className={styles.option__list} key={option.id}>
+              <div className={cn({
+                [styles.option__builtIn]: roomDetail?.
+                  [option.img_code as keyof LandDetailResponse] === true,
+                [styles.option__builtNot]: roomDetail?.
+                  [option.img_code as keyof LandDetailResponse] === false,
+              })}
+              >
+                <img src={option.img_url} alt="옵션 이미지" />
+                <div className={styles.option__name}>
+                  {option.name}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
