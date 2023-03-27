@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .mapContainer {
   &__address {
     font-family: NanumBarunGothic, serif;
@@ -10,5 +12,9 @@
 
   &__map {
     height: 400px;
+
+    @include media.media-breakpoint(mobile) {
+      height: 165px;
+    }
   }
 }

@@ -1,6 +1,17 @@
+@use "src/utils/scss/media" as media;
+
 .template {
   width: 1131px;
   margin: 68px auto 20px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 95%;
+    margin: 0 auto;
+
+    .info:nth-child(odd) {
+      border: none;
+    }
+  }
 }
 
 .title {
@@ -20,6 +31,13 @@
   height: 224px;
   font-size: 30px;
   font-weight: bold;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 50px 0 40px;
+    height: 24px;
+  }
 }
 
 .info {
@@ -29,6 +47,11 @@
   text-align: center;
   height: 100%;
 
+  @include media.media-breakpoint(mobile) {
+    padding: 0;
+    margin-bottom: 30px;
+  }
+
   &__title {
     font-family: NanumBarunGothic, serif;
     font-size: 24px;
@@ -36,5 +59,12 @@
     line-height: 1;
     letter-spacing: -0.5px;
     margin: 20px 0 30px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+      font-weight: 300;
+      letter-spacing: -0.3px;
+      margin: 25px 0 30px;
+    }
   }
 }

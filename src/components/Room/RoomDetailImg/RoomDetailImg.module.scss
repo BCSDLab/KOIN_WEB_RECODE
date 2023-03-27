@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .img-slider {
   margin-top: 35px;
   display: flex;
@@ -5,11 +7,21 @@
   align-items: center;
   position: relative;
 
+  @include media.media-breakpoint(mobile) {
+    justify-content: space-evenly;
+  }
+
   &__img-arrow {
     margin: 0 10px;
     cursor: pointer;
     border: none;
     background-color: #fff;
+
+    @include media.media-breakpoint(mobile) {
+      img {
+        width: 40px;
+      }
+    }
   }
 
   &__img {
@@ -19,6 +31,11 @@
       position: relative;
       width: 100%;
       height: 100%;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      height: 184px;
+      width: 100%;
     }
   }
 
@@ -31,6 +48,15 @@
       position: relative;
       width: 100%;
       height: 100%;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      height: 184px;
+
+      & > img {
+        object-fit: none;
+        border: 1px solid rgb(210 218 226);
+      }
     }
   }
 
