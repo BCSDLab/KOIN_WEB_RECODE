@@ -20,19 +20,14 @@ export const getLeftTimeString = (second: number | '미운행' | undefined) => {
 export const getStartTimeString = (second: number | '미운행' | undefined, isMain:boolean = false) => {
   if (!second) return '';
   if (second === '미운행') return '';
-
   const hour = getHour(second);
   const minute = getMinute(second);
-
   const today = new Date();
-
   let startMinute = today.getMinutes() + minute;
-  let startHour = today.getHours() + hour + Math.ceil(startMinute / 60);
-
+  let startHour = today.getHours() + hour + Math.floor(startMinute / 60);
   startHour %= 24;
   startMinute %= 60;
   const timeString = [String(startHour).padStart(2, '0'), String(startMinute).padStart(2, '0')];
-
   if (isMain) return `${timeString[0]}시 ${timeString[1]}분`;
   return `${timeString[0]}:${timeString[1]}`;
 };
