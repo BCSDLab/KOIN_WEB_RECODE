@@ -1,0 +1,28 @@
+.table {
+  width: 100%;
+  border-top: 1px solid #175c8e;
+  border-bottom: 1px solid #175c8e;
+  font-family: NanumBarunGothic, serif;
+  font-size: 14px;
+  color: #828282;
+  line-height: 2.8;
+  border-collapse: collapse;
+
+  &__row {
+    border-top: #175c8e4d 1px solid;
+  }
+
+  &__title {
+    color: #828282;
+    text-align: left;
+    padding-left: 20px;
+    font-weight: bold;
+  }
+
+  &__cell {
+    width: 280px;
+    height: 40px;
+    color: #252525;
+    font-size: 15px;
+  }
+}

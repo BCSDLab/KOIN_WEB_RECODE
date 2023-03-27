@@ -1,0 +1,15 @@
+.option {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  line-height: 1.71;
+  color: #828282;
+
+  &__builtIn {
+    opacity: 1;
+  }
+
+  &__builtNot {
+    opacity: 0.2;
+  }
+}
