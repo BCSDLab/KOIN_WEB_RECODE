@@ -3,6 +3,7 @@ import RoomDetailImg from 'components/Room/RoomDetailImg';
 import RoomDetailOption from 'components/Room/RoomDetailOption';
 import RoomDetailTable from 'components/Room/RoomDetailTable';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
+import RoomDetailMap from 'components/Room/RoomDetailMap';
 import useRoomDetail from './hooks/useRoomDetail';
 import styles from './RoomDetailPage.module.scss';
 
@@ -35,6 +36,10 @@ function RoomDetailPage() {
       <div className={styles.info}>
         <h2 className={styles.info__title}>원룸 옵션</h2>
         {roomDetail && <RoomDetailOption roomDetail={roomDetail} />}
+      </div>
+      <div className={styles.info}>
+        <h2 className={styles.info__title}>원룸 위치</h2>
+        {roomDetail && <RoomDetailMap roomDetail={roomDetail} />}
       </div>
     </div>
   );
