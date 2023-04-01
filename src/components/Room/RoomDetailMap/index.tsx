@@ -1,18 +1,19 @@
-import { LandDetailResponse } from 'api/room/entity';
-import useDetailMap from 'pages/Room/RoomDetailPage/hooks/useDetailMap';
 import useDetailMarker from 'pages/Room/RoomDetailPage/hooks/useDetailMarker';
+import useNaverMap from 'pages/Room/RoomPage/hooks/useNaverMap';
 import styles from './RoomDetailMap.module.scss';
 
 interface MapProps {
-  roomDetail: LandDetailResponse
+  latitude: number
+  longitude: number
+  address: string
 }
 
-function RoomDetailMap({ roomDetail }: MapProps) {
-  const map = useDetailMap({ latitude: roomDetail?.latitude, longitude: roomDetail?.longitude });
-  useDetailMarker({ map, latitude: roomDetail?.latitude, longitude: roomDetail?.longitude });
+function RoomDetailMap({ latitude, longitude, address }: MapProps) {
+  const map = useNaverMap(latitude, longitude);
+  useDetailMarker({ map, latitude, longitude });
   return (
     <div className={styles['map-container']}>
-      <div className={styles['map-container__address']}>{roomDetail?.address}</div>
+      <div className={styles['map-container__address']}>{address}</div>
       <div id="map" className={styles['map-container__map']} />
     </div>
   );

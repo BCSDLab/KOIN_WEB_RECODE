@@ -39,7 +39,14 @@ function RoomDetailPage() {
       </div>
       <div className={styles.info}>
         <h2 className={styles.info__title}>원룸 위치</h2>
-        {roomDetail && <RoomDetailMap roomDetail={roomDetail} />}
+        {roomDetail
+          && (
+          <RoomDetailMap
+            latitude={roomDetail?.latitude}
+            longitude={roomDetail?.longitude}
+            address={roomDetail?.address}
+          />
+          )}
       </div>
     </div>
   );
