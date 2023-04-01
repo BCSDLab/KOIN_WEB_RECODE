@@ -6,38 +6,34 @@ interface ImgProps {
 }
 
 function RoomDetailImg({ imgUrl }: ImgProps) {
-  const { imgIndx, clickRightArrow, clickLeftArrow } = useClickArrow();
+  const { imgIndex, clickRightArrow, clickLeftArrow } = useClickArrow();
   return (
     <div>
       {imgUrl ? (
         <div className={styles['img-slider']}>
           <button className={styles['img-slider__img-arrow']} type="button" onClick={clickLeftArrow}>
-            <img src="https://static.koreatech.in/assets/ic-room/left-arrow.png" alt="이전 화살표" />
+            <img src="https://static.koreatech.in/assets/ic-room/left-arrow.png" alt="이전 이미지 보기" />
           </button>
           <div className={styles['img-slider__img']}>
-            <img src={imgUrl[imgIndx]} alt="방 사진" />
+            <img src={imgUrl[imgIndex]} alt="방 사진" />
           </div>
           <button
             className={styles['img-slider__img-arrow']}
             type="button"
-            onClick={() => clickRightArrow(imgUrl?.length)}
+            onClick={() => clickRightArrow(imgUrl.length)}
           >
             <img
               src="https://static.koreatech.in/assets/ic-room/right-arrow.png"
-              alt="이후 화살표"
+              alt="이후 이미지 보기"
             />
           </button>
-          <div className={styles['img-slider__indx']}>
-            {imgIndx + 1}
-            {' '}
-            /
-            {' '}
-            {imgUrl.length}
+          <div className={styles['img-slider__index']}>
+            {`${imgIndex + 1} / ${imgUrl.length}`}
           </div>
         </div>
       )
         : (
-          <div className={styles['img-slider__no-img']}>
+          <div className={styles['img-slider__img--empty']}>
             <img src="https://static.koreatech.in/assets/ic-room/img.png" alt="이미지 없음" />
           </div>
         )}
