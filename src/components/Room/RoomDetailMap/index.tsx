@@ -11,9 +11,9 @@ function RoomDetailMap({ roomDetail }: MapProps) {
   const map = useDetailMap({ latitude: roomDetail?.latitude, longitude: roomDetail?.longitude });
   useDetailMarker({ map, latitude: roomDetail?.latitude, longitude: roomDetail?.longitude });
   return (
-    <div className={styles.mapContainer}>
-      <div className={styles.mapContainer__address}>{roomDetail?.address}</div>
-      <div id="map" className={styles.mapContainer__map} />
+    <div className={styles['map-container']}>
+      <div className={styles['map-container__address']}>{roomDetail?.address}</div>
+      <div id="map" className={styles['map-container__map']} />
     </div>
   );
 }

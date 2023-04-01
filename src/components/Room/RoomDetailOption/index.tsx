@@ -13,9 +13,9 @@ function RoomDetailOption({ roomDetail }: OptionProps) {
       {OPTION_CATEGORY.map((option) => (
         <li className={styles.option__list} key={option.id}>
           <div className={cn({
-            [styles.option__builtIn]: roomDetail?.
+            [styles.option__builtin]: roomDetail?.
               [option.img_code as keyof LandDetailResponse] === true,
-            [styles.option__builtNot]: roomDetail?.
+            [styles.option__builtnot]: roomDetail?.
               [option.img_code as keyof LandDetailResponse] === false,
           })}
           >
