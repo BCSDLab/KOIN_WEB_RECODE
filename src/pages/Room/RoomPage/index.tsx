@@ -8,7 +8,8 @@ import useMarker from './hooks/useMarker';
 function RoomPage() {
   const isMobile = useMediaQuery();
   const roomList = useRoomList();
-  const map = useNaverMap();
+  const location = { latitude: 36.764617, longitude: 127.2831540 };
+  const map = useNaverMap(location.latitude, location.longitude);
   useMarker({ map, roomList });
 
   return (
