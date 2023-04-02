@@ -1,1 +1,135 @@
 @use "src/utils/scss/media" as media;
+
+.template {
+  width: 100%;
+  min-height: calc(100% - 301px);
+  display: flex;
+  justify-content: center;
+  margin: 49px auto 35px;
+}
+
+.content {
+  width: 1132px;
+
+  @media (max-width: 576px) {
+    width: 100%;
+    min-width: 300px;
+    margin: auto;
+  }
+}
+
+.title {
+  width: auto;
+  height: 29px;
+  font-family: NanumSquare, sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: -1.5px;
+  text-align: left;
+  color: #175c8e;
+  margin: 0;
+}
+
+.date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: -4px;
+
+  @media(max-width: 576px){
+    margin-top: 0;
+  }
+
+  &__prev {
+    width: 4.5px;
+    height: 13px;
+    border: solid #bbbbbb;
+    background-color: #fff;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    transform: rotate(135deg);
+    -webkit-transform:rotate(135deg);
+    cursor: pointer;
+
+    @media(max-width: 576px){
+      border: solid #989898;
+      border-width: 0 2.5px 2.5px 0;
+    }
+  }
+
+  &__title {
+    height: 27px;
+    font-family: AppleSDGothicNeoB00, sans-serif;
+    font-size: 22px;
+    line-height: 1.41;
+    text-align: center;
+    color: #3a3a3a;
+    margin: 0 7px 8px;
+
+    @media (max-width: 576px) {
+      height: 21px;
+      font-family: AppleSDGothicNeoM00,sans-serif;
+      font-size: 18px;
+      line-height: 1.11;
+      text-align: left;
+      color: #4f4f4f;
+    }
+  }
+
+  &__next {
+    width: 4.5px;
+    height: 13px;
+    border: solid #bbbbbb;
+    background-color: #fff;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    transform: rotate(-45deg);
+    -webkit-transform:rotate(-45deg);
+    cursor: pointer;
+
+    @media(max-width: 576px){
+      border: solid #989898;
+      border-width: 0 2.5px 2.5px 0;
+    }
+  }
+}
+
+.header{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+
+  &__list {
+    width: 100%;
+    height: 54px;
+    border: solid #175c8e;
+    border-width: 3px 0;
+    color: #175c8e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 21px auto;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: -0.8px;
+    text-align: center;
+    margin: 50px 2px 0 1.5px;
+    background-color: #ffffff;
+
+    @media(max-width: 576px){
+      display: none;
+    }
+
+    &--other {
+      border: solid #f7941e;
+      border-width: 3px 0 3px 0;
+      color: #f7941e;
+    }
+  }
+}

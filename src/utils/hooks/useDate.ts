@@ -4,7 +4,7 @@ export const leftPad = (value: number) => {
   }
 
   return `0${value}`;
-}
+};
 
 const useDate = (nowDate = new Date(), delimiter = '') => {
   const year = nowDate.getFullYear();
