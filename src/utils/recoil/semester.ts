@@ -50,26 +50,21 @@ export const myLecturesAtom = atom<LectureInfo[] | null>({
   default: null,
   effects: [
     ({ getLoadable, setSelf, onSet }) => {
+      if (getLoadable(tokenState).contents) {
+        return;
+      }
       waitForTruthyValue(
         (() => getLoadable(
-          tokenState,
+          selectedSemesterAtom,
         ).contents) as () => string,
       )
-        .then((value) => {
-          if (value) {
-            return Promise.reject();
-          }
-          return waitForTruthyValue(
-            (() => getLoadable(
-              selectedSemesterAtom,
-            ).contents) as () => string,
-          );
-        })
         .then((value) => {
           const savedValue = localStorage.getItem(MY_LECTURES_KEY);
           if (savedValue != null) {
             setSelf(JSON.parse(savedValue)[value]);
+            return;
           }
+          setSelf([]);
         });
 
       onSet((newValue, _, isReset) => {

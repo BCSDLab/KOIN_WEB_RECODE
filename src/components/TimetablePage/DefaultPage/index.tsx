@@ -118,7 +118,6 @@ function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListP
   const token = useRecoilValue(tokenState);
   const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
-
   const isLoaded = status === 'success' && (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
   return (
     isLoaded ? (
@@ -215,9 +214,8 @@ function CurrentSemesterTimeTable(): JSX.Element {
   const token = useRecoilValue(tokenState);
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
   const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
-
   const myLectureDayValue = useTimetableDayList(
-    tokenState
+    token
       ? (myLecturesFromServer ?? [])
       : (myLecturesFromLocalStorageValue ?? []),
   );
@@ -253,7 +251,7 @@ function Curriculum() {
   return (
     <ul className={styles['page__curriculum-list']}>
       {(deptList as unknown as Array<IDept> | undefined ?? []).map((dept) => (
-        <li>
+        <li key={dept.name}>
           <a
             className={styles.page__curriculum}
             href={dept.curriculum_link}
@@ -375,7 +373,11 @@ function DefaultPage() {
         </div>
         <div>
           <h3 className={styles['page__title--sub']}>커리큘럼</h3>
-          <Curriculum />
+          <ErrorBoundary fallbackClassName="loading">
+            <React.Suspense fallback="loading...">
+              <Curriculum />
+            </React.Suspense>
+          </ErrorBoundary>
         </div>
       </div>
     </>

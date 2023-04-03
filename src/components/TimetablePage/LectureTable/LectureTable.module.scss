@@ -47,12 +47,12 @@
     display: flex;
     line-height: 34px;
 
-    &--selected.table__row > .table__row-button {
-      background: rgb(219 243 255);
-    }
-
     &:nth-child(2n) > .table__row-button {
       background: rgb(247 247 247);
+    }
+
+    &--selected.table__row > .table__row-button {
+      background: rgb(219 243 255);
     }
   }
 
