@@ -1,7 +1,7 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
 export type LoginRequest = {
-  portal_account: string
+  email: string
   password: string
 };
 
@@ -21,7 +21,7 @@ export interface LoginResponse extends APIResponse {
     major: string
     name: string
     nickname: string
-    portal_account: string
+    email: string
     student_number: string
     username: string
   }
@@ -32,7 +32,7 @@ export interface NicknameDuplicateCheckResponse extends APIResponse {
 }
 
 export interface SignupRequest {
-  portal_account: string,
+  email: string,
   password: string,
   // options
   name?: string,
