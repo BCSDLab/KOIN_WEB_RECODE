@@ -11,7 +11,7 @@ interface State {
   hasError: boolean;
 }
 
-function isAxiosError(error: AxiosError | Error): error is AxiosError {
+function isAxiosError(error: AxiosError<any, any> | Error): error is AxiosError<any, any> {
   return ('response' in error);
 }
 
@@ -31,7 +31,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
   // 이후에 사용시 해제
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  componentDidCatch(error: AxiosError<any> | Error, __: ErrorInfo) {
+  componentDidCatch(error: AxiosError<any, any> | Error, __: ErrorInfo) {
     showToast('error', isAxiosError(error) ? error.response?.data.error.message : error.message);
   }
 
