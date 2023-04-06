@@ -2,13 +2,13 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
 import cn from 'utils/ts/classnames';
-import { TimeTableDayLectureInfo } from 'interfaces/Lecture';
-import styles from './TimeTable.module.scss';
+import { TimetableDayLectureInfo } from 'interfaces/Lecture';
+import styles from './Timetable.module.scss';
 
-interface TimeTableProps {
-  lectures: TimeTableDayLectureInfo[][];
+interface TimetableProps {
+  lectures: TimetableDayLectureInfo[][];
   selectedLectureIndex?: number;
-  similarSelectedLecture?: TimeTableDayLectureInfo[][];
+  similarSelectedLecture?: TimetableDayLectureInfo[][];
   firstColWidth: number;
   colWidth: number;
   rowHeight: number;
@@ -22,7 +22,7 @@ const backgroundColor = ['#ffa9b7', '#fdbcf5', '#fedb8f', '#c2eead', '#60e4c1', 
 
 export const TIMETABLE_ID = 'timetable-id';
 
-function TimeTable({
+function Timetable({
   lectures,
   selectedLectureIndex,
   similarSelectedLecture,
@@ -30,7 +30,7 @@ function TimeTable({
   colWidth,
   rowHeight,
   totalHeight,
-}: TimeTableProps) {
+}: TimetableProps) {
   return (
     <div id={TIMETABLE_ID} className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${colWidth / 5}px` }}>
       <div className={styles.timetable__head} style={{ height: `${rowHeight * 1.5}px` }}>
@@ -147,4 +147,4 @@ function TimeTable({
   );
 }
 
-export default TimeTable;
+export default Timetable;

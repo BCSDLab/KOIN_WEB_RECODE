@@ -1,4 +1,4 @@
-import { APIClient } from 'utils/ts/apiClient';
+import APIClient from 'utils/ts/apiClient';
 import {
   NoticeList,
   HotNoticeList,

@@ -4,7 +4,7 @@ import {
   SemesterResponse,
   TimetableAddLectureRequest,
   TimetableAddLectureResponse,
-  TimeTableInfoResponse,
+  TimetableInfoResponse,
   TimetableRemoveLectureResponse,
 } from './entity';
 
@@ -26,7 +26,7 @@ export class LectureList<R extends LectureInfoResponse> implements APIRequest<R>
   }
 }
 
-export class TimetableInfo<R extends TimeTableInfoResponse> implements APIRequest<R> {
+export class TimetableInfo<R extends TimetableInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/timetables';

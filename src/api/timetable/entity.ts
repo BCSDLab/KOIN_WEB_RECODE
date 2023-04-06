@@ -1,5 +1,5 @@
 import { APIResponse } from 'interfaces/APIResponse';
-import { LectureInfo, TimeTableLectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 
 export type SemesterInfo = {
   id: number;
@@ -14,13 +14,13 @@ export interface LectureInfoResponse extends APIResponse {
   [index: number]: LectureInfo;
 }
 
-export interface TimeTableInfoResponse extends APIResponse {
+export interface TimetableInfoResponse extends APIResponse {
   semester: string;
-  timetable: TimeTableLectureInfo[];
+  timetable: TimetableLectureInfo[];
 }
 
 export interface TimetableAddLectureResponse extends APIResponse {
-  [index: number]: TimeTableLectureInfo;
+  [index: number]: TimetableLectureInfo;
 }
 
 export interface TimetableAddLectureRequest {
@@ -33,5 +33,5 @@ export interface TimetableAddLectureRequest {
 }
 
 export interface TimetableRemoveLectureResponse extends APIResponse {
-  [index: number]: TimeTableLectureInfo;
+  [index: number]: TimetableLectureInfo;
 }

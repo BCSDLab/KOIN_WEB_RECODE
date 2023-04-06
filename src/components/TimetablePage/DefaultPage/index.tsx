@@ -3,7 +3,7 @@ import { IDept } from 'api/dept/entity';
 import { SemesterInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import LectureTable from 'components/TimetablePage/LectureTable';
-import { LectureInfo, TimeTableLectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import {
   myLectureAddLectureSelector,
   myLectureRemoveLectureSelector,
@@ -13,7 +13,7 @@ import {
 } from 'utils/recoil/semester';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import showToast from 'utils/ts/showToast';
-import TimeTable, { TIMETABLE_ID } from 'components/TimetablePage/TimeTable';
+import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { tokenState } from 'utils/recoil';
@@ -137,7 +137,7 @@ function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListP
               return;
             }
             const myLectureTimeValue = (
-              myLecturesValue as Array<LectureInfo | TimeTableLectureInfo>)
+              myLecturesValue as Array<LectureInfo | TimetableLectureInfo>)
               .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
             if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
               showToast('error', '시간이 중복되어 추가할 수 없습니다.');
@@ -207,7 +207,7 @@ function CurrentMyLectureList() {
     ));
 }
 
-function CurrentSemesterTimeTable(): JSX.Element {
+function CurrentSemesterTimetable(): JSX.Element {
   const selectedSemesterValue = useRecoilValue(selectedSemesterAtom);
   const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
 
@@ -230,7 +230,7 @@ function CurrentSemesterTimeTable(): JSX.Element {
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
 
   return selectedSemesterValue && status === 'success' ? (
-    <TimeTable
+    <Timetable
       lectures={myLectureDayValue}
       similarSelectedLecture={similarSelectedLectureDayList}
       selectedLectureIndex={selectedLectureIndex}
@@ -356,7 +356,7 @@ function DefaultPage() {
           <div className={styles.page__timetable}>
             <ErrorBoundary fallbackClassName="loading">
               <React.Suspense fallback="loading...">
-                <CurrentSemesterTimeTable />
+                <CurrentSemesterTimetable />
               </React.Suspense>
             </ErrorBoundary>
           </div>

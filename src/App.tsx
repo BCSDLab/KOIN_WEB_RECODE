@@ -19,6 +19,7 @@ import BusPage from 'pages/BusPage';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import TimetablePage from 'pages/TimetablePage';
+import { tokenState } from 'utils/recoil';
 
 const useTokenState = () => useRecoilValue(tokenState);
 

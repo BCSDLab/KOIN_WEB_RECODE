@@ -11,7 +11,7 @@ export interface LectureInfo {
   class_time: Array<number>;
 }
 
-export interface TimeTableLectureInfo {
+export interface TimetableLectureInfo {
   id: number;
   code: string;
   class_title: string;
@@ -29,7 +29,7 @@ export interface TimetableInfoFromLocalStorage {
   [key: string]: LectureInfo[];
 }
 
-export interface TimeTableDayLectureInfo {
+export interface TimetableDayLectureInfo {
   name: string;
   start: number;
   end: number;

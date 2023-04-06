@@ -1,16 +1,16 @@
-import type { LectureInfo, TimeTableLectureInfo } from 'interfaces/Lecture';
+import type { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import { FixedSizeList as List } from 'react-window';
 import cn from 'utils/ts/classnames';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
-  list: Array<LectureInfo> | Array<TimeTableLectureInfo>;
+  list: Array<LectureInfo> | Array<TimetableLectureInfo>;
   height: number;
   children: (props: { onClick: () => void }) => React.ReactNode | undefined;
-  selectedLecture: LectureInfo | TimeTableLectureInfo | undefined;
-  onClickRow: ((value: LectureInfo | TimeTableLectureInfo) => void) | undefined;
-  onClickLastColumn: (value: LectureInfo | TimeTableLectureInfo) => void;
+  selectedLecture: LectureInfo | TimetableLectureInfo | undefined;
+  onClickRow: ((value: LectureInfo | TimetableLectureInfo) => void) | undefined;
+  onClickLastColumn: (value: LectureInfo | TimetableLectureInfo) => void;
 }
 
 const LECTURE_TABLE_HEADER = [
@@ -26,7 +26,7 @@ const LECTURE_TABLE_HEADER = [
   { key: null, label: '' },
 ] as const;
 
-const isLectureInfo = (value: LectureInfo | TimeTableLectureInfo): value is LectureInfo => 'name' in value;
+const isLectureInfo = (value: LectureInfo | TimetableLectureInfo): value is LectureInfo => 'name' in value;
 
 const useFlexibleWidth = (length: number, initialValue: number[]) => {
   const [widthInfo] = React.useState(() => initialValue);
