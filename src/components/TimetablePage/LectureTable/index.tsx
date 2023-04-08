@@ -64,7 +64,7 @@ function LectureTable({
               {header.label}
               {headerIndex !== LECTURE_TABLE_HEADER.length - 1 && (
                 <>
-                  <button type="button" className={styles.table__button} aria-label="sibal">
+                  <button type="button" className={styles.table__button}>
                     <img src="https://static.koreatech.in/assets/img/ic-arrow-down.png" alt="내림차순" />
                   </button>
                   <div className={styles.table__resize} aria-hidden />
