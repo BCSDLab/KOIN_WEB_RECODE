@@ -73,10 +73,9 @@
   &__lecture {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     position: absolute;
     z-index: 3;
-    padding: 0 2px;
+    padding: 4px 2px 0 2px;
     font-size: 9px;
     font-family: NanumSquare, serif;
     box-sizing: border-box;

@@ -86,6 +86,7 @@ function LectureTable({
               <div
                 className={cn({
                   [styles.table__row]: true,
+                  [styles['table__row--even']]: index % 2 === 0,
                   [styles['table__row--selected']]: selectedLecture === currentItem,
                 })}
                 aria-selected={selectedLecture === currentItem}
