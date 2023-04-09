@@ -11,7 +11,7 @@ import styles from './RoomDetailPage.module.scss';
 function RoomDetailPage() {
   const isMobile = useMediaQuery();
   const params = useParams();
-  const roomDetail = useRoomDetail(params.id);
+  const roomDetail = useRoomDetail(String(params.id));
   useScrollToTop();
   return (
     <div className={styles.template}>
