@@ -133,3 +133,55 @@
     }
   }
 }
+
+.menu {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  &__morning {
+    margin-top: 35px;
+  }
+
+  &__lunch {
+    margin-top: 22px;
+  }
+
+  &__dinner {
+    margin-top: 24px;
+  }
+
+  &__time {
+    width: 62px;
+    height: 24px;
+    border-radius: 13px;
+    border: solid 0.7px #c0c0c0;
+    font-family: AppleSDGothicNeoSB00,sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.46;
+    letter-spacing: normal;
+    text-align: center;
+    color: #838383;
+    background-color: #FFFFFF;
+    z-index: 1;
+      
+    &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      height: 1px;
+      width: 1132px;
+      background-color: #c0c0c0;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      z-index: -1;
+    }
+  }
+}

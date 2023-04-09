@@ -41,6 +41,23 @@ function CafeteriaPage() {
           ))
           }
         </div>
+        <div className={styles.menu}>
+          <div className={styles.menu__morning}>
+            <div className={styles.menu__time}>
+              아침
+            </div>
+          </div>
+          <div className={styles.menu__lunch}>
+            <div className={styles.menu__time}>
+              점심
+            </div>
+          </div>
+          <div className={styles.menu__dinner}>
+            <div className={styles.menu__time}>
+              저녁
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
