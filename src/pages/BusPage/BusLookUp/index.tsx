@@ -75,7 +75,7 @@ function BusLookUp() {
                   </span>
                   {typeof busData[idx]?.now_bus?.remain_time === 'number' && (
                   <span className={styles.cards__detail}>
-                    {`(${getStartTimeString(busData[idx]?.now_bus?.remain_time)} 출발)`}
+                    {`(${getStartTimeString(busData[idx]?.now_bus?.start_time)} 출발)`}
                   </span>
                   )}
                 </div>
@@ -99,7 +99,7 @@ function BusLookUp() {
                   </span>
                   {typeof busData[idx]?.next_bus?.remain_time === 'number' && (
                   <span className={styles.cards__detail}>
-                    {`(${getStartTimeString(busData[idx]?.next_bus?.remain_time)} 출발)`}
+                    {`(${getStartTimeString(busData[idx]?.next_bus?.start_time)} 출발)`}
                   </span>
                   )}
                 </div>

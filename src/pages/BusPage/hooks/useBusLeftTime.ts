@@ -14,10 +14,12 @@ interface Props {
 const emptyRouteData = {
   now_bus: {
     remain_time: '미운행',
+    start_time: '미운행', //
     bus_number: null,
   },
   next_bus: {
     remain_time: '미운행',
+    start_time: '미운행', //
     bus_number: null,
   },
 } as const;
@@ -31,6 +33,29 @@ const useBusLeftTIme = ({ departList, arrivalList }: Props) => {
       staleTime: 60000,
       suspense: true,
       keepPreviousData: true,
+      select: (response: BusResponse) => {
+        const today = new Date();
+        const nowSecond = (
+          today.getHours() * 3600 + today.getMinutes() * 60 + today.getSeconds()
+        );
+        const nowRemainSecond = response.now_bus?.remain_time;
+        const nextRemainSecond = response.next_bus?.remain_time;
+        if (nowRemainSecond !== undefined && nextRemainSecond !== undefined) {
+          return {
+            now_bus: {
+              remain_time: nowRemainSecond,
+              start_time: (nowSecond + nowRemainSecond),
+              bus_number: null,
+            },
+            next_bus: {
+              remain_time: nextRemainSecond,
+              start_time: (nowSecond + nextRemainSecond),
+              bus_number: null,
+            },
+          };
+        }
+        return { response };
+      },
     }),
   );
 

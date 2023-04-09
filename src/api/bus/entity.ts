@@ -26,10 +26,12 @@ export interface BusResponse extends APIResponse {
   bus_type: BusType;
   next_bus: {
     remain_time: number;
+    start_time: number; //
     bus_number?: number;
   } | null;
   now_bus: {
     remain_time: number;
+    start_time: number; //
     bus_number?: number;
   } | null;
 }

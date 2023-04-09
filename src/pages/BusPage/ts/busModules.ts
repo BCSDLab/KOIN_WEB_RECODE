@@ -22,9 +22,9 @@ export const getStartTimeString = (second: number | '미운행' | undefined, isM
   if (second === '미운행') return '';
   const hour = getHour(second);
   const minute = getMinute(second);
-  const today = new Date();
-  let startMinute = today.getMinutes() + minute;
-  let startHour = today.getHours() + hour + Math.floor(startMinute / 60);
+  let startMinute = minute;
+  let startHour = hour;
+  if (startMinute === 0) startHour += 1;
   startHour %= 24;
   startMinute %= 60;
   const timeString = [String(startHour).padStart(2, '0'), String(startMinute).padStart(2, '0')];
