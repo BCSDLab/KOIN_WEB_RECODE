@@ -4,6 +4,7 @@ import RoomDetailOption from 'components/Room/RoomDetailOption';
 import RoomDetailTable from 'components/Room/RoomDetailTable';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import RoomDetailMap from 'components/Room/RoomDetailMap';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useRoomDetail from './hooks/useRoomDetail';
 import styles from './RoomDetailPage.module.scss';
 
@@ -11,6 +12,7 @@ function RoomDetailPage() {
   const isMobile = useMediaQuery();
   const params = useParams();
   const roomDetail = useRoomDetail(params.id);
+  useScrollToTop();
   return (
     <div className={styles.template}>
       <div>{!isMobile && <h1 className={styles.title}>복덕방</h1>}</div>
