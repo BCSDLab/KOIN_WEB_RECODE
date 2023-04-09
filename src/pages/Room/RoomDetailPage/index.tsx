@@ -31,7 +31,12 @@ function RoomDetailPage() {
           phone={roomDetail?.phone}
         />
         )}
-        {roomDetail && <RoomDetailImg imgUrl={roomDetail?.image_urls} />}
+        {roomDetail?.image_urls ? <RoomDetailImg imgUrl={roomDetail?.image_urls} />
+          : (
+            <div className={styles['img-slider__img--empty']}>
+              <img src="https://static.koreatech.in/assets/ic-room/img.png" alt="이미지 없음" />
+            </div>
+          )}
       </div>
       <div className={styles.info}>
         <h2 className={styles.info__title}>원룸 옵션</h2>

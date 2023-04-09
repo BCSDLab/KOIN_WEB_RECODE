@@ -68,3 +68,17 @@
     }
   }
 }
+
+.img-slider {
+  &__img {
+    &--empty {
+      margin-top: 35px;
+
+      & > img {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
