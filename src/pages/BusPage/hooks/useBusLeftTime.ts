@@ -40,7 +40,21 @@ const useBusLeftTIme = ({ departList, arrivalList }: Props) => {
         );
         const nowRemainSecond = response.now_bus?.remain_time;
         const nextRemainSecond = response.next_bus?.remain_time;
-        if (nowRemainSecond !== undefined && nextRemainSecond !== undefined) {
+        if (nowRemainSecond !== undefined) {
+          if (nextRemainSecond !== undefined) {
+            return {
+              now_bus: {
+                remain_time: nowRemainSecond,
+                start_time: (nowSecond + nowRemainSecond),
+                bus_number: null,
+              },
+              next_bus: {
+                remain_time: nextRemainSecond,
+                start_time: (nowSecond + nextRemainSecond),
+                bus_number: null,
+              },
+            };
+          }
           return {
             now_bus: {
               remain_time: nowRemainSecond,
@@ -48,8 +62,8 @@ const useBusLeftTIme = ({ departList, arrivalList }: Props) => {
               bus_number: null,
             },
             next_bus: {
-              remain_time: nextRemainSecond,
-              start_time: (nowSecond + nextRemainSecond),
+              remain_time: '미운행',
+              start_time: '미운행',
               bus_number: null,
             },
           };
