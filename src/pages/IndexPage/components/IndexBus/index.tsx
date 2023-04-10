@@ -41,7 +41,7 @@ function IndexBus() {
               && (
               <span className={styles.cards__detail}>
                 {typeof busData[idx]?.now_bus?.remain_time === 'number' && (
-                  `${getStartTimeString(busData[idx]?.now_bus?.remain_time, true)} 출발`
+                  `${getStartTimeString(busData[idx]?.now_bus?.start_time, true)} 출발`
                 )}
               </span>
               )}
