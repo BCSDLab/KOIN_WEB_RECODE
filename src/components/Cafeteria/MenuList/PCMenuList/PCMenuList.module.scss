@@ -1,0 +1,74 @@
+@use 'src/utils/scss/media' as media;
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: relative;
+  top: -7px;
+  z-index: -1;
+}
+
+.card {
+  margin-right: 3px;
+
+  &__menus {
+    width: 100%;
+    height: 100%;
+    border-radius: 2px px;
+    color: black;
+    padding-top: 33.8px;
+
+    &--isDisabled {
+      display: none;
+    }
+
+    &--another-breakfast {
+      background-color: rgba(247, 148, 30, 0.03);
+    }
+
+    &--another-lunch {
+      background-color: rgba(247, 148, 30, 0.1);
+    }
+
+    &--another-dinner {
+      background-color: rgba(247, 148, 30, 0.2);
+    }
+
+    &--school-breakfast {
+      background-color: rgba(23, 92, 142, 0.03);
+    }
+
+    &--school-lunch {
+      background-color: rgba(23, 92, 142, 0.1);
+    }
+
+    &--school-dinner {
+      background-color: rgba(23, 92, 142, 0.2);
+    }
+  }
+
+  &__menu {
+    font-family: AppleSDGothicNeoR00, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: -0.48px;
+    text-align: left;
+    color: #232323;
+  }
+
+  &__info {
+    font-family: AppleSDGothicNeoR00, sans-serif;
+    font-size: 11px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.45;
+    letter-spacing: -0.17px;
+    text-align: left;
+    color: rgb(122, 122, 122);
+    margin-top: 17px;
+  }
+}

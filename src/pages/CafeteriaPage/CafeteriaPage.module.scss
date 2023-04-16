@@ -1,4 +1,4 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 
 .template {
   width: 100%;
@@ -40,7 +40,7 @@
   margin-top: 22px;
   margin-bottom: -4px;
 
-  @media(max-width: 576px){
+  @media (max-width: 576px) {
     margin-top: 0;
   }
 
@@ -52,10 +52,10 @@
     border-width: 0 2px 2px 0;
     display: inline-block;
     transform: rotate(135deg);
-    -webkit-transform:rotate(135deg);
+    -webkit-transform: rotate(135deg);
     cursor: pointer;
 
-    @media(max-width: 576px){
+    @media (max-width: 576px) {
       border: solid #989898;
       border-width: 0 2.5px 2.5px 0;
     }
@@ -72,7 +72,7 @@
 
     @media (max-width: 576px) {
       height: 21px;
-      font-family: AppleSDGothicNeoM00,sans-serif;
+      font-family: AppleSDGothicNeoM00, sans-serif;
       font-size: 18px;
       line-height: 1.11;
       text-align: left;
@@ -88,17 +88,17 @@
     border-width: 0 2px 2px 0;
     display: inline-block;
     transform: rotate(-45deg);
-    -webkit-transform:rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
     cursor: pointer;
 
-    @media(max-width: 576px){
+    @media (max-width: 576px) {
       border: solid #989898;
       border-width: 0 2.5px 2.5px 0;
     }
   }
 }
 
-.header{
+.header {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
 
@@ -122,7 +122,7 @@
     margin: 50px 2px 0 1.5px;
     background-color: #ffffff;
 
-    @media(max-width: 576px){
+    @media (max-width: 576px) {
       display: none;
     }
 
@@ -140,14 +140,17 @@
   flex-direction: column;
 
   &__morning {
+    width: 100%;
     margin-top: 35px;
   }
 
   &__lunch {
+    width: 100%;
     margin-top: 22px;
   }
 
   &__dinner {
+    width: 100%;
     margin-top: 24px;
   }
 
@@ -156,11 +159,12 @@
     height: 24px;
     border-radius: 13px;
     border: solid 0.7px #c0c0c0;
-    font-family: AppleSDGothicNeoSB00,sans-serif;
+    font-family: AppleSDGothicNeoSB00, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 13px;
+    margin: 0 auto;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -168,11 +172,11 @@
     letter-spacing: normal;
     text-align: center;
     color: #838383;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     z-index: 1;
-      
+
     &:before {
-      content: "";
+      content: '';
       display: block;
       position: absolute;
       height: 1px;

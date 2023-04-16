@@ -8,7 +8,7 @@ const isCheckNewPost = (created: number[]) => {
   return false;
 };
 
-const convertDate = (time: string) => time.split(' ')[0].replaceAll('-', '.');
+export const convertDate = (time: string) => time.split(' ')[0].replaceAll('-', '.');
 
 function setPostCreateDate(time: string) {
   const created = convertDate(time).split('.').map((item: string) => parseInt(item, 10));

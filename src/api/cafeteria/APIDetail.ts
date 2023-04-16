@@ -1,10 +1,6 @@
-import { APIRequest } from 'interfaces/APIRequest';
 import { HTTP_METHOD } from 'utils/ts/apiClient';
-import {
-  CafeteriaMenuResponse,
-} from './entity';
 
-export default class GetCafeteriaMenu<R extends CafeteriaMenuResponse> implements APIRequest<R> {
+export default class GetCafeteriaMenu<R> {
   method = HTTP_METHOD.GET;
 
   path: string;

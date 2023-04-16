@@ -1,3 +1,13 @@
+export type CafeteriaListType = {
+  menu: string;
+  location: string;
+};
+
+export type CafeteriaHeaderType = {
+  corner: string;
+  location: string;
+};
+
 export const CAFETERIA_MENU = [
   {
     menu: '한식',

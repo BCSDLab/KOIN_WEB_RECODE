@@ -14,7 +14,7 @@ const useDate = (nowDate = new Date(), delimiter = '') => {
   return {
     date: new Date(year, Number(month), Number(day)),
     displayDate: [year, month, day].join(delimiter),
-    apiDate: [String(year).slice(2, 3), month, day].join(''),
+    apiDate: [String(year).slice(2, 4), month, day].join(''),
   };
 };
 
