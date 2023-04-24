@@ -2,8 +2,8 @@ import { useParams } from 'react-router-dom';
 import RoomDetailImg from 'components/Room/RoomDetailImg';
 import RoomDetailOption from 'components/Room/RoomDetailOption';
 import RoomDetailTable from 'components/Room/RoomDetailTable';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
 import RoomDetailMap from 'components/Room/RoomDetailMap';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useRoomDetail from './hooks/useRoomDetail';
 import styles from './RoomDetailPage.module.scss';
@@ -15,8 +15,8 @@ function RoomDetailPage() {
   useScrollToTop();
   return (
     <div className={styles.template}>
-      <div>{!isMobile && <h1 className={styles.title}>복덕방</h1>}</div>
-      <div className={styles.name}>
+      <div>{!isMobile && <h1 className={styles.template__title}>복덕방</h1>}</div>
+      <div className={styles.template__name}>
         {roomDetail?.name}
       </div>
       <div className={styles.info}>
@@ -35,7 +35,7 @@ function RoomDetailPage() {
         )}
         {roomDetail?.image_urls ? <RoomDetailImg imgUrl={roomDetail?.image_urls} />
           : (
-            <div className={styles['img-slider__img--empty']}>
+            <div className={styles['info__img-slider__img--empty']}>
               <img src="https://static.koreatech.in/assets/ic-room/img.png" alt="이미지 없음" />
             </div>
           )}
@@ -49,9 +49,9 @@ function RoomDetailPage() {
         {roomDetail
           && (
           <RoomDetailMap
-            latitude={roomDetail?.latitude}
-            longitude={roomDetail?.longitude}
-            address={roomDetail?.address}
+            latitude={roomDetail.latitude}
+            longitude={roomDetail.longitude}
+            address={roomDetail.address}
           />
           )}
       </div>
