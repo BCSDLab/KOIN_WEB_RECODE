@@ -6,7 +6,7 @@ interface ImgProps {
 }
 
 function RoomDetailImg({ imgUrl }: ImgProps) {
-  const { imgIndex, clickRightArrow, clickLeftArrow } = useClickArrow();
+  const { imgIndex, clickRightArrow, clickLeftArrow } = useClickArrow(imgUrl.length);
   return (
     <div className={styles['img-slider']}>
       <button className={styles['img-slider__img-arrow']} type="button" onClick={clickLeftArrow}>
@@ -18,7 +18,7 @@ function RoomDetailImg({ imgUrl }: ImgProps) {
       <button
         className={styles['img-slider__img-arrow']}
         type="button"
-        onClick={() => clickRightArrow(imgUrl.length)}
+        onClick={() => clickRightArrow()}
       >
         <img
           src="https://static.koreatech.in/assets/ic-room/right-arrow.png"
