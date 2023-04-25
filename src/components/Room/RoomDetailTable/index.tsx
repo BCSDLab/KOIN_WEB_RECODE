@@ -41,7 +41,7 @@ function RoomDetailTable({
     <table className={styles.table}>
       <tbody>
         {tableData.map((data) => (
-          <tr className={styles.table__row}>
+          <tr key={data.title1} className={styles.table__row}>
             <th className={styles.table__title}>{data.title1}</th>
             <td className={styles.table__cell}>{data.value1 ? `${data.value1}${data.suffix1 || ''}` : ' - ' }</td>
             <th className={styles.table__title}>{data.title2}</th>
