@@ -9,7 +9,16 @@ const useRoomDetail = (id: string) => {
       retry: 0,
     },
   );
-  return roomDetail;
+  const roomOptions = Object.entries(roomDetail || {}).reduce((acc, [key, val]) => {
+    if (key.startsWith('opt')) {
+      return {
+        ...acc,
+        [key]: val,
+      };
+    }
+    return acc;
+  }, {});
+  return { roomDetail, roomOptions };
 };
 
 export default useRoomDetail;

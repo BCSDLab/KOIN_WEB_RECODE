@@ -11,7 +11,7 @@ import styles from './RoomDetailPage.module.scss';
 function RoomDetailPage() {
   const isMobile = useMediaQuery();
   const params = useParams();
-  const roomDetail = useRoomDetail(String(params.id));
+  const { roomDetail, roomOptions } = useRoomDetail(String(params.id));
   useScrollToTop();
   return (
     <div className={styles.template}>
@@ -42,7 +42,7 @@ function RoomDetailPage() {
       </div>
       <div className={styles.info}>
         <h2 className={styles.info__title}>원룸 옵션</h2>
-        {roomDetail && <RoomDetailOption roomDetail={roomDetail} />}
+        {roomDetail && <RoomDetailOption roomOptions={roomOptions} />}
       </div>
       <div className={styles.info}>
         <h2 className={styles.info__title}>원룸 위치</h2>

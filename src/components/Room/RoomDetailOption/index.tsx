@@ -1,22 +1,19 @@
-import { LandDetailResponse } from 'api/room/entity';
 import OPTION_CATEGORY from 'static/optionCategory';
 import cn from 'utils/ts/classnames';
 import styles from './RoomDetailOption.module.scss';
 
-interface OptionProps {
-  roomDetail: LandDetailResponse
-}
+type OptionProps = {
+  [key in typeof OPTION_CATEGORY[number]['img_code']]: boolean;
+};
 
-function RoomDetailOption({ roomDetail }: OptionProps) {
+function RoomDetailOption({ roomOptions }: { roomOptions: OptionProps }) {
   return (
     <ul className={styles.option}>
       {OPTION_CATEGORY.map((option) => (
         <li className={styles.option__list} key={option.id}>
           <div className={cn({
-            [styles.option__builtin]: roomDetail?.
-              [option.img_code as keyof LandDetailResponse] === true,
-            [styles.option__builtnot]: roomDetail?.
-              [option.img_code as keyof LandDetailResponse] === false,
+            [styles.option__builtin]: roomOptions[option.img_code],
+            [styles.option__builtnot]: !roomOptions[option.img_code],
           })}
           >
             <img src={option.img_url} alt="옵션 이미지" />
