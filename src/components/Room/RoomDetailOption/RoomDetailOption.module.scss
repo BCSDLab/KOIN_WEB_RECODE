@@ -18,10 +18,8 @@
   }
 
   &__item {
-    opacity: 0.2;
-
-    &--builtin {
-      opacity: 1;
+    &--unchecked {
+      opacity: 0.2;
     }
   }
 }

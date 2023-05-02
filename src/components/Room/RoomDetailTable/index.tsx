@@ -12,12 +12,12 @@ interface TableProps {
 }
 
 interface TableData {
-  title1: string;
-  title2: string;
-  value1: string | number | null;
-  value2: string | number | null;
-  suffix1?: string;
-  suffix2?: string;
+  leftTitle: string;
+  rightTitle: string;
+  leftValue: string | number | null;
+  rightValue: string | number | null;
+  leftSuffix?: string;
+  rightSuffix?: string;
 }
 
 function RoomDetailTable({
@@ -25,27 +25,27 @@ function RoomDetailTable({
 }: TableProps) {
   const tableData: TableData[] = [
     {
-      title1: '월세', value1: monthlyFee, title2: '방 종류', value2: roomType,
+      leftTitle: '월세', leftValue: monthlyFee, rightTitle: '방 종류', rightValue: roomType,
     },
     {
-      title1: '전세', value1: charterFee, suffix1: '만원', title2: '보증금', value2: deposit, suffix2: '만원',
+      leftTitle: '전세', leftValue: charterFee, leftSuffix: '만원', rightTitle: '보증금', rightValue: deposit, rightSuffix: '만원',
     },
     {
-      title1: '층수', value1: floor, suffix1: '층', title2: '관리비', value2: managementFee,
+      leftTitle: '층수', leftValue: floor, leftSuffix: '층', rightTitle: '관리비', rightValue: managementFee,
     },
     {
-      title1: '방 크기', value1: size, suffix1: '평', title2: '연락처', value2: phone,
+      leftTitle: '방 크기', leftValue: size, leftSuffix: '평', rightTitle: '연락처', rightValue: phone,
     },
   ];
   return (
     <table className={styles.table}>
       <tbody>
         {tableData.map((data) => (
-          <tr key={data.title1} className={styles.table__row}>
-            <th className={styles.table__title}>{data.title1}</th>
-            <td className={styles.table__cell}>{data.value1 ? `${data.value1}${data.suffix1 || ''}` : ' - ' }</td>
-            <th className={styles.table__title}>{data.title2}</th>
-            <td className={styles.table__cell}>{data.value2 ? `${data.value2}${data.suffix2 || ''}` : ' - ' }</td>
+          <tr key={data.leftTitle} className={styles.table__row}>
+            <th className={styles.table__title}>{data.leftTitle}</th>
+            <td className={styles.table__cell}>{data.leftValue ? `${data.leftValue}${data.leftSuffix || ''}` : ' - ' }</td>
+            <th className={styles.table__title}>{data.rightTitle}</th>
+            <td className={styles.table__cell}>{data.rightValue ? `${data.rightValue}${data.rightSuffix || ''}` : ' - ' }</td>
           </tr>
         ))}
       </tbody>

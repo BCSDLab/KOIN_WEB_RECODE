@@ -14,7 +14,7 @@ function RoomDetailOption({ roomOptions }: { roomOptions: OptionProps }) {
           <div
             className={cn({
               [styles.option__item]: true,
-              [styles['option__item--builtin']]: roomOptions[option.img_code],
+              [styles['option__item--unchecked']]: !roomOptions[option.img_code],
             })}
           >
             <img src={option.img_url} alt="옵션 이미지" />
