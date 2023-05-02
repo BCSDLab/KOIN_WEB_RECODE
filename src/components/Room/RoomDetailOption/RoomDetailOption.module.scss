@@ -17,11 +17,11 @@
     }
   }
 
-  &__builtin {
-    opacity: 1;
-  }
-
-  &__builtnot {
+  &__item {
     opacity: 0.2;
+
+    &--builtin {
+      opacity: 1;
+    }
   }
 }

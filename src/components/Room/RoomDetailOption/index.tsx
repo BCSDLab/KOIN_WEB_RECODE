@@ -11,10 +11,11 @@ function RoomDetailOption({ roomOptions }: { roomOptions: OptionProps }) {
     <ul className={styles.option}>
       {OPTION_CATEGORY.map((option) => (
         <li className={styles.option__list} key={option.id}>
-          <div className={cn({
-            [styles.option__builtin]: roomOptions[option.img_code],
-            [styles.option__builtnot]: !roomOptions[option.img_code],
-          })}
+          <div
+            className={cn({
+              [styles.option__item]: true,
+              [styles['option__item--builtin']]: roomOptions[option.img_code],
+            })}
           >
             <img src={option.img_url} alt="옵션 이미지" />
             <div className={styles.option__name}>
