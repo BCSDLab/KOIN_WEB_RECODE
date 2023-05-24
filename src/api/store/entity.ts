@@ -1,12 +1,18 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
+interface Open {
+  open_time: string,
+  close_time: string,
+  closed: boolean,
+  day_of_week: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY',
+}
+
 export interface StoreDetailResponse extends APIResponse {
   weekend_open_time: string | null,
   created_at: string,
   description: string,
   image_urls: string[],
   address: string,
-  open_time: string,
   weekend_close_time: string | null,
   pay_bank: boolean,
   hit: number,
@@ -32,7 +38,7 @@ export interface StoreDetailResponse extends APIResponse {
   phone: string,
   delivery: boolean,
   delivery_price: number,
-  close_time: string,
+  open: Open[],
 }
 
 export interface StoreListResponse extends APIResponse {
@@ -41,7 +47,7 @@ export interface StoreListResponse extends APIResponse {
     created_at : string,
     description : string,
     image_urls: string[],
-    open_time: string,
+    open: Open[],
     // weekend_close_time: null,
     pay_bank: boolean,
     hit: number,
@@ -53,7 +59,6 @@ export interface StoreListResponse extends APIResponse {
     delivery: boolean,
     address: string,
     pay_card: boolean,
-    close_time: string,
     is_event: boolean,
     event_articles: {}[],
     phone: string,

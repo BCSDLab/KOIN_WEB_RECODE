@@ -62,7 +62,7 @@ const useLogin = (state: IsAutoLogin) => {
     const hashedPassword = await sha256(userInfo.password);
 
     postLogin.mutate({
-      portal_account: userInfo.userId,
+      email: `${userInfo.userId}@koreatech.ac.kr`,
       password: hashedPassword,
     });
   };
