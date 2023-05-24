@@ -4,9 +4,7 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import { tokenState } from 'utils/recoil';
-import { useRecoilState } from 'recoil';
-import { getCookie } from 'utils/ts/cookie';
+import { useRecoilValue } from 'recoil';
 import AuthPage from 'pages/Auth/AuthPage';
 import LoginPage from 'pages/Auth/LoginPage';
 import BoardPage from 'pages/BoardPage';
@@ -20,17 +18,10 @@ import StoreDetailPage from 'pages/Store/StoreDetailPage';
 import BusPage from 'pages/BusPage';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
+import TimetablePage from 'pages/TimetablePage';
+import { tokenState } from 'utils/recoil';
 
-const useTokenState = () => {
-  const [token, setToken] = useRecoilState(tokenState);
-  React.useEffect(() => {
-    const cookieToken = getCookie('AUTH_TOKEN_KEY');
-    if (cookieToken) {
-      setToken(String(cookieToken));
-    }
-  });
-  return token;
-};
+const useTokenState = () => useRecoilValue(tokenState);
 
 function App() {
   const token = useTokenState();
@@ -38,6 +29,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<BoardPage />}>
+          <Route path="timetable" element={<TimetablePage />} />
           <Route path="/" element={<IndexPage />} />
           <Route path="/store" element={<StorePage />} />
           <Route path="/store/:id" element={<StoreDetailPage />} />

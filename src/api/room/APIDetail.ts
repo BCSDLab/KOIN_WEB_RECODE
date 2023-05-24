@@ -1,5 +1,4 @@
-import { APIRequest } from 'interfaces/APIRequest';
-import { HTTP_METHOD } from 'utils/ts/apiClient';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { LandListResponse, LandDetailResponse } from './entity';
 
 export class LandList<R extends LandListResponse> implements APIRequest<R> {

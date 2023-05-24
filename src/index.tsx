@@ -7,6 +7,7 @@ import PortalProvider from 'components/common/Modal/PortalProvider';
 import { RecoilRoot } from 'recoil';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import showToast from './utils/ts/showToast';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,6 +17,9 @@ const queryClient = new QueryClient({
       refetchOnReconnect: false,
       retry: false,
       staleTime: 5 * 60 * 1000,
+      onError: () => {
+        showToast('error', '네트워크 연결을 확인해주세요.');
+      },
     },
   },
 });

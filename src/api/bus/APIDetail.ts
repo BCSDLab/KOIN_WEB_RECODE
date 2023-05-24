@@ -1,5 +1,4 @@
-import { APIRequest } from 'interfaces/APIRequest';
-import { HTTP_METHOD } from 'utils/ts/apiClient';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
   CourseResponse, BusResponse, BusTimetableResponse, Course,
 } from './entity';

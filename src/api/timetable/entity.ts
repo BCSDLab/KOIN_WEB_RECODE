@@ -1,0 +1,37 @@
+import { APIResponse } from 'interfaces/APIResponse';
+import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
+
+export type SemesterInfo = {
+  id: number;
+  'semester': string;
+};
+
+export interface SemesterResponse extends APIResponse {
+  [index: number]: SemesterInfo;
+}
+
+export interface LectureInfoResponse extends APIResponse {
+  [index: number]: LectureInfo;
+}
+
+export interface TimetableInfoResponse extends APIResponse {
+  semester: string;
+  timetable: TimetableLectureInfo[];
+}
+
+export interface TimetableAddLectureResponse extends APIResponse {
+  [index: number]: TimetableLectureInfo;
+}
+
+export interface TimetableAddLectureRequest {
+  semester: string;
+  timetable: [{
+    class_time: number[];
+    class_title: string;
+    grades: string;
+  }];
+}
+
+export interface TimetableRemoveLectureResponse extends APIResponse {
+  [index: number]: TimetableLectureInfo;
+}

@@ -1,28 +1,17 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { getCookie } from 'utils/ts/cookie';
-// eslint-disable-next-line import/no-cycle
-import { APIRequest } from 'interfaces/APIRequest';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
 import { APIError } from 'interfaces/APIError';
 
 const API_URL = process.env.REACT_APP_API_PATH;
-
-export const HTTP_METHOD = {
-  GET: 'GET',
-  POST: 'POST',
-  PUT: 'PUT',
-  DELETE: 'DELETE',
-} as const;
-
-export type HTTPMethod = typeof HTTP_METHOD[keyof typeof HTTP_METHOD];
 
 type Constructor<T> = new (...args: any[]) => T;
 
 // eslint-disable-next-line
 type ResponseType<T> = T extends APIRequest<infer T> ? T : never
 
-export class APIClient {
+export default class APIClient {
   // API Client Singleton
   static shared = new APIClient();
 
@@ -104,10 +93,9 @@ export class APIClient {
   // Create headers
   private createHeaders<U extends APIResponse>(request: APIRequest<U>): any {
     const headers: Record<string, string> = {};
-    const authToken = getCookie('AUTH_TOKEN_KEY');
     // 인증 토큰 삽입
-    if (authToken) {
-      headers.Authorization = `Bearer ${authToken}`;
+    if (request.authorization) {
+      headers.Authorization = `Bearer ${request.authorization}`;
     }
 
     // json body 사용

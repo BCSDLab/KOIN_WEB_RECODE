@@ -1,0 +1,8 @@
+@use "utils/scss/media.scss" as media;
+
+.page {
+  width: 1128px;
+  margin: 68px auto 80px;
+  padding: 0 10px;
+  min-height: 800px;
+}
