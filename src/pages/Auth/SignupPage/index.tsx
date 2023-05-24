@@ -447,7 +447,7 @@ const useSignupForm = () => {
   const submitForm: ISubmitForm = (formValue) => {
     const payload = {
       // 필수정보
-      portal_account: formValue.id?.trim(),
+      email: formValue.id?.trim(),
       password: formValue.password,
       // 옵션
       name: formValue.name || undefined,

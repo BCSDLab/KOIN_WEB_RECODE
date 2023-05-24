@@ -1,7 +1,14 @@
 import { AxiosResponse } from 'axios';
-// eslint-disable-next-line import/no-cycle
-import { HTTPMethod } from 'utils/ts/apiClient';
 import { APIResponse } from './APIResponse';
+
+export const HTTP_METHOD = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+} as const;
+
+export type HTTPMethod = typeof HTTP_METHOD[keyof typeof HTTP_METHOD];
 
 export type APIRequest<R extends APIResponse> = {
   response: R
@@ -10,6 +17,7 @@ export type APIRequest<R extends APIResponse> = {
   params?: any
   data?: any
   baseURL?: string
+  authorization?: string;
   headers?: Record<string, string>
   parse?: (data: AxiosResponse<R>) => R
   convertBody?: (data: any) => any

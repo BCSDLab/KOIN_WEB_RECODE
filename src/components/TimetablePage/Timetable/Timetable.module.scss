@@ -1,0 +1,93 @@
+.timetable {
+  background-color: #fff;
+
+  &__head {
+    background-color: #f1f1f1;
+    border-top: solid 1px #d2dae2;
+    border-left: solid 1px #d2dae2;
+    display: flex;
+  }
+
+  &__col {
+    border-right: #dadada 1px solid;
+
+    &--head {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-right: solid 1px #d2dae2;
+      height: 100%;
+      font-family: NanumBarunGothic, serif;
+      letter-spacing: normal;
+      color: #555;
+    }
+
+    &--time {
+      & > div {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+      }
+
+      & > div > div:first-child {
+        display: inline-block;
+        text-align: center;
+        border-right: #dadada 1px solid;
+      }
+    }
+  }
+
+  &__content {
+    width: 100%;
+    overflow: hidden;
+    display: inline-flex;
+    flex: none;
+    position: relative;
+    border-bottom: #d2dae2 1px solid;
+    border-left: solid 1px #d2dae2;
+  }
+
+  &__row-container {
+    border-top: #d2dae2 1px solid;
+  }
+
+  &__row-line {
+    margin-top: -1px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+    }
+
+    &:nth-child(odd)::after {
+      border-bottom: #dadada 1px solid;
+    }
+
+    &:nth-child(even)::after {
+      border-bottom: rgb(218 218 218 / 30%) 1px solid;
+    }
+  }
+
+  &__lecture {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 3;
+    padding: 4px 2px 0;
+    font-size: 9px;
+    font-family: NanumSquare, serif;
+    box-sizing: border-box;
+
+    &--selected {
+      border-color: #000;
+      border-style: solid;
+    }
+
+    & > h4 {
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+  }
+}

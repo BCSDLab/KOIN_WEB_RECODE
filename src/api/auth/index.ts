@@ -1,4 +1,4 @@
-import { APIClient } from 'utils/ts/apiClient';
+import APIClient from 'utils/ts/apiClient';
 import { Login, NicknameDuplicateCheck, Signup } from './APIDetail';
 
 export const login = APIClient.of(Login);
