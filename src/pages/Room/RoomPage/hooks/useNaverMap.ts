@@ -1,12 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
-function useNaverMap() {
+function useNaverMap(latitude: number, longitude: number) {
   const [map, setMap] = useState<naver.maps.Map | null>(null);
 
   useEffect(() => {
     if (!map) {
       const newMaps = new naver.maps.Map('map', {
-        center: new naver.maps.LatLng(36.764617, 127.2831540),
+        center: new naver.maps.LatLng(latitude, longitude),
         maxZoom: 20,
         minZoom: 15,
         logoControl: false,
@@ -18,8 +19,14 @@ function useNaverMap() {
         },
       });
       setMap(newMaps);
+
+      return () => {
+        newMaps.destroy();
+      };
     }
-  }, [map]);
+
+    return () => {};
+  }, [latitude, longitude]);
 
   return map;
 }

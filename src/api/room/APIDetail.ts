@@ -16,7 +16,7 @@ export class LandDetailInfo<R extends LandDetailResponse> implements APIRequest<
 
   path: string;
 
-  constructor(id: number) {
+  constructor(id: string) {
     this.path = `lands/${id}`;
   }
 }

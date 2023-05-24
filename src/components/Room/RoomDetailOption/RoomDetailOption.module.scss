@@ -1,0 +1,25 @@
+@use "src/utils/scss/media" as media;
+
+.option {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  line-height: 1.71;
+  color: #828282;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 10px;
+    padding-bottom: 25px;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  &__item {
+    &--unchecked {
+      opacity: 0.2;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+@use "src/utils/scss/media" as media;
+
+.map-container {
+  &__address {
+    font-family: NanumBarunGothic, serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.71;
+    color: #828282;
+    margin-bottom: 30px;
+  }
+
+  &__map {
+    height: 400px;
+
+    @include media.media-breakpoint(mobile) {
+      height: 165px;
+    }
+  }
+}

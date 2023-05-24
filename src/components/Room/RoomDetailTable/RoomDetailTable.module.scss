@@ -1,0 +1,45 @@
+@use "src/utils/scss/media" as media;
+
+.table {
+  width: 100%;
+  border-top: 1px solid #175c8e;
+  border-bottom: 1px solid #175c8e;
+  font-family: NanumBarunGothic, serif;
+  font-size: 14px;
+  color: #828282;
+  line-height: 1.7;
+  border-collapse: collapse;
+
+  &__row {
+    border-top: #175c8e4d 1px solid;
+  }
+
+  &__title {
+    color: #828282;
+    text-align: left;
+    padding-left: 20px;
+    font-weight: bold;
+    vertical-align: middle;
+
+    @include media.media-breakpoint(mobile) {
+      width: 52px;
+      font-size: 13px;
+      padding-left: 14px;
+    }
+  }
+
+  &__cell {
+    width: 280px;
+    height: 40px;
+    color: #252525;
+    font-size: 15px;
+    vertical-align: middle;
+
+    @include media.media-breakpoint(mobile) {
+      width: auto;
+      font-size: 12px;
+      text-align: left;
+      line-height: 0.92;
+    }
+  }
+}
