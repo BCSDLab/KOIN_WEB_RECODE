@@ -4,7 +4,6 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import AuthPage from 'pages/Auth/AuthPage';
 import LoginPage from 'pages/Auth/LoginPage';
 import BoardPage from 'pages/BoardPage';
@@ -20,9 +19,7 @@ import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
 import TimetablePage from 'pages/TimetablePage';
-import { tokenState } from 'utils/recoil';
-
-const useTokenState = () => useRecoilValue(tokenState);
+import useTokenState from 'utils/hooks/useTokenState';
 
 function App() {
   const token = useTokenState();

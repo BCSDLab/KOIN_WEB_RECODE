@@ -5,6 +5,7 @@ import CATEGORY, { Category, SubMenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
+import useTokenState from 'utils/hooks/useTokenState';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -80,8 +81,7 @@ function Header() {
     expandSidebar,
     hideSidebar,
   } = useMobileSidebar(pathname, isMobile);
-  // TODO: Auth 모듈이 만들어지면 그 때 변경
-  const [token] = useState(false);
+  const token = useTokenState();
   const isLoggedin = !!token;
   const [userInfo] = useState<{ nickname: string; } | null>(null);
 
@@ -164,41 +164,27 @@ function Header() {
                     <ul className={styles['mobileheader__auth-menu']}>
                       {isLoggedin ? (
                         <>
-                          <li
-                            className={styles['mobileheader__my-info']}
-                          >
-                            <Link
-                              to="/modifyinfo"
-                            >
+                          <li className={styles['mobileheader__my-info']}>
+                            <Link to="/modifyinfo">
                               내 정보
                             </Link>
                           </li>
                           <li className={styles.mobileheader__link}>
-                            <button
-                              type="button"
-                            >
+                            <button type="button">
                               로그아웃
                             </button>
                           </li>
                         </>
                       ) : (
                         <>
-                          <li
-                            className={styles.mobileheader__link}
-                          >
-                            <Link
-                              to="/auth/signup"
-                            >
+                          <li className={styles.mobileheader__link}>
+                            <Link to="/auth/signup">
                               회원가입
                             </Link>
                           </li>
                           |
-                          <li
-                            className={styles.mobileheader__link}
-                          >
-                            <Link
-                              to="/auth"
-                            >
+                          <li className={styles.mobileheader__link}>
+                            <Link to="/auth">
                               로그인
                             </Link>
                           </li>
