@@ -37,4 +37,5 @@ export interface RefreshRequest {
 
 export interface RefreshResponse extends APIResponse {
   token: string;
+  refresh_token: string;
 }
