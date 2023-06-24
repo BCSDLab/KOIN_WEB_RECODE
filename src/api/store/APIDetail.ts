@@ -1,5 +1,9 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { StoreListResponse, StoreDetailResponse } from './entity';
+import { 
+  StoreListResponse,
+  StoreDetailResponse,
+  StoreDetailMenuResponse, 
+} from './entity';
 
 export class StoreList<R extends StoreListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
@@ -18,5 +22,17 @@ export class StoreDetailInfo<R extends StoreDetailResponse> implements APIReques
 
   constructor(id: any) {
     this.path = `shops/${id}`;
+  }
+}
+
+export class StoreDetailMenu<R extends StoreDetailMenuResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  response!: R;
+
+  path = 'shops/:id/menus';
+
+  constructor(id: any) {
+    this.path = `shops/${id}/menus`;
   }
 }
