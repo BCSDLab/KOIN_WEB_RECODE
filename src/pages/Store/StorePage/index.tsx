@@ -2,6 +2,7 @@ import React from 'react';
 import STORE_CATEGORY from 'static/storeCategory';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
+import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
 import cn from 'utils/ts/classnames';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -48,16 +49,6 @@ const useStore = (params: any) => {
     api.store.getStoreList,
     {
       retry: 0,
-      // 임시 처리, 추후 요일별 시간 디자인이 나온 경우 필요 없어짐
-      select: (response) => ({
-        shops: response.shops.map((shop) => (
-          {
-            ...shop,
-            open_time: shop.open[0].open_time,
-            close_time: shop.open[0].close_time,
-          }
-        )),
-      }),
     },
   );
   return storeList?.shops.filter(
@@ -191,7 +182,7 @@ function StorePage() {
         {
           storeList?.map((store) => (
             <Link to={`/store/${store.id}`} className={styles['store-list__item']} key={store.id}>
-              {isStoreOpen(store.open_time, store.close_time) && <div className={styles['store-none-open']} />}
+              {isStoreOpen(store.open[getDayOfWeek()].open_time, store.open[getDayOfWeek()].close_time) && <div className={styles['store-none-open']} />}
               <div className={styles['store-list__title']}>{store.name}</div>
               <div className={styles['store-list__phone']}>
                 전화번호
@@ -199,7 +190,14 @@ function StorePage() {
               </div>
               <div className={styles['store-list__open-time']}>
                 운영시간
-                <span>{getOpenCloseTime(store.open_time, store.close_time)}</span>
+                <span>
+                  {
+                    getOpenCloseTime(
+                      store.open[getDayOfWeek()].open_time,
+                      store.open[getDayOfWeek()].close_time,
+                    )
+                  }
+                </span>
               </div>
               <div className={styles['store-item']}>
                 {(store.delivery || isMobile)

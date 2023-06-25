@@ -1,4 +1,5 @@
 import React from 'react';
+import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -8,13 +9,6 @@ import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
-
-function getDayOfWeek(): number {
-  const today = new Date().getDay();
-
-  if (today === 0) return 6;
-  return today;
-}
 
 function StoreDetailPage() {
   const params = useParams();
