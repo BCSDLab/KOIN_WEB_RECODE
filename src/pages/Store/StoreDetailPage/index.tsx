@@ -1,5 +1,6 @@
 import React from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
+import { Menu, MenuCategory } from 'api/store/entity';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -118,17 +119,19 @@ function StoreDetailPage() {
             ))}
           </div>
         </div>
-        { (storeMenuCategories && storeMenuCategories.menus) && (
+        { (storeMenuCategories && storeMenuCategories.length > 0) && (
           <>
             <div className={styles['menu-title']}>MENU</div>
             <div className={styles['menu-info']}>
-              { storeMenuCategories.menus.map((menu) => (
-                menu.option_prices === null && (
-                  <div className={styles['menu-card']} key={menu.id}>
-                    { menu.name }
-                    <span>{ !!menu.single_price && menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
-                  </div>
-                )
+              { storeMenuCategories.map((menu_categories: MenuCategory) => (
+                menu_categories.menus.map((menu: Menu) => (
+                  menu.option_prices === null && (
+                    <div className={styles['menu-card']} key={menu.id}>
+                      { menu.name }
+                      <span>{ !!menu.single_price && menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
+                    </div>
+                  )
+                ))
               ))}
             </div>
           </>

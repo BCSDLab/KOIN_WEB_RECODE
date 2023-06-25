@@ -5,17 +5,11 @@ const useStoreDetail = (params: string | undefined) => {
   const { data: storeDetail, isError: storeDetailError } = useQuery(
     ['storeDetail', params],
     ({ queryKey }) => api.store.getStoreDetailInfo(queryKey[1] ?? ''),
-    {
-      retry: 0,
-    },
   );
   const storeDescription = storeDetail?.description ? storeDetail?.description.replace(/(?:\/)/g, '\n') : '-';
   const { data: storeMenus, isError: storeMenusError } = useQuery(
     ['storeDetailMenu', params],
     ({ queryKey }) => api.store.getStoreDetailMenu(queryKey[1] ?? ''),
-    {
-      retry: 0,
-    },
   );
 
   if (storeMenusError || storeDetailError) {

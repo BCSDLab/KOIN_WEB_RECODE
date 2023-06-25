@@ -59,9 +59,9 @@ interface MultiPriceMenu extends MenuBase {
   option_prices: { option: string; price: number }[];
 }
 
-type Menu = SinglePriceMenu | MultiPriceMenu;
+export type Menu = SinglePriceMenu | MultiPriceMenu;
 
-interface MenuCategory {
+export interface MenuCategory {
   id: number;
   name: string;
   menus: Menu[];
