@@ -61,7 +61,8 @@ const useStoreList = (params: StoreSearchQueryType) => {
   );
   return storeList?.shops.filter(
     (store) => ((params.category === undefined || params.category === 'ALL') || store.category === params.category)
-    && (checkedStoreSearchQuery(params) ? true : ((store.pay_bank && searchStorePayCheckBoxFilter(params.bank))
+    && (checkedStoreSearchQuery(params) ? true : (
+      (store.pay_bank && searchStorePayCheckBoxFilter(params.bank))
       || (store.pay_card && searchStorePayCheckBoxFilter(params.card))
       || (store.delivery && searchStorePayCheckBoxFilter(params.delivery))))
     && store.name.includes(params.storeName ? params.storeName : ''),
