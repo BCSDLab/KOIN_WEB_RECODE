@@ -9,13 +9,15 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
+import useStoreMenus from './hooks/useStoreMenus';
 import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
   const params = useParams();
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
-  const { storeDetail, storeDescription, storeMenus } = useStoreDetail(params.id);
+  const { storeDetail, storeDescription } = useStoreDetail(params.id ?? '');
+  const { storeMenus } = useStoreMenus(params.id ?? '');
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const portalManager = useModalPortal();
 
@@ -123,12 +125,17 @@ function StoreDetailPage() {
           <>
             <div className={styles['menu-title']}>MENU</div>
             <div className={styles['menu-info']}>
-              { storeMenuCategories.map((menu_categories: MenuCategory) => (
-                menu_categories.menus.map((menu: Menu) => (
-                  menu.option_prices === null && (
+              { storeMenuCategories.map((menuCategories: MenuCategory) => (
+                menuCategories.menus.map((menu: Menu) => (
+                  menu.option_prices === null ? (
                     <div className={styles['menu-card']} key={menu.id}>
                       { menu.name }
                       <span>{ !!menu.single_price && menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
+                    </div>
+                  ) : (
+                    <div className={styles['menu-card']} key={menu.id}>
+                      { menu.name }
+                      <span>{ !!menu.option_prices && menu.option_prices[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
                     </div>
                   )
                 ))
