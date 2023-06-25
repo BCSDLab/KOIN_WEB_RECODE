@@ -9,6 +9,14 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
 import styles from './StorePage.module.scss';
 
+type StoreSearchParameterType = {
+  storeName?: string,
+  category?: string,
+  delivery?: string,
+  bank?: string,
+  card?: string,
+};
+
 const CHECK_BOX = [
   {
     id: 'delivery',
@@ -34,7 +42,7 @@ const checkedFilter = (checked : string | undefined) => {
   return true;
 };
 
-const checkedState = (params: any) => {
+const checkedState = (params: StoreSearchParameterType) => {
   if (params.delivery === undefined
     && params.bank === undefined
     && params.card === undefined) {
@@ -43,7 +51,7 @@ const checkedState = (params: any) => {
   return false;
 };
 
-const useStore = (params: any) => {
+const useStore = (params: StoreSearchParameterType) => {
   const { data: storeList } = useQuery(
     'storeList',
     api.store.getStoreList,

@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import * as api from 'api';
 
-const useStoreDetail = (params: string | undefined) => {
+const useStoreDetail = (params: string) => {
   const { data: storeDetail } = useQuery(
     ['storeDetail', params],
     ({ queryKey }) => api.store.getStoreDetailInfo(queryKey[1]),

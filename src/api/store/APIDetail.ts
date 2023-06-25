@@ -20,7 +20,7 @@ export class StoreDetailInfo<R extends StoreDetailResponse> implements APIReques
 
   path = 'shops/:id';
 
-  constructor(id: any) {
+  constructor(id: string) {
     this.path = `shops/${id}`;
   }
 }
@@ -32,7 +32,7 @@ export class StoreDetailMenu<R extends StoreDetailMenuResponse> implements APIRe
 
   path = 'shops/:id/menus';
 
-  constructor(id: any) {
+  constructor(id: string) {
     this.path = `shops/${id}/menus`;
   }
 }
