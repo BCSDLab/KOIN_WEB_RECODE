@@ -9,7 +9,7 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
 import styles from './StorePage.module.scss';
 
-type StoreSearchParameterType = {
+type StoreSearchQueryType = {
   storeName?: string,
   category?: string,
   delivery?: string,
@@ -35,23 +35,23 @@ const CHECK_BOX = [
   },
 ];
 
-const checkedFilter = (checked : string | undefined) => {
+const searchStorePayCheckBoxFilter = (checked : string | undefined) => {
   if (checked === undefined) {
     return false;
   }
   return true;
 };
 
-const checkedState = (params: StoreSearchParameterType) => {
-  if (params.delivery === undefined
-    && params.bank === undefined
-    && params.card === undefined) {
+const checkedStoreSearchQuery = (storeSearchQuery: StoreSearchQueryType) => {
+  if (storeSearchQuery.delivery === undefined
+    && storeSearchQuery.bank === undefined
+    && storeSearchQuery.card === undefined) {
     return true;
   }
   return false;
 };
 
-const useStore = (params: StoreSearchParameterType) => {
+const useStoreList = (params: StoreSearchQueryType) => {
   const { data: storeList } = useQuery(
     'storeList',
     api.store.getStoreList,
@@ -61,9 +61,9 @@ const useStore = (params: StoreSearchParameterType) => {
   );
   return storeList?.shops.filter(
     (store) => ((params.category === undefined || params.category === 'ALL') || store.category === params.category)
-    && (checkedState(params) ? true : ((store.pay_bank && checkedFilter(params.bank))
-      || (store.pay_card && checkedFilter(params.card))
-      || (store.delivery && checkedFilter(params.delivery))))
+    && (checkedStoreSearchQuery(params) ? true : ((store.pay_bank && searchStorePayCheckBoxFilter(params.bank))
+      || (store.pay_card && searchStorePayCheckBoxFilter(params.card))
+      || (store.delivery && searchStorePayCheckBoxFilter(params.delivery))))
     && store.name.includes(params.storeName ? params.storeName : ''),
   );
 };
@@ -74,7 +74,7 @@ const getOpenCloseTime = (open_time: string | null, close_time : string | null) 
   return `${open_time}~${close_time}`;
 };
 
-const isStoreOpen = (open_time: string | null, close_time : string | null) => {
+const isOpenStore = (open_time: string | null, close_time : string | null) => {
   if (open_time === null || close_time === null) return false;
 
   const date = new Date();
@@ -90,7 +90,7 @@ const isStoreOpen = (open_time: string | null, close_time : string | null) => {
 function StorePage() {
   const storeRef = React.useRef<HTMLInputElement | null>(null);
   const { params, searchParams, setParams } = useParamsHandler();
-  const storeList = useStore(params);
+  const storeList = useStoreList(params);
   const isMobile = useMediaQuery();
 
   return (
@@ -190,7 +190,7 @@ function StorePage() {
         {
           storeList?.map((store) => (
             <Link to={`/store/${store.id}`} className={styles['store-list__item']} key={store.id}>
-              {isStoreOpen(store.open[getDayOfWeek()].open_time, store.open[getDayOfWeek()].close_time) && <div className={styles['store-none-open']} />}
+              {isOpenStore(store.open[getDayOfWeek()].open_time, store.open[getDayOfWeek()].close_time) && <div className={styles['store-none-open']} />}
               <div className={styles['store-list__title']}>{store.name}</div>
               <div className={styles['store-list__phone']}>
                 전화번호
