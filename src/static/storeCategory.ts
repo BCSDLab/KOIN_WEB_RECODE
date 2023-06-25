@@ -38,7 +38,7 @@ const STORE_CATEGORY:StoreCategory[] = [
   },
   {
     title: '중국집',
-    state: 'cafeteria.ts',
+    state: 'cafeteria',
     tag: 'S004',
     image: 'https://static.koreatech.in/assets/img/img-rest-blacknoodle.png',
   },

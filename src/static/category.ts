@@ -33,7 +33,7 @@ const CATEGORY: Category[] = [
       },
       {
         title: '식단',
-        link: '/cafeteria.ts',
+        link: '/cafeteria',
         newFlag: false,
         planFlag: false,
         tag: null,
