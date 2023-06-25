@@ -3,6 +3,8 @@ import {
   LoginRequest,
   LoginResponse,
   NicknameDuplicateCheckResponse,
+  RefreshRequest,
+  RefreshResponse,
   SignupResponse,
 } from './entity';
 
@@ -43,4 +45,16 @@ export class Signup<R extends SignupResponse> implements APIRequest<R> {
   auth = false;
 
   constructor(public data: LoginRequest) {}
+}
+
+export class Refresh<R extends RefreshResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/user/refresh';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: RefreshRequest) {}
 }

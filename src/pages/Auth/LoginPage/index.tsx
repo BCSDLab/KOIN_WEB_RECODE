@@ -3,7 +3,7 @@ import { LoginResponse } from 'api/auth/entity';
 import { tokenState } from 'utils/recoil';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { auth } from 'api';
@@ -28,11 +28,12 @@ interface UserInfo {
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 
 const useLogin = (state: IsAutoLogin) => {
-  const [, setToken] = useRecoilState(tokenState);
+  const setToken = useSetRecoilState(tokenState);
   const navigate = useNavigate();
   const postLogin = useMutation(auth.login, {
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
+        localStorage.setItem('AUTH_REFRESH_TOKEN_KEY', data.refresh_token);
         setCookie('AUTH_TOKEN_KEY', data.token, 3);
       } else {
         setCookie('AUTH_TOKEN_KEY', data.token, 0);
@@ -42,7 +43,7 @@ const useLogin = (state: IsAutoLogin) => {
     },
   });
 
-  const useSubmit = async (userInfo: UserInfo) => {
+  const login = async (userInfo: UserInfo) => {
     if (userInfo.userId === null) {
       showToast('error', '계정을 입력해주세요');
       return;
@@ -66,7 +67,7 @@ const useLogin = (state: IsAutoLogin) => {
       password: hashedPassword,
     });
   };
-  return useSubmit;
+  return login;
 };
 
 function LoginPage() {

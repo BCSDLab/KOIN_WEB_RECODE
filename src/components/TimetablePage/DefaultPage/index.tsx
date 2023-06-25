@@ -16,7 +16,7 @@ import showToast from 'utils/ts/showToast';
 import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
-import { tokenState } from 'utils/recoil';
+import useTokenState from 'utils/hooks/useTokenState';
 import useDeptList from './hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 import useSemester from './hooks/useSemester';
@@ -115,7 +115,7 @@ function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListP
   const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
   const addLectureToLocalStorage = useSetRecoilState(myLectureAddLectureSelector);
 
-  const token = useRecoilValue(tokenState);
+  const token = useTokenState();
   const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const isLoaded = status === 'success' && (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
@@ -173,7 +173,7 @@ function CurrentMyLectureList() {
   const removeLectureFromLocalStorage = useSetRecoilState(myLectureRemoveLectureSelector);
 
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const token = useRecoilValue(tokenState);
+  const token = useTokenState();
   const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(selectedSemester, token);
 
@@ -211,7 +211,7 @@ function CurrentSemesterTimetable(): JSX.Element {
   const selectedSemesterValue = useRecoilValue(selectedSemesterAtom);
   const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
 
-  const token = useRecoilValue(tokenState);
+  const token = useTokenState();
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
   const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const myLectureDayValue = useTimetableDayList(

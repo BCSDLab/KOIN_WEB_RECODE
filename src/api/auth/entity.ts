@@ -1,48 +1,41 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
 export type LoginRequest = {
-  email: string
-  password: string
+  email: string;
+  password: string;
 };
 
 export interface LoginResponse extends APIResponse {
-  token: string
-  ttl: number
-  user:{
-    accountNonExpired : boolean
-    accountNonLocked: boolean
-    anonymous_nickname: string
-    credentialsNonExpired: boolean
-    enabled: boolean
-    gender: number
-    id: number
-    identity: number
-    is_graduated: false
-    major: string
-    name: string
-    nickname: string
-    email: string
-    student_number: string
-    username: string
-  }
+  token: string;
+  refresh_token: string;
+  userType: 'STUDENT';
 }
 
 export interface NicknameDuplicateCheckResponse extends APIResponse {
-  'success': string;
+  success: string;
 }
 
 export interface SignupRequest {
-  email: string,
-  password: string,
+  email: string;
+  password: string;
   // options
-  name?: string,
-  nickname?: string,
-  gender?: string,
-  major?: string,
-  student_number?: string,
-  phone_number?: string,
-  identity?: number,
-  is_graduated?: boolean,
+  name?: string;
+  nickname?: string;
+  gender?: string;
+  major?: string;
+  student_number?: string;
+  phone_number?: string;
+  identity?: number;
+  is_graduated?: boolean;
 }
 
 export interface SignupResponse extends APIResponse { }
+
+export interface RefreshRequest {
+  refresh_token: string;
+}
+
+export interface RefreshResponse extends APIResponse {
+  token: string;
+  refresh_token: string;
+}
