@@ -40,26 +40,36 @@ export interface StoreDetailResponse extends APIResponse {
   delivery_price: number,
   open: Open[],
 }
+interface MenuBase {
+  id: number;
+  name: string;
+  image_urls: string[];
+  is_hidden: boolean;
+  is_single: boolean;
+  description: string | null;
+}
+
+interface SinglePriceMenu extends MenuBase {
+  single_price: number;
+  option_prices: null;
+}
+
+interface MultiPriceMenu extends MenuBase {
+  single_price: null;
+  option_prices: { option: string; price: number }[];
+}
+
+type Menu = SinglePriceMenu | MultiPriceMenu;
+
+interface MenuCategory {
+  id: number;
+  name: string;
+  menus: Menu[];
+}
 
 export interface StoreDetailMenuResponse extends APIResponse {
-  count: number,
-  menu_categories:{
-    id: number,
-    menus: {
-      description: string,
-      id: number,
-      image_url: string[]
-      is_hidden: boolean,
-      is_single: boolean,
-      name: string,
-      option_prices: {
-        option: string,
-        price: number,
-      }[] | null,
-      single_price: number,
-    }[]
-    name: string,
-  }
+  count: number;
+  menu_categories: MenuCategory[];
 }
 
 export interface StoreListResponse extends APIResponse {
