@@ -1,9 +1,9 @@
 import { Course } from 'api/bus/entity';
 
 // 시간 반환 함수
-const getHour = (second: number) => Math.floor(second / 60 / 60);
+const getHour = (second: number) => Math.floor(second / 60 / 60) % 24;
 
-const getMinute = (second: number) => Math.ceil(second / 60) % 60;
+const getMinute = (second: number) => Math.round(second / 60) % 60;
 
 export const getLeftTimeString = (second: number | '미운행' | undefined) => {
   if (!second) {
@@ -17,21 +17,17 @@ export const getLeftTimeString = (second: number | '미운행' | undefined) => {
   } return `${getHour(second)}시간 ${getMinute(second)}분 전`;
 };
 
-export const getStartTimeString = (second: number | '미운행' | undefined, isMain:boolean = false) => {
+export const getStartTimeString = (second: number | '미운행' | undefined, isMain: boolean = false) => {
   if (!second) return '';
   if (second === '미운행') return '';
 
-  const hour = getHour(second);
-  const minute = getMinute(second);
+  const today = (new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000);
+  const arrivalTimeSecond = (today / 1000) + second;
 
-  const today = new Date();
+  const hour = getHour(arrivalTimeSecond);
+  const minute = getMinute(arrivalTimeSecond);
 
-  let startMinute = today.getMinutes() + minute;
-  let startHour = today.getHours() + hour + Math.ceil(startMinute / 60);
-
-  startHour %= 24;
-  startMinute %= 60;
-  const timeString = [String(startHour).padStart(2, '0'), String(startMinute).padStart(2, '0')];
+  const timeString = [String(hour).padStart(2, '0'), String(minute).padStart(2, '0')];
 
   if (isMain) return `${timeString[0]}시 ${timeString[1]}분`;
   return `${timeString[0]}:${timeString[1]}`;
