@@ -84,9 +84,12 @@ function Header() {
   const token = useTokenState();
   const isLoggedin = !!token;
   const [userInfo] = useState<{ nickname: string; } | null>(null);
-
-  const isMain = true; // pathname === '/';
-
+  const [isMain, setIsMain] = useState<boolean>(true); // pathname === '/';
+  useEffect(() => {
+    if (pathname !== '/') {
+      setIsMain(false);
+    }
+  }, [pathname]);
   return (
     <header
       className={cn({
