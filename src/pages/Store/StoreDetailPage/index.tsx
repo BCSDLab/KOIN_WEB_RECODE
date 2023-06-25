@@ -15,7 +15,7 @@ function StoreDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const { storeDetail, storeDescription, storeMenus } = useStoreDetail(params.id);
-  const storeMenuCategories = storeMenus?.menu_categories;
+  const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const portalManager = useModalPortal();
 
   const onClickImage = (img: string[], index: number) => {
@@ -40,61 +40,65 @@ function StoreDetailPage() {
           </button>
         )}
         <div className={styles['section__store-info']}>
-          <div className={styles.store}>
-            <div className={styles.store__name}>{storeDetail?.name}</div>
-            <div className={styles.store__detail}>
-              <span>전화번호</span>
-              { storeDetail?.phone }
-              <br />
-              <span>운영시간</span>
-              {
-                storeDetail?.open ? (`${storeDetail?.open[getDayOfWeek()].open_time} ~ ${storeDetail?.open[getDayOfWeek()].close_time}`) : '-'
-              }
-              <br />
-              <span>주소정보</span>
-              { storeDetail?.address }
-              <br />
-              <span>배달요금</span>
-              { storeDetail?.delivery_price.toLocaleString() }
-              원
-              <br />
-              <div className={styles.etc}>
-                <span>기타정보</span>
-                <div className={styles.etc__content}>
-                  { storeDescription }
+          {
+            storeDetail && (
+              <div className={styles.store}>
+                <div className={styles.store__name}>{storeDetail?.name}</div>
+                <div className={styles.store__detail}>
+                  <span>전화번호</span>
+                  { storeDetail?.phone }
+                  <br />
+                  <span>운영시간</span>
+                  {
+                    storeDetail?.open ? (`${storeDetail?.open[getDayOfWeek()].open_time} ~ ${storeDetail?.open[getDayOfWeek()].close_time}`) : '-'
+                  }
+                  <br />
+                  <span>주소정보</span>
+                  { storeDetail?.address }
+                  <br />
+                  <span>배달요금</span>
+                  { storeDetail?.delivery_price.toLocaleString() }
+                  원
+                  <br />
+                  <div className={styles.etc}>
+                    <span>기타정보</span>
+                    <div className={styles.etc__content}>
+                      { storeDescription }
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.store__tag}>
+                  { storeDetail?.delivery && <span>#배달가능</span> }
+                  { storeDetail?.pay_card && <span>#카드가능</span> }
+                  { storeDetail?.pay_bank && <span>#계좌이체가능</span> }
+                </div>
+                <div className={styles['button-wrapper']}>
+                  <a
+                    className={cn({
+                      [styles['button-wrapper__button']]: true,
+                      [styles['button-wrapper__button--call']]: true,
+                    })}
+                    role="button"
+                    aria-label="상점 전화하기"
+                    href={`tel:${storeDetail?.phone}`}
+                  >
+                    전화하기
+                  </a>
+                  <button
+                    className={cn({
+                      [styles['button-wrapper__button']]: true,
+                      [styles['button-wrapper__button--store-list']]: true,
+                    })}
+                    aria-label="상점 목록 이동"
+                    type="button"
+                    onClick={() => navigate('/store')}
+                  >
+                    상점목록
+                  </button>
                 </div>
               </div>
-            </div>
-            <div className={styles.store__tag}>
-              { storeDetail?.delivery && <span>#배달가능</span> }
-              { storeDetail?.pay_card && <span>#카드가능</span> }
-              { storeDetail?.pay_bank && <span>#계좌이체가능</span> }
-            </div>
-            <div className={styles['button-wrapper']}>
-              <a
-                className={cn({
-                  [styles['button-wrapper__button']]: true,
-                  [styles['button-wrapper__button--call']]: true,
-                })}
-                role="button"
-                aria-label="상점 전화하기"
-                href={`tel:${storeDetail?.phone}`}
-              >
-                전화하기
-              </a>
-              <button
-                className={cn({
-                  [styles['button-wrapper__button']]: true,
-                  [styles['button-wrapper__button--store-list']]: true,
-                })}
-                aria-label="상점 목록 이동"
-                type="button"
-                onClick={() => navigate('/store')}
-              >
-                상점목록
-              </button>
-            </div>
-          </div>
+            )
+          }
           <div className={styles.image}>
             { storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
               <div key={`${img}`} className={styles.image__content}>
