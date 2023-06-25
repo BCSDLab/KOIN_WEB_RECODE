@@ -84,7 +84,7 @@ function Header() {
   const token = useTokenState();
   const isLoggedin = !!token;
   const [userInfo] = useState<{ nickname: string; } | null>(null);
-  const isMain = (pathname === '/') ?? false;
+  const isMain = pathname === '/';
 
   return (
     <header
