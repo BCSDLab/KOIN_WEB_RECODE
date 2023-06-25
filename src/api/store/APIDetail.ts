@@ -1,8 +1,8 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { 
+import {
   StoreListResponse,
   StoreDetailResponse,
-  StoreDetailMenuResponse, 
+  StoreDetailMenuResponse,
 } from './entity';
 
 export class StoreList<R extends StoreListResponse> implements APIRequest<R> {

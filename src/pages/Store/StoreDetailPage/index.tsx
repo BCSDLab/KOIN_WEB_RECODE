@@ -9,11 +9,19 @@ import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
 import styles from './StoreDetailPage.module.scss';
 
+function getDayOfWeek(): number {
+  const today = new Date().getDay();
+
+  if (today === 0) return 6;
+  return today;
+}
+
 function StoreDetailPage() {
   const params = useParams();
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
-  const { storeDetail, storeDescription } = useStoreDetail(params.id);
+  const { storeDetail, storeDescription, storeMenus } = useStoreDetail(params.id);
+  const storeMenuCategories = storeMenus?.menu_categories;
   const portalManager = useModalPortal();
 
   const onClickImage = (img: string[], index: number) => {
@@ -45,7 +53,9 @@ function StoreDetailPage() {
               { storeDetail?.phone }
               <br />
               <span>운영시간</span>
-              { storeDetail?.open_time ? `${storeDetail.open_time} ~ ${storeDetail.close_time}` : '-'}
+              {
+                storeDetail?.open ? (`${storeDetail?.open[getDayOfWeek()].open_time} ~ ${storeDetail?.open[getDayOfWeek()].close_time}`) : '-'
+              }
               <br />
               <span>주소정보</span>
               { storeDetail?.address }
@@ -110,23 +120,18 @@ function StoreDetailPage() {
             ))}
           </div>
         </div>
-        { !!storeDetail?.menus.length && (
+        { (storeMenuCategories && storeMenuCategories.menus) && (
           <>
             <div className={styles['menu-title']}>MENU</div>
             <div className={styles['menu-info']}>
-              { storeDetail.menus.filter((menu) => menu.price_type).map(
-                (menu) => menu.price_type.map((price) => ({
-                  ...price,
-                  name: menu.name,
-                })),
-              ).flat(1)
-                .map((menu) => (
-                  <div className={styles['menu-card']} key={menu.name + menu.price + menu.size}>
+              { storeMenuCategories.menus.map((menu) => (
+                menu.option_prices === null && (
+                  <div className={styles['menu-card']} key={menu.id}>
                     { menu.name }
-                    { menu.size !== '기본' && menu.size}
-                    <span>{ !!menu.price && menu.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
+                    <span>{ !!menu.single_price && menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
                   </div>
-                ))}
+                )
+              ))}
             </div>
           </>
         )}

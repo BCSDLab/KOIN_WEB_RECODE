@@ -43,26 +43,25 @@ export interface StoreDetailResponse extends APIResponse {
 
 export interface StoreDetailMenuResponse extends APIResponse {
   count: number,
-  menu_categories: StoreMenu[]
+  menu_categories:{
+    id: number,
+    menus: {
+      description: string,
+      id: number,
+      image_url: string[]
+      is_hidden: boolean,
+      is_single: boolean,
+      name: string,
+      option_prices: {
+        option: string,
+        price: number,
+      }[] | null,
+      single_price: number,
+    }[]
+    name: string,
+  }
 }
 
-export type StoreMenu = {
-  id: number,
-  menus: {
-    description: string,
-    id: number,
-    image_url: string[]
-    is_hidden: boolean,
-    is_single: boolean,
-    name: string,
-    option_prices: {
-      option: string,
-      pirce: number,
-    }[]
-    single_price: number,
-  }
-  name: string,
-}
 export interface StoreListResponse extends APIResponse {
   shops:
   { // weekend_open_time: null
