@@ -16,8 +16,8 @@ function StoreDetailPage() {
   const params = useParams();
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
-  const { storeDetail, storeDescription } = useStoreDetail(params.id ?? '');
-  const { storeMenus } = useStoreMenus(params.id ?? '');
+  const { storeDetail, storeDescription } = useStoreDetail(params.id!);
+  const { storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const portalManager = useModalPortal();
 
@@ -43,103 +43,105 @@ function StoreDetailPage() {
           </button>
         )}
         <div className={styles['section__store-info']}>
-          {
-            storeDetail && (
-              <div className={styles.store}>
-                <div className={styles.store__name}>{storeDetail?.name}</div>
-                <div className={styles.store__detail}>
-                  <span>전화번호</span>
-                  { storeDetail?.phone }
-                  <br />
-                  <span>운영시간</span>
-                  {
-                    storeDetail?.open ? (`${storeDetail?.open[getDayOfWeek()].open_time} ~ ${storeDetail?.open[getDayOfWeek()].close_time}`) : '-'
-                  }
-                  <br />
-                  <span>주소정보</span>
-                  { storeDetail?.address }
-                  <br />
-                  <span>배달요금</span>
-                  { storeDetail?.delivery_price.toLocaleString() }
-                  원
-                  <br />
-                  <div className={styles.etc}>
-                    <span>기타정보</span>
-                    <div className={styles.etc__content}>
-                      { storeDescription }
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.store__tag}>
-                  { storeDetail?.delivery && <span>#배달가능</span> }
-                  { storeDetail?.pay_card && <span>#카드가능</span> }
-                  { storeDetail?.pay_bank && <span>#계좌이체가능</span> }
-                </div>
-                <div className={styles['button-wrapper']}>
-                  <a
-                    className={cn({
-                      [styles['button-wrapper__button']]: true,
-                      [styles['button-wrapper__button--call']]: true,
-                    })}
-                    role="button"
-                    aria-label="상점 전화하기"
-                    href={`tel:${storeDetail?.phone}`}
-                  >
-                    전화하기
-                  </a>
-                  <button
-                    className={cn({
-                      [styles['button-wrapper__button']]: true,
-                      [styles['button-wrapper__button--store-list']]: true,
-                    })}
-                    aria-label="상점 목록 이동"
-                    type="button"
-                    onClick={() => navigate('/store')}
-                  >
-                    상점목록
-                  </button>
+          {storeDetail && (
+            <div className={styles.store}>
+              <div className={styles.store__name}>{storeDetail?.name}</div>
+              <div className={styles.store__detail}>
+                <span>전화번호</span>
+                {storeDetail?.phone}
+                <br />
+                <span>운영시간</span>
+                {storeDetail?.open
+                  ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${
+                      storeDetail?.open[getDayOfWeek()].close_time
+                    }`
+                  : '-'}
+                <br />
+                <span>주소정보</span>
+                {storeDetail?.address}
+                <br />
+                <span>배달요금</span>
+                {storeDetail?.delivery_price.toLocaleString()}
+                원
+                <br />
+                <div className={styles.etc}>
+                  <span>기타정보</span>
+                  <div className={styles.etc__content}>{storeDescription}</div>
                 </div>
               </div>
-            )
-          }
-          <div className={styles.image}>
-            { storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
-              <div key={`${img}`} className={styles.image__content}>
-                <button
-                  className={styles.image__button}
-                  aria-label="이미지 확대"
-                  type="button"
-                  onClick={() => onClickImage(storeDetail!.image_urls, index)}
+              <div className={styles.store__tag}>
+                {storeDetail?.delivery && <span>#배달가능</span>}
+                {storeDetail?.pay_card && <span>#카드가능</span>}
+                {storeDetail?.pay_bank && <span>#계좌이체가능</span>}
+              </div>
+              <div className={styles['button-wrapper']}>
+                <a
+                  className={cn({
+                    [styles['button-wrapper__button']]: true,
+                    [styles['button-wrapper__button--call']]: true,
+                  })}
+                  role="button"
+                  aria-label="상점 전화하기"
+                  href={`tel:${storeDetail?.phone}`}
                 >
-                  <img
-                    className={styles.image__poster}
-                    src={`${img}`}
-                    alt="상점이미지"
-                  />
+                  전화하기
+                </a>
+                <button
+                  className={cn({
+                    [styles['button-wrapper__button']]: true,
+                    [styles['button-wrapper__button--store-list']]: true,
+                  })}
+                  aria-label="상점 목록 이동"
+                  type="button"
+                  onClick={() => navigate('/store')}
+                >
+                  상점목록
                 </button>
               </div>
-            ))}
+            </div>
+          )}
+          <div className={styles.image}>
+            {storeDetail?.image_urls &&
+              storeDetail.image_urls.map((img, index) => (
+                <div key={`${img}`} className={styles.image__content}>
+                  <button
+                    className={styles.image__button}
+                    aria-label="이미지 확대"
+                    type="button"
+                    onClick={() => onClickImage(storeDetail!.image_urls, index)}
+                  >
+                    <img className={styles.image__poster} src={`${img}`} alt="상점이미지" />
+                  </button>
+                </div>
+              ))}
           </div>
         </div>
-        { (storeMenuCategories && storeMenuCategories.length > 0) && (
+        {storeMenuCategories && storeMenuCategories.length > 0 && (
           <>
             <div className={styles['menu-title']}>MENU</div>
             <div className={styles['menu-info']}>
-              { storeMenuCategories.map((menuCategories: MenuCategory) => (
-                menuCategories.menus.map((menu: Menu) => (
+              {storeMenuCategories.map((menuCategories: MenuCategory) =>
+                menuCategories.menus.map((menu: Menu) =>
                   menu.option_prices === null ? (
                     <div className={styles['menu-card']} key={menu.id}>
-                      { menu.name }
-                      <span>{ !!menu.single_price && menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
+                      {menu.name}
+                      <span>
+                        {!!menu.single_price &&
+                          menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                      </span>
                     </div>
                   ) : (
                     <div className={styles['menu-card']} key={menu.id}>
-                      { menu.name }
-                      <span>{ !!menu.option_prices && menu.option_prices[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</span>
+                      {menu.name}
+                      <span>
+                        {menu.option_prices[0].price
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                      </span>
                     </div>
-                  )
-                ))
-              ))}
+                  ),
+                ),
+              )}
             </div>
           </>
         )}
