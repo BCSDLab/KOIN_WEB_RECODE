@@ -44,9 +44,9 @@ const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
 
 const checkedStoreSearchQuery = (storeSearchQuery: StoreSearchQueryType) => {
   if (
-    storeSearchQuery.delivery === undefined &&
-    storeSearchQuery.bank === undefined &&
-    storeSearchQuery.card === undefined
+    storeSearchQuery.delivery === undefined && (
+      storeSearchQuery.bank === undefined) && (
+      storeSearchQuery.card === undefined)
   ) {
     return true;
   }
@@ -58,16 +58,14 @@ const useStoreList = (params: StoreSearchQueryType) => {
     retry: 0,
   });
   return storeList?.shops.filter(
-    (store) =>
-      (params.category === undefined ||
-        params.category === 'ALL' ||
-        store.category === params.category) &&
-      (checkedStoreSearchQuery(params)
-        ? true
-        : (store.pay_bank && searchStorePayCheckBoxFilter(params.bank)) ||
-          (store.pay_card && searchStorePayCheckBoxFilter(params.card)) ||
-          (store.delivery && searchStorePayCheckBoxFilter(params.delivery))) &&
-      store.name.includes(params.storeName ? params.storeName : ''),
+    (store) => (params.category === undefined || params.category === 'ALL' || (
+      store.category === params.category
+    )) && (
+      checkedStoreSearchQuery(params)
+        ? true : (store.pay_bank && searchStorePayCheckBoxFilter(params.bank)) || (
+          store.pay_card && searchStorePayCheckBoxFilter(params.card)) || (
+          store.delivery && searchStorePayCheckBoxFilter(params.delivery))) && (
+      store.name.includes(params.storeName ? params.storeName : '')),
   );
 };
 
@@ -85,12 +83,11 @@ const isStoreOpen = (open_time: string | null, close_time: string | null) => {
   const closeTimeNum = Number(close_time.replace(':', ''));
   const nowTimeNum = date.getHours() * 100 + date.getMinutes();
 
-  if (
-    openTimeNum > closeTimeNum
-      ? openTimeNum >= nowTimeNum || closeTimeNum >= nowTimeNum
-      : openTimeNum >= nowTimeNum || closeTimeNum <= nowTimeNum
-  )
-    return true;
+  if (openTimeNum > closeTimeNum ? (
+    openTimeNum >= nowTimeNum || closeTimeNum >= nowTimeNum
+  ) : (
+    openTimeNum >= nowTimeNum || closeTimeNum <= nowTimeNum
+  )) return true;
   return false;
 };
 
@@ -115,9 +112,7 @@ function StorePage() {
               role="radio"
               aria-checked={searchParams.get('category') === value.tag}
               type="button"
-              onClick={() =>
-                setParams('category', value.tag, { deleteBeforeParam: false, replacePage: true })
-              }
+              onClick={() => setParams('category', value.tag, { deleteBeforeParam: false, replacePage: true })}
               key={value.tag}
             >
               <img className={styles.category__image} src={value.image} alt="category_img" />
@@ -137,11 +132,12 @@ function StorePage() {
           name="search"
           placeholder="상점명을 입력하세요"
           onKeyPress={(e) => {
-            if (e.key === 'Enter')
+            if (e.key === 'Enter') {
               setParams('storeName', e.target.value, {
                 deleteBeforeParam: searchParams.get('storeName') === undefined,
                 replacePage: true,
               });
+            }
           }}
         />
         <button

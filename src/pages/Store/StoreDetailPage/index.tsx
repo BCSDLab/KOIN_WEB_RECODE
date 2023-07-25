@@ -53,8 +53,8 @@ function StoreDetailPage() {
                 <span>운영시간</span>
                 {storeDetail?.open
                   ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${
-                      storeDetail?.open[getDayOfWeek()].close_time
-                    }`
+                    storeDetail?.open[getDayOfWeek()].close_time
+                  }`
                   : '-'}
                 <br />
                 <span>주소정보</span>
@@ -101,8 +101,8 @@ function StoreDetailPage() {
             </div>
           )}
           <div className={styles.image}>
-            {storeDetail?.image_urls &&
-              storeDetail.image_urls.map((img, index) => (
+            {
+              storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
                 <div key={`${img}`} className={styles.image__content}>
                   <button
                     className={styles.image__button}
@@ -113,35 +113,38 @@ function StoreDetailPage() {
                     <img className={styles.image__poster} src={`${img}`} alt="상점이미지" />
                   </button>
                 </div>
-              ))}
+              ))
+            }
           </div>
         </div>
         {storeMenuCategories && storeMenuCategories.length > 0 && (
           <>
             <div className={styles['menu-title']}>MENU</div>
             <div className={styles['menu-info']}>
-              {storeMenuCategories.map((menuCategories: MenuCategory) =>
-                menuCategories.menus.map((menu: Menu) =>
+              {storeMenuCategories.map((menuCategories: MenuCategory) => (
+                menuCategories.menus.map((menu: Menu) => (
                   menu.option_prices === null ? (
                     <div className={styles['menu-card']} key={menu.id}>
                       {menu.name}
                       <span>
-                        {!!menu.single_price &&
-                          menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        {
+                          !!menu.single_price && (
+                            menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          )
+                        }
                       </span>
                     </div>
                   ) : (
                     <div className={styles['menu-card']} key={menu.id}>
                       {menu.name}
                       <span>
-                        {menu.option_prices[0].price
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        {
+                          menu.option_prices[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        }
                       </span>
                     </div>
-                  ),
-                ),
-              )}
+                  )
+                ))))}
             </div>
           </>
         )}
