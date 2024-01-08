@@ -12,3 +12,10 @@
     width: 100%;
   }
 }
+
+.mobileWrapper {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+  }
+}

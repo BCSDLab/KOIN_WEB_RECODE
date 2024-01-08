@@ -8,9 +8,11 @@ import styles from './IndexPage.module.scss';
 function IndexPage() {
   return (
     <main className={styles.template}>
-      <IndexStore />
+      <div className={styles.mobileWrapper}>
+        <IndexStore />
+        <IndexBus />
+      </div>
       <IndexTimetable />
-      <IndexBus />
       <IndexNotice />
       <IndexCafeteria />
     </main>

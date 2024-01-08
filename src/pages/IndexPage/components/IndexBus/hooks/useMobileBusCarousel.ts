@@ -11,6 +11,10 @@ const useMobileBusCarousel = () => {
     let startX = 0;
     let scrollValue = 0;
     const slider = sliderRef.current;
+    if (slider?.scrollLeft) {
+      slider.scrollLeft = (window.innerWidth * 0.75
+      - (window.innerWidth - window.innerWidth * 0.75) / 2);
+    }
 
     const slideTouchStart = (e:TouchEvent) => {
       if (slider) {

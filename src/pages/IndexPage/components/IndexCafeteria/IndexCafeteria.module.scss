@@ -36,6 +36,9 @@
   color: #252525;
   text-decoration: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-weight: 400;
 
   ::after {
     display: inline-block;

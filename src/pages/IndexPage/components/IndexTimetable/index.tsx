@@ -10,6 +10,7 @@ import { LectureInfo } from 'interfaces/Lecture';
 import Timetable from 'components/TimetablePage/Timetable';
 import { useSelectRecoil } from 'components/TimetablePage/DefaultPage/hooks/useSelect';
 import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
+import { Link } from 'react-router-dom';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
@@ -61,16 +62,21 @@ export default function IndexTimeTable() {
   // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const token = useTokenState();
+
   return (
     <div className={styles.template}>
-      <div className={styles.title}>
+      <Link to="/timetable" className={styles.title}>
         시간표
-      </div>
+      </Link>
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback="loading...">
           <CurrentSemesterTimetable />
         </React.Suspense>
       </ErrorBoundary>
+      {!token && (
+        <Link to="/auth" className={styles.needLogin} />
+      )}
     </div>
   );
 }
