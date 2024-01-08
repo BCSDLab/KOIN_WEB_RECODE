@@ -384,4 +384,4 @@ function DefaultPage() {
   );
 }
 
-export default DefaultPage;
+export { DefaultPage, useSemesterOptionList };
