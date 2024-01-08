@@ -56,7 +56,9 @@
         "required": {
           "some": ["nesting", "id"]
         }
-      }]
+      }],
+       "linebreak-style":"off",
+       "import/prefer-default-export": "off"
     },
     "settings": {
       "import/resolver": {
