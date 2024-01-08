@@ -31,7 +31,7 @@ implements APIRequest<R> {
   auth = false;
 
   constructor(nickname: string) {
-    this.path = `/user/check/nickname/${nickname}`;
+    this.path = `/user/check/nickname?nickname=${nickname}`;
   }
 }
 
