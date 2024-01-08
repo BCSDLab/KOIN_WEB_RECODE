@@ -6,7 +6,7 @@
   align-items: flex-start;
 
   @include media.media-breakpoint(mobile) {
-    order: 2;
+    order: 1;
     width: 100%;
     overflow-x: auto;
   }

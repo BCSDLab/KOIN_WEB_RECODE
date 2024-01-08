@@ -7,7 +7,7 @@
   gap: 18px;
 
   @include media.media-breakpoint(mobile) {
-    order: 1;
+    order: 0;
     width: 100%;
   }
 
@@ -17,6 +17,7 @@
     font-weight: bold;
     color: #175c8e;
     text-decoration: none;
+    margin-top: 24px;
 
     @include media.media-breakpoint(mobile) {
       font-size: 15px;

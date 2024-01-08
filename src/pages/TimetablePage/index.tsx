@@ -1,6 +1,6 @@
 import React from 'react';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import DefaultPage from 'components/TimetablePage/DefaultPage';
+import { DefaultPage } from 'components/TimetablePage/DefaultPage';
 import styles from './TimetablePage.module.scss';
 
 function MobilePage() {

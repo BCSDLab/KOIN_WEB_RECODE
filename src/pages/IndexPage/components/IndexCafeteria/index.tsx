@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CAFETERIA_CATEGORY } from 'static/cafeteria';
 import { useState } from 'react';
+import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import cn from 'utils/ts/classnames';
 import useCafeteriaList from 'pages/Cafeteria/CafeteriaPage/hooks/useCafeteriaList';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
@@ -28,7 +29,10 @@ function IndexCafeteria() {
     <section className={styles.template}>
       <h2 className={styles.title}>
         <span>식단</span>
-        <Link to="/cafeteria" className={styles.moreLink}>더보기</Link>
+        <Link to="/cafeteria" className={styles.moreLink}>
+          더보기
+          <RightArrow aria-hidden />
+        </Link>
       </h2>
       <div className={styles.cafeteriaCard}>
         <div className={styles.cafeteriaContainer}>
@@ -57,7 +61,6 @@ function IndexCafeteria() {
               {menu}
             </div>
           )) : (
-
             <div className={styles.noMenuContent}>
               <img className={styles.noMenuImage} src="https://static.koreatech.in/assets/img/ic-none.png" alt="" />
               <div className={styles.noMenu}>
