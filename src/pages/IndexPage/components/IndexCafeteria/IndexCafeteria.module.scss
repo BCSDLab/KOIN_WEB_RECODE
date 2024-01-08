@@ -2,6 +2,206 @@
 
 .template {
   @include media.media-breakpoint(mobile) {
-    order: 3;
+    margin-top: 33px;
+    max-width: calc(100% - 32px);
+    padding: 0 16px;
+  }
+}
+
+.title {
+  font-family: NanumSquare, serif;
+  font-size: 17px;
+  font-weight: bold;
+  color: #175c8e;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 15px;
+    padding-left: 3px;
+  }
+
+  span {
+    cursor: pointer;
+  }
+}
+
+.moreLink {
+  font-family: NanumBarunGothic, sans-serif;
+  font-size: 12px;
+  color: #252525;
+  text-decoration: none;
+  cursor: pointer;
+
+  ::after {
+    display: inline-block;
+    width: 12px;
+    height: 8px;
+    background:
+      url("https://static.koreatech.in/assets/img/bus_dropdown.png")
+      center/12px 8px no-repeat;
+    transform: rotate(-90deg);
+    content: "";
+  }
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.cafeteriaCard {
+  display: grid;
+  grid-template: 26px 159px / 27px 1fr;
+  width: 256px;
+  height: 203px;
+  margin-top: 16px;
+  padding: 15px 12px 0;
+  border: solid 1px #e4e4e4;
+  box-sizing: border-box;
+
+  @include media.media-breakpoint(mobile) {
+    grid-template: 27px 156px / 1fr 28px;
+    max-width: 100%;
+    width: 544px;
+    padding: 11px 15px 0 17px;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 25%);
+    border: solid 1px rgb(216 216 216 / 0%);
+    background-image:
+      linear-gradient(to top, #fff, rgb(255 255 255 / 0%)),
+      linear-gradient(to bottom, #fff, #fff);
+  }
+}
+
+.cafeteriaContainer {
+  display: flex;
+  flex-direction: column;
+  grid-row: 1 / 3;
+  width: 27px;
+  height: 100%;
+
+  @include media.media-breakpoint(mobile) {
+    flex-direction: row;
+    align-items: center;
+    grid-row: 1 / 2;
+    width: 100%;
+  }
+}
+
+.cafeteria {
+  margin: 8px 0;
+  width: 42px;
+  font-size: 14px;
+  text-align: center;
+  color: #bbb;
+  cursor: pointer;
+
+  &--selected {
+    color: #175c8e;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    margin-right: 16px;
+    margin-bottom: 0;
+  }
+}
+
+.typeContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.type {
+  font-family: NanumSquare, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+  line-height: 26px;
+  text-align: center;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 13px;
+  }
+}
+
+.typeControlButton {
+  width: 26px;
+  height: 26px;
+  margin: 0 8px;
+  padding: 0;
+  border: 0;
+  background:
+    url("https://static.koreatech.in/assets/img/ic-more.png")
+    center/26px 26px no-repeat;
+  cursor: pointer;
+
+  &.left {
+    transform: rotate(180deg);
+  }
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.menuContainer {
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: column wrap;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px 0 0 27px;
+
+  @include media.media-breakpoint(mobile) {
+    grid-column: 1 / 3;
+    padding: 27px 0 0 19px;
+  }
+}
+
+.menu {
+  font-size: 12px;
+  color: #252525;
+  text-align: left;
+  margin-bottom: 14px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 75px;
+
+  &.long {
+    width: 100%;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    margin-bottom: 10px;
+    width: 78px;
+  }
+}
+
+.noMenuContent {
+  text-align: center;
+  margin-top: 21px;
+}
+
+.noMenuImage {
+  width: 52px;
+  height: 47px;
+  margin-left: -19px;
+}
+
+.noMenu {
+  height: 31px;
+  font-family: NanumBarunGothic, serif;
+  font-size: 12px;
+  color: #252525;
+  text-align: center;
+  margin: 15px 0 0 -15px;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 8px 0 0 -19px;
   }
 }
