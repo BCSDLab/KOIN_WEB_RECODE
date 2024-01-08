@@ -6,6 +6,7 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import useTokenState from 'utils/hooks/useTokenState';
+import { useLogout } from 'utils/hooks/useLogout';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -85,6 +86,7 @@ function Header() {
   const isLoggedin = !!token;
   const [userInfo] = useState<{ nickname: string; } | null>(null);
   const isMain = pathname === '/';
+  const logout = useLogout();
 
   return (
     <header
@@ -169,7 +171,7 @@ function Header() {
                             </Link>
                           </li>
                           <li className={styles.mobileheader__link}>
-                            <button type="button">
+                            <button type="button" onClick={logout}>
                               로그아웃
                             </button>
                           </li>
@@ -316,9 +318,9 @@ function Header() {
                     </Link>
                   </li>
                   <li className={styles['header__auth-link']}>
-                    <Link to="/logout">
+                    <button onClick={logout} type="button" className={styles['header__auth-button']}>
                       로그아웃
-                    </Link>
+                    </button>
                   </li>
                 </>
               )}

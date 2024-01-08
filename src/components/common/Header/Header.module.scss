@@ -86,6 +86,22 @@
       text-decoration: none;
     }
   }
+
+  &__auth-button {
+    font-weight: normal;
+    background: none;
+    border: none;
+    color: #a0d2f6;
+    text-decoration: none;
+    font-family: NanumSquare, serif;
+    line-height: 1.35;
+    font-size: 15px;
+
+    &:hover {
+      font-weight: 800;
+      color: #fff;
+    }
+  }
 }
 
 .mobileheader {
