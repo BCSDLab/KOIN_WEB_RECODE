@@ -1,5 +1,4 @@
 import React from 'react';
-import STORE_CATEGORY from 'static/storeCategory';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
@@ -8,6 +7,7 @@ import cn from 'utils/ts/classnames';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
 import styles from './StorePage.module.scss';
+import { useStoreCategories } from './hooks/useCategoryList';
 
 type StoreSearchQueryType = {
   storeName?: string;
@@ -57,9 +57,10 @@ const useStoreList = (params: StoreSearchQueryType) => {
   const { data: storeList } = useQuery('storeList', api.store.getStoreList, {
     retry: 0,
   });
+  const selectedCategory = Number(params.category);
   return storeList?.shops.filter(
-    (store) => (params.category === undefined || params.category === 'ALL' || (
-      store.category === params.category
+    (store) => (params.category === undefined || (
+      store.category_ids.some((id) => id === selectedCategory)
     )) && (
       checkedStoreSearchQuery(params)
         ? true : (store.pay_bank && searchStorePayCheckBoxFilter(params.bank)) || (
@@ -96,6 +97,8 @@ function StorePage() {
   const { params, searchParams, setParams } = useParamsHandler();
   const storeList = useStoreList(params);
   const isMobile = useMediaQuery();
+  const { data: categories } = useStoreCategories();
+  const selectedCategory = Number(searchParams.get('category'));
 
   return (
     <div className={styles.section}>
@@ -103,20 +106,20 @@ function StorePage() {
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
-          {STORE_CATEGORY.map((value) => (
+          {categories?.shop_categories.slice(0, 9).map((category) => (
             <button
               className={cn({
                 [styles.category__menu]: true,
-                [styles['category__menu--selected']]: value.tag === searchParams.get('category'),
+                [styles['category__menu--selected']]: category.id === selectedCategory,
               })}
               role="radio"
-              aria-checked={searchParams.get('category') === value.tag}
+              aria-checked={category.id === selectedCategory}
               type="button"
-              onClick={() => setParams('category', value.tag, { deleteBeforeParam: false, replacePage: true })}
-              key={value.tag}
+              onClick={() => setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true })}
+              key={category.id}
             >
-              <img className={styles.category__image} src={value.image} alt="category_img" />
-              <span>{value.title}</span>
+              <img className={styles.category__image} src={category.image_url} alt="category_img" />
+              <span>{category.name}</span>
             </button>
           ))}
         </div>
