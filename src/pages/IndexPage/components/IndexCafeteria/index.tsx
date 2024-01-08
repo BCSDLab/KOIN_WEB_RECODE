@@ -1,33 +1,72 @@
 import { Link } from 'react-router-dom';
-import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
+import { CAFETERIA_CATEGORY } from 'static/cafeteria';
+import { useState } from 'react';
+import cn from 'utils/ts/classnames';
+import useCafeteriaList from 'pages/Cafeteria/CafeteriaPage/hooks/useCafeteriaList';
+import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
+  const getType = () => {
+    const hour = new Date().getHours();
+    if (hour < 9) {
+      return ['아침', 'BREAKFAST'];
+    } if (hour < 14) {
+      return ['점심', 'LUNCH'];
+    }
+    return ['저녁', 'DINNER'];
+  };
+  const { data: dinings } = useCafeteriaList(convertDateToSimpleString(new Date()));
+
+  const [selectedCafeteria, setSelectedCafeteria] = useState<'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'>('A코너');
+
+  const 선택된_식단 = dinings?.find(
+    (dining) => dining.place === selectedCafeteria && dining.type === getType()[1],
+  );
+
   return (
     <section className={styles.template}>
       <h2 className={styles.title}>
         <span>식단</span>
-        <Link to="/cafeteria" className={styles.moreLink}>더 보기</Link>
+        <Link to="/cafeteria" className={styles.moreLink}>더보기</Link>
       </h2>
       <div className={styles.cafeteriaCard}>
         <div className={styles.cafeteriaContainer}>
           {CAFETERIA_CATEGORY.map((category) => (
             category.isShowMain && (
-            <div key={category.id} className={styles.cafeteria}>
+            // eslint-disable-next-line
+            <div
+              key={category.id}
+              className={cn({
+                [styles.cafeteria]: true,
+                [styles['cafeteria--selected']]: selectedCafeteria === category.placeName,
+              })}
+              onClick={() => setSelectedCafeteria(category.placeName)}
+            >
               {category.placeName}
             </div>
             )
           ))}
         </div>
-        <div className={styles.typeContainer}>
-          {CAFETERIA_TIME.map((time) => (
-            <div key={time.id} className={styles.type}>
-              {time.name}
-            </div>
-          ))}
+        <div className={styles.type}>
+          {getType()[0]}
         </div>
         <div className={styles.menuContainer}>
-          {/* allMenus를 순회하는 코드 작성 */}
+          {선택된_식단 ? 선택된_식단.menu.slice(0, 10).map((menu) => (
+            <div className={styles.menu} key={menu}>
+              {menu}
+            </div>
+          )) : (
+
+            <div className={styles.noMenuContent}>
+              <img className={styles.noMenuImage} src="https://static.koreatech.in/assets/img/ic-none.png" alt="" />
+              <div className={styles.noMenu}>
+                식단이 제공되지 않아
+                <br />
+                표시할 수 없습니다.
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
