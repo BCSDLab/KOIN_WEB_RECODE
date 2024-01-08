@@ -22,7 +22,7 @@ export const getStartTimeString = (second: number | '미운행' | undefined, isM
   if (second === '미운행') return '';
 
   const today = (new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000);
-  const arrivalTimeSecond = (today / 1000) + second;
+  const arrivalTimeSecond = Math.ceil(today / 1000) + second;
 
   const hour = getHour(arrivalTimeSecond);
   const minute = getMinute(arrivalTimeSecond);
