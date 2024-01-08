@@ -94,9 +94,20 @@ export interface StoreListResponse extends APIResponse {
     event_articles: {}[],
     phone: string,
     name: string,
-    category: string,
+    category_ids: number[],
     permalink: string,
     // remarks: null,
-    delivery_price: number
+    delivery_price: number,
   }[]
+}
+
+export interface StoreCategoriesResponse extends APIResponse {
+  total_count: number;
+  shop_categories: StoreCategory[];
+}
+
+export interface StoreCategory {
+  id: number;
+  name: string;
+  image_url: string;
 }
