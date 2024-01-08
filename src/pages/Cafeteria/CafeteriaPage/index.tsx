@@ -2,6 +2,7 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import cn from 'utils/ts/classnames';
 import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
+import { convertDateToSimpleString, formatKoreanDateString } from 'utils/ts/cafeteria';
 import styles from './CafeteriaPage.module.scss';
 import useCafeteriaList from './hooks/useCafeteriaList';
 
@@ -31,17 +32,6 @@ const useDatePicker = () => {
     },
   };
 };
-
-const koreanDateStringInstance = new Intl.DateTimeFormat('ko-KR', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  weekday: 'short',
-});
-
-const formatKoreanDateString = koreanDateStringInstance.format;
-
-const convertDateToSimpleString = (date: Date) => `${date.getFullYear().toString().slice(2, 4)}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
 
 function CafeteriaPage() {
   const {
