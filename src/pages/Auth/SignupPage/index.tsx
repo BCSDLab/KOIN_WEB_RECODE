@@ -330,7 +330,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
           [styles['select__trigger--active']]: currentValue !== null,
         })}
       >
-        {currentValue !== null ? GENDER_TYPE[currentValue].value : '성별'}
+        {currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'}
       </button>
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">
@@ -447,7 +447,7 @@ const useSignupForm = () => {
   const submitForm: ISubmitForm = (formValue) => {
     const payload = {
       // 필수정보
-      email: formValue.id?.trim(),
+      email: `${formValue.id?.trim()}@koreatech.ac.kr`,
       password: formValue.password,
       // 옵션
       name: formValue.name || undefined,
@@ -456,7 +456,6 @@ const useSignupForm = () => {
       major: formValue['student-number'].major || undefined,
       student_number: formValue['student-number'].studentNumber || undefined,
       phone_number: formValue['phone-number'] || undefined,
-      identity: 0,
       is_graduated: false,
     };
     mutate(payload);
