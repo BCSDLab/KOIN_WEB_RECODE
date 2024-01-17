@@ -21,7 +21,7 @@ export interface SignupRequest {
   // options
   name?: string;
   nickname?: string;
-  gender?: string;
+  gender?: number;
   major?: string;
   student_number?: string;
   phone_number?: string;
