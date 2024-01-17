@@ -25,7 +25,6 @@ export interface SignupRequest {
   major?: string;
   student_number?: string;
   phone_number?: string;
-  identity?: number;
   is_graduated?: boolean;
 }
 
