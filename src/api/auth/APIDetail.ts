@@ -38,7 +38,7 @@ implements APIRequest<R> {
 export class Signup<R extends SignupResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/register';
+  path = '/user/student/register';
 
   response!: R;
 
