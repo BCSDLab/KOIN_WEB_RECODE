@@ -5,6 +5,7 @@ import cn from 'utils/ts/classnames';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import { DeptListResponse, IDept } from 'api/dept/entity';
+import sha256 from 'utils/ts/SHA-256';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
@@ -444,11 +445,11 @@ const useSignupForm = () => {
     navigate('/');
   };
   const { status, mutate } = useSignup({ onSuccess });
-  const submitForm: ISubmitForm = (formValue) => {
+  const submitForm: ISubmitForm = async (formValue) => {
     const payload = {
       // 필수정보
       email: `${formValue.id?.trim()}@koreatech.ac.kr`,
-      password: formValue.password,
+      password: await sha256(formValue.password),
       // 옵션
       name: formValue.name || undefined,
       nickname: formValue.nickname || undefined,
