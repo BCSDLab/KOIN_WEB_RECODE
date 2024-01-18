@@ -116,8 +116,8 @@ function LoginPage() {
       </div>
       <div className={styles.help}>
         <a className={styles.help__link} href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp">아이디 찾기</a>
-        <Link className={styles.help__link} to="/findpw">비밀번호 찾기</Link>
-        <Link className={styles.help__link} to="/signup">회원가입</Link>
+        <Link className={styles.help__link} to="/auth/findpw">비밀번호 찾기</Link>
+        <Link className={styles.help__link} to="/auth/signup">회원가입</Link>
       </div>
       <span className={styles.template__copyright}>
         COPYRIGHT ⓒ&nbsp;
