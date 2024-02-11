@@ -72,5 +72,6 @@
     "stylelint-config-standard": "^26.0.0",
     "stylelint-config-standard-scss": "^4.0.0",
     "stylelint-selector-bem-pattern": "^2.1.1"
-  }
+  },
+  "packageManager": "yarn@3.8.0"
 }

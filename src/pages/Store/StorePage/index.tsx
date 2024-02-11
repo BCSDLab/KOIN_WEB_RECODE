@@ -134,9 +134,9 @@ function StorePage() {
           type="text"
           name="search"
           placeholder="상점명을 입력하세요"
-          onKeyPress={(e) => {
+          onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              setParams('storeName', e.target.value, {
+              setParams('storeName', e.currentTarget.value, {
                 deleteBeforeParam: searchParams.get('storeName') === undefined,
                 replacePage: true,
               });

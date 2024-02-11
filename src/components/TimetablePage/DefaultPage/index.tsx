@@ -36,8 +36,7 @@ const useSearch = () => {
     if (e.key !== 'Enter') {
       return;
     }
-    const { target } = e;
-    setCurrentValue(target.value);
+    setCurrentValue(e.currentTarget.value);
   };
 
   return {
