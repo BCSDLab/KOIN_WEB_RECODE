@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@types/dom-to-image": "^2.6.4",
+    "@types/gtag.js": "^0.0.19",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
     "eslint": "^8.18.0",
