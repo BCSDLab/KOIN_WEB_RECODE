@@ -38,6 +38,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:16.18.80"],\
             ["@types/react", "npm:18.2.55"],\
             ["@types/react-dom", "npm:18.2.19"],\
+            ["@types/react-helmet", "npm:6.1.11"],\
             ["@types/react-query", "npm:1.2.9"],\
             ["@types/react-window", "npm:1.8.8"],\
             ["@typescript-eslint/eslint-plugin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\
@@ -5095,6 +5096,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-react-dom-npm-18.2.19-4c3126d580-087a19d8e4.zip/node_modules/@types/react-dom/",\
           "packageDependencies": [\
             ["@types/react-dom", "npm:18.2.19"],\
+            ["@types/react", "npm:18.2.55"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/react-helmet", [\
+        ["npm:6.1.11", {\
+          "packageLocation": "./.yarn/cache/@types-react-helmet-npm-6.1.11-6d6a281744-e329d8ad82.zip/node_modules/@types/react-helmet/",\
+          "packageDependencies": [\
+            ["@types/react-helmet", "npm:6.1.11"],\
             ["@types/react", "npm:18.2.55"]\
           ],\
           "linkType": "HARD"\
@@ -12522,6 +12533,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:16.18.80"],\
             ["@types/react", "npm:18.2.55"],\
             ["@types/react-dom", "npm:18.2.19"],\
+            ["@types/react-helmet", "npm:6.1.11"],\
             ["@types/react-query", "npm:1.2.9"],\
             ["@types/react-window", "npm:1.8.8"],\
             ["@typescript-eslint/eslint-plugin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\

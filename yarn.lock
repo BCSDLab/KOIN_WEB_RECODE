@@ -3092,6 +3092,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-helmet@npm:^6.1.11":
+  version: 6.1.11
+  resolution: "@types/react-helmet@npm:6.1.11"
+  dependencies:
+    "@types/react": "*"
+  checksum: e329d8ad82c365fec7dd7d91c8b6d167faac30cef0d9f1e27d7e895172a0ebfa65829fb4acabbe79283b01cbbe5840a845caeb50148ceef6f3fad42b3c2c4bdc
+  languageName: node
+  linkType: hard
+
 "@types/react-query@npm:^1.2.9":
   version: 1.2.9
   resolution: "@types/react-query@npm:1.2.9"
@@ -9141,6 +9150,7 @@ __metadata:
     "@types/node": ^16.7.13
     "@types/react": ^18.0.0
     "@types/react-dom": ^18.0.0
+    "@types/react-helmet": ^6.1.11
     "@types/react-query": ^1.2.9
     "@types/react-window": ^1.8.5
     "@typescript-eslint/eslint-plugin": ^5.30.0
