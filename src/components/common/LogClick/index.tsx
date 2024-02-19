@@ -8,7 +8,7 @@ interface LogClickProps {
   };
 }
 
-const LogClick: React.FC<LogClickProps> = ({ children, params }) => {
+function LogClick({ children, params }: LogClickProps): React.ReactElement {
   const child: ReactElement = React.Children.only(children);
   const logger = useLogger();
 
@@ -21,6 +21,6 @@ const LogClick: React.FC<LogClickProps> = ({ children, params }) => {
       }
     },
   });
-};
+}
 
 export default LogClick;

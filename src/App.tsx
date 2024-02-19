@@ -12,6 +12,7 @@ import NoticePage from 'pages/Notice/NoticePage';
 import NoticeListPage from 'pages/Notice/NoticeListPage';
 import NoticeDetailPage from 'pages/Notice/NoticeDetailPage';
 import Toast from 'components/common/Toast';
+import LogPage from 'components/common/LogPage';
 import SignupPage from 'pages/Auth/SignupPage';
 import StoreDetailPage from 'pages/Store/StoreDetailPage';
 import BusPage from 'pages/BusPage';
@@ -47,6 +48,7 @@ function App() {
         </Route>
       </Routes>
       <Toast />
+      <LogPage />
     </>
 
   );
