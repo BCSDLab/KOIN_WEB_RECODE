@@ -6,6 +6,7 @@ import { useMutation } from 'react-query';
 import { useSetRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
+import MetaHelmet from 'components/common/MetaHelmet';
 import { auth } from 'api';
 import sha256 from 'utils/ts/SHA-256';
 import showToast from 'utils/ts/showToast';
@@ -87,46 +88,49 @@ function LoginPage() {
   };
 
   return (
-    <div className={styles.template}>
-      <form className={styles.loginform} onSubmit={onSubmit}>
-        <input
-          ref={(inputRef) => { loginRef.current.userId = inputRef; }}
-          className={styles['form-input']}
-          autoComplete="username"
-          name="userId"
-          placeholder="아이디를 입력하세요"
-        />
-        <input
-          ref={(inputRef) => { loginRef.current.password = inputRef; }}
-          className={styles['form-input']}
-          type="password"
-          autoComplete="current-password"
-          name="password"
-          placeholder="비밀번호를 입력하세요"
-        />
-        <button type="submit" className={styles.loginform__button}>
-          로그인
-        </button>
-      </form>
-      <div aria-hidden="true" className={styles['auto-login']}>
-        <label className={styles['auto-login__label']} htmlFor="autoLoginCheckBox">
-          <input className={styles['auto-login__checkbox']} checked={isAutoLoginFlag} onChange={toggleIsAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
-          자동 로그인
-        </label>
+    <>
+      <MetaHelmet title="코인 - 로그인" />
+      <div className={styles.template}>
+        <form className={styles.loginform} onSubmit={onSubmit}>
+          <input
+            ref={(inputRef) => { loginRef.current.userId = inputRef; }}
+            className={styles['form-input']}
+            autoComplete="username"
+            name="userId"
+            placeholder="아이디를 입력하세요"
+          />
+          <input
+            ref={(inputRef) => { loginRef.current.password = inputRef; }}
+            className={styles['form-input']}
+            type="password"
+            autoComplete="current-password"
+            name="password"
+            placeholder="비밀번호를 입력하세요"
+          />
+          <button type="submit" className={styles.loginform__button}>
+            로그인
+          </button>
+        </form>
+        <div aria-hidden="true" className={styles['auto-login']}>
+          <label className={styles['auto-login__label']} htmlFor="autoLoginCheckBox">
+            <input className={styles['auto-login__checkbox']} checked={isAutoLoginFlag} onChange={toggleIsAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
+            자동 로그인
+          </label>
+        </div>
+        <div className={styles.help}>
+          <a className={styles.help__link} href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp">아이디 찾기</a>
+          <Link className={styles.help__link} to="/auth/findpw">비밀번호 찾기</Link>
+          <Link className={styles.help__link} to="/auth/signup">회원가입</Link>
+        </div>
+        <span className={styles.template__copyright}>
+          COPYRIGHT ⓒ&nbsp;
+          {
+            new Date().getFullYear()
+          }
+          &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
+        </span>
       </div>
-      <div className={styles.help}>
-        <a className={styles.help__link} href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp">아이디 찾기</a>
-        <Link className={styles.help__link} to="/auth/findpw">비밀번호 찾기</Link>
-        <Link className={styles.help__link} to="/auth/signup">회원가입</Link>
-      </div>
-      <span className={styles.template__copyright}>
-        COPYRIGHT ⓒ&nbsp;
-        {
-          new Date().getFullYear()
-        }
-        &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
-      </span>
-    </div>
+    </>
   );
 }
 
