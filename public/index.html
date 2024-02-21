@@ -63,7 +63,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-94GSS0XCEP');
+      gtag('config', `${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`);
     </script>
     <!--
       This HTML file is a template.
