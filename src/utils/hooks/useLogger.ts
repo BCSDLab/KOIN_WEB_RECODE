@@ -13,7 +13,7 @@ const useLogger = () => {
     title,
   } : ClickLoggerProps) => {
     gtag.event({
-      action: 'action', category: 'button', label: title, value: title,
+      action: 'click', category: 'button', label: title, value: title,
     });
   };
 
