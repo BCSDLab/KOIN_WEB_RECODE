@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import cn from 'utils/ts/classnames';
 import useCafeteriaList from 'pages/Cafeteria/CafeteriaPage/hooks/useCafeteriaList';
+import useLogger from 'utils/hooks/useLogger';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import styles from './IndexCafeteria.module.scss';
 
@@ -24,14 +25,27 @@ function IndexCafeteria() {
   const 선택된_식단 = dinings?.find(
     (dining) => dining.place === selectedCafeteria && dining.type === getType()[1],
   );
-
+  const logger = useLogger();
   return (
     <section className={styles.template}>
       <h2 className={styles.title}>
         <span>식단</span>
-        <Link to="/cafeteria" className={styles.moreLink}>
+        <Link
+          to="/cafeteria"
+          className={styles.moreLink}
+          onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+            e.preventDefault();
+            logger.click({
+              title: 'main_cafeteria_more',
+              value: '식단 더보기',
+            });
+          }}
+          aria-hidden
+        >
           더보기
-          <RightArrow aria-hidden />
+          <RightArrow
+            aria-hidden
+          />
         </Link>
       </h2>
       <div className={styles.cafeteriaCard}>
