@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
   Routes,
   Route,
@@ -26,7 +26,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 function App() {
   const token = useTokenState();
   return (
-    <>
+    <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<BoardPage />}>
           <Route path="timetable" element={<TimetablePage />} />
@@ -49,8 +49,7 @@ function App() {
       </Routes>
       <Toast />
       <LogPage />
-    </>
-
+    </Suspense>
   );
 }
 
