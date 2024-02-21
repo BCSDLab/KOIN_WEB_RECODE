@@ -1,11 +1,9 @@
 import React, { cloneElement, ReactElement } from 'react';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger, { ClickLoggerProps } from 'utils/hooks/useLogger';
 
 interface LogClickProps {
   children: ReactElement;
-  params: {
-    title: string;
-  };
+  params: ClickLoggerProps;
 }
 
 function LogClick({ children, params }: LogClickProps): React.ReactElement {

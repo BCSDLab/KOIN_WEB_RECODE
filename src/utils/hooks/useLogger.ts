@@ -1,7 +1,8 @@
 import * as gtag from 'lib/gtag';
 
-type ClickLoggerProps = {
+export type ClickLoggerProps = {
   title: string,
+  value: string,
 };
 
 type ScrollLoggerProps = {
@@ -11,9 +12,10 @@ type ScrollLoggerProps = {
 const useLogger = () => {
   const click = ({
     title,
+    value,
   } : ClickLoggerProps) => {
     gtag.event({
-      action: 'click', category: 'button', label: title, value: title,
+      action: 'click', category: 'button', label: title, value,
     });
   };
 
