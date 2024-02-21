@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { CAFETERIA_CATEGORY } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
@@ -26,27 +26,31 @@ function IndexCafeteria() {
     (dining) => dining.place === selectedCafeteria && dining.type === getType()[1],
   );
   const logger = useLogger();
+  const navigate = useNavigate();
+
+  const handleMoreClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    logger.click({
+      title: 'main_cafeteria_more',
+      value: '식단 더보기',
+    });
+    navigate('/cafeteria');
+  };
+
   return (
     <section className={styles.template}>
       <h2 className={styles.title}>
         <span>식단</span>
-        <Link
-          to="/cafeteria"
+        <div
           className={styles.moreLink}
-          onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-            e.preventDefault();
-            logger.click({
-              title: 'main_cafeteria_more',
-              value: '식단 더보기',
-            });
-          }}
+          onClick={(e) => handleMoreClick(e)}
           aria-hidden
         >
           더보기
           <RightArrow
             aria-hidden
           />
-        </Link>
+        </div>
       </h2>
       <div className={styles.cafeteriaCard}>
         <div className={styles.cafeteriaContainer}>
