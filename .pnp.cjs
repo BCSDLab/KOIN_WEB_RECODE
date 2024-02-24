@@ -32,6 +32,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.4.0"],\
             ["@testing-library/user-event", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.5.0"],\
             ["@types/dom-to-image", "npm:2.6.7"],\
+            ["@types/gtag.js", "npm:0.0.19"],\
             ["@types/jest", "npm:27.5.2"],\
             ["@types/navermaps", "npm:3.7.4"],\
             ["@types/node", "npm:16.18.80"],\
@@ -4844,6 +4845,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@types/graceful-fs", "npm:4.1.9"],\
             ["@types/node", "npm:20.11.17"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/gtag.js", [\
+        ["npm:0.0.19", {\
+          "packageLocation": "./.yarn/cache/@types-gtag.js-npm-0.0.19-8d50f84a08-7ecd5ae645.zip/node_modules/@types/gtag.js/",\
+          "packageDependencies": [\
+            ["@types/gtag.js", "npm:0.0.19"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -12506,6 +12516,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.4.0"],\
             ["@testing-library/user-event", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.5.0"],\
             ["@types/dom-to-image", "npm:2.6.7"],\
+            ["@types/gtag.js", "npm:0.0.19"],\
             ["@types/jest", "npm:27.5.2"],\
             ["@types/navermaps", "npm:3.7.4"],\
             ["@types/node", "npm:16.18.80"],\

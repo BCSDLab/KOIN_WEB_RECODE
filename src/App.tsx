@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
   Routes,
   Route,
@@ -12,6 +12,7 @@ import NoticePage from 'pages/Notice/NoticePage';
 import NoticeListPage from 'pages/Notice/NoticeListPage';
 import NoticeDetailPage from 'pages/Notice/NoticeDetailPage';
 import Toast from 'components/common/Toast';
+import LogPage from 'components/common/LogPage';
 import SignupPage from 'pages/Auth/SignupPage';
 import StoreDetailPage from 'pages/Store/StoreDetailPage';
 import BusPage from 'pages/BusPage';
@@ -25,7 +26,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 function App() {
   const token = useTokenState();
   return (
-    <>
+    <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<BoardPage />}>
           <Route path="timetable" element={<TimetablePage />} />
@@ -47,8 +48,8 @@ function App() {
         </Route>
       </Routes>
       <Toast />
-    </>
-
+      <LogPage />
+    </Suspense>
   );
 }
 
