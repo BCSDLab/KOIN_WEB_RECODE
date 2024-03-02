@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useNavigate } from 'react-router-dom';
 import { CAFETERIA_CATEGORY } from 'static/cafeteria';
 import { useState } from 'react';
@@ -6,9 +7,11 @@ import cn from 'utils/ts/classnames';
 import useCafeteriaList from 'pages/Cafeteria/CafeteriaPage/hooks/useCafeteriaList';
 import useLogger from 'utils/hooks/useLogger';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
+  const isMobile = useMediaQuery();
   const getType = () => {
     const hour = new Date().getHours();
     if (hour < 9) {
@@ -73,7 +76,16 @@ function IndexCafeteria() {
         <div className={styles.type}>
           {getType()[0]}
         </div>
-        <div className={styles.menuContainer}>
+        <div
+          className={styles.menuContainer}
+          onClick={(e) => {
+            if (isMobile) {
+              handleMoreClick(e);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
           {선택된_식단 ? 선택된_식단.menu.slice(0, 10).map((menu) => (
             <div className={styles.menu} key={menu}>
               {menu}
