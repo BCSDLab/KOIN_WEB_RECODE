@@ -8,17 +8,16 @@ export default function useDeleteTimetableLecture(semester: string, authorizatio
     (
       data: Parameters<typeof changeTimetableInfoByRemoveLecture>[0],
     ) => changeTimetableInfoByRemoveLecture(
-      data,
       authorization,
+      data,
     ),
     {
-      onSuccess: (data) => {
-        queryClient.setQueryData(
+      onSuccess: () => {
+        queryClient.invalidateQueries(
           [
             TIMETABLE_INFO_LIST,
             semester,
           ],
-          data,
         );
       },
     },

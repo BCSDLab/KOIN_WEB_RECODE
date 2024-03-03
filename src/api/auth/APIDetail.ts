@@ -68,4 +68,6 @@ export class User<R extends UserResponse> implements APIRequest<R> {
   response!: R;
 
   auth = false;
+
+  constructor(public authorization: string) { }
 }
