@@ -119,6 +119,7 @@
 
   &__row {
     height: 68px;
+    border-top: 1px rgb(0 0 0 / 10%) solid;
 
     @include media.media-breakpoint(mobile) {
       height: 42px;
