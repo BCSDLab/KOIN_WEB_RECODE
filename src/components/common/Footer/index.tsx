@@ -65,7 +65,7 @@ function Footer(): JSX.Element {
           <div className={styles['sitemap__icon-links']}>
             <a
               className={styles['sitemap__icon-link']}
-              href="https://portal.koreatech.ac.kr"
+              href="https://www.facebook.com/bcsdlab"
               target="_blank"
               rel="noreferrer"
             >

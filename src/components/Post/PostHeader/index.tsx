@@ -10,7 +10,6 @@ const HEADER_ROW: HeaderRowInfo = {
   title: '제목',
   author: '작성자',
   date: '날짜',
-  views: '조회수',
 };
 
 function PostHeader() {

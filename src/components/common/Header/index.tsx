@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import CATEGORY, { Category, SubMenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
+import { UserResponse } from 'api/auth/entity';
+import { getUser } from 'api/auth';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -84,9 +86,18 @@ function Header() {
   } = useMobileSidebar(pathname, isMobile);
   const token = useTokenState();
   const isLoggedin = !!token;
-  const [userInfo] = useState<{ nickname: string; } | null>(null);
+  const [userInfo, setUserInfo] = useState<UserResponse | null>(null);
   const isMain = pathname === '/';
   const logout = useLogout();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      getUser(token).then((response) => {
+        setUserInfo(response);
+      });
+    }
+  }, [token]);
 
   return (
     <header
@@ -108,6 +119,7 @@ function Header() {
                     [styles.mobileheader__icon]: true,
                   })}
                   type="button"
+                  onClick={() => navigate(-1)}
                 >
                   <img src="https://static.koreatech.in/assets/img/back-menu.png" alt="go back logo" />
                 </button>
@@ -166,9 +178,7 @@ function Header() {
                       {isLoggedin ? (
                         <>
                           <li className={styles['mobileheader__my-info']}>
-                            <Link to="/modifyinfo">
-                              내 정보
-                            </Link>
+                            내 정보
                           </li>
                           <li className={styles.mobileheader__link}>
                             <button type="button" onClick={logout}>
@@ -219,7 +229,7 @@ function Header() {
                       [styles.mobileheader__logo]: true,
                       [styles['mobileheader__logo--bcsd']]: true,
                     })}
-                    src="http://static.koreatech.in/assets/img/ic-bcsd_gray.png"
+                    src="https://image.bcsdlab.com/favicon.ico"
                     alt="bcsd lab logo"
                   />
                   <img

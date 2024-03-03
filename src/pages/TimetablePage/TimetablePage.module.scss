@@ -5,4 +5,9 @@
   margin: 68px auto 80px;
   padding: 0 10px;
   min-height: 800px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    margin: 0 auto 16px;
+  }
 }
