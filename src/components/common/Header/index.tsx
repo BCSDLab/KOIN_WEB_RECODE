@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import CATEGORY, { Category, SubMenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -87,6 +87,7 @@ function Header() {
   const [userInfo] = useState<{ nickname: string; } | null>(null);
   const isMain = pathname === '/';
   const logout = useLogout();
+  const navigate = useNavigate();
 
   return (
     <header
@@ -108,6 +109,7 @@ function Header() {
                     [styles.mobileheader__icon]: true,
                   })}
                   type="button"
+                  onClick={() => navigate(-1)}
                 >
                   <img src="https://static.koreatech.in/assets/img/back-menu.png" alt="go back logo" />
                 </button>
