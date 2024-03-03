@@ -192,6 +192,12 @@
   width: 330px;
   height: 330px;
   display: flex;
+ 
+  &--none {
+    @include media.media-breakpoint(mobile) {
+      display: none !important;
+    }
+  }
 
   @include media.media-breakpoint(mobile) {
     display: flex;
@@ -200,9 +206,14 @@
     cursor: initial;
     overflow-x: scroll;
     overflow-y: hidden;
+    overflow: hidden;
     white-space: nowrap;
     margin-top: 25px;
     margin-left: 16px;
+  }
+  
+  ::-webkit-scrollbar {
+    display: none;
   }
 
   &__content {
