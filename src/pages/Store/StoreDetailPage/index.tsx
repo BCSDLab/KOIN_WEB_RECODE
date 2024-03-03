@@ -135,14 +135,16 @@ function StoreDetailPage() {
                       </span>
                     </div>
                   ) : (
-                    <div className={styles['menu-card']} key={menu.id}>
-                      {menu.name}
-                      <span>
-                        {
-                          menu.option_prices[0].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                        }
-                      </span>
-                    </div>
+                    menu.option_prices.map((item) => (
+                      <div className={styles['menu-card']} key={menu.id}>
+                        {menu.name + item.option}
+                        <span>
+                          {
+                            item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          }
+                        </span>
+                      </div>
+                    ))
                   )
                 ))))}
             </div>
