@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LandListResponse } from 'api/room/entity';
 import MarkerIcon from 'components/Room/MarkerIcon';
+import { useNavigate } from 'react-router-dom';
 
 interface MarkerProps {
   map: naver.maps.Map | null
@@ -9,6 +10,7 @@ interface MarkerProps {
 
 function useMarker({ map, roomList }: MarkerProps) {
   const [markerArray, setMarkerArray] = useState<naver.maps.Marker[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!map || !roomList) return;
@@ -20,11 +22,15 @@ function useMarker({ map, roomList }: MarkerProps) {
         icon: {
           content: MarkerIcon(),
         },
+        clickable: true,
+      });
+      marker.addListener('click', () => {
+        navigate(`/room/${land.id}`);
       });
       return marker;
     });
     setMarkerArray(newMarkers);
-  }, [map, roomList]);
+  }, [map, roomList, navigate]);
 
   return { markerArray };
 }

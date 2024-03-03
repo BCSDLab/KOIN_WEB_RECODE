@@ -38,3 +38,14 @@ export interface RefreshResponse extends APIResponse {
   token: string;
   refresh_token: string;
 }
+
+export interface UserResponse extends APIResponse {
+  anonymous_nickname: string;
+  email: string;
+  gender: 0 | 1;
+  major: string;
+  name: string;
+  nickname: string;
+  phone_number: string;
+  student_number: number;
+}
