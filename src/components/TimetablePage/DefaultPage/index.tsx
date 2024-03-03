@@ -262,9 +262,9 @@ function Curriculum() {
       <li>
         <a
           className={styles.page__curriculum}
-          href="https://www.koreatech.ac.kr/kor/sub01_03_02.do"
+          href="https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002"
         >
-          대학 입학 요람
+          대학 요람
         </a>
       </li>
     </ul>
