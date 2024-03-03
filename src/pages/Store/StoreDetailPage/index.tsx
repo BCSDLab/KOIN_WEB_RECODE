@@ -100,7 +100,12 @@ function StoreDetailPage() {
               </div>
             </div>
           )}
-          <div className={styles.image}>
+          <div
+            className={cn({
+              [styles.image]: true,
+              [styles['image--none']]: storeDetail?.image_urls.length === 0,
+            })}
+          >
             {
               storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
                 <div key={`${img}`} className={styles.image__content}>
