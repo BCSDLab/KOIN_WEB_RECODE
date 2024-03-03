@@ -71,9 +71,9 @@ implements APIRequest<R> {
     [index: string]: string;
   };
 
-  constructor(public authorization: string, id: string) {
+  constructor(public authorization: string, data: string) {
     this.params = {
-      id,
+      id: data,
     };
   }
 }

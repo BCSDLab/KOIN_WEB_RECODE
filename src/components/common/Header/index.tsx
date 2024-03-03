@@ -93,7 +93,7 @@ function Header() {
 
   useEffect(() => {
     if (token) {
-      getUser().then((response) => {
+      getUser(token).then((response) => {
         setUserInfo(response);
       });
     }
