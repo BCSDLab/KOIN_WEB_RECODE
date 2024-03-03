@@ -1,3 +1,4 @@
+import React from 'react';
 import cn from 'utils/ts/classnames';
 import showToast from 'utils/ts/showToast';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
@@ -31,8 +32,18 @@ const onHandleNextPage = (moveNumber: number, totalPageNum: number) => {
 function Pagination(props: PaginationProps) {
   const { calcIndexPage, onClickMove } = usePagination();
   const { params, setParams } = useParamsHandler();
+  const [currentPage, setCurrentPage] = React.useState(Number(params.page) || 1);
   const { totalPageNum } = props;
   const totalPage = Array.from({ length: totalPageNum ?? 5 }, (v, i) => i + 1);
+
+  React.useEffect(() => {
+    setCurrentPage(Number(params.page) || 1);
+  }, [params.page]);
+
+  const handlePageChange = (newPage: String) => {
+    setCurrentPage(Number(newPage));
+    onClickMove(String(newPage));
+  };
 
   return (
     <div className={styles.pagination}>
@@ -69,9 +80,9 @@ function Pagination(props: PaginationProps) {
                 aria-label="페이지 이동"
                 className={cn({
                   [styles.pagination__number]: true,
-                  [styles['pagination__number--selected']]: Number(params.page) === limit + 1,
+                  [styles['pagination__number--selected']]: Number(currentPage) === limit + 1,
                 })}
-                onClick={() => onClickMove(String(limit + 1))}
+                onClick={() => handlePageChange(String(limit + 1))}
               >
                 { limit + 1 }
               </button>
