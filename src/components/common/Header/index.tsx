@@ -7,6 +7,8 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
+import { UserResponse } from 'api/auth/entity';
+import { getUser } from 'api/auth';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -84,10 +86,18 @@ function Header() {
   } = useMobileSidebar(pathname, isMobile);
   const token = useTokenState();
   const isLoggedin = !!token;
-  const [userInfo] = useState<{ nickname: string; } | null>(null);
+  const [userInfo, setUserInfo] = useState<UserResponse | null>(null);
   const isMain = pathname === '/';
   const logout = useLogout();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      getUser().then((response) => {
+        setUserInfo(response);
+      });
+    }
+  }, [token]);
 
   return (
     <header
@@ -221,7 +231,7 @@ function Header() {
                       [styles.mobileheader__logo]: true,
                       [styles['mobileheader__logo--bcsd']]: true,
                     })}
-                    src="http://static.koreatech.in/assets/img/ic-bcsd_gray.png"
+                    src="https://image.bcsdlab.com/favicon.ico"
                     alt="bcsd lab logo"
                   />
                   <img

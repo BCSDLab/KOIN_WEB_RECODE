@@ -34,11 +34,10 @@ function PostList(props: ArticleListProps) {
                 />
               )}
             </div>
-            <div className={styles.list__author}>{ isMobile ? `조회 ${article.hit} · ${article.nickname}` : article.nickname }</div>
+            <div className={styles.list__author}>{ isMobile ? `${article.nickname}` : article.nickname }</div>
             <div className={styles.list__created_at}>
               { setPostCreateDate(article.created_at)[0] }
             </div>
-            <div className={styles.list__views}>{ article.hit }</div>
           </Link>
         ))
       }
