@@ -178,9 +178,7 @@ function Header() {
                       {isLoggedin ? (
                         <>
                           <li className={styles['mobileheader__my-info']}>
-                            <Link to="/modifyinfo">
-                              내 정보
-                            </Link>
+                            내 정보
                           </li>
                           <li className={styles.mobileheader__link}>
                             <button type="button" onClick={logout}>
