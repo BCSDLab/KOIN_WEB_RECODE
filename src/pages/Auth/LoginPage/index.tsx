@@ -122,9 +122,9 @@ function LoginPage() {
       <span className={styles.template__copyright}>
         COPYRIGHT ⓒ&nbsp;
         {
-          new Date().getFullYear()
-        }
-        &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
+            new Date().getFullYear()
+          }
+          &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
       </span>
     </div>
   );
