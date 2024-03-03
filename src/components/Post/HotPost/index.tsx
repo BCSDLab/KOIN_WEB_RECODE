@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { HotPostResponse } from 'api/notice/entity';
 import { APIError } from 'interfaces/APIError';
 import styles from './HotPost.module.scss';
@@ -42,10 +43,14 @@ function HotPost(HotPostList: HotPostProps) {
         <div className={styles.hotpost__title}>가장 많이 본 게시물</div>
         {
         hotArticleList.map((hotPost: HotPostResponse, index: number) => (
-          <div className={styles.hotpost__content} key={hotPost.id + hotPost.board_id}>
+          <Link
+            className={styles.hotpost__content}
+            to={`/board/notice/${hotPost.id}`}
+            key={hotPost.id + hotPost.board_id}
+          >
             <span className={styles.hotpost__rank}>{ index + 1 }</span>
             <span className={styles.hotpost__item}>{ hotPost.title }</span>
-          </div>
+          </Link>
         ))
         }
       </div>
