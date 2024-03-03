@@ -1,6 +1,11 @@
 {
     "extends": [
-        "stylelint-config-standard-scss",
-        "stylelint-config-standard"
-    ]
+        "stylelint-config-standard-scss"
+    ],
+    "plugin": [
+      "stylelint-selector-bem-pattern"
+    ],
+    "rules": {
+      "selector-class-pattern": null
+  }
 }

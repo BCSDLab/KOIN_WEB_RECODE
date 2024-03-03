@@ -2,19 +2,47 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <meta name="author" content="BCSD Lab" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="보다 편하게, 한국기술교육대학교 생활에 필요한 서비스를 만날 수 있습니다."
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="https://static.koreatech.in/assets/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="https://static.koreatech.in/assets/favicons/favicon-16x16.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://static.koreatech.in/assets/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="shortcut icon"
+      href="https://static.koreatech.in/assets/favicons/favicon-32x32.png"
+    />
+    <meta
+      name="keywords"
+      content="한기대, 코인, 코리아텍, koreatech, BCSD Lab"
+    />
+    <meta name="og:title" content="코인 - 한기대 커뮤니티" />
+    <meta
+      name="og:description"
+      content="보다 편하게, 한국기술교육대학교 생활에 필요한 서비스를 만날 수 있습니다."
+    />
+    <meta
+      property="og:image"
+      content="https://static.koreatech.in/assets/img/facebook_showcase_image.png"
+    />
+    <meta property="og:image:width" content="1200" />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -24,11 +52,19 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>코인 - 한기대 커뮤니티</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=%REACT_APP_NAVER_MAPS_CLIENT_ID%"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-94GSS0XCEP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', `${process.env.REACT_APP_GOOGLE_ANALYTICS_ID}`);
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

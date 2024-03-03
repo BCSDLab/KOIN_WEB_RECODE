@@ -1,0 +1,66 @@
+@use "src/utils/scss/media" as media;
+
+.pagination {
+  background: #fff;
+  color: #858585;
+  width: 100%;
+  display: flex;
+  margin-top: 22px;
+  justify-content: center;
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  &__move {
+    border-radius: 0;
+    padding: 7px 14px;
+    margin-left: 8px;
+    margin-right: 8px;
+    background: #fff;
+    border: 1px #edf0f3 solid;
+    color: #858585;
+    font-size: 13px;
+    letter-spacing: -0.7px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #175c8e;
+      color: white;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: 73px;
+      height: 30px;
+      padding: 7px 10px;
+    }
+  }
+
+  &__number {
+    border-radius: 0;
+    padding: 7px 12px;
+    margin-left: 1px;
+    margin-right: 1px;
+    border: 1px #edf0f3 solid;
+    font-size: 13px;
+    cursor: pointer;
+    color: #858585;
+    background-color: #fff;
+
+    &:hover {
+      background-color: #175c8e;
+      color: white;
+    }
+
+    @media (max-width: 576px) {
+      margin: 0 2px;
+    }
+
+    &--selected {
+      color: #fff;
+      background-color: #175c8e;
+    }
+  }
+}

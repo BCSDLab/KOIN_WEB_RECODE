@@ -1,0 +1,79 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  @include media.media-breakpoint(mobile) {
+    order: 1;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  &__title {
+    font-family: NanumSquare, serif;
+    font-size: 17px;
+    font-weight: bold;
+    color: #175c8e;
+    text-decoration: none;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 15px;
+      padding-left: 3px;
+      margin-left: 16px;
+    }
+  }
+}
+
+.category {
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 18px 5px;
+    gap: 23px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  }
+
+  &__item {
+    width: 73px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    color: black;
+    text-decoration: none;
+
+    &:hover {
+      color: #f7941e;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      letter-spacing: -0.8px;
+      width: 15%;
+      padding-top: 11px;
+      margin-right: 8px;
+      font-size: 12px;
+      color: #252525;
+    }
+  }
+
+  &__image {
+    width: 56px;
+    height: 56px;
+    border-width: 50%;
+
+    @media (max-width: 576px) {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}

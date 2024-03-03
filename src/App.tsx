@@ -1,6 +1,55 @@
+import React, { Suspense } from 'react';
+import {
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import AuthPage from 'pages/Auth/AuthPage';
+import LoginPage from 'pages/Auth/LoginPage';
+import BoardPage from 'pages/BoardPage';
+import StorePage from 'pages/Store/StorePage';
+import NoticePage from 'pages/Notice/NoticePage';
+import NoticeListPage from 'pages/Notice/NoticeListPage';
+import NoticeDetailPage from 'pages/Notice/NoticeDetailPage';
+import Toast from 'components/common/Toast';
+import LogPage from 'components/common/LogPage';
+import SignupPage from 'pages/Auth/SignupPage';
+import StoreDetailPage from 'pages/Store/StoreDetailPage';
+import BusPage from 'pages/BusPage';
+import IndexPage from 'pages/IndexPage';
+import RoomPage from 'pages/Room/RoomPage';
+import RoomDetailPage from 'pages/Room/RoomDetailPage';
+import TimetablePage from 'pages/TimetablePage';
+import CafeteriaPage from 'pages/Cafeteria/CafeteriaPage';
+import useTokenState from 'utils/hooks/useTokenState';
+
 function App() {
+  const token = useTokenState();
   return (
-    <div className="App" />
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/" element={<BoardPage />}>
+          <Route path="timetable" element={<TimetablePage />} />
+          <Route path="/" element={<IndexPage />} />
+          <Route path="/store" element={<StorePage />} />
+          <Route path="/store/:id" element={<StoreDetailPage />} />
+          <Route path="/bus" element={<BusPage />} />
+          <Route path="/cafeteria" element={<CafeteriaPage />} />
+          <Route path="/board/notice" element={<NoticePage />}>
+            <Route path="/board/notice/" element={<NoticeListPage />} />
+            <Route path="/board/notice/:id" element={<NoticeDetailPage />} />
+          </Route>
+          <Route path="/room" element={<RoomPage />} />
+          <Route path="/room/:id" element={<RoomDetailPage />} />
+        </Route>
+        <Route path="auth" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
+          <Route index element={<LoginPage />} />
+          <Route path="signup" element={<SignupPage />} />
+        </Route>
+      </Routes>
+      <Toast />
+      <LogPage />
+    </Suspense>
   );
 }
 

@@ -1,0 +1,13 @@
+$media: (
+  mobile: 576px,
+);
+
+@mixin media-breakpoint($breakpoint) {
+  @each $breakpointName, $size in $media {
+    @if $breakpoint == $breakpointName {
+      @media screen and (max-width: $size) {
+        @content;
+      }
+    }
+  }
+}

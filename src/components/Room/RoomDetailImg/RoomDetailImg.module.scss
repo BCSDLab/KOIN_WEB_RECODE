@@ -1,0 +1,56 @@
+@use "src/utils/scss/media" as media;
+
+.img-slider {
+  margin-top: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  @include media.media-breakpoint(mobile) {
+    justify-content: space-evenly;
+  }
+
+  &__img-arrow {
+    margin: 0 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #fff;
+
+    @include media.media-breakpoint(mobile) {
+      img {
+        width: 40px;
+      }
+    }
+  }
+
+  &__img {
+    height: 400px;
+
+    & > img {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      height: 184px;
+      width: 100%;
+    }
+  }
+
+  &__index {
+    position: absolute;
+    width: 54px;
+    height: 23px;
+    opacity: 0.8;
+    border-radius: 12px;
+    background-color: #252525;
+    font-family: NanumBarunGothic, serif;
+    font-size: 12px;
+    line-height: 2;
+    color: #fff;
+    bottom: 10px;
+    left: calc(50% - 27px);
+  }
+}
