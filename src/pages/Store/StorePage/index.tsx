@@ -42,32 +42,32 @@ const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
   return true;
 };
 
-const checkedStoreSearchQuery = (storeSearchQuery: StoreSearchQueryType) => {
-  if (
-    storeSearchQuery.delivery === undefined && (
-      storeSearchQuery.bank === undefined) && (
-      storeSearchQuery.card === undefined)
-  ) {
-    return true;
-  }
-  return false;
-};
-
 const useStoreList = (params: StoreSearchQueryType) => {
   const { data: storeList } = useQuery('storeList', api.store.getStoreList, {
     retry: 0,
   });
   const selectedCategory = Number(params.category);
-  return storeList?.shops.filter(
-    (store) => (params.category === undefined || (
+
+  return storeList?.shops.filter((store) => {
+    const matchCategory = params.category === undefined || (
       store.category_ids.some((id) => id === selectedCategory)
-    )) && (
-      checkedStoreSearchQuery(params)
-        ? true : (store.pay_bank && searchStorePayCheckBoxFilter(params.bank)) || (
-          store.pay_card && searchStorePayCheckBoxFilter(params.card)) || (
-          store.delivery && searchStorePayCheckBoxFilter(params.delivery))) && (
-      store.name.includes(params.storeName ? params.storeName : '')),
-  );
+    );
+    const matchConditions = [];
+
+    if (params.delivery !== undefined) {
+      matchConditions.push(store.delivery === searchStorePayCheckBoxFilter(params.delivery));
+    }
+    if (params.bank !== undefined) {
+      matchConditions.push(store.pay_bank === searchStorePayCheckBoxFilter(params.bank));
+    }
+    if (params.card !== undefined) {
+      matchConditions.push(store.pay_card === searchStorePayCheckBoxFilter(params.card));
+    }
+
+    const isMatchAllSelectedConditions = matchConditions.every((condition) => condition === true);
+
+    return matchCategory && (matchConditions.length === 0 || isMatchAllSelectedConditions) && store.name.includes(params.storeName ? params.storeName : '');
+  });
 };
 
 const getOpenCloseTime = (open_time: string | null, close_time: string | null) => {
