@@ -13,7 +13,7 @@ function useNaverMap(latitude: number, longitude: number) {
         logoControl: false,
         zoomControl: true,
         scrollWheel: false,
-        draggable: false,
+        draggable: true,
         zoomControlOptions: {
           position: naver.maps.Position.TOP_LEFT,
         },
