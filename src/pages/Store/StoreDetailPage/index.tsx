@@ -142,7 +142,7 @@ function StoreDetailPage() {
                   ) : (
                     menu.option_prices.map((item) => (
                       <div className={styles['menu-card']} key={menu.id + item.option}>
-                        {menu.name + item.option}
+                        {`${menu.name} - ${item.option}`}
                         <span>
                           {
                             item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
