@@ -72,6 +72,7 @@ const useStoreList = (params: StoreSearchQueryType) => {
 
 const getOpenCloseTime = (open_time: string | null, close_time: string | null) => {
   if (open_time === null && close_time === null) return '운영정보없음';
+  if (open_time === '00:00' && close_time === '00:00') return '24시간 운영';
 
   return `${open_time}~${close_time}`;
 };
