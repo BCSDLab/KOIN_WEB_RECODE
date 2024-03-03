@@ -17,6 +17,7 @@
     font-weight: bold;
     color: #175c8e;
     text-decoration: none;
+    cursor: pointer;
 
     @include media.media-breakpoint(mobile) {
       font-size: 15px;
