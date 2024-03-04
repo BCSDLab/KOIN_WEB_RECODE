@@ -14,6 +14,7 @@ import NoticeDetailPage from 'pages/Notice/NoticeDetailPage';
 import Toast from 'components/common/Toast';
 import LogPage from 'components/common/LogPage';
 import SignupPage from 'pages/Auth/SignupPage';
+import FindPasswordPage from 'pages/Auth/FindPasswordPage';
 import StoreDetailPage from 'pages/Store/StoreDetailPage';
 import BusPage from 'pages/BusPage';
 import IndexPage from 'pages/IndexPage';
@@ -60,6 +61,7 @@ function App() {
         <Route path="auth" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
           <Route index element={<HelmetWrapper title="코인 - 로그인" element={<LoginPage />} />} />
           <Route path="signup" element={<HelmetWrapper title="코인 - 회원가입" element={<SignupPage />} />} />
+          <Route path="findpw" element={<HelmetWrapper title="코인 - 비밀번호 찾기" element={<FindPasswordPage />} />} />
         </Route>
       </Routes>
       <Toast />

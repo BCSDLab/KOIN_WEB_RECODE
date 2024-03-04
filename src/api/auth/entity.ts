@@ -28,6 +28,10 @@ export interface SignupRequest {
   is_graduated?: boolean;
 }
 
+export interface FindPasswordRequest {
+  email: string;
+}
+
 export interface SignupResponse extends APIResponse { }
 
 export interface RefreshRequest {
@@ -48,4 +52,9 @@ export interface UserResponse extends APIResponse {
   nickname: string;
   phone_number: string;
   student_number: number;
+}
+
+export interface FindPasswordResponse extends APIResponse {
+  code: number;
+  message: string;
 }
