@@ -7,6 +7,8 @@ import {
   RefreshResponse,
   SignupResponse,
   UserResponse,
+  FindPasswordRequest,
+  FindPasswordResponse,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -70,4 +72,16 @@ export class User<R extends UserResponse> implements APIRequest<R> {
   auth = false;
 
   constructor(public authorization: string) { }
+}
+
+export class FindPassword<R extends FindPasswordResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/user/find/password';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: FindPasswordRequest) {}
 }
