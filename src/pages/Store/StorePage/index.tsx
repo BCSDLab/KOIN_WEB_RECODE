@@ -90,9 +90,9 @@ const isStoreOpen = (open_time: string | null, close_time: string | null) => {
     nowTimeNum >= openTimeNum || nowTimeNum < closeTimeNum
   ) : (
     nowTimeNum >= openTimeNum && nowTimeNum < closeTimeNum
-  )) return true;
+  )) return false;
 
-  return false;
+  return true;
 };
 
 function StorePage() {
