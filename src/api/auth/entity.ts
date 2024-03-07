@@ -54,6 +54,18 @@ export interface UserResponse extends APIResponse {
   student_number: number;
 }
 
+export interface UserUpdateRequest {
+  password: string;
+  identity: number;
+  is_graduated: boolean;
+  gender: 0 | 1;
+  major: string;
+  name: string;
+  nickname: string;
+  phone_number: string;
+  student_number: number;
+}
+
 export interface FindPasswordResponse extends APIResponse {
   code: number;
   message: string;

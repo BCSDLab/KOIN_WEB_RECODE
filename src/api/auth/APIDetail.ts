@@ -9,6 +9,7 @@ import {
   UserResponse,
   FindPasswordRequest,
   FindPasswordResponse,
+  UserUpdateRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -72,6 +73,18 @@ export class User<R extends UserResponse> implements APIRequest<R> {
   auth = false;
 
   constructor(public authorization: string) { }
+}
+
+export class UpdateUser<R extends UserResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/user/student/me';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: UserUpdateRequest) { }
 }
 
 export class FindPassword<R extends FindPasswordResponse> implements APIRequest<R> {
