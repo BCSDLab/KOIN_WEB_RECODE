@@ -63,7 +63,9 @@ function App() {
           <Route index element={<HelmetWrapper title="코인 - 로그인" element={<LoginPage />} />} />
           <Route path="signup" element={<HelmetWrapper title="코인 - 회원가입" element={<SignupPage />} />} />
           <Route path="findpw" element={<HelmetWrapper title="코인 - 비밀번호 찾기" element={<FindPasswordPage />} />} />
-          <Route path="modifyInfo" element={token ? <HelmetWrapper title="코인 - 유저 정보변경" element={<ModifyInfoPage />} /> : <Navigate replace to="/auth" />} />
+        </Route>
+        <Route path="auth" element={<AuthPage />}>
+          <Route path="modifyInfo" element={token ? <HelmetWrapper title="코인 - 유저 정보변경" element={<ModifyInfoPage />} /> : <Navigate replace to="/" />} />
         </Route>
       </Routes>
       <Toast />
