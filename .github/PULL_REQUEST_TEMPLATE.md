@@ -1,3 +1,5 @@
+- Close #ISSUE_NUMBER
+
 ## What is this PR? 🔍
 
 <!-- 
@@ -34,6 +36,3 @@ ex)
 - [ ] The commit message follows our guidelines
 - [ ] There are no warning message when you run `yarn lint`
 - [ ] Docs updated for breaking changes
-
-
-Close #ISSUE_NUMBER
