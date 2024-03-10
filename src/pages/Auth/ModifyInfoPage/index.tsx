@@ -411,7 +411,6 @@ const useModifyInfoForm = () => {
       phone_number: formValue['phone-number'] || undefined,
       is_graduated: false,
     };
-    console.log(payload);
     mutate(payload);
   };
   return { submitForm, status };
