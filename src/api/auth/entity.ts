@@ -51,7 +51,7 @@ export interface UserResponse extends APIResponse {
   name: string;
   nickname: string;
   phone_number: string;
-  student_number: number;
+  student_number: string;
 }
 
 export interface UserUpdateRequest {
@@ -63,8 +63,10 @@ export interface UserUpdateRequest {
   name: string;
   nickname: string;
   phone_number: string;
-  student_number: number;
+  student_number: string;
 }
+
+export interface DeleteResponse extends APIResponse { }
 
 export interface FindPasswordResponse extends APIResponse {
   code: number;

@@ -7,6 +7,7 @@ import {
   User,
   UpdateUser,
   FindPassword,
+  DeleteUser,
 } from './APIDetail';
 
 export const login = APIClient.of(Login);
@@ -20,5 +21,7 @@ export const refresh = APIClient.of(Refresh);
 export const getUser = APIClient.of(User);
 
 export const updateUser = APIClient.of(UpdateUser);
+
+export const deleteUser = APIClient.of(DeleteUser);
 
 export const findPassword = APIClient.of(FindPassword);

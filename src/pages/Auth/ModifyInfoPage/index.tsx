@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props, no-restricted-globals */
 import React, { useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
@@ -5,11 +6,14 @@ import cn from 'utils/ts/classnames';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { DeptListResponse, IDept } from 'api/dept/entity';
 import sha256 from 'utils/ts/SHA-256';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from 'utils/recoil/userInfoState';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import useTokenState from 'utils/hooks/useTokenState';
-import useUserInfo from './hooks/useUserInfo';
+import useUserInfo from 'utils/hooks/useUserInfo';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
+import useUserDelete from './hooks/useUserDelete';
 import styles from './ModifyInfoPage.module.scss';
 
 const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
@@ -31,7 +35,6 @@ interface ICustomFormInput {
 interface IRegisterOption {
   validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
   required?: boolean;
-  defaultValue?: string | number;
 }
 
 interface RegisterReturn {
@@ -54,30 +57,18 @@ const isRefICustomFormInput = (
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const refCollection = React.useRef<IFormType>({});
 
-  const register = (name: string, options: IRegisterOption = {}): RegisterReturn => {
-    const ref = (elementRef: HTMLInputElement | ICustomFormInput | null) => {
+  const register = (name: string, options: IRegisterOption = {}): RegisterReturn => ({
+    required: options.required,
+    name,
+    ref: (elementRef: HTMLInputElement | ICustomFormInput | null) => {
       refCollection.current[name] = {
         ref: elementRef,
       };
       if (options.validFunction) {
         refCollection.current[name].validFunction = options.validFunction;
       }
-      if (elementRef && (typeof options.defaultValue === 'string' || typeof options.defaultValue === 'number')) {
-        // eslint-disable-next-line no-param-reassign
-        elementRef.value = options.defaultValue.toString();
-      }
-      if (isRefICustomFormInput(elementRef) && options.defaultValue !== undefined) {
-        // eslint-disable-next-line no-param-reassign
-        elementRef.value = options.defaultValue;
-      }
-    };
-
-    return {
-      ref,
-      required: options.required,
-      name,
-    };
-  };
+    },
+  });
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const isCurrentValidEntries = Object.entries(refCollection.current)
@@ -118,6 +109,11 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = true;
+
+    if (password === '' && passwordConfirmValue === '') {
+      return { valid, value: password };
+    }
+
     if (password !== passwordConfirmValue) {
       valid = '입력하신 비밀번호가 일치하지 않습니다.';
     } else if (password.length < 6 || password.length > 18) {
@@ -165,28 +161,46 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   props,
   ref,
 ) => {
+  const userInfo = useRecoilValue(userInfoState); // Recoil에서 기존 userInfo 상태를 가져옵니다.
   const nicknameElementRef = React.useRef<HTMLInputElement>(null);
-  const [nicknameInputValue, setNicknameInputValue] = React.useState('');
+  const [nicknameInputValue, setNicknameInputValue] = React.useState(userInfo?.nickname || ''); // 초기값을 기존 닉네임으로 설정합니다.
   const {
     changeTargetNickname,
     status,
     currentCheckedNickname,
   } = useNicknameDuplicateCheck();
+
+  // 닉네임 중복 확인 버튼 클릭 핸들러
+  const onClickNicknameDuplicateCheckButton = () => {
+    const currentInputValue = nicknameElementRef.current?.value ?? '';
+    // 현재 입력된 닉네임과 기존 닉네임이 같다면 중복 검사를 수행하지 않습니다.
+    if (currentInputValue === userInfo?.nickname) {
+      showToast('info', '기존의 닉네임과 동일합니다.');
+      return;
+    }
+    changeTargetNickname(currentInputValue);
+  };
+
   useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
     ref,
-    () => ({
-      value: currentCheckedNickname,
-      valid: nicknameInputValue === '' || (status === 'success' && nicknameInputValue === currentCheckedNickname) ? true : '닉네임 중복확인을 해주세요.',
-    }),
-    [currentCheckedNickname, status, nicknameInputValue],
+    () => {
+      // 닉네임 유효성 검사 로직
+      let valid: string | true = true;
+      if (nicknameInputValue && nicknameInputValue !== userInfo?.nickname && (status !== 'success' || nicknameInputValue !== currentCheckedNickname)) {
+        valid = '닉네임 중복확인을 해주세요.';
+      }
+      return {
+        value: nicknameInputValue,
+        valid,
+      };
+    },
+    [currentCheckedNickname, status, nicknameInputValue, userInfo?.nickname],
   );
-  const onClickNicknameDuplicateCheckButton = () => {
-    changeTargetNickname(nicknameElementRef.current?.value ?? '');
-  };
+
   const onChangeNicknameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { target } = event;
-    setNicknameInputValue(target.value);
+    setNicknameInputValue(event.target.value);
   };
+
   return (
     <div
       className={cn({
@@ -201,6 +215,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         onChange={onChangeNicknameInput}
         autoComplete="nickname"
         placeholder="닉네임 (선택)"
+        value={nicknameInputValue} // defaultValue를 value로 변경하여 제어 컴포넌트로 만듭니다.
         {...props}
       />
       <button
@@ -218,7 +233,8 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 });
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
-  const [studentNumber, setStudentNumber] = React.useState<string>('');
+  const userInfo = useRecoilValue(userInfoState);
+  const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
 
   const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -265,6 +281,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
         className={styles['form-input']}
         placeholder="학번 (선택)"
         value={studentNumber}
+        defaultValue={userInfo?.student_number}
         onChange={onChangeMajorInput}
         {...props}
       />
@@ -292,7 +309,8 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
   name,
   required,
 }, ref) => {
-  const [currentValue, setCurrentValue] = React.useState<number | null>(null);
+  const userInfo = useRecoilValue(userInfoState);
+  const [currentValue, setCurrentValue] = React.useState<number | null>(userInfo?.gender || null);
   const [isOpenedPopup, openPopup, closePopup, triggerPopup] = useBooleanState(false);
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
     const { currentTarget } = event;
@@ -314,6 +332,12 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         break;
     }
   };
+
+  React.useEffect(() => {
+    if (userInfo?.gender !== undefined) {
+      setCurrentValue(userInfo.gender);
+    }
+  }, [userInfo?.gender]); // 기존 회원가입 로직에서 가져오는 과정에서 업데이트 문제로 활용
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     const requiredValidValue = (currentValue !== null ? true : '성별을 선택해주세요.');
@@ -343,7 +367,9 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
           [styles['select__trigger--active']]: currentValue !== null,
         })}
       >
-        {currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'}
+        {
+          currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'
+        }
       </button>
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">
@@ -385,6 +411,7 @@ const useModifyInfoForm = () => {
       phone_number: formValue['phone-number'] || undefined,
       is_graduated: false,
     };
+    console.log(payload);
     mutate(payload);
   };
   return { submitForm, status };
@@ -393,11 +420,22 @@ const useModifyInfoForm = () => {
 function ModifyInfoPage() {
   const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
-  const { userInfo } = useUserInfo(token);
-  const { register, onSubmit: onSubmitSignupForm } = useLightweightForm(submitForm);
+  const userInfo = useRecoilValue(userInfoState);
+  useUserInfo(token);
+  const { mutate: deleteUser } = useUserDelete();
+  const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
+
+  const onClickDeleteUser = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // 이전 KOIN에서도 confirm을 활용함
+    if (confirm('정말 계정을 삭제하시겠습니까? 다시 복구할 수 없습니다')) {
+      deleteUser(token);
+    }
+  };
+
   return (
     <>
-      <form className={styles.signup} onSubmit={onSubmitSignupForm}>
+      <form className={styles.signup} onSubmit={onSubmitModifyForm}>
         <input
           className={styles['form-input']}
           type="text"
@@ -416,8 +454,8 @@ function ModifyInfoPage() {
           placeholder="이름 (선택)"
           {...register('name')}
         />
-        <NicknameForm {...register('nickname', { defaultValue: userInfo?.nickname })} />
-        <MajorInput {...register('student-number', { defaultValue: userInfo?.student_number })} />
+        <NicknameForm {...register('nickname')} />
+        <MajorInput {...register('student-number')} />
         <input
           className={styles['form-input']}
           type="text"
@@ -440,7 +478,7 @@ function ModifyInfoPage() {
             },
           })}
         />
-        <GenderListbox {...register('gender', { defaultValue: userInfo?.gender })} />
+        <GenderListbox {...register('gender')} />
         <button
           type="submit"
           disabled={status === 'loading'}
@@ -453,20 +491,21 @@ function ModifyInfoPage() {
         >
           정보수정
         </button>
-        <button
-          type="button"
-          disabled={status === 'loading'}
-          className={cn({
-            [styles.signup__button]: true,
-            [styles['signup__button--delete']]: true,
-            [styles['signup__button--flex-end']]: true,
-            [styles['signup__button--block']]: true,
-            [styles['signup__button--large-font']]: true,
-          })}
-        >
-          회원탈퇴
-        </button>
       </form>
+      <button
+        type="button"
+        disabled={status === 'loading'}
+        className={cn({
+          [styles.signup__button]: true,
+          [styles['signup__button--delete']]: true,
+          [styles['signup__button--flex-end']]: true,
+          [styles['signup__button--block']]: true,
+          [styles['signup__button--large-font']]: true,
+        })}
+        onClick={onClickDeleteUser}
+      >
+        회원탈퇴
+      </button>
       <div className={styles.signup__section}>
         <span className={styles.signup__copyright}>
           COPYRIGHT ⓒ&nbsp;

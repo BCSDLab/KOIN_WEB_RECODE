@@ -323,7 +323,7 @@ function Header() {
               ) : (
                 <>
                   <li className={styles['header__auth-link']}>
-                    <Link to="/modifyinfo">
+                    <Link to="/auth/modifyinfo">
                       정보수정
                     </Link>
                   </li>
