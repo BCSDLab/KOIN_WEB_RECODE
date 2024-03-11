@@ -192,7 +192,7 @@
   width: 330px;
   height: 330px;
   display: flex;
- 
+
   &--none {
     @include media.media-breakpoint(mobile) {
       display: none !important;
@@ -211,7 +211,7 @@
     margin-top: 25px;
     margin-left: 16px;
   }
-  
+
   ::-webkit-scrollbar {
     display: none;
   }
