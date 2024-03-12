@@ -67,6 +67,12 @@
     cursor: pointer;
   }
 
+  &__timetable-wrap {
+    height: 560px;
+    display: flex;
+    flex-direction: column;
+  }
+
   &__button {
     display: flex;
     justify-content: space-around;
@@ -85,6 +91,10 @@
       width: 24px;
       height: 24px;
     }
+  }
+
+  &__last-update {
+    margin: 20px 0 0 50px;
   }
 }
 
