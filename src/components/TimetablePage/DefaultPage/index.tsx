@@ -323,7 +323,7 @@ function DefaultPage() {
             </React.Suspense>
           </ErrorBoundary>
         </div>
-        <div>
+        <div className={styles['page__timetable-wrap']}>
           <div className={styles.page__filter}>
             <div className={styles.page__semester}>
               <React.Suspense fallback="loading...">
@@ -359,7 +359,9 @@ function DefaultPage() {
               </React.Suspense>
             </ErrorBoundary>
           </div>
+          <div className={styles['page__last-update']}>마지막 업데이트 날짜: 2024.03.12</div>
         </div>
+
         <div>
           <h3 className={styles['page__title--sub']}>나의 시간표</h3>
           <div className={styles['page__table--selected']}>
