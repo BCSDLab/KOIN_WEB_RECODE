@@ -338,6 +338,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     const requiredValidValue = (currentValue !== null ? true : '성별을 선택해주세요.');
+    console.log(currentValue);
     return {
       value: currentValue,
       valid: required ? requiredValidValue : true,
@@ -401,7 +402,7 @@ const useModifyInfoForm = () => {
       // 옵션
       name: formValue.name || undefined,
       nickname: formValue.nickname || undefined,
-      gender: formValue.gender || undefined,
+      gender: formValue.gender ?? undefined,
       major: formValue['student-number'].major || undefined,
       student_number: formValue['student-number'].studentNumber || undefined,
       phone_number: formValue['phone-number'] || undefined,
