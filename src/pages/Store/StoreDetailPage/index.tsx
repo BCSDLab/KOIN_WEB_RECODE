@@ -10,6 +10,7 @@ import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
+import UpdateInfo from './components/UpdateInfo';
 import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
@@ -33,19 +34,27 @@ function StoreDetailPage() {
     <div className={styles.template}>
       <div className={styles.section}>
         {!isMobile && (
-          <button
-            className={styles.section__header}
-            aria-label="주변 상점 리스트 이동"
-            type="button"
-            onClick={() => navigate('/store')}
-          >
-            주변 상점
-          </button>
+          <div className={styles.section__header}>
+            <button
+              className={styles['section__header--button']}
+              aria-label="주변 상점 리스트 이동"
+              type="button"
+              onClick={() => navigate('/store')}
+            >
+              주변 상점
+            </button>
+            {storeDetail && (
+              <UpdateInfo date={storeDetail.updated_at} />
+            )}
+          </div>
         )}
         <div className={styles['section__store-info']}>
           {storeDetail && (
             <div className={styles.store}>
               <div className={styles.store__name}>{storeDetail?.name}</div>
+              {isMobile && (
+                <UpdateInfo date={storeDetail.updated_at} />
+              )}
               <div className={styles.store__detail}>
                 <span>전화번호</span>
                 {storeDetail?.phone}
