@@ -401,7 +401,7 @@ const useModifyInfoForm = () => {
       // 옵션
       name: formValue.name || undefined,
       nickname: formValue.nickname || undefined,
-      gender: formValue.gender || undefined,
+      gender: formValue.gender ?? undefined,
       major: formValue['student-number'].major || undefined,
       student_number: formValue['student-number'].studentNumber || undefined,
       phone_number: formValue['phone-number'] || undefined,
