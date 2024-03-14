@@ -97,7 +97,7 @@ function CityTimetable() {
   return (
     <>
       <div className={styles['timetable__citybus-info']}>
-        버스번호: 400, 401, 493
+        버스번호: 400, 402, 405
       </div>
 
       <Template headers={BUS_TYPES[2].tableHeaders} arrivalList={CITY_BUS_TIMETABLE} />
