@@ -1,0 +1,54 @@
+{
+  "reviewers": [
+    {
+      "name": "채승윤",
+      "githubName": "chaeseungyun",
+      "team" : "business"
+    },
+    {
+      "name": "최정훈",
+      "githubName": "hoooooony",
+      "team" : "business"
+    },
+    {
+      "name": "김대의",
+      "githubName": "kimeodml",
+      "team" : "business"
+    },
+    {
+      "name": "김대관",
+      "githubName": "daepan",
+      "team" : "business"
+    },
+    {
+      "name": "김하나",
+      "githubName": "hanagertrudeKim",
+      "team" : "user"
+    },
+    {
+      "name": "김도훈",
+      "githubName": "dooohun",
+      "team" : "user"
+    },
+    {
+      "name": "곽승주",
+      "githubName": "Gwak-Seungju",
+      "team" : "user"
+    },
+    {
+      "name": "정민구",
+      "githubName": "MinGu-Jeong",
+      "team" : "campus"
+    },
+    {
+      "name": "정해성",
+      "githubName": "junghaesung79",
+      "team" : "campus"
+    },
+    {
+      "name": "김경윤",
+      "githubName": "KimKyungYun",
+      "team" : "campus"
+    }
+  ]
+}
