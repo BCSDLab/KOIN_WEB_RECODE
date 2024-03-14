@@ -5,7 +5,6 @@ import { userInfoState } from 'utils/recoil/userInfoState';
 
 const useUserInfo = (token: string) => {
   const setUserInfo = useSetRecoilState(userInfoState);
-
   const { data: userInfo, isError: isUserDataError } = useQuery(
     ['userInfo', token],
     () => api.auth.getUser(token),

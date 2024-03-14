@@ -11,7 +11,6 @@ import { userInfoState } from 'utils/recoil/userInfoState';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import useTokenState from 'utils/hooks/useTokenState';
-import useUserInfo from 'utils/hooks/useUserInfo';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import useUserDelete from './hooks/useUserDelete';
 import styles from './ModifyInfoPage.module.scss';
@@ -318,9 +317,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
     setCurrentValue(value ? parseInt(value, 10) : null);
     closePopup();
   };
-  const onBlurSelect = () => {
-    closePopup();
-  };
+
   const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
     const { key, currentTarget } = event;
     const value = currentTarget.getAttribute('data-value');
@@ -354,7 +351,6 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         [styles['select--flex-end']]: true,
       })}
       onMouseLeave={closePopup}
-      onBlur={onBlurSelect}
     >
       <button
         type="button"
@@ -405,7 +401,7 @@ const useModifyInfoForm = () => {
       // 옵션
       name: formValue.name || undefined,
       nickname: formValue.nickname || undefined,
-      gender: formValue.gender || undefined,
+      gender: formValue.gender ?? undefined,
       major: formValue['student-number'].major || undefined,
       student_number: formValue['student-number'].studentNumber || undefined,
       phone_number: formValue['phone-number'] || undefined,
@@ -420,7 +416,6 @@ function ModifyInfoPage() {
   const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
   const userInfo = useRecoilValue(userInfoState);
-  useUserInfo(token);
   const { mutate: deleteUser } = useUserDelete();
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
 
