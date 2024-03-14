@@ -22,7 +22,7 @@ const useUserInfo = (token: string) => {
 
   return {
     userInfo: isUserDataError ? null : userInfo,
-  }
+  };
 };
 
 export default useUserInfo;
