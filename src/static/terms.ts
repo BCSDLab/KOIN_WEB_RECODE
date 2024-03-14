@@ -38,7 +38,7 @@ export const privacy = `제1조 개인정보의 처리 목적 (‘koreatech.in�
 ① BCSD Lab(‘koreatech.in’이하 ‘코인) 은(는) 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.
 
 ▶ 개인정보 보호책임자
-성명 : 최준호 (BCSD Lab Project Leader)
+성명 : 최원빈 (BCSD Lab Project Leader)
 연락처 : chldnjsqls1264@gmail.com
 ※ 개인정보 보호 담당부서로 연결됩니다.
 
