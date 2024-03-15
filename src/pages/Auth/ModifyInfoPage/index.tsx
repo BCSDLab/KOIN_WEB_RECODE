@@ -6,14 +6,17 @@ import cn from 'utils/ts/classnames';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { DeptListResponse, IDept } from 'api/dept/entity';
 import sha256 from 'utils/ts/SHA-256';
+import useTokenState from 'utils/hooks/useTokenState';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import useModalPortal from 'utils/hooks/useModalPortal';
+import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from 'utils/recoil/userInfoState';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
-import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
-import useTokenState from 'utils/hooks/useTokenState';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
-import useUserDelete from './hooks/useUserDelete';
+import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
+import useUserDelete from './hooks/useUserDelete';
 
 const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
 
@@ -139,7 +142,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         required={required}
         name={name}
       />
-      <span className={styles.signup__advice}>
+      <span className={styles.modify__advice}>
         비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
       </span>
       <input
@@ -149,7 +152,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         autoComplete="new-password"
         placeholder="비밀번호 확인 (필수)"
       />
-      <span className={styles.signup__advice}>
+      <span className={styles.modify__advice}>
         비밀번호를 입력하지 않으면 기존 비밀번호를 유지합니다.
       </span>
     </>
@@ -203,8 +206,8 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   return (
     <div
       className={cn({
-        [styles.signup__row]: true,
-        [styles['signup__row--nickname']]: true,
+        [styles.modify__row]: true,
+        [styles['modify__row--nickname']]: true,
       })}
     >
       <input
@@ -220,8 +223,8 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       <button
         type="button"
         className={cn({
-          [styles.signup__button]: true,
-          [styles['signup__button--nickname']]: true,
+          [styles.modify__button]: true,
+          [styles['modify__button--nickname']]: true,
         })}
         onClick={onClickNicknameDuplicateCheckButton}
       >
@@ -415,28 +418,34 @@ const useModifyInfoForm = () => {
 function ModifyInfoPage() {
   const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
+  const navigate = useNavigate();
   const userInfo = useRecoilValue(userInfoState);
-  const { mutate: deleteUser } = useUserDelete();
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
+  const portalManager = useModalPortal();
+  const { mutate: deleteUser } = useUserDelete();
+  const onClickUserDeleteConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    deleteUser(token);
+    navigate('/');
+  };
 
   const onClickDeleteUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // 이전 KOIN에서도 confirm을 활용함
-    if (confirm('정말 계정을 삭제하시겠습니까? 다시 복구할 수 없습니다')) {
-      deleteUser(token);
-    }
+    portalManager.open((portalOption: Portal) => (
+      <UserDeleteModal deleteUser={() => onClickUserDeleteConfirm} onClose={portalOption.close} />
+    ));
   };
 
   return (
     <>
-      <form className={styles.signup} onSubmit={onSubmitModifyForm}>
+      <form className={styles.modify} onSubmit={onSubmitModifyForm}>
         <input
           className={styles['form-input']}
           type="text"
           readOnly
           disabled
         />
-        <span className={styles.signup__advice}>
+        <span className={styles.modify__advice}>
           계정명은 변경하실 수 없습니다.
         </span>
         <PasswordForm {...register('password')} />
@@ -477,31 +486,31 @@ function ModifyInfoPage() {
           type="submit"
           disabled={status === 'loading'}
           className={cn({
-            [styles.signup__button]: true,
-            [styles['signup__button--flex-end']]: true,
-            [styles['signup__button--block']]: true,
-            [styles['signup__button--large-font']]: true,
+            [styles.modify__button]: true,
+            [styles['modify__button--flex-end']]: true,
+            [styles['modify__button--block']]: true,
+            [styles['modify__button--large-font']]: true,
           })}
         >
           정보수정
         </button>
+        <button
+          type="button"
+          disabled={status === 'loading'}
+          className={cn({
+            [styles.modify__button]: true,
+            [styles['modify__button--delete']]: true,
+            [styles['modify__button--flex-end']]: true,
+            [styles['modify__button--block']]: true,
+            [styles['modify__button--large-font']]: true,
+          })}
+          onClick={onClickDeleteUser}
+        >
+          회원탈퇴
+        </button>
       </form>
-      <button
-        type="button"
-        disabled={status === 'loading'}
-        className={cn({
-          [styles.signup__button]: true,
-          [styles['signup__button--delete']]: true,
-          [styles['signup__button--flex-end']]: true,
-          [styles['signup__button--block']]: true,
-          [styles['signup__button--large-font']]: true,
-        })}
-        onClick={onClickDeleteUser}
-      >
-        회원탈퇴
-      </button>
-      <div className={styles.signup__section}>
-        <span className={styles.signup__copyright}>
+      <div className={styles.modify__section}>
+        <span className={styles.modify__copyright}>
           COPYRIGHT ⓒ&nbsp;
           {new Date().getFullYear()}
           &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
