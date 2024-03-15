@@ -142,7 +142,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         required={required}
         name={name}
       />
-      <span className={styles.signup__advice}>
+      <span className={styles.modify__advice}>
         비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
       </span>
       <input
@@ -152,7 +152,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         autoComplete="new-password"
         placeholder="비밀번호 확인 (필수)"
       />
-      <span className={styles.signup__advice}>
+      <span className={styles.modify__advice}>
         비밀번호를 입력하지 않으면 기존 비밀번호를 유지합니다.
       </span>
     </>
@@ -206,8 +206,8 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   return (
     <div
       className={cn({
-        [styles.signup__row]: true,
-        [styles['signup__row--nickname']]: true,
+        [styles.modify__row]: true,
+        [styles['modify__row--nickname']]: true,
       })}
     >
       <input
@@ -223,8 +223,8 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       <button
         type="button"
         className={cn({
-          [styles.signup__button]: true,
-          [styles['signup__button--nickname']]: true,
+          [styles.modify__button]: true,
+          [styles['modify__button--nickname']]: true,
         })}
         onClick={onClickNicknameDuplicateCheckButton}
       >
@@ -438,14 +438,14 @@ function ModifyInfoPage() {
 
   return (
     <>
-      <form className={styles.signup} onSubmit={onSubmitModifyForm}>
+      <form className={styles.modify} onSubmit={onSubmitModifyForm}>
         <input
           className={styles['form-input']}
           type="text"
           readOnly
           disabled
         />
-        <span className={styles.signup__advice}>
+        <span className={styles.modify__advice}>
           계정명은 변경하실 수 없습니다.
         </span>
         <PasswordForm {...register('password')} />
@@ -486,31 +486,31 @@ function ModifyInfoPage() {
           type="submit"
           disabled={status === 'loading'}
           className={cn({
-            [styles.signup__button]: true,
-            [styles['signup__button--flex-end']]: true,
-            [styles['signup__button--block']]: true,
-            [styles['signup__button--large-font']]: true,
+            [styles.modify__button]: true,
+            [styles['modify__button--flex-end']]: true,
+            [styles['modify__button--block']]: true,
+            [styles['modify__button--large-font']]: true,
           })}
         >
           정보수정
         </button>
+        <button
+          type="button"
+          disabled={status === 'loading'}
+          className={cn({
+            [styles.modify__button]: true,
+            [styles['modify__button--delete']]: true,
+            [styles['modify__button--flex-end']]: true,
+            [styles['modify__button--block']]: true,
+            [styles['modify__button--large-font']]: true,
+          })}
+          onClick={onClickDeleteUser}
+        >
+          회원탈퇴
+        </button>
       </form>
-      <button
-        type="button"
-        disabled={status === 'loading'}
-        className={cn({
-          [styles.signup__button]: true,
-          [styles['signup__button--delete']]: true,
-          [styles['signup__button--flex-end']]: true,
-          [styles['signup__button--block']]: true,
-          [styles['signup__button--large-font']]: true,
-        })}
-        onClick={onClickDeleteUser}
-      >
-        회원탈퇴
-      </button>
-      <div className={styles.signup__section}>
-        <span className={styles.signup__copyright}>
+      <div className={styles.modify__section}>
+        <span className={styles.modify__copyright}>
           COPYRIGHT ⓒ&nbsp;
           {new Date().getFullYear()}
           &nbsp;BY BCSDLab ALL RIGHTS RESERVED.

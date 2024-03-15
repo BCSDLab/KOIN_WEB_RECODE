@@ -16,10 +16,10 @@
 
 .container {
   width: 400px;
-  height: 120px;
-  background-color: #fff;
+  height: 140px;
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
 
   &__header {
     height: 36px;
@@ -27,9 +27,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    font-size: 22px;
+    padding: 4px 0;
     color: #fff;
     background-color: #175c8e;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
 
   &__content {
@@ -37,22 +40,31 @@
     justify-content: center;
     align-items: center;
     color: #000;
-    height: 48px;
+    height: 36px;
+    background-color: #fff;
     font-size: 15px;
+    padding: 10px 20px;
   }
 
   &__footer {
     display: flex;
+    background-color: #fff;
     justify-content: flex-end;
+    height: 40px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 10px 20px 0;
   }
 }
 
 .button {
+  width: 60px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #e4e4e4;
   color: #fff;
   background-color: #175c8e;
-  margin: 0 24px;
+  border-radius: 5px;
 }
