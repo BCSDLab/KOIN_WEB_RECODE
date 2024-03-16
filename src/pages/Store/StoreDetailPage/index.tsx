@@ -133,7 +133,11 @@ function StoreDetailPage() {
         </div>
         {storeMenuCategories && storeMenuCategories.length > 0 && (
           <>
-            <div className={styles['menu-title']}>MENU</div>
+            <div className={styles['menu-title__container']}>
+              <div className={styles['menu-title']}>MENU</div>
+              {storeDetail && <UpdateInfo date={storeDetail.updated_at} />}
+            </div>
+
             <div className={styles['menu-info']}>
               {storeMenuCategories.map((menuCategories: MenuCategory) => (
                 menuCategories.menus.map((menu: Menu) => (

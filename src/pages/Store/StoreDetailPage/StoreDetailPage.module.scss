@@ -282,17 +282,22 @@
 }
 
 .menu-title {
-  text-align: left;
+  &__container {
+    margin: 63px 0 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      margin-top: 31px;
+    }
+  }
+
   font-size: 20px;
   letter-spacing: -1px;
   line-height: 1.69;
   color: #252525;
-  margin: 63px 0 12px;
   font-weight: 700;
-
-  @include media.media-breakpoint(mobile) {
-    margin-top: 31px;
-  }
 }
 
 .menu-info {
