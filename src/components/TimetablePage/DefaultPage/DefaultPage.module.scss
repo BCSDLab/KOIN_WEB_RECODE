@@ -26,7 +26,7 @@
   &__content {
     display: grid;
     grid-template-columns: 766px 1fr;
-    grid-template-rows: 517px 336px;
+    grid-template-rows: 535px 336px;
     gap: 66px 28px;
   }
 
@@ -67,6 +67,14 @@
     cursor: pointer;
   }
 
+  &__last-update {
+    display: flex;
+    justify-content: end;
+    font-size: 14px;
+    color: #888686;
+    margin-top: 5px;
+  }
+
   &__timetable-wrap {
     height: 560px;
     display: flex;
@@ -91,10 +99,6 @@
       width: 24px;
       height: 24px;
     }
-  }
-
-  &__last-update {
-    margin: 20px 0 0 50px;
   }
 }
 

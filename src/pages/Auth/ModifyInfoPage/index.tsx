@@ -427,6 +427,7 @@ function ModifyInfoPage() {
   const onClickDeleteUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     // 이전 KOIN에서도 confirm을 활용함
+    // eslint-disable-next-line no-alert
     if (confirm('정말 계정을 삭제하시겠습니까? 다시 복구할 수 없습니다')) {
       deleteUser(token);
     }

@@ -17,6 +17,8 @@ import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
+import { useQuery } from 'react-query';
+import { timetable } from 'api';
 import useDeptList from './hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 import useSemester from './hooks/useSemester';
@@ -90,6 +92,23 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
     <Listbox list={deptOptionList} value={value} onChange={onChange} />
   );
 }
+
+const LastUpdatedDate = () => {
+  const { data } = useQuery(
+    'updated',
+    timetable.getLastUpdatedDate,
+    {
+      useErrorBoundary: false,
+      suspense: true,
+    },
+  );
+
+  return {
+    data,
+  };
+};
+
+const { data: updatedDate } = LastUpdatedDate();
 
 function SemesterListbox({ value, onChange }: DecidedListboxProps) {
   const semesterOptionList = useSemesterOptionList();
@@ -317,11 +336,16 @@ function DefaultPage() {
               </React.Suspense>
             </div>
           </div>
+
           <ErrorBoundary fallbackClassName="loading">
             <React.Suspense fallback="loading...">
               <CurrentSemesterLectureList semesterKey={semesterFilterValue} />
             </React.Suspense>
           </ErrorBoundary>
+          <div className={styles['page__last-update']}>
+            마지막 업데이트 날짜:
+          </div>
+          <div>{ updatedDate }</div>
         </div>
         <div className={styles['page__timetable-wrap']}>
           <div className={styles.page__filter}>
@@ -359,7 +383,6 @@ function DefaultPage() {
               </React.Suspense>
             </ErrorBoundary>
           </div>
-          <div className={styles['page__last-update']}>마지막 업데이트 날짜: 2024.03.12</div>
         </div>
 
         <div>

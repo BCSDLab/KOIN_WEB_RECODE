@@ -6,6 +6,7 @@ import {
   TimetableAddLectureResponse,
   TimetableInfoResponse,
   TimetableRemoveLectureResponse,
+  LastUpdatedDateResponse,
 } from './entity';
 
 export class LectureList<R extends LectureInfoResponse> implements APIRequest<R> {
@@ -24,6 +25,14 @@ export class LectureList<R extends LectureInfoResponse> implements APIRequest<R>
       semester_date,
     };
   }
+}
+
+export class LastUpdatedDate<R extends LastUpdatedDateResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/update';
+
+  response!: R;
 }
 
 export class TimetableInfo<R extends TimetableInfoResponse> implements APIRequest<R> {

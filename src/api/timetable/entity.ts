@@ -35,3 +35,7 @@ export interface TimetableAddLectureRequest {
 export interface TimetableRemoveLectureResponse extends APIResponse {
   [index: number]: TimetableLectureInfo;
 }
+
+export interface LastUpdatedDateResponse extends APIResponse {
+  [index: number]: string;
+}
