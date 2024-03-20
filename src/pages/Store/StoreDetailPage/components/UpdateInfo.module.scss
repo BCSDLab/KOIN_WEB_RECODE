@@ -1,0 +1,21 @@
+@use "src/utils/scss/media";
+
+.update {
+  font-size: 14px;
+  padding: 30px 0 0;
+  color: #aaa;
+
+  &--content {
+    width: 100%;
+  }
+
+  &--info {
+    width: 100%;
+    margin-left: 3px;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    padding: 6px 0 7px;
+    font-size: 10px;
+  }
+}
