@@ -21,7 +21,6 @@ function StoreDetailPage() {
   const { storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const portalManager = useModalPortal();
-
   const onClickImage = (img: string[], index: number) => {
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -43,7 +42,7 @@ function StoreDetailPage() {
             >
               주변 상점
             </button>
-            {storeDetail && (
+            {storeDetail?.updated_at && (
               <UpdateInfo date={storeDetail.updated_at} />
             )}
           </div>
@@ -52,7 +51,7 @@ function StoreDetailPage() {
           {storeDetail && (
             <div className={styles.store}>
               <div className={styles.store__name}>{storeDetail?.name}</div>
-              {isMobile && (
+              {isMobile && storeDetail?.updated_at && (
                 <UpdateInfo date={storeDetail.updated_at} />
               )}
               <div className={styles.store__detail}>
@@ -135,12 +134,11 @@ function StoreDetailPage() {
           <>
             <div className={styles['menu-title__container']}>
               <div className={styles['menu-title']}>MENU</div>
-              {storeDetail && <UpdateInfo date={storeDetail.updated_at} />}
+              {storeMenus?.updated_at && <UpdateInfo date={storeMenus.updated_at} />}
             </div>
-
             <div className={styles['menu-info']}>
               {storeMenuCategories.map((menuCategories: MenuCategory) => (
-                menuCategories.menus.map((menu: Menu) => (
+                menuCategories.menu_responses.map((menu: Menu) => (
                   menu.option_prices === null ? (
                     <div className={styles['menu-card']} key={menu.id}>
                       {menu.name}

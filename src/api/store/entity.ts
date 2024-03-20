@@ -64,12 +64,13 @@ export type Menu = SinglePriceMenu | MultiPriceMenu;
 export interface MenuCategory {
   id: number;
   name: string;
-  menus: Menu[];
+  menu_responses: Menu[];
 }
 
 export interface StoreDetailMenuResponse extends APIResponse {
   count: number;
   menu_categories: MenuCategory[];
+  updated_at: string;
 }
 
 export interface StoreListResponse extends APIResponse {
