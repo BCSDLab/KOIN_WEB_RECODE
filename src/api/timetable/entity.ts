@@ -6,6 +6,14 @@ export type SemesterInfo = {
   'semester': string;
 };
 
+export type TimetableVersionInfo = {
+  id: string;
+  version: string;
+  type: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export interface SemesterResponse extends APIResponse {
   [index: number]: SemesterInfo;
 }
@@ -37,5 +45,5 @@ export interface TimetableRemoveLectureResponse extends APIResponse {
 }
 
 export interface LastUpdatedDateResponse extends APIResponse {
-  [index: number]: string;
+  [index: number]: TimetableVersionInfo;
 }

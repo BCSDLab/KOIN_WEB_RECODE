@@ -30,9 +30,13 @@ export class LectureList<R extends LectureInfoResponse> implements APIRequest<R>
 export class LastUpdatedDate<R extends LastUpdatedDateResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/update';
-
   response!: R;
+
+  path = 'versions/:type';
+
+  constructor(type: string) {
+    this.path = `/versions/${type}`;
+  }
 }
 
 export class TimetableInfo<R extends TimetableInfoResponse> implements APIRequest<R> {

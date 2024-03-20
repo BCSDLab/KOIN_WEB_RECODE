@@ -1,6 +1,6 @@
 import React from 'react';
 import { IDept } from 'api/dept/entity';
-import { SemesterInfo } from 'api/timetable/entity';
+import { SemesterInfo, TimetableVersionInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
@@ -17,8 +17,6 @@ import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
-import { useQuery } from 'react-query';
-import { timetable } from 'api';
 import useDeptList from './hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 import useSemester from './hooks/useSemester';
@@ -27,6 +25,7 @@ import useLectureList from './hooks/useLectureList';
 import useTimetableInfoList from './hooks/useTimetableInfoList';
 import useAddTimetableLecture from './hooks/useAddTimetableLecture';
 import useDeleteTimetableLecture from './hooks/useDeleteTimetableLecture';
+import useLastUpdatedDate from './hooks/useLastUpdatedDate';
 
 const useSearch = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -92,23 +91,6 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
     <Listbox list={deptOptionList} value={value} onChange={onChange} />
   );
 }
-
-const LastUpdatedDate = () => {
-  const { data } = useQuery(
-    'updated',
-    timetable.getLastUpdatedDate,
-    {
-      useErrorBoundary: false,
-      suspense: true,
-    },
-  );
-
-  return {
-    data,
-  };
-};
-
-const { data: updatedDate } = LastUpdatedDate();
 
 function SemesterListbox({ value, onChange }: DecidedListboxProps) {
   const semesterOptionList = useSemesterOptionList();
@@ -290,6 +272,16 @@ function Curriculum() {
   );
 }
 
+function LastUpdatedDate() {
+  const { data: updatedDate } = useLastUpdatedDate();
+
+  return (
+    <div>
+      {(updatedDate as unknown as TimetableVersionInfo).updated_at.substring(0, 11).replaceAll('-', '. ').replace('T', '.')}
+    </div>
+  );
+}
+
 function DefaultPage() {
   const {
     searchInputRef,
@@ -344,8 +336,8 @@ function DefaultPage() {
           </ErrorBoundary>
           <div className={styles['page__last-update']}>
             마지막 업데이트 날짜:
+            <LastUpdatedDate />
           </div>
-          <div>{ updatedDate }</div>
         </div>
         <div className={styles['page__timetable-wrap']}>
           <div className={styles.page__filter}>
