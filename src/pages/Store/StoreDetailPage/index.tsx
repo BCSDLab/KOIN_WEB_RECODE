@@ -42,8 +42,8 @@ function StoreDetailPage() {
             >
               주변 상점
             </button>
-            {storeDetail?.updated_at && (
-              <UpdateInfo date={storeDetail.updated_at} />
+            {storeDetail && (
+              <UpdateInfo date={storeDetail?.updated_at ?? '날짜 정보 없음'} />
             )}
           </div>
         )}
@@ -51,8 +51,8 @@ function StoreDetailPage() {
           {storeDetail && (
             <div className={styles.store}>
               <div className={styles.store__name}>{storeDetail?.name}</div>
-              {isMobile && storeDetail?.updated_at && (
-                <UpdateInfo date={storeDetail.updated_at} />
+              {isMobile && (
+                <UpdateInfo date={storeDetail?.updated_at ?? '날짜 정보 없음'} />
               )}
               <div className={styles.store__detail}>
                 <span>전화번호</span>
@@ -134,7 +134,7 @@ function StoreDetailPage() {
           <>
             <div className={styles['menu-title__container']}>
               <div className={styles['menu-title']}>MENU</div>
-              {storeMenus?.updated_at && <UpdateInfo date={storeMenus.updated_at} />}
+              {storeMenus && <UpdateInfo date={storeMenus?.updated_at ?? '날짜 정보 없음'} />}
             </div>
             <div className={styles['menu-info']}>
               {storeMenuCategories.map((menuCategories: MenuCategory) => (
