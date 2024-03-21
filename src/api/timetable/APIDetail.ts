@@ -6,7 +6,8 @@ import {
   TimetableAddLectureResponse,
   TimetableInfoResponse,
   TimetableRemoveLectureResponse,
-  LastUpdatedDateResponse,
+  VersionInfoResponse,
+  VersionType,
 } from './entity';
 
 export class LectureList<R extends LectureInfoResponse> implements APIRequest<R> {
@@ -27,14 +28,14 @@ export class LectureList<R extends LectureInfoResponse> implements APIRequest<R>
   }
 }
 
-export class LastUpdatedDate<R extends LastUpdatedDateResponse> implements APIRequest<R> {
+export class VersionInfo<R extends VersionInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   response!: R;
 
   path = 'versions/:type';
 
-  constructor(type: string) {
+  constructor(type: VersionType) {
     this.path = `/versions/${type}`;
   }
 }

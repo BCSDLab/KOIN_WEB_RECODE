@@ -5,7 +5,7 @@ import {
   TimetableAddLecture,
   TimetableInfo,
   TimetableRemoveLecture,
-  LastUpdatedDate,
+  VersionInfo,
 } from './APIDetail';
 
 export const getLectureList = APIClient.of(LectureList);
@@ -18,4 +18,4 @@ export const changeTimetableInfoByAddLecture = APIClient.of(TimetableAddLecture)
 
 export const changeTimetableInfoByRemoveLecture = APIClient.of(TimetableRemoveLecture);
 
-export const getLastUpdatedDate = APIClient.of(LastUpdatedDate);
+export const getVersion = APIClient.of(VersionInfo);
