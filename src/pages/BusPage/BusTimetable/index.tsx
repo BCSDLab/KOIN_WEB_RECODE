@@ -2,11 +2,23 @@ import { Suspense, useState } from 'react';
 import cn from 'utils/ts/classnames';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import { BUS_TYPES } from 'static/bus';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './BusTimetable.module.scss';
 import Timetable from './Timetable';
 
+type BusType = {
+  key: string,
+  tabName: string,
+  tableHeaders: string[],
+};
+
 function BusTimetable() {
   const [selectedTab, setSelectedTab] = useState(BUS_TYPES[0]);
+  const logger = useLogger();
+  const onClickBusTab = (type: BusType) => {
+    logger.click({ title: 'bus_tab_click', value: type.tabName });
+    setSelectedTab(type);
+  };
 
   return (
     <section className={styles.template}>
@@ -17,7 +29,7 @@ function BusTimetable() {
           <li key={type.key} role="tab" aria-selected={selectedTab.key === type.key}>
             <button
               type="button"
-              onClick={() => setSelectedTab(type)}
+              onClick={() => onClickBusTab(type)}
               className={cn({
                 [styles.tabs__tab]: true,
                 [styles['tabs__tab--selected']]: selectedTab.key === type.key,
