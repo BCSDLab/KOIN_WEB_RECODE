@@ -7,7 +7,7 @@ interface UpdateInfoProps {
 function UpdateInfo({ date } :UpdateInfoProps) {
   return (
     <div className={styles.update}>
-      <span className={styles['update--content']}>최근 업데이트</span>
+      <span className={styles['update--content']}>{date ? '최근 없데이트일' : '최근 업데이트 정보 없음'}</span>
       <span className={styles['update--info']}>{date}</span>
     </div>
   );
