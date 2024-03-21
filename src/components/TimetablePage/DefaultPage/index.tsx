@@ -282,7 +282,7 @@ function LastUpdatedDate() {
   return (
     <div className={styles['page__last-update']}>
       <span className={styles['page__last-update--content']}>마지막 업데이트 날짜:</span>
-      <span className={styles['page__last-update--info']}>{RefactorDate((updatedDate as VersionInfo).updated_at)}</span>
+      <span className={styles['page__last-update--info']}>{RefactorDate((updatedDate as unknown as VersionInfo).updated_at)}</span>
     </div>
   );
 }
@@ -339,7 +339,11 @@ function DefaultPage() {
               <CurrentSemesterLectureList semesterKey={semesterFilterValue} />
             </React.Suspense>
           </ErrorBoundary>
-          <LastUpdatedDate />
+          <ErrorBoundary fallbackClassName="loading">
+            <React.Suspense fallback="loading...">
+              <LastUpdatedDate />
+            </React.Suspense>
+          </ErrorBoundary>
         </div>
         <div className={styles['page__timetable-wrap']}>
           <div className={styles.page__filter}>

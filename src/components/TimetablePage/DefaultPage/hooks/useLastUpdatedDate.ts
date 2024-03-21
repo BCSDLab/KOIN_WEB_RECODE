@@ -8,6 +8,7 @@ const useLastUpdatedDate = () => {
     LASTUPDATED_INFO_KEY,
     ({ queryKey }) => timetable.getVersion(queryKey[0]),
     {
+      suspense: true,
       useErrorBoundary: false,
     },
   );
