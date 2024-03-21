@@ -42,8 +42,8 @@ function StoreDetailPage() {
             >
               주변 상점
             </button>
-            {storeDetail && (
-              <UpdateInfo date={storeDetail?.updated_at} />
+            {storeDetail?.updated_at && (
+              <UpdateInfo date={storeDetail.updated_at} />
             )}
           </div>
         )}
@@ -52,7 +52,7 @@ function StoreDetailPage() {
             <div className={styles.store}>
               <div className={styles.store__name}>{storeDetail?.name}</div>
               {isMobile && (
-                <UpdateInfo date={storeDetail?.updated_at} />
+                <UpdateInfo date={storeDetail.updated_at} />
               )}
               <div className={styles.store__detail}>
                 <span>전화번호</span>
@@ -134,7 +134,7 @@ function StoreDetailPage() {
           <>
             <div className={styles['menu-title__container']}>
               <div className={styles['menu-title']}>MENU</div>
-              {storeMenus && <UpdateInfo date={storeMenus?.updated_at} />}
+              {storeMenus && <UpdateInfo date={storeMenus.updated_at} />}
             </div>
             <div className={styles['menu-info']}>
               {storeMenuCategories.map((menuCategories: MenuCategory) => (
