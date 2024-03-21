@@ -6,11 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import { Portal } from 'components/common/Modal/PortalProvider';
+import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
-import UpdateInfo from './components/UpdateInfo';
 import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
@@ -21,7 +21,6 @@ function StoreDetailPage() {
   const { storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const portalManager = useModalPortal();
-
   const onClickImage = (img: string[], index: number) => {
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -43,7 +42,7 @@ function StoreDetailPage() {
             >
               주변 상점
             </button>
-            {storeDetail && (
+            {storeDetail?.updated_at && (
               <UpdateInfo date={storeDetail.updated_at} />
             )}
           </div>
@@ -133,7 +132,10 @@ function StoreDetailPage() {
         </div>
         {storeMenuCategories && storeMenuCategories.length > 0 && (
           <>
-            <div className={styles['menu-title']}>MENU</div>
+            <div className={styles['menu-title__container']}>
+              <div className={styles['menu-title']}>MENU</div>
+              {storeMenus && <UpdateInfo date={storeMenus.updated_at} />}
+            </div>
             <div className={styles['menu-info']}>
               {storeMenuCategories.map((menuCategories: MenuCategory) => (
                 menuCategories.menus.map((menu: Menu) => (

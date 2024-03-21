@@ -70,6 +70,7 @@ export interface MenuCategory {
 export interface StoreDetailMenuResponse extends APIResponse {
   count: number;
   menu_categories: MenuCategory[];
+  updated_at: string;
 }
 
 export interface StoreListResponse extends APIResponse {
