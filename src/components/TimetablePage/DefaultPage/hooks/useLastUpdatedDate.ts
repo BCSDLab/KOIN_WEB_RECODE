@@ -6,7 +6,7 @@ const LASTUPDATED_INFO_KEY = 'timetable';
 const useLastUpdatedDate = () => {
   const { data } = useQuery(
     LASTUPDATED_INFO_KEY,
-    ({ queryKey }) => timetable.getLastUpdatedDate(queryKey[0] ?? 'timetable'),
+    ({ queryKey }) => timetable.getVersion(queryKey[0] ?? 'timetable'),
     {
       suspense: true,
       useErrorBoundary: false,

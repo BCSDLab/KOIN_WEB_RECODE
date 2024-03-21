@@ -1,6 +1,6 @@
 import React from 'react';
 import { IDept } from 'api/dept/entity';
-import { SemesterInfo, TimetableVersionInfo } from 'api/timetable/entity';
+import { SemesterInfo, VersionInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
