@@ -64,7 +64,7 @@ export type Menu = SinglePriceMenu | MultiPriceMenu;
 export interface MenuCategory {
   id: number;
   name: string;
-  menu_responses: Menu[];
+  menus: Menu[];
 }
 
 export interface StoreDetailMenuResponse extends APIResponse {

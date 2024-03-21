@@ -138,7 +138,7 @@ function StoreDetailPage() {
             </div>
             <div className={styles['menu-info']}>
               {storeMenuCategories.map((menuCategories: MenuCategory) => (
-                menuCategories.menu_responses.map((menu: Menu) => (
+                menuCategories.menus.map((menu: Menu) => (
                   menu.option_prices === null ? (
                     <div className={styles['menu-card']} key={menu.id}>
                       {menu.name}
