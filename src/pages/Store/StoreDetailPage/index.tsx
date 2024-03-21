@@ -6,11 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import { Portal } from 'components/common/Modal/PortalProvider';
+import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
-import UpdateInfo from './components/UpdateInfo';
 import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
