@@ -105,9 +105,17 @@ function SemesterListbox({ value, onChange }: DecidedListboxProps) {
 
 interface CurrentSemesterLectureListProps {
   semesterKey: string | null;
+  filter: {
+    // 백엔드 수정하면 optional 제거
+    dept?: string;
+    search: string;
+  }
 }
 
-function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListProps) {
+function CurrentSemesterLectureList({
+  semesterKey,
+  filter,
+}: CurrentSemesterLectureListProps) {
   const { data: lectureList, status } = useLectureList(semesterKey);
   const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
@@ -122,7 +130,16 @@ function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListP
     isLoaded ? (
       <LectureTable
         height={459}
-        list={(lectureList as unknown as Array<LectureInfo>)}
+        list={
+          (lectureList as unknown as Array<LectureInfo>)
+            .filter(
+              (lecture) => (
+                lecture.name.includes(filter.search)
+                // 백엔드 수정하면 제거
+                // || (filter.dept !== '전체' && lecture.department === filter.dept)
+              ),
+            )
+        }
         selectedLecture={selectedTempLecture ?? undefined}
         onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
         onClickLastColumn={
@@ -276,7 +293,7 @@ function DefaultPage() {
     searchInputRef,
     onClickSearchButton,
     onKeyDownSearchInput,
-    // value: searchValue,
+    value: searchValue,
   } = useSearch();
   const {
     value: deptFilterValue,
@@ -319,7 +336,14 @@ function DefaultPage() {
           </div>
           <ErrorBoundary fallbackClassName="loading">
             <React.Suspense fallback="loading...">
-              <CurrentSemesterLectureList semesterKey={semesterFilterValue} />
+              <CurrentSemesterLectureList
+                semesterKey={semesterFilterValue}
+                filter={{
+                  // 백엔드 수정하면 제거
+                  // dept: deptFilterValue ?? '전체',
+                  search: searchValue ?? '',
+                }}
+              />
             </React.Suspense>
           </ErrorBoundary>
         </div>
