@@ -25,7 +25,7 @@ import useLectureList from './hooks/useLectureList';
 import useTimetableInfoList from './hooks/useTimetableInfoList';
 import useAddTimetableLecture from './hooks/useAddTimetableLecture';
 import useDeleteTimetableLecture from './hooks/useDeleteTimetableLecture';
-import useLastUpdatedDate from './hooks/useLastUpdatedDate';
+import useVersionInfo from './hooks/useVersionInfo';
 
 const useSearch = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -277,7 +277,7 @@ function RefactorDate(date: string) {
 }
 
 function LastUpdatedDate() {
-  const { data: updatedDate } = useLastUpdatedDate();
+  const { data: updatedDate } = useVersionInfo();
 
   return (
     <div className={styles['page__last-update']}>

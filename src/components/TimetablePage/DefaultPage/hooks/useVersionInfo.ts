@@ -1,11 +1,11 @@
 import { timetable } from 'api';
 import { useQuery } from 'react-query';
 
-const LASTUPDATED_INFO_KEY = 'timetable';
+const VERSION_INFO_KEY = 'timetable';
 
-const useLastUpdatedDate = () => {
+const useVersionInfo = () => {
   const { data } = useQuery(
-    LASTUPDATED_INFO_KEY,
+    VERSION_INFO_KEY,
     ({ queryKey }) => timetable.getVersion(queryKey[0]),
     {
       suspense: true,
@@ -18,4 +18,4 @@ const useLastUpdatedDate = () => {
   };
 };
 
-export default useLastUpdatedDate;
+export default useVersionInfo;
