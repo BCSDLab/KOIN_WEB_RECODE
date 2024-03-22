@@ -20,7 +20,7 @@ Make an issue or Contact with this repository leader.
 
 ### Repository leader
 
-[Yunsup Sim](https://github.com/SimYunSup)
+[Hana Kim](https://github.com/hanagertrudekim)
 
 # Learn Our Stack
 
