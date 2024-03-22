@@ -27,22 +27,29 @@ jobs:
             //PrCreator가 reviewer에 등록되지 않은 사람인 경우
             if (!prCreatorJson) {
               const reviewerArr = developers.reviewers;
-              const randomReviewer1 = reviewerArr[Math.floor(Math.random() * reviewerArr.length)];
-              const randomReviewer2 = reviewerArr[Math.floor(Math.random() * reviewerArr.length)];  
-              core.setOutput('writer', JSON.stringify(prCreator));
+              const randomReviewer1 = getRandomReviewer(reviewerArr);
+              const randomReviewer2 = getRandomReviewer(reviewerArr.filter(reviewer => reviewer.name !== randomReviewer1.name));
+              setOutput(prCreator, prUrl, randomReviewer1, randomReviewer2);
             } else {
               const candidateInternalReviewers = developers.reviewers.filter(person => person.team === prCreatorJson.team && person.githubName !== prCreator);
               const candidateExternalReviewers = developers.reviewers.filter(person => person.team !== prCreatorJson.team);
-              const randomReviewer1 = candidateInternalReviewers[Math.floor(Math.random() * candidateInternalReviewers.length)];
-              const randomReviewer2 = candidateExternalReviewers[Math.floor(Math.random() * candidateExternalReviewers.length)];
-              core.setOutput('writer', JSON.stringify(prCreatorJson.name));
+              const randomReviewer1 = getRandomReviewer(candidateInternalReviewers);
+              const randomReviewer2 = getRandomReviewer(candidateExternalReviewers);
+              setOutput(prCreatorJson.name, prUrl, randomReviewer1, randomReviewer2);
             }
-            
-            core.setOutput('pullRequestLink', JSON.stringify(prUrl));
-            core.setOutput('reviewer1Name', JSON.stringify(randomReviewer1.name));
-            core.setOutput('reviewer2Name', JSON.stringify(randomReviewer2.name));
-            core.setOutput('reviewer1GithubName', randomReviewer1.githubName);
-            core.setOutput('reviewer2GithubName', randomReviewer2.githubName);
+
+            function getRandomReviewer(reviewers) {
+              return reviewers[Math.floor(Math.random() * reviewers.length)];
+            }
+
+            function setOutput(prCreator, prUrl, reviewer1, reviewer2) {
+              core.setOutput('writer', JSON.stringify(prCreator));
+              core.setOutput('pullRequestLink', JSON.stringify(prUrl));
+              core.setOutput('reviewer1Name', JSON.stringify(reviewer1.name));
+              core.setOutput('reviewer2Name', JSON.stringify(reviewer2.name));
+              core.setOutput('reviewer1GithubName', reviewer1.githubName);
+              core.setOutput('reviewer2GithubName', reviewer2.githubName);
+            }
 
       - name: test valiable
         uses: actions/github-script@v7
