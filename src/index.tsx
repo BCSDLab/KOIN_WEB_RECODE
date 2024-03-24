@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import { BrowserRouter } from 'react-router-dom';
-// import { QueryClient, QueryClientProvider } from 'react-query';
-// 일단 몰라서 react-query 부분 주석으로 진행.
+import { QueryClient as QueryClientV3, QueryClientProvider as QueryClientProviderV3 } from 'react-query'; // V3 버전 사용
+// 순차적 진행을 위해. 기존의 V3는 다른 이름으로 남겨둠. 작업 완료 후 삭제할 것.
 
 import PortalProvider from 'components/common/Modal/PortalProvider';
 import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-// import showToast from './utils/ts/showToast';
+import showToast from './utils/ts/showToast';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,12 +20,25 @@ const queryClient = new QueryClient({
       refetchOnReconnect: false,
       retry: false,
       staleTime: 5 * 60 * 1000,
-      // onError: () => {
-      //   showToast('error', '네트워크 연결을 확인해주세요.');
-      // },
     },
   },
 });
+
+const queryClientV3 = new QueryClientV3({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: false,
+      staleTime: 5 * 60 * 1000,
+      onError: () => {
+        showToast('error', '네트워크 연결을 확인해주세요.');
+      },
+    },
+  },
+});
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
@@ -35,7 +48,9 @@ root.render(
       <PortalProvider>
         <BrowserRouter>
           <QueryClientProvider client={queryClient}>
-            <App />
+            <QueryClientProviderV3 client={queryClientV3}>
+              <App />
+            </QueryClientProviderV3>
           </QueryClientProvider>
         </BrowserRouter>
       </PortalProvider>
