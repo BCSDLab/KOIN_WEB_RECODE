@@ -2651,6 +2651,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.28.6":
+  version: 5.28.6
+  resolution: "@tanstack/query-core@npm:5.28.6"
+  checksum: 2d8406e707fe36a72a90fd0f4f2975bb14b0546c9d39574e0b70a2e52e49f12bff44f6610a0c15a526c0b0561b18c65987602e4ad3ea3fd767502bb938985f88
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.28.6":
+  version: 5.28.6
+  resolution: "@tanstack/react-query@npm:5.28.6"
+  dependencies:
+    "@tanstack/query-core": 5.28.6
+  peerDependencies:
+    react: ^18.0.0
+  checksum: a920991b62b2bd7f91f8a8a4377a7f50c28c60979535dad33f45d15aa865d481956724493341e8343ca71dbaf00e9ed7cefb782d5460a7447ce39125a66f869f
+  languageName: node
+  linkType: hard
+
 "@testing-library/dom@npm:^8.5.0":
   version: 8.20.1
   resolution: "@testing-library/dom@npm:8.20.1"
@@ -9140,6 +9158,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "koin_web_recode@workspace:."
   dependencies:
+    "@tanstack/react-query": ^5.28.6
     "@testing-library/jest-dom": ^5.14.1
     "@testing-library/react": ^13.0.0
     "@testing-library/user-event": ^13.2.1
@@ -9169,7 +9188,6 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-helmet: ^6.1.0
-    react-query: ^3.39.1
     react-router-dom: ^6.3.0
     react-scripts: 5.0.1
     react-toastify: ^9.0.8
@@ -11724,7 +11742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-query@npm:*, react-query@npm:^3.39.1":
+"react-query@npm:*":
   version: 3.39.3
   resolution: "react-query@npm:3.39.3"
   dependencies:
