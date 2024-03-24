@@ -2,12 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import { BrowserRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+// import { QueryClient, QueryClientProvider } from 'react-query';
+// 일단 몰라서 react-query 부분 주석으로 진행.
+
 import PortalProvider from 'components/common/Modal/PortalProvider';
 import { RecoilRoot } from 'recoil';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import showToast from './utils/ts/showToast';
+// import showToast from './utils/ts/showToast';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,9 +20,9 @@ const queryClient = new QueryClient({
       refetchOnReconnect: false,
       retry: false,
       staleTime: 5 * 60 * 1000,
-      onError: () => {
-        showToast('error', '네트워크 연결을 확인해주세요.');
-      },
+      // onError: () => {
+      //   showToast('error', '네트워크 연결을 확인해주세요.');
+      // },
     },
   },
 });
