@@ -26,7 +26,7 @@
   &__content {
     display: grid;
     grid-template-columns: 766px 1fr;
-    grid-template-rows: 517px 336px;
+    grid-template-rows: 535px 336px;
     gap: 66px 28px;
   }
 
@@ -65,6 +65,24 @@
     background-color: #fff;
     margin-bottom: 17px;
     cursor: pointer;
+  }
+
+  &__last-update {
+    display: flex;
+    justify-content: end;
+    font-size: 14px;
+    color: #888686;
+    margin-top: 5px;
+
+    &--info {
+      margin-left: 4px;
+    }
+  }
+
+  &__timetable-wrap {
+    height: 560px;
+    display: flex;
+    flex-direction: column;
   }
 
   &__button {
@@ -147,4 +165,32 @@
       width: 22px;
     }
   }
+}
+
+.dropdown-loading-spinner {
+  margin: 1px auto;
+  background-color: white;
+  width: 50px;
+  height: 50px;
+}
+
+.top-loading-spinner {
+  margin: 208px auto;
+  background-color: white;
+  width: 100px;
+  height: 100px;
+}
+
+.central-loading-spinner {
+  margin: auto 650px;
+  background-color: white;
+  width: 20px;
+  height: 20px;
+}
+
+.bottom-loading-spinner {
+  margin: 100px auto;
+  background-color: white;
+  width: 100px;
+  height: 100px;
 }
