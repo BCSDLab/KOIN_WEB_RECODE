@@ -17,6 +17,7 @@ import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
+import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import useDeptList from './hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 import useSemester from './hooks/useSemester';
@@ -161,9 +162,7 @@ function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListP
         )}
       </LectureTable>
     ) : (
-      <div>
-        Loading...
-      </div>
+      <LoadingSpinner className={styles['top-loading-spinner']} />
     )
   );
 }
@@ -201,9 +200,7 @@ function CurrentMyLectureList() {
         )}
       </LectureTable>
     ) : (
-      <div>
-        Loading...
-      </div>
+      <LoadingSpinner className={styles['bottom-loading-spinner']} />
     ));
 }
 
@@ -240,9 +237,7 @@ function CurrentSemesterTimetable(): JSX.Element {
       totalHeight={456}
     />
   ) : (
-    <div>
-      loading...
-    </div>
+    <LoadingSpinner className={styles['top-loading-spinner']} />
   );
 }
 
@@ -325,7 +320,7 @@ function DefaultPage() {
               </button>
             </div>
             <div className={styles.page__depart}>
-              <React.Suspense fallback="loading...">
+              <React.Suspense fallback={<LoadingSpinner className={styles['dropdown-loading-spinner']} />}>
                 <DeptListbox
                   value={deptFilterValue}
                   onChange={onChangeDeptSelect}
@@ -335,12 +330,12 @@ function DefaultPage() {
           </div>
 
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback="loading...">
+            <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
               <CurrentSemesterLectureList semesterKey={semesterFilterValue} />
             </React.Suspense>
           </ErrorBoundary>
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback="loading...">
+            <React.Suspense fallback={<LoadingSpinner className={styles['central-loading-spinner']} />}>
               <LastUpdatedDate />
             </React.Suspense>
           </ErrorBoundary>
@@ -348,7 +343,7 @@ function DefaultPage() {
         <div className={styles['page__timetable-wrap']}>
           <div className={styles.page__filter}>
             <div className={styles.page__semester}>
-              <React.Suspense fallback="loading...">
+              <React.Suspense fallback={<LoadingSpinner className={styles['dropdown-loading-spinner']} />}>
                 <SemesterListbox
                   value={semesterFilterValue}
                   onChange={onChangeSemesterSelect}
@@ -376,7 +371,7 @@ function DefaultPage() {
           </div>
           <div className={styles.page__timetable}>
             <ErrorBoundary fallbackClassName="loading">
-              <React.Suspense fallback="loading...">
+              <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
                 <CurrentSemesterTimetable />
               </React.Suspense>
             </ErrorBoundary>
@@ -387,7 +382,7 @@ function DefaultPage() {
           <h3 className={styles['page__title--sub']}>나의 시간표</h3>
           <div className={styles['page__table--selected']}>
             <ErrorBoundary fallbackClassName="loading">
-              <React.Suspense fallback="loading...">
+              <React.Suspense fallback={<LoadingSpinner className={styles['bottom-loading-spinner']} />}>
                 <CurrentMyLectureList />
               </React.Suspense>
             </ErrorBoundary>
@@ -396,7 +391,7 @@ function DefaultPage() {
         <div>
           <h3 className={styles['page__title--sub']}>커리큘럼</h3>
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback="loading...">
+            <React.Suspense fallback={<LoadingSpinner className={styles['bottom-loading-spinner']} />}>
               <Curriculum />
             </React.Suspense>
           </ErrorBoundary>
