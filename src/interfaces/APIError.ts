@@ -1,8 +1,5 @@
-import { AxiosError, AxiosResponse } from 'axios';
-
 export interface APIError {
-  message: string
-  status: number
-  raw: AxiosError
-  response?: AxiosResponse
+  status: number;
+  code: string;
+  message: string;
 }

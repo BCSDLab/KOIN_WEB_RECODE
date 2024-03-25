@@ -59,7 +59,7 @@ export default class APIClient {
         })
         .catch((err) => {
           const apiError = this.normalizeError(err);
-          this.errorMiddleware(apiError);
+          // this.errorMiddleware(apiError);
           reject(apiError);
         });
     });
@@ -74,19 +74,18 @@ export default class APIClient {
     return data.data;
   }
 
-  private errorMiddleware(error: APIError): void {
-    // 인증 오류 발생 시 로그인 페이지로 쫓아냄
-    // eslint-disable-next-line no-useless-return
-    if (error.status === 401) return;
-  }
+  // private errorMiddleware(error: CustomError): void {
+  //   // 인증 오류 발생 시 로그인 페이지로 쫓아냄
+  //   // eslint-disable-next-line no-useless-return
+  //   if (error.status === 401) return;
+  // }
 
   // Convert axios error into APIError
-  private normalizeError(error: AxiosError): APIError {
+  private normalizeError(error: AxiosError<APIError>): APIError {
     return {
       status: error.response?.status!,
-      message: error.message,
-      raw: error,
-      response: error.response,
+      code: error.response?.data.code!,
+      message: error.response?.data.message!,
     };
   }
 
