@@ -6,9 +6,9 @@ const useRoomDetail = (id: string) => {
     queryOptions({
       queryKey: ['roomDetail', id],
       queryFn: async ({ queryKey }) => {
-        const a = queryKey[1]; // 왜 객체로 받고 있지????????
+        const queryFnParams = queryKey[1]; // 왜 객체로 받고 있지????????
 
-        return api.room.getRoomDetailInfo(a);
+        return api.room.getRoomDetailInfo(queryFnParams);
       },
 
     }),
