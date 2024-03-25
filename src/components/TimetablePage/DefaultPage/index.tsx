@@ -112,8 +112,17 @@ interface CurrentSemesterLectureListProps {
     dept?: string;
     search: string;
   }
+  filter: {
+    // 백엔드 수정하면 optional 제거
+    dept?: string;
+    search: string;
+  }
 }
 
+function CurrentSemesterLectureList({
+  semesterKey,
+  filter,
+}: CurrentSemesterLectureListProps) {
 function CurrentSemesterLectureList({
   semesterKey,
   filter,
@@ -132,6 +141,16 @@ function CurrentSemesterLectureList({
     isLoaded ? (
       <LectureTable
         height={459}
+        list={
+          (lectureList as unknown as Array<LectureInfo>)
+            .filter(
+              (lecture) => (
+                lecture.name.includes(filter.search)
+                // 백엔드 수정하면 제거
+                // || (filter.dept !== '전체' && lecture.department === filter.dept)
+              ),
+            )
+        }
         list={
           (lectureList as unknown as Array<LectureInfo>)
             .filter(
@@ -304,6 +323,7 @@ function DefaultPage() {
     searchInputRef,
     onClickSearchButton,
     onKeyDownSearchInput,
+    value: searchValue,
     value: searchValue,
   } = useSearch();
   const {

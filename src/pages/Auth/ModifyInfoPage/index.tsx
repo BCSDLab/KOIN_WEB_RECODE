@@ -13,6 +13,7 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from 'utils/recoil/userInfoState';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
+import { UserUpdateRequest } from 'api/auth/entity';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -398,8 +399,7 @@ const useModifyInfoForm = () => {
   };
   const { status, mutate } = useUserInfoUpdate({ onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
-    const payload = {
-      password: await sha256(formValue.password),
+    const payload: UserUpdateRequest = {
       identity: 0,
       // 옵션
       name: formValue.name || undefined,
@@ -410,6 +410,9 @@ const useModifyInfoForm = () => {
       phone_number: formValue['phone-number'] || undefined,
       is_graduated: false,
     };
+    if ((formValue.password.trim()).length > 0) {
+      payload.password = await sha256(formValue.password);
+    }
     mutate(payload);
   };
   return { submitForm, status };
