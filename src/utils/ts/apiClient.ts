@@ -83,11 +83,11 @@ export default class APIClient {
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
     const { response } = error;
     return response?.status !== undefined
-    && response.data?.code !== undefined
+    && response.data.code !== undefined
     && response.data.message !== undefined;
   }
 
-  // Convert axios error into KoinError
+  // error 를 경우에 따라 KoinError와 AxiosError로 반환
   private normalizeError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
     if (this.isAxiosErrorWithResponseData(error)) {
       const koinError = error.response!;
