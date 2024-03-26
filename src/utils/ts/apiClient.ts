@@ -58,7 +58,7 @@ export default class APIClient {
           resolve(response);
         })
         .catch((err) => {
-          const apiError = this.normalizeError(err);
+          const apiError = this.createKoinErrorFromAxiosError(err);
           // this.errorMiddleware(apiError);
           reject(apiError);
         });
@@ -88,7 +88,9 @@ export default class APIClient {
   }
 
   // error 를 경우에 따라 KoinError와 AxiosError로 반환
-  private normalizeError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
+  private createKoinErrorFromAxiosError(
+    error: AxiosError<KoinError>,
+  ): KoinError | CustomAxiosError {
     if (this.isAxiosErrorWithResponseData(error)) {
       const koinError = error.response!;
       return {
