@@ -2,7 +2,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
-import { APIError } from 'interfaces/APIError';
+import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 
 const API_URL = process.env.REACT_APP_API_PATH;
 
@@ -23,7 +23,7 @@ export default class APIClient {
   static toCallable<
     T extends Constructor<any>,
     U extends InstanceType<T>,
-    R extends ResponseType<U> & APIError,
+    R extends ResponseType<U> & KoinError,
   >(api: T) {
     // eslint-disable-next-line new-cap
     return (...args: ConstructorParameters<T>) => APIClient.request<R>(new api(...args));
@@ -80,12 +80,26 @@ export default class APIClient {
   //   if (error.status === 401) return;
   // }
 
+  private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
+    const { response } = error;
+    return response?.status !== undefined
+    && response.data?.code !== undefined
+    && response.data.message !== undefined;
+  }
+
   // Convert axios error into APIError
-  private normalizeError(error: AxiosError<APIError>): APIError {
+  private normalizeError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
+    if (this.isAxiosErrorWithResponseData(error)) {
+      return {
+        type: 'koin-error',
+        status: error.response?.status!,
+        code: error.response?.data.code!,
+        message: error.response?.data.message!,
+      };
+    }
     return {
-      status: error.response?.status!,
-      code: error.response?.data.code!,
-      message: error.response?.data.message!,
+      type: 'axios-error',
+      ...error,
     };
   }
 
