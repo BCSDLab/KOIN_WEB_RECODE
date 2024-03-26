@@ -90,11 +90,12 @@ export default class APIClient {
   // Convert axios error into APIError
   private normalizeError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
     if (this.isAxiosErrorWithResponseData(error)) {
+      const koinError = error.response!;
       return {
         type: 'koin-error',
-        status: error.response?.status!,
-        code: error.response?.data.code!,
-        message: error.response?.data.message!,
+        status: koinError.status,
+        code: koinError.data.code,
+        message: koinError.data.message,
       };
     }
     return {
