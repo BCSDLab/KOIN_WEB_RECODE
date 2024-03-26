@@ -87,7 +87,7 @@ export default class APIClient {
     && response.data.message !== undefined;
   }
 
-  // Convert axios error into APIError
+  // Convert axios error into KoinError
   private normalizeError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
     if (this.isAxiosErrorWithResponseData(error)) {
       const koinError = error.response!;
