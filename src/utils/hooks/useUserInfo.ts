@@ -1,10 +1,9 @@
 import { useQuery } from 'react-query';
 import * as api from 'api';
-import { useSetRecoilState } from 'recoil';
-import { userInfoState } from 'utils/recoil/userInfoState';
+import { useUserStore } from 'utils/zustand/userInfoState';
 
 const useUserInfo = (token: string) => {
-  const setUserInfo = useSetRecoilState(userInfoState);
+  const { setUserInfo } = useUserStore();
   const { data: userInfo, isError: isUserDataError } = useQuery(
     ['userInfo', token],
     () => api.auth.getUser(token),

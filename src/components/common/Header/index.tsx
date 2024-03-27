@@ -7,9 +7,8 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
-import { userInfoState } from 'utils/recoil/userInfoState';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { getUser } from 'api/auth';
+import { useUserStore } from 'utils/zustand/userInfoState';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -88,8 +87,7 @@ function Header() {
   const token = useTokenState();
   const isLoggedin = !!token;
   const isMain = pathname === '/';
-  const userInfo = useRecoilValue(userInfoState);
-  const setUserInfo = useSetRecoilState(userInfoState);
+  const { userInfo, setUserInfo } = useUserStore();
   const logout = useLogout();
   const navigate = useNavigate();
 

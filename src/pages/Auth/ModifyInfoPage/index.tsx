@@ -10,10 +10,9 @@ import useTokenState from 'utils/hooks/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
-import { useRecoilValue } from 'recoil';
-import { userInfoState } from 'utils/recoil/userInfoState';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import { UserUpdateRequest } from 'api/auth/entity';
+import { useUserStore } from 'utils/zustand/userInfoState';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -164,7 +163,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   props,
   ref,
 ) => {
-  const userInfo = useRecoilValue(userInfoState); // Recoil에서 기존 userInfo 상태를 가져옵니다.
+  const { userInfo } = useUserStore();
   const nicknameElementRef = React.useRef<HTMLInputElement>(null);
   const [nicknameInputValue, setNicknameInputValue] = React.useState(userInfo?.nickname || ''); // 초기값을 기존 닉네임으로 설정합니다.
   const {
@@ -236,7 +235,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 });
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
-  const userInfo = useRecoilValue(userInfoState);
+  const { userInfo } = useUserStore();
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
 
@@ -312,7 +311,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
   name,
   required,
 }, ref) => {
-  const userInfo = useRecoilValue(userInfoState);
+  const { userInfo } = useUserStore();
   const [currentValue, setCurrentValue] = React.useState<number | null>(userInfo?.gender || null);
   const [isOpenedPopup, openPopup, closePopup, triggerPopup] = useBooleanState(false);
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
@@ -422,7 +421,7 @@ function ModifyInfoPage() {
   const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
   const navigate = useNavigate();
-  const userInfo = useRecoilValue(userInfoState);
+  const { userInfo } = useUserStore();
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
   const portalManager = useModalPortal();
   const { mutate: deleteUser } = useUserDelete();
