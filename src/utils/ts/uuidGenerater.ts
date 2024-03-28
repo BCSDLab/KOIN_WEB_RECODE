@@ -1,3 +1,4 @@
+// 비트 연산을 위한 lint 제거
 /* eslint-disable no-bitwise */
 const uuidv4 = (): string => (
   // eslint-disable-next-line no-mixed-operators
