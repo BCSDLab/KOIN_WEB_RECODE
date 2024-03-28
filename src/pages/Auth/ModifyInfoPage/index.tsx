@@ -435,7 +435,10 @@ function ModifyInfoPage() {
   const onClickDeleteUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     portalManager.open((portalOption: Portal) => (
-      <UserDeleteModal deleteUser={() => onClickUserDeleteConfirm} onClose={portalOption.close} />
+      <UserDeleteModal
+        deleteUser={() => onClickUserDeleteConfirm(e)}
+        onClose={portalOption.close}
+      />
     ));
   };
 
