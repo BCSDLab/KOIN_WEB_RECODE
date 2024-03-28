@@ -6,6 +6,16 @@ export type SemesterInfo = {
   'semester': string;
 };
 
+export type VersionType = 'android' | 'timetable' | 'shuttle_bus_timetable' | 'express_bus_timetable' | 'city_bus_timetable';
+
+export type VersionInfo = {
+  id: string;
+  version: string;
+  type: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export interface SemesterResponse extends APIResponse {
   [index: number]: SemesterInfo;
 }
@@ -34,4 +44,12 @@ export interface TimetableAddLectureRequest {
 
 export interface TimetableRemoveLectureResponse extends APIResponse {
   [index: number]: TimetableLectureInfo;
+}
+
+export interface VersionInfoResponse extends APIResponse {
+  id: string;
+  version: string;
+  type: string;
+  created_at: string;
+  updated_at: string;
 }

@@ -11,6 +11,7 @@ import Timetable from 'components/TimetablePage/Timetable';
 import { useSelectRecoil } from 'components/TimetablePage/DefaultPage/hooks/useSelect';
 import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
 import { Link } from 'react-router-dom';
+import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
@@ -46,9 +47,7 @@ function CurrentSemesterTimetable(): JSX.Element {
       totalHeight={369}
     />
   ) : (
-    <div>
-      loading...
-    </div>
+    <LoadingSpinner className={styles['template__loading-spinner']} />
   );
 }
 
@@ -70,7 +69,7 @@ export default function IndexTimeTable() {
         시간표
       </Link>
       <ErrorBoundary fallbackClassName="loading">
-        <React.Suspense fallback="loading...">
+        <React.Suspense fallback={<LoadingSpinner className={styles['template__loading-spinner']} />}>
           <CurrentSemesterTimetable />
         </React.Suspense>
       </ErrorBoundary>
