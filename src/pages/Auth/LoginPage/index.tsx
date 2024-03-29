@@ -64,6 +64,10 @@ const useLogin = (state: IsAutoLogin) => {
       showToast('error', '아우누리 계정 형식이 아닙니다.');
       return;
     }
+    if (userInfo.password.length < 6) {
+      showToast('error', '비밀번호는 6자 이상이어야 합니다.');
+      return;
+    }
     const hashedPassword = await sha256(userInfo.password);
 
     postLogin.mutate({
