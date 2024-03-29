@@ -48,11 +48,11 @@ const useLogin = (state: IsAutoLogin) => {
   });
 
   const login = async (userInfo: UserInfo) => {
-    if (userInfo.userId === null) {
+    if (userInfo.userId === '') {
       showToast('error', '계정을 입력해주세요');
       return;
     }
-    if (userInfo.password === null) {
+    if (userInfo.password === '') {
       showToast('error', '비밀번호를 입력해주세요');
       return;
     }
