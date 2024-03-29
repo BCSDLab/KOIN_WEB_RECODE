@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import { getTimetableInfo } from 'api/timetable';
-import { KoinError } from 'interfaces/APIError';
+import { APIError } from 'interfaces/APIError';
 import { TimetableLectureInfo } from 'interfaces/Lecture';
 
 export const TIMETABLE_INFO_LIST = 'TIMETABLE_INFO_LIST';
@@ -11,7 +11,7 @@ export default function useTimetableInfoList(
 ) {
   return useQuery<
   Awaited<ReturnType<typeof getTimetableInfo>>,
-  KoinError,
+  APIError,
   TimetableLectureInfo[] | undefined,
   [string, string]
   >(

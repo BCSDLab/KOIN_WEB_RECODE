@@ -1,12 +1,8 @@
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
-export interface KoinError {
-  type: 'KOIN_ERROR';
-  status: number;
-  code: number;
-  message: string;
-}
-
-export interface CustomAxiosError extends AxiosError {
-  type: 'AXIOS_ERROR';
+export interface APIError {
+  message: string
+  status: number
+  raw: AxiosError
+  response?: AxiosResponse
 }

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { HotPostResponse } from 'api/notice/entity';
-import { KoinError } from 'interfaces/APIError';
+import { APIError } from 'interfaces/APIError';
 import styles from './HotPost.module.scss';
 
 interface HotPostProps {
-  hotArticleList: HotPostResponse[] & KoinError
+  hotArticleList: HotPostResponse[] & APIError
 }
 
 const LINK_LIST = [

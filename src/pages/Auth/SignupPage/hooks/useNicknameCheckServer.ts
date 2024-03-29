@@ -1,5 +1,5 @@
 import { auth } from 'api';
-import { KoinError } from 'interfaces/APIError';
+import { APIError } from 'interfaces/APIError';
 import { useQuery } from 'react-query';
 import showToast from 'utils/ts/showToast';
 
@@ -12,7 +12,7 @@ const useNicknameCheckServer = (nickname: string) => {
       onSuccess: () => {
         showToast('success', '사용 가능한 닉네임입니다.');
       },
-      onError: (responseError: KoinError) => {
+      onError: (responseError: APIError) => {
         if (responseError.status === 409) {
           showToast('error', '사용 불가능한 닉네임입니다.');
           return;

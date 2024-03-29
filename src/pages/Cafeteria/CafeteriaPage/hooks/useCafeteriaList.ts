@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import { cafeteria } from 'api';
-import { type KoinError } from 'interfaces/APIError';
+import { type APIError } from 'interfaces/APIError';
 import { CafeteriaMenu } from 'interfaces/Cafeteria';
 
 const CAFETERIA_LIST_KEY = 'CAFETERIA_LIST_KEY';
@@ -8,7 +8,7 @@ const CAFETERIA_LIST_KEY = 'CAFETERIA_LIST_KEY';
 function useCafeteriaList(date: string) {
   return useQuery<
   Awaited<ReturnType<typeof cafeteria.default>>,
-  KoinError,
+  APIError,
   Array<CafeteriaMenu> | undefined,
   [string, string]
   >(
