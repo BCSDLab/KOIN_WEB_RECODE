@@ -2,7 +2,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
-import { APIError } from 'interfaces/APIError';
+import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 
 const API_URL = process.env.REACT_APP_API_PATH;
 
@@ -23,7 +23,7 @@ export default class APIClient {
   static toCallable<
     T extends Constructor<any>,
     U extends InstanceType<T>,
-    R extends ResponseType<U> & APIError,
+    R extends ResponseType<U> & KoinError,
   >(api: T) {
     // eslint-disable-next-line new-cap
     return (...args: ConstructorParameters<T>) => APIClient.request<R>(new api(...args));
@@ -58,8 +58,8 @@ export default class APIClient {
           resolve(response);
         })
         .catch((err) => {
-          const apiError = this.normalizeError(err);
-          this.errorMiddleware(apiError);
+          const apiError = this.createKoinErrorFromAxiosError(err);
+          // this.errorMiddleware(apiError);
           reject(apiError);
         });
     });
@@ -74,19 +74,35 @@ export default class APIClient {
     return data.data;
   }
 
-  private errorMiddleware(error: APIError): void {
-    // 인증 오류 발생 시 로그인 페이지로 쫓아냄
-    // eslint-disable-next-line no-useless-return
-    if (error.status === 401) return;
+  // private errorMiddleware(error: CustomError): void {
+  //   // 인증 오류 발생 시 로그인 페이지로 쫓아냄
+  //   // eslint-disable-next-line no-useless-return
+  //   if (error.status === 401) return;
+  // }
+
+  private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
+    const { response } = error;
+    return response?.status !== undefined
+    && response.data.code !== undefined
+    && response.data.message !== undefined;
   }
 
-  // Convert axios error into APIError
-  private normalizeError(error: AxiosError): APIError {
+  // error 를 경우에 따라 KoinError와 AxiosError로 반환
+  private createKoinErrorFromAxiosError(
+    error: AxiosError<KoinError>,
+  ): KoinError | CustomAxiosError {
+    if (this.isAxiosErrorWithResponseData(error)) {
+      const koinError = error.response!;
+      return {
+        type: 'KOIN_ERROR',
+        status: koinError.status,
+        code: koinError.data.code,
+        message: koinError.data.message,
+      };
+    }
     return {
-      status: error.response?.status!,
-      message: error.message,
-      raw: error,
-      response: error.response,
+      type: 'AXIOS_ERROR',
+      ...error,
     };
   }
 
