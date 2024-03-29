@@ -13,7 +13,7 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from 'utils/recoil/userInfoState';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
-import { UserUpdateRequest } from 'api/auth/entity';
+import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -52,6 +52,8 @@ export interface ISubmitForm {
   }): void;
 }
 
+type UserResponseKeys = Pick<UserResponse, 'gender' | 'name' | 'nickname' | 'student_number' | 'phone_number' | 'major'>;
+
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
 ): elementRef is ICustomFormInput => (elementRef !== null
@@ -59,6 +61,7 @@ const isRefICustomFormInput = (
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const refCollection = React.useRef<IFormType>({});
+  const userInfo = useRecoilValue(userInfoState);
 
   const register = (name: string, options: IRegisterOption = {}): RegisterReturn => ({
     required: options.required,
@@ -74,6 +77,31 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
   });
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+
+    let isAnyFieldChanged = false;
+
+    const compareFields: (keyof UserResponseKeys)[] = ['name', 'nickname', 'phone_number', 'student_number', 'major'];
+    compareFields.forEach((field) => {
+      if (!refCollection.current[field]) return;
+      const fieldRef = refCollection.current[field].ref;
+      let inputValue;
+      if (isRefICustomFormInput(fieldRef)) {
+        inputValue = fieldRef.value;
+      } else if (fieldRef !== null) {
+        inputValue = fieldRef.value;
+      }
+
+      const originalValue = userInfo ? userInfo[field] : '';
+
+      if (inputValue !== originalValue) {
+        isAnyFieldChanged = true;
+      }
+    });
+
+    if (!isAnyFieldChanged && !refCollection.current.password?.ref?.value) {
+      showToast('error', '변경된 정보가 없습니다.');
+      return;
+    }
     const isCurrentValidEntries = Object.entries(refCollection.current)
       .map((refValue): [string, string | true] => {
         if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
