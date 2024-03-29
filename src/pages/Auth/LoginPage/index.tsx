@@ -48,11 +48,11 @@ const useLogin = (state: IsAutoLogin) => {
   });
 
   const login = async (userInfo: UserInfo) => {
-    if (userInfo.userId === null) {
+    if (userInfo.userId === '') {
       showToast('error', '계정을 입력해주세요');
       return;
     }
-    if (userInfo.password === null) {
+    if (userInfo.password === '') {
       showToast('error', '비밀번호를 입력해주세요');
       return;
     }
@@ -62,6 +62,10 @@ const useLogin = (state: IsAutoLogin) => {
     }
     if (!emailLocalPartRegex.test(userInfo.userId)) {
       showToast('error', '아우누리 계정 형식이 아닙니다.');
+      return;
+    }
+    if (userInfo.password.length < 6) {
+      showToast('error', '비밀번호는 6자 이상이어야 합니다.');
       return;
     }
     const hashedPassword = await sha256(userInfo.password);
