@@ -8,7 +8,7 @@ import { userInfoState } from 'utils/recoil/userInfoState';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
   const uuid = uuidv4();
-  if (userInfo?.student_number && userInfo.student_number.length > 0) {
+  if (userInfo?.student_number) {
     return `${userInfo.student_number}-${uuid}`;
   }
   return uuid;
