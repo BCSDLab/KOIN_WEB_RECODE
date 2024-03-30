@@ -3,18 +3,26 @@ import { Course } from 'api/bus/entity';
 // 시간 반환 함수
 const getHour = (second: number) => Math.floor(second / 60 / 60) % 24;
 
-const getMinute = (second: number) => Math.round(second / 60) % 60;
+const getMinute = (second: number) => Math.floor(second / 60) % 60;
 
 export const getLeftTimeString = (second: number | '미운행' | undefined) => {
-  if (!second) {
+  if (second === undefined) {
     return '운행정보없음';
-  } if (second === '미운행') {
+  }
+
+  if (second === '미운행') {
     return '미운행';
-  } if (getHour(second) === 0 && getMinute(second) === 0) {
+  }
+
+  if (getHour(second) === 0 && getMinute(second) === 0) {
     return '곧 도착';
-  } if (getHour(second) === 0) {
+  }
+
+  if (getHour(second) === 0) {
     return `${getMinute(second)}분 전`;
-  } return `${getHour(second)}시간 ${getMinute(second)}분 전`;
+  }
+
+  return `${getHour(second)}시간 ${getMinute(second)}분 전`;
 };
 
 export const getStartTimeString = (second: number | '미운행' | undefined, isMain: boolean = false) => {
