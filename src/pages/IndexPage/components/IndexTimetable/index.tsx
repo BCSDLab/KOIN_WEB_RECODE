@@ -2,11 +2,9 @@ import React from 'react';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import { useRecoilValue } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
-import { myLecturesAtom, selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
+import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
 import useTimetableInfoList from 'components/TimetablePage/DefaultPage/hooks/useTimetableInfoList';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
-import useLectureList from 'components/TimetablePage/DefaultPage/hooks/useLectureList';
-import { LectureInfo } from 'interfaces/Lecture';
 import Timetable from 'components/TimetablePage/Timetable';
 import { useSelectRecoil } from 'components/TimetablePage/DefaultPage/hooks/useSelect';
 import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
@@ -27,20 +25,9 @@ function CurrentSemesterTimetable(): JSX.Element {
       : (myLecturesFromLocalStorageValue ?? []),
   );
 
-  const selectedLecture = useRecoilValue(selectedTempLectureSelector);
-  const { data: lectureList, status } = useLectureList(selectedSemester);
-  const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
-    ?.filter((lecture) => lecture.code === selectedLecture?.code)
-    ?? [];
-  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
-  const selectedLectureIndex = similarSelectedLecture
-    .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
-
-  return selectedSemesterValue && status === 'success' ? (
+  return selectedSemesterValue ? (
     <Timetable
       lectures={myLectureDayValue}
-      similarSelectedLecture={similarSelectedLectureDayList}
-      selectedLectureIndex={selectedLectureIndex}
       colWidth={40}
       firstColWidth={42}
       rowHeight={16}
