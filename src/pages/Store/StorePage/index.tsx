@@ -1,5 +1,4 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
@@ -7,6 +6,7 @@ import cn from 'utils/ts/classnames';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useLogger from 'utils/hooks/useLogger';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 
@@ -44,9 +44,14 @@ const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
 };
 
 const useStoreList = (params: StoreSearchQueryType) => {
-  const { data: storeList } = useQuery('storeList', api.store.getStoreList, {
-    retry: 0,
-  });
+  const { data: storeList } = useQuery(
+    queryOptions({
+      queryKey: ['storeList', params],
+      queryFn: api.store.getStoreList,
+      retry: 0,
+    }),
+  );
+
   const selectedCategory = Number(params.category);
 
   return storeList?.shops.filter((store) => {
