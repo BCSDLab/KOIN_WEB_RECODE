@@ -85,8 +85,8 @@ function LoginPage() {
     e.preventDefault();
     const { userId, password } = loginRef.current;
     submitLogin({
-      userId: userId!.value,
-      password: password!.value,
+      userId: userId ? userId.value : '',
+      password: password ? password.value : '',
     });
   };
 
