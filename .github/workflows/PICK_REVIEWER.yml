@@ -51,12 +51,6 @@ jobs:
               core.setOutput('reviewer2GithubName', reviewer2.githubName);
             }
 
-      - name: test valiable
-        uses: actions/github-script@v7
-        with: 
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: console.log(${{ steps.pick_random_reviewer.outputs.reviewer1Name }})
-
       - name: Add Reviewers
         uses: madrapps/add-reviewers@v1
         with:
