@@ -18,7 +18,7 @@ function StoreDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const { storeDetail, storeDescription } = useStoreDetail(params.id!);
-  const { storeMenus } = useStoreMenus(params.id!);
+  const { data: storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const portalManager = useModalPortal();
   const onClickImage = (img: string[], index: number) => {
