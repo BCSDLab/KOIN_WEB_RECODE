@@ -2,11 +2,10 @@ name: "Check PR Merged"
 
 on:
   pull_request_review:
-    types: submitted
+    types: [submitted, edited]
 
 jobs:
   check_pr_merged:
-    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,7 +17,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prUrl = github.event.pull_request._links.html.href;
+            console.log(JSON.stringify(context.payload));
+            const prUrl = context.payload.pull_request._links.html.href;
             core.setOutput('pullRequestLink', JSON.stringify(prUrl));
 
       - name: Send Slack Trigger
