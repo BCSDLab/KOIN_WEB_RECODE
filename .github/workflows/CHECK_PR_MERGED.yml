@@ -19,7 +19,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prUrl = github.event.pull_request.html_url;
+            const prUrl = context.payload.pull_request.html_url;
             core.setOutput('pullRequestLink', JSON.stringify(prUrl));
 
       - name: Send Slack Trigger
