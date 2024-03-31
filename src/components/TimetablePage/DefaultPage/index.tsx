@@ -139,11 +139,11 @@ function CurrentSemesterLectureList({
               const searchFilter = filter.search;
               const departmentFilter = filter.department;
 
-              if (searchFilter && departmentFilter !== '전체') {
+              if (searchFilter !== '' && departmentFilter !== '전체') {
                 return lecture.name.includes(searchFilter)
                   && lecture.department === departmentFilter;
               }
-              if (searchFilter) {
+              if (searchFilter !== '') {
                 return lecture.name.includes(searchFilter);
               }
               if (departmentFilter !== '전체') {
