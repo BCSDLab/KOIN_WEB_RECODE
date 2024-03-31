@@ -52,7 +52,11 @@ export interface ISubmitForm {
   }): void;
 }
 
-type UserResponseKeys = Pick<UserResponse, 'gender' | 'name' | 'nickname' | 'student_number' | 'phone_number' | 'major'>;
+type UserResponseKeys = Omit<UserResponse, 'anonymous_nickname' | 'major'>;
+
+interface MappedFields {
+  [key: string]: keyof UserResponseKeys;
+}
 
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
@@ -79,27 +83,43 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
     event.preventDefault();
 
     let isAnyFieldChanged = false;
+    let isAnyFieldRemoved = false;
 
-    const compareFields: (keyof UserResponseKeys)[] = ['name', 'nickname', 'phone_number', 'student_number', 'major'];
+    const mappedFields: MappedFields = {
+      'phone-number': 'phone_number',
+      'student-number': 'student_number',
+    };
+
+    const compareFields = ['name', 'nickname', 'gender', 'phone-number', 'student-number'];
     compareFields.forEach((field) => {
       if (!refCollection.current[field]) return;
       const fieldRef = refCollection.current[field].ref;
       let inputValue;
       if (isRefICustomFormInput(fieldRef)) {
-        inputValue = fieldRef.value;
+        inputValue = fieldRef.value ? fieldRef.value : null;
       } else if (fieldRef !== null) {
-        inputValue = fieldRef.value;
+        inputValue = fieldRef.value ? fieldRef.value : null;
       }
-
-      const originalValue = userInfo ? userInfo[field] : '';
-
+      if (field === 'student-number') {
+        inputValue = inputValue && typeof inputValue === 'object' && 'studentNumber' in inputValue ? inputValue.studentNumber : null;
+      }
+      const userResponseField = mappedFields[field] || field;
+      const originalValue = userInfo ? userInfo[userResponseField] : '';
       if (inputValue !== originalValue) {
         isAnyFieldChanged = true;
+        if (originalValue !== '' && inputValue === null) {
+          isAnyFieldRemoved = true;
+        }
       }
     });
 
     if (!isAnyFieldChanged && !refCollection.current.password?.ref?.value) {
       showToast('error', '변경된 정보가 없습니다.');
+      return;
+    }
+
+    if (isAnyFieldRemoved) {
+      showToast('error', '기존에 입력한 정보를 삭제할 수 없습니다.');
       return;
     }
     const isCurrentValidEntries = Object.entries(refCollection.current)
@@ -478,6 +498,7 @@ function ModifyInfoPage() {
           type="text"
           readOnly
           disabled
+          defaultValue={userInfo?.email}
         />
         <span className={styles.modify__advice}>
           계정명은 변경하실 수 없습니다.
