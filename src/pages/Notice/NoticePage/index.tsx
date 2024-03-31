@@ -2,10 +2,12 @@ import { Suspense } from 'react';
 import useHotArticleList from 'pages/Notice/NoticePage/hooks/useHotArticle';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import { Outlet } from 'react-router-dom';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 import styles from './NoticePage.module.scss';
 
 function Notice() {
   const hotArticleList = useHotArticleList();
+  useScrollToTop();
   return (
     <div className={styles.template}>
       <div className={styles.content}>
