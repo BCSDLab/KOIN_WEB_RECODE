@@ -76,7 +76,8 @@
     position: absolute;
     z-index: 3;
     padding: 4px 2px 0;
-    font-size: 9px;
+    font-size: 0.9em;
+    line-height: 1.2;
     font-family: NanumSquare, serif;
     box-sizing: border-box;
 
@@ -87,7 +88,11 @@
 
     & > h4 {
       font-weight: 700;
-      margin-bottom: 5px;
+      margin-bottom: 2px;
+    }
+
+    & > span {
+      font-size: 1em;
     }
   }
 }

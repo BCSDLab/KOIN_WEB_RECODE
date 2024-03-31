@@ -207,7 +207,7 @@ function CurrentMyLectureList() {
   return (
     (myLecturesValue !== null || myLecturesFromServer !== undefined) ? (
       <LectureTable
-        height={360}
+        height={300}
         list={token ? (myLecturesFromServer ?? []) : (myLecturesValue ?? [])}
         selectedLecture={undefined}
         onClickRow={undefined}
@@ -253,7 +253,7 @@ function CurrentSemesterTimetable(): JSX.Element {
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
-
+  // TODO: selectedSemesterValue가 바뀔 때 myLecturesFromServer가 학기별 강의를 불러오지 못함
   return selectedSemesterValue && status === 'success' ? (
     <Timetable
       lectures={myLectureDayValue}

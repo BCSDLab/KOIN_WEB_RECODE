@@ -48,7 +48,6 @@ export default function IndexTimeTable() {
   // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const token = useTokenState();
 
   return (
     <div className={styles.template}>
@@ -57,12 +56,11 @@ export default function IndexTimeTable() {
       </Link>
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner className={styles['template__loading-spinner']} />}>
-          <CurrentSemesterTimetable />
+          <Link to="/timetable">
+            <CurrentSemesterTimetable />
+          </Link>
         </React.Suspense>
       </ErrorBoundary>
-      {!token && (
-        <Link to="/auth" className={styles.needLogin} />
-      )}
     </div>
   );
 }
