@@ -109,7 +109,7 @@ interface CurrentSemesterLectureListProps {
   semesterKey: string | null;
   filter: {
     // 백엔드 수정하면 optional 제거
-    dept: string;
+    department: string;
     search: string;
   }
 }
@@ -137,15 +137,16 @@ function CurrentSemesterLectureList({
           (lectureList as unknown as Array<LectureInfo>)
             .filter((lecture) => {
               const searchFilter = filter.search;
-              const deptFilter = filter.dept;
-              if (searchFilter && deptFilter === '전체') {
+              const departmentFilter = filter.department;
+              if (searchFilter && departmentFilter === '전체') {
                 return lecture.name.includes(searchFilter);
               }
-              if (!searchFilter && deptFilter !== '전체') {
-                return lecture.department === deptFilter;
+              if (!searchFilter && departmentFilter !== '전체') {
+                return lecture.department === departmentFilter;
               }
-              if (searchFilter && deptFilter !== '전체') {
-                return lecture.name.includes(searchFilter) && lecture.department === deptFilter;
+              if (searchFilter && departmentFilter !== '전체') {
+                return lecture.name.includes(searchFilter)
+                  && lecture.department === departmentFilter;
               }
               return true;
             })
@@ -315,7 +316,7 @@ function DefaultPage() {
     value: searchValue,
   } = useSearch();
   const {
-    value: deptFilterValue,
+    value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
   } = useSelect();
   const {
@@ -347,7 +348,7 @@ function DefaultPage() {
             <div className={styles.page__depart}>
               <React.Suspense fallback={<LoadingSpinner className={styles['dropdown-loading-spinner']} />}>
                 <DeptListbox
-                  value={deptFilterValue}
+                  value={departmentFilterValue}
                   onChange={onChangeDeptSelect}
                 />
               </React.Suspense>
@@ -360,7 +361,7 @@ function DefaultPage() {
                 semesterKey={semesterFilterValue}
                 filter={{
                   // 백엔드 수정하면 제거
-                  dept: deptFilterValue ?? '전체',
+                  department: departmentFilterValue ?? '전체',
                   search: searchValue ?? '',
                 }}
               />
