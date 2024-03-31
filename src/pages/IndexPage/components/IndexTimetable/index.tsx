@@ -57,7 +57,9 @@ export default function IndexTimeTable() {
       </Link>
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner className={styles['template__loading-spinner']} />}>
-          <CurrentSemesterTimetable />
+          <Link to="/timetable">
+            <CurrentSemesterTimetable />
+          </Link>
         </React.Suspense>
       </ErrorBoundary>
       {!token && (
