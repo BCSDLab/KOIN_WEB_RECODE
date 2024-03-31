@@ -196,7 +196,7 @@ function CurrentMyLectureList() {
   return (
     (myLecturesValue !== null || myLecturesFromServer !== undefined) ? (
       <LectureTable
-        height={360}
+        height={300}
         list={token ? (myLecturesFromServer ?? []) : (myLecturesValue ?? [])}
         selectedLecture={undefined}
         onClickRow={undefined}
