@@ -75,10 +75,7 @@
       height: 100%;
       color: #555;
       overflow-y: hidden;
-
-      &:hover {
-        background: #e9e9e9;
-      }
+      cursor: default;
     }
 
     &--body {
@@ -107,15 +104,9 @@
     padding: 0;
     width: 24px;
     background-color: transparent;
-    cursor: pointer;
 
     & > img {
       width: 100%;
-    }
-
-    &:hover,
-    &:focus {
-      transform: scale(1.3);
     }
   }
 
@@ -128,6 +119,5 @@
     background: transparent;
     user-select: none;
     z-index: 2;
-    cursor: col-resize;
   }
 }

@@ -7,6 +7,7 @@ import cn from 'utils/ts/classnames';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useLogger from 'utils/hooks/useLogger';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 
@@ -104,6 +105,7 @@ function StorePage() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const selectedCategory = Number(searchParams.get('category'));
+  useScrollToTop();
 
   return (
     <div className={styles.section}>
