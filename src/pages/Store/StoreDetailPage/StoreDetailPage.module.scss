@@ -75,29 +75,30 @@
   }
 
   &__name {
-    font-size: 20px;
+    font-size: 26px;
+    font-weight: 600;
     line-height: 0.8;
     letter-spacing: -1.5px;
     color: #252525;
     margin-bottom: 18px;
 
     @include media.media-breakpoint(mobile) {
-      font-weight: bold;
+      font-size: 20px;
+      font-weight: 600;
       letter-spacing: normal;
-      margin-bottom: 0;
     }
   }
 
   &__detail {
     align-self: flex-start;
-    font-size: 13px;
+    font-size: 18px;
     line-height: 1.69;
     letter-spacing: -0.7px;
-    color: #858585;
+    color: #252525;
 
     & span {
       display: inline-block;
-      color: #252525;
+      color: #858585;
       margin-right: 17px;
     }
 
@@ -117,18 +118,19 @@
     }
   }
 
-  &__tag {
-    margin: auto 0 24px;
+  &__tags {
+    margin: 30px 0;
+    display: inline-block;
+    border: 1px #cacaca solid;
+    font-size: 12px;
+    border-radius: 5px;
+    padding: 6px 13px 5px;
+    color: #cacaca;
+    margin-right: 10px;
 
-    & span {
-      display: inline-block;
-      border: 1px #f7941e solid;
-      margin-right: 5px;
-      font-size: 12px;
-      border-radius: 20px;
-      padding: 6px 13px 5px;
-      background: #f7931e;
-      color: white;
+    &--active {
+      border: 1px #6dbbdd solid;
+      color: #6dbbdd;
     }
 
     @include media.media-breakpoint(mobile) {
@@ -226,7 +228,7 @@
     height: 330px;
     image-orientation: from-image;
 
-    &:nth-child(n+2) {
+    &:nth-child(n + 2) {
       display: none;
     }
 
@@ -251,7 +253,7 @@
     background-color: #fff;
     cursor: pointer;
 
-    &:nth-child(n+2) {
+    &:nth-child(n + 2) {
       display: none;
     }
   }
@@ -261,7 +263,7 @@
     height: 330px;
     image-orientation: from-image;
 
-    &:nth-child(n+2) {
+    &:nth-child(n + 2) {
       display: none;
     }
 
@@ -350,6 +352,31 @@
 
     & span {
       font-size: 13px;
+    }
+  }
+}
+
+.tap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1.5px solid #eee;
+
+  &__type {
+    font-size: 20px;
+    font-weight: 500;
+    border: none;
+    background: none;
+    padding: 10px 0;
+    color: #8e8e8e;
+    cursor: pointer;
+
+    &--active {
+      color: #175c8e;
+      border-bottom: 1.5px solid #175c8e;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
     }
   }
 }
