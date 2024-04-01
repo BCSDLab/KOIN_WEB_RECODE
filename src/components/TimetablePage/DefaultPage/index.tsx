@@ -109,7 +109,7 @@ interface CurrentSemesterLectureListProps {
   semesterKey: string | null;
   filter: {
     // 백엔드 수정하면 optional 제거
-    dept?: string;
+    department: string;
     search: string;
   }
 }
@@ -128,19 +128,30 @@ function CurrentSemesterLectureList({
   const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const isLoaded = status === 'success' && (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
+
   return (
     isLoaded ? (
       <LectureTable
         height={459}
         list={
           (lectureList as unknown as Array<LectureInfo>)
-            .filter(
-              (lecture) => (
-                lecture.name.includes(filter.search)
-                // 백엔드 수정하면 제거
-                // || (filter.dept !== '전체' && lecture.department === filter.dept)
-              ),
-            )
+            .filter((lecture) => {
+              const searchFilter = filter.search;
+              const departmentFilter = filter.department;
+
+              if (searchFilter !== '' && departmentFilter !== '전체') {
+                return lecture.name.includes(searchFilter)
+                  && lecture.department === departmentFilter;
+              }
+              if (searchFilter !== '') {
+                return lecture.name.includes(searchFilter);
+              }
+              if (departmentFilter !== '전체') {
+                return lecture.department === departmentFilter;
+              }
+
+              return true;
+            })
         }
         selectedLecture={selectedTempLecture ?? undefined}
         onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
@@ -307,7 +318,7 @@ function DefaultPage() {
     value: searchValue,
   } = useSearch();
   const {
-    value: deptFilterValue,
+    value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
   } = useSelect();
   const {
@@ -339,7 +350,7 @@ function DefaultPage() {
             <div className={styles.page__depart}>
               <React.Suspense fallback={<LoadingSpinner className={styles['dropdown-loading-spinner']} />}>
                 <DeptListbox
-                  value={deptFilterValue}
+                  value={departmentFilterValue}
                   onChange={onChangeDeptSelect}
                 />
               </React.Suspense>
@@ -352,7 +363,7 @@ function DefaultPage() {
                 semesterKey={semesterFilterValue}
                 filter={{
                   // 백엔드 수정하면 제거
-                  // dept: deptFilterValue ?? '전체',
+                  department: departmentFilterValue ?? '전체',
                   search: searchValue ?? '',
                 }}
               />
