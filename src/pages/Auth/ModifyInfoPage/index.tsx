@@ -11,7 +11,7 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
-import { UserUpdateRequest } from 'api/auth/entity';
+import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
 import { useUserStore } from 'utils/zustand/userInfoState';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
@@ -25,7 +25,7 @@ const PHONENUMBER_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
 interface IFormType {
   [key: string]: {
     ref: HTMLInputElement | ICustomFormInput | null;
-    validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
+    validFunction?: (value: unknown, fieldRefs: { current: any }) => string | true;
   }
 }
 
@@ -35,7 +35,7 @@ interface ICustomFormInput {
 }
 
 interface IRegisterOption {
-  validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
+  validFunction?: (value: unknown, fieldsRefs: { current: any }) => string | true;
   required?: boolean;
 }
 
@@ -51,40 +51,88 @@ export interface ISubmitForm {
   }): void;
 }
 
+type UserResponseKeys = Omit<UserResponse, 'anonymous_nickname' | 'major'>;
+
+interface MappedFields {
+  [key: string]: keyof UserResponseKeys;
+}
+
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
 ): elementRef is ICustomFormInput => (elementRef !== null
 && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
-  const refCollection = React.useRef<IFormType>({});
+  const fieldRefs = React.useRef<IFormType>({});
+  const { userInfo } = useUserStore();
 
   const register = (name: string, options: IRegisterOption = {}): RegisterReturn => ({
     required: options.required,
     name,
     ref: (elementRef: HTMLInputElement | ICustomFormInput | null) => {
-      refCollection.current[name] = {
+      fieldRefs.current[name] = {
         ref: elementRef,
       };
       if (options.validFunction) {
-        refCollection.current[name].validFunction = options.validFunction;
+        fieldRefs.current[name].validFunction = options.validFunction;
       }
     },
   });
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const isCurrentValidEntries = Object.entries(refCollection.current)
+
+    let isAnyFieldChanged = false;
+    let isAnyFieldRemoved = false;
+
+    const mappedFields: MappedFields = {
+      'phone-number': 'phone_number',
+      'student-number': 'student_number',
+    };
+
+    const compareFields = ['name', 'nickname', 'gender', 'phone-number', 'student-number'];
+    compareFields.forEach((field) => {
+      if (!fieldRefs.current[field]) return;
+      const fieldRef = fieldRefs.current[field].ref;
+      let inputValue;
+      if (isRefICustomFormInput(fieldRef)) {
+        inputValue = fieldRef.value ? fieldRef.value : null;
+      } else if (fieldRef !== null) {
+        inputValue = fieldRef.value ? fieldRef.value : null;
+      }
+      if (field === 'student-number') {
+        inputValue = inputValue && typeof inputValue === 'object' && 'studentNumber' in inputValue ? inputValue.studentNumber : null;
+      }
+      const userResponseField = mappedFields[field] || field;
+      const originalValue = userInfo ? userInfo[userResponseField] : '';
+      if (inputValue !== originalValue) {
+        isAnyFieldChanged = true;
+        if (originalValue !== '' && inputValue === null) {
+          isAnyFieldRemoved = true;
+        }
+      }
+    });
+
+    if (!isAnyFieldChanged && !fieldRefs.current.password?.ref?.value) {
+      showToast('error', '변경된 정보가 없습니다.');
+      return;
+    }
+
+    if (isAnyFieldRemoved) {
+      showToast('error', '기존에 입력한 정보를 삭제할 수 없습니다.');
+      return;
+    }
+    const isCurrentValidEntries = Object.entries(fieldRefs.current)
       .map((refValue): [string, string | true] => {
         if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
         const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
           ? refValue[1].ref.valid
-          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', refCollection) ?? true;
+          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', fieldRefs) ?? true;
         return [refValue[0], isCurrentNameValid];
       });
     const invalidFormEntry = isCurrentValidEntries
       .find((entry): entry is [string, string] => entry[1] !== true);
     if (!invalidFormEntry) {
-      const formValue = Object.entries(refCollection?.current).map((nameValue) => {
+      const formValue = Object.entries(fieldRefs?.current).map((nameValue) => {
         if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
           return [nameValue[0], nameValue[1].ref.value];
         }
@@ -434,7 +482,10 @@ function ModifyInfoPage() {
   const onClickDeleteUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     portalManager.open((portalOption: Portal) => (
-      <UserDeleteModal deleteUser={() => onClickUserDeleteConfirm} onClose={portalOption.close} />
+      <UserDeleteModal
+        deleteUser={(event: React.MouseEvent<HTMLButtonElement>) => onClickUserDeleteConfirm(event)}
+        onClose={portalOption.close}
+      />
     ));
   };
 
@@ -446,6 +497,7 @@ function ModifyInfoPage() {
           type="text"
           readOnly
           disabled
+          defaultValue={userInfo?.email}
         />
         <span className={styles.modify__advice}>
           계정명은 변경하실 수 없습니다.

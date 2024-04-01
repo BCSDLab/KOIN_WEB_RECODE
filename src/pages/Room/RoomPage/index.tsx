@@ -1,5 +1,6 @@
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import RoomList from 'components/Room/RoomList';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useRoomList from './hooks/useRoomList';
 import styles from './RoomPage.module.scss';
 import useNaverMap from './hooks/useNaverMap';
@@ -12,6 +13,7 @@ function RoomPage() {
   const roomList = useRoomList();
   const map = useNaverMap(LOCATION.latitude, LOCATION.longitude);
   useMarker({ map, roomList });
+  useScrollToTop();
 
   return (
     <div className={styles.template}>

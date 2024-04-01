@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import cn from 'utils/ts/classnames';
 import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
 import { convertDateToSimpleString, formatKoreanDateString } from 'utils/ts/cafeteria';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 import styles from './CafeteriaPage.module.scss';
 import useCafeteriaList from './hooks/useCafeteriaList';
 
@@ -42,6 +43,7 @@ function CafeteriaPage() {
   const { data } = useCafeteriaList(
     convertDateToSimpleString(currentDate),
   );
+  useScrollToTop();
   return (
     <div className={styles.page}>
       <div className={styles.page__content} key={currentDate.toISOString()}>

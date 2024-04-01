@@ -179,7 +179,7 @@ function Header() {
                         <>
                           <li className={styles['mobileheader__my-info']}>
                             <Link to="/auth/modifyinfo">
-                              내 정보
+                              정보 수정
                             </Link>
                           </li>
                           <li className={styles.mobileheader__link}>
