@@ -8,38 +8,22 @@ interface Open {
 }
 
 export interface StoreDetailResponse extends APIResponse {
-  weekend_open_time: string | null,
-  created_at: string,
-  description: string,
-  image_urls: string[],
-  address: string,
-  weekend_close_time: string | null,
-  pay_bank: boolean,
-  hit: number,
-  internal_name: string,
-  is_deleted: false,
-  updated_at: string,
-  chosung: string,
-  id: number,
-  menus: {
-    shop_id: number,
-    is_deleted: boolean,
-    updated_at: string,
-    name: string,
-    created_at: string,
-    price_type: {
-      size: string,
-      price: string,
-    }[],
-    id: number,
-  }[],
-  name: string,
-  pay_card: boolean,
-  phone: string,
-  delivery: boolean,
-  delivery_price: number,
-  open: Open[],
+  address: string;
+  delivery: boolean;
+  delivery_price: number;
+  description: string;
+  id: number;
+  image_urls: string[];
+  menu_categories: MenuCategory[];
+  name: string;
+  open: Open[];
+  pay_bank: boolean;
+  pay_card: boolean;
+  phone: string;
+  shop_categories: StoreCategory[];
+  updated_at: string;
 }
+
 interface MenuBase {
   id: number;
   name: string;
@@ -63,7 +47,7 @@ export type Menu = SinglePriceMenu | MultiPriceMenu;
 
 export interface MenuCategory {
   id: number;
-  name: string;
+  name: '이벤트 메뉴' | '대표 메뉴' | '추천 메뉴 ' | '사이드 메뉴' | '세트 메뉴';
   menus: Menu[];
 }
 
@@ -74,31 +58,17 @@ export interface StoreDetailMenuResponse extends APIResponse {
 }
 
 export interface StoreListResponse extends APIResponse {
+  count: number;
   shops:
-  { // weekend_open_time: null
-    created_at : string,
-    description : string,
-    image_urls: string[],
-    open: Open[],
-    // weekend_close_time: null,
-    pay_bank: boolean,
-    hit: number,
-    internal_name: string,
-    is_deleted: boolean,
-    updated_at: string,
-    chosung: string,
-    id: number,
-    delivery: boolean,
-    address: string,
-    pay_card: boolean,
-    is_event: boolean,
-    event_articles: {}[],
-    phone: string,
-    name: string,
-    category_ids: number[],
-    permalink: string,
-    // remarks: null,
-    delivery_price: number,
+  {
+    id: number;
+    name: string;
+    phone: string;
+    delivery: boolean;
+    pay_card: boolean;
+    pay_bank: boolean;
+    open: Open[];
+    category_ids: number[];
   }[]
 }
 
