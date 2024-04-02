@@ -1,5 +1,30 @@
 @use "src/utils/scss/media";
 
+.categories {
+  display: flex;
+  gap: 13px;
+  margin: 16px 0;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 16px 0 0 10px;
+  }
+
+  &__tag {
+    padding: 8px 12px;
+    background-color: transparent;
+    border: 1px solid #cacaca;
+    border-radius: 4px;
+    color: #cacaca;
+    cursor: pointer;
+
+    &--active {
+      background-color: #175c8e;
+      border: 1px solid #175c8e;
+      color: #ffff;
+    }
+  }
+}
+
 .menu {
   @include media.media-breakpoint(mobile) {
     padding: 10px;
