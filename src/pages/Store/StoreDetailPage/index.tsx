@@ -8,6 +8,7 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
+import showToast from 'utils/ts/showToast';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
@@ -169,7 +170,7 @@ function StoreDetailPage() {
               [styles['tap__type--active']]: tapType === '이벤트/공지',
             })}
             type="button"
-            onClick={() => setTapType('이벤트/공지')}
+            onClick={() => showToast('info', '아직 준비중입니다.')}
           >
             이벤트/공지
           </button>
@@ -179,7 +180,6 @@ function StoreDetailPage() {
             <MenuTable storeMenuCategories={storeMenuCategories} />
           )
         )}
-        {tapType === '이벤트/공지' && (<div>이벤트/공지</div>)}
       </div>
     </div>
   );
