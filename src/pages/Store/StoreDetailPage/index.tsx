@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
-// import { Menu, MenuCategory } from 'api/store/entity';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -12,6 +11,7 @@ import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import styles from './StoreDetailPage.module.scss';
+import MenuTable from './MenuTable';
 
 function StoreDetailPage() {
   const params = useParams();
@@ -21,8 +21,6 @@ function StoreDetailPage() {
   const { storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [tapType, setTapType] = useState('메뉴');
-  console.log(storeMenuCategories);
-
   const portalManager = useModalPortal();
 
   const onClickImage = (img: string[], index: number) => {
@@ -126,6 +124,9 @@ function StoreDetailPage() {
                   상점목록
                 </button>
               </div>
+              {isMobile && storeDetail?.updated_at && (
+                <UpdateInfo date={storeDetail.updated_at} />
+              )}
             </div>
           )}
           <div
@@ -150,6 +151,7 @@ function StoreDetailPage() {
             }
           </div>
         </div>
+
         <div className={styles.tap}>
           <button
             className={cn({
@@ -172,44 +174,12 @@ function StoreDetailPage() {
             이벤트/공지
           </button>
         </div>
-        {tapType === '메뉴' && (<div>메뉴</div>)}
+        {tapType === '메뉴' && (
+          storeMenuCategories && storeMenuCategories.length > 0 && (
+            <MenuTable storeMenuCategories={storeMenuCategories} />
+          )
+        )}
         {tapType === '이벤트/공지' && (<div>이벤트/공지</div>)}
-        {/* {storeMenuCategories && storeMenuCategories.length > 0 && (
-          <>
-            <div className={styles['menu-title__container']}>
-              <div className={styles['menu-title']}>MENU</div>
-              {storeMenus && <UpdateInfo date={storeMenus.updated_at} />}
-            </div>
-            <div className={styles['menu-info']}>
-              {storeMenuCategories.map((menuCategories: MenuCategory) => (
-                menuCategories.menus.map((menu: Menu) => (
-                  menu.option_prices === null ? (
-                    <div className={styles['menu-card']} key={menu.id}>
-                      {menu.name}
-                      <span>
-                        {
-                          !!menu.single_price && (
-                            menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          )
-                        }
-                      </span>
-                    </div>
-                  ) : (
-                    menu.option_prices.map((item) => (
-                      <div className={styles['menu-card']} key={menu.id + item.option}>
-                        {`${menu.name} - ${item.option}`}
-                        <span>
-                          {
-                            item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          }
-                        </span>
-                      </div>
-                    ))
-                  )
-                ))))}
-            </div>
-          </>
-        )} */}
       </div>
     </div>
   );
