@@ -16,8 +16,7 @@
   display: inline-block;
 
   @include media.media-breakpoint(mobile) {
-    width: calc(100% - 32px);
-    margin: 30px auto;
+    margin: 0 auto;
     font-size: 20px;
   }
 
@@ -45,7 +44,6 @@
   &__store-info {
     width: 100%;
     text-align: left;
-    min-height: 407px;
     padding: 39px 0;
     box-sizing: border-box;
     border-bottom: solid 1px #ececec;
@@ -55,7 +53,7 @@
     align-items: center;
 
     @include media.media-breakpoint(mobile) {
-      flex-direction: column;
+      flex-direction: column-reverse;
       padding: 0 0 16px;
       border: 0;
       margin-bottom: 0;
@@ -65,12 +63,11 @@
 }
 
 .store {
-  min-height: 330px;
   display: flex;
   flex-direction: column;
 
   @include media.media-breakpoint(mobile) {
-    width: 100%;
+    width: calc(100% - 10px);
     height: auto;
   }
 
@@ -108,6 +105,8 @@
     }
 
     @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+
       & span {
         margin-right: 5px;
       }
@@ -134,7 +133,7 @@
     }
 
     @include media.media-breakpoint(mobile) {
-      margin: 15px 0 30px;
+      margin: 15px 10px 30px 0;
 
       & span {
         height: 14px;
@@ -196,9 +195,9 @@
 }
 
 .image {
-  width: 330px;
   height: 330px;
   display: flex;
+  margin-bottom: 20px;
 
   &--none {
     @include media.media-breakpoint(mobile) {
@@ -208,15 +207,12 @@
 
   @include media.media-breakpoint(mobile) {
     display: flex;
-    width: calc(100% + 16px);
-    height: 159px;
+    max-height: 255px;
     cursor: initial;
     overflow-x: scroll;
     overflow-y: hidden;
     overflow: hidden;
     white-space: nowrap;
-    margin-top: 25px;
-    margin-left: 16px;
   }
 
   ::-webkit-scrollbar {
@@ -224,32 +220,18 @@
   }
 
   &__content {
-    width: 330px;
     height: 330px;
     image-orientation: from-image;
 
     &:nth-child(n + 2) {
       display: none;
     }
-
-    @include media.media-breakpoint(mobile) {
-      width: 159px;
-      height: 159px;
-
-      & + & {
-        display: block;
-        margin-left: 10px;
-      }
-
-      &:last-child {
-        margin-right: 10px;
-      }
-    }
   }
 
   &__button {
     border: 0;
     outline: 0;
+    padding: 0;
     background-color: #fff;
     cursor: pointer;
 
@@ -261,6 +243,7 @@
   &__poster {
     width: 330px;
     height: 330px;
+    object-fit: fill;
     image-orientation: from-image;
 
     &:nth-child(n + 2) {
@@ -268,8 +251,7 @@
     }
 
     @include media.media-breakpoint(mobile) {
-      width: 159px;
-      height: 159px;
+      width: 100%;
 
       & + & {
         display: block;
@@ -283,79 +265,6 @@
   }
 }
 
-.menu-title {
-  &__container {
-    margin: 63px 0 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    @include media.media-breakpoint(mobile) {
-      margin-top: 31px;
-    }
-  }
-
-  font-size: 20px;
-  letter-spacing: -1px;
-  line-height: 1.69;
-  color: #252525;
-  font-weight: 700;
-}
-
-.menu-info {
-  display: grid;
-  flex-flow: row wrap;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 74px;
-  grid-gap: 11px 14px;
-  height: 100%;
-  margin-bottom: 24px;
-
-  @include media.media-breakpoint(mobile) {
-    grid-template-columns: 1fr;
-    grid-auto-rows: 60px;
-    margin-bottom: 0;
-  }
-}
-
-.menu-card {
-  display: flex;
-  align-items: center;
-  background-color: #f2f2f2;
-  border: solid 1px #d7d7d7;
-  padding-left: 29px;
-  padding-right: 30px;
-  user-select: text;
-  text-align: left;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.8px;
-  line-height: 1.5;
-  color: #252525;
-  word-wrap: break-word;
-
-  & span {
-    margin-left: auto;
-    font-size: 15px;
-    font-weight: bold;
-    letter-spacing: -0.8px;
-    color: #175c8e;
-  }
-
-  @include media.media-breakpoint(mobile) {
-    padding: 0 12px;
-    line-height: 1;
-    font-size: 13px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-
-    & span {
-      font-size: 13px;
-    }
-  }
-}
-
 .tap {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -363,7 +272,7 @@
 
   &__type {
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
     border: none;
     background: none;
     padding: 10px 0;
