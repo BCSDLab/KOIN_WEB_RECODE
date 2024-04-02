@@ -1,0 +1,67 @@
+@use "src/utils/scss/media";
+
+.menu {
+  @include media.media-breakpoint(mobile) {
+    padding: 10px;
+    border-bottom: 6px solid #f5f5f5;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #4590bb;
+    padding: 10px 0;
+  }
+}
+
+.menu-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+
+    &:nth-child(2) {
+      align-items: center;
+      justify-content: center;
+    }
+
+    span:nth-child(1) {
+      font-size: 16px;
+      font-weight: 600;
+      padding-bottom: 20px;
+
+      @include media.media-breakpoint(mobile) {
+        padding-bottom: 12px;
+      }
+    }
+
+    span:nth-child(2) {
+      color: #175c8e;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.menu-card {
+  display: flex;
+  flex-direction: column;
+}

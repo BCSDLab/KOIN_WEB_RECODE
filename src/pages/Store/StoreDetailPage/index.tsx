@@ -10,8 +10,8 @@ import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
-import styles from './StoreDetailPage.module.scss';
 import MenuTable from './MenuTable';
+import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
   const params = useParams();

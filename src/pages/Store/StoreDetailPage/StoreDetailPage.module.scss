@@ -53,9 +53,9 @@
     align-items: center;
 
     @include media.media-breakpoint(mobile) {
+      border-bottom: 12px solid #f5f5f5;
       flex-direction: column-reverse;
       padding: 0 0 16px;
-      border: 0;
       margin-bottom: 0;
       height: auto;
     }
