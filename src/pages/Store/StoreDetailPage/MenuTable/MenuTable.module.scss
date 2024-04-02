@@ -49,6 +49,11 @@
   padding: 10px;
   border-bottom: 1px solid #eee;
 
+  div:nth-child(1) {
+    display: flex;
+    justify-content: center;
+  }
+
   &:last-child {
     border-bottom: none;
   }
@@ -62,7 +67,6 @@
     flex-direction: column;
 
     &:nth-child(2) {
-      align-items: center;
       justify-content: center;
     }
 
@@ -73,6 +77,11 @@
 
       @include media.media-breakpoint(mobile) {
         padding-bottom: 12px;
+        width: 250px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
       }
     }
 
@@ -84,9 +93,4 @@
       }
     }
   }
-}
-
-.menu-card {
-  display: flex;
-  flex-direction: column;
 }

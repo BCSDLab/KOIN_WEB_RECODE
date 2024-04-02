@@ -16,7 +16,8 @@
   display: inline-block;
 
   @include media.media-breakpoint(mobile) {
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
     font-size: 20px;
   }
 
@@ -69,6 +70,7 @@
   @include media.media-breakpoint(mobile) {
     width: calc(100% - 10px);
     height: auto;
+    margin-top: 20px;
   }
 
   &__name {
@@ -197,7 +199,6 @@
 .image {
   height: 330px;
   display: flex;
-  margin-bottom: 20px;
 
   &--none {
     @include media.media-breakpoint(mobile) {
@@ -252,15 +253,6 @@
 
     @include media.media-breakpoint(mobile) {
       width: 100%;
-
-      & + & {
-        display: block;
-        margin-left: 10px;
-      }
-
-      &:last-child {
-        margin-right: 10px;
-      }
     }
   }
 }

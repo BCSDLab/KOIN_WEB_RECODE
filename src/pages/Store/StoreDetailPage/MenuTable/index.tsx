@@ -47,7 +47,7 @@ function MenuTable({ storeMenuCategories }: { storeMenuCategories: MenuCategory[
                     />
                   </div>
                   <div className={styles['menu-info__card']}>
-                    <span>{menu.name}</span>
+                    <span title={menu.name}>{menu.name}</span>
                     <span>
                       {!!menu.single_price && (
                         menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
