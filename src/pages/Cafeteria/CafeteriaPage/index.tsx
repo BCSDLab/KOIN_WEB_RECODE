@@ -39,7 +39,7 @@ function CafeteriaPage() {
     setPrev: onClickPrevArrow,
     setNext: onClickNextArrow,
   } = useDatePicker();
-  const { data } = useCafeteriaList(
+  const { cafeteriaList } = useCafeteriaList(
     convertDateToSimpleString(currentDate),
   );
   return (
@@ -93,7 +93,7 @@ function CafeteriaPage() {
               </div>
               <ul className={styles['category__menu-list-row']}>
                 {CAFETERIA_TIME.map((time) => {
-                  const currentTimeMenu = data ? Array.from(data).find(
+                  const currentTimeMenu = cafeteriaList ? Array.from(cafeteriaList).find(
                     (value) => value.place === cafeteriaCategory.placeName
                       && value.type === time.type,
                   ) : undefined;
