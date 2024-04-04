@@ -1,11 +1,7 @@
 import { Link } from 'react-router-dom';
 import { HotPostResponse } from 'api/notice/entity';
-import { APIError } from 'interfaces/APIError';
+import useHotArticleList from 'pages/Notice/NoticePage/hooks/useHotArticle';
 import styles from './HotPost.module.scss';
-
-interface HotPostProps {
-  hotArticleList: HotPostResponse[] & APIError
-}
 
 const LINK_LIST = [
   {
@@ -34,8 +30,8 @@ const LINK_LIST = [
   },
 ];
 
-function HotPost(HotPostList: HotPostProps) {
-  const { hotArticleList } = HotPostList;
+function HotPost() {
+  const hotArticleList = useHotArticleList();
 
   return (
     <aside className={styles.hotpost}>

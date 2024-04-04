@@ -1,8 +1,8 @@
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import * as api from 'api';
 
 const useArticleList = (page: string | undefined) => {
-  const { isLoading, data: articleList } = useQuery(
+  const { data: articleList } = useSuspenseQuery(
     queryOptions({
       queryKey: ['articleList', page],
       queryFn: async ({ queryKey }) => {
@@ -10,13 +10,8 @@ const useArticleList = (page: string | undefined) => {
 
         return api.notice.PostList(queryFnParams);
       },
-
     }),
   );
-
-  if (isLoading || articleList === undefined) {
-    return null;
-  }
 
   return articleList;
 };
