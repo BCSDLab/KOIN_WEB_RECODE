@@ -16,6 +16,7 @@ function useCafeteriaList(date: string) {
       queryKey: [CAFETERIA_LIST_KEY, date],
       queryFn: async ({ queryKey }) => {
         const [, queryDate] = queryKey;
+
         return cafeteria.default(queryDate);
       },
       select: (data) => (('status' in data) ? undefined : data as Array<CafeteriaMenu>),

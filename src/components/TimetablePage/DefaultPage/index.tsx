@@ -119,11 +119,12 @@ function CurrentSemesterLectureList({
   const { data: lectureList, status } = useLectureList(semesterKey);
   const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
+
   const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
   const addLectureToLocalStorage = useSetRecoilState(myLectureAddLectureSelector);
 
   const token = useTokenState();
-  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { timetableInfoList: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const isLoaded = status === 'success' && (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
   return (
@@ -190,7 +191,7 @@ function CurrentMyLectureList() {
 
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
   const token = useTokenState();
-  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { timetableInfoList: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(selectedSemester, token);
 
   return (
@@ -229,7 +230,7 @@ function CurrentSemesterTimetable(): JSX.Element {
 
   const token = useTokenState();
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { timetableInfoList: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const myLectureDayValue = useTimetableDayList(
     token
       ? (myLecturesFromServer ?? [])

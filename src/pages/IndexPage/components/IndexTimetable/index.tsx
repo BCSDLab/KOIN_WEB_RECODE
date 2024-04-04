@@ -19,7 +19,7 @@ function CurrentSemesterTimetable(): JSX.Element {
 
   const token = useTokenState();
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { timetableInfoList: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const myLectureDayValue = useTimetableDayList(
     token
       ? (myLecturesFromServer ?? [])
