@@ -132,15 +132,15 @@ function CurrentSemesterLectureList({
         list={
           (lectureList as unknown as Array<LectureInfo>)
             .filter((lecture) => {
-              const searchFilter = filter.search;
+              const searchFilter = filter.search.toUpperCase();
               const departmentFilter = filter.department;
 
               if (searchFilter !== '' && departmentFilter !== '전체') {
-                return lecture.name.includes(searchFilter)
+                return lecture.name.toUpperCase().includes(searchFilter)
                   && lecture.department === departmentFilter;
               }
               if (searchFilter !== '') {
-                return lecture.name.includes(searchFilter);
+                return lecture.name.toUpperCase().includes(searchFilter);
               }
               if (departmentFilter !== '전체') {
                 return lecture.department === departmentFilter;
