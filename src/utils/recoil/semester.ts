@@ -29,6 +29,21 @@ export const selectedTempLectureSelector = selector({
 
 const MY_LECTURES_KEY = 'my-lectures';
 
+function waitForTruthyValue<T>(getValue: () => T, timeout = 1000): Promise<T> {
+  return new Promise((resolve) => {
+    function endSetTimeoutWhenValueNonNullable() {
+      setTimeout(() => {
+        const value = getValue();
+        if (value) {
+          resolve(value);
+        } else {
+          endSetTimeoutWhenValueNonNullable();
+        }
+      }, timeout);
+    }
+    endSetTimeoutWhenValueNonNullable();
+  });
+}
 export const myLecturesAtom = atom<LectureInfo[] | null>({
   key: 'myLectures',
   default: null,
@@ -37,12 +52,14 @@ export const myLecturesAtom = atom<LectureInfo[] | null>({
       const loadTokenState = async () => {
         const token = await getLoadable(tokenState).toPromise();
         if (token) {
-          setSelf([]);
           return;
         }
-        const selectedSemester = await getLoadable(selectedSemesterAtom).toPromise();
-        const savedValue = localStorage.getItem(MY_LECTURES_KEY) ?? '{}';
-        if (savedValue) {
+        const selectedSemester = await waitForTruthyValue(
+          () => getLoadable(selectedSemesterAtom).getValue()
+        );
+        const savedValue = localStorage.getItem(MY_LECTURES_KEY);
+        console.log(savedValue, selectedSemester)
+        if (!savedValue) {
           setSelf([]);
           return;
         }
