@@ -46,13 +46,8 @@
 .menu-info {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  padding: 10px;
+  padding: 20px;
   border-bottom: 1px solid #eee;
-
-  div:nth-child(1) {
-    display: flex;
-    justify-content: center;
-  }
 
   &:last-child {
     border-bottom: none;
@@ -65,6 +60,7 @@
   &__card {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 
     &:nth-child(2) {
       justify-content: center;
@@ -92,5 +88,35 @@
         font-size: 14px;
       }
     }
+  }
+}
+
+.image {
+  display: flex;
+  justify-content: center;
+
+  &:not(:first-child) {
+    display: none;
+  }
+
+  &__button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    img {
+      width: 69px;
+      height: 69px;
+    }
+  }
+}
+
+.empty-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 69px;
   }
 }

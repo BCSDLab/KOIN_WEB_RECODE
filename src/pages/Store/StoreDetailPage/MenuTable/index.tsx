@@ -4,7 +4,12 @@ import cn from 'utils/ts/classnames';
 import useMoveScroll from 'utils/hooks/useMoveScroll';
 import styles from './MenuTable.module.scss';
 
-function MenuTable({ storeMenuCategories }: { storeMenuCategories: MenuCategory[] }) {
+interface MenuTableProps {
+  storeMenuCategories: MenuCategory[];
+  onClickImage: (img: string[], index: number) => void;
+}
+
+function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
   const [categoryType, setCateogoryType] = useState<string>(storeMenuCategories[0].name);
   const { elements, onMoveToElement } = useMoveScroll();
 
@@ -40,12 +45,25 @@ function MenuTable({ storeMenuCategories }: { storeMenuCategories: MenuCategory[
             {menuCategories.menus.map((menu) => (
               menu.option_prices === null ? (
                 <div className={styles['menu-info']} key={menu.id}>
-                  <div className={styles['menu-info__img']}>
-                    <img
-                      src="http://static.koreatech.in/assets/img/rectangle_icon.png"
-                      alt="KOIN service logo"
-                    />
-                  </div>
+                  {menu.image_urls.length > 0 ? (
+                    menu.image_urls.map((img, idx) => (
+                      <div key={`${img}`} className={styles.image}>
+                        <button
+                          className={styles.image__button}
+                          type="button"
+                          onClick={() => onClickImage(menu.image_urls, idx)}
+                        >
+                          <img src={`${img}`} alt={`${menu.name}`} />
+                        </button>
+                      </div>
+                    ))) : (
+                      <div className={styles['empty-image']}>
+                        <img
+                          src="https://static.koreatech.in/assets/img/empty-thumbnail.png"
+                          alt="KOIN service logo"
+                        />
+                      </div>
+                  )}
                   <div className={styles['menu-info__card']}>
                     <span title={menu.name}>{menu.name}</span>
                     <span>
@@ -59,12 +77,25 @@ function MenuTable({ storeMenuCategories }: { storeMenuCategories: MenuCategory[
               ) : (
                 menu.option_prices.map((item) => (
                   <div className={styles['menu-info']} key={menu.id + item.option}>
-                    <div className={styles['menu-info__img']}>
-                      <img
-                        src="http://static.koreatech.in/assets/img/rectangle_icon.png"
-                        alt="KOIN service logo"
-                      />
-                    </div>
+                    {menu.image_urls.length > 0 ? (
+                      menu.image_urls.map((img, idx) => (
+                        <div key={`${img}`} className={styles.image}>
+                          <button
+                            className={styles.image__button}
+                            type="button"
+                            onClick={() => onClickImage(menu.image_urls, idx)}
+                          >
+                            <img src={`${img}`} alt={`${menu.name}`} />
+                          </button>
+                        </div>
+                      ))) : (
+                        <div className={styles['empty-image']}>
+                          <img
+                            src="https://static.koreatech.in/assets/img/empty-thumbnail.png"
+                            alt="KOIN service logo"
+                          />
+                        </div>
+                    )}
                     <div className={styles['menu-info__card']}>
                       <span>{`${menu.name} - ${item.option}`}</span>
                       <span>

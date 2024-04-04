@@ -177,7 +177,7 @@ function StoreDetailPage() {
         </div>
         {tapType === '메뉴' && (
           storeMenuCategories && storeMenuCategories.length > 0 && (
-            <MenuTable storeMenuCategories={storeMenuCategories} />
+            <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
           )
         )}
       </div>
