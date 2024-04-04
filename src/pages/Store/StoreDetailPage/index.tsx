@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import { Portal } from 'components/common/Modal/PortalProvider';
+import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useStoreDetail from './hooks/useStoreDetail';
@@ -20,7 +21,6 @@ function StoreDetailPage() {
   const { storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const portalManager = useModalPortal();
-
   const onClickImage = (img: string[], index: number) => {
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -33,19 +33,27 @@ function StoreDetailPage() {
     <div className={styles.template}>
       <div className={styles.section}>
         {!isMobile && (
-          <button
-            className={styles.section__header}
-            aria-label="주변 상점 리스트 이동"
-            type="button"
-            onClick={() => navigate('/store')}
-          >
-            주변 상점
-          </button>
+          <div className={styles.section__header}>
+            <button
+              className={styles['section__header--button']}
+              aria-label="주변 상점 리스트 이동"
+              type="button"
+              onClick={() => navigate('/store')}
+            >
+              주변 상점
+            </button>
+            {storeDetail?.updated_at && (
+              <UpdateInfo date={storeDetail.updated_at} />
+            )}
+          </div>
         )}
         <div className={styles['section__store-info']}>
           {storeDetail && (
             <div className={styles.store}>
               <div className={styles.store__name}>{storeDetail?.name}</div>
+              {isMobile && (
+                <UpdateInfo date={storeDetail.updated_at} />
+              )}
               <div className={styles.store__detail}>
                 <span>전화번호</span>
                 {storeDetail?.phone}
@@ -100,7 +108,12 @@ function StoreDetailPage() {
               </div>
             </div>
           )}
-          <div className={styles.image}>
+          <div
+            className={cn({
+              [styles.image]: true,
+              [styles['image--none']]: storeDetail?.image_urls.length === 0,
+            })}
+          >
             {
               storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
                 <div key={`${img}`} className={styles.image__content}>
@@ -119,7 +132,10 @@ function StoreDetailPage() {
         </div>
         {storeMenuCategories && storeMenuCategories.length > 0 && (
           <>
-            <div className={styles['menu-title']}>MENU</div>
+            <div className={styles['menu-title__container']}>
+              <div className={styles['menu-title']}>MENU</div>
+              {storeMenus && <UpdateInfo date={storeMenus.updated_at} />}
+            </div>
             <div className={styles['menu-info']}>
               {storeMenuCategories.map((menuCategories: MenuCategory) => (
                 menuCategories.menus.map((menu: Menu) => (

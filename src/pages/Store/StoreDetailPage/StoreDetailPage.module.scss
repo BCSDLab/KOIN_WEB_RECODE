@@ -23,19 +23,23 @@
 
   &__header {
     height: 54px;
-    text-align: left;
-    border: 0;
-    padding: 0 0 20px;
-    width: 100%;
     border-bottom: 2px #175c8e solid;
-    font-size: 30px;
-    font-family: NanumSquare, serif;
-    font-weight: 800;
-    color: #175c8e;
-    letter-spacing: -1.5px;
-    cursor: pointer;
-    background-color: #fff;
-    outline: none;
+    display: flex;
+    justify-content: space-between;
+
+    &--button {
+      text-align: left;
+      border: 0;
+      padding: 0 0 20px;
+      font-size: 30px;
+      font-family: NanumSquare, serif;
+      font-weight: 800;
+      color: #175c8e;
+      letter-spacing: -1.5px;
+      cursor: pointer;
+      background-color: #fff;
+      outline: none;
+    }
   }
 
   &__store-info {
@@ -80,6 +84,7 @@
     @include media.media-breakpoint(mobile) {
       font-weight: bold;
       letter-spacing: normal;
+      margin-bottom: 0;
     }
   }
 
@@ -193,6 +198,12 @@
   height: 330px;
   display: flex;
 
+  &--none {
+    @include media.media-breakpoint(mobile) {
+      display: none !important;
+    }
+  }
+
   @include media.media-breakpoint(mobile) {
     display: flex;
     width: calc(100% + 16px);
@@ -200,9 +211,14 @@
     cursor: initial;
     overflow-x: scroll;
     overflow-y: hidden;
+    overflow: hidden;
     white-space: nowrap;
     margin-top: 25px;
     margin-left: 16px;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
   }
 
   &__content {
@@ -266,17 +282,22 @@
 }
 
 .menu-title {
-  text-align: left;
+  &__container {
+    margin: 63px 0 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      margin-top: 31px;
+    }
+  }
+
   font-size: 20px;
   letter-spacing: -1px;
   line-height: 1.69;
   color: #252525;
-  margin: 63px 0 12px;
   font-weight: 700;
-
-  @include media.media-breakpoint(mobile) {
-    margin-top: 31px;
-  }
 }
 
 .menu-info {

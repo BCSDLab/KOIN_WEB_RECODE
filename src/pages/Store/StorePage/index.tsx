@@ -5,7 +5,9 @@ import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
 import cn from 'utils/ts/classnames';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useLogger from 'utils/hooks/useLogger';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 
@@ -101,7 +103,9 @@ function StorePage() {
   const storeList = useStoreList(params);
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
+  const logger = useLogger();
   const selectedCategory = Number(searchParams.get('category'));
+  useScrollToTop();
 
   return (
     <div className={styles.section}>
@@ -197,7 +201,12 @@ function StorePage() {
       {isMobile && <div className={styles['store-mobile-header']}>상점목록</div>}
       <div className={styles['store-list']}>
         {storeList?.map((store) => (
-          <Link to={`/store/${store.id}`} className={styles['store-list__item']} key={store.id}>
+          <Link
+            to={`/store/${store.id}`}
+            className={styles['store-list__item']}
+            key={store.id}
+            onClick={() => logger.click({ title: 'store_card_click', value: store.name })}
+          >
             {isStoreOpen(
               store.open[getDayOfWeek()].open_time,
               store.open[getDayOfWeek()].close_time,

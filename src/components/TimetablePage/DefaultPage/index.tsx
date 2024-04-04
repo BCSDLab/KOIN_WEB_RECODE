@@ -1,6 +1,6 @@
 import React from 'react';
 import { IDept } from 'api/dept/entity';
-import { SemesterInfo } from 'api/timetable/entity';
+import { SemesterInfo, VersionInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
@@ -17,6 +17,7 @@ import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
+import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import useDeptList from './hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 import useSemester from './hooks/useSemester';
@@ -25,6 +26,7 @@ import useLectureList from './hooks/useLectureList';
 import useTimetableInfoList from './hooks/useTimetableInfoList';
 import useAddTimetableLecture from './hooks/useAddTimetableLecture';
 import useDeleteTimetableLecture from './hooks/useDeleteTimetableLecture';
+import useVersionInfo from './hooks/useVersionInfo';
 
 const useSearch = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -105,9 +107,17 @@ function SemesterListbox({ value, onChange }: DecidedListboxProps) {
 
 interface CurrentSemesterLectureListProps {
   semesterKey: string | null;
+  filter: {
+    // 백엔드 수정하면 optional 제거
+    department: string;
+    search: string;
+  }
 }
 
-function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListProps) {
+function CurrentSemesterLectureList({
+  semesterKey,
+  filter,
+}: CurrentSemesterLectureListProps) {
   const { data: lectureList, status } = useLectureList(semesterKey);
   const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
@@ -118,11 +128,31 @@ function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListP
   const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const isLoaded = status === 'success' && (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
+
   return (
     isLoaded ? (
       <LectureTable
         height={459}
-        list={(lectureList as unknown as Array<LectureInfo>)}
+        list={
+          (lectureList as unknown as Array<LectureInfo>)
+            .filter((lecture) => {
+              const searchFilter = filter.search;
+              const departmentFilter = filter.department;
+
+              if (searchFilter !== '' && departmentFilter !== '전체') {
+                return lecture.name.includes(searchFilter)
+                  && lecture.department === departmentFilter;
+              }
+              if (searchFilter !== '') {
+                return lecture.name.includes(searchFilter);
+              }
+              if (departmentFilter !== '전체') {
+                return lecture.department === departmentFilter;
+              }
+
+              return true;
+            })
+        }
         selectedLecture={selectedTempLecture ?? undefined}
         onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
         onClickLastColumn={
@@ -160,9 +190,7 @@ function CurrentSemesterLectureList({ semesterKey }: CurrentSemesterLectureListP
         )}
       </LectureTable>
     ) : (
-      <div>
-        Loading...
-      </div>
+      <LoadingSpinner className={styles['top-loading-spinner']} />
     )
   );
 }
@@ -179,7 +207,7 @@ function CurrentMyLectureList() {
   return (
     (myLecturesValue !== null || myLecturesFromServer !== undefined) ? (
       <LectureTable
-        height={360}
+        height={300}
         list={token ? (myLecturesFromServer ?? []) : (myLecturesValue ?? [])}
         selectedLecture={undefined}
         onClickRow={undefined}
@@ -200,9 +228,7 @@ function CurrentMyLectureList() {
         )}
       </LectureTable>
     ) : (
-      <div>
-        Loading...
-      </div>
+      <LoadingSpinner className={styles['bottom-loading-spinner']} />
     ));
 }
 
@@ -227,7 +253,7 @@ function CurrentSemesterTimetable(): JSX.Element {
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
-
+  // TODO: selectedSemesterValue가 바뀔 때 myLecturesFromServer가 학기별 강의를 불러오지 못함
   return selectedSemesterValue && status === 'success' ? (
     <Timetable
       lectures={myLectureDayValue}
@@ -239,9 +265,7 @@ function CurrentSemesterTimetable(): JSX.Element {
       totalHeight={456}
     />
   ) : (
-    <div>
-      loading...
-    </div>
+    <LoadingSpinner className={styles['top-loading-spinner']} />
   );
 }
 
@@ -271,15 +295,30 @@ function Curriculum() {
   );
 }
 
+function RefactorDate(date: string) {
+  return date.substring(0, 11).replaceAll('-', '. ').replace('T', '.');
+}
+
+function LastUpdatedDate() {
+  const { data: updatedDate } = useVersionInfo();
+
+  return (
+    <div className={styles['page__last-update']}>
+      <span className={styles['page__last-update--content']}>마지막 업데이트 날짜:</span>
+      <span className={styles['page__last-update--info']}>{RefactorDate((updatedDate as unknown as VersionInfo).updated_at)}</span>
+    </div>
+  );
+}
+
 function DefaultPage() {
   const {
     searchInputRef,
     onClickSearchButton,
     onKeyDownSearchInput,
-    // value: searchValue,
+    value: searchValue,
   } = useSearch();
   const {
-    value: deptFilterValue,
+    value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
   } = useSelect();
   const {
@@ -309,24 +348,37 @@ function DefaultPage() {
               </button>
             </div>
             <div className={styles.page__depart}>
-              <React.Suspense fallback="loading...">
+              <React.Suspense fallback={<LoadingSpinner className={styles['dropdown-loading-spinner']} />}>
                 <DeptListbox
-                  value={deptFilterValue}
+                  value={departmentFilterValue}
                   onChange={onChangeDeptSelect}
                 />
               </React.Suspense>
             </div>
           </div>
+
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback="loading...">
-              <CurrentSemesterLectureList semesterKey={semesterFilterValue} />
+            <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
+              <CurrentSemesterLectureList
+                semesterKey={semesterFilterValue}
+                filter={{
+                  // 백엔드 수정하면 제거
+                  department: departmentFilterValue ?? '전체',
+                  search: searchValue ?? '',
+                }}
+              />
+            </React.Suspense>
+          </ErrorBoundary>
+          <ErrorBoundary fallbackClassName="loading">
+            <React.Suspense fallback={<LoadingSpinner className={styles['central-loading-spinner']} />}>
+              <LastUpdatedDate />
             </React.Suspense>
           </ErrorBoundary>
         </div>
-        <div>
+        <div className={styles['page__timetable-wrap']}>
           <div className={styles.page__filter}>
             <div className={styles.page__semester}>
-              <React.Suspense fallback="loading...">
+              <React.Suspense fallback={<LoadingSpinner className={styles['dropdown-loading-spinner']} />}>
                 <SemesterListbox
                   value={semesterFilterValue}
                   onChange={onChangeSemesterSelect}
@@ -354,17 +406,18 @@ function DefaultPage() {
           </div>
           <div className={styles.page__timetable}>
             <ErrorBoundary fallbackClassName="loading">
-              <React.Suspense fallback="loading...">
+              <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
                 <CurrentSemesterTimetable />
               </React.Suspense>
             </ErrorBoundary>
           </div>
         </div>
+
         <div>
           <h3 className={styles['page__title--sub']}>나의 시간표</h3>
           <div className={styles['page__table--selected']}>
             <ErrorBoundary fallbackClassName="loading">
-              <React.Suspense fallback="loading...">
+              <React.Suspense fallback={<LoadingSpinner className={styles['bottom-loading-spinner']} />}>
                 <CurrentMyLectureList />
               </React.Suspense>
             </ErrorBoundary>
@@ -373,7 +426,7 @@ function DefaultPage() {
         <div>
           <h3 className={styles['page__title--sub']}>커리큘럼</h3>
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback="loading...">
+            <React.Suspense fallback={<LoadingSpinner className={styles['bottom-loading-spinner']} />}>
               <Curriculum />
             </React.Suspense>
           </ErrorBoundary>

@@ -7,7 +7,8 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
-import { UserResponse } from 'api/auth/entity';
+import { userInfoState } from 'utils/recoil/userInfoState';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { getUser } from 'api/auth';
 import styles from './Header.module.scss';
 
@@ -86,8 +87,9 @@ function Header() {
   } = useMobileSidebar(pathname, isMobile);
   const token = useTokenState();
   const isLoggedin = !!token;
-  const [userInfo, setUserInfo] = useState<UserResponse | null>(null);
   const isMain = pathname === '/';
+  const userInfo = useRecoilValue(userInfoState);
+  const setUserInfo = useSetRecoilState(userInfoState);
   const logout = useLogout();
   const navigate = useNavigate();
 
@@ -97,7 +99,7 @@ function Header() {
         setUserInfo(response);
       });
     }
-  }, [token]);
+  }, [token, setUserInfo]);
 
   return (
     <header
@@ -178,7 +180,9 @@ function Header() {
                       {isLoggedin ? (
                         <>
                           <li className={styles['mobileheader__my-info']}>
-                            내 정보
+                            <Link to="/auth/modifyinfo">
+                              정보 수정
+                            </Link>
                           </li>
                           <li className={styles.mobileheader__link}>
                             <button type="button" onClick={logout}>
@@ -323,7 +327,7 @@ function Header() {
               ) : (
                 <>
                   <li className={styles['header__auth-link']}>
-                    <Link to="/modifyinfo">
+                    <Link to="/auth/modifyinfo">
                       정보수정
                     </Link>
                   </li>

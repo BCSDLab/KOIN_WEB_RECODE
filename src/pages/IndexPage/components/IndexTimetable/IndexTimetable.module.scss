@@ -1,11 +1,23 @@
 @use "src/utils/scss/media" as media;
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .template {
   height: 405px;
   position: relative;
 
   @include media.media-breakpoint(mobile) {
     display: none;
+  }
+
+  &__loading-spinner {
+    margin: 125px 75px;
+    background-color: white;
+    width: 100px;
+    height: 100px;
   }
 }
 

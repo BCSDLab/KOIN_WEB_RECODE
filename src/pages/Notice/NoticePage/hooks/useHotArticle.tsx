@@ -3,10 +3,10 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import * as api from 'api';
 import HotPost from 'components/Post/HotPost';
 import { HotPostResponse } from 'api/notice/entity';
-import { APIError } from 'interfaces/APIError';
+import { KoinError } from 'interfaces/APIError';
 
 function useHotArticleList() {
-  const { data: hotArticleList, isSuccess } = useQuery<HotPostResponse[] & APIError>(
+  const { data: hotArticleList, isSuccess } = useQuery<HotPostResponse[] & KoinError>(
     'hotArticleList',
     api.notice.HotPostList,
     { retry: 0 },

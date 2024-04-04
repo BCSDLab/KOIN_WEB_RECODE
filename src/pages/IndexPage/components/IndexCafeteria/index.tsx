@@ -10,6 +10,12 @@ import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './IndexCafeteria.module.scss';
 
+type CafeteriaType = {
+  id: number
+  placeName: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'
+  isShowMain: boolean
+};
+
 function IndexCafeteria() {
   const isMobile = useMediaQuery();
   const getType = () => {
@@ -40,6 +46,15 @@ function IndexCafeteria() {
     navigate('/cafeteria');
   };
 
+  const onClickCafeteriaCorner = (e: React.MouseEvent<HTMLDivElement>, category: CafeteriaType) => {
+    e.preventDefault();
+    logger.click({
+      title: 'main_cafeteria_corner',
+      value: selectedCafeteria,
+    });
+    setSelectedCafeteria(category.placeName);
+  };
+
   return (
     <section className={styles.template}>
       <h2 className={styles.title}>
@@ -66,7 +81,7 @@ function IndexCafeteria() {
                 [styles.cafeteria]: true,
                 [styles['cafeteria--selected']]: selectedCafeteria === category.placeName,
               })}
-              onClick={() => setSelectedCafeteria(category.placeName)}
+              onClick={(e) => onClickCafeteriaCorner(e, category)}
             >
               {category.placeName}
             </div>
