@@ -58,7 +58,6 @@ export const myLecturesAtom = atom<LectureInfo[] | null>({
           () => getLoadable(selectedSemesterAtom).getValue()
         );
         const savedValue = localStorage.getItem(MY_LECTURES_KEY);
-        console.log(savedValue, selectedSemester)
         if (!savedValue) {
           setSelf([]);
           return;
