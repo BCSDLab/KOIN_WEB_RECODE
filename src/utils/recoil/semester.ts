@@ -55,7 +55,7 @@ export const myLecturesAtom = atom<LectureInfo[] | null>({
           return;
         }
         const selectedSemester = await waitForTruthyValue(
-          () => getLoadable(selectedSemesterAtom).getValue()
+          () => getLoadable(selectedSemesterAtom).getValue(),
         );
         const savedValue = localStorage.getItem(MY_LECTURES_KEY);
         if (!savedValue) {
