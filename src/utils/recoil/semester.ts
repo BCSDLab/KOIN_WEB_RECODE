@@ -29,43 +29,26 @@ export const selectedTempLectureSelector = selector({
 
 const MY_LECTURES_KEY = 'my-lectures';
 
-function waitForTruthyValue<T>(getValue: () => T, timeout = 1000): Promise<T> {
-  return new Promise((resolve) => {
-    function endSetTimeoutWhenValueNonNullable() {
-      setTimeout(() => {
-        const value = getValue();
-        if (value) {
-          resolve(value);
-        } else {
-          endSetTimeoutWhenValueNonNullable();
-        }
-      }, timeout);
-    }
-    endSetTimeoutWhenValueNonNullable();
-  });
-}
-
 export const myLecturesAtom = atom<LectureInfo[] | null>({
   key: 'myLectures',
   default: null,
   effects: [
     ({ getLoadable, setSelf, onSet }) => {
-      if (getLoadable(tokenState).contents) {
-        return;
-      }
-      waitForTruthyValue(
-        (() => getLoadable(
-          selectedSemesterAtom,
-        ).contents) as () => string,
-      )
-        .then((value) => {
-          const savedValue = localStorage.getItem(MY_LECTURES_KEY);
-          if (savedValue != null) {
-            setSelf(JSON.parse(savedValue)[value]);
-            return;
-          }
+      const loadTokenState = async () => {
+        const token = await getLoadable(tokenState).toPromise();
+        if (token) {
           setSelf([]);
-        });
+          return;
+        }
+        const selectedSemester = await getLoadable(selectedSemesterAtom).toPromise();
+        const savedValue = localStorage.getItem(MY_LECTURES_KEY) ?? '{}';
+        if (savedValue) {
+          setSelf([]);
+          return;
+        }
+        setSelf(JSON.parse(savedValue)[selectedSemester]);
+      };
+      loadTokenState();
 
       onSet((newValue, _, isReset) => {
         if (isReset) {
