@@ -28,6 +28,7 @@ function IndexCafeteria() {
     return ['저녁', 'DINNER'];
   };
   const { data: dinings } = useCafeteriaList(convertDateToSimpleString(new Date()));
+  console.log('dinings:', dinings);
 
   const [selectedCafeteria, setSelectedCafeteria] = useState<'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'>('A코너');
 
@@ -88,33 +89,42 @@ function IndexCafeteria() {
             )
           ))}
         </div>
-        <div className={styles.type}>
-          {getType()[0]}
-        </div>
-        <div
-          className={styles.menuContainer}
-          onClick={(e) => {
-            if (isMobile) {
-              handleMoreClick(e);
-            }
-          }}
-          role="button"
-          tabIndex={0}
-        >
-          {선택된_식단 ? 선택된_식단.menu.slice(0, 10).map((menu) => (
-            <div className={styles.menu} key={menu}>
-              {menu}
+        <div className={styles.menuBox}>
+          <div className={styles.type}>
+            {getType()[0]}
+            <div className={cn({
+              [styles.type__block]: true,
+              [styles['type__block--soldOut']]: !!선택된_식단?.sold_out,
+            })}
+            >
+              {선택된_식단?.sold_out ? '품절' : ''}
             </div>
-          )) : (
-            <div className={styles.noMenuContent}>
-              <img className={styles.noMenuImage} src="https://static.koreatech.in/assets/img/ic-none.png" alt="" />
-              <div className={styles.noMenu}>
-                식단이 제공되지 않아
-                <br />
-                표시할 수 없습니다.
+          </div>
+          <div
+            className={styles.menuContainer}
+            onClick={(e) => {
+              if (isMobile) {
+                handleMoreClick(e);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            {선택된_식단 ? 선택된_식단.menu.slice(0, 10).map((menu) => (
+              <div className={styles.menu} key={menu}>
+                {menu}
               </div>
-            </div>
-          )}
+            )) : (
+              <div className={styles.noMenuContent}>
+                <img className={styles.noMenuImage} src="https://static.koreatech.in/assets/img/ic-none.png" alt="" />
+                <div className={styles.noMenu}>
+                  식단이 제공되지 않아
+                  <br />
+                  표시할 수 없습니다.
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
