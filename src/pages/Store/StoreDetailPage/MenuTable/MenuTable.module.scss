@@ -36,6 +36,9 @@
   }
 
   &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 18px;
     font-weight: 600;
     color: #4590bb;

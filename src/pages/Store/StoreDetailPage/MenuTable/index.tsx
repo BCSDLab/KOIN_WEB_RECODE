@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { MenuCategory } from 'api/store/entity';
 import cn from 'utils/ts/classnames';
 import useMoveScroll from 'utils/hooks/useMoveScroll';
+import MENU_CATEGORY from 'static/menu';
 import styles from './MenuTable.module.scss';
 
 interface MenuTableProps {
@@ -41,7 +42,14 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
             key={menuCategories.id}
             ref={(element) => { elements.current[index] = element; }}
           >
-            <div className={styles.menu__title}>{menuCategories.name}</div>
+            {MENU_CATEGORY.map((category) => (
+              category.name === menuCategories.name && (
+                <div className={styles.menu__title} key={category.id}>
+                  <img src={category.img} alt={category.name} />
+                  {menuCategories.name}
+                </div>
+              )
+            ))}
             {menuCategories.menus.map((menu) => (
               menu.option_prices === null ? (
                 <div className={styles['menu-info']} key={menu.id}>
