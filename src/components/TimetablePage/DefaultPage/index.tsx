@@ -63,6 +63,7 @@ const useDeptOptionList = () => {
 
   return deptOptionList;
 };
+
 const useSemesterOptionList = () => {
   const { data: semesterList } = useSemester();
   // 구조가 Array<SemesterInfo>인데 Array로 인식이 안됨.
@@ -117,7 +118,7 @@ function CurrentSemesterLectureList({
   semesterKey,
   filter,
 }: CurrentSemesterLectureListProps) {
-  const { data: lectureList, status } = useLectureList(semesterKey);
+  const { data: lectureList } = useLectureList(semesterKey);
   const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
 
@@ -127,7 +128,8 @@ function CurrentSemesterLectureList({
   const token = useTokenState();
   const { timetableInfoList: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
-  const isLoaded = status === 'success' && (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
+  const isLoaded = (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
+
   return (
     isLoaded ? (
       <LectureTable
@@ -179,9 +181,7 @@ function CurrentSemesterLectureList({
         )}
       </LectureTable>
     ) : (
-      <div>
-        Loading...
-      </div>
+      <LoadingSpinner size="80px" />
     )
   );
 }
@@ -219,9 +219,7 @@ function CurrentMyLectureList() {
         )}
       </LectureTable>
     ) : (
-      <div>
-        Loading...
-      </div>
+      <LoadingSpinner size="50px" />
     ));
 }
 
@@ -239,7 +237,7 @@ function CurrentSemesterTimetable(): JSX.Element {
   );
 
   const selectedLecture = useRecoilValue(selectedTempLectureSelector);
-  const { data: lectureList, status } = useLectureList(selectedSemester);
+  const { data: lectureList } = useLectureList(selectedSemester);
   const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
     ?.filter((lecture) => lecture.code === selectedLecture?.code)
     ?? [];
@@ -247,25 +245,29 @@ function CurrentSemesterTimetable(): JSX.Element {
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
 
-  return selectedSemesterValue && status === 'success' ? (
-    <Timetable
-      lectures={myLectureDayValue}
-      similarSelectedLecture={similarSelectedLectureDayList}
-      selectedLectureIndex={selectedLectureIndex}
-      colWidth={55}
-      firstColWidth={52}
-      rowHeight={21}
-      totalHeight={456}
-    />
+  return selectedSemesterValue ? (
+    // 리코일 값이 어느 순간에 있는 것인지 확인하고 삼항 연산 빼는 방향으로 추가 수정 필요
+    <Suspense fallback={<LoadingSpinner size="20px" />}>
+      <Timetable
+        lectures={myLectureDayValue}
+        similarSelectedLecture={similarSelectedLectureDayList}
+        selectedLectureIndex={selectedLectureIndex}
+        colWidth={55}
+        firstColWidth={52}
+        rowHeight={21}
+        totalHeight={456}
+      />
+    </Suspense>
   ) : (
     <div>
-      loading...
+      Recoil loading...
     </div>
   );
 }
 
 function Curriculum() {
   const { data: deptList } = useDeptList();
+
   return (
     <ul className={styles['page__curriculum-list']}>
       {(deptList as unknown as Array<IDept> | undefined ?? []).map((dept) => (
@@ -328,7 +330,7 @@ function DefaultPage() {
               </button>
             </div>
             <div className={styles.page__depart}>
-              <React.Suspense fallback="loading...">
+              <React.Suspense fallback={<LoadingSpinner size="30px" />}>
                 <DeptListbox
                   value={deptFilterValue}
                   onChange={onChangeDeptSelect}
@@ -337,7 +339,7 @@ function DefaultPage() {
             </div>
           </div>
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback="loading...">
+            <React.Suspense fallback={<LoadingSpinner size="30px" />}>
               <CurrentSemesterLectureList
                 semesterKey={semesterFilterValue}
                 filter={{
@@ -379,8 +381,8 @@ function DefaultPage() {
             </button>
           </div>
           <div className={styles.page__timetable}>
-            <ErrorBoundary fallbackClassName="loading">
-              <React.Suspense fallback="loading...">
+            <ErrorBoundary fallbackClassName="CurrentSemesterTimetable ErrorBoundary loading">
+              <React.Suspense fallback={<LoadingSpinner size="30px" />}>
                 <CurrentSemesterTimetable />
               </React.Suspense>
             </ErrorBoundary>
@@ -389,8 +391,8 @@ function DefaultPage() {
         <div>
           <h3 className={styles['page__title--sub']}>나의 시간표</h3>
           <div className={styles['page__table--selected']}>
-            <ErrorBoundary fallbackClassName="loading">
-              <React.Suspense fallback="loading...">
+            <ErrorBoundary fallbackClassName="CurrentMyLectureList ErrorBoundary loading">
+              <React.Suspense fallback={<LoadingSpinner size="30px" />}>
                 <CurrentMyLectureList />
               </React.Suspense>
             </ErrorBoundary>
@@ -399,7 +401,7 @@ function DefaultPage() {
         <div>
           <h3 className={styles['page__title--sub']}>커리큘럼</h3>
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback="loading...">
+            <React.Suspense fallback={<LoadingSpinner size="30px" />}>
               <Curriculum />
             </React.Suspense>
           </ErrorBoundary>

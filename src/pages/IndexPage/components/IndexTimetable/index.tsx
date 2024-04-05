@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import { useRecoilValue } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
@@ -11,6 +11,7 @@ import Timetable from 'components/TimetablePage/Timetable';
 import { useSelectRecoil } from 'components/TimetablePage/DefaultPage/hooks/useSelect';
 import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
 import { Link } from 'react-router-dom';
+import LoadingSpinner from 'components/common/LoadingSpinner';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
@@ -27,7 +28,7 @@ function CurrentSemesterTimetable(): JSX.Element {
   );
 
   const selectedLecture = useRecoilValue(selectedTempLectureSelector);
-  const { data: lectureList, status } = useLectureList(selectedSemester);
+  const { data: lectureList } = useLectureList(selectedSemester);
   const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
     ?.filter((lecture) => lecture.code === selectedLecture?.code)
     ?? [];
@@ -35,19 +36,21 @@ function CurrentSemesterTimetable(): JSX.Element {
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
 
-  return selectedSemesterValue && status === 'success' ? (
-    <Timetable
-      lectures={myLectureDayValue}
-      similarSelectedLecture={similarSelectedLectureDayList}
-      selectedLectureIndex={selectedLectureIndex}
-      colWidth={40}
-      firstColWidth={42}
-      rowHeight={16}
-      totalHeight={369}
-    />
+  return selectedSemesterValue ? (
+    <Suspense fallback={<LoadingSpinner size="80px" />}>
+      <Timetable
+        lectures={myLectureDayValue}
+        similarSelectedLecture={similarSelectedLectureDayList}
+        selectedLectureIndex={selectedLectureIndex}
+        colWidth={40}
+        firstColWidth={42}
+        rowHeight={16}
+        totalHeight={369}
+      />
+    </Suspense>
   ) : (
     <div>
-      loading...
+      Recoil loading...
     </div>
   );
 }

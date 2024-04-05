@@ -1,23 +1,20 @@
-import { useQuery } from 'react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { timetable } from 'api';
 
 const SEMESTER_INFO_KEY = 'lecture';
 
 const useLectureList = (semesterKey: string | null) => {
-  const { data, status } = useQuery(
-    [SEMESTER_INFO_KEY, semesterKey],
-    ({ queryKey }) => timetable.getLectureList(queryKey[1] ?? '20191'),
-    {
-      suspense: true,
-      useErrorBoundary: false,
-      enabled: !!semesterKey,
-    },
-  );
+  const { data } = useSuspenseQuery(
+    queryOptions({
+      queryKey: [SEMESTER_INFO_KEY, semesterKey],
+      queryFn: async ({ queryKey }) => {
+        const [, semesterKeyParam] = queryKey;
 
-  return {
-    data,
-    status,
-  };
+        return semesterKeyParam ? timetable.getLectureList(semesterKeyParam) : null;
+      },
+    }),
+  );
+  return { data };
 };
 
 export default useLectureList;
