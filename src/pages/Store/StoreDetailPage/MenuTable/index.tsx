@@ -12,7 +12,7 @@ interface MenuTableProps {
 
 function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
   const [categoryType, setCateogoryType] = useState<string>(storeMenuCategories[0].name);
-  const { elements, onMoveToElement } = useMoveScroll();
+  const { elementsRef, onMoveToElement } = useMoveScroll();
 
   return (
     <>
@@ -40,7 +40,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
           <div
             className={styles.menu}
             key={menuCategories.id}
-            ref={(element) => { elements.current[index] = element; }}
+            ref={(element) => { elementsRef.current[index] = element; }}
           >
             {MENU_CATEGORY.map((category) => (
               category.name === menuCategories.name && (

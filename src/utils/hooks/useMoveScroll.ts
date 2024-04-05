@@ -7,13 +7,13 @@ import { useRef } from 'react';
  *  - onMoveToElement: 인덱스에 해당하는 요소로 이동
  */
 export default function useMoveScroll() {
-  const elements = useRef<Array<HTMLDivElement | null>>([]);
+  const elementsRef = useRef<Array<HTMLElement | null>>([]);
 
   const onMoveToElement = (index: number) => {
-    if (elements.current[index]) {
-      elements.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (elementsRef.current[index]) {
+      elementsRef.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
-  return { elements, onMoveToElement };
+  return { elementsRef, onMoveToElement };
 }
