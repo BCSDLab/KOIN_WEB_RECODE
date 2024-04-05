@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { IDept } from 'api/dept/entity';
 import { SemesterInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
@@ -17,6 +17,7 @@ import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
+import LoadingSpinner from 'components/common/LoadingSpinner';
 import useDeptList from './hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 import useSemester from './hooks/useSemester';
@@ -351,12 +352,12 @@ function DefaultPage() {
         <div>
           <div className={styles.page__filter}>
             <div className={styles.page__semester}>
-              <React.Suspense fallback="loading...">
+              <Suspense fallback={<LoadingSpinner size="20px" />}>
                 <SemesterListbox
                   value={semesterFilterValue}
                   onChange={onChangeSemesterSelect}
                 />
-              </React.Suspense>
+              </Suspense>
             </div>
             <button
               type="button"
