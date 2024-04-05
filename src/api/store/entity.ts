@@ -112,3 +112,13 @@ export interface StoreCategory {
   name: string;
   image_url: string;
 }
+
+export interface StoreEvent {
+  title : string;
+  content : string
+  thumbnail_image : string;
+}
+
+export interface StorEventListResponse extends APIResponse {
+  events : StoreEvent[];
+}
