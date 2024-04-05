@@ -2,7 +2,7 @@ import React from 'react';
 import { LoginResponse } from 'api/auth/entity';
 import { tokenState } from 'utils/recoil';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
+
 import { useSetRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
@@ -10,6 +10,7 @@ import { auth } from 'api';
 import sha256 from 'utils/ts/SHA-256';
 import showToast from 'utils/ts/showToast';
 import { AxiosError } from 'axios';
+import { useMutation } from '@tanstack/react-query';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -31,7 +32,9 @@ const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 const useLogin = (state: IsAutoLogin) => {
   const setToken = useSetRecoilState(tokenState);
   const navigate = useNavigate();
-  const postLogin = useMutation(auth.login, {
+
+  const postLogin = useMutation({
+    mutationFn: auth.login,
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
         localStorage.setItem('AUTH_REFRESH_TOKEN_KEY', data.refresh_token);
