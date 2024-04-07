@@ -275,6 +275,21 @@
   }
 }
 
+.edit-timetable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(23 92 142);
+  padding: 1px 6px;
+  width: 100%;
+  height: 45px;
+  background-color: rgb(253 253 253);
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgb(23 92 142);
+  cursor: pointer;
+}
+
 .dropdown-loading-spinner {
   margin: 1px auto;
   background-color: white;
