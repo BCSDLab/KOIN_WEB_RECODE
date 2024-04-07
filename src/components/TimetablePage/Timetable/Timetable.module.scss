@@ -1,16 +1,29 @@
+@use "utils/scss/media.scss" as media;
+
 .timetable {
   background-color: #fff;
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+  }
 
   &__head {
     background-color: #f1f1f1;
     border-top: solid 1px #d2dae2;
     border-left: solid 1px #d2dae2;
     display: flex;
+    @include media.media-breakpoint(mobile) {
+      height: 18px;
+      & div:last-child {
+        border-right: none;
+      }
+    }
   }
 
   &__col {
     border-right: #dadada 1px solid;
-
+    @include media.media-breakpoint(mobile) {
+      width: calc((100% - 52px) / 5);
+    }
     &--head {
       display: flex;
       justify-content: center;
@@ -80,10 +93,16 @@
     line-height: 1.2;
     font-family: NanumSquare, serif;
     box-sizing: border-box;
+    @include media.media-breakpoint(mobile) {
+      width: calc((100% - 57px) / 5);
+    }
 
     &--selected {
       border-color: #000;
       border-style: solid;
+      @include media.media-breakpoint(mobile) {
+        width: calc((100% - 55px) / 5);
+      }
     }
 
     & > h4 {
