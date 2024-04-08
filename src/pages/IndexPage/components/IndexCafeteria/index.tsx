@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CAFETERIA_CATEGORY } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useCafeteriaList from 'pages/Cafeteria/CafeteriaPage/hooks/useCafeteriaList';
 import useLogger from 'utils/hooks/useLogger';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';

@@ -1659,6 +1659,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bcsdlab/utils@npm:^0.0.12":
+  version: 0.0.12
+  resolution: "@bcsdlab/utils@npm:0.0.12"
+  checksum: ebcfc783e72688f7033d99c03bf34552e2863487ca8e8145be744c3048091d5ddc47d751ec00be982c53e4122cb648281e32b82fb0ba1834736b23dbb8affb07
+  languageName: node
+  linkType: hard
+
 "@csstools/css-parser-algorithms@npm:^2.5.0":
   version: 2.5.0
   resolution: "@csstools/css-parser-algorithms@npm:2.5.0"
@@ -9150,6 +9157,7 @@ __metadata:
   resolution: "koin_web_recode@workspace:."
   dependencies:
     "@bcsdlab/koin": ^0.0.15
+    "@bcsdlab/utils": ^0.0.12
     "@testing-library/jest-dom": ^5.14.1
     "@testing-library/react": ^13.0.0
     "@testing-library/user-event": ^13.2.1
