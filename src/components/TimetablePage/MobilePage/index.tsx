@@ -132,7 +132,7 @@ function MobilePage() {
       <button
         type="button"
         onClick={() => {
-          showToast('info', 'PC에서 지원가능합니다.\n PC를 이용해주세요.');
+          showToast('info', 'PC환경만 지원합니다. PC를 이용해주세요.');
         }}
         className={styles['edit-timetable']}
       >
