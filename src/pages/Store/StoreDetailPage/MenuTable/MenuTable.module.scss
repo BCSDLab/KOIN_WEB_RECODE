@@ -1,0 +1,125 @@
+@use "src/utils/scss/media";
+
+.categories {
+  display: flex;
+  gap: 13px;
+  margin: 16px 0;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 16px 0 0 10px;
+  }
+
+  &__tag {
+    padding: 8px 12px;
+    background-color: transparent;
+    border: 1px solid #cacaca;
+    border-radius: 4px;
+    color: #cacaca;
+    cursor: pointer;
+
+    &--active {
+      background-color: #175c8e;
+      border: 1px solid #175c8e;
+      color: #ffff;
+    }
+  }
+}
+
+.menu {
+  @include media.media-breakpoint(mobile) {
+    padding: 10px;
+    border-bottom: 6px solid #f5f5f5;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #4590bb;
+    padding: 10px 0;
+  }
+}
+
+.menu-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &:nth-child(2) {
+      justify-content: center;
+    }
+
+    span:nth-child(1) {
+      font-size: 16px;
+      font-weight: 600;
+      padding-bottom: 20px;
+
+      @include media.media-breakpoint(mobile) {
+        padding-bottom: 12px;
+        width: 250px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+      }
+    }
+
+    span:nth-child(2) {
+      color: #175c8e;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.image {
+  display: flex;
+  justify-content: center;
+
+  &:not(:first-child) {
+    display: none;
+  }
+
+  &__button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    img {
+      width: 69px;
+      height: 69px;
+    }
+  }
+}
+
+.empty-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 69px;
+  }
+}
