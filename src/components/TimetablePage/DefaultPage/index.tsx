@@ -49,21 +49,18 @@ const useSearch = () => {
   };
 };
 
-const defaultOptionList = [
+const deptOptionList = [
   { label: '전체', value: '전체' },
-];
+  { label: '디자인ㆍ건축공학부', value: '디자인ㆍ건축공학부' },
+  { label: '고용서비스정책학과', value: '고용서비스정책학과' },
+  { label: '기계공학부', value: '기계공학부' },
+  { label: '메카트로닉스공학부', value: '메카트로닉스공학부' },
+  { label: '산업경영학부', value: '산업경영학부' },
+  { label: '전기ㆍ전자ㆍ통신공학부', value: '전기ㆍ전자ㆍ통신공학부' },
+  { label: '컴퓨터공학부', value: '컴퓨터공학부' },
+  { label: '에너지신소재화학공학부', value: '에너지신소재화학공학부' },
+  { label: '교양학부', value: '교양학부' }];
 
-const useDeptOptionList = () => {
-  const { data: deptList } = useDeptList();
-  // 구조가 Array<Dept>인데 Array로 인식이 안됨.
-  const deptOptionList = defaultOptionList.concat(
-    (deptList as unknown as Array<IDept> | undefined ?? []).map(
-      (dept) => ({ label: dept.name, value: dept.name }),
-    ) ?? [],
-  );
-
-  return deptOptionList;
-};
 const useSemesterOptionList = () => {
   const { data: semesterList } = useSemester();
   // 구조가 Array<SemesterInfo>인데 Array로 인식이 안됨.
@@ -80,7 +77,6 @@ const useSemesterOptionList = () => {
 type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 
 function DeptListbox({ value, onChange }: DecidedListboxProps) {
-  const deptOptionList = useDeptOptionList();
   React.useEffect(() => {
     if (deptOptionList.length !== 0) {
       onChange({ target: { value: deptOptionList[0].value } });
@@ -136,15 +132,15 @@ function CurrentSemesterLectureList({
         list={
           (lectureList as unknown as Array<LectureInfo>)
             .filter((lecture) => {
-              const searchFilter = filter.search;
+              const searchFilter = filter.search.toUpperCase();
               const departmentFilter = filter.department;
 
               if (searchFilter !== '' && departmentFilter !== '전체') {
-                return lecture.name.includes(searchFilter)
+                return lecture.name.toUpperCase().includes(searchFilter)
                   && lecture.department === departmentFilter;
               }
               if (searchFilter !== '') {
-                return lecture.name.includes(searchFilter);
+                return lecture.name.toUpperCase().includes(searchFilter);
               }
               if (departmentFilter !== '전체') {
                 return lecture.department === departmentFilter;
