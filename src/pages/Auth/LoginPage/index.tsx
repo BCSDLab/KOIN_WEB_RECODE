@@ -9,8 +9,7 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import { auth } from 'api';
 import sha256 from 'utils/ts/SHA-256';
 import showToast from 'utils/ts/showToast';
-import { isKoinError } from 'utils/ts/isKoinError';
-import { sendClientError } from 'utils/ts/sendClientError';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
