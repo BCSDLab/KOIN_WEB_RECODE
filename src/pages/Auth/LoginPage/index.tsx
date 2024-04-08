@@ -50,6 +50,7 @@ const useLogin = (state: IsAutoLogin) => {
         showToast('error', error.message || '로그인에 실패했습니다.');
       } else {
         sendClientError(error);
+        showToast('error', '로그인에 실패했습니다.');
       }
     },
   });
