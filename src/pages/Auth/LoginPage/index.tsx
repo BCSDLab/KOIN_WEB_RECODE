@@ -34,6 +34,7 @@ const useLogin = (state: IsAutoLogin) => {
   const navigate = useNavigate();
   const postLogin = useMutation(auth.login, {
     onSuccess: (data: LoginResponse) => {
+      throw new Error('로그인 클라이언트 에러가 발생했다');
       if (state.isAutoLoginFlag) {
         localStorage.setItem('AUTH_REFRESH_TOKEN_KEY', data.refresh_token);
         setCookie('AUTH_TOKEN_KEY', data.token, 3);
@@ -43,7 +44,7 @@ const useLogin = (state: IsAutoLogin) => {
       setToken(data.token);
       navigate('/');
     },
-    onError: (error: unknown) => {
+    onError: (error) => {
       if (isKoinError(error)) {
         // 추후에 코드별 에러 분기처리 진행
         showToast('error', error.message || '로그인에 실패했습니다.');
