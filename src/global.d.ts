@@ -7,6 +7,6 @@ declare module '*.scss' {
 
 declare module '@tanstack/react-query' {
   interface Register {
-    defaultError: unknwon;
+    defaultError: unknown;
   }
 }
