@@ -136,8 +136,7 @@ function MobilePage() {
         }}
         className={styles['edit-timetable']}
       >
-        시간표 편집하기 -
-        {'>'}
+        시간표 편집하기
       </button>
     </>
   );
