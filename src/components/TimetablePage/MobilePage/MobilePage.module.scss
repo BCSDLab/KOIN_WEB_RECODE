@@ -11,16 +11,16 @@
     align-items: center;
     margin-bottom: 14px;
   }
- 
+
   &__semester {
     width: 150px;
   }
- 
+
   &__timetable-wrap {
     display: flex;
     flex-direction: column;
   }
- 
+
   &__button {
     display: flex;
     justify-content: space-around;
@@ -56,7 +56,7 @@
   color: rgb(23 92 142);
   cursor: pointer;
 }
- 
+
 .dropdown-loading-spinner {
   margin: 1px auto;
   background-color: white;
