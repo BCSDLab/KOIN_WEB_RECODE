@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
-import { Menu, MenuCategory } from 'api/store/entity';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -9,8 +8,10 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
+import showToast from 'utils/ts/showToast';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
+import MenuTable from './MenuTable';
 import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
@@ -20,12 +21,15 @@ function StoreDetailPage() {
   const { storeDetail, storeDescription } = useStoreDetail(params.id!);
   const { storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
+  const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
+
   const onClickImage = (img: string[], index: number) => {
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
     ));
   };
+
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
@@ -51,9 +55,6 @@ function StoreDetailPage() {
           {storeDetail && (
             <div className={styles.store}>
               <div className={styles.store__name}>{storeDetail?.name}</div>
-              {isMobile && (
-                <UpdateInfo date={storeDetail.updated_at} />
-              )}
               <div className={styles.store__detail}>
                 <span>전화번호</span>
                 {storeDetail?.phone}
@@ -77,10 +78,28 @@ function StoreDetailPage() {
                   <div className={styles.etc__content}>{storeDescription}</div>
                 </div>
               </div>
-              <div className={styles.store__tag}>
-                {storeDetail?.delivery && <span>#배달가능</span>}
-                {storeDetail?.pay_card && <span>#카드가능</span>}
-                {storeDetail?.pay_bank && <span>#계좌이체가능</span>}
+              <div>
+                <span className={cn({
+                  [styles.store__tags]: true,
+                  [styles['store__tags--active']]: storeDetail?.delivery,
+                })}
+                >
+                  #배달가능
+                </span>
+                <span className={cn({
+                  [styles.store__tags]: true,
+                  [styles['store__tags--active']]: storeDetail?.pay_card,
+                })}
+                >
+                  #카드가능
+                </span>
+                <span className={cn({
+                  [styles.store__tags]: true,
+                  [styles['store__tags--active']]: storeDetail?.pay_bank,
+                })}
+                >
+                  #계좌이체가능
+                </span>
               </div>
               <div className={styles['button-wrapper']}>
                 <a
@@ -106,6 +125,9 @@ function StoreDetailPage() {
                   상점목록
                 </button>
               </div>
+              {isMobile && storeDetail?.updated_at && (
+                <UpdateInfo date={storeDetail.updated_at} />
+              )}
             </div>
           )}
           <div
@@ -130,41 +152,33 @@ function StoreDetailPage() {
             }
           </div>
         </div>
-        {storeMenuCategories && storeMenuCategories.length > 0 && (
-          <>
-            <div className={styles['menu-title__container']}>
-              <div className={styles['menu-title']}>MENU</div>
-              {storeMenus && <UpdateInfo date={storeMenus.updated_at} />}
-            </div>
-            <div className={styles['menu-info']}>
-              {storeMenuCategories.map((menuCategories: MenuCategory) => (
-                menuCategories.menus.map((menu: Menu) => (
-                  menu.option_prices === null ? (
-                    <div className={styles['menu-card']} key={menu.id}>
-                      {menu.name}
-                      <span>
-                        {
-                          !!menu.single_price && (
-                            menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          )
-                        }
-                      </span>
-                    </div>
-                  ) : (
-                    menu.option_prices.map((item) => (
-                      <div className={styles['menu-card']} key={menu.id + item.option}>
-                        {`${menu.name} - ${item.option}`}
-                        <span>
-                          {
-                            item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          }
-                        </span>
-                      </div>
-                    ))
-                  )
-                ))))}
-            </div>
-          </>
+
+        <div className={styles.tap}>
+          <button
+            className={cn({
+              [styles.tap__type]: true,
+              [styles['tap__type--active']]: tapType === '메뉴',
+            })}
+            type="button"
+            onClick={() => setTapType('메뉴')}
+          >
+            메뉴
+          </button>
+          <button
+            className={cn({
+              [styles.tap__type]: true,
+              [styles['tap__type--active']]: tapType === '이벤트/공지',
+            })}
+            type="button"
+            onClick={() => showToast('info', '아직 준비중입니다.')}
+          >
+            이벤트/공지
+          </button>
+        </div>
+        {tapType === '메뉴' && (
+          storeMenuCategories && storeMenuCategories.length > 0 && (
+            <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
+          )
         )}
       </div>
     </div>
