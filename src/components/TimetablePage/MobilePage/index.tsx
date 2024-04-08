@@ -14,11 +14,11 @@ import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import showToast from 'utils/ts/showToast';
+import useSemester from 'components/TimetablePage/hooks/useSemester';
+import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
+import useLectureList from 'components/TimetablePage/hooks/useLectureList';
+import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
 import styles from './MobilePage.module.scss';
-import useSemester from './hooks/useSemester';
-import { useSelectRecoil } from './hooks/useSelect';
-import useLectureList from './hooks/useLectureList';
-import useTimetableInfoList from './hooks/useTimetableInfoList';
 
 const useSemesterOptionList = () => {
   const { data: semesterList } = useSemester();
