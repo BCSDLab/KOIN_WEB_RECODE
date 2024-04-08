@@ -1,4 +1,4 @@
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import styles from './PostHeader.module.scss';
 
 type HeaderRowInfo = {
