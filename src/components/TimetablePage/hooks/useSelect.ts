@@ -18,8 +18,8 @@ const useSelect = () => {
 const useSelectRecoil = (atom: RecoilState<string>) => {
   const [value, setValue] = useRecoilState<string>(atom);
 
-  const onChangeSelect = (event: { target: any }) => {
-    const { target } = event;
+  const onChangeSelect = (e: { target: any }) => {
+    const { target } = e;
     setValue(target?.value);
   };
 
