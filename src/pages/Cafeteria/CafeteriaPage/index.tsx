@@ -71,7 +71,6 @@ function CafeteriaPage() {
     if (url) setPhotoData({ isOpen: true, url });
   };
 
-  console.log('data:', data);
   return (
     <div className={styles.page}>
       {photoData.isOpen
