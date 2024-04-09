@@ -72,7 +72,7 @@ export default function IndexTimeTable() {
       <Link to="/timetable" className={styles.title}>
         시간표
       </Link>
-      <ErrorBoundary fallbackClassName="loading">
+      <ErrorBoundary fallbackClassName="loadingErrorBoundary">
         <React.Suspense fallback="loading...">
           <CurrentSemesterTimetable />
         </React.Suspense>

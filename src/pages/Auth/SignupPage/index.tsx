@@ -530,7 +530,7 @@ function SignupPage() {
         <TermsCheckboxes {...register('terms', { required: true })} />
         <button
           type="submit"
-          disabled={status === 'loading'}
+          disabled={status === 'pending'}
           className={cn({
             [styles.signup__button]: true,
             [styles['signup__button--flex-end']]: true,

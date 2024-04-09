@@ -7,7 +7,7 @@ import { QueryClient as QueryClientV3, QueryClientProvider as QueryClientProvide
 
 import PortalProvider from 'components/common/Modal/PortalProvider';
 import { RecoilRoot } from 'recoil';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import showToast from './utils/ts/showToast';
@@ -22,6 +22,9 @@ const queryClient = new QueryClient({
       staleTime: 5 * 60 * 1000,
     },
   },
+  queryCache: new QueryCache({
+    onError: () => showToast('error', '네트워크 연결을 확인해주세요.'),
+  }),
 });
 
 const queryClientV3 = new QueryClientV3({

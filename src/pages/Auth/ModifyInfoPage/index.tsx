@@ -487,7 +487,7 @@ function ModifyInfoPage() {
         <GenderListbox {...register('gender')} />
         <button
           type="submit"
-          disabled={status === 'loading'}
+          disabled={status === 'pending'}
           className={cn({
             [styles.modify__button]: true,
             [styles['modify__button--flex-end']]: true,
@@ -499,7 +499,7 @@ function ModifyInfoPage() {
         </button>
         <button
           type="button"
-          disabled={status === 'loading'}
+          disabled={status === 'pending'}
           className={cn({
             [styles.modify__button]: true,
             [styles['modify__button--delete']]: true,
