@@ -1,5 +1,5 @@
 import OPTION_CATEGORY from 'static/optionCategory';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import styles from './RoomDetailOption.module.scss';
 
 type OptionProps = {

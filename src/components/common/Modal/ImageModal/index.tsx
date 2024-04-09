@@ -1,5 +1,5 @@
 import React from 'react';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import styles from './ImageModal.module.scss';
 import useModalKeyboardEvent from './hooks/useModalKeyboardEvent';
 

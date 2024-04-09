@@ -28,6 +28,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
+            ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
+            ["@bcsdlab/utils", "npm:0.0.12"],\
             ["@testing-library/jest-dom", "npm:5.17.0"],\
             ["@testing-library/react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.4.0"],\
             ["@testing-library/user-event", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.5.0"],\
@@ -3155,6 +3157,37 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@bcoe-v8-coverage-npm-0.2.3-9e27b3c57e-850f930553.zip/node_modules/@bcoe/v8-coverage/",\
           "packageDependencies": [\
             ["@bcoe/v8-coverage", "npm:0.2.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@bcsdlab/koin", [\
+        ["npm:0.0.15", {\
+          "packageLocation": "./.yarn/cache/@bcsdlab-koin-npm-0.0.15-ad194f9536-30b1904180.zip/node_modules/@bcsdlab/koin/",\
+          "packageDependencies": [\
+            ["@bcsdlab/koin", "npm:0.0.15"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15", {\
+          "packageLocation": "./.yarn/__virtual__/@bcsdlab-koin-virtual-01be273abd/0/cache/@bcsdlab-koin-npm-0.0.15-ad194f9536-30b1904180.zip/node_modules/@bcsdlab/koin/",\
+          "packageDependencies": [\
+            ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
+            ["@types/axios", null],\
+            ["axios", "npm:0.27.2"]\
+          ],\
+          "packagePeers": [\
+            "@types/axios",\
+            "axios"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@bcsdlab/utils", [\
+        ["npm:0.0.12", {\
+          "packageLocation": "./.yarn/cache/@bcsdlab-utils-npm-0.0.12-85afb79bdf-ebcfc783e7.zip/node_modules/@bcsdlab/utils/",\
+          "packageDependencies": [\
+            ["@bcsdlab/utils", "npm:0.0.12"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -12524,6 +12557,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["koin_web_recode", "workspace:."],\
+            ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
+            ["@bcsdlab/utils", "npm:0.0.12"],\
             ["@testing-library/jest-dom", "npm:5.17.0"],\
             ["@testing-library/react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.4.0"],\
             ["@testing-library/user-event", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.5.0"],\
