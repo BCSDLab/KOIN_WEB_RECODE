@@ -1,16 +1,21 @@
 .picker {
   display: flex;
-  justify-content: center;
-  width: 100vw;
+  width: 100%;
   overflow: hidden;
 
   &__container {
-    flex-shrink: 0;
     width: 100vw;
     display: flex;
-    box-sizing: border-box;
     justify-content: space-around;
+    flex-shrink: 0;
+    box-sizing: border-box;
     padding: 24px 24px 16px;
+  }
+
+  &__week {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
   }
 
   &__date {

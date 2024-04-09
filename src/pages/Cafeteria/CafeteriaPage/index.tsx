@@ -6,10 +6,17 @@ import { convertDateToSimpleString, formatKoreanDateString } from 'utils/ts/cafe
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { useState } from 'react';
 import { ReactComponent as NoPhoto } from 'assets/svg/no_photography.svg';
+import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
+import { ReactComponent as NoMeal } from 'assets/svg/no_meals.svg';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './CafeteriaPage.module.scss';
 import useCafeteriaList from './hooks/useCafeteriaList';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
+
+interface Photo {
+  isOpen: boolean;
+  url: string;
+}
 
 const DATE_KEY = 'date';
 const useDatePicker = () => {
@@ -48,6 +55,7 @@ const useDatePicker = () => {
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
   const [mealTime, setMealTime] = useState<string>(CAFETERIA_TIME[0].type);
+  const [photoData, setPhotoData] = useState<Photo>({ isOpen: false, url: '' });
   const {
     value: currentDate,
     setPrev: onClickPrevArrow,
@@ -59,10 +67,21 @@ function CafeteriaPage() {
   );
   useScrollToTop();
 
-  console.log('data:', data);
+  const handlePhoto = (url:string | null) => {
+    if (url) setPhotoData({ isOpen: true, url });
+  };
 
   return (
     <div className={styles.page}>
+      {photoData.isOpen
+        && (
+          <div className={styles.photo}>
+            <div className={styles.photo__close}>
+              <CloseIcon onClick={() => setPhotoData({ isOpen: false, url: '' })} />
+            </div>
+            <img src={photoData.url} alt="" />
+          </div>
+        )}
       <div className={styles.page__content} key={currentDate.toISOString()}>
         <div className={styles.header}>
           {isMobile && <WeeklyDatePicker currentDate={currentDate} setDate={onClickDate} />}
@@ -165,14 +184,20 @@ function CafeteriaPage() {
                             </ul>
                           ) : undefined}
                           <button
-                            className={styles['category__menu--photo']}
+                            className={styles['category__menu-photo']}
                             type="button"
-                            onClick={() => { }}
+                            onClick={() => handlePhoto(currentTimeMenu.image_url)}
                           >
+                            {currentTimeMenu.sold_out && (
+                              <div className={styles['category__menu-photo--soldOut']}>
+                                <NoMeal />
+                                품절된 메뉴입니다.
+                              </div>
+                            )}
                             {currentTimeMenu?.image_url
                               ? <img src={currentTimeMenu?.image_url || ''} alt="" />
                               : (
-                                <div>
+                                <div className={styles['category__menu-photo--none']}>
                                   <NoPhoto />
                                   사진 없음
                                 </div>

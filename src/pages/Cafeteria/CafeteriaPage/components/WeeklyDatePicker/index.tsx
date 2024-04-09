@@ -1,4 +1,5 @@
 import { cn } from '@bcsdlab/utils';
+import { useState } from 'react';
 import usePickerCarousel from './hooks/usePickerCarousel';
 import styles from './WeeklyDatePicker.module.scss';
 
@@ -10,9 +11,10 @@ interface Props {
 }
 
 export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
-  const { sliderRef } = usePickerCarousel();
-  const prevWeek = new Date(new Date(currentDate).setDate(currentDate.getDate() - 7));
-  const nextWeek = new Date(new Date(currentDate).setDate(currentDate.getDate() + 7));
+  const [viewDate, setViewDate] = useState(currentDate);
+  const { sliderRef } = usePickerCarousel(setViewDate);
+  const lastWeek = new Date(new Date(viewDate).setDate(viewDate.getDate() - 7));
+  const nextWeek = new Date(new Date(viewDate).setDate(viewDate.getDate() + 7));
 
   const addDays = (date: Date, days: number) => {
     const result = new Date(date);
@@ -30,7 +32,7 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
           <div
             className={cn({
               [styles.picker__date]: true,
-              [styles['picker__date--before']]: index < new Date().getDay(),
+              [styles['picker__date--before']]: lastWeek < new Date(),
             })}
             key={day}
           >
@@ -38,13 +40,11 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
             <button
               className={cn({
                 [styles.picker__button]: true,
-                [styles['picker__button--before']]: index < new Date().getDay(),
-                [styles['picker__button--selected']]: addDays(prevWeek, index - prevWeek.getDay()).getDate() === currentDate.getDate(),
+                [styles['picker__button--before']]: lastWeek < new Date(),
               })}
               type="button"
-              onClick={() => setDate(`${addDays(prevWeek, index - prevWeek.getDay())}`)}
             >
-              {addDays(prevWeek, index - prevWeek.getDay()).getDate()}
+              {addDays(lastWeek, index - lastWeek.getDay()).getDate()}
             </button>
           </div>
         ))}
@@ -55,7 +55,7 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
           <div
             className={cn({
               [styles.picker__date]: true,
-              [styles['picker__date--before']]: index < new Date().getDay(),
+              [styles['picker__date--before']]: viewDate < new Date(),
             })}
             key={day}
           >
@@ -63,13 +63,13 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
             <button
               className={cn({
                 [styles.picker__button]: true,
-                [styles['picker__button--before']]: index < new Date().getDay(),
-                [styles['picker__button--selected']]: addDays(currentDate, index - currentDate.getDay()).getDate() === currentDate.getDate(),
+                [styles['picker__button--before']]: viewDate < new Date(),
+                [styles['picker__button--selected']]: addDays(viewDate, index - viewDate.getDay()).toISOString() === currentDate.toISOString(),
               })}
               type="button"
-              onClick={() => setDate(`${addDays(currentDate, index - currentDate.getDay())}`)}
+              onClick={() => setDate(`${addDays(viewDate, index - viewDate.getDay())}`)}
             >
-              {addDays(currentDate, index - currentDate.getDay()).getDate()}
+              {addDays(viewDate, index - viewDate.getDay()).getDate()}
             </button>
           </div>
         ))}
@@ -78,23 +78,14 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
       <div className={styles.picker__container}>
         {WEEK.map((day, index) => (
           <div
-            className={cn({
-              [styles.picker__date]: true,
-              [styles['picker__date--before']]: index < new Date().getDay(),
-            })}
+            className={styles.picker__date}
             key={day}
           >
             {day}
             <button
-              className={cn({
-                [styles.picker__button]: true,
-                [styles['picker__button--before']]: index < new Date().getDay(),
-                [styles['picker__button--selected']]: addDays(nextWeek, index - nextWeek.getDay()).getDate() === currentDate.getDate(),
-              })}
+              className={styles.picker__button}
               type="button"
-              onClick={() => setDate(`${addDays(nextWeek, index - nextWeek.getDay())}`)}
             >
-              {}
               {addDays(nextWeek, index - nextWeek.getDay()).getDate()}
             </button>
           </div>
