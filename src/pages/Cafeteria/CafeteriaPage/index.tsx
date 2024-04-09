@@ -1,11 +1,15 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useSearchParams } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
 import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
 import { convertDateToSimpleString, formatKoreanDateString } from 'utils/ts/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
+import { useState } from 'react';
+import { ReactComponent as NoPhoto } from 'assets/svg/no_photography.svg';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './CafeteriaPage.module.scss';
 import useCafeteriaList from './hooks/useCafeteriaList';
+import WeeklyDatePicker from './components/WeeklyDatePicker';
 
 const DATE_KEY = 'date';
 const useDatePicker = () => {
@@ -31,23 +35,37 @@ const useDatePicker = () => {
         replace: true,
       });
     },
+    setDate: (date: string) => {
+      const newDate = new Date(date);
+      searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
+      setSearchParams(searchParams, {
+        replace: true,
+      });
+    },
   };
 };
 
 function CafeteriaPage() {
+  const isMobile = useMediaQuery();
+  const [mealTime, setMealTime] = useState<string>(CAFETERIA_TIME[0].type);
   const {
     value: currentDate,
     setPrev: onClickPrevArrow,
     setNext: onClickNextArrow,
+    setDate: onClickDate,
   } = useDatePicker();
   const { data } = useCafeteriaList(
     convertDateToSimpleString(currentDate),
   );
   useScrollToTop();
+
+  console.log('data:', data);
+
   return (
     <div className={styles.page}>
       <div className={styles.page__content} key={currentDate.toISOString()}>
         <div className={styles.header}>
+          {isMobile && <WeeklyDatePicker currentDate={currentDate} setDate={onClickDate} />}
           <div className={styles.header__picker}>
             <button
               className={styles['header__pick-button']}
@@ -79,54 +97,144 @@ function CafeteriaPage() {
               />
             </button>
           </div>
-          <ul className={styles['header__time-list']}>
+          <div className={styles['header__time-list']}>
             {CAFETERIA_TIME.map((time) => (
-              <li className={styles.header__time} key={time.id}>{time.name}</li>
-            ))}
-          </ul>
-        </div>
-        <div className={styles.page__table}>
-          {CAFETERIA_CATEGORY.map((cafeteriaCategory) => (
-            <div className={styles.category} key={cafeteriaCategory.id}>
-              <div className={styles.category__header}>
-                <div className={styles.category__type}>
-                  {cafeteriaCategory.placeName}
-                </div>
-              </div>
-              <ul className={styles['category__menu-list-row']}>
-                {CAFETERIA_TIME.map((time) => {
-                  const currentTimeMenu = data ? Array.from(data).find(
-                    (value) => value.place === cafeteriaCategory.placeName
-                      && value.type === time.type,
-                  ) : undefined;
-                  return (
-                    <li className={styles['category__menu-list']} key={time.id}>
-                      {currentTimeMenu ? (
-                        <>
-                          <ul>
-                            {currentTimeMenu.menu.map((menuName) => (
-                              <li className={styles.category__menu} key={menuName}>{menuName}</li>
-                            ))}
-                          </ul>
-                          <div className={styles.category__calorie}>
-                            {currentTimeMenu.kcal}
-                            Kcal
-                          </div>
-                          <div className={styles.category__price}>
-                            {currentTimeMenu.price_cash}
-                            원/
-                            {currentTimeMenu.price_card}
-                            원
-                          </div>
-                        </>
-                      ) : undefined}
-                    </li>
-                  );
+              <button
+                className={cn({
+                  [styles.header__time]: true,
+                  [styles['header__time--selected']]: mealTime === time.type,
                 })}
-              </ul>
-            </div>
-          ))}
+                key={time.id}
+                type="button"
+                onClick={() => (isMobile ? setMealTime(time.type) : {})}
+              >
+                {time.name}
+              </button>
+            ))}
+          </div>
         </div>
+        {isMobile
+          ? (
+            <div className={styles.page__table}>
+              {CAFETERIA_CATEGORY.map((cafeteriaCategory) => (
+                <div className={styles.category} key={cafeteriaCategory.id}>
+                  {(function Meal() {
+                    const currentTimeMenu = data ? Array.from(data).find(
+                      (value) => value.place === cafeteriaCategory.placeName
+                      && value.type === mealTime,
+                    ) : undefined;
+
+                    if (!currentTimeMenu) return null;
+
+                    return (
+                      <ul className={styles['category__menu-list-row']}>
+                        <div className={styles.category__header}>
+                          <div className={styles.category__type}>
+                            <div className={styles['category__type--title']}>
+                              {cafeteriaCategory.placeName}
+                              <div className={styles.category__calorie}>
+                                {currentTimeMenu?.kcal}
+                                Kcal •
+                              </div>
+                              <div className={styles.category__price}>
+                                {currentTimeMenu?.price_cash}
+                                원/
+                                {currentTimeMenu?.price_card}
+                                원
+                              </div>
+                            </div>
+                            <div className={cn({
+                              [styles.category__block]: true,
+                              [styles['category__block--soldOut']]: currentTimeMenu.sold_out,
+                              [styles['category__block--changed']]: !currentTimeMenu.sold_out
+                          && (currentTimeMenu.updated_at !== currentTimeMenu.created_at),
+                            })}
+                            >
+                              {!currentTimeMenu.sold_out
+                          && (currentTimeMenu.updated_at !== currentTimeMenu.created_at)
+                                ? '변경됨' : '품절'}
+                            </div>
+                          </div>
+                        </div>
+                        <li className={styles['category__menu-list']}>
+                          {currentTimeMenu ? (
+                            <ul>
+                              {currentTimeMenu.menu.map((menuName) => (
+                                <li className={styles.category__menu} key={menuName}>{menuName}</li>
+                              ))}
+                            </ul>
+                          ) : undefined}
+                          <button
+                            className={styles['category__menu--photo']}
+                            type="button"
+                            onClick={() => { }}
+                          >
+                            {currentTimeMenu?.image_url
+                              ? <img src={currentTimeMenu?.image_url || ''} alt="" />
+                              : (
+                                <div>
+                                  <NoPhoto />
+                                  사진 없음
+                                </div>
+                              )}
+                          </button>
+                        </li>
+                      </ul>
+                    );
+                  }())}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.page__table}>
+              {CAFETERIA_CATEGORY.map((cafeteriaCategory) => (
+                <div className={styles.category} key={cafeteriaCategory.id}>
+                  <div className={styles.category__header}>
+                    <div className={styles.category__type}>
+                      {cafeteriaCategory.placeName}
+                    </div>
+                  </div>
+                  <ul className={styles['category__menu-list-row']}>
+                    {CAFETERIA_TIME.map((time) => {
+                      const currentTimeMenu = data ? Array.from(data).find(
+                        (value) => value.place === cafeteriaCategory.placeName
+                      && value.type === time.type,
+                      ) : undefined;
+                      return (
+                        <li className={styles['category__menu-list']} key={time.id}>
+                          {currentTimeMenu ? (
+                            <>
+                              <ul>
+                                {currentTimeMenu.menu.map((menuName) => (
+                                  <li
+                                    className={styles.category__menu}
+                                    key={menuName}
+                                  >
+                                    {menuName}
+                                  </li>
+                                ))}
+                              </ul>
+                              <div className={styles.category__calorie}>
+                                {currentTimeMenu.kcal}
+                                Kcal
+                              </div>
+                              <div className={styles.category__price}>
+                                {currentTimeMenu.price_cash}
+                                원/
+                                {currentTimeMenu.price_card}
+                                원
+                              </div>
+                            </>
+                          ) : undefined}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
+
       </div>
     </div>
   );

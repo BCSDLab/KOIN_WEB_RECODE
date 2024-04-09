@@ -1,0 +1,51 @@
+.picker {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  overflow: hidden;
+
+  &__container {
+    flex-shrink: 0;
+    width: 100vw;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-around;
+    padding: 24px 24px 16px;
+  }
+
+  &__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: #4b4b4b;
+
+    &--before {
+      color: #8e8e8e;
+    }
+  }
+
+  &__button {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    border: none;
+    background-color: transparent;
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+
+    &--before {
+      color: #8e8e8e;
+    }
+
+    &--selected {
+      color: #fff;
+      background-color: #175c8e;
+    }
+  }
+}
