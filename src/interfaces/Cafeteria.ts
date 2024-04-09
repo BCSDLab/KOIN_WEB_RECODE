@@ -6,13 +6,14 @@ export type CafeteriaMenu = {
   created_at: string;
   id: number;
   date: string;
-  image_url:string | null;
+  image_url: string | null;
   type: CafeteriaTime;
   place: CafeteriaCategory;
   price_card: number;
   price_cash: number;
   kcal: number;
   menu: string[];
-  sold_out: boolean;
+  soldout_at: string;
   updated_at: string;
+  changed_at: string;
 };

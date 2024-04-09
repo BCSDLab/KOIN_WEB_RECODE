@@ -93,10 +93,10 @@ function IndexCafeteria() {
             {getType()[0]}
             <div className={cn({
               [styles.type__block]: true,
-              [styles['type__block--soldOut']]: !!선택된_식단?.sold_out,
+              [styles['type__block--soldOut']]: !!선택된_식단?.soldout_at,
             })}
             >
-              {선택된_식단?.sold_out ? '품절' : ''}
+              {선택된_식단?.soldout_at ? '품절' : ''}
             </div>
           </div>
           <div

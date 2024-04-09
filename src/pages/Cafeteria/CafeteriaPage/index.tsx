@@ -71,6 +71,7 @@ function CafeteriaPage() {
     if (url) setPhotoData({ isOpen: true, url });
   };
 
+  console.log('data:', data);
   return (
     <div className={styles.page}>
       {photoData.isOpen
@@ -156,21 +157,16 @@ function CafeteriaPage() {
                                 Kcal •
                               </div>
                               <div className={styles.category__price}>
-                                {currentTimeMenu?.price_cash}
-                                원/
-                                {currentTimeMenu?.price_card}
-                                원
+                                {`${currentTimeMenu?.price_cash}원/ ${currentTimeMenu?.price_card}원`}
                               </div>
                             </div>
                             <div className={cn({
                               [styles.category__block]: true,
-                              [styles['category__block--soldOut']]: currentTimeMenu.sold_out,
-                              [styles['category__block--changed']]: !currentTimeMenu.sold_out
-                          && (currentTimeMenu.updated_at !== currentTimeMenu.created_at),
+                              [styles['category__block--soldOut']]: !!currentTimeMenu.soldout_at,
+                              [styles['category__block--changed']]: !currentTimeMenu.soldout_at && !!currentTimeMenu.changed_at,
                             })}
                             >
-                              {!currentTimeMenu.sold_out
-                          && (currentTimeMenu.updated_at !== currentTimeMenu.created_at)
+                              {!currentTimeMenu.soldout_at && !!currentTimeMenu.changed_at
                                 ? '변경됨' : '품절'}
                             </div>
                           </div>
@@ -188,7 +184,7 @@ function CafeteriaPage() {
                             type="button"
                             onClick={() => handlePhoto(currentTimeMenu.image_url)}
                           >
-                            {currentTimeMenu.sold_out && (
+                            {currentTimeMenu.soldout_at && (
                               <div className={styles['category__menu-photo--soldOut']}>
                                 <NoMeal />
                                 품절된 메뉴입니다.
@@ -244,10 +240,7 @@ function CafeteriaPage() {
                                 Kcal
                               </div>
                               <div className={styles.category__price}>
-                                {currentTimeMenu.price_cash}
-                                원/
-                                {currentTimeMenu.price_card}
-                                원
+                                {`${currentTimeMenu?.price_cash}원/ ${currentTimeMenu?.price_card}원`}
                               </div>
                             </>
                           ) : undefined}
