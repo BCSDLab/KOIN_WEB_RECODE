@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useSearchParams } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
 import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
