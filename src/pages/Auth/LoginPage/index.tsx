@@ -28,12 +28,12 @@ interface UserInfo {
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 
 const useLogin = (state: IsAutoLogin) => {
-  const { setToken } = useTokenStore();
+  const { setToken, setRefreshToken } = useTokenStore();
   const navigate = useNavigate();
   const postLogin = useMutation(auth.login, {
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
-        localStorage.setItem('AUTH_REFRESH_TOKEN_KEY', data.refresh_token);
+        setRefreshToken(data.refresh_token);
         setCookie('AUTH_TOKEN_KEY', data.token, 3);
       } else {
         setCookie('AUTH_TOKEN_KEY', data.token, 0);
