@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import CATEGORY, { Category, SubMenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
 
