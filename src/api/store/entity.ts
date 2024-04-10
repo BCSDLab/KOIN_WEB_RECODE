@@ -90,7 +90,8 @@ export interface StoreEvent {
   title : string;
   content : string
   thumbnail_image : string;
-  updated_at : string;
+  start_date : string;
+  end_date : string;
 }
 
 export interface StorEventListResponse extends APIResponse {

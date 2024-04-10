@@ -38,20 +38,18 @@ export default function EventCard({ event }: { event: StoreEvent }) {
           })}
         />
       )}
-      <div className={styles.eventInfo}>
-        <div className={styles.eventInfo__header}>
+      <div className={styles['event-info']}>
+        <div className={styles['event-info__header']}>
           <div className={styles.title}>{event.title}</div>
-          <div className={styles['eventInfo__header--condition']}>
-            <div>전체보기</div>
-            <button
-              className={styles.seemoreArrowButton}
-              type="button"
-              aria-label="더보기 버튼"
-              onClick={() => { toggleHiddenInfo(hiddenInfo); }}
-            >
-              {hiddenInfo ? <SeeInfoArrow /> : <HiddenInfoArrow /> }
-            </button>
-          </div>
+          <button
+            className={styles['arrow-button']}
+            type="button"
+            aria-label="더보기 버튼"
+            onClick={() => { toggleHiddenInfo(hiddenInfo); }}
+          >
+            전체보기
+            {hiddenInfo ? <SeeInfoArrow /> : <HiddenInfoArrow /> }
+          </button>
         </div>
         <div className={cn({
           [styles.eventContent]: true,
@@ -60,7 +58,7 @@ export default function EventCard({ event }: { event: StoreEvent }) {
         >
           {event.content}
         </div>
-        <div className={styles.eventUpdatedAt}>{event.updated_at}</div>
+        <div className={styles.eventUpdatedAt}>{event.start_date}</div>
       </div>
     </div>
   );
