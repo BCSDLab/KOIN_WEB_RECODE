@@ -70,6 +70,12 @@
     align-items: center;
   }
 
+  &__item-title {
+    max-width: 680px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   &__item-type {
     font-weight: 600;
     margin-right: 4px;
