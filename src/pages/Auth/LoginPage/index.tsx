@@ -8,7 +8,6 @@ import { auth } from 'api';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
-import { AxiosError } from 'axios';
 import { useTokenStore } from 'utils/zustand';
 import styles from './LoginPage.module.scss';
 
