@@ -1,12 +1,15 @@
-import { useRecoilValueLoadable } from 'recoil';
-import { tokenState } from 'utils/recoil';
+import { useEffect } from 'react';
+import { useTokenStore } from 'utils/zustand';
 
 const useTokenState = () => {
-  const token = useRecoilValueLoadable(tokenState);
-  if (token.state === 'hasValue' && token.contents) {
-    return token.contents;
-  }
-  return '';
+  const token = useTokenStore((state) => state.token);
+  const refreshAccessToken = useTokenStore((state) => state.refreshAccessToken);
+  useEffect(() => {
+    if (!token) {
+      refreshAccessToken();
+    }
+  }, [token, refreshAccessToken]);
+  return token;
 };
 
 export default useTokenState;
