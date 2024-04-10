@@ -51,7 +51,7 @@ function IndexNotice() {
                 <span className={styles['list__item-type']}>
                   {getArticleType(article.board_id)}
                 </span>
-                <span>
+                <span className={styles['list__item-title']}>
                   {article.title}
                 </span>
                 {isNew(article.created_at) && (
