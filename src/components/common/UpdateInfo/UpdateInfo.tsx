@@ -1,14 +1,25 @@
+import { ReactComponent as UpdateIcon } from 'assets/svg/update-icon.svg';
 import styles from './UpdateInfo.module.scss';
 
 interface UpdateInfoProps {
-  date : string | null
+  date: string | null;
 }
 
-function UpdateInfo({ date } :UpdateInfoProps) {
+function UpdateInfo({ date }: UpdateInfoProps) {
+  // 날짜 형식을 YYYY.MM.DD로 변경
+  const formattedDate = date ? date.replace(/-/g, '.') : null;
+
   return (
     <div className={styles.update}>
-      <span className={styles['update--content']}>{date ? '최근 업데이트일' : '최근 업데이트 정보 없음'}</span>
-      <span className={styles['update--info']}>{date}</span>
+      {date
+        ? (
+          <div className={styles['update--box']}>
+            <UpdateIcon />
+            <div className={styles['update--text']}>{`${formattedDate} 업데이트`}</div>
+          </div>
+        )
+
+        : '최근 업데이트 정보 없음'}
     </div>
   );
 }
