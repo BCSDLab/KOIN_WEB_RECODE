@@ -7,8 +7,8 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import cn from 'utils/ts/classnames';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
-import { getUser } from 'api/auth';
-import { useUserStore } from 'utils/zustand/userInfoState';
+
+import { useUser } from 'utils/hooks/useUser';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -87,17 +87,9 @@ function Header() {
   const token = useTokenState();
   const isLoggedin = !!token;
   const isMain = pathname === '/';
-  const { userInfo, setUserInfo } = useUserStore();
+  const { data: userInfo } = useUser();
   const logout = useLogout();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (token) {
-      getUser(token).then((response) => {
-        setUserInfo(response);
-      });
-    }
-  }, [token, setUserInfo]);
 
   return (
     <header
