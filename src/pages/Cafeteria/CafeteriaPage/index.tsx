@@ -142,7 +142,7 @@ function CafeteriaPage() {
                       && value.type === mealTime,
                     ) : undefined;
 
-                    if (!currentTimeMenu) return null;
+                    if (!currentTimeMenu || currentTimeMenu.menu.includes('미운영')) return null;
 
                     return (
                       <ul className={styles['category__menu-list-row']}>
@@ -151,11 +151,11 @@ function CafeteriaPage() {
                             <div className={styles['category__type--title']}>
                               {cafeteriaCategory.placeName}
                               <div className={styles.category__calorie}>
-                                {currentTimeMenu?.kcal}
+                                {currentTimeMenu?.kcal ?? 0}
                                 Kcal •
                               </div>
                               <div className={styles.category__price}>
-                                {`${currentTimeMenu?.price_cash}원/ ${currentTimeMenu?.price_card}원`}
+                                {`${currentTimeMenu?.price_cash ?? 0}원/ ${currentTimeMenu?.price_card ?? 0}원`}
                               </div>
                             </div>
                             <div className={cn({
@@ -238,7 +238,7 @@ function CafeteriaPage() {
                                 Kcal
                               </div>
                               <div className={styles.category__price}>
-                                {`${currentTimeMenu?.price_cash}원/ ${currentTimeMenu?.price_card}원`}
+                                {`${currentTimeMenu?.price_cash ?? 0}원/ ${currentTimeMenu?.price_card ?? 0}원`}
                               </div>
                             </>
                           ) : undefined}
