@@ -7,7 +7,6 @@ import 'swiper/scss/autoplay'
 // import { useNavigate } from 'react-router-dom';
 import { useGetAllEvents } from 'pages/Store/StorePage/components/hooks/useGetAllEvents';
 import { useNavigate } from 'react-router-dom';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './EventCarousel.module.scss';
 
 const colors = ['#6DBBDD', '#4590BB', '#175C8E', '#10477A'];
@@ -15,8 +14,6 @@ const colors = ['#6DBBDD', '#4590BB', '#175C8E', '#10477A'];
 export default function EventCarousel() {
   const carousel = useGetAllEvents();
   const navigate = useNavigate();
-  const isMobile = useMediaQuery();
-  console.log(isMobile);
 
   return (
     <div>
