@@ -85,12 +85,18 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
       <div className={styles.picker__container}>
         {WEEK.map((day, index) => (
           <div
-            className={styles.picker__date}
+            className={cn({
+              [styles.picker__date]: true,
+              [styles['picker__date--before']]: dateFormat(addDays(nextWeek, index - nextWeek.getDay())) < dateFormat(),
+            })}
             key={day}
           >
             {day}
             <button
-              className={styles.picker__button}
+              className={cn({
+                [styles.picker__button]: true,
+                [styles['picker__button--before']]: dateFormat(addDays(nextWeek, index - nextWeek.getDay())) < dateFormat(),
+              })}
               type="button"
             >
               {addDays(nextWeek, index - nextWeek.getDay()).getDate()}
