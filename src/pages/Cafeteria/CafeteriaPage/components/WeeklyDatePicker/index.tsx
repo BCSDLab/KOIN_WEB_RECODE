@@ -22,6 +22,13 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
     return result;
   };
 
+  const dateFormat = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <div
       className={styles.picker}
@@ -55,7 +62,7 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
           <div
             className={cn({
               [styles.picker__date]: true,
-              [styles['picker__date--before']]: viewDate < new Date(),
+              [styles['picker__date--before']]: dateFormat(addDays(viewDate, index - viewDate.getDay())) < dateFormat(),
             })}
             key={day}
           >
@@ -63,7 +70,7 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
             <button
               className={cn({
                 [styles.picker__button]: true,
-                [styles['picker__button--before']]: viewDate < new Date(),
+                [styles['picker__button--before']]: dateFormat(addDays(viewDate, index - viewDate.getDay())) < dateFormat(),
                 [styles['picker__button--selected']]: addDays(viewDate, index - viewDate.getDay()).toISOString() === currentDate.toISOString(),
               })}
               type="button"
