@@ -55,7 +55,6 @@ export interface UserResponse extends APIResponse {
 }
 
 export interface UserUpdateRequest {
-  password?: string;
   identity: number;
   is_graduated: boolean;
   gender: 0 | 1;
