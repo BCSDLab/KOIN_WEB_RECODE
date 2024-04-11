@@ -87,6 +87,16 @@ export interface StoreCategory {
   image_url: string;
 }
 
+export interface StoreEvent {
+  shop_id: number,
+  shop_name: string,
+  title: string,
+  content: string,
+  thumbnail_images: string[],
+  start_date: string,
+  end_date: string,
+}
+
 export interface AllStoreEventResponse extends APIResponse {
   events: {
     shop_id: number,
@@ -97,4 +107,8 @@ export interface AllStoreEventResponse extends APIResponse {
     start_date: string,
     end_date: string,
   }[]
+}
+
+export interface StoreEventListResponse extends APIResponse {
+  events : StoreEvent[];
 }

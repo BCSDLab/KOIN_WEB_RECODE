@@ -5,6 +5,7 @@ import {
   StoreDetailMenuResponse,
   StoreCategoriesResponse,
   AllStoreEventResponse,
+  StoreEventListResponse,
 } from './entity';
 
 export class StoreList<R extends StoreListResponse> implements APIRequest<R> {
@@ -60,5 +61,17 @@ export class AllStoreEvent<R extends AllStoreEventResponse> implements APIReques
 
   constructor() {
     this.path = 'shops/events';
+  }
+}
+
+export class StoreEventList<R extends StoreEventListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  response!: R;
+
+  path = 'shops/:id/events';
+
+  constructor(id:string) {
+    this.path = `shops/${id}/events`;
   }
 }
