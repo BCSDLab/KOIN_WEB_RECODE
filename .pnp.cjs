@@ -71,8 +71,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-config-standard", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:26.0.0"],\
             ["stylelint-config-standard-scss", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.0.0"],\
             ["stylelint-selector-bem-pattern", "npm:2.1.1"],\
+            ["swiper", "npm:11.1.0"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=289587"],\
-            ["web-vitals", "npm:2.1.4"]\
+            ["web-vitals", "npm:2.1.4"],\
+            ["zustand", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.5.2"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -12600,8 +12602,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-config-standard", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:26.0.0"],\
             ["stylelint-config-standard-scss", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.0.0"],\
             ["stylelint-selector-bem-pattern", "npm:2.1.1"],\
+            ["swiper", "npm:11.1.0"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=289587"],\
-            ["web-vitals", "npm:2.1.4"]\
+            ["web-vitals", "npm:2.1.4"],\
+            ["zustand", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.5.2"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -18405,6 +18409,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["swiper", [\
+        ["npm:11.1.0", {\
+          "packageLocation": "./.yarn/cache/swiper-npm-11.1.0-f05fa79b37-c03a4f3dbf.zip/node_modules/swiper/",\
+          "packageDependencies": [\
+            ["swiper", "npm:11.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["symbol-tree", [\
         ["npm:3.2.4", {\
           "packageLocation": "./.yarn/cache/symbol-tree-npm-3.2.4-fe70cdb75b-6e8fc7e148.zip/node_modules/symbol-tree/",\
@@ -19141,6 +19154,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["url-parse", "npm:1.5.10"],\
             ["querystringify", "npm:2.2.0"],\
             ["requires-port", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["use-sync-external-store", [\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/use-sync-external-store-npm-1.2.0-44f75d2564-5c639e0f8d.zip/node_modules/use-sync-external-store/",\
+          "packageDependencies": [\
+            ["use-sync-external-store", "npm:1.2.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:cd857ad26b8db21c161b6e0ef8419cb17f576cae6fae4b1b5d5b55047147083611649303cacae56e664074d204aad41f1f5522d0749218f8416ccf14aa9ccc48#npm:1.2.0", {\
+          "packageLocation": "./.yarn/__virtual__/use-sync-external-store-virtual-526cafba24/0/cache/use-sync-external-store-npm-1.2.0-44f75d2564-5c639e0f8d.zip/node_modules/use-sync-external-store/",\
+          "packageDependencies": [\
+            ["use-sync-external-store", "virtual:cd857ad26b8db21c161b6e0ef8419cb17f576cae6fae4b1b5d5b55047147083611649303cacae56e664074d204aad41f1f5522d0749218f8416ccf14aa9ccc48#npm:1.2.0"],\
+            ["@types/react", "npm:18.2.55"],\
+            ["react", "npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -20102,6 +20137,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/yocto-queue-npm-0.1.0-c6c9a7db29-f77b3d8d00.zip/node_modules/yocto-queue/",\
           "packageDependencies": [\
             ["yocto-queue", "npm:0.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["zustand", [\
+        ["npm:4.5.2", {\
+          "packageLocation": "./.yarn/cache/zustand-npm-4.5.2-4f034a2f1c-160052a7fa.zip/node_modules/zustand/",\
+          "packageDependencies": [\
+            ["zustand", "npm:4.5.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.5.2", {\
+          "packageLocation": "./.yarn/__virtual__/zustand-virtual-cd857ad26b/0/cache/zustand-npm-4.5.2-4f034a2f1c-160052a7fa.zip/node_modules/zustand/",\
+          "packageDependencies": [\
+            ["zustand", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.5.2"],\
+            ["@types/immer", null],\
+            ["@types/react", "npm:18.2.55"],\
+            ["immer", null],\
+            ["react", "npm:18.2.0"],\
+            ["use-sync-external-store", "virtual:cd857ad26b8db21c161b6e0ef8419cb17f576cae6fae4b1b5d5b55047147083611649303cacae56e664074d204aad41f1f5522d0749218f8416ccf14aa9ccc48#npm:1.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/immer",\
+            "@types/react",\
+            "immer",\
+            "react"\
           ],\
           "linkType": "HARD"\
         }]\

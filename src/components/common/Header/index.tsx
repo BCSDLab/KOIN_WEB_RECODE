@@ -7,9 +7,8 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
-import { userInfoState } from 'utils/recoil/userInfoState';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { getUser } from 'api/auth';
+
+import { useUser } from 'utils/hooks/useUser';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -88,18 +87,9 @@ function Header() {
   const token = useTokenState();
   const isLoggedin = !!token;
   const isMain = pathname === '/';
-  const userInfo = useRecoilValue(userInfoState);
-  const setUserInfo = useSetRecoilState(userInfoState);
+  const { data: userInfo } = useUser();
   const logout = useLogout();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (token) {
-      getUser(token).then((response) => {
-        setUserInfo(response);
-      });
-    }
-  }, [token, setUserInfo]);
 
   return (
     <header
