@@ -26,12 +26,6 @@
     border: 1px solid #d2dae2;
     cursor: pointer;
 
-    @include media.media-breakpoint(mobile) {
-      width: 155px;
-      font-size: 14px;
-      height: 36px;
-    }
-
     &::after {
       position: absolute;
       top: 9px;

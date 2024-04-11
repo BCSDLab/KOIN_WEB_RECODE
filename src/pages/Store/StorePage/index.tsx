@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useLogger from 'utils/hooks/useLogger';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
