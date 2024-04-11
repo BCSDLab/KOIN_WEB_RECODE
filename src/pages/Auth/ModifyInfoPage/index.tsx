@@ -95,6 +95,9 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       let inputValue;
       if (isRefICustomFormInput(fieldRef)) {
         inputValue = fieldRef.value ? fieldRef.value : null;
+        if (field === 'gender' && fieldRef.value === 0) {
+          inputValue = 0;
+        }
       } else if (fieldRef !== null) {
         inputValue = fieldRef.value ? fieldRef.value : null;
       }
