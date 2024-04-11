@@ -1,5 +1,5 @@
 import React from 'react';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import styles from './Listbox.module.scss';
 

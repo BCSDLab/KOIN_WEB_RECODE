@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MenuCategory } from 'api/store/entity';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useMoveScroll from 'utils/hooks/useMoveScroll';
 import MENU_CATEGORY from 'static/menu';
 import styles from './MenuTable.module.scss';

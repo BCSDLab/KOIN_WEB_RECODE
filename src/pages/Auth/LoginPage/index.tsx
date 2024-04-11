@@ -7,9 +7,9 @@ import { useSetRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { auth } from 'api';
-import sha256 from 'utils/ts/SHA-256';
 import showToast from 'utils/ts/showToast';
-import { AxiosError } from 'axios';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import { sha256 } from '@bcsdlab/utils';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -42,8 +42,14 @@ const useLogin = (state: IsAutoLogin) => {
       setToken(data.token);
       navigate('/');
     },
-    onError: (error: AxiosError<{ message: string }>) => {
-      showToast('error', error.response?.data?.message || '로그인에 실패했습니다.');
+    onError: (error) => {
+      if (isKoinError(error)) {
+        // 추후에 코드별 에러 분기처리 진행
+        showToast('error', error.message || '로그인에 실패했습니다.');
+      } else {
+        sendClientError(error);
+        showToast('error', '로그인에 실패했습니다.');
+      }
     },
   });
 
