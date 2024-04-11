@@ -21,7 +21,7 @@ export default function EventCard({ event }: { event: StoreEvent }) {
     >
       {event.thumbnail_image ? (
         <img
-          src={event.thumbnail_image}
+          src={event.thumbnail_image[0]}
           alt={event.title}
           className={cn({
             [styles.eventThumbail]: true,

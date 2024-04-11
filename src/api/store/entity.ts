@@ -89,7 +89,7 @@ export interface StoreCategory {
 export interface StoreEvent {
   title : string;
   content : string
-  thumbnail_image : string;
+  thumbnail_image : string[];
   start_date : string;
   end_date : string;
 }
