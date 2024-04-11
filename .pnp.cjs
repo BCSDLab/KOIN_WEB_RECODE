@@ -71,6 +71,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-config-standard", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:26.0.0"],\
             ["stylelint-config-standard-scss", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.0.0"],\
             ["stylelint-selector-bem-pattern", "npm:2.1.1"],\
+            ["swiper", "npm:11.1.0"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=289587"],\
             ["web-vitals", "npm:2.1.4"]\
           ],\
@@ -12600,6 +12601,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-config-standard", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:26.0.0"],\
             ["stylelint-config-standard-scss", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.0.0"],\
             ["stylelint-selector-bem-pattern", "npm:2.1.1"],\
+            ["swiper", "npm:11.1.0"],\
             ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=289587"],\
             ["web-vitals", "npm:2.1.4"]\
           ],\
@@ -18401,6 +18403,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["csso", "npm:4.2.0"],\
             ["picocolors", "npm:1.0.0"],\
             ["stable", "npm:0.1.8"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["swiper", [\
+        ["npm:11.1.0", {\
+          "packageLocation": "./.yarn/cache/swiper-npm-11.1.0-f05fa79b37-c03a4f3dbf.zip/node_modules/swiper/",\
+          "packageDependencies": [\
+            ["swiper", "npm:11.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\

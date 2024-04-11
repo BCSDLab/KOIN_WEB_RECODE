@@ -1,0 +1,65 @@
+@use "src/utils/scss/media";
+
+.container {
+  margin-top: 20px;
+  width: 100%;
+  overflow: hidden;
+  height: 100px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100vw;
+    overflow: hidden;
+  }
+}
+
+.swipe-item {
+  width: 100%;
+  height: 100px;
+  color: #fff;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding-left: 6px;
+  box-sizing: border-box;
+  border: none;
+  cursor: pointer;
+
+  @include media.media-breakpoint(mobile) {
+    height: 80px;
+  }
+
+  &__image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  &__name {
+    font-weight: bold;
+  }
+
+  &__nowrap {
+    white-space: nowrap;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.swiperSize {
+  width: 30%;
+
+  @include media.media-breakpoint(mobile) {
+    width: 60%;
+  }
+}
