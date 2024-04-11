@@ -18,15 +18,15 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
-import useDeptList from './hooks/useDeptList';
+import useDeptList from 'components/TimetablePage/hooks/useDeptList';
+import useSemester from 'components/TimetablePage/hooks/useSemester';
+import { useSelect, useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
+import useLectureList from 'components/TimetablePage/hooks/useLectureList';
+import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
+import useAddTimetableLecture from 'components/TimetablePage/hooks/useAddTimetableLecture';
+import useDeleteTimetableLecture from 'components/TimetablePage/hooks/useDeleteTimetableLecture';
+import useVersionInfo from 'components/TimetablePage/hooks/useVersionInfo';
 import styles from './DefaultPage.module.scss';
-import useSemester from './hooks/useSemester';
-import { useSelect, useSelectRecoil } from './hooks/useSelect';
-import useLectureList from './hooks/useLectureList';
-import useTimetableInfoList from './hooks/useTimetableInfoList';
-import useAddTimetableLecture from './hooks/useAddTimetableLecture';
-import useDeleteTimetableLecture from './hooks/useDeleteTimetableLecture';
-import useVersionInfo from './hooks/useVersionInfo';
 
 const useSearch = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);

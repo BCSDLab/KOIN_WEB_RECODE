@@ -1,7 +1,7 @@
 import type { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import { FixedSizeList as List } from 'react-window';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
