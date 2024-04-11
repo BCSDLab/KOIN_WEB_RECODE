@@ -58,7 +58,7 @@ export default function EventCard({ event }: { event: StoreEvent }) {
         >
           {event.content}
         </div>
-        <div className={styles.eventUpdatedAt}>{event.start_date}</div>
+        <div className={styles.eventUpdatedAt}>{event.start_date.replace(/-/g, '.')}</div>
       </div>
     </div>
   );
