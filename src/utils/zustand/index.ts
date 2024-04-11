@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-// eslint-disable-next-line import/extensions
 import { persist } from 'zustand/middleware';
 import { getCookie, setCookie } from 'utils/ts/cookie';
 import { auth } from 'api';

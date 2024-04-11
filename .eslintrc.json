@@ -43,6 +43,13 @@
           ]
         }
       ],
+      "import/extensions": ["error", "ignorePackages", {
+        "mts": "never",
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }],
       "react/react-in-jsx-scope": "off",
       "max-classes-per-file": "off",
       "class-methods-use-this": "off",
