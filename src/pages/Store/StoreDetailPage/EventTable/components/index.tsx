@@ -19,9 +19,9 @@ export default function EventCard({ event }: { event: StoreEvent }) {
         [styles['eventCard--nonHidden']]: hiddenInfo === false,
       })}
     >
-      {event.thumbnail_image ? (
+      {event.thumbnail_images ? (
         <img
-          src={event.thumbnail_image[0]}
+          src={event.thumbnail_images[0]}
           alt={event.title}
           className={cn({
             [styles.eventThumbail]: true,
