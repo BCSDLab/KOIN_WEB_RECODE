@@ -309,6 +309,7 @@
   &__item {
     display: block;
     border: 1px #175c8e solid;
+    border-radius: 5px;
     padding: 22px 27px;
     cursor: pointer;
     position: relative;
@@ -316,7 +317,23 @@
     text-decoration: none;
 
     &:hover {
-      border: 1px #f7941e solid;
+      border: 1px #175c8e solid;
+    }
+
+    &--event {
+      position: absolute;
+      top: -12px;
+      left: 5px;
+      border: 1px solid #6dbbdd;
+      border-radius: 100px;
+      color: #6dbbdd;
+      width: 60px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      font-size: 10px;
     }
 
     @include media.media-breakpoint(mobile) {
@@ -330,7 +347,7 @@
       flex: none;
 
       &:hover {
-        border: 1px #f7941e solid;
+        border: 1px #175c8e solid;
       }
     }
   }
@@ -409,12 +426,22 @@
 }
 
 .store-none-open {
-  background-color: rgba(0 0 0 / 40%);
+  background-color: rgba(4 26 68 / 40%);
+  backdrop-filter: blur(3px);
+  border-radius: 5px;
   width: 100%;
   height: 100%;
   position: absolute;
   left: 0;
   top: 0;
+  display: flex;
+  align-items: center;
+  color: #fff;
+
+  &__name {
+    color: #fccc77;
+    margin-left: 15px;
+  }
 
   &::after {
     // font-family: NotoSansCJKKR;추가 요망
@@ -425,12 +452,10 @@
     font-size: 20px;
     font-weight: 500;
     color: #fff;
-    content: "준비중";
-    justify-content: center;
-    align-items: center;
 
     @include media.media-breakpoint(mobile) {
       font-size: 15px;
+      border-radius: 5px;
     }
   }
 }
@@ -445,18 +470,18 @@
   }
 
   &__option {
-    border: 1px #f7941e solid;
+    border: 1px #175c8e solid;
     margin-right: 4px;
     font-size: 11px;
     border-radius: 20px;
     padding: 5px 10px;
-    background: #f7931e;
+    background: #175c8e;
     color: white;
 
     @include media.media-breakpoint(mobile) {
       font-size: 11px;
       background: transparent;
-      color: #f7931e;
+      color: #175c8e;
       margin: 0 6px;
       padding: 0;
       border: 0;

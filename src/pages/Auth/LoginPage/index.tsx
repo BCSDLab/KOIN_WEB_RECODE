@@ -1,15 +1,14 @@
 import React from 'react';
 import { LoginResponse } from 'api/auth/entity';
-import { tokenState } from 'utils/recoil';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import { useSetRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { auth } from 'api';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
+import { useTokenStore } from 'utils/zustand';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -29,12 +28,12 @@ interface UserInfo {
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 
 const useLogin = (state: IsAutoLogin) => {
-  const setToken = useSetRecoilState(tokenState);
+  const { setToken, setRefreshToken } = useTokenStore();
   const navigate = useNavigate();
   const postLogin = useMutation(auth.login, {
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
-        localStorage.setItem('AUTH_REFRESH_TOKEN_KEY', data.refresh_token);
+        setRefreshToken(data.refresh_token);
         setCookie('AUTH_TOKEN_KEY', data.token, 3);
       } else {
         setCookie('AUTH_TOKEN_KEY', data.token, 0);

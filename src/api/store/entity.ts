@@ -68,6 +68,7 @@ export type StoreList = {
   pay_bank: boolean;
   open: Open[];
   category_ids: number[];
+  is_event: boolean;
 };
 
 export interface StoreListResponse extends APIResponse {
@@ -84,4 +85,30 @@ export interface StoreCategory {
   id: number;
   name: string;
   image_url: string;
+}
+
+export interface StoreEvent {
+  shop_id: number,
+  shop_name: string,
+  title: string,
+  content: string,
+  thumbnail_images: string[],
+  start_date: string,
+  end_date: string,
+}
+
+export interface AllStoreEventResponse extends APIResponse {
+  events: {
+    shop_id: number,
+    shop_name: string,
+    title: string,
+    content: string,
+    thumbnail_images: string[],
+    start_date: string,
+    end_date: string,
+  }[]
+}
+
+export interface StoreEventListResponse extends APIResponse {
+  events : StoreEvent[];
 }
