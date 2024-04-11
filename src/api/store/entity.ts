@@ -88,13 +88,27 @@ export interface StoreCategory {
 }
 
 export interface StoreEvent {
-  title : string;
-  content : string
-  thumbnail_images : string[];
-  start_date : string;
-  end_date : string;
+  shop_id: number,
+  shop_name: string,
+  title: string,
+  content: string,
+  thumbnail_images: string[],
+  start_date: string,
+  end_date: string,
 }
 
 export interface AllStoreEventResponse extends APIResponse {
-  events: StoreEvent[]
+  events: {
+    shop_id: number,
+    shop_name: string,
+    title: string,
+    content: string,
+    thumbnail_images: string[],
+    start_date: string,
+    end_date: string,
+  }[]
+}
+
+export interface StoreEventListResponse extends APIResponse {
+  events : StoreEvent[];
 }
