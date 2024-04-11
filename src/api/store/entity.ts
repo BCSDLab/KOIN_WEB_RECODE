@@ -112,3 +112,15 @@ export interface StoreCategory {
   name: string;
   image_url: string;
 }
+
+export interface AllStoreEventResponse extends APIResponse {
+  events: {
+    shop_id: number,
+    shop_name: string,
+    title: string,
+    content: string,
+    thumbnail_images: string[],
+    start_date: string,
+    end_date: string,
+  }[]
+}
