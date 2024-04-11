@@ -6,6 +6,7 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
+import useLogger from 'utils/hooks/useLogger';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import showToast from 'utils/ts/showToast';
@@ -23,7 +24,14 @@ function StoreDetailPage() {
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
-
+  const logger = useLogger();
+  const onClickCallNumber = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    logger.click({
+      title: 'store_detail_call_number',
+      value: storeDetail!.phone,
+    });
+  };
   const onClickImage = (img: string[], index: number) => {
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -110,6 +118,7 @@ function StoreDetailPage() {
                   role="button"
                   aria-label="상점 전화하기"
                   href={`tel:${storeDetail?.phone}`}
+                  onClick={(e) => onClickCallNumber(e)}
                 >
                   전화하기
                 </a>
