@@ -37,7 +37,7 @@ export default function EventCarousel() {
                 onClick={() => navigate(`/store/${item.shop_id}`)}
               >
                 <img
-                  src={item.thumbnail_images[0] || ''}
+                  src={item.thumbnail_images[0] || 'https://static.koreatech.in/assets/img/empty-thumbnail.png'}
                   alt="가게 이미지"
                   className={styles['swipe-item__image']}
                 />

@@ -24,6 +24,7 @@
   padding-left: 6px;
   box-sizing: border-box;
   border: none;
+  cursor: pointer;
 
   @include media.media-breakpoint(mobile) {
     height: 80px;
