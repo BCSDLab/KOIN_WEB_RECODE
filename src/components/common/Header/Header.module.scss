@@ -366,6 +366,21 @@
       width: 33px;
       height: 33px;
     }
+
+    &--contact {
+      left: 16px;
+      bottom: 27px;
+      font-weight: 500;
+      color: #252525;
+      font-size: 15px;
+      text-decoration: none;
+
+      &:hover {
+        color: #f7941e;
+        font-weight: 700;
+        outline: none;
+      }
+    }
   }
 }
 

@@ -17,6 +17,8 @@ const ID: { [key: string]: string; } = {
   LABEL2: 'megamenu-label-2',
 };
 
+const INQUIRY_LINK_URL = 'https://docs.google.com/forms/d/1VEuxVK9ioVRZN36eb6m0UClyTJwW4lYiKLWcaQw2JzQ/edit';
+
 const useMegaMenu = (category: Category[]) => {
   const [panelMenuList, setPanelMenuList] = useState<SubMenu[] | null>();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -226,6 +228,18 @@ function Header() {
                     src="https://image.bcsdlab.com/favicon.ico"
                     alt="bcsd lab logo"
                   />
+                  <div
+                    className={
+                      cn({
+                        [styles.mobileheader__logo]: true,
+                        [styles['mobileheader__logo--contact']]: true,
+                      })
+                    }
+                  >
+                    <Link to={INQUIRY_LINK_URL}>
+                      문의하기
+                    </Link>
+                  </div>
                   <img
                     className={cn({
                       [styles.mobileheader__logo]: true,
