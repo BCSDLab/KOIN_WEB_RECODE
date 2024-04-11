@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ReactComponent as SeeInfoArrow } from 'assets/svg/see-info-arrow.svg';
 import { ReactComponent as HiddenInfoArrow } from 'assets/svg/hidden-info-arrow.svg';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import { StoreEvent } from 'api/store/entity';
 import styles from './EventCard.module.scss';
 
