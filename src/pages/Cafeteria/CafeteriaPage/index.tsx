@@ -51,9 +51,19 @@ const useDatePicker = () => {
   };
 };
 
+const getType = () => {
+  const hour = new Date().getHours();
+  if (hour < 9) {
+    return ['아침', 'BREAKFAST'];
+  } if (hour < 14) {
+    return ['점심', 'LUNCH'];
+  }
+  return ['저녁', 'DINNER'];
+};
+
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
-  const [mealTime, setMealTime] = useState<string>(CAFETERIA_TIME[0].type);
+  const [mealTime, setMealTime] = useState<string>(getType()[1]);
   const [photoData, setPhotoData] = useState<Photo>({ isOpen: false, url: '' });
   const {
     value: currentDate,
