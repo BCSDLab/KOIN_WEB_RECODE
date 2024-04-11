@@ -6,16 +6,13 @@ interface UpdateInfoProps {
 }
 
 function UpdateInfo({ date }: UpdateInfoProps) {
-  // 날짜 형식을 YYYY.MM.DD로 변경
-  const formattedDate = date ? date.replace(/-/g, '.') : null;
-
   return (
     <div className={styles.update}>
       {date
         ? (
           <div className={styles['update--box']}>
             <UpdateIcon />
-            <div className={styles['update--text']}>{`${formattedDate} 업데이트`}</div>
+            <div className={styles['update--text']}>{`${date.replace(/-/g, '.')} 업데이트`}</div>
           </div>
         )
 
