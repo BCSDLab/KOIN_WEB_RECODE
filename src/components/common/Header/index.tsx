@@ -228,14 +228,7 @@ function Header() {
                     src="https://image.bcsdlab.com/favicon.ico"
                     alt="bcsd lab logo"
                   />
-                  <div
-                    className={
-                      cn({
-                        [styles.mobileheader__logo]: true,
-                        [styles['mobileheader__logo--contact']]: true,
-                      })
-                    }
-                  >
+                  <div className={styles.mobileheader__inquiry}>
                     <Link to={INQUIRY_LINK_URL}>
                       문의하기
                     </Link>

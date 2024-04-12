@@ -107,6 +107,7 @@
 
 .mobileheader {
   display: block;
+  position: relative;
   width: 100%;
   height: 100%;
   padding: 16px;
@@ -366,21 +367,16 @@
       width: 33px;
       height: 33px;
     }
+  }
 
-    &--contact {
-      left: 16px;
-      bottom: 27px;
-      font-weight: 500;
-      color: #252525;
-      font-size: 15px;
-      text-decoration: none;
-
-      &:hover {
-        color: #f7941e;
-        font-weight: 700;
-        outline: none;
-      }
-    }
+  &__inquiry {
+    position: absolute;
+    left: 20px;
+    bottom: 27px;
+    font-weight: 600;
+    color: #175c8e;
+    font-size: 15px;
+    text-decoration: none;
   }
 }
 
