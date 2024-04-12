@@ -81,7 +81,7 @@ export default function MenuBlock({ menu, mealTime, category }:Props) {
               <button
                 className={styles['category__menu-photo']}
                 type="button"
-                onClick={() => handlePhoto(currentMenu.image_url ?? '')}
+                onClick={() => currentMenu.image_url && handlePhoto(currentMenu.image_url)}
               >
                 {currentMenu.soldout_at && (
                   <div className={styles['category__menu-photo--soldOut']}>
