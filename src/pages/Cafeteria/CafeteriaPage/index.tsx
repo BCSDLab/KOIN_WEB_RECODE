@@ -3,19 +3,16 @@ import { cn } from '@bcsdlab/utils';
 import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
 import { convertDateToSimpleString, formatKoreanDateString } from 'utils/ts/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as NoPhoto } from 'assets/svg/no_photography.svg';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
 import { ReactComponent as NoMeal } from 'assets/svg/no_meals.svg';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useModalPortal from 'utils/hooks/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
 import styles from './CafeteriaPage.module.scss';
 import useCafeteriaList from './hooks/useCafeteriaList';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
-
-interface Photo {
-  isOpen: boolean;
-  url: string;
-}
 
 const DATE_KEY = 'date';
 const useDatePicker = () => {
@@ -63,34 +60,35 @@ const getType = () => {
 
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
+  const portalManager = useModalPortal();
   const [mealTime, setMealTime] = useState<string>(getType()[1]);
-  const [photoData, setPhotoData] = useState<Photo>({ isOpen: false, url: '' });
   const {
     value: currentDate,
     setPrev: onClickPrevArrow,
     setNext: onClickNextArrow,
     setDate: onClickDate,
   } = useDatePicker();
-  const { data } = useCafeteriaList(
+  const { data: cafeteriaMenu } = useCafeteriaList(
     convertDateToSimpleString(currentDate),
   );
   useScrollToTop();
 
-  const handlePhoto = (url:string | null) => {
-    if (url) setPhotoData({ isOpen: true, url });
+  const handlePhoto = (url: string) => {
+    portalManager.open((portalOption: Portal) => (
+      <div className={styles.photo}>
+        <div className={styles.photo__close}>
+          <CloseIcon onClick={portalOption.close} />
+        </div>
+        <img src={url} alt="mealDetail" />
+      </div>
+    ));
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
 
   return (
     <div className={styles.page}>
-      {photoData.isOpen
-        && (
-          <div className={styles.photo}>
-            <div className={styles.photo__close}>
-              <CloseIcon onClick={() => setPhotoData({ isOpen: false, url: '' })} />
-            </div>
-            <img src={photoData.url} alt="" />
-          </div>
-        )}
       <div className={styles.page__content} key={currentDate.toISOString()}>
         <div className={styles.header}>
           {isMobile && <WeeklyDatePicker currentDate={currentDate} setDate={onClickDate} />}
@@ -144,11 +142,11 @@ function CafeteriaPage() {
         {isMobile
           ? (
             <div className={styles.page__table}>
-              {data?.find((element) => element.type === mealTime)
+              {cafeteriaMenu?.find((element) => element.type === mealTime)
                 ? CAFETERIA_CATEGORY.map((cafeteriaCategory) => (
                   <div className={styles.category} key={cafeteriaCategory.id}>
                     {(function Meal() {
-                      const currentTimeMenu = data ? Array.from(data).find(
+                      const currentTimeMenu = cafeteriaMenu ? Array.from(cafeteriaMenu).find(
                         (value) => value.place === cafeteriaCategory.placeName
                       && value.type === mealTime,
                       ) : undefined;
@@ -195,7 +193,7 @@ function CafeteriaPage() {
                             <button
                               className={styles['category__menu-photo']}
                               type="button"
-                              onClick={() => handlePhoto(currentTimeMenu.image_url)}
+                              onClick={() => handlePhoto(currentTimeMenu.image_url ?? '')}
                             >
                               {currentTimeMenu.soldout_at && (
                               <div className={styles['category__menu-photo--soldOut']}>
@@ -234,7 +232,7 @@ function CafeteriaPage() {
                   </div>
                   <ul className={styles['category__menu-list-row']}>
                     {CAFETERIA_TIME.map((time) => {
-                      const currentTimeMenu = data ? Array.from(data).find(
+                      const currentTimeMenu = cafeteriaMenu ? Array.from(cafeteriaMenu).find(
                         (value) => value.place === cafeteriaCategory.placeName
                       && value.type === time.type,
                       ) : undefined;
