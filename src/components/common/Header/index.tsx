@@ -17,7 +17,7 @@ const ID: { [key: string]: string; } = {
   LABEL2: 'megamenu-label-2',
 };
 
-const INQUIRY_LINK_URL = 'https://docs.google.com/forms/d/1VEuxVK9ioVRZN36eb6m0UClyTJwW4lYiKLWcaQw2JzQ/edit';
+const INQUIRY_LINK_URL = 'https://forms.gle/hE4VMchTZuff5rLB7';
 
 const useMegaMenu = (category: Category[]) => {
   const [panelMenuList, setPanelMenuList] = useState<SubMenu[] | null>();
@@ -211,7 +211,7 @@ function Header() {
                               className={styles['mobileheader__sub-menu']}
                               key={subMenu.title}
                             >
-                              <Link to={subMenu.link}>
+                              <Link to={subMenu.link} target={subMenu.openInNewTab ? '_blank' : '_self'}>
                                 {subMenu.title}
                               </Link>
                             </li>
