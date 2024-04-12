@@ -2,7 +2,7 @@
 import React, { useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
-import { cn } from '@bcsdlab/utils';
+import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { DeptListResponse, IDept } from 'api/dept/entity';
 import useTokenState from 'utils/hooks/useTokenState';
@@ -17,6 +17,8 @@ import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
+
+const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
 
 const PHONENUMBER_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
 
@@ -142,6 +144,62 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
 };
 
 type ICustomFormInputProps = Omit<RegisterReturn, 'ref'>;
+
+const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
+  name,
+  required,
+}, ref) => {
+  const [password, setPassword] = React.useState('');
+  const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
+  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+    let valid: string | true = true;
+
+    if (password === '' && passwordConfirmValue === '') {
+      return { valid, value: password };
+    }
+
+    if (password !== passwordConfirmValue) {
+      valid = '입력하신 비밀번호가 일치하지 않습니다.';
+    } else if (password.length < 6 || password.length > 18) {
+      valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
+    } else if (!PASSWORD_REGEX.test(password)) {
+      valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
+    }
+    return {
+      valid,
+      value: password,
+    };
+  }, [password, passwordConfirmValue]);
+  return (
+    <>
+      <input
+        className={cn({
+          [styles['form-input']]: true,
+          [styles['form-input--invalid']]: password.trim() !== '' && password !== passwordConfirmValue,
+        })}
+        type="password"
+        autoComplete="new-password"
+        placeholder="비밀번호 (필수)"
+        onChange={(e) => setPassword(e.target.value)}
+        required={required}
+        name={name}
+      />
+      <span className={styles.modify__advice}>
+        비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
+      </span>
+      <input
+        className={styles['form-input']}
+        type="password"
+        onChange={(e) => setPasswordConfirmValue(e.target.value)}
+        autoComplete="new-password"
+        placeholder="비밀번호 확인 (필수)"
+      />
+      <span className={styles.modify__advice}>
+        비밀번호를 입력하지 않으면 기존 비밀번호를 유지합니다.
+      </span>
+    </>
+  );
+});
 
 const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((
   props,
@@ -396,6 +454,9 @@ const useModifyInfoForm = () => {
       phone_number: formValue['phone-number'] || undefined,
       is_graduated: false,
     };
+    if ((formValue.password.trim()).length > 0) {
+      payload.password = await sha256(formValue.password);
+    }
     mutate(payload);
   };
   return { submitForm, status };
@@ -438,6 +499,7 @@ function ModifyInfoPage() {
         <span className={styles.modify__advice}>
           계정명은 변경하실 수 없습니다.
         </span>
+        <PasswordForm {...register('password')} />
         <input
           className={styles['form-input']}
           type="text"
