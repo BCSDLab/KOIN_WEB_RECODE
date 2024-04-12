@@ -3,16 +3,12 @@ import { cn } from '@bcsdlab/utils';
 import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
 import { convertDateToSimpleString, formatKoreanDateString } from 'utils/ts/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { useEffect, useState } from 'react';
-import { ReactComponent as NoPhoto } from 'assets/svg/no_photography.svg';
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
-import { ReactComponent as NoMeal } from 'assets/svg/no_meals.svg';
+import { useState } from 'react';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import useModalPortal from 'utils/hooks/useModalPortal';
-import { Portal } from 'components/common/Modal/PortalProvider';
 import styles from './CafeteriaPage.module.scss';
 import useCafeteriaList from './hooks/useCafeteriaList';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
+import MenuBlock from './components/MenuBlock';
 
 const DATE_KEY = 'date';
 const useDatePicker = () => {
@@ -60,7 +56,6 @@ const getType = () => {
 
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
-  const portalManager = useModalPortal();
   const [mealTime, setMealTime] = useState<string>(getType()[1]);
   const {
     value: currentDate,
@@ -72,20 +67,6 @@ function CafeteriaPage() {
     convertDateToSimpleString(currentDate),
   );
   useScrollToTop();
-
-  const handlePhoto = (url: string) => {
-    portalManager.open((portalOption: Portal) => (
-      <div className={styles.photo}>
-        <div className={styles.photo__close}>
-          <CloseIcon onClick={portalOption.close} />
-        </div>
-        <img src={url} alt="mealDetail" />
-      </div>
-    ));
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
 
   return (
     <div className={styles.page}>
@@ -143,82 +124,17 @@ function CafeteriaPage() {
           ? (
             <div className={styles.page__table}>
               {cafeteriaMenu?.find((element) => element.type === mealTime)
-                ? CAFETERIA_CATEGORY.map((cafeteriaCategory) => (
-                  <div className={styles.category} key={cafeteriaCategory.id}>
-                    {(function Meal() {
-                      const currentTimeMenu = cafeteriaMenu ? Array.from(cafeteriaMenu).find(
-                        (value) => value.place === cafeteriaCategory.placeName
-                      && value.type === mealTime,
-                      ) : undefined;
-
-                      if (!currentTimeMenu || currentTimeMenu.menu.includes('미운영')) return null;
-                      return (
-                        <ul className={styles['category__menu-list-row']}>
-                          <div className={styles.category__header}>
-                            <div className={styles.category__type}>
-                              <div className={styles['category__type--title']}>
-                                {cafeteriaCategory.placeName}
-                                <div className={styles.category__calorie}>
-                                  {currentTimeMenu?.kcal ?? 0}
-                                  Kcal •
-                                </div>
-                                <div className={styles.category__price}>
-                                  {`${currentTimeMenu?.price_cash ?? 0}원/ ${currentTimeMenu?.price_card ?? 0}원`}
-                                </div>
-                              </div>
-                              <div className={cn({
-                                [styles.category__block]: true,
-                                [styles['category__block--soldOut']]: !!currentTimeMenu.soldout_at,
-                                [styles['category__block--changed']]: !currentTimeMenu.soldout_at && !!currentTimeMenu.changed_at,
-                              })}
-                              >
-                                {!currentTimeMenu.soldout_at && !!currentTimeMenu.changed_at
-                                  ? '변경됨' : '품절'}
-                              </div>
-                            </div>
-                          </div>
-                          <li className={styles['category__menu-list']}>
-                            {currentTimeMenu ? (
-                              <ul>
-                                {currentTimeMenu.menu.map((menuName) => (
-                                  <li
-                                    className={styles.category__menu}
-                                    key={menuName}
-                                  >
-                                    {menuName}
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : undefined}
-                            <button
-                              className={styles['category__menu-photo']}
-                              type="button"
-                              onClick={() => handlePhoto(currentTimeMenu.image_url ?? '')}
-                            >
-                              {currentTimeMenu.soldout_at && (
-                              <div className={styles['category__menu-photo--soldOut']}>
-                                <NoMeal />
-                                품절된 메뉴입니다.
-                              </div>
-                              )}
-                              {currentTimeMenu?.image_url
-                                ? <img src={currentTimeMenu?.image_url || ''} alt="" />
-                                : (
-                                  <div className={styles['category__menu-photo--none']}>
-                                    <NoPhoto />
-                                    사진 없음
-                                  </div>
-                                )}
-                            </button>
-                          </li>
-                        </ul>
-                      );
-                    }())}
-                  </div>
-                )) : (
-                  <div className={styles.category__empty}>
-                    현재 조회 가능한 식단 정보가 없습니다.
-                  </div>
+                ? CAFETERIA_CATEGORY
+                  .map((cafeteriaCategory) => (
+                    <MenuBlock
+                      menu={cafeteriaMenu}
+                      mealTime={mealTime}
+                      category={cafeteriaCategory}
+                    />
+                  )) : (
+                    <div className={styles.category__empty}>
+                      현재 조회 가능한 식단 정보가 없습니다.
+                    </div>
                 )}
             </div>
           ) : (
