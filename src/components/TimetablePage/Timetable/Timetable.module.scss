@@ -43,15 +43,9 @@
     &--time {
       & > div {
         display: flex;
-        text-align: center;
-        justify-content: center;
+        padding-left: 3px;
         align-items: center;
-      }
-
-      & > div > div:first-child {
-        display: inline-block;
-        text-align: center;
-        border-right: #dadada 1px solid;
+        font-family: arial;
       }
     }
   }

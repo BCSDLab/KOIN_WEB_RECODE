@@ -6,7 +6,6 @@ import { TimetableDayLectureInfo } from 'interfaces/Lecture';
 import {
   BACKGROUND_COLOR,
   DAYS_STRING,
-  TIME_ALIAS,
   TIME_STRING,
 } from 'static/timetable';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -59,7 +58,7 @@ function Timetable({
       </div>
       <div className={styles.timetable__content}>
         <div className={styles['timetable__row-container']} aria-hidden="true">
-          {TIME_ALIAS.map((value) => (
+          {TIME_STRING.map((value) => (
             <div
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
@@ -73,16 +72,13 @@ function Timetable({
             [styles.timetable__col]: true,
             [styles['timetable__col--time']]: true,
           })}
-          style={{ width: `${firstColWidth}px` }}
+          style={{ width: `${firstColWidth}px`, fontSize: `${firstColWidth / 4}px` }}
           aria-hidden="true"
         >
-          {TIME_ALIAS.map((value, timeIndex) => (
+          {TIME_STRING.map((value) => (
             <div style={{ height: `${rowHeight}px` }} key={value}>
               <div>
                 {value}
-              </div>
-              <div>
-                {TIME_STRING[timeIndex]}
               </div>
             </div>
           ))}
