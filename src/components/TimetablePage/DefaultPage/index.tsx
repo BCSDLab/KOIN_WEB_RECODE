@@ -157,10 +157,6 @@ function CurrentSemesterLectureList({
               return;
             }
             const myLecturesValue = token ? myLecturesFromServer : myLecturesFromLocalStorageValue;
-            if (myLecturesValue?.some((lecture) => lecture.code === clickedLecture.code)) {
-              showToast('error', '중첩된 과목입니다.');
-              return;
-            }
             const myLectureTimeValue = (
               myLecturesValue as Array<LectureInfo | TimetableLectureInfo>)
               .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
