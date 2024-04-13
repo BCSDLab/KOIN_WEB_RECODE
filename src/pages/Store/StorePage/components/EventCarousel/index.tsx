@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/scss';
 // eslint-disable-next-line
 import 'swiper/scss/autoplay'
-// import { useNavigate } from 'react-router-dom';
+import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import { useGetAllEvents } from 'pages/Store/StorePage/components/hooks/useGetAllEvents';
 import { useNavigate } from 'react-router-dom';
 import styles from './EventCarousel.module.scss';
@@ -24,9 +24,9 @@ export default function EventCarousel() {
           spaceBetween={30}
           rewind
           autoplay={{
-            delay: 2000,
+            delay: 1000000000,
           }}
-          centeredSlides
+          // centeredSlides
         >
           {carousel && carousel.map(((item, idx) => (
             <SwiperSlide key={item.title} className={styles.swiperSize}>
@@ -36,17 +36,23 @@ export default function EventCarousel() {
                 style={{ backgroundColor: `${colors[Math.abs(((idx + 1) % 4) - 2)]}` }}
                 onClick={() => navigate(`/store/${item.shop_id}`)}
               >
-                <img
-                  src={item.thumbnail_images[0] || 'https://static.koreatech.in/assets/img/empty-thumbnail.png'}
-                  alt="가게 이미지"
-                  className={styles['swipe-item__image']}
-                />
+                {item.thumbnail_images.length > 0 ? (
+                  <img
+                    src={item.thumbnail_images[0]}
+                    alt="가게 이미지"
+                    className={styles['swipe-item__image']}
+                  />
+                ) : (
+                  <div className={styles['swipe-item__empty-image']}>
+                    <EmptyImageIcon />
+                  </div>
+                ) }
                 <div className={styles['swipe-item__text']}>
                   <div style={{ textAlign: 'start' }}>
                     <span className={styles['swipe-item__name']}>
                       {item.title}
                     </span>
-                    에서
+                    {' 에서'}
                   </div>
                   <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>
                 </div>
