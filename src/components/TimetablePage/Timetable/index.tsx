@@ -104,7 +104,7 @@ function Timetable({
                 className={styles.timetable__lecture}
                 key={lectureIndex}
                 style={{
-                  backgroundColor: BACKGROUND_COLOR[lectureIndex],
+                  backgroundColor: BACKGROUND_COLOR[lectureIndex % 11],
                   top: `${start * rowHeight}px`,
                   width: isMobile ? undefined : `${colWidth}px`,
                   height: `${(end - start + 1) * rowHeight}px`,
