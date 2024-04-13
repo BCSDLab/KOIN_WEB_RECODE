@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MenuCategory } from 'api/store/entity';
+import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import { cn } from '@bcsdlab/utils';
 import useMoveScroll from 'utils/hooks/useMoveScroll';
 import MENU_CATEGORY from 'static/menu';
@@ -66,10 +67,9 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                       </div>
                     ))) : (
                       <div className={styles['empty-image']}>
-                        <img
-                          src="https://static.koreatech.in/assets/img/empty-thumbnail.png"
-                          alt="KOIN service logo"
-                        />
+                        <div>
+                          <EmptyImageIcon />
+                        </div>
                       </div>
                   )}
                   <div className={styles['menu-info__card']}>
@@ -98,10 +98,9 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                         </div>
                       ))) : (
                         <div className={styles['empty-image']}>
-                          <img
-                            src="https://static.koreatech.in/assets/img/empty-thumbnail.png"
-                            alt="KOIN service logo"
-                          />
+                          <div>
+                            <EmptyImageIcon />
+                          </div>
                         </div>
                     )}
                     <div className={styles['menu-info__card']}>
