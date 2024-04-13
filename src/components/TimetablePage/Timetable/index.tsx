@@ -136,7 +136,7 @@ function Timetable({
                 })}
                 key={lectureIndex}
                 style={{
-                  borderWidth: selectedLectureIndex === lectureIndex ? '3px' : '1px',
+                  borderWidth: selectedLectureIndex === lectureIndex ? '2px' : '1px',
                   top: `${start * rowHeight}px`,
                   width: isMobile ? undefined : `${colWidth}px`,
                   height: `${(end - start + 1) * rowHeight}px`,
