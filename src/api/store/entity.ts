@@ -45,8 +45,7 @@ interface MultiPriceMenu extends MenuBase {
 
 export type Menu = SinglePriceMenu | MultiPriceMenu;
 
-// 추후 추천, 메인, 세트, 사이드로 변경 예정
-export type MenuCategoryName = '이벤트 메뉴' | '대표 메뉴' | '사이드 메뉴' | '세트 메뉴';
+export type MenuCategoryName = '추천 메뉴' | '메인 메뉴' | '사이드 메뉴' | '세트 메뉴';
 export interface MenuCategory {
   id: number;
   name: MenuCategoryName;
