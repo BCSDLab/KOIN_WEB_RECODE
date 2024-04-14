@@ -15,7 +15,7 @@ interface TimetableProps {
   lectures: TimetableDayLectureInfo[][];
   selectedLectureIndex?: number;
   similarSelectedLecture?: TimetableDayLectureInfo[][];
-  firstColWidth: number;
+  firstColumnWidth: number;
   colWidth: number;
   rowHeight: number;
   totalHeight: number;
@@ -27,7 +27,7 @@ function Timetable({
   lectures,
   selectedLectureIndex,
   similarSelectedLecture,
-  firstColWidth,
+  firstColumnWidth,
   colWidth,
   rowHeight,
   totalHeight,
@@ -41,7 +41,7 @@ function Timetable({
             [styles.timetable__col]: true,
             [styles['timetable__col--head']]: true,
           })}
-          style={{ width: `${firstColWidth}px` }}
+          style={{ width: `${firstColumnWidth}px` }}
         />
         {DAYS_STRING.map((day) => (
           <div
@@ -72,7 +72,7 @@ function Timetable({
             [styles.timetable__col]: true,
             [styles['timetable__col--time']]: true,
           })}
-          style={{ width: `${firstColWidth}px`, fontSize: `${firstColWidth / 4}px` }}
+          style={{ width: `${firstColumnWidth}px`, fontSize: `${firstColumnWidth / 4}px` }}
           aria-hidden="true"
         >
           {TIME_STRING.map((value) => (

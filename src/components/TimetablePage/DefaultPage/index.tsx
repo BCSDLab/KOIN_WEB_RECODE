@@ -252,7 +252,7 @@ function CurrentSemesterTimetable(): JSX.Element {
       similarSelectedLecture={similarSelectedLectureDayList}
       selectedLectureIndex={selectedLectureIndex}
       colWidth={55}
-      firstColWidth={52}
+      firstColumnWidth={52}
       rowHeight={21}
       totalHeight={456}
     />

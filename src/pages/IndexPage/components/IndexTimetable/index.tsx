@@ -29,7 +29,7 @@ function CurrentSemesterTimetable(): JSX.Element {
     <Timetable
       lectures={myLectureDayValue}
       colWidth={40}
-      firstColWidth={42}
+      firstColumnWidth={42}
       rowHeight={16}
       totalHeight={369}
     />
