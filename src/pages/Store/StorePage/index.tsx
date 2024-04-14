@@ -77,7 +77,6 @@ const useStoreList = (params: StoreSearchQueryType) => {
 const getOpenCloseTime = (open_time: string | null, close_time: string | null) => {
   if (open_time === null && close_time === null) return '운영정보없음';
   if (open_time === '00:00' && close_time === '00:00') return '24시간 운영';
-
   return `${open_time}~${close_time}`;
 };
 
@@ -221,7 +220,7 @@ function StorePage() {
                   <EventIcon />
                 </div>
               )}
-            {isStoreOpen(
+            {store.open[getDayOfWeek()] && isStoreOpen(
               store.open[getDayOfWeek()].open_time,
               store.open[getDayOfWeek()].close_time,
             )
@@ -239,7 +238,7 @@ function StorePage() {
             <div className={styles['store-list__open-time']}>
               운영시간
               <span>
-                {getOpenCloseTime(
+                {store.open[getDayOfWeek()] && getOpenCloseTime(
                   store.open[getDayOfWeek()].open_time,
                   store.open[getDayOfWeek()].close_time,
                 )}
