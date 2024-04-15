@@ -9,11 +9,12 @@ import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
 import useLogger from 'utils/hooks/useLogger';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
+import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
-import styles from './StoreDetailPage.module.scss';
 import EventTable from './EventTable';
+import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
   const params = useParams();
@@ -145,8 +146,8 @@ function StoreDetailPage() {
               [styles['image--none']]: storeDetail?.image_urls.length === 0,
             })}
           >
-            {
-              storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
+            {storeDetail?.image_urls && storeDetail.image_urls.length > 0
+              ? (storeDetail.image_urls.map((img, index) => (
                 <div key={`${img}`} className={styles.image__content}>
                   <button
                     className={styles.image__button}
@@ -157,11 +158,15 @@ function StoreDetailPage() {
                     <img className={styles.image__poster} src={`${img}`} alt="상점이미지" />
                   </button>
                 </div>
-              ))
-            }
+              ))) : (
+                <div className={styles['empty-image']}>
+                  <div>
+                    <EmptyImageIcon />
+                  </div>
+                </div>
+              )}
           </div>
         </div>
-
         <div className={styles.tap}>
           <button
             className={cn({
