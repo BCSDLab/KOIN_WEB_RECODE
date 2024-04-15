@@ -8,7 +8,7 @@ import {
   selectedTempLectureSelector,
 } from 'utils/recoil/semester';
 import { useRecoilValue } from 'recoil';
-import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
+import Timetable from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
@@ -18,6 +18,7 @@ import useSemester from 'components/TimetablePage/hooks/useSemester';
 import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
 import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
+import useImageDownload from 'components/TimetablePage/hooks/useImageDownload';
 import styles from './MobilePage.module.scss';
 
 const useSemesterOptionList = () => {
@@ -89,6 +90,7 @@ function MobilePage() {
     value: semesterFilterValue,
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
+  const { onImageDownload: onTimetableImageDownload } = useImageDownload();
 
   return (
     <>
@@ -105,17 +107,7 @@ function MobilePage() {
           <button
             type="button"
             className={styles.page__button}
-            onClick={() => {
-              import('dom-to-image').then(({ default: domToImage }) => {
-                domToImage.toJpeg(document.getElementById(TIMETABLE_ID)!, { quality: 0.95 })
-                  .then((dataUrl: string) => {
-                    const link = document.createElement('a');
-                    link.download = 'my-image-name.jpeg';
-                    link.href = dataUrl;
-                    link.click();
-                  });
-              });
-            }}
+            onClick={onTimetableImageDownload}
           >
             <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
             이미지로 저장하기
