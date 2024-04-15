@@ -10,8 +10,8 @@
   width: 100%;
 
   @include media.media-breakpoint(mobile) {
-    width: calc(100% - 70px);
-    padding-left: 70px;
+    width: 81%;
+    padding-left: 19%;
   }
 }
 
