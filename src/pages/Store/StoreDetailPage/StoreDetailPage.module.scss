@@ -257,6 +257,30 @@
   }
 }
 
+.empty-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    width: 330px;
+    height: 330px;
+
+    svg {
+      width: 100px;
+      height: 100px;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+    }
+  }
+}
+
 .tap {
   display: grid;
   grid-template-columns: 1fr 1fr;

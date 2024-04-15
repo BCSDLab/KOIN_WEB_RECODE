@@ -32,6 +32,7 @@
   }
 
   &__button {
+    position: relative;
     width: 28px;
     height: 28px;
     display: flex;
@@ -44,6 +45,10 @@
     font-size: 15px;
     cursor: pointer;
 
+    &--today {
+      outline: 1px solid #175c8e;
+    }
+
     &--before {
       color: #8e8e8e;
     }
@@ -51,6 +56,14 @@
     &--selected {
       color: #fff;
       background-color: #175c8e;
+    }
+
+    &--selector {
+      position: absolute;
+      width: 12px;
+      height: 2px;
+      background-color: #175c8e;
+      top: 110%;
     }
   }
 }
