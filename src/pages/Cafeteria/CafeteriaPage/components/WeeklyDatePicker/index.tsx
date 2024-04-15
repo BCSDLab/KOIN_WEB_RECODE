@@ -70,12 +70,16 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
             <button
               className={cn({
                 [styles.picker__button]: true,
+                [styles['picker__button--today']]: dateFormat(addDays(viewDate, index - viewDate.getDay())) === dateFormat(),
                 [styles['picker__button--before']]: dateFormat(addDays(viewDate, index - viewDate.getDay())) < dateFormat(),
                 [styles['picker__button--selected']]: addDays(viewDate, index - viewDate.getDay()).toISOString() === currentDate.toISOString(),
               })}
               type="button"
               onClick={() => setDate(`${addDays(viewDate, index - viewDate.getDay())}`)}
             >
+              {addDays(viewDate, index - viewDate.getDay()).toISOString()
+                === currentDate.toISOString()
+              && <div className={styles['picker__button--selector']} />}
               {addDays(viewDate, index - viewDate.getDay()).getDate()}
             </button>
           </div>
