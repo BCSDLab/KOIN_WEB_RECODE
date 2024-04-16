@@ -26,7 +26,7 @@ import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInf
 import useAddTimetableLecture from 'components/TimetablePage/hooks/useAddTimetableLecture';
 import useDeleteTimetableLecture from 'components/TimetablePage/hooks/useDeleteTimetableLecture';
 import useVersionInfo from 'components/TimetablePage/hooks/useVersionInfo';
-import useImageDownload from 'components/TimetablePage/hooks/useImageDownload';
+import useImageDownload from 'utils/hooks/useImageDownload';
 import styles from './DefaultPage.module.scss';
 
 const useSearch = () => {

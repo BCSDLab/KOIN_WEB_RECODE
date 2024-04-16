@@ -18,7 +18,7 @@ import useSemester from 'components/TimetablePage/hooks/useSemester';
 import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
 import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
-import useImageDownload from 'components/TimetablePage/hooks/useImageDownload';
+import useImageDownload from 'utils/hooks/useImageDownload';
 import styles from './MobilePage.module.scss';
 
 const useSemesterOptionList = () => {
