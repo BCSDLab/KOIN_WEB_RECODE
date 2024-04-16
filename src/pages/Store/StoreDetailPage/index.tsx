@@ -6,8 +6,6 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
-import ImageErrorBoundary from 'components/common/ImageErrorBoundary';
-import ErrorDisplay from 'components/common/ErrorDisplay';
 import useLogger from 'utils/hooks/useLogger';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
@@ -163,7 +161,7 @@ function StoreDetailPage() {
                     type="button"
                     onClick={() => onClickImage(storeDetail!.image_urls, index)}
                   >
-                    <ImageErrorBoundary className={styles.image__poster} src={`${img}`} alt="상점이미지" fallback={<ErrorDisplay />} />
+                    <img className={styles.image__poster} src={`${img}`} alt="상점이미지" />
                   </button>
                 </div>
               ))) : (
