@@ -9,6 +9,11 @@ type ScrollLoggerProps = {
   title: string,
 };
 
+type ActionClickLoggerProps = {
+  title: string,
+  actionTitle: string,
+};
+
 const useLogger = () => {
   const click = ({
     title,
@@ -27,9 +32,19 @@ const useLogger = () => {
     });
   };
 
+  const actionEventClick = ({
+    actionTitle,
+    title,
+  }: ActionClickLoggerProps) => {
+    gtag.event({
+      action: actionTitle, category: 'button', label: title, value: title,
+    });
+  };
+
   return {
     click,
     scroll,
+    actionEventClick,
   };
 };
 
