@@ -382,7 +382,7 @@ function DefaultPage() {
             <button
               type="button"
               className={styles.page__button}
-              onClick={onTimetableImageDownload}
+              onClick={() => onTimetableImageDownload('my-timetable')}
             >
               <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
               이미지로 저장하기

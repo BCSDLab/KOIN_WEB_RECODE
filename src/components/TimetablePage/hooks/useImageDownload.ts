@@ -4,13 +4,13 @@ import React from 'react';
 
 function useImageDownload() {
   const divRef = React.useRef<HTMLDivElement>(null);
-  const onImageDownload = async () => {
+  const onImageDownload = async (imageName: string) => {
     if (!divRef.current) return;
     const div = divRef.current;
     const canvas = await html2canvas(div, { scale: 4 });
     canvas.toBlob((blob) => {
       if (blob !== null) {
-        saveAs(blob, 'my-image-name.jpeg');
+        saveAs(blob, `${imageName}.jpeg`);
       }
     });
   };
