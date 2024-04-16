@@ -1,10 +1,13 @@
 import html2canvas from 'html2canvas';
 import saveAs from 'file-saver';
-import { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
+import React from 'react';
 
 function useImageDownload() {
+  const divRef = React.useRef<HTMLDivElement>(null);
   const onImageDownload = async () => {
-    const canvas = await html2canvas(document.getElementById(TIMETABLE_ID)!, { scale: 4 });
+    if (!divRef.current) return;
+    const div = divRef.current;
+    const canvas = await html2canvas(div, { scale: 4 });
     canvas.toBlob((blob) => {
       if (blob !== null) {
         saveAs(blob, 'my-image-name.jpeg');
@@ -13,6 +16,7 @@ function useImageDownload() {
   };
 
   return {
+    divRef,
     onImageDownload,
   };
 }

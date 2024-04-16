@@ -90,7 +90,7 @@ function MobilePage() {
     value: semesterFilterValue,
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
-  const { onImageDownload: onTimetableImageDownload } = useImageDownload();
+  const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
 
   return (
     <>
@@ -113,7 +113,7 @@ function MobilePage() {
             이미지로 저장하기
           </button>
         </div>
-        <div className={styles.page__timetable}>
+        <div ref={timetableRef} className={styles.page__timetable}>
           <ErrorBoundary fallbackClassName="loading">
             <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
               <CurrentSemesterTimetable />
