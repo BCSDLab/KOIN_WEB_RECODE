@@ -322,18 +322,18 @@
 
     &--event {
       position: absolute;
-      top: -12px;
+      top: -10px;
       left: 5px;
       border: 1px solid #6dbbdd;
       border-radius: 100px;
       color: #6dbbdd;
-      width: 60px;
-      height: 25px;
+      width: 45px;
+      height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       background-color: white;
-      font-size: 10px;
+      font-size: 8px;
     }
 
     @include media.media-breakpoint(mobile) {
@@ -372,9 +372,9 @@
       width: auto;
       max-width: 120px;
       word-break: break-all;
-      text-overflow: unset;
-      overflow: unset;
-      white-space: unset;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
       font-size: 15px;
       font-weight: 500;
       line-height: 1.33;

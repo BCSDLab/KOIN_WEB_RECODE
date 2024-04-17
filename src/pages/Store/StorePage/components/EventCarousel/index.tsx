@@ -12,19 +12,18 @@ export default function EventCarousel() {
   const carouselList = useGetAllEvents();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const slideIndex = isMobile ? 1 : 3;
-  const slideWidth = isMobile ? 390 : 387;
+  const slideWidth = isMobile ? 266 : 387; // width + gap
 
   useEffect(() => {
     const slideTime = setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex === carouselList!.length - slideIndex
-        ? 0 : prevIndex + slideIndex));
+      setCurrentIndex((prevIndex) => (prevIndex === carouselList!.length - 1
+        ? 0 : prevIndex + 1));
     }, 3000);
 
     return () => {
       clearInterval(slideTime);
     };
-  }, [carouselList, currentIndex, slideIndex]);
+  }, [carouselList, currentIndex]);
 
   return (
     <div className={styles.container}>
