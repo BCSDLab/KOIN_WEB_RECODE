@@ -51,6 +51,7 @@
   grid-template-columns: repeat(2, 1fr);
   padding: 20px;
   border-bottom: 1px solid #eee;
+  gap: 10px;
 
   &:last-child {
     border-bottom: none;
@@ -108,8 +109,9 @@
     cursor: pointer;
 
     img {
-      width: 69px;
-      height: 69px;
+      border-radius: 5px;
+      width: 75px;
+      height: 80px;
     }
   }
 }
@@ -119,7 +121,13 @@
   justify-content: center;
   align-items: center;
 
-  img {
-    width: 69px;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    width: 75px;
+    height: 80px;
   }
 }

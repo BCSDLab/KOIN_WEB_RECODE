@@ -6,12 +6,14 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
+import useLogger from 'utils/hooks/useLogger';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import showToast from 'utils/ts/showToast';
+import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
+import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
 
 function StoreDetailPage() {
@@ -23,7 +25,14 @@ function StoreDetailPage() {
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
-
+  const logger = useLogger();
+  const onClickCallNumber = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    logger.click({
+      title: 'store_detail_call_number',
+      value: storeDetail!.phone,
+    });
+  };
   const onClickImage = (img: string[], index: number) => {
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -110,6 +119,7 @@ function StoreDetailPage() {
                   role="button"
                   aria-label="상점 전화하기"
                   href={`tel:${storeDetail?.phone}`}
+                  onClick={(e) => onClickCallNumber(e)}
                 >
                   전화하기
                 </a>
@@ -136,8 +146,8 @@ function StoreDetailPage() {
               [styles['image--none']]: storeDetail?.image_urls.length === 0,
             })}
           >
-            {
-              storeDetail?.image_urls && storeDetail.image_urls.map((img, index) => (
+            {storeDetail?.image_urls && storeDetail.image_urls.length > 0
+              ? (storeDetail.image_urls.map((img, index) => (
                 <div key={`${img}`} className={styles.image__content}>
                   <button
                     className={styles.image__button}
@@ -148,11 +158,15 @@ function StoreDetailPage() {
                     <img className={styles.image__poster} src={`${img}`} alt="상점이미지" />
                   </button>
                 </div>
-              ))
-            }
+              ))) : (
+                <div className={styles['empty-image']}>
+                  <div>
+                    <EmptyImageIcon />
+                  </div>
+                </div>
+              )}
           </div>
         </div>
-
         <div className={styles.tap}>
           <button
             className={cn({
@@ -170,16 +184,19 @@ function StoreDetailPage() {
               [styles['tap__type--active']]: tapType === '이벤트/공지',
             })}
             type="button"
-            onClick={() => showToast('info', '아직 준비중입니다.')}
+            onClick={() => setTapType('이벤트/공지')}
           >
             이벤트/공지
           </button>
         </div>
-        {tapType === '메뉴' && (
+        {tapType === '메뉴' ? (
           storeMenuCategories && storeMenuCategories.length > 0 && (
             <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
           )
-        )}
+        )
+          : (
+            <EventTable />
+          )}
       </div>
     </div>
   );

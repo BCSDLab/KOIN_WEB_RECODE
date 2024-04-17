@@ -4,6 +4,7 @@ export interface SubMenu {
   newFlag: boolean;
   planFlag: boolean;
   tag: number | null;
+  openInNewTab?: boolean;
 }
 
 export interface Category {
@@ -65,6 +66,14 @@ const CATEGORY: Category[] = [
         newFlag: false,
         planFlag: false,
         tag: null,
+      },
+      {
+        title: '코인 for Business',
+        link: 'https://owner.koreatech.in/',
+        newFlag: true,
+        planFlag: false,
+        tag: null,
+        openInNewTab: true,
       },
 
     ],

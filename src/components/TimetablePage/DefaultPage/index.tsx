@@ -13,20 +13,21 @@ import {
 } from 'utils/recoil/semester';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import showToast from 'utils/ts/showToast';
-import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
+import Timetable from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
-import useDeptList from './hooks/useDeptList';
+import useDeptList from 'components/TimetablePage/hooks/useDeptList';
+import useSemester from 'components/TimetablePage/hooks/useSemester';
+import { useSelect, useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
+import useLectureList from 'components/TimetablePage/hooks/useLectureList';
+import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
+import useAddTimetableLecture from 'components/TimetablePage/hooks/useAddTimetableLecture';
+import useDeleteTimetableLecture from 'components/TimetablePage/hooks/useDeleteTimetableLecture';
+import useVersionInfo from 'components/TimetablePage/hooks/useVersionInfo';
+import useImageDownload from 'utils/hooks/useImageDownload';
 import styles from './DefaultPage.module.scss';
-import useSemester from './hooks/useSemester';
-import { useSelect, useSelectRecoil } from './hooks/useSelect';
-import useLectureList from './hooks/useLectureList';
-import useTimetableInfoList from './hooks/useTimetableInfoList';
-import useAddTimetableLecture from './hooks/useAddTimetableLecture';
-import useDeleteTimetableLecture from './hooks/useDeleteTimetableLecture';
-import useVersionInfo from './hooks/useVersionInfo';
 
 const useSearch = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -157,10 +158,6 @@ function CurrentSemesterLectureList({
               return;
             }
             const myLecturesValue = token ? myLecturesFromServer : myLecturesFromLocalStorageValue;
-            if (myLecturesValue?.some((lecture) => lecture.code === clickedLecture.code)) {
-              showToast('error', '중첩된 과목입니다.');
-              return;
-            }
             const myLectureTimeValue = (
               myLecturesValue as Array<LectureInfo | TimetableLectureInfo>)
               .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
@@ -255,8 +252,8 @@ function CurrentSemesterTimetable(): JSX.Element {
       lectures={myLectureDayValue}
       similarSelectedLecture={similarSelectedLectureDayList}
       selectedLectureIndex={selectedLectureIndex}
-      colWidth={55}
-      firstColWidth={52}
+      columnWidth={55}
+      firstColumnWidth={52}
       rowHeight={21}
       totalHeight={456}
     />
@@ -321,6 +318,7 @@ function DefaultPage() {
     value: semesterFilterValue,
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
+  const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
 
   return (
     <>
@@ -384,23 +382,13 @@ function DefaultPage() {
             <button
               type="button"
               className={styles.page__button}
-              onClick={() => {
-                import('dom-to-image').then(({ default: domToImage }) => {
-                  domToImage.toJpeg(document.getElementById(TIMETABLE_ID)!, { quality: 0.95 })
-                    .then((dataUrl: string) => {
-                      const link = document.createElement('a');
-                      link.download = 'my-image-name.jpeg';
-                      link.href = dataUrl;
-                      link.click();
-                    });
-                });
-              }}
+              onClick={() => onTimetableImageDownload('my-timetable')}
             >
               <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
               이미지로 저장하기
             </button>
           </div>
-          <div className={styles.page__timetable}>
+          <div ref={timetableRef} className={styles.page__timetable}>
             <ErrorBoundary fallbackClassName="loading">
               <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
                 <CurrentSemesterTimetable />
