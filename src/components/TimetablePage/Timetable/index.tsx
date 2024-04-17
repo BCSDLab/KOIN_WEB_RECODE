@@ -21,8 +21,6 @@ interface TimetableProps {
   totalHeight: number;
 }
 
-export const TIMETABLE_ID = 'timetable-id';
-
 function Timetable({
   lectures,
   selectedLectureIndex,
@@ -33,8 +31,9 @@ function Timetable({
   totalHeight,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
+
   return (
-    <div id={TIMETABLE_ID} className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${columnWidth / 5}px` }}>
+    <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${columnWidth / 5}px` }}>
       <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight * 1.5}px` }}>
         <div
           className={cn({

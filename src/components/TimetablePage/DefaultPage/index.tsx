@@ -13,7 +13,7 @@ import {
 } from 'utils/recoil/semester';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import showToast from 'utils/ts/showToast';
-import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
+import Timetable from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
@@ -26,6 +26,7 @@ import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInf
 import useAddTimetableLecture from 'components/TimetablePage/hooks/useAddTimetableLecture';
 import useDeleteTimetableLecture from 'components/TimetablePage/hooks/useDeleteTimetableLecture';
 import useVersionInfo from 'components/TimetablePage/hooks/useVersionInfo';
+import useImageDownload from 'utils/hooks/useImageDownload';
 import styles from './DefaultPage.module.scss';
 
 const useSearch = () => {
@@ -317,6 +318,7 @@ function DefaultPage() {
     value: semesterFilterValue,
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
+  const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
 
   return (
     <>
@@ -380,23 +382,13 @@ function DefaultPage() {
             <button
               type="button"
               className={styles.page__button}
-              onClick={() => {
-                import('dom-to-image').then(({ default: domToImage }) => {
-                  domToImage.toJpeg(document.getElementById(TIMETABLE_ID)!, { quality: 0.95 })
-                    .then((dataUrl: string) => {
-                      const link = document.createElement('a');
-                      link.download = 'my-image-name.jpeg';
-                      link.href = dataUrl;
-                      link.click();
-                    });
-                });
-              }}
+              onClick={() => onTimetableImageDownload('my-timetable')}
             >
               <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
               이미지로 저장하기
             </button>
           </div>
-          <div className={styles.page__timetable}>
+          <div ref={timetableRef} className={styles.page__timetable}>
             <ErrorBoundary fallbackClassName="loading">
               <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
                 <CurrentSemesterTimetable />

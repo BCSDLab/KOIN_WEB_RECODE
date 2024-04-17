@@ -17,7 +17,8 @@
     "@types/react-query": "^1.2.9",
     "@types/react-window": "^1.8.5",
     "axios": "^0.27.2",
-    "dom-to-image": "^2.6.0",
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
@@ -61,7 +62,7 @@
     ]
   },
   "devDependencies": {
-    "@types/dom-to-image": "^2.6.4",
+    "@types/file-saver": "^2.0.7",
     "@types/gtag.js": "^0.0.19",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
