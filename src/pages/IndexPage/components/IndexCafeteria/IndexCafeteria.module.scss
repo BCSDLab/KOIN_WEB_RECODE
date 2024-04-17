@@ -75,6 +75,7 @@
     box-sizing: border-box;
     border: none;
     background-color: #fafafa;
+    cursor: default;
   }
 }
 
@@ -115,6 +116,7 @@
   @include media.media-breakpoint(mobile) {
     margin-bottom: 0;
     padding: 16px 16px 12px;
+    cursor: pointer;
   }
 }
 
@@ -124,6 +126,7 @@
     border-radius: 8px;
     background-color: #fff;
     margin: 16px 24px 20px;
+    cursor: pointer;
   }
 }
 
