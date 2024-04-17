@@ -19,6 +19,7 @@ import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
 import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
 import useImageDownload from 'utils/hooks/useImageDownload';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './MobilePage.module.scss';
 
 const useSemesterOptionList = () => {
@@ -90,7 +91,16 @@ function MobilePage() {
     value: semesterFilterValue,
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
+  const logger = useLogger();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
+  const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    logger.click({
+      title: 'timetable_imageDownload_click',
+      value: '시간표 저장',
+    });
+    onTimetableImageDownload('my-timetable');
+  };
 
   return (
     <>
@@ -107,7 +117,7 @@ function MobilePage() {
           <button
             type="button"
             className={styles.page__button}
-            onClick={() => onTimetableImageDownload('my-timetable')}
+            onClick={(e) => handleImageDownloadClick(e)}
           >
             <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
             이미지로 저장하기
