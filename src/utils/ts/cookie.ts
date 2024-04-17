@@ -1,4 +1,4 @@
-export function setCookie(name: string, val: any, day: number) {
+export function setCookie(name: string, val: any, day?: number) {
   const date = new Date();
   const value = val;
   // day가 없는 경우 세션쿠키로 설정

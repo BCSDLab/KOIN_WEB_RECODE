@@ -35,10 +35,8 @@ const useLogin = (state: IsAutoLogin) => {
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
         localStorage.setItem('AUTH_REFRESH_TOKEN_KEY', data.refresh_token);
-        setCookie('AUTH_TOKEN_KEY', data.token, 3);
-      } else {
-        setCookie('AUTH_TOKEN_KEY', data.token, 0);
       }
+      setCookie('AUTH_TOKEN_KEY', data.token);
       setToken(data.token);
       navigate('/');
     },
