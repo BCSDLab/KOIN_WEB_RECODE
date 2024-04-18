@@ -73,9 +73,9 @@ export default function IndexTimeTable() {
         시간표
       </Link>
       <ErrorBoundary fallbackClassName="loadingErrorBoundary">
-        <React.Suspense fallback="loading...">
+        <Suspense fallback={<LoadingSpinner size="70px" />}>
           <CurrentSemesterTimetable />
-        </React.Suspense>
+        </Suspense>
       </ErrorBoundary>
       {!token && (
         <Link to="/auth" className={styles.needLogin} />
