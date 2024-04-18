@@ -12,7 +12,7 @@ function NoticePage() {
     <>
       <PostHeader />
       <PostList
-        articles={articleList?.articles}
+        articles={articleList.articles}
       />
       <Pagination
         totalPageNum={articleList === null ? 5 : articleList!.totalPage}
