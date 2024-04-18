@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { MenuCategory } from 'api/store/entity';
 import { cn } from '@bcsdlab/utils';
-import useMoveScroll from 'utils/hooks/useMoveScroll';
 import MENU_CATEGORY from 'static/menu';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './MenuTable.module.scss';
 
 interface MenuTableProps {
@@ -11,13 +11,26 @@ interface MenuTableProps {
 }
 
 function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
+  const isMobile = useMediaQuery();
   const [categoryType, setCateogoryType] = useState<string>(storeMenuCategories[0].name);
-  const { elementsRef, onMoveToElement } = useMoveScroll();
+
+  const scrollToTarget = (name: string) => {
+    const headerOffset = isMobile ? 120 : 60;
+    const element = document.getElementById(name);
+    if (element) {
+      const elementPosistion = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosistion + window.scrollY - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   return (
     <>
       <ul className={styles.categories}>
-        {MENU_CATEGORY.map((menuCategories, index) => (
+        {MENU_CATEGORY.map((menuCategories) => (
           <li key={menuCategories.id}>
             <button
               className={cn({
@@ -28,21 +41,21 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
               type="button"
               onClick={() => {
                 setCateogoryType(menuCategories.name);
-                onMoveToElement(index);
+                scrollToTarget(menuCategories.name);
               }}
             >
               {menuCategories.name}
             </button>
           </li>
         ))}
-
       </ul>
       <div className={styles.table}>
-        {storeMenuCategories.map((menuCategories, index) => (
+        {storeMenuCategories.map((menuCategories) => (
           <div
+            id={`${menuCategories.name}`}
             className={styles.menu}
             key={menuCategories.id}
-            ref={(element) => { elementsRef.current[index] = element; }}
+            // ref={(element) => { elementsRef.current[index] = element; }}
           >
             {MENU_CATEGORY.map((category) => (
               category.name === menuCategories.name && (
