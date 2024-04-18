@@ -58,11 +58,18 @@ function IndexCafeteria() {
   return (
     <section className={styles.template}>
       <h2 className={styles.title}>
-        <span>식단</span>
+        <div
+          onClick={(e) => handleMoreClick(e)}
+          role="button"
+          tabIndex={0}
+        >
+          식단
+        </div>
         <div
           className={styles.moreLink}
           onClick={(e) => handleMoreClick(e)}
-          aria-hidden
+          role="button"
+          tabIndex={0}
         >
           더보기
           <RightArrow
@@ -88,7 +95,12 @@ function IndexCafeteria() {
             )
           ))}
         </div>
-        <div className={styles.menuBox}>
+        <div
+          className={styles.menuBox}
+          onClick={(e) => handleMoreClick(e)}
+          role="button"
+          tabIndex={0}
+        >
           <div className={styles.type}>
             {getType()[0]}
             <div className={cn({
