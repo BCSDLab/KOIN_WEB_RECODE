@@ -29,6 +29,7 @@ function StoreDetailPage() {
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
+
   return (
     <div className={styles.template}>
       <div className={styles.section}>

@@ -88,8 +88,8 @@ const isStoreOpen = (open_time: string | null, close_time: string | null) => {
   if (open_time === '00:00' && close_time === '00:00') return false;
 
   const date = new Date();
-  const openTimeNum = Number(open_time.replace(':', ''));
-  const closeTimeNum = Number(close_time.replace(':', ''));
+  const openTimeNum = open_time && Number(open_time.replace(':', ''));
+  const closeTimeNum = close_time && Number(close_time.replace(':', ''));
   const nowTimeNum = date.getHours() * 100 + date.getMinutes();
 
   if (openTimeNum > closeTimeNum ? (
@@ -211,8 +211,8 @@ function StorePage() {
             onClick={() => logger.click({ title: 'store_card_click', value: store.name })}
           >
             {isStoreOpen(
-              store.open[getDayOfWeek()].open_time,
-              store.open[getDayOfWeek()].close_time,
+              store.open[getDayOfWeek()]?.open_time,
+              store.open[getDayOfWeek()]?.close_time,
             ) && <div className={styles['store-none-open']} />}
             <div className={styles['store-list__title']}>{store.name}</div>
             <div className={styles['store-list__phone']}>
@@ -223,8 +223,8 @@ function StorePage() {
               운영시간
               <span>
                 {getOpenCloseTime(
-                  store.open[getDayOfWeek()].open_time,
-                  store.open[getDayOfWeek()].close_time,
+                  store.open[getDayOfWeek()]?.open_time,
+                  store.open[getDayOfWeek()]?.close_time,
                 )}
               </span>
             </div>
