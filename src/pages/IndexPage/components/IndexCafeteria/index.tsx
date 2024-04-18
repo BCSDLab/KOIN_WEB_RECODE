@@ -67,7 +67,8 @@ function IndexCafeteria() {
         <div
           className={styles.moreLink}
           onClick={(e) => handleMoreClick(e)}
-          aria-hidden
+          role="button"
+          tabIndex={0}
         >
           더보기
           <RightArrow
@@ -96,7 +97,8 @@ function IndexCafeteria() {
         <div
           className={styles.menuBox}
           onClick={(e) => handleMoreClick(e)}
-          aria-hidden
+          role="button"
+          tabIndex={0}
         >
           <div className={styles.type}>
             {getType()[0]}
