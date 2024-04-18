@@ -60,7 +60,8 @@ function IndexCafeteria() {
       <h2 className={styles.title}>
         <div
           onClick={(e) => handleMoreClick(e)}
-          aria-hidden
+          role="button"
+          tabIndex={0}
         >
           식단
         </div>
