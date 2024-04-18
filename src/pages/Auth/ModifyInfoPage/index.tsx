@@ -76,6 +76,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       };
       if (options.validFunction) {
         fieldRefs.current[name].validFunction = options.validFunction;
+        fieldRefs.current[name].validFunction = options.validFunction;
       }
     },
   });
@@ -116,12 +117,14 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       showToast('error', '변경된 정보가 없습니다.');
       return;
     }
+
     const isCurrentValidEntries = Object.entries(fieldRefs.current)
       .map((refValue): [string, string | true] => {
         if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
         const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
           ? refValue[1].ref.valid
           : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', fieldRefs) ?? true;
+
         return [refValue[0], isCurrentNameValid];
       });
     const invalidFormEntry = isCurrentValidEntries

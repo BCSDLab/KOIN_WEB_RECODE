@@ -153,6 +153,23 @@ function CurrentSemesterLectureList({
 
               return true;
             })
+            .filter((lecture) => {
+              const searchFilter = filter.search.toUpperCase();
+              const departmentFilter = filter.department;
+
+              if (searchFilter !== '' && departmentFilter !== '전체') {
+                return lecture.name.toUpperCase().includes(searchFilter)
+                  && lecture.department === departmentFilter;
+              }
+              if (searchFilter !== '') {
+                return lecture.name.toUpperCase().includes(searchFilter);
+              }
+              if (departmentFilter !== '전체') {
+                return lecture.department === departmentFilter;
+              }
+
+              return true;
+            })
         }
         selectedLecture={selectedTempLecture ?? undefined}
         onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
@@ -329,6 +346,7 @@ function DefaultPage() {
   } = useSelectRecoil(selectedSemesterAtom);
   const { onImageDownload: onTimetableImageDownload } = useImageDownload();
   // divRef: timetableRef  사용안하고 있다는데 dev 코드 비교 필요
+  // 다시
   return (
     <>
       <h1 className={styles.page__title}>시간표</h1>
@@ -409,8 +427,7 @@ function DefaultPage() {
         <div>
           <h3 className={styles['page__title--sub']}>나의 시간표</h3>
           <div className={styles['page__table--selected']}>
-            {/* <ErrorBoundary fallbackClassName="loading">
-              <React.Suspense fallback={<LoadingSpinner size="20px"  />}> */}
+
             <ErrorBoundary fallbackClassName="CurrentMyLectureList ErrorBoundary loading">
               <React.Suspense fallback={<LoadingSpinner size="30px" />}>
                 <CurrentMyLectureList />
