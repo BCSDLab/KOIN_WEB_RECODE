@@ -1,6 +1,5 @@
 // 후에 전체 disable 예정. defaultProps는 필요 없음.
 /* eslint-disable react/require-default-props */
-import React from 'react';
 import cn from 'utils/ts/classnames';
 import { TimetableDayLectureInfo } from 'interfaces/Lecture';
 import {

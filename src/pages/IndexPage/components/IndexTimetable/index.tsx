@@ -1,5 +1,4 @@
-import React, { Suspense } from 'react';
-import ErrorBoundary from 'components/common/ErrorBoundary';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
 import { myLecturesAtom, selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
@@ -11,7 +10,6 @@ import Timetable from 'components/TimetablePage/Timetable';
 import { useSelectRecoil } from 'components/TimetablePage/DefaultPage/hooks/useSelect';
 import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
 import { Link } from 'react-router-dom';
-import LoadingSpinner from 'components/common/LoadingSpinner';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
@@ -37,17 +35,15 @@ function CurrentSemesterTimetable(): JSX.Element {
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
 
   return selectedSemesterValue ? (
-    <Suspense fallback={<LoadingSpinner size="80px" />}>
-      <Timetable
-        lectures={myLectureDayValue}
-        similarSelectedLecture={similarSelectedLectureDayList}
-        selectedLectureIndex={selectedLectureIndex}
-        colWidth={40}
-        firstColWidth={42}
-        rowHeight={16}
-        totalHeight={369}
-      />
-    </Suspense>
+    <Timetable
+      lectures={myLectureDayValue}
+      similarSelectedLecture={similarSelectedLectureDayList}
+      selectedLectureIndex={selectedLectureIndex}
+      colWidth={40}
+      firstColWidth={42}
+      rowHeight={16}
+      totalHeight={369}
+    />
   ) : (
     <div>
       Recoil loading...
@@ -72,11 +68,7 @@ export default function IndexTimeTable() {
       <Link to="/timetable" className={styles.title}>
         시간표
       </Link>
-      <ErrorBoundary fallbackClassName="loadingErrorBoundary">
-        <Suspense fallback={<LoadingSpinner size="70px" />}>
-          <CurrentSemesterTimetable />
-        </Suspense>
-      </ErrorBoundary>
+      <CurrentSemesterTimetable />
       {!token && (
         <Link to="/auth" className={styles.needLogin} />
       )}
