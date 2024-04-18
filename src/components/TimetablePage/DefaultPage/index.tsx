@@ -18,7 +18,6 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-//
 import useSemester from 'components/TimetablePage/hooks/useSemester';
 import { useSelect, useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
@@ -27,7 +26,6 @@ import useAddTimetableLecture from 'components/TimetablePage/hooks/useAddTimetab
 import useDeleteTimetableLecture from 'components/TimetablePage/hooks/useDeleteTimetableLecture';
 import useVersionInfo from 'components/TimetablePage/hooks/useVersionInfo';
 import useImageDownload from 'utils/hooks/useImageDownload';
-//
 
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import styles from './DefaultPage.module.scss';

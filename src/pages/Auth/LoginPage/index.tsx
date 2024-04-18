@@ -1,8 +1,6 @@
 import React from 'react';
 import { LoginResponse } from 'api/auth/entity';
 import { Link, useNavigate } from 'react-router-dom';
-
-// import { useSetRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { auth } from 'api';

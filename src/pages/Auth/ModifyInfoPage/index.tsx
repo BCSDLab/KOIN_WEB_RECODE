@@ -12,7 +12,6 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/useUser';
-
 import { useQueryClient } from '@tanstack/react-query';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';

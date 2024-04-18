@@ -6,7 +6,6 @@ export const useStoreCategories = () => {
     queryOptions({
       queryKey: ['storeCategories'],
       queryFn: getStoreCategories,
-
     }),
   );
 
