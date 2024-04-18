@@ -1,14 +1,22 @@
+import { ReactComponent as UpdateIcon } from 'assets/svg/update-icon.svg';
 import styles from './UpdateInfo.module.scss';
 
 interface UpdateInfoProps {
-  date : string | null
+  date: string | null;
 }
 
-function UpdateInfo({ date } :UpdateInfoProps) {
+function UpdateInfo({ date }: UpdateInfoProps) {
   return (
     <div className={styles.update}>
-      <span className={styles['update--content']}>{date ? '최근 업데이트일' : '최근 업데이트 정보 없음'}</span>
-      <span className={styles['update--info']}>{date}</span>
+      {date
+        ? (
+          <div className={styles['update--box']}>
+            <UpdateIcon />
+            <div className={styles['update--text']}>{`${date.replace(/-/g, '.')} 업데이트`}</div>
+          </div>
+        )
+
+        : '최근 업데이트 정보 없음'}
     </div>
   );
 }

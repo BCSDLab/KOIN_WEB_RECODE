@@ -1,15 +1,15 @@
 import React from 'react';
 import { LoginResponse } from 'api/auth/entity';
-import { tokenState } from 'utils/recoil';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useSetRecoilState } from 'recoil';
+// import { useSetRecoilState } from 'recoil';
 import { setCookie } from 'utils/ts/cookie';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { auth } from 'api';
-import sha256 from 'utils/ts/SHA-256';
 import showToast from 'utils/ts/showToast';
-import { AxiosError } from 'axios';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import { sha256 } from '@bcsdlab/utils';
+import { useTokenStore } from 'utils/zustand';
 import { useMutation } from '@tanstack/react-query';
 import styles from './LoginPage.module.scss';
 
@@ -30,14 +30,14 @@ interface UserInfo {
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 
 const useLogin = (state: IsAutoLogin) => {
-  const setToken = useSetRecoilState(tokenState);
+  const { setToken, setRefreshToken } = useTokenStore();
   const navigate = useNavigate();
 
   const postLogin = useMutation({
     mutationFn: auth.login,
     onSuccess: (data: LoginResponse) => {
       if (state.isAutoLoginFlag) {
-        localStorage.setItem('AUTH_REFRESH_TOKEN_KEY', data.refresh_token);
+        setRefreshToken(data.refresh_token);
         setCookie('AUTH_TOKEN_KEY', data.token, 3);
       } else {
         setCookie('AUTH_TOKEN_KEY', data.token, 0);
@@ -45,17 +45,23 @@ const useLogin = (state: IsAutoLogin) => {
       setToken(data.token);
       navigate('/');
     },
-    onError: (error: AxiosError<{ message: string }>) => {
-      showToast('error', error.response?.data?.message || '로그인에 실패했습니다.');
+    onError: (error) => {
+      if (isKoinError(error)) {
+        // 추후에 코드별 에러 분기처리 진행
+        showToast('error', error.message || '로그인에 실패했습니다.');
+      } else {
+        sendClientError(error);
+        showToast('error', '로그인에 실패했습니다.');
+      }
     },
   });
 
   const login = async (userInfo: UserInfo) => {
-    if (userInfo.userId === null) {
+    if (userInfo.userId === '') {
       showToast('error', '계정을 입력해주세요');
       return;
     }
-    if (userInfo.password === null) {
+    if (userInfo.password === '') {
       showToast('error', '비밀번호를 입력해주세요');
       return;
     }
@@ -88,8 +94,8 @@ function LoginPage() {
     e.preventDefault();
     const { userId, password } = loginRef.current;
     submitLogin({
-      userId: userId!.value,
-      password: password!.value,
+      userId: userId ? userId.value : '',
+      password: password ? password.value : '',
     });
   };
 

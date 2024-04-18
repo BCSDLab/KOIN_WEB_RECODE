@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CAFETERIA_CATEGORY } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useCafeteriaList from 'pages/Cafeteria/CafeteriaPage/hooks/useCafeteriaList';
 import useLogger from 'utils/hooks/useLogger';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
@@ -58,11 +58,18 @@ function IndexCafeteria() {
   return (
     <section className={styles.template}>
       <h2 className={styles.title}>
-        <span>식단</span>
+        <div
+          onClick={(e) => handleMoreClick(e)}
+          role="button"
+          tabIndex={0}
+        >
+          식단
+        </div>
         <div
           className={styles.moreLink}
           onClick={(e) => handleMoreClick(e)}
-          aria-hidden
+          role="button"
+          tabIndex={0}
         >
           더보기
           <RightArrow
@@ -88,33 +95,47 @@ function IndexCafeteria() {
             )
           ))}
         </div>
-        <div className={styles.type}>
-          {getType()[0]}
-        </div>
         <div
-          className={styles.menuContainer}
-          onClick={(e) => {
-            if (isMobile) {
-              handleMoreClick(e);
-            }
-          }}
+          className={styles.menuBox}
+          onClick={(e) => handleMoreClick(e)}
           role="button"
           tabIndex={0}
         >
-          {선택된_식단 ? 선택된_식단.menu.slice(0, 10).map((menu) => (
-            <div className={styles.menu} key={menu}>
-              {menu}
+          <div className={styles.type}>
+            {getType()[0]}
+            <div className={cn({
+              [styles.type__block]: true,
+              [styles['type__block--soldOut']]: !!선택된_식단?.soldout_at,
+            })}
+            >
+              {선택된_식단?.soldout_at ? '품절' : ''}
             </div>
-          )) : (
-            <div className={styles.noMenuContent}>
-              <img className={styles.noMenuImage} src="https://static.koreatech.in/assets/img/ic-none.png" alt="" />
-              <div className={styles.noMenu}>
-                식단이 제공되지 않아
-                <br />
-                표시할 수 없습니다.
+          </div>
+          <div
+            className={styles.menuContainer}
+            onClick={(e) => {
+              if (isMobile) {
+                handleMoreClick(e);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            {선택된_식단 ? 선택된_식단.menu.slice(0, 10).map((menu) => (
+              <div className={styles.menu} key={menu}>
+                {menu}
               </div>
-            </div>
-          )}
+            )) : (
+              <div className={styles.noMenuContent}>
+                <img className={styles.noMenuImage} src="https://static.koreatech.in/assets/img/ic-none.png" alt="" />
+                <div className={styles.noMenu}>
+                  식단이 제공되지 않아
+                  <br />
+                  표시할 수 없습니다.
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>

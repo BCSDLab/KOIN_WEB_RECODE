@@ -2,13 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useLogger from 'utils/hooks/useLogger';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
 import { queryOptions, useQuery } from '@tanstack/react-query';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
+import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
+
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
+import EventCarousel from './components/EventCarousel';
 
 type StoreSearchQueryType = {
   storeName?: string;
@@ -79,7 +83,6 @@ const useStoreList = (params: StoreSearchQueryType) => {
 const getOpenCloseTime = (open_time: string | null, close_time: string | null) => {
   if (open_time === null && close_time === null) return '운영정보없음';
   if (open_time === '00:00' && close_time === '00:00') return '24시간 운영';
-
   return `${open_time}~${close_time}`;
 };
 
@@ -109,6 +112,7 @@ function StorePage() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const selectedCategory = Number(searchParams.get('category'));
+  useScrollToTop();
 
   return (
     <div className={styles.section}>
@@ -202,6 +206,7 @@ function StorePage() {
         </div>
       </div>
       {isMobile && <div className={styles['store-mobile-header']}>상점목록</div>}
+      <EventCarousel />
       <div className={styles['store-list']}>
         {storeList?.map((store) => (
           <Link
@@ -210,10 +215,27 @@ function StorePage() {
             key={store.id}
             onClick={() => logger.click({ title: 'store_card_click', value: store.name })}
           >
-            {isStoreOpen(
-              store.open[getDayOfWeek()]?.open_time,
-              store.open[getDayOfWeek()]?.close_time,
-            ) && <div className={styles['store-none-open']} />}
+            {store.is_event
+              && !isStoreOpen(
+                store.open[getDayOfWeek()].open_time,
+                store.open[getDayOfWeek()].close_time,
+              )
+              && (
+                <div className={styles['store-list__item--event']}>
+                  이벤트
+                  <EventIcon />
+                </div>
+              )}
+            {store.open[getDayOfWeek()] && isStoreOpen(
+              store.open[getDayOfWeek()].open_time,
+              store.open[getDayOfWeek()].close_time,
+            )
+              && (
+                <div className={styles['store-none-open']}>
+                  <span className={styles['store-none-open__name']}>{store.name}</span>
+                  은 준비 중입니다.
+                </div>
+              )}
             <div className={styles['store-list__title']}>{store.name}</div>
             <div className={styles['store-list__phone']}>
               전화번호
@@ -222,9 +244,9 @@ function StorePage() {
             <div className={styles['store-list__open-time']}>
               운영시간
               <span>
-                {getOpenCloseTime(
-                  store.open[getDayOfWeek()]?.open_time,
-                  store.open[getDayOfWeek()]?.close_time,
+                {store.open[getDayOfWeek()] && getOpenCloseTime(
+                  store.open[getDayOfWeek()].open_time,
+                  store.open[getDayOfWeek()].close_time,
                 )}
               </span>
             </div>

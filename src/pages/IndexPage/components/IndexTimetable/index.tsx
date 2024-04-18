@@ -1,15 +1,15 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
-import { myLecturesAtom, selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
-import useTimetableInfoList from 'components/TimetablePage/DefaultPage/hooks/useTimetableInfoList';
+import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
+import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
-import useLectureList from 'components/TimetablePage/DefaultPage/hooks/useLectureList';
-import { LectureInfo } from 'interfaces/Lecture';
 import Timetable from 'components/TimetablePage/Timetable';
-import { useSelectRecoil } from 'components/TimetablePage/DefaultPage/hooks/useSelect';
+import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
 import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
 import { Link } from 'react-router-dom';
+import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import ErrorBoundary from 'components/common/ErrorBoundary';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
@@ -18,36 +18,23 @@ function CurrentSemesterTimetable(): JSX.Element {
 
   const token = useTokenState();
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const { timetableInfoList: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const myLectureDayValue = useTimetableDayList(
     token
       ? (myLecturesFromServer ?? [])
       : (myLecturesFromLocalStorageValue ?? []),
   );
 
-  const selectedLecture = useRecoilValue(selectedTempLectureSelector);
-  const { data: lectureList } = useLectureList(selectedSemester);
-  const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
-    ?.filter((lecture) => lecture.code === selectedLecture?.code)
-    ?? [];
-  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
-  const selectedLectureIndex = similarSelectedLecture
-    .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
-
   return selectedSemesterValue ? (
     <Timetable
       lectures={myLectureDayValue}
-      similarSelectedLecture={similarSelectedLectureDayList}
-      selectedLectureIndex={selectedLectureIndex}
-      colWidth={40}
-      firstColWidth={42}
+      columnWidth={40}
+      firstColumnWidth={42}
       rowHeight={16}
       totalHeight={369}
     />
   ) : (
-    <div>
-      Recoil loading...
-    </div>
+    <LoadingSpinner className={styles['template__loading-spinner']} />
   );
 }
 
@@ -61,17 +48,19 @@ export default function IndexTimeTable() {
   // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const token = useTokenState();
 
   return (
     <div className={styles.template}>
       <Link to="/timetable" className={styles.title}>
         시간표
       </Link>
-      <CurrentSemesterTimetable />
-      {!token && (
-        <Link to="/auth" className={styles.needLogin} />
-      )}
+      <ErrorBoundary fallbackClassName="loading">
+        <React.Suspense fallback={<LoadingSpinner className={styles['template__loading-spinner']} />}>
+          <Link to="/timetable">
+            <CurrentSemesterTimetable />
+          </Link>
+        </React.Suspense>
+      </ErrorBoundary>
     </div>
   );
 }

@@ -1,11 +1,10 @@
 import React, { useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
-import cn from 'utils/ts/classnames';
+import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import { DeptListResponse, IDept } from 'api/dept/entity';
-import sha256 from 'utils/ts/SHA-256';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';

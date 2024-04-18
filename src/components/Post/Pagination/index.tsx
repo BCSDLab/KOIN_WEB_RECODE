@@ -1,5 +1,5 @@
 import React from 'react';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
 import usePagination from './hooks/usePagination';

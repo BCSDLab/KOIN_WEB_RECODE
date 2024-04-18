@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { IDept } from 'api/dept/entity';
-import { SemesterInfo } from 'api/timetable/entity';
+import { SemesterInfo, VersionInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
@@ -13,19 +13,24 @@ import {
 } from 'utils/recoil/semester';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import showToast from 'utils/ts/showToast';
-import Timetable, { TIMETABLE_ID } from 'components/TimetablePage/Timetable';
+import Timetable from 'components/TimetablePage/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import useDeptList from './hooks/useDeptList';
+//
+import useSemester from 'components/TimetablePage/hooks/useSemester';
+import { useSelect, useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
+import useLectureList from 'components/TimetablePage/hooks/useLectureList';
+import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
+import useAddTimetableLecture from 'components/TimetablePage/hooks/useAddTimetableLecture';
+import useDeleteTimetableLecture from 'components/TimetablePage/hooks/useDeleteTimetableLecture';
+import useVersionInfo from 'components/TimetablePage/hooks/useVersionInfo';
+import useImageDownload from 'utils/hooks/useImageDownload';
+//
+
+import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
-import useSemester from './hooks/useSemester';
-import { useSelect, useSelectRecoil } from './hooks/useSelect';
-import useLectureList from './hooks/useLectureList';
-import useTimetableInfoList from './hooks/useTimetableInfoList';
-import useAddTimetableLecture from './hooks/useAddTimetableLecture';
-import useDeleteTimetableLecture from './hooks/useDeleteTimetableLecture';
 
 const useSearch = () => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -48,21 +53,17 @@ const useSearch = () => {
   };
 };
 
-const defaultOptionList = [
+const deptOptionList = [
   { label: '전체', value: '전체' },
-];
-
-const useDeptOptionList = () => {
-  const { data: deptList } = useDeptList();
-  // 구조가 Array<Dept>인데 Array로 인식이 안됨.
-  const deptOptionList = defaultOptionList.concat(
-    (deptList as unknown as Array<IDept> | undefined ?? []).map(
-      (dept) => ({ label: dept.name, value: dept.name }),
-    ) ?? [],
-  );
-
-  return deptOptionList;
-};
+  { label: '디자인ㆍ건축공학부', value: '디자인ㆍ건축공학부' },
+  { label: '고용서비스정책학과', value: '고용서비스정책학과' },
+  { label: '기계공학부', value: '기계공학부' },
+  { label: '메카트로닉스공학부', value: '메카트로닉스공학부' },
+  { label: '산업경영학부', value: '산업경영학부' },
+  { label: '전기ㆍ전자ㆍ통신공학부', value: '전기ㆍ전자ㆍ통신공학부' },
+  { label: '컴퓨터공학부', value: '컴퓨터공학부' },
+  { label: '에너지신소재화학공학부', value: '에너지신소재화학공학부' },
+  { label: '교양학부', value: '교양학부' }];
 
 const useSemesterOptionList = () => {
   const { data: semesterList } = useSemester();
@@ -80,7 +81,6 @@ const useSemesterOptionList = () => {
 type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 
 function DeptListbox({ value, onChange }: DecidedListboxProps) {
-  const deptOptionList = useDeptOptionList();
   React.useEffect(() => {
     if (deptOptionList.length !== 0) {
       onChange({ target: { value: deptOptionList[0].value } });
@@ -109,7 +109,7 @@ interface CurrentSemesterLectureListProps {
   semesterKey: string | null;
   filter: {
     // 백엔드 수정하면 optional 제거
-    dept?: string;
+    department: string;
     search: string;
   }
 }
@@ -126,7 +126,7 @@ function CurrentSemesterLectureList({
   const addLectureToLocalStorage = useSetRecoilState(myLectureAddLectureSelector);
 
   const token = useTokenState();
-  const { timetableInfoList: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const isLoaded = (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
 
@@ -136,13 +136,23 @@ function CurrentSemesterLectureList({
         height={459}
         list={
           (lectureList as unknown as Array<LectureInfo>)
-            .filter(
-              (lecture) => (
-                lecture.name.includes(filter.search)
-                // 백엔드 수정하면 제거
-                // || (filter.dept !== '전체' && lecture.department === filter.dept)
-              ),
-            )
+            .filter((lecture) => {
+              const searchFilter = filter.search.toUpperCase();
+              const departmentFilter = filter.department;
+
+              if (searchFilter !== '' && departmentFilter !== '전체') {
+                return lecture.name.toUpperCase().includes(searchFilter)
+                  && lecture.department === departmentFilter;
+              }
+              if (searchFilter !== '') {
+                return lecture.name.toUpperCase().includes(searchFilter);
+              }
+              if (departmentFilter !== '전체') {
+                return lecture.department === departmentFilter;
+              }
+
+              return true;
+            })
         }
         selectedLecture={selectedTempLecture ?? undefined}
         onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
@@ -152,10 +162,6 @@ function CurrentSemesterLectureList({
               return;
             }
             const myLecturesValue = token ? myLecturesFromServer : myLecturesFromLocalStorageValue;
-            if (myLecturesValue?.some((lecture) => lecture.code === clickedLecture.code)) {
-              showToast('error', '중첩된 과목입니다.');
-              return;
-            }
             const myLectureTimeValue = (
               myLecturesValue as Array<LectureInfo | TimetableLectureInfo>)
               .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
@@ -182,6 +188,7 @@ function CurrentSemesterLectureList({
       </LectureTable>
     ) : (
       <LoadingSpinner size="80px" />
+    //  <LoadingSpinner className={styles['top-loading-spinner']} />
     )
   );
 }
@@ -192,13 +199,13 @@ function CurrentMyLectureList() {
 
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
   const token = useTokenState();
-  const { timetableInfoList: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(selectedSemester, token);
 
   return (
     (myLecturesValue !== null || myLecturesFromServer !== undefined) ? (
       <LectureTable
-        height={360}
+        height={300}
         list={token ? (myLecturesFromServer ?? []) : (myLecturesValue ?? [])}
         selectedLecture={undefined}
         onClickRow={undefined}
@@ -229,7 +236,7 @@ function CurrentSemesterTimetable(): JSX.Element {
 
   const token = useTokenState();
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const { timetableInfoList: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const myLectureDayValue = useTimetableDayList(
     token
       ? (myLecturesFromServer ?? [])
@@ -252,16 +259,14 @@ function CurrentSemesterTimetable(): JSX.Element {
         lectures={myLectureDayValue}
         similarSelectedLecture={similarSelectedLectureDayList}
         selectedLectureIndex={selectedLectureIndex}
-        colWidth={55}
-        firstColWidth={52}
+        columnWidth={55}
+        firstColumnWidth={52}
         rowHeight={21}
         totalHeight={456}
       />
     </Suspense>
   ) : (
-    <div>
-      Recoil loading...
-    </div>
+    <LoadingSpinner size="20px" />
   );
 }
 
@@ -292,6 +297,21 @@ function Curriculum() {
   );
 }
 
+function RefactorDate(date: string) {
+  return date.substring(0, 11).replaceAll('-', '. ').replace('T', '.');
+}
+
+function LastUpdatedDate() {
+  const { data: updatedDate } = useVersionInfo();
+
+  return (
+    <div className={styles['page__last-update']}>
+      <span className={styles['page__last-update--content']}>마지막 업데이트 날짜:</span>
+      <span className={styles['page__last-update--info']}>{RefactorDate((updatedDate as unknown as VersionInfo).updated_at)}</span>
+    </div>
+  );
+}
+
 function DefaultPage() {
   const {
     searchInputRef,
@@ -300,14 +320,15 @@ function DefaultPage() {
     value: searchValue,
   } = useSearch();
   const {
-    value: deptFilterValue,
+    value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
   } = useSelect();
   const {
     value: semesterFilterValue,
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
-
+  const { onImageDownload: onTimetableImageDownload } = useImageDownload();
+  // divRef: timetableRef  사용안하고 있다는데 dev 코드 비교 필요
   return (
     <>
       <h1 className={styles.page__title}>시간표</h1>
@@ -330,28 +351,34 @@ function DefaultPage() {
               </button>
             </div>
             <div className={styles.page__depart}>
-              <React.Suspense fallback={<LoadingSpinner size="30px" />}>
+              <React.Suspense fallback={<LoadingSpinner size="20px" />}>
                 <DeptListbox
-                  value={deptFilterValue}
+                  value={departmentFilterValue}
                   onChange={onChangeDeptSelect}
                 />
               </React.Suspense>
             </div>
           </div>
+
           <ErrorBoundary fallbackClassName="loading">
             <React.Suspense fallback={<LoadingSpinner size="30px" />}>
               <CurrentSemesterLectureList
                 semesterKey={semesterFilterValue}
                 filter={{
                   // 백엔드 수정하면 제거
-                  // dept: deptFilterValue ?? '전체',
+                  department: departmentFilterValue ?? '전체',
                   search: searchValue ?? '',
                 }}
               />
             </React.Suspense>
           </ErrorBoundary>
+          <ErrorBoundary fallbackClassName="loading">
+            <React.Suspense fallback={<LoadingSpinner size="20px" />}>
+              <LastUpdatedDate />
+            </React.Suspense>
+          </ErrorBoundary>
         </div>
-        <div>
+        <div className={styles['page__timetable-wrap']}>
           <div className={styles.page__filter}>
             <div className={styles.page__semester}>
               <Suspense fallback={<LoadingSpinner size="20px" />}>
@@ -364,17 +391,7 @@ function DefaultPage() {
             <button
               type="button"
               className={styles.page__button}
-              onClick={() => {
-                import('dom-to-image').then(({ default: domToImage }) => {
-                  domToImage.toJpeg(document.getElementById(TIMETABLE_ID)!, { quality: 0.95 })
-                    .then((dataUrl: string) => {
-                      const link = document.createElement('a');
-                      link.download = 'my-image-name.jpeg';
-                      link.href = dataUrl;
-                      link.click();
-                    });
-                });
-              }}
+              onClick={() => onTimetableImageDownload('my-timetable')}
             >
               <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
               이미지로 저장하기
@@ -388,9 +405,12 @@ function DefaultPage() {
             </ErrorBoundary>
           </div>
         </div>
+
         <div>
           <h3 className={styles['page__title--sub']}>나의 시간표</h3>
           <div className={styles['page__table--selected']}>
+            {/* <ErrorBoundary fallbackClassName="loading">
+              <React.Suspense fallback={<LoadingSpinner size="20px"  />}> */}
             <ErrorBoundary fallbackClassName="CurrentMyLectureList ErrorBoundary loading">
               <React.Suspense fallback={<LoadingSpinner size="30px" />}>
                 <CurrentMyLectureList />

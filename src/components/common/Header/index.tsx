@@ -4,12 +4,11 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import CATEGORY, { Category, SubMenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
-import { userInfoState } from 'utils/recoil/userInfoState';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { getUser } from 'api/auth';
+
+import { useUser } from 'utils/hooks/useUser';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -17,6 +16,8 @@ const ID: { [key: string]: string; } = {
   LABEL1: 'megamenu-label-1',
   LABEL2: 'megamenu-label-2',
 };
+
+const INQUIRY_LINK_URL = 'https://forms.gle/hE4VMchTZuff5rLB7';
 
 const useMegaMenu = (category: Category[]) => {
   const [panelMenuList, setPanelMenuList] = useState<SubMenu[] | null>();
@@ -88,18 +89,9 @@ function Header() {
   const token = useTokenState();
   const isLoggedin = !!token;
   const isMain = pathname === '/';
-  const userInfo = useRecoilValue(userInfoState);
-  const setUserInfo = useSetRecoilState(userInfoState);
+  const { data: userInfo } = useUser();
   const logout = useLogout();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (token) {
-      getUser(token).then((response) => {
-        setUserInfo(response);
-      });
-    }
-  }, [token, setUserInfo]);
 
   return (
     <header
@@ -181,7 +173,7 @@ function Header() {
                         <>
                           <li className={styles['mobileheader__my-info']}>
                             <Link to="/auth/modifyinfo">
-                              내 정보
+                              정보 수정
                             </Link>
                           </li>
                           <li className={styles.mobileheader__link}>
@@ -219,7 +211,7 @@ function Header() {
                               className={styles['mobileheader__sub-menu']}
                               key={subMenu.title}
                             >
-                              <Link to={subMenu.link}>
+                              <Link to={subMenu.link} target={subMenu.openInNewTab ? '_blank' : '_self'}>
                                 {subMenu.title}
                               </Link>
                             </li>
@@ -236,6 +228,11 @@ function Header() {
                     src="https://image.bcsdlab.com/favicon.ico"
                     alt="bcsd lab logo"
                   />
+                  <div className={styles.mobileheader__inquiry}>
+                    <Link to={INQUIRY_LINK_URL}>
+                      문의하기
+                    </Link>
+                  </div>
                   <img
                     className={cn({
                       [styles.mobileheader__logo]: true,

@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 
 import LoadingSpinner from 'components/common/LoadingSpinner';
 
@@ -7,6 +8,7 @@ import HotPost from 'components/Post/HotPost';
 import styles from './NoticePage.module.scss';
 
 function Notice() {
+  useScrollToTop();
   return (
     <div className={styles.template}>
       <div className={styles.content}>

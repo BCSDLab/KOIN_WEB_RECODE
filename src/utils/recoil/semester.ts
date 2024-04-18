@@ -44,28 +44,27 @@ function waitForTruthyValue<T>(getValue: () => T, timeout = 1000): Promise<T> {
     endSetTimeoutWhenValueNonNullable();
   });
 }
-
 export const myLecturesAtom = atom<LectureInfo[] | null>({
   key: 'myLectures',
   default: null,
   effects: [
     ({ getLoadable, setSelf, onSet }) => {
-      if (getLoadable(tokenState).contents) {
-        return;
-      }
-      waitForTruthyValue(
-        (() => getLoadable(
-          selectedSemesterAtom,
-        ).contents) as () => string,
-      )
-        .then((value) => {
-          const savedValue = localStorage.getItem(MY_LECTURES_KEY);
-          if (savedValue != null) {
-            setSelf(JSON.parse(savedValue)[value]);
-            return;
-          }
+      const loadTokenState = async () => {
+        const token = await getLoadable(tokenState).toPromise();
+        if (token) {
+          return;
+        }
+        const selectedSemester = await waitForTruthyValue(
+          () => getLoadable(selectedSemesterAtom).getValue(),
+        );
+        const savedValue = localStorage.getItem(MY_LECTURES_KEY);
+        if (!savedValue) {
           setSelf([]);
-        });
+          return;
+        }
+        setSelf(JSON.parse(savedValue)[selectedSemester]);
+      };
+      loadTokenState();
 
       onSet((newValue, _, isReset) => {
         if (isReset) {
@@ -119,7 +118,8 @@ export const myLectureRemoveLectureSelector = selector<LectureInfo>({
       return;
     }
     const timetableInfoWithNewValue = timetableInfo.filter(
-      (lecture) => lecture.code !== newValue.code,
+      // eslint-disable-next-line max-len
+      (lecture) => (lecture.code !== newValue.code) || (lecture.lecture_class !== newValue.lecture_class),
     );
     set(myLecturesAtom, timetableInfoWithNewValue);
   },

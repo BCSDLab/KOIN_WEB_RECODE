@@ -1,7 +1,7 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 import { nicknameDuplicateCheck } from 'api/auth';
 import { NicknameDuplicateCheckResponse } from 'api/auth/entity';
-import { APIError } from 'interfaces/APIError';
+import { KoinError } from 'interfaces/APIError';
 import { useEffect } from 'react';
 
 import showToast from 'utils/ts/showToast';
@@ -11,7 +11,7 @@ const NICKNAME_DUPLICATE_CHECK_KEY = 'nickname-duplicate-check';
 function useNicknameCheckServer(nickname: string) {
   const { data, error, status } = useQuery<
   Awaited<ReturnType<typeof nicknameDuplicateCheck>>,
-  APIError,
+  KoinError,
   NicknameDuplicateCheckResponse | undefined,
   [string, string]
   >(

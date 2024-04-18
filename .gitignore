@@ -2,6 +2,7 @@
 
 # .gitignore
 .yarn/*
+.yarn/cache/fsevents*
 !.yarn/cache
 !.yarn/patches
 !.yarn/plugins

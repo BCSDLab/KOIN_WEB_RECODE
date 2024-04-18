@@ -2,18 +2,18 @@
 import React, { useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
-import cn from 'utils/ts/classnames';
+import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { DeptListResponse, IDept } from 'api/dept/entity';
-import sha256 from 'utils/ts/SHA-256';
 import useTokenState from 'utils/hooks/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
-import { useRecoilValue } from 'recoil';
-import { userInfoState } from 'utils/recoil/userInfoState';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
-import { UserUpdateRequest } from 'api/auth/entity';
+import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
+import { useUser } from 'utils/hooks/useUser';
+
+import { useQueryClient } from '@tanstack/react-query';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -26,7 +26,7 @@ const PHONENUMBER_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
 interface IFormType {
   [key: string]: {
     ref: HTMLInputElement | ICustomFormInput | null;
-    validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
+    validFunction?: (value: unknown, fieldRefs: { current: any }) => string | true;
   }
 }
 
@@ -36,7 +36,7 @@ interface ICustomFormInput {
 }
 
 interface IRegisterOption {
-  validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
+  validFunction?: (value: unknown, fieldsRefs: { current: any }) => string | true;
   required?: boolean;
 }
 
@@ -52,40 +52,82 @@ export interface ISubmitForm {
   }): void;
 }
 
+type UserResponseKeys = Omit<UserResponse, 'anonymous_nickname' | 'major'>;
+
+interface MappedFields {
+  [key: string]: keyof UserResponseKeys;
+}
+
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
 ): elementRef is ICustomFormInput => (elementRef !== null
 && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
-  const refCollection = React.useRef<IFormType>({});
+  const fieldRefs = React.useRef<IFormType>({});
+  const { data: userInfo } = useUser();
 
   const register = (name: string, options: IRegisterOption = {}): RegisterReturn => ({
     required: options.required,
     name,
     ref: (elementRef: HTMLInputElement | ICustomFormInput | null) => {
-      refCollection.current[name] = {
+      fieldRefs.current[name] = {
         ref: elementRef,
       };
       if (options.validFunction) {
-        refCollection.current[name].validFunction = options.validFunction;
+        fieldRefs.current[name].validFunction = options.validFunction;
       }
     },
   });
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const isCurrentValidEntries = Object.entries(refCollection.current)
+
+    let isAnyFieldChanged = false;
+
+    const mappedFields: MappedFields = {
+      'phone-number': 'phone_number',
+      'student-number': 'student_number',
+    };
+
+    const compareFields = ['name', 'nickname', 'gender', 'phone-number', 'student-number'];
+    compareFields.forEach((field) => {
+      if (!fieldRefs.current[field]) return;
+      const fieldRef = fieldRefs.current[field].ref;
+      let inputValue;
+      if (isRefICustomFormInput(fieldRef)) {
+        inputValue = fieldRef.value ? fieldRef.value : null;
+        if (field === 'gender' && fieldRef.value === 0) {
+          inputValue = 0;
+        }
+      } else if (fieldRef !== null) {
+        inputValue = fieldRef.value ? fieldRef.value : null;
+      }
+      if (field === 'student-number') {
+        inputValue = inputValue && typeof inputValue === 'object' && 'studentNumber' in inputValue ? inputValue.studentNumber : null;
+      }
+      const userResponseField = mappedFields[field] || field;
+      const originalValue = userInfo ? userInfo[userResponseField] : '';
+      if (inputValue !== originalValue) {
+        isAnyFieldChanged = true;
+      }
+    });
+
+    if (!isAnyFieldChanged && !fieldRefs.current.password?.ref?.value) {
+      showToast('error', '변경된 정보가 없습니다.');
+      return;
+    }
+    const isCurrentValidEntries = Object.entries(fieldRefs.current)
       .map((refValue): [string, string | true] => {
         if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
         const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
           ? refValue[1].ref.valid
-          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', refCollection) ?? true;
+          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', fieldRefs) ?? true;
         return [refValue[0], isCurrentNameValid];
       });
     const invalidFormEntry = isCurrentValidEntries
       .find((entry): entry is [string, string] => entry[1] !== true);
     if (!invalidFormEntry) {
-      const formValue = Object.entries(refCollection?.current).map((nameValue) => {
+      const formValue = Object.entries(fieldRefs?.current).map((nameValue) => {
         if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
           return [nameValue[0], nameValue[1].ref.value];
         }
@@ -164,7 +206,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   props,
   ref,
 ) => {
-  const userInfo = useRecoilValue(userInfoState); // Recoil에서 기존 userInfo 상태를 가져옵니다.
+  const { data: userInfo } = useUser();
   const nicknameElementRef = React.useRef<HTMLInputElement>(null);
 
   const {
@@ -231,7 +273,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 });
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
-  const userInfo = useRecoilValue(userInfoState);
+  const { data: userInfo } = useUser();
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
 
@@ -307,7 +349,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
   name,
   required,
 }, ref) => {
-  const userInfo = useRecoilValue(userInfoState);
+  const { data: userInfo } = useUser();
   const [currentValue, setCurrentValue] = React.useState<number | null>(userInfo?.gender || null);
   const [isOpenedPopup, openPopup, closePopup, triggerPopup] = useBooleanState(false);
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
@@ -388,9 +430,12 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
 });
 
 const useModifyInfoForm = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const token = useTokenState();
   const onSuccess = () => {
     navigate('/');
+    queryClient.invalidateQueries({ queryKey: ['userInfo', token] });
   };
   const { status, mutate } = useUserInfoUpdate({ onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
@@ -417,7 +462,7 @@ function ModifyInfoPage() {
   const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
   const navigate = useNavigate();
-  const userInfo = useRecoilValue(userInfoState);
+  const { data: userInfo } = useUser();
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
   const portalManager = useModalPortal();
   const { mutate: deleteUser } = useUserDelete();
@@ -430,7 +475,10 @@ function ModifyInfoPage() {
   const onClickDeleteUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     portalManager.open((portalOption: Portal) => (
-      <UserDeleteModal deleteUser={() => onClickUserDeleteConfirm} onClose={portalOption.close} />
+      <UserDeleteModal
+        deleteUser={(event: React.MouseEvent<HTMLButtonElement>) => onClickUserDeleteConfirm(event)}
+        onClose={portalOption.close}
+      />
     ));
   };
 
@@ -442,6 +490,7 @@ function ModifyInfoPage() {
           type="text"
           readOnly
           disabled
+          defaultValue={userInfo?.email}
         />
         <span className={styles.modify__advice}>
           계정명은 변경하실 수 없습니다.

@@ -1,45 +1,46 @@
 // 후에 전체 disable 예정. defaultProps는 필요 없음.
 /* eslint-disable react/require-default-props */
-import cn from 'utils/ts/classnames';
+import React from 'react';
+import { cn } from '@bcsdlab/utils';
 import { TimetableDayLectureInfo } from 'interfaces/Lecture';
 import {
   BACKGROUND_COLOR,
   DAYS_STRING,
-  TIME_ALIAS,
   TIME_STRING,
 } from 'static/timetable';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
   lectures: TimetableDayLectureInfo[][];
   selectedLectureIndex?: number;
   similarSelectedLecture?: TimetableDayLectureInfo[][];
-  firstColWidth: number;
-  colWidth: number;
+  firstColumnWidth: number;
+  columnWidth: number;
   rowHeight: number;
   totalHeight: number;
 }
-
-export const TIMETABLE_ID = 'timetable-id';
 
 function Timetable({
   lectures,
   selectedLectureIndex,
   similarSelectedLecture,
-  firstColWidth,
-  colWidth,
+  firstColumnWidth,
+  columnWidth,
   rowHeight,
   totalHeight,
 }: TimetableProps) {
+  const isMobile = useMediaQuery();
+
   return (
-    <div id={TIMETABLE_ID} className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${colWidth / 5}px` }}>
-      <div className={styles.timetable__head} style={{ height: `${rowHeight * 1.5}px` }}>
+    <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${columnWidth / 5}px` }}>
+      <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight * 1.5}px` }}>
         <div
           className={cn({
             [styles.timetable__col]: true,
             [styles['timetable__col--head']]: true,
           })}
-          style={{ width: `${firstColWidth}px` }}
+          style={{ width: `${firstColumnWidth}px` }}
         />
         {DAYS_STRING.map((day) => (
           <div
@@ -47,7 +48,7 @@ function Timetable({
               [styles.timetable__col]: true,
               [styles['timetable__col--head']]: true,
             })}
-            style={{ width: `${colWidth}px` }}
+            style={{ width: isMobile ? undefined : `${columnWidth}px` }}
             key={day}
           >
             {day}
@@ -56,7 +57,7 @@ function Timetable({
       </div>
       <div className={styles.timetable__content}>
         <div className={styles['timetable__row-container']} aria-hidden="true">
-          {TIME_ALIAS.map((value) => (
+          {TIME_STRING.map((value) => (
             <div
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
@@ -70,16 +71,13 @@ function Timetable({
             [styles.timetable__col]: true,
             [styles['timetable__col--time']]: true,
           })}
-          style={{ width: `${firstColWidth}px` }}
+          style={{ width: `${firstColumnWidth}px`, fontSize: `${firstColumnWidth / 4}px` }}
           aria-hidden="true"
         >
-          {TIME_ALIAS.map((value, timeIndex) => (
+          {TIME_STRING.map((value) => (
             <div style={{ height: `${rowHeight}px` }} key={value}>
               <div>
                 {value}
-              </div>
-              <div>
-                {TIME_STRING[timeIndex]}
               </div>
             </div>
           ))}
@@ -90,7 +88,7 @@ function Timetable({
         {DAYS_STRING.map((day, index) => (
           <div
             className={styles.timetable__col}
-            style={{ width: `${colWidth}px` }}
+            style={{ width: isMobile ? undefined : `${columnWidth}px` }}
             key={day}
           >
             {lectures[index].map(({
@@ -105,9 +103,9 @@ function Timetable({
                 className={styles.timetable__lecture}
                 key={lectureIndex}
                 style={{
-                  backgroundColor: BACKGROUND_COLOR[lectureIndex],
+                  backgroundColor: BACKGROUND_COLOR[lectureIndex % 11],
                   top: `${start * rowHeight}px`,
-                  width: `${colWidth}px`,
+                  width: isMobile ? undefined : `${columnWidth}px`,
                   height: `${(end - start + 1) * rowHeight}px`,
                 }}
               >
@@ -133,9 +131,9 @@ function Timetable({
                 })}
                 key={lectureIndex}
                 style={{
-                  borderWidth: selectedLectureIndex === lectureIndex ? '3px' : '1px',
+                  borderWidth: selectedLectureIndex === lectureIndex ? '2px' : '1px',
                   top: `${start * rowHeight}px`,
-                  width: `${colWidth}px`,
+                  width: isMobile ? undefined : `${columnWidth}px`,
                   height: `${(end - start + 1) * rowHeight}px`,
                 }}
               />

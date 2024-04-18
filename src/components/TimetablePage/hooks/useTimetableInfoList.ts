@@ -1,6 +1,6 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 import { getTimetableInfo } from 'api/timetable';
-import { APIError } from 'interfaces/APIError';
+import { KoinError } from 'interfaces/APIError';
 import { TimetableLectureInfo } from 'interfaces/Lecture';
 
 export const TIMETABLE_INFO_LIST = 'TIMETABLE_INFO_LIST';
@@ -11,7 +11,7 @@ function useTimetableInfoList(
 ) {
   const { data: timetableInfoList } = useQuery<
   Awaited<ReturnType<typeof getTimetableInfo>>,
-  APIError,
+  KoinError,
   TimetableLectureInfo[] | undefined,
   [string, string]
   >(
@@ -26,7 +26,7 @@ function useTimetableInfoList(
       select: (data: Awaited<ReturnType<typeof getTimetableInfo>>) => data.timetable,
     }),
   );
-  return { timetableInfoList };
+  return { data: timetableInfoList };
 }
 
 export default useTimetableInfoList;

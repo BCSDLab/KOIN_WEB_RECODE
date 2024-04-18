@@ -43,6 +43,7 @@
           ]
         }
       ],
+      "import/extensions": "off",
       "react/react-in-jsx-scope": "off",
       "max-classes-per-file": "off",
       "class-methods-use-this": "off",
