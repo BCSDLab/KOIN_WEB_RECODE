@@ -1,9 +1,9 @@
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import * as api from 'api';
 
 const useRoomDetail = (id: string) => {
   const { data: roomDetail } = useQuery(
-    queryOptions({
+    {
       queryKey: ['roomDetail', id],
       queryFn: async ({ queryKey }) => {
         const queryFnParams = queryKey[1];
@@ -11,7 +11,7 @@ const useRoomDetail = (id: string) => {
         return api.room.getRoomDetailInfo(queryFnParams);
       },
 
-    }),
+    },
   );
 
   const roomOptions = Object.entries(roomDetail || {}).reduce((acc, [key, val]) => {

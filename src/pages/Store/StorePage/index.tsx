@@ -7,7 +7,7 @@ import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useLogger from 'utils/hooks/useLogger';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 
@@ -50,11 +50,11 @@ const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
 
 const useStoreList = (params: StoreSearchQueryType) => {
   const { data: storeList } = useQuery(
-    queryOptions({
+    {
       queryKey: ['storeList', params],
       queryFn: api.store.getStoreList,
       retry: 0,
-    }),
+    },
   );
 
   const selectedCategory = Number(params.category);

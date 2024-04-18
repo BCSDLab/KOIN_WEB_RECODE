@@ -1,4 +1,4 @@
-import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getBusTimetableInfo } from 'api/bus';
 import {
   BusRouteInfo as ShuttleInfo, Course, ExpressCourse, ExpressInfo, ShuttleCourse,
@@ -24,7 +24,7 @@ function useBusTimetable(course: Course): ShuttleTimetable | ExpressTimetable | 
   const { bus_type: busType, direction: busDirection, region: busRegion } = course;
 
   const { data } = useSuspenseQuery(
-    queryOptions({
+    {
       queryKey: [TIMETABLE_KEY, busType, busDirection, busRegion] as const,
       queryFn: (
         { queryKey: [, bus_type, direction, region] },
@@ -42,7 +42,7 @@ function useBusTimetable(course: Course): ShuttleTimetable | ExpressTimetable | 
           type: 'shuttle' as const,
         };
       },
-    }),
+    },
   );
 
   return data;

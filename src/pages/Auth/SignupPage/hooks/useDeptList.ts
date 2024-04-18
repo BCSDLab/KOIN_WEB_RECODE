@@ -1,14 +1,14 @@
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { dept } from 'api';
 import showToast from 'utils/ts/showToast';
 
 const useDeptList = () => {
   const { data, error } = useQuery(
-    queryOptions({
+    {
       queryKey: ['dept'],
       queryFn: dept.default,
 
-    }),
+    },
   );
 
   if (error) {
