@@ -166,7 +166,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 ) => {
   const userInfo = useRecoilValue(userInfoState); // Recoil에서 기존 userInfo 상태를 가져옵니다.
   const nicknameElementRef = React.useRef<HTMLInputElement>(null);
-  const [nicknameInputValue, setNicknameInputValue] = React.useState(userInfo?.nickname || ''); // 초기값을 기존 닉네임으로 설정합니다.
+
   const {
     changeTargetNickname,
     status,
@@ -189,20 +189,16 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     () => {
       // 닉네임 유효성 검사 로직
       let valid: string | true = true;
-      if (nicknameInputValue && nicknameInputValue !== userInfo?.nickname && (status !== 'success' || nicknameInputValue !== currentCheckedNickname)) {
+      if (nicknameElementRef && nicknameElementRef.current?.value !== userInfo?.nickname && (status !== 'success' || nicknameElementRef.current?.value !== currentCheckedNickname)) {
         valid = '닉네임 중복확인을 해주세요.';
       }
       return {
-        value: nicknameInputValue,
+        value: nicknameElementRef.current?.value,
         valid,
       };
     },
-    [currentCheckedNickname, status, nicknameInputValue, userInfo?.nickname],
+    [currentCheckedNickname, status, nicknameElementRef, userInfo?.nickname],
   );
-
-  const onChangeNicknameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNicknameInputValue(event.target.value);
-  };
 
   return (
     <div
@@ -215,10 +211,9 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         ref={nicknameElementRef}
         className={styles['form-input']}
         type="text"
-        onChange={onChangeNicknameInput}
         autoComplete="nickname"
         placeholder="닉네임 (선택)"
-        value={nicknameInputValue} // defaultValue를 value로 변경하여 제어 컴포넌트로 만듭니다.
+        defaultValue={userInfo?.nickname || ''}
         {...props}
       />
       <button
