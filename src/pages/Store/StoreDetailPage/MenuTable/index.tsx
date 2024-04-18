@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { MenuCategory } from 'api/store/entity';
-import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import { cn } from '@bcsdlab/utils';
 import useMoveScroll from 'utils/hooks/useMoveScroll';
 import MENU_CATEGORY from 'static/menu';
@@ -18,12 +17,13 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
   return (
     <>
       <ul className={styles.categories}>
-        {storeMenuCategories.map((menuCategories, index) => (
+        {MENU_CATEGORY.map((menuCategories, index) => (
           <li key={menuCategories.id}>
             <button
               className={cn({
                 [styles.categories__tag]: true,
                 [styles['categories__tag--active']]: categoryType === menuCategories.name,
+                [styles['categories__tag--inactive']]: !storeMenuCategories.some((menu) => menuCategories.name === menu.name),
               })}
               type="button"
               onClick={() => {
@@ -35,6 +35,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
             </button>
           </li>
         ))}
+
       </ul>
       <div className={styles.table}>
         {storeMenuCategories.map((menuCategories, index) => (
@@ -68,7 +69,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                     ))) : (
                       <div className={styles['empty-image']}>
                         <div>
-                          <EmptyImageIcon />
+                          <img width="54px" height="50px" src="https://static.koreatech.in/assets/img/mainlogo2.png" alt="빈 이미지" />
                         </div>
                       </div>
                   )}
@@ -99,7 +100,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                       ))) : (
                         <div className={styles['empty-image']}>
                           <div>
-                            <EmptyImageIcon />
+                            <img width="54px" height="50px" src="https://static.koreatech.in/assets/img/mainlogo2.png" alt="빈 이미지" />
                           </div>
                         </div>
                     )}
