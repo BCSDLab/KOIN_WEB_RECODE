@@ -1,24 +1,33 @@
-/* eslint-disable react/require-default-props */
 /* eslint-disable no-restricted-imports */
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
 import useImageDownload from 'utils/hooks/useImageDownload';
-import { TimetableDayLectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableDayLectureInfo } from 'interfaces/Lecture';
+import { useRecoilValue } from 'recoil';
+import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
+import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import styles from './DefaultPage.module.scss';
 import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
 import Timetable from '../MyLectureTimetable/Timetable';
+import useLectureList from '../hooks/useLectureList';
 
 interface Props {
   lectures: TimetableDayLectureInfo[][];
-  selectedLectureIndex?: number;
-  similarSelectedLecture?: TimetableDayLectureInfo[][];
 }
 
-export default function MyLectureTimetable(
-  { lectures, similarSelectedLecture, selectedLectureIndex }: Props,
-) {
+export default function MyLectureTimetable({ lectures }: Props) {
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
+  const selectedSemester = useRecoilValue(selectedSemesterAtom);
+  const selectedLecture = useRecoilValue(selectedTempLectureSelector);
+  const { data: lectureList } = useLectureList(selectedSemester);
+  const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
+    ?.filter((lecture) => lecture.code === selectedLecture?.code)
+    ?? [];
+
+  const selectedLectureIndex = similarSelectedLecture
+    .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
+  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
 
   return (
     <div className={styles['page__timetable-wrap']}>
@@ -40,7 +49,7 @@ export default function MyLectureTimetable(
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <Timetable
               lectures={lectures}
-              similarSelectedLecture={similarSelectedLecture}
+              similarSelectedLecture={similarSelectedLectureDayList}
               selectedLectureIndex={selectedLectureIndex}
               columnWidth={55}
               firstColumnWidth={52}

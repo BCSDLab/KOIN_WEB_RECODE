@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props */
 /* eslint-disable no-restricted-imports */
 import React from 'react';
 import ErrorBoundary from 'components/common/ErrorBoundary';
@@ -6,18 +5,20 @@ import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg
 import showToast from 'utils/ts/showToast';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
-import { TimetableDayLectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableDayLectureInfo } from 'interfaces/Lecture';
+import { useRecoilValue } from 'recoil';
+import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
+import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import styles from './MobilePage.module.scss';
 import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
 import Timetable from '../MyLectureTimetable/Timetable';
+import useLectureList from '../hooks/useLectureList';
 
 interface Props {
   lectures: TimetableDayLectureInfo[][];
-  selectedLectureIndex?: number;
-  similarSelectedLecture?: TimetableDayLectureInfo[][];
 }
 
-function MobilePage({ lectures, similarSelectedLecture, selectedLectureIndex }: Props) {
+function MobilePage({ lectures }: Props) {
   const logger = useLogger();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,6 +29,16 @@ function MobilePage({ lectures, similarSelectedLecture, selectedLectureIndex }: 
     });
     onTimetableImageDownload('my-timetable');
   };
+  const selectedSemester = useRecoilValue(selectedSemesterAtom);
+  const selectedLecture = useRecoilValue(selectedTempLectureSelector);
+  const { data: lectureList } = useLectureList(selectedSemester);
+  const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
+    ?.filter((lecture) => lecture.code === selectedLecture?.code)
+    ?? [];
+
+  const selectedLectureIndex = similarSelectedLecture
+    .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
+  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
 
   return (
     <>
@@ -52,7 +63,7 @@ function MobilePage({ lectures, similarSelectedLecture, selectedLectureIndex }: 
             <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
               <Timetable
                 lectures={lectures}
-                similarSelectedLecture={similarSelectedLecture}
+                similarSelectedLecture={similarSelectedLectureDayList}
                 selectedLectureIndex={selectedLectureIndex}
                 columnWidth={55}
                 firstColumnWidth={52}
