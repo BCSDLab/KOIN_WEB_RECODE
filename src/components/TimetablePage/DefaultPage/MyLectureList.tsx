@@ -20,7 +20,6 @@ function MyLectureList() {
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(selectedSemester, token);
 
   return (
-
     <div>
       <h3 className={styles['page__title--sub']}>나의 시간표</h3>
       <div className={styles['page__table--selected']}>
@@ -33,14 +32,14 @@ function MyLectureList() {
                 selectedLecture={undefined}
                 onClickRow={undefined}
                 onClickLastColumn={
-        (clickedLecture) => {
-          if ('name' in clickedLecture) {
-            removeLectureFromLocalStorage(clickedLecture);
-            return;
-          }
-          removeLectureFromServer(clickedLecture.id.toString());
-        }
-      }
+                  (clickedLecture) => {
+                    if ('name' in clickedLecture) {
+                      removeLectureFromLocalStorage(clickedLecture);
+                      return;
+                    }
+                    removeLectureFromServer(clickedLecture.id.toString());
+                  }
+                }
               >
                 {(props: { onClick: () => void }) => (
                   <button type="button" className={styles.list__button} onClick={props.onClick}>

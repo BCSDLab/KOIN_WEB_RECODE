@@ -1,63 +1,23 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable no-restricted-imports */
 import React from 'react';
-import { LectureInfo } from 'interfaces/Lecture';
-import {
-  myLecturesAtom,
-  selectedSemesterAtom,
-  selectedTempLectureSelector,
-} from 'utils/recoil/semester';
-import { useRecoilValue } from 'recoil';
-import Timetable from 'components/TimetablePage/MyLectureTimetable/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
-import useTokenState from 'utils/hooks/useTokenState';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import showToast from 'utils/ts/showToast';
-import useLectureList from 'components/TimetablePage/hooks/useLectureList';
-import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
+import { TimetableDayLectureInfo } from 'interfaces/Lecture';
 import styles from './MobilePage.module.scss';
 import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
+import Timetable from '../MyLectureTimetable/Timetable';
 
-function CurrentSemesterTimetable(): JSX.Element {
-  const selectedSemesterValue = useRecoilValue(selectedSemesterAtom);
-  const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
-
-  const token = useTokenState();
-  const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
-  const myLectureDayValue = useTimetableDayList(
-    token
-      ? (myLecturesFromServer ?? [])
-      : (myLecturesFromLocalStorageValue ?? []),
-  );
-
-  const selectedLecture = useRecoilValue(selectedTempLectureSelector);
-  const { data: lectureList, status } = useLectureList(selectedSemester);
-  const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
-    ?.filter((lecture) => lecture.code === selectedLecture?.code)
-    ?? [];
-  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
-  const selectedLectureIndex = similarSelectedLecture
-    .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
-  // TODO: selectedSemesterValue가 바뀔 때 myLecturesFromServer가 학기별 강의를 불러오지 못함
-  return selectedSemesterValue && status === 'success' ? (
-    <Timetable
-      lectures={myLectureDayValue}
-      similarSelectedLecture={similarSelectedLectureDayList}
-      selectedLectureIndex={selectedLectureIndex}
-      columnWidth={55}
-      firstColumnWidth={52}
-      rowHeight={28}
-      totalHeight={600}
-    />
-  ) : (
-    <LoadingSpinner className={styles['top-loading-spinner']} />
-  );
+interface Props {
+  lectures: TimetableDayLectureInfo[][];
+  selectedLectureIndex?: number;
+  similarSelectedLecture?: TimetableDayLectureInfo[][];
 }
 
-function MobilePage() {
+function MobilePage({ lectures, similarSelectedLecture, selectedLectureIndex }: Props) {
   const logger = useLogger();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -90,7 +50,15 @@ function MobilePage() {
         <div ref={timetableRef} className={styles.page__timetable}>
           <ErrorBoundary fallbackClassName="loading">
             <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
-              <CurrentSemesterTimetable />
+              <Timetable
+                lectures={lectures}
+                similarSelectedLecture={similarSelectedLecture}
+                selectedLectureIndex={selectedLectureIndex}
+                columnWidth={55}
+                firstColumnWidth={52}
+                rowHeight={21}
+                totalHeight={456}
+              />
             </React.Suspense>
           </ErrorBoundary>
         </div>
