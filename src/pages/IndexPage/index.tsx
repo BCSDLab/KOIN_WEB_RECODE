@@ -8,17 +8,19 @@ import styles from './IndexPage.module.scss';
 
 function IndexPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      {/* 위 전체적으로 씌워주는 부분에서의 suspense의 위치를
-      조율하는 방향으로 수정 필요 예상 */}
+    <Suspense fallback={null}>
       <main className={styles.template}>
         <div className={styles.mobileWrapper}>
           <IndexStore />
           <IndexBus />
         </div>
-        <IndexTimetable />
-        <IndexNotice />
-        <IndexCafeteria />
+        <Suspense fallback={null}>
+          <IndexTimetable />
+        </Suspense>
+        <Suspense fallback={null}>
+          <IndexNotice />
+          <IndexCafeteria />
+        </Suspense>
       </main>
     </Suspense>
   );

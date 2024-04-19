@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
-import { DeptListResponse, IDept } from 'api/dept/entity';
 import useTokenState from 'utils/hooks/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/useModalPortal';
@@ -287,9 +286,8 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     ? studentNumber?.slice(studentNumber.length - 5, studentNumber.length - 3)
     : '';
   const majorFromStudentNumber = studentNumber && studentNumber.length >= 8
-  && studentNumber.length <= 10 && Array.isArray(deptList as DeptListResponse)
-    // as unknown as ~를 써야 하는 이유: Response가 Array<IDept>로 주어진다.
-    ? (deptList as unknown as Array<IDept>)?.find(
+  && studentNumber.length <= 10
+    ? deptList.find(
       (deptValue) => deptValue.dept_nums.find((deptNum) => (deptNum === majorNumber)),
     )?.name ?? '' : '';
 

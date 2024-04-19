@@ -1,4 +1,4 @@
-import React from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
 import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
@@ -43,7 +43,8 @@ export default function IndexTimeTable() {
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
   const semesterOptionList = useSemesterOptionList();
-  React.useEffect(() => {
+
+  useEffect(() => {
     onChangeSemesterSelect({ target: { value: semesterOptionList[0].value } });
   // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,11 +56,11 @@ export default function IndexTimeTable() {
         시간표
       </Link>
       <ErrorBoundary fallbackClassName="loading">
-        <React.Suspense fallback={<LoadingSpinner className={styles['template__loading-spinner']} />}>
+        <Suspense fallback={null}>
           <Link to="/timetable">
             <CurrentSemesterTimetable />
           </Link>
-        </React.Suspense>
+        </Suspense>
       </ErrorBoundary>
     </div>
   );

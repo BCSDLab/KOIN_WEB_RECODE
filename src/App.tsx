@@ -43,8 +43,6 @@ function HelmetWrapper({ title, element }: PageWrapperProps) {
 function App() {
   const token = useTokenState();
   return (
-    // <Suspense fallback={null}>
-    // Suspense를 옮기는 작업 필요할 예정.
     <>
       <Routes>
         <Route path="/" element={<BoardPage />}>
@@ -73,7 +71,6 @@ function App() {
       <Toast />
       <LogPage />
     </>
-  // </Suspense>
   );
 }
 

@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react';
-import { IDept } from 'api/dept/entity';
-import { SemesterInfo, VersionInfo } from 'api/timetable/entity';
+import {
+  Suspense, useEffect, useRef, useState,
+} from 'react';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
@@ -31,8 +31,8 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 
 const useSearch = () => {
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
-  const [currentValue, setCurrentValue] = React.useState<string | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [currentValue, setCurrentValue] = useState<string | null>(null);
   const onClickSearchButton = () => {
     setCurrentValue(searchInputRef.current?.value ?? '');
   };
@@ -65,8 +65,7 @@ const deptOptionList = [
 
 const useSemesterOptionList = () => {
   const { data: semesterList } = useSemester();
-  // 구조가 Array<SemesterInfo>인데 Array로 인식이 안됨.
-  const semesterOptionList = (semesterList as unknown as Array<SemesterInfo> | undefined ?? []).map(
+  const semesterOptionList = semesterList.map(
     (semesterInfo) => ({
       label: `${semesterInfo.semester.slice(0, 4)}년 ${semesterInfo.semester.slice(4)}학기`,
       value: semesterInfo.semester,
@@ -79,7 +78,7 @@ const useSemesterOptionList = () => {
 type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 
 function DeptListbox({ value, onChange }: DecidedListboxProps) {
-  React.useEffect(() => {
+  useEffect(() => {
     if (deptOptionList.length !== 0) {
       onChange({ target: { value: deptOptionList[0].value } });
     }
@@ -93,7 +92,7 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
 
 function SemesterListbox({ value, onChange }: DecidedListboxProps) {
   const semesterOptionList = useSemesterOptionList();
-  React.useEffect(() => {
+  useEffect(() => {
     onChange({ target: { value: semesterOptionList[0].value } });
   // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,7 +103,7 @@ function SemesterListbox({ value, onChange }: DecidedListboxProps) {
 }
 
 interface CurrentSemesterLectureListProps {
-  semesterKey: string | null;
+  semesterKey: string;
   filter: {
     // 백엔드 수정하면 optional 제거
     department: string;
@@ -133,7 +132,7 @@ function CurrentSemesterLectureList({
       <LectureTable
         height={459}
         list={
-          (lectureList as unknown as Array<LectureInfo>)
+          (lectureList ?? [])
             .filter((lecture) => {
               const searchFilter = filter.search.toUpperCase();
               const departmentFilter = filter.department;
@@ -201,10 +200,7 @@ function CurrentSemesterLectureList({
           </button>
         )}
       </LectureTable>
-    ) : (
-      <LoadingSpinner size="80px" />
-    //  <LoadingSpinner className={styles['top-loading-spinner']} />
-    )
+    ) : null
   );
 }
 
@@ -260,7 +256,7 @@ function CurrentSemesterTimetable(): JSX.Element {
 
   const selectedLecture = useRecoilValue(selectedTempLectureSelector);
   const { data: lectureList } = useLectureList(selectedSemester);
-  const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
+  const similarSelectedLecture = lectureList
     ?.filter((lecture) => lecture.code === selectedLecture?.code)
     ?? [];
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
@@ -269,7 +265,7 @@ function CurrentSemesterTimetable(): JSX.Element {
 
   return selectedSemesterValue ? (
     // 리코일 값이 어느 순간에 있는 것인지 확인하고 삼항 연산 빼는 방향으로 추가 수정 필요
-    <Suspense fallback={<LoadingSpinner size="20px" />}>
+    <Suspense fallback={null}>
       <Timetable
         lectures={myLectureDayValue}
         similarSelectedLecture={similarSelectedLectureDayList}
@@ -290,7 +286,7 @@ function Curriculum() {
 
   return (
     <ul className={styles['page__curriculum-list']}>
-      {(deptList as unknown as Array<IDept> | undefined ?? []).map((dept) => (
+      {deptList.map((dept) => (
         <li key={dept.name}>
           <a
             className={styles.page__curriculum}
@@ -322,7 +318,7 @@ function LastUpdatedDate() {
   return (
     <div className={styles['page__last-update']}>
       <span className={styles['page__last-update--content']}>마지막 업데이트 날짜:</span>
-      <span className={styles['page__last-update--info']}>{RefactorDate((updatedDate as unknown as VersionInfo).updated_at)}</span>
+      <span className={styles['page__last-update--info']}>{RefactorDate(updatedDate.updated_at)}</span>
     </div>
   );
 }
@@ -342,9 +338,8 @@ function DefaultPage() {
     value: semesterFilterValue,
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
-  const { onImageDownload: onTimetableImageDownload } = useImageDownload();
-  // divRef: timetableRef  사용안하고 있다는데 dev 코드 비교 필요
-  // 다시
+  const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
+
   return (
     <>
       <h1 className={styles.page__title}>시간표</h1>
@@ -367,17 +362,17 @@ function DefaultPage() {
               </button>
             </div>
             <div className={styles.page__depart}>
-              <React.Suspense fallback={<LoadingSpinner size="20px" />}>
+              <Suspense fallback={null}>
                 <DeptListbox
                   value={departmentFilterValue}
                   onChange={onChangeDeptSelect}
                 />
-              </React.Suspense>
+              </Suspense>
             </div>
           </div>
 
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback={<LoadingSpinner size="30px" />}>
+            <Suspense fallback={null}>
               <CurrentSemesterLectureList
                 semesterKey={semesterFilterValue}
                 filter={{
@@ -386,18 +381,18 @@ function DefaultPage() {
                   search: searchValue ?? '',
                 }}
               />
-            </React.Suspense>
+            </Suspense>
           </ErrorBoundary>
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback={<LoadingSpinner size="20px" />}>
+            <Suspense fallback={null}>
               <LastUpdatedDate />
-            </React.Suspense>
+            </Suspense>
           </ErrorBoundary>
         </div>
         <div className={styles['page__timetable-wrap']}>
           <div className={styles.page__filter}>
             <div className={styles.page__semester}>
-              <Suspense fallback={<LoadingSpinner size="20px" />}>
+              <Suspense fallback={null}>
                 <SemesterListbox
                   value={semesterFilterValue}
                   onChange={onChangeSemesterSelect}
@@ -413,11 +408,11 @@ function DefaultPage() {
               이미지로 저장하기
             </button>
           </div>
-          <div className={styles.page__timetable}>
+          <div ref={timetableRef} className={styles.page__timetable}>
             <ErrorBoundary fallbackClassName="CurrentSemesterTimetable ErrorBoundary loading">
-              <React.Suspense fallback={<LoadingSpinner size="30px" />}>
+              <Suspense fallback={null}>
                 <CurrentSemesterTimetable />
-              </React.Suspense>
+              </Suspense>
             </ErrorBoundary>
           </div>
         </div>
@@ -427,18 +422,18 @@ function DefaultPage() {
           <div className={styles['page__table--selected']}>
 
             <ErrorBoundary fallbackClassName="CurrentMyLectureList ErrorBoundary loading">
-              <React.Suspense fallback={<LoadingSpinner size="30px" />}>
+              <Suspense fallback={null}>
                 <CurrentMyLectureList />
-              </React.Suspense>
+              </Suspense>
             </ErrorBoundary>
           </div>
         </div>
         <div>
           <h3 className={styles['page__title--sub']}>커리큘럼</h3>
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback={<LoadingSpinner size="30px" />}>
+            <Suspense fallback={null}>
               <Curriculum />
-            </React.Suspense>
+            </Suspense>
           </ErrorBoundary>
         </div>
       </div>

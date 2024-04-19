@@ -4,7 +4,6 @@ import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { koin, privacy } from 'static/terms';
-import { DeptListResponse, IDept } from 'api/dept/entity';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
@@ -211,9 +210,8 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     ? studentNumber?.slice(studentNumber.length - 5, studentNumber.length - 3)
     : '';
   const majorFromStudentNumber = studentNumber && studentNumber.length >= 8
-  && studentNumber.length <= 10 && Array.isArray(deptList as DeptListResponse)
-    // as unknown as ~를 써야 하는 이유: Response가 Array<IDept>로 주어진다.
-    ? (deptList as unknown as Array<IDept>)?.find(
+  && studentNumber.length <= 10
+    ? deptList.find(
       (deptValue) => deptValue.dept_nums.find((deptNum) => (deptNum === majorNumber)),
     )?.name ?? '' : '';
 

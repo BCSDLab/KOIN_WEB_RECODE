@@ -3,15 +3,11 @@ import { timetable } from 'api';
 
 const SEMESTER_INFO_KEY = 'lecture';
 
-const useLectureList = (semesterKey: string | null) => {
+const useLectureList = (semesterKey: string) => {
   const { data } = useSuspenseQuery(
     {
       queryKey: [SEMESTER_INFO_KEY, semesterKey],
-      queryFn: async ({ queryKey }) => {
-        const [, semesterKeyParam] = queryKey;
-
-        return semesterKeyParam ? timetable.getLectureList(semesterKeyParam) : null;
-      },
+      queryFn: () => (semesterKey !== '' ? timetable.getLectureList(semesterKey) : null),
     },
   );
   return { data };
