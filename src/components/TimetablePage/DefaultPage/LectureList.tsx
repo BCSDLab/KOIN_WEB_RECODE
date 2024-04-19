@@ -3,13 +3,9 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import useTokenState from 'utils/hooks/useTokenState';
-import {
-  myLectureAddLectureSelector, selectedSemesterAtom, selectedTempLectureSelector,
-} from 'utils/recoil/semester';
+import { useRecoilState } from 'recoil';
+import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import showToast from 'utils/ts/showToast';
-import useAddTimetableLecture from '../hooks/useAddTimetableLecture';
 import useLectureList from '../hooks/useLectureList';
 import { useSelect, useSelectRecoil } from '../hooks/useSelect';
 import DeptListbox from '../LectureList/DeptListbox ';
@@ -25,20 +21,17 @@ interface CurrentSemesterLectureListProps {
     search: string;
   };
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
+  addMyLecture: (clickedLecture: LectureInfo) => void;
 }
 
 function CurrentSemesterLectureList({
   semesterKey,
   filter,
   myLectures,
+  addMyLecture,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList, status } = useLectureList(semesterKey);
   const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
-  const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const addLectureToLocalStorage = useSetRecoilState(myLectureAddLectureSelector);
-
-  const token = useTokenState();
-  const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const isLoaded = status === 'success' && myLectures;
 
   return (
@@ -75,18 +68,12 @@ function CurrentSemesterLectureList({
             const myLectureTimeValue = (
               myLectures as Array<LectureInfo | TimetableLectureInfo>)
               .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
+
             if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
               showToast('error', '시간이 중복되어 추가할 수 없습니다.');
               return;
             }
-            if (token) {
-              mutateAddWithServer({
-                semester: selectedSemester,
-                timetable: [{ class_title: clickedLecture.name, ...clickedLecture }],
-              });
-            } else {
-              addLectureToLocalStorage(clickedLecture);
-            }
+            addMyLecture(clickedLecture);
           }
         }
       >
@@ -102,8 +89,11 @@ function CurrentSemesterLectureList({
   );
 }
 
-function LectureList({ myLectures }:
-{ myLectures: Array<LectureInfo> | Array<TimetableLectureInfo> }) {
+function LectureList({ myLectures, addMyLecture }:
+{
+  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
+  addMyLecture: (clickedLecture: LectureInfo) => void;
+}) {
   const {
     value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
@@ -152,6 +142,7 @@ function LectureList({ myLectures }:
               search: searchValue ?? '',
             }}
             myLectures={myLectures}
+            addMyLecture={addMyLecture}
           />
         </React.Suspense>
       </ErrorBoundary>

@@ -24,9 +24,9 @@ export default function MyLectureTimetable({ myLectures }: Props) {
   const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
     ?.filter((lecture) => lecture.code === selectedLecture?.code)
     ?? [];
-
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
+
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
 

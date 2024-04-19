@@ -7,10 +7,12 @@ import LectureList from 'components/TimetablePage/DefaultPage/LectureList';
 import MyLectureTimetable from 'components/TimetablePage/DefaultPage/MyLectureTimetable';
 import MyLectureList from 'components/TimetablePage/DefaultPage/MyLectureList';
 import Curriculum from 'components/TimetablePage/DefaultPage/Curriculum';
-import { useRecoilValue } from 'recoil';
-import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { myLectureAddLectureSelector, myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
 import useTokenState from 'utils/hooks/useTokenState';
 import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
+import useAddTimetableLecture from 'components/TimetablePage/hooks/useAddTimetableLecture';
+import { LectureInfo } from 'interfaces/Lecture';
 import styles from './TimetablePage.module.scss';
 
 function TimetablePage() {
@@ -24,6 +26,20 @@ function TimetablePage() {
 
   const myLectures = token ? (myLecturesFromServer ?? []) : (myLecturesFromLocalStorageValue ?? []);
 
+  const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
+  const addLectureToLocalStorage = useSetRecoilState(myLectureAddLectureSelector);
+
+  const addMyLecture = (clickedLecture: LectureInfo) => {
+    if (token) {
+      mutateAddWithServer({
+        semester: selectedSemester,
+        timetable: [{ class_title: clickedLecture.name, ...clickedLecture }],
+      });
+    } else {
+      addLectureToLocalStorage(clickedLecture);
+    }
+  };
+
   return (
     <div className={styles.page}>
       {!isMobile ? (
@@ -31,7 +47,7 @@ function TimetablePage() {
           <h1 className={styles.page__title}>시간표</h1>
           <div className={styles.page__content}>
             {/* 강의 목록 */}
-            <LectureList myLectures={myLectures} />
+            <LectureList myLectures={myLectures} addMyLecture={addMyLecture} />
             {/* 나의 시간표 타임 테이블 */}
             <MyLectureTimetable myLectures={myLectures} />
             {/* 나의 시간표 강의 목록 */}
