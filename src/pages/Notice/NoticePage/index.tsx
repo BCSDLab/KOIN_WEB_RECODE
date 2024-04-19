@@ -1,12 +1,13 @@
 import { Suspense } from 'react';
-import useHotArticleList from 'pages/Notice/NoticePage/hooks/useHotArticle';
-import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import { Outlet } from 'react-router-dom';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
+
+import LoadingSpinner from 'components/common/LoadingSpinner';
+
+import HotPost from 'components/Post/HotPost';
 import styles from './NoticePage.module.scss';
 
 function Notice() {
-  const hotArticleList = useHotArticleList();
   useScrollToTop();
   return (
     <div className={styles.template}>
@@ -14,11 +15,13 @@ function Notice() {
         <div className={styles.header}>
           <h1 className={styles.header__title}>공지사항</h1>
         </div>
-        <Suspense fallback={<LoadingSpinner className={styles['content__loading-spinner']} />}>
+        <Suspense fallback={<LoadingSpinner size="200px" />}>
           <Outlet />
         </Suspense>
       </div>
-      { hotArticleList }
+      <Suspense fallback={<LoadingSpinner size="80px" />}>
+        <HotPost />
+      </Suspense>
     </div>
   );
 }

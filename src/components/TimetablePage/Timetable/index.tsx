@@ -57,11 +57,13 @@ function Timetable({
       </div>
       <div className={styles.timetable__content}>
         <div className={styles['timetable__row-container']} aria-hidden="true">
-          {TIME_STRING.map((value) => (
+          {TIME_STRING.map((value, index) => (
             <div
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
-              key={value}
+              // index값이 변경되지 않음
+              // eslint-disable-next-line react/no-array-index-key
+              key={`value-${index}`}
             />
           ))}
           <div className={styles['timetable__row-line']} />
@@ -74,8 +76,13 @@ function Timetable({
           style={{ width: `${firstColumnWidth}px`, fontSize: `${firstColumnWidth / 4}px` }}
           aria-hidden="true"
         >
-          {TIME_STRING.map((value) => (
-            <div style={{ height: `${rowHeight}px` }} key={value}>
+          {TIME_STRING.map((value, index) => (
+            <div
+              style={{ height: `${rowHeight}px` }}
+              // index값이 변경되지 않음
+              // eslint-disable-next-line react/no-array-index-key
+              key={`value-${index}`}
+            >
               <div>
                 {value}
               </div>

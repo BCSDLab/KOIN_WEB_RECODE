@@ -1,4 +1,4 @@
-import React, { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 import {
   Routes,
   Route,
@@ -43,7 +43,7 @@ function HelmetWrapper({ title, element }: PageWrapperProps) {
 function App() {
   const token = useTokenState();
   return (
-    <Suspense fallback={null}>
+    <>
       <Routes>
         <Route path="/" element={<BoardPage />}>
           <Route path="timetable" element={<HelmetWrapper title="코인 - 시간표" element={<TimetablePage />} />} />
@@ -70,7 +70,7 @@ function App() {
       </Routes>
       <Toast />
       <LogPage />
-    </Suspense>
+    </>
   );
 }
 

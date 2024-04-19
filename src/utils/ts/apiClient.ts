@@ -23,7 +23,7 @@ export default class APIClient {
   static toCallable<
     T extends Constructor<any>,
     U extends InstanceType<T>,
-    R extends ResponseType<U> & KoinError,
+    R extends ResponseType<U>,
   >(api: T) {
     // eslint-disable-next-line new-cap
     return (...args: ConstructorParameters<T>) => APIClient.request<R>(new api(...args));

@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
-import { DeptListResponse, IDept } from 'api/dept/entity';
 import useTokenState from 'utils/hooks/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/useModalPortal';
@@ -12,7 +11,7 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/useUser';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -115,12 +114,14 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       showToast('error', '변경된 정보가 없습니다.');
       return;
     }
+
     const isCurrentValidEntries = Object.entries(fieldRefs.current)
       .map((refValue): [string, string | true] => {
         if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
         const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
           ? refValue[1].ref.valid
           : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', fieldRefs) ?? true;
+
         return [refValue[0], isCurrentNameValid];
       });
     const invalidFormEntry = isCurrentValidEntries
@@ -207,7 +208,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 ) => {
   const { data: userInfo } = useUser();
   const nicknameElementRef = React.useRef<HTMLInputElement>(null);
-  const [nicknameInputValue, setNicknameInputValue] = React.useState(userInfo?.nickname || ''); // 초기값을 기존 닉네임으로 설정합니다.
+
   const {
     changeTargetNickname,
     status,
@@ -230,20 +231,16 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     () => {
       // 닉네임 유효성 검사 로직
       let valid: string | true = true;
-      if (nicknameInputValue && nicknameInputValue !== userInfo?.nickname && (status !== 'success' || nicknameInputValue !== currentCheckedNickname)) {
+      if (nicknameElementRef && nicknameElementRef.current?.value !== userInfo?.nickname && (status !== 'success' || nicknameElementRef.current?.value !== currentCheckedNickname)) {
         valid = '닉네임 중복확인을 해주세요.';
       }
       return {
-        value: nicknameInputValue,
+        value: nicknameElementRef.current?.value,
         valid,
       };
     },
-    [currentCheckedNickname, status, nicknameInputValue, userInfo?.nickname],
+    [currentCheckedNickname, status, nicknameElementRef, userInfo?.nickname],
   );
-
-  const onChangeNicknameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNicknameInputValue(event.target.value);
-  };
 
   return (
     <div
@@ -256,10 +253,9 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         ref={nicknameElementRef}
         className={styles['form-input']}
         type="text"
-        onChange={onChangeNicknameInput}
         autoComplete="nickname"
         placeholder="닉네임 (선택)"
-        value={nicknameInputValue} // defaultValue를 value로 변경하여 제어 컴포넌트로 만듭니다.
+        defaultValue={userInfo?.nickname || ''}
         {...props}
       />
       <button
@@ -289,9 +285,8 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     ? studentNumber?.slice(studentNumber.length - 5, studentNumber.length - 3)
     : '';
   const majorFromStudentNumber = studentNumber && studentNumber.length >= 8
-  && studentNumber.length <= 10 && Array.isArray(deptList as DeptListResponse)
-    // as unknown as ~를 써야 하는 이유: Response가 Array<IDept>로 주어진다.
-    ? (deptList as unknown as Array<IDept>)?.find(
+  && studentNumber.length <= 10
+    ? deptList.find(
       (deptValue) => deptValue.dept_nums.find((deptNum) => (deptNum === majorNumber)),
     )?.name ?? '' : '';
 
@@ -439,7 +434,7 @@ const useModifyInfoForm = () => {
   const token = useTokenState();
   const onSuccess = () => {
     navigate('/');
-    queryClient.invalidateQueries(['userInfo', token]);
+    queryClient.invalidateQueries({ queryKey: ['userInfo', token] });
   };
   const { status, mutate } = useUserInfoUpdate({ onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
@@ -535,7 +530,7 @@ function ModifyInfoPage() {
         <GenderListbox {...register('gender')} />
         <button
           type="submit"
-          disabled={status === 'loading'}
+          disabled={status === 'pending'}
           className={cn({
             [styles.modify__button]: true,
             [styles['modify__button--flex-end']]: true,
@@ -547,7 +542,7 @@ function ModifyInfoPage() {
         </button>
         <button
           type="button"
-          disabled={status === 'loading'}
+          disabled={status === 'pending'}
           className={cn({
             [styles.modify__button]: true,
             [styles['modify__button--delete']]: true,

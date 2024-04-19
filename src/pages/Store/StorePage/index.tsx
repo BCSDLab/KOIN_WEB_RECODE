@@ -1,14 +1,16 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
+
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useLogger from 'utils/hooks/useLogger';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
+import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
+
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
@@ -47,9 +49,14 @@ const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
 };
 
 const useStoreList = (params: StoreSearchQueryType) => {
-  const { data: storeList } = useQuery('storeList', api.store.getStoreList, {
-    retry: 0,
-  });
+  const { data: storeList } = useQuery(
+    {
+      queryKey: ['storeList', params],
+      queryFn: api.store.getStoreList,
+      retry: 0,
+    },
+  );
+
   const selectedCategory = Number(params.category);
 
   return storeList?.shops.filter((store) => {
@@ -85,8 +92,8 @@ const isStoreOpen = (open_time: string | null, close_time: string | null) => {
   if (open_time === '00:00' && close_time === '00:00') return false;
 
   const date = new Date();
-  const openTimeNum = Number(open_time.replace(':', ''));
-  const closeTimeNum = Number(close_time.replace(':', ''));
+  const openTimeNum = open_time && Number(open_time.replace(':', ''));
+  const closeTimeNum = close_time && Number(close_time.replace(':', ''));
   const nowTimeNum = date.getHours() * 100 + date.getMinutes();
 
   if (openTimeNum > closeTimeNum ? (

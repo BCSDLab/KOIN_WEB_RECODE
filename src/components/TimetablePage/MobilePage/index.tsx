@@ -1,7 +1,5 @@
 import React from 'react';
-import { SemesterInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
-import { LectureInfo } from 'interfaces/Lecture';
 import {
   myLecturesAtom,
   selectedSemesterAtom,
@@ -24,9 +22,8 @@ import styles from './MobilePage.module.scss';
 
 const useSemesterOptionList = () => {
   const { data: semesterList } = useSemester();
-  // 구조가 Array<SemesterInfo>인데 Array로 인식이 안됨.
 
-  const semesterOptionList = (semesterList as unknown as Array<SemesterInfo> | undefined ?? []).map(
+  const semesterOptionList = semesterList.map(
     (semesterInfo) => ({
       label: `${semesterInfo.semester.slice(0, 4)}년 ${semesterInfo.semester.slice(4)}학기`,
       value: semesterInfo.semester,
@@ -63,15 +60,14 @@ function CurrentSemesterTimetable(): JSX.Element {
   );
 
   const selectedLecture = useRecoilValue(selectedTempLectureSelector);
-  const { data: lectureList, status } = useLectureList(selectedSemester);
-  const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
+  const { data: lectureList } = useLectureList(selectedSemester);
+  const similarSelectedLecture = lectureList
     ?.filter((lecture) => lecture.code === selectedLecture?.code)
     ?? [];
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
-  // TODO: selectedSemesterValue가 바뀔 때 myLecturesFromServer가 학기별 강의를 불러오지 못함
-  return selectedSemesterValue && status === 'success' ? (
+  return selectedSemesterValue ? (
     <Timetable
       lectures={myLectureDayValue}
       similarSelectedLecture={similarSelectedLectureDayList}
