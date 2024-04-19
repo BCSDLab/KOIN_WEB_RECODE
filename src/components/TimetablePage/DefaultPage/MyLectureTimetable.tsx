@@ -4,7 +4,7 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
-import CurrentSemesterTimetable from './CurrentSemesterTable';
+import CurrentSemesterTimetable from '../MyLectureTimetable/CurrentSemesterTable';
 import styles from './DefaultPage.module.scss';
 
 export default function MyLectureTimetable() {

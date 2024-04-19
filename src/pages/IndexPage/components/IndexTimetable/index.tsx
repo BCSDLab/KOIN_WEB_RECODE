@@ -5,7 +5,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
 import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
-import Timetable from 'components/TimetablePage/Timetable';
+import Timetable from 'components/TimetablePage/MyLectureTimetable/Timetable';
 import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';

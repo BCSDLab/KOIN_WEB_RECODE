@@ -7,7 +7,7 @@ import {
   selectedTempLectureSelector,
 } from 'utils/recoil/semester';
 import { useRecoilValue } from 'recoil';
-import Timetable from 'components/TimetablePage/Timetable';
+import Timetable from 'components/TimetablePage/MyLectureTimetable/Timetable';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';

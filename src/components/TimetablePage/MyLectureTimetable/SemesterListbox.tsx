@@ -3,7 +3,7 @@ import React from 'react';
 import { selectedSemesterAtom } from 'utils/recoil/semester';
 import { useSelectRecoil } from '../hooks/useSelect';
 import useSemesterOptionList from '../hooks/useSemesterOptionList';
-import Listbox from '../Listbox';
+import Listbox from '../common/Listbox';
 
 function SemesterListbox() {
   const {

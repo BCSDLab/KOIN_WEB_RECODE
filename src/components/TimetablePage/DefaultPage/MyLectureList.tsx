@@ -7,7 +7,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 import { myLectureRemoveLectureSelector, myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
 import useDeleteTimetableLecture from '../hooks/useDeleteTimetableLecture';
 import useTimetableInfoList from '../hooks/useTimetableInfoList';
-import LectureTable from '../LectureTable';
+import LectureTable from '../common/LectureTable';
 import styles from './DefaultPage.module.scss';
 
 function MyLectureList() {

@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports */
 import React from 'react';
-import Listbox, { ListboxProps } from '../Listbox';
+import Listbox, { ListboxProps } from '../common/Listbox';
 
 type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 

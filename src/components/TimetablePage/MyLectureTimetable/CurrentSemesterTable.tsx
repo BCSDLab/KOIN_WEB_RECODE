@@ -7,7 +7,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 import { myLecturesAtom, selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import useLectureList from '../hooks/useLectureList';
 import useTimetableInfoList from '../hooks/useTimetableInfoList';
-import Timetable from '../Timetable';
+import Timetable from './Timetable';
 
 function CurrentSemesterTimetable(): JSX.Element {
   const selectedSemesterValue = useRecoilValue(selectedSemesterAtom);

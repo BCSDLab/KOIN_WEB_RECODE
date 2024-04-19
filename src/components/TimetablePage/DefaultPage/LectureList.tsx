@@ -13,15 +13,14 @@ import useAddTimetableLecture from '../hooks/useAddTimetableLecture';
 import useLectureList from '../hooks/useLectureList';
 import { useSelect, useSelectRecoil } from '../hooks/useSelect';
 import useTimetableInfoList from '../hooks/useTimetableInfoList';
-import LectureTable from '../LectureTable';
-import DeptListbox from '../SemesterLectureTable/DeptListbox ';
-import LastUpdatedDate from '../SemesterLectureTable/LastUpdatedDate';
+import LectureTable from '../common/LectureTable';
+import DeptListbox from '../LectureList/DeptListbox ';
+import LastUpdatedDate from '../LectureList/LastUpdatedDate';
 import styles from './DefaultPage.module.scss';
 
 interface CurrentSemesterLectureListProps {
   semesterKey: string | null;
   filter: {
-    // 백엔드 수정하면 optional 제거
     department: string;
     search: string;
   }
@@ -104,13 +103,14 @@ function CurrentSemesterLectureList({
   );
 }
 
-function SemesterLectureTable() {
+function LectureList() {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
 
   const {
     value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
   } = useSelect();
+
   const useSearch = () => {
     const [currentValue, setCurrentValue] = React.useState<string | null>(null);
     const onClickSearchButton = () => {
@@ -131,15 +131,8 @@ function SemesterLectureTable() {
     };
   };
 
-  const {
-    onClickSearchButton,
-    onKeyDownSearchInput,
-    value: searchValue,
-  } = useSearch();
-
-  const {
-    value: semesterFilterValue,
-  } = useSelectRecoil(selectedSemesterAtom);
+  const { onClickSearchButton, onKeyDownSearchInput, value: searchValue } = useSearch();
+  const { value: semesterFilterValue } = useSelectRecoil(selectedSemesterAtom);
 
   return (
     <div>
@@ -190,4 +183,4 @@ function SemesterLectureTable() {
   );
 }
 
-export default SemesterLectureTable;
+export default LectureList;
