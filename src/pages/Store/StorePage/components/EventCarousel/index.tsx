@@ -49,7 +49,7 @@ export default function EventCarousel() {
             <div className={styles['swipe-item__text']}>
               <div style={{ textAlign: 'start' }}>
                 <span className={styles['swipe-item__name']}>
-                  {item.title}
+                  {item.shop_name}
                 </span>
                 {' 에서'}
               </div>

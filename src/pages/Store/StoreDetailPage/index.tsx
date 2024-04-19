@@ -69,7 +69,7 @@ function StoreDetailPage() {
                 {storeDetail?.phone}
                 <br />
                 <span>운영시간</span>
-                {storeDetail?.open
+                {storeDetail.open[getDayOfWeek()] && storeDetail?.open
                   ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${
                     storeDetail?.open[getDayOfWeek()].close_time
                   }`
