@@ -3,7 +3,7 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
 import useImageDownload from 'utils/hooks/useImageDownload';
-import { LectureInfo, TimetableDayLectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import { useRecoilValue } from 'recoil';
 import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
@@ -13,7 +13,7 @@ import Timetable from '../MyLectureTimetable/Timetable';
 import useLectureList from '../hooks/useLectureList';
 
 interface Props {
-  myLectures: TimetableDayLectureInfo[][];
+  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
 }
 
 export default function MyLectureTimetable({ myLectures }: Props) {
@@ -28,6 +28,7 @@ export default function MyLectureTimetable({ myLectures }: Props) {
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
+  const myLectureDayValue = useTimetableDayList(myLectures);
 
   return (
     <div className={styles['page__timetable-wrap']}>
@@ -48,7 +49,7 @@ export default function MyLectureTimetable({ myLectures }: Props) {
         <ErrorBoundary fallbackClassName="loading">
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <Timetable
-              lectures={myLectures}
+              lectures={myLectureDayValue}
               similarSelectedLecture={similarSelectedLectureDayList}
               selectedLectureIndex={selectedLectureIndex}
               columnWidth={55}

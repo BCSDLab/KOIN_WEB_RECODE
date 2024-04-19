@@ -11,7 +11,6 @@ import { useRecoilValue } from 'recoil';
 import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
 import useTokenState from 'utils/hooks/useTokenState';
 import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import styles from './TimetablePage.module.scss';
 
 function TimetablePage() {
@@ -24,7 +23,6 @@ function TimetablePage() {
   const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
 
   const myLectures = token ? (myLecturesFromServer ?? []) : (myLecturesFromLocalStorageValue ?? []);
-  const myLectureDayValue = useTimetableDayList(myLectures);
 
   return (
     <div className={styles.page}>
@@ -35,7 +33,7 @@ function TimetablePage() {
             {/* 강의 목록 */}
             <LectureList myLectures={myLectures} />
             {/* 나의 시간표 타임 테이블 */}
-            <MyLectureTimetable myLectures={myLectureDayValue} />
+            <MyLectureTimetable myLectures={myLectures} />
             {/* 나의 시간표 강의 목록 */}
             <MyLectureList myLectures={myLectures} />
             {/* 시간표 커리큘럼 */}
@@ -43,7 +41,7 @@ function TimetablePage() {
           </div>
         </>
       ) : (
-        <MobilePage lectures={myLectureDayValue} />
+        <MobilePage myLectures={myLectures} />
       ) }
     </div>
   );

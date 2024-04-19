@@ -5,7 +5,7 @@ import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg
 import showToast from 'utils/ts/showToast';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
-import { LectureInfo, TimetableDayLectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import { useRecoilValue } from 'recoil';
 import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
@@ -15,10 +15,10 @@ import Timetable from '../MyLectureTimetable/Timetable';
 import useLectureList from '../hooks/useLectureList';
 
 interface Props {
-  lectures: TimetableDayLectureInfo[][];
+  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
 }
 
-function MobilePage({ lectures }: Props) {
+function MobilePage({ myLectures }: Props) {
   const logger = useLogger();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,6 +39,7 @@ function MobilePage({ lectures }: Props) {
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
+  const myLectureDayValue = useTimetableDayList(myLectures);
 
   return (
     <>
@@ -62,7 +63,7 @@ function MobilePage({ lectures }: Props) {
           <ErrorBoundary fallbackClassName="loading">
             <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
               <Timetable
-                lectures={lectures}
+                lectures={myLectureDayValue}
                 similarSelectedLecture={similarSelectedLectureDayList}
                 selectedLectureIndex={selectedLectureIndex}
                 columnWidth={55}
