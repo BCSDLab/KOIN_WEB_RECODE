@@ -74,7 +74,6 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       };
       if (options.validFunction) {
         fieldRefs.current[name].validFunction = options.validFunction;
-        fieldRefs.current[name].validFunction = options.validFunction;
       }
     },
   });
