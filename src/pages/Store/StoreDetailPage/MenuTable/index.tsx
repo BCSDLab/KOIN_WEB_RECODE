@@ -14,7 +14,7 @@ interface MenuTableProps {
 function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
   const isMobile = useMediaQuery();
   const [categoryType, setCategoryType] = useState<string>(storeMenuCategories[0].name);
-  const headerOffset = isMobile ? 120 : 60;
+  const headerOffset = isMobile ? 120 : 68; // categories 높이
 
   const handleScroll = () => {
     storeMenuCategories.forEach((menu) => {
