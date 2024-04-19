@@ -13,10 +13,10 @@ import Timetable from '../MyLectureTimetable/Timetable';
 import useLectureList from '../hooks/useLectureList';
 
 interface Props {
-  lectures: TimetableDayLectureInfo[][];
+  myLectures: TimetableDayLectureInfo[][];
 }
 
-export default function MyLectureTimetable({ lectures }: Props) {
+export default function MyLectureTimetable({ myLectures }: Props) {
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
   const selectedLecture = useRecoilValue(selectedTempLectureSelector);
@@ -48,7 +48,7 @@ export default function MyLectureTimetable({ lectures }: Props) {
         <ErrorBoundary fallbackClassName="loading">
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <Timetable
-              lectures={lectures}
+              lectures={myLectures}
               similarSelectedLecture={similarSelectedLectureDayList}
               selectedLectureIndex={selectedLectureIndex}
               columnWidth={55}

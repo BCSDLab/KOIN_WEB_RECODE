@@ -6,40 +6,40 @@ import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
 import {
-  myLectureAddLectureSelector, myLecturesAtom, selectedSemesterAtom, selectedTempLectureSelector,
+  myLectureAddLectureSelector, selectedSemesterAtom, selectedTempLectureSelector,
 } from 'utils/recoil/semester';
 import showToast from 'utils/ts/showToast';
 import useAddTimetableLecture from '../hooks/useAddTimetableLecture';
 import useLectureList from '../hooks/useLectureList';
 import { useSelect, useSelectRecoil } from '../hooks/useSelect';
-import useTimetableInfoList from '../hooks/useTimetableInfoList';
-import LectureTable from '../common/LectureTable';
 import DeptListbox from '../LectureList/DeptListbox ';
 import LastUpdatedDate from '../LectureList/LastUpdatedDate';
 import styles from './DefaultPage.module.scss';
+import useSearch from '../hooks/useSearch';
+import LectureTable from '../common/LectureTable';
 
 interface CurrentSemesterLectureListProps {
   semesterKey: string | null;
   filter: {
     department: string;
     search: string;
-  }
+  };
+  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
 }
 
 function CurrentSemesterLectureList({
   semesterKey,
   filter,
+  myLectures,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList, status } = useLectureList(semesterKey);
   const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
   const addLectureToLocalStorage = useSetRecoilState(myLectureAddLectureSelector);
 
   const token = useTokenState();
-  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
-  const isLoaded = status === 'success' && (myLecturesFromLocalStorageValue !== null || myLecturesFromServer !== undefined);
+  const isLoaded = status === 'success' && myLectures;
 
   return (
     isLoaded ? (
@@ -72,9 +72,8 @@ function CurrentSemesterLectureList({
             if ('class_title' in clickedLecture) {
               return;
             }
-            const myLecturesValue = token ? myLecturesFromServer : myLecturesFromLocalStorageValue;
             const myLectureTimeValue = (
-              myLecturesValue as Array<LectureInfo | TimetableLectureInfo>)
+              myLectures as Array<LectureInfo | TimetableLectureInfo>)
               .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
             if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
               showToast('error', '시간이 중복되어 추가할 수 없습니다.');
@@ -103,35 +102,16 @@ function CurrentSemesterLectureList({
   );
 }
 
-function LectureList() {
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
-
+function LectureList({ myLectures }:
+{ myLectures: Array<LectureInfo> | Array<TimetableLectureInfo> }) {
   const {
     value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
   } = useSelect();
+  const {
+    onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef,
+  } = useSearch();
 
-  const useSearch = () => {
-    const [currentValue, setCurrentValue] = React.useState<string | null>(null);
-    const onClickSearchButton = () => {
-      setCurrentValue(searchInputRef.current?.value ?? '');
-    };
-    const onKeyDownSearchInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key !== 'Enter') {
-        return;
-      }
-      setCurrentValue(e.currentTarget.value);
-    };
-
-    return {
-      value: currentValue,
-      onClickSearchButton,
-      searchInputRef,
-      onKeyDownSearchInput,
-    };
-  };
-
-  const { onClickSearchButton, onKeyDownSearchInput, value: searchValue } = useSearch();
   const { value: semesterFilterValue } = useSelectRecoil(selectedSemesterAtom);
 
   return (
@@ -171,6 +151,7 @@ function LectureList() {
               department: departmentFilterValue ?? '전체',
               search: searchValue ?? '',
             }}
+            myLectures={myLectures}
           />
         </React.Suspense>
       </ErrorBoundary>

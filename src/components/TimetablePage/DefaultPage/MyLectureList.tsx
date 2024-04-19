@@ -11,10 +11,10 @@ import LectureTable from '../common/LectureTable';
 import styles from './DefaultPage.module.scss';
 
 interface Props {
-  lectures: Array<LectureInfo> | Array<TimetableLectureInfo>
+  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>
 }
 
-function MyLectureList({ lectures } : Props) {
+function MyLectureList({ myLectures } : Props) {
   const removeLectureFromLocalStorage = useSetRecoilState(myLectureRemoveLectureSelector);
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
   const token = useTokenState();
@@ -28,7 +28,7 @@ function MyLectureList({ lectures } : Props) {
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <LectureTable
               height={300}
-              list={lectures}
+              list={myLectures}
               selectedLecture={undefined}
               onClickRow={undefined}
               onClickLastColumn={
