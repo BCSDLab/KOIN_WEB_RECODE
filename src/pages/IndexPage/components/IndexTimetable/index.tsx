@@ -3,10 +3,10 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import { useRecoilValue } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
 import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
-import useTimetableInfoList from 'components/TimetablePage/DefaultPage/hooks/useTimetableInfoList';
+import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
-import { useSelectRecoil } from 'components/TimetablePage/DefaultPage/hooks/useSelect';
+import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
 import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
@@ -28,8 +28,8 @@ function CurrentSemesterTimetable(): JSX.Element {
   return selectedSemesterValue ? (
     <Timetable
       lectures={myLectureDayValue}
-      colWidth={40}
-      firstColWidth={42}
+      columnWidth={40}
+      firstColumnWidth={42}
       rowHeight={16}
       totalHeight={369}
     />

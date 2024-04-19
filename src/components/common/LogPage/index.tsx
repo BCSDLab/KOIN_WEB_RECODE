@@ -7,7 +7,8 @@ import { useRecoilValue } from 'recoil';
 import { userInfoState } from 'utils/recoil/userInfoState';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
-  const uuid = uuidv4();
+  const uuid = localStorage.getItem('uuid') || uuidv4();
+  localStorage.setItem('uuid', uuid);
   if (userInfo?.student_number) {
     return `${userInfo.student_number}-${uuid}`;
   }

@@ -2,18 +2,17 @@
 import React, { useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
-import cn from 'utils/ts/classnames';
+import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { DeptListResponse, IDept } from 'api/dept/entity';
-import sha256 from 'utils/ts/SHA-256';
 import useTokenState from 'utils/hooks/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
-import { useRecoilValue } from 'recoil';
-import { userInfoState } from 'utils/recoil/userInfoState';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
+import { useUser } from 'utils/hooks/useUser';
+import { useQueryClient } from 'react-query';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -65,7 +64,7 @@ const isRefICustomFormInput = (
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const fieldRefs = React.useRef<IFormType>({});
-  const userInfo = useRecoilValue(userInfoState);
+  const { data: userInfo } = useUser();
 
   const register = (name: string, options: IRegisterOption = {}): RegisterReturn => ({
     required: options.required,
@@ -83,7 +82,6 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
     event.preventDefault();
 
     let isAnyFieldChanged = false;
-    let isAnyFieldRemoved = false;
 
     const mappedFields: MappedFields = {
       'phone-number': 'phone_number',
@@ -97,6 +95,9 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       let inputValue;
       if (isRefICustomFormInput(fieldRef)) {
         inputValue = fieldRef.value ? fieldRef.value : null;
+        if (field === 'gender' && fieldRef.value === 0) {
+          inputValue = 0;
+        }
       } else if (fieldRef !== null) {
         inputValue = fieldRef.value ? fieldRef.value : null;
       }
@@ -107,19 +108,11 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       const originalValue = userInfo ? userInfo[userResponseField] : '';
       if (inputValue !== originalValue) {
         isAnyFieldChanged = true;
-        if (originalValue !== '' && inputValue === null) {
-          isAnyFieldRemoved = true;
-        }
       }
     });
 
     if (!isAnyFieldChanged && !fieldRefs.current.password?.ref?.value) {
       showToast('error', '변경된 정보가 없습니다.');
-      return;
-    }
-
-    if (isAnyFieldRemoved) {
-      showToast('error', '기존에 입력한 정보를 삭제할 수 없습니다.');
       return;
     }
     const isCurrentValidEntries = Object.entries(fieldRefs.current)
@@ -212,7 +205,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   props,
   ref,
 ) => {
-  const userInfo = useRecoilValue(userInfoState); // Recoil에서 기존 userInfo 상태를 가져옵니다.
+  const { data: userInfo } = useUser();
   const nicknameElementRef = React.useRef<HTMLInputElement>(null);
   const [nicknameInputValue, setNicknameInputValue] = React.useState(userInfo?.nickname || ''); // 초기값을 기존 닉네임으로 설정합니다.
   const {
@@ -284,7 +277,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 });
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
-  const userInfo = useRecoilValue(userInfoState);
+  const { data: userInfo } = useUser();
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
 
@@ -360,7 +353,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
   name,
   required,
 }, ref) => {
-  const userInfo = useRecoilValue(userInfoState);
+  const { data: userInfo } = useUser();
   const [currentValue, setCurrentValue] = React.useState<number | null>(userInfo?.gender || null);
   const [isOpenedPopup, openPopup, closePopup, triggerPopup] = useBooleanState(false);
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
@@ -441,9 +434,12 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
 });
 
 const useModifyInfoForm = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const token = useTokenState();
   const onSuccess = () => {
     navigate('/');
+    queryClient.invalidateQueries(['userInfo', token]);
   };
   const { status, mutate } = useUserInfoUpdate({ onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
@@ -470,7 +466,7 @@ function ModifyInfoPage() {
   const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
   const navigate = useNavigate();
-  const userInfo = useRecoilValue(userInfoState);
+  const { data: userInfo } = useUser();
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
   const portalManager = useModalPortal();
   const { mutate: deleteUser } = useUserDelete();

@@ -121,7 +121,8 @@ export const myLectureRemoveLectureSelector = selector<LectureInfo>({
       return;
     }
     const timetableInfoWithNewValue = timetableInfo.filter(
-      (lecture) => lecture.code !== newValue.code,
+      // eslint-disable-next-line max-len
+      (lecture) => (lecture.code !== newValue.code) || (lecture.lecture_class !== newValue.lecture_class),
     );
     set(myLecturesAtom, timetableInfoWithNewValue);
   },
