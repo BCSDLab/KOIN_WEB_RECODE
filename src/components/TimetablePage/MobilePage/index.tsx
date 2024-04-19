@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-imports */
 import React from 'react';
-import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import { LectureInfo } from 'interfaces/Lecture';
 import {
   myLecturesAtom,
@@ -14,27 +13,12 @@ import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import showToast from 'utils/ts/showToast';
-import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
 import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
 import styles from './MobilePage.module.scss';
-import useSemesterOptionList from '../hooks/useSemesterOptionList';
-
-type DecidedListboxProps = Omit<ListboxProps, 'list'>;
-
-function SemesterListbox({ value, onChange }: DecidedListboxProps) {
-  const semesterOptionList = useSemesterOptionList();
-  React.useEffect(() => {
-    onChange({ target: { value: semesterOptionList[0].value } });
-  // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  return (
-    <Listbox list={semesterOptionList} value={value} onChange={onChange} />
-  );
-}
+import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
 
 function CurrentSemesterTimetable(): JSX.Element {
   const selectedSemesterValue = useRecoilValue(selectedSemesterAtom);
@@ -74,10 +58,6 @@ function CurrentSemesterTimetable(): JSX.Element {
 }
 
 function MobilePage() {
-  const {
-    value: semesterFilterValue,
-    onChangeSelect: onChangeSemesterSelect,
-  } = useSelectRecoil(selectedSemesterAtom);
   const logger = useLogger();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -95,10 +75,7 @@ function MobilePage() {
         <div className={styles.page__filter}>
           <div className={styles.page__semester}>
             <React.Suspense fallback={<LoadingSpinner className={styles['dropdown-loading-spinner']} />}>
-              <SemesterListbox
-                value={semesterFilterValue}
-                onChange={onChangeSemesterSelect}
-              />
+              <SemesterListbox />
             </React.Suspense>
           </div>
           <button
