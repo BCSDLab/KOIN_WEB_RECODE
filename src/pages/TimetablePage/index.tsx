@@ -18,16 +18,13 @@ function TimetablePage() {
   const isMobile = useMediaQuery();
   useScrollToTop();
 
-  const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
-
   const token = useTokenState();
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
+  const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
   const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
-  const myLectureDayValue = useTimetableDayList(
-    token
-      ? (myLecturesFromServer ?? [])
-      : (myLecturesFromLocalStorageValue ?? []),
-  );
+
+  const mylecture = token ? (myLecturesFromServer ?? []) : (myLecturesFromLocalStorageValue ?? []);
+  const myLectureDayValue = useTimetableDayList(mylecture);
 
   return (
     <div className={styles.page}>
@@ -40,7 +37,7 @@ function TimetablePage() {
             {/* 나의 시간표 타임 테이블 */}
             <MyLectureTimetable lectures={myLectureDayValue} />
             {/* 나의 시간표 강의 목록 */}
-            <MyLectureList />
+            <MyLectureList lectures={mylecture} />
             {/* 시간표 커리큘럼 */}
             <Curriculum />
           </div>
