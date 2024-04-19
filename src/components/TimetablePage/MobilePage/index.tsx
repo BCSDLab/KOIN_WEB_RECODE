@@ -1,5 +1,5 @@
+/* eslint-disable no-restricted-imports */
 import React from 'react';
-import { SemesterInfo } from 'api/timetable/entity';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
 import { LectureInfo } from 'interfaces/Lecture';
 import {
@@ -14,26 +14,13 @@ import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import showToast from 'utils/ts/showToast';
-import useSemester from 'components/TimetablePage/hooks/useSemester';
 import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
 import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
 import styles from './MobilePage.module.scss';
-
-const useSemesterOptionList = () => {
-  const { data: semesterList } = useSemester();
-  // 구조가 Array<SemesterInfo>인데 Array로 인식이 안됨.
-
-  const semesterOptionList = (semesterList as unknown as Array<SemesterInfo> | undefined ?? []).map(
-    (semesterInfo) => ({
-      label: `${semesterInfo.semester.slice(0, 4)}년 ${semesterInfo.semester.slice(4)}학기`,
-      value: semesterInfo.semester,
-    }),
-  );
-  return semesterOptionList;
-};
+import useSemesterOptionList from '../hooks/useSemesterOptionList';
 
 type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 

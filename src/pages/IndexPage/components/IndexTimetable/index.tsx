@@ -7,9 +7,9 @@ import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInf
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
 import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
-import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
