@@ -2,24 +2,16 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { myLectureRemoveLectureSelector, selectedSemesterAtom } from 'utils/recoil/semester';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
-import useTokenState from 'utils/hooks/useTokenState';
-import useDeleteTimetableLecture from '../hooks/useDeleteTimetableLecture';
 import LectureTable from '../common/LectureTable';
 import styles from './DefaultPage.module.scss';
 
 interface Props {
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>
+  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
+  removeMyLectures: (clickedLecture: LectureInfo | TimetableLectureInfo) => void;
 }
 
-function MyLectureList({ myLectures } : Props) {
-  const removeLectureFromLocalStorage = useSetRecoilState(myLectureRemoveLectureSelector);
-  const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const token = useTokenState();
-  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(selectedSemester, token);
-
+function MyLectureList({ myLectures, removeMyLectures } : Props) {
   return (
     <div>
       <h3 className={styles['page__title--sub']}>나의 시간표</h3>
@@ -31,15 +23,7 @@ function MyLectureList({ myLectures } : Props) {
               list={myLectures}
               selectedLecture={undefined}
               onClickRow={undefined}
-              onClickLastColumn={
-                  (clickedLecture) => {
-                    if ('name' in clickedLecture) {
-                      removeLectureFromLocalStorage(clickedLecture);
-                      return;
-                    }
-                    removeLectureFromServer(clickedLecture.id.toString());
-                  }
-                }
+              onClickLastColumn={(clickedLecture) => { removeMyLectures(clickedLecture); }}
             >
               {(props: { onClick: () => void }) => (
                 <button type="button" className={styles.list__button} onClick={props.onClick}>

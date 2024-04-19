@@ -8,11 +8,14 @@ import MyLectureTimetable from 'components/TimetablePage/DefaultPage/MyLectureTi
 import MyLectureList from 'components/TimetablePage/DefaultPage/MyLectureList';
 import Curriculum from 'components/TimetablePage/DefaultPage/Curriculum';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { myLectureAddLectureSelector, myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
+import {
+  myLectureAddLectureSelector, myLectureRemoveLectureSelector, myLecturesAtom, selectedSemesterAtom,
+} from 'utils/recoil/semester';
 import useTokenState from 'utils/hooks/useTokenState';
 import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
 import useAddTimetableLecture from 'components/TimetablePage/hooks/useAddTimetableLecture';
-import { LectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
+import useDeleteTimetableLecture from 'components/TimetablePage/hooks/useDeleteTimetableLecture';
 import styles from './TimetablePage.module.scss';
 
 function TimetablePage() {
@@ -40,6 +43,17 @@ function TimetablePage() {
     }
   };
 
+  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(selectedSemester, token);
+  const removeLectureFromLocalStorage = useSetRecoilState(myLectureRemoveLectureSelector);
+
+  const removeMyLecture = (clickedLecture: LectureInfo | TimetableLectureInfo) => {
+    if ('name' in clickedLecture) {
+      removeLectureFromLocalStorage(clickedLecture);
+      return;
+    }
+    removeLectureFromServer(clickedLecture.id.toString());
+  };
+
   return (
     <div className={styles.page}>
       {!isMobile ? (
@@ -51,7 +65,7 @@ function TimetablePage() {
             {/* 나의 시간표 타임 테이블 */}
             <MyLectureTimetable myLectures={myLectures} />
             {/* 나의 시간표 강의 목록 */}
-            <MyLectureList myLectures={myLectures} />
+            <MyLectureList myLectures={myLectures} removeMyLectures={removeMyLecture} />
             {/* 시간표 커리큘럼 */}
             <Curriculum />
           </div>
