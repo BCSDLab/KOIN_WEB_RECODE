@@ -27,7 +27,7 @@ function IndexCafeteria() {
     }
     return ['저녁', 'DINNER'];
   };
-  const { data: dinings } = useCafeteriaList(convertDateToSimpleString(new Date()));
+  const { cafeteriaList: dinings } = useCafeteriaList(convertDateToSimpleString(new Date()));
 
   const [selectedCafeteria, setSelectedCafeteria] = useState<'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'>('A코너');
 

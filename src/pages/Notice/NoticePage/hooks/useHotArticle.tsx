@@ -1,20 +1,15 @@
-import { useQuery } from 'react-query';
-import LoadingSpinner from 'components/common/LoadingSpinner';
 import * as api from 'api';
-import HotPost from 'components/Post/HotPost';
-import { HotPostResponse } from 'api/notice/entity';
-import { KoinError } from 'interfaces/APIError';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 function useHotArticleList() {
-  const { data: hotArticleList, isSuccess } = useQuery<HotPostResponse[] & KoinError>(
-    'hotArticleList',
-    api.notice.HotPostList,
-    { retry: 0 },
+  const { data: hotArticleList } = useSuspenseQuery(
+    {
+      queryKey: ['hotArticleList'],
+      queryFn: api.notice.HotPostList,
+    },
   );
 
-  if (!isSuccess) return <LoadingSpinner size="80px" />;
-
-  return <HotPost hotArticleList={hotArticleList} />;
+  return hotArticleList;
 }
 
 export default useHotArticleList;

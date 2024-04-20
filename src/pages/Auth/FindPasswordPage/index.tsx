@@ -1,7 +1,7 @@
 import React from 'react';
-import { useMutation } from 'react-query';
 import { auth } from 'api';
 import showToast from 'utils/ts/showToast';
+import { useMutation } from '@tanstack/react-query';
 import styles from './FindPasswordPage.module.scss';
 
 interface IClassUser {
@@ -11,7 +11,8 @@ interface IClassUser {
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 
 const useFindPassword = () => {
-  const postFindPassword = useMutation(auth.findPassword, {
+  const postFindPassword = useMutation({
+    mutationFn: auth.findPassword,
     onSuccess: () => {
       showToast('success', '비밀번호 초기화 메일을 전송했습니다. 아우누리에서 확인해주세요.');
     },

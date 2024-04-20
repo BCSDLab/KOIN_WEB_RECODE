@@ -1,26 +1,24 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { changeTimetableInfoByAddLecture } from 'api/timetable';
 import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 
 export default function useAddTimetableLecture(authorization: string) {
   const queryClient = useQueryClient();
-  return useMutation(
-    (
+  return useMutation({
+    mutationFn: (
       data: Parameters<typeof changeTimetableInfoByAddLecture>[0],
     ) => changeTimetableInfoByAddLecture(
       data,
       authorization,
     ),
-    {
-      onSuccess: (data, variables) => {
-        queryClient.setQueryData(
-          [
-            TIMETABLE_INFO_LIST,
-            variables.semester,
-          ],
-          data,
-        );
-      },
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(
+        [
+          TIMETABLE_INFO_LIST,
+          variables.semester,
+        ],
+        data,
+      );
     },
-  );
+  });
 }

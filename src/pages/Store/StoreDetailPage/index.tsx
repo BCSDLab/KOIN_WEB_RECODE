@@ -21,7 +21,7 @@ function StoreDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const { storeDetail, storeDescription } = useStoreDetail(params.id!);
-  const { storeMenus } = useStoreMenus(params.id!);
+  const { data: storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
@@ -42,6 +42,7 @@ function StoreDetailPage() {
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
+
   return (
     <div className={styles.template}>
       <div className={styles.section}>

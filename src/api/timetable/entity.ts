@@ -16,22 +16,16 @@ export type VersionInfo = {
   updated_at: string;
 };
 
-export interface SemesterResponse extends APIResponse {
-  [index: number]: SemesterInfo;
-}
+export type SemesterResponse = SemesterInfo[];
 
-export interface LectureInfoResponse extends APIResponse {
-  [index: number]: LectureInfo;
-}
+export type LectureInfoResponse = LectureInfo[];
 
 export interface TimetableInfoResponse extends APIResponse {
   semester: string;
   timetable: TimetableLectureInfo[];
 }
 
-export interface TimetableAddLectureResponse extends APIResponse {
-  [index: number]: TimetableLectureInfo;
-}
+export type TimetableAddLectureResponse = TimetableLectureInfo[];
 
 export interface TimetableAddLectureRequest {
   semester: string;
@@ -42,9 +36,7 @@ export interface TimetableAddLectureRequest {
   }];
 }
 
-export interface TimetableRemoveLectureResponse extends APIResponse {
-  [index: number]: TimetableLectureInfo;
-}
+export type TimetableRemoveLectureResponse = TimetableLectureInfo[];
 
 export interface VersionInfoResponse extends APIResponse {
   id: string;
