@@ -1,9 +1,8 @@
 /* eslint-disable no-restricted-imports */
-import { IDept } from 'api/dept/entity';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
+import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import React from 'react';
-import useDeptList from '../hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 
 function Curriculum() {
@@ -14,7 +13,7 @@ function Curriculum() {
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner size="50" />}>
           <ul className={styles['page__curriculum-list']}>
-            {(deptList as unknown as Array<IDept> | undefined ?? []).map((dept) => (
+            {deptList.map((dept) => (
               <li key={dept.name}>
                 <a
                   className={styles.page__curriculum}
