@@ -29,6 +29,11 @@ function StoreDetailPage() {
       title: 'store_detail_call_number',
       value: storeDetail!.phone,
     });
+    logger.actionEventClick({
+      actionTitle: 'click_call_store_btn',
+      title: 'store_detail_call_number',
+      value: storeDetail!.phone,
+    });
   };
   const onClickImage = (img: string[], index: number) => {
     portalManager.open((portalOption: Portal) => (
