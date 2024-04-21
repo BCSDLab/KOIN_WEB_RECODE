@@ -21,7 +21,7 @@ export const tokenState = atom<TokenState>({
       if (refreshToken) {
         const result = await auth.refresh({ refresh_token: refreshToken });
         const { token: newAccessToken, refresh_token: newRefreshToken } = result;
-        setCookie('AUTH_TOKEN_KEY', newAccessToken, 3);
+        setCookie('AUTH_TOKEN_KEY', newAccessToken);
         localStorage.setItem('AUTH_REFRESH_TOKEN_KEY', newRefreshToken);
         return newAccessToken;
       }
