@@ -14,7 +14,7 @@ import styles from './DefaultPage.module.scss';
 import useSearch from '../hooks/useSearch';
 import LectureTable from '../common/LectureTable';
 import useTimetableMutation from '../hooks/useTimetableMutation';
-import useMyLecture from '../hooks/useMyLecture';
+import useMyLectures from '../hooks/useMyLectures';
 
 interface CurrentSemesterLectureListProps {
   semesterKey: string;
@@ -96,7 +96,7 @@ function LectureList() {
   } = useSearch();
   const { value: semesterFilterValue } = useSelectRecoil(selectedSemesterAtom);
   const { addMyLecture } = useTimetableMutation();
-  const { myLectures } = useMyLecture();
+  const { myLectures } = useMyLectures();
 
   return (
     <div>

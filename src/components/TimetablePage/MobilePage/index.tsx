@@ -12,11 +12,11 @@ import styles from './MobilePage.module.scss';
 import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
 import Timetable from '../MyLectureTimetable/Timetable';
 import useLectureList from '../hooks/useLectureList';
-import useMyLecture from '../hooks/useMyLecture';
+import useMyLectures from '../hooks/useMyLectures';
 
 function MobilePage() {
   const logger = useLogger();
-  const { myLectures } = useMyLecture();
+  const { myLectures } = useMyLectures();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

@@ -5,11 +5,11 @@ import React from 'react';
 import LectureTable from '../common/LectureTable';
 import styles from './DefaultPage.module.scss';
 import useTimetableMutation from '../hooks/useTimetableMutation';
-import useMyLecture from '../hooks/useMyLecture';
+import useMyLectures from '../hooks/useMyLectures';
 
 function MyLectureList() {
   const { removeMyLecture } = useTimetableMutation();
-  const { myLectures } = useMyLecture();
+  const { myLectures } = useMyLectures();
   return (
     <div>
       <h3 className={styles['page__title--sub']}>나의 시간표</h3>

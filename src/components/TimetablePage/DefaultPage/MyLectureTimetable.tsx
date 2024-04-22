@@ -10,10 +10,10 @@ import styles from './DefaultPage.module.scss';
 import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
 import Timetable from '../MyLectureTimetable/Timetable';
 import useLectureList from '../hooks/useLectureList';
-import useMyLecture from '../hooks/useMyLecture';
+import useMyLectures from '../hooks/useMyLectures';
 
 export default function MyLectureTimetable() {
-  const { myLectures } = useMyLecture();
+  const { myLectures } = useMyLectures();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
   const selectedLecture = useRecoilValue(selectedTempLectureSelector);
