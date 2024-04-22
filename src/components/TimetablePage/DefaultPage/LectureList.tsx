@@ -13,6 +13,7 @@ import LastUpdatedDate from '../LectureList/LastUpdatedDate';
 import styles from './DefaultPage.module.scss';
 import useSearch from '../hooks/useSearch';
 import LectureTable from '../common/LectureTable';
+import useTimetableMutation from '../hooks/useTimetableMutation';
 
 interface CurrentSemesterLectureListProps {
   semesterKey: string;
@@ -84,10 +85,9 @@ function CurrentSemesterLectureList({
   );
 }
 
-function LectureList({ myLectures, addMyLecture }:
+function LectureList({ myLectures }:
 {
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-  addMyLecture: (clickedLecture: LectureInfo) => void;
 }) {
   const {
     value: departmentFilterValue,
@@ -98,7 +98,7 @@ function LectureList({ myLectures, addMyLecture }:
   } = useSearch();
 
   const { value: semesterFilterValue } = useSelectRecoil(selectedSemesterAtom);
-
+  const { addMyLecture } = useTimetableMutation();
   return (
     <div>
       <div className={styles.page__filter}>
@@ -132,7 +132,7 @@ function LectureList({ myLectures, addMyLecture }:
           <CurrentSemesterLectureList
             semesterKey={semesterFilterValue}
             filter={{
-              // 백엔드 수정하면 제거
+            // 백엔드 수정하면 제거
               department: departmentFilterValue ?? '전체',
               search: searchValue ?? '',
             }}

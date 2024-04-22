@@ -4,15 +4,12 @@ import { changeTimetableInfoByAddLecture } from 'api/timetable';
 import { toast } from 'react-toastify';
 import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 
-export default function useAddTimetableLecture(authorization: string) {
+export default function useAddTimetableLecture(token: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (
       data: Parameters<typeof changeTimetableInfoByAddLecture>[0],
-    ) => changeTimetableInfoByAddLecture(
-      data,
-      authorization,
-    ),
+    ) => changeTimetableInfoByAddLecture(data, token),
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
         [

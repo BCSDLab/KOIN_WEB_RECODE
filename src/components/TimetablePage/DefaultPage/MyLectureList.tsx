@@ -5,13 +5,14 @@ import React from 'react';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import LectureTable from '../common/LectureTable';
 import styles from './DefaultPage.module.scss';
+import useTimetableMutation from '../hooks/useTimetableMutation';
 
 interface Props {
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-  removeMyLectures: (clickedLecture: LectureInfo | TimetableLectureInfo) => void;
 }
 
-function MyLectureList({ myLectures, removeMyLectures } : Props) {
+function MyLectureList({ myLectures }: Props) {
+  const { removeMyLecture } = useTimetableMutation();
   return (
     <div>
       <h3 className={styles['page__title--sub']}>나의 시간표</h3>
@@ -23,7 +24,7 @@ function MyLectureList({ myLectures, removeMyLectures } : Props) {
               list={myLectures}
               selectedLecture={undefined}
               onClickRow={undefined}
-              onClickLastColumn={(clickedLecture) => { removeMyLectures(clickedLecture); }}
+              onClickLastColumn={(clickedLecture) => { removeMyLecture(clickedLecture); }}
             >
               {(props: { onClick: () => void }) => (
                 <button type="button" className={styles.list__button} onClick={props.onClick}>
