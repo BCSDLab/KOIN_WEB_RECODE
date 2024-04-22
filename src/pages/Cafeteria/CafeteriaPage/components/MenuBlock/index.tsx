@@ -78,26 +78,29 @@ export default function MenuBlock({ menu, mealTime, category }:Props) {
                   ))}
                 </ul>
               ) : undefined}
-              <button
-                className={styles['category__menu-photo']}
-                type="button"
-                onClick={() => currentMenu.image_url && handlePhoto(currentMenu.image_url)}
-              >
-                {currentMenu.soldout_at && (
+              {![4, 5].includes(category.id)
+                && (
+                <button
+                  className={styles['category__menu-photo']}
+                  type="button"
+                  onClick={() => currentMenu.image_url && handlePhoto(currentMenu.image_url)}
+                >
+                  {currentMenu.soldout_at && (
                   <div className={styles['category__menu-photo--soldOut']}>
                     <NoMeal />
                     품절된 메뉴입니다.
                   </div>
-                )}
-                {currentMenu?.image_url
-                  ? <img src={currentMenu?.image_url || ''} alt="" />
-                  : (
-                    <div className={styles['category__menu-photo--none']}>
-                      <NoPhoto />
-                      사진 없음
-                    </div>
                   )}
-              </button>
+                  {currentMenu?.image_url
+                    ? <img src={currentMenu?.image_url || ''} alt="" />
+                    : (
+                      <div className={styles['category__menu-photo--none']}>
+                        <NoPhoto />
+                        사진 없음
+                      </div>
+                    )}
+                </button>
+                )}
             </li>
           </ul>
         ) : null}
