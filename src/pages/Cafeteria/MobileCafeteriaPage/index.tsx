@@ -30,12 +30,12 @@ export default function MobileCafeteriaPage({
   return (
     <>
       <WeeklyDatePicker currentDate={currentDate} setDate={onClickDate} />
-      <div className={styles['header__time-list']}>
+      <div className={styles['meal-select']}>
         {CAFETERIA_TIME.map((time) => (
           <button
             className={cn({
-              [styles.header__time]: true,
-              [styles['header__time--selected']]: mealTime === time.type,
+              [styles['meal-select__button']]: true,
+              [styles['meal-select__button--selected']]: mealTime === time.type,
             })}
             key={time.id}
             type="button"
@@ -45,17 +45,18 @@ export default function MobileCafeteriaPage({
           </button>
         ))}
       </div>
-      <div className={styles.page__table}>
+      <div className={styles.table}>
         {cafeteriaList?.find((element) => element.type === mealTime)
           ? CAFETERIA_CATEGORY
             .map((cafeteriaCategory) => (
               <MobileMenuBlock
+                key={cafeteriaCategory.id}
                 menu={cafeteriaList}
                 mealTime={mealTime}
                 category={cafeteriaCategory}
               />
             )) : (
-              <div className={styles.category__empty}>
+              <div className={styles['table--empty']}>
                 현재 조회 가능한 식단 정보가 없습니다.
               </div>
           )}
