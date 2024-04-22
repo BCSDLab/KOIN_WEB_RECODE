@@ -30,7 +30,7 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
   };
 
   return (
-    <div className={styles.header}>
+    <div className={styles.container}>
       <div
         className={styles.picker}
         ref={sliderRef}
