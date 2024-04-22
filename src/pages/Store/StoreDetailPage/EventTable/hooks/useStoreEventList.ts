@@ -1,14 +1,14 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import * as api from 'api';
 
 const useStoreEventList = (id: string) => {
-  const { data: storeEventList, isError: isStoreEvnetListError } = useQuery(
-    ['storeEventList', id],
-    ({ queryKey }) => api.store.getStoreEventList(queryKey[1] ?? ''),
-  );
+  const { data: storeEventList, isError: isStoreEventListError } = useQuery({
+    queryKey: ['storeEventList', id],
+    queryFn: ({ queryKey }) => api.store.getStoreEventList(queryKey[1] ?? ''),
+  });
 
   return {
-    storeEventList: isStoreEvnetListError ? null : storeEventList,
+    storeEventList: isStoreEventListError ? null : storeEventList,
   };
 };
 

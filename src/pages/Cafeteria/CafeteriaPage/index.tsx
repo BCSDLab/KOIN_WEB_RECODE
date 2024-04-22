@@ -63,7 +63,7 @@ function CafeteriaPage() {
     setNext: onClickNextArrow,
     setDate: onClickDate,
   } = useDatePicker();
-  const { data: cafeteriaMenu } = useCafeteriaList(
+  const { cafeteriaList } = useCafeteriaList(
     convertDateToSimpleString(currentDate),
   );
   useScrollToTop();
@@ -123,11 +123,11 @@ function CafeteriaPage() {
         {isMobile
           ? (
             <div className={styles.page__table}>
-              {cafeteriaMenu?.find((element) => element.type === mealTime)
+              {cafeteriaList?.find((element) => element.type === mealTime)
                 ? CAFETERIA_CATEGORY
                   .map((cafeteriaCategory) => (
                     <MenuBlock
-                      menu={cafeteriaMenu}
+                      menu={cafeteriaList}
                       mealTime={mealTime}
                       category={cafeteriaCategory}
                     />
@@ -148,7 +148,7 @@ function CafeteriaPage() {
                   </div>
                   <ul className={styles['category__menu-list-row']}>
                     {CAFETERIA_TIME.map((time) => {
-                      const currentTimeMenu = cafeteriaMenu ? Array.from(cafeteriaMenu).find(
+                      const currentTimeMenu = cafeteriaList ? Array.from(cafeteriaList).find(
                         (value) => value.place === cafeteriaCategory.placeName
                       && value.type === time.type,
                       ) : undefined;

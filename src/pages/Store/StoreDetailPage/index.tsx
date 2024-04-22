@@ -21,7 +21,7 @@ function StoreDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const { storeDetail, storeDescription } = useStoreDetail(params.id!);
-  const { storeMenus } = useStoreMenus(params.id!);
+  const { data: storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
@@ -29,6 +29,11 @@ function StoreDetailPage() {
   const onClickCallNumber = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     logger.click({
+      title: 'store_detail_call_number',
+      value: storeDetail!.phone,
+    });
+    logger.actionEventClick({
+      actionTitle: 'click_call_store_btn',
       title: 'store_detail_call_number',
       value: storeDetail!.phone,
     });
@@ -42,6 +47,7 @@ function StoreDetailPage() {
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
+
   return (
     <div className={styles.template}>
       <div className={styles.section}>
@@ -69,7 +75,7 @@ function StoreDetailPage() {
                 {storeDetail?.phone}
                 <br />
                 <span>운영시간</span>
-                {storeDetail?.open
+                {storeDetail.open[getDayOfWeek()] && storeDetail?.open
                   ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${
                     storeDetail?.open[getDayOfWeek()].close_time
                   }`

@@ -7,7 +7,6 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
-
 import { useUser } from 'utils/hooks/useUser';
 import styles from './Header.module.scss';
 

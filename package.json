@@ -5,6 +5,7 @@
   "dependencies": {
     "@bcsdlab/koin": "^0.0.15",
     "@bcsdlab/utils": "^0.0.12",
+    "@tanstack/react-query": "^5.28.6",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -17,11 +18,11 @@
     "@types/react-query": "^1.2.9",
     "@types/react-window": "^1.8.5",
     "axios": "^0.27.2",
-    "dom-to-image": "^2.6.0",
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
-    "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.8",
@@ -61,7 +62,7 @@
     ]
   },
   "devDependencies": {
-    "@types/dom-to-image": "^2.6.4",
+    "@types/file-saver": "^2.0.7",
     "@types/gtag.js": "^0.0.19",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",

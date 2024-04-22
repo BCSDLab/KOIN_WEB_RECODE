@@ -1,12 +1,20 @@
 @use "src/utils/scss/media";
 
+.table {
+  margin-bottom: 50px;
+}
+
 .categories {
   display: flex;
+  position: sticky;
+  top: 0;
   gap: 13px;
-  margin: 16px 0;
+  background-color: #ffff;
+  padding: 16px 0;
 
   @include media.media-breakpoint(mobile) {
-    margin: 16px 0 0 10px;
+    justify-content: center;
+    top: 56px;
   }
 
   &__tag {
@@ -14,13 +22,23 @@
     background-color: transparent;
     border: 1px solid #cacaca;
     border-radius: 4px;
-    color: #cacaca;
+    color: #8e8e8e;
     cursor: pointer;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+    }
 
     &--active {
       background-color: #175c8e;
       border: 1px solid #175c8e;
       color: #ffff;
+    }
+
+    &--inactive {
+      border: 1px solid #f5f5f5;
+      color: #cacaca;
+      pointer-events: none;
     }
   }
 }
@@ -42,7 +60,7 @@
     font-size: 18px;
     font-weight: 600;
     color: #4590bb;
-    padding: 10px 0;
+    padding: 20px 0;
   }
 }
 

@@ -1,6 +1,6 @@
+import { useMutation } from '@tanstack/react-query';
 import { auth } from 'api';
 import { AxiosError } from 'axios';
-import { useMutation } from 'react-query';
 import showToast from 'utils/ts/showToast';
 
 interface ISignupOption {
@@ -9,7 +9,8 @@ interface ISignupOption {
 }
 
 const useSignup = (options: ISignupOption) => {
-  const { status, mutate } = useMutation(auth.signup, {
+  const { status, mutate } = useMutation({
+    mutationFn: auth.signup,
     onSuccess: () => {
       options.onSuccess?.();
       showToast('success', '아우누리 이메일로 인증 메일을 발송했습니다. 확인 부탁드립니다.');

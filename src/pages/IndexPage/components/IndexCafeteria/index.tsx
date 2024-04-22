@@ -27,7 +27,7 @@ function IndexCafeteria() {
     }
     return ['저녁', 'DINNER'];
   };
-  const { data: dinings } = useCafeteriaList(convertDateToSimpleString(new Date()));
+  const { cafeteriaList: dinings } = useCafeteriaList(convertDateToSimpleString(new Date()));
 
   const [selectedCafeteria, setSelectedCafeteria] = useState<'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'>('A코너');
 
@@ -58,11 +58,18 @@ function IndexCafeteria() {
   return (
     <section className={styles.template}>
       <h2 className={styles.title}>
-        <span>식단</span>
+        <div
+          onClick={(e) => handleMoreClick(e)}
+          role="button"
+          tabIndex={0}
+        >
+          식단
+        </div>
         <div
           className={styles.moreLink}
           onClick={(e) => handleMoreClick(e)}
-          aria-hidden
+          role="button"
+          tabIndex={0}
         >
           더보기
           <RightArrow
@@ -88,7 +95,12 @@ function IndexCafeteria() {
             )
           ))}
         </div>
-        <div className={styles.menuBox}>
+        <div
+          className={styles.menuBox}
+          onClick={(e) => handleMoreClick(e)}
+          role="button"
+          tabIndex={0}
+        >
           <div className={styles.type}>
             {getType()[0]}
             <div className={cn({

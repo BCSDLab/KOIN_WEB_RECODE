@@ -1,15 +1,15 @@
-import React from 'react';
-import ErrorBoundary from 'components/common/ErrorBoundary';
+import { Suspense, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
 import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
-import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
+import useTimetableInfoList from 'pages/TimetablePage/hooks/useTimetableInfoList';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
-import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
-import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
+import { useSelectRecoil } from 'pages/TimetablePage/hooks/useSelect';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
+import ErrorBoundary from 'components/common/ErrorBoundary';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
@@ -24,7 +24,6 @@ function CurrentSemesterTimetable(): JSX.Element {
       ? (myLecturesFromServer ?? [])
       : (myLecturesFromLocalStorageValue ?? []),
   );
-
   return selectedSemesterValue ? (
     <Timetable
       lectures={myLectureDayValue}
@@ -43,7 +42,8 @@ export default function IndexTimeTable() {
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
   const semesterOptionList = useSemesterOptionList();
-  React.useEffect(() => {
+
+  useEffect(() => {
     onChangeSemesterSelect({ target: { value: semesterOptionList[0].value } });
   // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,11 +55,11 @@ export default function IndexTimeTable() {
         시간표
       </Link>
       <ErrorBoundary fallbackClassName="loading">
-        <React.Suspense fallback={<LoadingSpinner className={styles['template__loading-spinner']} />}>
+        <Suspense fallback={null}>
           <Link to="/timetable">
             <CurrentSemesterTimetable />
           </Link>
-        </React.Suspense>
+        </Suspense>
       </ErrorBoundary>
     </div>
   );
