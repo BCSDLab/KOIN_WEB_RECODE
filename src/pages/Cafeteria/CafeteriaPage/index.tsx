@@ -8,7 +8,7 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './CafeteriaPage.module.scss';
 import useCafeteriaList from './hooks/useCafeteriaList';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
-import MenuBlock from './components/MenuBlock';
+import MobileMenuBlock from './components/MobileMenuBlock';
 
 const DATE_KEY = 'date';
 const useDatePicker = () => {
@@ -71,62 +71,14 @@ function CafeteriaPage() {
   return (
     <div className={styles.page}>
       <div className={styles.page__content} key={currentDate.toISOString()}>
-        <div className={styles.header}>
-          {isMobile && <WeeklyDatePicker currentDate={currentDate} setDate={onClickDate} />}
-          <div className={styles.header__picker}>
-            <button
-              className={styles['header__pick-button']}
-              type="button"
-              onClick={onClickPrevArrow}
-              aria-label="이전 날짜"
-            >
-              <div
-                className={cn({
-                  [styles.header__arrow]: true,
-                  [styles['header__arrow--left']]: true,
-                })}
-              />
-            </button>
-            <div className={styles.header__date}>
-              {formatKoreanDateString(currentDate)}
-            </div>
-            <button
-              className={styles['header__pick-button']}
-              type="button"
-              onClick={onClickNextArrow}
-              aria-label="다음 날짜"
-            >
-              <div
-                className={cn({
-                  [styles.header__arrow]: true,
-                  [styles['header__arrow--right']]: true,
-                })}
-              />
-            </button>
-          </div>
-          <div className={styles['header__time-list']}>
-            {CAFETERIA_TIME.map((time) => (
-              <button
-                className={cn({
-                  [styles.header__time]: true,
-                  [styles['header__time--selected']]: mealTime === time.type,
-                })}
-                key={time.id}
-                type="button"
-                onClick={() => (isMobile ? setMealTime(time.type) : {})}
-              >
-                {time.name}
-              </button>
-            ))}
-          </div>
-        </div>
-        {isMobile
-          ? (
+        {isMobile && (
+          <>
+            <WeeklyDatePicker currentDate={currentDate} setDate={onClickDate} />
             <div className={styles.page__table}>
               {cafeteriaList?.find((element) => element.type === mealTime)
                 ? CAFETERIA_CATEGORY
                   .map((cafeteriaCategory) => (
-                    <MenuBlock
+                    <MobileMenuBlock
                       menu={cafeteriaList}
                       mealTime={mealTime}
                       category={cafeteriaCategory}
@@ -137,7 +89,58 @@ function CafeteriaPage() {
                     </div>
                 )}
             </div>
-          ) : (
+          </>
+        )}
+        {!isMobile && (
+          <>
+            <div className={styles.header}>
+              <div className={styles.header__picker}>
+                <button
+                  className={styles['header__pick-button']}
+                  type="button"
+                  onClick={onClickPrevArrow}
+                  aria-label="이전 날짜"
+                >
+                  <div
+                    className={cn({
+                      [styles.header__arrow]: true,
+                      [styles['header__arrow--left']]: true,
+                    })}
+                  />
+                </button>
+                <div className={styles.header__date}>
+                  {formatKoreanDateString(currentDate)}
+                </div>
+                <button
+                  className={styles['header__pick-button']}
+                  type="button"
+                  onClick={onClickNextArrow}
+                  aria-label="다음 날짜"
+                >
+                  <div
+                    className={cn({
+                      [styles.header__arrow]: true,
+                      [styles['header__arrow--right']]: true,
+                    })}
+                  />
+                </button>
+              </div>
+              <div className={styles['header__time-list']}>
+                {CAFETERIA_TIME.map((time) => (
+                  <button
+                    className={cn({
+                      [styles.header__time]: true,
+                      [styles['header__time--selected']]: mealTime === time.type,
+                    })}
+                    key={time.id}
+                    type="button"
+                    onClick={() => (isMobile ? setMealTime(time.type) : {})}
+                  >
+                    {time.name}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className={styles.page__table}>
               {CAFETERIA_CATEGORY.map((cafeteriaCategory) => (
                 <div className={styles.category} key={cafeteriaCategory.id}>
@@ -182,8 +185,8 @@ function CafeteriaPage() {
                 </div>
               ))}
             </div>
-          )}
-
+          </>
+        )}
       </div>
     </div>
   );
