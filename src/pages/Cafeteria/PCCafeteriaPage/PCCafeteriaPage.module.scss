@@ -76,17 +76,6 @@
 }
 
 .category {
-  &__empty {
-    display: flex;
-    height: 40vh;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 500;
-  }
-}
-
-.category {
   margin-bottom: 33px;
   display: block;
 
