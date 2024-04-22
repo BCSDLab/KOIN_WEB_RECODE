@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
@@ -51,10 +52,9 @@ const getType = () => {
   return ['저녁', 'DINNER'];
 };
 
-const mealTime = getType()[1];
-
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
+  const [mealTime, setMealTime] = useState<string>(getType()[1]);
   const {
     value: currentDate,
   } = useDatePicker();
@@ -70,6 +70,7 @@ function CafeteriaPage() {
           ? (
             <MobileCafeteriaPage
               mealTime={mealTime}
+              setMealTime={setMealTime}
               cafeteriaList={cafeteriaList}
               useDatePicker={useDatePicker}
             />
