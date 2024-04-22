@@ -1,4 +1,5 @@
-import { CAFETERIA_CATEGORY } from 'static/cafeteria';
+import { cn } from '@bcsdlab/utils';
+import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { CafeteriaMenu } from 'interfaces/Cafeteria';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
@@ -7,6 +8,7 @@ import styles from './MobileCafeteriaPage.module.scss';
 
 interface Props {
   mealTime: string;
+  setMealTime: (mealTime: string) => void;
   cafeteriaList: CafeteriaMenu[] | undefined;
   useDatePicker: () => {
     value: Date;
@@ -16,7 +18,9 @@ interface Props {
   };
 }
 
-export default function MobileCafeteriaPage({ mealTime, cafeteriaList, useDatePicker }: Props) {
+export default function MobileCafeteriaPage({
+  mealTime, setMealTime, cafeteriaList, useDatePicker,
+}: Props) {
   const {
     value: currentDate,
     setDate: onClickDate,
@@ -26,6 +30,21 @@ export default function MobileCafeteriaPage({ mealTime, cafeteriaList, useDatePi
   return (
     <>
       <WeeklyDatePicker currentDate={currentDate} setDate={onClickDate} />
+      <div className={styles['header__time-list']}>
+        {CAFETERIA_TIME.map((time) => (
+          <button
+            className={cn({
+              [styles.header__time]: true,
+              [styles['header__time--selected']]: mealTime === time.type,
+            })}
+            key={time.id}
+            type="button"
+            onClick={() => setMealTime(time.type)}
+          >
+            {time.name}
+          </button>
+        ))}
+      </div>
       <div className={styles.page__table}>
         {cafeteriaList?.find((element) => element.type === mealTime)
           ? CAFETERIA_CATEGORY
