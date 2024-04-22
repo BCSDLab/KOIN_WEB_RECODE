@@ -37,73 +37,72 @@ export default function MobileMenuBlock({ menu, mealTime, category }:Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
 
+  if (currentMenu === undefined || currentMenu.menu.includes('미운영')) return null;
+
   return (
     <div className={styles.category} key={category.id}>
-      {(currentMenu && !currentMenu.menu.includes('미운영'))
-        ? (
-          <ul className={styles['category__menu-list-row']}>
-            <div className={styles.category__header}>
-              <div className={styles.category__type}>
-                <div className={styles['category__type--title']}>
-                  {category.placeName}
-                  <div className={styles.category__calorie}>
-                    {currentMenu?.kcal ?? 0}
-                    Kcal •
-                  </div>
-                  <div className={styles.category__price}>
-                    {`${currentMenu?.price_cash ?? 0}원/ ${currentMenu?.price_card ?? 0}원`}
-                  </div>
-                </div>
-                <div className={cn({
-                  [styles.category__block]: true,
-                  [styles['category__block--soldOut']]: !!currentMenu.soldout_at,
-                  [styles['category__block--changed']]: !currentMenu.soldout_at && !!currentMenu.changed_at,
-                })}
-                >
-                  {!currentMenu.soldout_at && !!currentMenu.changed_at
-                    ? '변경됨' : '품절'}
-                </div>
+      <ul className={styles['category__menu-list-row']}>
+        <div className={styles.category__header}>
+          <div className={styles.category__type}>
+            <div className={styles['category__type--title']}>
+              {category.placeName}
+              <div className={styles.category__calorie}>
+                {currentMenu?.kcal ?? 0}
+                Kcal •
+              </div>
+              <div className={styles.category__price}>
+                {`${currentMenu?.price_cash ?? 0}원/ ${currentMenu?.price_card ?? 0}원`}
               </div>
             </div>
-            <li className={styles['category__menu-list']}>
-              {menu ? (
-                <ul>
-                  {currentMenu.menu.map((menuName) => (
-                    <li
-                      className={styles.category__menu}
-                      key={menuName}
-                    >
-                      {menuName}
-                    </li>
-                  ))}
-                </ul>
-              ) : undefined}
-              {![4, 5].includes(category.id)
-                && (
-                <button
-                  className={styles['category__menu-photo']}
-                  type="button"
-                  onClick={() => currentMenu.image_url && handlePhoto(currentMenu.image_url)}
+            <div className={cn({
+              [styles.category__block]: true,
+              [styles['category__block--soldOut']]: !!currentMenu.soldout_at,
+              [styles['category__block--changed']]: !currentMenu.soldout_at && !!currentMenu.changed_at,
+            })}
+            >
+              {!currentMenu.soldout_at && !!currentMenu.changed_at
+                ? '변경됨' : '품절'}
+            </div>
+          </div>
+        </div>
+        <li className={styles['category__menu-list']}>
+          {menu ? (
+            <ul>
+              {currentMenu.menu.map((menuName) => (
+                <li
+                  className={styles.category__menu}
+                  key={menuName}
                 >
-                  {currentMenu.soldout_at && (
-                  <div className={styles['category__menu-photo--soldOut']}>
-                    <NoMeal />
-                    품절된 메뉴입니다.
+                  {menuName}
+                </li>
+              ))}
+            </ul>
+          ) : undefined}
+          {![4, 5].includes(category.id)
+            && (
+            <button
+              className={styles['category__menu-photo']}
+              type="button"
+              onClick={() => currentMenu.image_url && handlePhoto(currentMenu.image_url)}
+            >
+              {currentMenu.soldout_at && (
+              <div className={styles['category__menu-photo--soldOut']}>
+                <NoMeal />
+                품절된 메뉴입니다.
+              </div>
+              )}
+              {currentMenu?.image_url
+                ? <img src={currentMenu?.image_url || ''} alt="" />
+                : (
+                  <div className={styles['category__menu-photo--none']}>
+                    <NoPhoto />
+                    사진 없음
                   </div>
-                  )}
-                  {currentMenu?.image_url
-                    ? <img src={currentMenu?.image_url || ''} alt="" />
-                    : (
-                      <div className={styles['category__menu-photo--none']}>
-                        <NoPhoto />
-                        사진 없음
-                      </div>
-                    )}
-                </button>
                 )}
-            </li>
-          </ul>
-        ) : null}
+            </button>
+            )}
+        </li>
+      </ul>
     </div>
   );
 }
