@@ -5,10 +5,10 @@ import { convertDateToSimpleString, formatKoreanDateString } from 'utils/ts/cafe
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { useState } from 'react';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import styles from './CafeteriaPage.module.scss';
 import useCafeteriaList from './hooks/useCafeteriaList';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import MobileMenuBlock from './components/MobileMenuBlock';
+import styles from './PCCafeteriaPage.module.scss';
 
 const DATE_KEY = 'date';
 const useDatePicker = () => {
