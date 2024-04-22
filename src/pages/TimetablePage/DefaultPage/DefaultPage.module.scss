@@ -1,6 +1,13 @@
 @use "utils/scss/media.scss" as media;
 
 .page {
+  &__content {
+    display: grid;
+    grid-template-columns: 766px 1fr;
+    grid-template-rows: 535px 336px;
+    gap: 66px 28px;
+  }
+
   &__title {
     text-align: left;
     font-family: NanumSquare, serif;
@@ -21,13 +28,6 @@
       color: #175c8e;
       margin-bottom: 26px;
     }
-  }
-
-  &__content {
-    display: grid;
-    grid-template-columns: 766px 1fr;
-    grid-template-rows: 535px 336px;
-    gap: 66px 28px;
   }
 
   &__filter {

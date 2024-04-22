@@ -2,13 +2,13 @@ import { Suspense, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
 import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
-import useTimetableInfoList from 'components/TimetablePage/hooks/useTimetableInfoList';
+import useTimetableInfoList from 'pages/TimetablePage/hooks/useTimetableInfoList';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
-import { useSelectRecoil } from 'components/TimetablePage/hooks/useSelect';
-import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
+import { useSelectRecoil } from 'pages/TimetablePage/hooks/useSelect';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import styles from './IndexTimetable.module.scss';
 
@@ -24,7 +24,6 @@ function CurrentSemesterTimetable(): JSX.Element {
       ? (myLecturesFromServer ?? [])
       : (myLecturesFromLocalStorageValue ?? []),
   );
-
   return selectedSemesterValue ? (
     <Timetable
       lectures={myLectureDayValue}

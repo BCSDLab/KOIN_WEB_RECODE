@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getTimetableInfo } from 'api/timetable';
+import { TimetableInfoResponse } from 'api/timetable/entity';
 import { KoinError } from 'interfaces/APIError';
 import { TimetableLectureInfo } from 'interfaces/Lecture';
 
@@ -9,21 +10,16 @@ function useTimetableInfoList(
   semester: string,
   authorization: string,
 ) {
-  const { data: timetableInfoList } = useQuery<
-  Awaited<ReturnType<typeof getTimetableInfo>>,
+  const { data: timetableInfoList } = useSuspenseQuery<
+  TimetableInfoResponse | null,
   KoinError,
   TimetableLectureInfo[] | undefined,
   [string, string]
   >(
     {
       queryKey: [TIMETABLE_INFO_LIST, semester],
-      queryFn: async ({ queryKey }) => {
-        const [, semesterParams] = queryKey;
-
-        return getTimetableInfo(authorization, semesterParams);
-      },
-      enabled: !!authorization && !!semester,
-      select: (data: Awaited<ReturnType<typeof getTimetableInfo>>) => data.timetable,
+      queryFn: () => (authorization && semester ? getTimetableInfo(authorization, semester) : null),
+      select: (data) => (data ? data.timetable : undefined),
     },
   );
   return { data: timetableInfoList };
