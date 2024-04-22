@@ -5,7 +5,6 @@ import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg
 import showToast from 'utils/ts/showToast';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
-import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import { useRecoilValue } from 'recoil';
 import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
@@ -13,13 +12,11 @@ import styles from './MobilePage.module.scss';
 import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
 import Timetable from '../MyLectureTimetable/Timetable';
 import useLectureList from '../hooks/useLectureList';
+import useMyLecture from '../hooks/useMyLecture';
 
-interface Props {
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-}
-
-function MobilePage({ myLectures }: Props) {
+function MobilePage() {
   const logger = useLogger();
+  const { myLectures } = useMyLecture();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

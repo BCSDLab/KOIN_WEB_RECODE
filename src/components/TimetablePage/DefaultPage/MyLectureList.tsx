@@ -2,17 +2,14 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import LectureTable from '../common/LectureTable';
 import styles from './DefaultPage.module.scss';
 import useTimetableMutation from '../hooks/useTimetableMutation';
+import useMyLecture from '../hooks/useMyLecture';
 
-interface Props {
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-}
-
-function MyLectureList({ myLectures }: Props) {
+function MyLectureList() {
   const { removeMyLecture } = useTimetableMutation();
+  const { myLectures } = useMyLecture();
   return (
     <div>
       <h3 className={styles['page__title--sub']}>나의 시간표</h3>

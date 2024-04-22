@@ -3,7 +3,6 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
 import useImageDownload from 'utils/hooks/useImageDownload';
-import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import { useRecoilValue } from 'recoil';
 import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
@@ -11,12 +10,10 @@ import styles from './DefaultPage.module.scss';
 import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
 import Timetable from '../MyLectureTimetable/Timetable';
 import useLectureList from '../hooks/useLectureList';
+import useMyLecture from '../hooks/useMyLecture';
 
-interface Props {
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-}
-
-export default function MyLectureTimetable({ myLectures }: Props) {
+export default function MyLectureTimetable() {
+  const { myLectures } = useMyLecture();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
   const selectedLecture = useRecoilValue(selectedTempLectureSelector);

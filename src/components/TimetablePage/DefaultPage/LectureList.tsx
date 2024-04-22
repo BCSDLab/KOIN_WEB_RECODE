@@ -14,6 +14,7 @@ import styles from './DefaultPage.module.scss';
 import useSearch from '../hooks/useSearch';
 import LectureTable from '../common/LectureTable';
 import useTimetableMutation from '../hooks/useTimetableMutation';
+import useMyLecture from '../hooks/useMyLecture';
 
 interface CurrentSemesterLectureListProps {
   semesterKey: string;
@@ -85,10 +86,7 @@ function CurrentSemesterLectureList({
   );
 }
 
-function LectureList({ myLectures }:
-{
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-}) {
+function LectureList() {
   const {
     value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
@@ -96,9 +94,10 @@ function LectureList({ myLectures }:
   const {
     onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef,
   } = useSearch();
-
   const { value: semesterFilterValue } = useSelectRecoil(selectedSemesterAtom);
   const { addMyLecture } = useTimetableMutation();
+  const { myLectures } = useMyLecture();
+
   return (
     <div>
       <div className={styles.page__filter}>
