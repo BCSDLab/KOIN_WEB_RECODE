@@ -4,7 +4,7 @@ import { CAFETERIA_CATEGORY } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { cn } from '@bcsdlab/utils';
-import useCafeteriaList from 'pages/Cafeteria/CafeteriaPage/hooks/useCafeteriaList';
+import useCafeteriaList from 'pages/Cafeteria/MobileCafeteriaPage/hooks/useCafeteriaList';
 import useLogger from 'utils/hooks/useLogger';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
