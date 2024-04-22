@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports */
-import useVersionInfo from '../hooks/useVersionInfo';
-import styles from '../DefaultPage/DefaultPage.module.scss';
+import useVersionInfo from '../../hooks/useVersionInfo';
+import styles from '../../DefaultPage/DefaultPage.module.scss';
 
 function LastUpdatedDate() {
   const { data: updatedDate } = useVersionInfo();

@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-imports */
 import React from 'react';
 import { selectedSemesterAtom } from 'utils/recoil/semester';
-import { useSelectRecoil } from '../hooks/useSelect';
-import useSemesterOptionList from '../hooks/useSemesterOptionList';
-import Listbox from '../common/Listbox';
+import { useSelectRecoil } from '../../hooks/useSelect';
+import useSemesterOptionList from '../../hooks/useSemesterOptionList';
+import Listbox from '../../../../components/TimetablePage/Listbox';
 
 function SemesterListbox() {
   const {

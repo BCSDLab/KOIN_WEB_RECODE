@@ -9,8 +9,8 @@ import { useRecoilValue } from 'recoil';
 import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import styles from './MobilePage.module.scss';
-import SemesterListbox from '../MyLectureTimetable/SemesterListbox';
-import Timetable from '../MyLectureTimetable/Timetable';
+import SemesterListbox from '../components/MyLectureTimetable/SemesterListbox';
+import Timetable from '../../../components/TimetablePage/Timetable';
 import useLectureList from '../hooks/useLectureList';
 import useMyLectures from '../hooks/useMyLectures';
 

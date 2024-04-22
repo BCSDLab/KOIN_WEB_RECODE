@@ -6,15 +6,15 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import showToast from 'utils/ts/showToast';
-import useLectureList from '../hooks/useLectureList';
-import { useSelect, useSelectRecoil } from '../hooks/useSelect';
-import DeptListbox from '../LectureList/DeptListbox ';
-import LastUpdatedDate from '../LectureList/LastUpdatedDate';
-import styles from './DefaultPage.module.scss';
-import useSearch from '../hooks/useSearch';
-import LectureTable from '../common/LectureTable';
-import useTimetableMutation from '../hooks/useTimetableMutation';
-import useMyLectures from '../hooks/useMyLectures';
+import useLectureList from '../../hooks/useLectureList';
+import { useSelect, useSelectRecoil } from '../../hooks/useSelect';
+import DeptListbox from './DeptListbox ';
+import LastUpdatedDate from './LastUpdatedDate';
+import styles from '../../DefaultPage/DefaultPage.module.scss';
+import useSearch from '../../hooks/useSearch';
+import LectureTable from '../../../../components/TimetablePage/LectureTable';
+import useTimetableMutation from '../../hooks/useTimetableMutation';
+import useMyLectures from '../../hooks/useMyLectures';
 
 interface CurrentSemesterLectureListProps {
   semesterKey: string;

@@ -11,24 +11,4 @@
     margin: 15px auto 16px;
     padding: 0;
   }
-
-  &__title {
-    text-align: left;
-    font-family: NanumSquare, serif;
-    font-size: 30px;
-    font-weight: 800;
-    color: #175c8e;
-    width: 100%;
-    height: 32px;
-    margin: 0 0 21px;
-    padding-bottom: 26px;
-    border-bottom: 2px solid #175c8e;
-  }
-
-  &__content {
-    display: grid;
-    grid-template-columns: 766px 1fr;
-    grid-template-rows: 535px 336px;
-    gap: 66px 28px;
-  }
 }

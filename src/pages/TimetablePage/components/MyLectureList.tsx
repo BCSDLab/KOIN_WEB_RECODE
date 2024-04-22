@@ -2,8 +2,8 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import LectureTable from '../common/LectureTable';
-import styles from './DefaultPage.module.scss';
+import LectureTable from '../../../components/TimetablePage/LectureTable';
+import styles from '../DefaultPage/DefaultPage.module.scss';
 import useTimetableMutation from '../hooks/useTimetableMutation';
 import useMyLectures from '../hooks/useMyLectures';
 

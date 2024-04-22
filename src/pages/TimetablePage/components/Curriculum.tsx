@@ -3,7 +3,7 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import React from 'react';
-import styles from './DefaultPage.module.scss';
+import styles from '../DefaultPage/DefaultPage.module.scss';
 
 function Curriculum() {
   const { data: deptList } = useDeptList();
