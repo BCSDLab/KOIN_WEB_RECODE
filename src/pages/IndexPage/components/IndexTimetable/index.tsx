@@ -24,7 +24,6 @@ function CurrentSemesterTimetable(): JSX.Element {
       ? (myLecturesFromServer ?? [])
       : (myLecturesFromLocalStorageValue ?? []),
   );
-
   return selectedSemesterValue ? (
     <Timetable
       lectures={myLectureDayValue}
