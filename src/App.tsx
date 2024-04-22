@@ -21,7 +21,7 @@ import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
 import TimetablePage from 'pages/TimetablePage';
-import CafeteriaPage from 'pages/Cafeteria/MobileCafeteriaPage';
+import CafeteriaPage from 'pages/Cafeteria';
 import MetaHelmet from 'components/common/MetaHelmet';
 import useTokenState from 'utils/hooks/useTokenState';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
