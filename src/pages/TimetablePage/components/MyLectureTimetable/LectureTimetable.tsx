@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
+import Timetable from 'components/TimetablePage/Timetable';
 import { TimetableDayLectureInfo } from 'interfaces/Lecture';
-import Timetable from '../../../../components/TimetablePage/Timetable';
 
 interface Props {
   lectures: TimetableDayLectureInfo[][];
