@@ -28,7 +28,7 @@ export const useTokenStore = create(
         } else if (refreshToken) {
           const result = await auth.refresh({ refresh_token: refreshToken });
           const { token: newAccessToken, refresh_token: newRefreshToken } = result;
-          setCookie('AUTH_TOKEN_KEY', newAccessToken, 3);
+          setCookie('AUTH_TOKEN_KEY', newAccessToken);
           set({ token: newAccessToken, refreshToken: newRefreshToken });
         } else {
           set({ token: '' });
