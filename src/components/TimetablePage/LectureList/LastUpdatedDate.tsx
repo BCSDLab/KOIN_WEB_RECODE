@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-imports */
-import { VersionInfo } from 'api/timetable/entity';
 import useVersionInfo from '../hooks/useVersionInfo';
 import styles from '../DefaultPage/DefaultPage.module.scss';
 
@@ -13,7 +12,7 @@ function LastUpdatedDate() {
   return (
     <div className={styles['page__last-update']}>
       <span className={styles['page__last-update--content']}>마지막 업데이트 날짜:</span>
-      <span className={styles['page__last-update--info']}>{RefactorDate((updatedDate as unknown as VersionInfo).updated_at)}</span>
+      <span className={styles['page__last-update--info']}>{RefactorDate(updatedDate.updated_at)}</span>
     </div>
   );
 }

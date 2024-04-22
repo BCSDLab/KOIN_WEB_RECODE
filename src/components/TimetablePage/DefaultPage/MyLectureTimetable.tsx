@@ -21,7 +21,7 @@ export default function MyLectureTimetable({ myLectures }: Props) {
   const selectedSemester = useRecoilValue(selectedSemesterAtom);
   const selectedLecture = useRecoilValue(selectedTempLectureSelector);
   const { data: lectureList } = useLectureList(selectedSemester);
-  const similarSelectedLecture = (lectureList as unknown as Array<LectureInfo>)
+  const similarSelectedLecture = lectureList
     ?.filter((lecture) => lecture.code === selectedLecture?.code)
     ?? [];
   const selectedLectureIndex = similarSelectedLecture

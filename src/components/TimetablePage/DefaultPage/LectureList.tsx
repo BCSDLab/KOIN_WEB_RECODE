@@ -15,7 +15,7 @@ import useSearch from '../hooks/useSearch';
 import LectureTable from '../common/LectureTable';
 
 interface CurrentSemesterLectureListProps {
-  semesterKey: string | null;
+  semesterKey: string;
   filter: {
     department: string;
     search: string;
@@ -30,16 +30,14 @@ function CurrentSemesterLectureList({
   myLectures,
   addMyLecture,
 }: CurrentSemesterLectureListProps) {
-  const { data: lectureList, status } = useLectureList(semesterKey);
+  const { data: lectureList } = useLectureList(semesterKey);
   const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
-  const isLoaded = status === 'success' && myLectures;
 
   return (
-    isLoaded ? (
-      <LectureTable
-        height={459}
-        list={
-          (lectureList as unknown as Array<LectureInfo>)
+    <LectureTable
+      height={459}
+      list={
+          (lectureList ?? [])
             .filter((lecture) => {
               const searchFilter = filter.search.toUpperCase();
               const departmentFilter = filter.department;
@@ -58,9 +56,9 @@ function CurrentSemesterLectureList({
               return true;
             })
         }
-        selectedLecture={selectedTempLecture ?? undefined}
-        onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
-        onClickLastColumn={
+      selectedLecture={selectedTempLecture ?? undefined}
+      onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
+      onClickLastColumn={
           (clickedLecture) => {
             if ('class_title' in clickedLecture) {
               return;
@@ -76,16 +74,13 @@ function CurrentSemesterLectureList({
             addMyLecture(clickedLecture);
           }
         }
-      >
-        {(props: { onClick: () => void }) => (
-          <button type="button" className={styles.list__button} onClick={props.onClick}>
-            <img src="https://static.koreatech.in/assets/img/ic-add.png" alt="추가" />
-          </button>
-        )}
-      </LectureTable>
-    ) : (
-      <LoadingSpinner size="50" />
-    )
+    >
+      {(props: { onClick: () => void }) => (
+        <button type="button" className={styles.list__button} onClick={props.onClick}>
+          <img src="https://static.koreatech.in/assets/img/ic-add.png" alt="추가" />
+        </button>
+      )}
+    </LectureTable>
   );
 }
 
