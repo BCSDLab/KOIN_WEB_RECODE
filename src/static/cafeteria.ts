@@ -1,27 +1,27 @@
 const CAFETERIA_CATEGORY = [
   {
     id: 1,
-    placeName: 'A코너',
+    place: 'A코너',
     isShowMain: true,
   },
   {
     id: 2,
-    placeName: 'B코너',
+    place: 'B코너',
     isShowMain: true,
   },
   {
     id: 3,
-    placeName: 'C코너',
+    place: 'C코너',
     isShowMain: true,
   },
   {
     id: 4,
-    placeName: '능수관',
+    place: '능수관',
     isShowMain: true,
   },
   {
     id: 5,
-    placeName: '2캠퍼스',
+    place: '2캠퍼스',
     isShowMain: false,
   },
 ] as const;

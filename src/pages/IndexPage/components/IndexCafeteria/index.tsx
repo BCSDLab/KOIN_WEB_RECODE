@@ -12,7 +12,7 @@ import styles from './IndexCafeteria.module.scss';
 
 type CafeteriaType = {
   id: number
-  placeName: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'
+  place: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'
   isShowMain: boolean
 };
 
@@ -52,7 +52,7 @@ function IndexCafeteria() {
       title: 'main_cafeteria_corner',
       value: selectedCafeteria,
     });
-    setSelectedCafeteria(category.placeName);
+    setSelectedCafeteria(category.place);
   };
 
   return (
@@ -86,11 +86,11 @@ function IndexCafeteria() {
               key={category.id}
               className={cn({
                 [styles.cafeteria]: true,
-                [styles['cafeteria--selected']]: selectedCafeteria === category.placeName,
+                [styles['cafeteria--selected']]: selectedCafeteria === category.place,
               })}
               onClick={(e) => onClickCafeteriaCorner(e, category)}
             >
-              {category.placeName}
+              {category.place}
             </div>
             )
           ))}

@@ -80,13 +80,13 @@ export default function PCCafeteriaPage({
           <div className={styles.category} key={cafeteriaCategory.id}>
             <div className={styles.category__header}>
               <div className={styles.category__type}>
-                {cafeteriaCategory.placeName}
+                {cafeteriaCategory.place}
               </div>
             </div>
             <ul className={styles['category__menu-list-row']}>
               {CAFETERIA_TIME.map((time) => {
                 const currentTimeMenu = cafeteriaList ? Array.from(cafeteriaList).find(
-                  (value) => value.place === cafeteriaCategory.placeName
+                  (value) => value.place === cafeteriaCategory.place
                 && value.type === time.type,
                 ) : undefined;
                 return (
