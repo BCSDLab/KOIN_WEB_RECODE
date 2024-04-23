@@ -18,12 +18,20 @@ interface Props {
   }
 }
 
+function checkMenuStatus(menuItem: CafeteriaMenu | undefined) {
+  if (!menuItem) return { isSoldOut: false, isChanged: false };
+
+  const isSoldOut = menuItem.soldout_at !== null;
+  const isChanged = !isSoldOut && menuItem.changed_at !== null;
+
+  return { isSoldOut, isChanged };
+}
+
 export default function MobileMenuBlock({ menu, mealType, category }:Props) {
   const portalManager = useModalPortal();
   const currentMenu = menu.find((item) => item.place === category.place && item.type === mealType);
 
-  const isSoldOut = currentMenu?.soldout_at !== null;
-  const isChanged = !isSoldOut && currentMenu.changed_at !== null;
+  const { isSoldOut, isChanged } = checkMenuStatus(currentMenu);
 
   const handlePhoto = (url: string) => {
     portalManager.open((portalOption: Portal) => (
@@ -87,7 +95,7 @@ export default function MobileMenuBlock({ menu, mealType, category }:Props) {
               onClick={() => currentMenu.image_url && handlePhoto(currentMenu.image_url)}
             >
               {isSoldOut && (
-              <div className={styles['category__menu-photo--soldOut']}>
+              <div className={styles['category__menu-photo--sold-out']}>
                 <NoMeal />
                 품절된 메뉴입니다.
               </div>
