@@ -10,7 +10,7 @@ import styles from './MobileMenuBlock.module.scss';
 
 interface Props {
   menu: CafeteriaMenu[];
-  mealTime: string;
+  mealType: string;
   category: {
     id: number;
     place: string;
@@ -18,9 +18,9 @@ interface Props {
   }
 }
 
-export default function MobileMenuBlock({ menu, mealTime, category }:Props) {
+export default function MobileMenuBlock({ menu, mealType, category }:Props) {
   const portalManager = useModalPortal();
-  const currentMenu = menu.find((item) => item.place === category.place && item.type === mealTime);
+  const currentMenu = menu.find((item) => item.place === category.place && item.type === mealType);
 
   const isSoldOut = currentMenu?.soldout_at !== null;
   const isChanged = !isSoldOut && currentMenu.changed_at !== null;
