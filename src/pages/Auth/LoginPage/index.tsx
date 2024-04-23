@@ -7,22 +7,22 @@ import { auth } from 'api';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
-import { useTokenStore } from 'utils/zustand';
 import { useMutation } from '@tanstack/react-query';
+import { useTokenStore } from 'utils/zustand/\bauth';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
-  userId: HTMLInputElement | null
-  password: HTMLInputElement | null
+  userId: HTMLInputElement | null;
+  password: HTMLInputElement | null;
 }
 
 interface IsAutoLogin {
-  isAutoLoginFlag: boolean
+  isAutoLoginFlag: boolean;
 }
 
 interface UserInfo {
-  userId: string
-  password: string
+  userId: string;
+  password: string;
 }
 
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
@@ -99,14 +99,18 @@ function LoginPage() {
     <div className={styles.template}>
       <form className={styles.loginform} onSubmit={onSubmit}>
         <input
-          ref={(inputRef) => { loginRef.current.userId = inputRef; }}
+          ref={(inputRef) => {
+            loginRef.current.userId = inputRef;
+          }}
           className={styles['form-input']}
           autoComplete="username"
           name="userId"
           placeholder="아이디를 입력하세요"
         />
         <input
-          ref={(inputRef) => { loginRef.current.password = inputRef; }}
+          ref={(inputRef) => {
+            loginRef.current.password = inputRef;
+          }}
           className={styles['form-input']}
           type="password"
           autoComplete="current-password"
@@ -118,22 +122,38 @@ function LoginPage() {
         </button>
       </form>
       <div aria-hidden="true" className={styles['auto-login']}>
-        <label className={styles['auto-login__label']} htmlFor="autoLoginCheckBox">
-          <input className={styles['auto-login__checkbox']} checked={isAutoLoginFlag} onChange={toggleIsAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
+        <label
+          className={styles['auto-login__label']}
+          htmlFor="autoLoginCheckBox"
+        >
+          <input
+            className={styles['auto-login__checkbox']}
+            checked={isAutoLoginFlag}
+            onChange={toggleIsAutoLoginFlag}
+            type="checkbox"
+            id="autoLoginCheckBox"
+          />
           자동 로그인
         </label>
       </div>
       <div className={styles.help}>
-        <a className={styles.help__link} href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp">아이디 찾기</a>
-        <Link className={styles.help__link} to="/auth/findpw">비밀번호 찾기</Link>
-        <Link className={styles.help__link} to="/auth/signup">회원가입</Link>
+        <a
+          className={styles.help__link}
+          href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp"
+        >
+          아이디 찾기
+        </a>
+        <Link className={styles.help__link} to="/auth/findpw">
+          비밀번호 찾기
+        </Link>
+        <Link className={styles.help__link} to="/auth/signup">
+          회원가입
+        </Link>
       </div>
       <span className={styles.template__copyright}>
         COPYRIGHT ⓒ&nbsp;
-        {
-            new Date().getFullYear()
-          }
-          &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
+        {new Date().getFullYear()}
+        &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
       </span>
     </div>
   );

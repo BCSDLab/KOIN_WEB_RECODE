@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useTokenStore } from 'utils/zustand';
+import { useTokenStore } from 'utils/zustand/auth';
 
 const useTokenState = () => {
   const token = useTokenStore((state) => state.token);

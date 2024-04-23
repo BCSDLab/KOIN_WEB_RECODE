@@ -5,13 +5,11 @@ import {
 } from 'interfaces/Lecture';
 import { tokenState } from './index';
 
-// 임시 강의 저장
 export const selectedTempLectureAtom = atom<LectureInfo | null>({
   key: 'selectedTempLecture',
   default: null,
 });
 
-// 선택한 강의 저장
 export const selectedSemesterAtom = atom<string>({
   key: 'selectedSemester',
   default: '',
