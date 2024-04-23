@@ -313,6 +313,7 @@
     border: 1px solid #8e8e8e;
     border-radius: 8px;
     padding: 0;
+    flex-shrink: 0;
     overflow: hidden;
 
     img {
@@ -353,6 +354,7 @@
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
+    word-break: break-all;
     line-height: 1.67;
     letter-spacing: -0.48px;
     color: rgb(73 73 73);
