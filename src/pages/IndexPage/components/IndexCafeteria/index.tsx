@@ -4,7 +4,7 @@ import { CAFETERIA_CATEGORY } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { cn } from '@bcsdlab/utils';
-import useCafeteriaList from 'pages/Cafeteria/CafeteriaPage/hooks/useCafeteriaList';
+import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import useLogger from 'utils/hooks/useLogger';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -12,7 +12,7 @@ import styles from './IndexCafeteria.module.scss';
 
 type CafeteriaType = {
   id: number
-  placeName: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'
+  place: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'
   isShowMain: boolean
 };
 
@@ -52,7 +52,7 @@ function IndexCafeteria() {
       title: 'main_cafeteria_corner',
       value: selectedCafeteria,
     });
-    setSelectedCafeteria(category.placeName);
+    setSelectedCafeteria(category.place);
   };
 
   return (
@@ -86,11 +86,11 @@ function IndexCafeteria() {
               key={category.id}
               className={cn({
                 [styles.cafeteria]: true,
-                [styles['cafeteria--selected']]: selectedCafeteria === category.placeName,
+                [styles['cafeteria--selected']]: selectedCafeteria === category.place,
               })}
               onClick={(e) => onClickCafeteriaCorner(e, category)}
             >
-              {category.placeName}
+              {category.place}
             </div>
             )
           ))}

@@ -1,0 +1,23 @@
+@use "utils/scss/media.scss" as media;
+
+.page {
+  margin: 0 auto;
+  width: 1132px;
+  padding: 0 10px;
+  min-height: 800px;
+
+  @include media.media-breakpoint(mobile) {
+    padding: 0;
+    width: 100%;
+  }
+
+  &__content {
+    margin: 0 auto;
+    display: block;
+    width: 690px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+    }
+  }
+}
