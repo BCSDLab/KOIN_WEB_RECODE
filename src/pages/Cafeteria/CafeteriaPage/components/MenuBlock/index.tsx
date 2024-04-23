@@ -7,6 +7,7 @@ import useModalPortal from 'utils/hooks/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import { useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
+import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 
 interface Props {
   menu: CafeteriaMenu[];
@@ -18,8 +19,9 @@ interface Props {
   }
 }
 
-export default function MenuBlock({ menu, mealTime, category }:Props) {
+export default function MenuBlock({ menu, mealTime, category }: Props) {
   const portalManager = useModalPortal();
+  const { target } = useOnClickOutside<HTMLImageElement>(portalManager.close);
   const currentMenu = menu.find((item) => item.place === category.placeName
     && item.type === mealTime);
 
@@ -29,7 +31,7 @@ export default function MenuBlock({ menu, mealTime, category }:Props) {
         <div className={styles.photo__close}>
           <CloseIcon onClick={portalOption.close} />
         </div>
-        <img src={url} alt="mealDetail" />
+        <img src={url} alt="mealDetail" ref={target} />
       </div>
     ));
   };
@@ -40,18 +42,18 @@ export default function MenuBlock({ menu, mealTime, category }:Props) {
   return (
     <div className={styles.category} key={category.id}>
       {(currentMenu && !currentMenu.menu.includes('미운영'))
-        ? (
+        && (
           <ul className={styles['category__menu-list-row']}>
             <div className={styles.category__header}>
               <div className={styles.category__type}>
                 <div className={styles['category__type--title']}>
                   {category.placeName}
                   <div className={styles.category__calorie}>
-                    {currentMenu?.kcal ?? 0}
-                    Kcal •
+                    {!!currentMenu.kcal && `${currentMenu.kcal}Kcal •`}
                   </div>
                   <div className={styles.category__price}>
-                    {`${currentMenu?.price_cash ?? 0}원/ ${currentMenu?.price_card ?? 0}원`}
+                    {!!currentMenu.price_cash && `${currentMenu.price_cash}원/`}
+                    {!!currentMenu.price_card && ` ${currentMenu.price_card}원`}
                   </div>
                 </div>
                 <div className={cn({
@@ -66,18 +68,16 @@ export default function MenuBlock({ menu, mealTime, category }:Props) {
               </div>
             </div>
             <li className={styles['category__menu-list']}>
-              {menu ? (
-                <ul>
-                  {currentMenu.menu.map((menuName) => (
-                    <li
-                      className={styles.category__menu}
-                      key={menuName}
-                    >
-                      {menuName}
-                    </li>
-                  ))}
-                </ul>
-              ) : undefined}
+              <ul>
+                {currentMenu.menu.map((menuName) => (
+                  <li
+                    className={styles.category__menu}
+                    key={menuName}
+                  >
+                    {menuName}
+                  </li>
+                ))}
+              </ul>
               {![4, 5].includes(category.id)
                 && (
                 <button
@@ -103,7 +103,7 @@ export default function MenuBlock({ menu, mealTime, category }:Props) {
                 )}
             </li>
           </ul>
-        ) : null}
+        ) }
     </div>
   );
 }

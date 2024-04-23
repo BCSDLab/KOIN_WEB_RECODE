@@ -300,6 +300,12 @@
       gap: 12px;
       padding: 0 24px 16px;
     }
+
+    &--empty {
+      // height: 130px;
+      font-size: 14px;
+      font-weight: 400;
+    }
   }
 
   &__menu-photo {
