@@ -13,15 +13,17 @@ interface Props {
   mealTime: string;
   category: {
     id: number;
-    placeName: string;
+    place: string;
     isShowMain: boolean;
   }
 }
 
 export default function MobileMenuBlock({ menu, mealTime, category }:Props) {
   const portalManager = useModalPortal();
-  const currentMenu = menu.find((item) => item.place === category.placeName
-    && item.type === mealTime);
+  const currentMenu = menu.find((item) => item.place === category.place && item.type === mealTime);
+
+  const isSoldOut = currentMenu?.soldout_at !== null;
+  const isChanged = !isSoldOut && currentMenu.changed_at !== null;
 
   const handlePhoto = (url: string) => {
     portalManager.open((portalOption: Portal) => (
@@ -45,7 +47,7 @@ export default function MobileMenuBlock({ menu, mealTime, category }:Props) {
         <div className={styles.category__header}>
           <div className={styles.category__type}>
             <div className={styles['category__type--title']}>
-              {category.placeName}
+              {category.place}
               <div className={styles.category__calorie}>
                 {currentMenu?.kcal ?? 0}
                 Kcal •
@@ -56,12 +58,11 @@ export default function MobileMenuBlock({ menu, mealTime, category }:Props) {
             </div>
             <div className={cn({
               [styles.category__block]: true,
-              [styles['category__block--soldOut']]: !!currentMenu.soldout_at,
-              [styles['category__block--changed']]: !currentMenu.soldout_at && !!currentMenu.changed_at,
+              [styles['category__block--sold-out']]: isSoldOut,
+              [styles['category__block--changed']]: isChanged,
             })}
             >
-              {!currentMenu.soldout_at && !!currentMenu.changed_at
-                ? '변경됨' : '품절'}
+              {isSoldOut ? '품절' : (isChanged && '변경됨') }
             </div>
           </div>
         </div>
@@ -85,7 +86,7 @@ export default function MobileMenuBlock({ menu, mealTime, category }:Props) {
               type="button"
               onClick={() => currentMenu.image_url && handlePhoto(currentMenu.image_url)}
             >
-              {currentMenu.soldout_at && (
+              {isSoldOut && (
               <div className={styles['category__menu-photo--soldOut']}>
                 <NoMeal />
                 품절된 메뉴입니다.

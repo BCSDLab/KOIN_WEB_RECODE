@@ -9,7 +9,7 @@ import styles from './MobileCafeteriaPage.module.scss';
 interface Props {
   mealTime: string;
   setMealTime: (mealTime: string) => void;
-  cafeteriaList: CafeteriaMenu[] | undefined;
+  cafeteriaList: CafeteriaMenu[];
   useDatePicker: () => {
     value: Date;
     setPrev: () => void;
@@ -46,7 +46,7 @@ export default function MobileCafeteriaPage({
         ))}
       </div>
       <div className={styles.table}>
-        {cafeteriaList?.find((element) => element.type === mealTime)
+        {cafeteriaList.find((element) => element.type === mealTime)
           ? CAFETERIA_CATEGORY
             .map((cafeteriaCategory) => (
               <MobileMenuBlock
