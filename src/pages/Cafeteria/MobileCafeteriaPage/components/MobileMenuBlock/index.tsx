@@ -44,8 +44,9 @@ export default function MobileMenuBlock({ menu, mealType, category }:Props) {
     ));
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
+  useEffect(() => () => portalManager.close(), [
+    portalManager,
+  ]);
 
   if (currentMenu === undefined || currentMenu.menu.includes('미운영')) return null;
 
