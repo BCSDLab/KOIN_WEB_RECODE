@@ -6,7 +6,7 @@ import { CafeteriaMenu } from 'interfaces/Cafeteria';
 import styles from './PCCafeteriaPage.module.scss';
 
 interface Props {
-  mealTime: string;
+  mealType: string;
   cafeteriaList: CafeteriaMenu[] | undefined;
   useDatePicker: () => {
     value: Date;
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default function PCCafeteriaPage({
-  mealTime, cafeteriaList, useDatePicker,
+  mealType, cafeteriaList, useDatePicker,
 }: Props) {
   const {
     value: currentDate,
@@ -61,16 +61,16 @@ export default function PCCafeteriaPage({
           </button>
         </div>
         <div className={styles['header__time-list']}>
-          {CAFETERIA_TIME.map((time) => (
+          {CAFETERIA_TIME.map((meal) => (
             <button
               className={cn({
                 [styles.header__time]: true,
-                [styles['header__time--selected']]: mealTime === time.type,
+                [styles['header__time--selected']]: mealType === meal.type,
               })}
-              key={time.id}
+              key={meal.id}
               type="button"
             >
-              {time.name}
+              {meal.name}
             </button>
           ))}
         </div>

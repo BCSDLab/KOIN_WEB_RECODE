@@ -7,8 +7,8 @@ import MobileMenuBlock from './components/MobileMenuBlock';
 import styles from './MobileCafeteriaPage.module.scss';
 
 interface Props {
-  mealTime: string;
-  setMealTime: (mealTime: string) => void;
+  mealType: string;
+  setMealType: (mealType: string) => void;
   cafeteriaList: CafeteriaMenu[];
   useDatePicker: () => {
     value: Date;
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function MobileCafeteriaPage({
-  mealTime, setMealTime, cafeteriaList, useDatePicker,
+  mealType, setMealType, cafeteriaList, useDatePicker,
 }: Props) {
   const {
     value: currentDate,
@@ -31,28 +31,28 @@ export default function MobileCafeteriaPage({
     <>
       <WeeklyDatePicker currentDate={currentDate} setDate={onClickDate} />
       <div className={styles['meal-select']}>
-        {CAFETERIA_TIME.map((time) => (
+        {CAFETERIA_TIME.map((meal) => (
           <button
             className={cn({
               [styles['meal-select__button']]: true,
-              [styles['meal-select__button--selected']]: mealTime === time.type,
+              [styles['meal-select__button--selected']]: meal.type === mealType,
             })}
-            key={time.id}
+            key={meal.id}
             type="button"
-            onClick={() => setMealTime(time.type)}
+            onClick={() => setMealType(meal.type)}
           >
-            {time.name}
+            {meal.name}
           </button>
         ))}
       </div>
       <div className={styles.table}>
-        {cafeteriaList.find((element) => element.type === mealTime)
+        {cafeteriaList.find((element) => element.type === mealType)
           ? CAFETERIA_CATEGORY
             .map((cafeteriaCategory) => (
               <MobileMenuBlock
                 key={cafeteriaCategory.id}
                 menu={cafeteriaList}
-                mealTime={mealTime}
+                mealType={mealType}
                 category={cafeteriaCategory}
               />
             )) : (
