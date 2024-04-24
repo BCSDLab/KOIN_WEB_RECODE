@@ -33,12 +33,13 @@ function StoreDetailPage() {
       value: storeDetail!.phone,
     });
     logger.actionEventClick({
-      actionTitle: 'click_call_store_btn',
-      title: 'store_detail_call_number',
-      value: storeDetail!.phone,
+      actionTitle: 'BUSINESS',
+      title: `store_${storeDetail!.name}_call`,
+      value: storeDetail!.name,
     });
   };
   const onClickImage = (img: string[], index: number) => {
+    logger.actionEventClick({ actionTitle: 'BUSINESS', title: `store_${storeDetail.name}_picture`, value: storeDetail.name });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
     ));
