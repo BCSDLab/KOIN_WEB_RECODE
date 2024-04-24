@@ -34,7 +34,7 @@ function IndexCafeteria() {
   const 선택된_식단 = dinings?.find(
     (dining) => dining.place === selectedCafeteria && dining.type === getType()[1],
   );
-  const logger = useLogger();
+  const logger = useLogger('CAMPUS');
   const navigate = useNavigate();
 
   const handleMoreClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -81,17 +81,17 @@ function IndexCafeteria() {
         <div className={styles.cafeteriaContainer}>
           {CAFETERIA_CATEGORY.map((category) => (
             category.isShowMain && (
-            // eslint-disable-next-line
-            <div
-              key={category.id}
-              className={cn({
-                [styles.cafeteria]: true,
-                [styles['cafeteria--selected']]: selectedCafeteria === category.place,
-              })}
-              onClick={(e) => onClickCafeteriaCorner(e, category)}
-            >
-              {category.place}
-            </div>
+              // eslint-disable-next-line
+              <div
+                key={category.id}
+                className={cn({
+                  [styles.cafeteria]: true,
+                  [styles['cafeteria--selected']]: selectedCafeteria === category.place,
+                })}
+                onClick={(e) => onClickCafeteriaCorner(e, category)}
+              >
+                {category.place}
+              </div>
             )
           ))}
         </div>

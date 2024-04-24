@@ -111,7 +111,7 @@ function StorePage() {
   const storeList = useStoreList(params);
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
-  const logger = useLogger();
+  const logger = useLogger('BUSINESS');
   const selectedCategory = Number(searchParams.get('category'));
   useScrollToTop();
 

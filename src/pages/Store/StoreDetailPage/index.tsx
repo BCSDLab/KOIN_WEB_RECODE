@@ -25,7 +25,7 @@ function StoreDetailPage() {
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
-  const logger = useLogger();
+  const logger = useLogger('BUSINESS');
   const onClickCallNumber = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     logger.click({
@@ -76,8 +76,7 @@ function StoreDetailPage() {
                 <br />
                 <span>운영시간</span>
                 {storeDetail.open[getDayOfWeek()] && storeDetail?.open
-                  ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${
-                    storeDetail?.open[getDayOfWeek()].close_time
+                  ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${storeDetail?.open[getDayOfWeek()].close_time
                   }`
                   : '-'}
                 <br />
