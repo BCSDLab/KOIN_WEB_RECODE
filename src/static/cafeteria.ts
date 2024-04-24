@@ -1,3 +1,5 @@
+import { CafeteriaTime } from 'interfaces/Cafeteria';
+
 const CAFETERIA_CATEGORY = [
   {
     id: 1,
@@ -26,7 +28,7 @@ const CAFETERIA_CATEGORY = [
   },
 ] as const;
 
-const CAFETERIA_TIME = [
+const CAFETERIA_TIME: CafeteriaTime = [
   {
     id: 1,
     type: 'BREAKFAST',
@@ -44,7 +46,14 @@ const CAFETERIA_TIME = [
   },
 ];
 
+const MEAL_TYPE_MAP = {
+  BREAKFAST: '아침',
+  LUNCH: '점심',
+  DINNER: '저녁',
+} as const;
+
 export {
   CAFETERIA_CATEGORY,
   CAFETERIA_TIME,
+  MEAL_TYPE_MAP,
 };

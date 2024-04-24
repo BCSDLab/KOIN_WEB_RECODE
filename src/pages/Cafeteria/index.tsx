@@ -4,6 +4,7 @@ import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
+import { MealType } from 'interfaces/Cafeteria';
 import MobileCafeteriaPage from './MobileCafeteriaPage';
 import PCCafeteriaPage from './PCCafeteriaPage';
 import styles from './Cafeteria.module.scss';
@@ -45,16 +46,16 @@ const useDatePicker = () => {
 const getType = () => {
   const hour = new Date().getHours();
   if (hour < 9) {
-    return ['아침', 'BREAKFAST'];
+    return 'BREAKFAST';
   } if (hour < 14) {
-    return ['점심', 'LUNCH'];
+    return 'LUNCH';
   }
-  return ['저녁', 'DINNER'];
+  return 'DINNER';
 };
 
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
-  const [mealType, setMealType] = useState<string>(getType()[1]);
+  const [mealType, setMealType] = useState<MealType>(getType());
   const {
     value: currentDate,
   } = useDatePicker();

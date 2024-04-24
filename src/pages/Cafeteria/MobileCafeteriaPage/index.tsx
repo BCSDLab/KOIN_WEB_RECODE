@@ -1,14 +1,14 @@
 import { cn } from '@bcsdlab/utils';
 import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { CafeteriaMenu } from 'interfaces/Cafeteria';
+import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import MobileMenuBlock from './components/MobileMenuBlock';
 import styles from './MobileCafeteriaPage.module.scss';
 
 interface Props {
-  mealType: string;
-  setMealType: (mealType: string) => void;
+  mealType: MealType;
+  setMealType: (mealType: MealType) => void;
   cafeteriaList: CafeteriaMenu[];
   useDatePicker: () => {
     value: Date;
