@@ -25,7 +25,7 @@ function StoreDetailPage() {
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
-  const logger = useLogger('BUSINESS');
+  const logger = useLogger();
   const onClickCallNumber = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     logger.click({

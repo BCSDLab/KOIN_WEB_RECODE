@@ -13,12 +13,13 @@ interface Category {
 function IndexStore() {
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
-  const logger = useLogger('BUSINESS');
+  const logger = useLogger();
   const navigate = useNavigate();
 
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
-    logger.click({
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
       title: 'main_store_categories',
       value: category.name,
     });

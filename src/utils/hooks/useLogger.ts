@@ -15,13 +15,13 @@ type ActionClickLoggerProps = {
   value: string,
 };
 
-const useLogger = (actionName: 'BUSINESS' | 'CAMPUS' | 'UESR') => {
+const useLogger = () => {
   const click = ({
     title,
     value,
   } : ClickLoggerProps) => {
     gtag.event({
-      action: actionName, category: 'button', label: title, value,
+      action: 'click', category: 'button', label: title, value,
     });
   };
 

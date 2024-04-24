@@ -34,7 +34,7 @@ function IndexCafeteria() {
   const 선택된_식단 = dinings?.find(
     (dining) => dining.place === selectedCafeteria && dining.type === getType()[1],
   );
-  const logger = useLogger('CAMPUS');
+  const logger = useLogger();
   const navigate = useNavigate();
 
   const handleMoreClick = (e: React.MouseEvent<HTMLDivElement>) => {

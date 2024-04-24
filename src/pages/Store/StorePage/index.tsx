@@ -111,7 +111,7 @@ function StorePage() {
   const storeList = useStoreList(params);
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
-  const logger = useLogger('BUSINESS');
+  const logger = useLogger();
   const selectedCategory = Number(searchParams.get('category'));
   useScrollToTop();
 
@@ -130,7 +130,10 @@ function StorePage() {
               role="radio"
               aria-checked={category.id === selectedCategory}
               type="button"
-              onClick={() => setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true })}
+              onClick={() => {
+                logger.click({ title: 'store_categories', value: category.name });
+                setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true });
+              }}
               key={category.id}
             >
               <img className={styles.category__image} src={category.image_url} alt="category_img" />

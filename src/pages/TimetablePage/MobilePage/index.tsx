@@ -15,7 +15,7 @@ import useLectureList from '../hooks/useLectureList';
 import useMyLectures from '../hooks/useMyLectures';
 
 function MobilePage() {
-  const logger = useLogger('UESR');
+  const logger = useLogger();
   const { myLectures } = useMyLectures();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -14,7 +14,7 @@ type BusType = {
 
 function BusTimetable() {
   const [selectedTab, setSelectedTab] = useState(BUS_TYPES[0]);
-  const logger = useLogger('UESR');
+  const logger = useLogger();
   const onClickBusTab = (type: BusType) => {
     logger.click({ title: 'bus_tab_click', value: type.tabName });
     setSelectedTab(type);
