@@ -15,13 +15,13 @@ type ActionClickLoggerProps = {
   value: string,
 };
 
-const useLogger = () => {
+const useLogger = (actionName: 'BUSINESS' | 'CAMPUS' | 'UESR') => {
   const click = ({
     title,
     value,
   } : ClickLoggerProps) => {
     gtag.event({
-      action: 'click', category: 'button', label: title, value,
+      action: actionName, category: 'button', label: title, value,
     });
   };
 
@@ -29,7 +29,7 @@ const useLogger = () => {
     title,
   }: ScrollLoggerProps) => {
     gtag.event({
-      action: 'action', category: 'scroll', label: title, value: title,
+      action: 'BUSINESS', category: 'scroll', label: title, value: title,
     });
   };
 
