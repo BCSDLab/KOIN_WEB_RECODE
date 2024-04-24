@@ -1,20 +1,21 @@
 @use "utils/scss/media.scss" as media;
 
 .page {
-  margin: 0 auto;
-  width: 1132px;
+  width: 100vw;
   padding: 0 10px;
   min-height: 800px;
+  background-color: #f5f5f5;
 
   @include media.media-breakpoint(mobile) {
     padding: 0;
     width: 100%;
+    background-color: #fff;
   }
 
   &__content {
     margin: 0 auto;
     display: block;
-    width: 690px;
+    width: 852px;
 
     @include media.media-breakpoint(mobile) {
       width: 100%;
