@@ -1,3 +1,5 @@
+import { ReactComponent as LeftArrow } from 'assets/svg/left-angle-bracket.svg';
+import { ReactComponent as RightArrow } from 'assets/svg/right-angle-bracket.svg';
 import styles from './DateNavigator.module.scss';
 
 const WEEK = [
@@ -8,9 +10,9 @@ export default function DateNavigator() {
   return (
     <div className={styles.container}>
       <div className={styles.date}>
-        <span>{'<'}</span>
+        <LeftArrow />
         <span>오늘</span>
-        <span>{'>'}</span>
+        <RightArrow />
       </div>
       <div className={styles.week}>
         {WEEK.map((day) => (

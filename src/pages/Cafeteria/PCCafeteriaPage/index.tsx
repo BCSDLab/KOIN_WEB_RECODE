@@ -1,6 +1,7 @@
 // import { cn } from '@bcsdlab/utils';
 // import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
 // import { formatKoreanDateString } from 'utils/ts/cafeteria';
+import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
 import { MEAL_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
@@ -33,6 +34,7 @@ export default function PCCafeteriaPage({
       <div className={styles['meal-type-selector']}>
         오늘
         <span>{MEAL_TYPE_MAP[mealType]}</span>
+        <LowerArrow />
         식단
       </div>
       <div className={styles['date-navigator']}>
