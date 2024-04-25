@@ -16,7 +16,7 @@ export default function useTimetableMutation() {
   const removeLectureFromLocalStorage = useSetRecoilState(myLectureRemoveLectureSelector);
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(selectedSemester, token);
 
-  const addMyLecture = (clickedLecture: LectureInfo | null) => {
+  const addMyLecture = (clickedLecture: LectureInfo) => {
     if (token && clickedLecture) {
       mutateAddWithServer({
         semester: selectedSemester,

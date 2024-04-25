@@ -10,7 +10,7 @@ type State = {
 
 type Action = {
   action: {
-    updateLectures: (lectures: LectureInfo | null, semester: string) => void
+    updateLectures: (lectures: LectureInfo, semester: string) => void
   }
 };
 
@@ -19,7 +19,14 @@ export const useLecturesStore = create<State & Action>(
     lectures: localStorage.getItem(MY_LECTURES_KEY) ?? {},
     action: {
       updateLectures: async (value, semester) => {
-        localStorage.setItem(MY_LECTURES_KEY, JSON.stringify({ [semester]: value }));
+        const timetableInfoList = JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}') as TimetableInfoFromLocalStorage;
+        const newValue = [...(timetableInfoList[semester] || [])];
+        newValue.push(value);
+
+        localStorage.setItem(
+          MY_LECTURES_KEY,
+          JSON.stringify({ ...timetableInfoList, [semester]: newValue }),
+        );
       },
     },
   }),

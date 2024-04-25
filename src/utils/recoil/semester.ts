@@ -79,6 +79,7 @@ export const myLecturesAtom = atom<LectureInfo[] | null>({
         const timetableInfoList = JSON.parse(
           localStorage.getItem(MY_LECTURES_KEY) ?? '{}',
         ) as TimetableInfoFromLocalStorage;
+
         timetableInfoList[
           getLoadable(selectedSemesterAtom).contents
         ] = newValue ?? [];
