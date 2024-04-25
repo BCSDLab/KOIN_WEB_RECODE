@@ -95,7 +95,7 @@ function Header() {
   const logger = useLogger();
 
   const loggingBusinessShortCut = (title: string) => {
-    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger _store', value: title });
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_store', value: title });
   };
 
   return (
