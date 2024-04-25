@@ -8,6 +8,7 @@ import { cn } from '@bcsdlab/utils';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
 import { useUser } from 'utils/hooks/useUser';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -91,6 +92,11 @@ function Header() {
   const { data: userInfo } = useUser();
   const logout = useLogout();
   const navigate = useNavigate();
+  const logger = useLogger();
+
+  const loggingBusinessShortCut = (title: string) => {
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_store', value: title });
+  };
 
   return (
     <header
@@ -210,7 +216,11 @@ function Header() {
                               className={styles['mobileheader__sub-menu']}
                               key={subMenu.title}
                             >
-                              <Link to={subMenu.link} target={subMenu.openInNewTab ? '_blank' : '_self'}>
+                              <Link
+                                to={subMenu.link}
+                                target={subMenu.openInNewTab ? '_blank' : '_self'}
+                                onClick={() => loggingBusinessShortCut(subMenu.title)}
+                              >
                                 {subMenu.title}
                               </Link>
                             </li>

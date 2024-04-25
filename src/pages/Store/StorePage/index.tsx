@@ -115,6 +115,12 @@ function StorePage() {
   const selectedCategory = Number(searchParams.get('category'));
   useScrollToTop();
 
+  const loggingCheckbox = (id: string) => {
+    if (id && searchParams.get(id)) {
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: `store_can_${id}`, value: `check_${id}` });
+    }
+  };
+
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
@@ -130,7 +136,10 @@ function StorePage() {
               role="radio"
               aria-checked={category.id === selectedCategory}
               type="button"
-              onClick={() => setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true })}
+              onClick={() => {
+                logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'store_categories', value: category.name });
+                setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true });
+              }}
               key={category.id}
             >
               <img className={styles.category__image} src={category.image_url} alt="category_img" />
@@ -162,6 +171,8 @@ function StorePage() {
           className={styles.search_bar__icon}
           type="button"
           onClick={() => {
+            const currentCategoryId = Number(params.category);
+            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'store_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
             setParams('storeName', storeRef.current?.value ?? '', {
               deleteBeforeParam: searchParams.get('storeName') === undefined,
               replacePage: true,
@@ -194,6 +205,7 @@ function StorePage() {
                   checked={searchParams.get(item.id) ? true : undefined}
                   className={styles['option-checkbox__input']}
                   onChange={() => {
+                    loggingCheckbox(item.id);
                     setParams(item.id, item.value, {
                       deleteBeforeParam: true,
                       replacePage: true,
@@ -214,7 +226,7 @@ function StorePage() {
             to={`/store/${store.id}`}
             className={styles['store-list__item']}
             key={store.id}
-            onClick={() => logger.click({ title: 'store_card_click', value: store.name })}
+            onClick={() => logger.click({ title: `store_${store.name}_click`, value: store.name })}
           >
             {store.is_event
               && !isStoreOpen(
