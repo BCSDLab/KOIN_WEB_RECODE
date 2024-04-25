@@ -6,6 +6,7 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import showToast from 'utils/ts/showToast';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import useLectureList from '../../hooks/useLectureList';
 import { useSelect, useSelectRecoil } from '../../hooks/useSelect';
 import DeptListbox from './DeptListbox ';
@@ -13,7 +14,6 @@ import LastUpdatedDate from './LastUpdatedDate';
 import styles from '../../DefaultPage/DefaultPage.module.scss';
 import useSearch from '../../hooks/useSearch';
 import LectureTable from '../../../../components/TimetablePage/LectureTable';
-import useTimetableMutation from '../../hooks/useTimetableMutation';
 import useMyLectures from '../../hooks/useMyLectures';
 
 interface CurrentSemesterLectureListProps {
@@ -23,17 +23,16 @@ interface CurrentSemesterLectureListProps {
     search: string;
   };
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-  addMyLecture: (clickedLecture: LectureInfo) => void;
 }
 
 function CurrentSemesterLectureList({
   semesterKey,
   filter,
   myLectures,
-  addMyLecture,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
   const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
+  const { addMyLecture } = useTimetableMutation();
 
   return (
     <LectureTable
@@ -71,8 +70,9 @@ function CurrentSemesterLectureList({
 
             if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
               showToast('error', '시간이 중복되어 추가할 수 없습니다.');
-              return;
             }
+            // addLectureToLocalStorage(clickedLecture);
+            // updateLectures(clickedLecture);
             addMyLecture(clickedLecture);
           }
         }
@@ -95,7 +95,6 @@ function LectureList() {
     onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef,
   } = useSearch();
   const { value: semesterFilterValue } = useSelectRecoil(selectedSemesterAtom);
-  const { addMyLecture } = useTimetableMutation();
   const { myLectures } = useMyLectures();
 
   return (
@@ -136,7 +135,6 @@ function LectureList() {
               search: searchValue ?? '',
             }}
             myLectures={myLectures}
-            addMyLecture={addMyLecture}
           />
         </React.Suspense>
       </ErrorBoundary>
