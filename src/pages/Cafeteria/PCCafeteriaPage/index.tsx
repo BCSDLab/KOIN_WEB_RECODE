@@ -20,6 +20,7 @@ interface Props {
     setPrev: () => void;
     setNext: () => void;
     setDate: (date: string) => void;
+    setToday: () => void;
   };
 }
 
@@ -28,11 +29,11 @@ export default function PCCafeteriaPage({
 }: Props) {
   const { value: currentDate } = useDatePicker();
   useScrollToTop();
-  console.log(mealType, cafeteriaList, currentDate);
+  console.log(cafeteriaList);
 
   const [dropdownOpen,,,toggleDropdown] = useBooleanState(false);
 
-  const isToday = true;
+  const isToday = new Date().toDateString() === currentDate.toDateString();
 
   const handleMealTypeChange = (value: MealType) => {
     setMealType(value);
@@ -67,7 +68,10 @@ export default function PCCafeteriaPage({
         )}
       </div>
       <div className={styles['date-navigator']}>
-        <DateNavigator />
+        <DateNavigator
+          useDatePicker={useDatePicker}
+          isToday={isToday}
+        />
       </div>
       <div className={styles['menu-blocks']}>
         <PCMenuBlocks />

@@ -40,6 +40,13 @@ const useDatePicker = () => {
         replace: true,
       });
     },
+    setToday: () => {
+      const newDate = new Date();
+      searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
+      setSearchParams(searchParams, {
+        replace: true,
+      });
+    },
   };
 };
 
