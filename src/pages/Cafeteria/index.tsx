@@ -56,9 +56,7 @@ const getType = () => {
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
   const [mealType, setMealType] = useState<MealType>(getType());
-  const {
-    value: currentDate,
-  } = useDatePicker();
+  const { value: currentDate } = useDatePicker();
   const { cafeteriaList } = useCafeteriaList(
     convertDateToSimpleString(currentDate),
   );
@@ -78,6 +76,7 @@ function CafeteriaPage() {
           ) : (
             <PCCafeteriaPage
               mealType={mealType}
+              setMealType={setMealType}
               cafeteriaList={cafeteriaList}
               useDatePicker={useDatePicker}
             />

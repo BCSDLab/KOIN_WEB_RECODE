@@ -17,6 +17,8 @@ export type CafeteriaMenu = {
 export type MealType = 'BREAKFAST' | 'LUNCH' | 'DINNER';
 export type MealName = '아침' | '점심' | '저녁';
 
+export type MealTypes = Array<'BREAKFAST' | 'LUNCH' | 'DINNER'>;
+
 export type CafeteriaTime = {
   id: number;
   type: MealType;
