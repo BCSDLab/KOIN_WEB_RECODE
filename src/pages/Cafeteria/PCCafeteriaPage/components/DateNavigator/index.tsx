@@ -9,7 +9,9 @@ const WEEK = [
 
 interface Props {
   useDatePicker: () => {
-    value: Date;
+    currentDate: Date;
+    isToday: boolean;
+    isPast: boolean;
     setPrev: () => void;
     setNext: () => void;
     setDate: (date: string) => void;
@@ -20,7 +22,7 @@ interface Props {
 
 export default function DateNavigator({ useDatePicker, isToday }: Props) {
   const {
-    value: currentDate,
+    currentDate,
     setPrev,
     setNext,
     setToday,

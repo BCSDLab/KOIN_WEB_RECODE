@@ -15,38 +15,45 @@ const useDatePicker = () => {
   const dateSearchParams = searchParams.get(DATE_KEY);
   const currentDate = dateSearchParams !== null ? new Date(dateSearchParams) : new Date();
 
+  const isToday = new Date().toDateString() === currentDate.toDateString();
+  const isPast = new Date() > currentDate;
+
+  const setPrev = () => {
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() - 1);
+    searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
+    setSearchParams(searchParams, {
+      replace: true,
+    });
+  };
+
+  const setNext = () => {
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() + 1);
+    searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
+    setSearchParams(searchParams, {
+      replace: true,
+    });
+  };
+
+  const setDate = (date: string) => {
+    const newDate = new Date(date);
+    searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
+    setSearchParams(searchParams, {
+      replace: true,
+    });
+  };
+
+  const setToday = () => {
+    const newDate = new Date();
+    searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
+    setSearchParams(searchParams, {
+      replace: true,
+    });
+  };
+
   return {
-    value: currentDate,
-    setPrev: () => {
-      const newDate = new Date(currentDate);
-      newDate.setDate(newDate.getDate() - 1);
-      searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
-      setSearchParams(searchParams, {
-        replace: true,
-      });
-    },
-    setNext: () => {
-      const newDate = new Date(currentDate);
-      newDate.setDate(newDate.getDate() + 1);
-      searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
-      setSearchParams(searchParams, {
-        replace: true,
-      });
-    },
-    setDate: (date: string) => {
-      const newDate = new Date(date);
-      searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
-      setSearchParams(searchParams, {
-        replace: true,
-      });
-    },
-    setToday: () => {
-      const newDate = new Date();
-      searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
-      setSearchParams(searchParams, {
-        replace: true,
-      });
-    },
+    currentDate, isToday, isPast, setPrev, setNext, setDate, setToday,
   };
 };
 
@@ -63,7 +70,7 @@ const getType = () => {
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
   const [mealType, setMealType] = useState<MealType>(getType());
-  const { value: currentDate } = useDatePicker();
+  const { currentDate } = useDatePicker();
   const { cafeteriaList } = useCafeteriaList(
     convertDateToSimpleString(currentDate),
   );

@@ -11,7 +11,9 @@ interface Props {
   setMealType: (mealType: MealType) => void;
   cafeteriaList: CafeteriaMenu[];
   useDatePicker: () => {
-    value: Date;
+    currentDate: Date;
+    isToday: boolean;
+    isPast: boolean;
     setPrev: () => void;
     setNext: () => void;
     setDate: (date: string) => void;
@@ -22,7 +24,7 @@ export default function MobileCafeteriaPage({
   mealType, setMealType, cafeteriaList, useDatePicker,
 }: Props) {
   const {
-    value: currentDate,
+    currentDate,
     setDate: onClickDate,
   } = useDatePicker();
   useScrollToTop();
