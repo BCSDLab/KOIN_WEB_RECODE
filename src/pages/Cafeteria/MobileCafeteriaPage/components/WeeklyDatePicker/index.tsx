@@ -1,19 +1,17 @@
 import { cn } from '@bcsdlab/utils';
+import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import styles from './WeeklyDatePicker.module.scss';
 
 const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
 
-interface Props {
-  currentDate: Date;
-  setDate:(date:string)=>void
-}
-
-export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
+export default function WeeklyDatePicker() {
   const addDays = (date: Date, days: number) => {
     const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
   };
+
+  const { currentDate, setDate } = useDatePicker();
 
   const dateArray = Array.from({ length: 7 }).map((_, index) => addDays(currentDate, index - 3));
 
@@ -45,7 +43,7 @@ export default function WeeklyDatePicker({ currentDate, setDate }:Props) {
                   [styles['picker__button--selected']]: dateFormat(day) === dateFormat(currentDate),
                 })}
                 type="button"
-                onClick={() => setDate(`${day}`)}
+                onClick={() => setDate(day)}
               >
                 {day.toISOString()
                   === currentDate.toISOString()

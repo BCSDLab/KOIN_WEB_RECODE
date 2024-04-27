@@ -47,6 +47,7 @@ export default function DateNavigator() {
     setPrev,
     setNext,
     setToday,
+    setDate,
   } = useDatePicker();
 
   const thisWeek = generateWeek(currentDate);
@@ -82,12 +83,14 @@ export default function DateNavigator() {
 
       <div className={styles.week}>
         {thisWeek.map((dayInfo) => (
-          <div
+          <button
             key={dayInfo.weekDay}
             className={cn({
               [styles['week__one-day']]: true,
               [styles['week__one-day--selected']]: dayInfo.date.toDateString() === currentDate.toDateString(),
             })}
+            type="button"
+            onClick={() => setDate(dayInfo.date)}
           >
             <span
               className={cn({
@@ -108,7 +111,7 @@ export default function DateNavigator() {
               {dayInfo.dateOfMonth}
             </span>
             {checkToday(dayInfo.date) && <span className={styles['week__today-dot']} />}
-          </div>
+          </button>
         ))}
       </div>
     </div>

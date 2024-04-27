@@ -30,7 +30,7 @@ export const useDatePicker = () => {
     });
   };
 
-  const setDate = (date: string) => {
+  const setDate = (date: Date) => {
     const newDate = new Date(date);
     searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
     setSearchParams(searchParams, {

@@ -42,21 +42,21 @@ export default function PCCafeteriaPage({
         >
           <span>{`${MEAL_TYPE_MAP[mealType]}식단`}</span>
           {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
+          {dropdownOpen && (
+            <div className={styles.dropdown__box}>
+              {MEAL_TYPES.map((type: MealType) => (
+                <button
+                  key={type}
+                  className={styles.dropdown__meal}
+                  type="button"
+                  onClick={() => handleMealTypeChange(type)}
+                >
+                  {`${MEAL_TYPE_MAP[type]}식단`}
+                </button>
+              ))}
+            </div>
+          )}
         </button>
-        {dropdownOpen && (
-          <div className={styles.dropdown__box}>
-            {MEAL_TYPES.map((type: MealType) => (
-              <button
-                key={type}
-                className={styles.dropdown__meal}
-                type="button"
-                onClick={() => handleMealTypeChange(type)}
-              >
-                {`${MEAL_TYPE_MAP[type]}식단`}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
       <div className={styles['date-navigator']}>
         <DateNavigator />
