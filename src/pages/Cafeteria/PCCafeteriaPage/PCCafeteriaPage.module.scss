@@ -15,7 +15,6 @@
   font-size: 32px;
   font-weight: 400;
   line-height: 38.19px;
-  position: relative;
 }
 
 .dropdown {
@@ -33,6 +32,7 @@
   font-size: 32px;
   font-weight: 500;
   line-height: 38.19px;
+  position: relative;
 
   &:hover {
     background-color: #eee;
@@ -49,8 +49,9 @@
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0 0 0 / 4%);
     position: absolute;
-    top: 48px;
-    left: 64px;
+    top: 62px;
+    left: 0;
+    z-index: 1;
   }
 
   &__meal {
