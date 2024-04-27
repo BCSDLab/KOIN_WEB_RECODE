@@ -49,6 +49,8 @@ export default function DateNavigator() {
     setToday,
   } = useDatePicker();
 
+  const thisWeek = generateWeek(currentDate);
+
   return (
     <div className={styles.container}>
       <div className={styles.date}>
@@ -66,7 +68,7 @@ export default function DateNavigator() {
           aria-label="오늘 날짜"
           onClick={setToday}
         >
-          {isToday ? '오늘' : formatDate(currentDate)}
+          {checkToday(currentDate) ? '오늘' : formatDate(currentDate)}
         </button>
         <button
           className={styles.date__button}
@@ -80,7 +82,13 @@ export default function DateNavigator() {
 
       <div className={styles.week}>
         {thisWeek.map((dayInfo) => (
-          <div key={dayInfo.weekDay} className={styles['week__one-day']}>
+          <div
+            key={dayInfo.weekDay}
+            className={cn({
+              [styles['week__one-day']]: true,
+              [styles['week__one-day--selected']]: dayInfo.date.toDateString() === currentDate.toDateString(),
+            })}
+          >
             <span
               className={cn({
                 [styles.week__day]: true,
