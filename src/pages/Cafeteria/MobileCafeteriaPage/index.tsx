@@ -1,5 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
+import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
@@ -10,18 +11,10 @@ interface Props {
   mealType: MealType;
   setMealType: (mealType: MealType) => void;
   cafeteriaList: CafeteriaMenu[];
-  useDatePicker: () => {
-    currentDate: Date;
-    isToday: boolean;
-    isPast: boolean;
-    setPrev: () => void;
-    setNext: () => void;
-    setDate: (date: string) => void;
-  };
 }
 
 export default function MobileCafeteriaPage({
-  mealType, setMealType, cafeteriaList, useDatePicker,
+  mealType, setMealType, cafeteriaList,
 }: Props) {
   const {
     currentDate,

@@ -1,4 +1,3 @@
-// import { cn } from '@bcsdlab/utils';
 // import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
 // import { formatKoreanDateString } from 'utils/ts/cafeteria';
 import useBooleanState from 'utils/hooks/useBooleanState';
@@ -7,6 +6,7 @@ import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg
 import { MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
+import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import styles from './PCCafeteriaPage.module.scss';
 import DateNavigator from './components/DateNavigator';
 import PCMenuBlocks from './components/PCMenuBlocks';
@@ -15,21 +15,12 @@ interface Props {
   mealType: MealType;
   setMealType: (mealType: MealType) => void;
   cafeteriaList: CafeteriaMenu[] | undefined;
-  useDatePicker: () => {
-    currentDate: Date;
-    isToday: boolean;
-    isPast: boolean;
-    setPrev: () => void;
-    setNext: () => void;
-    setDate: (date: string) => void;
-    setToday: () => void;
-  };
 }
 
 export default function PCCafeteriaPage({
-  mealType, setMealType, cafeteriaList, useDatePicker,
+  mealType, setMealType, cafeteriaList,
 }: Props) {
-  const { isToday } = useDatePicker();
+  const { currentDate, checkToday } = useDatePicker();
   useScrollToTop();
   console.log(cafeteriaList);
 
@@ -43,7 +34,7 @@ export default function PCCafeteriaPage({
   return (
     <div className={styles.container}>
       <div className={styles['meal-type-selector']}>
-        {isToday && '오늘'}
+        {checkToday(currentDate) && '오늘'}
         <button
           className={styles.dropdown}
           type="button"
@@ -68,10 +59,7 @@ export default function PCCafeteriaPage({
         )}
       </div>
       <div className={styles['date-navigator']}>
-        <DateNavigator
-          useDatePicker={useDatePicker}
-          isToday={isToday}
-        />
+        <DateNavigator />
       </div>
       <div className={styles['menu-blocks']}>
         <PCMenuBlocks />
