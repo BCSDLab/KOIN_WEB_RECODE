@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { HotPostResponse } from 'api/notice/entity';
 import { KoinError } from 'interfaces/APIError';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './HotPost.module.scss';
 
 interface HotPostProps {
@@ -36,6 +37,7 @@ const LINK_LIST = [
 
 function HotPost(HotPostList: HotPostProps) {
   const { hotArticleList } = HotPostList;
+  const logger = useLogger();
 
   return (
     <aside className={styles.hotpost}>
@@ -47,6 +49,7 @@ function HotPost(HotPostList: HotPostProps) {
             className={styles.hotpost__content}
             to={`/board/notice/${hotPost.id}`}
             key={hotPost.id + hotPost.board_id}
+            onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'notice_hot', value: hotPost.title })}
           >
             <span className={styles.hotpost__rank}>{ index + 1 }</span>
             <span className={styles.hotpost__item}>{ hotPost.title }</span>
@@ -61,6 +64,9 @@ function HotPost(HotPostList: HotPostProps) {
               className={styles.link__button}
               key={link.id}
               href={link.url}
+              onClick={() => {
+                logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'short_cut', value: link.title.join('') });
+              }}
             >
               <img
                 className={styles.link__image}
