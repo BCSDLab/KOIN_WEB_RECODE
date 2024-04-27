@@ -307,7 +307,7 @@ function Header() {
                       <Link
                         className={styles.megamenu__link}
                         to={menu.link}
-                        onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header_bus', value: '버스' })}
+                        onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: menu.title })}
                       >
                         {menu.title}
                       </Link>
