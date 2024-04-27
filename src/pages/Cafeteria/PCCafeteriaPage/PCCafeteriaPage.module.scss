@@ -17,11 +17,15 @@
   line-height: 38.19px;
 }
 
+.dropdown-wrapper {
+  margin-left: 8px;
+  position: relative;
+}
+
 .dropdown {
   width: 160px;
   height: 54px;
   padding: 0;
-  margin-left: 8px;
   display: flex;
   flex-direction: row;
   justify-content:space-evenly;
@@ -32,7 +36,6 @@
   font-size: 32px;
   font-weight: 500;
   line-height: 38.19px;
-  position: relative;
 
   &:hover {
     background-color: #eee;

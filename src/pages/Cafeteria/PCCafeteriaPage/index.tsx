@@ -24,7 +24,7 @@ export default function PCCafeteriaPage({
   useScrollToTop();
   console.log(cafeteriaList);
 
-  const [dropdownOpen,,,toggleDropdown] = useBooleanState(false);
+  const [dropdownOpen,,, toggleDropdown] = useBooleanState(false);
 
   const handleMealTypeChange = (value: MealType) => {
     setMealType(value);
@@ -35,13 +35,15 @@ export default function PCCafeteriaPage({
     <div className={styles.container}>
       <div className={styles['meal-type-selector']}>
         {checkToday(currentDate) && '오늘'}
-        <button
-          className={styles.dropdown}
-          type="button"
-          onClick={toggleDropdown}
-        >
-          <span>{`${MEAL_TYPE_MAP[mealType]}식단`}</span>
-          {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
+        <div className={styles['dropdown-wrapper']}>
+          <button
+            className={styles.dropdown}
+            type="button"
+            onClick={toggleDropdown}
+          >
+            <span>{`${MEAL_TYPE_MAP[mealType]}식단`}</span>
+            {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
+          </button>
           {dropdownOpen && (
             <div className={styles.dropdown__box}>
               {MEAL_TYPES.map((type: MealType) => (
@@ -56,8 +58,9 @@ export default function PCCafeteriaPage({
               ))}
             </div>
           )}
-        </button>
+        </div>
       </div>
+
       <div className={styles['date-navigator']}>
         <DateNavigator />
       </div>
