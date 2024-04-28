@@ -36,7 +36,7 @@ export default function MobileCafeteriaPage({
         ))}
       </div>
       <div className={styles.table}>
-        {cafeteriaList.find((element) => element.type === mealType)
+        {cafeteriaList.find((item) => item.type === mealType)
           ? CAFETERIA_CATEGORY
             .map((cafeteriaCategory) => (
               <MobileMenuBlock

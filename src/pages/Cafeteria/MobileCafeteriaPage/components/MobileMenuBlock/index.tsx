@@ -1,9 +1,9 @@
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
-import { ReactComponent as NoMeal } from 'assets/svg/no-meals.svg';
+import { ReactComponent as NoMeal } from 'assets/svg/no-meals-mobile.svg';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
 import { CafeteriaMenu } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/useModalPortal';
-import { ReactComponent as NoPhoto } from 'assets/svg/no-photography.svg';
+import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-mobile.svg';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import { useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';

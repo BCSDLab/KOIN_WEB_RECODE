@@ -1,16 +1,16 @@
 export type CafeteriaMenu = {
-  created_at: string;
   id: number;
   date: string;
-  image_url: string | null;
   type: string;
   place: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스';
-  price_card: number;
-  price_cash: number;
-  kcal: number;
+  price_card: number | null;
+  price_cash: number | null;
+  kcal: number | null;
   menu: string[];
+  image_url: string | null;
+  created_at: string;
+  updated_at: string;
   soldout_at: string | null;
-  updated_at: string | null;
   changed_at: string | null;
 };
 

@@ -14,22 +14,21 @@ import PCMenuBlocks from './components/PCMenuBlocks';
 interface Props {
   mealType: MealType;
   setMealType: (mealType: MealType) => void;
-  cafeteriaList: CafeteriaMenu[] | undefined;
+  cafeteriaList: CafeteriaMenu[];
 }
 
 export default function PCCafeteriaPage({
   mealType, setMealType, cafeteriaList,
 }: Props) {
   const { currentDate, checkToday } = useDatePicker();
-  useScrollToTop();
-  console.log(cafeteriaList);
-
   const [dropdownOpen,,, toggleDropdown] = useBooleanState(false);
 
   const handleMealTypeChange = (value: MealType) => {
     setMealType(value);
     toggleDropdown();
   };
+
+  useScrollToTop();
 
   return (
     <div className={styles.container}>
@@ -65,7 +64,7 @@ export default function PCCafeteriaPage({
         <DateNavigator />
       </div>
       <div className={styles['menu-blocks']}>
-        <PCMenuBlocks />
+        <PCMenuBlocks mealType={mealType} cafeteriaList={cafeteriaList} />
       </div>
     </div>
   );
