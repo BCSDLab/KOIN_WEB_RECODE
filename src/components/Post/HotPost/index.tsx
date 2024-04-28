@@ -65,7 +65,7 @@ function HotPost(HotPostList: HotPostProps) {
               key={link.id}
               href={link.url}
               onClick={() => {
-                logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'short_cut', value: link.title.join('') });
+                logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'short_cut', value: link.title.join('_') });
               }}
             >
               <img
