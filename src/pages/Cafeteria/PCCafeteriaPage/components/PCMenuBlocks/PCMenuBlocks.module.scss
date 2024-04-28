@@ -1,9 +1,9 @@
 .container {
   display: flex;
-  flex-direction: row;
   justify-content: flex-start;
   gap: 12px;
-  flex-wrap: wrap;
+  flex-flow: wrap;
+  flex-direction: row;
   align-items: flex-start;
 }
 
@@ -23,14 +23,14 @@
   position: relative;
 
   &__place {
-  font-family: Pretendard;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 21.48px;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.48px;
   }
 
   &__detail {
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 12px;
     font-weight: 400;
     line-height: 15.3px;
@@ -49,7 +49,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 12px;
     font-weight: 500;
     line-height: 14.32px;
@@ -86,7 +86,7 @@
   }
 
   &__menu > * {
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 19.09px;
