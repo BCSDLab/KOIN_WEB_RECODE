@@ -6,6 +6,7 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import { DeptListResponse, IDept } from 'api/dept/entity';
 import sha256 from 'utils/ts/SHA-256';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
@@ -467,6 +468,7 @@ const useSignupForm = () => {
 function SignupPage() {
   const { status, submitForm } = useSignupForm();
   const { register, onSubmit: onSubmitSignupForm } = useLightweightForm(submitForm);
+  const logger = useLogger();
   return (
     <>
       <form className={styles.signup} onSubmit={onSubmitSignupForm}>
@@ -537,6 +539,13 @@ function SignupPage() {
             [styles['signup__button--block']]: true,
             [styles['signup__button--large-font']]: true,
           })}
+          onClick={() => {
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              title: 'complete_sign_up',
+              value: '회원가입 완료',
+            });
+          }}
         >
           회원가입
         </button>

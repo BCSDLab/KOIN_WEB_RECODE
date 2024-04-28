@@ -10,6 +10,7 @@ import { useLogout } from 'utils/hooks/useLogout';
 import { userInfoState } from 'utils/recoil/userInfoState';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { getUser } from 'api/auth';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -92,6 +93,7 @@ function Header() {
   const setUserInfo = useSetRecoilState(userInfoState);
   const logout = useLogout();
   const navigate = useNavigate();
+  const logger = useLogger();
 
   useEffect(() => {
     if (token) {
@@ -100,6 +102,15 @@ function Header() {
       });
     }
   }, [token, setUserInfo]);
+
+  const handleHamburgerClick = () => {
+    expandSidebar();
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      title: 'hamburger',
+      value: '햄버거',
+    });
+  };
 
   return (
     <header
@@ -141,7 +152,7 @@ function Header() {
                   [styles.mobileheader__icon]: true,
                 })}
                 type="button"
-                onClick={expandSidebar}
+                onClick={handleHamburgerClick}
                 aria-expanded={isMobileSidebarExpanded}
               >
                 <img src="https://static.koreatech.in/assets/img/menu.png" alt="menu expand logo" />
@@ -193,13 +204,31 @@ function Header() {
                       ) : (
                         <>
                           <li className={styles.mobileheader__link}>
-                            <Link to="/auth/signup">
+                            <Link
+                              to="/auth/signup"
+                              onClick={() => {
+                                logger.actionEventClick({
+                                  actionTitle: 'USER',
+                                  title: 'hamburger_sign_up',
+                                  value: '햄버거_회원가입',
+                                });
+                              }}
+                            >
                               회원가입
                             </Link>
                           </li>
                           |
                           <li className={styles.mobileheader__link}>
-                            <Link to="/auth">
+                            <Link
+                              to="/auth"
+                              onClick={() => {
+                                logger.actionEventClick({
+                                  actionTitle: 'USER',
+                                  title: 'hamburger_login',
+                                  value: '햄버거_로그인',
+                                });
+                              }}
+                            >
                               로그인
                             </Link>
                           </li>
