@@ -87,24 +87,6 @@ const getOpenCloseTime = (open_time: string | null, close_time: string | null) =
   return `${open_time}~${close_time}`;
 };
 
-const isStoreOpen = (open_time: string | null, close_time: string | null) => {
-  if (open_time === null || close_time === null) return false;
-  if (open_time === '00:00' && close_time === '00:00') return false;
-
-  const date = new Date();
-  const openTimeNum = open_time && Number(open_time.replace(':', ''));
-  const closeTimeNum = close_time && Number(close_time.replace(':', ''));
-  const nowTimeNum = date.getHours() * 100 + date.getMinutes();
-
-  if (openTimeNum > closeTimeNum ? (
-    nowTimeNum >= openTimeNum || nowTimeNum < closeTimeNum
-  ) : (
-    nowTimeNum >= openTimeNum && nowTimeNum < closeTimeNum
-  )) return false;
-
-  return true;
-};
-
 function StorePage() {
   const storeRef = React.useRef<HTMLInputElement | null>(null);
   const { params, searchParams, setParams } = useParamsHandler();
@@ -228,20 +210,14 @@ function StorePage() {
             onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}
           >
             {store.is_event
-              && !isStoreOpen(
-                store.open[getDayOfWeek()].open_time,
-                store.open[getDayOfWeek()].close_time,
-              )
+              && store.is_open
               && (
                 <div className={styles['store-list__item--event']}>
                   이벤트
                   <EventIcon />
                 </div>
               )}
-            {store.open[getDayOfWeek()] && isStoreOpen(
-              store.open[getDayOfWeek()].open_time,
-              store.open[getDayOfWeek()].close_time,
-            )
+            {!store.is_open
               && (
                 <div className={styles['store-none-open']}>
                   <span className={styles['store-none-open__name']}>{store.name}</span>
