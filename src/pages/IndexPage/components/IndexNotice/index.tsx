@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import useArticleList from 'pages/Notice/NoticeListPage/hooks/useArticleList';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './IndexNotice.module.scss';
 
 const getArticleType = (id: number) => {
@@ -27,14 +28,23 @@ const isNew = (createdAt: string) => {
 
 function IndexNotice() {
   const articleList = useArticleList('1');
+  const logger = useLogger();
 
   return (
     <section className={styles.template}>
       <div className={styles.template__header}>
-        <Link to="board/notice" className={styles['template__title-link']}>
+        <Link
+          to="board/notice"
+          className={styles['template__title-link']}
+          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice', value: '공지사항' })}
+        >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
-        <Link to="/board/notice" className={styles.template__link}>
+        <Link
+          to="/board/notice"
+          className={styles.template__link}
+          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice_detail', value: '공지사항' })}
+        >
           더보기
           <RightArrow aria-hidden />
         </Link>

@@ -39,17 +39,15 @@ function IndexCafeteria() {
 
   const handleMoreClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    logger.click({
-      title: 'main_cafeteria_more',
-      value: '식단 더보기',
-    });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
     navigate('/cafeteria');
   };
 
   const onClickCafeteriaCorner = (e: React.MouseEvent<HTMLDivElement>, category: CafeteriaType) => {
     e.preventDefault();
-    logger.click({
-      title: 'main_cafeteria_corner',
+    logger.actionEventClick({
+      actionTitle: 'CAMPUS',
+      title: 'main_menu_corner',
       value: selectedCafeteria,
     });
     setSelectedCafeteria(category.place);
