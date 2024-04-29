@@ -18,7 +18,8 @@ function IndexStore() {
 
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
-    logger.click({
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
       title: 'main_store_categories',
       value: category.name,
     });
