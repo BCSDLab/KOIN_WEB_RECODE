@@ -37,6 +37,7 @@
   font-size: 32px;
   font-weight: 500;
   line-height: 38.19px;
+  cursor: pointer;
 
   &:hover {
     background-color: #eee;
@@ -70,6 +71,7 @@
     align-items: center;
     border: none;
     background-color: #fafafa;
+    cursor: pointer;
 
     &:hover {
       background-color: #eee;

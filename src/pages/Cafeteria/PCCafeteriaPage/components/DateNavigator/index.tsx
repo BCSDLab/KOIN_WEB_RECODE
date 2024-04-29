@@ -63,7 +63,10 @@ export default function DateNavigator() {
           <LeftArrow />
         </button>
         <button
-          className={styles.date__button}
+          className={cn({
+            [styles.date__button]: true,
+            [styles['date__button--today']]: checkToday(currentDate),
+          })}
           type="button"
           aria-label="오늘 날짜"
           onClick={setToday}
