@@ -216,7 +216,7 @@ function StorePage() {
             to={`/store/${store.id}`}
             className={styles['store-list__item']}
             key={store.id}
-            onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: `store_${store.name}_click`, value: store.name })}
+            onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'store_click', value: store.name })}
           >
             {isStoreOpen(
               store.open[getDayOfWeek()].open_time,
