@@ -9,9 +9,10 @@ const order = ['A코너', 'B코너', 'C코너', '능수관', '2캠퍼스'];
 interface Props {
   mealType: MealType;
   cafeteriaList: CafeteriaMenu[];
+  recentDate: boolean;
 }
 
-export default function PCMenuBlocks({ mealType, cafeteriaList }: Props) {
+export default function PCMenuBlocks({ mealType, cafeteriaList, recentDate }: Props) {
   const filteredCafeteriaList = cafeteriaList.filter((item) => item.type === mealType);
   const sortedCafeteriaList = filteredCafeteriaList.sort((a, b) => {
     const indexA = order.indexOf(a.place);
@@ -54,7 +55,8 @@ export default function PCMenuBlocks({ mealType, cafeteriaList }: Props) {
             {!item.soldout_at && item.changed_at && <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>변경됨</span>}
           </div>
           <div className={styles.content}>
-            {['A코너', 'B코너', 'C코너'].includes(item.place)
+            {recentDate
+            && ['A코너', 'B코너', 'C코너'].includes(item.place)
             && (item.image_url ? (
               <img
                 className={styles.content__image}

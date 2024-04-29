@@ -11,6 +11,16 @@ import styles from './PCCafeteriaPage.module.scss';
 import DateNavigator from './components/DateNavigator';
 import PCMenuBlocks from './components/PCMenuBlocks';
 
+const getTwoWeeksAgo = () => {
+  const twoWeeksAgoSunday = new Date();
+  while (twoWeeksAgoSunday.getDay() !== 0) {
+    twoWeeksAgoSunday.setDate(twoWeeksAgoSunday.getDate() - 1);
+  }
+  twoWeeksAgoSunday.setDate(twoWeeksAgoSunday.getDate() - 15);
+
+  return twoWeeksAgoSunday;
+};
+
 interface Props {
   mealType: MealType;
   setMealType: (mealType: MealType) => void;
@@ -27,6 +37,9 @@ export default function PCCafeteriaPage({
     setMealType(value);
     toggleDropdown();
   };
+
+  const 지지난주일요일 = getTwoWeeksAgo();
+  const recentDate = currentDate > 지지난주일요일;
 
   useScrollToTop();
 
@@ -64,7 +77,7 @@ export default function PCCafeteriaPage({
         <DateNavigator />
       </div>
       <div className={styles['menu-blocks']}>
-        <PCMenuBlocks mealType={mealType} cafeteriaList={cafeteriaList} />
+        <PCMenuBlocks mealType={mealType} cafeteriaList={cafeteriaList} recentDate={recentDate} />
       </div>
     </div>
   );
