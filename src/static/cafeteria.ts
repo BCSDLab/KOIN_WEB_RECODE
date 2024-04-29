@@ -1,4 +1,4 @@
-import { CafeteriaTime, MealTypes } from 'interfaces/Cafeteria';
+import { MealTypes } from 'interfaces/Cafeteria';
 
 export const CAFETERIA_CATEGORY = [
   {
@@ -27,24 +27,6 @@ export const CAFETERIA_CATEGORY = [
     isShowMain: false,
   },
 ] as const;
-
-export const CAFETERIA_TIME: CafeteriaTime = [
-  {
-    id: 1,
-    type: 'BREAKFAST',
-    name: '아침',
-  },
-  {
-    id: 2,
-    type: 'LUNCH',
-    name: '점심',
-  },
-  {
-    id: 3,
-    type: 'DINNER',
-    name: '저녁',
-  },
-];
 
 export const MEAL_TYPE_MAP = {
   BREAKFAST: '아침',

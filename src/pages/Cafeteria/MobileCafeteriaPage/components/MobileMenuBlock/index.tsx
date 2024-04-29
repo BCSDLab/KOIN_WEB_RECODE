@@ -1,4 +1,5 @@
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
+import { MEAL_TYPE_MAP } from 'static/cafeteria';
 import { ReactComponent as NoMeal } from 'assets/svg/no-meals-mobile.svg';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
 import { CafeteriaMenu } from 'interfaces/Cafeteria';
@@ -7,6 +8,7 @@ import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-mobile.svg'
 import { Portal } from 'components/common/Modal/PortalProvider';
 import { useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './MobileMenuBlock.module.scss';
 
 interface Props {
@@ -35,15 +37,24 @@ export default function MobileMenuBlock({ menu, mealType, category }:Props) {
 
   const { isSoldOut, isChanged } = checkMenuStatus(currentMenu);
 
-  const handlePhoto = (url: string) => {
-    portalManager.open((portalOption: Portal) => (
-      <div className={styles.photo}>
-        <div className={styles.photo__close}>
-          <CloseIcon onClick={portalOption.close} />
+  const logger = useLogger();
+  const handleImageClick = (current: CafeteriaMenu) => {
+    logger.actionEventClick({
+      actionTitle: 'CAMPUS',
+      title: 'menu_image',
+      value: `${MEAL_TYPE_MAP[current.type]}_${current.place}`,
+    });
+
+    if (current.image_url) {
+      portalManager.open((portalOption: Portal) => (
+        <div className={styles.photo}>
+          <div className={styles.photo__close}>
+            <CloseIcon onClick={portalOption.close} />
+          </div>
+          <img src={current.image_url as string} alt="mealDetail" ref={target} />
         </div>
-        <img src={url} alt="mealDetail" ref={target} />
-      </div>
-    ));
+      ));
+    }
   };
 
   useEffect(() => () => portalManager.close(), [
@@ -93,7 +104,7 @@ export default function MobileMenuBlock({ menu, mealType, category }:Props) {
             <button
               className={styles['category__menu-photo']}
               type="button"
-              onClick={() => currentMenu.image_url && handlePhoto(currentMenu.image_url)}
+              onClick={() => handleImageClick(currentMenu)}
             >
               {isSoldOut && (
               <div className={styles['category__menu-photo--sold-out']}>

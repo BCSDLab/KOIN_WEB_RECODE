@@ -1,7 +1,7 @@
 export type CafeteriaMenu = {
   id: number;
   date: string;
-  type: string;
+  type: 'BREAKFAST' | 'LUNCH' | 'DINNER';
   place: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스';
   price_card: number | null;
   price_cash: number | null;

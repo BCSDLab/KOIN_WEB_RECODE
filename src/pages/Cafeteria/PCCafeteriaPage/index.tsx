@@ -1,5 +1,3 @@
-// import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
-// import { formatKoreanDateString } from 'utils/ts/cafeteria';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
 import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
@@ -7,9 +5,10 @@ import { MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import styles from './PCCafeteriaPage.module.scss';
+import useLogger from 'utils/hooks/useLogger';
 import DateNavigator from './components/DateNavigator';
 import PCMenuBlocks from './components/PCMenuBlocks';
+import styles from './PCCafeteriaPage.module.scss';
 
 const getTwoWeeksAgo = () => {
   const twoWeeksAgoSunday = new Date();
@@ -33,7 +32,9 @@ export default function PCCafeteriaPage({
   const { currentDate, checkToday } = useDatePicker();
   const [dropdownOpen,,, toggleDropdown] = useBooleanState(false);
 
+  const logger = useLogger();
   const handleMealTypeChange = (value: MealType) => {
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[value] });
     setMealType(value);
     toggleDropdown();
   };

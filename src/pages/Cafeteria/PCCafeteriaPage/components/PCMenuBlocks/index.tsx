@@ -4,7 +4,8 @@ import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-pc.svg';
 import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
 import { ReactComponent as NoMeals } from 'assets/svg/no-meals-pc.svg';
 import { useEffect, useRef, useState } from 'react';
-import { placeOrder } from 'static/cafeteria';
+import { MEAL_TYPE_MAP, placeOrder } from 'static/cafeteria';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './PCMenuBlocks.module.scss';
 
 interface MealDetailProps {
@@ -88,8 +89,14 @@ export default function PCMenuBlocks({ mealType, cafeteriaList, recentDate }: Pr
     }
   }, [sortedCafeteriaList]);
 
+  const logger = useLogger();
   const [mealDetail, setMealDetail] = useState(<div />);
   const handleImageClick = (item: CafeteriaMenu) => {
+    logger.actionEventClick({
+      actionTitle: 'CAMPUS',
+      title: 'menu_image',
+      value: `${MEAL_TYPE_MAP[item.type]}_${item.place}`,
+    });
     setMealDetail(<MealDetail item={item} setMealDetail={setMealDetail} />);
   };
 
