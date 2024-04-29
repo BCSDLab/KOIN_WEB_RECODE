@@ -94,6 +94,9 @@ function Header() {
   const logout = useLogout();
   const navigate = useNavigate();
   const logger = useLogger();
+  const loggingBusinessShortCut = (title: string) => {
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_store', value: title });
+  };
 
   useEffect(() => {
     if (token) {
@@ -221,7 +224,10 @@ function Header() {
                               className={styles['mobileheader__sub-menu']}
                               key={subMenu.title}
                             >
-                              <Link to={subMenu.link}>
+                              <Link
+                                to={subMenu.link}
+                                onClick={() => loggingBusinessShortCut(subMenu.title)}
+                              >
                                 {subMenu.title}
                               </Link>
                             </li>
