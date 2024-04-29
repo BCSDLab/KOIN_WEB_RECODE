@@ -11,7 +11,6 @@ import { userInfoState } from 'utils/recoil/userInfoState';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import useLogger from 'utils/hooks/useLogger';
 import { getUser } from 'api/auth';
-import useLogger from 'utils/hooks/useLogger';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
