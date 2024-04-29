@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
 import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
@@ -73,11 +74,13 @@ export default function PCCafeteriaPage({
         </div>
       </div>
 
-      <div className={styles['date-navigator']}>
+      <div>
         <DateNavigator />
       </div>
-      <div className={styles['menu-blocks']}>
-        <PCMenuBlocks mealType={mealType} recentDate={recentDate} />
+      <div>
+        <Suspense fallback={<div />}>
+          <PCMenuBlocks mealType={mealType} recentDate={recentDate} />
+        </Suspense>
       </div>
     </div>
   );

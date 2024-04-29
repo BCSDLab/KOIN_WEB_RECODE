@@ -1,8 +1,11 @@
 import { cn } from '@bcsdlab/utils';
 import { useEffect, useState } from 'react';
 import { CAFETERIA_CATEGORY, MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
+import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
+import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
+import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
+import { MealType } from 'interfaces/Cafeteria';
 import useLogger from 'utils/hooks/useLogger';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import MobileMenuBlock from './components/MobileMenuBlock';
@@ -11,12 +14,13 @@ import styles from './MobileCafeteriaPage.module.scss';
 interface Props {
   mealType: MealType;
   setMealType: (mealType: MealType) => void;
-  cafeteriaList: CafeteriaMenu[];
 }
 
-export default function MobileCafeteriaPage({ mealType, setMealType, cafeteriaList }: Props) {
+export default function MobileCafeteriaPage({ mealType, setMealType }: Props) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
+  const { currentDate } = useDatePicker();
+  const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
 
   const handleMealTypeChange = (meal: MealType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[meal] });

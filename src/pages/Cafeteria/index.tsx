@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import { MealType } from 'interfaces/Cafeteria';
 import MobileCafeteriaPage from 'pages/Cafeteria/MobileCafeteriaPage';
 import PCCafeteriaPage from './PCCafeteriaPage';
@@ -23,9 +21,7 @@ function CafeteriaPage() {
   const isMobile = useMediaQuery();
   const [mealType, setMealType] = useState<MealType>(getType());
   const { currentDate } = useDatePicker();
-  const { cafeteriaList } = useCafeteriaList(
-    convertDateToSimpleString(currentDate),
-  );
+
   useScrollToTop();
 
   return (
@@ -36,7 +32,6 @@ function CafeteriaPage() {
             <MobileCafeteriaPage
               mealType={mealType}
               setMealType={setMealType}
-              cafeteriaList={cafeteriaList}
             />
           ) : (
             <PCCafeteriaPage
