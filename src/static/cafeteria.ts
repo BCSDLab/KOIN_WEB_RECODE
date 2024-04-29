@@ -53,3 +53,5 @@ export const MEAL_TYPE_MAP = {
 } as const;
 
 export const MEAL_TYPES: MealTypes = ['BREAKFAST', 'LUNCH', 'DINNER'];
+
+export const placeOrder = ['A코너', 'B코너', 'C코너', '능수관', '2캠퍼스'];

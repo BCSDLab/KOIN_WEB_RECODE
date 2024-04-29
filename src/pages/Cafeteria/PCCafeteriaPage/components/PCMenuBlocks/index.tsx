@@ -1,10 +1,57 @@
 /* eslint-disable no-param-reassign */
 import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
 import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-pc.svg';
-import { useEffect, useRef } from 'react';
+import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
+import { useEffect, useRef, useState } from 'react';
+import { placeOrder } from 'static/cafeteria';
 import styles from './PCMenuBlocks.module.scss';
 
-const order = ['A코너', 'B코너', 'C코너', '능수관', '2캠퍼스'];
+interface MealDetailProps {
+  item: CafeteriaMenu;
+  setMealDetail: (element: JSX.Element) => void;
+}
+
+function MealDetail({ item, setMealDetail }: MealDetailProps): JSX.Element {
+  const handleCloseModal = () => {
+    setMealDetail(<div />);
+  };
+
+  return (
+    <button
+      className={styles.overlay}
+      onClick={handleCloseModal}
+      type="button"
+    >
+      <div className={styles.modal}>
+        <div className={styles['modal-header']}>
+          <div className={styles['modal-header__place-chip']}>
+            <div className={styles['modal-header__place']}>{item.place}</div>
+            {item.soldout_at && <span className={`${styles['modal-header__chip']} ${styles['modal-header__chip--sold-out']}`}>품절</span>}
+            {!item.soldout_at && item.changed_at && <span className={`${styles['modal-header__chip']} ${styles['modal-header__chip--changed']}`}>변경됨</span>}
+          </div>
+          <div className={styles['modal-header__detail']}>
+            {!!item.kcal && `${item.kcal}kcal`}
+            {!!item.kcal && !!item.price_card && !!item.price_cash && '•'}
+            {!!item.price_card && !!item.price_cash && `${item.price_card}원/${item.price_cash}원`}
+          </div>
+          <button
+            type="button"
+            aria-label="닫기"
+            className={styles['modal-header__close']}
+            onClick={handleCloseModal}
+          >
+            <CloseIcon />
+          </button>
+        </div>
+        <img
+          className={styles.modal__image}
+          src={item.image_url!}
+          alt="menu"
+        />
+      </div>
+    </button>
+  );
+}
 
 interface Props {
   mealType: MealType;
@@ -15,16 +62,16 @@ interface Props {
 export default function PCMenuBlocks({ mealType, cafeteriaList, recentDate }: Props) {
   const filteredCafeteriaList = cafeteriaList.filter((item) => item.type === mealType);
   const sortedCafeteriaList = filteredCafeteriaList.sort((a, b) => {
-    const indexA = order.indexOf(a.place);
-    const indexB = order.indexOf(b.place);
+    const indexA = placeOrder.indexOf(a.place);
+    const indexB = placeOrder.indexOf(b.place);
     return indexA - indexB;
   });
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const bosRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (containerRef.current) {
-      const blocks = containerRef.current.children;
+    if (bosRef.current) {
+      const blocks = bosRef.current.children;
       const columnHeights = [0, 0, 0];
       let columnIndex = 0;
 
@@ -36,42 +83,56 @@ export default function PCMenuBlocks({ mealType, cafeteriaList, recentDate }: Pr
         columnIndex = (columnIndex + 1) % columnHeights.length; // 다음 열 인덱스로 업데이트
       });
 
-      containerRef.current.style.height = `${Math.max(...columnHeights)}px`; // 컨테이너의 높이 업데이트
+      bosRef.current.style.height = `${Math.max(...columnHeights)}px`; // 컨테이너의 높이 업데이트
     }
   }, [sortedCafeteriaList]);
 
+  const [mealDetail, setMealDetail] = useState(<div />);
+  const handleImageClick = (item: CafeteriaMenu) => {
+    setMealDetail(<MealDetail item={item} setMealDetail={setMealDetail} />);
+  };
+
   return (
-    <div className={styles.container} ref={containerRef}>
-      {sortedCafeteriaList.map((item) => (
-        <div className={styles.block} key={item.id}>
-          <div className={styles.header}>
-            <div className={styles.header__place}>{item.place}</div>
-            <div className={styles.header__detail}>
-              {!!item.kcal && `${item.kcal}kcal`}
-              {!!item.kcal && !!item.price_card && !!item.price_cash && '•'}
-              {!!item.price_card && !!item.price_cash && `${item.price_card}원/${item.price_cash}원`}
+    <div className={styles.container}>
+      {mealDetail}
+
+      <div className={styles.box} ref={bosRef}>
+        {sortedCafeteriaList.map((item) => (
+          <div className={styles.block} key={item.id}>
+            <div className={styles.header}>
+              <div className={styles.header__place}>{item.place}</div>
+              <div className={styles.header__detail}>
+                {!!item.kcal && `${item.kcal}kcal`}
+                {!!item.kcal && !!item.price_card && !!item.price_cash && '•'}
+                {!!item.price_card && !!item.price_cash && `${item.price_card}원/${item.price_cash}원`}
+              </div>
+              {item.soldout_at && <span className={`${styles.header__chip} ${styles['header__chip--sold-out']}`}>품절</span>}
+              {!item.soldout_at && item.changed_at && <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>변경됨</span>}
             </div>
-            {item.soldout_at && <span className={`${styles.header__chip} ${styles['header__chip--sold-out']}`}>품절</span>}
-            {!item.soldout_at && item.changed_at && <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>변경됨</span>}
-          </div>
-          <div className={styles.content}>
-            {recentDate
-            && ['A코너', 'B코너', 'C코너'].includes(item.place)
-            && (item.image_url ? (
-              <img
-                className={styles.content__image}
-                src={item.image_url}
-                alt="menu"
-              />
-            ) : <span className={styles.content__image}><NoPhoto /></span>)}
-            <div className={styles.content__menu}>
-              {item.menu.map((dish) => (
-                <div key={dish}>{dish}</div>
-              ))}
+            <div className={styles.content}>
+              {recentDate
+              && ['A코너', 'B코너', 'C코너'].includes(item.place)
+              && (item.image_url ? (
+                <button
+                  type="button"
+                  onClick={() => handleImageClick(item)}
+                >
+                  <img
+                    className={styles.content__image}
+                    src={item.image_url}
+                    alt="menu"
+                  />
+                </button>
+              ) : <span className={styles.content__image}><NoPhoto /></span>)}
+              <div className={styles.content__menu}>
+                {item.menu.map((dish) => (
+                  <div key={dish}>{dish}</div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
