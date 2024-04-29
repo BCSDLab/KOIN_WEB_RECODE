@@ -17,6 +17,10 @@
   &__content {
     width: 390px;
     margin: 80px auto 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     @include media.media-breakpoint(mobile) {
       min-width: 360px;

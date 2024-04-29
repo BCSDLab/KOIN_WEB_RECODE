@@ -1,5 +1,5 @@
 /* eslint-disable react/require-default-props, no-restricted-globals */
-import React, { useImperativeHandle } from 'react';
+import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
@@ -12,6 +12,7 @@ import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDu
 import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/useUser';
 import { useQueryClient } from '@tanstack/react-query';
+import LoadingSpinner from 'components/common/LoadingSpinner';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -457,7 +458,7 @@ const useModifyInfoForm = () => {
   return { submitForm, status };
 };
 
-function ModifyInfoPage() {
+function ModifyInfoDefaultPage() {
   const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
   const navigate = useNavigate();
@@ -563,6 +564,14 @@ function ModifyInfoPage() {
         </span>
       </div>
     </>
+  );
+}
+
+function ModifyInfoPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner size="40px" />}>
+      <ModifyInfoDefaultPage />
+    </Suspense>
   );
 }
 
