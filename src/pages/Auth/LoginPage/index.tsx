@@ -134,7 +134,7 @@ function LoginPage() {
               logger.actionEventClick({
                 actionTitle: 'USER',
                 title: 'auto_login',
-                value: '자동_로그인',
+                value: '자동 로그인',
               });
             }}
           />
@@ -149,7 +149,7 @@ function LoginPage() {
             logger.actionEventClick({
               actionTitle: 'USER',
               title: 'find_id',
-              value: '아이디_찾기',
+              value: '아이디 찾기',
             });
           }}
         >

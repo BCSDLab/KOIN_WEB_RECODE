@@ -210,7 +210,7 @@ function Header() {
                                 logger.actionEventClick({
                                   actionTitle: 'USER',
                                   title: 'hamburger_sign_up',
-                                  value: '햄버거_회원가입',
+                                  value: '햄버거 회원가입',
                                 });
                               }}
                             >
@@ -225,7 +225,7 @@ function Header() {
                                 logger.actionEventClick({
                                   actionTitle: 'USER',
                                   title: 'hamburger_login',
-                                  value: '햄버거_로그인',
+                                  value: '햄버거 로그인',
                                 });
                               }}
                             >
