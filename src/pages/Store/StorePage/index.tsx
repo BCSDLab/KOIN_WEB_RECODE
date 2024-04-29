@@ -107,7 +107,7 @@ function StorePage() {
   const selectedCategory = Number(searchParams.get('category'));
   const loggingCheckbox = (id: string) => {
     if (id && searchParams.get(id)) {
-      logger.actionEventClick({ actionTitle: 'BUSINESS', title: `store_can_${id}`, value: `check_${id}` });
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
     }
   };
   useScrollToTop();
@@ -128,7 +128,7 @@ function StorePage() {
               aria-checked={category.id === selectedCategory}
               type="button"
               onClick={() => {
-                logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'store_categories', value: category.name });
+                logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
                 setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}
@@ -163,7 +163,7 @@ function StorePage() {
           type="button"
           onClick={() => {
             const currentCategoryId = Number(params.category);
-            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'store_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
+            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
             setParams('storeName', storeRef.current?.value ?? '', {
               deleteBeforeParam: searchParams.get('storeName') === undefined,
               replacePage: true,
@@ -216,7 +216,7 @@ function StorePage() {
             to={`/store/${store.id}`}
             className={styles['store-list__item']}
             key={store.id}
-            onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'store_click', value: store.name })}
+            onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}
           >
             {isStoreOpen(
               store.open[getDayOfWeek()].open_time,
