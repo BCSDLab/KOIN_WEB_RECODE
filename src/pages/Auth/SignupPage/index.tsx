@@ -1,10 +1,11 @@
-import React, { useImperativeHandle } from 'react';
+import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/useLogger';
+import LoadingSpinner from 'components/common/LoadingSpinner';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
@@ -462,7 +463,7 @@ const useSignupForm = () => {
   return { submitForm, status };
 };
 
-function SignupPage() {
+function SignupDefaultPage() {
   const { status, submitForm } = useSignupForm();
   const { register, onSubmit: onSubmitSignupForm } = useLightweightForm(submitForm);
   const logger = useLogger();
@@ -559,6 +560,14 @@ function SignupPage() {
         </span>
       </div>
     </>
+  );
+}
+
+function SignupPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner size="50px" />}>
+      <SignupDefaultPage />
+    </Suspense>
   );
 }
 
