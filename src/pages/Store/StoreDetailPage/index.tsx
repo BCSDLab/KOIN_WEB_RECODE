@@ -30,12 +30,13 @@ function StoreDetailPage() {
       value: storeDetail!.phone,
     });
     logger.actionEventClick({
-      actionTitle: 'click_call_store_btn',
-      title: 'store_detail_call_number',
-      value: storeDetail!.phone,
+      actionTitle: 'BUSINESS',
+      title: 'shop_call',
+      value: storeDetail!.name,
     });
   };
   const onClickImage = (img: string[], index: number) => {
+    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
     ));
@@ -74,8 +75,7 @@ function StoreDetailPage() {
                 <br />
                 <span>운영시간</span>
                 {storeDetail?.open
-                  ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${
-                    storeDetail?.open[getDayOfWeek()].close_time
+                  ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${storeDetail?.open[getDayOfWeek()].close_time
                   }`
                   : '-'}
                 <br />
