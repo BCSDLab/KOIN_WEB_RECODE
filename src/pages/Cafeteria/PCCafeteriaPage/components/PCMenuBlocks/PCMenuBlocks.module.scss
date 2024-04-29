@@ -1,12 +1,3 @@
-.container {
-  display: flex;
-  justify-content: flex-start;
-  gap: 12px;
-  flex-flow: wrap;
-  flex-direction: row;
-  align-items: flex-start;
-}
-
 .block {
   width: 276px;
   min-height: 178px;
@@ -15,6 +6,7 @@
   box-sizing: border-box;
   border-radius: 12px;
   background-color: white;
+  position: absolute;
 }
 
 .header {
