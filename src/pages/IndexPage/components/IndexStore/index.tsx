@@ -18,9 +18,8 @@ function IndexStore() {
 
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
-    logger.actionEventClick({
-      actionTitle: 'BUSINESS',
-      title: 'main_shop_categories',
+    logger.click({
+      title: 'main_store_categories',
       value: category.name,
     });
     navigate(`/store?category=${category.id}`);
