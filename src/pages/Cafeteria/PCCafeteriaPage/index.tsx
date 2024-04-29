@@ -3,7 +3,7 @@ import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg
 import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
 import { MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
+import { MealType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/useLogger';
 import DateNavigator from './components/DateNavigator';
@@ -23,11 +23,10 @@ const getTwoWeeksAgo = () => {
 interface Props {
   mealType: MealType;
   setMealType: (mealType: MealType) => void;
-  cafeteriaList: CafeteriaMenu[];
 }
 
 export default function PCCafeteriaPage({
-  mealType, setMealType, cafeteriaList,
+  mealType, setMealType,
 }: Props) {
   const { currentDate, checkToday } = useDatePicker();
   const [dropdownOpen,,, toggleDropdown] = useBooleanState(false);
@@ -78,7 +77,7 @@ export default function PCCafeteriaPage({
         <DateNavigator />
       </div>
       <div className={styles['menu-blocks']}>
-        <PCMenuBlocks mealType={mealType} cafeteriaList={cafeteriaList} recentDate={recentDate} />
+        <PCMenuBlocks mealType={mealType} recentDate={recentDate} />
       </div>
     </div>
   );

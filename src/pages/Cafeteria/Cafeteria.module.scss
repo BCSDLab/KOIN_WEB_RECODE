@@ -2,8 +2,8 @@
 
 .page {
   width: 100vw;
+  min-height: 100vh;
   padding: 0 10px;
-  min-height: 800px;
   background-color: #f5f5f5;
 
   @include media.media-breakpoint(mobile) {

@@ -42,7 +42,6 @@ function CafeteriaPage() {
             <PCCafeteriaPage
               mealType={mealType}
               setMealType={setMealType}
-              cafeteriaList={cafeteriaList}
             />
           )}
       </div>

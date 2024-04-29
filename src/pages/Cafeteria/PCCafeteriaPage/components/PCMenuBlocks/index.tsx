@@ -6,6 +6,9 @@ import { ReactComponent as NoMeals } from 'assets/svg/no-meals-pc.svg';
 import { useEffect, useRef, useState } from 'react';
 import { MEAL_TYPE_MAP, placeOrder } from 'static/cafeteria';
 import useLogger from 'utils/hooks/useLogger';
+import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
+import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
+import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import styles from './PCMenuBlocks.module.scss';
 
 interface MealDetailProps {
@@ -57,11 +60,13 @@ function MealDetail({ item, setMealDetail }: MealDetailProps): JSX.Element {
 
 interface Props {
   mealType: MealType;
-  cafeteriaList: CafeteriaMenu[];
   recentDate: boolean;
 }
 
-export default function PCMenuBlocks({ mealType, cafeteriaList, recentDate }: Props) {
+export default function PCMenuBlocks({ mealType, recentDate }: Props) {
+  const { currentDate } = useDatePicker();
+  const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
+
   const filteredCafeteriaList = cafeteriaList.filter((item) => item.type === mealType);
   const sortedCafeteriaList = filteredCafeteriaList.sort((a, b) => {
     const indexA = placeOrder.indexOf(a.place);
