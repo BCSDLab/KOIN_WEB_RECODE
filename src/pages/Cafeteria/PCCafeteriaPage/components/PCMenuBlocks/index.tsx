@@ -2,6 +2,7 @@
 import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
 import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-pc.svg';
 import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
+import { ReactComponent as NoMeals } from 'assets/svg/no-meals-pc.svg';
 import { useEffect, useRef, useState } from 'react';
 import { placeOrder } from 'static/cafeteria';
 import styles from './PCMenuBlocks.module.scss';
@@ -124,6 +125,13 @@ export default function PCMenuBlocks({ mealType, cafeteriaList, recentDate }: Pr
                   />
                 </button>
               ) : <span className={styles.content__image}><NoPhoto /></span>)}
+              {item.soldout_at && (
+                <span className={styles.content__overlay}>
+                  <span className={styles['content__no-meals']}>
+                    <NoMeals />
+                  </span>
+                </span>
+              )}
               <div className={styles.content__menu}>
                 {item.menu.map((dish) => (
                   <div key={dish}>{dish}</div>
