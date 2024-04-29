@@ -30,6 +30,24 @@ export const useDatePicker = () => {
     });
   };
 
+  const setPrevWeek = () => {
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() - 7);
+    searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
+    setSearchParams(searchParams, {
+      replace: true,
+    });
+  };
+
+  const setNextWeek = () => {
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() + 7);
+    searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
+    setSearchParams(searchParams, {
+      replace: true,
+    });
+  };
+
   const setDate = (date: Date) => {
     const newDate = new Date(date);
     searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
@@ -47,6 +65,14 @@ export const useDatePicker = () => {
   };
 
   return {
-    currentDate, checkToday, checkPast, setPrev, setNext, setDate, setToday,
+    currentDate,
+    checkToday,
+    checkPast,
+    setPrev,
+    setNext,
+    setPrevWeek,
+    setNextWeek,
+    setDate,
+    setToday,
   };
 };

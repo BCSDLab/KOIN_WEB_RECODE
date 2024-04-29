@@ -2,7 +2,6 @@ import { cn } from '@bcsdlab/utils';
 import { ReactComponent as LeftArrow } from 'assets/svg/left-angle-bracket.svg';
 import { ReactComponent as RightArrow } from 'assets/svg/right-angle-bracket.svg';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import { formatDate } from 'utils/ts/cafeteria';
 import styles from './DateNavigator.module.scss';
 
 class DayInfo {
@@ -44,8 +43,8 @@ export default function DateNavigator() {
     currentDate,
     checkToday,
     checkPast,
-    setPrev,
-    setNext,
+    setPrevWeek,
+    setNextWeek,
     setToday,
     setDate,
   } = useDatePicker();
@@ -59,7 +58,7 @@ export default function DateNavigator() {
           className={styles.date__button}
           type="button"
           aria-label="이전 날짜"
-          onClick={setPrev}
+          onClick={setPrevWeek}
         >
           <LeftArrow />
         </button>
@@ -69,13 +68,13 @@ export default function DateNavigator() {
           aria-label="오늘 날짜"
           onClick={setToday}
         >
-          {checkToday(currentDate) ? '오늘' : formatDate(currentDate)}
+          오늘
         </button>
         <button
           className={styles.date__button}
           type="button"
           aria-label="다음 날짜"
-          onClick={setNext}
+          onClick={setNextWeek}
         >
           <RightArrow />
         </button>
