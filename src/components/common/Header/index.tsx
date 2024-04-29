@@ -9,6 +9,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
 import { userInfoState } from 'utils/recoil/userInfoState';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
+import useLogger from 'utils/hooks/useLogger';
 import { getUser } from 'api/auth';
 import useLogger from 'utils/hooks/useLogger';
 import styles from './Header.module.scss';
@@ -331,7 +332,11 @@ function Header() {
                   {panelMenuList?.map((menu) => (
                     <li className={styles.megamenu__menu} key={menu.title}>
                       {/* TODO: 키보드 Focus 접근성 향상 */}
-                      <Link className={styles.megamenu__link} to={menu.link}>
+                      <Link
+                        className={styles.megamenu__link}
+                        to={menu.link}
+                        onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: menu.title })}
+                      >
                         {menu.title}
                       </Link>
                     </li>
