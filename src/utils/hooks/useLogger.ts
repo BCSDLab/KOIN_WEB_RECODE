@@ -29,7 +29,7 @@ const useLogger = () => {
     title,
   }: ScrollLoggerProps) => {
     gtag.event({
-      action: 'action', category: 'scroll', label: title, value: title,
+      action: 'BUSINESS', category: 'scroll', label: title, value: title,
     });
   };
 
