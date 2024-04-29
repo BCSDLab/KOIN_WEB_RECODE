@@ -20,7 +20,7 @@ function IndexStore() {
     e.preventDefault();
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: 'main_store_categories',
+      title: 'main_shop_categories',
       value: category.name,
     });
     navigate(`/store?category=${category.id}`);

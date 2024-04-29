@@ -34,12 +34,12 @@ function StoreDetailPage() {
     });
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: `store_${storeDetail!.name}_call`,
+      title: 'shop_call',
       value: storeDetail!.name,
     });
   };
   const onClickImage = (img: string[], index: number) => {
-    logger.actionEventClick({ actionTitle: 'BUSINESS', title: `store_${storeDetail.name}_picture`, value: storeDetail.name });
+    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
     ));

@@ -7,7 +7,8 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
-import { useUser } from 'utils/hooks/useUser';
+import { userInfoState } from 'utils/recoil/userInfoState';
+import { useRecoilValue } from 'recoil';
 import useLogger from 'utils/hooks/useLogger';
 import styles from './Header.module.scss';
 
@@ -16,8 +17,6 @@ const ID: { [key: string]: string; } = {
   LABEL1: 'megamenu-label-1',
   LABEL2: 'megamenu-label-2',
 };
-
-const INQUIRY_LINK_URL = 'https://forms.gle/hE4VMchTZuff5rLB7';
 
 const useMegaMenu = (category: Category[]) => {
   const [panelMenuList, setPanelMenuList] = useState<SubMenu[] | null>();
@@ -89,13 +88,13 @@ function Header() {
   const token = useTokenState();
   const isLoggedin = !!token;
   const isMain = pathname === '/';
-  const { data: userInfo } = useUser();
+  const userInfo = useRecoilValue(userInfoState);
   const logout = useLogout();
   const navigate = useNavigate();
   const logger = useLogger();
 
   const loggingBusinessShortCut = (title: string) => {
-    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_store', value: title });
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: title });
   };
 
   return (
@@ -237,11 +236,6 @@ function Header() {
                     src="https://image.bcsdlab.com/favicon.ico"
                     alt="bcsd lab logo"
                   />
-                  <div className={styles.mobileheader__inquiry}>
-                    <Link to={INQUIRY_LINK_URL}>
-                      문의하기
-                    </Link>
-                  </div>
                   <img
                     className={cn({
                       [styles.mobileheader__logo]: true,
