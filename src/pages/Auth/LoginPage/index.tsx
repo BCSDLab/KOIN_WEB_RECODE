@@ -10,6 +10,7 @@ import { auth } from 'api';
 import sha256 from 'utils/ts/SHA-256';
 import showToast from 'utils/ts/showToast';
 import { AxiosError } from 'axios';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -78,6 +79,7 @@ function LoginPage() {
     password: null,
   });
   const [isAutoLoginFlag, , , toggleIsAutoLoginFlag] = useBooleanState(false);
+  const logger = useLogger();
   const submitLogin = useLogin({ isAutoLoginFlag });
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -106,18 +108,53 @@ function LoginPage() {
           name="password"
           placeholder="비밀번호를 입력하세요"
         />
-        <button type="submit" className={styles.loginform__button}>
+        <button
+          type="submit"
+          className={styles.loginform__button}
+          onClick={() => {
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              title: 'login',
+              value: '로그인',
+            });
+          }}
+        >
           로그인
         </button>
       </form>
       <div aria-hidden="true" className={styles['auto-login']}>
         <label className={styles['auto-login__label']} htmlFor="autoLoginCheckBox">
-          <input className={styles['auto-login__checkbox']} checked={isAutoLoginFlag} onChange={toggleIsAutoLoginFlag} type="checkbox" id="autoLoginCheckBox" />
+          <input
+            className={styles['auto-login__checkbox']}
+            checked={isAutoLoginFlag}
+            onChange={toggleIsAutoLoginFlag}
+            type="checkbox"
+            id="autoLoginCheckBox"
+            onClick={() => {
+              logger.actionEventClick({
+                actionTitle: 'USER',
+                title: 'auto_login',
+                value: '자동 로그인',
+              });
+            }}
+          />
           자동 로그인
         </label>
       </div>
       <div className={styles.help}>
-        <a className={styles.help__link} href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp">아이디 찾기</a>
+        <a
+          className={styles.help__link}
+          href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp"
+          onClick={() => {
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              title: 'find_id',
+              value: '아이디 찾기',
+            });
+          }}
+        >
+          아이디 찾기
+        </a>
         <Link className={styles.help__link} to="/auth/findpw">비밀번호 찾기</Link>
         <Link className={styles.help__link} to="/auth/signup">회원가입</Link>
       </div>
