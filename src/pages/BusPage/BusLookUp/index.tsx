@@ -4,6 +4,7 @@ import useBusDirection from 'pages/BusPage/hooks/useBusDirection';
 import useBusLeftTIme from 'pages/BusPage/hooks/useBusLeftTime';
 import { getBusName, getLeftTimeString, getStartTimeString } from 'pages/BusPage/ts/busModules';
 import { BUS_DIRECTIONS, BUS_TYPES } from 'static/bus';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './BusLookUp.module.scss';
 
 function BusLookUp() {
@@ -12,6 +13,7 @@ function BusLookUp() {
     departList: [depart.value, depart.value, depart.value],
     arrivalList: [arrival.value, arrival.value, arrival.value],
   });
+  const logger = useLogger();
 
   return (
     <div className={styles.lookup}>
@@ -27,6 +29,7 @@ function BusLookUp() {
             className={styles.lookup__select}
             onChange={depart.handleChange}
             value={depart.value}
+            onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_departure', value: depart.value })}
           >
             {depart.options.map((option) => (
               <option key={option}>{option}</option>
@@ -37,6 +40,7 @@ function BusLookUp() {
             className={styles.lookup__select}
             onChange={arrival.handleChange}
             value={arrival.value}
+            onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_arrival', value: arrival.value })}
           >
             {arrival.options.map((option) => (
               <option key={option}>{option}</option>
