@@ -78,7 +78,7 @@ export default function EventCarousel() {
             }}
             onTransitionEnd={() => {
               setAnimation(false);
-              if (currentIndex === newCarouselList.length - 2) {
+              if (currentIndex === 0) {
                 setCurrentIndex(newCarouselList.length - 2);
               } else if (currentIndex === newCarouselList.length - 1) {
                 setCurrentIndex(1);
