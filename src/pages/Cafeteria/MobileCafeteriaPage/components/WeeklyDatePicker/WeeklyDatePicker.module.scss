@@ -56,7 +56,8 @@
     cursor: pointer;
 
     &--today {
-      outline: 1px solid #175c8e;
+      color: #fff !important;
+      background-color: #175c8e;
     }
 
     &--before {
@@ -64,8 +65,8 @@
     }
 
     &--selected {
-      color: #fff;
-      background-color: #175c8e;
+      color: #175c8e;
+      outline: 1px solid #175c8e;
     }
 
     &--selector {
