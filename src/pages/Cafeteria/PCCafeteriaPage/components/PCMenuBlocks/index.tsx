@@ -74,11 +74,11 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
     return indexA - indexB;
   });
 
-  const bosRef = useRef<HTMLDivElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (bosRef.current) {
-      const blocks = bosRef.current.children;
+    if (boxRef.current) {
+      const blocks = boxRef.current.children;
       const columnHeights = [0, 0, 0];
       let columnIndex = 0;
 
@@ -90,7 +90,7 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
         columnIndex = (columnIndex + 1) % columnHeights.length; // 다음 열 인덱스로 업데이트
       });
 
-      bosRef.current.style.height = `${Math.max(...columnHeights)}px`; // 컨테이너의 높이 업데이트
+      boxRef.current.style.height = `${Math.max(...columnHeights)}px`; // 컨테이너의 높이 업데이트
     }
   }, [sortedCafeteriaList]);
 
@@ -109,7 +109,7 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
     <div className={styles.container}>
       {mealDetail}
 
-      <div className={styles.box} ref={bosRef}>
+      <div className={styles.box} ref={boxRef}>
         {sortedCafeteriaList.map((item) => (
           <div className={styles.block} key={item.id}>
             <div className={styles.header}>

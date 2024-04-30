@@ -11,12 +11,12 @@ import DateNavigator from './components/DateNavigator';
 import PCMenuBlocks from './components/PCMenuBlocks';
 import styles from './PCCafeteriaPage.module.scss';
 
-const getTwoWeeksAgo = () => {
+const getWeekAgo = () => {
   const twoWeeksAgoSunday = new Date();
   while (twoWeeksAgoSunday.getDay() !== 0) {
     twoWeeksAgoSunday.setDate(twoWeeksAgoSunday.getDate() - 1);
   }
-  twoWeeksAgoSunday.setDate(twoWeeksAgoSunday.getDate() - 15);
+  twoWeeksAgoSunday.setDate(twoWeeksAgoSunday.getDate() - 8);
 
   return twoWeeksAgoSunday;
 };
@@ -39,8 +39,8 @@ export default function PCCafeteriaPage({
     toggleDropdown();
   };
 
-  const 지지난주일요일 = getTwoWeeksAgo();
-  const recentDate = currentDate > 지지난주일요일;
+  const 지난주일요일 = getWeekAgo();
+  const recentDate = 지난주일요일 < currentDate;
 
   useScrollToTop();
 
