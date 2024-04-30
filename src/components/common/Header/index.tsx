@@ -97,6 +97,15 @@ function Header() {
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: title });
   };
 
+  const handleHamburgerClick = () => {
+    expandSidebar();
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      title: 'hamburger',
+      value: '햄버거',
+    });
+  };
+
   return (
     <header
       className={cn({
@@ -137,7 +146,7 @@ function Header() {
                   [styles.mobileheader__icon]: true,
                 })}
                 type="button"
-                onClick={expandSidebar}
+                onClick={handleHamburgerClick}
                 aria-expanded={isMobileSidebarExpanded}
               >
                 <img src="https://static.koreatech.in/assets/img/menu.png" alt="menu expand logo" />
@@ -189,13 +198,31 @@ function Header() {
                       ) : (
                         <>
                           <li className={styles.mobileheader__link}>
-                            <Link to="/auth/signup">
+                            <Link
+                              to="/auth/signup"
+                              onClick={() => {
+                                logger.actionEventClick({
+                                  actionTitle: 'USER',
+                                  title: 'hamburger_sign_up',
+                                  value: '햄버거 회원가입',
+                                });
+                              }}
+                            >
                               회원가입
                             </Link>
                           </li>
                           |
                           <li className={styles.mobileheader__link}>
-                            <Link to="/auth">
+                            <Link
+                              to="/auth"
+                              onClick={() => {
+                                logger.actionEventClick({
+                                  actionTitle: 'USER',
+                                  title: 'hamburger_login',
+                                  value: '햄버거 로그인',
+                                });
+                              }}
+                            >
                               로그인
                             </Link>
                           </li>
