@@ -4,18 +4,10 @@ import { ReactComponent as RightArrow } from 'assets/svg/right-angle-bracket.svg
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import styles from './DateNavigator.module.scss';
 
-class DayInfo {
+interface DayInfo {
   weekDay: string;
-
   dateOfMonth: number;
-
   date: Date;
-
-  constructor(weekDay: string, dateOfMonth: number, date: Date) {
-    this.weekDay = weekDay;
-    this.dateOfMonth = dateOfMonth;
-    this.date = date;
-  }
 }
 
 const generateWeek = (today: Date) => {
@@ -26,12 +18,16 @@ const generateWeek = (today: Date) => {
     currentDate.setDate(currentDate.getDate() - 1);
   }
 
-  const week = [];
+  const week: DayInfo[] = [];
   for (let i = 0; i < 7; i += 1) {
     const weekDay = WEEK[i];
     const dateOfMonth = currentDate.getDate();
     const newDate = new Date(currentDate);
-    week.push(new DayInfo(weekDay, dateOfMonth, newDate));
+    week.push({
+      weekDay,
+      dateOfMonth,
+      date: newDate,
+    });
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
