@@ -3,6 +3,9 @@
   min-height: 178px;
   height: auto;
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
   box-sizing: border-box;
   border-radius: 12px;
   background-color: white;
