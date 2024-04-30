@@ -98,7 +98,6 @@
     border-radius: 8px;
     background-color: rgba(0 0 0 / 50%);
     z-index: 1;
-    pointer-events: none;
   }
 
   &__no-meals {
@@ -107,7 +106,6 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
-    pointer-events: none;
   }
 
   &__menu > * {
@@ -138,6 +136,7 @@
   height: 459px;
   padding: 18px;
   gap: 12px;
+  border: none;
   box-sizing: border-box;
   border-radius: 12px;
   background-color: white;

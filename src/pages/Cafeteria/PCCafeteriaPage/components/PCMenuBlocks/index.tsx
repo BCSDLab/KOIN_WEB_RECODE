@@ -27,7 +27,11 @@ function MealDetail({ item, setMealDetail }: MealDetailProps): JSX.Element {
       onClick={handleCloseModal}
       type="button"
     >
-      <div className={styles.modal}>
+      <button
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+        type="button"
+      >
         <div className={styles['modal-header']}>
           <div className={styles['modal-header__place-chip']}>
             <div className={styles['modal-header__place']}>{item.place}</div>
@@ -53,7 +57,7 @@ function MealDetail({ item, setMealDetail }: MealDetailProps): JSX.Element {
           src={item.image_url!}
           alt="menu"
         />
-      </div>
+      </button>
     </button>
   );
 }
