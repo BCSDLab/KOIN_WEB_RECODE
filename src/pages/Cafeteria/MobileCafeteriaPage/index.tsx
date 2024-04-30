@@ -35,7 +35,7 @@ export default function MobileCafeteriaPage({ mealType, setMealType }: Props) {
       const scrollPercentage = (scrolled / maxHeight) * 100;
 
       if (scrollPercentage > 70 && !hasLoggedScroll) {
-        logger.actionEventClick({ actionTitle: 'SCROLL', title: 'menu_time', value: MEAL_TYPE_MAP[mealType] });
+        logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[mealType] });
         setHasLoggedScroll(true);
       }
     };
