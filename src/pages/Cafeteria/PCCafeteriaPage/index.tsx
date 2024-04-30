@@ -1,4 +1,6 @@
-import { Suspense } from 'react';
+import {
+  RefObject, Suspense, useEffect, useRef,
+} from 'react';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
 import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
@@ -21,6 +23,23 @@ const getWeekAgo = () => {
   return twoWeeksAgoSunday;
 };
 
+const useOutsideAlerter = (
+  { ref, closeFunction }: { ref: RefObject<HTMLElement>, closeFunction: () => void },
+) => {
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        closeFunction();
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref, closeFunction]);
+};
+
 interface Props {
   mealType: MealType;
   setMealType: (mealType: MealType) => void;
@@ -30,7 +49,9 @@ export default function PCCafeteriaPage({
   mealType, setMealType,
 }: Props) {
   const { currentDate, checkToday } = useDatePicker();
-  const [dropdownOpen,,, toggleDropdown] = useBooleanState(false);
+  const wrapperRef = useRef(null);
+  const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
+  useOutsideAlerter({ ref: wrapperRef, closeFunction: closeDropdown });
 
   const logger = useLogger();
   const handleMealTypeChange = (value: MealType) => {
@@ -53,6 +74,7 @@ export default function PCCafeteriaPage({
             className={styles.dropdown}
             type="button"
             onClick={toggleDropdown}
+            ref={wrapperRef}
           >
             <span>{`${MEAL_TYPE_MAP[mealType]}식단`}</span>
             {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
