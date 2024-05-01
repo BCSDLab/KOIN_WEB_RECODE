@@ -24,3 +24,6 @@ jobs:
           -d '{
                 "pullRequestLink": ${{ steps.check_pr_merged.outputs.pullRequestLink }}
               }'
+      - name: Delete Local Branch
+        run: |
+          git branch -d ${{ steps.check_pr_merged.outputs.branchName }}
