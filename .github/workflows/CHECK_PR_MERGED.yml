@@ -26,5 +26,5 @@ jobs:
               }'
       - name: Delete Local Branch
         run: |
-          console.log(steps.check_pr_merged.outputs) \
-          console.log(context.payload.pull_request)
+          git branch ${{ github.ref_name }}
+          console.log(${{ steps.check_pr_merged.outputs }})
