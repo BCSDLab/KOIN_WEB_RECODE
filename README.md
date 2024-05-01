@@ -20,7 +20,7 @@ Make an issue or Contact with this repository leader.
 
 ### Repository leader
 
-[Hana Kim](https://github.com/hanagertrudekim) 
+[Hana Kim](https://github.com/hanagertrudekim)
 
 # Learn Our Stack
 
