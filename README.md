@@ -16,7 +16,7 @@ See Our [Contribute Guide](./CONTRIBUTE.md).
 
 ## Want to question?
 
-Make an issue or Contact with this repository leader.
+Make an issue or Contact with this repository leader. 
 
 ### Repository leader
 
