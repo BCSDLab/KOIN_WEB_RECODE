@@ -26,4 +26,5 @@ jobs:
               }'
       - name: Delete Local Branch
         run: |
-          git branch -d ${{ steps.check_pr_merged.outputs.branchName }}
+          console.log(steps.check_pr_merged.outputs) \
+          console.log(context.payload.pull_request)
