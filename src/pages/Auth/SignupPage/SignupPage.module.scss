@@ -48,6 +48,19 @@
     }
   }
 
+  &--select {
+    width: 192px;
+    height: 45px;
+    font-size: 15px;
+    margin-bottom: 12px;
+    order: 99;
+
+    @include media.media-breakpoint(mobile) {
+      width: 155px;
+      height: 36px;
+    }
+  }
+
   &--flex-end {
     order: 99;
   }

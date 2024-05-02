@@ -6,6 +6,7 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/useLogger';
 import LoadingSpinner from 'components/common/LoadingSpinner';
+import Listbox from 'components/TimetablePage/Listbox';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
@@ -202,7 +203,13 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
   const [studentNumber, setStudentNumber] = React.useState<string>('');
+  const [major, setMajor] = React.useState<string>('건축공학부');
+  const yearOfAdmission = studentNumber.slice(0, 4);
   const { data: deptList } = useDeptList();
+  const deptOptionList = deptList.map((dept) => ({
+    label: dept.name,
+    value: dept.name,
+  }));
 
   const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
@@ -233,6 +240,15 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     } else {
       valid = true;
     }
+    if (year >= 2023) {
+      return {
+        value: {
+          studentNumber,
+          major,
+        },
+        valid,
+      };
+    }
     return {
       value: {
         studentNumber,
@@ -240,7 +256,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
       },
       valid,
     };
-  }, [studentNumber, majorFromStudentNumber]);
+  }, [studentNumber, majorFromStudentNumber, major]);
   return (
     <>
       <input
@@ -250,17 +266,28 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
         onChange={onChangeMajorInput}
         {...props}
       />
-      <input
-        className={cn({
-          [styles['form-input']]: true,
-          [styles['form-input--half']]: true,
-          [styles['form-input--disabled-value']]: majorFromStudentNumber !== '',
-          [styles['form-input--flex-end']]: true,
-        })}
-        placeholder="학부(자동입력)"
-        value={majorFromStudentNumber}
-        disabled
-      />
+      {Number(yearOfAdmission) >= 2023 ? (
+        <div className={styles['form-input--select']}>
+          <Listbox
+            list={deptOptionList}
+            value={major}
+            mobileSize="small"
+            onChange={({ target }) => setMajor(target.value)}
+          />
+        </div>
+      ) : (
+        <input
+          className={cn({
+            [styles['form-input']]: true,
+            [styles['form-input--half']]: true,
+            [styles['form-input--disabled-value']]: majorFromStudentNumber !== '',
+            [styles['form-input--flex-end']]: true,
+          })}
+          placeholder="학부(자동입력)"
+          value={majorFromStudentNumber}
+          disabled
+        />
+      )}
     </>
   );
 });
