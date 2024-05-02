@@ -1,124 +1,109 @@
-import { cn } from '@bcsdlab/utils';
-import { CAFETERIA_CATEGORY, CAFETERIA_TIME } from 'static/cafeteria';
-import { formatKoreanDateString } from 'utils/ts/cafeteria';
+import {
+  RefObject, Suspense, useEffect, useRef,
+} from 'react';
+import useBooleanState from 'utils/hooks/useBooleanState';
+import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
+import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
+import { MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { CafeteriaMenu } from 'interfaces/Cafeteria';
+import { MealType } from 'interfaces/Cafeteria';
+import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
+import useLogger from 'utils/hooks/useLogger';
+import DateNavigator from './components/DateNavigator';
+import PCMenuBlocks from './components/PCMenuBlocks';
 import styles from './PCCafeteriaPage.module.scss';
 
+const getWeekAgo = () => {
+  const twoWeeksAgoSunday = new Date();
+  while (twoWeeksAgoSunday.getDay() !== 0) {
+    twoWeeksAgoSunday.setDate(twoWeeksAgoSunday.getDate() - 1);
+  }
+  twoWeeksAgoSunday.setDate(twoWeeksAgoSunday.getDate() - 8);
+
+  return twoWeeksAgoSunday;
+};
+
+const useOutsideAlerter = (
+  { ref, closeFunction }: { ref: RefObject<HTMLElement>, closeFunction: () => void },
+) => {
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        closeFunction();
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref, closeFunction]);
+};
+
 interface Props {
-  mealType: string;
-  cafeteriaList: CafeteriaMenu[] | undefined;
-  useDatePicker: () => {
-    value: Date;
-    setPrev: () => void;
-    setNext: () => void;
-    setDate: (date: string) => void;
-  };
+  mealType: MealType;
+  setMealType: (mealType: MealType) => void;
 }
 
 export default function PCCafeteriaPage({
-  mealType, cafeteriaList, useDatePicker,
+  mealType, setMealType,
 }: Props) {
-  const {
-    value: currentDate,
-    setPrev: onClickPrevArrow,
-    setNext: onClickNextArrow,
-  } = useDatePicker();
+  const { currentDate, checkToday } = useDatePicker();
+  const wrapperRef = useRef(null);
+  const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
+  useOutsideAlerter({ ref: wrapperRef, closeFunction: closeDropdown });
+
+  const logger = useLogger();
+  const handleMealTypeChange = (value: MealType) => {
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[value] });
+    setMealType(value);
+    toggleDropdown();
+  };
+
+  const 지난주일요일 = getWeekAgo();
+  const recentDate = 지난주일요일 < currentDate;
+
   useScrollToTop();
 
   return (
-    <>
-      <div className={styles.header}>
-        <div className={styles.header__picker}>
+    <div className={styles.container}>
+      <div className={styles['meal-type-selector']}>
+        {checkToday(currentDate) && '오늘'}
+        <div className={styles['dropdown-wrapper']}>
           <button
-            className={styles['header__pick-button']}
+            className={styles.dropdown}
             type="button"
-            onClick={onClickPrevArrow}
-            aria-label="이전 날짜"
+            onClick={toggleDropdown}
+            ref={wrapperRef}
           >
-            <div
-              className={cn({
-                [styles.header__arrow]: true,
-                [styles['header__arrow--left']]: true,
-              })}
-            />
+            <span>{`${MEAL_TYPE_MAP[mealType]}식단`}</span>
+            {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
           </button>
-          <div className={styles.header__date}>
-            {formatKoreanDateString(currentDate)}
-          </div>
-          <button
-            className={styles['header__pick-button']}
-            type="button"
-            onClick={onClickNextArrow}
-            aria-label="다음 날짜"
-          >
-            <div
-              className={cn({
-                [styles.header__arrow]: true,
-                [styles['header__arrow--right']]: true,
-              })}
-            />
-          </button>
-        </div>
-        <div className={styles['header__time-list']}>
-          {CAFETERIA_TIME.map((meal) => (
-            <button
-              className={cn({
-                [styles.header__time]: true,
-                [styles['header__time--selected']]: mealType === meal.type,
-              })}
-              key={meal.id}
-              type="button"
-            >
-              {meal.name}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className={styles.page__table}>
-        {CAFETERIA_CATEGORY.map((cafeteriaCategory) => (
-          <div className={styles.category} key={cafeteriaCategory.id}>
-            <div className={styles.category__header}>
-              <div className={styles.category__type}>
-                {cafeteriaCategory.place}
-              </div>
+          {dropdownOpen && (
+            <div className={styles.dropdown__box}>
+              {MEAL_TYPES.map((type: MealType) => (
+                <button
+                  key={type}
+                  className={styles.dropdown__meal}
+                  type="button"
+                  onClick={() => handleMealTypeChange(type)}
+                >
+                  {`${MEAL_TYPE_MAP[type]}식단`}
+                </button>
+              ))}
             </div>
-            <ul className={styles['category__menu-list-row']}>
-              {CAFETERIA_TIME.map((time) => {
-                const currentTimeMenu = cafeteriaList ? Array.from(cafeteriaList).find(
-                  (value) => value.place === cafeteriaCategory.place
-                && value.type === time.type,
-                ) : undefined;
-                return (
-                  <li className={styles['category__menu-list']} key={time.id}>
-                    {currentTimeMenu ? (
-                      <>
-                        <ul>
-                          {currentTimeMenu.menu.map((menuName) => (
-                            <li
-                              className={styles.category__menu}
-                              key={menuName}
-                            >
-                              {menuName}
-                            </li>
-                          ))}
-                        </ul>
-                        <div className={styles.category__calorie}>
-                          {currentTimeMenu.kcal}
-                          Kcal
-                        </div>
-                        <div className={styles.category__price}>
-                          {`${currentTimeMenu?.price_cash ?? 0}원/ ${currentTimeMenu?.price_card ?? 0}원`}
-                        </div>
-                      </>
-                    ) : undefined}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
+          )}
+        </div>
       </div>
-    </>
+
+      <div>
+        <DateNavigator />
+      </div>
+      <div>
+        <Suspense fallback={<div />}>
+          <PCMenuBlocks mealType={mealType} recentDate={recentDate} />
+        </Suspense>
+      </div>
+    </div>
   );
 }

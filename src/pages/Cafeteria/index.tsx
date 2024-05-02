@@ -1,66 +1,27 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
-import MobileCafeteriaPage from './MobileCafeteriaPage';
+import { MealType } from 'interfaces/Cafeteria';
+import MobileCafeteriaPage from 'pages/Cafeteria/MobileCafeteriaPage';
 import PCCafeteriaPage from './PCCafeteriaPage';
 import styles from './Cafeteria.module.scss';
-
-const DATE_KEY = 'date';
-const useDatePicker = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const dateSearchParams = searchParams.get(DATE_KEY);
-  const currentDate = dateSearchParams !== null ? new Date(dateSearchParams) : new Date();
-
-  return {
-    value: currentDate,
-    setPrev: () => {
-      const newDate = new Date(currentDate);
-      newDate.setDate(newDate.getDate() - 1);
-      searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
-      setSearchParams(searchParams, {
-        replace: true,
-      });
-    },
-    setNext: () => {
-      const newDate = new Date(currentDate);
-      newDate.setDate(newDate.getDate() + 1);
-      searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
-      setSearchParams(searchParams, {
-        replace: true,
-      });
-    },
-    setDate: (date: string) => {
-      const newDate = new Date(date);
-      searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
-      setSearchParams(searchParams, {
-        replace: true,
-      });
-    },
-  };
-};
+import { useDatePicker } from './hooks/useDatePicker';
 
 const getType = () => {
   const hour = new Date().getHours();
   if (hour < 9) {
-    return ['아침', 'BREAKFAST'];
+    return 'BREAKFAST';
   } if (hour < 14) {
-    return ['점심', 'LUNCH'];
+    return 'LUNCH';
   }
-  return ['저녁', 'DINNER'];
+  return 'DINNER';
 };
 
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
-  const [mealType, setMealType] = useState<string>(getType()[1]);
-  const {
-    value: currentDate,
-  } = useDatePicker();
-  const { cafeteriaList } = useCafeteriaList(
-    convertDateToSimpleString(currentDate),
-  );
+  const [mealType, setMealType] = useState<MealType>(getType());
+  const { currentDate } = useDatePicker();
+
   useScrollToTop();
 
   return (
@@ -71,14 +32,11 @@ function CafeteriaPage() {
             <MobileCafeteriaPage
               mealType={mealType}
               setMealType={setMealType}
-              cafeteriaList={cafeteriaList}
-              useDatePicker={useDatePicker}
             />
           ) : (
             <PCCafeteriaPage
               mealType={mealType}
-              cafeteriaList={cafeteriaList}
-              useDatePicker={useDatePicker}
+              setMealType={setMealType}
             />
           )}
       </div>
