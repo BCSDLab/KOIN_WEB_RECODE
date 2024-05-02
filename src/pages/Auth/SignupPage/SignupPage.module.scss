@@ -21,6 +21,19 @@
     color: #b5c1cd;
   }
 
+  &__select {
+    width: 192px;
+    height: 45px;
+    font-size: 15px;
+    margin-bottom: 12px;
+    order: 99;
+
+    @include media.media-breakpoint(mobile) {
+      width: 155px;
+      height: 36px;
+    }
+  }
+
   &--invalid {
     border: 2px solid red;
   }
@@ -45,19 +58,6 @@
 
     @include media.media-breakpoint(mobile) {
       width: 155px;
-    }
-  }
-
-  &--select {
-    width: 192px;
-    height: 45px;
-    font-size: 15px;
-    margin-bottom: 12px;
-    order: 99;
-
-    @include media.media-breakpoint(mobile) {
-      width: 155px;
-      height: 36px;
     }
   }
 

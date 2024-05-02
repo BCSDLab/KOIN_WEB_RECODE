@@ -267,7 +267,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
         {...props}
       />
       {Number(yearOfAdmission) >= 2023 ? (
-        <div className={styles['form-input--select']}>
+        <div className={styles['form-input__select']}>
           <Listbox
             list={deptOptionList}
             value={major}
