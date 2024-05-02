@@ -28,7 +28,11 @@ const useOutsideAlerter = (
 ) => {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
+      if (
+        ref.current
+        && !ref.current.contains(event.target as Node)
+        && !((event.target as HTMLElement).id === 'dropdown-button')
+      ) {
         closeFunction();
       }
     }
@@ -71,16 +75,19 @@ export default function PCCafeteriaPage({
         {checkToday(currentDate) && '오늘'}
         <div className={styles['dropdown-wrapper']}>
           <button
+            id="dropdown-button"
             className={styles.dropdown}
             type="button"
             onClick={toggleDropdown}
-            ref={wrapperRef}
           >
-            <span>{`${MEAL_TYPE_MAP[mealType]}식단`}</span>
+            {`${MEAL_TYPE_MAP[mealType]}식단`}
             {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
           </button>
           {dropdownOpen && (
-            <div className={styles.dropdown__box}>
+            <div
+              className={styles.dropdown__box}
+              ref={wrapperRef}
+            >
               {MEAL_TYPES.map((type: MealType) => (
                 <button
                   key={type}
