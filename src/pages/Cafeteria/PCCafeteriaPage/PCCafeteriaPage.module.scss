@@ -44,7 +44,7 @@
   }
 
   &__box {
-    width: 102px;
+    width: 160px;
     height: 120px;
     display: flex;
     flex-direction: column;
@@ -62,12 +62,12 @@
   &__meal {
     width: 100%;
     min-height: 40px;
+    padding-left: 16px;
     color: #4b4b4b;
     font-size: 20px;
     font-weight: 500;
     line-height: 23.87px;
     display: flex;
-    justify-content: center;
     align-items: center;
     border: none;
     background-color: #fafafa;
