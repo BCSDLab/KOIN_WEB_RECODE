@@ -128,20 +128,12 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
             </div>
             <div className={styles.content}>
               {recentDate
-              && ['A코너', 'B코너', 'C코너'].includes(item.place)
-              && (item.image_url ? (
-                <button
-                  type="button"
-                  onClick={() => handleImageClick(item)}
-                >
-                  <img
-                    className={styles.content__image}
-                    src={item.image_url}
-                    alt="menu"
-                  />
+              && (['A코너', 'B코너', 'C코너'].includes(item.place) && (item.image_url ? (
+                <button type="button" onClick={() => handleImageClick(item)}>
+                  <img className={styles.content__image} src={item.image_url} alt="menu" />
                 </button>
-              ) : <span className={styles.content__image}><NoPhoto /></span>)}
-              {item.soldout_at && (
+              ) : <span className={styles.content__image}><NoPhoto /></span>))}
+              {recentDate && item.soldout_at && (
                 <span className={styles.content__overlay}>
                   <span className={styles['content__no-meals']}>
                     <NoMeals />
