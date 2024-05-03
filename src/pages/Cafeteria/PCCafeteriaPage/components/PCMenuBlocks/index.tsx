@@ -126,27 +126,26 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
               {item.soldout_at && <span className={`${styles.header__chip} ${styles['header__chip--sold-out']}`}>품절</span>}
               {!item.soldout_at && item.changed_at && <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>변경됨</span>}
             </div>
+
             <div className={styles.content}>
-              {recentDate
-              && ['A코너', 'B코너', 'C코너'].includes(item.place)
-              && (item.image_url ? (
-                <button
-                  type="button"
-                  onClick={() => handleImageClick(item)}
-                >
-                  <img
-                    className={styles.content__image}
-                    src={item.image_url}
-                    alt="menu"
-                  />
-                </button>
-              ) : <span className={styles.content__image}><NoPhoto /></span>)}
-              {item.soldout_at && (
-                <span className={styles.content__overlay}>
-                  <span className={styles['content__no-meals']}>
-                    <NoMeals />
-                  </span>
-                </span>
+              {recentDate && ['A코너', 'B코너', 'C코너'].includes(item.place) && (
+                <div className={styles['content__image-wrapper']}>
+                  {item.image_url ? (
+                    <button type="button" onClick={() => handleImageClick(item)}>
+                      <img className={styles.content__image} src={item.image_url} alt="식단 상세" />
+                    </button>
+                  ) : (
+                    !item.soldout_at && (<span className={styles.content__image}><NoPhoto /></span>)
+                  )}
+                  {item.soldout_at && (
+                    <span className={styles.content__overlay}>
+                      <span className={styles['content__no-meals']}>
+                        <NoMeals />
+                        품절된 메뉴입니다.
+                      </span>
+                    </span>
+                  )}
+                </div>
               )}
               <div className={styles.content__menu}>
                 {item.menu.map((dish) => (

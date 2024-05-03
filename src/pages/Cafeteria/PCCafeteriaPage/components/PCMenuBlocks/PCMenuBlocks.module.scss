@@ -76,11 +76,27 @@
     cursor: pointer;
   }
 
-  &__image {
+  &__image-wrapper {
+    position: relative;
     width: 252px;
     height: 157.5px;
     border-radius: 8px;
-    background-color: #f5f5f5;
+    background-color: transparent;
+
+    & > button {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
     object-fit: cover;
 
     & svg {
@@ -90,6 +106,7 @@
   }
 
   &__overlay {
+    z-index: 1;
     position: absolute;
     top: 0;
     left: 0;
@@ -97,15 +114,25 @@
     height: 157.5px;
     border-radius: 8px;
     background-color: rgba(0 0 0 / 50%);
-    z-index: 1;
+    pointer-events: none;
   }
 
   &__no-meals {
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19.09px;
+
+    & > svg {
+      padding-right: 3px;
+    }
   }
 
   &__menu > * {
