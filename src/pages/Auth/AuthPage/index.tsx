@@ -1,12 +1,17 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import styles from './Auth.module.scss';
 
 function AuthPage() {
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
   return (
     <div className={styles.template}>
-      <Link className={styles['template__left-arrow']} to="/">
+      <button type="button" className={styles['template__go-back']} onClick={handleGoBack}>
         <img className={styles['template__left-arrow-image']} src="https://static.koreatech.in/assets/ic-room/left-arrow.png" alt="go back logo" />
-      </Link>
+      </button>
       <div className={styles.template__content}>
         <Link className={styles.template__logo} to="/">
           <img className={styles.template__image} src="https://static.koreatech.in/assets/img/logo_primary.png" alt="main logo" />

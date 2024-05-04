@@ -48,10 +48,13 @@
     }
   }
 
-  &__left-arrow {
+  &__go-back {
     position: absolute;
     top: 20px;
     left: 15px;
+    background-color: transparent;
+    border: none;
+    padding: 0;
     cursor: pointer;
 
     @include media.media-breakpoint(mobile) {
