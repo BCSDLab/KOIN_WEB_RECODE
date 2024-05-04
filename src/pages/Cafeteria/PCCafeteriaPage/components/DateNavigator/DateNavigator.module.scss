@@ -1,0 +1,136 @@
+.date {
+  min-width: 112px;
+  height: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  &__button {
+    min-width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+
+    &--today {
+      cursor: default;
+    }
+
+    &:nth-child(2) {
+      padding: 1px 9px 0;
+    }
+
+    &:hover {
+      background-color: #d9d9d9;
+    }
+  }
+}
+
+.week {
+  width: 100%;
+  min-height: 70px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  &__one-day {
+    width: 100px;
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16.71px;
+    position: relative;
+    cursor: pointer;
+
+    &--selected {
+      background-color: #eee;
+      border-radius: 12px;
+      cursor: default;
+    }
+
+    &:hover {
+      background-color: #eee;
+      border-radius: 12px;
+    }
+  }
+
+  &__day {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16.71px;
+    color: black;
+  }
+
+  &__date {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.48px;
+    color: black;
+  }
+
+  &--past {
+    color: #4b4b4b;
+  }
+
+  &--today {
+    color: #10477a;
+    font-weight: 500;
+
+    &.week__date {
+      font-weight: 700;
+    }
+  }
+
+  &__today-dot {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 0;
+    border: 1px solid #10477a;
+    border-radius: 1px;
+  }
+}
+
+.container {
+  height: 118px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .date {
+    width: 78px;
+    height: 18px;
+  }
+
+  .week {
+    width: 100%;
+    height: 54px;
+  }
+}

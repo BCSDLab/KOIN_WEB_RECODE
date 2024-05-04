@@ -68,6 +68,7 @@ export type StoreList = {
   open: Open[];
   category_ids: number[];
   is_event: boolean;
+  is_open: boolean;
 };
 
 export interface StoreListResponse extends APIResponse {
