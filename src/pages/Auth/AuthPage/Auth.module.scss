@@ -1,6 +1,7 @@
 @use "src/utils/scss/media" as media;
 
 .template {
+  position: relative;
   min-width: 100%;
   min-height: 100vh;
   display: flex;
@@ -38,12 +39,34 @@
     }
   }
 
-  &__img {
+  &__image {
     width: 125px;
     cursor: pointer;
 
     @include media.media-breakpoint(mobile) {
       width: 105px;
+    }
+  }
+
+  &__left-arrow {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+    cursor: pointer;
+
+    @include media.media-breakpoint(mobile) {
+      top: 15px;
+      left: 10px;
+    }
+  }
+
+  &__left-arrow-image {
+    width: 35px;
+    height: 35px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 30px;
+      height: 30px;
     }
   }
 }
