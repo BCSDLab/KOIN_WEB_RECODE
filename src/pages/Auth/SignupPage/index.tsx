@@ -7,6 +7,7 @@ import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/useLogger';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
+import { prevDeptList } from 'static/dept';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
@@ -220,7 +221,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     : '';
   const majorFromStudentNumber = studentNumber && studentNumber.length >= 8
   && studentNumber.length <= 10
-    ? deptList.find(
+    ? prevDeptList.find(
       (deptValue) => deptValue.dept_nums.find((deptNum) => (deptNum === majorNumber)),
     )?.name ?? '' : '';
 
