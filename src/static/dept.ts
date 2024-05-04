@@ -1,6 +1,6 @@
 // 22학번 요람 기준
 // https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002&act=view&list_no=33003
-export const previousDept = [
+export const prevDeptList = [
   { name: '건축공학과', dept_nums: ['72'] },
   { name: '기계공학부', dept_nums: ['20'] },
   { name: '디자인공학과', dept_nums: ['51'] },

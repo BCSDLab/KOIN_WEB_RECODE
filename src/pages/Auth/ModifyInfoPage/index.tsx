@@ -14,7 +14,7 @@ import { useUser } from 'utils/hooks/useUser';
 import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
-import { previousDept } from 'static/dept';
+import { prevDeptList } from 'static/dept';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -302,7 +302,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     : '';
   const majorFromStudentNumber = studentNumber && studentNumber.length >= 8
   && studentNumber.length <= 10
-    ? previousDept.find(
+    ? prevDeptList.find(
       (deptValue) => deptValue.dept_nums.find((deptNum) => (deptNum === majorNumber)),
     )?.name ?? '' : '';
 
