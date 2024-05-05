@@ -7,7 +7,9 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
-import { useUser } from 'utils/hooks/useUser';
+import { userInfoState } from 'utils/recoil/userInfoState';
+import { useRecoilValue } from 'recoil';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -15,8 +17,6 @@ const ID: { [key: string]: string; } = {
   LABEL1: 'megamenu-label-1',
   LABEL2: 'megamenu-label-2',
 };
-
-const INQUIRY_LINK_URL = 'https://forms.gle/hE4VMchTZuff5rLB7';
 
 const useMegaMenu = (category: Category[]) => {
   const [panelMenuList, setPanelMenuList] = useState<SubMenu[] | null>();
@@ -88,9 +88,23 @@ function Header() {
   const token = useTokenState();
   const isLoggedin = !!token;
   const isMain = pathname === '/';
-  const { data: userInfo } = useUser();
+  const userInfo = useRecoilValue(userInfoState);
   const logout = useLogout();
   const navigate = useNavigate();
+  const logger = useLogger();
+
+  const loggingBusinessShortCut = (title: string) => {
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: title });
+  };
+
+  const handleHamburgerClick = () => {
+    expandSidebar();
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      title: 'hamburger',
+      value: '햄버거',
+    });
+  };
 
   return (
     <header
@@ -132,7 +146,7 @@ function Header() {
                   [styles.mobileheader__icon]: true,
                 })}
                 type="button"
-                onClick={expandSidebar}
+                onClick={handleHamburgerClick}
                 aria-expanded={isMobileSidebarExpanded}
               >
                 <img src="https://static.koreatech.in/assets/img/menu.png" alt="menu expand logo" />
@@ -184,13 +198,31 @@ function Header() {
                       ) : (
                         <>
                           <li className={styles.mobileheader__link}>
-                            <Link to="/auth/signup">
+                            <Link
+                              to="/auth/signup"
+                              onClick={() => {
+                                logger.actionEventClick({
+                                  actionTitle: 'USER',
+                                  title: 'hamburger_sign_up',
+                                  value: '햄버거 회원가입',
+                                });
+                              }}
+                            >
                               회원가입
                             </Link>
                           </li>
                           |
                           <li className={styles.mobileheader__link}>
-                            <Link to="/auth">
+                            <Link
+                              to="/auth"
+                              onClick={() => {
+                                logger.actionEventClick({
+                                  actionTitle: 'USER',
+                                  title: 'hamburger_login',
+                                  value: '햄버거 로그인',
+                                });
+                              }}
+                            >
                               로그인
                             </Link>
                           </li>
@@ -210,7 +242,11 @@ function Header() {
                               className={styles['mobileheader__sub-menu']}
                               key={subMenu.title}
                             >
-                              <Link to={subMenu.link} target={subMenu.openInNewTab ? '_blank' : '_self'}>
+                              <Link
+                                to={subMenu.link}
+                                target={subMenu.openInNewTab ? '_blank' : '_self'}
+                                onClick={() => loggingBusinessShortCut(subMenu.title)}
+                              >
                                 {subMenu.title}
                               </Link>
                             </li>
@@ -227,11 +263,6 @@ function Header() {
                     src="https://image.bcsdlab.com/favicon.ico"
                     alt="bcsd lab logo"
                   />
-                  <div className={styles.mobileheader__inquiry}>
-                    <Link to={INQUIRY_LINK_URL}>
-                      문의하기
-                    </Link>
-                  </div>
                   <img
                     className={cn({
                       [styles.mobileheader__logo]: true,
@@ -298,7 +329,11 @@ function Header() {
                   {panelMenuList?.map((menu) => (
                     <li className={styles.megamenu__menu} key={menu.title}>
                       {/* TODO: 키보드 Focus 접근성 향상 */}
-                      <Link className={styles.megamenu__link} to={menu.link}>
+                      <Link
+                        className={styles.megamenu__link}
+                        to={menu.link}
+                        onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: menu.title })}
+                      >
                         {menu.title}
                       </Link>
                     </li>

@@ -4,7 +4,7 @@ import { CAFETERIA_CATEGORY } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { cn } from '@bcsdlab/utils';
-import useCafeteriaList from 'pages/Cafeteria/CafeteriaPage/hooks/useCafeteriaList';
+import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import useLogger from 'utils/hooks/useLogger';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -12,7 +12,7 @@ import styles from './IndexCafeteria.module.scss';
 
 type CafeteriaType = {
   id: number
-  placeName: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'
+  place: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스'
   isShowMain: boolean
 };
 
@@ -39,20 +39,18 @@ function IndexCafeteria() {
 
   const handleMoreClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    logger.click({
-      title: 'main_cafeteria_more',
-      value: '식단 더보기',
-    });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
     navigate('/cafeteria');
   };
 
   const onClickCafeteriaCorner = (e: React.MouseEvent<HTMLDivElement>, category: CafeteriaType) => {
     e.preventDefault();
-    logger.click({
-      title: 'main_cafeteria_corner',
+    logger.actionEventClick({
+      actionTitle: 'CAMPUS',
+      title: 'main_menu_corner',
       value: selectedCafeteria,
     });
-    setSelectedCafeteria(category.placeName);
+    setSelectedCafeteria(category.place);
   };
 
   return (
@@ -81,17 +79,17 @@ function IndexCafeteria() {
         <div className={styles.cafeteriaContainer}>
           {CAFETERIA_CATEGORY.map((category) => (
             category.isShowMain && (
-            // eslint-disable-next-line
-            <div
-              key={category.id}
-              className={cn({
-                [styles.cafeteria]: true,
-                [styles['cafeteria--selected']]: selectedCafeteria === category.placeName,
-              })}
-              onClick={(e) => onClickCafeteriaCorner(e, category)}
-            >
-              {category.placeName}
-            </div>
+              // eslint-disable-next-line
+              <div
+                key={category.id}
+                className={cn({
+                  [styles.cafeteria]: true,
+                  [styles['cafeteria--selected']]: selectedCafeteria === category.place,
+                })}
+                onClick={(e) => onClickCafeteriaCorner(e, category)}
+              >
+                {category.place}
+              </div>
             )
           ))}
         </div>

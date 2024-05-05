@@ -16,7 +16,7 @@ function BusTimetable() {
   const [selectedTab, setSelectedTab] = useState(BUS_TYPES[0]);
   const logger = useLogger();
   const onClickBusTab = (type: BusType) => {
-    logger.click({ title: 'bus_tab_click', value: type.tabName });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable', value: type.tabName });
     setSelectedTab(type);
   };
 

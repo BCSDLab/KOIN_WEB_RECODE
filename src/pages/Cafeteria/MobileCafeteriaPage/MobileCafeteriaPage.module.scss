@@ -1,0 +1,40 @@
+@use "utils/scss/media.scss" as media;
+
+.meal-select {
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+  border-top: 8px solid #f5f5f5;
+  border-bottom: 1px solid #e1e1e1;
+  background-color: #fff;
+
+  &__button {
+    width: 100%;
+    height: 100%;
+    padding: 16px 16px 12px;
+    border-radius: 0;
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    color: #e1e1e1;
+
+    &--selected {
+      border-bottom: 1px solid #10477a;
+      color: #175c8e;
+    }
+  }
+}
+
+.table {
+  display: block;
+
+  &--empty {
+    display: flex;
+    height: 40vh;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}

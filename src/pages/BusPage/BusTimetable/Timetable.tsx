@@ -4,6 +4,7 @@ import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
 import {
   BUS_TYPES, CITY_BUS_TIMETABLE, EXPRESS_COURSES, SHUTTLE_COURSES,
 } from 'static/bus';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './BusTimetable.module.scss';
 
 function Template({ headers, arrivalList }: { headers: string[], arrivalList: string[][] }) {
@@ -32,6 +33,7 @@ function ShuttleTimetable() {
   const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
   const [selectedRoute, handleRouteChange, resetRoute] = useIndexValueSelect();
   const timetable = useBusTimetable(SHUTTLE_COURSES[selectedCourseId]);
+  const logger = useLogger();
 
   return (
     <div>
@@ -42,6 +44,7 @@ function ShuttleTimetable() {
             handleCourseChange(e);
             resetRoute();
           }}
+          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable_area', value: getCourseName(SHUTTLE_COURSES[selectedCourseId]) })}
         >
           {SHUTTLE_COURSES.map((course, index) => (
             <option key={getCourseName(course)} value={index}>{getCourseName(course)}</option>
@@ -51,6 +54,7 @@ function ShuttleTimetable() {
         <select
           className={styles.timetable__dropdown}
           onChange={handleRouteChange}
+          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable_time', value: timetable.info[selectedRoute].route_name })}
         >
           {timetable.info.map((routeInfo, index) => (
             <option key={routeInfo.route_name} value={index}>{routeInfo.route_name}</option>
@@ -71,6 +75,7 @@ function ShuttleTimetable() {
 function ExpressTimetable() {
   const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
   const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
+  const logger = useLogger();
 
   return (
     <div>
@@ -78,6 +83,7 @@ function ExpressTimetable() {
         <select
           className={styles.timetable__dropdown}
           onChange={handleCourseChange}
+          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable_express', value: EXPRESS_COURSES[selectedCourseId].name })}
         >
           {EXPRESS_COURSES.map((course, index) => (
             <option key={course.name} value={index}>{course.name}</option>

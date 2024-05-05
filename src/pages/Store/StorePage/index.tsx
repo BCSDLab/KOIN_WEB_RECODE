@@ -87,24 +87,6 @@ const getOpenCloseTime = (open_time: string | null, close_time: string | null) =
   return `${open_time}~${close_time}`;
 };
 
-const isStoreOpen = (open_time: string | null, close_time: string | null) => {
-  if (open_time === null || close_time === null) return false;
-  if (open_time === '00:00' && close_time === '00:00') return false;
-
-  const date = new Date();
-  const openTimeNum = open_time && Number(open_time.replace(':', ''));
-  const closeTimeNum = close_time && Number(close_time.replace(':', ''));
-  const nowTimeNum = date.getHours() * 100 + date.getMinutes();
-
-  if (openTimeNum > closeTimeNum ? (
-    nowTimeNum >= openTimeNum || nowTimeNum < closeTimeNum
-  ) : (
-    nowTimeNum >= openTimeNum && nowTimeNum < closeTimeNum
-  )) return false;
-
-  return true;
-};
-
 function StorePage() {
   const storeRef = React.useRef<HTMLInputElement | null>(null);
   const { params, searchParams, setParams } = useParamsHandler();
@@ -113,6 +95,11 @@ function StorePage() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const selectedCategory = Number(searchParams.get('category'));
+  const loggingCheckbox = (id: string) => {
+    if (id && searchParams.get(id)) {
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
+    }
+  };
   useScrollToTop();
 
   return (
@@ -121,7 +108,7 @@ function StorePage() {
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
-          {categories?.shop_categories.slice(0, 9).map((category) => (
+          {categories?.shop_categories.map((category) => (
             <button
               className={cn({
                 [styles.category__menu]: true,
@@ -130,7 +117,10 @@ function StorePage() {
               role="radio"
               aria-checked={category.id === selectedCategory}
               type="button"
-              onClick={() => setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true })}
+              onClick={() => {
+                logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
+                setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true });
+              }}
               key={category.id}
             >
               <img className={styles.category__image} src={category.image_url} alt="category_img" />
@@ -162,6 +152,8 @@ function StorePage() {
           className={styles.search_bar__icon}
           type="button"
           onClick={() => {
+            const currentCategoryId = Number(params.category);
+            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
             setParams('storeName', storeRef.current?.value ?? '', {
               deleteBeforeParam: searchParams.get('storeName') === undefined,
               replacePage: true,
@@ -194,6 +186,7 @@ function StorePage() {
                   checked={searchParams.get(item.id) ? true : undefined}
                   className={styles['option-checkbox__input']}
                   onChange={() => {
+                    loggingCheckbox(item.id);
                     setParams(item.id, item.value, {
                       deleteBeforeParam: true,
                       replacePage: true,
@@ -214,23 +207,17 @@ function StorePage() {
             to={`/store/${store.id}`}
             className={styles['store-list__item']}
             key={store.id}
-            onClick={() => logger.click({ title: 'store_card_click', value: store.name })}
+            onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}
           >
             {store.is_event
-              && !isStoreOpen(
-                store.open[getDayOfWeek()].open_time,
-                store.open[getDayOfWeek()].close_time,
-              )
+              && store.is_open
               && (
                 <div className={styles['store-list__item--event']}>
                   이벤트
                   <EventIcon />
                 </div>
               )}
-            {store.open[getDayOfWeek()] && isStoreOpen(
-              store.open[getDayOfWeek()].open_time,
-              store.open[getDayOfWeek()].close_time,
-            )
+            {!store.is_open
               && (
                 <div className={styles['store-none-open']}>
                   <span className={styles['store-none-open__name']}>{store.name}</span>
