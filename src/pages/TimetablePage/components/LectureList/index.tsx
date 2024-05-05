@@ -4,11 +4,12 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
+import { selectedTempLectureSelector } from 'utils/recoil/semester';
 import showToast from 'utils/ts/showToast';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
+import { useSemester } from 'utils/zustand/semester';
 import useLectureList from '../../hooks/useLectureList';
-import { useSelect, useSelectRecoil } from '../../hooks/useSelect';
+import { useSelect } from '../../hooks/useSelect';
 import DeptListbox from './DeptListbox ';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from '../../DefaultPage/DefaultPage.module.scss';
@@ -94,7 +95,7 @@ function LectureList() {
   const {
     onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef,
   } = useSearch();
-  const { value: semesterFilterValue } = useSelectRecoil(selectedSemesterAtom);
+  const semester = useSemester();
   const { myLectures } = useMyLectures();
 
   return (
@@ -128,7 +129,7 @@ function LectureList() {
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner size="50" />}>
           <CurrentSemesterLectureList
-            semesterKey={semesterFilterValue}
+            semesterKey={semester}
             filter={{
             // 백엔드 수정하면 제거
               department: departmentFilterValue ?? '전체',
