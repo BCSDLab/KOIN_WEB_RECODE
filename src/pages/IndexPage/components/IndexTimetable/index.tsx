@@ -1,15 +1,17 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import { useLecturesState } from 'utils/zustand/myLectures';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
+import { useSemesterAction } from 'utils/zustand/semester';
+import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
-  const lectures = useLecturesState();
-  const myLectureDayValue = useTimetableDayList(lectures);
+  const { myLectures } = useMyLectures();
+  const myLectureDayValue = useTimetableDayList(myLectures);
   return myLectureDayValue ? (
     <Timetable
       lectures={myLectureDayValue}
@@ -24,13 +26,13 @@ function CurrentSemesterTimetable(): JSX.Element {
 }
 
 export default function IndexTimeTable() {
-  // const semesterOptionList = useSemesterOptionList();
+  const { updateSemester } = useSemesterAction();
+  const semesterOptionList = useSemesterOptionList();
 
-  // useEffect(() => {
-  //   onChangeSemesterSelect({ target: { value: semesterOptionList[0].value } });
-  // // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    updateSemester(semesterOptionList[0]?.value);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.template}>
