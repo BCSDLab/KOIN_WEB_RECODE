@@ -1,26 +1,15 @@
 import { Suspense } from 'react';
-import { useRecoilValue } from 'recoil';
-import useTokenState from 'utils/hooks/useTokenState';
-import { myLecturesAtom } from 'utils/recoil/semester';
-import useTimetableInfoList from 'pages/TimetablePage/hooks/useTimetableInfoList';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import { useSemester } from 'utils/zustand/semester';
+import { useLecturesState } from 'utils/zustand/myLectures';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
-  const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
-  const token = useTokenState();
-  const semester = useSemester();
-  const { data: myLecturesFromServer } = useTimetableInfoList(semester, token);
-  const myLectureDayValue = useTimetableDayList(
-    token
-      ? (myLecturesFromServer ?? [])
-      : (myLecturesFromLocalStorageValue ?? []),
-  );
+  const lectures = useLecturesState();
+  const myLectureDayValue = useTimetableDayList(lectures);
   return myLectureDayValue ? (
     <Timetable
       lectures={myLectureDayValue}
