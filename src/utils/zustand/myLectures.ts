@@ -12,24 +12,43 @@ type State = {
 
 type Action = {
   action: {
-    updateLectures: (lectures: LectureInfo, semester: string) => void;
+    addLecture: (lecture: LectureInfo, semester: string) => void;
+    removeLecture: (lecture: LectureInfo, semester: string) => void;
   }
 };
 
 export const useLecturesStore = create<State & Action>(
-  (set) => ({
+  (set, get) => ({
     lectures: JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}'),
     action: {
-      updateLectures: async (value, semester) => {
-        const timetableInfoList = JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}');
+      addLecture: async (lecture, semester) => {
+        if (!lecture) {
+          return;
+        }
+        const timetableInfoList = get().lectures;
         const newValue = [...(timetableInfoList[semester] || [])];
-        newValue.push(value);
+        newValue.push(lecture);
 
         localStorage.setItem(
           MY_LECTURES_KEY,
           JSON.stringify({ ...timetableInfoList, [semester]: newValue }),
         );
         set(() => ({ lectures: { ...timetableInfoList, [semester]: newValue } }));
+      },
+      removeLecture: (lecture, semester) => {
+        if (!lecture) {
+          return;
+        }
+        const timetableInfoList = get().lectures;
+        const timetableInfoWithNewValue = timetableInfoList[semester].filter(
+          (newValue) => (lecture.code !== newValue.code)
+            || (lecture.lecture_class !== newValue.lecture_class),
+        );
+        localStorage.setItem(
+          MY_LECTURES_KEY,
+          JSON.stringify({ ...timetableInfoList, [semester]: timetableInfoWithNewValue }),
+        );
+        set(() => ({ lectures: { ...timetableInfoList, [semester]: timetableInfoWithNewValue } }));
       },
     },
   }),
