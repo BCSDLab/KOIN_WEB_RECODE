@@ -15,6 +15,7 @@ import useMyLectures from '../../hooks/useMyLectures';
 
 export default function MyLectureTimetable() {
   const { myLectures } = useMyLectures();
+
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const semester = useSemester();
   const selectedLecture = useRecoilValue(selectedTempLectureSelector);
