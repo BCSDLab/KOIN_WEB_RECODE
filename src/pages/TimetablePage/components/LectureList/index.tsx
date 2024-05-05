@@ -3,11 +3,10 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
-import { useRecoilState } from 'recoil';
-import { selectedTempLectureSelector } from 'utils/recoil/semester';
 import showToast from 'utils/ts/showToast';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useSemester } from 'utils/zustand/semester';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import useLectureList from '../../hooks/useLectureList';
 import { useSelect } from '../../hooks/useSelect';
 import DeptListbox from './DeptListbox ';
@@ -32,7 +31,8 @@ function CurrentSemesterLectureList({
   myLectures,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
-  const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
+  const tempLecture = useTempLecture();
+  const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation();
 
   return (
@@ -58,8 +58,8 @@ function CurrentSemesterLectureList({
               return true;
             })
         }
-      selectedLecture={selectedTempLecture ?? undefined}
-      onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
+      selectedLecture={tempLecture ?? undefined}
+      onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
       onClickLastColumn={
           (clickedLecture) => {
             if ('class_title' in clickedLecture) {

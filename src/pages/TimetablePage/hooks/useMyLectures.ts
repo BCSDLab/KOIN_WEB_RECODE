@@ -6,7 +6,6 @@ import useTimetableInfoList from './useTimetableInfoList';
 export default function useMyLectures() {
   const token = useTokenState();
   const semester = useSemester();
-  // const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
   const myLecturesFromLocalStorageValue = useLecturesState();
   const { data: myLecturesFromServer } = useTimetableInfoList(semester, token);
 
