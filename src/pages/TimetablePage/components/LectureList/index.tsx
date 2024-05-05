@@ -71,8 +71,9 @@ function CurrentSemesterLectureList({
 
             if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
               showToast('error', '시간이 중복되어 추가할 수 없습니다.');
+            } else {
+              addMyLecture(clickedLecture);
             }
-            addMyLecture(clickedLecture);
           }
         }
     >
