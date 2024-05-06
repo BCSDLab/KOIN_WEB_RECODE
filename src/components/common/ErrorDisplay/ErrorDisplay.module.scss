@@ -1,30 +1,30 @@
 @use "src/utils/scss/media" as media;
 
-.noContent {
+.display {
   text-align: center;
   z-index: 9999;
 
   @include media.media-breakpoint(mobile) {
     margin: 0;
   }
-}
 
-.noImage {
-  width: 104px;
-  height: 94px;
-  margin-left: -19px;
-}
+  &__image {
+    width: 104px;
+    height: 94px;
+    margin-left: -19px;
+  }
 
-.noMessage {
-  height: 62px;
-  font-family: NanumBarunGothic, serif;
-  font-size: 24px;
-  color: #fff;
-  text-align: center;
-  margin: 15px 0 0 -15px;
-  z-index: 9999;
-
-  @include media.media-breakpoint(mobile) {
-    margin: 8px 0 0 -19px;
+  &__describe {
+    height: 62px;
+    font-family: NanumBarunGothic, serif;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    margin: 15px 0 0 -15px;
+    z-index: 9999;
+  
+    @include media.media-breakpoint(mobile) {
+      margin: 8px 0 0 -19px;
+    }
   }
 }

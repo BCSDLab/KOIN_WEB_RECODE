@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
 
-interface ImageErrorBoundaryProps {
+interface ImageWithErrorBoundaryProps {
   src: string;
   alt: string;
   className: string;
   fallback: React.ReactNode;
 }
 
-export default function ImageErrorBoundary({
+export default function ImageWithErrorBoundary({
   src,
   alt,
   className,
   fallback,
-}: ImageErrorBoundaryProps) {
+}: ImageWithErrorBoundaryProps) {
   const [hasError, setHasError] = useState(false);
 
   return (
     <div>
       {hasError ? (
-        <div className={className}>
-          {fallback}
-        </div>
+        <div className={className}>{fallback}</div>
       ) : (
         <img
           src={src}
-          alt={alt}
           className={className}
           onError={() => setHasError(true)}
+          alt={alt}
         />
       )}
     </div>
