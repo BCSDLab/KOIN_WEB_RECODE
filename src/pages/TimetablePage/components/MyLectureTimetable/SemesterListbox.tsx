@@ -9,7 +9,7 @@ function SemesterListbox() {
   const { updateSemester } = useSemesterAction();
   const [value, setValue] = useState(semester);
 
-  const onChangeSelect = (e: { target: any }) => {
+  const onChangeSelect = (e: { target: { value: string } }) => {
     const { target } = e;
     updateSemester(target?.value);
     setValue(target?.value);

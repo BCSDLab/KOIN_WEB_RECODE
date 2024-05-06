@@ -30,7 +30,7 @@ export default function useTimetableMutation() {
     if ('name' in clickedLecture) {
       removeLectureFromLocalStorage(clickedLecture, semester);
     } else {
-      removeLectureFromServer(clickedLecture.id.toString());
+      removeLectureFromServer(clickedLecture.id);
     }
   };
 

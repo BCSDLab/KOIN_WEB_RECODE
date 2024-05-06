@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getUser } from 'api/auth';
-import { useTokenStore } from 'utils/zustand/auth';
+import { useTokenStore } from 'utils/zustand/auth';
 
 export const useUser = () => {
   const { token } = useTokenStore();

@@ -8,7 +8,7 @@ import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
-import { useTokenStore } from 'utils/zustand/\bauth';
+import { useTokenStore } from 'utils/zustand/auth';
 import useLogger from 'utils/hooks/useLogger';
 import styles from './LoginPage.module.scss';
 
