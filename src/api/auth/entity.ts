@@ -72,3 +72,5 @@ export interface FindPasswordResponse extends APIResponse {
   code: number;
   message: string;
 }
+
+export interface CheckPasswordResponse extends APIResponse { }

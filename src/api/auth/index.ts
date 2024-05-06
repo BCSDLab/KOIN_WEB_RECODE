@@ -8,6 +8,7 @@ import {
   UpdateUser,
   FindPassword,
   DeleteUser,
+  CheckPassword,
 } from './APIDetail';
 
 export const login = APIClient.of(Login);
@@ -25,3 +26,5 @@ export const updateUser = APIClient.of(UpdateUser);
 export const deleteUser = APIClient.of(DeleteUser);
 
 export const findPassword = APIClient.of(FindPassword);
+
+export const checkPassword = APIClient.of(CheckPassword);

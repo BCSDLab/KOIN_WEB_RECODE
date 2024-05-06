@@ -11,6 +11,7 @@ import {
   FindPasswordResponse,
   UserUpdateRequest,
   DeleteResponse,
+  CheckPasswordResponse,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -22,11 +23,11 @@ export class Login<R extends LoginResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: LoginRequest) {}
+  constructor(public data: LoginRequest) { }
 }
 
-export class NicknameDuplicateCheck<R extends NicknameDuplicateCheckResponse>
-implements APIRequest<R> {
+export class NicknameDuplicateCheck<R extends NicknameDuplicateCheckResponse> implements
+  APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -49,7 +50,7 @@ export class Signup<R extends SignupResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: LoginRequest) {}
+  constructor(public data: LoginRequest) { }
 }
 
 export class Refresh<R extends RefreshResponse> implements APIRequest<R> {
@@ -61,7 +62,7 @@ export class Refresh<R extends RefreshResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: RefreshRequest) {}
+  constructor(public data: RefreshRequest) { }
 }
 
 export class User<R extends UserResponse> implements APIRequest<R> {
@@ -113,5 +114,17 @@ export class FindPassword<R extends FindPasswordResponse> implements APIRequest<
 
   auth = false;
 
-  constructor(public data: FindPasswordRequest) {}
+  constructor(public data: FindPasswordRequest) { }
+}
+
+export class CheckPassword<R extends CheckPasswordResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/user/check/password';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public data: { password: string }) { }
 }
