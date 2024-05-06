@@ -22,9 +22,6 @@ export const useLecturesStore = create<State & Action>(
     lectures: JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}'),
     action: {
       addLecture: (lecture, semester) => {
-        if (!lecture) {
-          return;
-        }
         const timetableInfoList = get().lectures;
         const newValue = [...(timetableInfoList[semester] || [])];
         newValue.push(lecture);
@@ -36,9 +33,6 @@ export const useLecturesStore = create<State & Action>(
         set(() => ({ lectures: { ...timetableInfoList, [semester]: newValue } }));
       },
       removeLecture: (lecture, semester) => {
-        if (!lecture) {
-          return;
-        }
         const timetableInfoList = get().lectures;
         const timetableInfoWithNewValue = timetableInfoList[semester].filter(
           (newValue) => (lecture.code !== newValue.code)
