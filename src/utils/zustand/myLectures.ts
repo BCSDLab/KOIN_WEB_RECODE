@@ -21,7 +21,7 @@ export const useLecturesStore = create<State & Action>(
   (set, get) => ({
     lectures: JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}'),
     action: {
-      addLecture: async (lecture, semester) => {
+      addLecture: (lecture, semester) => {
         if (!lecture) {
           return;
         }
