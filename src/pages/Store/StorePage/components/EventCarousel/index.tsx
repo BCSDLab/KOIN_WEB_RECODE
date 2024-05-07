@@ -4,6 +4,7 @@ import { useGetAllEvents } from 'pages/Store/StorePage/components/hooks/useGetAl
 import { useNavigate } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useDragEvent from 'pages/Store/StorePage/components/hooks/useDragEvent';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './EventCarousel.module.scss';
 
 const SLIDE_WIDTH = 387; // width + gap
@@ -17,6 +18,7 @@ export default function EventCarousel() {
   const [animation, setAnimation] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(1);
   const [transX, setTransX] = useState(0);
+  const logger = useLogger();
 
   useEffect(() => {
     const slideTime = setTimeout(() => {
@@ -32,7 +34,7 @@ export default function EventCarousel() {
 
   const transfromValue = isMobile ? `translateX(${-100 * currentIndex}vw)` : `translateX(${-SLIDE_WIDTH * currentIndex + transX}px)`;
 
-  const inrange = (v:number, min:number, max:number) => { // 범위 제한
+  const inrange = (v: number, min: number, max: number) => { // 범위 제한
     if (v < min) return min;
     if (v > max) return max;
     return v;
@@ -41,10 +43,10 @@ export default function EventCarousel() {
   const {
     onTouchStart, onMouseDown, isDragging,
   } = useDragEvent({
-    onDragChange: (x:number) => {
+    onDragChange: (x: number) => {
       setTransX(inrange(x, -SLIDE_WIDTH, SLIDE_WIDTH));
     },
-    onDragEnd: (x:number) => {
+    onDragEnd: (x: number) => {
       const maxIndex = newCarouselList.length - 1;
       if (x < (isMobile ? -10 : SLIDE_WIDTH / 2)) {
         setCurrentIndex((inrange(currentIndex + 1, 0, maxIndex)));
@@ -62,6 +64,10 @@ export default function EventCarousel() {
     }
   };
 
+  const eventLogging = (shopName: string) => {
+    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_event', value: `${shopName}` });
+  };
+
   return (
     <div className={styles.container}>
       {newCarouselList.map((item) => (
@@ -75,6 +81,7 @@ export default function EventCarousel() {
             onClick={() => {
               handleClick(item.shop_id);
               setTransX(0);
+              eventLogging(item.shop_name);
             }}
             onTransitionEnd={() => {
               setAnimation(false);
@@ -93,7 +100,7 @@ export default function EventCarousel() {
               <div className={styles['swipe-item__empty-image']}>
                 <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
               </div>
-            ) }
+            )}
             <div className={styles['swipe-item__text']}>
               <div>
                 <span className={styles['swipe-item__name']}>
