@@ -1,4 +1,6 @@
-const CAFETERIA_CATEGORY = [
+import { MealTypes } from 'interfaces/Cafeteria';
+
+export const CAFETERIA_CATEGORY = [
   {
     id: 1,
     place: 'A코너',
@@ -26,25 +28,12 @@ const CAFETERIA_CATEGORY = [
   },
 ] as const;
 
-const CAFETERIA_TIME = [
-  {
-    id: 1,
-    type: 'BREAKFAST',
-    name: '아침',
-  },
-  {
-    id: 2,
-    type: 'LUNCH',
-    name: '점심',
-  },
-  {
-    id: 3,
-    type: 'DINNER',
-    name: '저녁',
-  },
-];
+export const MEAL_TYPE_MAP = {
+  BREAKFAST: '아침',
+  LUNCH: '점심',
+  DINNER: '저녁',
+} as const;
 
-export {
-  CAFETERIA_CATEGORY,
-  CAFETERIA_TIME,
-};
+export const MEAL_TYPES: MealTypes = ['BREAKFAST', 'LUNCH', 'DINNER'];
+
+export const placeOrder = ['A코너', 'B코너', 'C코너', '능수관', '2캠퍼스'];
