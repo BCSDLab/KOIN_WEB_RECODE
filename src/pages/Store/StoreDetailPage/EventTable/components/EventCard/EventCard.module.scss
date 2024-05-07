@@ -2,6 +2,7 @@
   padding: 10px 0;
   display: flex;
   gap: 16px;
+  width: 100%;
 
   &--nonHidden {
     padding: 10px 0;
@@ -15,6 +16,7 @@
   width: 72px;
   height: 80px;
   border-radius: 5px;
+  transition: height 0.5s ease;
 
   &--nonHidden {
     width: 100%;
@@ -23,6 +25,8 @@
 }
 
 .event-info {
+  width: 100%;
+
   &__header {
     display: flex;
     align-items: center;
@@ -77,4 +81,27 @@
   font-size: 12px;
   font-style: normal;
   line-height: 15.3px;
+}
+
+.default-event-thumbnail-img-container {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  width: 100%;
+  padding: 77px 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  gap: 5px;
+}
+
+.default-event-thumbnail-img {
+  width: 100%;
+  height: auto;
+}
+
+.default-event-thumbnail-text {
+  color: #8e8e8e;
+  font-size: 14px;
 }
