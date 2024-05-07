@@ -108,6 +108,11 @@ function Header() {
     });
   };
 
+  const openMobileAuthenticateUserModal = () => {
+    hideSidebar();
+    openModal();
+  };
+
   return (
     <header
       className={cn({
@@ -187,9 +192,9 @@ function Header() {
                       {isLoggedin ? (
                         <>
                           <li className={styles['mobileheader__my-info']}>
-                            <Link to="/auth/modifyinfo">
+                            <button type="button" onClick={openMobileAuthenticateUserModal} className={styles['mobileheader__my-info-button']}>
                               정보 수정
-                            </Link>
+                            </button>
                           </li>
                           <li className={styles.mobileheader__link}>
                             <button type="button" onClick={logout}>

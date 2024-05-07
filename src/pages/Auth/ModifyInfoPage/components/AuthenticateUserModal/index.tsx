@@ -4,9 +4,11 @@ import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { ReactComponent as BlindIcon } from 'assets/svg/blind-icon.svg';
 import { ReactComponent as ShowIcon } from 'assets/svg/show-icon.svg';
 import { ReactComponent as WarningIcon } from 'assets/svg/warning-icon.svg';
+import { ReactComponent as WarningMobileIcon } from 'assets/svg/warning-mobile-icon.svg';
 import useCheckPassword from 'components/common/Header/hooks/useCheckPassword';
 import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -19,6 +21,7 @@ export default function AuthenticateUserModal({
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
   const { mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error } = useCheckPassword();
+  const isMobile = useMediaQuery();
   const navigate = useNavigate();
 
   const handleCheckPassword = async () => {
@@ -77,6 +80,12 @@ export default function AuthenticateUserModal({
             <button type="button" onClick={changeIsBlind} className={styles['container__blind-button']}>
               {isBlind ? <BlindIcon /> : <ShowIcon />}
             </button>
+            {isMobile && isKoinError(error) && (
+            <span className={styles['container__mobile-error-message']}>
+              <WarningMobileIcon />
+              {error.message}
+            </span>
+            )}
             <button
               type="button"
               className={cn({
@@ -89,7 +98,7 @@ export default function AuthenticateUserModal({
             </button>
           </div>
         </div>
-        {isKoinError(error) && error
+        {!isMobile && isKoinError(error) && error
            && (
            <span className={styles['container__error-message']}>
              <WarningIcon />

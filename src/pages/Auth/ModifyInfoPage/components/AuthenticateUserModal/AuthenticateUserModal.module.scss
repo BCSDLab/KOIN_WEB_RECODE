@@ -1,3 +1,5 @@
+@use "src/utils/scss/media";
+
 .background {
   position: fixed;
   display: flex;
@@ -19,6 +21,11 @@
   border-radius: 10px;
   background-color: #fff;
 
+  @include media.media-breakpoint(mobile) {
+    width: 342px;
+    height: 226px;
+  }
+
   &__header {
     display: flex;
     justify-content: space-between;
@@ -26,6 +33,10 @@
     padding: 24px 24px 16px;
     font-size: 20px;
     font-weight: 700;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 24px 24px 8px;
+    }
   }
 
   &__title {
@@ -52,6 +63,10 @@
     &--error {
       padding: 8px 24px;
     }
+
+    @include media.media-breakpoint(mobile) {
+      padding: 8px 24px;
+    }
   }
 
   &__footer {
@@ -65,16 +80,20 @@
     display: flex;
     align-items: center;
     position: relative;
+
+    @include media.media-breakpoint(mobile) {
+      flex-direction: column;
+    }
   }
 
   &__check-button {
     width: 80px;
     height: 50px;
     border-radius: 4px;
-    border: 1px solid #10477a;
+    border: 1px solid #8e8e8e;
     padding: 12px;
     background-color: #fff;
-    color: #10477a;
+    color: #4b4b4b;
     font-weight: 500;
     line-height: 25.6px;
     margin-left: 8px;
@@ -84,6 +103,14 @@
       background-color: #e1e1e1;
       color: #4b4b4b;
       border: none;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: 290px;
+      height: 42px;
+      margin-top: 8px;
+      margin-left: 0;
+      padding: 8px;
     }
   }
 
@@ -111,6 +138,10 @@
         outline: 1px solid #4590bb;
       }
     }
+
+    @include media.media-breakpoint(mobile) {
+      height: 20px;
+    }
   }
 
   &__blind-button {
@@ -121,6 +152,11 @@
     border: none;
     padding: 0;
     background-color: transparent;
+
+    @include media.media-breakpoint(mobile) {
+      right: 12px;
+      top: 13px;
+    }
   }
 
   &__error-message {
@@ -133,5 +169,16 @@
     color: #f7941e;
     margin-top: 8px;
     gap: 4px;
+  }
+
+  &__mobile-error-message {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: #f7941e;
+    gap: 4px;
+    margin-top: 6px;
+    font-size: 14px;
+    font-weight: 400;
   }
 }
