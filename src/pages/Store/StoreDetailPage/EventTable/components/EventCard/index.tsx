@@ -4,6 +4,7 @@ import { ReactComponent as HiddenInfoArrow } from 'assets/svg/hidden-info-arrow.
 import { cn } from '@bcsdlab/utils';
 import { StoreEvent } from 'api/store/entity';
 import styles from './EventCard.module.scss';
+import EventContent from './EventContent';
 
 export default function EventCard({ event }: { event: StoreEvent }) {
   const [hiddenInfo, setHiddenInfo] = useState<boolean>(true);
@@ -56,7 +57,7 @@ export default function EventCard({ event }: { event: StoreEvent }) {
           [styles['eventContent--nonHidden']]: hiddenInfo === false,
         })}
         >
-          {event.content}
+          <EventContent html={event.content} />
         </div>
         <div className={styles.eventUpdatedAt}>{event.start_date.replace(/-/g, '.')}</div>
       </div>
