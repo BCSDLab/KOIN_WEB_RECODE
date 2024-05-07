@@ -12,6 +12,7 @@ import {
   UserUpdateRequest,
   DeleteResponse,
   CheckPasswordResponse,
+  CheckPasswordRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -124,7 +125,11 @@ export class CheckPassword<R extends CheckPasswordResponse> implements APIReques
 
   response!: R;
 
-  auth = true;
+  auth = false;
 
-  constructor(public data: { password: string }) { }
+  data: CheckPasswordRequest;
+
+  constructor(public authorization: string, data: CheckPasswordRequest) {
+    this.data = data;
+  }
 }

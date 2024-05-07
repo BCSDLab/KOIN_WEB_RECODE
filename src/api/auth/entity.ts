@@ -32,6 +32,10 @@ export interface FindPasswordRequest {
   email: string;
 }
 
+export interface CheckPasswordRequest {
+  password: string;
+}
+
 export interface SignupResponse extends APIResponse { }
 
 export interface RefreshRequest {

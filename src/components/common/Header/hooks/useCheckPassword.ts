@@ -1,28 +1,32 @@
 import * as api from 'api';
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
-import { sendClientError } from '@bcsdlab/koin';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import useTokenState from 'utils/hooks/useTokenState';
+import { CheckPasswordRequest } from 'api/auth/entity';
 
 const useCheckPassword = () => {
-  const mutation = useMutation({
-    mutationFn: api.auth.checkPassword,
+  const token = useTokenState();
+  const { mutate, isSuccess, error } = useMutation({
+    mutationFn: (password: CheckPasswordRequest) => api.auth.checkPassword(token, password),
     onSuccess: () => {
       showToast('success', '비밀번호 확인이 완료되었습니다.');
     },
-    onError: (error: AxiosError<{ message?: string }>) => {
-      if (error.response?.status === 401) {
-        showToast('error', '비밀번호가 일치하지 않습니다.');
-      } else if (error.response?.status === 403) {
-        showToast('error', '권한이 필요합니다. 관리자에게 문의해주세요.');
-      } else {
-        const errorMessage = error.response?.data.message || '에러가 발생했습니다.';
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 401) {
+          return;
+        }
+        if (err.status === 403) {
+          return;
+        }
+        const errorMessage = err.message || '에러가 발생했습니다.';
         showToast('error', errorMessage);
-        sendClientError(error);
+        sendClientError(err);
       }
     },
   });
-  return mutation;
+  return { mutate, isSuccess, error };
 };
 
 export default useCheckPassword;
