@@ -1,5 +1,5 @@
 /* eslint-disable react/require-default-props, no-restricted-globals */
-import React, { useImperativeHandle } from 'react';
+import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
@@ -12,6 +12,9 @@ import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDu
 import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/useUser';
 import { useQueryClient } from '@tanstack/react-query';
+import LoadingSpinner from 'components/common/LoadingSpinner';
+import Listbox from 'components/TimetablePage/Listbox';
+import { prevDeptList } from 'static/dept';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -86,12 +89,15 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       'phone-number': 'phone_number',
       'student-number': 'student_number',
     };
-
     const compareFields = ['name', 'nickname', 'gender', 'phone-number', 'student-number'];
     compareFields.forEach((field) => {
       if (!fieldRefs.current[field]) return;
       const fieldRef = fieldRefs.current[field].ref;
-      let inputValue;
+      let inputValue: any;
+      const studentInfo = {
+        studentNumber: '',
+        major: '',
+      };
       if (isRefICustomFormInput(fieldRef)) {
         inputValue = fieldRef.value ? fieldRef.value : null;
         if (field === 'gender' && fieldRef.value === 0) {
@@ -100,12 +106,16 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       } else if (fieldRef !== null) {
         inputValue = fieldRef.value ? fieldRef.value : null;
       }
+      // student-number의 경우 major와 studentNumber로 나뉘어져 있음
       if (field === 'student-number') {
-        inputValue = inputValue && typeof inputValue === 'object' && 'studentNumber' in inputValue ? inputValue.studentNumber : null;
+        studentInfo.studentNumber = inputValue && typeof inputValue === 'object' && 'studentNumber' in inputValue ? inputValue.studentNumber : null;
+        studentInfo.major = inputValue && typeof inputValue === 'object' && 'major' in inputValue ? inputValue.major : null;
       }
       const userResponseField = mappedFields[field] || field;
       const originalValue = userInfo ? userInfo[userResponseField] : '';
-      if (inputValue !== originalValue) {
+      if (inputValue !== originalValue
+        || studentInfo.studentNumber !== originalValue
+        || studentInfo.major !== originalValue) {
         isAnyFieldChanged = true;
       }
     });
@@ -276,6 +286,12 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
   const { data: userInfo } = useUser();
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
+  const [major, setMajor] = React.useState<string>(userInfo?.major || '');
+  const yearOfAdmission = studentNumber.slice(0, 4);
+  const deptOptionList = deptList.map((dept) => ({
+    label: dept.name,
+    value: dept.name,
+  }));
 
   const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
@@ -286,7 +302,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     : '';
   const majorFromStudentNumber = studentNumber && studentNumber.length >= 8
   && studentNumber.length <= 10
-    ? deptList.find(
+    ? prevDeptList.find(
       (deptValue) => deptValue.dept_nums.find((deptNum) => (deptNum === majorNumber)),
     )?.name ?? '' : '';
 
@@ -306,6 +322,15 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     } else {
       valid = true;
     }
+    if (year >= 2023) {
+      return {
+        value: {
+          studentNumber,
+          major,
+        },
+        valid,
+      };
+    }
     return {
       value: {
         studentNumber,
@@ -313,7 +338,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
       },
       valid,
     };
-  }, [studentNumber, majorFromStudentNumber]);
+  }, [studentNumber, majorFromStudentNumber, major]);
   return (
     <>
       <input
@@ -324,17 +349,28 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
         onChange={onChangeMajorInput}
         {...props}
       />
-      <input
-        className={cn({
-          [styles['form-input']]: true,
-          [styles['form-input--half']]: true,
-          [styles['form-input--disabled-value']]: majorFromStudentNumber !== '',
-          [styles['form-input--flex-end']]: true,
-        })}
-        placeholder="학부(자동입력)"
-        value={majorFromStudentNumber}
-        disabled
-      />
+      {Number(yearOfAdmission) >= 2023 ? (
+        <div className={styles['form-input__select']}>
+          <Listbox
+            list={deptOptionList}
+            value={major}
+            mobileSize="small"
+            onChange={({ target }) => setMajor(target.value)}
+          />
+        </div>
+      ) : (
+        <input
+          className={cn({
+            [styles['form-input']]: true,
+            [styles['form-input--half']]: true,
+            [styles['form-input--disabled-value']]: majorFromStudentNumber !== '',
+            [styles['form-input--flex-end']]: true,
+          })}
+          placeholder="학부(자동입력)"
+          value={majorFromStudentNumber}
+          disabled
+        />
+      )}
     </>
   );
 });
@@ -457,7 +493,7 @@ const useModifyInfoForm = () => {
   return { submitForm, status };
 };
 
-function ModifyInfoPage() {
+function ModifyInfoDefaultPage() {
   const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
   const navigate = useNavigate();
@@ -563,6 +599,14 @@ function ModifyInfoPage() {
         </span>
       </div>
     </>
+  );
+}
+
+function ModifyInfoPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner size="40px" />}>
+      <ModifyInfoDefaultPage />
+    </Suspense>
   );
 }
 
