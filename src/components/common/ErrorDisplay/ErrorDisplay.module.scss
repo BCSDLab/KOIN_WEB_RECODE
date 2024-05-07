@@ -1,8 +1,16 @@
 @use "src/utils/scss/media" as media;
 
 .display {
-  text-align: center;
-  z-index: 9999;
+  max-width: 300px;
+  max-height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
   @include media.media-breakpoint(mobile) {
     margin: 0;
@@ -18,11 +26,15 @@
     height: 62px;
     font-family: NanumBarunGothic, serif;
     font-size: 24px;
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #fff;
+
     text-align: center;
     margin: 15px 0 0 -15px;
-    z-index: 9999;
-  
+
     @include media.media-breakpoint(mobile) {
       margin: 8px 0 0 -19px;
     }

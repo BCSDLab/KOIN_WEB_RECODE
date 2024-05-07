@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import ImageErrorBoundary from 'components/common/ImageErrorBoundary';
+import ImageWithErrorBoundary from 'components/common/ImageWithErrorBoundary';
 import ErrorDisplay from 'components/common/ErrorDisplay';
 import styles from './ImageModal.module.scss';
 import useModalKeyboardEvent from './hooks/useModalKeyboardEvent';
@@ -63,7 +63,7 @@ function ImageModal({
         />
       )}
       <button className={styles.close} type="button" aria-label="이미지 닫기" onClick={() => onClose()} />
-      <ImageErrorBoundary
+      <ImageWithErrorBoundary
         className={styles.image}
         src=""
         fallback={<ErrorDisplay />}
