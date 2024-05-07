@@ -48,6 +48,9 @@ function StoreDetailPage() {
   const onClickList = () => {
     logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_list', value: 'shopList' });
   };
+  const onClickEventList = () => {
+    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_detailView_event', value: `${storeDetail.name}` });
+  };
 
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -198,7 +201,10 @@ function StoreDetailPage() {
               [styles['tap__type--active']]: tapType === '이벤트/공지',
             })}
             type="button"
-            onClick={() => setTapType('이벤트/공지')}
+            onClick={() => {
+              onClickEventList();
+              setTapType('이벤트/공지');
+            }}
           >
             이벤트/공지
           </button>
