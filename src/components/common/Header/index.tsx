@@ -10,6 +10,7 @@ import { useLogout } from 'utils/hooks/useLogout';
 import { userInfoState } from 'utils/recoil/userInfoState';
 import { useRecoilValue } from 'recoil';
 import useLogger from 'utils/hooks/useLogger';
+import AuthenticateUserModal from 'pages/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -92,6 +93,7 @@ function Header() {
   const logout = useLogout();
   const navigate = useNavigate();
   const logger = useLogger();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const loggingBusinessShortCut = (title: string) => {
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: title });
@@ -358,9 +360,9 @@ function Header() {
               ) : (
                 <>
                   <li className={styles['header__auth-link']}>
-                    <Link to="/auth/modifyinfo">
+                    <button type="button" className={styles['header__auth-button']} onClick={openModal}>
                       정보수정
-                    </Link>
+                    </button>
                   </li>
                   <li className={styles['header__auth-link']}>
                     <button onClick={logout} type="button" className={styles['header__auth-button']}>
@@ -372,8 +374,12 @@ function Header() {
             </ul>
           </>
         )}
-
       </nav>
+      {isModalOpen && (
+      <AuthenticateUserModal
+        onClose={closeModal}
+      />
+      )}
     </header>
   );
 }
