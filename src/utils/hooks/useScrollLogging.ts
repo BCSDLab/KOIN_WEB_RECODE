@@ -17,11 +17,11 @@ export const useScorllLogging = (
       window.addEventListener('scroll', onScroll);
     }
     if (document.body.scrollHeight * 0.7 < currentHeignt && data) {
-      const currentCategoryId = Number(params.category);
       if ('delivery_price' in data) {
         logger.actionEventClick({ actionTitle: 'BUSINESS', title, value: `search in ${data.name}` });
       }
       if ('total_count' in data) {
+        const currentCategoryId = Number(params.category);
         logger.actionEventClick({ actionTitle: 'BUSINESS', title, value: `search in ${data.shop_categories[currentCategoryId].name}` });
       }
     }
