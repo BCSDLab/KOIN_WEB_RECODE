@@ -9,6 +9,7 @@ import useCheckPassword from 'components/common/Header/hooks/useCheckPassword';
 import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
+import { useAuthenticationActions } from 'utils/zustand/authentication';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -23,6 +24,7 @@ export default function AuthenticateUserModal({
   const {
     mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error, errorMessage,
   } = useCheckPassword();
+  const { updateAuthentication } = useAuthenticationActions();
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
 
@@ -46,9 +48,14 @@ export default function AuthenticateUserModal({
 
   useEffect(() => {
     if (isCheckPasswordSuccess) {
+      updateAuthentication(isCheckPasswordSuccess);
       onClose();
       navigate('/auth/modifyInfo');
     }
+  });
+
+  window.addEventListener('unload', () => {
+    updateAuthentication(false);
   });
 
   return (
