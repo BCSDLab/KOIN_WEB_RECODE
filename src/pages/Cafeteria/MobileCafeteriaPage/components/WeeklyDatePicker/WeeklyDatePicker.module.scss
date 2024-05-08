@@ -1,6 +1,5 @@
 .container {
   position: sticky;
-  top: 56px;
   padding-top: 0;
   left: 0;
   right: 0;
@@ -56,8 +55,8 @@
     cursor: pointer;
 
     &--today {
-      color: #fff !important;
-      background-color: #175c8e;
+      color: #175c8e;
+      outline: 1px solid #175c8e;
     }
 
     &--before {
@@ -65,8 +64,8 @@
     }
 
     &--selected {
-      color: #175c8e;
-      outline: 1px solid #175c8e;
+      color: #fff !important;
+      background-color: #175c8e;
     }
 
     &--selector {
