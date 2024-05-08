@@ -15,12 +15,14 @@ export interface ListItem {
 export interface ListboxProps {
   list: ListItem[];
   value: string | null;
+  mobileSize?: 'small' | 'medium';
   onChange: (event: { target: ListboxRef }) => void;
 }
 
 function Listbox({
   list,
   value,
+  mobileSize = 'medium',
   onChange,
 }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
@@ -64,7 +66,7 @@ function Listbox({
         type="button"
         onClick={triggerPopup}
         className={cn({
-          [styles.select__trigger]: true,
+          [styles[`select__trigger--${mobileSize}`]]: true,
         })}
       >
         {value !== null ? list.find((item) => item.value === value)?.label : ''}
@@ -90,5 +92,9 @@ function Listbox({
     </div>
   );
 }
+
+Listbox.defaultProps = {
+  mobileSize: 'medium',
+};
 
 export default Listbox;
