@@ -11,7 +11,6 @@ interface Props {
 function LectureTimetable(
   { lectures, similarSelectedLecture, selectedLectureIndex } : Props,
 ) {
-  // TODO: selectedSemesterValue가 바뀔 때 myLecturesFromServer가 학기별 강의를 불러오지 못함
   return (
     <Timetable
       lectures={lectures}

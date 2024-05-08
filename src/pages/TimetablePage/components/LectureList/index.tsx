@@ -3,17 +3,17 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
-import { useRecoilState } from 'recoil';
-import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import showToast from 'utils/ts/showToast';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
+import { useSemester } from 'utils/zustand/semester';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
+import useSelect from 'pages/TimetablePage/hooks/useSelect';
 import useLectureList from '../../hooks/useLectureList';
-import { useSelect, useSelectRecoil } from '../../hooks/useSelect';
 import DeptListbox from './DeptListbox ';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from '../../DefaultPage/DefaultPage.module.scss';
 import useSearch from '../../hooks/useSearch';
 import LectureTable from '../../../../components/TimetablePage/LectureTable';
-import useTimetableMutation from '../../hooks/useTimetableMutation';
 import useMyLectures from '../../hooks/useMyLectures';
 
 interface CurrentSemesterLectureListProps {
@@ -23,17 +23,17 @@ interface CurrentSemesterLectureListProps {
     search: string;
   };
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-  addMyLecture: (clickedLecture: LectureInfo) => void;
 }
 
 function CurrentSemesterLectureList({
   semesterKey,
   filter,
   myLectures,
-  addMyLecture,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
-  const [selectedTempLecture, setSelectedTempLecture] = useRecoilState(selectedTempLectureSelector);
+  const tempLecture = useTempLecture();
+  const { updateTempLecture } = useTempLectureAction();
+  const { addMyLecture } = useTimetableMutation();
 
   return (
     <LectureTable
@@ -58,8 +58,8 @@ function CurrentSemesterLectureList({
               return true;
             })
         }
-      selectedLecture={selectedTempLecture ?? undefined}
-      onClickRow={(clickedLecture) => ('name' in clickedLecture ? setSelectedTempLecture(clickedLecture) : undefined)}
+      selectedLecture={tempLecture ?? undefined}
+      onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
       onClickLastColumn={
           (clickedLecture) => {
             if ('class_title' in clickedLecture) {
@@ -71,9 +71,9 @@ function CurrentSemesterLectureList({
 
             if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
               showToast('error', '시간이 중복되어 추가할 수 없습니다.');
-              return;
+            } else {
+              addMyLecture(clickedLecture);
             }
-            addMyLecture(clickedLecture);
           }
         }
     >
@@ -94,8 +94,7 @@ function LectureList() {
   const {
     onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef,
   } = useSearch();
-  const { value: semesterFilterValue } = useSelectRecoil(selectedSemesterAtom);
-  const { addMyLecture } = useTimetableMutation();
+  const semester = useSemester();
   const { myLectures } = useMyLectures();
 
   return (
@@ -129,14 +128,13 @@ function LectureList() {
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner size="50" />}>
           <CurrentSemesterLectureList
-            semesterKey={semesterFilterValue}
+            semesterKey={semester}
             filter={{
             // 백엔드 수정하면 제거
               department: departmentFilterValue ?? '전체',
               search: searchValue ?? '',
             }}
             myLectures={myLectures}
-            addMyLecture={addMyLecture}
           />
         </React.Suspense>
       </ErrorBoundary>
