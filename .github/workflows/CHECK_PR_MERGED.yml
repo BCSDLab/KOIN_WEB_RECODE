@@ -17,6 +17,7 @@ jobs:
           script: |
             const prUrl = context.payload.pull_request.html_url ?? context.payload.pull_request._links.html.href;
             core.setOutput('pullRequestLink', JSON.stringify(prUrl));
+
       - name: Send Slack Trigger
         run: |
           curl -X POST https://api-slack.internal.bcsdlab.com/api/pr-merged/frontend \
@@ -24,8 +25,17 @@ jobs:
           -d '{
                 "pullRequestLink": ${{ steps.check_pr_merged.outputs.pullRequestLink }}
               }'
-      - name: Delete Local Branch
+
+      - name: Get branch names
+        id: get_branch_name
         run: |
-          git branch -d ${{ github.ref_name }} \
-          git push origin --delete ${{ github.ref_name }} \
-          console.log(${{ steps.check_pr_merged.outputs }})
+          baseBranch=${{ github.event.pull_request.base.ref }}
+          headBranch=${{ github.event.pull_request.head.ref }}
+          echo "::set-output name=baseBranch::${baseBranch}"
+          echo "::set-output name=headBranch::${headBranch}"
+
+      - name: Delete Branch
+        if: ${{ steps.get_branch_name.outputs.baseBranch }} != ${{ steps.get_branch_name.outputs.headBranch }}
+        run: |
+          git checkout ${{ steps.get_branch_name.outputs.baseBranch }}
+          git push origin --delete ${{ steps.get_branch_name.outputs.headBranch }}
