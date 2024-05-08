@@ -20,7 +20,9 @@ export default function AuthenticateUserModal({
 }: AuthenticateUserModalProps) {
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
-  const { mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error } = useCheckPassword();
+  const {
+    mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error, errorMessage,
+  } = useCheckPassword();
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
 
@@ -83,7 +85,7 @@ export default function AuthenticateUserModal({
             {isMobile && isKoinError(error) && (
             <span className={styles['container__mobile-error-message']}>
               <WarningMobileIcon />
-              {error.message}
+              {errorMessage}
             </span>
             )}
             <button
@@ -102,7 +104,7 @@ export default function AuthenticateUserModal({
            && (
            <span className={styles['container__error-message']}>
              <WarningIcon />
-             {error.message}
+             {errorMessage}
            </span>
            )}
       </div>
