@@ -363,7 +363,6 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
           className={cn({
             [styles['form-input']]: true,
             [styles['form-input--half']]: true,
-            [styles['form-input--disabled-value']]: majorFromStudentNumber !== '',
             [styles['form-input--flex-end']]: true,
           })}
           placeholder="학부(자동입력)"
@@ -436,7 +435,6 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         name={name}
         className={cn({
           [styles.select__trigger]: true,
-          [styles['select__trigger--active']]: currentValue !== null,
         })}
       >
         {
