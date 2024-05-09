@@ -9,7 +9,7 @@ export default function useDeleteTimetableLecture(semester: string, authorizatio
 
   return useMutation({
     mutationFn: (
-      data: Parameters<typeof changeTimetableInfoByRemoveLecture>[0],
+      data: Parameters<typeof changeTimetableInfoByRemoveLecture>[1],
     ) => changeTimetableInfoByRemoveLecture(authorization, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [TIMETABLE_INFO_LIST, semester] });
