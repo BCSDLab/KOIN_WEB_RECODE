@@ -190,7 +190,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         })}
         type="password"
         autoComplete="new-password"
-        placeholder="비밀번호 (필수)"
+        placeholder="비밀번호 (선택)"
         onChange={(e) => setPassword(e.target.value)}
         required={required}
         name={name}
@@ -203,7 +203,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         type="password"
         onChange={(e) => setPasswordConfirmValue(e.target.value)}
         autoComplete="new-password"
-        placeholder="비밀번호 확인 (필수)"
+        placeholder="비밀번호 확인 (선택)"
       />
       <span className={styles.modify__advice}>
         비밀번호를 입력하지 않으면 기존 비밀번호를 유지합니다.
