@@ -1,9 +1,5 @@
 .container {
   position: sticky;
-  top: 56px;
-  padding-top: 0;
-  left: 0;
-  right: 0;
   background-color: rgb(255 255 255);
   z-index: 1;
 }
@@ -56,6 +52,7 @@
     cursor: pointer;
 
     &--today {
+      color: #175c8e;
       outline: 1px solid #175c8e;
     }
 
@@ -64,7 +61,7 @@
     }
 
     &--selected {
-      color: #fff;
+      color: #fff !important;
       background-color: #175c8e;
     }
 

@@ -1,35 +1,37 @@
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
-import { myLectureAddLectureSelector, myLectureRemoveLectureSelector, selectedSemesterAtom } from 'utils/recoil/semester';
+import { useLecturesAction } from 'utils/zustand/myLectures';
+import { useSemester } from 'utils/zustand/semester';
 import useAddTimetableLecture from './useAddTimetableLecture';
 import useDeleteTimetableLecture from './useDeleteTimetableLecture';
 
 export default function useTimetableMutation() {
   const token = useTokenState();
-  const selectedSemester = useRecoilValue(selectedSemesterAtom);
+  const semester = useSemester();
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
-  const addLectureToLocalStorage = useSetRecoilState(myLectureAddLectureSelector);
-  const removeLectureFromLocalStorage = useSetRecoilState(myLectureRemoveLectureSelector);
-  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(selectedSemester, token);
+  const {
+    addLecture: addLectureFromLocalStorage,
+    removeLecture: removeLectureFromLocalStorage,
+  } = useLecturesAction();
+  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(semester, token);
 
   const addMyLecture = (clickedLecture: LectureInfo) => {
-    if (token) {
+    if (token && clickedLecture) {
       mutateAddWithServer({
-        semester: selectedSemester,
+        semester,
         timetable: [{ class_title: clickedLecture.name, ...clickedLecture }],
       });
     } else {
-      addLectureToLocalStorage(clickedLecture);
+      addLectureFromLocalStorage(clickedLecture, semester);
     }
   };
 
   const removeMyLecture = (clickedLecture: LectureInfo | TimetableLectureInfo) => {
     if ('name' in clickedLecture) {
-      removeLectureFromLocalStorage(clickedLecture);
-      return;
+      removeLectureFromLocalStorage(clickedLecture, semester);
+    } else {
+      removeLectureFromServer(clickedLecture.id);
     }
-    removeLectureFromServer(clickedLecture.id.toString());
   };
 
   return { addMyLecture, removeMyLecture };

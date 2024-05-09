@@ -1,13 +1,13 @@
-import { useRecoilValue } from 'recoil';
 import useTokenState from 'utils/hooks/useTokenState';
-import { myLecturesAtom, selectedSemesterAtom } from 'utils/recoil/semester';
+import { useLecturesState } from 'utils/zustand/myLectures';
+import { useSemester } from 'utils/zustand/semester';
 import useTimetableInfoList from './useTimetableInfoList';
 
 export default function useMyLectures() {
   const token = useTokenState();
-  const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const myLecturesFromLocalStorageValue = useRecoilValue(myLecturesAtom);
-  const { data: myLecturesFromServer } = useTimetableInfoList(selectedSemester, token);
+  const semester = useSemester();
+  const myLecturesFromLocalStorageValue = useLecturesState();
+  const { data: myLecturesFromServer } = useTimetableInfoList(semester, token);
 
   const myLectures = token ? (myLecturesFromServer ?? []) : (myLecturesFromLocalStorageValue ?? []);
 
