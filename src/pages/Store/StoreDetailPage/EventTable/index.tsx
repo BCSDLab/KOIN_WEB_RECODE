@@ -16,7 +16,7 @@ export default function EventTable() {
         ))
         : (
           <div className={styles['event-default-img-container']}>
-            <img className={styles['event-default-img']} src="https://static.koreatech.in/assets/img/shop-event-tab-default-img.png" alt="기술적 오류 발생" />
+            <img className={styles['event-default-img']} src="https://static.koreatech.in/assets/img/shop-event-tab-default-img.png" alt="기본이미지" />
             <div className={styles['event-default-text']}>사장님이 이벤트를 준비 중입니다.</div>
           </div>
         )}
