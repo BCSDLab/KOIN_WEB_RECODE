@@ -5,9 +5,9 @@ import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg
 import showToast from 'utils/ts/showToast';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
-import { useRecoilValue } from 'recoil';
-import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import { useSemester } from 'utils/zustand/semester';
+import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from './MobilePage.module.scss';
 import SemesterListbox from '../components/MyLectureTimetable/SemesterListbox';
 import Timetable from '../../../components/TimetablePage/Timetable';
@@ -26,15 +26,15 @@ function MobilePage() {
     });
     onTimetableImageDownload('my-timetable');
   };
-  const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const selectedLecture = useRecoilValue(selectedTempLectureSelector);
-  const { data: lectureList } = useLectureList(selectedSemester);
+  const semester = useSemester();
+  const tempLecture = useTempLecture();
+  const { data: lectureList } = useLectureList(semester);
   const similarSelectedLecture = lectureList
-    ?.filter((lecture) => lecture.code === selectedLecture?.code)
+    ?.filter((lecture) => lecture.code === tempLecture?.code)
     ?? [];
 
   const selectedLectureIndex = similarSelectedLecture
-    .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
+    .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
 

@@ -3,9 +3,9 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
 import useImageDownload from 'utils/hooks/useImageDownload';
-import { useRecoilValue } from 'recoil';
-import { selectedSemesterAtom, selectedTempLectureSelector } from 'utils/recoil/semester';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import { useSemester } from 'utils/zustand/semester';
+import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from '../../DefaultPage/DefaultPage.module.scss';
 import SemesterListbox from './SemesterListbox';
 import Timetable from '../../../../components/TimetablePage/Timetable';
@@ -14,15 +14,16 @@ import useMyLectures from '../../hooks/useMyLectures';
 
 export default function MyLectureTimetable() {
   const { myLectures } = useMyLectures();
+
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
-  const selectedSemester = useRecoilValue(selectedSemesterAtom);
-  const selectedLecture = useRecoilValue(selectedTempLectureSelector);
-  const { data: lectureList } = useLectureList(selectedSemester);
+  const semester = useSemester();
+  const tempLecture = useTempLecture();
+  const { data: lectureList } = useLectureList(semester);
   const similarSelectedLecture = lectureList
-    ?.filter((lecture) => lecture.code === selectedLecture?.code)
+    ?.filter((lecture) => lecture.code === tempLecture?.code)
     ?? [];
   const selectedLectureIndex = similarSelectedLecture
-    .findIndex(({ lecture_class }) => lecture_class === selectedLecture?.lecture_class);
+    .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
 
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
