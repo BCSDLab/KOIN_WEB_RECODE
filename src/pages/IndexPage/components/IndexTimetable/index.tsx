@@ -10,6 +10,7 @@ import { useSelectRecoil } from 'components/TimetablePage/DefaultPage/hooks/useS
 import { useSemesterOptionList } from 'components/TimetablePage/DefaultPage';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
@@ -43,6 +44,8 @@ export default function IndexTimeTable() {
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
   const semesterOptionList = useSemesterOptionList();
+  const logger = useLogger();
+
   React.useEffect(() => {
     onChangeSemesterSelect({ target: { value: semesterOptionList[0].value } });
   // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
@@ -51,12 +54,31 @@ export default function IndexTimeTable() {
 
   return (
     <div className={styles.template}>
-      <Link to="/timetable" className={styles.title}>
+      <Link
+        to="/timetable"
+        className={styles.title}
+        onClick={() => {
+          logger.actionEventClick({
+            actionTitle: 'USER',
+            title: 'entry_text_timetable',
+            value: '시간표 텍스트 진입',
+          });
+        }}
+      >
         시간표
       </Link>
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner className={styles['template__loading-spinner']} />}>
-          <Link to="/timetable">
+          <Link
+            to="/timetable"
+            onClick={() => {
+              logger.actionEventClick({
+                actionTitle: 'USER',
+                title: 'entry_table_timetable',
+                value: '시간표 테이블 진입',
+              });
+            }}
+          >
             <CurrentSemesterTimetable />
           </Link>
         </React.Suspense>
