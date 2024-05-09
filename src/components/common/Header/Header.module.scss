@@ -258,6 +258,13 @@
     }
   }
 
+  &__my-info-button {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
   &__link {
     margin-right: 15px;
     font-size: 15px;

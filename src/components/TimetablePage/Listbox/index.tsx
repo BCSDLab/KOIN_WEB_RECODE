@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './Listbox.module.scss';
 
 export interface ListboxRef {
@@ -17,6 +18,7 @@ export interface ListboxProps {
   value: string | null;
   mobileSize?: 'small' | 'medium';
   onChange: (event: { target: ListboxRef }) => void;
+  logTitle?: string;
 }
 
 function Listbox({
@@ -24,13 +26,26 @@ function Listbox({
   value,
   mobileSize = 'medium',
   onChange,
+  logTitle = '',
 }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const logger = useLogger();
+  const handleLogClick = (optionValue: string) => {
+    if (logTitle === 'select_dept') {
+      logger.actionEventClick({ actionTitle: 'USER', title: 'select_dept', value: optionValue });
+      return;
+    }
+    if (logTitle === 'select_semester') {
+      logger.actionEventClick({ actionTitle: 'USER', title: 'select_semester', value: optionValue });
+    }
+  };
+
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
     onChange({ target: { value: optionValue ?? '' } });
+    handleLogClick(optionValue ?? '');
     closePopup();
   };
   const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
@@ -94,7 +109,9 @@ function Listbox({
 }
 
 Listbox.defaultProps = {
+  logTitle: '',
   mobileSize: 'medium',
+
 };
 
 export default Listbox;
