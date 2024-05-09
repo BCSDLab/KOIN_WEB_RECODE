@@ -7,23 +7,23 @@ import { auth } from 'api';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
-import { useTokenStore } from 'utils/zustand';
 import { useMutation } from '@tanstack/react-query';
+import { useTokenStore } from 'utils/zustand/auth';
 import useLogger from 'utils/hooks/useLogger';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
-  userId: HTMLInputElement | null
-  password: HTMLInputElement | null
+  userId: HTMLInputElement | null;
+  password: HTMLInputElement | null;
 }
 
 interface IsAutoLogin {
-  isAutoLoginFlag: boolean
+  isAutoLoginFlag: boolean;
 }
 
 interface UserInfo {
-  userId: string
-  password: string
+  userId: string;
+  password: string;
 }
 
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
@@ -101,14 +101,18 @@ function LoginPage() {
     <div className={styles.template}>
       <form className={styles.loginform} onSubmit={onSubmit}>
         <input
-          ref={(inputRef) => { loginRef.current.userId = inputRef; }}
+          ref={(inputRef) => {
+            loginRef.current.userId = inputRef;
+          }}
           className={styles['form-input']}
           autoComplete="username"
           name="userId"
           placeholder="아이디를 입력하세요"
         />
         <input
-          ref={(inputRef) => { loginRef.current.password = inputRef; }}
+          ref={(inputRef) => {
+            loginRef.current.password = inputRef;
+          }}
           className={styles['form-input']}
           type="password"
           autoComplete="current-password"
@@ -167,10 +171,8 @@ function LoginPage() {
       </div>
       <span className={styles.template__copyright}>
         COPYRIGHT ⓒ&nbsp;
-        {
-            new Date().getFullYear()
-          }
-          &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
+        {new Date().getFullYear()}
+        &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
       </span>
     </div>
   );

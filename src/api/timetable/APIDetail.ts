@@ -82,12 +82,12 @@ implements APIRequest<R> {
   auth = true;
 
   params: {
-    [index: string]: string;
+    [index: string]: number;
   };
 
-  constructor(public authorization: string, data: string) {
+  constructor(public authorization: string, id: number) {
     this.params = {
-      id: data,
+      id,
     };
   }
 }
