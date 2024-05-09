@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Link, useLocation, useNavigate, useParams,
+} from 'react-router-dom';
 import CATEGORY, { Category, SubMenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -9,6 +11,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
 import useLogger from 'utils/hooks/useLogger';
 import { useUser } from 'utils/hooks/useUser';
+import * as api from 'api';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -91,6 +94,14 @@ function Header() {
   const logout = useLogout();
   const navigate = useNavigate();
   const logger = useLogger();
+  const params = useParams();
+
+  const backInDetailPage = async () => {
+    if (pathname.includes('/store/') && params) {
+      const response = await api.store.getStoreDetailInfo(params.id!);
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_back_button', value: response.name }); // 상점 내 뒤로가기 버튼 로깅
+    }
+  };
 
   const loggingBusinessShortCut = (title: string) => {
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: title });
@@ -125,7 +136,10 @@ function Header() {
                     [styles.mobileheader__icon]: true,
                   })}
                   type="button"
-                  onClick={() => navigate(-1)}
+                  onClick={() => {
+                    backInDetailPage();
+                    navigate(-1);
+                  }}
                 >
                   <img src="https://static.koreatech.in/assets/img/back-menu.png" alt="go back logo" />
                 </button>
