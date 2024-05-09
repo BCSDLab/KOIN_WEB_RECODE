@@ -47,6 +47,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\
             ["@typescript-eslint/parser", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\
             ["axios", "npm:0.27.2"],\
+            ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
+            ["embla-carousel-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
             ["eslint", "npm:8.56.0"],\
             ["eslint-config-airbnb", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.0.4"],\
             ["eslint-config-airbnb-typescript", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:17.1.0"],\
@@ -8608,6 +8610,83 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["embla-carousel", [\
+        ["npm:8.0.4", {\
+          "packageLocation": "./.yarn/cache/embla-carousel-npm-8.0.4-78f6fb6a5a-c6a05eb5a3.zip/node_modules/embla-carousel/",\
+          "packageDependencies": [\
+            ["embla-carousel", "npm:8.0.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["embla-carousel-autoplay", [\
+        ["npm:8.0.4", {\
+          "packageLocation": "./.yarn/cache/embla-carousel-autoplay-npm-8.0.4-0f90c57dac-8ce5cbdee2.zip/node_modules/embla-carousel-autoplay/",\
+          "packageDependencies": [\
+            ["embla-carousel-autoplay", "npm:8.0.4"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4", {\
+          "packageLocation": "./.yarn/__virtual__/embla-carousel-autoplay-virtual-16b2cf8bcb/0/cache/embla-carousel-autoplay-npm-8.0.4-0f90c57dac-8ce5cbdee2.zip/node_modules/embla-carousel-autoplay/",\
+          "packageDependencies": [\
+            ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
+            ["@types/embla-carousel", null],\
+            ["embla-carousel", null]\
+          ],\
+          "packagePeers": [\
+            "@types/embla-carousel",\
+            "embla-carousel"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["embla-carousel-react", [\
+        ["npm:8.0.4", {\
+          "packageLocation": "./.yarn/cache/embla-carousel-react-npm-8.0.4-5f1cf2e339-af0dacb292.zip/node_modules/embla-carousel-react/",\
+          "packageDependencies": [\
+            ["embla-carousel-react", "npm:8.0.4"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4", {\
+          "packageLocation": "./.yarn/__virtual__/embla-carousel-react-virtual-60bfd0584c/0/cache/embla-carousel-react-npm-8.0.4-5f1cf2e339-af0dacb292.zip/node_modules/embla-carousel-react/",\
+          "packageDependencies": [\
+            ["embla-carousel-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
+            ["@types/react", "npm:18.2.55"],\
+            ["embla-carousel", "npm:8.0.4"],\
+            ["embla-carousel-reactive-utils", "virtual:60bfd0584c1b078dcddec94ff9abbf93ec558d778bababdeff248a8dbfa8ff1cbb64fd9d392d6afc96b07504b72cb77258271a8c052f017d0731160303d4aeea#npm:8.0.4"],\
+            ["react", "npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["embla-carousel-reactive-utils", [\
+        ["npm:8.0.4", {\
+          "packageLocation": "./.yarn/cache/embla-carousel-reactive-utils-npm-8.0.4-a6989e0d47-de99e0606b.zip/node_modules/embla-carousel-reactive-utils/",\
+          "packageDependencies": [\
+            ["embla-carousel-reactive-utils", "npm:8.0.4"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:60bfd0584c1b078dcddec94ff9abbf93ec558d778bababdeff248a8dbfa8ff1cbb64fd9d392d6afc96b07504b72cb77258271a8c052f017d0731160303d4aeea#npm:8.0.4", {\
+          "packageLocation": "./.yarn/__virtual__/embla-carousel-reactive-utils-virtual-b3657faa9d/0/cache/embla-carousel-reactive-utils-npm-8.0.4-a6989e0d47-de99e0606b.zip/node_modules/embla-carousel-reactive-utils/",\
+          "packageDependencies": [\
+            ["embla-carousel-reactive-utils", "virtual:60bfd0584c1b078dcddec94ff9abbf93ec558d778bababdeff248a8dbfa8ff1cbb64fd9d392d6afc96b07504b72cb77258271a8c052f017d0731160303d4aeea#npm:8.0.4"],\
+            ["@types/embla-carousel", null],\
+            ["embla-carousel", "npm:8.0.4"]\
+          ],\
+          "packagePeers": [\
+            "@types/embla-carousel",\
+            "embla-carousel"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["emittery", [\
         ["npm:0.10.2", {\
           "packageLocation": "./.yarn/cache/emittery-npm-0.10.2-aac10498b5-ee3e21788b.zip/node_modules/emittery/",\
@@ -12733,6 +12812,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\
             ["@typescript-eslint/parser", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\
             ["axios", "npm:0.27.2"],\
+            ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
+            ["embla-carousel-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
             ["eslint", "npm:8.56.0"],\
             ["eslint-config-airbnb", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.0.4"],\
             ["eslint-config-airbnb-typescript", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:17.1.0"],\
