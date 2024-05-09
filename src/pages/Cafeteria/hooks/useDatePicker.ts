@@ -49,8 +49,8 @@ export const useDatePicker = () => {
   };
 
   const setDate = (date: Date) => {
-    const newDate = new Date(date);
-    searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
+    const formatedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    searchParams.set(DATE_KEY, formatedDate);
     setSearchParams(searchParams, {
       replace: true,
     });
