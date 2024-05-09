@@ -23,7 +23,7 @@ export default function EventCarousel() {
       setAnimation(true);
       setCurrentIndex((prevIndex) => (prevIndex === newCarouselList.length - 1
         ? 0 : prevIndex + 1));
-    }, 10000);
+    }, 3000);
 
     return () => {
       clearInterval(slideTime);

@@ -28,11 +28,14 @@ export default function EventCard({ event }: { event: StoreEvent }) {
     }
     if (hiddenInfo) {
       return (
-        <img
-          src="https://static.koreatech.in/assets/img/mainlogo2.png"
-          alt="KOIN service logo"
-          className={styles.eventThumbail}
-        />
+        <div className={styles.eventThumbail}>
+          <img
+            src="https://static.koreatech.in/assets/img/mainlogo2.png"
+            alt="KOIN service logo"
+            width="54px"
+            height="50px"
+          />
+        </div>
       );
     }
 
