@@ -83,9 +83,7 @@ function Timetable({
               // eslint-disable-next-line react/no-array-index-key
               key={`value-${index}`}
             >
-              <div>
-                {value}
-              </div>
+              {value}
             </div>
           ))}
           <div style={{ height: `${rowHeight * 2}px` }}>
