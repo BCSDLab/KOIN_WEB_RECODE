@@ -18,6 +18,7 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/useTokenState';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import useLogger from 'utils/hooks/useLogger';
 import useDeptList from './hooks/useDeptList';
 import styles from './DefaultPage.module.scss';
 import useSemester from './hooks/useSemester';
@@ -77,7 +78,7 @@ const useSemesterOptionList = () => {
   return semesterOptionList;
 };
 
-type DecidedListboxProps = Omit<ListboxProps, 'list'>;
+type DecidedListboxProps = Omit<ListboxProps, 'list' | 'logTitle'>;
 
 function DeptListbox({ value, onChange }: DecidedListboxProps) {
   const deptOptionList = useDeptOptionList();
@@ -89,7 +90,7 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Listbox list={deptOptionList} value={value} onChange={onChange} />
+    <Listbox list={deptOptionList} value={value} onChange={onChange} logTitle="select_dept" />
   );
 }
 
@@ -101,7 +102,7 @@ function SemesterListbox({ value, onChange }: DecidedListboxProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Listbox list={semesterOptionList} value={value} onChange={onChange} />
+    <Listbox list={semesterOptionList} value={value} onChange={onChange} logTitle="select_semester" />
   );
 }
 
@@ -271,6 +272,11 @@ function CurrentSemesterTimetable(): JSX.Element {
 
 function Curriculum() {
   const { data: deptList } = useDeptList();
+  const logger = useLogger();
+
+  const handleLogClick = (deptName: string) => {
+    logger.actionEventClick({ actionTitle: 'USER', title: 'curriculum', value: deptName });
+  };
   return (
     <ul className={styles['page__curriculum-list']}>
       {(deptList as unknown as Array<IDept> | undefined ?? []).map((dept) => (
@@ -278,6 +284,7 @@ function Curriculum() {
           <a
             className={styles.page__curriculum}
             href={dept.curriculum_link}
+            onClick={() => handleLogClick(dept.name)}
           >
             {dept.name}
           </a>
@@ -325,6 +332,7 @@ function DefaultPage() {
     value: semesterFilterValue,
     onChangeSelect: onChangeSemesterSelect,
   } = useSelectRecoil(selectedSemesterAtom);
+  const logger = useLogger();
 
   return (
     <>
@@ -338,6 +346,7 @@ function DefaultPage() {
                 className={styles['search-input__input']}
                 placeholder="교과명을 입력하세요."
                 onKeyDown={onKeyDownSearchInput}
+                onClick={() => logger.actionEventClick({ actionTitle: 'USER', title: 'timetable_search', value: '시간표 검색' })}
               />
               <button
                 className={styles['search-input__button']}
@@ -398,6 +407,7 @@ function DefaultPage() {
                       link.click();
                     });
                 });
+                logger.actionEventClick({ actionTitle: 'USER', title: 'timetable_image', value: '시간표 이미지 저장' });
               }}
             >
               <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />

@@ -1,6 +1,8 @@
 import React from 'react';
 import cn from 'utils/ts/classnames';
 import useBooleanState from 'utils/hooks/useBooleanState';
+// import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './Listbox.module.scss';
 
 export interface ListboxRef {
@@ -16,19 +18,33 @@ export interface ListboxProps {
   list: ListItem[];
   value: string | null;
   onChange: (event: { target: ListboxRef }) => void;
+  logTitle?: string;
 }
 
 function Listbox({
   list,
   value,
   onChange,
+  logTitle = '',
 }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const logger = useLogger();
+  const handleLogClick = (optionValue: string) => {
+    if (logTitle === 'select_dept') {
+      logger.actionEventClick({ actionTitle: 'USER', title: 'select_dept', value: optionValue });
+      return;
+    }
+    if (logTitle === 'select_semester') {
+      logger.actionEventClick({ actionTitle: 'USER', title: 'select_semester', value: optionValue });
+    }
+  };
+
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
     onChange({ target: { value: optionValue ?? '' } });
+    handleLogClick(optionValue ?? '');
     closePopup();
   };
   const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
@@ -90,5 +106,9 @@ function Listbox({
     </div>
   );
 }
+
+Listbox.defaultProps = {
+  logTitle: '',
+};
 
 export default Listbox;
