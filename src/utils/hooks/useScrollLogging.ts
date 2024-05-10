@@ -8,7 +8,7 @@ export const useScorllLogging = (
   data: StoreCategoriesResponse | StoreDetailResponse | undefined,
 ) => {
   const [currentHeignt, setCurrentHeight] = useState<number>(window.scrollY);
-  const { params } = useParamsHandler();
+  const { params, searchParams } = useParamsHandler();
   const logger = useLogger();
   const onScroll = () => setCurrentHeight(window.scrollY);
 
@@ -21,10 +21,10 @@ export const useScorllLogging = (
         logger.actionEventClick({ actionTitle: 'BUSINESS', title, value: `search in ${data.name}` });
       }
       if ('total_count' in data) {
-        const currentCategoryId = Number(params.category);
-        logger.actionEventClick({ actionTitle: 'BUSINESS', title, value: `search in ${data.shop_categories[currentCategoryId].name}` });
+        const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
+        logger.actionEventClick({ actionTitle: 'BUSINESS', title, value: `search in ${data.shop_categories[currentCategoryId]?.name}` });
       }
     }
     return () => window.removeEventListener('scroll', onScroll); // 웹 사이트 높이의 70퍼센트를 넘을 때 로깅
-  }, [currentHeignt, logger, data, params.category, title]);
+  }, [currentHeignt, logger, data, params.category, title, searchParams]);
 };
