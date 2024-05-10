@@ -53,7 +53,7 @@ export default function MyLectureTimetable() {
               columnWidth={55}
               firstColumnWidth={52}
               rowHeight={21}
-              totalHeight={456}
+              totalHeight={453}
             />
           </React.Suspense>
         </ErrorBoundary>
