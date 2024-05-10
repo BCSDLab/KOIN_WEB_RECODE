@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Link, useLocation, useNavigate, useParams,
+} from 'react-router-dom';
 import CATEGORY, { Category, SubMenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLogout } from 'utils/hooks/useLogout';
-import { userInfoState } from 'utils/recoil/userInfoState';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
 import useLogger from 'utils/hooks/useLogger';
-import { getUser } from 'api/auth';
+import { useUser } from 'utils/hooks/useUser';
+import * as api from 'api';
+import AuthenticateUserModal from 'pages/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -89,23 +91,24 @@ function Header() {
   const token = useTokenState();
   const isLoggedin = !!token;
   const isMain = pathname === '/';
-  const userInfo = useRecoilValue(userInfoState);
-  const setUserInfo = useSetRecoilState(userInfoState);
+  const { data: userInfo } = useUser();
   const logout = useLogout();
   const navigate = useNavigate();
   const logger = useLogger();
+  const params = useParams();
+
+  const backInDetailPage = async () => {
+    if (pathname.includes('/store/') && params) {
+      const response = await api.store.getStoreDetailInfo(params.id!);
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_back_button', value: response.name }); // 상점 내 뒤로가기 버튼 로깅
+    }
+  };
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
   const loggingBusinessShortCut = (title: string) => {
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: title });
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger_timetable', value: `햄버거 ${title}` });
   };
-
-  useEffect(() => {
-    if (token) {
-      getUser(token).then((response) => {
-        setUserInfo(response);
-      });
-    }
-  }, [token, setUserInfo]);
 
   const handleHamburgerClick = () => {
     expandSidebar();
@@ -114,6 +117,11 @@ function Header() {
       title: 'hamburger',
       value: '햄버거',
     });
+  };
+
+  const openMobileAuthenticateUserModal = () => {
+    hideSidebar();
+    openModal();
   };
 
   return (
@@ -136,7 +144,10 @@ function Header() {
                     [styles.mobileheader__icon]: true,
                   })}
                   type="button"
-                  onClick={() => navigate(-1)}
+                  onClick={() => {
+                    backInDetailPage();
+                    navigate(-1);
+                  }}
                 >
                   <img src="https://static.koreatech.in/assets/img/back-menu.png" alt="go back logo" />
                 </button>
@@ -195,9 +206,9 @@ function Header() {
                       {isLoggedin ? (
                         <>
                           <li className={styles['mobileheader__my-info']}>
-                            <Link to="/auth/modifyinfo">
+                            <button type="button" onClick={openMobileAuthenticateUserModal} className={styles['mobileheader__my-info-button']}>
                               정보 수정
-                            </Link>
+                            </button>
                           </li>
                           <li className={styles.mobileheader__link}>
                             <button type="button" onClick={logout}>
@@ -254,6 +265,7 @@ function Header() {
                             >
                               <Link
                                 to={subMenu.link}
+                                target={subMenu.openInNewTab ? '_blank' : '_self'}
                                 onClick={() => loggingBusinessShortCut(subMenu.title)}
                               >
                                 {subMenu.title}
@@ -367,9 +379,9 @@ function Header() {
               ) : (
                 <>
                   <li className={styles['header__auth-link']}>
-                    <Link to="/auth/modifyinfo">
+                    <button type="button" className={styles['header__auth-button']} onClick={openModal}>
                       정보수정
-                    </Link>
+                    </button>
                   </li>
                   <li className={styles['header__auth-link']}>
                     <button onClick={logout} type="button" className={styles['header__auth-button']}>
@@ -381,8 +393,12 @@ function Header() {
             </ul>
           </>
         )}
-
       </nav>
+      {isModalOpen && (
+        <AuthenticateUserModal
+          onClose={closeModal}
+        />
+      )}
     </header>
   );
 }

@@ -1,5 +1,5 @@
 import { Suspense, useState } from 'react';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import { BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/useLogger';

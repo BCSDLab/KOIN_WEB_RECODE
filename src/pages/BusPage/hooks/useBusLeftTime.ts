@@ -1,7 +1,5 @@
+import { useQueries } from '@tanstack/react-query';
 import { getBusInfo } from 'api/bus';
-import { BusResponse } from 'api/bus/entity';
-import { AxiosError } from 'axios';
-import { QueryOptions, useQueries } from 'react-query';
 import { BUS_TYPES } from 'static/bus';
 
 const BUS_KEY = 'bus_info';
@@ -23,18 +21,16 @@ const emptyRouteData = {
 } as const;
 
 const useBusLeftTIme = ({ departList, arrivalList }: Props) => {
-  const queries = BUS_TYPES.map<QueryOptions<BusResponse, AxiosError, BusResponse, string[]>>(
-    ({ key: type }, idx) => ({
+  const results = useQueries({
+    // 이부분에서 suspense: true를 했던 이유를 모르겠습니다. v5의 경우 suspense에서 keepPreviousData를 사용할 수 없다고 합니다.
+    queries: BUS_TYPES.map(({ key: type }, idx) => ({
       queryKey: [BUS_KEY, type, departList[idx], arrivalList[idx]],
-      queryFn: ({ queryKey: [, busType, depart, arrival] }) => getBusInfo(busType, depart, arrival),
+      queryFn: () => getBusInfo(type, departList[idx], arrivalList[idx]),
       refetchInterval: 60000,
       staleTime: 60000,
-      suspense: true,
       keepPreviousData: true,
-    }),
-  );
-
-  const results = useQueries(queries);
+    })),
+  });
 
   return {
     data: results.map((result) => {

@@ -21,13 +21,21 @@
     color: #b5c1cd;
   }
 
-  &--invalid {
-    border: 2px solid red;
+  &__select {
+    width: 192px;
+    height: 45px;
+    font-size: 15px;
+    margin-bottom: 12px;
+    order: 99;
+
+    @include media.media-breakpoint(mobile) {
+      width: 155px;
+      height: 36px;
+    }
   }
 
-  &--disabled-value:disabled {
-    background-color: #175c8e;
-    color: #fff;
+  &--invalid {
+    border: 2px solid red;
   }
 
   @include media.media-breakpoint(mobile) {
@@ -93,11 +101,6 @@
       height: 17px;
       content: "";
     }
-
-    &--active {
-      background-color: #175c8e;
-      color: #fff;
-    }
   }
 
   &__content {
@@ -120,8 +123,7 @@
     border: 1px solid #d2dae2;
 
     &:hover {
-      background-color: #175c8e;
-      color: #fff;
+      font-weight: 700;
     }
 
     @include media.media-breakpoint(mobile) {

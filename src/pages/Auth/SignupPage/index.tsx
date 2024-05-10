@@ -1,12 +1,12 @@
-import React, { useImperativeHandle } from 'react';
+import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
-import cn from 'utils/ts/classnames';
+import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { koin, privacy } from 'static/terms';
-import { DeptListResponse, IDept } from 'api/dept/entity';
-import sha256 from 'utils/ts/SHA-256';
 import useLogger from 'utils/hooks/useLogger';
+import LoadingSpinner from 'components/common/LoadingSpinner';
+import Listbox from 'components/TimetablePage/Listbox';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
@@ -204,20 +204,16 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
   const [studentNumber, setStudentNumber] = React.useState<string>('');
   const { data: deptList } = useDeptList();
+  const deptOptionList = deptList.map((dept) => ({
+    label: dept.name,
+    value: dept.name,
+  }));
+  const [major, setMajor] = React.useState<string>(deptOptionList[0].value);
 
   const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
     setStudentNumber(target?.value ?? '');
   };
-  const majorNumber = studentNumber && studentNumber.length >= 8 && studentNumber.length <= 10
-    ? studentNumber?.slice(studentNumber.length - 5, studentNumber.length - 3)
-    : '';
-  const majorFromStudentNumber = studentNumber && studentNumber.length >= 8
-  && studentNumber.length <= 10 && Array.isArray(deptList as DeptListResponse)
-    // as unknown as ~를 써야 하는 이유: Response가 Array<IDept>로 주어진다.
-    ? (deptList as unknown as Array<IDept>)?.find(
-      (deptValue) => deptValue.dept_nums.find((deptNum) => (deptNum === majorNumber)),
-    )?.name ?? '' : '';
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = '오류가 발생했습니다';
@@ -230,19 +226,19 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     const year = parseInt(studentNumber.slice(0, 4), 10);
     if (year < 1992 || year > new Date().getFullYear()) {
       valid = '올바른 입학년도가 아닙니다.';
-    } else if (majorFromStudentNumber === '') {
-      valid = '올바른 학부코드가 아닙니다.';
+    } else if (studentNumber.length !== 10) {
+      valid = '학번은 10자리여야 합니다.';
     } else {
       valid = true;
     }
     return {
       value: {
         studentNumber,
-        major: majorFromStudentNumber,
+        major,
       },
       valid,
     };
-  }, [studentNumber, majorFromStudentNumber]);
+  }, [studentNumber, major]);
   return (
     <>
       <input
@@ -252,17 +248,13 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
         onChange={onChangeMajorInput}
         {...props}
       />
-      <input
-        className={cn({
-          [styles['form-input']]: true,
-          [styles['form-input--half']]: true,
-          [styles['form-input--disabled-value']]: majorFromStudentNumber !== '',
-          [styles['form-input--flex-end']]: true,
-        })}
-        placeholder="학부(자동입력)"
-        value={majorFromStudentNumber}
-        disabled
-      />
+      <div className={styles['form-input__select']}>
+        <Listbox
+          list={deptOptionList}
+          value={major}
+          onChange={({ target }) => setMajor(target.value)}
+        />
+      </div>
     </>
   );
 });
@@ -465,7 +457,7 @@ const useSignupForm = () => {
   return { submitForm, status };
 };
 
-function SignupPage() {
+function SignupDefaultPage() {
   const { status, submitForm } = useSignupForm();
   const { register, onSubmit: onSubmitSignupForm } = useLightweightForm(submitForm);
   const logger = useLogger();
@@ -532,7 +524,7 @@ function SignupPage() {
         <TermsCheckboxes {...register('terms', { required: true })} />
         <button
           type="submit"
-          disabled={status === 'loading'}
+          disabled={status === 'pending'}
           className={cn({
             [styles.signup__button]: true,
             [styles['signup__button--flex-end']]: true,
@@ -562,6 +554,14 @@ function SignupPage() {
         </span>
       </div>
     </>
+  );
+}
+
+function SignupPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner size="50px" />}>
+      <SignupDefaultPage />
+    </Suspense>
   );
 }
 

@@ -1,8 +1,7 @@
-import React, { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 import {
   Routes,
   Route,
-  Navigate,
 } from 'react-router-dom';
 import AuthPage from 'pages/Auth/AuthPage';
 import LoginPage from 'pages/Auth/LoginPage';
@@ -21,10 +20,10 @@ import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
 import TimetablePage from 'pages/TimetablePage';
-import CafeteriaPage from 'pages/Cafeteria/CafeteriaPage';
+import CafeteriaPage from 'pages/Cafeteria';
 import MetaHelmet from 'components/common/MetaHelmet';
-import useTokenState from 'utils/hooks/useTokenState';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
+import PrivateRoute from 'components/common/PrivateRoute';
 
 interface PageWrapperProps {
   title: string;
@@ -41,9 +40,8 @@ function HelmetWrapper({ title, element }: PageWrapperProps) {
 }
 
 function App() {
-  const token = useTokenState();
   return (
-    <Suspense fallback={null}>
+    <>
       <Routes>
         <Route path="/" element={<BoardPage />}>
           <Route path="timetable" element={<HelmetWrapper title="코인 - 시간표" element={<TimetablePage />} />} />
@@ -59,18 +57,18 @@ function App() {
           <Route path="/room" element={<HelmetWrapper title="코인 - 복덕방" element={<RoomPage />} />} />
           <Route path="/room/:id" element={<HelmetWrapper title="코인 - 복덕방 상세" element={<RoomDetailPage />} />} />
         </Route>
-        <Route path="auth" element={token ? <Navigate replace to="/" /> : <AuthPage />}>
+        <Route path="auth" element={<PrivateRoute requireAuthentication={false} element={<AuthPage />} />}>
           <Route index element={<HelmetWrapper title="코인 - 로그인" element={<LoginPage />} />} />
           <Route path="signup" element={<HelmetWrapper title="코인 - 회원가입" element={<SignupPage />} />} />
           <Route path="findpw" element={<HelmetWrapper title="코인 - 비밀번호 찾기" element={<FindPasswordPage />} />} />
         </Route>
         <Route path="auth" element={<AuthPage />}>
-          <Route path="modifyInfo" element={token ? <HelmetWrapper title="코인 - 유저 정보변경" element={<ModifyInfoPage />} /> : <Navigate replace to="/" />} />
+          <Route path="modifyInfo" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보변경" element={<ModifyInfoPage />} />} />} />
         </Route>
       </Routes>
       <Toast />
       <LogPage />
-    </Suspense>
+    </>
   );
 }
 

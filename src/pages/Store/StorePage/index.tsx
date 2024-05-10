@@ -1,15 +1,20 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
-import cn from 'utils/ts/classnames';
+
+import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useLogger from 'utils/hooks/useLogger';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
+import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
+import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
+
+import { useScorllLogging } from 'utils/hooks/useScrollLogging';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
+import EventCarousel from './components/EventCarousel';
 
 type StoreSearchQueryType = {
   storeName?: string;
@@ -45,9 +50,14 @@ const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
 };
 
 const useStoreList = (params: StoreSearchQueryType) => {
-  const { data: storeList } = useQuery('storeList', api.store.getStoreList, {
-    retry: 0,
-  });
+  const { data: storeList } = useQuery(
+    {
+      queryKey: ['storeList', params],
+      queryFn: api.store.getStoreList,
+      retry: 0,
+    },
+  );
+
   const selectedCategory = Number(params.category);
 
   return storeList?.shops.filter((store) => {
@@ -75,26 +85,7 @@ const useStoreList = (params: StoreSearchQueryType) => {
 const getOpenCloseTime = (open_time: string | null, close_time: string | null) => {
   if (open_time === null && close_time === null) return '운영정보없음';
   if (open_time === '00:00' && close_time === '00:00') return '24시간 운영';
-
   return `${open_time}~${close_time}`;
-};
-
-const isStoreOpen = (open_time: string | null, close_time: string | null) => {
-  if (open_time === null || close_time === null) return false;
-  if (open_time === '00:00' && close_time === '00:00') return false;
-
-  const date = new Date();
-  const openTimeNum = Number(open_time.replace(':', ''));
-  const closeTimeNum = Number(close_time.replace(':', ''));
-  const nowTimeNum = date.getHours() * 100 + date.getMinutes();
-
-  if (openTimeNum > closeTimeNum ? (
-    nowTimeNum >= openTimeNum || nowTimeNum < closeTimeNum
-  ) : (
-    nowTimeNum >= openTimeNum && nowTimeNum < closeTimeNum
-  )) return false;
-
-  return true;
 };
 
 function StorePage() {
@@ -111,6 +102,7 @@ function StorePage() {
     }
   };
   useScrollToTop();
+  useScorllLogging('shpp_categories', categories);
 
   return (
     <div className={styles.section}>
@@ -118,7 +110,7 @@ function StorePage() {
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
-          {categories?.shop_categories.slice(0, 9).map((category) => (
+          {categories?.shop_categories.map((category) => (
             <button
               className={cn({
                 [styles.category__menu]: true,
@@ -129,7 +121,7 @@ function StorePage() {
               type="button"
               onClick={() => {
                 logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
-                setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true });
+                setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}
             >
@@ -157,13 +149,15 @@ function StorePage() {
               });
             }
           }}
+          onFocus={() => {
+            const currentCategoryId = Number(params.category); // 검색창에 포커스되면 로깅
+            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name} ` });
+          }}
         />
         <button
           className={styles.search_bar__icon}
           type="button"
           onClick={() => {
-            const currentCategoryId = Number(params.category);
-            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
             setParams('storeName', storeRef.current?.value ?? '', {
               deleteBeforeParam: searchParams.get('storeName') === undefined,
               replacePage: true,
@@ -210,6 +204,7 @@ function StorePage() {
         </div>
       </div>
       {isMobile && <div className={styles['store-mobile-header']}>상점목록</div>}
+      <EventCarousel />
       <div className={styles['store-list']}>
         {storeList?.map((store) => (
           <Link
@@ -218,10 +213,21 @@ function StorePage() {
             key={store.id}
             onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}
           >
-            {isStoreOpen(
-              store.open[getDayOfWeek()].open_time,
-              store.open[getDayOfWeek()].close_time,
-            ) && <div className={styles['store-none-open']} />}
+            {store.is_event
+              && store.is_open
+              && (
+                <div className={styles['store-list__item--event']}>
+                  이벤트
+                  <EventIcon />
+                </div>
+              )}
+            {!store.is_open
+              && (
+                <div className={styles['store-none-open']}>
+                  <span className={styles['store-none-open__name']}>{store.name}</span>
+                  은 준비 중입니다.
+                </div>
+              )}
             <div className={styles['store-list__title']}>{store.name}</div>
             <div className={styles['store-list__phone']}>
               전화번호
@@ -230,7 +236,7 @@ function StorePage() {
             <div className={styles['store-list__open-time']}>
               운영시간
               <span>
-                {getOpenCloseTime(
+                {store.open[getDayOfWeek()] && getOpenCloseTime(
                   store.open[getDayOfWeek()].open_time,
                   store.open[getDayOfWeek()].close_time,
                 )}

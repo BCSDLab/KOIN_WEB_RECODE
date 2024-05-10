@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import useBusLeftTIme from 'pages/BusPage/hooks/useBusLeftTime';
 import { BUS_DIRECTIONS, BUS_TYPES } from 'static/bus';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import { getLeftTimeString, getStartTimeString, directionToEnglish } from 'pages/BusPage/ts/busModules';
 import useLogger from 'utils/hooks/useLogger';
 import styles from './IndexBus.module.scss';

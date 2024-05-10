@@ -26,12 +26,6 @@
     border: 1px solid #d2dae2;
     cursor: pointer;
 
-    @include media.media-breakpoint(mobile) {
-      width: 155px;
-      font-size: 14px;
-      height: 36px;
-    }
-
     &::after {
       position: absolute;
       top: 9px;
@@ -40,6 +34,15 @@
       width: 24px;
       height: 24px;
       content: "";
+    }
+
+    @include media.media-breakpoint(mobile) {
+      height: 36px;
+
+      &::after {
+        top: 5px;
+        right: 5px;
+      }
     }
   }
 

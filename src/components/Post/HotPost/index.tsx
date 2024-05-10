@@ -1,12 +1,8 @@
 import { Link } from 'react-router-dom';
 import { HotPostResponse } from 'api/notice/entity';
-import { KoinError } from 'interfaces/APIError';
+import useHotArticleList from 'pages/Notice/NoticePage/hooks/useHotArticle';
 import useLogger from 'utils/hooks/useLogger';
 import styles from './HotPost.module.scss';
-
-interface HotPostProps {
-  hotArticleList: HotPostResponse[] & KoinError
-}
 
 const LINK_LIST = [
   {
@@ -35,8 +31,8 @@ const LINK_LIST = [
   },
 ];
 
-function HotPost(HotPostList: HotPostProps) {
-  const { hotArticleList } = HotPostList;
+function HotPost() {
+  const hotArticleList = useHotArticleList();
   const logger = useLogger();
 
   return (

@@ -1,7 +1,7 @@
 import type { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import { FixedSizeList as List } from 'react-window';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
@@ -62,14 +62,15 @@ function LectureTable({
               key={header.key}
             >
               {header.label}
-              {headerIndex !== LECTURE_TABLE_HEADER.length - 1 && (
+              {/* 내림차순 기능 추가할때 다시 복구 */}
+              {/* {headerIndex !== LECTURE_TABLE_HEADER.length - 1 && (
                 <>
                   <button type="button" className={styles.table__button}>
                     <img src="https://static.koreatech.in/assets/img/ic-arrow-down.png" alt="내림차순" />
                   </button>
                   <div className={styles.table__resize} aria-hidden />
                 </>
-              )}
+              )} */}
             </div>
           ))}
         </div>

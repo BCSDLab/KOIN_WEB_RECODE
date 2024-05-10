@@ -1,5 +1,5 @@
 import React from 'react';
-import cn from 'utils/ts/classnames';
+import { cn } from '@bcsdlab/utils';
 import useBusDirection from 'pages/BusPage/hooks/useBusDirection';
 import useBusLeftTIme from 'pages/BusPage/hooks/useBusLeftTime';
 import { getBusName, getLeftTimeString, getStartTimeString } from 'pages/BusPage/ts/busModules';

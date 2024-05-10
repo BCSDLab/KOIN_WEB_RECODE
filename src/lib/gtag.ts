@@ -26,4 +26,8 @@ export const event = ({
     event_label: label,
     value,
   });
+  // eslint-disable-next-line no-console
+  console.table({
+    팀: action, '이벤트 Category': category, '이벤트 Title': label, 값: value,
+  });
 };

@@ -6,6 +6,8 @@ const NICKNAME_REGEX = /admin|관리자/;
 
 const useNicknameDuplicateCheck = () => {
   const [nickname, setNickname] = React.useState('');
+  const { data, mutate, status } = useNicknameCheckServer();
+
   const changeTargetNickname = (targetNickname: string) => {
     if (NICKNAME_REGEX.test(targetNickname)) {
       showToast('warning', '사용할 수 없는 닉네임입니다.');
@@ -20,13 +22,13 @@ const useNicknameDuplicateCheck = () => {
       return;
     }
     setNickname(targetNickname);
+    mutate(targetNickname);
   };
-  const { data, error, status } = useNicknameCheckServer(nickname);
 
   return {
     changeTargetNickname,
     data,
-    error,
+    mutate,
     status,
     currentCheckedNickname: nickname,
   };

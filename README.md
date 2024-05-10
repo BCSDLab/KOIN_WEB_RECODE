@@ -12,15 +12,15 @@ Now, We made a service for students.
 
 # Want to Contibute?
 
-See Our [Contribute Guide](./CONTRIBUTE.md).
+See Our [Contribute Guide](./CONTRIBUTE.md). 
 
 ## Want to question?
 
-Make an issue or Contact with this repository leader.
+Make an issue or Contact with this repository leader. 
 
 ### Repository leader
 
-[Hana Kim](https://github.com/hanagertrudekim)
+[Hana Kim](https://github.com/hanagertrudekim) 
 
 # Learn Our Stack
 
