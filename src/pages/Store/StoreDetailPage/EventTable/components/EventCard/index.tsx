@@ -76,7 +76,7 @@ export default function EventCard({ event }: { event: StoreEvent }) {
         >
           <EventContent html={event.content} />
         </div>
-        <div className={styles.date}>{event.start_date.replace(/-/g, '.')}</div>
+        <div className={styles.date}>{`${event.start_date.replace(/-/g, '.')} - ${event.end_date.replace(/-/g, '.')}`}</div>
       </div>
     </div>
   );
