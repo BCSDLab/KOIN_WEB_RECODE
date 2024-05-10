@@ -53,6 +53,7 @@ function ShuttleTimetable() {
 
         <select
           className={styles.timetable__dropdown}
+          value={selectedRoute}
           onChange={handleRouteChange}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable_time', value: timetable.info[selectedRoute].route_name })}
         >
