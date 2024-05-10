@@ -19,11 +19,12 @@ const useSignup = (options: ISignupOption) => {
       if (isKoinError(error)) {
         if (error.status === 409) {
           showToast('error', '이미 가입된 이메일입니다.');
-        } else {
-          const { message } = error;
-          showToast('error', message || '회원가입에 실패했습니다.');
-          sendClientError(error);
+          return;
         }
+        const { message } = error;
+        showToast('error', message || '회원가입에 실패했습니다.');
+        sendClientError(error);
+        return;
       }
       showToast('error', '회원가입에 실패했습니다.');
       sendClientError(error);
