@@ -75,7 +75,8 @@
   text-overflow: ellipsis;
   font-size: 12px;
   line-height: normal;
-  display: box;
+  /* stylelint-disable value-no-vendor-prefix */
+  display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 
