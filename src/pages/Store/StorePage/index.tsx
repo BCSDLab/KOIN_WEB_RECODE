@@ -225,7 +225,7 @@ function StorePage() {
               && (
                 <div className={styles['store-none-open']}>
                   <span className={styles['store-none-open__name']}>{store.name}</span>
-                  은 준비 중입니다.
+                  은/는 준비 중입니다.
                 </div>
               )}
             <div className={styles['store-list__title']}>{store.name}</div>
