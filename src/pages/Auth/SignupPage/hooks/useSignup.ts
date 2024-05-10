@@ -25,6 +25,8 @@ const useSignup = (options: ISignupOption) => {
           sendClientError(error);
         }
       }
+      showToast('error', '회원가입에 실패했습니다.');
+      sendClientError(error);
     },
   });
 
