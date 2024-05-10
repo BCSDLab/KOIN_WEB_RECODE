@@ -83,9 +83,7 @@ function Timetable({
               // eslint-disable-next-line react/no-array-index-key
               key={`value-${index}`}
             >
-              <div>
-                {value}
-              </div>
+              {value}
             </div>
           ))}
           <div style={{ height: `${rowHeight * 2}px` }}>
@@ -111,9 +109,9 @@ function Timetable({
                 key={lectureIndex}
                 style={{
                   backgroundColor: BACKGROUND_COLOR[lectureIndex % 11],
-                  top: `${start * rowHeight}px`,
+                  top: `${start * rowHeight + 1}px`,
                   width: isMobile ? undefined : `${columnWidth}px`,
-                  height: `${(end - start + 1) * rowHeight}px`,
+                  height: `${(end - start + 1) * rowHeight - 1}px`,
                 }}
               >
                 <h4>

@@ -38,11 +38,6 @@
     border: 2px solid red;
   }
 
-  &--disabled-value:disabled {
-    background-color: #175c8e;
-    color: #fff;
-  }
-
   @include media.media-breakpoint(mobile) {
     width: 320px;
     height: 36px;
@@ -106,11 +101,6 @@
       height: 17px;
       content: "";
     }
-
-    &--active {
-      background-color: #175c8e;
-      color: #fff;
-    }
   }
 
   &__content {
@@ -133,8 +123,7 @@
     border: 1px solid #d2dae2;
 
     &:hover {
-      background-color: #175c8e;
-      color: #fff;
+      font-weight: 700;
     }
 
     @include media.media-breakpoint(mobile) {

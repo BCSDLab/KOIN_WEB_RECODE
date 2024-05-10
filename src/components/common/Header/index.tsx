@@ -12,6 +12,7 @@ import { useLogout } from 'utils/hooks/useLogout';
 import useLogger from 'utils/hooks/useLogger';
 import { useUser } from 'utils/hooks/useUser';
 import * as api from 'api';
+import AuthenticateUserModal from 'pages/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import styles from './Header.module.scss';
 
 const ID: { [key: string]: string; } = {
@@ -102,9 +103,11 @@ function Header() {
       logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_back_button', value: response.name }); // 상점 내 뒤로가기 버튼 로깅
     }
   };
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const loggingBusinessShortCut = (title: string) => {
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: title });
+    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger_timetable', value: `햄버거 ${title}` });
   };
 
   const handleHamburgerClick = () => {
@@ -114,6 +117,11 @@ function Header() {
       title: 'hamburger',
       value: '햄버거',
     });
+  };
+
+  const openMobileAuthenticateUserModal = () => {
+    hideSidebar();
+    openModal();
   };
 
   return (
@@ -198,9 +206,9 @@ function Header() {
                       {isLoggedin ? (
                         <>
                           <li className={styles['mobileheader__my-info']}>
-                            <Link to="/auth/modifyinfo">
+                            <button type="button" onClick={openMobileAuthenticateUserModal} className={styles['mobileheader__my-info-button']}>
                               정보 수정
-                            </Link>
+                            </button>
                           </li>
                           <li className={styles.mobileheader__link}>
                             <button type="button" onClick={logout}>
@@ -371,9 +379,9 @@ function Header() {
               ) : (
                 <>
                   <li className={styles['header__auth-link']}>
-                    <Link to="/auth/modifyinfo">
+                    <button type="button" className={styles['header__auth-button']} onClick={openModal}>
                       정보수정
-                    </Link>
+                    </button>
                   </li>
                   <li className={styles['header__auth-link']}>
                     <button onClick={logout} type="button" className={styles['header__auth-button']}>
@@ -385,8 +393,12 @@ function Header() {
             </ul>
           </>
         )}
-
       </nav>
+      {isModalOpen && (
+        <AuthenticateUserModal
+          onClose={closeModal}
+        />
+      )}
     </header>
   );
 }

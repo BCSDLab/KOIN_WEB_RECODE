@@ -3,6 +3,7 @@ import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import useLogger from 'utils/hooks/useLogger';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useSemesterAction } from 'utils/zustand/semester';
@@ -28,6 +29,7 @@ function CurrentSemesterTimetable(): JSX.Element {
 export default function IndexTimeTable() {
   const { updateSemester } = useSemesterAction();
   const semesterOptionList = useSemesterOptionList();
+  const logger = useLogger();
 
   useEffect(() => {
     updateSemester(semesterOptionList[0]?.value);
@@ -36,12 +38,31 @@ export default function IndexTimeTable() {
 
   return (
     <div className={styles.template}>
-      <Link to="/timetable" className={styles.title}>
+      <Link
+        to="/timetable"
+        className={styles.title}
+        onClick={() => {
+          logger.actionEventClick({
+            actionTitle: 'USER',
+            title: 'entry_text_timetable',
+            value: '시간표 텍스트 진입',
+          });
+        }}
+      >
         시간표
       </Link>
       <ErrorBoundary fallbackClassName="loading">
         <Suspense fallback={null}>
-          <Link to="/timetable">
+          <Link
+            to="/timetable"
+            onClick={() => {
+              logger.actionEventClick({
+                actionTitle: 'USER',
+                title: 'entry_table_timetable',
+                value: '시간표 테이블 진입',
+              });
+            }}
+          >
             <CurrentSemesterTimetable />
           </Link>
         </Suspense>
