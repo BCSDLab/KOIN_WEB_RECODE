@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
 import { CustomAxiosError, KoinError } from 'interfaces/APIError';
+import { deleteCookie } from './cookie';
 
 const API_URL = process.env.REACT_APP_API_PATH;
 
@@ -59,7 +60,7 @@ export default class APIClient {
         })
         .catch((err) => {
           const apiError = this.createKoinErrorFromAxiosError(err);
-          // this.errorMiddleware(apiError);
+          this.errorMiddleware(apiError);
           reject(apiError);
         });
     });
@@ -74,17 +75,18 @@ export default class APIClient {
     return data.data;
   }
 
-  // private errorMiddleware(error: CustomError): void {
-  //   // 인증 오류 발생 시 로그인 페이지로 쫓아냄
-  //   // eslint-disable-next-line no-useless-return
-  //   if (error.status === 401) return;
-  // }
+  private errorMiddleware(error: KoinError | CustomAxiosError) {
+    if (error.status === 401) {
+      deleteCookie('AUTH_TOKEN_KEY');
+      window.location.href = '/auth';
+    }
+  }
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
     const { response } = error;
     return response?.status !== undefined
-    && response.data.code !== undefined
-    && response.data.message !== undefined;
+      && response.data.code !== undefined
+      && response.data.message !== undefined;
   }
 
   // error 를 경우에 따라 KoinError와 AxiosError로 반환
