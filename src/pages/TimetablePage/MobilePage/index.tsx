@@ -66,7 +66,7 @@ function MobilePage() {
                 columnWidth={55}
                 firstColumnWidth={52}
                 rowHeight={21}
-                totalHeight={456}
+                totalHeight={439}
               />
             </React.Suspense>
           </ErrorBoundary>
