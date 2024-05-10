@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 
+import { useScorllLogging } from 'utils/hooks/useScrollLogging';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
@@ -101,6 +102,7 @@ function StorePage() {
     }
   };
   useScrollToTop();
+  useScorllLogging('shpp_categories', categories);
 
   return (
     <div className={styles.section}>
@@ -119,7 +121,7 @@ function StorePage() {
               type="button"
               onClick={() => {
                 logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
-                setParams('category', `${category.id}`, { deleteBeforeParam: false, replacePage: true });
+                setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}
             >
@@ -147,13 +149,15 @@ function StorePage() {
               });
             }
           }}
+          onFocus={() => {
+            const currentCategoryId = Number(params.category); // 검색창에 포커스되면 로깅
+            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name} ` });
+          }}
         />
         <button
           className={styles.search_bar__icon}
           type="button"
           onClick={() => {
-            const currentCategoryId = Number(params.category);
-            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
             setParams('storeName', storeRef.current?.value ?? '', {
               deleteBeforeParam: searchParams.get('storeName') === undefined,
               replacePage: true,
