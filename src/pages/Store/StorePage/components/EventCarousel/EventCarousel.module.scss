@@ -2,18 +2,20 @@
 @use "src/utils/scss/media";
 
 .container {
+  overflow: hidden;
+
+  @include media.media-breakpoint(mobile) {
+    width: calc(100% - 32px);
+    margin: 10px auto;
+  }
+}
+
+.swipe {
   display: flex;
-  flex-flow: nowrap;
-  margin: 20px 0 auto;
-  overflow-x: hidden;
-  gap: 29px;
   height: 100px;
 
   @include media.media-breakpoint(mobile) {
-    gap: 0;
-    margin: 20px 16px;
-    width: calc(100vw - 32px);
-    height: 70px;
+    height: 72px;
   }
 }
 
@@ -21,7 +23,12 @@
   border: none;
   background-color: transparent;
   padding: 0;
+  margin: 0 15px;
   cursor: pointer;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 0 16px;
+  }
 
   &__image {
     display: flex;
@@ -31,19 +38,12 @@
       border-radius: 5px;
       width: 358px;
       object-fit: cover;
-
-      @include media.media-breakpoint(mobile) {
-        width: calc(100vw - 32px);
-        margin-right: 32px;
-      }
     }
 
     &::before {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+      width: 358px;
       height: 100%;
       border-radius: 5px;
       background: linear-gradient(
@@ -67,22 +67,18 @@
       margin-top: 10px;
       margin-right: 30px;
     }
-
-    @include media.media-breakpoint(mobile) {
-      width: calc(100vw - 32px);
-      margin-right: 32px;
-    }
   }
 
   &__text {
-    display: flex;
     position: absolute;
-    top: 25px;
-    left: 15px;
-    flex-direction: column;
+    padding-left: 20px;
+    top: 30px;
     font-size: 18px;
     font-weight: 500;
-    width: 50%;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
     @include media.media-breakpoint(mobile) {
       top: 15px;

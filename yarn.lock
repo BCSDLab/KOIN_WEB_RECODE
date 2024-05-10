@@ -5848,6 +5848,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"embla-carousel-autoplay@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "embla-carousel-autoplay@npm:8.0.4"
+  peerDependencies:
+    embla-carousel: 8.0.4
+  checksum: 8ce5cbdee2e65aa4b5530ac4ca188a0cd5485145c6e13cc5758f3fadb7e133c0b6c7c3c910327fa399004db1765c33e4d2f556b359efa6b323eb9d677234b68a
+  languageName: node
+  linkType: hard
+
+"embla-carousel-react@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "embla-carousel-react@npm:8.0.4"
+  dependencies:
+    embla-carousel: 8.0.4
+    embla-carousel-reactive-utils: 8.0.4
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.1 || ^18.0.0
+  checksum: af0dacb2921da9de63827e1163236ef93945593d5e50ca97689b7075537fcc227644da47da1c9f7f4b7d49e55abd55442ba6bd179a83af1515badb8df76c8d29
+  languageName: node
+  linkType: hard
+
+"embla-carousel-reactive-utils@npm:8.0.4":
+  version: 8.0.4
+  resolution: "embla-carousel-reactive-utils@npm:8.0.4"
+  peerDependencies:
+    embla-carousel: 8.0.4
+  checksum: de99e0606b7040e58a208da2774d3a269e567f63ae0ccd1d520b4cccd7515a60036d1f9c434563c640e75ed13b58c82e33d21776a155a80d688c63b67c4027ac
+  languageName: node
+  linkType: hard
+
+"embla-carousel@npm:8.0.4":
+  version: 8.0.4
+  resolution: "embla-carousel@npm:8.0.4"
+  checksum: c6a05eb5a3de7d64e48a160df60f2baf727b5f023595aab96b4be2851ef8b80b1c6036c5c4f668af24de7233f3fe69716ff846f5a372ae9b48c62486b950bae1
+  languageName: node
+  linkType: hard
+
 "emittery@npm:^0.10.2":
   version: 0.10.2
   resolution: "emittery@npm:0.10.2"
@@ -9304,6 +9341,8 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.30.0
     "@typescript-eslint/parser": ^5.30.0
     axios: ^0.27.2
+    embla-carousel-autoplay: ^8.0.4
+    embla-carousel-react: ^8.0.4
     eslint: ^8.18.0
     eslint-config-airbnb: ^19.0.4
     eslint-config-airbnb-typescript: ^17.0.0

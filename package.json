@@ -18,6 +18,8 @@
     "@types/react-query": "^1.2.9",
     "@types/react-window": "^1.8.5",
     "axios": "^0.27.2",
+    "embla-carousel-autoplay": "^8.0.4",
+    "embla-carousel-react": "^8.0.4",
     "file-saver": "^2.0.5",
     "html-react-parser": "^5.1.10",
     "html2canvas": "^1.4.1",

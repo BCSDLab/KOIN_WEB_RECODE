@@ -1,4 +1,6 @@
-.eventCard {
+@use "src/utils/scss/media";
+
+.event-card {
   padding: 10px 0;
   display: flex;
   gap: 16px;
@@ -7,20 +9,30 @@
   &--nonHidden {
     padding: 10px 0;
     display: flex;
-    gap: 16px;
+
+    // gap: 16px;
     flex-direction: column;
   }
 }
 
-.eventThumbail {
-  width: 72px;
-  height: 80px;
+.event-thumbnail {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
   border-radius: 5px;
+  width: 75px;
+  height: 80px;
   transition: height 0.5s ease;
 
   &--nonHidden {
-    width: 100%;
+    margin: 0 auto;
+    width: 30%;
     height: auto;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+    }
   }
 }
 
@@ -54,8 +66,7 @@
   line-height: normal;
 }
 
-/* stylelint-disable value-no-vendor-prefix */
-.eventContent {
+.event-content {
   max-height: 28px;
   max-width: 239px;
   margin-top: 8px;
@@ -64,7 +75,7 @@
   text-overflow: ellipsis;
   font-size: 12px;
   line-height: normal;
-  display: -webkit-box;
+  display: box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 
@@ -73,9 +84,8 @@
     max-height: none;
   }
 }
-/* stylelint-enable value-no-vendor-prefix */
 
-.eventUpdatedAt {
+.date {
   margin-top: 6px;
   color: #8e8e8e;
   font-size: 12px;
@@ -86,7 +96,8 @@
 .default-event-thumbnail-img-container {
   background-color: #f5f5f5;
   border-radius: 5px;
-  width: 100%;
+  width: 50%;
+  margin: 0 auto;
   padding: 77px 44px;
   display: flex;
   justify-content: center;
@@ -94,11 +105,20 @@
   flex-direction: column;
   box-sizing: border-box;
   gap: 5px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+  }
 }
 
 .default-event-thumbnail-img {
-  width: 100%;
+  margin: 0 auto;
+  width: 50%;
   height: auto;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+  }
 }
 
 .default-event-thumbnail-text {
