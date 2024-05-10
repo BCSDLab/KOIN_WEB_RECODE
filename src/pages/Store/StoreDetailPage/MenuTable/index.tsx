@@ -111,7 +111,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                   ))) : (
                     <div className={styles['empty-image']}>
                       <div>
-                        <img width="54px" height="50px" src="https://static.koreatech.in/assets/img/mainlogo2.png" alt="빈 이미지" />
+                        <img width="75px" height="80px" src="https://static.koreatech.in/assets/img/mainlogo2.png" alt="빈 이미지" />
                       </div>
                     </div>
                 )}
