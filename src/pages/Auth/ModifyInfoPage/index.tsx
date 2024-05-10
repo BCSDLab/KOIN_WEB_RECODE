@@ -14,7 +14,6 @@ import { useUser } from 'utils/hooks/useUser';
 import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
-import { prevDeptList } from 'static/dept';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -287,7 +286,6 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
   const [major, setMajor] = React.useState<string>(userInfo?.major || '');
-  const yearOfAdmission = studentNumber.slice(0, 4);
   const deptOptionList = deptList.map((dept) => ({
     label: dept.name,
     value: dept.name,
@@ -297,14 +295,6 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     const { target } = event;
     setStudentNumber(target?.value ?? '');
   };
-  const majorNumber = studentNumber && studentNumber.length >= 8 && studentNumber.length <= 10
-    ? studentNumber?.slice(studentNumber.length - 5, studentNumber.length - 3)
-    : '';
-  const majorFromStudentNumber = studentNumber && studentNumber.length >= 8
-  && studentNumber.length <= 10
-    ? prevDeptList.find(
-      (deptValue) => deptValue.dept_nums.find((deptNum) => (deptNum === majorNumber)),
-    )?.name ?? '' : '';
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = '오류가 발생했습니다';
@@ -317,28 +307,19 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     const year = parseInt(studentNumber.slice(0, 4), 10);
     if (year < 1992 || year > new Date().getFullYear()) {
       valid = '올바른 입학년도가 아닙니다.';
-    } else if (majorFromStudentNumber === '') {
-      valid = '올바른 학부코드가 아닙니다.';
+    } else if (studentNumber.length !== 10) {
+      valid = '학번은 10자리여야 합니다.';
     } else {
       valid = true;
-    }
-    if (year >= 2023) {
-      return {
-        value: {
-          studentNumber,
-          major,
-        },
-        valid,
-      };
     }
     return {
       value: {
         studentNumber,
-        major: majorFromStudentNumber,
+        major,
       },
       valid,
     };
-  }, [studentNumber, majorFromStudentNumber, major]);
+  }, [studentNumber, major]);
   return (
     <>
       <input
@@ -349,27 +330,13 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
         onChange={onChangeMajorInput}
         {...props}
       />
-      {Number(yearOfAdmission) >= 2023 ? (
-        <div className={styles['form-input__select']}>
-          <Listbox
-            list={deptOptionList}
-            value={major}
-            mobileSize="small"
-            onChange={({ target }) => setMajor(target.value)}
-          />
-        </div>
-      ) : (
-        <input
-          className={cn({
-            [styles['form-input']]: true,
-            [styles['form-input--half']]: true,
-            [styles['form-input--flex-end']]: true,
-          })}
-          placeholder="학부(자동입력)"
-          value={majorFromStudentNumber}
-          disabled
+      <div className={styles['form-input__select']}>
+        <Listbox
+          list={deptOptionList}
+          value={major}
+          onChange={({ target }) => setMajor(target.value)}
         />
-      )}
+      </div>
     </>
   );
 });

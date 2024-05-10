@@ -9,42 +9,13 @@
     order: 99;
   }
 
-  &__trigger--medium {
+  &__trigger {
     position: relative;
     width: 100%;
     height: 45px;
     padding: 0 15px;
     box-sizing: border-box;
     background-color: #fff;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: -0.8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid #d2dae2;
-    cursor: pointer;
-
-    &::after {
-      position: absolute;
-      top: 9px;
-      right: 15px;
-      background: no-repeat center/24px 24px url("https://static.koreatech.in/assets/img/ic-arrow-up-down.png");
-      width: 24px;
-      height: 24px;
-      content: "";
-    }
-  }
-
-  &__trigger--small {
-    position: relative;
-    width: 100%;
-    height: 45px;
-    padding: 0 15px;
-    box-sizing: border-box;
-    background-color: #fff;
-    color: black;
     font-size: 15px;
     font-weight: 400;
     line-height: 1.2;
