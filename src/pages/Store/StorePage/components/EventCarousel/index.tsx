@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useGetAllEvents } from 'pages/Store/StorePage/components/hooks/useGetAllEvents';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './EventCarousel.module.scss';
 
 export default function EventCarousel() {
@@ -10,12 +11,22 @@ export default function EventCarousel() {
     { loop: true },
     [Autoplay({ stopOnInteraction: false, delay: 2000 })],
   );
+  const logger = useLogger();
+
+  const eventLogging = (shopName: string) => {
+    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_event', value: `${shopName}` });
+  };
 
   return (
     <div className={styles.container} ref={emblaRef}>
       <div className={styles.swipe}>
         {carouselList && carouselList.map((item) => (
-          <Link to={`${item.shop_id}`} key={item.shop_id} className={styles['swipe-item']}>
+          <Link
+            to={`${item.shop_id}`}
+            key={item.shop_id}
+            className={styles['swipe-item']}
+            onClick={() => eventLogging(item.shop_name)}
+          >
             {item.thumbnail_images.length > 0 ? (
               <div className={styles['swipe-item__image']}>
                 <img src={item.thumbnail_images[0]} alt="가게 이미지" />
