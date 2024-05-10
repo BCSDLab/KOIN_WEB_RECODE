@@ -10,6 +10,7 @@ import useLogger from 'utils/hooks/useLogger';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
+import { useScorllLogging } from 'utils/hooks/useScrollLogging';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
@@ -44,10 +45,17 @@ function StoreDetailPage() {
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
     ));
   };
+  const onClickList = () => {
+    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_list', value: 'shopList' });
+  };
+  const onClickEventList = () => {
+    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_detailView_event', value: `${storeDetail.name}` });
+  };
 
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
+  useScorllLogging('shpp_detailView', storeDetail);
 
   return (
     <div className={styles.template}>
@@ -136,7 +144,10 @@ function StoreDetailPage() {
                   })}
                   aria-label="상점 목록 이동"
                   type="button"
-                  onClick={() => navigate('/store')}
+                  onClick={() => {
+                    onClickList();
+                    navigate('/store');
+                  }}
                 >
                   상점목록
                 </button>
@@ -190,7 +201,10 @@ function StoreDetailPage() {
               [styles['tap__type--active']]: tapType === '이벤트/공지',
             })}
             type="button"
-            onClick={() => setTapType('이벤트/공지')}
+            onClick={() => {
+              onClickEventList();
+              setTapType('이벤트/공지');
+            }}
           >
             이벤트/공지
           </button>
