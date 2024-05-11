@@ -146,7 +146,7 @@ function StoreDetailPage() {
                   type="button"
                   onClick={() => {
                     onClickList();
-                    navigate('/store');
+                    navigate(-1);
                   }}
                 >
                   상점목록
