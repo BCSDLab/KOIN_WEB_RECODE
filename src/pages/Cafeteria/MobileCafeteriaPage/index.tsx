@@ -85,6 +85,7 @@ export default function MobileCafeteriaPage({ mealType, setMealType }: Props) {
                 현재 조회 가능한 식단 정보가 없습니다.
               </div>
           )}
+        <span className={styles.table__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
     </>
   );

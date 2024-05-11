@@ -106,10 +106,11 @@ export default function PCCafeteriaPage({
       <div>
         <DateNavigator />
       </div>
-      <div>
+      <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
           <PCMenuBlocks mealType={mealType} recentDate={recentDate} />
         </Suspense>
+        <span className={styles['pc-menu-blocks__caution']}>식단 정보는 운영 상황에 따라 변동될 수 있습니다.</span>
       </div>
     </div>
   );
