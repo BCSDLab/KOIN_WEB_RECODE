@@ -31,7 +31,6 @@
   min-width: 1148px;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  color: #000;
 
   /* https://css-tricks.com/snippets/css/system-font-stack/ */
   font-family:
@@ -49,4 +48,8 @@
   @include media.media-breakpoint(mobile) {
     min-width: 360px;
   }
+}
+
+a, button {
+  color: #000;
 }
