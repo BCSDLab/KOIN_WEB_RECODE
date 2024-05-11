@@ -55,9 +55,9 @@ function ShuttleTimetable() {
           className={styles.timetable__dropdown}
           value={selectedRoute}
           onChange={handleRouteChange}
-          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable_time', value: timetable.info[selectedRoute].route_name })}
+          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable_time', value: timetable.info.bus_timetables[selectedRoute].route_name })}
         >
-          {timetable.info.map((routeInfo, index) => (
+          {timetable.info.bus_timetables.map((routeInfo, index) => (
             <option key={routeInfo.route_name} value={index}>{routeInfo.route_name}</option>
           ))}
         </select>
@@ -66,9 +66,13 @@ function ShuttleTimetable() {
       <Template
         headers={BUS_TYPES[0].tableHeaders}
         arrivalList={
-          timetable.info[selectedRoute].arrival_info.map((arrival) => Object.values(arrival))
+          timetable.info.bus_timetables[selectedRoute]
+            .arrival_info.map((arrival) => Object.values(arrival))
         }
       />
+      <div className={styles.timetable__date}>
+        {timetable.info.updated_at}
+      </div>
     </div>
   );
 }
@@ -94,8 +98,11 @@ function ExpressTimetable() {
 
       <Template
         headers={BUS_TYPES[1].tableHeaders}
-        arrivalList={timetable.info.map((info) => [info.departure, info.arrival])}
+        arrivalList={timetable.info.bus_timetables.map((info) => [info.departure, info.arrival])}
       />
+      <div className={styles.timetable__date}>
+        {timetable.info.updated_at}
+      </div>
     </div>
   );
 }
@@ -103,11 +110,11 @@ function ExpressTimetable() {
 function CityTimetable() {
   return (
     <>
+      <div className={styles['timetable__citybus-blank']} />
+      <Template headers={BUS_TYPES[2].tableHeaders} arrivalList={CITY_BUS_TIMETABLE} />
       <div className={styles['timetable__citybus-info']}>
         버스번호: 400, 401, 493
       </div>
-
-      <Template headers={BUS_TYPES[2].tableHeaders} arrivalList={CITY_BUS_TIMETABLE} />
     </>
   );
 }
