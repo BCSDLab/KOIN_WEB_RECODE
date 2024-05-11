@@ -7,7 +7,6 @@ import { cn } from '@bcsdlab/utils';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import useLogger from 'utils/hooks/useLogger';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './IndexCafeteria.module.scss';
 
 type CafeteriaType = {
@@ -17,7 +16,6 @@ type CafeteriaType = {
 };
 
 function IndexCafeteria() {
-  const isMobile = useMediaQuery();
   const getType = () => {
     const hour = new Date().getHours();
     if (hour < 9) {
@@ -39,8 +37,9 @@ function IndexCafeteria() {
 
   const handleMoreClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
+
     navigate('/cafeteria');
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
   };
 
   const onClickCafeteriaCorner = (e: React.MouseEvent<HTMLDivElement>, category: CafeteriaType) => {
@@ -57,7 +56,9 @@ function IndexCafeteria() {
     <section className={styles.template}>
       <h2 className={styles.title}>
         <div
-          onClick={(e) => handleMoreClick(e)}
+          onClick={(e) => {
+            handleMoreClick(e);
+          }}
           role="button"
           tabIndex={0}
         >
@@ -65,7 +66,9 @@ function IndexCafeteria() {
         </div>
         <div
           className={styles.moreLink}
-          onClick={(e) => handleMoreClick(e)}
+          onClick={(e) => {
+            handleMoreClick(e);
+          }}
           role="button"
           tabIndex={0}
         >
@@ -95,7 +98,9 @@ function IndexCafeteria() {
         </div>
         <div
           className={styles.menuBox}
-          onClick={(e) => handleMoreClick(e)}
+          onClick={(e) => {
+            handleMoreClick(e);
+          }}
           role="button"
           tabIndex={0}
         >
@@ -111,13 +116,6 @@ function IndexCafeteria() {
           </div>
           <div
             className={styles.menuContainer}
-            onClick={(e) => {
-              if (isMobile) {
-                handleMoreClick(e);
-              }
-            }}
-            role="button"
-            tabIndex={0}
           >
             {선택된_식단 ? 선택된_식단.menu.slice(0, 10).map((menu) => (
               <div className={styles.menu} key={menu}>
