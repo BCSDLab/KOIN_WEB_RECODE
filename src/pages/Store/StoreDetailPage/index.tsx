@@ -27,8 +27,7 @@ function StoreDetailPage() {
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
   const logger = useLogger();
-  const onClickCallNumber = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
+  const onClickCallNumber = () => {
     logger.click({
       title: 'store_detail_call_number',
       value: storeDetail!.phone,
@@ -133,7 +132,7 @@ function StoreDetailPage() {
                   role="button"
                   aria-label="상점 전화하기"
                   href={`tel:${storeDetail?.phone}`}
-                  onClick={(e) => onClickCallNumber(e)}
+                  onClick={onClickCallNumber}
                 >
                   전화하기
                 </a>
