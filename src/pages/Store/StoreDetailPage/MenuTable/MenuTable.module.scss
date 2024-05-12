@@ -115,37 +115,17 @@
 
 .image {
   display: flex;
-  justify-content: center;
-
-  &:not(:first-child) {
-    display: none;
-  }
 
   &__button {
     border: none;
     background-color: transparent;
     cursor: pointer;
+    padding: 0;
 
     img {
       border-radius: 5px;
       width: 75px;
       height: 80px;
     }
-  }
-}
-
-.empty-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    width: 75px;
-    height: 80px;
   }
 }

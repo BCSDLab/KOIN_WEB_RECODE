@@ -171,6 +171,9 @@
     text-decoration: none;
     padding: 13px 31px;
     cursor: pointer;
+    width: 88px;
+    height: 36px;
+    box-sizing: border-box;
 
     & + & {
       margin-left: 3px;
