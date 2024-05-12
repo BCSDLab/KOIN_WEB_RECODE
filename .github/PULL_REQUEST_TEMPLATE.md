@@ -31,5 +31,6 @@
 ## ✔️ Please check if the PR fulfills these requirements
 
 - [ ] It's submitted to the correct branch, not the develop branch unconditionally?
+- [ ] If on a hotfix branch, ensure it targets main?
 - [ ] Have you rebased against the recent develop branch?
 - [ ] There are no warning message when you run `yarn lint`
