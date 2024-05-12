@@ -83,3 +83,19 @@
     }
   }
 }
+
+.pc-menu-blocks {
+  position: relative;
+
+  &__caution {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Pretendard, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 15.51px;
+    color: #cacaca;
+  }
+}

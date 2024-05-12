@@ -27,7 +27,9 @@
 }
 
 .table {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
   &--empty {
     display: flex;
@@ -36,5 +38,14 @@
     justify-content: center;
     font-size: 16px;
     font-weight: 500;
+  }
+
+  &__caution {
+    margin: 8px 24px 16px;
+    color: #cacaca;
+    font-family: Pretendard, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 15.51px;
   }
 }
