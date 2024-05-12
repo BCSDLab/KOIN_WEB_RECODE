@@ -37,6 +37,6 @@ export class BusTimetableInfo<R extends BusTimetableResponse> implements APIRequ
   auth = false;
 
   constructor({ bus_type, direction, region }: Course) {
-    this.path = `/bus/timetable?bus_type=${bus_type}&direction=${direction}&region=${region}`;
+    this.path = `/bus/timetable/v2?bus_type=${bus_type}&direction=${direction}&region=${region}`;
   }
 }
