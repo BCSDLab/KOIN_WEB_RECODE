@@ -34,11 +34,14 @@ export interface BusResponse extends APIResponse {
   } | null;
 }
 
-export type BusTimetableResponse = Array<BusRouteInfo> | Array<ExpressInfo>;
+export type BusTimetableResponse = BusRouteInfo | ExpressInfo;
 
 export interface BusRouteInfo {
-  route_name: string;
-  arrival_info: ArrivalInfo[];
+  bus_timetables: {
+    route_name: string;
+    arrival_info: ArrivalInfo[];
+  }[],
+  updated_at: string;
 }
 
 export interface ArrivalInfo {
@@ -47,7 +50,10 @@ export interface ArrivalInfo {
 }
 
 export interface ExpressInfo {
-  departure: string;
-  arrival: string;
-  charge: number;
+  bus_timetables: {
+    departure: string;
+    arrival: string;
+    charge: number;
+  }[];
+  updated_at: string;
 }
