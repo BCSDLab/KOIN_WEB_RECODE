@@ -71,6 +71,8 @@ function ShuttleTimetable() {
         }
       />
       <div className={styles.timetable__date}>
+        마지막 업데이트:
+        {' '}
         {timetable.info.updated_at}
       </div>
     </div>
@@ -101,6 +103,8 @@ function ExpressTimetable() {
         arrivalList={timetable.info.bus_timetables.map((info) => [info.departure, info.arrival])}
       />
       <div className={styles.timetable__date}>
+        마지막 업데이트:
+        {' '}
         {timetable.info.updated_at}
       </div>
     </div>
@@ -113,7 +117,7 @@ function CityTimetable() {
       <div className={styles['timetable__citybus-blank']} />
       <Template headers={BUS_TYPES[2].tableHeaders} arrivalList={CITY_BUS_TIMETABLE} />
       <div className={styles['timetable__citybus-info']}>
-        버스번호: 400, 401, 493
+        버스번호: 400, 402, 405
       </div>
     </>
   );
