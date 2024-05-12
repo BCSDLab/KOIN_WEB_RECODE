@@ -101,6 +101,8 @@ function StorePage() {
       logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
     }
   };
+  // eslint-disable-next-line
+  const Josa = require('josa-js');
   useScrollToTop();
   useScorllLogging('shpp_categories', categories);
 
@@ -225,7 +227,8 @@ function StorePage() {
               && (
                 <div className={styles['store-none-open']}>
                   <span className={styles['store-none-open__name']}>{store.name}</span>
-                  은/는 준비 중입니다.
+                  {`${Josa.c(store.name, '은/는')} `}
+                  준비중입니다.
                 </div>
               )}
             <div className={styles['store-list__title']}>{store.name}</div>

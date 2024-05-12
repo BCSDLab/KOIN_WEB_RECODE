@@ -9074,6 +9074,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"josa-js@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "josa-js@npm:0.0.2"
+  checksum: 15cf3663a08db6b6da9331ed7a26a3f1391efbd0c6eb4620934b4c38a8600b53b3d1aacc0fea272649c2e9b27e47f348f8755a2f00cc9369f12b735c87b25e05
+  languageName: node
+  linkType: hard
+
 "js-sha3@npm:0.8.0":
   version: 0.8.0
   resolution: "js-sha3@npm:0.8.0"
@@ -9355,6 +9362,7 @@ __metadata:
     file-saver: ^2.0.5
     html-react-parser: ^5.1.10
     html2canvas: ^1.4.1
+    josa-js: ^0.0.2
     react: ^18.2.0
     react-dom: ^18.2.0
     react-helmet: ^6.1.0
