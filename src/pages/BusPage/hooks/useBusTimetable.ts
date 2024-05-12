@@ -7,13 +7,13 @@ import {
 const TIMETABLE_KEY = 'timetable';
 
 interface ShuttleTimetable {
-  info: ShuttleInfo[],
-  type: 'shuttle',
+  info: ShuttleInfo;
+  type: 'shuttle';
 }
 
 interface ExpressTimetable {
-  info: ExpressInfo[]
-  type: 'express',
+  info: ExpressInfo;
+  type: 'express';
 }
 
 function useBusTimetable(course: ShuttleCourse): ShuttleTimetable;
@@ -32,13 +32,13 @@ function useBusTimetable(course: Course): ShuttleTimetable | ExpressTimetable | 
       select: (response) => {
         if (busType === 'express') {
           return {
-            info: response as ExpressInfo[],
+            info: response as ExpressInfo,
             type: 'express' as const,
           };
         }
 
         return {
-          info: response as ShuttleInfo[],
+          info: response as ShuttleInfo,
           type: 'shuttle' as const,
         };
       },
