@@ -12,6 +12,10 @@ import useTokenState from 'utils/hooks/useTokenState';
 import { useUser } from 'utils/hooks/useUser';
 import * as api from 'api';
 import { createPortal } from 'react-dom';
+import { ReactComponent as HamburgerIcon } from 'assets/svg/hamburger-icon.svg';
+import { ReactComponent as KoinServiceLogo } from 'assets/svg/koin-service-logo.svg';
+import { ReactComponent as WhiteArrowBackIcon } from 'assets/svg/white-arrow-back-icon.svg';
+import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import styles from './MobileHeader.module.scss';
 
 function useMobileSidebar(pathname: string, isMobile: boolean) {
@@ -63,9 +67,10 @@ function Panel({ isExpanded, hideSidebar }: { isExpanded: boolean, hideSidebar: 
         <button
           className={styles.mobileheader__backspace}
           type="button"
+          aria-label="뒤로가기 버튼"
           onClick={hideSidebar}
         >
-          <img src="http://static.koreatech.in/assets/img/arrow_left.png" alt="go back" />
+          <BlackArrowBackIcon />
         </button>
         <div className={styles.mobileheader__greet}>
           {isLoggedin ? (
@@ -200,12 +205,13 @@ export default function MobileHeader() {
               [styles.mobileheader__icon]: true,
             })}
             type="button"
+            aria-label="뒤로가기 버튼"
             onClick={() => {
               backInDetailPage();
               navigate(-1);
             }}
           >
-            <img src="https://static.koreatech.in/assets/img/back-menu.png" alt="go back logo" />
+            <WhiteArrowBackIcon />
           </button>
         )}
         <span
@@ -215,7 +221,7 @@ export default function MobileHeader() {
           })}
         >
           {isMain ? (
-            <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
+            <KoinServiceLogo />
           ) : (CATEGORY
             .flatMap((categoryValue) => categoryValue.submenu)
             .find((subMenuValue) => subMenuValue.link === pathname)
@@ -228,9 +234,10 @@ export default function MobileHeader() {
             [styles.mobileheader__icon]: true,
           })}
           type="button"
+          aria-label="메뉴 버튼"
           onClick={handleHamburgerClick}
         >
-          <img src="https://static.koreatech.in/assets/img/menu.png" alt="menu expand logo" />
+          <HamburgerIcon />
         </button>
       </div>
       {createPortal(<Panel isExpanded={isExpanded} hideSidebar={hideSidebar} />, document.body)}
