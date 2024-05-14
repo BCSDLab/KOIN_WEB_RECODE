@@ -27,7 +27,7 @@
       height: 24px;
     }
 
-    .header--main & {
+    &--main {
       top: 24px;
     }
 
@@ -38,7 +38,7 @@
     &--right {
       right: 16px;
 
-      .header--main & {
+      &--main {
         right: 26px;
       }
     }
@@ -48,9 +48,10 @@
     font-size: 16px;
     height: 100%;
     display: flex;
+    justify-content: center;
     align-items: center;
 
-    .header--main & {
+    &--main {
       justify-content: flex-start;
     }
 
