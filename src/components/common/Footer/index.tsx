@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import CATEGORY from 'static/category';
+import { CATEGORY } from 'static/category';
 import useLogger from 'utils/hooks/useLogger';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './Footer.module.scss';

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Link, useLocation, useNavigate, useParams,
 } from 'react-router-dom';
-import CATEGORY, { Category, SubMenu } from 'static/category';
+import { CATEGORY } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
@@ -14,44 +14,7 @@ import { useUser } from 'utils/hooks/useUser';
 import * as api from 'api';
 import AuthenticateUserModal from 'pages/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import styles from './Header.module.scss';
-
-const ID: { [key: string]: string; } = {
-  PANEL: 'megamenu-panel',
-  LABEL1: 'megamenu-label-1',
-  LABEL2: 'megamenu-label-2',
-};
-
-const useMegaMenu = (category: Category[]) => {
-  const [panelMenuList, setPanelMenuList] = useState<SubMenu[] | null>();
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const createOnChangeMenu = (title: string) => () => {
-    const selectedSubMenu = category
-      .find((categoryInfo) => categoryInfo.title === title)?.submenu ?? null;
-    setPanelMenuList(selectedSubMenu);
-    setIsExpanded(true);
-  };
-  const onFocusPanel = () => {
-    setIsExpanded(true);
-  };
-  const hideMegaMenu = (
-    event: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLElement>,
-  ) => {
-    if (event.type === 'mouseout') {
-      const { currentTarget } = event;
-      currentTarget.blur();
-    }
-    setIsExpanded(false);
-  };
-
-  return {
-    panelMenuList,
-    isExpanded,
-    createOnChangeMenu,
-    onFocusPanel,
-    hideMegaMenu,
-  };
-};
+import PCHeader from './PCHeader';
 
 const useMobileSidebar = (pathname: string, isMobile: boolean) => {
   const [isExpanded, expandSidebar, hideSidebar] = useBooleanState(false);
@@ -75,13 +38,6 @@ const useMobileSidebar = (pathname: string, isMobile: boolean) => {
 
 function Header() {
   const { pathname } = useLocation();
-  const {
-    panelMenuList,
-    isExpanded: isMegaMenuExpanded,
-    createOnChangeMenu,
-    onFocusPanel,
-    hideMegaMenu,
-  } = useMegaMenu(CATEGORY);
   const isMobile = useMediaQuery();
   const {
     isExpanded: isMobileSidebarExpanded,
@@ -298,100 +254,7 @@ function Header() {
             )}
           </>
         ) : (
-          <>
-            <Link
-              className={styles.header__logo}
-              to="/"
-              tabIndex={0}
-            >
-              <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
-            </Link>
-            <div
-              className={cn({
-                [styles['header__mega-menu']]: true,
-                [styles.megamenu]: true,
-              })}
-              onBlur={hideMegaMenu}
-              onMouseOut={hideMegaMenu}
-            >
-              <ul className={styles['megamenu__trigger-list']}>
-                {CATEGORY.map((category, index) => (
-                  <li
-                    key={category.title}
-                  >
-                    <button
-                      className={styles.megamenu__trigger}
-                      tabIndex={0}
-                      type="button"
-                      onClick={createOnChangeMenu(category.title)}
-                      onFocus={createOnChangeMenu(category.title)}
-                      onBlur={hideMegaMenu}
-                      onMouseOver={createOnChangeMenu(category.title)}
-                      onMouseOut={hideMegaMenu}
-                      aria-expanded={isMegaMenuExpanded}
-                      aria-controls={ID[`LABEL${index + 1}`]}
-                    >
-                      <span>
-                        {category.title}
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <div
-                id={ID.PANEL}
-                className={styles.megamenu__panel}
-                onFocus={onFocusPanel}
-                onMouseOver={onFocusPanel}
-                aria-hidden={!isMegaMenuExpanded}
-                aria-labelledby={Array.from({ length: 2 }, (_, index) => ID[`LABEL${index + 1}`]).join(' ')}
-              >
-                <ul className={styles.megamenu__content}>
-                  {panelMenuList?.map((menu) => (
-                    <li className={styles.megamenu__menu} key={menu.title}>
-                      {/* TODO: 키보드 Focus 접근성 향상 */}
-                      <Link
-                        className={styles.megamenu__link}
-                        to={menu.link}
-                        onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: menu.title })}
-                      >
-                        {menu.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <ul className={styles['header__auth-menu']}>
-              {!isLoggedin ? (
-                <>
-                  <li className={styles['header__auth-link']}>
-                    <Link to="/auth/signup">
-                      회원가입
-                    </Link>
-                  </li>
-                  <li className={styles['header__auth-link']}>
-                    <Link to="/auth">
-                      로그인
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li className={styles['header__auth-link']}>
-                    <button type="button" className={styles['header__auth-button']} onClick={openModal}>
-                      정보수정
-                    </button>
-                  </li>
-                  <li className={styles['header__auth-link']}>
-                    <button onClick={logout} type="button" className={styles['header__auth-button']}>
-                      로그아웃
-                    </button>
-                  </li>
-                </>
-              )}
-            </ul>
-          </>
+          <PCHeader />
         )}
       </nav>
       {isModalOpen && (

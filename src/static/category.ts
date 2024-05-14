@@ -13,7 +13,7 @@ export interface Category {
   submenu: SubMenu[]
 }
 
-const CATEGORY: Category[] = [
+export const CATEGORY: Category[] = [
   {
     title: '서비스',
     planFlag: false,
@@ -198,5 +198,3 @@ const CATEGORY: Category[] = [
   }
   */
 ];
-
-export default CATEGORY;
