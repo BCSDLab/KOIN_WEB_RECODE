@@ -40,7 +40,7 @@ function useMobileSidebar(pathname: string, isMobile: boolean) {
 
 function Panel({ isExpanded, hideSidebar }: { isExpanded: boolean, hideSidebar: () => void }) {
   const token = useTokenState();
-  const isLoggedin = !!token;
+  const isAuth = !!token;
   const { data: userInfo } = useUser();
   const logout = useLogout();
   const logger = useLogger();
@@ -57,109 +57,109 @@ function Panel({ isExpanded, hideSidebar }: { isExpanded: boolean, hideSidebar: 
   };
 
   return (
-    <nav className={cn({
-      [styles.mobileheader__panel]: true,
-      [styles['mobileheader__panel--show']]: isExpanded,
-      [styles['mobileheader__panel--logged-in']]: isLoggedin,
-    })}
-    >
-      <div className={styles.mobileheader__user}>
-        <button
-          className={styles.mobileheader__backspace}
-          type="button"
-          aria-label="뒤로가기 버튼"
-          onClick={hideSidebar}
-        >
-          <BlackArrowBackIcon />
-        </button>
-        <div className={styles.mobileheader__greet}>
-          {isLoggedin ? (
-            <>
-              {userInfo?.nickname}
-              <span>님, 안녕하세요!</span>
-            </>
-          ) : (
-            <>
-              로그인
-              <span>을 해주세요!</span>
-            </>
-          )}
-        </div>
-        <ul className={styles['mobileheader__auth-menu']}>
-          {isLoggedin ? (
-            <>
-              <li className={styles['mobileheader__my-info']}>
-                <button type="button" onClick={openMobileAuthenticateUserModal} className={styles['mobileheader__my-info-button']}>
-                  정보 수정
-                </button>
-              </li>
-              <li className={styles.mobileheader__link}>
-                <button type="button" onClick={logout}>
-                  로그아웃
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li className={styles.mobileheader__link}>
-                <Link
-                  to="/auth/signup"
-                  onClick={() => {
-                    logger.actionEventClick({
-                      actionTitle: 'USER',
-                      title: 'hamburger_sign_up',
-                      value: '햄버거 회원가입',
-                    });
-                  }}
-                >
-                  회원가입
-                </Link>
-              </li>
-              |
-              <li className={styles.mobileheader__link}>
-                <Link
-                  to="/auth"
-                  onClick={() => {
-                    logger.actionEventClick({
-                      actionTitle: 'USER',
-                      title: 'hamburger_login',
-                      value: '햄버거 로그인',
-                    });
-                  }}
-                >
-                  로그인
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-      </div>
-      {CATEGORY.map((categoryInfo) => (
-        <div key={categoryInfo.title}>
-          <div>
-            <div className={styles['mobileheader__category-title']}>
-              {categoryInfo.title}
-            </div>
-            <ul className={styles['mobileheader__sub-menus']}>
-              {categoryInfo.submenu.map((subMenu) => (
-                <li
-                  className={styles['mobileheader__sub-menu']}
-                  key={subMenu.title}
-                >
-                  <Link
-                    to={subMenu.link}
-                    target={subMenu.openInNewTab ? '_blank' : '_self'}
-                    onClick={() => loggingBusinessShortCut(subMenu.title)}
-                  >
-                    {subMenu.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      ))}
-    </nav>
+    // <nav className={cn({
+    //   [styles.panel]: true,
+    //   [styles['panel--show']]: isExpanded,
+    //   [styles['panel--logged-in']]: isLoggedin,
+    // })}
+    // >
+    //   <div className={styles.panel__user}>
+    //     <button
+    //       className={styles.panel__backspace}
+    //       type="button"
+    //       aria-label="뒤로가기 버튼"
+    //       onClick={hideSidebar}
+    //     >
+    //       <BlackArrowBackIcon />
+    //     </button>
+    //     <div className={styles.panel__greet}>
+    //       {isLoggedin ? (
+    //         <>
+    //           {userInfo?.nickname}
+    //           <span>님, 안녕하세요!</span>
+    //         </>
+    //       ) : (
+    //         <>
+    //           로그인
+    //           <span>을 해주세요!</span>
+    //         </>
+    //       )}
+    //     </div>
+    //     <ul className={styles['panel__auth-menu']}>
+    //       {isLoggedin ? (
+    //         <>
+    //           <li className={styles['panel__my-info']}>
+    //             <button type="button" onClick={openMobileAuthenticateUserModal} className={styles['panel__my-info-button']}>
+    //               정보 수정
+    //             </button>
+    //           </li>
+    //           <li className={styles.panel__link}>
+    //             <button type="button" onClick={logout}>
+    //               로그아웃
+    //             </button>
+    //           </li>
+    //         </>
+    //       ) : (
+    //         <>
+    //           <li className={styles.panel__link}>
+    //             <Link
+    //               to="/auth/signup"
+    //               onClick={() => {
+    //                 logger.actionEventClick({
+    //                   actionTitle: 'USER',
+    //                   title: 'hamburger_sign_up',
+    //                   value: '햄버거 회원가입',
+    //                 });
+    //               }}
+    //             >
+    //               회원가입
+    //             </Link>
+    //           </li>
+    //           |
+    //           <li className={styles.panel__link}>
+    //             <Link
+    //               to="/auth"
+    //               onClick={() => {
+    //                 logger.actionEventClick({
+    //                   actionTitle: 'USER',
+    //                   title: 'hamburger_login',
+    //                   value: '햄버거 로그인',
+    //                 });
+    //               }}
+    //             >
+    //               로그인
+    //             </Link>
+    //           </li>
+    //         </>
+    //       )}
+    //     </ul>
+    //   </div>
+    //   {CATEGORY.map((categoryInfo) => (
+    //     <div key={categoryInfo.title}>
+    //       <div>
+    //         <div className={styles['panel__category-title']}>
+    //           {categoryInfo.title}
+    //         </div>
+    //         <ul className={styles['panel__sub-menus']}>
+    //           {categoryInfo.submenu.map((subMenu) => (
+    //             <li
+    //               className={styles['panel__sub-menu']}
+    //               key={subMenu.title}
+    //             >
+    //               <Link
+    //                 to={subMenu.link}
+    //                 target={subMenu.openInNewTab ? '_blank' : '_self'}
+    //                 onClick={() => loggingBusinessShortCut(subMenu.title)}
+    //               >
+    //                 {subMenu.title}
+    //               </Link>
+    //             </li>
+    //           ))}
+    //         </ul>
+    //       </div>
+    //     </div>
+    //   ))}
+    // </nav>
   );
 }
 

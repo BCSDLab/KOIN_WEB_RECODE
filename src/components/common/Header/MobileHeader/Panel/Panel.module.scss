@@ -1,109 +1,33 @@
-.mobileheader {
-  display: block;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  text-align: center;
-
-  .header--main & {
-    padding: 20px;
-  }
-
-  &__icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 0;
-    border: 0;
-    width: 24px;
-    height: 24px;
-    background-color: transparent;
-    cursor: pointer;
-
-    & > img {
-      width: 24px;
-      height: 24px;
-    }
-
-    &--main {
-      top: 24px;
-    }
-
-    &--left {
-      left: 16px;
-    }
-
-    &--right {
-      right: 16px;
-
-      &--main {
-        right: 26px;
-      }
-    }
-  }
-
-  &__title {
-    font-size: 16px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &--main {
-      justify-content: flex-start;
-    }
-
-    & > img {
-      width: 58px;
-      height: 32px;
-    }
-  }
-
-  &__logo {
-    position: absolute;
-
-    &--koin {
-      right: 16px;
-      top: 16px;
-      width: 40px;
-      height: 40px;
-    }
-
-    &--bcsd {
-      right: 16px;
-      bottom: 20px;
-      width: 33px;
-      height: 33px;
-    }
-  }
-
-  &__inquiry {
-    position: absolute;
-    left: 20px;
-    bottom: 27px;
-    font-weight: 600;
-    color: #175c8e;
-    font-size: 15px;
-    text-decoration: none;
-  }
-}
-
-.panel {
+.container {
   position: fixed;
   top: 0;
   left: 0;
-  box-sizing: border-box;
   width: 100vw;
   height: 100vh;
   min-width: 360px;
   padding-bottom: 40px;
+  box-sizing: border-box;
   background-color: #fff;
   z-index: 20;
   overflow: scroll;
   transform: translateX(100%);
   transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.greet {
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.71px;
+  text-align: left;
+
+  & > span {
+    font-size: 13px;
+    font-weight: 400;
+  }
+}
+
+.panel {
 
   &--show {
     transform: translateX(0);
