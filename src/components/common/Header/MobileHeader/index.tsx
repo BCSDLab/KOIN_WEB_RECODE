@@ -1,22 +1,17 @@
 import { cn } from '@bcsdlab/utils';
 import { useEffect } from 'react';
-import {
-  Link, useLocation, useNavigate, useParams,
-} from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useLogger from 'utils/hooks/useLogger';
-import { useLogout } from 'utils/hooks/useLogout';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import useTokenState from 'utils/hooks/useTokenState';
-import { useUser } from 'utils/hooks/useUser';
 import * as api from 'api';
 import { createPortal } from 'react-dom';
 import { ReactComponent as HamburgerIcon } from 'assets/svg/hamburger-icon.svg';
 import { ReactComponent as KoinServiceLogo } from 'assets/svg/koin-service-logo.svg';
 import { ReactComponent as WhiteArrowBackIcon } from 'assets/svg/white-arrow-back-icon.svg';
-import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import styles from './MobileHeader.module.scss';
+import Panel from './Panel';
 
 function useMobileSidebar(pathname: string, isMobile: boolean) {
   const [isExpanded, expandSidebar, hideSidebar] = useBooleanState(false);
@@ -36,131 +31,6 @@ function useMobileSidebar(pathname: string, isMobile: boolean) {
     expandSidebar,
     hideSidebar,
   };
-}
-
-function Panel({ isExpanded, hideSidebar }: { isExpanded: boolean, hideSidebar: () => void }) {
-  const token = useTokenState();
-  const isAuth = !!token;
-  const { data: userInfo } = useUser();
-  const logout = useLogout();
-  const logger = useLogger();
-  const [, openModal] = useBooleanState(false);
-
-  const loggingBusinessShortCut = (title: string) => {
-    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: title });
-    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger_timetable', value: `햄버거 ${title}` });
-  };
-
-  const openMobileAuthenticateUserModal = () => {
-    hideSidebar();
-    openModal();
-  };
-
-  return (
-    // <nav className={cn({
-    //   [styles.panel]: true,
-    //   [styles['panel--show']]: isExpanded,
-    //   [styles['panel--logged-in']]: isLoggedin,
-    // })}
-    // >
-    //   <div className={styles.panel__user}>
-    //     <button
-    //       className={styles.panel__backspace}
-    //       type="button"
-    //       aria-label="뒤로가기 버튼"
-    //       onClick={hideSidebar}
-    //     >
-    //       <BlackArrowBackIcon />
-    //     </button>
-    //     <div className={styles.panel__greet}>
-    //       {isLoggedin ? (
-    //         <>
-    //           {userInfo?.nickname}
-    //           <span>님, 안녕하세요!</span>
-    //         </>
-    //       ) : (
-    //         <>
-    //           로그인
-    //           <span>을 해주세요!</span>
-    //         </>
-    //       )}
-    //     </div>
-    //     <ul className={styles['panel__auth-menu']}>
-    //       {isLoggedin ? (
-    //         <>
-    //           <li className={styles['panel__my-info']}>
-    //             <button type="button" onClick={openMobileAuthenticateUserModal} className={styles['panel__my-info-button']}>
-    //               정보 수정
-    //             </button>
-    //           </li>
-    //           <li className={styles.panel__link}>
-    //             <button type="button" onClick={logout}>
-    //               로그아웃
-    //             </button>
-    //           </li>
-    //         </>
-    //       ) : (
-    //         <>
-    //           <li className={styles.panel__link}>
-    //             <Link
-    //               to="/auth/signup"
-    //               onClick={() => {
-    //                 logger.actionEventClick({
-    //                   actionTitle: 'USER',
-    //                   title: 'hamburger_sign_up',
-    //                   value: '햄버거 회원가입',
-    //                 });
-    //               }}
-    //             >
-    //               회원가입
-    //             </Link>
-    //           </li>
-    //           |
-    //           <li className={styles.panel__link}>
-    //             <Link
-    //               to="/auth"
-    //               onClick={() => {
-    //                 logger.actionEventClick({
-    //                   actionTitle: 'USER',
-    //                   title: 'hamburger_login',
-    //                   value: '햄버거 로그인',
-    //                 });
-    //               }}
-    //             >
-    //               로그인
-    //             </Link>
-    //           </li>
-    //         </>
-    //       )}
-    //     </ul>
-    //   </div>
-    //   {CATEGORY.map((categoryInfo) => (
-    //     <div key={categoryInfo.title}>
-    //       <div>
-    //         <div className={styles['panel__category-title']}>
-    //           {categoryInfo.title}
-    //         </div>
-    //         <ul className={styles['panel__sub-menus']}>
-    //           {categoryInfo.submenu.map((subMenu) => (
-    //             <li
-    //               className={styles['panel__sub-menu']}
-    //               key={subMenu.title}
-    //             >
-    //               <Link
-    //                 to={subMenu.link}
-    //                 target={subMenu.openInNewTab ? '_blank' : '_self'}
-    //                 onClick={() => loggingBusinessShortCut(subMenu.title)}
-    //               >
-    //                 {subMenu.title}
-    //               </Link>
-    //             </li>
-    //           ))}
-    //         </ul>
-    //       </div>
-    //     </div>
-    //   ))}
-    // </nav>
-  );
 }
 
 export default function MobileHeader() {

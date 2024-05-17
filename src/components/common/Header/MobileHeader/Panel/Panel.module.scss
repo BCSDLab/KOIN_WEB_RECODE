@@ -12,6 +12,11 @@
   overflow: scroll;
   transform: translateX(100%);
   transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+
+  &--expanded {
+    transform: translateX(0);
+
+  }
 }
 
 .greet {
@@ -25,6 +30,20 @@
     font-size: 13px;
     font-weight: 400;
   }
+}
+
+.auth {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.71px;
+  text-align: left;
+  color: #4b4b4b;
+
 }
 
 .panel {
