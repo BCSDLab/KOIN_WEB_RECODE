@@ -15,15 +15,8 @@ export default function DefaultPage() {
         )}
       >
         <div className={styles.page__content}>
-          {/* 강의 목록 */}
-          {/* <LectureList /> */}
           <TimetableList />
-          {/* 나의 시간표 타임 테이블 */}
           <MainTimetable />
-          {/* 나의 시간표 강의 목록 */}
-          {/* <MyLectureList /> */}
-          {/* 시간표 커리큘럼 */}
-          {/* <Curriculum /> */}
         </div>
       </Suspense>
     </div>
