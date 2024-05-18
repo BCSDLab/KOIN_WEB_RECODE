@@ -33,7 +33,7 @@ function Timetable({
   const isMobile = useMediaQuery();
 
   return (
-    <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${columnWidth / 5}px` }}>
+    <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
       <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight * 1.5}px` }}>
         <div
           className={cn({
@@ -60,7 +60,7 @@ function Timetable({
           {TIME_STRING.map((value, index) => (
             <div
               className={styles['timetable__row-line']}
-              style={{ height: `${rowHeight + 1}px` }}
+              style={{ height: `${rowHeight + 1}px`, fontSize: `${firstColumnWidth / 10}px` }}
               // index값이 변경되지 않음
               // eslint-disable-next-line react/no-array-index-key
               key={`value-${index}`}
@@ -86,9 +86,6 @@ function Timetable({
               {value}
             </div>
           ))}
-          <div style={{ height: `${rowHeight * 2}px` }}>
-            <span>그 이후</span>
-          </div>
         </div>
         {DAYS_STRING.map((day, index) => (
           <div
