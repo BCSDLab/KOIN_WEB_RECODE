@@ -7,12 +7,11 @@ import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from '../../DefaultPage/DefaultPage.module.scss';
-import SemesterListbox from './SemesterListbox';
 import Timetable from '../../../../components/TimetablePage/Timetable';
 import useLectureList from '../../hooks/useLectureList';
 import useMyLectures from '../../hooks/useMyLectures';
 
-export default function MyLectureTimetable() {
+export default function MainTimetable() {
   const { myLectures } = useMyLectures();
 
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
@@ -31,9 +30,6 @@ export default function MyLectureTimetable() {
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
-        <div className={styles.page__semester}>
-          <SemesterListbox />
-        </div>
         <button
           type="button"
           className={styles.page__button}
@@ -50,10 +46,10 @@ export default function MyLectureTimetable() {
               lectures={myLectureDayValue}
               similarSelectedLecture={similarSelectedLectureDayList}
               selectedLectureIndex={selectedLectureIndex}
-              columnWidth={55}
-              firstColumnWidth={52}
-              rowHeight={21}
-              totalHeight={453}
+              columnWidth={140}
+              firstColumnWidth={70}
+              rowHeight={32.5}
+              totalHeight={700}
             />
           </React.Suspense>
         </ErrorBoundary>

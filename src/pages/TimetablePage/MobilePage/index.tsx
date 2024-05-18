@@ -9,7 +9,7 @@ import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from './MobilePage.module.scss';
-import SemesterListbox from '../components/MyLectureTimetable/SemesterListbox';
+import SemesterListbox from '../components/SemesterListbox';
 import Timetable from '../../../components/TimetablePage/Timetable';
 import useLectureList from '../hooks/useLectureList';
 import useMyLectures from '../hooks/useMyLectures';
