@@ -1,7 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CATEGORY, Category, SubMenu } from 'static/category';
+import { CATEGORY, Category, Submenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useLogger from 'utils/hooks/useLogger';
 import { useLogout } from 'utils/hooks/useLogout';
@@ -15,7 +15,7 @@ const ID: { [key: string]: string; } = {
 };
 
 const useMegaMenu = (category: Category[]) => {
-  const [panelMenuList, setPanelMenuList] = useState<SubMenu[] | null>();
+  const [panelMenuList, setPanelMenuList] = useState<Submenu[] | null>();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const createOnChangeMenu = (title: string) => () => {

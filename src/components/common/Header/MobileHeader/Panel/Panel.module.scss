@@ -1,225 +1,120 @@
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
 .container {
   position: fixed;
   top: 0;
   left: 0;
+  display: flex;
+  flex-direction: column;
   width: 100vw;
   height: 100vh;
   min-width: 360px;
-  padding-bottom: 40px;
   box-sizing: border-box;
   background-color: #fff;
   z-index: 20;
-  overflow: scroll;
   transform: translateX(100%);
   transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
 
   &--expanded {
     transform: translateX(0);
-
   }
 }
 
-.greet {
-  font-family: Pretendard, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 16.71px;
-  text-align: left;
+.top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 22px 16px 22px;
+  box-sizing: border-box;
+}
 
-  & > span {
-    font-size: 13px;
-    font-weight: 400;
+.greet {
+  padding: 25px 22px 18px 22px;
+
+  &__font {
+    font-family: Pretendard;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16.71px;
+    text-align: left;
+    color: #4b4b4b;
+  }
+
+  &--highlight {
+    font-family: Pretendard;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 21.48px;
+    text-align: left;
+    color: #10477a;
   }
 }
 
 .auth {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  font-family: Pretendard, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 16.71px;
-  text-align: left;
-  color: #4b4b4b;
+  height: 48px;
+  padding: 0 24px;
 
+  &__font {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16.71px;
+    text-align: left;
+    color: #4b4b4b;
+
+    & > svg {
+      margin-right: 8px;
+      margin-bottom: 2px;
+    }
+  }
 }
 
-.panel {
+.category {
 
-  &--show {
-    transform: translateX(0);
-  }
-
-  &--logged-in {
-    justify-content: space-around;
-  }
-
-  &__user {
-    width: 100%;
-    height: 111px;
-    box-sizing: border-box;
-    color: #175c8e;
-    font-size: 14px;
-    font-family: NanumSquare, serif;
-    padding: 0 16px;
-    background: #fff;
-    position: sticky;
-    top: 0;
-    left: 0;
-  }
-
-  &__backspace {
-    display: block;
-    margin: 18px 0 8px -2px;
-    padding: 0;
-    border: 0;
-    width: 28px;
-    height: 28px;
-    background-color: transparent;
-    cursor: pointer;
-
-    & > img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  &__greet {
-    font-size: 16px;
-    display: block;
-    max-width: 240px;
-    text-align: left;
-    margin-bottom: 16px;
-    font-weight: bold;
-
-    & > span {
-      font-size: 13px;
-      font-weight: normal;
-    }
-  }
-
-  &__auth-menu {
+  &__title {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    font-size: 15px;
-    font-weight: normal;
-    color: #252525;
-  }
-
-  &__my-info {
-    display: flex;
-    margin-right: auto;
-    width: 110px;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: normal;
-    color: black;
-    line-height: 24px;
-
-    ::before {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      margin-right: 4px;
-      content: "";
-      background: url("http://static.koreatech.in/assets/img/ic-bottom_myinfo.png") center/24px 24px;
-      position: relative;
-      top: 6px;
-    }
-
-    & > a {
-      color: inherit;
-      text-decoration: inherit;
-    }
-  }
-
-  &__my-info-button {
-    background-color: transparent;
-    border: 0;
-    padding: 0;
-    cursor: pointer;
-  }
-
-  &__link {
-    margin-right: 15px;
-    font-size: 15px;
-    height: 12px;
-    color: #252525;
-    text-decoration: none;
-    cursor: pointer;
-
-    & + & {
-      margin-left: 15px;
-      margin-right: 0;
-    }
-
-    .mobileheader__my-info + & {
-      margin-left: 9px;
-      text-align: left;
-    }
-
-    & > a {
-      background-color: transparent;
-      color: inherit;
-      text-decoration: inherit;
-    }
-
-    & > button {
-      padding: 0;
-      border: 0;
-      background-color: transparent;
-      color: inherit;
-      text-decoration: inherit;
-      cursor: pointer;
-    }
-  }
-
-  &__category-title {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px 16px;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    font-size: 15px;
-    font-weight: normal;
-    color: #858585;
-    background-color: #f7f7f7;
-    text-align: left;
-  }
-
-  &__sub-menus {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    list-style: none;
-  }
-
-  &__sub-menu {
-    display: block;
-    padding: 8px 20px;
-    width: 50%;
-    font-size: 15px;
-    background: #fff;
-    box-sizing: border-box;
-    border-collapse: collapse;
-    text-decoration: none;
-    text-align: left;
-    color: #252525;
+    padding: 0 24px;
+    height: 33px;
+    font-family: Pretendard;
+    font-size: 14px;
     font-weight: 500;
-    cursor: pointer;
+    line-height: 16.71px;
+    text-align: left;
+    color: #4b4b4b;
+    background-color: #fafafa;
+  }
 
-    & > a {
-      color: inherit;
-      text-decoration: inherit;
+  &__submenu {
+    padding: 0 24px;
+    height: 58px;
+    background-color: #fff;
+    border-bottom: 1px solid #f5f5f5;
+  }
 
-      &:hover {
-        color: #f7941e;
-        font-weight: 500;
-        outline: none;
-      }
-    }
+  &__button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25.6px;
+    text-align: left;
   }
 }
