@@ -100,6 +100,7 @@ export interface StoreEvent {
 export interface AllStoreEventResponse extends APIResponse {
   events: {
     shop_id: number,
+    event_id: number,
     shop_name: string,
     title: string,
     content: string,
