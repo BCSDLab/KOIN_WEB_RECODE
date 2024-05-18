@@ -1,5 +1,7 @@
-export interface SubMenu {
-  title: string;
+export type SubmenuTitle = '공지사항' | '버스/교통' | '식단' | '시간표' | '복덕방' | '주변상점' | '코인 for Business';
+
+export interface Submenu {
+  title: SubmenuTitle;
   link: string;
   newFlag: boolean;
   planFlag: boolean;
@@ -7,10 +9,12 @@ export interface SubMenu {
   openInNewTab?: boolean;
 }
 
+export type CategoryTitle = '서비스';
+
 export interface Category {
-  title: string;
+  title: CategoryTitle;
   planFlag: boolean;
-  submenu: SubMenu[]
+  submenu: Submenu[]
 }
 
 export const CATEGORY: Category[] = [

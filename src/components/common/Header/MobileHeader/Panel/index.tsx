@@ -1,11 +1,12 @@
 import { cn } from '@bcsdlab/utils';
 import { useNavigate } from 'react-router-dom';
-import { CATEGORY } from 'static/category';
+import { CATEGORY, Submenu } from 'static/category';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useLogger from 'utils/hooks/useLogger';
 import { useLogout } from 'utils/hooks/useLogout';
 import { useUser } from 'utils/hooks/useUser';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
+import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
 import styles from './Panel.module.scss';
 
 interface Props {
@@ -39,11 +40,14 @@ export default function Panel({ isExpanded, hideSidebar }: Props) {
     }
   };
 
-  const handleSubmenuClick = (title: string, link: string) => {
-    logShortcut(title);
+  const handleSubmenuClick = (submenu: Submenu) => {
+    logShortcut(submenu.title);
     hideSidebar();
-    console.log('aaaa', link);
-    navigate(link);
+    if (submenu.openInNewTab) {
+      window.open(submenu.link, '_blank');
+    } else {
+      navigate(submenu.link);
+    }
   };
 
   return (
@@ -65,24 +69,25 @@ export default function Panel({ isExpanded, hideSidebar }: Props) {
       </div>
       <div className={styles.greet}>
         {userInfo ? (
-          <>
-            <span>{userInfo.nickname}</span>
+          <div className={styles.greet__font}>
+            <span className={styles['greet--highlight']}>{userInfo.nickname}</span>
             님, 안녕하세요!
-          </>
+          </div>
         ) : (
           <>로그인 후 더 많은 기능을 사용하세요.</>
         )}
       </div>
       <div className={styles.auth}>
         <button
-          className={styles['auth__my-info']}
+          className={styles.auth__font}
           type="button"
           onClick={() => handleMyInfoClick()}
         >
+          <PersonIcon />
           내 정보
         </button>
         <button
-          className={styles['auth__login-out']}
+          className={styles.auth__font}
           type="button"
           onClick={userInfo ? logout : () => navigate('/auth')}
         >
@@ -91,8 +96,8 @@ export default function Panel({ isExpanded, hideSidebar }: Props) {
       </div>
       <div className={styles.category}>
         {CATEGORY.map((category) => (
-          <>
-            <div key={category.title} className={styles.category__title}>
+          <div key={category.title}>
+            <div className={styles.category__title}>
               {category.title}
             </div>
             <ul className={styles.category__submenus}>
@@ -100,14 +105,15 @@ export default function Panel({ isExpanded, hideSidebar }: Props) {
                 <li key={submenu.title} className={styles.category__submenu}>
                   <button
                     type="button"
-                    onClick={() => handleSubmenuClick(submenu.title, submenu.link)}
+                    className={styles.category__button}
+                    onClick={() => handleSubmenuClick(submenu)}
                   >
                     {submenu.title}
                   </button>
                 </li>
               ))}
             </ul>
-          </>
+          </div>
         ))}
       </div>
     </nav>
