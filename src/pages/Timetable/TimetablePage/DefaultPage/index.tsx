@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-imports */
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React, { Suspense } from 'react';
-import MainTimetable from '../components/MyLectureTimetable';
-import TimetableList from '../components/TimetableList';
+import MainTimetable from '../../components/MyLectureTimetable';
+import TimetableList from '../../components/TimetableList';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage() {

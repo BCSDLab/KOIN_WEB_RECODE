@@ -7,7 +7,7 @@ import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useNavigate } from 'react-router-dom';
-import styles from '../../DefaultPage/DefaultPage.module.scss';
+import styles from '../../TimetablePage/DefaultPage/DefaultPage.module.scss';
 import Timetable from '../../../../components/TimetablePage/Timetable';
 import useLectureList from '../../hooks/useLectureList';
 import useMyLectures from '../../hooks/useMyLectures';
@@ -44,7 +44,7 @@ export default function MainTimetable() {
         <button
           type="button"
           className={styles.page__button}
-          onClick={() => navigate('/timetable-edit')}
+          onClick={() => navigate('/timetable/modify')}
         >
           <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
           시간표 수정
