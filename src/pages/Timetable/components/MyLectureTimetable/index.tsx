@@ -38,7 +38,7 @@ export default function MainTimetable() {
           className={styles.page__button}
           onClick={() => onTimetableImageDownload('my-timetable')}
         >
-          <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
+          <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="" />
           이미지로 저장하기
         </button>
         <button
@@ -46,7 +46,7 @@ export default function MainTimetable() {
           className={styles.page__button}
           onClick={() => navigate('/timetable/modify')}
         >
-          <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
+          <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="" />
           시간표 수정
         </button>
       </div>
