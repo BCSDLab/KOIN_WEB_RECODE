@@ -1,5 +1,5 @@
 import { cn, sha256 } from '@bcsdlab/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { ReactComponent as BlindIcon } from 'assets/svg/blind-icon.svg';
 import { ReactComponent as ShowIcon } from 'assets/svg/show-icon.svg';
@@ -28,6 +28,8 @@ export default function AuthenticateUserModal({
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
 
+  const backgroundRef = useRef<HTMLDivElement>(null);
+
   const handleCheckPassword = async () => {
     if (password === '') {
       return;
@@ -36,7 +38,7 @@ export default function AuthenticateUserModal({
     checkPassword({ password: hashedPassword });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleCheckPassword();
     }
@@ -58,8 +60,29 @@ export default function AuthenticateUserModal({
     updateAuthentication(false);
   });
 
+  useEffect(() => {
+    const handleEscKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (e.target === backgroundRef.current) {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', (e) => handleEscKeyDown(e));
+    window.addEventListener('click', (e) => handleOutsideClick(e));
+
+    return () => {
+      window.removeEventListener('keydown', (e) => handleEscKeyDown(e));
+    };
+  }, [onClose]);
+
   return (
-    <div className={styles.background} aria-hidden>
+    <div className={styles.background} aria-hidden ref={backgroundRef}>
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>내 정보 수정하기</span>
@@ -84,7 +107,7 @@ export default function AuthenticateUserModal({
               })}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleEnterKeyDown}
             />
             <button type="button" onClick={changeIsBlind} className={styles['container__blind-button']}>
               {isBlind ? <BlindIcon /> : <ShowIcon />}
