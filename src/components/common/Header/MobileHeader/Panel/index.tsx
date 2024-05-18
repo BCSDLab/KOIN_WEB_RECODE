@@ -74,7 +74,7 @@ export default function Panel({ isExpanded, hideSidebar }: Props) {
             님, 안녕하세요!
           </div>
         ) : (
-          <>로그인 후 더 많은 기능을 사용하세요.</>
+          <div className={styles.greet__font}>로그인 후 더 많은 기능을 사용하세요.</div>
         )}
       </div>
       <div className={styles.auth}>
