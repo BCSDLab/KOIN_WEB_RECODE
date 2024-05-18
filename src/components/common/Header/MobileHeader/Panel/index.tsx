@@ -1,7 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import { useNavigate } from 'react-router-dom';
 import { CATEGORY, Submenu } from 'static/category';
-import useBooleanState from 'utils/hooks/useBooleanState';
 import useLogger from 'utils/hooks/useLogger';
 import { useLogout } from 'utils/hooks/useLogout';
 import { useUser } from 'utils/hooks/useUser';
@@ -12,14 +11,14 @@ import styles from './Panel.module.scss';
 interface Props {
   isExpanded: boolean,
   hideSidebar: () => void,
+  openModal: () => void,
 }
 
-export default function Panel({ isExpanded, hideSidebar }: Props) {
+export default function Panel({ isExpanded, hideSidebar, openModal }: Props) {
   const { data: userInfo } = useUser();
   const logout = useLogout();
   const logger = useLogger();
   const navigate = useNavigate();
-  const [, openModal] = useBooleanState(false);
 
   const logShortcut = (title: string) => {
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: '주변상점' });

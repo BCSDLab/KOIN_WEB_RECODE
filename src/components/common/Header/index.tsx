@@ -11,7 +11,7 @@ function Header() {
   const { pathname } = useLocation();
   const isMobile = useMediaQuery();
   const isMain = pathname === '/';
-  const [isModalOpen,, closeModal] = useBooleanState(false);
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   return (
     <header
@@ -22,9 +22,9 @@ function Header() {
     >
       <nav className={styles.header__content}>
         {isMobile ? (
-          <MobileHeader />
+          <MobileHeader openModal={openModal} />
         ) : (
-          <PCHeader />
+          <PCHeader openModal={openModal} />
         )}
       </nav>
       {isModalOpen && (

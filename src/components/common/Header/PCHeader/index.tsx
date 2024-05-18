@@ -2,7 +2,6 @@ import { cn } from '@bcsdlab/utils';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
-import useBooleanState from 'utils/hooks/useBooleanState';
 import useLogger from 'utils/hooks/useLogger';
 import { useLogout } from 'utils/hooks/useLogout';
 import useTokenState from 'utils/hooks/useTokenState';
@@ -46,7 +45,11 @@ const useMegaMenu = (category: Category[]) => {
   };
 };
 
-export default function PCHeader() {
+interface Props {
+  openModal: () => void;
+}
+
+export default function PCHeader({ openModal }: Props) {
   const {
     panelMenuList,
     isExpanded: isMegaMenuExpanded,
@@ -55,7 +58,6 @@ export default function PCHeader() {
     hideMegaMenu: hideMegamenu,
   } = useMegaMenu(CATEGORY);
 
-  const [, openModal] = useBooleanState(false);
   const logout = useLogout();
   const logger = useLogger();
   const token = useTokenState();

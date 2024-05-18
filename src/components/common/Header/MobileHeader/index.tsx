@@ -33,7 +33,11 @@ function useMobileSidebar(pathname: string, isMobile: boolean) {
   };
 }
 
-export default function MobileHeader() {
+interface Props {
+  openModal: () => void;
+}
+
+export default function MobileHeader({ openModal }: Props) {
   const { pathname } = useLocation();
   const isMobile = useMediaQuery();
   const {
@@ -110,7 +114,10 @@ export default function MobileHeader() {
           <HamburgerIcon />
         </button>
       </div>
-      {createPortal(<Panel isExpanded={isExpanded} hideSidebar={hideSidebar} />, document.body)}
+      {createPortal(
+        <Panel isExpanded={isExpanded} hideSidebar={hideSidebar} openModal={openModal} />,
+        document.body,
+      )}
     </>
   );
 }
