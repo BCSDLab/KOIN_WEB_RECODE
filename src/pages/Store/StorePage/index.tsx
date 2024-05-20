@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
 
-import { cn } from '@bcsdlab/utils';
+import { cn, josa } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import useLogger from 'utils/hooks/useLogger';
 import useParamsHandler from 'utils/hooks/useParamsHandler';
@@ -227,7 +227,7 @@ function StorePage() {
               && (
                 <div className={styles['store-none-open']}>
                   <span className={styles['store-none-open__name']}>{store.name}</span>
-                  {`${Josa.c(store.name, '은/는')} `}
+                  {josa(`${store.name}#{은}`).charAt(store.name.length)}
                   준비중입니다.
                 </div>
               )}
