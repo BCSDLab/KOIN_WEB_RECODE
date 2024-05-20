@@ -122,7 +122,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
               </div>
             ) : (
               menu.option_prices.map((item) => (
-                <div className={styles['menu-info']} key={menu.id + item.option}>
+                <div className={styles['menu-info']} key={menu.id + item.price + item.option}>
                   <div className={styles['menu-info__card']}>
                     <span>{`${menu.name} - ${item.option}`}</span>
                     <span>
