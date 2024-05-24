@@ -12,6 +12,7 @@ import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useSemester } from 'utils/zustand/semester';
 import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
 import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
+import LectureList from 'pages/Timetable/components/LectureList';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage() {
@@ -76,7 +77,7 @@ export default function DefaultPage() {
             </div>
             {/* TODO: 직접 추가 UI, 강의 리스트 UI 추가 */}
             {isRegularCourseSelected ? (
-              <div>강의 리스트</div>
+              <LectureList />
             ) : (
               <div>직접 추가 UI</div>
             )}
@@ -87,7 +88,7 @@ export default function DefaultPage() {
                 <TrashCanIcon className={styles['page__trash-can-icon']} />
                 삭제
               </button>
-              <button type="button" className={styles['page__save-button']}>
+              <button type="button" className={styles['page__save-button']} onClick={() => navigate('/timetable')}>
                 <PenIcon className={styles['page__pen-icon']} />
                 시간표 저장
               </button>
