@@ -6,15 +6,15 @@ import { useLogout } from 'utils/hooks/useLogout';
 import { useUser } from 'utils/hooks/useUser';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
+import { useMobileSidebar } from 'utils/zustand/sidebarOpen';
 import styles from './Panel.module.scss';
 
 interface Props {
-  isExpanded: boolean,
-  hideSidebar: () => void,
   openModal: () => void,
 }
 
-export default function Panel({ isExpanded, hideSidebar, openModal }: Props) {
+export default function Panel({ openModal }: Props) {
+  const { isSidebarOpen, closeSidebar } = useMobileSidebar();
   const { data: userInfo } = useUser();
   const logout = useLogout();
   const logger = useLogger();
@@ -27,7 +27,7 @@ export default function Panel({ isExpanded, hideSidebar, openModal }: Props) {
 
   const handleMyInfoClick = () => {
     if (userInfo) {
-      hideSidebar();
+      closeSidebar();
       openModal();
     } else {
       logger.actionEventClick({
@@ -41,7 +41,7 @@ export default function Panel({ isExpanded, hideSidebar, openModal }: Props) {
 
   const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
-    hideSidebar();
+    closeSidebar();
     if (submenu.openInNewTab) {
       window.open(submenu.link, '_blank');
     } else {
@@ -53,7 +53,7 @@ export default function Panel({ isExpanded, hideSidebar, openModal }: Props) {
     <nav
       className={cn({
         [styles.container]: true,
-        [styles['container--expanded']]: isExpanded,
+        [styles['container--expanded']]: isSidebarOpen,
       })}
     >
       <div className={styles.top}>
@@ -61,7 +61,7 @@ export default function Panel({ isExpanded, hideSidebar, openModal }: Props) {
           className={styles.top__close}
           type="button"
           aria-label="닫기 버튼"
-          onClick={hideSidebar}
+          onClick={closeSidebar}
         >
           <BlackArrowBackIcon />
         </button>

@@ -1,11 +1,9 @@
 import { cn } from '@bcsdlab/utils';
-import { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
-import useBooleanState from 'utils/hooks/useBooleanState';
 import useLogger from 'utils/hooks/useLogger';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
 import * as api from 'api';
+import { useMobileSidebar } from 'utils/zustand/sidebarOpen';
 import { createPortal } from 'react-dom';
 import { ReactComponent as HamburgerIcon } from 'assets/svg/hamburger-icon.svg';
 import { ReactComponent as KoinServiceLogo } from 'assets/svg/koin-service-logo.svg';
@@ -13,38 +11,13 @@ import { ReactComponent as WhiteArrowBackIcon } from 'assets/svg/white-arrow-bac
 import styles from './MobileHeader.module.scss';
 import Panel from './Panel';
 
-function useMobileSidebar(pathname: string, isMobile: boolean) {
-  const [isExpanded, expandSidebar, hideSidebar] = useBooleanState(false);
-
-  useEffect(() => {
-    if (!isMobile) {
-      hideSidebar();
-    }
-  }, [hideSidebar, isMobile]);
-
-  useEffect(() => {
-    hideSidebar();
-  }, [hideSidebar, pathname]);
-
-  return {
-    isExpanded,
-    expandSidebar,
-    hideSidebar,
-  };
-}
-
 interface Props {
   openModal: () => void;
 }
 
 export default function MobileHeader({ openModal }: Props) {
   const { pathname } = useLocation();
-  const isMobile = useMediaQuery();
-  const {
-    isExpanded,
-    hideSidebar,
-    expandSidebar,
-  } = useMobileSidebar(pathname, isMobile);
+  const { openSidebar } = useMobileSidebar();
 
   const isMain = pathname === '/';
   const navigate = useNavigate();
@@ -59,7 +32,7 @@ export default function MobileHeader({ openModal }: Props) {
   };
 
   const handleHamburgerClick = () => {
-    expandSidebar();
+    openSidebar();
     logger.actionEventClick({
       actionTitle: 'USER',
       title: 'hamburger',
@@ -115,7 +88,7 @@ export default function MobileHeader({ openModal }: Props) {
         </button>
       </div>
       {createPortal(
-        <Panel isExpanded={isExpanded} hideSidebar={hideSidebar} openModal={openModal} />,
+        <Panel openModal={openModal} />,
         document.body,
       )}
     </>
