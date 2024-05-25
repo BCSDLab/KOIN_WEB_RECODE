@@ -104,7 +104,7 @@ function StorePage() {
   // eslint-disable-next-line
   const Josa = require('josa-js');
   useScrollToTop();
-  useScorllLogging('shpp_categories', categories);
+  useScorllLogging('shop_categories', categories);
 
   return (
     <div className={styles.section}>
@@ -152,8 +152,8 @@ function StorePage() {
             }
           }}
           onFocus={() => {
-            const currentCategoryId = Number(params.category); // 검색창에 포커스되면 로깅
-            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name} ` });
+            const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
+            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
           }}
         />
         <button
