@@ -5,7 +5,7 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import React from 'react';
 import styles from '../DefaultPage/DefaultPage.module.scss';
 
-function Curriculum() {
+function CurriculumListBox() {
   const { data: deptList } = useDeptList();
   return (
     <div>
@@ -39,4 +39,4 @@ function Curriculum() {
   );
 }
 
-export default Curriculum;
+export default CurriculumListBox;
