@@ -1,0 +1,50 @@
+.page {
+  width: 613px;
+  height: 699px;
+
+  &__filter {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  &__depart {
+    width: 236px;
+  }
+}
+
+.search-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 4px;
+  width: 369px;
+  height: 26px;
+  background-color: #fff;
+
+  &__input {
+    margin-right: 0;
+    border: none;
+    width: 100%;
+    font-size: 15px;
+    text-align: left;
+    color: #8e8e8e;
+    background-color: #fff;
+    position: relative;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__button {
+    border: none;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    background-color: #fff;
+    cursor: pointer;
+  }
+}
