@@ -7,6 +7,10 @@ import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useNavigate } from 'react-router-dom';
+import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
+import CurriculumListBox from 'pages/Timetable/components/Curriculum';
+import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
+import { ReactComponent as EditIcon } from 'assets/svg/edit-icon.svg';
 import styles from '../../TimetablePage/DefaultPage/DefaultPage.module.scss';
 import Timetable from '../../../../components/TimetablePage/Timetable';
 import useLectureList from '../../hooks/useLectureList';
@@ -27,26 +31,36 @@ export default function MainTimetable() {
 
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
+  const { data: deptList } = useDeptList();
+  const [curriculum, setCurriculum] = React.useState(deptList[0].name);
+
+  const onChangeSelect = (e: { target: string }) => {
+    const { target } = e;
+    setCurriculum(target);
+  };
 
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
-        {/* TODO: CurriculumListBox 수정 필요 */}
-        {/* <CurriculumListBox /> */}
+        <CurriculumListBox
+          list={deptList}
+          value={curriculum}
+          onChange={onChangeSelect}
+        />
         <button
           type="button"
           className={styles.page__button}
           onClick={() => onTimetableImageDownload('my-timetable')}
         >
-          <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="" />
-          이미지로 저장하기
+          <DownloadIcon />
+          이미지 저장
         </button>
         <button
           type="button"
           className={styles.page__button}
           onClick={() => navigate('/timetable/modify')}
         >
-          <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="" />
+          <EditIcon />
           시간표 수정
         </button>
       </div>

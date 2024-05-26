@@ -82,6 +82,7 @@ function Timetable({
               // index값이 변경되지 않음
               // eslint-disable-next-line react/no-array-index-key
               key={`value-${index}`}
+              className={styles['timetable__content--time']}
             >
               {value}
             </div>

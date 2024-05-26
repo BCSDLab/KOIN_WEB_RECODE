@@ -1,5 +1,7 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
+import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
+import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useLogger from 'utils/hooks/useLogger';
 import styles from './Listbox.module.scss';
@@ -42,6 +44,7 @@ function Listbox({
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
+    event.stopPropagation();
     onChange({ target: { value: optionValue ?? '' } });
     handleLogClick(optionValue ?? '');
     closePopup();
@@ -80,9 +83,11 @@ function Listbox({
         onClick={triggerPopup}
         className={cn({
           [styles.select__trigger]: true,
+          [styles['select__trigger--opened']]: isOpenedPopup,
         })}
       >
         {value !== null ? list.find((item) => item.value === value)?.label : ''}
+        {isOpenedPopup ? <UpperArrow /> : <LowerArrow />}
       </button>
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">

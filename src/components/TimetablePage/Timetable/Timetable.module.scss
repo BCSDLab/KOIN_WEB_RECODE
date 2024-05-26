@@ -58,6 +58,15 @@
     position: relative;
     border-bottom: #d2dae2 1px solid;
     border-left: solid 1px #d2dae2;
+
+    &--time {
+      &:nth-child(odd) {
+        position: relative;
+        z-index: 2;
+        top: 18px;
+        background-color: #fff;
+      }
+    }
   }
 
   &__row-container {
@@ -71,6 +80,7 @@
       content: "";
       position: absolute;
       width: 100%;
+      border-bottom: #F5F5F5;
     }
 
     &:nth-child(odd)::after {
