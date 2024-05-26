@@ -1,5 +1,5 @@
 import type { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
-import React from 'react';
+import React, { useRef } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import { cn } from '@bcsdlab/utils';
 import styles from './LectureTable.module.scss';
@@ -42,30 +42,22 @@ function LectureTable({
   onDoubleClickRow,
 }: LectureTableProps): JSX.Element {
   const { widthInfo } = useFlexibleWidth(9, [65, 173, 45, 65, 65, 45, 45, 45, 65]);
-  let clickTimeout: NodeJS.Timeout | null = null;
+  const clickTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const handleClickRow = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    value: LectureInfo | TimetableLectureInfo,
-  ) => {
-    if (clickTimeout) {
-      clearTimeout(clickTimeout);
-      clickTimeout = null;
-    }
-
-    clickTimeout = setTimeout(() => {
-      if (e.detail === 1 && onClickRow) {
-        onClickRow(value);
+  const handleTableRowClick = (value: LectureInfo | TimetableLectureInfo) => {
+    if (clickTimeout.current !== null) {
+      clearTimeout(clickTimeout.current);
+      clickTimeout.current = null;
+      if (onDoubleClickRow !== undefined) {
+        onDoubleClickRow(value);
       }
-      clickTimeout = null;
-    }, 200);
-
-    if (e.detail === 2 && onDoubleClickRow) {
-      if (clickTimeout) {
-        clearTimeout(clickTimeout);
-        clickTimeout = null;
-      }
-      onDoubleClickRow(value);
+    } else {
+      clickTimeout.current = setTimeout(() => {
+        if (onClickRow !== undefined) {
+          onClickRow(value);
+        }
+        clickTimeout.current = null;
+      }, 200);
     }
   };
 
@@ -124,8 +116,8 @@ function LectureTable({
                   role={onClickRow !== undefined ? undefined : 'null'}
                   aria-label={onClickRow !== undefined ? '시간표에서 미리 보기' : undefined}
                   className={styles['table__row-button']}
-                  onClick={(e) => handleClickRow(e, currentItem)}
-                  onDoubleClick={(e) => handleClickRow(e, currentItem)}
+                  onClick={() => handleTableRowClick(currentItem)}
+                  onDoubleClick={() => handleTableRowClick(currentItem)}
                 >
                   {LECTURE_TABLE_HEADER
                     .map((headerItem, headerItemIndex) => (headerItem.key !== null
