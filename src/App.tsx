@@ -55,7 +55,8 @@ function App() {
         <Route path="/" element={<BoardPage />}>
           <Route path="/" element={<HelmetWrapper title="코인 - 한기대 커뮤니티" element={<IndexPage />} />} />
           <Route path="timetable" element={<HelmetWrapper title="코인 - 시간표" element={<TimetablePage />} />} />
-          <Route path="timetable/modify" element={<HelmetWrapper title="코인 - 시간표 수정" element={<ModifyTimetablePage />} />} />
+          <Route path="timetable/modify/regular" element={<HelmetWrapper title="코인 - 시간표 수정" element={<ModifyTimetablePage />} />} />
+          <Route path="timetable/modify/direct" element={<HelmetWrapper title="코인 - 시간표 수정" element={<ModifyTimetablePage />} />} />
           <Route path="/store" element={<HelmetWrapper title="코인 - 상점" element={<StorePage />} />} />
           <Route path="/store/:id" element={<HelmetWrapper title="코인 - 상점 상세" element={<StoreDetailPage />} />} />
           <Route path="/bus" element={<HelmetWrapper title="코인 - 버스" element={<BusPage />} />} />
