@@ -96,7 +96,7 @@ function Listbox({
         })}
       >
         {value !== null ? list.find((item) => item.value === value)?.label : ''}
-        {version === 'new' && isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />}
+        {version === 'new' && (isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />)}
       </button>
       {isOpenedPopup && (
         <ul className={styleClasses.select__content} role="listbox">
