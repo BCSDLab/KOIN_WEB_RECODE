@@ -58,7 +58,7 @@ export default function MainTimetable() {
         <button
           type="button"
           className={styles.page__button}
-          onClick={() => navigate('/timetable/modify')}
+          onClick={() => navigate('/timetable/modify/regular')}
         >
           <EditIcon />
           시간표 수정
