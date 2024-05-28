@@ -32,20 +32,12 @@ export default function MainTimetable() {
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: deptList } = useDeptList();
-  const [curriculum, setCurriculum] = React.useState(deptList[0].name);
-
-  const onChangeSelect = (e: { target: string }) => {
-    const { target } = e;
-    setCurriculum(target);
-  };
 
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
         <CurriculumListBox
           list={deptList}
-          value={curriculum}
-          onChange={onChangeSelect}
         />
         <button
           type="button"
@@ -73,7 +65,7 @@ export default function MainTimetable() {
               selectedLectureIndex={selectedLectureIndex}
               columnWidth={140}
               firstColumnWidth={70}
-              rowHeight={32.5}
+              rowHeight={33}
               totalHeight={700}
             />
           </React.Suspense>

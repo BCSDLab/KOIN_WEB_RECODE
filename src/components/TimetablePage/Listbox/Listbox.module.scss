@@ -12,23 +12,28 @@
   &__trigger {
     position: relative;
     width: 100%;
-    height: 48px;
-    padding: 16px 24px 16px 24px;
-    border-radius: 5px;
-    border: none;
+    height: 45px;
+    padding: 0 15px;
     box-sizing: border-box;
     background-color: #fff;
-    font-size: 20px;
-    font-family: Pretendard;
-    font-weight: 500;
-    line-height: 23.87px;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border: 1px solid #d2dae2;
     cursor: pointer;
 
-    &--opened {
-      background-color: #175C8E26;
+    &::after {
+      position: absolute;
+      top: 9px;
+      right: 15px;
+      background: no-repeat center/24px 24px url("https://static.koreatech.in/assets/img/ic-arrow-up-down.png");
+      width: 24px;
+      height: 24px;
+      content: "";
     }
 
     @include media.media-breakpoint(mobile) {
@@ -47,25 +52,22 @@
   }
 
   &__option {
-    width: 331px;
-    height: 52px;
-    padding: 12px 16px 12px 24px;
+    width: 192px;
+    height: 45px;
+    padding: 0 15px;
     box-sizing: border-box;
     background-color: #fff;
     cursor: pointer;
-    font-family: Pretendard;
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 23.87px;
-    color: #8E8E8E;
-    border-radius: 5px;
-  
-    &[aria-selected="true"] {
-      color: #175C8E
-    }
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 45px;
+    letter-spacing: -0.8px;
+    color: #252525;
+    border: 1px solid #d2dae2;
 
+    &[aria-selected="true"],
     &:hover {
-      background-color: #EEEEEE;
+      font-weight: bold;
     }
   }
 }

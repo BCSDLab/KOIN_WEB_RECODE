@@ -1,7 +1,5 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
-import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
@@ -54,7 +52,6 @@ function Listbox({
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
-    event.stopPropagation();
     onChange({ target: { value: optionValue ?? '' } });
     handleLogClick(optionValue ?? '');
     closePopup();
@@ -94,40 +91,33 @@ function Listbox({
         type="button"
         onClick={handleToggleListBox}
         className={cn({
-<<<<<<< HEAD
-          [styles.select__trigger]: true,
-          [styles['select__trigger--opened']]: isOpenedPopup,
-        })}
-      >
-        {value !== null ? list.find((item) => item.value === value)?.label : ''}
-        {isOpenedPopup ? <UpperArrow /> : <LowerArrow />}
-=======
           [styleClasses.select__trigger]: true,
           [styleClasses['select__trigger--selected']]: isOpenedPopup,
         })}
       >
         {value !== null ? list.find((item) => item.value === value)?.label : ''}
         {version === 'new' && (isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />)}
->>>>>>> develop
       </button>
       {isOpenedPopup && (
         <ul className={styleClasses.select__content} role="listbox">
           {list.map((optionValue) => (
-            <li
-              className={cn({
-                [styleClasses.select__option]: true,
-                [styleClasses['select__option--selected']]: optionValue.value === value,
-              })}
-              key={optionValue.value}
-              role="option"
-              aria-selected={optionValue.value === value}
-              data-value={optionValue.value}
-              onClick={onClickOption}
-              onKeyPress={onKeyPressOption}
-              tabIndex={0}
-            >
-              {optionValue.label}
-            </li>
+            <div>
+              <li
+                className={cn({
+                  [styleClasses.select__option]: true,
+                  [styleClasses['select__option--selected']]: optionValue.value === value,
+                })}
+                key={optionValue.value}
+                role="option"
+                aria-selected={optionValue.value === value}
+                data-value={optionValue.value}
+                onClick={onClickOption}
+                onKeyPress={onKeyPressOption}
+                tabIndex={0}
+              >
+                {optionValue.label}
+              </li>
+            </div>
           ))}
         </ul>
       )}

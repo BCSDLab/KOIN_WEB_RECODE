@@ -77,9 +77,12 @@
     color: #4B4B4B;
     cursor: pointer;
 
-    & > img {
-      width: 24px;
-      height: 24px;
+    &:hover {
+      background-color: #EEEEEE;
+    }
+
+    &:active {
+      background-color: #E1E1E1;
     }
   }
 }
@@ -195,47 +198,68 @@
   display: inline-block;
   width: 260px;
   background-color: #fff;
+  border-radius: 5px;
+  
+  &--opened {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 
   &__trigger {
     position: relative;
     width: 100%;
     height: 48px;
-    padding: 16px 24px 16px 24px;
+    padding: 12px 20px 12px 20px;
     border-radius: 5px;
     border: none;
     box-sizing: border-box;
     background-color: #FAFAFA;
-    font-size: 18px;
-    font-family: Pretendard;
-    font-weight: 500;
-    line-height: 21.48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
 
-    &--opened {
-      background-color: #175C8E26;
+    &:hover {
+      background-color: #EEEEEE;
     }
+  }
+
+  &__curriculum-title {
+    display: flex;
+    gap: 8px;
+    color: #4B4B4B;
+    font-size: 15.5px;
+    font-family: Pretendard;
+    font-weight: 500;
+    line-height: 21.48px;
   }
 
   &__curriculum-list {
     position: absolute;
     z-index: 5;
-    background-color: #fff;
+    box-shadow: 0px 8px 32px 0px #00000014;
+    box-shadow: 0px 2px 20px 0px #0000000A;
+    background-color: #FAFAFA;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 
   &__curriculum {
     width: 260px;
     height: 48px;
     box-sizing: border-box;
-    background-color: #fff;
+    background-color: #FAFAFA;
     cursor: pointer;
     font-family: Pretendard;
-    font-size: 18px;
+    font-size: 15.5px;
     font-weight: 500;
     line-height: 21.48px;
     color: #8E8E8E;
+
+    &:last-child {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
 
     & > a {
       display: block;
@@ -249,6 +273,10 @@
     &:hover {
       background-color: #EEEEEE;
       border-radius: 5px;
+    }
+
+    &:active {
+      background-color: #E1E1E1;
     }
   }
 }

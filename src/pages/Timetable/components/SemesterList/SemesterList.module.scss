@@ -3,6 +3,17 @@
 .semester-list {
   width: 331px;
   height: 48px;
+  font-size: 20px;
+
+  & > div {
+    & > button {
+      font-size: 20px;
+
+      &:hover {
+        background-color: #EEEEEE;
+      }
+    }
+  }
 }
 
 .select {
@@ -21,7 +32,7 @@
     height: 100%;
     padding: 0 24px;
     box-sizing: border-box;
-    background-color: #fff;
+    background-color: #3f0f0f;
     font-size: 16px;
     font-weight: 400;
     line-height: 1.2;

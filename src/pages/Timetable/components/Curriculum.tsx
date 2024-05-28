@@ -3,28 +3,22 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { DeptListResponse } from 'api/dept/entity';
-import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
-import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
+import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
+import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
+import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
 import styles from 'pages/Timetable/TimetablePage/DefaultPage/DefaultPage.module.scss';
 
 export interface DeptListboxProps {
   list: DeptListResponse;
-  value: string | null;
-  onChange: (event: { target: string }) => void;
 }
 
 function CurriculumListBox({
   list,
-  value,
-  onChange,
 }: DeptListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
 
-  const onClickOption = (event: React.MouseEvent<HTMLElement>) => {
-    const { currentTarget } = event;
-    const optionValue = currentTarget.getAttribute('data-value');
-    onChange({ target: optionValue ?? '' });
+  const onClickOption = () => {
     closePopup();
   };
 
@@ -43,7 +37,10 @@ function CurriculumListBox({
 
   return (
     <div
-      className={styles.select}
+      className={cn({
+        [styles.select]: true,
+        [styles['select--opened']]: isOpenedPopup,
+      })}
       ref={wrapperRef}
     >
       <button
@@ -54,8 +51,11 @@ function CurriculumListBox({
           [styles['select__trigger--opened']]: isOpenedPopup,
         })}
       >
-        {value !== null ? list.find((item) => item.name === value)?.name : '커리큘럼'}
-        {isOpenedPopup ? <UpperArrow width={24} height={24} viewBox="-6 -8 24 24" /> : <LowerArrow width={24} height={24} viewBox="-6 -8 24 24" />}
+        <div className={styles['select__curriculum-title']}>
+          <CurriculumIcon />
+          커리큘럼
+        </div>
+        {isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
         <ul className={styles['select__curriculum-list']} role="listbox">
@@ -65,7 +65,7 @@ function CurriculumListBox({
               className={styles.select__curriculum}
               key={dept.name}
               role="option"
-              aria-selected={dept.name === value}
+              aria-selected="false"
               data-value={dept.name}
               onClick={onClickOption}
               tabIndex={0}

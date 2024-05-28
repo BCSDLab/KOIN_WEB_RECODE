@@ -1,8 +1,9 @@
 /* eslint-disable no-restricted-imports */
 import React, { useState } from 'react';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import useSemesterOptionList from '../hooks/useSemesterOptionList';
-import Listbox from '../../../components/TimetablePage/Listbox';
+import styles from './SemesterList.module.scss';
+import useSemesterOptionList from '../../hooks/useSemesterOptionList';
+import Listbox from '../../../../components/TimetablePage/Listbox';
 
 function SemesterListbox() {
   const semester = useSemester();
@@ -22,11 +23,14 @@ function SemesterListbox() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Listbox
-      list={semesterOptionList}
-      value={value}
-      onChange={onChangeSelect}
-    />
+    <div className={styles['semester-list']}>
+      <Listbox
+        list={semesterOptionList}
+        value={value}
+        onChange={onChangeSelect}
+        version="new"
+      />
+    </div>
   );
 }
 
