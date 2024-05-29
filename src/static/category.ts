@@ -59,7 +59,7 @@ export const CATEGORY: Category[] = [
       },
       {
         title: '주변상점',
-        link: '/store?category=1',
+        link: '/store',
         newFlag: false,
         planFlag: false,
         tag: null,

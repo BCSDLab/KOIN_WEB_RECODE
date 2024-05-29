@@ -70,10 +70,8 @@ export default function MobileHeader({ openModal }: Props) {
           {isMain ? (
             <KoinServiceLogo />
           ) : (CATEGORY
-            .flatMap((categoryValue) => categoryValue.submenu)
-            .find((submenuValue) => submenuValue.link === pathname)
-            ?.title ?? ''
-          )}
+            .flatMap((category) => category.submenu)
+            .find((submenu) => pathname.startsWith(submenu.link))?.title ?? '')}
         </span>
         <button
           className={cn({
