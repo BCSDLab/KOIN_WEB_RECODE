@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
 import useLogger from 'utils/hooks/useLogger';
 import * as api from 'api';
-import { useMobileSidebar } from 'utils/zustand/sidebarOpen';
+import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { createPortal } from 'react-dom';
 import { ReactComponent as HamburgerIcon } from 'assets/svg/hamburger-icon.svg';
 import { ReactComponent as KoinServiceLogo } from 'assets/svg/koin-service-logo.svg';
@@ -69,9 +69,11 @@ export default function MobileHeader({ openModal }: Props) {
         >
           {isMain ? (
             <KoinServiceLogo />
-          ) : (CATEGORY
-            .flatMap((category) => category.submenu)
-            .find((submenu) => pathname.startsWith(submenu.link))?.title ?? '')}
+          ) : (
+            CATEGORY
+              .flatMap((category) => category.submenu)
+              .find((submenu) => pathname.startsWith(submenu.link))?.title ?? ''
+          )}
         </span>
         <button
           className={cn({

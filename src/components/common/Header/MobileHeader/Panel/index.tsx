@@ -6,7 +6,7 @@ import { useLogout } from 'utils/hooks/useLogout';
 import { useUser } from 'utils/hooks/useUser';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
-import { useMobileSidebar } from 'utils/zustand/sidebarOpen';
+import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import styles from './Panel.module.scss';
 
 interface Props {
