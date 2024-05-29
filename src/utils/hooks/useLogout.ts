@@ -7,6 +7,7 @@ export const useLogout = () => {
     setRefreshToken('');
     deleteCookie('AUTH_TOKEN_KEY');
     setToken('');
+    window.location.href = '/';
   };
   return logout;
 };
