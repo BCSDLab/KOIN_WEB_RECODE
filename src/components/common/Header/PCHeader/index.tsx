@@ -18,9 +18,9 @@ const useMegaMenu = (category: Category[]) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const createOnChangeMenu = (title: string) => () => {
-    const selectedSubMenu = category
+    const selectedSubmenu = category
       .find((categoryInfo) => categoryInfo.title === title)?.submenu ?? null;
-    setPanelMenuList(selectedSubMenu);
+    setPanelMenuList(selectedSubmenu);
     setIsExpanded(true);
   };
   const onFocusPanel = () => {

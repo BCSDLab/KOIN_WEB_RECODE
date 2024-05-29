@@ -71,7 +71,7 @@ export default function MobileHeader({ openModal }: Props) {
             <KoinServiceLogo />
           ) : (CATEGORY
             .flatMap((categoryValue) => categoryValue.submenu)
-            .find((subMenuValue) => subMenuValue.link === pathname)
+            .find((submenuValue) => submenuValue.link === pathname)
             ?.title ?? ''
           )}
         </span>
