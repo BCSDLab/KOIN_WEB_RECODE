@@ -128,7 +128,7 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
             </div>
 
             <div className={styles.content}>
-              {recentDate && ['A코너', 'B코너', 'C코너'].includes(item.place) && (
+              {recentDate && ['A코너', 'B코너', 'C코너'].includes(item.place) && item.type !== 'BREAKFAST' && (
                 <div className={styles['content__image-wrapper']}>
                   {item.image_url ? (
                     <button type="button" onClick={() => handleImageClick(item)}>

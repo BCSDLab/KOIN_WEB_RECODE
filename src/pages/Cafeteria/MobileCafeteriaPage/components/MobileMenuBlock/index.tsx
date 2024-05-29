@@ -2,7 +2,7 @@ import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import { MEAL_TYPE_MAP } from 'static/cafeteria';
 import { ReactComponent as NoMeal } from 'assets/svg/no-meals-mobile.svg';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
-import { CafeteriaMenu } from 'interfaces/Cafeteria';
+import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-mobile.svg';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -13,7 +13,7 @@ import styles from './MobileMenuBlock.module.scss';
 
 interface Props {
   menu: CafeteriaMenu[];
-  mealType: string;
+  mealType: MealType;
   category: {
     id: number;
     place: string;
@@ -99,7 +99,7 @@ export default function MobileMenuBlock({ menu, mealType, category }:Props) {
               </li>
             ))}
           </ul>
-          {![4, 5].includes(category.id)
+          {[1, 2, 3].includes(category.id) && mealType !== 'BREAKFAST'
             && (
             <button
               className={styles['category__menu-photo']}
