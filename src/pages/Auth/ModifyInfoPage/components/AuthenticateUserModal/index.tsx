@@ -19,16 +19,16 @@ export interface AuthenticateUserModalProps {
 export default function AuthenticateUserModal({
   onClose,
 }: AuthenticateUserModalProps) {
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
+  const backgroundRef = useRef<HTMLDivElement>(null);
+
+  const isMobile = useMediaQuery();
+  const { updateAuthentication } = useAuthenticationActions();
   const {
     mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error, errorMessage,
   } = useCheckPassword();
-  const { updateAuthentication } = useAuthenticationActions();
-  const isMobile = useMediaQuery();
-  const navigate = useNavigate();
-
-  const backgroundRef = useRef<HTMLDivElement>(null);
 
   const handleCheckPassword = async () => {
     if (password === '') {
@@ -78,6 +78,7 @@ export default function AuthenticateUserModal({
 
     return () => {
       window.removeEventListener('keydown', (e) => handleEscKeyDown(e));
+      window.addEventListener('click', (e) => handleOutsideClick(e));
     };
   }, [onClose]);
 
