@@ -108,8 +108,7 @@
     }
 
     &--active {
-      background-color: #175c8e;
-      color: #fff;
+      background-color: #fff;
     }
   }
 
@@ -133,8 +132,7 @@
     border: 1px solid #d2dae2;
 
     &:hover {
-      background-color: #175c8e;
-      color: #fff;
+      font-weight: bold;
     }
 
     @include media.media-breakpoint(mobile) {
