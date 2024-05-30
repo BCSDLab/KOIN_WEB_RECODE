@@ -144,6 +144,8 @@
 .signup {
   display: flex;
   flex-wrap: wrap;
+  padding-top: 20px;
+  border-top: 0.5px solid #d2dae2;
 
   @include media.media-breakpoint(mobile) {
     width: 320px;
@@ -233,8 +235,6 @@
 
   &__section {
     text-align: left;
-    margin: 20px 0 6px;
-    border-top: 0.5px solid #d2dae2;
     padding: 20px 0;
     width: 100%;
 
