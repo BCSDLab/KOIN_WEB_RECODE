@@ -103,6 +103,12 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 }, ref) => {
   const [password, setPassword] = React.useState('');
   const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
+  const [isPasswordValid, setIsPasswordValid] = React.useState(false);
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setIsPasswordValid(PASSWORD_REGEX.test(e.target.value));
+  };
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = true;
     if (password !== passwordConfirmValue) {
@@ -122,12 +128,12 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       <input
         className={cn({
           [styles['form-input']]: true,
-          [styles['form-input--invalid']]: password.trim() !== '',
+          [styles['form-input--invalid']]: password.trim() !== '' && !isPasswordValid,
         })}
         type="password"
         autoComplete="new-password"
         placeholder="비밀번호 (필수)"
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={handlePasswordChange}
         required={required}
         name={name}
       />
