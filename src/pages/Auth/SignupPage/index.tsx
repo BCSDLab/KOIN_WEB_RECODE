@@ -48,7 +48,7 @@ export interface ISubmitForm {
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
 ): elementRef is ICustomFormInput => (elementRef !== null
-&& Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+  && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const refCollection = React.useRef<IFormType>({});
@@ -122,7 +122,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       <input
         className={cn({
           [styles['form-input']]: true,
-          [styles['form-input--invalid']]: password.trim() !== '' && password !== passwordConfirmValue,
+          [styles['form-input--invalid']]: password.trim() !== '',
         })}
         type="password"
         autoComplete="new-password"
@@ -135,7 +135,10 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
       </span>
       <input
-        className={styles['form-input']}
+        className={cn({
+          [styles['form-input']]: true,
+          [styles['form-input--invalid']]: passwordConfirmValue.trim() !== '' && password !== passwordConfirmValue,
+        })}
         type="password"
         onChange={(e) => setPasswordConfirmValue(e.target.value)}
         autoComplete="new-password"
@@ -208,7 +211,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     label: dept.name,
     value: dept.name,
   }));
-  const [major, setMajor] = React.useState<string>(deptOptionList[0].value);
+  const [major, setMajor] = React.useState<string | null>(null);
 
   const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
