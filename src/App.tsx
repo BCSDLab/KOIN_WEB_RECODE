@@ -1,7 +1,8 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import {
   Routes,
   Route,
+  useLocation,
 } from 'react-router-dom';
 import AuthPage from 'pages/Auth/AuthPage';
 import LoginPage from 'pages/Auth/LoginPage';
@@ -32,10 +33,17 @@ interface PageWrapperProps {
 }
 
 function HelmetWrapper({ title, element }: PageWrapperProps) {
+  const location = useLocation();
+
+  useEffect(() => {
+    document.title = title;
+  }, [title, location]);
+
   return (
     <>
       <MetaHelmet title={title} />
       {element}
+      <LogPage />
     </>
   );
 }
@@ -70,7 +78,6 @@ function App() {
         </Route>
       </Routes>
       <Toast />
-      <LogPage />
     </>
   );
 }

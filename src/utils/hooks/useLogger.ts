@@ -1,3 +1,4 @@
+import React from 'react';
 import * as gtag from 'lib/gtag';
 
 export type ClickLoggerProps = {
@@ -15,12 +16,42 @@ type ActionClickLoggerProps = {
   value: string,
 };
 
+type LoggerEventProps = {
+  action: string,
+  category: string,
+  label: string,
+  value: string,
+};
+
 const useLogger = () => {
+  const prevEvent = React.useRef<LoggerEventProps | null>(null);
+
+  const logEvent = ({
+    action,
+    category,
+    label,
+    value,
+  }: LoggerEventProps) => {
+    const event = {
+      action, category, label, value,
+    };
+    if (
+      !prevEvent.current
+      || prevEvent.current.action !== action
+      || prevEvent.current.category !== category
+      || prevEvent.current.label !== label
+      || prevEvent.current.value !== value
+    ) {
+      gtag.event(event);
+      prevEvent.current = event;
+    }
+  };
+
   const click = ({
     title,
     value,
   } : ClickLoggerProps) => {
-    gtag.event({
+    logEvent({
       action: 'click', category: 'button', label: title, value,
     });
   };
@@ -28,8 +59,8 @@ const useLogger = () => {
   const scroll = ({
     title,
   }: ScrollLoggerProps) => {
-    gtag.event({
-      action: 'BUSINESS', category: 'scroll', label: title, value: title,
+    logEvent({
+      action: 'scroll', category: 'BUSINESS', label: title, value: title,
     });
   };
 
@@ -38,7 +69,7 @@ const useLogger = () => {
     title,
     value,
   }: ActionClickLoggerProps) => {
-    gtag.event({
+    logEvent({
       action: actionTitle, category: 'button', label: title, value,
     });
   };
