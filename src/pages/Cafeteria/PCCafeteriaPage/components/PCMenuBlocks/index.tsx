@@ -55,7 +55,7 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
       title: 'menu_image',
       value: `${MEAL_TYPE_MAP[item.type]}_${item.place}`,
     });
-    setMealDetail(<MealDetail item={item} setMealDetail={setMealDetail} />);
+    setMealDetail(<MealDetail cafeteriaMenu={item} setMealDetail={setMealDetail} />);
   };
 
   return (

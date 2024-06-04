@@ -3,11 +3,11 @@ import { CafeteriaMenu } from 'interfaces/Cafeteria';
 import styles from './MealDetail.module.scss';
 
 interface MealDetailProps {
-  item: CafeteriaMenu;
+  cafeteriaMenu: CafeteriaMenu;
   setMealDetail: (element: JSX.Element) => void;
 }
 
-export default function MealDetail({ item, setMealDetail }: MealDetailProps): JSX.Element {
+export default function MealDetail({ cafeteriaMenu, setMealDetail }: MealDetailProps): JSX.Element {
   const handleCloseModal = () => {
     setMealDetail(<div />);
   };
@@ -25,14 +25,14 @@ export default function MealDetail({ item, setMealDetail }: MealDetailProps): JS
       >
         <div className={styles['modal-header']}>
           <div className={styles['modal-header__place-chip']}>
-            <div className={styles['modal-header__place']}>{item.place}</div>
-            {item.soldout_at && <span className={`${styles['modal-header__chip']} ${styles['modal-header__chip--sold-out']}`}>품절</span>}
-            {!item.soldout_at && item.changed_at && <span className={`${styles['modal-header__chip']} ${styles['modal-header__chip--changed']}`}>변경됨</span>}
+            <div className={styles['modal-header__place']}>{cafeteriaMenu.place}</div>
+            {cafeteriaMenu.soldout_at && <span className={`${styles['modal-header__chip']} ${styles['modal-header__chip--sold-out']}`}>품절</span>}
+            {!cafeteriaMenu.soldout_at && cafeteriaMenu.changed_at && <span className={`${styles['modal-header__chip']} ${styles['modal-header__chip--changed']}`}>변경됨</span>}
           </div>
           <div className={styles['modal-header__detail']}>
-            {!!item.kcal && `${item.kcal}kcal`}
-            {!!item.kcal && !!item.price_card && !!item.price_cash && '•'}
-            {!!item.price_card && !!item.price_cash && `${item.price_card}원/${item.price_cash}원`}
+            {!!cafeteriaMenu.kcal && `${cafeteriaMenu.kcal}kcal`}
+            {!!cafeteriaMenu.kcal && !!cafeteriaMenu.price_card && !!cafeteriaMenu.price_cash && '•'}
+            {!!cafeteriaMenu.price_card && !!cafeteriaMenu.price_cash && `${cafeteriaMenu.price_card}원/${cafeteriaMenu.price_cash}원`}
           </div>
           <button
             type="button"
@@ -45,7 +45,7 @@ export default function MealDetail({ item, setMealDetail }: MealDetailProps): JS
         </div>
         <img
           className={styles.modal__image}
-          src={item.image_url!}
+          src={cafeteriaMenu.image_url!}
           alt="menu"
         />
       </button>

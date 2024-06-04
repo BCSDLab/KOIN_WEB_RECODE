@@ -1,14 +1,11 @@
 import { cn } from '@bcsdlab/utils';
-import { useEffect, useState } from 'react';
-import { CAFETERIA_CATEGORY, MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
-import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
-import { convertDateToSimpleString } from 'utils/ts/cafeteria';
+import { Suspense, useEffect, useState } from 'react';
+import { MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { MealType } from 'interfaces/Cafeteria';
 import useLogger from 'utils/hooks/useLogger';
+import MobileMenuBlocks from './components/MobileMenuBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
-import MobileMenuBlock from './components/MobileMenuBlock';
 import styles from './MobileCafeteriaPage.module.scss';
 
 interface Props {
@@ -19,8 +16,6 @@ interface Props {
 export default function MobileCafeteriaPage({ mealType, setMealType }: Props) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
-  const { currentDate } = useDatePicker();
-  const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
 
   const handleMealTypeChange = (meal: MealType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[meal] });
@@ -70,22 +65,11 @@ export default function MobileCafeteriaPage({ mealType, setMealType }: Props) {
           </button>
         ))}
       </div>
-      <div className={styles.table}>
-        {cafeteriaList.find((item) => item.type === mealType)
-          ? CAFETERIA_CATEGORY
-            .map((cafeteriaCategory) => (
-              <MobileMenuBlock
-                key={cafeteriaCategory.id}
-                menu={cafeteriaList}
-                mealType={mealType}
-                category={cafeteriaCategory}
-              />
-            )) : (
-              <div className={styles['table--empty']}>
-                현재 조회 가능한 식단 정보가 없습니다.
-              </div>
-          )}
-        <span className={styles.table__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
+      <div className={styles.blocks}>
+        <Suspense fallback={<div />}>
+          <MobileMenuBlocks mealType={mealType} />
+        </Suspense>
+        <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
     </>
   );
