@@ -1,23 +1,22 @@
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import { MEAL_TYPE_MAP, placeOrder } from 'static/cafeteria';
-import { ReactComponent as NoMeal } from 'assets/svg/no-meals-mobile.svg';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
 import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/useModalPortal';
-import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-mobile.svg';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import { useEffect } from 'react';
 import useLogger from 'utils/hooks/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
+import MenuImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MenuImage';
 import styles from './MobileMenuBlocks.module.scss';
 
 interface Props {
   mealType: MealType;
 }
 
-export default function MobileMenuBlocks({ mealType }:Props) {
+export default function MobileMenuBlocks({ mealType }: Props) {
   const portalManager = useModalPortal();
   const { target } = useOnClickOutside<HTMLImageElement>(portalManager.close);
 
@@ -55,8 +54,6 @@ export default function MobileMenuBlocks({ mealType }:Props) {
     portalManager,
   ]);
 
-  const isShowImageBox = mealType === 'BREAKFAST';
-
   return (
     <>
       {sortedCafeteriaList.map((item) => (
@@ -89,29 +86,7 @@ export default function MobileMenuBlocks({ mealType }:Props) {
                   </li>
                 ))}
               </ul>
-              {[1, 2, 3].includes(item.id) && isShowImageBox
-                && (
-                <button
-                  className={styles['category__menu-photo']}
-                  type="button"
-                  onClick={() => handleImageClick(item)}
-                >
-                  {item.soldout_at && (
-                  <div className={styles['category__menu-photo--sold-out']}>
-                    <NoMeal />
-                    품절된 메뉴입니다.
-                  </div>
-                  )}
-                  {item?.image_url
-                    ? <img src={item?.image_url || ''} alt="" />
-                    : (
-                      <div className={styles['category__menu-photo--none']}>
-                        <NoPhoto />
-                        사진 없음
-                      </div>
-                    )}
-                </button>
-                )}
+              <MenuImage meal={item} mealType={mealType} handleImageClick={handleImageClick} />
             </li>
           </ul>
         </div>
