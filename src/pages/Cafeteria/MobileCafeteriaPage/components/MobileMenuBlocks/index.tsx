@@ -23,7 +23,9 @@ export default function MobileMenuBlocks({ mealType }: Props) {
   const { currentDate } = useDatePicker();
   const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
 
-  const filteredCafeteriaList = cafeteriaList.filter((item) => item.type === mealType);
+  const filteredCafeteriaList = cafeteriaList
+    .filter((item) => item.type === mealType)
+    .filter((item) => !item.menu.includes('미운영'));
   const sortedCafeteriaList = filteredCafeteriaList.sort((a, b) => {
     const indexA = placeOrder.indexOf(a.place);
     const indexB = placeOrder.indexOf(b.place);
@@ -86,7 +88,7 @@ export default function MobileMenuBlocks({ mealType }: Props) {
                   </li>
                 ))}
               </ul>
-              <MenuImage meal={item} mealType={mealType} handleImageClick={handleImageClick} />
+              <MenuImage meal={item} handleImageClick={handleImageClick} />
             </li>
           </ul>
         </div>

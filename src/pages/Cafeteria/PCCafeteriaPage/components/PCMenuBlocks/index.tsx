@@ -20,7 +20,9 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
   const { currentDate } = useDatePicker();
   const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
 
-  const filteredCafeteriaList = cafeteriaList.filter((item) => item.type === mealType);
+  const filteredCafeteriaList = cafeteriaList
+    .filter((item) => item.type === mealType)
+    .filter((item) => !item.menu.includes('미운영'));
   const sortedCafeteriaList = filteredCafeteriaList.sort((a, b) => {
     const indexA = placeOrder.indexOf(a.place);
     const indexB = placeOrder.indexOf(b.place);
@@ -97,8 +99,8 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
                 </div>
               )}
               <div className={styles.content__menu}>
-                {item.menu.map((dish) => (
-                  <div key={dish}>{dish}</div>
+                {item.menu.map((menuName) => (
+                  <div key={menuName}>{menuName}</div>
                 ))}
               </div>
             </div>
