@@ -1,13 +1,12 @@
 /* eslint-disable no-param-reassign */
 import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
-import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-pc.svg';
-import { ReactComponent as NoMeals } from 'assets/svg/no-meals-pc.svg';
 import { useEffect, useRef, useState } from 'react';
 import { MEAL_TYPE_MAP, placeOrder } from 'static/cafeteria';
 import useLogger from 'utils/hooks/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import MealDetail from 'pages/Cafeteria/PCCafeteriaPage/components/MealDetail';
+import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import styles from './PCMenuBlocks.module.scss';
 
@@ -61,10 +60,10 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
   };
 
   return (
-    <div className={styles.container}>
+    <>
       {mealDetail}
 
-      <div className={styles.box} ref={boxRef}>
+      <div ref={boxRef}>
         {sortedCafeteriaList.map((item) => (
           <div className={styles.block} key={item.id}>
             <div className={styles.header}>
@@ -81,21 +80,7 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
             <div className={styles.content}>
               {recentDate && ['A코너', 'B코너', 'C코너'].includes(item.place) && item.type !== 'BREAKFAST' && (
                 <div className={styles['content__image-wrapper']}>
-                  {item.image_url ? (
-                    <button type="button" onClick={() => handleImageClick(item)}>
-                      <img className={styles.content__image} src={item.image_url} alt="식단 상세" />
-                    </button>
-                  ) : (
-                    !item.soldout_at && (<span className={styles.content__image}><NoPhoto /></span>)
-                  )}
-                  {item.soldout_at && (
-                    <span className={styles.content__overlay}>
-                      <span className={styles['content__no-meals']}>
-                        <NoMeals />
-                        품절된 메뉴입니다.
-                      </span>
-                    </span>
-                  )}
+                  <PCMealImage meal={item} handleImageClick={handleImageClick} />
                 </div>
               )}
               <div className={styles.content__menu}>
@@ -107,6 +92,6 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }
