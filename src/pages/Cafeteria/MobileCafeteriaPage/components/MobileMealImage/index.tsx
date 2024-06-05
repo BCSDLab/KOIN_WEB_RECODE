@@ -1,5 +1,6 @@
+import { cn } from '@bcsdlab/utils';
 import { CafeteriaMenu } from 'interfaces/Cafeteria';
-import { ReactComponent as NoMeal } from 'assets/svg/no-meals-mobile.svg';
+import { ReactComponent as NoMeals } from 'assets/svg/no-meals-mobile.svg';
 import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-mobile.svg';
 import styles from './MobileMealImage.module.scss';
 
@@ -17,24 +18,22 @@ export default function MobileMealImage({ meal, handleImageClick }: Props) {
 
   return (
     <button
-      className={styles.image}
       type="button"
+      className={cn({
+        [styles.image]: true,
+        [styles['image--no-image']]: !hasImage,
+      })}
       onClick={() => handleImageClick(meal)}
     >
       {meal.soldout_at && (
-        <div className={styles['image--sold-out']}>
-          <NoMeal />
+        <span className={styles['image--sold-out']}>
+          <NoMeals />
           품절된 메뉴입니다.
-        </div>
+        </span>
       )}
       {hasImage
         ? <img src={meal.image_url!} alt="식단 사진" />
-        : (
-          <div className={styles['image--none']}>
-            <NoPhoto />
-            사진 없음
-          </div>
-        )}
+        : <span><NoPhoto /></span>}
     </button>
   );
 }
