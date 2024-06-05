@@ -12,10 +12,10 @@ import styles from './PCMenuBlocks.module.scss';
 
 interface Props {
   mealType: MealType;
-  recentDate: boolean;
+  isRecent: boolean;
 }
 
-export default function PCMenuBlocks({ mealType, recentDate }: Props) {
+export default function PCMenuBlocks({ mealType, isRecent }: Props) {
   const { currentDate } = useDatePicker();
   const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
 
@@ -50,13 +50,15 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
 
   const logger = useLogger();
   const [mealDetail, setMealDetail] = useState(<div />);
-  const handleImageClick = (item: CafeteriaMenu) => {
+  const handleImageClick = (meal: CafeteriaMenu) => {
+    if (!meal.image_url) return;
+
     logger.actionEventClick({
       actionTitle: 'CAMPUS',
       title: 'menu_image',
-      value: `${MEAL_TYPE_MAP[item.type]}_${item.place}`,
+      value: `${MEAL_TYPE_MAP[meal.type]}_${meal.place}`,
     });
-    setMealDetail(<MealDetail cafeteriaMenu={item} setMealDetail={setMealDetail} />);
+    setMealDetail(<MealDetail cafeteriaMenu={meal} setMealDetail={setMealDetail} />);
   };
 
   return (
@@ -78,11 +80,7 @@ export default function PCMenuBlocks({ mealType, recentDate }: Props) {
             </div>
 
             <div className={styles.content}>
-              {recentDate && ['A코너', 'B코너', 'C코너'].includes(item.place) && item.type !== 'BREAKFAST' && (
-                <div className={styles['content__image-wrapper']}>
-                  <PCMealImage meal={item} handleImageClick={handleImageClick} />
-                </div>
-              )}
+              <PCMealImage meal={item} isRecent={isRecent} handleImageClick={handleImageClick} />
               <div className={styles.content__menu}>
                 {item.menu.map((menuName) => (
                   <div key={menuName}>{menuName}</div>

@@ -33,20 +33,22 @@ export default function MobileMenuBlocks({ mealType }: Props) {
   });
 
   const logger = useLogger();
-  const handleImageClick = (current: CafeteriaMenu) => {
+  const handleImageClick = (meal: CafeteriaMenu) => {
+    if (!meal.image_url) return;
+
     logger.actionEventClick({
       actionTitle: 'CAMPUS',
       title: 'menu_image',
-      value: `${MEAL_TYPE_MAP[current.type]}_${current.place}`,
+      value: `${MEAL_TYPE_MAP[meal.type]}_${meal.place}`,
     });
 
-    if (current.image_url) {
+    if (meal.image_url) {
       portalManager.open((portalOption: Portal) => (
         <div className={styles.photo}>
           <div className={styles.photo__close}>
             <CloseIcon onClick={portalOption.close} />
           </div>
-          <img src={current.image_url as string} alt="mealDetail" ref={target} />
+          <img src={meal.image_url as string} alt="mealDetail" ref={target} />
         </div>
       ));
     }
