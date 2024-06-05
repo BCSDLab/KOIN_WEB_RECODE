@@ -1,7 +1,8 @@
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
-import { MEAL_TYPE_MAP, placeOrder } from 'static/cafeteria';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
-import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
+import {
+  CafeteriaMenu, MealType, MEAL_TYPE_MAP, placeOrder,
+} from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import { useEffect } from 'react';

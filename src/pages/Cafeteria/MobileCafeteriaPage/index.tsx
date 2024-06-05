@@ -1,8 +1,8 @@
 import { cn } from '@bcsdlab/utils';
 import { Suspense, useEffect, useState } from 'react';
-import { MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
+import { MEAL_TYPES } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { MealType } from 'interfaces/Cafeteria';
+import { MealType, MEAL_TYPE_MAP } from 'interfaces/Cafeteria';
 import useLogger from 'utils/hooks/useLogger';
 import MobileMenuBlocks from './components/MobileMenuBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';

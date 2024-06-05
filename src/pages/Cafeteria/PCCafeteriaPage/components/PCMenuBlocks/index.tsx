@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
-import { CafeteriaMenu, MealType } from 'interfaces/Cafeteria';
+import {
+  CafeteriaMenu, MealType, MEAL_TYPE_MAP, placeOrder,
+} from 'interfaces/Cafeteria';
 import { useEffect, useRef, useState } from 'react';
-import { MEAL_TYPE_MAP, placeOrder } from 'static/cafeteria';
 import useLogger from 'utils/hooks/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
