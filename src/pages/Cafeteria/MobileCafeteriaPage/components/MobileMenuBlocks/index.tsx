@@ -9,7 +9,7 @@ import useLogger from 'utils/hooks/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
-import MenuImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MenuImage';
+import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import styles from './MobileMenuBlocks.module.scss';
 
 interface Props {
@@ -88,7 +88,7 @@ export default function MobileMenuBlocks({ mealType }: Props) {
                   </li>
                 ))}
               </ul>
-              <MenuImage meal={item} handleImageClick={handleImageClick} />
+              <MobileMealImage meal={item} handleImageClick={handleImageClick} />
             </li>
           </ul>
         </div>
