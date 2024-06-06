@@ -1,3 +1,5 @@
+import { MealType } from 'interfaces/Cafeteria';
+
 const koreanDateStringInstance = new Intl.DateTimeFormat('ko-KR', {
   year: 'numeric',
   month: 'short',
@@ -15,7 +17,13 @@ export const formatDate = (date: Date) => {
   return `${month}/${day}`;
 };
 
-export const getType = () => {
+export const getType = (type?: MealType): MealType => {
+  const mealTypes: Array<MealType> = ['BREAKFAST', 'LUNCH', 'DINNER', 'BREAKFAST'];
+
+  if (type) {
+    return mealTypes[mealTypes.indexOf(type) + 1];
+  }
+
   const hour = new Date().getHours();
   if (hour < 9) {
     return 'BREAKFAST';

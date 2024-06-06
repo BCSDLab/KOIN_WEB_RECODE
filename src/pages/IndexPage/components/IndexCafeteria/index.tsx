@@ -4,6 +4,8 @@ import { MEAL_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { ReactComponent as NotServed } from 'assets/svg/not-served.svg';
+import { ReactComponent as ChevronLeft } from 'assets/svg/chevron-left.svg';
+import { ReactComponent as ChevronRight } from 'assets/svg/chevron-right.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/useLogger';
@@ -16,7 +18,6 @@ function IndexCafeteria() {
   const navigate = useNavigate();
   const { dinings } = useDinings(new Date());
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedMealType, setSelectedMeaType] = useState<MealType>(getType());
   const [selectedPlace, setSelectedPlace] = useState<PlaceType>('A코너');
 
@@ -31,6 +32,11 @@ function IndexCafeteria() {
   const handlePlaceClick = (place: PlaceType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: selectedPlace });
     setSelectedPlace(place);
+  };
+
+  const handleChevronClick = (name: string) => {
+    if (name === 'prev') setSelectedMeaType(getType(getType(selectedMealType)));
+    if (name === 'next') setSelectedMeaType(getType(selectedMealType));
   };
 
   return (
@@ -71,7 +77,23 @@ function IndexCafeteria() {
         </div>
 
         <div className={styles.type}>
+          <button
+            type="button"
+            name="prev"
+            aria-label="이전 시간"
+            onClick={(e) => handleChevronClick(e.currentTarget.name)}
+          >
+            <ChevronLeft />
+          </button>
           {MEAL_TYPE_MAP[selectedMealType]}
+          <button
+            type="button"
+            name="next"
+            aria-label="다음 시간"
+            onClick={(e) => handleChevronClick(e.currentTarget.name)}
+          >
+            <ChevronRight />
+          </button>
           <div className={cn({
             [styles.type__chip]: true,
             [styles['type__chip--sold-out']]: !!selectedDining?.soldout_at,

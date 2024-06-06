@@ -116,11 +116,6 @@
   }
 }
 
-.typeContainer {
-  display: flex;
-  justify-content: center;
-}
-
 .type {
   grid-column: 2 / 6;
   grid-row: 1 / 2;
@@ -131,6 +126,12 @@
   text-align: center;
   white-space: nowrap;
   color: #000;
+  height: 26px;
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 
   @include media.media-breakpoint(mobile) {
     display: flex;
@@ -184,7 +185,6 @@
     line-height: 13.79px;
     text-align: left;
     color: #252525;
-    margin: auto 0;
     max-width: 50%;
     min-height: 20%;
     white-space: nowrap;
