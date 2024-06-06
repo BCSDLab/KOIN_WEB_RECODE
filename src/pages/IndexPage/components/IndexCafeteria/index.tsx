@@ -6,7 +6,6 @@ import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { cn } from '@bcsdlab/utils';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import useLogger from 'utils/hooks/useLogger';
-import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import { PlaceType } from 'interfaces/Cafeteria';
 import styles from './IndexCafeteria.module.scss';
 
@@ -20,12 +19,12 @@ function IndexCafeteria() {
     }
     return ['저녁', 'DINNER'];
   };
-  const { cafeteriaList: dinings } = useCafeteriaList(convertDateToSimpleString(new Date()));
+  const { cafeteriaList } = useCafeteriaList(new Date());
 
   const [selectedCafeteria, setSelectedCafeteria] = useState<PlaceType>('A코너');
 
-  const 선택된_식단 = dinings?.find(
     (dining) => dining.place === selectedCafeteria && dining.type === getType()[1],
+  const 선택된_식단 = cafeteriaList?.find(
   );
   const logger = useLogger();
   const navigate = useNavigate();

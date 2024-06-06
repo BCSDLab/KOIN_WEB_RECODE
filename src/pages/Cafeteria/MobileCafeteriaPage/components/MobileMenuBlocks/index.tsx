@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 import useLogger from 'utils/hooks/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
-import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import styles from './MobileMenuBlocks.module.scss';
 
@@ -22,7 +21,7 @@ export default function MobileMenuBlocks({ mealType }: Props) {
   const { target } = useOnClickOutside<HTMLImageElement>(portalManager.close);
 
   const { currentDate } = useDatePicker();
-  const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
+  const { cafeteriaList } = useCafeteriaList(currentDate);
 
   const filteredCafeteriaList = cafeteriaList
     .filter((item) => item.type === mealType)

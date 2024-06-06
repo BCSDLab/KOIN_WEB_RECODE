@@ -8,7 +8,6 @@ import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import MealDetail from 'pages/Cafeteria/PCCafeteriaPage/components/MealDetail';
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
-import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 import styles from './PCMenuBlocks.module.scss';
 
 interface Props {
@@ -18,7 +17,7 @@ interface Props {
 
 export default function PCMenuBlocks({ mealType, isRecent }: Props) {
   const { currentDate } = useDatePicker();
-  const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
+  const { cafeteriaList } = useCafeteriaList(currentDate);
 
   const filteredCafeteriaList = cafeteriaList
     .filter((item) => item.type === mealType)
