@@ -4,9 +4,9 @@ import {
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
 import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
-import { MEAL_TYPES } from 'static/cafeteria';
+import { MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { MealType, MEAL_TYPE_MAP } from 'interfaces/Cafeteria';
+import { MealType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/useLogger';
 import DateNavigator from './components/DateNavigator';

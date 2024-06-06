@@ -1,12 +1,12 @@
 import { cn } from '@bcsdlab/utils';
-import { CafeteriaMenu } from 'interfaces/Cafeteria';
+import { Dining } from 'interfaces/Cafeteria';
 import { ReactComponent as NoMeals } from 'assets/svg/no-meals-mobile.svg';
 import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-mobile.svg';
 import styles from './MobileMealImage.module.scss';
 
 interface Props {
-  meal: CafeteriaMenu,
-  handleImageClick: (item: CafeteriaMenu) => void,
+  meal: Dining,
+  handleImageClick: (item: Dining) => void,
 }
 
 export default function MobileMealImage({ meal, handleImageClick }: Props) {

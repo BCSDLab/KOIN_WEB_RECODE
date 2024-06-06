@@ -1,15 +1,14 @@
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
-import {
-  CafeteriaMenu, MealType, MEAL_TYPE_MAP, placeOrder,
-} from 'interfaces/Cafeteria';
+import { Dining, MealType } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import { useEffect } from 'react';
 import useLogger from 'utils/hooks/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
+import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
+import { MEAL_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import styles from './MobileMenuBlocks.module.scss';
 
 interface Props {
@@ -21,19 +20,19 @@ export default function MobileMenuBlocks({ mealType }: Props) {
   const { target } = useOnClickOutside<HTMLImageElement>(portalManager.close);
 
   const { currentDate } = useDatePicker();
-  const { cafeteriaList } = useCafeteriaList(currentDate);
+  const { dinings } = useDinings(currentDate);
 
-  const filteredCafeteriaList = cafeteriaList
+  const filteredDinings = dinings
     .filter((item) => item.type === mealType)
     .filter((item) => !item.menu.includes('미운영'));
-  const sortedCafeteriaList = filteredCafeteriaList.sort((a, b) => {
-    const indexA = placeOrder.indexOf(a.place);
-    const indexB = placeOrder.indexOf(b.place);
+  const sortedDinings = filteredDinings.sort((a, b) => {
+    const indexA = PLACE_ORDER.indexOf(a.place);
+    const indexB = PLACE_ORDER.indexOf(b.place);
     return indexA - indexB;
   });
 
   const logger = useLogger();
-  const handleImageClick = (meal: CafeteriaMenu) => {
+  const handleImageClick = (meal: Dining) => {
     if (!meal.image_url) return;
 
     logger.actionEventClick({
@@ -60,7 +59,7 @@ export default function MobileMenuBlocks({ mealType }: Props) {
 
   return (
     <>
-      {sortedCafeteriaList.map((item) => (
+      {sortedDinings.map((item) => (
         <div className={styles.category} key={item.id}>
           <ul className={styles['category__menu-list-row']}>
             <div className={styles.category__header}>

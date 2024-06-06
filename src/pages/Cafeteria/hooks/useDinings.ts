@@ -1,25 +1,25 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { cafeteria } from 'api';
-import { CafeteriaMenu } from 'interfaces/Cafeteria';
+import { Dining } from 'interfaces/Cafeteria';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 
-const CAFETERIA_LIST_KEY = 'CAFETERIA_LIST_KEY';
+const DININGS_KEY = 'DININGS_KEY';
 
-function useCafeteriaList(date: Date) {
+function useDinings(date: Date) {
   const convertedDate = convertDateToSimpleString(date);
-  const { data: cafeteriaList } = useSuspenseQuery(
+  const { data: dinings } = useSuspenseQuery(
     {
-      queryKey: [CAFETERIA_LIST_KEY, convertedDate],
+      queryKey: [DININGS_KEY, convertedDate],
       queryFn: async () => cafeteria.default(convertedDate),
       select: (data) => {
         if ('status' in data || !Array.isArray(data)) {
           return [];
         }
-        return data as Array<CafeteriaMenu>;
+        return data as Array<Dining>;
       },
     },
   );
-  return { cafeteriaList };
+  return { dinings };
 }
 
-export default useCafeteriaList;
+export default useDinings;

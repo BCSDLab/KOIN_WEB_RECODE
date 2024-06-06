@@ -1,25 +1,25 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useNavigate } from 'react-router-dom';
-import { CafeteriaType, CAFETERIA_CATEGORY } from 'static/cafeteria';
+import { MEAL_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { cn } from '@bcsdlab/utils';
-import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
+import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/useLogger';
 import { getType } from 'utils/ts/cafeteria';
-import { MealType, MEAL_TYPE_MAP, PlaceType } from 'interfaces/Cafeteria';
+import { MealType, PlaceType } from 'interfaces/Cafeteria';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
   const logger = useLogger();
   const navigate = useNavigate();
-  const { cafeteriaList } = useCafeteriaList(new Date());
+  const { dinings } = useDinings(new Date());
 
   const [mealType, setMealType] = useState<MealType>(getType());
   setMealType(getType());
   const [mealPlace, setMealPlace] = useState<PlaceType>('A코너');
 
-  const selectedMeal = cafeteriaList
+  const selectedDining = dinings
     .find((meal) => meal.place === mealPlace && meal.type === mealType);
 
   const handleMoreClick = () => {
@@ -27,9 +27,9 @@ function IndexCafeteria() {
     navigate('/cafeteria');
   };
 
-  const handlePlaceClick = (e: React.MouseEvent, category: CafeteriaType) => {
+  const handlePlaceClick = (place: PlaceType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: mealPlace });
-    setMealPlace(category.place);
+    setMealPlace(place);
   };
 
   return (
@@ -54,17 +54,17 @@ function IndexCafeteria() {
       </h2>
       <div className={styles.cafeteriaCard}>
         <div className={styles.cafeteriaContainer}>
-          {CAFETERIA_CATEGORY.map((category) => (
+          {PLACE_ORDER.map((place) => (
             <button
               type="button"
-              key={category.id}
+              key={place}
               className={cn({
                 [styles.cafeteria]: true,
-                [styles['cafeteria--selected']]: mealPlace === category.place,
+                [styles['cafeteria--selected']]: mealPlace === place,
               })}
-              onClick={(e) => handlePlaceClick(e, category)}
+              onClick={() => handlePlaceClick(place)}
             >
-              {category.place === '2캠퍼스' ? '2캠' : category.place}
+              {place === '2캠퍼스' ? '2캠' : place}
             </button>
           ))}
         </div>
@@ -77,16 +77,16 @@ function IndexCafeteria() {
             {MEAL_TYPE_MAP[getType()]}
             <div className={cn({
               [styles.type__block]: true,
-              [styles['type__block--soldOut']]: !!selectedMeal?.soldout_at,
+              [styles['type__block--soldOut']]: !!selectedDining?.soldout_at,
             })}
             >
-              {selectedMeal?.soldout_at ? '품절' : ''}
+              {selectedDining?.soldout_at ? '품절' : ''}
             </div>
           </div>
           <div
             className={styles.menuContainer}
           >
-            {selectedMeal ? selectedMeal.menu.slice(0, 10).map((menu) => (
+            {selectedDining ? selectedDining.menu.slice(0, 10).map((menu) => (
               <div className={styles.menu} key={menu}>
                 {menu}
               </div>

@@ -1,13 +1,13 @@
 import { cn } from '@bcsdlab/utils';
-import { CafeteriaMenu } from 'interfaces/Cafeteria';
+import { Dining } from 'interfaces/Cafeteria';
 import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-pc.svg';
 import { ReactComponent as NoMeals } from 'assets/svg/no-meals-pc.svg';
 import styles from './PCMealImage.module.scss';
 
 interface Props {
-  meal: CafeteriaMenu,
+  meal: Dining,
   isRecent: boolean,
-  handleImageClick: (item: CafeteriaMenu) => void,
+  handleImageClick: (item: Dining) => void,
 }
 
 export default function PCMealImage({ meal, isRecent, handleImageClick }: Props) {
