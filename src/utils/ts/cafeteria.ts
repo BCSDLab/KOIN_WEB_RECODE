@@ -14,3 +14,13 @@ export const formatDate = (date: Date) => {
   const day = date.getDate();
   return `${month}/${day}`;
 };
+
+export const getType = () => {
+  const hour = new Date().getHours();
+  if (hour < 9) {
+    return 'BREAKFAST';
+  } if (hour < 14) {
+    return 'LUNCH';
+  }
+  return 'DINNER';
+};

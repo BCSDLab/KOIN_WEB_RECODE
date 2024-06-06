@@ -6,71 +6,50 @@ import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { cn } from '@bcsdlab/utils';
 import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
 import useLogger from 'utils/hooks/useLogger';
-import { PlaceType } from 'interfaces/Cafeteria';
+import { getType } from 'utils/ts/cafeteria';
+import { MEAL_TYPE_MAP, PlaceType } from 'interfaces/Cafeteria';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
-  const getType = () => {
-    const hour = new Date().getHours();
-    if (hour < 9) {
-      return ['아침', 'BREAKFAST'];
-    } if (hour < 14) {
-      return ['점심', 'LUNCH'];
-    }
-    return ['저녁', 'DINNER'];
-  };
+  const logger = useLogger();
+  const navigate = useNavigate();
   const { cafeteriaList } = useCafeteriaList(new Date());
 
   const [selectedCafeteria, setSelectedCafeteria] = useState<PlaceType>('A코너');
 
-    (dining) => dining.place === selectedCafeteria && dining.type === getType()[1],
   const 선택된_식단 = cafeteriaList?.find(
+    (dining) => dining.place === selectedCafeteria && dining.type === getType(),
   );
-  const logger = useLogger();
-  const navigate = useNavigate();
 
-  const handleMoreClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-
+  const handleMoreClick = () => {
     navigate('/cafeteria');
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
   };
 
-  const onClickCafeteriaCorner = (e: React.MouseEvent, category: CafeteriaType) => {
-    e.preventDefault();
-    logger.actionEventClick({
-      actionTitle: 'CAMPUS',
-      title: 'main_menu_corner',
-      value: selectedCafeteria,
-    });
+  const handlePlaceClick = (e: React.MouseEvent, category: CafeteriaType) => {
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: selectedCafeteria });
     setSelectedCafeteria(category.place);
   };
 
   return (
     <section className={styles.template}>
       <h2 className={styles.title}>
-        <div
-          onClick={(e) => {
-            handleMoreClick(e);
-          }}
-          role="button"
-          tabIndex={0}
+        <button
+          type="button"
+          onClick={handleMoreClick}
         >
           식단
-        </div>
-        <div
+        </button>
+        <button
+          type="button"
           className={styles.moreLink}
-          onClick={(e) => {
-            handleMoreClick(e);
-          }}
-          role="button"
-          tabIndex={0}
+          onClick={handleMoreClick}
         >
           더보기
           <RightArrow
             aria-hidden
           />
-        </div>
+        </button>
       </h2>
       <div className={styles.cafeteriaCard}>
         <div className={styles.cafeteriaContainer}>
@@ -82,22 +61,19 @@ function IndexCafeteria() {
                 [styles.cafeteria]: true,
                 [styles['cafeteria--selected']]: selectedCafeteria === category.place,
               })}
-              onClick={(e) => onClickCafeteriaCorner(e, category)}
+              onClick={(e) => handlePlaceClick(e, category)}
             >
               {category.place === '2캠퍼스' ? '2캠' : category.place}
             </button>
           ))}
         </div>
-        <div
+        <button
+          type="button"
           className={styles.menuBox}
-          onClick={(e) => {
-            handleMoreClick(e);
-          }}
-          role="button"
-          tabIndex={0}
+          onClick={handleMoreClick}
         >
           <div className={styles.type}>
-            {getType()[0]}
+            {MEAL_TYPE_MAP[getType()]}
             <div className={cn({
               [styles.type__block]: true,
               [styles['type__block--soldOut']]: !!선택된_식단?.soldout_at,
@@ -124,7 +100,7 @@ function IndexCafeteria() {
               </div>
             )}
           </div>
-        </div>
+        </button>
       </div>
     </section>
   );
