@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { MEAL_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
+import { ReactComponent as NotServed } from 'assets/svg/not-served.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/useLogger';
@@ -15,12 +16,12 @@ function IndexCafeteria() {
   const navigate = useNavigate();
   const { dinings } = useDinings(new Date());
 
-  const [mealType, setMealType] = useState<MealType>(getType());
-  setMealType(getType());
-  const [mealPlace, setMealPlace] = useState<PlaceType>('A코너');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedMealType, setSelectedMeaType] = useState<MealType>(getType());
+  const [selectedPlace, setSelectedPlace] = useState<PlaceType>('A코너');
 
   const selectedDining = dinings
-    .find((meal) => meal.place === mealPlace && meal.type === mealType);
+    .find((meal) => meal.place === selectedPlace && meal.type === selectedMealType);
 
   const handleMoreClick = () => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
@@ -28,79 +29,76 @@ function IndexCafeteria() {
   };
 
   const handlePlaceClick = (place: PlaceType) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: mealPlace });
-    setMealPlace(place);
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: selectedPlace });
+    setSelectedPlace(place);
   };
 
   return (
     <section className={styles.template}>
-      <h2 className={styles.title}>
+      <h2 className={styles.header}>
         <button
           type="button"
+          className={styles.header__title}
           onClick={handleMoreClick}
         >
           식단
         </button>
         <button
           type="button"
-          className={styles.more}
+          className={styles.header__more}
           onClick={handleMoreClick}
         >
           더보기
-          <RightArrow
-            aria-hidden
-          />
+          <RightArrow />
         </button>
       </h2>
-      <div className={styles.cafeteriaCard}>
-        <div className={styles.cafeteriaContainer}>
-          {PLACE_ORDER.map((place) => (
+
+      <div className={styles.card}>
+        <div className={styles.place}>
+          {PLACE_ORDER.map((placeName) => (
             <button
               type="button"
-              key={place}
+              key={placeName}
               className={cn({
-                [styles.cafeteria]: true,
-                [styles['cafeteria--selected']]: mealPlace === place,
+                [styles.place__name]: true,
+                [styles['place__name--selected']]: placeName === selectedPlace,
               })}
-              onClick={() => handlePlaceClick(place)}
+              onClick={() => handlePlaceClick(placeName)}
             >
-              {place === '2캠퍼스' ? '2캠' : place}
+              {placeName === '2캠퍼스' ? '2캠' : placeName}
             </button>
           ))}
         </div>
+
+        <div className={styles.type}>
+          {MEAL_TYPE_MAP[selectedMealType]}
+          <div className={cn({
+            [styles.type__chip]: true,
+            [styles['type__chip--sold-out']]: !!selectedDining?.soldout_at,
+          })}
+          >
+            {selectedDining?.soldout_at ? '품절' : ''}
+          </div>
+        </div>
+
         <button
           type="button"
-          className={styles.menuBox}
+          className={styles.menus}
           onClick={handleMoreClick}
         >
-          <div className={styles.type}>
-            {MEAL_TYPE_MAP[getType()]}
-            <div className={cn({
-              [styles.type__block]: true,
-              [styles['type__block--soldOut']]: !!selectedDining?.soldout_at,
-            })}
-            >
-              {selectedDining?.soldout_at ? '품절' : ''}
+          {selectedDining ? (
+            selectedDining.menu.slice(0, 10).map((menuName) => (
+              <span className={styles.menus__name} key={menuName}>
+                {menuName}
+              </span>
+            ))
+          ) : (
+            <div className={styles['menus--not-served']}>
+              <NotServed />
+              <p>식단이 제공되지 않아</p>
+              <p>표시할 수 없습니다.</p>
             </div>
-          </div>
-          <div
-            className={styles.menuContainer}
-          >
-            {selectedDining ? selectedDining.menu.slice(0, 10).map((menu) => (
-              <div className={styles.menu} key={menu}>
-                {menu}
-              </div>
-            )) : (
-              <div className={styles.noMenuContent}>
-                <img className={styles.noMenuImage} src="https://static.koreatech.in/assets/img/ic-none.png" alt="" />
-                <div className={styles.noMenu}>
-                  식단이 제공되지 않아
-                  <br />
-                  표시할 수 없습니다.
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </button>
       </div>
     </section>

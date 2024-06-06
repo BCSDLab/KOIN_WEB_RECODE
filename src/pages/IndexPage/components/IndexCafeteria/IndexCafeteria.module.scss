@@ -7,61 +7,60 @@
   }
 }
 
-.title {
-  font-family: NanumSquare, serif;
-  font-size: 17px;
-  font-weight: bold;
-  color: #175c8e;
-  text-decoration: none;
+.header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin: 0;
 
-  @include media.media-breakpoint(mobile) {
-    font-size: 18px;
-    padding: 0 16px;
-    box-sizing: border-box;
+  &__title {
+    font-family: NanumSquare, serif;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 19.29px;
+    text-align: left;
+    color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 18px;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
   }
 
-  div {
-    cursor: pointer;
+  &__more {
+    font-family: NanumBarunGothic, sans-serif;
+    font-size: 12px;
+    color: #252525;
+    font-weight: 400;
+    line-height: 13.79px;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    position: relative;
+    left: 8px;
+
+    svg {
+      position: relative;
+      top: -1px;
+      right: 3px;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
   }
 }
 
-.more {
-  font-family: NanumBarunGothic, sans-serif;
-  font-size: 12px;
-  color: #252525;
-  text-decoration: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-weight: 400;
-
-  ::after {
-    display: inline-block;
-    width: 12px;
-    height: 8px;
-    background: url("https://static.koreatech.in/assets/img/bus_dropdown.png") center/12px 8px no-repeat;
-    transform: rotate(-90deg);
-    content: "";
-  }
-
-  @include media.media-breakpoint(mobile) {
-    display: none;
-  }
-}
-
-.cafeteriaCard {
+.card {
   display: grid;
-  grid-template: 26px 159px / 27px 1fr;
+  grid-template-columns: 1fr 5fr;
+  grid-template-rows: 1fr 5fr;
   width: 256px;
-  height: 203px;
+  height: 204px;
   margin-top: 16px;
-  padding: 15px 12px 0;
-  border: solid 1px #e4e4e4;
+  padding: 12px;
+  border: 1px solid #e4e4e4;
   box-sizing: border-box;
   cursor: pointer;
 
@@ -79,12 +78,11 @@
   }
 }
 
-.cafeteriaContainer {
+.place {
+  grid-column: 1 / 2;
+  grid-row: 1 / 6;
   display: flex;
   flex-direction: column;
-  grid-row: 1 / 3;
-  width: 27px;
-  height: 100%;
 
   @include media.media-breakpoint(mobile) {
     height: auto;
@@ -95,37 +93,26 @@
     width: 100%;
     background-color: #fff;
   }
-}
 
-.cafeteria {
-  margin: 8px 0;
-  width: 74px;
-  font-size: 14px;
-  text-align: center;
-  color: #bbb;
+  &__name {
+    margin: auto 0;
+    font-size: 14px;
+    text-align: center;
+    color: #bbb;
 
-  &--selected {
-    color: #175c8e;
+    &--selected {
+      color: #175c8e;
+
+      @include media.media-breakpoint(mobile) {
+        border-bottom: 1px solid #10477a;
+      }
+    }
 
     @include media.media-breakpoint(mobile) {
-      border-bottom: 1px solid #10477a;
+      margin-bottom: 0;
+      padding: 16px 16px 12px;
+      cursor: pointer;
     }
-  }
-
-  @include media.media-breakpoint(mobile) {
-    margin-bottom: 0;
-    padding: 16px 16px 12px;
-    cursor: pointer;
-  }
-}
-
-.menuBox {
-  @include media.media-breakpoint(mobile) {
-    border: 1px solid #e1e1e1;
-    border-radius: 8px;
-    background-color: #fff;
-    margin: 16px 24px 20px;
-    cursor: pointer;
   }
 }
 
@@ -135,12 +122,15 @@
 }
 
 .type {
+  grid-column: 2 / 6;
+  grid-row: 1 / 2;
   font-family: NanumSquare, sans-serif;
   font-size: 14px;
   font-weight: bold;
-  color: #000;
   line-height: 26px;
   text-align: center;
+  white-space: nowrap;
+  color: #000;
 
   @include media.media-breakpoint(mobile) {
     display: flex;
@@ -151,10 +141,10 @@
     border-bottom: 1px solid #eee;
   }
 
-  &__block {
+  &__chip {
     display: none;
 
-    &--soldOut {
+    &--sold-out {
       @include media.media-breakpoint(mobile) {
         display: flex;
         justify-content: center;
@@ -170,83 +160,55 @@
   }
 }
 
-.typeControlButton {
-  width: 26px;
-  height: 26px;
-  margin: 0 8px;
-  padding: 0;
-  border: 0;
-  background: url("https://static.koreatech.in/assets/img/ic-more.png") center/26px 26px no-repeat;
-  cursor: pointer;
-
-  &.left {
-    transform: rotate(180deg);
-  }
-
-  @include media.media-breakpoint(mobile) {
-    display: none;
-  }
-}
-
-.menuContainer {
+.menus {
+  grid-column: 2 / 6;
+  grid-row: 2 / 6;
   display: flex;
-  justify-content: flex-start;
   flex-flow: column wrap;
-  width: 100%;
-  height: 160px;
-  box-sizing: border-box;
-  padding: 15px 0 0 27px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 15px;
 
   @include media.media-breakpoint(mobile) {
-    padding: 16px;
-  }
-}
-
-.menu {
-  font-size: 12px;
-  color: #252525;
-  text-align: left;
-  margin-bottom: 14px;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 75px;
-
-  &.long {
-    width: 100%;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    background-color: #fff;
+    margin: 16px 24px 20px;
+    cursor: pointer;
   }
 
-  @include media.media-breakpoint(mobile) {
-    margin-bottom: 10px;
-    width: 50%;
+  &__name {
+    font-family: NanumBarunGothic, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 13.79px;
+    text-align: left;
+    color: #252525;
+    margin: auto 0;
+    max-width: 50%;
+    min-height: 20%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-}
 
-.noMenuContent {
-  text-align: center;
-  margin-top: 21px;
+  &--not-served {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: NanumBarunGothic, serif;
+    font-size: 12px;
+    color: #252525;
+    text-align: center;
 
-  @include media.media-breakpoint(mobile) {
-    margin: 0;
-  }
-}
+    & svg {
+      margin-bottom: 16px;
+    }
 
-.noMenuImage {
-  width: 52px;
-  height: 47px;
-  margin-left: -19px;
-}
-
-.noMenu {
-  height: 31px;
-  font-family: NanumBarunGothic, serif;
-  font-size: 12px;
-  color: #252525;
-  text-align: center;
-  margin: 15px 0 0 -15px;
-
-  @include media.media-breakpoint(mobile) {
-    margin: 8px 0 0 -19px;
+    @include media.media-breakpoint(mobile) {
+      margin: 8px 0 0 -19px;
+    }
   }
 }
