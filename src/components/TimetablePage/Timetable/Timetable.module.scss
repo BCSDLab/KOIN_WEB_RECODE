@@ -1,8 +1,8 @@
 @use "utils/scss/media.scss" as media;
 
 .timetable {
-  background-color: #FFFFFF;
-  border: 1px solid #F5F5F5;
+  background-color: #fff;
+  border: 1px solid #f5f5f5;
   border-radius: 5px;
 
   @include media.media-breakpoint(mobile) {
@@ -10,7 +10,7 @@
   }
 
   &__head {
-    background-color: #FFFFFF;
+    background-color: #fff;
     display: flex;
     border-radius: 5px;
 
@@ -24,7 +24,7 @@
   }
 
   &__col {
-    border-right: #F5F5F5 1px solid;
+    border-right: #f5f5f5 1px solid;
 
     &:last-child {
       border-right: none;
@@ -39,11 +39,11 @@
       justify-content: center;
       align-items: center;
       height: 100%;
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-weight: 400;
       line-height: 25.6px;
       text-align: left;
-      letter-spacing: normal; 
+      letter-spacing: normal;
     }
   }
 
@@ -58,7 +58,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-weight: 400;
       line-height: 25.6px;
       text-align: left;
@@ -75,7 +75,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-weight: 400;
       line-height: 25.6px;
       text-align: left;
@@ -91,7 +91,7 @@
   }
 
   &__row-container {
-    border-top: #F5F5F5 1px solid;
+    border-top: #f5f5f5 1px solid;
   }
 
   &__row-line {
@@ -101,15 +101,15 @@
       content: "";
       position: absolute;
       width: 100%;
-      border-bottom: #F5F5F5;
+      border-bottom: #f5f5f5;
     }
 
     &:nth-child(odd)::after {
-      border-bottom: #F5F5F5 1px solid;
+      border-bottom: #f5f5f5 1px solid;
     }
-    
+
     &:nth-child(even)::after {
-      border-bottom: #F5F5F5 1px solid;
+      border-bottom: #f5f5f5 1px solid;
     }
   }
 

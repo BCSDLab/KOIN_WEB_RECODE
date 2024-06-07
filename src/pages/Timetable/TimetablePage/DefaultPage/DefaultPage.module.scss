@@ -15,8 +15,8 @@
     width: 129px;
     height: 40px;
     margin-bottom: 40px;
-    color: #175C8E;
-    
+    color: #175c8e;
+
     &--name {
       width: 83px;
       text-align: left;
@@ -66,23 +66,23 @@
     align-items: center;
     border: none;
     border-radius: 5px;
-    padding: 12px 20px 12px 20px;
+    padding: 12px 20px;
     width: 155px;
     height: 48px;
-    background-color: #FAFAFA;
-    font-family: Pretendard;
+    background-color: #fafafa;
+    font-family: Pretendard, sans-serif;
     font-weight: 500;
     font-size: 15.5px;
     line-height: 21.48px;
-    color: #4B4B4B;
+    color: #4b4b4b;
     cursor: pointer;
 
     &:hover {
-      background-color: #EEEEEE;
+      background-color: #eee;
     }
 
     &:active {
-      background-color: #E1E1E1;
+      background-color: #e1e1e1;
     }
   }
 }
@@ -199,43 +199,43 @@
   width: 260px;
   background-color: #fff;
   border-radius: 5px;
-  
+
   &--opened {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    box-shadow: 0px 8px 32px 0px #00000014;
-    box-shadow: 0px 2px 20px 0px #0000000A;
+    box-shadow: 0 8px 32px 0 #00000014;
+    box-shadow: 0 2px 20px 0 #0000000a;
   }
 
   &__trigger {
     position: relative;
     width: 100%;
     height: 48px;
-    padding: 12px 20px 12px 20px;
+    padding: 12px 20px;
     border-radius: 5px;
     border: none;
     box-sizing: border-box;
-    background-color: #FAFAFA;
+    background-color: #fafafa;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
 
     &:hover {
-      background-color: #EEEEEE;
+      background-color: #eee;
     }
 
     &:active {
-      background-color: #E1E1E1;
+      background-color: #e1e1e1;
     }
   }
 
   &__curriculum-title {
     display: flex;
     gap: 8px;
-    color: #4B4B4B;
+    color: #4b4b4b;
     font-size: 15.5px;
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-weight: 500;
     line-height: 21.48px;
   }
@@ -243,9 +243,9 @@
   &__curriculum-list {
     position: absolute;
     z-index: 5;
-    box-shadow: 0px 8px 32px 0px #00000014;
-    box-shadow: 0px 2px 20px 0px #0000000A;
-    background-color: #FAFAFA;
+    box-shadow: 0 8px 32px 0 #00000014;
+    box-shadow: 0 2px 20px 0 #0000000a;
+    background-color: #fafafa;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
@@ -254,13 +254,13 @@
     width: 260px;
     height: 48px;
     box-sizing: border-box;
-    background-color: #FAFAFA;
+    background-color: #fafafa;
     cursor: pointer;
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 15.5px;
     font-weight: 500;
     line-height: 21.48px;
-    color: #8E8E8E;
+    color: #8e8e8e;
 
     &:last-child {
       border-bottom-left-radius: 5px;
@@ -269,20 +269,20 @@
 
     & > a {
       display: block;
-      padding: 16px 24px 16px 24px;
+      padding: 16px 24px;
     }
-  
+
     &[aria-selected="true"] {
-      color: #175C8E
+      color: #175c8e;
     }
 
     &:hover {
-      background-color: #EEEEEE;
+      background-color: #eee;
       border-radius: 5px;
     }
 
     &:active {
-      background-color: #E1E1E1;
+      background-color: #e1e1e1;
     }
   }
 }

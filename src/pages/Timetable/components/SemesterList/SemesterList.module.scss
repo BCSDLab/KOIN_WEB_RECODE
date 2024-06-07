@@ -5,14 +5,14 @@
   display: inline-block;
   width: 331px;
   height: 48px;
-  background-color: #FFFFFF;
+  background-color: #fff;
   border-radius: 5px;
 
   &--opened {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    box-shadow: 0px 8px 32px 0px #00000014;
-    box-shadow: 0px 2px 20px 0px #0000000A;
+    box-shadow: 0 8px 32px 0 #00000014;
+    box-shadow: 0 2px 20px 0 #0000000a;
   }
 
   &--flex-end {
@@ -25,8 +25,8 @@
     height: 100%;
     padding: 16px 24px;
     box-sizing: border-box;
-    background-color: #FFFFFF;
-    font-family: Pretendard;
+    background-color: #fff;
+    font-family: Pretendard, sans-serif;
     font-size: 20px;
     font-weight: 500;
     line-height: 23.87px;
@@ -47,17 +47,17 @@
     }
 
     &--selected {
-      background-color: #175C8E26;
+      background-color: #175c8e26;
     }
   }
 
   &__content {
     position: absolute;
     z-index: 5;
-    box-shadow: 0px 8px 32px 0px #00000014;
-    box-shadow: 0px 2px 20px 0px #0000000A;
+    box-shadow: 0 8px 32px 0 #00000014;
+    box-shadow: 0 2px 20px 0 #0000000a;
     width: 100%;
-    background-color: #FFFFFF;
+    background-color: #fff;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
@@ -72,23 +72,23 @@
     background-color: #fff;
     border-radius: 5px;
     cursor: pointer;
-    color: #8E8E8E;
+    color: #8e8e8e;
 
     &--selected {
-      color: #175C8E;
+      color: #175c8e;
     }
-    
+
     &:hover {
       background-color: #eee;
     }
 
     &:active {
-      background-color: #E1E1E1;
-      color: #4B4B4B;
+      background-color: #e1e1e1;
+      color: #4b4b4b;
     }
 
     &--item {
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-size: 20px;
       font-weight: 500;
       line-height: 23.87px;
@@ -103,27 +103,24 @@
       padding: 4px 8px;
       border-radius: 5px;
       gap: 4px;
-  
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-size: 14px;
       font-weight: 500;
       line-height: 16.71px;
       text-align: left;
-      color: #8E8E8E;
+      color: #8e8e8e;
 
       &:hover {
-        background-color: #E1E1E1;
+        background-color: #e1e1e1;
       }
 
       &:active {
-        background-color: #CACACA;
-        color: #4B4B4B;
+        background-color: #cacaca;
+        color: #4b4b4b;
       }
     }
   }
 }
-
-
 
 .add {
   display: flex;
@@ -131,25 +128,23 @@
   height: 48px;
   border-radius: 5px;
   justify-content: space-between;
-  padding: 14px 24px 16px 24px;
-  background-color: #FFFFFF;
+  padding: 14px 24px 16px;
+  background-color: #fff;
   border: none;
   cursor: pointer;
-  
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 21.48px;
   text-align: left;
-  color: #8E8E8E;
+  color: #8e8e8e;
 
   &:hover {
-    background-color: #EEEEEE;
+    background-color: #eee;
   }
 
   &:active {
-    background-color: #E1E1E1;
-    color: #4B4B4B;
+    background-color: #e1e1e1;
+    color: #4b4b4b;
   }
 }
-

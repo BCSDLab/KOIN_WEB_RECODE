@@ -16,22 +16,22 @@
 .container {
   width: 427px;
   height: 238px;
-  box-shadow: 0px 8px 32px 0px #00000014;
-  box-shadow: 0px 2px 20px 0px #0000000A;
+  box-shadow: 0 8px 32px 0 #00000014;
+  box-shadow: 0 2px 20px 0 #0000000a;
   border-radius: 16px;
-  background-color: #FFFFFF;
+  background-color: #fff;
 
   &__header {
     display: flex;
     justify-content: space-between;
-    padding: 24px 24px 16px 24px;
-  }   
+    padding: 24px 24px 16px;
+  }
 
   &__title {
     font-size: 20px;
     font-weight: 700;
     line-height: 23.87px;
-    color: #1F1F1F;
+    color: #1f1f1f;
   }
 
   &__close-button {
@@ -40,11 +40,11 @@
     height: 24px;
 
     &:hover {
-      background-color: #EEEEEE;
+      background-color: #eee;
     }
 
     &:active {
-      background-color: #CACACA;
+      background-color: #cacaca;
     }
   }
 
@@ -59,7 +59,7 @@
       display: flex;
       padding: 16px 24px;
       justify-content: space-between;
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-size: 18px;
       font-weight: 400;
       line-height: 21.48px;
@@ -71,7 +71,7 @@
       padding: 16px 24px;
       justify-content: space-between;
       gap: 8px;
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-size: 18px;
       font-weight: 400;
       line-height: 21.48px;
@@ -81,7 +81,7 @@
 
     & ul {
       top: 56px;
-      border: 1px solid #CACACA;
+      border: 1px solid #cacaca;
       border-radius: 5px;
     }
   }
@@ -94,63 +94,61 @@
   }
 
   &__set-default-semester {
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 25.6px;
     text-align: left;
-    color : #8E8E8E;
+    color: #8e8e8e;
   }
 
   &__button {
     display: flex;
-    padding: 16px 24px 24px 24px;
+    padding: 16px 24px 24px;
     gap: 16px;
 
     &--delete {
       width: 181.5px;
       padding: 8px 20px;
-      background-color: #EEEEEE;
+      background-color: #eee;
       border: none;
       border-radius: 4px;
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-size: 16px;
       font-weight: 500;
       line-height: 25.6px;
-      text-align: left;
-      color: #4B4B4B;
+      color: #4b4b4b;
       text-align: center;
       cursor: pointer;
 
       &:active {
-        background-color: #CACACA;
+        background-color: #cacaca;
       }
     }
 
     &--save {
       width: 181.5px;
       padding: 8px 20px;
-      background-color: #175C8E;
+      background-color: #175c8e;
       border: none;
       border-radius: 4px;
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-size: 16px;
       font-weight: 500;
       line-height: 25.6px;
-      text-align: left;
-      color: #FFFFFF;
+      color: #fff;
       text-align: center;
       cursor: pointer;
 
       &:active {
-        background-color: #10477A;
+        background-color: #10477a;
       }
     }
   }
 
   &__checkbox {
     padding: 0;
-    background-color: #FFFFFF;
+    background-color: #fff;
     border: none;
     cursor: pointer;
   }
