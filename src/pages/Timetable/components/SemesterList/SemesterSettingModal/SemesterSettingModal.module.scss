@@ -1,0 +1,157 @@
+@use "src/utils/scss/media";
+
+.background {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000026;
+  z-index: 21;
+}
+
+.container {
+  width: 427px;
+  height: 238px;
+  box-shadow: 0px 8px 32px 0px #00000014;
+  box-shadow: 0px 2px 20px 0px #0000000A;
+  border-radius: 16px;
+  background-color: #FFFFFF;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 24px 24px 16px 24px;
+  }   
+
+  &__title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 23.87px;
+    color: #1F1F1F;
+  }
+
+  &__close-button {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+
+    &:hover {
+      background-color: #EEEEEE;
+    }
+
+    &:active {
+      background-color: #CACACA;
+    }
+  }
+
+  &__semester {
+    display: flex;
+    position: relative;
+    padding: 0 16px;
+    gap: 8px;
+    height: 48px;
+
+    & button {
+      display: flex;
+      padding: 16px 24px;
+      justify-content: space-between;
+      font-family: Pretendard;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 21.48px;
+      text-align: left;
+    }
+
+    & li {
+      display: flex;
+      padding: 16px 24px;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: Pretendard;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 21.48px;
+      text-align: left;
+      align-items: center;
+    }
+
+    & ul {
+      top: 56px;
+      border: 1px solid #CACACA;
+      border-radius: 5px;
+    }
+  }
+
+  &__setting-message {
+    display: flex;
+    padding: 8px 24px;
+    gap: 8px;
+    align-items: center;
+  }
+
+  &__set-default-semester {
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25.6px;
+    text-align: left;
+    color : #8E8E8E;
+  }
+
+  &__button {
+    display: flex;
+    padding: 16px 24px 24px 24px;
+    gap: 16px;
+
+    &--delete {
+      width: 181.5px;
+      padding: 8px 20px;
+      background-color: #EEEEEE;
+      border: none;
+      border-radius: 4px;
+      font-family: Pretendard;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 25.6px;
+      text-align: left;
+      color: #4B4B4B;
+      text-align: center;
+      cursor: pointer;
+
+      &:active {
+        background-color: #CACACA;
+      }
+    }
+
+    &--save {
+      width: 181.5px;
+      padding: 8px 20px;
+      background-color: #175C8E;
+      border: none;
+      border-radius: 4px;
+      font-family: Pretendard;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 25.6px;
+      text-align: left;
+      color: #FFFFFF;
+      text-align: center;
+      cursor: pointer;
+
+      &:active {
+        background-color: #10477A;
+      }
+    }
+  }
+
+  &__checkbox {
+    padding: 0;
+    background-color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+  }
+}
