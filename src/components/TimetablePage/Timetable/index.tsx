@@ -72,7 +72,7 @@ function Timetable({
             [styles.timetable__col]: true,
             [styles['timetable__col--time']]: true,
           })}
-          style={{ width: `${firstColumnWidth}px`, fontSize: `${firstColumnWidth / 4}px` }}
+          style={{ width: `${firstColumnWidth}px`, fontSize: `${rowHeight / 2}px` }}
           aria-hidden="true"
         >
           {TIME_STRING.map((value, index) => (
