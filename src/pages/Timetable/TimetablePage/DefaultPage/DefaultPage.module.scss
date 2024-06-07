@@ -203,6 +203,8 @@
   &--opened {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    box-shadow: 0px 8px 32px 0px #00000014;
+    box-shadow: 0px 2px 20px 0px #0000000A;
   }
 
   &__trigger {
@@ -221,6 +223,10 @@
 
     &:hover {
       background-color: #EEEEEE;
+    }
+
+    &:active {
+      background-color: #E1E1E1;
     }
   }
 
