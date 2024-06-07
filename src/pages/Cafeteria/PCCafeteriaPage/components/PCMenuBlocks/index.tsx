@@ -19,8 +19,8 @@ export default function PCMenuBlocks({ mealType, isRecent }: Props) {
   const { dinings } = useDinings(currentDate);
 
   const filteredDinings = dinings
-    .filter((item) => item.type === mealType)
-    .filter((item) => !item.menu.includes('미운영'));
+    .filter((meal) => meal.type === mealType)
+    .filter((meal) => !meal.menu.some((dish) => dish.name.includes('미운영')));
   const sortedDinings = filteredDinings.sort((a, b) => {
     const indexA = PLACE_ORDER.indexOf(a.place);
     const indexB = PLACE_ORDER.indexOf(b.place);
@@ -81,8 +81,8 @@ export default function PCMenuBlocks({ mealType, isRecent }: Props) {
             <div className={styles.content}>
               <PCMealImage meal={meal} isRecent={isRecent} handleImageClick={handleImageClick} />
               <div className={styles.content__menu}>
-                {meal.menu.map((menuName) => (
-                  <div key={menuName}>{menuName}</div>
+                {meal.menu.map((dish) => (
+                  <div key={dish.id}>{dish.name}</div>
                 ))}
               </div>
             </div>

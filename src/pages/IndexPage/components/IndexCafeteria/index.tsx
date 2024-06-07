@@ -109,9 +109,9 @@ function IndexCafeteria() {
           onClick={handleMoreClick}
         >
           {selectedDining ? (
-            selectedDining.menu.slice(0, 10).map((menuName) => (
-              <span className={styles.menus__name} key={menuName}>
-                {menuName}
+            selectedDining.menu.slice(0, 10).map((dish) => (
+              <span className={styles.menus__name} key={dish.id}>
+                {dish.name}
               </span>
             ))
           ) : (

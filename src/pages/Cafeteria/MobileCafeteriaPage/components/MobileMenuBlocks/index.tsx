@@ -23,8 +23,8 @@ export default function MobileMenuBlocks({ mealType }: Props) {
   const { dinings } = useDinings(currentDate);
 
   const filteredDinings = dinings
-    .filter((item) => item.type === mealType)
-    .filter((item) => !item.menu.includes('미운영'));
+    .filter((meal) => meal.type === mealType)
+    .filter((meal) => !meal.menu.some((dish) => dish.name.includes('미운영')));
   const sortedDinings = filteredDinings.sort((a, b) => {
     const indexA = PLACE_ORDER.indexOf(a.place);
     const indexB = PLACE_ORDER.indexOf(b.place);
@@ -59,37 +59,37 @@ export default function MobileMenuBlocks({ mealType }: Props) {
 
   return (
     <>
-      {sortedDinings.map((item) => (
-        <div className={styles.category} key={item.id}>
+      {sortedDinings.map((meal) => (
+        <div className={styles.category} key={meal.id}>
           <ul className={styles['category__menu-list-row']}>
             <div className={styles.category__header}>
               <div className={styles.category__type}>
                 <div className={styles['category__type--title']}>
-                  {item.place}
+                  {meal.place}
                   <div className={styles.category__calorie}>
-                    {!!item.kcal && `${item.kcal}Kcal •`}
+                    {!!meal.kcal && `${meal.kcal}Kcal •`}
                   </div>
                   <div className={styles.category__price}>
-                    {!!item.price_cash && `${item.price_cash}원/`}
-                    {!!item.price_card && ` ${item.price_card}원`}
+                    {!!meal.price_cash && `${meal.price_cash}원/`}
+                    {!!meal.price_card && ` ${meal.price_card}원`}
                   </div>
                 </div>
-                {item.soldout_at && <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>품절</span>}
-                {!item.soldout_at && item.changed_at && <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>변경됨</span>}
+                {meal.soldout_at && <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>품절</span>}
+                {!meal.soldout_at && meal.changed_at && <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>변경됨</span>}
               </div>
             </div>
             <li className={styles['category__menu-list']}>
               <ul>
-                {item.menu.map((menuName) => (
+                {meal.menu.map((dish) => (
                   <li
                     className={styles.category__menu}
-                    key={menuName}
+                    key={dish.id}
                   >
-                    {menuName}
+                    {dish.name}
                   </li>
                 ))}
               </ul>
-              <MobileMealImage meal={item} handleImageClick={handleImageClick} />
+              <MobileMealImage meal={meal} handleImageClick={handleImageClick} />
             </li>
           </ul>
         </div>

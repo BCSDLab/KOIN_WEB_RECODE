@@ -9,7 +9,7 @@ export type CafeteriaType = {
   place: PlaceType;
 };
 
-export type Dining = {
+export type OriginalDining = {
   id: number;
   date: string;
   type: MealType;
@@ -23,4 +23,15 @@ export type Dining = {
   updated_at: string;
   soldout_at: string | null;
   changed_at: string | null;
+};
+
+export type Dish = {
+  id: number;
+  name: string;
+};
+
+export type Dishes = Array<Dish>;
+
+export type Dining = Omit<OriginalDining, 'menu'> & {
+  menu: Dishes;
 };

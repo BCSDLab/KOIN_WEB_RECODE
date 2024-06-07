@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { cafeteria } from 'api';
-import { Dining } from 'interfaces/Cafeteria';
+import { Dining, OriginalDining } from 'interfaces/Cafeteria';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 
 const DININGS_KEY = 'DININGS_KEY';
@@ -15,7 +15,10 @@ function useDinings(date: Date) {
         if ('status' in data || !Array.isArray(data)) {
           return [];
         }
-        return data as Array<Dining>;
+        return (data as Array<OriginalDining>).map((dining) => ({
+          ...dining,
+          menu: dining.menu.map((menuName, index) => ({ id: index, name: menuName })),
+        })) as Array<Dining>;
       },
     },
   );
