@@ -97,7 +97,7 @@ function Listbox({
           [styleClasses['select__trigger--selected-v2']]: isOpenedPopup && version === 'new_2',
         })}
       >
-        {value !== null ? list.find((item) => item.value === value)?.label : ''}
+        {value !== null ? list.find((item) => item.value === value)?.label : '학부'}
         {version !== 'default' && (isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />)}
       </button>
       {isOpenedPopup && (
