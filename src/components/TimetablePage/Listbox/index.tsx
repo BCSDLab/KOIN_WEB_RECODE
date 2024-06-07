@@ -21,7 +21,7 @@ export interface ListboxProps {
   value: string | null;
   onChange: (event: { target: ListboxRef }) => void;
   logTitle?: string;
-  version?: 'default' | 'new';
+  version?: 'default' | 'new' | 'new_2';
 }
 
 function Listbox({
@@ -50,6 +50,7 @@ function Listbox({
   };
 
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
+    event.stopPropagation();
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
     onChange({ target: { value: optionValue ?? '' } });
@@ -81,7 +82,7 @@ function Listbox({
     };
   });
 
-  const styleClasses = version === 'new' ? newStyles : styles;
+  const styleClasses = version !== 'default' ? newStyles : styles;
   return (
     <div
       className={styleClasses.select}
@@ -92,11 +93,12 @@ function Listbox({
         onClick={handleToggleListBox}
         className={cn({
           [styleClasses.select__trigger]: true,
-          [styleClasses['select__trigger--selected']]: isOpenedPopup,
+          [styleClasses['select__trigger--selected']]: isOpenedPopup && version === 'new',
+          [styleClasses['select__trigger--selected-v2']]: isOpenedPopup && version === 'new_2',
         })}
       >
         {value !== null ? list.find((item) => item.value === value)?.label : ''}
-        {version === 'new' && (isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />)}
+        {version !== 'default' && (isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />)}
       </button>
       {isOpenedPopup && (
         <ul className={styleClasses.select__content} role="listbox">
