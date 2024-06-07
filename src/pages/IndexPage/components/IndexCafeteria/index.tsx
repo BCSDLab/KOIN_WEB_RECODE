@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useNavigate } from 'react-router-dom';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { MEAL_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
@@ -14,8 +15,9 @@ import { MealType, PlaceType } from 'interfaces/Cafeteria';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
-  const logger = useLogger();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery();
+  const logger = useLogger();
   const { dinings } = useDinings(new Date());
 
   const [selectedMealType, setSelectedMeaType] = useState<MealType>(getType());
@@ -76,44 +78,51 @@ function IndexCafeteria() {
           ))}
         </div>
 
-        <div className={styles.type}>
-          <button
-            type="button"
-            name="prev"
-            aria-label="이전 시간"
-            onClick={(e) => handleChevronClick(e.currentTarget.name)}
-          >
-            <ChevronLeft />
-          </button>
-          {MEAL_TYPE_MAP[selectedMealType]}
-          <button
-            type="button"
-            name="next"
-            aria-label="다음 시간"
-            onClick={(e) => handleChevronClick(e.currentTarget.name)}
-          >
-            <ChevronRight />
-          </button>
-          <div className={cn({
-            [styles.type__chip]: true,
-            [styles['type__chip--sold-out']]: !!selectedDining?.soldout_at,
-          })}
-          >
-            {selectedDining?.soldout_at ? '품절' : ''}
+        {!isMobile && (
+          <div className={styles.type}>
+            <button
+              type="button"
+              name="prev"
+              aria-label="이전 시간"
+              onClick={(e) => handleChevronClick(e.currentTarget.name)}
+            >
+              <ChevronLeft />
+            </button>
+            {MEAL_TYPE_MAP[selectedMealType]}
+            <button
+              type="button"
+              name="next"
+              aria-label="다음 시간"
+              onClick={(e) => handleChevronClick(e.currentTarget.name)}
+            >
+              <ChevronRight />
+            </button>
           </div>
-        </div>
+        )}
 
         <button
           type="button"
           className={styles.menus}
           onClick={handleMoreClick}
         >
+          {isMobile && (
+            <div className={styles.menus__type}>
+              {MEAL_TYPE_MAP[selectedMealType]}
+              {selectedDining?.soldout_at && (
+                <span className={styles.menus__chip}>
+                  품절
+                </span>
+              )}
+            </div>
+          )}
           {selectedDining ? (
-            selectedDining.menu.slice(0, 10).map((dish) => (
-              <span className={styles.menus__name} key={dish.id}>
-                {dish.name}
-              </span>
-            ))
+            <ul className={styles.menus__list}>
+              {selectedDining.menu.slice(0, 10).map((dish) => (
+                <li className={styles.menus__name} key={dish.id}>
+                  {dish.name}
+                </li>
+              ))}
+            </ul>
           ) : (
             <div className={styles['menus--not-served']}>
               <NotServed />
