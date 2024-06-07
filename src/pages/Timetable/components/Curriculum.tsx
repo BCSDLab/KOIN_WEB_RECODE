@@ -18,6 +18,11 @@ function CurriculumListBox({
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
 
+  const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    triggerPopup();
+  };
+
   const onClickOption = () => {
     closePopup();
   };
@@ -45,7 +50,7 @@ function CurriculumListBox({
     >
       <button
         type="button"
-        onClick={triggerPopup}
+        onClick={handleToggleListBox}
         className={cn({
           [styles.select__trigger]: true,
           [styles['select__trigger--opened']]: isOpenedPopup,
