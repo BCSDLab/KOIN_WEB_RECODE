@@ -103,23 +103,21 @@ function Listbox({
       {isOpenedPopup && (
         <ul className={styleClasses.select__content} role="listbox">
           {list.map((optionValue) => (
-            <div>
-              <li
-                className={cn({
-                  [styleClasses.select__option]: true,
-                  [styleClasses['select__option--selected']]: optionValue.value === value,
-                })}
-                key={optionValue.value}
-                role="option"
-                aria-selected={optionValue.value === value}
-                data-value={optionValue.value}
-                onClick={onClickOption}
-                onKeyPress={onKeyPressOption}
-                tabIndex={0}
-              >
-                {optionValue.label}
-              </li>
-            </div>
+            <li
+              className={cn({
+                [styleClasses.select__option]: true,
+                [styleClasses['select__option--selected']]: optionValue.value === value,
+              })}
+              key={optionValue.value}
+              role="option"
+              aria-selected={optionValue.value === value}
+              data-value={optionValue.value}
+              onClick={onClickOption}
+              onKeyPress={onKeyPressOption}
+              tabIndex={0}
+            >
+              {optionValue.label}
+            </li>
           ))}
         </ul>
       )}
