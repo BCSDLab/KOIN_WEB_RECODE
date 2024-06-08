@@ -17,7 +17,7 @@ export default function TimetableList() {
       <SemesterListbox />
       <ul className={styles['timetable-list__list']} role="listbox">
         {timetableList.map((value) => (
-          <div className={styles['timetable-list__list--item']}>
+          <div className={styles['timetable-list__list--item']} key={value}>
             <li>
               {value}
             </li>
