@@ -6,6 +6,7 @@ import { DeptListResponse } from 'api/dept/entity';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
+import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import styles from 'pages/Timetable/TimetablePage/DefaultPage/DefaultPage.module.scss';
 
 export interface DeptListboxProps {
@@ -16,7 +17,6 @@ function CurriculumListBox({
   list,
 }: DeptListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
-  const wrapperRef = React.useRef<HTMLDivElement>(null);
 
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -27,18 +27,7 @@ function CurriculumListBox({
     closePopup();
   };
 
-  React.useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      const { target } = event;
-      if (wrapperRef.current && target && !wrapperRef.current.contains(target as HTMLElement)) {
-        closePopup();
-      }
-    }
-    document.body.addEventListener('click', handleClickOutside);
-    return () => {
-      document.body.removeEventListener('click', handleClickOutside);
-    };
-  });
+  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
 
   return (
     <div
@@ -46,7 +35,7 @@ function CurriculumListBox({
         [styles.select]: true,
         [styles['select--opened']]: isOpenedPopup,
       })}
-      ref={wrapperRef}
+      ref={target}
     >
       <button
         type="button"

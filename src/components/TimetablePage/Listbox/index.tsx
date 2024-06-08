@@ -4,6 +4,7 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import useLogger from 'utils/hooks/useLogger';
+import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import styles from './Listbox.module.scss';
 import newStyles from './NewListbox.module.scss';
 
@@ -32,7 +33,6 @@ function Listbox({
   version = 'default',
 }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
-  const wrapperRef = React.useRef<HTMLDivElement>(null);
   const logger = useLogger();
   const handleLogClick = (optionValue: string) => {
     if (logTitle === 'select_dept') {
@@ -49,7 +49,7 @@ function Listbox({
     triggerPopup();
   };
 
-  const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
+  const onClickOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
@@ -57,36 +57,12 @@ function Listbox({
     handleLogClick(optionValue ?? '');
     closePopup();
   };
-  const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
-    const { key, currentTarget } = event;
-    const optionValue = currentTarget.getAttribute('data-value');
-    switch (key) {
-      case 'Enter':
-        onChange({ target: { value: optionValue ?? '' } });
-        closePopup();
-        break;
-      default:
-        break;
-    }
-  };
-  React.useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      const { target } = event;
-      if (wrapperRef.current && target && !wrapperRef.current.contains(target as HTMLElement)) {
-        closePopup();
-      }
-    }
-    document.body.addEventListener('click', handleClickOutside);
-    return () => {
-      document.body.removeEventListener('click', handleClickOutside);
-    };
-  });
-
+  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
   const styleClasses = version !== 'default' ? newStyles : styles;
   return (
     <div
       className={styleClasses.select}
-      ref={wrapperRef}
+      ref={target}
     >
       <button
         type="button"
@@ -103,7 +79,8 @@ function Listbox({
       {isOpenedPopup && (
         <ul className={styleClasses.select__content} role="listbox">
           {list.map((optionValue) => (
-            <li
+            <button
+              type="button"
               className={cn({
                 [styleClasses.select__option]: true,
                 [styleClasses['select__option--selected']]: optionValue.value === value,
@@ -113,11 +90,10 @@ function Listbox({
               aria-selected={optionValue.value === value}
               data-value={optionValue.value}
               onClick={onClickOption}
-              onKeyPress={onKeyPressOption}
               tabIndex={0}
             >
               {optionValue.label}
-            </li>
+            </button>
           ))}
         </ul>
       )}

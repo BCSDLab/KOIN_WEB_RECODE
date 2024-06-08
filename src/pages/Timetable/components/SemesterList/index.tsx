@@ -9,14 +9,13 @@ import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg'
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
+import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import SemesterSettingModal from './SemesterSettingModal';
-
 import styles from './SemesterList.module.scss';
 import useSemesterOptionList from '../../hooks/useSemesterOptionList';
 
 function SemesterListbox() {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
-  const wrapperRef = React.useRef<HTMLDivElement>(null);
   const logger = useLogger();
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -39,38 +38,15 @@ function SemesterListbox() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onClickOption = (event: React.MouseEvent<HTMLDivElement>) => {
+  const onClickOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
     onChangeSelect({ target: { value: optionValue ?? '' } });
     logger.actionEventClick({ actionTitle: 'USER', title: 'select_semester', value: semesterValue });
     closePopup();
   };
-  const onKeyPressOption = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    const { key, currentTarget } = event;
-    const optionValue = currentTarget.getAttribute('data-value');
-    switch (key) {
-      case 'Enter':
-        onChangeSelect({ target: { value: optionValue ?? '' } });
-        closePopup();
-        break;
-      default:
-        break;
-    }
-  };
 
-  React.useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      const { target } = event;
-      if (wrapperRef.current && target && !wrapperRef.current.contains(target as HTMLElement)) {
-        closePopup();
-      }
-    }
-    document.body.addEventListener('click', handleClickOutside);
-    return () => {
-      document.body.removeEventListener('click', handleClickOutside);
-    };
-  });
+  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
 
   Listbox.defaultProps = {
     logTitle: '',
@@ -90,7 +66,7 @@ function SemesterListbox() {
         [styles.select]: true,
         [styles['select--opened']]: isOpenedPopup,
       })}
-      ref={wrapperRef}
+      ref={target}
     >
       <button
         type="button"
@@ -106,7 +82,8 @@ function SemesterListbox() {
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">
           {semesterOptionList.map((optionValue) => (
-            <div
+            <button
+              type="button"
               className={cn({
                 [styles.select__option]: true,
                 [styles['select__option--selected']]: optionValue.value === semesterValue,
@@ -115,7 +92,6 @@ function SemesterListbox() {
               aria-selected={optionValue.value === semesterValue}
               data-value={optionValue.value}
               onClick={onClickOption}
-              onKeyPress={onKeyPressOption}
               tabIndex={0}
             >
               <li
@@ -134,7 +110,7 @@ function SemesterListbox() {
                   <div>설정</div>
                 </button>
               </div>
-            </div>
+            </button>
           ))}
           <button type="button" className={styles.add}>
             <div>학기 추가하기</div>
