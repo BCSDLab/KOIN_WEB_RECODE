@@ -63,37 +63,36 @@ function CurriculumListBox({
         {isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
-        <ul className={styles['select__curriculum-list']} role="listbox">
-          {list.map((dept) => (
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-            <li
+      <div className={styles['select__curriculum-list']} role="listbox">
+        {list.map((dept) => (
+          <a
+            href={dept.curriculum_link}
+            target="_blank"
+            rel="noreferrer"
+            onClick={onClickOption}
+          >
+            <span
               className={styles.select__curriculum}
               key={dept.name}
               role="option"
               aria-selected="false"
               data-value={dept.name}
-              onClick={onClickOption}
               tabIndex={0}
             >
-              <a
-                href={dept.curriculum_link}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {dept.name}
-              </a>
-            </li>
-          ))}
-          <li className={styles.select__curriculum}>
-            <a
-              href="https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002"
-              target="_blank"
-              rel="noreferrer"
-            >
-              대학 요람
-            </a>
-          </li>
-        </ul>
+              {dept.name}
+            </span>
+          </a>
+        ))}
+        <a
+          href="https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002"
+          target="_blank"
+          rel="noreferrer"
+          onClick={onClickOption}
+          className={styles.select__curriculum}
+        >
+          대학 요람
+        </a>
+      </div>
       )}
     </div>
   );

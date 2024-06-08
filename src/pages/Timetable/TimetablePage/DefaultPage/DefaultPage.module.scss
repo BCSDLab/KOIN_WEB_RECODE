@@ -234,7 +234,7 @@
     display: flex;
     gap: 8px;
     color: #4b4b4b;
-    font-size: 15.5px;
+    font-size: 18px;
     font-family: Pretendard, sans-serif;
     font-weight: 500;
     line-height: 21.48px;
@@ -257,19 +257,16 @@
     background-color: #fafafa;
     cursor: pointer;
     font-family: Pretendard, sans-serif;
-    font-size: 15.5px;
+    font-size: 18px;
     font-weight: 500;
     line-height: 21.48px;
     color: #8e8e8e;
+    display: block;
+    padding: 14px 24px;
 
     &:last-child {
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
-    }
-
-    & > a {
-      display: block;
-      padding: 16px 24px;
     }
 
     &[aria-selected="true"] {
