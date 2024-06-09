@@ -13,7 +13,7 @@ export default function MobileMealImage({ meal, handleImageClick }: Props) {
   const isABC = ['A코너', 'B코너', 'C코너'].includes(meal.place);
   const hasImage = !!meal.image_url;
   const isBreakfast = meal.type === 'BREAKFAST';
-  const isBoxVisible = !(!isABC || (isBreakfast && !hasImage));
+  const isBoxVisible = isABC && (!isBreakfast || hasImage);
   if (!isBoxVisible) return null;
 
   return (
