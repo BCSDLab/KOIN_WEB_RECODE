@@ -102,7 +102,10 @@ function IndexCafeteria() {
 
         <button
           type="button"
-          className={styles.menus}
+          className={cn({
+            [styles.menus]: true,
+            [styles['menus--not-served']]: !selectedDining,
+          })}
           onClick={handleMoreClick}
         >
           {isMobile && (
@@ -124,7 +127,7 @@ function IndexCafeteria() {
               ))}
             </ul>
           ) : (
-            <div className={styles['menus--not-served']}>
+            <div className={styles['menus__not-served']}>
               <NotServed />
               <p>식단이 제공되지 않아</p>
               <p>표시할 수 없습니다.</p>

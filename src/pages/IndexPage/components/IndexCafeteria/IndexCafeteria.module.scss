@@ -223,7 +223,14 @@
   }
 
   &--not-served {
-    margin: auto;
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__not-served {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -234,11 +241,11 @@
     text-align: center;
 
     & svg {
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     @include media.media-breakpoint(mobile) {
-      margin: 8px 0 0 -19px;
+      margin-top: 20px;
     }
   }
 }
