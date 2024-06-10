@@ -13,10 +13,10 @@ import styles from './PCDiningBlocks.module.scss';
 
 interface Props {
   diningType: DiningType;
-  isRecent: boolean;
+  isThisWeek: boolean;
 }
 
-export default function PCDiningBlocks({ diningType, isRecent }: Props) {
+export default function PCDiningBlocks({ diningType, isThisWeek }: Props) {
   const { currentDate } = useDatePicker();
   const { dinings } = useDinings(currentDate);
   const filteredDinings = filterDinings(dinings, diningType);
@@ -79,7 +79,7 @@ export default function PCDiningBlocks({ diningType, isRecent }: Props) {
             <div className={styles.content}>
               <PCMealImage
                 dining={dining}
-                isRecent={isRecent}
+                isThisWeek={isThisWeek}
                 handleImageClick={handleImageClick}
               />
               <div className={styles.content__menu}>

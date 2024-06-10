@@ -6,15 +6,15 @@ import styles from './PCMealImage.module.scss';
 
 interface Props {
   dining: Dining,
-  isRecent: boolean,
-  handleImageClick: (item: Dining) => void,
+  isThisWeek: boolean,
+  handleImageClick: (dining: Dining) => void,
 }
 
-export default function PCMealImage({ dining, isRecent, handleImageClick }: Props) {
+export default function PCMealImage({ dining, isThisWeek, handleImageClick }: Props) {
   const isABC = ['A코너', 'B코너', 'C코너'].includes(dining.place);
   const hasImage = !!dining.image_url;
   const isBreakfast = dining.type === 'BREAKFAST';
-  const isBoxVisible = isRecent && isABC && (!isBreakfast || hasImage);
+  const isBoxVisible = isThisWeek && isABC && (!isBreakfast || hasImage);
   if (!isBoxVisible) return null;
 
   return (

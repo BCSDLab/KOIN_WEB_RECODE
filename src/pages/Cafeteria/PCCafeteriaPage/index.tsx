@@ -65,7 +65,7 @@ export default function PCCafeteriaPage({
   };
 
   const 지난주일요일 = getWeekAgo();
-  const isRecent = 지난주일요일 < currentDate;
+  const isThisWeek = 지난주일요일 < currentDate;
 
   useScrollToTop();
 
@@ -108,7 +108,7 @@ export default function PCCafeteriaPage({
       </div>
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
-          <PCDiningBlocks diningType={diningType} isRecent={isRecent} />
+          <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />
         </Suspense>
         <span className={styles['pc-menu-blocks__caution']}>식단 정보는 운영 상황에 따라 변동될 수 있습니다.</span>
       </div>
