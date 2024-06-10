@@ -1,0 +1,78 @@
+.block {
+  width: 276px;
+  min-height: 178px;
+  height: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background-color: white;
+  position: absolute;
+}
+
+.header {
+  width: 100%;
+  height: 39px;
+  position: relative;
+
+  &__place {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.48px;
+  }
+
+  &__detail {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15.3px;
+    color: #8e8e8e;
+  }
+
+  &__chip {
+    width: auto;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 4px;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 14.32px;
+
+    &--sold-out {
+      color: #ffad0d;
+      background-color: #fff7e1;
+    }
+
+    &--changed {
+      color: #4b4b4b;
+      background-color: #eee;
+    }
+  }
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+
+  &__menu > * {
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19.09px;
+  }
+}

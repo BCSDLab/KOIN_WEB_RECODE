@@ -1,8 +1,14 @@
-export type CafeteriaMenu = {
+export type DiningType = 'BREAKFAST' | 'LUNCH' | 'DINNER';
+
+export type DiningTypes = Array<DiningType>;
+
+export type DiningPlace = 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스';
+
+export type OriginalDining = {
   id: number;
   date: string;
-  type: 'BREAKFAST' | 'LUNCH' | 'DINNER';
-  place: 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스';
+  type: DiningType;
+  place: DiningPlace;
   price_card: number | null;
   price_cash: number | null;
   kcal: number | null;
@@ -14,13 +20,11 @@ export type CafeteriaMenu = {
   changed_at: string | null;
 };
 
-export type MealType = 'BREAKFAST' | 'LUNCH' | 'DINNER';
-export type MealName = '아침' | '점심' | '저녁';
-
-export type MealTypes = Array<'BREAKFAST' | 'LUNCH' | 'DINNER'>;
-
-export type CafeteriaTime = {
+export type MenuItem = {
   id: number;
-  type: MealType;
-  name: MealName;
-}[];
+  name: string;
+};
+
+export type Dining = Omit<OriginalDining, 'menu'> & {
+  menu: Array<MenuItem>;
+};

@@ -1,30 +1,25 @@
 import { cn } from '@bcsdlab/utils';
-import { useEffect, useState } from 'react';
-import { CAFETERIA_CATEGORY, MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
-import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
-import { convertDateToSimpleString } from 'utils/ts/cafeteria';
+import { Suspense, useEffect, useState } from 'react';
+import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { MealType } from 'interfaces/Cafeteria';
+import { DiningType } from 'interfaces/Cafeteria';
 import useLogger from 'utils/hooks/useLogger';
+import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
-import MobileMenuBlock from './components/MobileMenuBlock';
 import styles from './MobileCafeteriaPage.module.scss';
 
 interface Props {
-  mealType: MealType;
-  setMealType: (mealType: MealType) => void;
+  diningType: DiningType;
+  setDiningType: (diningType: DiningType) => void;
 }
 
-export default function MobileCafeteriaPage({ mealType, setMealType }: Props) {
+export default function MobileCafeteriaPage({ diningType, setDiningType }: Props) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
-  const { currentDate } = useDatePicker();
-  const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
 
-  const handleMealTypeChange = (meal: MealType) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[meal] });
-    setMealType(meal);
+  const handleDiningTypeChange = (dining: DiningType) => {
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[dining] });
+    setDiningType(dining);
   };
 
   useEffect(() => {
@@ -35,7 +30,7 @@ export default function MobileCafeteriaPage({ mealType, setMealType }: Props) {
       const scrollPercentage = (scrolled / maxHeight) * 100;
 
       if (scrollPercentage > 70 && !hasLoggedScroll) {
-        logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[mealType] });
+        logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[diningType] });
         setHasLoggedScroll(true);
       }
     };
@@ -44,48 +39,37 @@ export default function MobileCafeteriaPage({ mealType, setMealType }: Props) {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [hasLoggedScroll, logger, mealType]);
+  }, [hasLoggedScroll, logger, diningType]);
 
   useEffect(() => {
     setHasLoggedScroll(false);
-  }, [mealType]);
+  }, [diningType]);
 
   useScrollToTop();
 
   return (
     <>
       <WeeklyDatePicker />
-      <div className={styles['meal-select']}>
-        {MEAL_TYPES.map((meal) => (
+      <div className={styles['type-select']}>
+        {DINING_TYPES.map((dining) => (
           <button
             className={cn({
-              [styles['meal-select__button']]: true,
-              [styles['meal-select__button--selected']]: meal === mealType,
+              [styles['type-select__button']]: true,
+              [styles['type-select__button--selected']]: dining === diningType,
             })}
-            key={meal}
+            key={dining}
             type="button"
-            onClick={() => handleMealTypeChange(meal)}
+            onClick={() => handleDiningTypeChange(dining)}
           >
-            {MEAL_TYPE_MAP[meal]}
+            {DINING_TYPE_MAP[dining]}
           </button>
         ))}
       </div>
-      <div className={styles.table}>
-        {cafeteriaList.find((item) => item.type === mealType)
-          ? CAFETERIA_CATEGORY
-            .map((cafeteriaCategory) => (
-              <MobileMenuBlock
-                key={cafeteriaCategory.id}
-                menu={cafeteriaList}
-                mealType={mealType}
-                category={cafeteriaCategory}
-              />
-            )) : (
-              <div className={styles['table--empty']}>
-                현재 조회 가능한 식단 정보가 없습니다.
-              </div>
-          )}
-        <span className={styles.table__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
+      <div className={styles.blocks}>
+        <Suspense fallback={<div />}>
+          <MobileDiningBlocks diningType={diningType} />
+        </Suspense>
+        <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
     </>
   );
