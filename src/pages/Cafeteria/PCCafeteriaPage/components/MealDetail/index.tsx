@@ -1,5 +1,6 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
 import { Dining } from 'interfaces/Cafeteria';
+import { useEffect } from 'react';
 import styles from './MealDetail.module.scss';
 
 interface MealDetailProps {
@@ -8,21 +9,38 @@ interface MealDetailProps {
 }
 
 export default function MealDetail({ dining, setMealDetail }: MealDetailProps): JSX.Element {
-  const handleCloseModal = () => {
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
     setMealDetail(<div />);
   };
 
+  const handleModalClose = () => {
+    setMealDetail(<div />);
+  };
+
+  const handleEscapeKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setMealDetail(<div />);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleEscapeKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKeyDown);
+    };
+  });
+
   return (
-    <button
+    <div
       className={styles.overlay}
-      onClick={handleCloseModal}
-      type="button"
+      role="button"
+      tabIndex={0}
+      onClick={handleOverlayClick}
+      onKeyDown={handleEscapeKeyDown}
     >
-      <button
-        className={styles.modal}
-        onClick={(e) => e.stopPropagation()}
-        type="button"
-      >
+      <div className={styles.modal}>
         <div className={styles['modal-header']}>
           <div className={styles['modal-header__place-chip']}>
             <div className={styles['modal-header__place']}>{dining.place}</div>
@@ -38,7 +56,7 @@ export default function MealDetail({ dining, setMealDetail }: MealDetailProps): 
             type="button"
             aria-label="닫기"
             className={styles['modal-header__close']}
-            onClick={handleCloseModal}
+            onClick={handleModalClose}
           >
             <CloseIcon />
           </button>
@@ -48,7 +66,7 @@ export default function MealDetail({ dining, setMealDetail }: MealDetailProps): 
           src={dining.image_url!}
           alt="menu"
         />
-      </button>
-    </button>
+      </div>
+    </div>
   );
 }
