@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import CATEGORY from 'static/category';
+import { CATEGORY } from 'static/category';
 import useLogger from 'utils/hooks/useLogger';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './Footer.module.scss';
@@ -15,10 +15,10 @@ function Footer(): JSX.Element {
           <ul className={styles.footer__services}>
             {CATEGORY
               .flatMap((categoryInfo) => categoryInfo.submenu)
-              .map((subMenuInfo) => (
-                <li className={styles.footer__service} key={subMenuInfo.title}>
-                  <Link to={subMenuInfo.link} onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: subMenuInfo.title })}>
-                    {subMenuInfo.title}
+              .map((submenuInfo) => (
+                <li className={styles.footer__service} key={submenuInfo.title}>
+                  <Link to={submenuInfo.link} onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: submenuInfo.title })}>
+                    {submenuInfo.title}
                   </Link>
                 </li>
               ))}

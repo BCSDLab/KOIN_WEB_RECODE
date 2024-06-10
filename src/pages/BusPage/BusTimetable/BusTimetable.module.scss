@@ -74,11 +74,18 @@
   width: 100%;
   text-align: center;
   font-size: 15px;
-  margin-bottom: 67px;
   table-layout: fixed;
 
   @include media.media-breakpoint(mobile) {
     font-size: 13px;
+  }
+
+  &__date {
+    float: right;
+    color: rgb(133 133 133);
+    letter-spacing: -0.6px;
+    font-size: 12px;
+    margin: 6px 0 24px;
   }
 
   &__dropdown-wrapper {
@@ -88,13 +95,17 @@
     justify-content: space-between;
   }
 
+  &__citybus-blank {
+    height: 82px;
+    flex-shrink: 0;
+  }
+
   &__citybus-info {
-    margin-top: 52px;
-    margin-bottom: 10px;
-    height: 20px;
+    float: right;
     color: rgb(133 133 133);
     letter-spacing: -0.6px;
     font-size: 12px;
+    margin: 6px 0 24px;
   }
 
   &__dropdown {

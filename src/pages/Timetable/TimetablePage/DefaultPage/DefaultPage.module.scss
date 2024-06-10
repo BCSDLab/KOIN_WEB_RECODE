@@ -1,11 +1,12 @@
 @use "utils/scss/media.scss" as media;
 
 .page {
+  width: 1150px;
+  margin: 80px auto 0;
+
   &__content {
-    display: grid;
-    grid-template-columns: 766px 1fr;
-    grid-template-rows: 535px 336px;
-    gap: 66px 28px;
+    display: flex;
+    gap: 16px;
   }
 
   &__title {
@@ -32,7 +33,8 @@
 
   &__filter {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
+    gap: 16px;
     margin-bottom: 14px;
   }
 
@@ -91,7 +93,7 @@
     align-items: center;
     border: 1px solid rgb(23 92 142);
     padding: 1px 6px;
-    width: 170px;
+    width: 150px;
     height: 45px;
     background-color: rgb(23 92 142);
     font-size: 15px;
@@ -199,4 +201,15 @@
   align-items: center;
   width: 100%;
   height: 100vh;
+}
+
+.timetable-list {
+  width: 331px;
+  height: 720px;
+
+  &__list {
+    height: 699px;
+    background-color: white;
+    margin-top: 16px;
+  }
 }

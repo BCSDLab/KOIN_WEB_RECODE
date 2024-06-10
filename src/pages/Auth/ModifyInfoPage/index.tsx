@@ -61,7 +61,7 @@ interface MappedFields {
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
 ): elementRef is ICustomFormInput => (elementRef !== null
-&& Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+  && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const fieldRefs = React.useRef<IFormType>({});
@@ -285,7 +285,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
   const { data: userInfo } = useUser();
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
-  const [major, setMajor] = React.useState<string>(userInfo?.major || '');
+  const [major, setMajor] = React.useState<string | null>(null);
   const deptOptionList = deptList.map((dept) => ({
     label: dept.name,
     value: dept.name,

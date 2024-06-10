@@ -54,7 +54,7 @@ function StoreDetailPage() {
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
-  useScorllLogging('shpp_detailView', storeDetail);
+  useScorllLogging('shop_detailView', storeDetail);
 
   return (
     <div className={styles.template}>

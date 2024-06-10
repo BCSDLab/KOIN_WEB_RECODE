@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports */
 import React from 'react';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
@@ -8,11 +7,11 @@ import useLogger from 'utils/hooks/useLogger';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
+import Timetable from 'components/TimetablePage/Timetable';
+import useLectureList from 'pages/Timetable/hooks/useLectureList';
+import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
+import SemesterListbox from 'pages/Timetable/components/SemesterListbox';
 import styles from './MobilePage.module.scss';
-import SemesterListbox from '../components/MyLectureTimetable/SemesterListbox';
-import Timetable from '../../../components/TimetablePage/Timetable';
-import useLectureList from '../hooks/useLectureList';
-import useMyLectures from '../hooks/useMyLectures';
 
 function MobilePage() {
   const logger = useLogger();
