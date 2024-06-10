@@ -1,0 +1,19 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  width: 256px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  background-color: gray;
+  gap: 16px;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+
+  &__box {
+    width: 100%;
+    height: 100%;
+  }
+}

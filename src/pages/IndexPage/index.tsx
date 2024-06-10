@@ -1,4 +1,6 @@
 import { Suspense } from 'react';
+import CafeteriaSkeleton from 'components/Skeleton/IndexPage/CafeteriaSkeleton';
+import NoticeSkeleton from 'components/Skeleton/IndexPage/NoticeSkeleton';
 import IndexBus from './components/IndexBus';
 import IndexCafeteria from './components/IndexCafeteria';
 import IndexNotice from './components/IndexNotice';
@@ -17,8 +19,10 @@ function IndexPage() {
         <Suspense fallback={null}>
           <IndexTimetable />
         </Suspense>
-        <Suspense fallback={null}>
+        <Suspense fallback={<NoticeSkeleton />}>
           <IndexNotice />
+        </Suspense>
+        <Suspense fallback={<CafeteriaSkeleton />}>
           <IndexCafeteria />
         </Suspense>
       </main>
