@@ -6,7 +6,7 @@
   flex-direction: column;
 }
 
-.meal-type-selector {
+.type-selector {
   height: 28px;
   margin: 60px 0 19px;
   display: flex;
@@ -59,7 +59,7 @@
     z-index: 1;
   }
 
-  &__meal {
+  &__type {
     width: 100%;
     min-height: 40px;
     padding-left: 16px;

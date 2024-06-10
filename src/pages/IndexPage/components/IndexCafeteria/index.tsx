@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useNavigate } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import { MEAL_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
+import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { ReactComponent as NotServed } from 'assets/svg/not-served.svg';
@@ -11,7 +11,7 @@ import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/useLogger';
 import { getType } from 'utils/ts/cafeteria';
-import { MealType, PlaceType } from 'interfaces/Cafeteria';
+import { DiningType, DiningPlace } from 'interfaces/Cafeteria';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
@@ -20,25 +20,25 @@ function IndexCafeteria() {
   const logger = useLogger();
   const { dinings } = useDinings(new Date());
 
-  const [selectedMealType, setSelectedMeaType] = useState<MealType>(getType());
-  const [selectedPlace, setSelectedPlace] = useState<PlaceType>('A코너');
+  const [selectedDiningType, setSelectedDiningType] = useState<DiningType>(getType());
+  const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
 
   const selectedDining = dinings
-    .find((meal) => meal.place === selectedPlace && meal.type === selectedMealType);
+    .find((dining) => dining.place === selectedPlace && dining.type === selectedDiningType);
 
   const handleMoreClick = () => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
     navigate('/cafeteria');
   };
 
-  const handlePlaceClick = (place: PlaceType) => {
+  const handlePlaceClick = (place: DiningPlace) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: selectedPlace });
     setSelectedPlace(place);
   };
 
   const handleChevronClick = (name: string) => {
-    if (name === 'prev') setSelectedMeaType(getType(getType(selectedMealType)));
-    if (name === 'next') setSelectedMeaType(getType(selectedMealType));
+    if (name === 'prev') setSelectedDiningType(getType(getType(selectedDiningType)));
+    if (name === 'next') setSelectedDiningType(getType(selectedDiningType));
   };
 
   return (
@@ -88,7 +88,7 @@ function IndexCafeteria() {
             >
               <ChevronLeft />
             </button>
-            {MEAL_TYPE_MAP[selectedMealType]}
+            {DINING_TYPE_MAP[selectedDiningType]}
             <button
               type="button"
               name="next"
@@ -107,7 +107,7 @@ function IndexCafeteria() {
         >
           {isMobile && (
             <div className={styles.menus__type}>
-              {MEAL_TYPE_MAP[selectedMealType]}
+              {DINING_TYPE_MAP[selectedDiningType]}
               {selectedDining?.soldout_at && (
                 <span className={styles.menus__chip}>
                   품절
@@ -117,9 +117,9 @@ function IndexCafeteria() {
           )}
           {selectedDining ? (
             <ul className={styles.menus__list}>
-              {selectedDining.menu.slice(0, 10).map((dish) => (
-                <li className={styles.menus__name} key={dish.id}>
-                  {dish.name}
+              {selectedDining.menu.slice(0, 10).map((menuItem) => (
+                <li className={styles.menus__name} key={menuItem.id}>
+                  {menuItem.name}
                 </li>
               ))}
             </ul>

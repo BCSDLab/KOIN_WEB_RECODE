@@ -1,26 +1,26 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
 import { Dining } from 'interfaces/Cafeteria';
 import { useEffect } from 'react';
-import styles from './MealDetail.module.scss';
+import styles from './DetailModal.module.scss';
 
-interface MealDetailProps {
-  dining: Dining;
-  setMealDetail: (element: JSX.Element) => void;
+interface Props {
+  dining: Dining | null;
+  closeModal: () => void;
 }
 
-export default function MealDetail({ dining, setMealDetail }: MealDetailProps): JSX.Element {
+export default function DetailModal({ dining, closeModal }: Props): JSX.Element {
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) return;
-    setMealDetail(<div />);
+    closeModal();
   };
 
   const handleModalClose = () => {
-    setMealDetail(<div />);
+    closeModal();
   };
 
   const handleEscapeKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
     if (e.key === 'Escape') {
-      setMealDetail(<div />);
+      closeModal();
     }
   };
 
@@ -31,6 +31,8 @@ export default function MealDetail({ dining, setMealDetail }: MealDetailProps): 
       document.removeEventListener('keydown', handleEscapeKeyDown);
     };
   });
+
+  if (!dining) return <div />;
 
   return (
     <div

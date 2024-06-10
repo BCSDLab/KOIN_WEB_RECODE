@@ -5,15 +5,15 @@ import { ReactComponent as NoMeals } from 'assets/svg/no-meals-pc.svg';
 import styles from './PCMealImage.module.scss';
 
 interface Props {
-  meal: Dining,
+  dining: Dining,
   isRecent: boolean,
   handleImageClick: (item: Dining) => void,
 }
 
-export default function PCMealImage({ meal, isRecent, handleImageClick }: Props) {
-  const isABC = ['A코너', 'B코너', 'C코너'].includes(meal.place);
-  const hasImage = !!meal.image_url;
-  const isBreakfast = meal.type === 'BREAKFAST';
+export default function PCMealImage({ dining, isRecent, handleImageClick }: Props) {
+  const isABC = ['A코너', 'B코너', 'C코너'].includes(dining.place);
+  const hasImage = !!dining.image_url;
+  const isBreakfast = dining.type === 'BREAKFAST';
   const isBoxVisible = isRecent && isABC && (!isBreakfast || hasImage);
   if (!isBoxVisible) return null;
 
@@ -24,17 +24,17 @@ export default function PCMealImage({ meal, isRecent, handleImageClick }: Props)
         [styles.image]: true,
         [styles['image--no-image']]: !hasImage,
       })}
-      onClick={() => handleImageClick(meal)}
+      onClick={() => handleImageClick(dining)}
     >
-      {meal.soldout_at && (
+      {dining.soldout_at && (
         <span className={styles['image--sold-out']}>
           <NoMeals />
           품절된 메뉴입니다.
         </span>
       )}
       {hasImage
-        ? <img src={meal.image_url!} alt="식단 상세" />
-        : <span><NoPhoto /></span>}
+        ? <img src={dining.image_url!} alt="식단 상세" />
+        : <NoPhoto />}
     </button>
   );
 }

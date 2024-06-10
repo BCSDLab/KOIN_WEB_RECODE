@@ -1,14 +1,14 @@
-export type MealType = 'BREAKFAST' | 'LUNCH' | 'DINNER';
+export type DiningType = 'BREAKFAST' | 'LUNCH' | 'DINNER';
 
-export type MealTypes = Array<MealType>;
+export type DiningTypes = Array<DiningType>;
 
-export type PlaceType = 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스';
+export type DiningPlace = 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스';
 
 export type OriginalDining = {
   id: number;
   date: string;
-  type: MealType;
-  place: PlaceType;
+  type: DiningType;
+  place: DiningPlace;
   price_card: number | null;
   price_cash: number | null;
   kcal: number | null;
@@ -20,11 +20,11 @@ export type OriginalDining = {
   changed_at: string | null;
 };
 
-export type Dish = {
+export type MenuItem = {
   id: number;
   name: string;
 };
 
 export type Dining = Omit<OriginalDining, 'menu'> & {
-  menu: Array<Dish>;
+  menu: Array<MenuItem>;
 };
