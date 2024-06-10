@@ -14,7 +14,7 @@ export default function PCMealImage({ meal, isRecent, handleImageClick }: Props)
   const isABC = ['A코너', 'B코너', 'C코너'].includes(meal.place);
   const hasImage = !!meal.image_url;
   const isBreakfast = meal.type === 'BREAKFAST';
-  const isBoxVisible = isRecent && !(!isABC || (isBreakfast && !hasImage));
+  const isBoxVisible = isRecent && isABC && (!isBreakfast || hasImage);
   if (!isBoxVisible) return null;
 
   return (
