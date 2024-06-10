@@ -1,13 +1,8 @@
 export type MealType = 'BREAKFAST' | 'LUNCH' | 'DINNER';
 
-export type MealTypes = Array<'BREAKFAST' | 'LUNCH' | 'DINNER'>;
+export type MealTypes = Array<MealType>;
 
 export type PlaceType = 'A코너' | 'B코너' | 'C코너' | '능수관' | '2캠퍼스';
-
-export type CafeteriaType = {
-  id: number;
-  place: PlaceType;
-};
 
 export type OriginalDining = {
   id: number;
@@ -30,8 +25,6 @@ export type Dish = {
   name: string;
 };
 
-export type Dishes = Array<Dish>;
-
 export type Dining = Omit<OriginalDining, 'menu'> & {
-  menu: Dishes;
+  menu: Array<Dish>;
 };
