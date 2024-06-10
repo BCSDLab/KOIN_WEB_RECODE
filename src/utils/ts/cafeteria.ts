@@ -1,4 +1,5 @@
-import { DiningType, DiningTypes } from 'interfaces/Cafeteria';
+import { Dining, DiningType, DiningTypes } from 'interfaces/Cafeteria';
+import { PLACE_ORDER } from 'static/cafeteria';
 
 const koreanDateStringInstance = new Intl.DateTimeFormat('ko-KR', {
   year: 'numeric',
@@ -31,4 +32,14 @@ export const getType = (type?: DiningType): DiningType => {
     return 'LUNCH';
   }
   return 'DINNER';
+};
+
+export const sortDinings = (dinings: Dining[]) => {
+  const sortedDinings = dinings.sort((a, b) => {
+    const indexA = PLACE_ORDER.indexOf(a.place);
+    const indexB = PLACE_ORDER.indexOf(b.place);
+    return indexA - indexB;
+  });
+
+  return sortedDinings;
 };

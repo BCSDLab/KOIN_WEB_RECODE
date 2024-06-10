@@ -6,8 +6,9 @@ import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import DetailModal from 'pages/Cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
-import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
+import { DINING_TYPE_MAP } from 'static/cafeteria';
 import useBooleanState from 'utils/hooks/useBooleanState';
+import { sortDinings } from 'utils/ts/cafeteria';
 import styles from './PCDiningBlocks.module.scss';
 
 interface Props {
@@ -22,11 +23,7 @@ export default function PCDiningBlocks({ diningType, isRecent }: Props) {
   const filteredDinings = dinings
     .filter((dining) => dining.type === diningType
     && !dining.menu.some((menuItem) => menuItem.name.includes('미운영')));
-  const sortedDinings = filteredDinings.sort((a, b) => {
-    const indexA = PLACE_ORDER.indexOf(a.place);
-    const indexB = PLACE_ORDER.indexOf(b.place);
-    return indexA - indexB;
-  });
+  const sortedDinings = sortDinings(filteredDinings);
 
   const boxRef = useRef<HTMLDivElement>(null);
 
