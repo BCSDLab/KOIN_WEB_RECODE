@@ -19,8 +19,7 @@ export default function PCMenuBlocks({ mealType, isRecent }: Props) {
   const { dinings } = useDinings(currentDate);
 
   const filteredDinings = dinings
-    .filter((meal) => meal.type === mealType)
-    .filter((meal) => !meal.menu.some((dish) => dish.name.includes('미운영')));
+    .filter((meal) => meal.type === mealType && !meal.menu.some((dish) => dish.name.includes('미운영')));
   const sortedDinings = filteredDinings.sort((a, b) => {
     const indexA = PLACE_ORDER.indexOf(a.place);
     const indexB = PLACE_ORDER.indexOf(b.place);
