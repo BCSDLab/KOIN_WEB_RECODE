@@ -1,9 +1,9 @@
 import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
-  type CafeteriaListResponse,
+  DiningResponseType,
 } from './entity';
 
-export default class CafeteriaList<R extends CafeteriaListResponse> implements APIRequest<R> {
+export default class DiningResponse<R extends DiningResponseType> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/dinings';
