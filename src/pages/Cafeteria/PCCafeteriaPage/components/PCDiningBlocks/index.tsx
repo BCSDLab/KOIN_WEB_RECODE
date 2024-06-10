@@ -8,7 +8,7 @@ import DetailModal from 'pages/Cafeteria/PCCafeteriaPage/components/DetailModal'
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import useBooleanState from 'utils/hooks/useBooleanState';
-import { sortDinings } from 'utils/ts/cafeteria';
+import { filterDinings } from 'utils/ts/cafeteria';
 import styles from './PCDiningBlocks.module.scss';
 
 interface Props {
@@ -19,11 +19,7 @@ interface Props {
 export default function PCDiningBlocks({ diningType, isRecent }: Props) {
   const { currentDate } = useDatePicker();
   const { dinings } = useDinings(currentDate);
-
-  const filteredDinings = dinings
-    .filter((dining) => dining.type === diningType
-    && !dining.menu.some((menuItem) => menuItem.name.includes('미운영')));
-  const sortedDinings = sortDinings(filteredDinings);
+  const filteredDinings = filterDinings(dinings, diningType);
 
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +39,7 @@ export default function PCDiningBlocks({ diningType, isRecent }: Props) {
 
       boxRef.current.style.height = `${Math.max(...columnHeights)}px`; // 컨테이너의 높이 업데이트
     }
-  }, [sortedDinings]);
+  }, [filteredDinings]);
 
   const logger = useLogger();
   const [selectedDining, setSelectedDining] = useState<Dining | null>(null);
@@ -67,7 +63,7 @@ export default function PCDiningBlocks({ diningType, isRecent }: Props) {
       )}
 
       <div ref={boxRef}>
-        {sortedDinings.map((dining) => (
+        {filteredDinings.map((dining) => (
           <div className={styles.block} key={dining.id}>
             <div className={styles.header}>
               <div className={styles.header__place}>{dining.place}</div>

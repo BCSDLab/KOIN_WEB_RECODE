@@ -9,7 +9,7 @@ import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
-import { sortDinings } from 'utils/ts/cafeteria';
+import { filterDinings } from 'utils/ts/cafeteria';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface Props {
@@ -22,23 +22,17 @@ export default function MobileDiningBlocks({ diningType }: Props) {
 
   const { currentDate } = useDatePicker();
   const { dinings } = useDinings(currentDate);
-
-  const filteredDinings = dinings
-    .filter((dining) => dining.type === diningType
-    && !dining.menu.some((menuItem) => menuItem.name.includes('미운영')));
-  const sortedDinings = sortDinings(filteredDinings);
+  const filteredDinings = filterDinings(dinings, diningType);
 
   const logger = useLogger();
   const handleImageClick = (dining: Dining) => {
-    if (!dining.image_url) return;
-
-    logger.actionEventClick({
-      actionTitle: 'CAMPUS',
-      title: 'menu_image',
-      value: `${DINING_TYPE_MAP[dining.type]}_${dining.place}`,
-    });
-
     if (dining.image_url) {
+      logger.actionEventClick({
+        actionTitle: 'CAMPUS',
+        title: 'menu_image',
+        value: `${DINING_TYPE_MAP[dining.type]}_${dining.place}`,
+      });
+
       portalManager.open((portalOption: Portal) => (
         <div className={styles.photo}>
           <div className={styles.photo__close}>
@@ -56,7 +50,7 @@ export default function MobileDiningBlocks({ diningType }: Props) {
 
   return (
     <>
-      {sortedDinings.map((dining) => (
+      {filteredDinings.map((dining) => (
         <div className={styles.category} key={dining.id}>
           <ul className={styles['category__menu-list-row']}>
             <div className={styles.category__header}>
