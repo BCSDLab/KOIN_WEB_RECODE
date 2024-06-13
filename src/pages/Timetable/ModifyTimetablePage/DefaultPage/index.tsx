@@ -100,9 +100,9 @@ export default function DefaultPage() {
                   similarSelectedLecture={similarSelectedLectureDayList}
                   selectedLectureIndex={selectedLectureIndex}
                   columnWidth={88.73}
-                  firstColumnWidth={70}
-                  rowHeight={32.5}
-                  totalHeight={700}
+                  firstColumnWidth={44.36}
+                  rowHeight={33.07}
+                  totalHeight={699}
                 />
               </React.Suspense>
             </ErrorBoundary>
