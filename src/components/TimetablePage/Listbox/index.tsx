@@ -22,7 +22,7 @@ export interface ListboxProps {
   value: string | null;
   onChange: (event: { target: ListboxRef }) => void;
   logTitle?: string;
-  version?: 'default' | 'new' | 'new_2';
+  version?: 'default' | 'new' | 'inModal';
 }
 
 function Listbox({
@@ -70,7 +70,7 @@ function Listbox({
         className={cn({
           [styleClasses.select__trigger]: true,
           [styleClasses['select__trigger--selected']]: isOpenedPopup && version === 'new',
-          [styleClasses['select__trigger--selected-v2']]: isOpenedPopup && version === 'new_2',
+          [styleClasses['select__trigger--selected-v2']]: isOpenedPopup && version === 'inModal',
         })}
       >
         {value !== null ? list.find((item) => item.value === value)?.label : '학부'}

@@ -49,8 +49,8 @@ export default function SemesterSettingModal({
           <CloseIcon className={styles['container__close-button']} onClick={onClose} />
         </header>
         <div className={styles.container__semester}>
-          <Listbox list={year} value={yearValue} onChange={onChangeYear} version="new_2" />
-          <Listbox list={semester} value={semesterValue} onChange={onChangeSemester} version="new_2" />
+          <Listbox list={year} value={yearValue} onChange={onChangeYear} version="inModal" />
+          <Listbox list={semester} value={semesterValue} onChange={onChangeSemester} version="inModal" />
         </div>
         <div className={styles['container__setting-message']}>
           <button type="button" className={styles.container__checkbox} onClick={toggleIsChecked}>
