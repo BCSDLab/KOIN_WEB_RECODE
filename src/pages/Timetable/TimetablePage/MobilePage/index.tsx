@@ -10,7 +10,7 @@ import { useTempLecture } from 'utils/zustand/myTempLecture';
 import Timetable from 'components/TimetablePage/Timetable';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
-import SemesterListbox from 'pages/Timetable/components/SemesterListbox';
+import SemesterListbox from 'pages/Timetable/components/SemesterList';
 import styles from './MobilePage.module.scss';
 
 function MobilePage() {
