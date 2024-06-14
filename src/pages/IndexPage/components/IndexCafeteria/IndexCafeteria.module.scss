@@ -22,8 +22,9 @@
     color: #175c8e;
 
     @include media.media-breakpoint(mobile) {
-      font-size: 18px;
-      padding: 0 16px;
+      font-size: 15px;
+      padding-left: 3px;
+      margin-left: 16px;
       box-sizing: border-box;
     }
   }
