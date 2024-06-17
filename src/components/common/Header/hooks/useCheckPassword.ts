@@ -16,7 +16,7 @@ const useCheckPassword = () => {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 401) {
+        if (err.status === 400) {
           setErrorMessage('비밀번호가 일치하지 않습니다.');
           return;
         }
