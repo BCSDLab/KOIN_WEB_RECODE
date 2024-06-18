@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import CurriculumListBox from 'pages/Timetable/components/Curriculum';
 import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
-import { ReactComponent as EditIcon } from 'assets/svg/edit-icon.svg';
+import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
 import styles from '../../TimetablePage/DefaultPage/DefaultPage.module.scss';
 import Timetable from '../../../../components/TimetablePage/Timetable';
 import useLectureList from '../../hooks/useLectureList';
