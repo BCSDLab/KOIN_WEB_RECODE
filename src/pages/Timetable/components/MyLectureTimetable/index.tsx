@@ -11,10 +11,11 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import CurriculumListBox from 'pages/Timetable/components/Curriculum';
 import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
 import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
-import styles from '../../TimetablePage/DefaultPage/DefaultPage.module.scss';
+import styles from './MyLectureTimetable.module.scss';
 import Timetable from '../../../../components/TimetablePage/Timetable';
 import useLectureList from '../../hooks/useLectureList';
 import useMyLectures from '../../hooks/useMyLectures';
+import TotalGrades from './TotalGrades';
 
 export default function MainTimetable() {
   const { myLectures } = useMyLectures();
@@ -32,10 +33,10 @@ export default function MainTimetable() {
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: deptList } = useDeptList();
-
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
+        <TotalGrades myLectureList={myLectures} />
         <CurriculumListBox
           list={deptList}
         />
