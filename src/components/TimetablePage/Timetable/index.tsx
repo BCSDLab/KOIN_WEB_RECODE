@@ -2,13 +2,20 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import { TimetableDayLectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableDayLectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import {
   BACKGROUND_COLOR,
   DAYS_STRING,
   TIME_STRING,
 } from 'static/timetable';
+import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
+import { useLocation } from 'react-router-dom';
+import useModalPortal from 'utils/hooks/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import AlertModal from 'components/common/Modal/AlertModal';
+import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
+import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -21,6 +28,11 @@ interface TimetableProps {
   totalHeight: number;
 }
 
+interface RemoveLectureProps {
+  lecture_class: string;
+  professor: string;
+}
+
 function Timetable({
   lectures,
   selectedLectureIndex,
@@ -31,6 +43,26 @@ function Timetable({
   totalHeight,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
+  const portalManager = useModalPortal();
+  const [isMouseOver, setIsMouseOver] = React.useState('');
+  const { pathname } = useLocation();
+  const isEditable = pathname.includes('/timetable/modify');
+  const { removeMyLecture } = useTimetableMutation();
+  const { myLectures } = useMyLectures();
+
+  const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
+    let lectureToRemove: LectureInfo | TimetableLectureInfo | null = null;
+    myLectures.forEach((lecture) => {
+      if (lecture.lecture_class === lecture_class && lecture.professor === professor) {
+        lectureToRemove = lecture;
+      }
+    });
+    if (lectureToRemove) {
+      portalManager.open((portalOption: Portal) => (
+        <AlertModal title="강의를 삭제하겠습니까?" description="삭제한 강의는 복구가 불가능합니다." onClose={portalOption.close} onConfirm={() => removeMyLecture(lectureToRemove!)} />
+      ));
+    }
+  };
 
   return (
     <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
@@ -110,7 +142,14 @@ function Timetable({
                   width: isMobile ? undefined : `${columnWidth}px`,
                   height: `${(end - start + 1) * rowHeight - 1}px`,
                 }}
+                onMouseEnter={() => setIsMouseOver(`${day}-${start}-${end}`)}
+                onMouseLeave={() => setIsMouseOver('')}
               >
+                {isMouseOver === `${day}-${start}-${end}` && isEditable && (
+                  <div>
+                    <LectureCloseIcon className={styles['timetable__delete-button']} onClick={() => handleRemoveLectureClick({ lecture_class, professor })} />
+                  </div>
+                )}
                 <h4>
                   {name}
                 </h4>

@@ -145,4 +145,11 @@
       font-size: 1em;
     }
   }
+
+  &__delete-button {
+    position: absolute;
+    right: 0;
+    top: 3px;
+    cursor: pointer;
+  }
 }
