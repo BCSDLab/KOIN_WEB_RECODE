@@ -105,16 +105,33 @@ function Timetable({
                 className={styles.timetable__lecture}
                 key={lectureIndex}
                 style={{
-                  backgroundColor: BACKGROUND_COLOR[lectureIndex % 11],
+                  backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 12]}33`,
+                  borderTop: `2px solid ${BACKGROUND_COLOR[lectureIndex % 12]}`,
                   top: `${start * rowHeight + 1}px`,
                   width: isMobile ? undefined : `${columnWidth}px`,
                   height: `${(end - start + 1) * rowHeight - 1}px`,
+                  padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
+                  gap: `${rowHeight / 5.5}px`,
                 }}
               >
-                <h4>
+                <div
+                  style={{
+                    fontSize: `${rowHeight / 3 + 1}px`,
+                    fontWeight: '500',
+                    lineHeight: `${rowHeight / 2}px`,
+                    fontFamily: 'Pretendard',
+                  }}
+                >
                   {name}
-                </h4>
-                <span>
+                </div>
+                <span
+                  style={{
+                    fontSize: `${rowHeight / 3 + 1}px`,
+                    fontWeight: '400',
+                    lineHeight: `${rowHeight / 2}px`,
+                    fontFamily: 'Pretendard',
+                  }}
+                >
                   {lecture_class}
                   &nbsp;
                   {professor}
