@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports */
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
@@ -11,10 +10,10 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import CurriculumListBox from 'pages/Timetable/components/Curriculum';
 import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
 import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
+import Timetable from 'components/TimetablePage/Timetable';
+import useLectureList from 'pages/Timetable/hooks/useLectureList';
+import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import styles from './MyLectureTimetable.module.scss';
-import Timetable from '../../../../components/TimetablePage/Timetable';
-import useLectureList from '../../hooks/useLectureList';
-import useMyLectures from '../../hooks/useMyLectures';
 import TotalGrades from './TotalGrades';
 
 export default function MainTimetable() {
