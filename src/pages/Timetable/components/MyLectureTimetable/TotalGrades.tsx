@@ -1,12 +1,13 @@
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import styles from './MyLectureTimetable.module.scss';
 
-function TotalGrades(props: { myLectureList: TimetableLectureInfo[] | LectureInfo[] }) {
-  let total = 0;
-  // eslint-disable-next-line react/destructuring-assignment
-  props.myLectureList.forEach((item) => {
-    total += parseInt(item.grades, 10);
-  });
+interface TotalGradesProps {
+  myLectureList: TimetableLectureInfo[] | LectureInfo[];
+}
+
+function TotalGrades({ myLectureList }: TotalGradesProps) {
+  const lectureList = myLectureList as (TimetableLectureInfo | LectureInfo)[];
+  const total = lectureList.reduce((acc, lecture) => acc + Number(lecture.grades), 0);
 
   return (
     <div className={styles.grades}>
