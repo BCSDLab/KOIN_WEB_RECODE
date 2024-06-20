@@ -10,9 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useSemester } from 'utils/zustand/semester';
-import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
 import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/Timetable/components/LectureList';
+import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage() {
@@ -84,10 +84,9 @@ export default function DefaultPage() {
           </div>
           <div className={styles.page__timetable}>
             <div className={styles['page__timetable-button-group']}>
-              <button type="button" className={styles['page__delete-button']}>
-                <TrashCanIcon className={styles['page__trash-can-icon']} />
-                삭제
-              </button>
+              <div className={styles['page__total-grades']}>
+                <TotalGrades myLectureList={myLectures} />
+              </div>
               <button type="button" className={styles['page__save-button']} onClick={() => navigate('/timetable')}>
                 <PenIcon className={styles['page__pen-icon']} />
                 시간표 저장
