@@ -1,6 +1,5 @@
-/* eslint-disable no-restricted-imports */
-import useVersionInfo from '../../hooks/useVersionInfo';
-import styles from '../../TimetablePage/DefaultPage/DefaultPage.module.scss';
+import useVersionInfo from 'pages/Timetable/hooks/useVersionInfo';
+import styles from 'pages/Timetable/TimetablePage/DefaultPage/DefaultPage.module.scss';
 
 function LastUpdatedDate() {
   const { data: updatedDate } = useVersionInfo();

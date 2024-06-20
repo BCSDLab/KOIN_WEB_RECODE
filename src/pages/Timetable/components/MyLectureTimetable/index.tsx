@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports */
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
@@ -10,11 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import CurriculumListBox from 'pages/Timetable/components/Curriculum';
 import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
-import { ReactComponent as EditIcon } from 'assets/svg/edit-icon.svg';
-import styles from '../../TimetablePage/DefaultPage/DefaultPage.module.scss';
-import Timetable from '../../../../components/TimetablePage/Timetable';
-import useLectureList from '../../hooks/useLectureList';
-import useMyLectures from '../../hooks/useMyLectures';
+import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
+import Timetable from 'components/TimetablePage/Timetable';
+import useLectureList from 'pages/Timetable/hooks/useLectureList';
+import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
+import TotalGrades from 'pages/Timetable/components/TotalGrades';
+import styles from './MyLectureTimetable.module.scss';
 
 export default function MainTimetable() {
   const { myLectures } = useMyLectures();
@@ -32,10 +32,12 @@ export default function MainTimetable() {
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: deptList } = useDeptList();
-
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
+        <div className={styles['page__total-grades']}>
+          <TotalGrades myLectureList={myLectures} />
+        </div>
         <CurriculumListBox
           list={deptList}
         />

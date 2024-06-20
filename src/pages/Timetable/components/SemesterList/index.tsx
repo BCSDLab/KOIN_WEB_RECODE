@@ -10,9 +10,9 @@ import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
+import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
 import SemesterSettingModal from './SemesterSettingModal';
 import styles from './SemesterList.module.scss';
-import useSemesterOptionList from '../../hooks/useSemesterOptionList';
 
 function SemesterListbox() {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);

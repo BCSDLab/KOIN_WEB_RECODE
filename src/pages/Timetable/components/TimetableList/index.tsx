@@ -4,8 +4,8 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import TimetableSettingModal from 'pages/Timetable/components/TimetableList/TimetableSettingModal';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
+import SemesterListbox from 'pages/Timetable/components/SemesterList';
 import styles from './TimetableList.module.scss';
-import SemesterListbox from '../SemesterList';
 
 export default function TimetableList() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
