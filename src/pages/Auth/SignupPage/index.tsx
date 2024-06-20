@@ -12,7 +12,7 @@ import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
 import useSignup from './hooks/useSignup';
 
-const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
+const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/;
 
 const PHONENUMBER_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
 
@@ -107,8 +107,12 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    setIsPasswordValid(PASSWORD_REGEX.test(e.target.value));
   };
+
+  const handlePasswordValidCheck = () => {
+    setIsPasswordValid(PASSWORD_REGEX.test(password));
+  };
+
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = true;
     if (password !== passwordConfirmValue) {
@@ -134,6 +138,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         autoComplete="new-password"
         placeholder="비밀번호 (필수)"
         onChange={handlePasswordChange}
+        onBlur={handlePasswordValidCheck}
         required={required}
         name={name}
       />
