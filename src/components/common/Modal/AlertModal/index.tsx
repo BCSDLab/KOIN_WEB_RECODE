@@ -19,12 +19,20 @@ export default function AlertModal({
         onClose();
       }
     };
+
+    const handleESCClick = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
     const body = document.querySelector('body');
     body!.style.overflow = 'hidden';
     document.addEventListener('click', handleOutsideClick);
+    document.addEventListener('keydown', handleESCClick);
     return () => {
       body!.style.overflow = 'auto';
       document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener('keydown', handleESCClick);
     };
   }, [onClose]);
 
