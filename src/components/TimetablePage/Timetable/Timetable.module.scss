@@ -118,8 +118,6 @@
     flex-direction: column;
     position: absolute;
     z-index: 3;
-    padding: 6px 4px 0;
-    line-height: 1.2;
     font-family: NanumSquare, serif;
     box-sizing: border-box;
 
@@ -134,15 +132,6 @@
       @include media.media-breakpoint(mobile) {
         width: calc((100% - 55px) / 5);
       }
-    }
-
-    & > h4 {
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
-    & > span {
-      font-size: 1em;
     }
   }
 }

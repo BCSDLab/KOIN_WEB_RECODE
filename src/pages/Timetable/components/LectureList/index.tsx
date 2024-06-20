@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports */
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
@@ -8,13 +7,13 @@ import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/Timetable/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
-import useLectureList from '../../hooks/useLectureList';
-import DeptListbox from './DeptListbox ';
+import useLectureList from 'pages/Timetable/hooks/useLectureList';
+import useSearch from 'pages/Timetable/hooks/useSearch';
+import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
+import LectureTable from 'components/TimetablePage/LectureTable';
+import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
-import useSearch from '../../hooks/useSearch';
-import LectureTable from '../../../../components/TimetablePage/LectureTable';
-import useMyLectures from '../../hooks/useMyLectures';
 
 interface CurrentSemesterLectureListProps {
   semesterKey: string;
