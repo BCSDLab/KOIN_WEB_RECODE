@@ -30,10 +30,10 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: Props) {
       let columnIndex = 0;
 
       Array.from(blocks).forEach((block) => {
-        const x = columnIndex * (276 + 12); // 열 인덱스에 따라 x 위치 계산
+        const x = columnIndex * (276 + 16); // 열 인덱스에 따라 x 위치 계산
         const y = columnHeights[columnIndex]; // 현재 열의 높이에서 시작
         (block as HTMLElement).style.transform = `translate(${x}px, ${y}px)`;
-        columnHeights[columnIndex] += (block as HTMLElement).clientHeight + 12; // 열 높이 업데이트
+        columnHeights[columnIndex] += (block as HTMLElement).clientHeight + 16; // 열 높이 업데이트
         columnIndex = (columnIndex + 1) % columnHeights.length; // 다음 열 인덱스로 업데이트
       });
 
