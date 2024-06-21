@@ -3,6 +3,10 @@ import { ReactComponent as LeftArrow } from 'assets/svg/left-angle-bracket.svg';
 import { ReactComponent as RightArrow } from 'assets/svg/right-angle-bracket.svg';
 import { ReactComponent as InformationIcon } from 'assets/svg/information.svg';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
+import { createPortal } from 'react-dom';
+import CafeteriaInfo from 'pages/Cafeteria/PCCafeteriaPage/components/CafeteriaInfo';
+import useBooleanState from 'utils/hooks/useBooleanState';
+import { useEffect } from 'react';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {
@@ -45,11 +49,18 @@ export default function DateNavigator() {
     setToday,
     setDate,
   } = useDatePicker();
+  const [isPopupOpen, openPopup, closePopup] = useBooleanState(false);
 
   const thisWeek = generateWeek(currentDate);
 
-  const handleInformationClick = () => {
-  };
+  useEffect(() => {
+    const body = document.querySelector('body');
+    if (isPopupOpen) {
+      body!.style.overflow = 'hidden';
+    } else {
+      body!.style.overflow = 'auto';
+    }
+  }, [isPopupOpen]);
 
   return (
     <div className={styles.container}>
@@ -86,7 +97,7 @@ export default function DateNavigator() {
         <button
           type="button"
           className={styles.information}
-          onClick={handleInformationClick}
+          onClick={openPopup}
         >
           <InformationIcon />
           학생식당정보
@@ -126,6 +137,11 @@ export default function DateNavigator() {
           </button>
         ))}
       </div>
+
+      {isPopupOpen && createPortal(
+        <CafeteriaInfo closePopup={closePopup} />,
+        document.body,
+      )}
     </div>
   );
 }
