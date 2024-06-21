@@ -20,34 +20,36 @@
   &__place {
     font-family: Pretendard, sans-serif;
     font-size: 18px;
-    font-weight: 500;
-    line-height: 21.48px;
+    font-weight: 600;
+    line-height: 28.8px;
+    text-align: left;
   }
 
   &__detail {
     font-family: Pretendard, sans-serif;
     font-size: 12px;
     font-weight: 400;
-    line-height: 15.3px;
+    line-height: 19.2px;
+    text-align: left;
     color: #8e8e8e;
   }
 
   &__chip {
     width: auto;
-    height: 22px;
-    padding: 0 8px;
+    height: 26px;
+    padding: 0 6px;
     border-radius: 4px;
     position: absolute;
-    top: 50%;
+    top: 8px;
     right: 0;
-    transform: translateY(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: Pretendard, sans-serif;
     font-size: 12px;
     font-weight: 500;
-    line-height: 14.32px;
+    line-height: 22.4px;
+    text-align: right;
 
     &--sold-out {
       color: #ffad0d;
