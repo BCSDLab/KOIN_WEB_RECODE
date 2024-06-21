@@ -15,10 +15,43 @@
   }
 }
 
+.date-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.information {
+  position: absolute;
+  right: 0;
+  top: -10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 126px;
+  height: 42px;
+  border-radius: 8px;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 25.6px;
+  text-align: left;
+  color: #4b4b4b;
+
+  & > * {
+    margin-bottom: 3px;
+  }
+
+  &:hover {
+    background-color: #eee;
+  }
+}
+
 .date {
   min-width: 112px;
   min-height: 24px;
-  margin-bottom: 32px;
+  margin: 0 auto 32px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

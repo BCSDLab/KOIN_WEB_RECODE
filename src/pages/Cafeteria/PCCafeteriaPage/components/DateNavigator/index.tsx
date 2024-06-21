@@ -1,6 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as LeftArrow } from 'assets/svg/left-angle-bracket.svg';
 import { ReactComponent as RightArrow } from 'assets/svg/right-angle-bracket.svg';
+import { ReactComponent as InformationIcon } from 'assets/svg/information.svg';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import styles from './DateNavigator.module.scss';
 
@@ -47,35 +48,48 @@ export default function DateNavigator() {
 
   const thisWeek = generateWeek(currentDate);
 
+  const handleInformationClick = () => {
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.date}>
+      <div className={styles['date-wrapper']}>
+        <div className={styles.date}>
+          <button
+            className={styles.date__button}
+            type="button"
+            aria-label="이전 날짜"
+            onClick={setPrevWeek}
+          >
+            <LeftArrow />
+          </button>
+          <button
+            className={cn({
+              [styles.date__button]: true,
+              [styles['date__button--today']]: checkToday(currentDate),
+            })}
+            type="button"
+            aria-label="오늘 날짜"
+            onClick={setToday}
+          >
+            오늘
+          </button>
+          <button
+            className={styles.date__button}
+            type="button"
+            aria-label="다음 날짜"
+            onClick={setNextWeek}
+          >
+            <RightArrow />
+          </button>
+        </div>
         <button
-          className={styles.date__button}
           type="button"
-          aria-label="이전 날짜"
-          onClick={setPrevWeek}
+          className={styles.information}
+          onClick={handleInformationClick}
         >
-          <LeftArrow />
-        </button>
-        <button
-          className={cn({
-            [styles.date__button]: true,
-            [styles['date__button--today']]: checkToday(currentDate),
-          })}
-          type="button"
-          aria-label="오늘 날짜"
-          onClick={setToday}
-        >
-          오늘
-        </button>
-        <button
-          className={styles.date__button}
-          type="button"
-          aria-label="다음 날짜"
-          onClick={setNextWeek}
-        >
-          <RightArrow />
+          <InformationIcon />
+          학생식당정보
         </button>
       </div>
 
