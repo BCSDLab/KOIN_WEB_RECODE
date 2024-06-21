@@ -4,7 +4,7 @@ import {
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
 import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
-import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
@@ -72,7 +72,7 @@ export default function PCCafeteriaPage({
   return (
     <div className={styles.container}>
       <div className={styles['type-selector']}>
-        {checkToday(currentDate) && '오늘'}
+        {checkToday(currentDate) ? '오늘' : DAYS[currentDate.getDay()] }
         <div className={styles['dropdown-wrapper']}>
           <button
             id="dropdown-button"
