@@ -56,6 +56,15 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: Props) {
     setIsModalOpenTrue();
   };
 
+  useEffect(() => {
+    const body = document.querySelector('body');
+    if (isModalOpen) {
+      body!.style.overflow = 'hidden';
+    } else {
+      body!.style.overflow = 'auto';
+    }
+  }, [isModalOpen]);
+
   return (
     <>
       {isModalOpen && (
