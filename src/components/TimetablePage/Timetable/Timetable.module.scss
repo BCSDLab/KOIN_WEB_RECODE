@@ -120,6 +120,7 @@
     z-index: 3;
     font-family: NanumSquare, serif;
     box-sizing: border-box;
+    backdrop-filter: blur(10px);
 
     @include media.media-breakpoint(mobile) {
       width: calc((100% - 57px) / 5);
