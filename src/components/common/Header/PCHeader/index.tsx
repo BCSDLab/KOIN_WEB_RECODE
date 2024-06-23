@@ -45,11 +45,11 @@ const useMegaMenu = (category: Category[]) => {
   };
 };
 
-interface Props {
+interface PCHeaderProps {
   openModal: () => void;
 }
 
-export default function PCHeader({ openModal }: Props) {
+export default function PCHeader({ openModal }: PCHeaderProps) {
   const {
     panelMenuList,
     isExpanded: isMegaMenuExpanded,

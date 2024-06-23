@@ -4,12 +4,12 @@ import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-mobile.svg'
 import { ReactComponent as NoMeals } from 'assets/svg/no-meals-mobile.svg';
 import styles from './MobileMealImage.module.scss';
 
-interface Props {
+interface MobileMealImageProps {
   dining: Dining,
   handleImageClick: (dining: Dining) => void,
 }
 
-export default function MobileMealImage({ dining, handleImageClick }: Props) {
+export default function MobileMealImage({ dining, handleImageClick }: MobileMealImageProps) {
   const isABC = ['A코너', 'B코너', 'C코너'].includes(dining.place);
   const hasImage = !!dining.image_url;
   const isBreakfast = dining.type === 'BREAKFAST';

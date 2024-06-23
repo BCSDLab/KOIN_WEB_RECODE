@@ -9,13 +9,11 @@ import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import styles from 'pages/Timetable/TimetablePage/DefaultPage/DefaultPage.module.scss';
 
-export interface DeptListboxProps {
+export interface CurriculumListBoxProps {
   list: DeptListResponse;
 }
 
-function CurriculumListBox({
-  list,
-}: DeptListboxProps) {
+function CurriculumListBox({ list }: CurriculumListBoxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
 
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {

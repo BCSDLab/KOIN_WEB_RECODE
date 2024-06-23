@@ -1,6 +1,6 @@
 import styles from './RoomDetailTable.module.scss';
 
-interface TableProps {
+interface RoomDetailTableProps {
   monthlyFee: string;
   roomType: string;
   charterFee: string;
@@ -22,7 +22,7 @@ interface TableData {
 
 function RoomDetailTable({
   monthlyFee, roomType, charterFee, deposit, floor, managementFee, size, phone,
-}: TableProps) {
+}: RoomDetailTableProps) {
   const tableData: TableData[] = [
     {
       leftTitle: '월세', leftValue: monthlyFee, rightTitle: '방 종류', rightValue: roomType,

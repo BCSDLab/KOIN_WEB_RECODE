@@ -11,11 +11,11 @@ import { ReactComponent as WhiteArrowBackIcon } from 'assets/svg/white-arrow-bac
 import styles from './MobileHeader.module.scss';
 import Panel from './Panel';
 
-interface Props {
+interface MobileHeaderProps {
   openModal: () => void;
 }
 
-export default function MobileHeader({ openModal }: Props) {
+export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const { pathname } = useLocation();
   const { openSidebar } = useMobileSidebar();
 

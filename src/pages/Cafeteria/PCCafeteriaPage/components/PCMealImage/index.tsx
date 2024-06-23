@@ -4,13 +4,13 @@ import { ReactComponent as NoPhoto } from 'assets/svg/no-photography-pc.svg';
 import { ReactComponent as NoMeals } from 'assets/svg/no-meals-pc.svg';
 import styles from './PCMealImage.module.scss';
 
-interface Props {
+interface PCMealImageProps {
   dining: Dining,
   isThisWeek: boolean,
   handleImageClick: (dining: Dining) => void,
 }
 
-export default function PCMealImage({ dining, isThisWeek, handleImageClick }: Props) {
+export default function PCMealImage({ dining, isThisWeek, handleImageClick }: PCMealImageProps) {
   const isABC = ['A코너', 'B코너', 'C코너'].includes(dining.place);
   const hasImage = !!dining.image_url;
   const isBreakfast = dining.type === 'BREAKFAST';
