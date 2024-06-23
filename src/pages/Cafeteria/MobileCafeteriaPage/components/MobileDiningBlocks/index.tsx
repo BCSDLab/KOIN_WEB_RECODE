@@ -12,11 +12,11 @@ import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
 import styles from './MobileDiningBlocks.module.scss';
 
-interface Props {
+interface MobileDiningBlocksProps {
   diningType: DiningType;
 }
 
-export default function MobileDiningBlocks({ diningType }: Props) {
+export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksProps) {
   const portalManager = useModalPortal();
   const { target } = useOnClickOutside<HTMLImageElement>(portalManager.close);
 

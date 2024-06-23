@@ -26,11 +26,11 @@ const OPERATING_SCHEDULES = {
   ],
 };
 
-interface Props {
+interface CafeteriaInfoProps {
   closePopup: () => void;
 }
 
-export default function CafeteriaInfo({ closePopup }: Props) {
+export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
   const backgroundRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

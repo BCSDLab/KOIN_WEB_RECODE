@@ -9,11 +9,11 @@ import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import styles from './Panel.module.scss';
 
-interface Props {
+interface PanelProps {
   openModal: () => void,
 }
 
-export default function Panel({ openModal }: Props) {
+export default function Panel({ openModal }: PanelProps) {
   const { isSidebarOpen, closeSidebar } = useMobileSidebar();
   const { data: userInfo } = useUser();
   const logout = useLogout();

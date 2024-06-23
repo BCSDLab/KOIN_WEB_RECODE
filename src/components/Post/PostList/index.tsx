@@ -5,11 +5,11 @@ import setPostCreateDate from 'utils/ts/setPostCreateDate';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import styles from './PostList.module.scss';
 
-type ArticleListProps = {
+type PostListProps = {
   articles: ArticleList[] | undefined
 };
 
-function PostList(props: ArticleListProps) {
+function PostList(props: PostListProps) {
   const { articles } = props;
   const isMobile = useMediaQuery();
 

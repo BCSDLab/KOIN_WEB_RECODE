@@ -44,14 +44,14 @@ const useOutsideAlerter = (
   }, [ref, closeFunction]);
 };
 
-interface Props {
+interface PCCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
 }
 
 export default function PCCafeteriaPage({
   diningType, setDiningType,
-}: Props) {
+}: PCCafeteriaPageProps) {
   const { currentDate, checkToday } = useDatePicker();
   const wrapperRef = useRef(null);
   const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);

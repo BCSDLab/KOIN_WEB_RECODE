@@ -8,12 +8,14 @@ import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
 
-interface Props {
+interface MobileCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
 }
 
-export default function MobileCafeteriaPage({ diningType, setDiningType }: Props) {
+export default function MobileCafeteriaPage({
+  diningType, setDiningType,
+}: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
 

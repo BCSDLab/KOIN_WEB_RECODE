@@ -11,12 +11,12 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import { filterDinings } from 'utils/ts/cafeteria';
 import styles from './PCDiningBlocks.module.scss';
 
-interface Props {
+interface PCDiningBlocksProps {
   diningType: DiningType;
   isThisWeek: boolean;
 }
 
-export default function PCDiningBlocks({ diningType, isThisWeek }: Props) {
+export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlocksProps) {
   const { currentDate } = useDatePicker();
   const { dinings } = useDinings(currentDate);
   const filteredDinings = filterDinings(dinings, diningType);
