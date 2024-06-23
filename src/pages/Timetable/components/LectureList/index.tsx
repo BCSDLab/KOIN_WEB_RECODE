@@ -11,6 +11,7 @@ import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import useSearch from 'pages/Timetable/hooks/useSearch';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import LectureTable from 'components/TimetablePage/LectureTable';
+import { useUser } from 'utils/hooks/useUser';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
@@ -33,6 +34,7 @@ function CurrentSemesterLectureList({
   const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation();
+  const { data: userInfo } = useUser();
 
   return (
     <LectureTable
@@ -69,7 +71,20 @@ function CurrentSemesterLectureList({
             .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
 
           if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
-            showToast('error', '시간이 중복되어 추가할 수 없습니다.');
+            const myLectureList = myLectures as Array<LectureInfo & TimetableLectureInfo>;
+            const alreadySelectedLecture = myLectureList.find(
+              (lecture) => lecture.class_time.some(
+                (time) => clickedLecture.class_time.includes(time),
+              ),
+            );
+            if (!alreadySelectedLecture) {
+              return;
+            }
+            if (userInfo) {
+              showToast('error', `${alreadySelectedLecture.class_title} 강의가 중복되어 추가할 수 없습니다.`);
+            } else {
+              showToast('error', `${alreadySelectedLecture.name} 강의가 중복되어 추가할 수 없습니다.`);
+            }
           } else {
             addMyLecture(clickedLecture);
           }
