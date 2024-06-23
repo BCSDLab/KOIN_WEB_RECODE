@@ -48,7 +48,7 @@ export interface ISubmitForm {
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
 ): elementRef is ICustomFormInput => (elementRef !== null
-&& Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+  && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const refCollection = React.useRef<IFormType>({});
@@ -481,7 +481,9 @@ function SignupDefaultPage() {
               if (value.indexOf('@koreatech.ac.kr') !== -1) {
                 return '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.';
               }
-
+              if (value.indexOf('@') !== -1) {
+                return '이메일의 아이디 부분만 입력해주세요.';
+              }
               return true;
             },
           })}
