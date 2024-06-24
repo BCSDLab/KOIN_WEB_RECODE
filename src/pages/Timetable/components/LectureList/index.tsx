@@ -81,10 +81,10 @@ function CurrentSemesterLectureList({
               return;
             }
             if (userInfo) {
-              showToast('error', `${alreadySelectedLecture.class_title} 강의가 중복되어 추가할 수 없습니다.`);
-            } else {
-              showToast('error', `${alreadySelectedLecture.name} 강의가 중복되어 추가할 수 없습니다.`);
+              showToast('error', `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`);
+              return;
             }
+            showToast('error', `${alreadySelectedLecture.name}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`);
           } else {
             addMyLecture(clickedLecture);
           }
