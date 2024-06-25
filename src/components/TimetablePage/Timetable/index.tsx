@@ -65,11 +65,13 @@ function Timetable({
   const findMaxTime = (myTimetableLectures: TimetableDayLectureInfo[][] | undefined) => {
     let maxTime = 19;
     DAYS_STRING.forEach((day, index) => {
-      myTimetableLectures![index].forEach((lecture) => {
-        if (lecture.end > maxTime) {
-          maxTime = lecture.end;
-        }
-      });
+      if (myTimetableLectures !== undefined) {
+        myTimetableLectures[index].forEach((lecture) => {
+          if (lecture.end > maxTime) {
+            maxTime = lecture.end;
+          }
+        });
+      }
     });
     return maxTime;
   };
