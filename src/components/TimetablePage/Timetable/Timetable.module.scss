@@ -49,10 +49,16 @@
 
   &__content {
     width: 100%;
-    overflow: hidden;
+    overflow: auto;
     display: inline-flex;
     flex: none;
     position: relative;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
     &--time {
       display: flex;
