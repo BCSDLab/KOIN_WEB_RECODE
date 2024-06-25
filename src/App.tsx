@@ -27,12 +27,12 @@ import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
 import PrivateRoute from 'components/common/PrivateRoute';
 import ModifyTimetablePage from 'pages/Timetable/ModifyTimetablePage';
 
-interface PageWrapperProps {
+interface HelmetWrapperProps {
   title: string;
   element: ReactNode;
 }
 
-function HelmetWrapper({ title, element }: PageWrapperProps) {
+function HelmetWrapper({ title, element }: HelmetWrapperProps) {
   const location = useLocation();
 
   useEffect(() => {

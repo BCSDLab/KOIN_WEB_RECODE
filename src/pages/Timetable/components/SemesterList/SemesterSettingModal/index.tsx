@@ -6,13 +6,13 @@ import { ReactComponent as NotCheckedIcon } from 'assets/svg/not-checked-icon.sv
 import Listbox from 'components/TimetablePage/Listbox';
 import styles from './SemesterSettingModal.module.scss';
 
-export interface TimetableSettingModalProps {
+export interface SemesterSettingModalProps {
   onClose: () => void
 }
 
 export default function SemesterSettingModal({
   onClose,
-}: TimetableSettingModalProps) {
+}: SemesterSettingModalProps) {
   const [isChecked, setIsChecked] = React.useState(false);
   const toggleIsChecked = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();

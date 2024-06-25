@@ -7,10 +7,6 @@ import styles from './Pagination.module.scss';
 
 const LIMIT_COUNT = [0, 1, 2, 3, 4];
 
-interface PaginationProps {
-  totalPageNum: number
-}
-
 const onHandlePrevPage = (moveNumber: number) => {
   if (moveNumber <= 0) {
     showToast('error', '첫 페이지입니다.');
@@ -28,6 +24,10 @@ const onHandleNextPage = (moveNumber: number, totalPageNum: number) => {
 
   return String(moveNumber);
 };
+
+interface PaginationProps {
+  totalPageNum: number
+}
 
 function Pagination(props: PaginationProps) {
   const { calcIndexPage, onClickMove } = usePagination();

@@ -3,12 +3,12 @@ import { Dining } from 'interfaces/Cafeteria';
 import { useEffect } from 'react';
 import styles from './DetailModal.module.scss';
 
-interface Props {
+interface DetailModalProps {
   dining: Dining | null;
   closeModal: () => void;
 }
 
-export default function DetailModal({ dining, closeModal }: Props): JSX.Element {
+export default function DetailModal({ dining, closeModal }: DetailModalProps): JSX.Element {
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) return;
     closeModal();

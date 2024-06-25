@@ -1,0 +1,116 @@
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0 0 0 / 60%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  width: 438px;
+  height: 516px;
+  padding: 24px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #fff;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 78px;
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__main {
+    height: 32px;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: left;
+  }
+
+  &__sub {
+    height: 22px;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22.4px;
+    text-align: left;
+    color: #4b4b4b;
+
+    &--bold {
+      margin-right: 8px;
+      font-weight: 500;
+    }
+  }
+
+  &__close-button {
+    height: 30px;
+  }
+}
+
+.table {
+  width: 390px;
+  height: 185px;
+
+  &__title {
+    display: block;
+    height: 29px;
+    margin: 12px 0 8px;
+    box-sizing: border-box;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28.8px;
+    text-align: left;
+    color: #175c8e;
+  }
+
+  &__content {
+    width: 100%;
+    border-collapse: collapse;
+    border-bottom: 1px solid #cacaca;
+
+    th,
+    td {
+      height: 34px;
+      font-family: Pretendard, sans-serif;
+      text-align: center;
+    }
+
+    td {
+      padding: 4px 16px 0;
+      box-sizing: border-box;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 25.6px;
+      border-top: 1px solid #e1e1e1;
+    }
+
+    th {
+      padding: 6px 16px 0;
+      box-sizing: border-box;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 22.4px;
+      color: #000;
+      background-color: #fafafa;
+      border-top: 1px solid #cacaca;
+      border-bottom: 1px solid #cacaca;
+    }
+  }
+}

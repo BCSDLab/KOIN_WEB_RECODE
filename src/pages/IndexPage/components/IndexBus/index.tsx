@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import useBusLeftTIme from 'pages/BusPage/hooks/useBusLeftTime';
+import useBusLeftTime from 'pages/BusPage/hooks/useBusLeftTime';
 import { BUS_DIRECTIONS, BUS_TYPES } from 'static/bus';
 import { cn } from '@bcsdlab/utils';
 import { getLeftTimeString, getStartTimeString, directionToEnglish } from 'pages/BusPage/ts/busModules';
@@ -10,7 +10,7 @@ import useMobileBusCarousel from './hooks/useMobileBusCarousel';
 
 function IndexBus() {
   const { toSchoolList, toggleDirection } = useIndexBusDirection();
-  const { data: busData } = useBusLeftTIme({
+  const { data: busData } = useBusLeftTime({
     departList: toSchoolList.map((depart) => directionToEnglish(BUS_DIRECTIONS[Number(depart)])),
     arrivalList: toSchoolList.map((depart) => directionToEnglish(BUS_DIRECTIONS[Number(!depart)])),
   });
