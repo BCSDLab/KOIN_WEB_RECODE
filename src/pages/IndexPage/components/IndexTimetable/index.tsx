@@ -6,16 +6,30 @@ import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg
 import useLogger from 'utils/hooks/useLogger';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
-import { useSemesterAction } from 'utils/zustand/semester';
+import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
+import useLectureList from 'pages/Timetable/hooks/useLectureList';
+import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
   const { myLectures } = useMyLectures();
   const myLectureDayValue = useTimetableDayList(myLectures);
+  const semester = useSemester();
+  const tempLecture = useTempLecture();
+  const { data: lectureList } = useLectureList(semester);
+  const similarSelectedLecture = lectureList
+    ?.filter((lecture) => lecture.code === tempLecture?.code)
+    ?? [];
+  const selectedLectureIndex = similarSelectedLecture
+    .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
+
+  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   return myLectureDayValue ? (
     <Timetable
       lectures={myLectureDayValue}
+      similarSelectedLecture={similarSelectedLectureDayList}
+      selectedLectureIndex={selectedLectureIndex}
       columnWidth={44}
       firstColumnWidth={29}
       rowHeight={17.3}
