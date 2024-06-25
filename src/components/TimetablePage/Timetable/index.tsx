@@ -15,6 +15,7 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import AlertModal from 'components/common/Modal/AlertModal';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
+import { useTimeString } from 'utils/zustand/myLectures';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -25,6 +26,7 @@ interface TimetableProps {
   columnWidth: number;
   rowHeight: number;
   totalHeight: number;
+  forDownload?: boolean;
 }
 
 interface RemoveLectureProps {
@@ -40,6 +42,7 @@ function Timetable({
   columnWidth,
   rowHeight,
   totalHeight,
+  forDownload,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
@@ -48,7 +51,7 @@ function Timetable({
   const isEditable = pathname.includes('/timetable/modify');
   const { removeMyLecture } = useTimetableMutation();
   const { myLectures } = useMyLectures();
-  const [timeString, setTimeString] = React.useState(['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [time, '']));
+  const { timeString, setTimeString } = useTimeString();
   const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
     let lectureToRemove: LectureInfo | TimetableLectureInfo | null = null;
     myLectures.forEach((lecture) => {
@@ -93,7 +96,7 @@ function Timetable({
     } else {
       setTimeString(updateTimeString(fixedMaxTime));
     }
-  }, [lectures, similarSelectedLecture]);
+  }, [lectures, setTimeString, similarSelectedLecture]);
 
   return (
     <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
@@ -118,7 +121,7 @@ function Timetable({
           </div>
         ))}
       </div>
-      <div className={styles.timetable__content} style={{ height: `${20 * rowHeight}px` }}>
+      <div className={styles.timetable__content} style={forDownload ? undefined : { height: `${20 * rowHeight}px` }}>
         <div className={styles['timetable__row-container']} aria-hidden="true">
           {timeString.map((value, index) => (
             <div

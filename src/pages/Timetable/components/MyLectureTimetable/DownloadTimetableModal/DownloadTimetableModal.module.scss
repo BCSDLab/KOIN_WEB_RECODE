@@ -1,0 +1,29 @@
+@use "src/utils/scss/media";
+
+.background {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000026;
+  z-index: 21;
+}
+
+.container {
+  width: 427px;
+  height: 238px;
+  box-shadow: 0 8px 32px 0 #00000014;
+  box-shadow: 0 2px 20px 0 #0000000a;
+  border-radius: 16px;
+  background-color: #fff;
+
+  &__timetable-image {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+}
