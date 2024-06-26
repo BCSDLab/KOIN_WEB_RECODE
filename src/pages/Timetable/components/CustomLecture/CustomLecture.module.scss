@@ -1,64 +1,63 @@
 @use "utils/scss/media.scss" as media;
 
-.form-container{
+.form-container {
   display: flex;
   flex-direction: column;
-  gap:10px;
+  gap: 10px;
   width: 613px;
-
 }
 
-.require-mark{
+.require-mark {
   position: absolute;
-  left:-8px;
+  left: -8px;
   top: -3px;
-  color: var(--Sub-sub-500, #F7941E);
-  font-family: Pretendard;
+  color: #f7941e;
+  font-family: Pretendard, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 160%; /* 25.6px */
 }
 
-.form-group{
+.form-group {
   display: flex;
   align-items: center;
   padding: 4px;
-  background: var(--Neutral-50, #FAFAFA);
+  background: #fafafa;
   position: relative;
-  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
-  
-  &>label{
+  box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
+
+  & > label {
     display: flex;
     min-width: 42px;
     padding: 12px 16px;
     justify-content: center;
     align-items: center;
-    color: var(--Neutral-800, #000);
-    font-family: Pretendard;
+    color: #000;
+    font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 400;
-    line-height: 160%; /* 25.6px */  
+    line-height: 160%;
   }
 
-  &__title{
+  &__title {
     position: relative;
   }
 
-  &__block{
+  &__block {
     height: 24px;
     width: 2px;
-    background-color: #EEEEEE;      
-    margin:0 4px;
+    background-color: #eee;
+    margin: 0 4px;
   }
 
-  &>input{
+  & > input {
     padding: 12px 16px;
     width: 100%;
     border: none;
     background-color: transparent;
 
     &::placeholder {
-      color: var(--Neutral-500, #8E8E8E);
+      color: #8e8e8e;
       font-size: 16px;
       font-weight: 400;
       line-height: 160%; /* 25.6px */
@@ -75,44 +74,44 @@
   }
 }
 
-.form-group-time{
+.form-group-time {
   display: flex;
-  gap:8px;
+  gap: 8px;
   align-items: center;
   height: 81px;
   position: relative;
 
-  &>label{
+  & > label {
     display: flex;
     min-width: 42px;
     height: 100%;
     padding: 0 16px;
     justify-content: center;
     align-items: center;
-    background: var(--Neutral-50, #FAFAFA);
-    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
-    color: var(--Neutral-800, #000);
-    font-family: Pretendard;
+    background: #fafafa;
+    box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
+    color: #000;
+    font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 400;
-    line-height: 160%; /* 25.6px */  
+    line-height: 160%;
   }
 
-  &__container{
+  &__container {
     display: flex;
     width: 100%;
     flex-direction: column;
     gap: 3px;
   }
 
-  &__weekdays{
+  &__weekdays {
     display: flex;
     gap: 13px;
     width: 100%;
     justify-content: space-between;
   }
 
-  &__weekdays-button{
+  &__weekdays-button {
     display: flex;
     width: 94px;
     height: 32px;
@@ -120,30 +119,30 @@
     justify-content: center;
     align-items: center;
     border-radius: 5px;
-    background: var(--Neutral-50, #FAFAFA);
-    color: var(--Neutral-500, #8E8E8E);
-    font-family: Pretendard;
+    background: #fafafa;
+    color: #8e8e8e;
+    font-family: Pretendard, sans-serif;
     font-size: 14px;
     font-weight: 400;
-    line-height: 160%; 
+    line-height: 160%;
   }
 
-  &__time{
+  &__time {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    &>span{
-      color: var(--Neutral-50, #FAFAFA);
-      text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.02), 0px 2px 4px rgba(0, 0, 0, 0.04);
-      font-family: Pretendard;
+    & > span {
+      color: #fafafa;
+      text-shadow: 0 1px 1px rgba(0 0 0 / 2%), 0 2px 4px rgba(0 0 0 / 4%);
+      font-family: Pretendard, sans-serif;
       font-size: 20px;
       font-weight: 500;
       margin: 0 20px;
     }
   }
 
-  &__time-section{
+  &__time-section {
     display: flex;
     position: relative;
     width: 234px;
@@ -175,41 +174,41 @@
       align-items: center;
     }
 
-    & ul{
+    & ul {
       top: 50px;
       border: 1px solid #cacaca;
       border-radius: 5px;
       max-height: 288px;
       overflow-y: scroll;
-      
-      
+
       &::-webkit-scrollbar-thumb {
         height: 65px;
         border-radius: 5px 0;
-        background: #D9D9D9;
+        background: #d9d9d9;
       }
+
       &::-webkit-scrollbar-track {
         margin-right: 3px;
         background-color: transparent;
       }
     }
   }
-  }
+}
 
-.form-group-add-button{
+.form-group-add-button {
   width: 100%;
   padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   border-radius: 5px;
-  background: var(--Neutral-200, #EEE);
-  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+  background: #eee;
+  box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
 
-  &>span{
-    color: var(--Primary-main-500, #175C8E);
-    font-family: Pretendard;
+  & > span {
+    color: #175c8e;
+    font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 400;
-    line-height: 160%; /* 25.6px */
+    line-height: 160%;
   }
 }

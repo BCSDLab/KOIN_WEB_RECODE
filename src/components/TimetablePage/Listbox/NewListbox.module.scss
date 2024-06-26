@@ -72,9 +72,9 @@
     }
 
     &--selected-add-lecture {
-      box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 1px 1px 0 rgb(0 0 0 / 2%), 0 2px 4px 0 rgb(0 0 0 / 4%);
       border-radius: 5px;
-      background: var(--Neutral-50, #FAFAFA);
+      background: #fafafa;
 
       &--opened {
         border: 1px solid #cacaca;
@@ -113,7 +113,7 @@
       background-color: #e1e1e1;
     }
 
-    &--add-lecture{
+    &--add-lecture {
       width: 100%;
       height: 48px;
       padding: 0 24px;
@@ -124,15 +124,16 @@
       font-weight: 400;
       line-height: 45px;
       letter-spacing: -0.8px;
-      border-radius: 0px;
+      border-radius: 0;
       color: #8e8e8e;
       text-align: left;
+
       &:hover {
         background-color: #eee;
       }
-      &:active {
-        color: var(--Neutral-800, #000);
 
+      &:active {
+        color: #000;
         background-color: #e1e1e1;
       }
     }
@@ -140,9 +141,9 @@
     &--selected {
       color: #175c8e;
     }
-    
-    &--selected-add-lecture{
-      color: var(--Neutral-800, #000);
+
+    &--selected-add-lecture {
+      color: #000;
     }
   }
 }
