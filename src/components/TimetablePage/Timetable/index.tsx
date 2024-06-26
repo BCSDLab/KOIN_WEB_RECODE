@@ -4,6 +4,7 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { LectureInfo, TimetableDayLectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import {
+  BORDER_TOP_COLOR,
   BACKGROUND_COLOR,
   DAYS_STRING,
 } from 'static/timetable';
@@ -170,8 +171,8 @@ function Timetable({
                 className={styles.timetable__lecture}
                 key={lectureIndex}
                 style={{
-                  backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 12]}33`,
-                  borderTop: `2px solid ${BACKGROUND_COLOR[lectureIndex % 12]}`,
+                  backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 15]}`,
+                  borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]}`,
                   top: `${start * rowHeight + 1}px`,
                   width: isMobile ? undefined : `${columnWidth}px`,
                   height: `${(end - start + 1) * rowHeight - 1}px`,
