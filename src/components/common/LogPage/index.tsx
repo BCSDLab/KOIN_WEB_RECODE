@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import * as gtag from 'lib/gtag';
-import { userInfoState } from 'utils/recoil/userInfoState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import { UserResponse } from 'api/auth/entity';
+import { useUser } from 'utils/hooks/useUser';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
   const uuid = localStorage.getItem('uuid') || uuidv4();
@@ -17,7 +16,7 @@ const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
 
 function LogPage() {
   const location = useLocation();
-  const userInfo = useRecoilValue(userInfoState);
+  const { data: userInfo } = useUser();
   const prevPathname = React.useRef('');
 
   useEffect(() => {
