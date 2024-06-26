@@ -10,8 +10,8 @@
 
 .require-mark{
   position: absolute;
-  left: 15px;
-  top: 8px;
+  left:-8px;
+  top: -3px;
   color: var(--Sub-sub-500, #F7941E);
   font-family: Pretendard;
   font-size: 16px;
@@ -40,6 +40,9 @@
     line-height: 160%; /* 25.6px */  
   }
 
+  &__title{
+    position: relative;
+  }
 
   &__block{
     height: 24px;
@@ -179,11 +182,7 @@
       max-height: 288px;
       overflow-y: scroll;
       
-
-      &::-webkit-scrollbar{
-        
-        width: 2px;
-      }
+      
       &::-webkit-scrollbar-thumb {
         height: 65px;
         border-radius: 5px 0;
