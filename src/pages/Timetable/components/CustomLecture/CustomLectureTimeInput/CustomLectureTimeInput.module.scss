@@ -66,6 +66,12 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 160%;
+
+    &--checked {
+      background: #175c8e;
+      color: #fff;
+
+    }
   }
 
   &__time {

@@ -1,3 +1,4 @@
+import { cn } from '@bcsdlab/utils';
 import Listbox from 'components/TimetablePage/Listbox';
 import { useState } from 'react';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
@@ -8,11 +9,13 @@ function CustomLectureTimeInput() {
   // 임의로 작성한 state api 구조 확인 후 수정예정
 
   const [timeInfo, setTimeInfo] = useState({
-    startHour: '',
-    startMinute: '',
-    endHour: '',
-    endMinute: '',
+    startHour: '00시',
+    startMinute: '00분',
+    endHour: '00시',
+    endMinute: '00분',
   });
+
+  const [weekInfo, setWeekInfo] = useState<string[]>([]);
 
   const onChangeStartHours = (key: string) => (e: { target: { value: string } }) => {
     const { target } = e;
@@ -20,6 +23,14 @@ function CustomLectureTimeInput() {
       ...timeInfo,
       [key]: target?.value,
     });
+  };
+
+  const onChangeWeekdays = (weekday:string) => {
+    if (weekInfo.includes(weekday)) {
+      setWeekInfo(weekInfo.filter((day) => day !== weekday));
+    } else {
+      setWeekInfo([...weekInfo, weekday]);
+    }
   };
 
   return (
@@ -34,7 +45,16 @@ function CustomLectureTimeInput() {
         <div className={styles['form-group-time__weekdays']}>
           {DAYS_STRING.map((weekday) => (
             <div key={weekday}>
-              <button type="button" className={styles['form-group-time__weekdays-button']}>{weekday}</button>
+              <button
+                type="button"
+                className={cn({
+                  [styles['form-group-time__weekdays-button']]: true,
+                  [styles['form-group-time__weekdays-button--checked']]: weekInfo.includes(weekday),
+                })}
+                onClick={() => onChangeWeekdays(weekday)}
+              >
+                {weekday}
+              </button>
             </div>
           ))}
         </div>
