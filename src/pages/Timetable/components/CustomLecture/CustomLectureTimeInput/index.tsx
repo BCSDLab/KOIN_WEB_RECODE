@@ -1,15 +1,25 @@
 import Listbox from 'components/TimetablePage/Listbox';
+import { useState } from 'react';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
 
 import styles from './CustomLectureTimeInput.module.scss';
 
 function CustomLectureTimeInput() {
-  const onChangeHours = () => {
+  // 임의로 작성한 state api 구조 확인 후 수정예정
 
-  };
+  const [timeInfo, setTimeInfo] = useState({
+    startHour: '',
+    startMinute: '',
+    endHour: '',
+    endMinute: '',
+  });
 
-  const onChangeMin = () => {
-
+  const onChangeStartHours = (key: string) => (e: { target: { value: string } }) => {
+    const { target } = e;
+    setTimeInfo({
+      ...timeInfo,
+      [key]: target?.value,
+    });
   };
 
   return (
@@ -30,13 +40,13 @@ function CustomLectureTimeInput() {
         </div>
         <div className={styles['form-group-time__time']}>
           <div className={styles['form-group-time__time-section']}>
-            <Listbox list={HOUR} value="00시" onChange={onChangeHours} version="addLecture" />
-            <Listbox list={MINUTE} value="00분" onChange={onChangeMin} version="addLecture" />
+            <Listbox list={HOUR} value={timeInfo.startHour} onChange={onChangeStartHours('startHour')} version="addLecture" />
+            <Listbox list={MINUTE} value={timeInfo.startMinute} onChange={onChangeStartHours('startMinute')} version="addLecture" />
           </div>
           <span>-</span>
           <div className={styles['form-group-time__time-section']}>
-            <Listbox list={HOUR} value="00시" onChange={onChangeHours} version="addLecture" />
-            <Listbox list={MINUTE} value="00분" onChange={onChangeMin} version="addLecture" />
+            <Listbox list={HOUR} value={timeInfo.endHour} onChange={onChangeStartHours('endHour')} version="addLecture" />
+            <Listbox list={MINUTE} value={timeInfo.endMinute} onChange={onChangeStartHours('endMinute')} version="addLecture" />
           </div>
         </div>
       </div>
