@@ -307,3 +307,29 @@
     }
   }
 }
+
+@keyframes highlight-text {
+  0% {
+    background-color: none;
+  }
+  50% {
+    background-color: #6dbbdd;
+    color: white;
+    border-radius: 5px;
+  }
+  100% {
+    background-color: none;
+  }
+}
+
+.account {
+  animation-name: highlight-text;
+  animation-duration: 1.5s;
+  display: inline-block;
+}
+
+.copy {
+  width: 16px;
+  margin-left: 5px;
+  cursor: pointer;
+}
