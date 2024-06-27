@@ -1,0 +1,142 @@
+@use "utils/scss/media.scss" as media;
+
+.require-mark {
+  position: absolute;
+  left: -8px;
+  top: -3px;
+  color: #f7941e;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 160%; /* 25.6px */
+}
+
+.form-group-time {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  height: 81px;
+  position: relative;
+
+  & > label {
+    display: flex;
+    min-width: 42px;
+    height: 100%;
+    padding: 0 16px;
+    justify-content: center;
+    align-items: center;
+    background: #fafafa;
+    box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 160%;
+  }
+
+  &__title {
+    position: relative;
+  }
+
+  &__container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  &__weekdays {
+    display: flex;
+    gap: 13px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  &__weekdays-button {
+    display: flex;
+    width: 94px;
+    height: 32px;
+    padding: 5px 8px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background: #fafafa;
+    color: #8e8e8e;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 160%;
+
+    &--checked {
+      background: #175c8e;
+      color: #fff;
+    }
+  }
+
+  &__time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > span {
+      color: #fafafa;
+      text-shadow: 0 1px 1px rgba(0 0 0 / 2%), 0 2px 4px rgba(0 0 0 / 4%);
+      font-family: Pretendard, sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+      margin: 0 20px;
+    }
+  }
+
+  &__time-section {
+    display: flex;
+    position: relative;
+    width: 234px;
+    height: 46px;
+    gap: 8px;
+    align-items: center;
+
+    & button {
+      display: flex;
+      padding: 16px 24px;
+      justify-content: space-between;
+      font-family: Pretendard, sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 21.48px;
+      text-align: left;
+    }
+
+    & li {
+      display: flex;
+      padding: 16px 24px;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: Pretendard, sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 21.48px;
+      text-align: left;
+      align-items: center;
+    }
+
+    & ul {
+      top: 50px;
+      border: 1px solid #cacaca;
+      border-radius: 5px;
+      max-height: 288px;
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar-thumb {
+        height: 65px;
+        border-radius: 5px 0;
+        background: #d9d9d9;
+      }
+
+      &::-webkit-scrollbar-track {
+        margin-right: 3px;
+        background-color: transparent;
+      }
+    }
+  }
+}

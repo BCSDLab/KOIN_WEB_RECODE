@@ -70,6 +70,16 @@
         border: 1px solid #cacaca;
       }
     }
+
+    &--selected-add-lecture {
+      box-shadow: 0 1px 1px 0 rgb(0 0 0 / 2%), 0 2px 4px 0 rgb(0 0 0 / 4%);
+      border-radius: 5px;
+      background: #fafafa;
+
+      &--opened {
+        border: 1px solid #cacaca;
+      }
+    }
   }
 
   &__content {
@@ -103,8 +113,37 @@
       background-color: #e1e1e1;
     }
 
+    &--add-lecture {
+      width: 100%;
+      height: 48px;
+      padding: 0 24px;
+      box-sizing: border-box;
+      background-color: #fff;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 45px;
+      letter-spacing: -0.8px;
+      border-radius: 0;
+      color: #8e8e8e;
+      text-align: left;
+
+      &:hover {
+        background-color: #eee;
+      }
+
+      &:active {
+        color: #000;
+        background-color: #e1e1e1;
+      }
+    }
+
     &--selected {
       color: #175c8e;
+    }
+
+    &--selected-add-lecture {
+      color: #000;
     }
   }
 }
