@@ -15,24 +15,24 @@
 
 .container {
   width: 427px;
-  box-shadow: 0px 8px 32px 0px #00000014;
-  box-shadow: 0px 2px 20px 0px #0000000A;  
+  box-shadow: 0 8px 32px 0 #00000014;
+  box-shadow: 0 2px 20px 0 #0000000a;
   border-radius: 16px;
   background-color: #fff;
 
   &__header {
     display: flex;
     justify-content: space-between;
-    padding: 24px 24px 16px 24px;
+    padding: 24px 24px 16px;
     align-items: center;
 
     &--text {
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-size: 20px;
       font-weight: 700;
       line-height: 32px;
       text-align: left;
-      color: #1F1F1F;
+      color: #1f1f1f;
     }
 
     &--close-button {
@@ -42,11 +42,11 @@
 
   &__image-option {
     padding: 0 24px;
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 12px;
     font-weight: 400;
     text-align: left;
-    color: #1F1F1F;
+    color: #1f1f1f;
   }
 
   &__option-select {
@@ -62,20 +62,20 @@
     font-weight: 400;
     text-align: left;
   }
+
   &__button {
     display: flex;
-    justify-content: end;
-    padding: 16px 24px 24px 24px;
+    justify-content: flex-end;
+    padding: 16px 24px 24px;
 
     &--download {
       padding: 8px 20px;
       border: none;
       border-radius: 4px;
       color: #fff;
-      background-color: #F7941E;
+      background-color: #f7941e;
     }
   }
-    
 
   &__timetable-image {
     position: absolute;
