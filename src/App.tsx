@@ -1,4 +1,4 @@
-import { useEffect, ReactNode } from 'react';
+import { useEffect, ReactNode, Suspense } from 'react';
 import {
   Routes,
   Route,
@@ -43,7 +43,9 @@ function HelmetWrapper({ title, element }: HelmetWrapperProps) {
     <>
       <MetaHelmet title={title} />
       {element}
-      <LogPage />
+      <Suspense fallback={null}>
+        <LogPage />
+      </Suspense>
     </>
   );
 }
