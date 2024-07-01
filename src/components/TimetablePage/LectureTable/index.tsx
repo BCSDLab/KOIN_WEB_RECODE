@@ -8,6 +8,7 @@ import styles from './LectureTable.module.scss';
 interface LectureTableProps {
   list: Array<LectureInfo> | Array<TimetableLectureInfo>;
   height: number;
+  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
   selectedLecture: LectureInfo | TimetableLectureInfo | undefined;
   onClickRow: ((value: LectureInfo | TimetableLectureInfo) => void) | undefined;
   onDoubleClickRow: ((value: LectureInfo | TimetableLectureInfo) => void) | undefined;
@@ -38,6 +39,7 @@ const useFlexibleWidth = (length: number, initialValue: number[]) => {
 function LectureTable({
   list,
   height,
+  myLectures,
   selectedLecture,
   onClickRow,
   onDoubleClickRow,
@@ -59,7 +61,6 @@ function LectureTable({
       }
     }
   };
-
   return (
     <div className={styles.table}>
       <div className={styles.table__content} role="table">
@@ -102,7 +103,7 @@ function LectureTable({
               <div
                 className={cn({
                   [styles.table__row]: true,
-                  [styles['table__row--even']]: index % 2 === 0,
+                  [styles['table__row--include']]: myLectures.some((item) => item.code === currentItem.code && item.lecture_class === currentItem.lecture_class),
                   [styles['table__row--selected']]: selectedLecture === currentItem,
                 })}
                 aria-selected={selectedLecture === currentItem}

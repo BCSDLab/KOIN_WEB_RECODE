@@ -35,7 +35,6 @@ function CurrentSemesterLectureList({
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation();
   const { data: userInfo } = useUser();
-
   return (
     <LectureTable
       height={612}
@@ -59,6 +58,7 @@ function CurrentSemesterLectureList({
             return true;
           })
       }
+      myLectures={myLectures}
       selectedLecture={tempLecture ?? undefined}
       onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
       onDoubleClickRow={
