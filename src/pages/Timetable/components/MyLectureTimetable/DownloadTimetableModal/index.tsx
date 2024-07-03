@@ -59,41 +59,18 @@ export default function DownloadTimetableModal({
     onClose();
   };
   const { timeString } = useTimeString();
-  const [selectedUsage, setSelectedUsage] = React.useState('PC');
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedUsage(e.target.value);
-  };
 
   return (
     <div className={styles.background} aria-hidden>
       <div className={styles.container}>
         <div className={styles.container__header}>
-          <div className={styles['container__header--text']}>시간표 이미지 저장</div>
+          <div className={styles['container__header--text']}>시간표 저장</div>
           <CloseIcon onClick={onClose} className={styles['container__header--close-button']} />
         </div>
-        <div className={styles['container__image-option']}>이미지 옵션</div>
-        <div className={styles['container__option-select']}>
-          <input
-            type="radio"
-            id="PC"
-            name="saveUsage"
-            value="PC"
-            onChange={handleRadioChange}
-            checked={selectedUsage === 'PC'}
-          />
-          <label htmlFor="PC" className={styles['container__radio-button']}>PC용</label>
-          <input
-            type="radio"
-            id="Mobile"
-            name="saveUsage"
-            value="Mobile"
-            onChange={handleRadioChange}
-            checked={selectedUsage === 'Mobile'}
-          />
-          <label htmlFor="Mobile" className={styles['container__radio-button']}>모바일용</label>
-        </div>
+        <div className={styles['container__image-option']}>저장할 이미지 형식을 선택해 주세요.</div>
         <div className={styles.container__button}>
-          <button type="button" className={styles['container__button--download']} onClick={() => onClickImageDownload(selectedUsage)}>저장하기</button>
+          <button type="button" className={styles['container__button--mobile']} onClick={() => onClickImageDownload('Mobile')}>모바일 이미지 저장</button>
+          <button type="button" className={styles['container__button--pc']} onClick={() => onClickImageDownload('PC')}>PC용 이미지 저장</button>
         </div>
       </div>
       <div ref={pcTimetableRef} className={styles['container__timetable-image']}>

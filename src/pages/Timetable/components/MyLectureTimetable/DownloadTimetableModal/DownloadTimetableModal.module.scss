@@ -15,8 +15,8 @@
 
 .container {
   width: 427px;
-  box-shadow: 0 8px 32px 0 #00000014;
-  box-shadow: 0 2px 20px 0 #0000000a;
+  box-shadow: 0px 8px 32px 0px #00000014;
+  box-shadow: 0px 2px 20px 0px #0000000A;
   border-radius: 16px;
   background-color: #fff;
 
@@ -41,39 +41,34 @@
   }
 
   &__image-option {
-    padding: 0 24px;
+    padding: 8px 24px;
     font-family: Pretendard, sans-serif;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 400;
+    line-height: 25.6px;
     text-align: left;
-    color: #1f1f1f;
-  }
-
-  &__option-select {
-    display: flex;
-    gap: 2px;
-    padding: 12px 26px;
-    align-items: center;
-  }
-
-  &__radio-button {
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    text-align: left;
+    color: #8E8E8E;
   }
 
   &__button {
     display: flex;
-    justify-content: flex-end;
-    padding: 16px 24px 24px;
+    padding: 16px 24px 24px 24px;
+    gap: 16px;
 
-    &--download {
+    &--mobile, &--pc {
+      width: 181.5px;
       padding: 8px 20px;
-      border: none;
       border-radius: 4px;
-      color: #fff;
-      background-color: #f7941e;
+      background-color: #eee;
+      font-family: Pretendard, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 25.6px;
+      text-align: center;
+
+      &:active {
+        background-color: #CACACA;
+      }
     }
   }
 
