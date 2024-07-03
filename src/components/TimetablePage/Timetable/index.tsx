@@ -23,8 +23,6 @@ import styles from './Timetable.module.scss';
 
 interface TimetableProps {
   lectures: TimetableDayLectureInfo[][];
-  selectedLectureIndex?: number;
-  similarSelectedLecture?: TimetableDayLectureInfo[][];
   firstColumnWidth: number;
   columnWidth: number;
   rowHeight: number;
@@ -38,14 +36,11 @@ interface RemoveLectureProps {
 
 function Timetable({
   lectures,
-  selectedLectureIndex,
-  similarSelectedLecture,
   firstColumnWidth,
   columnWidth,
   rowHeight,
   totalHeight,
 }: TimetableProps) {
-  console.log(selectedLectureIndex);
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
   const [isMouseOver, setIsMouseOver] = React.useState('');
@@ -58,8 +53,6 @@ function Timetable({
   const newLectureList = lectureList?.filter((lecture) => lecture) ?? [];
   const lectureByDayList = useTimetableDayList(newLectureList);
   const { tempLecture } = useTempLecture();
-  console.log(tempLecture);
-  console.log(lectureByDayList);
   const [timeString, setTimeString] = React.useState(['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [time, '']));
   const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
     let lectureToRemove: LectureInfo | TimetableLectureInfo | null = null;
@@ -96,16 +89,38 @@ function Timetable({
 
     return timeArray;
   };
+  const scrollRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
     const fixedMaxTime = findMaxTime(lectures);
-    const maxTime = findMaxTime(similarSelectedLecture);
-    if (fixedMaxTime <= maxTime) {
-      setTimeString(updateTimeString(maxTime));
-    } else {
-      setTimeString(updateTimeString(fixedMaxTime));
+    let maxTime = 0;
+    let minimumTime = 999;
+    if (tempLecture) {
+      const classTimeArr = tempLecture.class_time.map((time) => time % 100);
+      maxTime = Math.max(...classTimeArr);
+      minimumTime = Math.min(...classTimeArr);
     }
-  }, [lectures, similarSelectedLecture]);
+    if (fixedMaxTime > maxTime) {
+      setTimeString(updateTimeString(fixedMaxTime));
+    } else {
+      setTimeString(updateTimeString(maxTime));
+    }
 
+    if (scrollRef.current) {
+      if (scrollRef.current.scrollTop >= minimumTime * 33.5) {
+        scrollRef.current.scrollTo({
+          top: minimumTime * 33.5,
+          left: 0,
+          behavior: 'smooth',
+        });
+      } else if (scrollRef.current.scrollTop < (maxTime - 19) * 33.5) {
+        scrollRef.current.scrollTo({
+          top: (maxTime - 19) * 33.5,
+          left: 0,
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, [lectures, tempLecture]);
   return (
     <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
       <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight + 5}px` }}>
@@ -129,7 +144,7 @@ function Timetable({
           </div>
         ))}
       </div>
-      <div className={styles.timetable__content} style={{ height: `${20 * rowHeight}px` }}>
+      <div className={styles.timetable__content} ref={scrollRef} style={{ height: `${20 * rowHeight}px` }}>
         <div className={styles['timetable__row-container']} aria-hidden="true">
           {timeString.map((value, index) => (
             <div
@@ -226,6 +241,7 @@ function Timetable({
                 key={day}
                 className={cn({
                   [styles.timetable__col]: true,
+                  [styles['timetable__col--preview']]: true,
                 })}
               >
                 {lectureByDayList[index].map(({
@@ -235,8 +251,11 @@ function Timetable({
                   index: lectureIndex,
                   lecture_class,
                   professor,
-                // eslint-disable-next-line max-len
-                }) => ((tempLecture.name === name && tempLecture.lecture_class === lecture_class && tempLecture.professor === professor)
+                }) => (((tempLecture.name === name
+                  && tempLecture.lecture_class === lecture_class
+                  && tempLecture.professor === professor)
+                && !myLectures.some((lecture) => JSON.stringify(lecture)
+                === JSON.stringify(tempLecture)))
                 && (
                 <div
                   className={cn({
