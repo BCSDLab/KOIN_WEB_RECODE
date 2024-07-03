@@ -15,8 +15,8 @@
 
 .container {
   width: 427px;
-  box-shadow: 0px 8px 32px 0px #00000014;
-  box-shadow: 0px 2px 20px 0px #0000000A;
+  box-shadow: 0 8px 32px 0 #00000014;
+  box-shadow: 0 2px 20px 0 #0000000a;
   border-radius: 16px;
   background-color: #fff;
 
@@ -47,15 +47,16 @@
     font-weight: 400;
     line-height: 25.6px;
     text-align: left;
-    color: #8E8E8E;
+    color: #8e8e8e;
   }
 
   &__button {
     display: flex;
-    padding: 16px 24px 24px 24px;
+    padding: 16px 24px 24px;
     gap: 16px;
 
-    &--mobile, &--pc {
+    &--mobile,
+    &--pc {
       width: 181.5px;
       padding: 8px 20px;
       border-radius: 4px;
@@ -67,7 +68,7 @@
       text-align: center;
 
       &:active {
-        background-color: #CACACA;
+        background-color: #cacaca;
       }
     }
   }
