@@ -13,32 +13,18 @@ interface DownloadTimetableModalProps {
 
 interface TimetableDownloadProps {
   rowNumber: number
+  forMobile: boolean
 }
 
-function TimetableForPCDownload({ rowNumber }: TimetableDownloadProps) {
+function TimetableDownload({ rowNumber, forMobile }: TimetableDownloadProps) {
   const { myLectures } = useMyLectures();
   const myLectureDayValue = useTimetableDayList(myLectures);
   return (
     <Timetable
       lectures={myLectureDayValue}
-      columnWidth={140}
-      firstColumnWidth={70}
-      rowHeight={33}
-      totalHeight={rowNumber * 33 + 38}
-      forDownload
-    />
-  );
-}
-
-function TimetableForMobileDownload({ rowNumber }: TimetableDownloadProps) {
-  const { myLectures } = useMyLectures();
-  const myLectureDayValue = useTimetableDayList(myLectures);
-  return (
-    <Timetable
-      lectures={myLectureDayValue}
-      columnWidth={88.73}
-      firstColumnWidth={44.36}
-      rowHeight={33.07}
+      columnWidth={forMobile ? 88.73 : 140}
+      firstColumnWidth={forMobile ? 44.36 : 70}
+      rowHeight={forMobile ? 33.07 : 33}
       totalHeight={rowNumber * 33 + 38}
       forDownload
     />
@@ -74,10 +60,10 @@ export default function DownloadTimetableModal({
         </div>
       </div>
       <div ref={pcTimetableRef} className={styles['container__timetable-image']}>
-        <TimetableForPCDownload rowNumber={timeString.length} />
+        <TimetableDownload rowNumber={timeString.length} forMobile={false} />
       </div>
       <div ref={mobileTimetableRef} className={styles['container__timetable-image']}>
-        <TimetableForMobileDownload rowNumber={timeString.length} />
+        <TimetableDownload rowNumber={timeString.length} forMobile />
       </div>
     </div>
   );
