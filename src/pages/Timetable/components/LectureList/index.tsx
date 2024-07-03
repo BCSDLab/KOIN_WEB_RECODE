@@ -3,7 +3,7 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
-import { useSemester } from 'utils/zustand/semester';
+import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/Timetable/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
@@ -12,6 +12,7 @@ import useSearch from 'pages/Timetable/hooks/useSearch';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { useUser } from 'utils/hooks/useUser';
+import { useParams } from 'react-router-dom';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
@@ -95,6 +96,8 @@ function CurrentSemesterLectureList({
 }
 
 function LectureList() {
+  const semesterParams = useParams().semester;
+
   const {
     value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
@@ -103,6 +106,10 @@ function LectureList() {
     onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef,
   } = useSearch();
   const semester = useSemester();
+  const { updateSemester } = useSemesterAction();
+  updateSemester(semesterParams || '20241');
+  // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
+
   const { myLectures } = useMyLectures();
 
   return (
