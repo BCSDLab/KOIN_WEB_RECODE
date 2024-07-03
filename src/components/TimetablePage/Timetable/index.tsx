@@ -15,6 +15,10 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import AlertModal from 'components/common/Modal/AlertModal';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
+import { useSemester } from 'utils/zustand/semester';
+import useLectureList from 'pages/Timetable/hooks/useLectureList';
+import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -41,6 +45,7 @@ function Timetable({
   rowHeight,
   totalHeight,
 }: TimetableProps) {
+  console.log(selectedLectureIndex);
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
   const [isMouseOver, setIsMouseOver] = React.useState('');
@@ -48,6 +53,13 @@ function Timetable({
   const isEditable = pathname.includes('/timetable/modify');
   const { removeMyLecture } = useTimetableMutation();
   const { myLectures } = useMyLectures();
+  const semester = useSemester();
+  const { data: lectureList } = useLectureList(semester);
+  const newLectureList = lectureList?.filter((lecture) => lecture) ?? [];
+  const lectureByDayList = useTimetableDayList(newLectureList);
+  const { tempLecture } = useTempLecture();
+  console.log(tempLecture);
+  console.log(lectureByDayList);
   const [timeString, setTimeString] = React.useState(['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [time, '']));
   const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
     let lectureToRemove: LectureInfo | TimetableLectureInfo | null = null;
@@ -205,27 +217,71 @@ function Timetable({
                 </span>
               </div>
             ))}
-            {similarSelectedLecture?.[index].map(({
-              start,
-              end,
-              index: lectureIndex,
-            }) => (
-              <div
-                className={cn({
-                  [styles.timetable__lecture]: true,
-                  [styles['timetable__lecture--selected']]: true,
-                })}
-                key={lectureIndex}
-                style={{
-                  borderWidth: selectedLectureIndex === lectureIndex ? '2px' : '1px',
-                  top: `${start * rowHeight}px`,
-                  width: isMobile ? undefined : `${columnWidth}px`,
-                  height: `${(end - start + 1) * rowHeight}px`,
-                }}
-              />
-            ))}
           </div>
         ))}
+        <div>
+          {tempLecture && (
+            DAYS_STRING.map((day, index) => (
+              <div
+                key={day}
+                className={cn({
+                  [styles.timetable__col]: true,
+                })}
+              >
+                {lectureByDayList[index].map(({
+                  name,
+                  start,
+                  end,
+                  index: lectureIndex,
+                  lecture_class,
+                  professor,
+                // eslint-disable-next-line max-len
+                }) => ((tempLecture.name === name && tempLecture.lecture_class === lecture_class && tempLecture.professor === professor)
+                && (
+                <div
+                  className={cn({
+                    [styles.timetable__lecture]: true,
+                    [styles['timetable__lecture--selected']]: true,
+                  })}
+                  key={lectureIndex}
+                  style={{
+                    top: `${start * rowHeight + 1}px`,
+                    left: `${firstColumnWidth + index * columnWidth + index + 1}px`,
+                    width: isMobile ? undefined : `${columnWidth}px`,
+                    height: `${(end - start + 1) * rowHeight - 1}px`,
+                    padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
+                    gap: `${rowHeight / 5.5}px`,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: `${rowHeight / 3 + 1}px`,
+                      fontWeight: '500',
+                      lineHeight: `${rowHeight / 2}px`,
+                      fontFamily: 'Pretendard',
+                    }}
+                  >
+                    {name}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: `${rowHeight / 3 + 1}px`,
+                      fontWeight: '400',
+                      lineHeight: `${rowHeight / 2}px`,
+                      fontFamily: 'Pretendard',
+                    }}
+                  >
+                    {lecture_class}
+                  &nbsp;
+                    {professor}
+                  </span>
+                </div>
+                )
+                ))}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

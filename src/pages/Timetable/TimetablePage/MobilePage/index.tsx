@@ -26,7 +26,7 @@ function MobilePage() {
     onTimetableImageDownload('my-timetable');
   };
   const semester = useSemester();
-  const tempLecture = useTempLecture();
+  const { tempLecture } = useTempLecture();
   const { data: lectureList } = useLectureList(semester);
   const similarSelectedLecture = lectureList
     ?.filter((lecture) => lecture.code === tempLecture?.code)

@@ -21,7 +21,7 @@ export default function MainTimetable() {
   const navigate = useNavigate();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const semester = useSemester();
-  const tempLecture = useTempLecture();
+  const { tempLecture } = useTempLecture();
   const { data: lectureList } = useLectureList(semester);
   const similarSelectedLecture = lectureList
     ?.filter((lecture) => lecture.code === tempLecture?.code)

@@ -132,8 +132,8 @@
     }
 
     &--selected {
-      border-color: #000;
-      border-style: solid;
+      border-top: 2px solid #CACACA;
+      background-color: #EEEEEE;
 
       @include media.media-breakpoint(mobile) {
         width: calc((100% - 55px) / 5);

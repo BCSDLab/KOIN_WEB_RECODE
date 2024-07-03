@@ -4,7 +4,7 @@ import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import { useSemester } from 'utils/zustand/semester';
-import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
+import { useTempLecture } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/Timetable/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
@@ -31,8 +31,8 @@ function CurrentSemesterLectureList({
   myLectures,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
-  const tempLecture = useTempLecture();
-  const { updateTempLecture } = useTempLectureAction();
+  const { tempLecture } = useTempLecture();
+  const { setTempLecture } = useTempLecture();
   const { addMyLecture } = useTimetableMutation();
   const { data: userInfo } = useUser();
   return (
@@ -60,8 +60,10 @@ function CurrentSemesterLectureList({
       }
       myLectures={myLectures}
       selectedLecture={tempLecture ?? undefined}
-      onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
-      onDoubleClickRow={
+      onHover={(hoveredLecture) => (
+        hoveredLecture !== null && 'name' in hoveredLecture ? setTempLecture(hoveredLecture) : setTempLecture(null)
+      )}
+      onClickRow={
         (clickedLecture) => {
           if ('class_title' in clickedLecture) {
             return;
