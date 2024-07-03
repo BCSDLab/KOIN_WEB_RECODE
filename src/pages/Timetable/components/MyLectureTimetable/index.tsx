@@ -3,15 +3,12 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
-import { useSemester } from 'utils/zustand/semester';
-import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import CurriculumListBox from 'pages/Timetable/components/Curriculum';
 import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
 import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
 import Timetable from 'components/TimetablePage/Timetable';
-import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import styles from './MyLectureTimetable.module.scss';
@@ -20,16 +17,6 @@ export default function MainTimetable() {
   const { myLectures } = useMyLectures();
   const navigate = useNavigate();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
-  const semester = useSemester();
-  const { tempLecture } = useTempLecture();
-  const { data: lectureList } = useLectureList(semester);
-  const similarSelectedLecture = lectureList
-    ?.filter((lecture) => lecture.code === tempLecture?.code)
-    ?? [];
-  const selectedLectureIndex = similarSelectedLecture
-    .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
-
-  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: deptList } = useDeptList();
   return (
@@ -63,8 +50,6 @@ export default function MainTimetable() {
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <Timetable
               lectures={myLectureDayValue}
-              similarSelectedLecture={similarSelectedLectureDayList}
-              selectedLectureIndex={selectedLectureIndex}
               columnWidth={140}
               firstColumnWidth={70}
               rowHeight={33}
