@@ -31,7 +31,6 @@ function CurrentSemesterLectureList({
   myLectures,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
-  const { tempLecture } = useTempLecture();
   const { setTempLecture } = useTempLecture();
   const { addMyLecture } = useTimetableMutation();
   const { data: userInfo } = useUser();
@@ -59,7 +58,6 @@ function CurrentSemesterLectureList({
           })
       }
       myLectures={myLectures}
-      selectedLecture={tempLecture ?? undefined}
       onHover={(hoveredLecture) => (
         hoveredLecture !== null && 'name' in hoveredLecture ? setTempLecture(hoveredLecture) : setTempLecture(null)
       )}

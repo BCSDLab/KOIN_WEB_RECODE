@@ -8,7 +8,6 @@ interface LectureTableProps {
   list: Array<LectureInfo> | Array<TimetableLectureInfo>;
   height: number;
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-  selectedLecture: LectureInfo | TimetableLectureInfo | undefined;
   onHover: ((value: LectureInfo | TimetableLectureInfo | null) => void) | undefined;
   onClickRow: ((value: LectureInfo | TimetableLectureInfo) => void) | undefined;
 }
@@ -39,7 +38,6 @@ function LectureTable({
   list,
   height,
   myLectures,
-  selectedLecture,
   onHover,
   onClickRow,
 }: LectureTableProps): JSX.Element {
@@ -104,9 +102,7 @@ function LectureTable({
                 className={cn({
                   [styles.table__row]: true,
                   [styles['table__row--include']]: myLectures.some((item) => item.code === currentItem.code && item.lecture_class === currentItem.lecture_class),
-                  [styles['table__row--selected']]: selectedLecture === currentItem,
                 })}
-                aria-selected={selectedLecture === currentItem}
                 role="row"
                 key={`${currentItem.code}-${currentItem.lecture_class}`}
                 style={style}
