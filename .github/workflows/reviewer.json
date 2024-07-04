@@ -26,6 +26,11 @@
       "team" : "user"
     },
     {
+      "name": "김혜준",
+      "githubName": "hyejun0228",
+      "team" : "user"
+    },
+    {
       "name": "김도훈",
       "githubName": "dooohun",
       "team" : "user"
@@ -48,6 +53,11 @@
     {
       "name": "김경윤",
       "githubName": "KimKyungYun",
+      "team" : "campus"
+    },
+     {
+      "name": "김민재",
+      "githubName": "D0Dam",
       "team" : "campus"
     }
   ]
