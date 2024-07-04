@@ -1,0 +1,68 @@
+@use "utils/scss/media.scss" as media;
+
+.require-mark {
+  position: absolute;
+  left: -8px;
+  top: -3px;
+  color: #f7941e;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 160%; /* 25.6px */
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  background: #fafafa;
+  position: relative;
+  box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
+
+  & > label {
+    display: flex;
+    min-width: 42px;
+    padding: 12px 16px;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 160%;
+  }
+
+  &__title {
+    position: relative;
+  }
+
+  &__block {
+    height: 24px;
+    width: 2px;
+    background-color: #eee;
+    margin: 0 4px;
+  }
+
+  & > input {
+    padding: 12px 16px;
+    width: 100%;
+    border: none;
+    background-color: transparent;
+
+    &::placeholder {
+      color: #8e8e8e;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 160%; /* 25.6px */
+    }
+
+    &:focus {
+      outline: 1px solid #4590bb;
+    }
+
+    &:focus ~ .container__check-button {
+      background-color: #175c8e;
+      color: #fff;
+    }
+  }
+}
