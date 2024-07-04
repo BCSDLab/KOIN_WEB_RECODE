@@ -99,18 +99,22 @@ function StoreDetailPage() {
                 {storeDetail?.delivery_price.toLocaleString()}
                 원
                 <br />
-                <span>계좌번호</span>
-                <div className={styles.account}>
-                  국민 000000-11-222222
-                  <button type="button" onClick={() => copyAccount('')}>
-                    <img
-                      src={Copy}
-                      alt="복사하기"
-                      className={styles.copy}
-                    />
-                  </button>
-                </div>
-                <br />
+                {storeDetail.bank && storeDetail.account_number && (
+                  <>
+                    <span>계좌번호</span>
+                    <div className={styles.account}>
+                      {`${storeDetail.bank} ${storeDetail.account_number}`}
+                      <button type="button" onClick={() => copyAccount(`${storeDetail.bank} ${storeDetail.account_number}`)}>
+                        <img
+                          src={Copy}
+                          alt="복사하기"
+                          className={styles.copy}
+                        />
+                      </button>
+                    </div>
+                    <br />
+                  </>
+                )}
                 <div className={styles.etc}>
                   <span>기타정보</span>
                   <div className={styles.etc__content}>{storeDescription}</div>
