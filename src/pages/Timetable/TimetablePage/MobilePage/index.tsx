@@ -5,10 +5,7 @@ import showToast from 'utils/ts/showToast';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
-import { useSemester } from 'utils/zustand/semester';
-import { useTempLecture } from 'utils/zustand/myTempLecture';
 import Timetable from 'components/TimetablePage/Timetable';
-import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import SemesterListbox from 'pages/Timetable/components/SemesterList';
 import styles from './MobilePage.module.scss';
@@ -25,16 +22,6 @@ function MobilePage() {
     });
     onTimetableImageDownload('my-timetable');
   };
-  const semester = useSemester();
-  const tempLecture = useTempLecture();
-  const { data: lectureList } = useLectureList(semester);
-  const similarSelectedLecture = lectureList
-    ?.filter((lecture) => lecture.code === tempLecture?.code)
-    ?? [];
-
-  const selectedLectureIndex = similarSelectedLecture
-    .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
-  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
 
   return (
@@ -60,8 +47,6 @@ function MobilePage() {
             <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
               <Timetable
                 lectures={myLectureDayValue}
-                similarSelectedLecture={similarSelectedLectureDayList}
-                selectedLectureIndex={selectedLectureIndex}
                 columnWidth={55}
                 firstColumnWidth={52}
                 rowHeight={21}

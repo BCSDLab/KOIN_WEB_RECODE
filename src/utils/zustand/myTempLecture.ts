@@ -15,11 +15,9 @@ const useTempLectureStore = create<State & Action>((set, get) => ({
   tempLecture: null,
   action: {
     updateTempLecture: (tempLecture) => {
-      if (get().tempLecture === tempLecture) {
-        set(() => ({ tempLecture: null }));
-        return;
+      if (get().tempLecture !== tempLecture) {
+        set(() => ({ tempLecture }));
       }
-      set(() => ({ tempLecture }));
     },
   },
 }));

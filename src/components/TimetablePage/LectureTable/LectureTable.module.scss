@@ -40,7 +40,11 @@
     cursor: pointer;
 
     &:hover {
-      background: rgb(219 243 255 / 38%);
+      background-color: #eee;
+    }
+
+    &:active {
+      background-color: #e1e1e1;
     }
   }
 
@@ -50,8 +54,8 @@
     background-color: #fff;
     color: #4b4b4b;
 
-    &--selected.table__row > .table__row-button {
-      background: rgb(219 243 255);
+    &--include.table__row > .table__row-button {
+      color: #4590bb;
     }
   }
 
