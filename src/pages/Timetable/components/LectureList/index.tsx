@@ -4,7 +4,7 @@ import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import { useTempLecture } from 'utils/zustand/myTempLecture';
+import { useTempLectureAction } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/Timetable/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
@@ -32,7 +32,7 @@ function CurrentSemesterLectureList({
   myLectures,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
-  const { setTempLecture } = useTempLecture();
+  const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation();
   const { data: userInfo } = useUser();
   return (
@@ -60,7 +60,7 @@ function CurrentSemesterLectureList({
       }
       myLectures={myLectures}
       onHover={(hoveredLecture) => (
-        hoveredLecture !== null && 'name' in hoveredLecture ? setTempLecture(hoveredLecture) : setTempLecture(null)
+        hoveredLecture !== null && 'name' in hoveredLecture ? updateTempLecture(hoveredLecture) : updateTempLecture(null)
       )}
       onClickRow={
         (clickedLecture) => {

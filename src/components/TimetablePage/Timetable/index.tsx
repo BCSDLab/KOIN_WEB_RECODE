@@ -52,7 +52,7 @@ function Timetable({
   const { data: lectureList } = useLectureList(semester);
   const newLectureList = lectureList?.filter((lecture) => lecture) ?? [];
   const lectureByDayList = useTimetableDayList(newLectureList);
-  const { tempLecture } = useTempLecture();
+  const tempLecture = useTempLecture();
   const [timeString, setTimeString] = React.useState(['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [time, '']));
   const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
     let lectureToRemove: LectureInfo | TimetableLectureInfo | null = null;
