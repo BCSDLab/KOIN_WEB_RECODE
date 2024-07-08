@@ -11,6 +11,7 @@ import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import { useScorllLogging } from 'utils/hooks/useScrollLogging';
+import Copy from 'assets/png/copy.png';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
@@ -49,6 +50,9 @@ function StoreDetailPage() {
   };
   const onClickEventList = () => {
     logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_detailView_event', value: `${storeDetail.name}` });
+  };
+  const copyAccount = async (account: string) => {
+    await navigator.clipboard.writeText(account);
   };
 
   useScrollToTop();
@@ -95,6 +99,22 @@ function StoreDetailPage() {
                 {storeDetail?.delivery_price.toLocaleString()}
                 원
                 <br />
+                {storeDetail.bank && storeDetail.account_number && (
+                  <>
+                    <span>계좌번호</span>
+                    <div className={styles.account}>
+                      {`${storeDetail.bank} ${storeDetail.account_number}`}
+                      <button type="button" onClick={() => copyAccount(`${storeDetail.bank} ${storeDetail.account_number}`)}>
+                        <img
+                          src={Copy}
+                          alt="복사하기"
+                          className={styles.copy}
+                        />
+                      </button>
+                    </div>
+                    <br />
+                  </>
+                )}
                 <div className={styles.etc}>
                   <span>기타정보</span>
                   <div className={styles.etc__content}>{storeDescription}</div>
