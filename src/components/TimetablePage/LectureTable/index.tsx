@@ -8,7 +8,7 @@ interface LectureTableProps {
   list: Array<LectureInfo> | Array<TimetableLectureInfo>;
   height: number;
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-  onHover: ((value: LectureInfo | TimetableLectureInfo | null) => void) | undefined;
+  onHover: ((value: LectureInfo | TimetableLectureInfo | null) => void);
   onClickRow: ((value: LectureInfo | TimetableLectureInfo) => void) | undefined;
 }
 
@@ -43,7 +43,7 @@ function LectureTable({
 }: LectureTableProps): JSX.Element {
   const { widthInfo } = useFlexibleWidth(9, [65, 173, 45, 65, 65, 45, 45, 45, 65]);
   const handleHover = (value: LectureInfo | TimetableLectureInfo | null) => {
-    if (onHover !== undefined) {
+    if (onHover !== null) {
       if (value !== null) {
         onHover(value);
       } else {
