@@ -4,6 +4,7 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { LectureInfo, TimetableDayLectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import {
+  BORDER_TOP_COLOR,
   BACKGROUND_COLOR,
   DAYS_STRING,
 } from 'static/timetable';
@@ -15,6 +16,7 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import AlertModal from 'components/common/Modal/AlertModal';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
+import { useTimeString } from 'utils/zustand/myLectures';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -25,6 +27,7 @@ interface TimetableProps {
   columnWidth: number;
   rowHeight: number;
   totalHeight: number;
+  forDownload?: boolean;
 }
 
 interface RemoveLectureProps {
@@ -40,6 +43,7 @@ function Timetable({
   columnWidth,
   rowHeight,
   totalHeight,
+  forDownload,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
@@ -48,7 +52,7 @@ function Timetable({
   const isEditable = pathname.includes('/timetable/modify');
   const { removeMyLecture } = useTimetableMutation();
   const { myLectures } = useMyLectures();
-  const [timeString, setTimeString] = React.useState(['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [time, '']));
+  const { timeString, setTimeString } = useTimeString();
   const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
     let lectureToRemove: LectureInfo | TimetableLectureInfo | null = null;
     myLectures.forEach((lecture) => {
@@ -92,7 +96,7 @@ function Timetable({
     } else {
       setTimeString(updateTimeString(fixedMaxTime));
     }
-  }, [lectures, similarSelectedLecture]);
+  }, [lectures, setTimeString, similarSelectedLecture]);
 
   return (
     <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
@@ -117,7 +121,7 @@ function Timetable({
           </div>
         ))}
       </div>
-      <div className={styles.timetable__content} style={{ height: `${20 * rowHeight}px` }}>
+      <div className={styles.timetable__content} style={forDownload ? undefined : { height: `${20 * rowHeight}px` }}>
         <div className={styles['timetable__row-container']} aria-hidden="true">
           {timeString.map((value, index) => (
             <div
@@ -167,8 +171,8 @@ function Timetable({
                 className={styles.timetable__lecture}
                 key={lectureIndex}
                 style={{
-                  backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 12]}33`,
-                  borderTop: `2px solid ${BACKGROUND_COLOR[lectureIndex % 12]}`,
+                  backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 15]}`,
+                  borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]}`,
                   top: `${start * rowHeight + 1}px`,
                   width: isMobile ? undefined : `${columnWidth}px`,
                   height: `${(end - start + 1) * rowHeight - 1}px`,

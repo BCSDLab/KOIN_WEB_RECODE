@@ -1,7 +1,6 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import useImageDownload from 'utils/hooks/useImageDownload';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
@@ -14,12 +13,13 @@ import Timetable from 'components/TimetablePage/Timetable';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
+import useBooleanState from 'utils/hooks/useBooleanState';
 import styles from './MyLectureTimetable.module.scss';
+import DownloadTimetableModal from './DownloadTimetableModal';
 
 export default function MainTimetable() {
   const { myLectures } = useMyLectures();
   const navigate = useNavigate();
-  const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const semester = useSemester();
   const tempLecture = useTempLecture();
   const { data: lectureList } = useLectureList(semester);
@@ -32,6 +32,11 @@ export default function MainTimetable() {
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: deptList } = useDeptList();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    openModal();
+  };
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
@@ -44,7 +49,7 @@ export default function MainTimetable() {
         <button
           type="button"
           className={styles.page__button}
-          onClick={() => onTimetableImageDownload('my-timetable')}
+          onClick={onClickDownloadImage}
         >
           <DownloadIcon />
           이미지 저장
@@ -58,7 +63,7 @@ export default function MainTimetable() {
           시간표 수정
         </button>
       </div>
-      <div ref={timetableRef} className={styles.page__timetable}>
+      <div className={styles.page__timetable}>
         <ErrorBoundary fallbackClassName="loading">
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <Timetable
@@ -72,6 +77,11 @@ export default function MainTimetable() {
             />
           </React.Suspense>
         </ErrorBoundary>
+      </div>
+      <div>
+        {isModalOpen && (
+          <DownloadTimetableModal onClose={closeModal} />
+        )}
       </div>
     </div>
   );
