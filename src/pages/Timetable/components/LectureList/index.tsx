@@ -3,7 +3,7 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
-import { useSemester } from 'utils/zustand/semester';
+import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/Timetable/hooks/useSelect';
 import showToast from 'utils/ts/showToast';

@@ -11,6 +11,7 @@ import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/Timetable/components/LectureList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import CustomLecture from 'pages/Timetable/components/CustomLecture';
+import { useSemester } from 'utils/zustand/semester';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage() {
@@ -20,6 +21,7 @@ export default function DefaultPage() {
 
   const { myLectures } = useMyLectures();
   const myLectureDayValue = useTimetableDayList(myLectures);
+  const semester = useSemester();
 
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;

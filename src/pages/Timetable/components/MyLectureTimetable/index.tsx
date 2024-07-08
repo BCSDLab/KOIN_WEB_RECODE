@@ -11,6 +11,7 @@ import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
 import Timetable from 'components/TimetablePage/Timetable';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
+import { useSemester } from 'utils/zustand/semester';
 import styles from './MyLectureTimetable.module.scss';
 
 export default function MainTimetable() {
@@ -19,6 +20,7 @@ export default function MainTimetable() {
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: deptList } = useDeptList();
+  const semester = useSemester();
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
