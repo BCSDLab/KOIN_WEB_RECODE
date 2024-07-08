@@ -24,7 +24,7 @@ export default function DefaultPage() {
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
     setSelectedCourseType(courseType);
-    navigate(`/timetable/modify/${courseType}`);
+    navigate(`/timetable/modify/${courseType}/${semester}`);
   };
   return (
     <div className={styles.page}>
