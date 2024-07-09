@@ -19,7 +19,7 @@ export default function TimetableToast({
   const [isClicked, setIsClicked] = useState(false);
   const toastRef = useRef<HTMLDivElement | null>(null);
 
-  const [toastProps, isVisible, setIsVisible] = useToastTimer({
+  const [toastProps, isVisible, closeToast] = useToastTimer({
     autoCloseTime: duration,
     onClose,
   });
@@ -36,11 +36,6 @@ export default function TimetableToast({
   const handleRecoverClick = () => {
     setIsClicked(true);
     onRecover();
-  };
-
-  const handleConfirmClick = () => {
-    setIsVisible(false);
-    setTimeout(onClose, 300);
   };
 
   useEffect(() => {
@@ -69,7 +64,7 @@ export default function TimetableToast({
       ) : (
         <>
           <div className={styles.toast__message}>{recoverMessage}</div>
-          <button className={styles.toast__button} type="button" onClick={handleConfirmClick}>확인</button>
+          <button className={styles.toast__button} type="button" onClick={closeToast}>확인</button>
         </>
       )}
     </div>

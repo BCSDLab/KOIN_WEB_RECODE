@@ -43,6 +43,14 @@ export default function useToastTimer({ autoCloseTime, onClose }: ToastTimerProp
     onMouseLeave: resumeTimer,
   };
 
+  const closeToast = () => {
+    if (timerId.current) {
+      clearTimeout(timerId.current);
+    }
+    setIsVisible(false);
+    setTimeout(onClose, 300);
+  };
+
   useEffect(() => {
     startTimer();
     return () => {
@@ -52,5 +60,5 @@ export default function useToastTimer({ autoCloseTime, onClose }: ToastTimerProp
     };
   }, [startTimer]);
 
-  return [toastProps, isVisible, setIsVisible, isPaused] as const;
+  return [toastProps, isVisible, closeToast, isPaused] as const;
 }
