@@ -1,5 +1,6 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
+  FrameListResponse,
   LectureInfoResponse,
   SemesterResponse,
   TimetableAddLectureRequest,
@@ -27,6 +28,44 @@ export class LectureList<R extends LectureInfoResponse> implements APIRequest<R>
     };
   }
 }
+
+export class FrameList <R extends FrameListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/v2/timetables/frames';
+
+  response!: R;
+
+  params: {
+    [index: string]: string;
+  };
+
+  auth = true;
+
+  constructor(public authorization: string, semester: string) {
+    this.params = {
+      semester,
+    };
+  }
+}
+
+// export class UpdateFrame<R extends FrameListResponse> implements APIRequest<R> {
+//   method = HTTP_METHOD.PUT;
+
+//   path = '/v2/timetables/frame/:id';
+
+//   response!: R;
+
+//   auth = true;
+
+//   constructor(
+//     public authorization: string,
+//     public data: { id: number; name: string; is_main: boolean },
+//   ) {
+//     this.path = `/v2/timetables/frame/${data.id}`;
+//     this.data = data;
+//   }
+// }
 
 export class VersionInfo<R extends VersionInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;

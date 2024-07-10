@@ -16,6 +16,20 @@ export type VersionInfo = {
   updated_at: string;
 };
 
+export type Frame = {
+  id: number;
+  timetable_name: string;
+  is_main: boolean;
+};
+
+export type UpdateFrame = {
+  id: number;
+  name: string;
+  is_main: boolean;
+};
+
+export type FrameListResponse = Frame[];
+
 export type SemesterResponse = SemesterInfo[];
 
 export type LectureInfoResponse = LectureInfo[];
