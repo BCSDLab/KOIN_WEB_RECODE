@@ -1,12 +1,12 @@
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import useLogger from 'utils/hooks/useLogger';
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useSemesterAction } from 'utils/zustand/semester';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import styles from './IndexTimetable.module.scss';
 
@@ -27,14 +27,10 @@ function CurrentSemesterTimetable(): JSX.Element {
 }
 
 export default function IndexTimeTable() {
-  const { updateSemester } = useSemesterAction();
   const semesterOptionList = useSemesterOptionList();
+  const { updateSemester } = useSemesterAction();
   const logger = useLogger();
-
-  useEffect(() => {
-    updateSemester(semesterOptionList[0]?.value);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  updateSemester(semesterOptionList[0].value);
 
   return (
     <div className={styles.template}>

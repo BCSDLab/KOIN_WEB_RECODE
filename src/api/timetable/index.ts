@@ -1,6 +1,7 @@
 import APIClient from 'utils/ts/apiClient';
 import {
   LectureList,
+  SemesterCheckInfo,
   SemesterInfoList,
   TimetableAddLecture,
   TimetableInfo,
@@ -11,6 +12,8 @@ import {
 export const getLectureList = APIClient.of(LectureList);
 
 export const getSemesterInfoList = APIClient.of(SemesterInfoList);
+
+export const getSemestersCheck = APIClient.of(SemesterCheckInfo);
 
 export const getTimetableInfo = APIClient.of(TimetableInfo);
 

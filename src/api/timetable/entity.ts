@@ -6,6 +6,11 @@ export type SemesterInfo = {
   'semester': string;
 };
 
+export type SemesterCheckInfo = {
+  user_id: number;
+  semesters: string[];
+};
+
 export type VersionType = 'android' | 'timetable' | 'shuttle_bus_timetable' | 'express_bus_timetable' | 'city_bus_timetable';
 
 export type VersionInfo = {
@@ -17,6 +22,11 @@ export type VersionInfo = {
 };
 
 export type SemesterResponse = SemesterInfo[];
+
+export interface SemesterCheckResponse extends APIResponse {
+  user_id: number;
+  semesters: string[];
+}
 
 export type LectureInfoResponse = LectureInfo[];
 

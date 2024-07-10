@@ -1,6 +1,7 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
   LectureInfoResponse,
+  SemesterCheckResponse,
   SemesterResponse,
   TimetableAddLectureRequest,
   TimetableAddLectureResponse,
@@ -71,8 +72,8 @@ export class TimetableAddLecture<R extends TimetableAddLectureResponse> implemen
   constructor(public data: TimetableAddLectureRequest, public authorization: string) { }
 }
 
-export class TimetableRemoveLecture<R extends TimetableRemoveLectureResponse>
-implements APIRequest<R> {
+export class TimetableRemoveLecture
+  <R extends TimetableRemoveLectureResponse> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 
   path = '/timetable';
@@ -100,4 +101,16 @@ export class SemesterInfoList<R extends SemesterResponse> implements APIRequest<
   response!: R;
 
   auth = false;
+}
+
+export class SemesterCheckInfo<R extends SemesterCheckResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/semesters/check';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) { }
 }
