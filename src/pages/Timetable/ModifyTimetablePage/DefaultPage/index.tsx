@@ -11,6 +11,7 @@ import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/Timetable/components/LectureList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import CustomLecture from 'pages/Timetable/components/CustomLecture';
+import useToast from 'components/common/Toast/useToast';
 import { useSemester } from 'utils/zustand/semester';
 import styles from './DefaultPage.module.scss';
 
@@ -28,6 +29,7 @@ export default function DefaultPage() {
     setSelectedCourseType(courseType);
     navigate(`/timetable/modify/${courseType}/${semester}`);
   };
+  const toast = useToast();
   return (
     <div className={styles.page}>
       <TimetableHeader />
@@ -78,7 +80,7 @@ export default function DefaultPage() {
               <div className={styles['page__total-grades']}>
                 <TotalGrades myLectureList={myLectures} />
               </div>
-              <button type="button" className={styles['page__save-button']} onClick={() => navigate('/timetable')}>
+              <button type="button" className={styles['page__save-button']} onClick={() => toast.open({ message: '시간표 저장~', recoverMessage: '시간표 저장되었어요~', onRecover: () => console.log('언두') })}>
                 <PenIcon className={styles['page__pen-icon']} />
                 시간표 저장
               </button>
