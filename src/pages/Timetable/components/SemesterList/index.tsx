@@ -8,9 +8,11 @@ import useLogger from 'utils/hooks/useLogger';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
-import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
+import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
+import useGetTimetableFrame from 'pages/Timetable/hooks/useGetTimetableFrame';
+import useTokenState from 'utils/hooks/useTokenState';
 import SemesterSettingModal from './SemesterSettingModal';
 import styles from './SemesterList.module.scss';
 
@@ -21,16 +23,17 @@ function SemesterListbox() {
     e.stopPropagation();
     triggerPopup();
   };
-
   const semester = useSemester();
   const { updateSemester } = useSemesterAction();
   const [semesterValue, setSemesterValue] = useState(semester);
+  const token = useTokenState();
+  const { data: timetableFrame } = useGetTimetableFrame(token, semester);
   const onChangeSelect = (e: { target: { value: string } }) => {
     const { target } = e;
     updateSemester(target?.value);
     setSemesterValue(target?.value);
   };
-
+  console.log(timetableFrame);
   const semesterOptionList = useSemesterOptionList();
   React.useEffect(() => {
     onChangeSelect({ target: { value: semesterOptionList[0].value } });
@@ -55,9 +58,16 @@ function SemesterListbox() {
 
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
-  const onClickSetting = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onClickAddSemester = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     openModal();
+  };
+
+  const deleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: string) => {
+    // 학기 삭제 api 연동 필요
+    e.stopPropagation();
+    console.log(semes);
+    closePopup();
   };
 
   return (
@@ -104,15 +114,15 @@ function SemesterListbox() {
                 <button
                   type="button"
                   className={styles['select__option--setting']}
-                  onClick={onClickSetting}
+                  onClick={(e) => deleteSemester(e, optionValue.value)}
                 >
-                  <SettingIcon />
-                  <div>설정</div>
+                  <TrashCanIcon />
+                  <div>삭제</div>
                 </button>
               </div>
             </button>
           ))}
-          <button type="button" className={styles.add}>
+          <button type="button" className={styles.add} onClick={onClickAddSemester}>
             <div>학기 추가하기</div>
             <AddIcon />
           </button>

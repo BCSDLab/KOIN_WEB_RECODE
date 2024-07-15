@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
 import { CustomAxiosError, KoinError } from 'interfaces/APIError';
-import { deleteCookie } from './cookie';
+// import { deleteCookie } from './cookie';
 
 const API_URL = process.env.REACT_APP_API_PATH;
 
@@ -77,8 +77,8 @@ export default class APIClient {
 
   private errorMiddleware(error: KoinError | CustomAxiosError) {
     if (error.status === 401) {
-      deleteCookie('AUTH_TOKEN_KEY');
-      window.location.href = '/auth';
+      // deleteCookie('AUTH_TOKEN_KEY');
+      // window.location.href = '/auth';
     }
   }
 
