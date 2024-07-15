@@ -26,19 +26,24 @@ type StoreSearchQueryType = {
 
 const CHECK_BOX = [
   {
+    id: 'review',
+    content: '# 리뷰순',
+    value: 1,
+  },
+  {
+    id: 'starPoint',
+    content: '# 별점순',
+    value: 2,
+  },
+  {
+    id: 'open',
+    content: '# 영업중',
+    value: 3,
+  },
+  {
     id: 'delivery',
-    content: '배달 가능',
-    value: '1',
-  },
-  {
-    id: 'card',
-    content: '카드결제 가능',
-    value: '1',
-  },
-  {
-    id: 'bank',
-    content: '계좌이체 가능',
-    value: '1',
+    content: '# 배달 가능',
+    value: 4,
   },
 ];
 
@@ -95,12 +100,14 @@ function StorePage() {
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
+  console.log(storeList);
   const selectedCategory = Number(searchParams.get('category'));
-  const loggingCheckbox = (id: string) => {
-    if (id && searchParams.get(id)) {
-      logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
-    }
-  };
+  // const loggingCheckbox = (id: string) => {
+  //   if (id && searchParams.get(id)) {
+  // eslint-disable-next-line max-len
+  //     logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
+  //   }
+  // };
   // eslint-disable-next-line
   const Josa = require('josa-js');
   useScrollToTop();
@@ -173,7 +180,7 @@ function StorePage() {
           />
         </button>
       </div>
-      <div className={styles.option}>
+      {/* <div className={styles.option}>
         <div className={styles.option__count}>
           총
           <strong>
@@ -204,9 +211,23 @@ function StorePage() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
       {isMobile && <div className={styles['store-mobile-header']}>상점목록</div>}
       <EventCarousel />
+      <div className={styles.filter}>
+        {
+          CHECK_BOX.map((item) => (
+            <div
+              className={cn({
+                [styles.filter__box]: true,
+                [styles['filter__box--activate']]: true,
+              })}
+            >
+              {item.content}
+            </div>
+          ))
+        }
+      </div>
       <div className={styles['store-list']}>
         {storeList?.map((store) => (
           <Link

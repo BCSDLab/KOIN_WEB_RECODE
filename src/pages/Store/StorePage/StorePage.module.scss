@@ -286,7 +286,6 @@
 .store-list {
   width: 1131px;
   min-height: 58vh;
-  margin-top: 15px;
   margin-bottom: 30px;
   height: 100%;
   display: grid;
@@ -489,6 +488,41 @@
       &[aria-hidden="true"] {
         color: #d2dae2;
       }
+    }
+  }
+}
+
+.filter {
+  display: none;
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    width: calc(100vw - 40px);
+    height: 25px;
+    padding: 12px 20px;
+    justify-content: space-between;
+    font-family: Pretendard;
+  }
+
+  &__box {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      width: 20%;
+      height: 25px;
+      border-radius: 5px;
+      justify-content: center;
+      align-items: center;
+      text-align: center; 
+      color: #E1E1E1;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 160%;
+      border: 1px solid #E1E1E1;
+    }
+
+    &--activate {
+      border: 1px solid #6DBBDD;
+      color: #6DBBDD;
     }
   }
 }
