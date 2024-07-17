@@ -1,14 +1,20 @@
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import { ReactComponent as StarIcon } from 'assets/svg/empty-star.svg';
 import { ReactComponent as AddImageIcon } from 'assets/svg/add-image.svg';
+import { ReactComponent as DeleteMenuIcon } from 'assets/svg/trash-can-icon.svg';
+import { ReactComponent as DeleteImageIcon } from 'assets/svg/delete-icon.svg';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { cn } from '@bcsdlab/utils';
+import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './StoreReviewPage.module.scss';
 
 function StoreReviewPage() {
   const params = useParams();
   const { storeDetail } = useStoreDetail(params.id!);
   const [rate, setRate] = useState(0);
+  const [imageList, setImageList] = useState<string[]>([]);
+  const [menuList, setMenuList] = useState<{ id: string, name: string }[]>([]);
 
   const handleRate = (num: number) => {
     if (num === rate) {
@@ -16,6 +22,36 @@ function StoreReviewPage() {
     } else {
       setRate(num);
     }
+  };
+
+  const addMenu = () => {
+    setMenuList([...menuList, { id: uuidv4(), name: '' }]);
+  };
+
+  const deleteMenu = (id: string) => {
+    setMenuList(menuList.filter((menu) => menu.id !== id));
+  };
+
+  const handleMenuChange = (e:React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const newMenuList = menuList.map((menu) => (
+      menu.id === id ? { ...menu, name: e.target.value } : menu));
+
+    setMenuList(newMenuList);
+  };
+
+  const addImage = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const uploadImages = e.target.files!;
+    const newImageList = [...imageList];
+    for (let i = 0; i < uploadImages.length; i += 1) {
+      const currentImageUrl = URL.createObjectURL(uploadImages[i]);
+      newImageList.push(currentImageUrl);
+    }
+
+    setImageList(newImageList);
+  };
+
+  const deleteImage = (url: string) => {
+    setImageList(imageList.filter((image) => image !== url));
   };
 
   return (
@@ -49,13 +85,31 @@ function StoreReviewPage() {
       <div className={styles.template}>
         <div className={styles.template__title}>
           <span>사진</span>
-          <span>0/3</span>
+          <span>
+            {imageList.length}
+            /3
+          </span>
         </div>
         <div className={styles.template__description}>리뷰와 관련된 사진을 업로드해주세요.</div>
-        <button type="button" className={styles.template__button}>
+        <ul className={styles.template__images}>
+          {imageList.map((url) => (
+            <li key={url}>
+              <img src={url} alt="리뷰 이미지" />
+              <button
+                type="button"
+                aria-label="이미지 삭제"
+                onClick={() => deleteImage(url)}
+              >
+                <DeleteImageIcon />
+              </button>
+            </li>
+          ))}
+        </ul>
+        <label htmlFor="image-file" className={styles['template__upload-image']}>
           사진 등록하기
           <AddImageIcon />
-        </button>
+          <input type="file" id="image-file" multiple onChange={addImage} />
+        </label>
       </div>
       <div className={styles.template}>
         <div className={styles.template__title}>
@@ -66,9 +120,37 @@ function StoreReviewPage() {
       </div>
       <div className={styles.template}>
         <div className={styles.template__title}>메뉴</div>
-        <button type="button" className={styles.template__button}>메뉴 추가하기</button>
+        <button type="button" className={styles.template__button} onClick={addMenu}>메뉴 추가하기</button>
+        <ul className={styles.template__list}>
+          {menuList.map((menu) => (
+            <li key={menu.id}>
+              <input
+                type="text"
+                placeholder="메뉴를 직접 입력해주세요."
+                value={menu.name}
+                onChange={(e) => handleMenuChange(e, menu.id)}
+              />
+              <button
+                type="button"
+                aria-label="메뉴 삭제"
+                onClick={() => deleteMenu(menu.id)}
+              >
+                <DeleteMenuIcon />
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
-      <button type="submit" className={styles.form__button}>작성하기</button>
+      <button
+        type="submit"
+        disabled={rate === 0}
+        className={cn({
+          [styles.form__button]: true,
+          [styles['form__button--active']]: rate !== 0,
+        })}
+      >
+        작성하기
+      </button>
     </form>
   );
 }
