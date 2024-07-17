@@ -62,6 +62,7 @@ function StoreReviewPage() {
         </div>
         <div>
           리뷰를 남겨주시면 사자님과 다른 분들에게 도움이 됩니다.
+          <br />
           또한, 악의적인 리뷰는 관리자에 의해 삭제될 수 있습니다.
         </div>
       </div>
