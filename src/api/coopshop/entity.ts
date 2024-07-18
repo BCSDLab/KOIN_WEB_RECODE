@@ -1,6 +1,6 @@
 import { type APIResponse } from 'interfaces/APIResponse';
-import { type Dining } from 'interfaces/Cafeteria';
+import { type OriginalDining } from 'interfaces/Coopshop';
 
-export interface CoopshopCafeteriaType extends APIResponse {
-  [index: number]: Dining;
+export interface CoopshopCafeteriaResponse extends APIResponse {
+  data: OriginalDining;
 }
