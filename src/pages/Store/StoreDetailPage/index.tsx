@@ -12,7 +12,6 @@ import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import { useScorllLogging } from 'utils/hooks/useScrollLogging';
 import Copy from 'assets/png/copy.png';
-import { useAuthenticationActions } from 'utils/zustand/authentication';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
@@ -40,8 +39,6 @@ function StoreDetailPage() {
       value: storeDetail!.name,
     });
   };
-
-  const { updateAuthentication } = useAuthenticationActions();
 
   const onClickImage = (img: string[], index: number) => {
     logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name });
@@ -182,7 +179,6 @@ function StoreDetailPage() {
                   aria-label="리뷰하기로 이동"
                   type="button"
                   onClick={() => {
-                    updateAuthentication(true);
                     navigate(`/review/${params.id}`);
                   }}
                 >
