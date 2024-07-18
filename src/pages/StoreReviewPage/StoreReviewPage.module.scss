@@ -88,16 +88,20 @@
     font-weight: 600;
     margin-bottom: 10px;
 
-    span:nth-child(2) {
+    &__count {
       font-size: 16px;
       font-weight: 400;
       color: #8e8e8e;
+
+      &--active {
+        color: #f7941e;
+      }
     }
 
     @include media.media-breakpoint(mobile) {
       font-size: 14px;
 
-      span:nth-child(2) {
+      &__count {
         font-size: 12px;
       }
     }

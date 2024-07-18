@@ -14,6 +14,7 @@ function StoreReviewPage() {
   const { storeDetail } = useStoreDetail(params.id!);
   const [rate, setRate] = useState(0);
   const [imageList, setImageList] = useState<string[]>([]);
+  const [reviewText, setReviewText] = useState('');
   const [menuList, setMenuList] = useState<{ id: string, name: string }[]>([]);
 
   const handleRate = (num: number) => {
@@ -86,7 +87,11 @@ function StoreReviewPage() {
       <div className={styles.template}>
         <div className={styles.template__title}>
           <span>사진</span>
-          <span>
+          <span className={cn({
+            [styles.template__title__count]: true,
+            [styles['template__title__count--active']]: imageList.length === 3,
+          })}
+          >
             {imageList.length}
             /3
           </span>
@@ -115,9 +120,25 @@ function StoreReviewPage() {
       <div className={styles.template}>
         <div className={styles.template__title}>
           <span>내용</span>
-          <span>0/500</span>
+          <span className={cn({
+            [styles.template__title__count]: true,
+            [styles['template__title__count--active']]: reviewText.length === 500,
+          })}
+          >
+            {reviewText.length}
+            /500
+          </span>
         </div>
-        <textarea className={styles.template__textarea} />
+        <textarea
+          value={reviewText}
+          maxLength={500}
+          className={styles.template__textarea}
+          onChange={(e) => {
+            if (e.target.value.length <= 500) {
+              setReviewText(e.target.value);
+            }
+          }}
+        />
       </div>
       <div className={styles.template}>
         <div className={styles.template__title}>메뉴</div>
