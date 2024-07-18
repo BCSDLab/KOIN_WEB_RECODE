@@ -11,10 +11,10 @@ import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
-import useGetTimetableFrame from 'pages/Timetable/hooks/useGetTimetableFrame';
 import useTokenState from 'utils/hooks/useTokenState';
-import SemesterSettingModal from './SemesterSettingModal';
+import AddSemesterModal from './AddSemesterModal';
 import styles from './SemesterList.module.scss';
+import DeleteSemesterModal from './DeleteSemesterModal';
 
 function SemesterListbox() {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
@@ -27,13 +27,11 @@ function SemesterListbox() {
   const { updateSemester } = useSemesterAction();
   const [semesterValue, setSemesterValue] = useState(semester);
   const token = useTokenState();
-  const { data: timetableFrame } = useGetTimetableFrame(token, semester);
   const onChangeSelect = (e: { target: { value: string } }) => {
     const { target } = e;
     updateSemester(target?.value);
     setSemesterValue(target?.value);
   };
-  console.log(timetableFrame);
   const semesterOptionList = useSemesterOptionList();
   React.useEffect(() => {
     onChangeSelect({ target: { value: semesterOptionList[0].value } });
@@ -55,19 +53,24 @@ function SemesterListbox() {
     logTitle: '',
     version: 'default',
   };
-
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const [selectedSemester, setSelectedSemester] = React.useState('');
+  const [
+    isAddSemesterModalOpen, openAddSemesterModal, closeAddSemesterModal,
+  ] = useBooleanState(false);
+  const [
+    isDeleteSemesterModalOpen, openDeleteSemesterModal, closeDeleteSemesterModal,
+  ] = useBooleanState(false);
 
   const onClickAddSemester = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    openModal();
+    openAddSemesterModal();
   };
 
-  const deleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: string) => {
+  const onClickDeleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: string) => {
     // 학기 삭제 api 연동 필요
     e.stopPropagation();
-    console.log(semes);
-    closePopup();
+    setSelectedSemester(semes);
+    openDeleteSemesterModal();
   };
 
   return (
@@ -114,7 +117,7 @@ function SemesterListbox() {
                 <button
                   type="button"
                   className={styles['select__option--setting']}
-                  onClick={(e) => deleteSemester(e, optionValue.value)}
+                  onClick={(e) => onClickDeleteSemester(e, optionValue.value)}
                 >
                   <TrashCanIcon />
                   <div>삭제</div>
@@ -129,8 +132,17 @@ function SemesterListbox() {
         </ul>
       )}
       <div>
-        {isModalOpen && (
-        <SemesterSettingModal onClose={closeModal} />
+        {isAddSemesterModalOpen && (
+        <AddSemesterModal onClose={closeAddSemesterModal} />
+        )}
+      </div>
+      <div>
+        {isDeleteSemesterModalOpen && (
+        <DeleteSemesterModal
+          onClose={closeDeleteSemesterModal}
+          token={token}
+          semester={selectedSemester}
+        />
         )}
       </div>
     </div>

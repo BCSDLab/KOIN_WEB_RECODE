@@ -9,13 +9,13 @@ import useSemesterCheck from 'pages/Timetable/hooks/useMySemester';
 import showToast from 'utils/ts/showToast';
 import styles from './SemesterSettingModal.module.scss';
 
-export interface SemesterSettingModalProps {
+export interface AddSemesterModalProps {
   onClose: () => void
 }
 
-export default function SemesterSettingModal({
+export default function AddSemesterModal({
   onClose,
-}: SemesterSettingModalProps) {
+}: AddSemesterModalProps) {
   /* 학기 API 완성 시 수정 예정 */
   const year = [{ label: '2024년도', value: '2024년도' },
     { label: '2023년도', value: '2023년도' },

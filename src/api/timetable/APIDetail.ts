@@ -160,5 +160,13 @@ export class DeleteTimetableFrame<R extends DeleteTimetableFrameResponse> implem
 
   auth = true;
 
-  constructor(public authorization: string, public id: number) {}
+  params: {
+    [index: string]: number;
+  };
+
+  constructor(public authorization: string, public id: number) {
+    this.params = {
+      id,
+    };
+  }
 }
