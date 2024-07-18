@@ -6,6 +6,7 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
+import showToast from 'utils/ts/showToast';
 import useLogger from 'utils/hooks/useLogger';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
@@ -53,6 +54,7 @@ function StoreDetailPage() {
   };
   const copyAccount = async (account: string) => {
     await navigator.clipboard.writeText(account);
+    showToast('info', '계좌번호가 복사되었습니다.');
   };
 
   useScrollToTop();
