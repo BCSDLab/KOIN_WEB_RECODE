@@ -2,7 +2,7 @@
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React, { Suspense } from 'react';
 import useBooleanState from 'utils/hooks/useBooleanState';
-import picture1 from 'assets/svg/fixes-image.jpg';
+import fixesImage from 'assets/svg/fixes-image.jpg';
 import Curriculum from '../components/Curriculum';
 import LectureList from '../components/LectureList';
 import MyLectureList from '../components/MyLectureList';
@@ -38,7 +38,7 @@ export default function DefaultPage() {
         && (
           <div className={styles.background} aria-hidden>
             <div className={styles.container}>
-              <img src={picture1} alt="s" />
+              <img src={fixesImage} alt="개설정보 수정사항" />
               <button type="button" onClick={closeModal} className={styles.container__close}>닫기</button>
             </div>
           </div>
