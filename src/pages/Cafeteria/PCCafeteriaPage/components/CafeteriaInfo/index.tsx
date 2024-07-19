@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-grey.svg';
+import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import styles from './CafeteriaInfo.module.scss';
 
 // 2024년 6월 21일 기준으로 작성된 학생식당 운영시간
@@ -31,6 +32,7 @@ interface CafeteriaInfoProps {
 }
 
 export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
+  const cafeteriaInfo = useCoopshopCafeteria();
   const backgroundRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
