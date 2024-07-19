@@ -8,6 +8,7 @@
 }
 
 .header {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -49,6 +50,12 @@
     @include media.media-breakpoint(mobile) {
       display: none;
     }
+  }
+
+  &__tooltip {
+    position: absolute;
+    top: -32px;
+    right: 0;
   }
 }
 

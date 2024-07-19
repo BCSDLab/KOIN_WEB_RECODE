@@ -10,17 +10,19 @@ import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/useLogger';
 import { DiningTime } from 'utils/ts/cafeteria';
 import { DiningPlace } from 'interfaces/Cafeteria';
+import useBooleanState from 'utils/hooks/useBooleanState';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
+  const diningTime = new DiningTime();
+
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const { dinings } = useDinings(new Date());
+  const { dinings } = useDinings(diningTime.generateDiningDate());
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
-
-  const diningTime = new DiningTime();
+  const [isTooltipOpen,,closeTooltip] = useBooleanState(sessionStorage.getItem('cafeteria-tooltip') === null);
 
   const selectedDining = dinings
     .find((dining) => dining.place === selectedPlace && dining.type === diningTime.getType());
@@ -35,6 +37,11 @@ function IndexCafeteria() {
     setSelectedPlace(place);
   };
 
+  const handleTooltipCloseButtonClick = () => {
+    sessionStorage.setItem('cafeteria-tooltip', 'used');
+    closeTooltip();
+  };
+
   return (
     <section className={styles.template}>
       <h2 className={styles.header}>
@@ -43,7 +50,7 @@ function IndexCafeteria() {
           className={styles.header__title}
           onClick={handleMoreClick}
         >
-          {`${diningTime.getPeriods()} 식단`}
+          {`${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`}
         </button>
         <button
           type="button"
@@ -53,6 +60,16 @@ function IndexCafeteria() {
           더보기
           <RightArrow />
         </button>
+        {isTooltipOpen && (
+          <div className={styles.header__tooltip}>
+            <div>
+              식단 사진 기능이 생겼어요!
+              <br />
+              오늘의 식단을 확인해보세요.
+            </div>
+            <button type="button" onClick={handleTooltipCloseButtonClick}>닫기</button>
+          </div>
+        )}
       </h2>
 
       <div className={styles.card}>

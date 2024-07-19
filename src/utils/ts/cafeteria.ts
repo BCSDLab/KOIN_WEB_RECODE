@@ -19,7 +19,7 @@ export const formatDate = (date: Date) => {
 };
 
 export class DiningTime {
-  private now: Date = new Date();
+  private now: Date;
 
   private lunchTransitionTime: Date = new Date();
 
@@ -28,13 +28,14 @@ export class DiningTime {
   private breakfastTransitionTime: Date = new Date();
 
   constructor() {
+    this.now = new Date();
     this.lunchTransitionTime.setHours(10, 30, 0, 0);
     this.dinnerTransitionTime.setHours(13, 30, 0, 0);
     this.breakfastTransitionTime.setHours(18, 30, 0, 0);
   }
 
   private isBreakfastTime() {
-    return this.now >= this.breakfastTransitionTime && this.now < this.lunchTransitionTime;
+    return this.now >= this.breakfastTransitionTime || this.now < this.lunchTransitionTime;
   }
 
   private isLunchTime() {
@@ -47,9 +48,19 @@ export class DiningTime {
     return 'DINNER';
   }
 
-  public getPeriods() {
-    if (this.isBreakfastTime() && this.now.getHours() > 18) return '내일';
-    return '오늘';
+  public isTodayDining() {
+    return !(this.isBreakfastTime() && this.now.getHours() >= 18);
+  }
+
+  public generateDiningDate() {
+    if (this.isTodayDining()) {
+      return new Date(this.now);
+    }
+
+    const tomorrow = new Date(this.now);
+    tomorrow.setDate(this.now.getDate() + 1);
+
+    return tomorrow;
   }
 }
 

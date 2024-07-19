@@ -17,7 +17,7 @@ function CafeteriaPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.page__content} key={currentDate.toISOString()}>
+      <div className={styles.page__content} key={currentDate().toISOString()}>
         {isMobile
           ? (
             <MobileCafeteriaPage
