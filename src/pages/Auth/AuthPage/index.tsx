@@ -5,7 +5,7 @@ function AuthPage() {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate(-1);
+    navigate('/');
   };
   return (
     <div className={styles.template}>
