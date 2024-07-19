@@ -3,14 +3,14 @@ import useScrollToTop from 'utils/hooks/useScrollToTop';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { DiningType } from 'interfaces/Cafeteria';
 import MobileCafeteriaPage from 'pages/Cafeteria/MobileCafeteriaPage';
-import { getType } from 'utils/ts/cafeteria';
+import { DiningTime } from 'utils/ts/cafeteria';
 import PCCafeteriaPage from './PCCafeteriaPage';
 import { useDatePicker } from './hooks/useDatePicker';
 import styles from './Cafeteria.module.scss';
 
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
-  const [diningType, setDiningType] = useState<DiningType>(getType());
+  const [diningType, setDiningType] = useState<DiningType>(new DiningTime().getType());
   const { currentDate } = useDatePicker();
 
   useScrollToTop();

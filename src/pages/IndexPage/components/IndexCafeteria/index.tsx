@@ -5,13 +5,11 @@ import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { ReactComponent as NotServed } from 'assets/svg/not-served.svg';
-import { ReactComponent as ChevronLeft } from 'assets/svg/chevron-left.svg';
-import { ReactComponent as ChevronRight } from 'assets/svg/chevron-right.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/useLogger';
-import { getType } from 'utils/ts/cafeteria';
-import { DiningType, DiningPlace } from 'interfaces/Cafeteria';
+import { DiningTime } from 'utils/ts/cafeteria';
+import { DiningPlace } from 'interfaces/Cafeteria';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
@@ -20,11 +18,12 @@ function IndexCafeteria() {
   const logger = useLogger();
   const { dinings } = useDinings(new Date());
 
-  const [selectedDiningType, setSelectedDiningType] = useState<DiningType>(getType());
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
 
+  const diningTime = new DiningTime();
+
   const selectedDining = dinings
-    .find((dining) => dining.place === selectedPlace && dining.type === selectedDiningType);
+    .find((dining) => dining.place === selectedPlace && dining.type === diningTime.getType());
 
   const handleMoreClick = () => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
@@ -36,11 +35,6 @@ function IndexCafeteria() {
     setSelectedPlace(place);
   };
 
-  const handleChevronClick = (name: string) => {
-    if (name === 'prev') setSelectedDiningType(getType(getType(selectedDiningType)));
-    if (name === 'next') setSelectedDiningType(getType(selectedDiningType));
-  };
-
   return (
     <section className={styles.template}>
       <h2 className={styles.header}>
@@ -49,7 +43,7 @@ function IndexCafeteria() {
           className={styles.header__title}
           onClick={handleMoreClick}
         >
-          식단
+          {`${diningTime.getPeriods()} 식단`}
         </button>
         <button
           type="button"
@@ -77,29 +71,9 @@ function IndexCafeteria() {
             </button>
           ))}
         </div>
-
-        {!isMobile && (
-          <div className={styles.type}>
-            <button
-              type="button"
-              name="prev"
-              aria-label="이전 시간"
-              onClick={(e) => handleChevronClick(e.currentTarget.name)}
-            >
-              <ChevronLeft />
-            </button>
-            {DINING_TYPE_MAP[selectedDiningType]}
-            <button
-              type="button"
-              name="next"
-              aria-label="다음 시간"
-              onClick={(e) => handleChevronClick(e.currentTarget.name)}
-            >
-              <ChevronRight />
-            </button>
-          </div>
-        )}
-
+        <div className={styles.type}>
+          {DINING_TYPE_MAP[diningTime.getType()]}
+        </div>
         <button
           type="button"
           className={cn({
@@ -110,7 +84,7 @@ function IndexCafeteria() {
         >
           {isMobile && (
             <div className={styles.menus__type}>
-              {DINING_TYPE_MAP[selectedDiningType]}
+              {DINING_TYPE_MAP[diningTime.getType()]}
               {selectedDining?.soldout_at && (
                 <span className={styles.menus__chip}>
                   품절

@@ -14,12 +14,11 @@
   align-items: center;
 
   &__title {
-    font-family: NanumSquare, serif;
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 19.29px;
-    text-align: left;
-    color: #175c8e;
+    color: #175C8E;
+
+    font-family: Pretendard;
+    font-size: 20px;
+    font-weight: 500;
 
     @include media.media-breakpoint(mobile) {
       font-size: 15px;

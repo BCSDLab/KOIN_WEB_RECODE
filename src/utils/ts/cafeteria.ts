@@ -1,4 +1,4 @@
-import { Dining, DiningType, DiningTypes } from 'interfaces/Cafeteria';
+import type { Dining, DiningType } from 'interfaces/Cafeteria';
 import { PLACE_ORDER } from 'static/cafeteria';
 
 const koreanDateStringInstance = new Intl.DateTimeFormat('ko-KR', {
@@ -18,21 +18,40 @@ export const formatDate = (date: Date) => {
   return `${month}/${day}`;
 };
 
-export const getType = (type?: DiningType): DiningType => {
-  const diningTypes: DiningTypes = ['BREAKFAST', 'LUNCH', 'DINNER', 'BREAKFAST'];
+export class DiningTime {
+  private now: Date = new Date();
 
-  if (type) {
-    return diningTypes[diningTypes.indexOf(type) + 1];
+  private lunchTransitionTime: Date = new Date();
+
+  private dinnerTransitionTime: Date = new Date();
+
+  private breakfastTransitionTime: Date = new Date();
+
+  constructor() {
+    this.lunchTransitionTime.setHours(10, 30, 0, 0);
+    this.dinnerTransitionTime.setHours(13, 30, 0, 0);
+    this.breakfastTransitionTime.setHours(18, 30, 0, 0);
   }
 
-  const hour = new Date().getHours();
-  if (hour < 9) {
-    return 'BREAKFAST';
-  } if (hour < 14) {
-    return 'LUNCH';
+  private isBreakfastTime() {
+    return this.now >= this.breakfastTransitionTime && this.now < this.lunchTransitionTime;
   }
-  return 'DINNER';
-};
+
+  private isLunchTime() {
+    return this.now >= this.lunchTransitionTime && this.now < this.dinnerTransitionTime;
+  }
+
+  public getType(): DiningType {
+    if (this.isBreakfastTime()) return 'BREAKFAST';
+    if (this.isLunchTime()) return 'LUNCH';
+    return 'DINNER';
+  }
+
+  public getPeriods() {
+    if (this.isBreakfastTime() && this.now.getHours() > 18) return '내일';
+    return '오늘';
+  }
+}
 
 export const filterDinings = (dinings: Dining[], type: DiningType) => {
   const filteredDinings = dinings.filter((dining) => dining.type === type
