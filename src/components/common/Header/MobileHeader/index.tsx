@@ -20,6 +20,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const { openSidebar } = useMobileSidebar();
 
   const isMain = pathname === '/';
+  const hamburgerButtonCondition = !pathname.includes('/cafeteria');
   const navigate = useNavigate();
   const logger = useLogger();
   const params = useParams();
@@ -75,17 +76,19 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               .find((submenu) => pathname.startsWith(submenu.link))?.title ?? ''
           )}
         </span>
-        <button
-          className={cn({
-            [styles['mobileheader__icon--right']]: true,
-            [styles.mobileheader__icon]: true,
-          })}
-          type="button"
-          aria-label="메뉴 버튼"
-          onClick={handleHamburgerClick}
-        >
-          <HamburgerIcon />
-        </button>
+        {hamburgerButtonCondition && (
+          <button
+            className={cn({
+              [styles['mobileheader__icon--right']]: true,
+              [styles.mobileheader__icon]: true,
+            })}
+            type="button"
+            aria-label="메뉴 버튼"
+            onClick={handleHamburgerClick}
+          >
+            <HamburgerIcon />
+          </button>
+        )}
       </div>
       {createPortal(
         <Panel openModal={openModal} />,
