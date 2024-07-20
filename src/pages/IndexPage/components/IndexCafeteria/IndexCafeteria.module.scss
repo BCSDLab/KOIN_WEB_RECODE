@@ -53,9 +53,41 @@
   }
 
   &__tooltip {
+    z-index: 10;
     position: absolute;
-    top: -32px;
-    right: 0;
+    top: -120px;
+    left: 64px;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__tooltip-content {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    color: var(--Neutral-600, #4B4B4B);
+    font-family: Pretendard;
+    font-size: 14px;
+  }
+
+  &__tooltip-close {
+    position: absolute;
+    bottom: 36px;
+    right: 24px;
+
+    display: flex;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 4px;
+    background: var(--Neutral-300, #E1E1E1);
+  }
+
+  &__tooltip-image {
+    width: 332px;
   }
 }
 

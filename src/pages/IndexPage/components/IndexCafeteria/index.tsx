@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useNavigate } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
@@ -22,7 +21,7 @@ function IndexCafeteria() {
   const { dinings } = useDinings(diningTime.generateDiningDate());
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
-  const [isTooltipOpen,,closeTooltip] = useBooleanState(sessionStorage.getItem('cafeteria-tooltip') === null);
+  const [isTooltipOpen,,closeTooltip] = useBooleanState(localStorage.getItem('cafeteria-tooltip') === null);
 
   const selectedDining = dinings
     .find((dining) => dining.place === selectedPlace && dining.type === diningTime.getType());
@@ -38,7 +37,7 @@ function IndexCafeteria() {
   };
 
   const handleTooltipCloseButtonClick = () => {
-    sessionStorage.setItem('cafeteria-tooltip', 'used');
+    localStorage.setItem('cafeteria-tooltip', 'used');
     closeTooltip();
   };
 
@@ -62,12 +61,13 @@ function IndexCafeteria() {
         </button>
         {isTooltipOpen && (
           <div className={styles.header__tooltip}>
-            <div>
+            <button type="button" className={styles['header__tooltip-content']} onClick={handleMoreClick}>
               식단 사진 기능이 생겼어요!
               <br />
               오늘의 식단을 확인해보세요.
-            </div>
-            <button type="button" onClick={handleTooltipCloseButtonClick}>닫기</button>
+            </button>
+            <button type="button" className={styles['header__tooltip-close']} onClick={handleTooltipCloseButtonClick}>닫기</button>
+            <img className={styles['header__tooltip-image']} src="https://stage-static.koreatech.in/upload/Tooltip.png" alt="툴팁" />
           </div>
         )}
       </h2>
