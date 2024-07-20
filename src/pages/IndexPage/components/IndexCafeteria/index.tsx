@@ -36,6 +36,11 @@ function IndexCafeteria() {
     setSelectedPlace(place);
   };
 
+  const handleTooltipContentButtonClick = () => {
+    localStorage.setItem('cafeteria-tooltip', 'used');
+    handleMoreClick();
+  };
+
   const handleTooltipCloseButtonClick = () => {
     localStorage.setItem('cafeteria-tooltip', 'used');
     closeTooltip();
@@ -61,7 +66,7 @@ function IndexCafeteria() {
         </button>
         {isTooltipOpen && (
           <div className={styles.header__tooltip}>
-            <button type="button" className={styles['header__tooltip-content']} onClick={handleMoreClick}>
+            <button type="button" className={styles['header__tooltip-content']} onClick={handleTooltipContentButtonClick}>
               식단 사진 기능이 생겼어요!
               <br />
               오늘의 식단을 확인해보세요.
