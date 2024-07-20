@@ -15,9 +15,8 @@
   align-items: center;
 
   &__title {
-    color: #175C8E;
-
-    font-family: Pretendard;
+    color: #175c8e;
+    font-family: Pretendard, sans-serif;
     font-size: 20px;
     font-weight: 500;
 
@@ -67,8 +66,8 @@
     position: absolute;
     top: 20px;
     left: 24px;
-    color: var(--Neutral-600, #4B4B4B);
-    font-family: Pretendard;
+    color: #4b4b4b;
+    font-family: Pretendard, sans-serif;
     font-size: 14px;
   }
 
@@ -76,14 +75,12 @@
     position: absolute;
     bottom: 36px;
     right: 24px;
-
     display: flex;
     padding: 8px 12px;
     justify-content: center;
     align-items: center;
-
     border-radius: 4px;
-    background: var(--Neutral-300, #E1E1E1);
+    background: #e1e1e1;
   }
 
   &__tooltip-image {
