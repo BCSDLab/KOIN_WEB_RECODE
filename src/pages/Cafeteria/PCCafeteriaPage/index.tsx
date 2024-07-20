@@ -72,6 +72,7 @@ export default function PCCafeteriaPage({
     if (checkToday(currentDate())) {
       return diningTime.isTodayDining() ? '오늘' : '내일';
     }
+
     return DAYS[currentDate().getDay()];
   };
 
