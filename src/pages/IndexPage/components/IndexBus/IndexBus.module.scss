@@ -115,7 +115,6 @@
 
     @include media.media-breakpoint(mobile) {
       gap: 10px;
-
     }
   }
 
@@ -161,7 +160,7 @@
     }
   }
 
-  &__redirect{
+  &__redirect {
     font-family: Pretendard, sans-serif;
     font-size: 12px;
     font-weight: 500;
