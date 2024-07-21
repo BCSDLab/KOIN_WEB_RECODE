@@ -18,7 +18,7 @@ interface PCDiningBlocksProps {
 
 export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlocksProps) {
   const { currentDate } = useDatePicker();
-  const { dinings } = useDinings(currentDate);
+  const { dinings } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
 
   const boxRef = useRef<HTMLDivElement>(null);
