@@ -1,0 +1,13 @@
+.container {
+  width: 93%;
+  border: 1px solid #10477A;
+  color: #10477A;
+  height: 5vh;
+  border-radius: 0.25em;
+  cursor: pointer;
+
+  &:active {
+    background-color: #10477A;
+    color: white;
+  }
+}
