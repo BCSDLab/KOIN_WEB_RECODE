@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
-import { BUS_TYPES } from 'static/bus';
+import { BusType, BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
 import styles from './BusTimetable.module.scss';
@@ -11,7 +11,7 @@ function BusTimetable() {
   const selectedTab = useBusStore((state) => state.selectedTab);
   const setSelectedTab = useBusStore((state) => state.setSelectedTab);
   const logger = useLogger();
-  const onClickBusTab = (type: typeof BUS_TYPES[number]) => {
+  const onClickBusTab = (type: BusType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable', value: type.tabName });
     setSelectedTab(type);
   };

@@ -1,11 +1,5 @@
 import { create } from 'zustand';
-import { BUS_TYPES } from 'static/bus';
-
-type BusType = {
-  key: string;
-  tabName: string;
-  tableHeaders: string[];
-};
+import { BusType, BUS_TYPES } from 'static/bus';
 
 type BusState = {
   selectedTab: BusType;

@@ -107,3 +107,9 @@ export const CITY_BUS_TIMETABLE = [
   ['시간표(병천)', '6:10(첫) - 22:45(막) (10분간격)'],
   ['소요시간', '약 40분'],
 ];
+
+export type BusType = {
+  key: string;
+  tabName: string;
+  tableHeaders: string[];
+};
