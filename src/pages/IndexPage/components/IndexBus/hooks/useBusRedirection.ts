@@ -6,7 +6,7 @@ export interface BusRedirection {
   label: string;
   link: string;
   key: string;
-  type: typeof BUS_TYPES[number];
+  type: BusType;
 }
 
 const useBusRedirection = (setSelectedTab?: (type: BusType) => void) => {
