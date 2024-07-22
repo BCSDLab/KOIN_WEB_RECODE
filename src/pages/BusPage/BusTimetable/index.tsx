@@ -4,12 +4,14 @@ import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg
 import { BusType, BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
+import { useShallow } from 'zustand/react/shallow';
 import styles from './BusTimetable.module.scss';
 import Timetable from './Timetable';
 
 function BusTimetable() {
-  const selectedTab = useBusStore((state) => state.selectedTab);
-  const setSelectedTab = useBusStore((state) => state.setSelectedTab);
+  const [selectedTab, setSelectedTab] = useBusStore(useShallow(
+    (state) => [state.selectedTab, state.setSelectedTab],
+  ));
   const logger = useLogger();
   const onClickBusTab = (type: BusType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable', value: type.tabName });
