@@ -1,12 +1,12 @@
 import { create } from 'zustand';
-import { BusType, BUS_TYPES } from 'static/bus';
+import { BUS_TYPES } from 'static/bus';
 
 type BusState = {
-  selectedTab: BusType;
-  setSelectedTab: (tab: BusType) => void;
+  selectedTab: typeof BUS_TYPES[number];
+  setSelectedTab: (tab: typeof BUS_TYPES[number]) => void;
 };
 
 export const useBusStore = create<BusState>((set) => ({
   selectedTab: BUS_TYPES[0],
-  setSelectedTab: (tab: BusType) => set({ selectedTab: tab }),
+  setSelectedTab: (tab: typeof BUS_TYPES[number]) => set({ selectedTab: tab }),
 }));

@@ -1,15 +1,15 @@
 import { useNavigate } from 'react-router-dom';
-import { BusType, BUS_TYPES } from 'static/bus';
+import { BUS_TYPES } from 'static/bus';
 import useMobileBusCarousel from './useMobileBusCarousel';
 
 export interface BusRedirection {
   label: string;
   link: string;
   key: string;
-  type: BusType;
+  type: typeof BUS_TYPES[number];
 }
 
-const useBusRedirection = (setSelectedTab?: (type: BusType) => void) => {
+const useBusRedirection = (setSelectedTab?: (type: typeof BUS_TYPES[number]) => void) => {
   const navigate = useNavigate();
   const {
     matchToMobileType,
