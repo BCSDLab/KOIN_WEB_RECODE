@@ -1,9 +1,11 @@
 import { cn } from '@bcsdlab/utils';
 import { Suspense, useEffect, useState } from 'react';
+import { useHeaderButton } from 'utils/hooks/useHeaderButton';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import useLogger from 'utils/hooks/useLogger';
+import { ReactComponent as InformationIcon } from 'assets/svg/information-icon.svg';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
@@ -18,6 +20,25 @@ export default function MobileCafeteriaPage({
 }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
+  const { setButtonContent } = useHeaderButton();
+
+  const handleHeaderButtonClick = () => {
+    console.log('a');
+  };
+
+  useEffect(() => {
+    setButtonContent(
+      <button
+        type="button"
+        aria-label="학생식당 운영 정보 안내"
+        onClick={handleHeaderButtonClick}
+      >
+        <InformationIcon />
+      </button>,
+    );
+
+    return () => setButtonContent(null);
+  }, [setButtonContent]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[dining] });
