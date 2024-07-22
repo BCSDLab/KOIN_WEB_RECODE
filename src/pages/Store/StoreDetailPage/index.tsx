@@ -18,6 +18,7 @@ import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
+import ReviewPage from './Review';
 
 function StoreDetailPage() {
   const params = useParams();
@@ -229,15 +230,25 @@ function StoreDetailPage() {
           >
             이벤트/공지
           </button>
+          <button
+            className={cn({
+              [styles.tap__type]: true,
+              [styles['tap__type--active']]: tapType === '리뷰',
+            })}
+            type="button"
+            onClick={() => {
+              onClickEventList();
+              setTapType('리뷰');
+            }}
+          >
+            리뷰
+          </button>
         </div>
-        {tapType === '메뉴' ? (
-          storeMenuCategories && storeMenuCategories.length > 0 && (
-            <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
-          )
-        )
-          : (
-            <EventTable />
-          )}
+        {tapType === '메뉴' && storeMenuCategories && storeMenuCategories.length > 0 && (
+          <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
+        )}
+        {tapType === '이벤트/공지' && <EventTable />}
+        {tapType === '리뷰' && <ReviewPage />}
       </div>
     </div>
   );

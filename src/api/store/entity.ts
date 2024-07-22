@@ -126,3 +126,38 @@ export interface AllStoreEventResponse extends APIResponse {
 export interface StoreEventListResponse extends APIResponse {
   events: StoreEvent[];
 }
+
+export interface ReviewListResponse extends APIResponse {
+  total_count: number,
+  current_count: number,
+  total_page: number,
+  current_page: number,
+  statistics: {
+    average_rating: number,
+    ratings: {
+      1: number,
+      2: number,
+      3: number,
+      4: number,
+      5: number
+    }
+  },
+  reviews: [
+    {
+      review_id: number,
+      rating: number,
+      nick_name: string,
+      content: string,
+      image_urls: [
+        string,
+      ],
+      menu_names: [
+        string,
+      ],
+      is_mine: boolean,
+      is_modified: boolean,
+      created_at: string
+    },
+  ]
+
+}
