@@ -1,30 +1,30 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useNavigate } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { ReactComponent as NotServed } from 'assets/svg/not-served.svg';
-import { ReactComponent as ChevronLeft } from 'assets/svg/chevron-left.svg';
-import { ReactComponent as ChevronRight } from 'assets/svg/chevron-right.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/useLogger';
-import { getType } from 'utils/ts/cafeteria';
-import { DiningType, DiningPlace } from 'interfaces/Cafeteria';
+import { DiningTime } from 'utils/ts/cafeteria';
+import { DiningPlace } from 'interfaces/Cafeteria';
+import useBooleanState from 'utils/hooks/useBooleanState';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
+  const diningTime = new DiningTime();
+
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const { dinings } = useDinings(new Date());
+  const { dinings } = useDinings(diningTime.generateDiningDate());
 
-  const [selectedDiningType, setSelectedDiningType] = useState<DiningType>(getType());
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
+  const [isTooltipOpen,,closeTooltip] = useBooleanState(localStorage.getItem('cafeteria-tooltip') === null);
 
   const selectedDining = dinings
-    .find((dining) => dining.place === selectedPlace && dining.type === selectedDiningType);
+    .find((dining) => dining.place === selectedPlace && dining.type === diningTime.getType());
 
   const handleMoreClick = () => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
@@ -36,9 +36,14 @@ function IndexCafeteria() {
     setSelectedPlace(place);
   };
 
-  const handleChevronClick = (name: string) => {
-    if (name === 'prev') setSelectedDiningType(getType(getType(selectedDiningType)));
-    if (name === 'next') setSelectedDiningType(getType(selectedDiningType));
+  const handleTooltipContentButtonClick = () => {
+    localStorage.setItem('cafeteria-tooltip', 'used');
+    handleMoreClick();
+  };
+
+  const handleTooltipCloseButtonClick = () => {
+    localStorage.setItem('cafeteria-tooltip', 'used');
+    closeTooltip();
   };
 
   return (
@@ -49,7 +54,7 @@ function IndexCafeteria() {
           className={styles.header__title}
           onClick={handleMoreClick}
         >
-          식단
+          {`${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`}
         </button>
         <button
           type="button"
@@ -59,6 +64,17 @@ function IndexCafeteria() {
           더보기
           <RightArrow />
         </button>
+        {isTooltipOpen && (
+          <div className={styles.header__tooltip}>
+            <button type="button" className={styles['header__tooltip-content']} onClick={handleTooltipContentButtonClick}>
+              식단 사진 기능이 생겼어요!
+              <br />
+              오늘의 식단을 확인해보세요.
+            </button>
+            <button type="button" className={styles['header__tooltip-close']} onClick={handleTooltipCloseButtonClick}>닫기</button>
+            <img className={styles['header__tooltip-image']} src="https://stage-static.koreatech.in/upload/Tooltip.png" alt="툴팁" />
+          </div>
+        )}
       </h2>
 
       <div className={styles.card}>
@@ -77,29 +93,9 @@ function IndexCafeteria() {
             </button>
           ))}
         </div>
-
-        {!isMobile && (
-          <div className={styles.type}>
-            <button
-              type="button"
-              name="prev"
-              aria-label="이전 시간"
-              onClick={(e) => handleChevronClick(e.currentTarget.name)}
-            >
-              <ChevronLeft />
-            </button>
-            {DINING_TYPE_MAP[selectedDiningType]}
-            <button
-              type="button"
-              name="next"
-              aria-label="다음 시간"
-              onClick={(e) => handleChevronClick(e.currentTarget.name)}
-            >
-              <ChevronRight />
-            </button>
-          </div>
-        )}
-
+        <div className={styles.type}>
+          {DINING_TYPE_MAP[diningTime.getType()]}
+        </div>
         <button
           type="button"
           className={cn({
@@ -110,7 +106,7 @@ function IndexCafeteria() {
         >
           {isMobile && (
             <div className={styles.menus__type}>
-              {DINING_TYPE_MAP[selectedDiningType]}
+              {DINING_TYPE_MAP[diningTime.getType()]}
               {selectedDining?.soldout_at && (
                 <span className={styles.menus__chip}>
                   품절

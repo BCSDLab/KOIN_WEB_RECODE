@@ -21,7 +21,7 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
   const { target } = useOnClickOutside<HTMLImageElement>(portalManager.close);
 
   const { currentDate } = useDatePicker();
-  const { dinings } = useDinings(currentDate);
+  const { dinings } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
 
   const logger = useLogger();
