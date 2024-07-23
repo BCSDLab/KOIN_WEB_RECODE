@@ -6,6 +6,7 @@ import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
+import showToast from 'utils/ts/showToast';
 import useLogger from 'utils/hooks/useLogger';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
@@ -17,6 +18,7 @@ import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
+import ReviewPage from './Review';
 
 function StoreDetailPage() {
   const params = useParams();
@@ -54,6 +56,7 @@ function StoreDetailPage() {
   };
   const copyAccount = async (account: string) => {
     await navigator.clipboard.writeText(account);
+    showToast('info', '계좌번호가 복사되었습니다.');
   };
 
   useScrollToTop();
@@ -241,15 +244,25 @@ function StoreDetailPage() {
           >
             이벤트/공지
           </button>
+          <button
+            className={cn({
+              [styles.tap__type]: true,
+              [styles['tap__type--active']]: tapType === '리뷰',
+            })}
+            type="button"
+            onClick={() => {
+              onClickEventList();
+              setTapType('리뷰');
+            }}
+          >
+            리뷰
+          </button>
         </div>
-        {tapType === '메뉴' ? (
-          storeMenuCategories && storeMenuCategories.length > 0 && (
-            <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
-          )
-        )
-          : (
-            <EventTable />
-          )}
+        {tapType === '메뉴' && storeMenuCategories && storeMenuCategories.length > 0 && (
+          <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
+        )}
+        {tapType === '이벤트/공지' && <EventTable />}
+        {tapType === '리뷰' && <ReviewPage />}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import APIClient from 'utils/ts/apiClient';
 import {
   StoreList, StoreDetailInfo, StoreDetailMenu, StoreCategories, AllStoreEvent,
   StoreEventList,
+  ReviewList,
 } from './APIDetail';
 
 export const getStoreList = APIClient.of(StoreList);
@@ -15,3 +16,5 @@ export const getStoreCategories = APIClient.of(StoreCategories);
 export const getAllEvent = APIClient.of(AllStoreEvent);
 
 export const getStoreEventList = APIClient.of(StoreEventList);
+
+export const getReviewList = APIClient.of(ReviewList);

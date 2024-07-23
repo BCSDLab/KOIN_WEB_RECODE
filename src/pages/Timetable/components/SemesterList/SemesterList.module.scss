@@ -37,6 +37,11 @@
     border-radius: 5px;
     cursor: pointer;
 
+    svg {
+      transform: rotate(360deg);
+      transition: transform 0.3s ease;
+    }
+
     @include media.media-breakpoint(mobile) {
       height: 36px;
 
@@ -48,6 +53,11 @@
 
     &--selected {
       background-color: #175c8e26;
+
+      svg {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+      }
     }
   }
 

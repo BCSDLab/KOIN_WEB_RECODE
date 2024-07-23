@@ -147,3 +147,17 @@
     }
   }
 }
+
+.image {
+  svg {
+    transform: rotate(360deg);
+    transition: transform 0.3s ease;
+  }
+
+  &__open {
+    svg {
+      transform: rotate(180deg);
+      transition: transform 0.3s ease;
+    }
+  }
+}

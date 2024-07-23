@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  width: 100%;
+  gap: 3%;
+  color: #8e8e8e;
+  font-size: 1rem;
+  justify-content: center;
+}
+
+.rate-container {
+  position: relative;
+  width: 70%;
+}
+
+.bar {
+  &--empty {
+    width: 100%;
+    height: 1vh;
+    background-color: #e1e1e1;
+    border-radius: 10px;
+  }
+
+  &--fill {
+    height: 1vh;
+    background-color: #ffc62b;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 10px;
+    animation: increase 0.5s linear forwards;
+  }
+}
+
+@keyframes increase {
+  from {
+    width: 0%;
+  }
+}

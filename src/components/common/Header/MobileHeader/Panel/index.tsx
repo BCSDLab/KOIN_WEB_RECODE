@@ -7,6 +7,7 @@ import { useUser } from 'utils/hooks/useUser';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
+import { useEffect } from 'react';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -48,6 +49,18 @@ export default function Panel({ openModal }: PanelProps) {
       navigate(submenu.link);
     }
   };
+
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.cssText = 'overflow: hidden;';
+    } else {
+      document.body.style.cssText = '';
+    }
+
+    return () => {
+      document.body.style.cssText = '';
+    };
+  }, [isSidebarOpen]);
 
   return (
     <nav
