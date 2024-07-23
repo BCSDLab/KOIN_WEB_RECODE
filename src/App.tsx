@@ -26,6 +26,7 @@ import MetaHelmet from 'components/common/MetaHelmet';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
 import PrivateRoute from 'components/common/PrivateRoute';
 import ModifyTimetablePage from 'pages/Timetable/ModifyTimetablePage';
+import StoreReviewPage from 'pages/StoreReviewPage';
 
 interface HelmetWrapperProps {
   title: string;
@@ -74,6 +75,9 @@ function App() {
           <Route index element={<HelmetWrapper title="코인 - 로그인" element={<LoginPage />} />} />
           <Route path="signup" element={<HelmetWrapper title="코인 - 회원가입" element={<SignupPage />} />} />
           <Route path="findpw" element={<HelmetWrapper title="코인 - 비밀번호 찾기" element={<FindPasswordPage />} />} />
+        </Route>
+        <Route path="/" element={<BoardPage />}>
+          <Route path="review/:id" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 상점 리뷰" element={<StoreReviewPage />} />} />} />
         </Route>
         <Route path="auth" element={<AuthPage />}>
           <Route path="modifyInfo" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보 변경" element={<ModifyInfoPage />} />} />} />
