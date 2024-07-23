@@ -15,7 +15,7 @@ function Footer(): JSX.Element {
           <ul className={styles.footer__services}>
             {CATEGORY
               .flatMap((categoryInfo) => categoryInfo.submenu)
-              .map((submenuInfo) => (
+              .slice(0, -1).map((submenuInfo) => (
                 <li className={styles.footer__service} key={submenuInfo.title}>
                   <Link to={submenuInfo.link} onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: submenuInfo.title })}>
                     {submenuInfo.title}

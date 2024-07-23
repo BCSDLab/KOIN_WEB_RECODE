@@ -41,6 +41,7 @@ function StoreDetailPage() {
       value: storeDetail!.name,
     });
   };
+
   const onClickImage = (img: string[], index: number) => {
     logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name });
     portalManager.open((portalOption: Portal) => (
@@ -172,6 +173,19 @@ function StoreDetailPage() {
                   }}
                 >
                   상점목록
+                </button>
+                <button
+                  className={cn({
+                    [styles['button-wrapper__button']]: true,
+                    [styles['button-wrapper__button--store-list']]: true,
+                  })}
+                  aria-label="리뷰하기로 이동"
+                  type="button"
+                  onClick={() => {
+                    navigate(`/review/${params.id}`);
+                  }}
+                >
+                  리뷰하기
                 </button>
               </div>
               {isMobile && storeDetail?.updated_at && (
