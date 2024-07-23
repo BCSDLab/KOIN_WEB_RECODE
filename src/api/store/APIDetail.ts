@@ -84,7 +84,7 @@ export class ReviewList<R extends ReviewListResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(id: number, pageParam: number) {
+  constructor(id: number, pageParam: number, public authorization?: string) {
     this.path = `shops/${id}/reviews?page=${pageParam}&limit=10`;
   }
 }
