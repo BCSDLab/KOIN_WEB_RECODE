@@ -1,6 +1,5 @@
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import { ReactComponent as StarIcon } from 'assets/svg/empty-star.svg';
-import { ReactComponent as AddImageIcon } from 'assets/svg/add-image.svg';
 import { ReactComponent as DeleteMenuIcon } from 'assets/svg/trash-can-icon.svg';
 import { ReactComponent as DeleteImageIcon } from 'assets/svg/delete-icon.svg';
 import { useState } from 'react';
@@ -101,7 +100,6 @@ function StoreReviewPage() {
         </ul>
         <label htmlFor="image-file" className={styles['template__upload-image']}>
           사진 등록하기
-          <AddImageIcon />
           <input type="file" id="image-file" multiple onChange={addImage} />
         </label>
       </div>
