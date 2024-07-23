@@ -17,14 +17,6 @@ function StoreReviewPage() {
   const [reviewText, setReviewText] = useState('');
   const [menuList, setMenuList] = useState<{ id: string, name: string }[]>([]);
 
-  const handleRate = (num: number) => {
-    if (num === rate) {
-      setRate(0);
-    } else {
-      setRate(num);
-    }
-  };
-
   const addMenu = () => {
     setMenuList([...menuList, { id: uuidv4(), name: '' }]);
   };
@@ -42,12 +34,8 @@ function StoreReviewPage() {
 
   const addImage = (e:React.ChangeEvent<HTMLInputElement>) => {
     const uploadImages = e.target.files!;
-    const newImageList = [...imageList];
-    for (let i = 0; i < uploadImages.length; i += 1) {
-      const currentImageUrl = URL.createObjectURL(uploadImages[i]);
-      newImageList.push(currentImageUrl);
-    }
-
+    const newImageList = [...imageList,
+      ...Array.from(uploadImages).map((file) => URL.createObjectURL(file))];
     setImageList(newImageList);
   };
 
@@ -62,7 +50,7 @@ function StoreReviewPage() {
           {storeDetail?.name}
         </div>
         <div>
-          리뷰를 남겨주시면 사자님과 다른 분들에게 도움이 됩니다.
+          리뷰를 남겨주시면 사장님과 다른 분들에게 도움이 됩니다.
           <br />
           또한, 악의적인 리뷰는 관리자에 의해 삭제될 수 있습니다.
         </div>
@@ -72,7 +60,7 @@ function StoreReviewPage() {
           <button
             key={num}
             type="button"
-            onClick={() => handleRate(num)}
+            onClick={() => setRate(num)}
             aria-label="별점 주기"
           >
             <StarIcon
