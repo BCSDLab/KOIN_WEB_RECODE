@@ -26,7 +26,7 @@ function IndexBus() {
   const setSelectedTab = useBusStore((state) => state.setSelectedTab);
   const navigate = useNavigate();
 
-  const getRedirection = (type: string): BusLink => {
+  const getBusDetail = (type: string): BusLink => {
     const links = matchToMobileType(busLink);
     return links.find((link) => link.key === type) || {
       label: '시간표 보러가기', link: '/bus', key: 'shuttle', type: BUS_TYPES[0],
@@ -88,19 +88,19 @@ function IndexBus() {
               <button
                 className={styles.cards__redirect}
                 onClick={() => {
-                  if (getRedirection(type).link.includes('https')) {
-                    window.open(getRedirection(type).link, '_blank');
+                  if (getBusDetail(type).link.includes('https')) {
+                    window.open(getBusDetail(type).link, '_blank');
                   } else {
                     const selectedTab = BUS_TYPES.find((busType) => busType.key === type);
                     if (selectedTab) {
                       setSelectedTab(selectedTab);
                     }
-                    navigate(getRedirection(type).link);
+                    navigate(getBusDetail(type).link);
                   }
                 }}
                 type="button"
               >
-                {getRedirection(type).label}
+                {getBusDetail(type).label}
                 <RightArrow />
               </button>
             </div>
