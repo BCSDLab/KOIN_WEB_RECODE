@@ -29,6 +29,19 @@
 
   &__kebab {
     position: relative;
+    background: #D9D9D9;
+    border-radius: 150px;
+    width: 25px;
+    height: 25px;
+
+    &--clicked {
+      position: relative;
+      background: #D9D9D9;
+      border-radius: 150px;
+      width: 25px;
+      height: 25px;
+      background: #727272;
+    }
   }
 }
 

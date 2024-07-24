@@ -2,9 +2,11 @@ import { Review } from 'api/store/entity';
 import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';
 import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
 import { ReactComponent as Kebab } from 'assets/svg/Review/kebab.svg';
+import { ReactComponent as ClickedKebab } from 'assets/svg/Review/clicked-kebab.svg';
 import { ReactComponent as Mine } from 'assets/svg/Review/check-mine.svg';
 import { useEffect, useState } from 'react';
 import SelectButton from 'pages/Store/StoreDetailPage/Review/components/SelectButton/SelectButton';
+import { cn } from '@bcsdlab/utils';
 import styles from './ReviewCard.module.scss';
 
 export default function ReviewCard({
@@ -35,11 +37,14 @@ export default function ReviewCard({
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            setIsKebabClick(true);
+            setIsKebabClick((prev) => !prev);
           }}
-          className={styles.top__kebab}
+          className={cn({
+            [styles.top__kebab]: !isKebabClick,
+            [styles['top__kebab--clicked']]: isKebabClick,
+          })}
         >
-          <Kebab />
+          {isKebabClick ? <ClickedKebab /> : <Kebab />}
           {isKebabClick && <SelectButton is_mine={is_mine} />}
         </button>
       </div>
