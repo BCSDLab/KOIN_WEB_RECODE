@@ -142,22 +142,21 @@ export interface ReviewListResponse extends APIResponse {
       5: number
     }
   },
-  reviews: [
-    {
-      review_id: number,
-      rating: number,
-      nick_name: string,
-      content: string,
-      image_urls: [
-        string,
-      ],
-      menu_names: [
-        string,
-      ],
-      is_mine: boolean,
-      is_modified: boolean,
-      created_at: string
-    },
-  ]
+  reviews: Review[]
+}
 
+export interface Review {
+  review_id: number,
+  rating: number,
+  nick_name: string,
+  content: string,
+  image_urls: [
+    string,
+  ],
+  menu_names: [
+    string,
+  ],
+  is_mine: boolean,
+  is_modified: boolean,
+  created_at: string
 }
