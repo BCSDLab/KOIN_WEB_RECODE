@@ -33,18 +33,6 @@ function IndexBus() {
     };
   };
 
-  const handleRedirectionClick = (link: string, key: string) => {
-    if (link.includes('https')) {
-      window.open(link, '_blank');
-    } else {
-      const selectedTab = BUS_TYPES.find((busType) => busType.key === key);
-      if (selectedTab) {
-        setSelectedTab(selectedTab);
-      }
-      navigate(link);
-    }
-  };
-
   return (
     <section className={styles.template}>
       <Link
@@ -97,7 +85,21 @@ function IndexBus() {
                 </button>
                 <span>{BUS_DIRECTIONS[Number(!matchToMobileType(toSchoolList)[idx])]}</span>
               </div>
-              <button className={styles.cards__redirect} onClick={() => handleRedirectionClick(getRedirection(type).link, type)} type="button">
+              <button
+                className={styles.cards__redirect}
+                onClick={() => {
+                  if (getRedirection(type).link.includes('https')) {
+                    window.open(getRedirection(type).link, '_blank');
+                  } else {
+                    const selectedTab = BUS_TYPES.find((busType) => busType.key === type);
+                    if (selectedTab) {
+                      setSelectedTab(selectedTab);
+                    }
+                    navigate(getRedirection(type).link);
+                  }
+                }}
+                type="button"
+              >
                 {getRedirection(type).label}
                 <RightArrow />
               </button>
