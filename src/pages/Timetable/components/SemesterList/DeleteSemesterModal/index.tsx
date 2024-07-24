@@ -1,5 +1,5 @@
 import React from 'react';
-import useGetTimetableFrame from 'pages/Timetable/hooks/useGetTimetableFrame';
+import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
 import useDeleteTimetableFrame from 'pages/Timetable/hooks/useDeleteTimetableFrame';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import styles from './DeleteSemesterModal.module.scss';
@@ -15,18 +15,15 @@ export default function DeleteSemesterModal({
   token,
   semester,
 }: DeleteSemesterModalProps) {
-  const { data: timetableFrame } = useGetTimetableFrame(token, semester);
+  const { data: timetableFrame } = useTimetableFrameList(token, semester);
   const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, semester);
   const deleteSemester = () => {
     if (timetableFrame) {
       console.log(timetableFrame);
       timetableFrame.map((frame) => (
-        !frame.is_main && (
-          deleteTimetableFrame(frame.id)
-        )
+        deleteTimetableFrame(frame.id)
       ));
     }
-    console.log(timetableFrame);
   };
 
   return (

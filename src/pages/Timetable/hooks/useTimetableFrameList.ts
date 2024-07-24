@@ -1,12 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { timetable } from 'api';
 
-const MY_TIMETABLE_FRAME_KEY = 'my_timetable_frame';
+export const TIMETABLE_FRAME_KEY = 'timetable_frame';
 
-function useGetTimetableFrame(token: string, semester: string) {
+function useTimetableFrameList(token: string, semester: string) {
   const { data } = useSuspenseQuery(
     {
-      queryKey: [MY_TIMETABLE_FRAME_KEY + semester],
+      queryKey: [TIMETABLE_FRAME_KEY + semester],
       queryFn: () => (token ? timetable.getTimetableFrame(token, semester) : null),
     },
   );
@@ -14,4 +14,4 @@ function useGetTimetableFrame(token: string, semester: string) {
   return { data };
 }
 
-export default useGetTimetableFrame;
+export default useTimetableFrameList;

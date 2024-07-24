@@ -10,7 +10,8 @@ import {
   VersionType,
   SemesterCheckResponse,
   AddTimetableFrameRequest,
-  TimetableFrameResponse,
+  UpdateTimetableFrameRequest,
+  TimetableFrameListResponse,
   AddTimetableFrameResponse,
   DeleteTimetableFrameResponse,
 } from './entity';
@@ -119,7 +120,7 @@ export class SemesterCheck<R extends SemesterCheckResponse> implements APIReques
   constructor(public authorization: string) {}
 }
 
-export class GetTimetableFrame<R extends TimetableFrameResponse> implements APIRequest<R> {
+export class TimetableFrameList<R extends TimetableFrameListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/v2/timetables/frames';
@@ -149,6 +150,25 @@ export class AddTimetableFrame<R extends AddTimetableFrameResponse> implements A
   auth = true;
 
   constructor(public data: AddTimetableFrameRequest, public authorization: string) {}
+}
+
+export class UpdateTimetableFrame<R extends TimetableFrameListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/v2/timetables/frame/:id';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public id: number,
+    public data: UpdateTimetableFrameRequest,
+  ) {
+    this.path = `/v2/timetables/frame/${id}`;
+    this.data = data;
+  }
 }
 
 export class DeleteTimetableFrame<R extends DeleteTimetableFrameResponse> implements APIRequest<R> {

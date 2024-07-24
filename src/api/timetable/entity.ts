@@ -57,12 +57,17 @@ export interface SemesterCheckResponse extends APIResponse {
   semesters: string[];
 }
 
-export type TimetableFrameResponse = TimetableFrameInfo[];
+export type TimetableFrameListResponse = TimetableFrameInfo[];
 
 export type AddTimetableFrameResponse = TimetableFrameInfo;
 
 export interface AddTimetableFrameRequest {
   semester: string;
+}
+
+export interface UpdateTimetableFrameRequest {
+  name: string,
+  is_main: boolean,
 }
 
 export interface DeleteTimetableFrameResponse extends APIResponse { }
