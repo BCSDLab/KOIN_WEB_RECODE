@@ -2,9 +2,11 @@
 
 .form-container {
   display: flex;
+  position: relative;
   flex-direction: column;
   gap: 10px;
   width: 613px;
+  height: calc(100% - 65px);
 }
 
 .require-mark {
@@ -211,4 +213,17 @@
     font-weight: 400;
     line-height: 160%;
   }
+}
+
+.submit-button {
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+  left: 400px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 20px;
+  height: 42px;
+  border-radius: 4px;
+  background-color: #E1E1E1;
 }

@@ -4,13 +4,13 @@ import CustomLectureDefaultInput from './CustomLectureDefaultInput';
 import CustomLectureLocationTimeSetting from './CustomLectureLocationTimeSetting';
 
 function CustomLecture() {
-  const handleAddLecture = () => {
-
+  const handleAddLecture = (e: any) => {
+    e.preventDefault();
   };
 
   // 해당 파트의 api 명세가 어떻게 나오느냐에 따라 html 구조의 변동이 있을 수 있을 것 같습니다.
   return (
-    <form onSubmit={handleAddLecture} className={styles['form-container']}>
+    <form onSubmit={(e) => handleAddLecture(e)} className={styles['form-container']}>
       <CustomLectureDefaultInput title="수업명" placeholder="수업명을 입력하세요." require />
       <CustomLectureDefaultInput title="교수명" placeholder="교수명을 입력하세요." require={false} />
       <CustomLectureLocationTimeSetting />
@@ -18,6 +18,7 @@ function CustomLecture() {
         <span>시간 및 장소 추가</span>
         <AddIcon />
       </button>
+      <button type="submit" className={styles['submit-button']}>일정 저장</button>
     </form>
   );
 }
