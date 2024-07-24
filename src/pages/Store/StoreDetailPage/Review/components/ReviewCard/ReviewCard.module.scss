@@ -1,21 +1,26 @@
 @use "src/utils/scss/media";
 
-.container {
+%container {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5vh;
   padding: 2vh 5%;
   box-sizing: border-box;
+}
+
+.container {
+  @extend %container;
 
   &--mine {
-    @extend .container;
-    background: #175C8E08;
+    @extend %container;
+
+    background: #175c8e08;
   }
 }
 
 .mine {
-  color: #175C8E;
+  color: #175c8e;
   font-size: 14px;
   display: flex;
   gap: 5px;
@@ -29,14 +34,13 @@
 
   &__kebab {
     position: relative;
-    background: #D9D9D9;
+    background: #d9d9d9;
     border-radius: 150px;
     width: 25px;
     height: 25px;
 
     &--clicked {
       position: relative;
-      background: #D9D9D9;
       border-radius: 150px;
       width: 25px;
       height: 25px;
@@ -57,7 +61,7 @@
 }
 
 .created {
-  color: #8E8E8E;
+  color: #8e8e8e;
   font-size: 12px;
 }
 
@@ -100,8 +104,8 @@
   }
 
   &__menu {
-    border: 1px solid #6DBBDD;
-    color: #6DBBDD;
+    border: 1px solid #6dbbdd;
+    color: #6dbbdd;
     border-radius: 5px;
     padding: 5px 10px;
     font-size: 14px;
