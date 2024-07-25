@@ -4,7 +4,7 @@ import { ReactComponent as RightArrow } from 'assets/svg/right-angle-bracket.svg
 import { ReactComponent as InformationIcon } from 'assets/svg/information.svg';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import { createPortal } from 'react-dom';
-import CafeteriaInfo from 'pages/Cafeteria/PCCafeteriaPage/components/CafeteriaInfo';
+import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { useEffect } from 'react';
 import styles from './DateNavigator.module.scss';

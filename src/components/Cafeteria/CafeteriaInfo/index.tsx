@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-grey.svg';
+import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import { Opens } from 'api/coopshop/entity';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './CafeteriaInfo.module.scss';
 
 function ScheduleTable({ title, schedules }: { title: string, schedules: Opens[] }) {
@@ -43,6 +45,7 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
   const weekday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '평일');
   const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '주말');
   const backgroundRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery();
 
   useEffect(() => {
     const handleEscKeyDown = (e: KeyboardEvent) => {
@@ -65,6 +68,23 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
   return (
     <div className={styles.background} aria-hidden ref={backgroundRef}>
       <div className={styles.box}>
+        {isMobile && (
+          <>
+            <div className={styles.division} />
+            <div className={styles['mobile-header']}>
+              <button
+                type="button"
+                aria-label="닫기 버튼"
+                onClick={closePopup}
+              >
+                <BlackArrowBackIcon />
+              </button>
+              <span className={styles['mobile-header__title']}>
+                학생식당정보
+              </span>
+            </div>
+          </>
+        )}
         <div className={styles.header}>
           <div className={styles.header__title}>
             <span className={styles.header__main}>
@@ -94,6 +114,14 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
 
         <ScheduleTable title="평일" schedules={weekday} />
         <ScheduleTable title="주말" schedules={weekend} />
+
+        {isMobile && (
+          <div className={styles.update}>
+            {cafeteriaInfo.updated_at.split('-').join('.')}
+            &nbsp;
+            업데이트
+          </div>
+        )}
       </div>
     </div>
   );

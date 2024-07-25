@@ -1,6 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import { Suspense, useEffect, useState } from 'react';
 import { useHeaderButton } from 'utils/hooks/useHeaderButton';
+import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
@@ -20,18 +21,15 @@ export default function MobileCafeteriaPage({
 }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
+  const [isCafeteriaInfoOpen, setIsCafeteriaInfoOpen] = useState(false);
   const { setButtonContent } = useHeaderButton();
-
-  const handleHeaderButtonClick = () => {
-    console.log('a');
-  };
 
   useEffect(() => {
     setButtonContent(
       <button
         type="button"
         aria-label="학생식당 운영 정보 안내"
-        onClick={handleHeaderButtonClick}
+        onClick={() => setIsCafeteriaInfoOpen(true)}
       >
         <InformationIcon />
       </button>,
@@ -44,6 +42,18 @@ export default function MobileCafeteriaPage({
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[dining] });
     setDiningType(dining);
   };
+
+  useEffect(() => {
+    if (isCafeteriaInfoOpen) {
+      document.body.style.cssText = 'overflow: hidden;';
+    } else {
+      document.body.style.cssText = '';
+    }
+
+    return () => {
+      document.body.style.cssText = '';
+    };
+  }, [isCafeteriaInfoOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -93,6 +103,15 @@ export default function MobileCafeteriaPage({
           <MobileDiningBlocks diningType={diningType} />
         </Suspense>
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
+      </div>
+
+      <div
+        className={cn({
+          [styles['cafeteria-info']]: true,
+          [styles['cafeteria-info--open']]: isCafeteriaInfoOpen,
+        })}
+      >
+        <CafeteriaInfo closePopup={() => setIsCafeteriaInfoOpen(false)} />
       </div>
     </>
   );

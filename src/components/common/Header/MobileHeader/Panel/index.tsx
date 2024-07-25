@@ -71,9 +71,9 @@ export default function Panel({ openModal }: PanelProps) {
     >
       <div className={styles.top}>
         <button
-          className={styles.top__close}
           type="button"
           aria-label="닫기 버튼"
+          className={styles.top__close}
           onClick={closeSidebar}
         >
           <BlackArrowBackIcon />
