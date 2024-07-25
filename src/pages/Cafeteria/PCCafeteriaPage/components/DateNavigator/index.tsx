@@ -51,7 +51,7 @@ export default function DateNavigator() {
   } = useDatePicker();
   const [isPopupOpen, openPopup, closePopup] = useBooleanState(false);
 
-  const thisWeek = generateWeek(currentDate);
+  const thisWeek = generateWeek(currentDate());
 
   useEffect(() => {
     const body = document.querySelector('body');
@@ -77,7 +77,7 @@ export default function DateNavigator() {
           <button
             className={cn({
               [styles.date__button]: true,
-              [styles['date__button--today']]: checkToday(currentDate),
+              [styles['date__button--today']]: checkToday(currentDate()),
             })}
             type="button"
             aria-label="오늘 날짜"
@@ -110,7 +110,7 @@ export default function DateNavigator() {
             key={dayInfo.weekDay}
             className={cn({
               [styles['week__one-day']]: true,
-              [styles['week__one-day--selected']]: dayInfo.date.toDateString() === currentDate.toDateString(),
+              [styles['week__one-day--selected']]: dayInfo.date.toDateString() === currentDate().toDateString(),
             })}
             type="button"
             onClick={() => setDate(dayInfo.date)}

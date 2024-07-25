@@ -8,18 +8,17 @@
 }
 
 .header {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 
   &__title {
-    font-family: NanumSquare, serif;
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 19.29px;
-    text-align: left;
     color: #175c8e;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
 
     @include media.media-breakpoint(mobile) {
       font-size: 15px;
@@ -50,6 +49,42 @@
     @include media.media-breakpoint(mobile) {
       display: none;
     }
+  }
+
+  &__tooltip {
+    z-index: 10;
+    position: absolute;
+    top: -120px;
+    left: 64px;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__tooltip-content {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    color: #4b4b4b;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+  }
+
+  &__tooltip-close {
+    position: absolute;
+    bottom: 36px;
+    right: 24px;
+    display: flex;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background: #e1e1e1;
+  }
+
+  &__tooltip-image {
+    width: 332px;
   }
 }
 

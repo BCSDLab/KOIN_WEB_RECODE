@@ -9,6 +9,7 @@ import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/useLogger';
+import { DiningTime } from 'utils/ts/cafeteria';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -55,9 +56,9 @@ export default function PCCafeteriaPage({
   const { currentDate, checkToday } = useDatePicker();
   const wrapperRef = useRef(null);
   const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
-  useOutsideAlerter({ ref: wrapperRef, closeFunction: closeDropdown });
-
   const logger = useLogger();
+
+  const diningTime = new DiningTime();
   const handleDiningTypeChange = (value: DiningType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[value] });
     setDiningType(value);
@@ -65,14 +66,23 @@ export default function PCCafeteriaPage({
   };
 
   const 지난주일요일 = getWeekAgo();
-  const isThisWeek = 지난주일요일 < currentDate;
+  const isThisWeek = 지난주일요일 < currentDate();
 
+  const formatDiningDate = () => {
+    if (checkToday(currentDate())) {
+      return diningTime.isTodayDining() ? '오늘' : '내일';
+    }
+
+    return DAYS[currentDate().getDay()];
+  };
+
+  useOutsideAlerter({ ref: wrapperRef, closeFunction: closeDropdown });
   useScrollToTop();
 
   return (
     <div className={styles.container}>
       <div className={styles['type-selector']}>
-        {checkToday(currentDate) ? '오늘' : DAYS[currentDate.getDay()] }
+        {formatDiningDate()}
         <div className={styles['dropdown-wrapper']}>
           <button
             id="dropdown-button"
