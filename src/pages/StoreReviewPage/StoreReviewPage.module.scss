@@ -1,0 +1,233 @@
+@use "src/utils/scss/media";
+
+.form {
+  width: 1131px;
+  margin: 63px auto 0;
+
+  @include media.media-breakpoint(mobile) {
+    width: 90%;
+    margin-top: 30px;
+  }
+
+  &__name {
+    div:nth-child(1) {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 15px;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 20px;
+      }
+    }
+
+    div:nth-child(2) {
+      font-size: 18px;
+      color: #8e8e8e;
+      line-height: 25px;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+      }
+    }
+  }
+
+  &__rate {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 30px 0;
+    border-bottom: 1px solid #eee;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+    }
+  }
+
+  &__description {
+    font-size: 20px;
+    color: #4b4b4b;
+    margin: 40px 0;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+      margin: 25px 0;
+    }
+  }
+
+  &__button {
+    margin-bottom: 50px;
+    width: 100%;
+    height: 60px;
+    background-color: #f5f5f5;
+    font-size: 18px;
+    font-weight: 600;
+    color: #4b4b4b;
+    border-radius: 8px;
+
+    &--active {
+      color: #fff;
+      background-color: #175c8e;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      height: 48px;
+    }
+  }
+}
+
+.template {
+  margin-bottom: 40px;
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+
+    &__count {
+      font-size: 16px;
+      font-weight: 400;
+      color: #8e8e8e;
+
+      &--active {
+        color: #f7941e;
+      }
+    }
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+
+      &__count {
+        font-size: 12px;
+      }
+    }
+  }
+
+  &__description {
+    font-size: 16px;
+    color: #8e8e8e;
+    margin-bottom: 10px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+    }
+  }
+
+  &__textarea {
+    resize: none;
+    width: 100%;
+    height: 200px;
+    border: 1px solid #cacaca;
+    border-radius: 4px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+  }
+
+  &__images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    align-items: center;
+    height: 150px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    margin-bottom: 10px;
+
+    li {
+      position: relative;
+
+      img {
+        height: 150px;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      button {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+      }
+    }
+  }
+
+  &__button,
+  &__upload-image {
+    width: 100%;
+    height: 60px;
+    background-color: #f5f5f5;
+    font-size: 18px;
+    font-weight: 600;
+    color: #4b4b4b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    input {
+      display: none;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      height: 46px;
+    }
+  }
+
+  &__list {
+    width: 100%;
+    height: 200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-rows: repeat(auto-fill, 50px);
+    gap: 20px;
+    justify-items: center;
+    margin-top: 20px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      grid-template-rows: repeat(auto-fill, 40px);
+      height: 150px;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    li {
+      display: flex;
+      height: 50px;
+      gap: 5px;
+
+      @include media.media-breakpoint(mobile) {
+        height: 40px;
+      }
+
+      input {
+        width: 300px;
+        border: 1px solid #e1e1e1;
+        box-sizing: border-box;
+        border-radius: 4px;
+        padding-left: 10px;
+
+        &::placeholder {
+          font-size: 16px;
+          color: #cacaca;
+
+          @include media.media-breakpoint(mobile) {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}
