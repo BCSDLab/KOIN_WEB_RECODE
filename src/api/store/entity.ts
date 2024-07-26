@@ -146,6 +146,7 @@ export interface ReviewListResponse extends APIResponse {
 }
 
 export interface Review {
+  shop_id: string,
   review_id: number,
   rating: number,
   nick_name: string,

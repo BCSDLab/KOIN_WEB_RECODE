@@ -80,7 +80,7 @@ function App() {
         </Route>
         <Route path="/" element={<BoardPage />}>
           <Route path="review/:id" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 상점 리뷰" element={<StoreReviewPage />} />} />} />
-          <Route path="/review/:id/report" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 리뷰 신고" element={<ReviewReportingPage />} />} />} />
+          <Route path="/shops/:shopid/reviews/:reviewid/reports" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 리뷰 신고" element={<ReviewReportingPage />} />} />} />
         </Route>
         <Route path="auth" element={<AuthPage />}>
           <Route path="modifyInfo" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보 변경" element={<ModifyInfoPage />} />} />} />

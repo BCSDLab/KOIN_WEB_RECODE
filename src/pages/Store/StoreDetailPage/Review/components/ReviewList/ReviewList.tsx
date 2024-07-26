@@ -27,6 +27,7 @@ export default function ReviewList() {
   return (
     <div className={styles.container}>
       {reviews.map((review) => (
+        param.id && (
         <ReviewCard
           key={review.review_id}
           rating={review.rating}
@@ -38,7 +39,9 @@ export default function ReviewList() {
           is_modified={review.is_modified}
           created_at={review.created_at}
           review_id={review.review_id}
+          shop_id={param.id}
         />
+        )
       ))}
       <div ref={endOfPage} />
     </div>
