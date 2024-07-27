@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import styles from './ImageModal.module.scss';
 import useModalKeyboardEvent from './hooks/useModalKeyboardEvent';
@@ -14,8 +14,8 @@ function ImageModal({
   imageIndex,
   onClose,
 }: ImageModalProps) {
-  const [selectedIndex, setSelectedIndex] = React.useState(imageIndex);
-  const onChangeImageIndex = React.useCallback((move: number) => {
+  const [selectedIndex, setSelectedIndex] = useState(imageIndex);
+  const onChangeImageIndex = useCallback((move: number) => {
     if (move < 0) {
       return (selectedIndex !== 0 && (
         setSelectedIndex(selectedIndex + move)
@@ -29,7 +29,7 @@ function ImageModal({
 
   useModalKeyboardEvent({ onClose, onChangeImageIndex });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const body = document.querySelector('body');
     body!.style.overflow = 'hidden';
 
