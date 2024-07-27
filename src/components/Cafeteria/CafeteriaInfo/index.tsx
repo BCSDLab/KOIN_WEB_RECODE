@@ -6,7 +6,12 @@ import { Opens } from 'api/coopshop/entity';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './CafeteriaInfo.module.scss';
 
-function ScheduleTable({ title, schedules }: { title: string, schedules: Opens[] }) {
+interface ScheduleTableProps {
+  title: string;
+  schedules: Opens[];
+}
+
+function ScheduleTable({ title, schedules }: ScheduleTableProps) {
   return (
     <div className={styles.table}>
       <span className={styles.table__title}>

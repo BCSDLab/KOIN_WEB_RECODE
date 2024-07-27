@@ -5,9 +5,9 @@ import setPostCreateDate from 'utils/ts/setPostCreateDate';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import styles from './PostList.module.scss';
 
-type PostListProps = {
+interface PostListProps {
   articles: ArticleList[] | undefined
-};
+}
 
 function PostList(props: PostListProps) {
   const { articles } = props;
