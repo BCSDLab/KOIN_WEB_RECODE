@@ -1,4 +1,3 @@
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
 import { Dining, DiningType } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/useModalPortal';
@@ -10,6 +9,7 @@ import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
+import { useClose } from 'utils/hooks/useClose';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
@@ -18,7 +18,10 @@ interface MobileDiningBlocksProps {
 
 export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksProps) {
   const portalManager = useModalPortal();
-  const { target } = useOnClickOutside<HTMLImageElement>(portalManager.close);
+  const handleClose = () => {
+    portalManager.close();
+  };
+  const { backgroundRef } = useClose({ closeFunction: handleClose });
 
   const { currentDate } = useDatePicker();
   const { dinings } = useDinings(currentDate());
@@ -34,11 +37,16 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
       });
 
       portalManager.open((portalOption: Portal) => (
-        <div className={styles.photo}>
-          <div className={styles.photo__close}>
+        <div className={styles.photo} ref={backgroundRef}>
+          <button
+            type="button"
+            aria-label="닫기"
+            className={styles.photo__close}
+            onClick={handleClose}
+          >
             <CloseIcon onClick={portalOption.close} />
-          </div>
-          <img src={dining.image_url as string} alt="mealDetail" ref={target} />
+          </button>
+          <img src={dining.image_url as string} alt="mealDetail" />
         </div>
       ));
     }

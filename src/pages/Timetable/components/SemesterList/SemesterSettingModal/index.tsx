@@ -4,6 +4,7 @@ import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { ReactComponent as CheckedIcon } from 'assets/svg/checked-icon.svg';
 import { ReactComponent as NotCheckedIcon } from 'assets/svg/not-checked-icon.svg';
 import Listbox from 'components/TimetablePage/Listbox';
+import { useClose } from 'utils/hooks/useClose';
 import styles from './SemesterSettingModal.module.scss';
 
 export interface SemesterSettingModalProps {
@@ -14,11 +15,14 @@ export default function SemesterSettingModal({
   onClose,
 }: SemesterSettingModalProps) {
   const [isChecked, setIsChecked] = React.useState(false);
+  const { backgroundRef } = useClose({ closeFunction: onClose });
+
   const toggleIsChecked = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (isChecked) setIsChecked(false);
     else setIsChecked(true);
   };
+
   /* 학기 API 완성 시 수정 예정 */
   const year = [{ label: '2024년도', value: '2024년도' },
     { label: '2023년도', value: '2023년도' },
@@ -42,7 +46,7 @@ export default function SemesterSettingModal({
     setSemesterValue(target?.value);
   };
   return (
-    <div className={styles.background} aria-hidden>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>학기 설정</span>

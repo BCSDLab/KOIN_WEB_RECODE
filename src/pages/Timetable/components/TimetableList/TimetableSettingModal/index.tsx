@@ -3,6 +3,7 @@ import { cn } from '@bcsdlab/utils';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { ReactComponent as CheckedIcon } from 'assets/svg/checked-icon.svg';
 import { ReactComponent as NotCheckedIcon } from 'assets/svg/not-checked-icon.svg';
+import { useClose } from 'utils/hooks/useClose';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
@@ -13,12 +14,15 @@ export default function TimetableSettingModal({
   onClose,
 }: TimetableSettingModalProps) {
   const [isChecked, setIsChecked] = React.useState(false);
+  const { backgroundRef } = useClose({ closeFunction: onClose });
+
   const toggleIsChecked = () => {
     if (isChecked) setIsChecked(false);
     else setIsChecked(true);
   };
+
   return (
-    <div className={styles.background} aria-hidden>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>시간표 설정</span>
