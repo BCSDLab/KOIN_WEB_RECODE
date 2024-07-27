@@ -1,5 +1,6 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { useEffect } from 'react';
+import { useClose } from 'utils/hooks/useClose';
 import styles from './AlertModal.module.scss';
 
 interface AlertModalProps {
@@ -12,32 +13,17 @@ interface AlertModalProps {
 export default function AlertModal({
   title, description, onClose, onConfirm,
 }: AlertModalProps) {
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (target.classList.contains(styles.background)) {
-        onClose();
-      }
-    };
+  const { backgroundRef } = useClose({ closeFunction: onClose });
 
-    const handleESCClick = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
+  useEffect(() => {
     const body = document.querySelector('body');
     body!.style.overflow = 'hidden';
-    document.addEventListener('click', handleOutsideClick);
-    document.addEventListener('keydown', handleESCClick);
-    return () => {
-      body!.style.overflow = 'auto';
-      document.removeEventListener('click', handleOutsideClick);
-      document.removeEventListener('keydown', handleESCClick);
-    };
-  }, [onClose]);
+
+    return () => { body!.style.overflow = 'auto'; };
+  }, []);
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.modal}>
         <div className={styles.modal__header}>
           <h1 className={styles.modal__title}>{title}</h1>

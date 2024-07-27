@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-grey.svg';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import { Opens } from 'api/coopshop/entity';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
+import { useClose } from 'utils/hooks/useClose';
 import styles from './CafeteriaInfo.module.scss';
 
 interface ScheduleTableProps {
@@ -49,26 +49,8 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
   const { cafeteriaInfo } = useCoopshopCafeteria();
   const weekday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '평일');
   const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '주말');
-  const backgroundRef = useRef<HTMLDivElement>(null);
+  const { backgroundRef } = useClose({ closeFunction: closePopup });
   const isMobile = useMediaQuery();
-
-  useEffect(() => {
-    const handleEscKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closePopup();
-    };
-
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (e.target === backgroundRef.current) closePopup();
-    };
-
-    window.addEventListener('keydown', (e) => handleEscKeyDown(e));
-    window.addEventListener('click', (e) => handleOutsideClick(e));
-
-    return () => {
-      window.removeEventListener('keydown', (e) => handleEscKeyDown(e));
-      window.addEventListener('click', (e) => handleOutsideClick(e));
-    };
-  }, [closePopup]);
 
   return (
     <div className={styles.background} aria-hidden ref={backgroundRef}>

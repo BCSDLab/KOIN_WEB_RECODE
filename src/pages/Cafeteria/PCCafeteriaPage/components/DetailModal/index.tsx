@@ -1,6 +1,6 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
 import { Dining } from 'interfaces/Cafeteria';
-import { useEffect } from 'react';
+import { useClose } from 'utils/hooks/useClose';
 import styles from './DetailModal.module.scss';
 
 interface DetailModalProps {
@@ -9,38 +9,14 @@ interface DetailModalProps {
 }
 
 export default function DetailModal({ dining, closeModal }: DetailModalProps): JSX.Element {
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target !== e.currentTarget) return;
-    closeModal();
-  };
-
-  const handleModalClose = () => {
-    closeModal();
-  };
-
-  const handleEscapeKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      closeModal();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleEscapeKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleEscapeKeyDown);
-    };
-  });
+  const { backgroundRef } = useClose({ closeFunction: closeModal });
 
   if (!dining) return <div />;
 
   return (
     <div
       className={styles.overlay}
-      role="button"
-      tabIndex={0}
-      onClick={handleOverlayClick}
-      onKeyDown={handleEscapeKeyDown}
+      ref={backgroundRef}
     >
       <div className={styles.modal}>
         <div className={styles['modal-header']}>
@@ -58,7 +34,7 @@ export default function DetailModal({ dining, closeModal }: DetailModalProps): J
             type="button"
             aria-label="닫기"
             className={styles['modal-header__close']}
-            onClick={handleModalClose}
+            onClick={() => closeModal()}
           >
             <CloseIcon />
           </button>

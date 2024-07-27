@@ -1,5 +1,5 @@
 import { cn, sha256 } from '@bcsdlab/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { ReactComponent as BlindIcon } from 'assets/svg/blind-icon.svg';
 import { ReactComponent as ShowIcon } from 'assets/svg/show-icon.svg';
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { useAuthenticationActions } from 'utils/zustand/authentication';
+import { useClose } from 'utils/hooks/useClose';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -22,7 +23,7 @@ export default function AuthenticateUserModal({
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
-  const backgroundRef = useRef<HTMLDivElement>(null);
+  const { backgroundRef } = useClose({ closeFunction: onClose });
 
   const isMobile = useMediaQuery();
   const { updateAuthentication } = useAuthenticationActions();
@@ -59,28 +60,6 @@ export default function AuthenticateUserModal({
   window.addEventListener('unload', () => {
     updateAuthentication(false);
   });
-
-  useEffect(() => {
-    const handleEscKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (e.target === backgroundRef.current) {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', (e) => handleEscKeyDown(e));
-    window.addEventListener('click', (e) => handleOutsideClick(e));
-
-    return () => {
-      window.removeEventListener('keydown', (e) => handleEscKeyDown(e));
-      window.addEventListener('click', (e) => handleOutsideClick(e));
-    };
-  }, [onClose]);
 
   return (
     <div className={styles.background} aria-hidden ref={backgroundRef}>
