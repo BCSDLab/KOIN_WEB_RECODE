@@ -14,10 +14,7 @@ export default function DetailModal({ dining, closeModal }: DetailModalProps): J
   if (!dining) return <div />;
 
   return (
-    <div
-      className={styles.overlay}
-      ref={backgroundRef}
-    >
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.modal}>
         <div className={styles['modal-header']}>
           <div className={styles['modal-header__place-chip']}>

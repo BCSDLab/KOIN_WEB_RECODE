@@ -11,6 +11,7 @@ export const useClose = ({
   enableEscKey = true,
   enableOutsideClick = true,
 }: UseCloseOptions) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -19,7 +20,17 @@ export const useClose = ({
     };
 
     const handleOutsideClick = (e: MouseEvent) => {
-      if (enableOutsideClick && e.target === backgroundRef.current) closeFunction();
+      if (!enableOutsideClick) return;
+
+      const clickedElement = e.target as Node;
+      const container = containerRef.current;
+      const background = backgroundRef.current;
+
+      if (container && !container.contains(clickedElement)) {
+        closeFunction();
+      } else if (background && background === clickedElement) {
+        closeFunction();
+      }
     };
 
     if (enableEscKey) {
@@ -27,7 +38,7 @@ export const useClose = ({
     }
 
     if (enableOutsideClick) {
-      window.addEventListener('click', handleOutsideClick);
+      document.addEventListener('mousedown', handleOutsideClick);
     }
 
     return () => {
@@ -35,10 +46,10 @@ export const useClose = ({
         window.removeEventListener('keydown', handleEscKeyDown);
       }
       if (enableOutsideClick) {
-        window.removeEventListener('click', handleOutsideClick);
+        document.removeEventListener('mousedown', handleOutsideClick);
       }
     };
   }, [closeFunction, enableEscKey, enableOutsideClick]);
 
-  return { backgroundRef };
+  return { containerRef, backgroundRef };
 };

@@ -60,10 +60,7 @@ function Listbox({
   const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
   const styleClasses = version !== 'default' ? newStyles : styles;
   return (
-    <div
-      className={styleClasses.select}
-      ref={target}
-    >
+    <div className={styleClasses.select} ref={target}>
       <button
         type="button"
         onClick={handleToggleListBox}
