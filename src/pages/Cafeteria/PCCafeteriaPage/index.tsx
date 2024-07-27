@@ -1,6 +1,4 @@
-import {
-  RefObject, Suspense, useEffect, useRef,
-} from 'react';
+import { Suspense } from 'react';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
 import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
@@ -10,6 +8,7 @@ import { DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/useLogger';
 import { DiningTime } from 'utils/ts/cafeteria';
+import { useClose } from 'utils/hooks/useClose';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -24,27 +23,6 @@ const getWeekAgo = () => {
   return twoWeeksAgoSunday;
 };
 
-const useOutsideAlerter = (
-  { ref, closeFunction }: { ref: RefObject<HTMLElement>, closeFunction: () => void },
-) => {
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        ref.current
-        && !ref.current.contains(event.target as Node)
-        && !((event.target as HTMLElement).id === 'dropdown-button')
-      ) {
-        closeFunction();
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref, closeFunction]);
-};
-
 interface PCCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
@@ -54,8 +32,8 @@ export default function PCCafeteriaPage({
   diningType, setDiningType,
 }: PCCafeteriaPageProps) {
   const { currentDate, checkToday } = useDatePicker();
-  const wrapperRef = useRef(null);
   const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
+  const { containerRef } = useClose({ closeFunction: closeDropdown });
   const logger = useLogger();
 
   const diningTime = new DiningTime();
@@ -76,7 +54,6 @@ export default function PCCafeteriaPage({
     return DAYS[currentDate().getDay()];
   };
 
-  useOutsideAlerter({ ref: wrapperRef, closeFunction: closeDropdown });
   useScrollToTop();
 
   return (
@@ -94,10 +71,7 @@ export default function PCCafeteriaPage({
             {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
           </button>
           {dropdownOpen && (
-            <div
-              className={styles.dropdown__box}
-              ref={wrapperRef}
-            >
+            <div className={styles.dropdown__box} ref={containerRef}>
               {DINING_TYPES.map((type: DiningType) => (
                 <button
                   key={type}
