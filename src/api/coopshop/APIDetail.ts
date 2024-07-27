@@ -1,4 +1,4 @@
-import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { CoopshopResponse } from './entity';
 
 // /coopshop/1: 학생식당

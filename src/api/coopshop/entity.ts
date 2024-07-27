@@ -1,4 +1,4 @@
-import { type APIResponse } from 'interfaces/APIResponse';
+import { APIResponse } from 'interfaces/APIResponse';
 
 export type Semester = '학기' | '하계방학' | '동계방학';
 

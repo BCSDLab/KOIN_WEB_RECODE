@@ -1,4 +1,4 @@
-import { type APIResponse } from 'interfaces/APIResponse';
+import { APIResponse } from 'interfaces/APIResponse';
 
 export type DiningType = 'BREAKFAST' | 'LUNCH' | 'DINNER';
 
