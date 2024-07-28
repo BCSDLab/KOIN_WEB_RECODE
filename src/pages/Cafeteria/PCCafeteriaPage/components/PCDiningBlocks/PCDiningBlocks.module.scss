@@ -88,17 +88,16 @@
 
     &:hover {
       border-radius: 8px;
-      background: var(--Neutral-100, #F5F5F5);
+      background: #f5f5f5;
     }
 
     &__count {
-      color: var(--Neutral-600, #4B4B4B);
-
       font-family: Pretendard, sans-serif;
       font-size: 12px;
       font-style: normal;
       font-weight: 400;
       line-height: 160%; /* 19.2px */
+      color: #4b4b4b;
     }
   }
 }
