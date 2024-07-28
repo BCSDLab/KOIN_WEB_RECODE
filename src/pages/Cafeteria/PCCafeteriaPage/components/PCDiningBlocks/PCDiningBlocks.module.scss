@@ -77,4 +77,28 @@
     font-weight: 400;
     line-height: 19.09px;
   }
+
+  &__like {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    padding: 4px;
+    gap: 4px;
+    margin-inline: auto 0;
+
+    &:hover {
+      border-radius: 8px;
+      background: var(--Neutral-100, #F5F5F5);
+    }
+
+    &__count {
+      color: var(--Neutral-600, #4B4B4B);
+
+      font-family: Pretendard, sans-serif;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 160%; /* 19.2px */
+    }
+  }
 }
