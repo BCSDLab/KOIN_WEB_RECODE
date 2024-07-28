@@ -8,6 +8,7 @@ import useUpdateTimetableFrame from 'pages/Timetable/hooks/useUpdateTimetableFra
 import useDeleteTimetableFrame from 'pages/Timetable/hooks/useDeleteTimetableFrame';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useSemester } from 'utils/zustand/semester';
+import useToast from 'components/common/Toast/useToast';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
@@ -23,6 +24,7 @@ export default function TimetableSettingModal({
 }: TimetableSettingModalProps) {
   const token = useTokenState();
   const semester = useSemester();
+  const toast = useToast();
   const toggleIsChecked = () => {
     if (focusFrame.is_main) setFocusFrame({ ...focusFrame, is_main: false });
     else setFocusFrame({ ...focusFrame, is_main: true });
@@ -34,11 +36,16 @@ export default function TimetableSettingModal({
     updateFrameInfo(submitFrame);
     onClose();
   };
+  const recoverFrame = () => {
+  // v2/timetables/lecture api 연결 후 시간표 프레임 추가와 강의 정보 추가로 recover 구현 예정.
+  };
   const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, semester);
-  const onDelete = () => {
+  const onDelete = (frame: TimetableFrameInfo) => {
+    toast.open({ message: `선택하신 [${frame.timetable_name}]이 삭제되었습니다.`, recoverMessage: `[${frame.timetable_name}]이 복구되었습니다.`, onRecover: recoverFrame });
     deleteTimetableFrame(focusFrame.id);
     onClose();
   };
+
   return (
     <div className={styles.background} aria-hidden>
       <div className={styles.container}>
@@ -70,7 +77,7 @@ export default function TimetableSettingModal({
             className={cn({
               [styles['container__button--delete']]: true,
             })}
-            onClick={onDelete}
+            onClick={() => onDelete(focusFrame)}
           >
             삭제하기
           </button>

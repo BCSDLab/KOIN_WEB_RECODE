@@ -4,12 +4,14 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import TimetableSettingModal from 'pages/Timetable/components/TimetableList/TimetableSettingModal';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
+import { ReactComponent as BlueSettingIcon } from 'assets/svg/setting-icon-blue.svg';
 import SemesterListbox from 'pages/Timetable/components/SemesterList';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/useTokenState';
 import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useAddTimetableFrame from 'pages/Timetable/hooks/useAddTimetableFrame';
+import { cn } from '@bcsdlab/utils';
 import styles from './TimetableList.module.scss';
 
 export default function TimetableList() {
@@ -19,30 +21,55 @@ export default function TimetableList() {
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
-  const handleOpenModal = (frame: TimetableFrameInfo) => {
+  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(
+    timetableFrameList
+      ? timetableFrameList.findIndex((frame) => frame.is_main === true)
+      : 0,
+  );
+  const selectFrame = (index: number) => {
+    setCurrentFrameIndex(index);
+  };
+  const handleOpenModal = (e: React.MouseEvent<HTMLButtonElement>, frame: TimetableFrameInfo) => {
+    e.stopPropagation();
     setFocusFrame(frame);
     openModal();
   };
+
+  React.useEffect(() => {
+    if (timetableFrameList) {
+      setCurrentFrameIndex((timetableFrameList.findIndex((frame) => frame.is_main === true)));
+    }
+  }, [timetableFrameList]);
 
   return (
     <div className={styles['timetable-list']}>
       <SemesterListbox />
       <ul className={styles['timetable-list__list']} role="listbox">
-        {timetableFrameList?.map((frame) => (
-          <div className={styles['timetable-list__list--item']} key={frame.id}>
-            <li>
-              {frame.timetable_name}
-            </li>
+        <div className={styles['timetable-list__list--scroll']}>
+          {timetableFrameList?.map((frame, index) => (
             <button
               type="button"
-              className={styles['timetable-list__list--setting']}
-              onClick={() => handleOpenModal(frame)}
+              className={cn({
+                [styles['timetable-list__list--item']]: true,
+                [styles['timetable-list__list--item--selected']]: currentFrameIndex === index,
+              })}
+              key={frame.id}
+              onClick={() => selectFrame(index)}
             >
-              <SettingIcon />
-              설정
+              <li>
+                {frame.timetable_name}
+              </li>
+              <button
+                type="button"
+                className={styles['timetable-list__list--setting']}
+                onClick={(e) => handleOpenModal(e, frame)}
+              >
+                {currentFrameIndex === index ? <BlueSettingIcon /> : <SettingIcon />}
+                설정
+              </button>
             </button>
-          </div>
-        ))}
+          ))}
+        </div>
         <button
           type="button"
           className={styles['timetable-list__list--add']}

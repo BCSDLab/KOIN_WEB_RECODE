@@ -12,8 +12,20 @@
     border-radius: 5px;
     background-color: #fafafa;
 
+    &--scroll {
+      height: 642px;
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
     &--item {
       display: flex;
+      width: 100%;
       border-radius: 5px;
       justify-content: space-between;
       padding: 12px 16px 12px 24px;
@@ -24,6 +36,10 @@
       line-height: 21.48px;
       text-align: left;
       color: #8e8e8e;
+
+      &--selected {
+        color: #175c8e;
+      }
 
       &:hover {
         background-color: #eee;
