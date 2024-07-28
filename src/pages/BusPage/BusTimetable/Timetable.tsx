@@ -1,10 +1,12 @@
 import { getCourseName } from 'pages/BusPage/ts/busModules';
-import useBusTimetable from 'pages/BusPage/hooks/useBusTimetable';
+import useBusTimetable, { useCityBusTimetable } from 'pages/BusPage/hooks/useBusTimetable';
 import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
 import {
-  BUS_TYPES, CITY_BUS_TIMETABLE, EXPRESS_COURSES, SHUTTLE_COURSES,
+  BUS_TYPES, cityBusDirections, CITY_COURSES, EXPRESS_COURSES, SHUTTLE_COURSES,
 } from 'static/bus';
 import useLogger from 'utils/hooks/useLogger';
+import { ChangeEvent, useState } from 'react';
+import dayjs from 'dayjs';
 import styles from './BusTimetable.module.scss';
 
 function Template({ headers, arrivalList }: { headers: string[], arrivalList: string[][] }) {
@@ -18,8 +20,9 @@ function Template({ headers, arrivalList }: { headers: string[], arrivalList: st
       </thead>
 
       <tbody className={styles.timetable__body}>
-        {arrivalList.map(([arrival, time]) => (
-          <tr className={styles.timetable__row} key={`${arrival} - ${time}`}>
+        {arrivalList.map(([arrival, time], idx) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <tr className={styles.timetable__row} key={`${arrival} - ${time} - ${idx}`}>
             <td className={styles.timetable__cell}>{arrival}</td>
             <td className={styles.timetable__cell}>{time}</td>
           </tr>
@@ -112,12 +115,99 @@ function ExpressTimetable() {
 }
 
 function CityTimetable() {
+  const [selectedDirection, setSelectedDirection] = useState(cityBusDirections[0].value);
+  const [selectedBusNumber, setSelectedBusNumber] = useState(CITY_COURSES[0].bus_number);
+
+  const handleDirectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const newDirection = e.target.value;
+    setSelectedDirection(newDirection);
+    const defaultBusNumber = CITY_COURSES.find((course) => course.direction === (newDirection === 'to' ? '병천3리' : '종합터미널'))?.bus_number || 400;
+    setSelectedBusNumber(defaultBusNumber);
+  };
+
+  const handleBusNumberChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedBusNumber(Number(e.target.value));
+  };
+
+  const timetable = useCityBusTimetable({
+    bus_number: selectedBusNumber,
+    direction: selectedDirection === 'to' ? CITY_COURSES.find((course) => course.bus_number === selectedBusNumber && course.direction !== '종합터미널')?.direction || '' : '종합터미널',
+  });
+
+  const getBusNumbersBySelectedDirection = () => CITY_COURSES.filter((course) => (selectedDirection === 'to'
+    ? course.direction !== '종합터미널'
+    : course.direction === '종합터미널')).map((course) => course.bus_number);
+
+  const getTodayTimetable = () => {
+    const today = dayjs().day();
+    let dayType = '';
+
+    if (today === 0 || today === 6) {
+      dayType = '주말';
+    } else {
+      dayType = '평일';
+    }
+
+    const todayTimetable = timetable.info.bus_timetables.find(
+      (info) => info.day_of_week === dayType,
+    );
+
+    const getHours = (time:string) => parseInt(time.split(':')[0], 10);
+
+    const morningTimetable = todayTimetable?.depart_info.filter(
+      (time) => getHours(time) < 12,
+    ) || [];
+    const afternoonTimetable = todayTimetable?.depart_info.filter(
+      (time) => getHours(time) >= 12,
+    ) || [];
+
+    const fullTimetable = Array.from({
+      length: Math.max(morningTimetable.length, afternoonTimetable.length),
+    }, (_, idx) => [
+      morningTimetable[idx] || '',
+      afternoonTimetable[idx] || '',
+    ]);
+
+    return fullTimetable;
+  };
+
   return (
     <>
-      <div className={styles['timetable__citybus-blank']} />
-      <Template headers={BUS_TYPES[2].tableHeaders} arrivalList={CITY_BUS_TIMETABLE} />
-      <div className={styles['timetable__citybus-info']}>
-        버스번호: 400, 402, 405
+      <div className={styles['timetable__dropdown-wrapper']}>
+        <select
+          className={styles.timetable__dropdown}
+          value={selectedDirection}
+          onChange={handleDirectionChange}
+        >
+          {cityBusDirections.map((direction) => (
+            <option key={direction.value} value={direction.value}>
+              {direction.label}
+            </option>
+          ))}
+        </select>
+        <select
+          className={styles.timetable__dropdown}
+          value={selectedBusNumber}
+          onChange={handleBusNumberChange}
+        >
+          {getBusNumbersBySelectedDirection().map((busNumber) => (
+            <option key={busNumber} value={busNumber}>
+              {busNumber}
+              번
+            </option>
+          ))}
+        </select>
+      </div>
+      <Template
+        headers={BUS_TYPES[2].tableHeaders}
+        arrivalList={getTodayTimetable()}
+      />
+      <div className={styles.timetable__date}>
+        마지막 업데이트:
+        {' '}
+        {timetable.info.updated_at}
+        <br />
+        한기대 → 터미널 시간표는 기점 출발시간입니다.
       </div>
     </>
   );

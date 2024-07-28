@@ -1,3 +1,5 @@
+import { CityBusParams } from 'api/bus/entity';
+
 export const BUS_TYPES = [{
   key: 'shuttle',
   tabName: '학교셔틀',
@@ -9,7 +11,7 @@ export const BUS_TYPES = [{
 }, {
   key: 'city',
   tabName: '시내버스',
-  tableHeaders: ['기점', '종합터미널 - 병천'],
+  tableHeaders: ['오전', '오후'],
 }];
 
 export const BUS_DIRECTIONS = ['한기대', '야우리', '천안역'];
@@ -134,4 +136,18 @@ export const busLink: BusLink[] = [
     key: 'city',
     type: BUS_TYPES[2],
   },
+];
+
+export const cityBusDirections = [
+  { label: '한기대 → 터미널', value: 'from' },
+  { label: '터미널 → 한기대', value: 'to' },
+];
+
+export const CITY_COURSES: CityBusParams[] = [
+  { bus_number: 400, direction: '병천3리' },
+  { bus_number: 402, direction: '황사동' },
+  { bus_number: 405, direction: '유관순열사사적지' },
+  { bus_number: 400, direction: '종합터미널' },
+  { bus_number: 402, direction: '종합터미널' },
+  { bus_number: 405, direction: '종합터미널' },
 ];
