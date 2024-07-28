@@ -55,7 +55,7 @@ export default class DiningResponse<R extends DiningResponseType> implements API
 
   auth = false;
 
-  constructor(date: string) {
+  constructor(date: string, public authorization?: string) {
     this.params = {
       date,
     };
