@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom';
 import { ReactComponent as HamburgerIcon } from 'assets/svg/hamburger-icon.svg';
 import { ReactComponent as KoinServiceLogo } from 'assets/svg/koin-service-logo.svg';
 import { ReactComponent as WhiteArrowBackIcon } from 'assets/svg/white-arrow-back-icon.svg';
-import { useHeaderButton } from 'utils/hooks/useHeaderButton';
+import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
@@ -19,14 +19,13 @@ interface MobileHeaderProps {
 export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const { pathname } = useLocation();
   const { openSidebar } = useMobileSidebar();
+  const buttonState = useHeaderButtonStore((state) => state.buttonState);
 
   const isMain = pathname === '/';
-  const hamburgerButtonCondition = !pathname.includes('/cafeteria');
+  const isCustomButton = buttonState.type === 'custom';
   const navigate = useNavigate();
   const logger = useLogger();
   const params = useParams();
-
-  const { HeaderButton } = useHeaderButton();
 
   const backInDetailPage = async () => {
     if (pathname.includes('/store/') && params) {
@@ -46,9 +45,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
 
   return (
     <>
-      <div
-        className={styles.mobileheader}
-      >
+      <div className={styles.mobileheader}>
         {!isMain && (
           <button
             className={cn({
@@ -79,7 +76,16 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               .find((submenu) => pathname.startsWith(submenu.link))?.title ?? ''
           )}
         </span>
-        {hamburgerButtonCondition ? (
+        {isCustomButton ? (
+          <span
+            className={cn({
+              [styles.mobileheader__icon]: true,
+              [styles['mobileheader__icon--right']]: true,
+            })}
+          >
+            {buttonState.content}
+          </span>
+        ) : (
           <button
             className={cn({
               [styles.mobileheader__icon]: true,
@@ -91,15 +97,6 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
           >
             <HamburgerIcon />
           </button>
-        ) : (
-          <span
-            className={cn({
-              [styles.mobileheader__icon]: true,
-              [styles['mobileheader__icon--right']]: true,
-            })}
-          >
-            <HeaderButton />
-          </span>
         )}
       </div>
       {createPortal(

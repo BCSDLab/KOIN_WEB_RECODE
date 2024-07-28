@@ -8,6 +8,7 @@ import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-bac
 import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
+import { useClose } from 'utils/hooks/useClose';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -51,6 +52,7 @@ export default function Panel({ openModal }: PanelProps) {
   };
 
   useBodyScrollLock(isSidebarOpen);
+  useClose({ closeFunction: closeSidebar });
 
   return (
     <nav
