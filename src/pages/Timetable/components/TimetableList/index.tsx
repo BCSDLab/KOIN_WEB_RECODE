@@ -29,8 +29,7 @@ export default function TimetableList() {
   const selectFrame = (index: number) => {
     setCurrentFrameIndex(index);
   };
-  const handleOpenModal = (e: React.MouseEvent<HTMLButtonElement>, frame: TimetableFrameInfo) => {
-    e.stopPropagation();
+  const handleOpenModal = (frame: TimetableFrameInfo) => {
     setFocusFrame(frame);
     openModal();
   };
@@ -45,7 +44,7 @@ export default function TimetableList() {
     <div className={styles['timetable-list']}>
       <SemesterListbox />
       <ul className={styles['timetable-list__list']} role="listbox">
-        <div className={styles['timetable-list__list--scroll']}>
+        <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
           {timetableFrameList?.map((frame, index) => (
             <button
               type="button"
@@ -62,7 +61,10 @@ export default function TimetableList() {
               <button
                 type="button"
                 className={styles['timetable-list__list--setting']}
-                onClick={(e) => handleOpenModal(e, frame)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleOpenModal(frame);
+                }}
               >
                 {currentFrameIndex === index ? <BlueSettingIcon /> : <SettingIcon />}
                 설정
