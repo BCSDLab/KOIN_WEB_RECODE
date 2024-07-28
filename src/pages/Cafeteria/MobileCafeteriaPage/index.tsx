@@ -7,6 +7,7 @@ import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import useLogger from 'utils/hooks/useLogger';
 import { ReactComponent as InformationIcon } from 'assets/svg/information-icon.svg';
+import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
@@ -23,6 +24,8 @@ export default function MobileCafeteriaPage({
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
   const [isCafeteriaInfoOpen, setIsCafeteriaInfoOpen] = useState(false);
   const { setButtonContent } = useHeaderButton();
+
+  useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
     setButtonContent(
@@ -42,18 +45,6 @@ export default function MobileCafeteriaPage({
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[dining] });
     setDiningType(dining);
   };
-
-  useEffect(() => {
-    if (isCafeteriaInfoOpen) {
-      document.body.style.cssText = 'overflow: hidden;';
-    } else {
-      document.body.style.cssText = '';
-    }
-
-    return () => {
-      document.body.style.cssText = '';
-    };
-  }, [isCafeteriaInfoOpen]);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useClose } from 'utils/hooks/useClose';
 import useArrowKeyNavigation from 'utils/hooks/useArrowKeyNavigation';
+import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
@@ -25,13 +26,7 @@ function ImageModal({
   }, [imageList.length]);
 
   useArrowKeyNavigation({ navigateImage });
-
-  useEffect(() => {
-    const body = document.querySelector('body');
-    body!.style.overflow = 'hidden';
-
-    return () => { body!.style.overflow = 'auto'; };
-  }, []);
+  useBodyScrollLock();
 
   return (
     <div className={styles.background} ref={backgroundRef}>

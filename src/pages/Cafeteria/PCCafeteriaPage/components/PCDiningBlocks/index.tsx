@@ -9,6 +9,7 @@ import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage'
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import { filterDinings } from 'utils/ts/cafeteria';
+import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {
@@ -44,6 +45,7 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
   const logger = useLogger();
   const [selectedDining, setSelectedDining] = useState<Dining | null>(null);
   const [isModalOpen, setIsModalOpenTrue, setIsModalOpenFalse] = useBooleanState(false);
+  useBodyScrollLock(isModalOpen);
   const handleImageClick = (dining: Dining) => {
     if (!dining.image_url) return;
 
@@ -55,15 +57,6 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
     setSelectedDining(dining);
     setIsModalOpenTrue();
   };
-
-  useEffect(() => {
-    const body = document.querySelector('body');
-    if (isModalOpen) {
-      body!.style.overflow = 'hidden';
-    } else {
-      body!.style.overflow = 'auto';
-    }
-  }, [isModalOpen]);
 
   return (
     <>

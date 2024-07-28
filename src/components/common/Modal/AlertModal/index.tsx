@@ -1,5 +1,5 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
-import { useEffect } from 'react';
+import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
 import { useClose } from 'utils/hooks/useClose';
 import styles from './AlertModal.module.scss';
 
@@ -14,13 +14,7 @@ export default function AlertModal({
   title, description, onClose, onConfirm,
 }: AlertModalProps) {
   const { backgroundRef } = useClose({ closeFunction: onClose });
-
-  useEffect(() => {
-    const body = document.querySelector('body');
-    body!.style.overflow = 'hidden';
-
-    return () => { body!.style.overflow = 'auto'; };
-  }, []);
+  useBodyScrollLock();
 
   return (
     <div className={styles.background} ref={backgroundRef}>

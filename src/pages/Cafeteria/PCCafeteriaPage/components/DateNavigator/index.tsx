@@ -6,7 +6,7 @@ import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import { createPortal } from 'react-dom';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import useBooleanState from 'utils/hooks/useBooleanState';
-import { useEffect } from 'react';
+import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {
@@ -50,17 +50,9 @@ export default function DateNavigator() {
     setDate,
   } = useDatePicker();
   const [isPopupOpen, openPopup, closePopup] = useBooleanState(false);
+  useBodyScrollLock(isPopupOpen);
 
   const thisWeek = generateWeek(currentDate());
-
-  useEffect(() => {
-    const body = document.querySelector('body');
-    if (isPopupOpen) {
-      body!.style.overflow = 'hidden';
-    } else {
-      body!.style.overflow = 'auto';
-    }
-  }, [isPopupOpen]);
 
   return (
     <div className={styles.container}>
