@@ -71,7 +71,6 @@ export interface CityInfo {
     arrival_node: string;
   };
   bus_timetables: {
-    arrival_node: any;
     day_of_week: string;
     depart_info: [];
   }[];
