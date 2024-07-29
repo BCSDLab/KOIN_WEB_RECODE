@@ -133,8 +133,8 @@ export const busLink: BusLink[] = [
 ];
 
 export const cityBusDirections = [
-  { label: '한기대 → 터미널', value: 'from' },
-  { label: '터미널 → 한기대', value: 'to' },
+  { label: '병천 → 터미널', value: 'from' },
+  { label: '터미널 → 병천', value: 'to' },
 ];
 
 export const CITY_COURSES: CityBusParams[] = [

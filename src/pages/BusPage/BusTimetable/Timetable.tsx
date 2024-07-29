@@ -74,9 +74,9 @@ function ShuttleTimetable() {
         }
       />
       <div className={styles.timetable__date}>
-        마지막 업데이트:
+        업데이트 날짜:
         {' '}
-        {timetable.info.updated_at}
+        {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
       </div>
     </div>
   );
@@ -106,9 +106,9 @@ function ExpressTimetable() {
         arrivalList={timetable.info.bus_timetables.map((info) => [info.departure, info.arrival])}
       />
       <div className={styles.timetable__date}>
-        마지막 업데이트:
+        업데이트 날짜:
         {' '}
-        {timetable.info.updated_at}
+        {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
       </div>
     </div>
   );
@@ -203,11 +203,12 @@ function CityTimetable() {
         arrivalList={getTodayTimetable()}
       />
       <div className={styles.timetable__date}>
-        마지막 업데이트:
-        {' '}
-        {timetable.info.updated_at}
+        기점 출발 시간표로 노선 별로 기점이 상이할 수 있습니다.
         <br />
-        한기대 → 터미널 시간표는 기점 출발시간입니다.
+        업데이트 날짜:
+        {' '}
+        {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+
       </div>
     </>
   );
