@@ -119,10 +119,13 @@ function CityTimetable() {
   const [selectedBusNumber, setSelectedBusNumber] = useState(CITY_COURSES[0].bus_number);
 
   const handleDirectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const newDirection = e.target.value;
-    setSelectedDirection(newDirection);
-    const defaultBusNumber = CITY_COURSES.find((course) => course.direction === (newDirection === 'to' ? '병천3리' : '종합터미널'))?.bus_number || 400;
-    setSelectedBusNumber(defaultBusNumber);
+    setSelectedDirection(e.target.value);
+    const filterBusNumber = CITY_COURSES.filter((course) => (
+      e.target.value === 'to' ? course.direction !== '종합터미널' : course.direction === '종합터미널'
+    )).map((course) => course.bus_number);
+    if (!filterBusNumber.includes(selectedBusNumber)) {
+      setSelectedBusNumber(filterBusNumber[0] || 400);
+    }
   };
 
   const handleBusNumberChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -140,32 +143,22 @@ function CityTimetable() {
 
   const getTodayTimetable = () => {
     const today = dayjs().day();
-    let dayType = '';
-
-    if (today === 0 || today === 6) {
-      dayType = '주말';
-    } else {
-      dayType = '평일';
-    }
+    const dayType = (today === 0 || today === 6) ? '주말' : '평일';
 
     const todayTimetable = timetable.info.bus_timetables.find(
       (info) => info.day_of_week === dayType,
     );
 
-    const getHours = (time:string) => parseInt(time.split(':')[0], 10);
-
-    const morningTimetable = todayTimetable?.depart_info.filter(
-      (time) => getHours(time) < 12,
-    ) || [];
-    const afternoonTimetable = todayTimetable?.depart_info.filter(
-      (time) => getHours(time) >= 12,
-    ) || [];
+    const getHours = (time: string) => parseInt(time.split(':')[0], 10);
 
     const fullTimetable = Array.from({
-      length: Math.max(morningTimetable.length, afternoonTimetable.length),
+      length: Math.max(
+        todayTimetable?.depart_info.filter((time) => getHours(time) < 12).length || 0,
+        todayTimetable?.depart_info.filter((time) => getHours(time) >= 12).length || 0,
+      ),
     }, (_, idx) => [
-      morningTimetable[idx] || '',
-      afternoonTimetable[idx] || '',
+      todayTimetable?.depart_info.filter((time) => getHours(time) < 12)[idx] || '',
+      todayTimetable?.depart_info.filter((time) => getHours(time) >= 12)[idx] || '',
     ]);
 
     return fullTimetable;
