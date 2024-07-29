@@ -49,8 +49,8 @@ export default function TimetableList() {
             <button
               type="button"
               className={cn({
-                [styles['timetable-list__list--item']]: true,
-                [styles['timetable-list__list--item--selected']]: currentFrameIndex === index,
+                [styles['timetable-list__list__item']]: true,
+                [styles['timetable-list__list__item--selected']]: currentFrameIndex === index,
               })}
               key={frame.id}
               onClick={() => selectFrame(index)}
