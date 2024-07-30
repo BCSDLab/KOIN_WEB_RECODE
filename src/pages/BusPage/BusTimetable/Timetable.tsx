@@ -135,7 +135,9 @@ function CityTimetable() {
 
   const timetable = useCityBusTimetable({
     bus_number: selectedBusNumber,
-    direction: selectedDirection === 'to' ? CITY_COURSES.find((course) => course.bus_number === selectedBusNumber && course.direction !== TERMINAL_CITY_BUS)?.direction || '' : TERMINAL_CITY_BUS,
+    direction: selectedDirection === 'to'
+      ? CITY_COURSES.find((course) => course.bus_number === selectedBusNumber && course.direction !== TERMINAL_CITY_BUS)?.direction || ''
+      : TERMINAL_CITY_BUS,
   });
 
   const getBusNumbersBySelectedDirection = () => CITY_COURSES.filter((course) => (selectedDirection === 'to'
