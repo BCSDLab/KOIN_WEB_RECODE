@@ -1,22 +1,25 @@
-import RadioBox from 'components/common/CommonRadioBox';
+import CheckBox from 'components/common/Common\bCheckBox';
 import { useState } from 'react';
 import ReportingLabel from './components/ReportingLabel';
 import styles from './ReviewReporting.module.scss';
 
 export default function ReviewReportingPage() {
-  const [selectOption, setSelectOption] = useState('');
+  const [selectOptions, setSelectOptions] = useState<string[]>([]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectOption(event.target.value);
+    const { value } = event.target;
+    setSelectOptions((prevOptions) => (prevOptions.includes(value)
+      ? prevOptions.filter((option) => option !== value)
+      : [...prevOptions, value]));
   };
 
   return (
     <div className={styles.reporting__container}>
       <div className={styles['reporting-option']}>
-        <RadioBox
+        <CheckBox
           value="notRelevant"
           name="reason"
-          checked={selectOption === 'notRelevant'}
+          checked={selectOptions.includes('notRelevant')}
           onChange={handleChange}
         />
         <ReportingLabel
@@ -25,10 +28,10 @@ export default function ReviewReportingPage() {
         />
       </div>
       <div className={styles['reporting-option']}>
-        <RadioBox
+        <CheckBox
           value="containsAd"
           name="reason"
-          checked={selectOption === 'containsAd'}
+          checked={selectOptions.includes('containsAd')}
           onChange={handleChange}
         />
         <ReportingLabel
@@ -37,10 +40,10 @@ export default function ReviewReportingPage() {
         />
       </div>
       <div className={styles['reporting-option']}>
-        <RadioBox
+        <CheckBox
           value="abusiveLanguage"
           name="reason"
-          checked={selectOption === 'abusiveLanguage'}
+          checked={selectOptions.includes('abusiveLanguage')}
           onChange={handleChange}
         />
         <ReportingLabel
@@ -49,10 +52,10 @@ export default function ReviewReportingPage() {
         />
       </div>
       <div className={styles['reporting-option']}>
-        <RadioBox
+        <CheckBox
           value="personalInfo"
           name="reason"
-          checked={selectOption === 'personalInfo'}
+          checked={selectOptions.includes('personalInfo')}
           onChange={handleChange}
         />
         <ReportingLabel
@@ -61,10 +64,10 @@ export default function ReviewReportingPage() {
         />
       </div>
       <div className={styles['reporting-option']}>
-        <RadioBox
+        <CheckBox
           value="etc"
           name="reason"
-          checked={selectOption === 'etc'}
+          checked={selectOptions.includes('etc')}
           onChange={handleChange}
         />
         <ReportingLabel
@@ -74,14 +77,14 @@ export default function ReviewReportingPage() {
       </div>
       <textarea
         className={styles.etc__description}
-        disabled={selectOption === 'etc'}
+        disabled={!selectOptions.includes('etc')}
         placeholder="신고 사유를 입력해주세요."
       />
       <button
         className={styles.submit__button}
         type="submit"
         onClick={() => {
-          console.log(selectOption);
+          console.log(selectOptions);
         }}
       >
         신고하기
