@@ -50,7 +50,9 @@ export default function ReviewCard({
       </div>
       <div className={styles.rating}>
         <div>
-          {ratingList.map((ratio) => (ratio ? <Star /> : <EmptyStar />))}
+          {ratingList.map((ratio, idx) =>
+            // eslint-disable-next-line
+            (ratio ? <Star key={idx}/> : <EmptyStar key={idx}/>))}
         </div>
         <div className={styles.created}>
           {created_at}
