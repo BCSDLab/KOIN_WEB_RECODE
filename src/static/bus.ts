@@ -145,3 +145,6 @@ export const CITY_COURSES: CityBusParams[] = [
   { bus_number: 402, direction: '종합터미널' },
   { bus_number: 405, direction: '종합터미널' },
 ];
+
+export const DEFAULT_CITY_BUS_NUMBER = 400;
+export const TERMINAL_CITY_BUS = '종합터미널'; // 공통 시내버스 종점

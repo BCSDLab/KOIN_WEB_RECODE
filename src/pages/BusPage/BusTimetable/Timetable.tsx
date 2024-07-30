@@ -2,7 +2,8 @@ import { getCourseName } from 'pages/BusPage/ts/busModules';
 import useBusTimetable, { useCityBusTimetable } from 'pages/BusPage/hooks/useBusTimetable';
 import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
 import {
-  BUS_TYPES, cityBusDirections, CITY_COURSES, EXPRESS_COURSES, SHUTTLE_COURSES,
+  BUS_TYPES, cityBusDirections, CITY_COURSES,
+  DEFAULT_CITY_BUS_NUMBER, EXPRESS_COURSES, SHUTTLE_COURSES, TERMINAL_CITY_BUS,
 } from 'static/bus';
 import useLogger from 'utils/hooks/useLogger';
 import { ChangeEvent, useState } from 'react';
@@ -121,10 +122,10 @@ function CityTimetable() {
   const handleDirectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedDirection(e.target.value);
     const filterBusNumber = CITY_COURSES.filter((course) => (
-      e.target.value === 'to' ? course.direction !== '종합터미널' : course.direction === '종합터미널'
+      e.target.value === 'to' ? course.direction !== TERMINAL_CITY_BUS : course.direction === TERMINAL_CITY_BUS
     )).map((course) => course.bus_number);
     if (!filterBusNumber.includes(selectedBusNumber)) {
-      setSelectedBusNumber(filterBusNumber[0] || 400);
+      setSelectedBusNumber(filterBusNumber[0] || DEFAULT_CITY_BUS_NUMBER);
     }
   };
 
@@ -134,12 +135,12 @@ function CityTimetable() {
 
   const timetable = useCityBusTimetable({
     bus_number: selectedBusNumber,
-    direction: selectedDirection === 'to' ? CITY_COURSES.find((course) => course.bus_number === selectedBusNumber && course.direction !== '종합터미널')?.direction || '' : '종합터미널',
+    direction: selectedDirection === 'to' ? CITY_COURSES.find((course) => course.bus_number === selectedBusNumber && course.direction !== TERMINAL_CITY_BUS)?.direction || '' : TERMINAL_CITY_BUS,
   });
 
   const getBusNumbersBySelectedDirection = () => CITY_COURSES.filter((course) => (selectedDirection === 'to'
-    ? course.direction !== '종합터미널'
-    : course.direction === '종합터미널')).map((course) => course.bus_number);
+    ? course.direction !== TERMINAL_CITY_BUS
+    : course.direction === TERMINAL_CITY_BUS)).map((course) => course.bus_number);
 
   const getTodayTimetable = () => {
     const today = dayjs().day();
