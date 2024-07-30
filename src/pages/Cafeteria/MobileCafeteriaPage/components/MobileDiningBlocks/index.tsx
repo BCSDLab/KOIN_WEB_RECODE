@@ -1,5 +1,7 @@
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
+import { ReactComponent as HeartIcon } from 'assets/svg/heart.svg';
+import { ReactComponent as FilledHeartIcon } from 'assets/svg/heart-filled.svg';
 import { Dining, DiningType } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -21,7 +23,7 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
   const { target } = useOnClickOutside<HTMLImageElement>(portalManager.close);
 
   const { currentDate } = useDatePicker();
-  const { dinings } = useDinings(currentDate());
+  const { dinings, likeDining } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
 
   const logger = useLogger();
@@ -82,6 +84,14 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
               </ul>
               <MobileMealImage dining={dining} handleImageClick={handleImageClick} />
             </li>
+            <button
+              type="button"
+              className={styles.like}
+              onClick={() => likeDining(dining.id, dining.is_liked)}
+            >
+              {dining.is_liked ? <FilledHeartIcon /> : <HeartIcon />}
+              <span className={styles.like__count}>{dining.likes === 0 ? '좋아요' : dining.likes.toLocaleString()}</span>
+            </button>
           </ul>
         </div>
       ))}
