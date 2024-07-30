@@ -22,7 +22,7 @@
         display: none;
       }
     }
-    
+
     &--add {
       position: absolute;
       display: flex;
@@ -64,15 +64,15 @@
     line-height: 21.48px;
     text-align: left;
     color: #8e8e8e;
-    
+
     &--selected {
       color: #175c8e;
     }
-    
+
     &:hover {
       background-color: #eee;
     }
-    
+
     &:active {
       background-color: #e1e1e1;
       color: #4b4b4b;
