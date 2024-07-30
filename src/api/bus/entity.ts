@@ -41,6 +41,8 @@ export interface BusResponse extends APIResponse {
 
 export type BusTimetableResponse = BusRouteInfo | ExpressInfo;
 
+export type CityInfoResponse = CityInfo;
+
 export interface BusRouteInfo {
   bus_timetables: {
     route_name: string;

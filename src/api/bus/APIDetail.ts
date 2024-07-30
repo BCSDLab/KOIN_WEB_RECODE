@@ -1,6 +1,6 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
-  CourseResponse, BusResponse, BusTimetableResponse, Course, CityInfo, CityBusParams,
+  CourseResponse, BusResponse, BusTimetableResponse, Course, CityBusParams, CityInfoResponse,
 } from './entity';
 
 export class CourseList<R extends CourseResponse> implements APIRequest<R> {
@@ -41,7 +41,7 @@ export class BusTimetableInfo<R extends BusTimetableResponse> implements APIRequ
   }
 }
 
-export class CityBusTimetableInfo<R extends CityInfo> implements APIRequest<R> {
+export class CityBusTimetableInfo<R extends CityInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
