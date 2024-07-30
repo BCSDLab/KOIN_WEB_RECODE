@@ -14,6 +14,7 @@
   height: 120%;
   min-height: 700px;
   display: inline-block;
+  position: relative;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
@@ -287,6 +288,14 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   border-bottom: 1.5px solid #eee;
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  background-color: white;
+
+  @include media.media-breakpoint(mobile) {
+    top: 56px;
+  }
 
   &__type {
     font-size: 20px;
