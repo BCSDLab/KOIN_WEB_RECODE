@@ -49,8 +49,8 @@ export default function TimetableList() {
             <button
               type="button"
               className={cn({
-                [styles['timetable-list__list__item']]: true,
-                [styles['timetable-list__list__item--selected']]: currentFrameIndex === index,
+                [styles['timetable-list__item']]: true,
+                [styles['timetable-list__item--selected']]: currentFrameIndex === index,
               })}
               key={frame.id}
               onClick={() => selectFrame(index)}
@@ -60,7 +60,7 @@ export default function TimetableList() {
               </li>
               <button
                 type="button"
-                className={styles['timetable-list__list--setting']}
+                className={styles['timetable-list__item--setting']}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleOpenModal(frame);
