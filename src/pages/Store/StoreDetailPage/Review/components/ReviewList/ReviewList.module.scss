@@ -2,6 +2,14 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   flex-wrap: wrap;
   padding-top: 1vh;
+}
+
+.selector {
+  display: flex;
+  width: 85%;
+  justify-content: space-around;
 }

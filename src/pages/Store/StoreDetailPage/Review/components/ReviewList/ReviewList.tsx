@@ -5,6 +5,7 @@ import {
   useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { Review } from 'api/store/entity';
+import { ReactComponent as NoReview } from 'assets/svg/Review/no-review.svg';
 import styles from './ReviewList.module.scss';
 
 const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
@@ -24,6 +25,7 @@ export default function ReviewList() {
   const endOfPage = useRef(null);
   const reviews = data.pages.flatMap((page) => page.reviews);
   const currentReviewType = useRef<string>('최신순');
+  const checkboxRef = useRef<HTMLInputElement>(null);
   const [filteredReview, setFilteredReview] = useState(reviews.sort((a, b) => check(b, a)));
 
   // 정렬 후 메모된 값을 사용
@@ -34,17 +36,19 @@ export default function ReviewList() {
   // reviews 배열 복사 후 정렬, sort는 원본을 바꿈
 
   const filter = (type: string) => {
-    if (type === '별점높은순') {
-      setFilteredReview(memoHighest);
-    }
-    if (type === '별점낮은순') {
-      setFilteredReview(memoLowest);
-    }
-    if (type === '최신순') {
-      setFilteredReview(memoRecent);
-    }
-    if (type === '오래된순') {
-      setFilteredReview(memoOld);
+    if (!checkboxRef.current?.checked) {
+      if (type === '별점높은순') {
+        setFilteredReview(memoHighest);
+      }
+      if (type === '별점낮은순') {
+        setFilteredReview(memoLowest);
+      }
+      if (type === '최신순') {
+        setFilteredReview(memoRecent);
+      }
+      if (type === '오래된순') {
+        setFilteredReview(memoOld);
+      }
     }
     currentReviewType.current = type; // 현재 정렬 타입 저장
   };
@@ -71,37 +75,52 @@ export default function ReviewList() {
 
   return (
     <div className={styles.container}>
-      <select onChange={(e) => filter(e.target.value)}>
-        {option.map((select) => (
-          <option
-            key={select}
-          >
-            {select}
-          </option>
-        ))}
-      </select>
-      <label htmlFor="myReview">
-        <input
-          type="checkbox"
-          id="myReview"
-          onChange={findMyReview}
-        />
-        내가 리뷰 작성한 리뷰
-      </label>
-      {filteredReview.map((review) => (
-        <ReviewCard
-          key={review.review_id}
-          rating={review.rating}
-          nick_name={review.nick_name}
-          content={review.content}
-          image_urls={review.image_urls}
-          menu_names={review.menu_names}
-          is_mine={review.is_mine}
-          is_modified={review.is_modified}
-          created_at={review.created_at}
-          review_id={review.review_id}
-        />
-      ))}
+      {(filteredReview.length > 0 || checkboxRef.current?.checked)
+      && (
+      <div className={styles.selector}>
+        <select
+          onChange={(e) => filter(e.target.value)}
+        >
+          {option.map((select) => (
+            <option
+              key={select}
+            >
+              {select}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="myReview">
+          <input
+            type="checkbox"
+            id="myReview"
+            onChange={findMyReview}
+            ref={checkboxRef}
+          />
+          내가 리뷰 작성한 리뷰
+        </label>
+      </div>
+      )}
+      {filteredReview.length > 0
+        ? filteredReview.map((review) => (
+          <ReviewCard
+            key={review.review_id}
+            rating={review.rating}
+            nick_name={review.nick_name}
+            content={review.content}
+            image_urls={review.image_urls}
+            menu_names={review.menu_names}
+            is_mine={review.is_mine}
+            is_modified={review.is_modified}
+            created_at={review.created_at}
+            review_id={review.review_id}
+          />
+        )) : (
+          <div>
+            {checkboxRef.current?.checked
+              ? <div>작성한 리뷰가 없어요</div>
+              : <NoReview />}
+          </div>
+        )}
       <div ref={endOfPage} />
     </div>
   );
