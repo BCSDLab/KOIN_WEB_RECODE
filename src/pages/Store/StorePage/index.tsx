@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import getDayOfWeek from 'utils/ts/getDayOfWeek';
+import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import * as api from 'api';
 
 import { cn } from '@bcsdlab/utils';
@@ -8,10 +7,11 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useQuery } from '@tanstack/react-query';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 
-import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
+import { useScorllLogging } from 'utils/hooks/useScrollLogging';
+import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
+import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
@@ -24,34 +24,71 @@ type StoreSearchQueryType = {
   card?: string;
 };
 
-const CHECK_BOX = [
+interface StoreMobileState {
+  sorter: StoreSorterType,
+  filter: StoreFilterType[],
+}
+
+const MOBILE_CHECK_BOX = [
   {
-    id: 'review',
+    id: 'COUNT',
     content: '# 리뷰순',
     value: 1,
   },
   {
-    id: 'starPoint',
+    id: 'RATING',
     content: '# 별점순',
     value: 2,
   },
   {
-    id: 'open',
+    id: 'OPEN',
     content: '# 영업중',
     value: 3,
   },
   {
-    id: 'delivery',
+    id: 'DELIVERY',
     content: '# 배달 가능',
     value: 4,
   },
 ];
+
+const CHECK_BOX = [
+  {
+    id: 'delivery',
+    content: '배달 가능',
+    value: '1',
+  },
+  {
+    id: 'card',
+    content: '카드결제 가능',
+    value: '1',
+  },
+  {
+    id: 'bank',
+    content: '계좌이체 가능',
+    value: '1',
+  },
+];
+
+type MobileStoreListCheckBoxType = 'COUNT' | 'RATING' | 'OPEN' | 'DELIVERY';
 
 const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
   if (checked === undefined) {
     return false;
   }
   return true;
+};
+
+const useStoreListMobile = (sorter: StoreSorterType, filter: StoreFilterType[]) => {
+  const { data: storeListMobile } = useQuery(
+    {
+      queryKey: ['storeListV2', sorter, filter],
+      queryFn: async () => api.store.getStoreListV2(sorter, filter),
+      retry: 0,
+    },
+  );
+
+  return storeListMobile?.shops;
 };
 
 const useStoreList = (params: StoreSearchQueryType) => {
@@ -87,29 +124,47 @@ const useStoreList = (params: StoreSearchQueryType) => {
   });
 };
 
-const getOpenCloseTime = (open_time: string | null, close_time: string | null) => {
-  if (open_time === null && close_time === null) return '운영정보없음';
-  if (open_time === '00:00' && close_time === '00:00') return '24시간 운영';
-  return `${open_time}~${close_time}`;
-};
-
 function StorePage() {
   const storeRef = React.useRef<HTMLInputElement | null>(null);
+  const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
+    sorter: '',
+    filter: [],
+  });
   const { params, searchParams, setParams } = useParamsHandler();
   const storeList = useStoreList(params);
+  const storeListMobile = useStoreListMobile(
+    storeMobileFilterState.sorter,
+    storeMobileFilterState.filter,
+  );
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   console.log(storeList);
   const selectedCategory = Number(searchParams.get('category'));
-  // const loggingCheckbox = (id: string) => {
-  //   if (id && searchParams.get(id)) {
-  // eslint-disable-next-line max-len
-  //     logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
-  //   }
-  // };
-  // eslint-disable-next-line
-  const Josa = require('josa-js');
+  const loggingCheckbox = (id: string) => {
+    if (id && searchParams.get(id)) {
+      // eslint-disable-next-line max-len
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
+    }
+  };
+  const onClickMobileStoreListFilter = (item: MobileStoreListCheckBoxType) => {
+    if (item === 'COUNT' || item === 'RATING') {
+      setStoreMobileFilterState((prevState) => ({
+        ...prevState,
+        sorter: item,
+      }));
+    } else if (item === 'DELIVERY' || item === 'OPEN') {
+      setStoreMobileFilterState((prevState) => {
+        const newFilter = prevState.filter.includes(item)
+          ? prevState.filter.filter((filterItem) => filterItem !== item)
+          : [...prevState.filter, item];
+        return {
+          ...prevState,
+          filter: newFilter,
+        };
+      });
+    }
+  };
   useScrollToTop();
   useScorllLogging('shop_categories', categories);
 
@@ -180,7 +235,7 @@ function StorePage() {
           />
         </button>
       </div>
-      {/* <div className={styles.option}>
+      <div className={styles.option}>
         <div className={styles.option__count}>
           총
           <strong>
@@ -200,7 +255,7 @@ function StorePage() {
                   className={styles['option-checkbox__input']}
                   onChange={() => {
                     loggingCheckbox(item.id);
-                    setParams(item.id, item.value, {
+                    setParams(item.id, String(item.value), {
                       deleteBeforeParam: true,
                       replacePage: true,
                     });
@@ -211,81 +266,32 @@ function StorePage() {
             </div>
           ))}
         </div>
-      </div> */}
+      </div>
       {isMobile && <div className={styles['store-mobile-header']}>상점목록</div>}
       <EventCarousel />
       <div className={styles.filter}>
         {
-          CHECK_BOX.map((item) => (
-            <div
+          MOBILE_CHECK_BOX.map((item) => (
+            <button
               className={cn({
                 [styles.filter__box]: true,
-                [styles['filter__box--activate']]: true,
+                [styles['filter__box--activate']]: storeMobileFilterState.sorter.includes(item.id) || (
+                  storeMobileFilterState.filter.lastIndexOf(item.id as StoreFilterType) >= 0
+                ),
               })}
+              key={item.value}
+              type="button"
+              onClick={() => onClickMobileStoreListFilter(item.id as MobileStoreListCheckBoxType)}
             >
               {item.content}
-            </div>
+            </button>
           ))
         }
       </div>
-      <div className={styles['store-list']}>
-        {storeList?.map((store) => (
-          <Link
-            to={`/store/${store.id}`}
-            className={styles['store-list__item']}
-            key={store.id}
-            onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}
-          >
-            {store.is_event
-              && store.is_open
-              && (
-                <div className={styles['store-list__item--event']}>
-                  이벤트
-                  <EventIcon />
-                </div>
-              )}
-            {!store.is_open
-              && (
-                <div className={styles['store-none-open']}>
-                  <span className={styles['store-none-open__name']}>{store.name}</span>
-                  {`${Josa.c(store.name, '은/는')} `}
-                  준비중입니다.
-                </div>
-              )}
-            <div className={styles['store-list__title']}>{store.name}</div>
-            <div className={styles['store-list__phone']}>
-              전화번호
-              <span>{store.phone}</span>
-            </div>
-            <div className={styles['store-list__open-time']}>
-              운영시간
-              <span>
-                {store.open[getDayOfWeek()] && getOpenCloseTime(
-                  store.open[getDayOfWeek()].open_time,
-                  store.open[getDayOfWeek()].close_time,
-                )}
-              </span>
-            </div>
-            <div className={styles['store-item']}>
-              {(store.delivery || isMobile) && (
-                <div className={styles['store-item__option']} aria-hidden={!store.delivery}>
-                  {!isMobile ? '#배달가능' : '배달'}
-                </div>
-              )}
-              {(store.pay_card || isMobile) && (
-                <div className={styles['store-item__option']} aria-hidden={!store.pay_card}>
-                  {!isMobile ? '#카드가능' : '카드'}
-                </div>
-              )}
-              {(store.pay_bank || isMobile) && (
-                <div className={styles['store-item__option']} aria-hidden={!store.pay_bank}>
-                  {!isMobile ? '#계좌이체가능' : '계좌이체'}
-                </div>
-              )}
-            </div>
-          </Link>
-        ))}
-      </div>
+      {
+        !isMobile ? <DesktopStoreList storeListData={storeList} />
+          : <MobileStoreList storeListData={storeListMobile} />
+      }
     </div>
   );
 }
