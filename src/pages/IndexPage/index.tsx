@@ -7,6 +7,7 @@ import IndexTimetable from './components/IndexTimetable';
 import styles from './IndexPage.module.scss';
 
 function IndexPage() {
+  sessionStorage.setItem('enterMain', new Date().getTime().toString());
   return (
     <Suspense fallback={null}>
       <main className={styles.template}>

@@ -18,11 +18,13 @@ export const useScorllLogging = (
     }
     if (document.body.scrollHeight * 0.7 < currentHeignt && data) {
       if ('delivery_price' in data) {
-        logger.actionEventClick({ actionTitle: 'BUSINESS', title, value: `search in ${data.name}` });
+        logger.actionEventClick({ actionTitle: 'BUSINESS', title, value: `scoll in ${data.name}` });
       }
       if ('total_count' in data) {
         const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
-        logger.actionEventClick({ actionTitle: 'BUSINESS', title, value: `search in ${data.shop_categories[currentCategoryId]?.name}` });
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS', title, value: `scoll in ${data.shop_categories[currentCategoryId]?.name}`, event_category: 'scroll',
+        });
       }
     }
     return () => window.removeEventListener('scroll', onScroll); // 웹 사이트 높이의 70퍼센트를 넘을 때 로깅

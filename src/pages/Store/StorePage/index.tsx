@@ -106,6 +106,8 @@ function StorePage() {
   useScrollToTop();
   useScorllLogging('shop_categories', categories);
 
+  sessionStorage.setItem('enter_category', new Date().getTime().toString());
+
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
@@ -122,7 +124,15 @@ function StorePage() {
               aria-checked={category.id === selectedCategory}
               type="button"
               onClick={() => {
-                logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
+                logger.actionEventClick({
+                  actionTitle: 'BUSINESS',
+                  title: 'shop_categories',
+                  value: category.name,
+                  event_category: 'click',
+                  previous_page: categories?.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '',
+                  duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+                  current_page: category.name,
+                });
                 setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}

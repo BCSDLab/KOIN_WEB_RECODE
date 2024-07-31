@@ -3,6 +3,8 @@ type GTagEvent = {
   category: string;
   label: string;
   value: string;
+  duration_time?: number;
+  previous_page?: string;
 };
 
 export const GA_TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
@@ -18,7 +20,7 @@ export const pageView = (url: string, userId?: string) => {
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/events
 export const event = ({
-  action, category, label, value,
+  action, category, label, value, duration_time, previous_page,
 }: GTagEvent) => {
   if (typeof window.gtag === 'undefined') return;
   window.gtag('event', action, {
@@ -30,7 +32,7 @@ export const event = ({
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line no-console
     console.table({
-      팀: action, '이벤트 Category': category, '이벤트 Title': label, 값: value,
+      팀: action, '이벤트 Category': category, '이벤트 Title': label, 값: value, '체류 시간': duration_time, '이전 카테고리': previous_page,
     });
   }
 };
