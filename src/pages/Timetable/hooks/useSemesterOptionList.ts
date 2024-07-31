@@ -1,5 +1,7 @@
 import { timetable } from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import useTokenState from 'utils/hooks/useTokenState';
+import useSemesterCheck from './useMySemester';
 
 const SEMESTER_INFO_KEY = 'semester';
 
@@ -17,13 +19,16 @@ const useSemester = () => {
 };
 
 const useSemesterOptionList = () => {
-  const { data: semesterList } = useSemester();
-  // 구조가 Array<SemesterInfo>인데 Array로 인식이 안됨.
-
+  const token = useTokenState();
+  const { data: semesterListFromLocalStorage } = useSemester();
+  const { data: mySemesterList } = useSemesterCheck();
+  const semesterList = token
+    ? mySemesterList?.semesters
+    : semesterListFromLocalStorage.map((item) => item.semester);
   const semesterOptionList = (semesterList ?? []).map(
     (semesterInfo) => ({
-      label: `${semesterInfo.semester.slice(0, 4)}년 ${semesterInfo.semester.slice(4)}학기`,
-      value: semesterInfo.semester,
+      label: `${semesterInfo.slice(0, 4)}년 ${semesterInfo.slice(4)}학기`,
+      value: semesterInfo,
     }),
   );
   return semesterOptionList;

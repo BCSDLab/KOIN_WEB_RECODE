@@ -4,36 +4,87 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import TimetableSettingModal from 'pages/Timetable/components/TimetableList/TimetableSettingModal';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
+import { ReactComponent as BlueSettingIcon } from 'assets/svg/setting-icon-blue.svg';
 import SemesterListbox from 'pages/Timetable/components/SemesterList';
+import { useSemester } from 'utils/zustand/semester';
+import useTokenState from 'utils/hooks/useTokenState';
+import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
+import { TimetableFrameInfo } from 'api/timetable/entity';
+import useAddTimetableFrame from 'pages/Timetable/hooks/useAddTimetableFrame';
+import { cn } from '@bcsdlab/utils';
 import styles from './TimetableList.module.scss';
 
 export default function TimetableList() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
-  /* 나의 시간표 api 만들어지면 수정될 부분 */
-  const timetableList = ['1안', '2안', '3안'];
+  const semester = useSemester();
+  const token = useTokenState();
+  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
+  const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
+  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(
+    timetableFrameList
+      ? timetableFrameList.findIndex((frame) => frame.is_main === true)
+      : 0,
+  );
+  const selectFrame = (index: number) => {
+    setCurrentFrameIndex(index);
+  };
+  const handleOpenModal = (frame: TimetableFrameInfo) => {
+    setFocusFrame(frame);
+    openModal();
+  };
+
+  React.useEffect(() => {
+    if (timetableFrameList) {
+      setCurrentFrameIndex((timetableFrameList.findIndex((frame) => frame.is_main === true)));
+    }
+  }, [timetableFrameList]);
 
   return (
     <div className={styles['timetable-list']}>
       <SemesterListbox />
       <ul className={styles['timetable-list__list']} role="listbox">
-        {timetableList.map((value) => (
-          <div className={styles['timetable-list__list--item']} key={value}>
-            <li>
-              {value}
-            </li>
-            <button type="button" className={styles['timetable-list__list--setting']} onClick={openModal}>
-              <SettingIcon />
-              설정
+        <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
+          {timetableFrameList?.map((frame, index) => (
+            <button
+              type="button"
+              className={cn({
+                [styles['timetable-list__item']]: true,
+                [styles['timetable-list__item--selected']]: currentFrameIndex === index,
+              })}
+              key={frame.id}
+              onClick={() => selectFrame(index)}
+            >
+              <li>
+                {frame.timetable_name}
+              </li>
+              <button
+                type="button"
+                className={styles['timetable-list__item--setting']}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleOpenModal(frame);
+                }}
+              >
+                {currentFrameIndex === index ? <BlueSettingIcon /> : <SettingIcon />}
+                설정
+              </button>
             </button>
-          </div>
-        ))}
-        <button type="button" className={styles['timetable-list__list--add']}>
-          <div>시간표 추가하기</div>
+          ))}
+        </div>
+        <button
+          type="button"
+          className={styles['timetable-list__list--add']}
+          onClick={() => addTimetableFrame({ semester: String(semester) })}
+        >
+          시간표 추가하기
           <AddIcon />
         </button>
       </ul>
       {isModalOpen && (
         <TimetableSettingModal
+          focusFrame={focusFrame!}
+          setFocusFrame={setFocusFrame}
           onClose={closeModal}
         />
       )}
