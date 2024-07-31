@@ -1,10 +1,12 @@
 import React from 'react';
 import Timetable from 'components/TimetablePage/Timetable';
-import useImageDownload from 'utils/hooks/useImageDownload';
+import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { useTimeString } from 'utils/zustand/myLectures';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DownloadTimetableModal.module.scss';
 
 interface DownloadTimetableModalProps {
@@ -34,6 +36,9 @@ function TimetableDownload({ rowNumber, forMobile }: TimetableDownloadProps) {
 export default function DownloadTimetableModal({
   onClose,
 }: DownloadTimetableModalProps) {
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+  useEscapeKeyDown({ onEscape: onClose });
+
   const { onImageDownload: DownloadForPC, divRef: pcTimetableRef } = useImageDownload();
   const { onImageDownload: DownloadForMobile, divRef: mobileTimetableRef } = useImageDownload();
   const onClickImageDownload = (usage: string) => {
@@ -44,10 +49,11 @@ export default function DownloadTimetableModal({
     }
     onClose();
   };
+
   const { timeString } = useTimeString();
 
   return (
-    <div className={styles.background} aria-hidden>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <div className={styles.container__header}>
           <div className={styles['container__header--text']}>시간표 저장</div>

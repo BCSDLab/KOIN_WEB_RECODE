@@ -1,7 +1,7 @@
 import { StoreCategoriesResponse, StoreDetailResponse } from 'api/store/entity';
 import { useEffect, useState } from 'react';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useLogger from './useLogger';
-import useParamsHandler from './useParamsHandler';
 
 export const useScorllLogging = (
   title: string,

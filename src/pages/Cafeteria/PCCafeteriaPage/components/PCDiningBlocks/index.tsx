@@ -1,16 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { Dining, DiningType } from 'interfaces/Cafeteria';
 import { useEffect, useRef, useState } from 'react';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import DetailModal from 'pages/Cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { filterDinings } from 'utils/ts/cafeteria';
 import { ReactComponent as HeartIcon } from 'assets/svg/heart.svg';
 import { ReactComponent as FilledHeartIcon } from 'assets/svg/heart-filled.svg';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {
@@ -27,6 +28,7 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
   const boxRef = useRef<HTMLDivElement>(null);
   const [selectedDining, setSelectedDining] = useState<Dining | null>(null);
   const [isModalOpen, setIsModalOpenTrue, setIsModalOpenFalse] = useBooleanState(false);
+  useBodyScrollLock(isModalOpen);
 
   const handleImageClick = (dining: Dining) => {
     if (!dining.image_url) return;
@@ -57,15 +59,6 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
       boxRef.current.style.height = `${Math.max(...columnHeights)}px`; // 컨테이너의 높이 업데이트
     }
   }, [filteredDinings]);
-
-  useEffect(() => {
-    const body = document.querySelector('body');
-    if (isModalOpen) {
-      body!.style.overflow = 'hidden';
-    } else {
-      body!.style.overflow = 'auto';
-    }
-  }, [isModalOpen]);
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import useArticleList from 'pages/Notice/NoticeListPage/hooks/useArticleList';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexNotice.module.scss';
 
 const getArticleType = (id: number) => {

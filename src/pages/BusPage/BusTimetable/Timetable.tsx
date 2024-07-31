@@ -5,7 +5,7 @@ import {
   BUS_TYPES, cityBusDirections, CITY_COURSES,
   DEFAULT_CITY_BUS_NUMBER, EXPRESS_COURSES, SHUTTLE_COURSES, TERMINAL_CITY_BUS,
 } from 'static/bus';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { ChangeEvent, useState } from 'react';
 import dayjs from 'dayjs';
 import styles from './BusTimetable.module.scss';
