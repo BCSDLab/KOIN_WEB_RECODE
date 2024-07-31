@@ -4,7 +4,7 @@ import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { ReactComponent as CheckedIcon } from 'assets/svg/checked-icon.svg';
 import { ReactComponent as NotCheckedIcon } from 'assets/svg/not-checked-icon.svg';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
@@ -16,7 +16,7 @@ export default function TimetableSettingModal({
 }: TimetableSettingModalProps) {
   const [isChecked, setIsChecked] = React.useState(false);
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
-  useEscapeKey({ onEscape: onClose });
+  useEscapeKeyDown({ onEscape: onClose });
 
   const toggleIsChecked = () => {
     if (isChecked) setIsChecked(false);

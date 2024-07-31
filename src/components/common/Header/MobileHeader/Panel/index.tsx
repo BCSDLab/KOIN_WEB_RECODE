@@ -8,7 +8,7 @@ import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-bac
 import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -21,7 +21,7 @@ export default function Panel({ openModal }: PanelProps) {
   const logout = useLogout();
   const logger = useLogger();
   const navigate = useNavigate();
-  useEscapeKey({ onEscape: closeSidebar });
+  useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
 
   const logShortcut = (title: string) => {

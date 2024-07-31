@@ -11,7 +11,7 @@ import { isKoinError } from '@bcsdlab/koin';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useAuthenticationActions } from 'utils/zustand/authentication';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -25,7 +25,7 @@ export default function AuthenticateUserModal({
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
-  useEscapeKey({ onEscape: onClose });
+  useEscapeKeyDown({ onEscape: onClose });
 
   const isMobile = useMediaQuery();
   const { updateAuthentication } = useAuthenticationActions();

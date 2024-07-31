@@ -5,7 +5,7 @@ import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg'
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './Listbox.module.scss';
 import newStyles from './NewListbox.module.scss';
 
@@ -35,7 +35,7 @@ function Listbox({
 }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
-  useEscapeKey({ onEscape: closePopup });
+  useEscapeKeyDown({ onEscape: closePopup });
 
   const logger = useLogger();
   const handleLogClick = (optionValue: string) => {

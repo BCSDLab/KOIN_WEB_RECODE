@@ -10,7 +10,7 @@ import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/Mobi
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
@@ -23,7 +23,7 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
     portalManager.close();
   };
   const { backgroundRef } = useOutsideClick({ onOutsideClick: handleClose });
-  useEscapeKey({ onEscape: handleClose });
+  useEscapeKeyDown({ onEscape: handleClose });
 
   const { currentDate } = useDatePicker();
   const { dinings } = useDinings(currentDate());

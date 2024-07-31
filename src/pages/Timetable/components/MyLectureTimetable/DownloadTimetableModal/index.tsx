@@ -5,7 +5,7 @@ import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { useTimeString } from 'utils/zustand/myLectures';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DownloadTimetableModal.module.scss';
 
@@ -37,7 +37,7 @@ export default function DownloadTimetableModal({
   onClose,
 }: DownloadTimetableModalProps) {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
-  useEscapeKey({ onEscape: onClose });
+  useEscapeKeyDown({ onEscape: onClose });
 
   const { onImageDownload: DownloadForPC, divRef: pcTimetableRef } = useImageDownload();
   const { onImageDownload: DownloadForMobile, divRef: mobileTimetableRef } = useImageDownload();

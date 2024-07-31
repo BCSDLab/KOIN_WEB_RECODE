@@ -3,7 +3,7 @@ import { cn } from '@bcsdlab/utils';
 import useArrowKeyNavigation from 'utils/hooks/ui/useArrowKeyNavigation';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
@@ -26,7 +26,7 @@ function ImageModal({
   }, [imageList.length]);
 
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
-  useEscapeKey({ onEscape: onClose });
+  useEscapeKeyDown({ onEscape: onClose });
   useBodyScrollLock();
 
   useArrowKeyNavigation({ navigateImage });

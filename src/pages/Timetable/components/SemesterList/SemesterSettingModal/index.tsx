@@ -5,7 +5,7 @@ import { ReactComponent as CheckedIcon } from 'assets/svg/checked-icon.svg';
 import { ReactComponent as NotCheckedIcon } from 'assets/svg/not-checked-icon.svg';
 import Listbox from 'components/TimetablePage/Listbox';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './SemesterSettingModal.module.scss';
 
 export interface SemesterSettingModalProps {
@@ -17,7 +17,7 @@ export default function SemesterSettingModal({
 }: SemesterSettingModalProps) {
   const [isChecked, setIsChecked] = React.useState(false);
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
-  useEscapeKey({ onEscape: onClose });
+  useEscapeKeyDown({ onEscape: onClose });
 
   const toggleIsChecked = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();

@@ -9,7 +9,7 @@ import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { DiningTime } from 'utils/ts/cafeteria';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -36,7 +36,7 @@ export default function PCCafeteriaPage({
   const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
-  useEscapeKey({ onEscape: closeDropdown });
+  useEscapeKeyDown({ onEscape: closeDropdown });
 
   const diningTime = new DiningTime();
   const handleDiningTypeChange = (value: DiningType) => {

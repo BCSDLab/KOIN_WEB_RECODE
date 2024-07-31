@@ -6,7 +6,7 @@ import { DeptListResponse } from 'api/dept/entity';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from 'pages/Timetable/TimetablePage/DefaultPage/DefaultPage.module.scss';
 
 export interface CurriculumListBoxProps {
@@ -16,7 +16,7 @@ export interface CurriculumListBoxProps {
 function CurriculumListBox({ list }: CurriculumListBoxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
-  useEscapeKey({ onEscape: closePopup });
+  useEscapeKeyDown({ onEscape: closePopup });
 
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();

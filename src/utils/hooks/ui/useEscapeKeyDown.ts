@@ -4,7 +4,7 @@ interface UseEscapeKeyOptions {
   onEscape: () => void;
 }
 
-export const useEscapeKey = ({ onEscape }: UseEscapeKeyOptions) => {
+export const useEscapeKeyDown = ({ onEscape }: UseEscapeKeyOptions) => {
   useEffect(() => {
     const handleEscKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onEscape();

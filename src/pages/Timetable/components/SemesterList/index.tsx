@@ -6,7 +6,7 @@ import Listbox from 'components/TimetablePage/Listbox';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
@@ -47,7 +47,7 @@ function SemesterListbox() {
   };
 
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
-  useEscapeKey({ onEscape: closePopup });
+  useEscapeKeyDown({ onEscape: closePopup });
 
   Listbox.defaultProps = {
     logTitle: '',
