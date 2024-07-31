@@ -6,6 +6,7 @@ import {
 } from 'react';
 import { Review } from 'api/store/entity';
 import { ReactComponent as NoReview } from 'assets/svg/Review/no-review.svg';
+import { ReactComponent as Arrow } from 'assets/svg/up-arrow-icon.svg';
 import styles from './ReviewList.module.scss';
 
 const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
@@ -27,6 +28,7 @@ export default function ReviewList() {
   const currentReviewType = useRef<string>('최신순');
   const checkboxRef = useRef<HTMLInputElement>(null);
   const [filteredReview, setFilteredReview] = useState(reviews.sort((a, b) => check(b, a)));
+  const [openDropdown, setOpenDropdowm] = useState(false);
 
   // 정렬 후 메모된 값을 사용
   const memoHighest = useMemo(() => [...reviews].sort((a, b) => b.rating - a.rating), [reviews]);
@@ -74,22 +76,44 @@ export default function ReviewList() {
   }, [getNextReview]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={() => setOpenDropdowm(false)} role="button" aria-hidden>
       {(filteredReview.length > 0 || checkboxRef.current?.checked)
       && (
       <div className={styles.selector}>
-        <select
-          onChange={(e) => filter(e.target.value)}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenDropdowm((prev) => !prev);
+          }}
+          className={styles.dropdown}
         >
-          {option.map((select) => (
-            <option
-              key={select}
-            >
-              {select}
-            </option>
-          ))}
-        </select>
-        <label htmlFor="myReview">
+
+          {currentReviewType.current}
+          {' '}
+          <Arrow style={{ transform: openDropdown ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }} />
+
+          <div className={styles.wrapper}>
+            {openDropdown && (
+            <div className={styles.dropdown__list}>
+              {option.map((select) => (
+                <button
+                  type="button"
+                  key={select}
+                  onClick={() => filter(select)}
+                  className={styles['dropdown__list--item']}
+                >
+                  {select}
+                </button>
+              ))}
+            </div>
+            )}
+          </div>
+        </button>
+        <label
+          htmlFor="myReview"
+          className={styles.selector__label}
+        >
           <input
             type="checkbox"
             id="myReview"

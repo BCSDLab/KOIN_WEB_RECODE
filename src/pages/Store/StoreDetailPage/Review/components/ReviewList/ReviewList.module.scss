@@ -10,6 +10,69 @@
 
 .selector {
   display: flex;
-  width: 85%;
-  justify-content: space-around;
+  width: 100%;
+  padding: 2vh 5%;
+  box-sizing: border-box;
+  justify-content: space-between;
+
+  &__label {
+    color: #727272;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+}
+
+.dropdown {
+  position: relative;
+  font-family: NanumBarunGothic;
+  color: #727272;
+
+  &__list {
+    background-color: #fafafa;
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    border-radius: 10px;
+    padding: 3px 3px;
+    box-sizing: border-box;
+    animation: appear 0.15s linear forwards;
+
+    &--item {
+      width: 100%;
+      text-align: left;
+      border-radius: 10px;
+      height: 40px;
+      font-family: NanumBarunGothic;
+      color: #727272;
+      padding-left: 3px;
+
+      &:hover {
+        background: #e1e1e1;
+      }
+    }
+  }
+}
+
+@keyframes appear {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0) ;
+  }
+}
+
+.wrapper {
+  position: absolute;
+  overflow: hidden;
+  top: 20px;
+  left: -5px;
+}
+
+.flex {
+  display: flex;
 }
