@@ -14,6 +14,8 @@ interface Open {
   | 'SUNDAY';
 }
 
+export type StoreSorterType = 'NONE' | 'COUNT' | 'RATING' | '';
+export type StoreFilterType = 'OPEN' | 'DELIVERY' | '';
 export interface StoreDetailResponse extends APIResponse {
   address: string;
   delivery: boolean;
@@ -84,9 +86,29 @@ export type StoreList = {
   is_open: boolean;
 };
 
+export type StoreListV2 = {
+  id: number;
+  name: string;
+  phone: string;
+  delivery: boolean;
+  pay_card: boolean;
+  pay_bank: boolean;
+  open: Open[];
+  category_ids: number[];
+  is_event: boolean;
+  is_open: boolean;
+  average_rate: number;
+  review_count: number;
+};
+
 export interface StoreListResponse extends APIResponse {
   count: number;
   shops: StoreList[];
+}
+
+export interface StoreListV2Response extends APIResponse {
+  count: number;
+  shops: StoreListV2[];
 }
 
 export interface StoreCategoriesResponse extends APIResponse {
