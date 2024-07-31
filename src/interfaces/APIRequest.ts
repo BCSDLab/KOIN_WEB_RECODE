@@ -4,6 +4,7 @@ import { APIResponse } from './APIResponse';
 export const HTTP_METHOD = {
   GET: 'GET',
   POST: 'POST',
+  PATCH: 'PATCH',
   PUT: 'PUT',
   DELETE: 'DELETE',
 } as const;
