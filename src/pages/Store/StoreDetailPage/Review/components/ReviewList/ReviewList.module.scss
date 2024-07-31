@@ -1,3 +1,5 @@
+@use "src/utils/scss/media";
+
 .container {
   width: 100%;
   display: flex;
@@ -14,6 +16,14 @@
   padding: 2vh 5%;
   box-sizing: border-box;
   justify-content: space-between;
+  position: sticky;
+  top: 42px;
+  background: white;
+  z-index: 20;
+
+  @include media.media-breakpoint(mobile) {
+    top: 96px;
+  }
 
   &__label {
     color: #727272;
@@ -75,4 +85,19 @@
 
 .flex {
   display: flex;
+}
+
+.not-found {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.point {
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+  gap: 5px;
+  color: #727272;
 }

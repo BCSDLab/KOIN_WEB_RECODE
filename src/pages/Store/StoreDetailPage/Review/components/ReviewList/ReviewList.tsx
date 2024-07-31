@@ -7,6 +7,7 @@ import {
 import { Review } from 'api/store/entity';
 import { ReactComponent as NoReview } from 'assets/svg/Review/no-review.svg';
 import { ReactComponent as Arrow } from 'assets/svg/up-arrow-icon.svg';
+import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/StarList';
 import styles from './ReviewList.module.scss';
 
 const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
@@ -24,11 +25,14 @@ export default function ReviewList() {
     data, hasNextPage, fetchNextPage,
   } = useGetReview(Number(param.id));
   const endOfPage = useRef(null);
+  const startReview = useRef(null);
   const reviews = data.pages.flatMap((page) => page.reviews);
   const currentReviewType = useRef<string>('최신순');
   const checkboxRef = useRef<HTMLInputElement>(null);
-  const [filteredReview, setFilteredReview] = useState(reviews.sort((a, b) => check(b, a)));
+  const selectorRef = useRef<HTMLDivElement>(null);
+  const [filteredReview, setFilteredReview] = useState(reviews);
   const [openDropdown, setOpenDropdowm] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
 
   // 정렬 후 메모된 값을 사용
   const memoHighest = useMemo(() => [...reviews].sort((a, b) => b.rating - a.rating), [reviews]);
@@ -64,65 +68,87 @@ export default function ReviewList() {
   };
 
   const getNextReview = useCallback(() => {
-    if (hasNextPage) fetchNextPage();
+    if (hasNextPage) {
+      fetchNextPage()
+        .then((result) => setFilteredReview(result.data!.pages.flatMap((page) => page.reviews)));
+    } // 다음 페이지가 있으면 패치
   }, [hasNextPage, fetchNextPage]);
 
+  const setStickyMode = useCallback((entries: IntersectionObserverEntry[]) => {
+    if (entries[0].boundingClientRect.top < 0) setIsSticky(true); // 옵저버가 지정한 top에 닿으면 조건부 렌더링
+    else setIsSticky(false);
+  }, []);
+
   useEffect(() => {
-    const observer = new IntersectionObserver(getNextReview);
+    const endObserver = new IntersectionObserver(getNextReview);
+    const startObserver = new IntersectionObserver(setStickyMode);
+    if (endOfPage.current) endObserver.observe(endOfPage.current);
+    if (startReview.current) startObserver.observe(startReview.current);
 
-    if (endOfPage.current) observer.observe(endOfPage.current);
-
-    return () => observer.disconnect();
-  }, [getNextReview]);
+    return () => {
+      endObserver.disconnect();
+      startObserver.disconnect();
+    };
+  }, [getNextReview, setStickyMode]);
 
   return (
     <div className={styles.container} onClick={() => setOpenDropdowm(false)} role="button" aria-hidden>
+      <div ref={startReview} />
       {(filteredReview.length > 0 || checkboxRef.current?.checked)
       && (
-      <div className={styles.selector}>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpenDropdowm((prev) => !prev);
-          }}
-          className={styles.dropdown}
-        >
-
-          {currentReviewType.current}
-          {' '}
-          <Arrow style={{ transform: openDropdown ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }} />
-
-          <div className={styles.wrapper}>
-            {openDropdown && (
-            <div className={styles.dropdown__list}>
-              {option.map((select) => (
+        <div className={styles.selector} ref={selectorRef} style={{ background: isSticky ? '#fafafa' : 'white' }}>
+          {
+            isSticky
+              ? (
+                <div className={styles.point}>
+                  <StarList average_rating={data.pages[0].statistics.average_rating} />
+                  {`${data.pages[0].statistics.average_rating}점`}
+                </div>
+              )
+              : (
                 <button
                   type="button"
-                  key={select}
-                  onClick={() => filter(select)}
-                  className={styles['dropdown__list--item']}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenDropdowm((prev) => !prev);
+                  }}
+                  className={styles.dropdown}
                 >
-                  {select}
+                  {currentReviewType.current}
+                  {' '}
+                  <Arrow style={{ transform: openDropdown ? '' : 'rotate(180deg)', transition: 'transform 0.15s' }} />
+                  <div className={styles.wrapper}>
+                    {openDropdown && (
+                    <div className={styles.dropdown__list}>
+                      {option.map((select) => (
+                        <button
+                          type="button"
+                          key={select}
+                          onClick={() => filter(select)}
+                          className={styles['dropdown__list--item']}
+                        >
+                          {select}
+                        </button>
+                      ))}
+                    </div>
+                    )}
+                  </div>
                 </button>
-              ))}
-            </div>
-            )}
-          </div>
-        </button>
-        <label
-          htmlFor="myReview"
-          className={styles.selector__label}
-        >
-          <input
-            type="checkbox"
-            id="myReview"
-            onChange={findMyReview}
-            ref={checkboxRef}
-          />
-          내가 리뷰 작성한 리뷰
-        </label>
-      </div>
+              )
+            }
+          <label
+            htmlFor="myReview"
+            className={styles.selector__label}
+          >
+            <input
+              type="checkbox"
+              id="myReview"
+              onChange={findMyReview}
+              ref={checkboxRef}
+            />
+            내가 리뷰 작성한 리뷰
+          </label>
+        </div>
       )}
       {filteredReview.length > 0
         ? filteredReview.map((review) => (
@@ -141,7 +167,7 @@ export default function ReviewList() {
         )) : (
           <div>
             {checkboxRef.current?.checked
-              ? <div>작성한 리뷰가 없어요</div>
+              ? <div className={styles['not-found']}>작성한 리뷰가 없어요 :)</div>
               : <NoReview />}
           </div>
         )}
