@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import Listbox from 'components/TimetablePage/Listbox';
-import useBooleanState from 'utils/hooks/useBooleanState';
-import useLogger from 'utils/hooks/useLogger';
-import { useClose } from 'utils/hooks/useClose';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
@@ -45,7 +46,8 @@ function SemesterListbox() {
     closePopup();
   };
 
-  const { containerRef } = useClose({ closeFunction: closePopup });
+  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
+  useEscapeKey({ onEscape: closePopup });
 
   Listbox.defaultProps = {
     logTitle: '',

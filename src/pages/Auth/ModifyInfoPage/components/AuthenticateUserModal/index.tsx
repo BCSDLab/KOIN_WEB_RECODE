@@ -8,9 +8,10 @@ import { ReactComponent as WarningMobileIcon } from 'assets/svg/warning-mobile-i
 import useCheckPassword from 'components/common/Header/hooks/useCheckPassword';
 import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useAuthenticationActions } from 'utils/zustand/authentication';
-import { useClose } from 'utils/hooks/useClose';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -23,7 +24,8 @@ export default function AuthenticateUserModal({
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
-  const { backgroundRef } = useClose({ closeFunction: onClose });
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+  useEscapeKey({ onEscape: onClose });
 
   const isMobile = useMediaQuery();
   const { updateAuthentication } = useAuthenticationActions();
@@ -57,9 +59,16 @@ export default function AuthenticateUserModal({
     }
   });
 
-  window.addEventListener('unload', () => {
-    updateAuthentication(false);
-  });
+  useEffect(() => {
+    const handleUnload = () => {
+      updateAuthentication(false);
+    };
+
+    window.addEventListener('unload', handleUnload);
+    return () => {
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, [updateAuthentication]);
 
   return (
     <div className={styles.background} aria-hidden ref={backgroundRef}>

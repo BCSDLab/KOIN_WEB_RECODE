@@ -4,7 +4,7 @@ import useBusDirection from 'pages/BusPage/hooks/useBusDirection';
 import useBusLeftTime from 'pages/BusPage/hooks/useBusLeftTime';
 import { getBusName, getLeftTimeString, getStartTimeString } from 'pages/BusPage/ts/busModules';
 import { BUS_DIRECTIONS, BUS_TYPES } from 'static/bus';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './BusLookUp.module.scss';
 
 function BusLookUp() {

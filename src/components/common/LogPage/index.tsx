@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import * as gtag from 'lib/gtag';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import { UserResponse } from 'api/auth/entity';
-import { useUser } from 'utils/hooks/useUser';
+import { useUser } from 'utils/hooks/state/useUser';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
   const uuid = localStorage.getItem('uuid') || uuidv4();

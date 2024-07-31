@@ -1,7 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import * as api from 'api';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { createPortal } from 'react-dom';

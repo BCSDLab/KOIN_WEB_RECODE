@@ -1,6 +1,7 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
-import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
-import { useClose } from 'utils/hooks/useClose';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './AlertModal.module.scss';
 
 interface AlertModalProps {
@@ -13,7 +14,8 @@ interface AlertModalProps {
 export default function AlertModal({
   title, description, onClose, onConfirm,
 }: AlertModalProps) {
-  const { backgroundRef } = useClose({ closeFunction: onClose });
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+  useEscapeKey({ onEscape: onClose });
   useBodyScrollLock();
 
   return (

@@ -1,11 +1,12 @@
 import React from 'react';
 import Timetable from 'components/TimetablePage/Timetable';
-import useImageDownload from 'utils/hooks/useImageDownload';
+import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { useTimeString } from 'utils/zustand/myLectures';
-import { useClose } from 'utils/hooks/useClose';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DownloadTimetableModal.module.scss';
 
 interface DownloadTimetableModalProps {
@@ -35,6 +36,9 @@ function TimetableDownload({ rowNumber, forMobile }: TimetableDownloadProps) {
 export default function DownloadTimetableModal({
   onClose,
 }: DownloadTimetableModalProps) {
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+  useEscapeKey({ onEscape: onClose });
+
   const { onImageDownload: DownloadForPC, divRef: pcTimetableRef } = useImageDownload();
   const { onImageDownload: DownloadForMobile, divRef: mobileTimetableRef } = useImageDownload();
   const onClickImageDownload = (usage: string) => {
@@ -45,8 +49,8 @@ export default function DownloadTimetableModal({
     }
     onClose();
   };
+
   const { timeString } = useTimeString();
-  const { backgroundRef } = useClose({ closeFunction: onClose });
 
   return (
     <div className={styles.background} ref={backgroundRef}>

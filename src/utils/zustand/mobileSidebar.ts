@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { useEffect } from 'react';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useLocation } from 'react-router-dom';
 
 interface SidebarState {

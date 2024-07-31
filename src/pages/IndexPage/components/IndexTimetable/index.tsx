@@ -1,9 +1,9 @@
 import { Suspense, useEffect } from 'react';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import { useSemesterAction } from 'utils/zustand/semester';

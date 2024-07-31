@@ -1,6 +1,6 @@
 import setPostCreateDate from 'utils/ts/setPostCreateDate';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './PostDetailHeader.module.scss';
 
 type PostDetailHeaderProps = {

@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import { BUS_TYPES } from 'static/bus';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
 import { useShallow } from 'zustand/react/shallow';
 import styles from './BusTimetable.module.scss';

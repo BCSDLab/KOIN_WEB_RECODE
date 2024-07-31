@@ -1,15 +1,16 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
 import { Dining, DiningType } from 'interfaces/Cafeteria';
-import useModalPortal from 'utils/hooks/useModalPortal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import { useEffect } from 'react';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
-import { useClose } from 'utils/hooks/useClose';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
@@ -21,7 +22,8 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
   const handleClose = () => {
     portalManager.close();
   };
-  const { backgroundRef } = useClose({ closeFunction: handleClose });
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: handleClose });
+  useEscapeKey({ onEscape: handleClose });
 
   const { currentDate } = useDatePicker();
   const { dinings } = useDinings(currentDate());

@@ -5,8 +5,8 @@ import { ReactComponent as InformationIcon } from 'assets/svg/information.svg';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import { createPortal } from 'react-dom';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
-import useBooleanState from 'utils/hooks/useBooleanState';
-import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {

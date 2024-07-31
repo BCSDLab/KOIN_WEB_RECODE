@@ -1,15 +1,15 @@
 /* eslint-disable no-param-reassign */
 import { Dining, DiningType } from 'interfaces/Cafeteria';
 import { useEffect, useRef, useState } from 'react';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import DetailModal from 'pages/Cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { filterDinings } from 'utils/ts/cafeteria';
-import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {

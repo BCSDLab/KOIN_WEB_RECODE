@@ -1,10 +1,11 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
-import useLogger from 'utils/hooks/useLogger';
-import { useClose } from 'utils/hooks/useClose';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
 import styles from './Listbox.module.scss';
 import newStyles from './NewListbox.module.scss';
 
@@ -33,7 +34,9 @@ function Listbox({
   version = 'default',
 }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
-  const { containerRef } = useClose({ closeFunction: closePopup });
+  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
+  useEscapeKey({ onEscape: closePopup });
+
   const logger = useLogger();
   const handleLogClick = (optionValue: string) => {
     if (logTitle === 'select_dept') {

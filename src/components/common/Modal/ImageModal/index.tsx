@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import { useClose } from 'utils/hooks/useClose';
-import useArrowKeyNavigation from 'utils/hooks/useArrowKeyNavigation';
-import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
+import useArrowKeyNavigation from 'utils/hooks/ui/useArrowKeyNavigation';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
@@ -16,7 +17,6 @@ function ImageModal({
   imageIndex,
   onClose,
 }: ImageModalProps) {
-  const { backgroundRef } = useClose({ closeFunction: onClose });
   const [selectedIndex, setSelectedIndex] = useState(imageIndex);
   const navigateImage = useCallback((move: number) => {
     setSelectedIndex((prevIndex) => {
@@ -25,8 +25,11 @@ function ImageModal({
     });
   }, [imageList.length]);
 
-  useArrowKeyNavigation({ navigateImage });
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+  useEscapeKey({ onEscape: onClose });
   useBodyScrollLock();
+
+  useArrowKeyNavigation({ navigateImage });
 
   return (
     <div className={styles.background} ref={backgroundRef}>

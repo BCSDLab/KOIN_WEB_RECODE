@@ -1,14 +1,14 @@
 import { cn } from '@bcsdlab/utils';
 import { useNavigate } from 'react-router-dom';
 import { CATEGORY, Submenu } from 'static/category';
-import useLogger from 'utils/hooks/useLogger';
-import { useLogout } from 'utils/hooks/useLogout';
-import { useUser } from 'utils/hooks/useUser';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useLogout } from 'utils/hooks/auth/useLogout';
+import { useUser } from 'utils/hooks/state/useUser';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
-import { useBodyScrollLock } from 'utils/hooks/useBodyScrollLock';
-import { useClose } from 'utils/hooks/useClose';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -21,6 +21,8 @@ export default function Panel({ openModal }: PanelProps) {
   const logout = useLogout();
   const logger = useLogger();
   const navigate = useNavigate();
+  useEscapeKey({ onEscape: closeSidebar });
+  useBodyScrollLock(isSidebarOpen);
 
   const logShortcut = (title: string) => {
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: '주변상점' });
@@ -50,9 +52,6 @@ export default function Panel({ openModal }: PanelProps) {
       navigate(submenu.link);
     }
   };
-
-  useBodyScrollLock(isSidebarOpen);
-  useClose({ closeFunction: closeSidebar });
 
   return (
     <nav

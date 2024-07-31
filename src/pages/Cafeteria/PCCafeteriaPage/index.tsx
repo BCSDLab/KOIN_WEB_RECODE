@@ -1,14 +1,15 @@
 import { Suspense } from 'react';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
 import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
-import useScrollToTop from 'utils/hooks/useScrollToTop';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { DiningTime } from 'utils/ts/cafeteria';
-import { useClose } from 'utils/hooks/useClose';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -33,8 +34,9 @@ export default function PCCafeteriaPage({
 }: PCCafeteriaPageProps) {
   const { currentDate, checkToday } = useDatePicker();
   const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
-  const { containerRef } = useClose({ closeFunction: closeDropdown });
   const logger = useLogger();
+  const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
+  useEscapeKey({ onEscape: closeDropdown });
 
   const diningTime = new DiningTime();
   const handleDiningTypeChange = (value: DiningType) => {

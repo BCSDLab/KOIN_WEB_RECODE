@@ -2,14 +2,14 @@ import React from 'react';
 import { LoginResponse } from 'api/auth/entity';
 import { Link, useNavigate } from 'react-router-dom';
 import { setCookie } from 'utils/ts/cookie';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { auth } from 'api';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useTokenStore } from 'utils/zustand/auth';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {

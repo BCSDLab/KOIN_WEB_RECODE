@@ -2,8 +2,9 @@ import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-grey.svg';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import { Opens } from 'api/coopshop/entity';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
-import { useClose } from 'utils/hooks/useClose';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKey } from 'utils/hooks/ui/useEscapeKey';
 import styles from './CafeteriaInfo.module.scss';
 
 interface ScheduleTableProps {
@@ -49,7 +50,8 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
   const { cafeteriaInfo } = useCoopshopCafeteria();
   const weekday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '평일');
   const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '주말');
-  const { backgroundRef } = useClose({ closeFunction: closePopup });
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: closePopup });
+  useEscapeKey({ onEscape: closePopup });
   const isMobile = useMediaQuery();
 
   return (

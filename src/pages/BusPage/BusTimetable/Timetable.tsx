@@ -4,7 +4,7 @@ import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
 import {
   BUS_TYPES, CITY_BUS_TIMETABLE, EXPRESS_COURSES, SHUTTLE_COURSES,
 } from 'static/bus';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './BusTimetable.module.scss';
 
 function Template({ headers, arrivalList }: { headers: string[], arrivalList: string[][] }) {
