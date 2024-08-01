@@ -12,59 +12,14 @@
     border-radius: 5px;
     background-color: #fafafa;
 
-    &--item {
-      display: flex;
-      border-radius: 5px;
-      justify-content: space-between;
-      padding: 12px 16px 12px 24px;
-      align-items: center;
-      font-family: Pretendard, sans-serif;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 21.48px;
-      text-align: left;
-      color: #8e8e8e;
+    &--scroll {
+      height: 642px;
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
 
-      &:hover {
-        background-color: #eee;
-      }
-
-      &:active {
-        background-color: #e1e1e1;
-        color: #4b4b4b;
-      }
-
-      /* 선택된 예비 시간표
-      &:nth-child(1) {
-       background-color: #fafafa;
-       color: #175c8e;
-      }
-      */
-    }
-
-    &--setting {
-      display: flex;
-      border: none;
-      background-color: inherit;
-      cursor: pointer;
-      align-items: center;
-      padding: 6px 8px;
-      border-radius: 5px;
-      gap: 4px;
-      font-family: Pretendard, sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 16.71px;
-      text-align: left;
-      color: inherit;
-
-      &:hover {
-        background-color: #e1e1e1;
-      }
-
-      &:active {
-        background-color: #cacaca;
-        color: #4b4b4b;
+      ::-webkit-scrollbar {
+        display: none;
       }
     }
 
@@ -91,6 +46,60 @@
 
       &:active {
         background-color: #e1e1e1;
+        color: #4b4b4b;
+      }
+    }
+  }
+
+  &__item {
+    display: flex;
+    width: 100%;
+    border-radius: 5px;
+    justify-content: space-between;
+    padding: 12px 16px 12px 24px;
+    align-items: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.48px;
+    text-align: left;
+    color: #8e8e8e;
+
+    &--selected {
+      color: #175c8e;
+    }
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &:active {
+      background-color: #e1e1e1;
+      color: #4b4b4b;
+    }
+
+    &--setting {
+      display: flex;
+      border: none;
+      background-color: inherit;
+      cursor: pointer;
+      align-items: center;
+      padding: 6px 8px;
+      border-radius: 5px;
+      gap: 4px;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16.71px;
+      text-align: left;
+      color: inherit;
+
+      &:hover {
+        background-color: #e1e1e1;
+      }
+
+      &:active {
+        background-color: #cacaca;
         color: #4b4b4b;
       }
     }
