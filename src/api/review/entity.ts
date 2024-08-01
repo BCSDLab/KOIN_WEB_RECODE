@@ -8,5 +8,5 @@ export interface ReviewRequest extends APIResponse {
 }
 
 export interface UploadImage extends APIResponse {
-  file_urls: string;
+  file_url: string;
 }

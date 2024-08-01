@@ -25,9 +25,11 @@ export class UploadFile<R extends UploadImage> implements APIRequest<R> {
 
   path = 'SHOPS/upload/file';
 
+  auth = true;
+
   data: FormData;
 
-  constructor(formData: FormData) {
+  constructor(public authorization: string, formData: FormData) {
     this.data = formData;
   }
 }
