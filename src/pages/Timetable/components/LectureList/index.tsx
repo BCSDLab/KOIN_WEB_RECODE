@@ -11,7 +11,7 @@ import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import useSearch from 'pages/Timetable/hooks/useSearch';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import LectureTable from 'components/TimetablePage/LectureTable';
-import { useUser } from 'utils/hooks/useUser';
+import { useUser } from 'utils/hooks/state/useUser';
 import { useParams } from 'react-router-dom';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';

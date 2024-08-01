@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports */
 import React from 'react';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import TimetableSettingModal from 'pages/Timetable/components/TimetableList/TimetableSettingModal';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';

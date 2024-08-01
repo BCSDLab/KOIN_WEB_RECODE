@@ -3,8 +3,8 @@ import RoomDetailImg from 'components/Room/RoomDetailImg';
 import RoomDetailOption from 'components/Room/RoomDetailOption';
 import RoomDetailTable from 'components/Room/RoomDetailTable';
 import RoomDetailMap from 'components/Room/RoomDetailMap';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
-import useScrollToTop from 'utils/hooks/useScrollToTop';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useRoomDetail from './hooks/useRoomDetail';
 import styles from './RoomDetailPage.module.scss';
 

@@ -1,5 +1,5 @@
 import { cn, sha256 } from '@bcsdlab/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { ReactComponent as BlindIcon } from 'assets/svg/blind-icon.svg';
 import { ReactComponent as ShowIcon } from 'assets/svg/show-icon.svg';
@@ -8,8 +8,10 @@ import { ReactComponent as WarningMobileIcon } from 'assets/svg/warning-mobile-i
 import useCheckPassword from 'components/common/Header/hooks/useCheckPassword';
 import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useAuthenticationActions } from 'utils/zustand/authentication';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -22,7 +24,8 @@ export default function AuthenticateUserModal({
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
-  const backgroundRef = useRef<HTMLDivElement>(null);
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+  useEscapeKeyDown({ onEscape: onClose });
 
   const isMobile = useMediaQuery();
   const { updateAuthentication } = useAuthenticationActions();
@@ -56,31 +59,16 @@ export default function AuthenticateUserModal({
     }
   });
 
-  window.addEventListener('unload', () => {
-    updateAuthentication(false);
-  });
-
   useEffect(() => {
-    const handleEscKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
+    const handleUnload = () => {
+      updateAuthentication(false);
     };
 
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (e.target === backgroundRef.current) {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', (e) => handleEscKeyDown(e));
-    window.addEventListener('click', (e) => handleOutsideClick(e));
-
+    window.addEventListener('unload', handleUnload);
     return () => {
-      window.removeEventListener('keydown', (e) => handleEscKeyDown(e));
-      window.addEventListener('click', (e) => handleOutsideClick(e));
+      window.removeEventListener('unload', handleUnload);
     };
-  }, [onClose]);
+  }, [updateAuthentication]);
 
   return (
     <div className={styles.background} aria-hidden ref={backgroundRef}>

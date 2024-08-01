@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { MenuCategory } from 'api/store/entity';
 import { cn } from '@bcsdlab/utils';
 import MENU_CATEGORY from 'static/menu';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './MenuTable.module.scss';
 
 interface MenuTableProps {
