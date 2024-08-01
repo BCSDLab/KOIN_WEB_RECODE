@@ -6,7 +6,9 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
 import uuidv4 from 'utils/ts/uuidGenerater';
+// import useImageUpload from 'utils/hooks/useImageUpload';
 import styles from './StoreReviewPage.module.scss';
+import { useReivewStore } from './hooks/useStoreReview';
 
 function StoreReviewPage() {
   const params = useParams();
@@ -15,7 +17,13 @@ function StoreReviewPage() {
   const [imageList, setImageList] = useState<string[]>([]);
   const [reviewText, setReviewText] = useState('');
   const [menuList, setMenuList] = useState<{ id: string, name: string }[]>([]);
+  const { mutate } = useReivewStore(String(storeDetail.id));
 
+  // const {
+  //   imageFile, imgRef, saveImgFile, setImageFile,
+  // } = useImageUpload();
+
+  // console.log('24', imageFile);
   const addMenu = () => {
     setMenuList([...menuList, { id: uuidv4(), name: '' }]);
   };
@@ -39,11 +47,24 @@ function StoreReviewPage() {
   };
 
   const deleteImage = (url: string) => {
-    setImageList(imageList.filter((image) => image !== url));
+    setImageList(imageList.filter((image: string) => image !== url));
+  };
+
+  const handleSumbit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const reviewData = {
+      rating: rate,
+      content: reviewText,
+      image_urls: imageList,
+      menu_names: menuList.map((menu) => menu.name),
+    };
+    if (rate) {
+      mutate(reviewData);
+    }
   };
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={handleSumbit}>
       <div className={styles.form__name}>
         <div>
           {storeDetail?.name}
@@ -85,7 +106,7 @@ function StoreReviewPage() {
         </div>
         <div className={styles.template__description}>리뷰와 관련된 사진을 업로드해주세요.</div>
         <ul className={styles.template__images}>
-          {imageList.map((url) => (
+          {imageList.map((url: string) => (
             <li key={url}>
               <img src={url} alt="리뷰 이미지" />
               <button
@@ -100,7 +121,13 @@ function StoreReviewPage() {
         </ul>
         <label htmlFor="image-file" className={styles['template__upload-image']}>
           사진 등록하기
-          <input type="file" id="image-file" multiple onChange={addImage} />
+          <input
+            type="file"
+            accept="image/*"
+            id="image-file"
+            multiple
+            onChange={addImage}
+          />
         </label>
       </div>
       <div className={styles.template}>
