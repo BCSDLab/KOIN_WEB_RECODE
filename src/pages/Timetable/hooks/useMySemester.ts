@@ -2,7 +2,7 @@ import { timetable } from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import useTokenState from 'utils/hooks/useTokenState';
 
-const MY_SEMESTER_INFO_KEY = 'my_semester';
+export const MY_SEMESTER_INFO_KEY = 'my_semester';
 
 const useSemesterCheck = () => {
   const token = useTokenState();
