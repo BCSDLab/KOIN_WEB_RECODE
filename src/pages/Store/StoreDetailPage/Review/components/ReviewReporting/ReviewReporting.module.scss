@@ -60,9 +60,13 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  background-color: #8e8e8e;
   border-radius: 4px;
-  background: #175c8e;
   color: #fff;
   font-size: 15px;
   font-weight: 500;
+
+  &--active {
+    background-color: #175c8e;
+  }
 }

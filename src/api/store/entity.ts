@@ -161,3 +161,9 @@ export interface Review {
   is_modified: boolean,
   created_at: string
 }
+
+export interface ReviewReportRequest {
+  title: string,
+  content: string
+}
+export interface ReviewReportResponse extends APIResponse { }

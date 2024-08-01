@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import CheckBox from 'components/common/Common\bCheckBox';
+import showToast from 'utils/ts/showToast';
 import ReportingLabel from './components/ReportingLabel';
 import styles from './ReviewReporting.module.scss';
 
@@ -18,8 +19,8 @@ export default function ReviewReportingPage() {
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto'; // Reset height to auto
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 10}px`; // Set height based on scrollHeight
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 10}px`;
     }
   }, [etcDescription]);
 
@@ -115,11 +116,15 @@ export default function ReviewReportingPage() {
         />
       </div>
       <button
-        className={styles['reporting-button']}
+        className={cn({
+          [styles['reporting-button']]: true,
+          [styles['reporting-button--active']]: selectOptions.length > 0,
+        })}
         type="submit"
         onClick={() => {
-          console.log(selectOptions);
+          showToast('success', '신고가 완료되었습니다.');
         }}
+        disabled={selectOptions.length === 0}
       >
         신고하기
       </button>
