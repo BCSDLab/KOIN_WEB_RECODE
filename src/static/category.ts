@@ -81,7 +81,7 @@ export const CATEGORY: Category[] = [
       },
       {
         title: '리뷰 신고하기',
-        link: '/review/report',
+        link: '/report/review',
         newFlag: false,
         planFlag: false,
         tag: null,

@@ -71,7 +71,6 @@ function App() {
           </Route>
           <Route path="/room" element={<HelmetWrapper title="코인 - 복덕방" element={<RoomPage />} />} />
           <Route path="/room/:id" element={<HelmetWrapper title="코인 - 복덕방 상세" element={<RoomDetailPage />} />} />
-          <Route path="/review/report/test" element={<HelmetWrapper title="코인 - 리뷰 신고" element={<ReviewReportingPage />} />} />
         </Route>
         <Route path="auth" element={<PrivateRoute requireAuthentication={false} element={<AuthPage />} />}>
           <Route index element={<HelmetWrapper title="코인 - 로그인" element={<LoginPage />} />} />
@@ -80,7 +79,7 @@ function App() {
         </Route>
         <Route path="/" element={<BoardPage />}>
           <Route path="review/:id" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 상점 리뷰" element={<StoreReviewPage />} />} />} />
-          <Route path="/shops/:shopid/reviews/:reviewid/reports" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 리뷰 신고" element={<ReviewReportingPage />} />} />} />
+          <Route path="/report/review/shopid/:shopid/reviewid/:reviewid" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 리뷰 신고" element={<ReviewReportingPage />} />} />} />
         </Route>
         <Route path="auth" element={<AuthPage />}>
           <Route path="modifyInfo" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보 변경" element={<ModifyInfoPage />} />} />} />

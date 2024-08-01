@@ -30,7 +30,7 @@ export default function SelectButton({ is_mine, shop_id, review_id }: Props) {
           <button
             className={styles['report-button']}
             type="button"
-            onClick={() => navigate(`/shops/${shop_id}/reviews/${review_id}/reports`)}
+            onClick={() => navigate(`/report/review/shopid/${shop_id}/reviewid/${review_id}`)}
           >
             신고하기
             {' '}
