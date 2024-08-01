@@ -5,9 +5,12 @@
   height: 5vh;
   border-radius: 0.25em;
   cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
 
   &:active {
     background-color: #10477a;
     color: white;
+    transform: scale(0.985);
+    transition: transform 0.2s, background-color 0.3s;
   }
 }

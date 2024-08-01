@@ -23,7 +23,8 @@ export default function AverageRating() {
       <div className={styles.point}>
         <div className={styles.point__rating}>{ratingObject.average_rating.toFixed(1)}</div>
         <div>
-          {rating.map((ratio) => (ratio ? <Star /> : <EmptyStar />))}
+          {/* eslint-disable-next-line */}
+          {rating.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}
         </div>
       </div>
       <div className={styles.rating}>
@@ -32,6 +33,7 @@ export default function AverageRating() {
             point={rate}
             count={ratingObject.ratings[rate]}
             rate={(ratingObject.ratings[rate] / totalReviewCount) * 100}
+            key={rate}
           />
         ))}
       </div>

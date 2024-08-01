@@ -107,3 +107,31 @@ export const CITY_BUS_TIMETABLE = [
   ['시간표(병천)', '6:10(첫) - 22:45(막) (10분간격)'],
   ['소요시간', '약 40분'],
 ];
+
+export interface BusLink {
+  label: string;
+  link: string;
+  key: string;
+  type: typeof BUS_TYPES[number];
+}
+
+export const busLink: BusLink[] = [
+  {
+    label: '유니버스 바로가기',
+    link: 'https://koreatech.unibus.kr/',
+    key: 'shuttle',
+    type: BUS_TYPES[0],
+  },
+  {
+    label: '시간표 보러가기',
+    link: '/bus',
+    key: 'express',
+    type: BUS_TYPES[1],
+  },
+  {
+    label: '시간표 보러가기',
+    link: '/bus',
+    key: 'city',
+    type: BUS_TYPES[2],
+  },
+];
