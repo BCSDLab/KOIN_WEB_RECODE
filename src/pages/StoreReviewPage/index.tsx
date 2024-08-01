@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
 import uuidv4 from 'utils/ts/uuidGenerater';
-// import useImageUpload from 'utils/hooks/useImageUpload';
+import useImageUpload from 'utils/hooks/useImageUpload';
 import styles from './StoreReviewPage.module.scss';
 import { useReivewStore } from './hooks/useStoreReview';
 
@@ -14,16 +14,14 @@ function StoreReviewPage() {
   const params = useParams();
   const { storeDetail } = useStoreDetail(params.id!);
   const [rate, setRate] = useState(0);
-  const [imageList, setImageList] = useState<string[]>([]);
   const [reviewText, setReviewText] = useState('');
   const [menuList, setMenuList] = useState<{ id: string, name: string }[]>([]);
   const { mutate } = useReivewStore(String(storeDetail.id));
 
-  // const {
-  //   imageFile, imgRef, saveImgFile, setImageFile,
-  // } = useImageUpload();
+  const {
+    imageFile, imgRef, saveImgFile, setImageFile,
+  } = useImageUpload();
 
-  // console.log('24', imageFile);
   const addMenu = () => {
     setMenuList([...menuList, { id: uuidv4(), name: '' }]);
   };
@@ -39,15 +37,8 @@ function StoreReviewPage() {
     setMenuList(newMenuList);
   };
 
-  const addImage = (e:React.ChangeEvent<HTMLInputElement>) => {
-    const uploadImages = e.target.files!;
-    const newImageList = [...imageList,
-      ...Array.from(uploadImages).map((file) => URL.createObjectURL(file))];
-    setImageList(newImageList);
-  };
-
   const deleteImage = (url: string) => {
-    setImageList(imageList.filter((image: string) => image !== url));
+    setImageFile(imageFile.filter((image: string) => image !== url));
   };
 
   const handleSumbit = (e: React.FormEvent) => {
@@ -55,7 +46,7 @@ function StoreReviewPage() {
     const reviewData = {
       rating: rate,
       content: reviewText,
-      image_urls: imageList,
+      image_urls: imageFile,
       menu_names: menuList.map((menu) => menu.name),
     };
     if (rate) {
@@ -97,16 +88,16 @@ function StoreReviewPage() {
           <span>사진</span>
           <span className={cn({
             [styles.template__title__count]: true,
-            [styles['template__title__count--active']]: imageList.length === 3,
+            [styles['template__title__count--active']]: imageFile.length === 3,
           })}
           >
-            {imageList.length}
+            {imageFile.length}
             /3
           </span>
         </div>
         <div className={styles.template__description}>리뷰와 관련된 사진을 업로드해주세요.</div>
         <ul className={styles.template__images}>
-          {imageList.map((url: string) => (
+          {imageFile.map((url: string) => (
             <li key={url}>
               <img src={url} alt="리뷰 이미지" />
               <button
@@ -123,10 +114,11 @@ function StoreReviewPage() {
           사진 등록하기
           <input
             type="file"
+            ref={imgRef}
             accept="image/*"
             id="image-file"
             multiple
-            onChange={addImage}
+            onChange={saveImgFile}
           />
         </label>
       </div>
