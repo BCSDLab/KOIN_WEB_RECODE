@@ -4,11 +4,13 @@ import { ReviewRequest } from 'api/review/entity';
 import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
 import showToast from 'utils/ts/showToast';
+import useTokenState from 'utils/hooks/useTokenState';
 
 export const useReivewStore = (id: string) => {
+  const token = useTokenState();
   const navigate = useNavigate();
   const { mutate, error } = useMutation({
-    mutationFn: (reviewData: ReviewRequest) => api.review.postStoreReview(id, reviewData),
+    mutationFn: (reviewData: ReviewRequest) => api.review.postStoreReview(token, id, reviewData),
     onSuccess: () => {
       navigate(`/store/${id!}`);
     },

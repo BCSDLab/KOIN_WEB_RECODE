@@ -8,9 +8,11 @@ export class StoreReview<R extends ReviewRequest> implements APIRequest<R> {
 
   path: string;
 
+  auth = true;
+
   data: ReviewRequest;
 
-  constructor(id: string, data: ReviewRequest) {
+  constructor(public authorization: string, id: string, data: ReviewRequest) {
     this.path = `shops/${id}/reviews`;
     this.data = data;
   }
