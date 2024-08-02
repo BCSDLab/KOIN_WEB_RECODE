@@ -11,6 +11,7 @@ import {
   AddTimetableFrame,
   UpdateTimetableFrame,
   DeleteTimetableFrame,
+  TimetableLectureInfoV2,
 } from './APIDetail';
 
 export const getLectureList = APIClient.of(LectureList);
@@ -34,3 +35,5 @@ export const addTimetableFrame = APIClient.of(AddTimetableFrame);
 export const updateTimetableFrame = APIClient.of(UpdateTimetableFrame);
 
 export const deleteTimetableFrame = APIClient.of(DeleteTimetableFrame);
+
+export const getTimetableLectureInfoV2 = APIClient.of(TimetableLectureInfoV2);

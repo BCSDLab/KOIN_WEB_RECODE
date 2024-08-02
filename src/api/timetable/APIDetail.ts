@@ -14,6 +14,10 @@ import {
   TimetableFrameListResponse,
   AddTimetableFrameResponse,
   DeleteTimetableFrameResponse,
+  TimetableLectureInfoV2Response,
+  AddTimetableLectureV2Request,
+  UpdateTimetableLectureV2Request,
+  DeleteTimetableLectureV2Request,
 } from './entity';
 
 export class LectureList<R extends LectureInfoResponse> implements APIRequest<R> {
@@ -188,5 +192,71 @@ export class DeleteTimetableFrame<R extends DeleteTimetableFrameResponse> implem
     this.params = {
       id,
     };
+  }
+}
+export class TimetableLectureInfoV2
+  <R extends TimetableLectureInfoV2Response> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/v2/timetables/lecture';
+
+  response!: R;
+
+  auth = true;
+
+  params: {
+    [index: string]: number;
+  };
+
+  constructor(public authorization: string, timeTableFrameId: number) {
+    this.params = {
+      timetable_frame_id: timeTableFrameId,
+    };
+  }
+}
+
+export class AddTimetableLectureV2
+  <R extends TimetableLectureInfoV2Response> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/v2/timetables/lecture';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public data: AddTimetableLectureV2Request, public authorization: string) {}
+}
+
+export class UpdateTimetableLectureV2
+  <R extends TimetableLectureInfoV2Response> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/v2/timetables/lecture';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public data: UpdateTimetableLectureV2Request, public authorization: string) {}
+}
+
+export class DeleteTimetableLectureV2
+  <R extends TimetableLectureInfoV2Response> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path = '/v2/timetables/lecture/:id';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public id: number,
+    public data: DeleteTimetableLectureV2Request,
+  ) {
+    this.path = `/v2/timetables/frame/${id}`;
+    this.data = data;
   }
 }
