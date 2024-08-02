@@ -103,13 +103,10 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
         <ScheduleTable title="평일" schedules={weekday} />
         <ScheduleTable title="주말" schedules={weekend} />
 
-        {isMobile && (
-          <div className={styles.update}>
-            {cafeteriaInfo.updated_at.split('-').join('.')}
-            &nbsp;
-            업데이트
-          </div>
-        )}
+        <div className={styles.update}>
+          {cafeteriaInfo.updated_at.split('-').join('.')}
+          &nbsp;업데이트
+        </div>
       </div>
     </div>
   );
