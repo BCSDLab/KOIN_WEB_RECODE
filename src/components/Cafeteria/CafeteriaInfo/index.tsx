@@ -17,8 +17,7 @@ function ScheduleTable({ title, schedules }: ScheduleTableProps) {
     <div className={styles.table}>
       <span className={styles.table__title}>
         {title}
-        &nbsp;
-        운영시간
+        &nbsp;운영시간
       </span>
       <table className={styles.table__content}>
         <thead>
