@@ -16,7 +16,7 @@ export const useReivewStore = (id: string) => {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        showToast('error', err.message || '에러가 발새했습니다.');
+        showToast('error', err.message || '에러가 발생했습니다.');
       }
     },
   });
