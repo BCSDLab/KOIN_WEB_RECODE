@@ -11,7 +11,7 @@ export default function ReviewPage({ id }: { id: string }) {
   return (
     <Suspense fallback={<div />}>
       <div className={styles.container}>
-        <ReviewButton onClick={() => navigate(`/review/${id}`)} />
+        <ReviewButton goReviewPage={() => navigate(`/review/${id}`)} />
         <AverageRating />
       </div>
       <div>

@@ -9,7 +9,7 @@ const REVEIW_LOGIN = [
   '리뷰 작성은 회원만 사용 가능합니다.',
 ];
 
-export default function ReviewButton({ onClick }: { onClick: ()=> void }) {
+export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void }) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const { data: userInfo } = useUser();
 
@@ -20,7 +20,7 @@ export default function ReviewButton({ onClick }: { onClick: ()=> void }) {
         className={styles.container}
         onClick={() => {
           if (userInfo) {
-            onClick();
+            goReviewPage();
           } else {
             openModal();
           }
