@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import useTokenState from 'utils/hooks/useTokenState';
 import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
