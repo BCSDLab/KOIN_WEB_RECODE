@@ -1,4 +1,5 @@
 import { cn } from '@bcsdlab/utils';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { Suspense, useEffect, useState } from 'react';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
@@ -22,7 +23,7 @@ export default function MobileCafeteriaPage({
 }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
-  const [isCafeteriaInfoOpen, setIsCafeteriaInfoOpen] = useState(false);
+  const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
 
   useBodyScrollLock(isCafeteriaInfoOpen);
@@ -32,12 +33,12 @@ export default function MobileCafeteriaPage({
       <button
         type="button"
         aria-label="학생식당 운영 정보 안내"
-        onClick={() => setIsCafeteriaInfoOpen(true)}
+        onClick={openCafeteriaInfo}
       >
         <InformationIcon />
       </button>
     ));
-  }, [setButtonContent, setIsCafeteriaInfoOpen]);
+  }, [setButtonContent, openCafeteriaInfo]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[dining] });
@@ -100,7 +101,7 @@ export default function MobileCafeteriaPage({
           [styles['cafeteria-info--open']]: isCafeteriaInfoOpen,
         })}
       >
-        <CafeteriaInfo closePopup={() => setIsCafeteriaInfoOpen(false)} />
+        <CafeteriaInfo closeInfo={closeCafeteriaInfo} />
       </div>
     </>
   );

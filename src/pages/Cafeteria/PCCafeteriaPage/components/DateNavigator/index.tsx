@@ -49,8 +49,8 @@ export default function DateNavigator() {
     setToday,
     setDate,
   } = useDatePicker();
-  const [isPopupOpen, openPopup, closePopup] = useBooleanState(false);
-  useBodyScrollLock(isPopupOpen);
+  const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
+  useBodyScrollLock(isCafeteriaInfoOpen);
 
   const thisWeek = generateWeek(currentDate());
 
@@ -89,7 +89,7 @@ export default function DateNavigator() {
         <button
           type="button"
           className={styles.information}
-          onClick={openPopup}
+          onClick={openCafeteriaInfo}
         >
           <InformationIcon />
           학생식당정보
@@ -130,8 +130,8 @@ export default function DateNavigator() {
         ))}
       </div>
 
-      {isPopupOpen && createPortal(
-        <CafeteriaInfo closePopup={closePopup} />,
+      {isCafeteriaInfoOpen && createPortal(
+        <CafeteriaInfo closeInfo={closeCafeteriaInfo} />,
         document.body,
       )}
     </div>

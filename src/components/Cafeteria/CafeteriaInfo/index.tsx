@@ -42,15 +42,15 @@ function ScheduleTable({ title, schedules }: ScheduleTableProps) {
 }
 
 interface CafeteriaInfoProps {
-  closePopup: () => void;
+  closeInfo: () => void;
 }
 
-export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
+export default function CafeteriaInfo({ closeInfo }: CafeteriaInfoProps) {
   const { cafeteriaInfo } = useCoopshopCafeteria();
   const weekday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '평일');
   const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '주말');
-  const { backgroundRef } = useOutsideClick({ onOutsideClick: closePopup });
-  useEscapeKeyDown({ onEscape: closePopup });
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });
+  useEscapeKeyDown({ onEscape: closeInfo });
   const isMobile = useMediaQuery();
 
   return (
@@ -63,7 +63,7 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
               <button
                 type="button"
                 aria-label="닫기 버튼"
-                onClick={closePopup}
+                onClick={closeInfo}
               >
                 <BlackArrowBackIcon />
               </button>
@@ -94,7 +94,7 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
             type="button"
             aria-label="닫기 버튼"
             className={styles['header__close-button']}
-            onClick={closePopup}
+            onClick={closeInfo}
           >
             <CloseIcon />
           </button>
