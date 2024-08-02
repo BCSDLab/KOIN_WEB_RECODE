@@ -37,8 +37,6 @@ export default function MobileCafeteriaPage({
         <InformationIcon />
       </button>
     ));
-
-    return () => setButtonContent(null);
   }, [setButtonContent, setIsCafeteriaInfoOpen]);
 
   const handleDiningTypeChange = (dining: DiningType) => {

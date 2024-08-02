@@ -26,6 +26,7 @@ import MetaHelmet from 'components/common/MetaHelmet';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
 import PrivateRoute from 'components/common/PrivateRoute';
 import ModifyTimetablePage from 'pages/Timetable/ModifyTimetablePage';
+import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 
 interface HelmetWrapperProps {
   title: string;
@@ -51,6 +52,8 @@ function HelmetWrapper({ title, element }: HelmetWrapperProps) {
 }
 
 function App() {
+  useResetHeaderButton();
+
   return (
     <>
       <Routes>
