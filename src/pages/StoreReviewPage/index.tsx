@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
 import uuidv4 from 'utils/ts/uuidGenerater';
-import useImageUpload from 'utils/hooks/useImageUpload';
+import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import styles from './StoreReviewPage.module.scss';
 import { useReivewStore } from './hooks/useStoreReview';
 

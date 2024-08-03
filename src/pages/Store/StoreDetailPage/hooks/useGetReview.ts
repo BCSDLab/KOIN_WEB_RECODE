@@ -1,6 +1,6 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { getReviewList } from 'api/store';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 
 export const useGetReview = (id: number) => {
   const token = useTokenState();
