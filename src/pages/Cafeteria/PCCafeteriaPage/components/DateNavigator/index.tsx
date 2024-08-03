@@ -7,6 +7,7 @@ import { createPortal } from 'react-dom';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {
@@ -49,8 +50,9 @@ export default function DateNavigator() {
     setToday,
     setDate,
   } = useDatePicker();
-  const [isPopupOpen, openPopup, closePopup] = useBooleanState(false);
-  useBodyScrollLock(isPopupOpen);
+  const { cafeteriaInfo } = useCoopshopCafeteria();
+  const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
+  useBodyScrollLock(isCafeteriaInfoOpen);
 
   const thisWeek = generateWeek(currentDate());
 
@@ -89,7 +91,7 @@ export default function DateNavigator() {
         <button
           type="button"
           className={styles.information}
-          onClick={openPopup}
+          onClick={openCafeteriaInfo}
         >
           <InformationIcon />
           학생식당정보
@@ -130,8 +132,8 @@ export default function DateNavigator() {
         ))}
       </div>
 
-      {isPopupOpen && createPortal(
-        <CafeteriaInfo closePopup={closePopup} />,
+      {isCafeteriaInfoOpen && createPortal(
+        <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={closeCafeteriaInfo} />,
         document.body,
       )}
     </div>
