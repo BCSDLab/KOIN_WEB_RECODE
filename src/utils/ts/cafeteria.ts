@@ -52,6 +52,10 @@ export class DiningTime {
     return !(this.isBreakfastTime() && this.now.getHours() >= 18);
   }
 
+  public isTomorrowDining() {
+    return this.now.getHours() >= 18;
+  }
+
   public generateDiningDate() {
     if (this.isTodayDining()) {
       return new Date(this.now);
