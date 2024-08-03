@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
-import useLogger from 'utils/hooks/useLogger';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Footer.module.scss';
 
 function Footer(): JSX.Element {

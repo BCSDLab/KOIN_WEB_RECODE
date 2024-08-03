@@ -1,7 +1,7 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
 import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import CurriculumListBox from 'pages/Timetable/components/Curriculum';
@@ -11,7 +11,7 @@ import Timetable from 'components/TimetablePage/Timetable';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import { useSemester } from 'utils/zustand/semester';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 

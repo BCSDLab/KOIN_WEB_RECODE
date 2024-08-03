@@ -1,15 +1,18 @@
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
+import { ReactComponent as HeartIcon } from 'assets/svg/heart.svg';
+import { ReactComponent as FilledHeartIcon } from 'assets/svg/heart-filled.svg';
 import { Dining, DiningType } from 'interfaces/Cafeteria';
-import useModalPortal from 'utils/hooks/useModalPortal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import { useEffect } from 'react';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
@@ -18,10 +21,14 @@ interface MobileDiningBlocksProps {
 
 export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksProps) {
   const portalManager = useModalPortal();
-  const { target } = useOnClickOutside<HTMLImageElement>(portalManager.close);
+  const handleClose = () => {
+    portalManager.close();
+  };
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: handleClose });
+  useEscapeKeyDown({ onEscape: handleClose });
 
   const { currentDate } = useDatePicker();
-  const { dinings } = useDinings(currentDate());
+  const { dinings, likeDining } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
 
   const logger = useLogger();
@@ -34,11 +41,16 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
       });
 
       portalManager.open((portalOption: Portal) => (
-        <div className={styles.photo}>
-          <div className={styles.photo__close}>
+        <div className={styles.photo} ref={backgroundRef}>
+          <button
+            type="button"
+            aria-label="닫기"
+            className={styles.photo__close}
+            onClick={handleClose}
+          >
             <CloseIcon onClick={portalOption.close} />
-          </div>
-          <img src={dining.image_url as string} alt="mealDetail" ref={target} />
+          </button>
+          <img src={dining.image_url as string} alt="mealDetail" />
         </div>
       ));
     }
@@ -82,6 +94,14 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
               </ul>
               <MobileMealImage dining={dining} handleImageClick={handleImageClick} />
             </li>
+            <button
+              type="button"
+              className={styles.like}
+              onClick={() => likeDining(dining.id, dining.is_liked)}
+            >
+              {dining.is_liked ? <FilledHeartIcon /> : <HeartIcon />}
+              <span className={styles.like__count}>{dining.likes === 0 ? '좋아요' : dining.likes.toLocaleString()}</span>
+            </button>
           </ul>
         </div>
       ))}

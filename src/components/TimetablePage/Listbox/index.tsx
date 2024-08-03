@@ -1,10 +1,11 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
-import useLogger from 'utils/hooks/useLogger';
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './Listbox.module.scss';
 import newStyles from './NewListbox.module.scss';
 
@@ -33,6 +34,9 @@ function Listbox({
   version = 'default',
 }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
+  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
+  useEscapeKeyDown({ onEscape: closePopup });
+
   const logger = useLogger();
   const handleLogClick = (optionValue: string) => {
     if (logTitle === 'select_dept') {
@@ -57,13 +61,11 @@ function Listbox({
     handleLogClick(optionValue ?? '');
     closePopup();
   };
-  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
+
   const styleClasses = version !== 'default' ? newStyles : styles;
+
   return (
-    <div
-      className={styleClasses.select}
-      ref={target}
-    >
+    <div className={styleClasses.select} ref={containerRef}>
       <button
         type="button"
         onClick={handleToggleListBox}

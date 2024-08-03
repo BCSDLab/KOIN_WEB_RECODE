@@ -6,7 +6,7 @@ import TimetableHeader from 'pages/Timetable/components/TimetableHeader';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import React, { Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
 import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/Timetable/components/LectureList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';

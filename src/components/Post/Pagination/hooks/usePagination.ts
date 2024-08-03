@@ -1,4 +1,4 @@
-import useParamsHandler from 'utils/hooks/useParamsHandler';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 
 const PAGE_LIMIT = 5;
 
