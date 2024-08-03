@@ -7,6 +7,7 @@ import { createPortal } from 'react-dom';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {
@@ -49,6 +50,7 @@ export default function DateNavigator() {
     setToday,
     setDate,
   } = useDatePicker();
+  const { cafeteriaInfo } = useCoopshopCafeteria();
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   useBodyScrollLock(isCafeteriaInfoOpen);
 
@@ -131,7 +133,7 @@ export default function DateNavigator() {
       </div>
 
       {isCafeteriaInfoOpen && createPortal(
-        <CafeteriaInfo closeInfo={closeCafeteriaInfo} />,
+        <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={closeCafeteriaInfo} />,
         document.body,
       )}
     </div>

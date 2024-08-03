@@ -1,7 +1,6 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-grey.svg';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
-import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
-import { Opens } from 'api/coopshop/entity';
+import { Opens, CoopshopResponse } from 'api/coopshop/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -42,11 +41,11 @@ function ScheduleTable({ title, schedules }: ScheduleTableProps) {
 }
 
 interface CafeteriaInfoProps {
+  cafeteriaInfo: CoopshopResponse;
   closeInfo: () => void;
 }
 
-export default function CafeteriaInfo({ closeInfo }: CafeteriaInfoProps) {
-  const { cafeteriaInfo } = useCoopshopCafeteria();
+export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInfoProps) {
   const weekday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '평일');
   const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '주말');
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });

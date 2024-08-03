@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -23,6 +24,7 @@ export default function MobileCafeteriaPage({
 }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
+  const { cafeteriaInfo } = useCoopshopCafeteria();
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
 
@@ -101,7 +103,7 @@ export default function MobileCafeteriaPage({
           [styles['cafeteria-info--open']]: isCafeteriaInfoOpen,
         })}
       >
-        <CafeteriaInfo closeInfo={closeCafeteriaInfo} />
+        <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={closeCafeteriaInfo} />
       </div>
     </>
   );
