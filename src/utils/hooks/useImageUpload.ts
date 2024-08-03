@@ -18,7 +18,7 @@ export default function useImageUpload() {
   const saveImgFile = async () => {
     const files = imgRef.current?.files;
     // imageFile.length + files.length을 통해 저장된 이미지 + 새로 추가할 이미지의 개수를 파악함
-    if (files && (files.length > 3 || imageFile.length >= 3 || imageFile.length + files.length > 3)) {
+    if (files && (imageFile.length + files.length > 3)) {
       showToast('error', '파일은 3개까지 등록할 수 있습니다.')
       return;
     }
@@ -42,13 +42,10 @@ export default function useImageUpload() {
 
         const formData = new FormData();
         formData.append('multipartFile', file);
-        console.log('45', formData);
 
         try {
           const data = await uploadFile(token, formData);
-          console.log('49',data);
           if (data.file_url) {
-            console.log('51', data.file_url);
             uploadedFile.push(data.file_url);
           }
         } catch (error: any) {
@@ -68,7 +65,6 @@ export default function useImageUpload() {
           return;
         }
       }
-      console.log('72', uploadedFile);
       setImageFile(uploadedFile);
       setUploadError('');
     }
