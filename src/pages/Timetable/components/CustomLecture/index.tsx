@@ -7,7 +7,7 @@ import CustomLectureDefaultInput from './CustomLectureDefaultInput';
 import CustomLectureLocationTimeSetting from './CustomLectureLocationTimeSetting';
 
 function CustomLecture({ frameId }: { frameId: number }) {
-  const handleAddLecture = (e: any) => {
+  const handleAddLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
