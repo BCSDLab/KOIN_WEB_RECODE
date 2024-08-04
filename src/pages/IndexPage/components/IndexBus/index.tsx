@@ -33,6 +33,34 @@ function IndexBus() {
     };
   };
 
+  const handleCardClick = (type: string) => {
+    const selectedTab = BUS_TYPES.find((busType) => busType.key === type);
+    if (selectedTab) {
+      setSelectedTab(selectedTab);
+    }
+
+    if (type === 'shuttle') {
+      navigate('/bus');
+    } else {
+      navigate(getBusDetail(type).link);
+    }
+  };
+
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement,
+  MouseEvent>, type: string) => {
+    e.stopPropagation();
+
+    if (getBusDetail(type).link.includes('https')) {
+      window.open(getBusDetail(type).link, '_blank');
+    } else {
+      const selectedTab = BUS_TYPES.find((busType) => busType.key === type);
+      if (selectedTab) {
+        setSelectedTab(selectedTab);
+      }
+      navigate(getBusDetail(type).link);
+    }
+  };
+
   return (
     <section className={styles.template}>
       <Link
@@ -53,6 +81,15 @@ function IndexBus() {
               [styles.cards__card]: true,
               [styles['cards__card--sm']]: idx !== 1,
             })}
+            tabIndex={0}
+            role="button"
+            aria-label=""
+            onClick={() => handleCardClick(type)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleCardClick(type);
+              }
+            }}
           >
             <div className={cn({ [styles.cards__head]: true, [styles[`cards__head--${type}`]]: true })}>
               <img className={styles['cards__bus-icon']} src="http://static.koreatech.in/assets/img/ic-bus.png" alt="" />
@@ -75,7 +112,8 @@ function IndexBus() {
                 <button
                   type="button"
                   aria-label="목적지 변경"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     toggleDirection(isMobile ? mobileBusTypes[idx] : idx);
                     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus_changeToFrom', value: BUS_TYPES[idx].tabName });
                   }}
@@ -87,17 +125,7 @@ function IndexBus() {
               </div>
               <button
                 className={styles.cards__redirect}
-                onClick={() => {
-                  if (getBusDetail(type).link.includes('https')) {
-                    window.open(getBusDetail(type).link, '_blank');
-                  } else {
-                    const selectedTab = BUS_TYPES.find((busType) => busType.key === type);
-                    if (selectedTab) {
-                      setSelectedTab(selectedTab);
-                    }
-                    navigate(getBusDetail(type).link);
-                  }
-                }}
+                onClick={(e) => handleButtonClick(e, type)}
                 type="button"
               >
                 {getBusDetail(type).label}
