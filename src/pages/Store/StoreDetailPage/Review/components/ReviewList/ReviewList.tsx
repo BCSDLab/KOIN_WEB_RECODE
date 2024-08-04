@@ -92,7 +92,21 @@ export default function ReviewList() {
   }, [getNextReview, setStickyMode]);
 
   return (
-    <div className={styles.container} onClick={() => setOpenDropdowm(false)} role="button" aria-hidden>
+    <div
+      className={styles.container}
+      onClick={(e) => {
+        const { target } = e;
+        if (target instanceof HTMLElement) {
+          if (target.matches('button')) {
+            setOpenDropdowm((prev) => !prev);
+          } else {
+            setOpenDropdowm(false);
+          }
+        }
+      }}
+      role="button"
+      aria-hidden
+    >
       <div ref={startReview} />
       {(filteredReview.length > 0 || checkboxRef.current?.checked)
       && (
@@ -108,10 +122,6 @@ export default function ReviewList() {
               : (
                 <button
                   type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpenDropdowm((prev) => !prev);
-                  }}
                   className={styles.dropdown}
                 >
                   {currentReviewType.current}
