@@ -27,6 +27,7 @@ type StoreSearchQueryType = {
 interface StoreMobileState {
   sorter: StoreSorterType,
   filter: StoreFilterType[],
+  storeName?: string;
 }
 
 const MOBILE_CHECK_BOX = [
@@ -79,7 +80,11 @@ const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
   return true;
 };
 
-const useStoreListMobile = (sorter: StoreSorterType, filter: StoreFilterType[]) => {
+const useStoreListMobile = (
+  sorter: StoreSorterType,
+  filter: StoreFilterType[],
+  params: StoreSearchQueryType,
+) => {
   const { data: storeListMobile } = useQuery(
     {
       queryKey: ['storeListV2', sorter, filter],
@@ -88,7 +93,7 @@ const useStoreListMobile = (sorter: StoreSorterType, filter: StoreFilterType[]) 
     },
   );
 
-  return storeListMobile?.shops;
+  return storeListMobile?.shops.filter((store) => store.name.includes(params.storeName ? params.storeName : ''));
 };
 
 const useStoreList = (params: StoreSearchQueryType) => {
@@ -120,6 +125,7 @@ const useStoreList = (params: StoreSearchQueryType) => {
 
     const isMatchAllSelectedConditions = matchConditions.every((condition) => condition === true);
 
+    if (params.storeName) return (matchConditions.length === 0 || isMatchAllSelectedConditions) && store.name.includes(params.storeName ? params.storeName : '');
     return matchCategory && (matchConditions.length === 0 || isMatchAllSelectedConditions) && store.name.includes(params.storeName ? params.storeName : '');
   });
 };
@@ -135,11 +141,12 @@ function StorePage() {
   const storeListMobile = useStoreListMobile(
     storeMobileFilterState.sorter,
     storeMobileFilterState.filter,
+    params,
   );
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
-  console.log(storeList);
+
   const selectedCategory = Number(searchParams.get('category'));
   const loggingCheckbox = (id: string) => {
     if (id && searchParams.get(id)) {
@@ -186,6 +193,7 @@ function StorePage() {
               onClick={() => {
                 logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
                 setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
+                setParams('storeName', '', { deleteBeforeParam: true, replacePage: false });
               }}
               key={category.id}
             >
