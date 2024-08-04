@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import Listbox from 'components/TimetablePage/Listbox';
-import useBooleanState from 'utils/hooks/useBooleanState';
-import useLogger from 'utils/hooks/useLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
 import SemesterSettingModal from './SemesterSettingModal';
 import styles from './SemesterList.module.scss';
@@ -45,7 +46,8 @@ function SemesterListbox() {
     closePopup();
   };
 
-  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
+  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
+  useEscapeKeyDown({ onEscape: closePopup });
 
   Listbox.defaultProps = {
     logTitle: '',
@@ -65,7 +67,7 @@ function SemesterListbox() {
         [styles.select]: true,
         [styles['select--opened']]: isOpenedPopup,
       })}
-      ref={target}
+      ref={containerRef}
     >
       <button
         type="button"

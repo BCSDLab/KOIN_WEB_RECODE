@@ -1,15 +1,16 @@
 import { cn } from '@bcsdlab/utils';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import * as api from 'api';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { createPortal } from 'react-dom';
 import { ReactComponent as HamburgerIcon } from 'assets/svg/hamburger-icon.svg';
 import { ReactComponent as KoinServiceLogo } from 'assets/svg/koin-service-logo.svg';
 import { ReactComponent as WhiteArrowBackIcon } from 'assets/svg/white-arrow-back-icon.svg';
-import styles from './MobileHeader.module.scss';
+import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import Panel from './Panel';
+import styles from './MobileHeader.module.scss';
 
 interface MobileHeaderProps {
   openModal: () => void;
@@ -18,8 +19,10 @@ interface MobileHeaderProps {
 export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const { pathname } = useLocation();
   const { openSidebar } = useMobileSidebar();
+  const buttonState = useHeaderButtonStore((state) => state.buttonState);
 
   const isMain = pathname === '/';
+  const isCustomButton = buttonState.type === 'custom';
   const navigate = useNavigate();
   const logger = useLogger();
   const params = useParams();
@@ -42,14 +45,12 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
 
   return (
     <>
-      <div
-        className={styles.mobileheader}
-      >
+      <div className={styles.mobileheader}>
         {!isMain && (
           <button
             className={cn({
-              [styles['mobileheader__icon--left']]: true,
               [styles.mobileheader__icon]: true,
+              [styles['mobileheader__icon--left']]: true,
             })}
             type="button"
             aria-label="뒤로가기 버튼"
@@ -75,17 +76,28 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               .find((submenu) => pathname.startsWith(submenu.link))?.title ?? ''
           )}
         </span>
-        <button
-          className={cn({
-            [styles['mobileheader__icon--right']]: true,
-            [styles.mobileheader__icon]: true,
-          })}
-          type="button"
-          aria-label="메뉴 버튼"
-          onClick={handleHamburgerClick}
-        >
-          <HamburgerIcon />
-        </button>
+        {isCustomButton ? (
+          <span
+            className={cn({
+              [styles.mobileheader__icon]: true,
+              [styles['mobileheader__icon--right']]: true,
+            })}
+          >
+            {buttonState.content}
+          </span>
+        ) : (
+          <button
+            className={cn({
+              [styles.mobileheader__icon]: true,
+              [styles['mobileheader__icon--right']]: true,
+            })}
+            type="button"
+            aria-label="메뉴 버튼"
+            onClick={handleHamburgerClick}
+          >
+            <HamburgerIcon />
+          </button>
+        )}
       </div>
       {createPortal(
         <Panel openModal={openModal} />,

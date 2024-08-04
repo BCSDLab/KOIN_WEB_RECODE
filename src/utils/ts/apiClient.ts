@@ -46,7 +46,8 @@ export default class APIClient {
           url: request.path,
           method: request.method,
           params: request.params,
-          data: (request.convertBody || this.convertBody)(request.data),
+          data: request.data instanceof FormData
+            ? request.data : (request.convertBody || this.convertBody)(request.data),
           timeout: this.timeout,
           baseURL: request.baseURL || this.baseURL,
           headers: this.createHeaders(request),
@@ -85,6 +86,7 @@ export default class APIClient {
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
     const { response } = error;
     return response?.status !== undefined
+      && response?.data !== undefined
       && response.data.code !== undefined
       && response.data.message !== undefined;
   }
