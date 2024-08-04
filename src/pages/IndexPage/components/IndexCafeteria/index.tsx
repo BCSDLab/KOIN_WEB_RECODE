@@ -48,8 +48,6 @@ function IndexCafeteria() {
     closeTooltip();
   };
 
-  console.log(handleTooltipCloseButtonClick);
-
   return (
     <section className={styles.template}>
       <h2 className={styles.header}>

@@ -36,9 +36,7 @@ export default function PCCafeteriaPage({
   const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
-  useEscapeKeyDown({ onEscape: closeDropdown });
 
-  // const diningTime = new DiningTime();
   const handleDiningTypeChange = (value: DiningType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[value] });
     setDiningType(value);
@@ -61,6 +59,7 @@ export default function PCCafeteriaPage({
   };
 
   useScrollToTop();
+  useEscapeKeyDown({ onEscape: closeDropdown });
 
   return (
     <div className={styles.container}>
