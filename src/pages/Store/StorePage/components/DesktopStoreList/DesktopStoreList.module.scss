@@ -174,3 +174,38 @@
     }
   }
 }
+
+.store-none-open {
+  background-color: rgba(4 26 68 / 40%);
+  backdrop-filter: blur(3px);
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  color: #fff;
+
+  &__name {
+    color: #fccc77;
+    margin-left: 15px;
+  }
+
+  &::after {
+    // font-family: NotoSansCJKKR;추가 요망
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 15px;
+      border-radius: 5px;
+    }
+  }
+}
