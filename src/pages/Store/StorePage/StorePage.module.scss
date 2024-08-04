@@ -327,7 +327,7 @@
     height: 25px;
     padding: 12px 20px;
     justify-content: space-between;
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
   }
 
   &__box {
@@ -338,18 +338,18 @@
       border-radius: 5px;
       justify-content: center;
       align-items: center;
-      text-align: center; 
-      color: #E1E1E1;
+      text-align: center;
+      color: #e1e1e1;
       font-size: 12px;
       font-style: normal;
       font-weight: 400;
       line-height: 160%;
-      border: 1px solid #E1E1E1;
+      border: 1px solid #e1e1e1;
     }
 
     &--activate {
-      border: 1px solid #6DBBDD;
-      color: #6DBBDD;
+      border: 1px solid #6dbbdd;
+      color: #6dbbdd;
     }
   }
 }
