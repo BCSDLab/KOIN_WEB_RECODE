@@ -27,7 +27,7 @@ const useSemesterOptionList = () => {
     : semesterListFromLocalStorage.map((item) => item.semester);
   const semesterOptionList = (semesterList ?? []).map(
     (semesterInfo) => ({
-      label: `${semesterInfo.slice(0, 4)}년 ${semesterInfo.slice(4)}학기`,
+      label: `${semesterInfo.slice(0, 4)}년 ${semesterInfo.replace('-', '').slice(4)}학기`,
       value: semesterInfo,
     }),
   );
