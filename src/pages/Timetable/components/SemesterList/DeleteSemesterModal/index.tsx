@@ -1,7 +1,6 @@
 import React from 'react';
-import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
-import useDeleteTimetableFrame from 'pages/Timetable/hooks/useDeleteTimetableFrame';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
+import useDeleteSemester from 'pages/Timetable/hooks/useDeleteSemester';
 import styles from './DeleteSemesterModal.module.scss';
 
 export interface DeleteSemesterModalProps {
@@ -15,14 +14,10 @@ export default function DeleteSemesterModal({
   token,
   semester,
 }: DeleteSemesterModalProps) {
-  const { data: timetableFrame } = useTimetableFrameList(token, semester);
-  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, semester);
-  const deleteSemester = () => {
-    if (timetableFrame) {
-      timetableFrame.map((frame) => (
-        deleteTimetableFrame(frame.id)
-      ));
-    }
+  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, semester);
+  const handleDeleteSemester = () => {
+    deleteTimetableFrame();
+    onClose();
   };
 
   return (
@@ -44,7 +39,7 @@ export default function DeleteSemesterModal({
           <button
             type="button"
             className={styles['container__button--delete']}
-            onClick={deleteSemester}
+            onClick={handleDeleteSemester}
           >
             삭제하기
           </button>

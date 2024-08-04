@@ -3,10 +3,10 @@ import { cn } from '@bcsdlab/utils';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import Listbox from 'components/TimetablePage/Listbox';
 import useTokenState from 'utils/hooks/useTokenState';
-import useAddTimetableFrame from 'pages/Timetable/hooks/useAddTimetableFrame';
 import { AddTimetableFrameRequest } from 'api/timetable/entity';
 import useSemesterCheck from 'pages/Timetable/hooks/useMySemester';
 import showToast from 'utils/ts/showToast';
+import useAddSemester from 'pages/Timetable/hooks/useAddSemester';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {
@@ -39,18 +39,19 @@ export default function AddSemesterModal({
     setSemesterValue(target?.value);
   };
   const token = useTokenState();
-  const { mutate: addSemes } = useAddTimetableFrame(token);
+  const { mutate: addSemester } = useAddSemester(token);
   const { data: mySemester } = useSemesterCheck();
-  const addSemester = (semesters: AddTimetableFrameRequest) => {
+  const handleAddSemester = (semesters: AddTimetableFrameRequest) => {
     if (mySemester) {
       if (mySemester.semesters.includes(semesters.semester)) {
         showToast('info', '이미 있는 학기입니다.');
       } else {
-        addSemes(semesters);
+        addSemester(semesters);
         onClose();
       }
     }
   };
+  const semesterParam = yearValue.replace('년도', '') + (semesterValue.length === 3 ? '' : '-') + semesterValue.replace('학기', '');
   return (
     <div className={styles.background} aria-hidden>
       <div className={styles.container}>
@@ -77,7 +78,7 @@ export default function AddSemesterModal({
             className={cn({
               [styles['container__button--save']]: true,
             })}
-            onClick={() => addSemester({ semester: yearValue.replace('년도', '') + semesterValue.replace('학기', '') })}
+            onClick={() => handleAddSemester({ semester: semesterParam })}
           >
             추가하기
           </button>
