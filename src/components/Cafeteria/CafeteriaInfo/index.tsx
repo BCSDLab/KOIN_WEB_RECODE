@@ -50,10 +50,9 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
   const weekday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '평일');
   const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '주말');
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });
-  const isMobile = useMediaQuery();
-
   useEscapeKeyDown({ onEscape: closeInfo });
   useBodyScrollLock(true);
+  const isMobile = useMediaQuery();
 
   return (
     <div className={styles.background} aria-hidden ref={backgroundRef}>
