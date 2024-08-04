@@ -167,6 +167,10 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
 }
 
 .menus {

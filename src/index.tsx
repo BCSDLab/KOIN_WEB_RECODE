@@ -27,13 +27,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <RecoilRoot>
-      <PortalProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <PortalProvider>
           <QueryClientProvider client={queryClient}>
             <App />
           </QueryClientProvider>
-        </BrowserRouter>
-      </PortalProvider>
+        </PortalProvider>
+      </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>,
 );

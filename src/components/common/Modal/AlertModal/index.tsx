@@ -1,5 +1,7 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
-import { useEffect } from 'react';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './AlertModal.module.scss';
 
 interface AlertModalProps {
@@ -12,32 +14,12 @@ interface AlertModalProps {
 export default function AlertModal({
   title, description, onClose, onConfirm,
 }: AlertModalProps) {
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (target.classList.contains(styles.background)) {
-        onClose();
-      }
-    };
-
-    const handleESCClick = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-    const body = document.querySelector('body');
-    body!.style.overflow = 'hidden';
-    document.addEventListener('click', handleOutsideClick);
-    document.addEventListener('keydown', handleESCClick);
-    return () => {
-      body!.style.overflow = 'auto';
-      document.removeEventListener('click', handleOutsideClick);
-      document.removeEventListener('keydown', handleESCClick);
-    };
-  }, [onClose]);
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+  useEscapeKeyDown({ onEscape: onClose });
+  useBodyScrollLock();
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.modal}>
         <div className={styles.modal__header}>
           <h1 className={styles.modal__title}>{title}</h1>

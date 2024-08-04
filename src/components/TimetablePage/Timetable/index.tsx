@@ -9,16 +9,16 @@ import {
   DAYS_STRING,
 } from 'static/timetable';
 import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useLocation } from 'react-router-dom';
-import useModalPortal from 'utils/hooks/useModalPortal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import AlertModal from 'components/common/Modal/AlertModal';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import { useSemester } from 'utils/zustand/semester';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
 import styles from './Timetable.module.scss';

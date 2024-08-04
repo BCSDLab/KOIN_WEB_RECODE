@@ -81,11 +81,12 @@
   }
 
   &__date {
-    float: right;
+    float: left;
     color: rgb(133 133 133);
     letter-spacing: -0.6px;
     font-size: 12px;
     margin: 6px 0 24px;
+    line-height: 160%;
   }
 
   &__dropdown-wrapper {

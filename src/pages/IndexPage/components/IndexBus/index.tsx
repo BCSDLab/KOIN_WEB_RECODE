@@ -5,7 +5,7 @@ import {
 } from 'static/bus';
 import { cn } from '@bcsdlab/utils';
 import { getLeftTimeString, getStartTimeString, directionToEnglish } from 'pages/BusPage/ts/busModules';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { ReactComponent as ReverseDestination } from 'assets/svg/reverse-destination.svg';
 import { useBusStore } from 'utils/zustand/bus';

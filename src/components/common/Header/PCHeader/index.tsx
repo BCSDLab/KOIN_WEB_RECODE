@@ -2,9 +2,9 @@ import { cn } from '@bcsdlab/utils';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
-import useLogger from 'utils/hooks/useLogger';
-import { useLogout } from 'utils/hooks/useLogout';
-import useTokenState from 'utils/hooks/useTokenState';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useLogout } from 'utils/hooks/auth/useLogout';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './PCHeader.module.scss';
 
 const ID: { [key: string]: string; } = {
