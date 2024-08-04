@@ -4,6 +4,7 @@ import { Opens, CoopshopResponse } from 'api/coopshop/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './CafeteriaInfo.module.scss';
 
 interface ScheduleTableProps {
@@ -50,6 +51,7 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
   const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '주말');
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });
   useEscapeKeyDown({ onEscape: closeInfo });
+  useBodyScrollLock(true);
   const isMobile = useMediaQuery();
 
   return (

@@ -3,10 +3,8 @@ import { ReactComponent as LeftArrow } from 'assets/svg/left-angle-bracket.svg';
 import { ReactComponent as RightArrow } from 'assets/svg/right-angle-bracket.svg';
 import { ReactComponent as InformationIcon } from 'assets/svg/information.svg';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import { createPortal } from 'react-dom';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import styles from './DateNavigator.module.scss';
 
@@ -50,11 +48,16 @@ export default function DateNavigator() {
     setToday,
     setDate,
   } = useDatePicker();
+  const portalManager = useModalPortal();
   const { cafeteriaInfo } = useCoopshopCafeteria();
-  const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
-  useBodyScrollLock(isCafeteriaInfoOpen);
 
   const thisWeek = generateWeek(currentDate());
+
+  const handleInformationClick = () => {
+    portalManager.open(() => (
+      <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={portalManager.close} />
+    ));
+  };
 
   return (
     <div className={styles.container}>
@@ -91,7 +94,7 @@ export default function DateNavigator() {
         <button
           type="button"
           className={styles.information}
-          onClick={openCafeteriaInfo}
+          onClick={() => handleInformationClick()}
         >
           <InformationIcon />
           학생식당정보
@@ -131,11 +134,6 @@ export default function DateNavigator() {
           </button>
         ))}
       </div>
-
-      {isCafeteriaInfoOpen && createPortal(
-        <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={closeCafeteriaInfo} />,
-        document.body,
-      )}
     </div>
   );
 }
