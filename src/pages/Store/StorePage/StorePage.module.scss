@@ -6,7 +6,7 @@
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 16px;
   }
 }
 
@@ -44,6 +44,7 @@
     margin-right: auto;
     height: auto;
     border: none;
+    margin-bottom: 13px;
   }
 
   &__header {
@@ -96,6 +97,11 @@
     & span {
       text-align: center;
       width: 100%;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+        font-weight: 400;
+      }
     }
 
     &--selected {
