@@ -91,43 +91,45 @@ function SemesterListbox() {
         {isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
-        <ul className={styles.select__content} role="listbox">
-          {semesterOptionList.map((optionValue) => (
-            <button
-              type="button"
-              className={cn({
-                [styles.select__option]: true,
-                [styles['select__option--selected']]: optionValue.value === semesterValue,
-              })}
-              role="option"
-              aria-selected={optionValue.value === semesterValue}
-              data-value={optionValue.value}
-              onClick={onClickOption}
-              tabIndex={0}
-            >
-              <li
-                className={styles['select__option--item']}
-                key={optionValue.value}
+        <div className={styles.select__content}>
+          <ul className={styles['select__content--list']} role="listbox">
+            {semesterOptionList.map((optionValue) => (
+              <button
+                type="button"
+                className={cn({
+                  [styles.select__option]: true,
+                  [styles['select__option--selected']]: optionValue.value === semesterValue,
+                })}
+                role="option"
+                aria-selected={optionValue.value === semesterValue}
+                data-value={optionValue.value}
+                onClick={onClickOption}
+                tabIndex={0}
               >
-                {optionValue.label}
-              </li>
-              <div>
-                <button
-                  type="button"
-                  className={styles['select__option--setting']}
-                  onClick={(e) => onClickDeleteSemester(e, optionValue.value)}
+                <li
+                  className={styles['select__option--item']}
+                  key={optionValue.value}
                 >
-                  <TrashCanIcon />
-                  <div>삭제</div>
-                </button>
-              </div>
-            </button>
-          ))}
+                  {optionValue.label}
+                </li>
+                <div>
+                  <button
+                    type="button"
+                    className={styles['select__option--setting']}
+                    onClick={(e) => onClickDeleteSemester(e, optionValue.value)}
+                  >
+                    <TrashCanIcon />
+                    <div>삭제</div>
+                  </button>
+                </div>
+              </button>
+            ))}
+          </ul>
           <button type="button" className={styles.add} onClick={onClickAddSemester}>
             <div>학기 추가하기</div>
             <AddIcon />
           </button>
-        </ul>
+        </div>
       )}
       <div>
         {isAddSemesterModalOpen && (

@@ -70,6 +70,17 @@
     background-color: #fff;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+
+    &--list {
+      max-height: 540px;
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+  
+      ::-webkit-scrollbar {
+        display: none;
+      }  
+    }
   }
 
   &__option {
