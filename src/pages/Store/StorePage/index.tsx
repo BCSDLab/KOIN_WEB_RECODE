@@ -25,12 +25,18 @@ type StoreSearchQueryType = {
 };
 
 interface StoreMobileState {
-  sorter: StoreSorterType,
+  sorter: StoreSorterType | '',
   filter: StoreFilterType[],
   storeName?: string;
 }
 
-const MOBILE_CHECK_BOX = [
+interface MobileCheckBoxItem {
+  id: StoreSorterType | StoreFilterType;
+  content: string;
+  value: number;
+}
+
+const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
   {
     id: 'COUNT',
     content: '# 리뷰순',
@@ -71,8 +77,6 @@ const CHECK_BOX = [
   },
 ];
 
-type MobileStoreListCheckBoxType = 'COUNT' | 'RATING' | 'OPEN' | 'DELIVERY';
-
 const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
   if (checked === undefined) {
     return false;
@@ -88,7 +92,10 @@ const useStoreListMobile = (
   const { data: storeListMobile } = useQuery(
     {
       queryKey: ['storeListV2', sorter, filter],
-      queryFn: async () => api.store.getStoreListV2(sorter, filter),
+      queryFn: () => api.store.getStoreListV2(
+        sorter,
+        filter,
+      ),
       retry: 0,
     },
   );
@@ -154,7 +161,7 @@ function StorePage() {
       logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
     }
   };
-  const onClickMobileStoreListFilter = (item: MobileStoreListCheckBoxType) => {
+  const onClickMobileStoreListFilter = (item: StoreSorterType | StoreFilterType) => {
     if (item === 'COUNT' || item === 'RATING') {
       setStoreMobileFilterState((prevState) => ({
         ...prevState,
@@ -284,12 +291,12 @@ function StorePage() {
               className={cn({
                 [styles.filter__box]: true,
                 [styles['filter__box--activate']]: storeMobileFilterState.sorter.includes(item.id) || (
-                  storeMobileFilterState.filter.lastIndexOf(item.id as StoreFilterType) >= 0
+                  storeMobileFilterState.filter.includes(item.id as StoreFilterType)
                 ),
               })}
               key={item.value}
               type="button"
-              onClick={() => onClickMobileStoreListFilter(item.id as MobileStoreListCheckBoxType)}
+              onClick={() => onClickMobileStoreListFilter(item.id)}
             >
               {item.content}
             </button>
