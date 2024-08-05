@@ -2,24 +2,14 @@ import React from 'react';
 import { ReactComponent as MobileSearchIcon } from 'assets/svg/mobile-store-search-icon.svg';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './SearchBar.module.scss';
 
-type SearchBarProps = {
-  params: {
-    [k: string]: string
-  };
-  searchParams: URLSearchParams;
-  setParams: (key: string, value: string, option: {
-    deleteBeforeParam: boolean;
-    replacePage: boolean;
-  }) => void;
-};
-
-export default function SearchBar(props : SearchBarProps) {
+export default function SearchBar() {
   const storeRef = React.useRef<HTMLInputElement | null>(null);
   const { data: categories } = useStoreCategories();
-  const { params, searchParams, setParams } = props;
+  const { params, searchParams, setParams } = useParamsHandler();
   const logger = useLogger();
   const isMobile = useMediaQuery();
 

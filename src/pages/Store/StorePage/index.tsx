@@ -193,13 +193,7 @@ function StorePage() {
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
-      { isMobile && (
-        <SearchBar
-          params={params}
-          searchParams={searchParams}
-          setParams={setParams}
-        />
-      )}
+      { isMobile && <SearchBar /> }
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
@@ -226,13 +220,7 @@ function StorePage() {
           ))}
         </div>
       </div>
-      { !isMobile && (
-        <SearchBar
-          params={params}
-          searchParams={searchParams}
-          setParams={setParams}
-        />
-      )}
+      { !isMobile && <SearchBar />}
       <div className={styles.option}>
         <div className={styles.option__count}>
           총
