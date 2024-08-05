@@ -8,25 +8,27 @@ interface Props {
 }
 export default function SelectButton({ is_mine }: Props) {
   return (
-    <div className={styles.container}>
-      {is_mine ? (
-        <>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        {is_mine ? (
+          <>
+            <div className={styles.section}>
+              수정하기
+              <Pen />
+            </div>
+            <div className={styles.section}>
+              삭제하기
+              <Trash />
+            </div>
+          </>
+        ) : (
           <div className={styles.section}>
-            수정하기
-            <Pen />
+            신고하기
+            {' '}
+            <Complaint />
           </div>
-          <div className={styles.section}>
-            삭제하기
-            <Trash />
-          </div>
-        </>
-      ) : (
-        <div className={styles.section}>
-          신고하기
-          {' '}
-          <Complaint />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
