@@ -192,8 +192,8 @@ function StorePage() {
               type="button"
               onClick={() => {
                 logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
-                setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
                 setParams('storeName', '', { deleteBeforeParam: true, replacePage: false });
+                setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}
             >
