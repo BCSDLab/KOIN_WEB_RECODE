@@ -100,8 +100,16 @@ const useStoreListMobile = (
       retry: 0,
     },
   );
+  const selectedCategory = Number(params.category);
 
-  return storeListMobile?.shops.filter((store) => store.name.includes(params.storeName ? params.storeName : ''));
+  return storeListMobile?.shops.filter((store) => {
+    const matchCategory = params.category === undefined || (
+      store.category_ids.some((id) => id === selectedCategory)
+    );
+
+    if (params.storeName) store.name.includes(params.storeName ? params.storeName : '');
+    return matchCategory && store.name.includes(params.storeName ? params.storeName : '');
+  });
 };
 
 const useStoreList = (params: StoreSearchQueryType) => {
@@ -185,7 +193,13 @@ function StorePage() {
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
-      { isMobile && <SearchBar />}
+      { isMobile && (
+        <SearchBar
+          params={params}
+          searchParams={searchParams}
+          setParams={setParams}
+        />
+      )}
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
@@ -201,7 +215,7 @@ function StorePage() {
               type="button"
               onClick={() => {
                 logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
-                setParams('storeName', '', { deleteBeforeParam: true, replacePage: false });
+                setParams('storeName', '', { deleteBeforeParam: true, replacePage: true });
                 setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}
@@ -212,7 +226,13 @@ function StorePage() {
           ))}
         </div>
       </div>
-      { !isMobile && <SearchBar />}
+      { !isMobile && (
+        <SearchBar
+          params={params}
+          searchParams={searchParams}
+          setParams={setParams}
+        />
+      )}
       <div className={styles.option}>
         <div className={styles.option__count}>
           총
