@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { StoreListV2 } from 'api/store/entity';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
 import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';

@@ -7,9 +7,9 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useQuery } from '@tanstack/react-query';
-import useScrollToTop from 'utils/hooks/useScrollToTop';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 
-import { useScorllLogging } from 'utils/hooks/useScrollLogging';
+import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import styles from './StorePage.module.scss';
