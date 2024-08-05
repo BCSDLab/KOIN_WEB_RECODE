@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 
 import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
+import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import styles from './StorePage.module.scss';
@@ -138,7 +139,6 @@ const useStoreList = (params: StoreSearchQueryType) => {
 };
 
 function StorePage() {
-  const storeRef = React.useRef<HTMLInputElement | null>(null);
   const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
     sorter: '',
     filter: [],
@@ -185,6 +185,7 @@ function StorePage() {
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
+      { isMobile && <SearchBar />}
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
@@ -193,6 +194,7 @@ function StorePage() {
               className={cn({
                 [styles.category__menu]: true,
                 [styles['category__menu--selected']]: category.id === selectedCategory,
+                [styles['category__menu--disabled']]: category.id === 1 && isMobile,
               })}
               role="radio"
               aria-checked={category.id === selectedCategory}
@@ -210,46 +212,7 @@ function StorePage() {
           ))}
         </div>
       </div>
-      <div className={styles.search_bar}>
-        <input
-          ref={storeRef}
-          className={styles.search_bar__input}
-          defaultValue={
-            searchParams.get('storeName') === undefined ? '' : searchParams.get('storeName') ?? ''
-          }
-          type="text"
-          name="search"
-          placeholder="상점명을 입력하세요"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              setParams('storeName', e.currentTarget.value, {
-                deleteBeforeParam: searchParams.get('storeName') === undefined,
-                replacePage: true,
-              });
-            }
-          }}
-          onFocus={() => {
-            const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
-            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
-          }}
-        />
-        <button
-          className={styles.search_bar__icon}
-          type="button"
-          onClick={() => {
-            setParams('storeName', storeRef.current?.value ?? '', {
-              deleteBeforeParam: searchParams.get('storeName') === undefined,
-              replacePage: true,
-            });
-          }}
-        >
-          <img
-            className={styles['search-icon']}
-            src="https://static.koreatech.in/assets/img/search.png"
-            alt="store_icon"
-          />
-        </button>
-      </div>
+      { !isMobile && <SearchBar />}
       <div className={styles.option}>
         <div className={styles.option__count}>
           총

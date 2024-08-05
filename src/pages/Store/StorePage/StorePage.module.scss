@@ -43,6 +43,7 @@
     margin-left: auto;
     margin-right: auto;
     height: auto;
+    border: none;
   }
 
   &__header {
@@ -58,11 +59,7 @@
     width: 182px;
 
     @include media.media-breakpoint(mobile) {
-      justify-content: flex-start;
-      width: 100%;
-      font-size: 15px;
-      line-height: 1;
-      height: 17px;
+      display: none;
     }
   }
 
@@ -106,6 +103,10 @@
       font-weight: 700;
     }
 
+    &--disabled {
+      display: none;
+    }
+
     @media (min-width: 577px) {
       &:hover {
         color: #f7941e;
@@ -133,54 +134,6 @@
   }
 }
 
-.search_bar {
-  text-align: center;
-  position: relative;
-
-  &__input {
-    font-family: NanumBarunGothic, serif;
-    border: solid 1px #d2dae2;
-    height: 45px;
-    width: 1068px;
-    font-size: 15px;
-    line-height: 1.6;
-    letter-spacing: -0.09px;
-    padding-left: 20px;
-    padding-right: 40px;
-
-    @include media.media-breakpoint(mobile) {
-      width: calc(100% - 95px);
-    }
-
-    &::placeholder {
-      color: #d2dae2;
-    }
-  }
-
-  &__icon {
-    position: absolute;
-    height: 24px;
-    right: 11px;
-    bottom: 13px;
-    z-index: 1;
-    border: 0;
-    background-color: #fff;
-    cursor: pointer;
-
-    @include media.media-breakpoint(mobile) {
-      right: 25px;
-      bottom: 10px;
-    }
-  }
-}
-
-.search-icon {
-  height: 24px;
-  z-index: 0;
-  border: 0;
-  background-color: #fff;
-}
-
 .option {
   display: flex;
   height: 24px;
@@ -194,6 +147,7 @@
     margin-right: auto;
     width: calc(100% - 32px);
     height: auto;
+    display: none;
   }
 
   &__count {
@@ -273,8 +227,8 @@
 }
 
 .store-mobile-header {
-  background-color: #e6ecf2;
-  color: #a1a1a1;
+  background-color: #f5f5f5;
+  color: #8e8e8e;
   line-height: 1.46;
   height: 31px;
   display: flex;
