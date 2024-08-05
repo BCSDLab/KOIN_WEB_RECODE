@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { StoreList } from 'api/store/entity';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {
