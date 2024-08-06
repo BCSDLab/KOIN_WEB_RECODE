@@ -19,7 +19,7 @@ export class AddStoreReview<R extends ReviewRequest> implements APIRequest<R> {
 }
 
 export class EditStoreReview<R extends ReviewRequest> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
+  method = HTTP_METHOD.PUT;
 
   response!: R;
 
