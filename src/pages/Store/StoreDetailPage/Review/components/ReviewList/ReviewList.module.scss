@@ -1,7 +1,103 @@
+@use "src/utils/scss/media";
+
 .container {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   flex-wrap: wrap;
   padding-top: 1vh;
+}
+
+.selector {
+  display: flex;
+  width: 100%;
+  padding: 2vh 5%;
+  box-sizing: border-box;
+  justify-content: space-between;
+  position: sticky;
+  top: 42px;
+  background: white;
+  z-index: 20;
+
+  @include media.media-breakpoint(mobile) {
+    top: 96px;
+  }
+
+  &__label {
+    color: #727272;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+}
+
+.dropdown {
+  position: relative;
+  font-family: NanumBarunGothic;
+  color: #727272;
+
+  &__list {
+    background-color: #fafafa;
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    border-radius: 10px;
+    padding: 3px 3px;
+    box-sizing: border-box;
+    animation: appear 0.15s linear forwards;
+
+    &--item {
+      width: 100%;
+      text-align: left;
+      border-radius: 10px;
+      height: 40px;
+      font-family: NanumBarunGothic;
+      color: #727272;
+      padding-left: 3px;
+
+      &:hover {
+        background: #e1e1e1;
+      }
+    }
+  }
+}
+
+@keyframes appear {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0) ;
+  }
+}
+
+.wrapper {
+  position: absolute;
+  overflow: hidden;
+  top: 20px;
+  left: -5px;
+}
+
+.flex {
+  display: flex;
+}
+
+.not-found {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.point {
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+  gap: 5px;
+  color: #727272;
 }

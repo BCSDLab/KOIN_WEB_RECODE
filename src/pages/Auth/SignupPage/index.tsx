@@ -502,7 +502,9 @@ function SignupDefaultPage() {
               if (value.indexOf('@koreatech.ac.kr') !== -1) {
                 return '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.';
               }
-
+              if (value.indexOf('@') !== -1) {
+                return '이메일의 아이디 부분만 입력해주세요.';
+              }
               return true;
             },
           })}
