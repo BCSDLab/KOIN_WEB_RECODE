@@ -6,13 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
 import showToast from 'utils/ts/showToast';
 
-export const useReivewStore = (id: string) => {
+export const useEditStoreReview = (shopId: string, reviewId: string) => {
   const token = useTokenState();
   const navigate = useNavigate();
   const { mutate, error } = useMutation({
-    mutationFn: (reviewData: ReviewRequest) => api.review.postStoreReview(token, id, reviewData),
+    mutationFn: (reviewData: ReviewRequest) => api.review
+      .putStoreReview(token, shopId, reviewId, reviewData),
     onSuccess: () => {
-      navigate(`/store/${id!}`);
+      navigate(`/store/${shopId!}`);
     },
     onError: (err) => {
       if (isKoinError(err)) {
