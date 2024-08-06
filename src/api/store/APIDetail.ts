@@ -1,4 +1,5 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { DeleteResponse } from 'api/auth/entity';
 import {
   StoreListResponse,
   StoreDetailResponse,
@@ -85,6 +86,18 @@ export class ReviewList<R extends ReviewListResponse> implements APIRequest<R> {
   response!: R;
 
   constructor(id: number, pageParam: number, public authorization?: string) {
-    this.path = `shops/${id}/reviews?page=${pageParam}&limit=10`;
+    this.path = `shops/${id}/reviews?page=${pageParam}&limit=5`;
+  }
+}
+
+export class DeleteReview<R extends DeleteResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path = 'shops/:shopId/reviews/:reviewId';
+
+  response!: R;
+
+  constructor(reviewId: number, shopId: string, public authorization: string) {
+    this.path = `shops/${shopId}/reviews/${reviewId}`;
   }
 }
