@@ -69,8 +69,8 @@ export default function DefaultPage() {
             {isRegularCourseSelected ? (
               <LectureList />
             ) : (
-              <CustomLecture />
-              // <div>직접 추가 UI</div>
+            // V2 데이터로 변경 및 fraomId 넣어줘야합니다.
+              <CustomLecture frameId={2058} />
             )}
           </div>
           <div className={styles.page__timetable}>

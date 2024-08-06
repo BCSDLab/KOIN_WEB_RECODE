@@ -1,16 +1,24 @@
+/* eslint-disable no-console */
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
+import useTokenState from 'utils/hooks/useTokenState';
+import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
 import styles from './CustomLecture.module.scss';
 import CustomLectureDefaultInput from './CustomLectureDefaultInput';
 import CustomLectureLocationTimeSetting from './CustomLectureLocationTimeSetting';
 
-function CustomLecture() {
-  const handleAddLecture = () => {
-
+function CustomLecture({ frameId }: { frameId: number }) {
+  const handleAddLecture = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
   };
+
+  const token = useTokenState();
+  const { data: timetableInfoList } = useTimetableV2InfoList(frameId, token);
+
+  console.log('dlddld', timetableInfoList);
 
   // 해당 파트의 api 명세가 어떻게 나오느냐에 따라 html 구조의 변동이 있을 수 있을 것 같습니다.
   return (
-    <form onSubmit={handleAddLecture} className={styles['form-container']}>
+    <form onSubmit={(e) => handleAddLecture(e)} className={styles['form-container']}>
       <CustomLectureDefaultInput title="수업명" placeholder="수업명을 입력하세요." require />
       <CustomLectureDefaultInput title="교수명" placeholder="교수명을 입력하세요." require={false} />
       <CustomLectureLocationTimeSetting />
@@ -18,6 +26,7 @@ function CustomLecture() {
         <span>시간 및 장소 추가</span>
         <AddIcon />
       </button>
+      <button type="submit" className={styles['submit-button']}>일정 저장</button>
     </form>
   );
 }
