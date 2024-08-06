@@ -139,7 +139,7 @@ export default function ReviewList() {
               ? (
                 <div className={styles.point}>
                   <StarList average_rating={data.pages[0].statistics.average_rating} />
-                  {`${data.pages[0].statistics.average_rating}점`}
+                  {`${data.pages[0].statistics.average_rating.toFixed()}점`}
                 </div>
               )
               : (
