@@ -19,7 +19,7 @@ export default function SelectButton({ is_mine, review_id }: Props) {
           <button
             type="button"
             onClick={() => navigate(
-              `/review/${params.id!}/edit`,
+              `/edit/review/${params.id!}`,
               { state: { from: review_id } },
             )}
             className={styles.section}
