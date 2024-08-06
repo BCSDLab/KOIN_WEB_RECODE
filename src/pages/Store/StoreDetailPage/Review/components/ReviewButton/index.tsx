@@ -5,7 +5,7 @@ import { useUser } from 'utils/hooks/state/useUser';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './index.module.scss';
 
-const REVEIW_LOGIN = [
+export const REVEIW_LOGIN = [
   '리뷰 작성 시 ',
   '리뷰 작성은 회원만 사용 가능합니다.',
 ];

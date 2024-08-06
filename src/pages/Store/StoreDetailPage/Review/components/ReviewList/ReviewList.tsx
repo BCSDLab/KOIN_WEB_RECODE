@@ -7,7 +7,12 @@ import {
 import { Review } from 'api/store/entity';
 import { ReactComponent as NoReview } from 'assets/svg/Review/no-review.svg';
 import { ReactComponent as Arrow } from 'assets/svg/up-arrow-icon.svg';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import LoginRequiredModal from 'components/common/LoginRequiredModal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/StarList';
+import { REVEIW_LOGIN } from 'pages/Store/StoreDetailPage/Review/components/ReviewButton/index';
+import { useUser } from 'utils/hooks/state/useUser';
 import styles from './ReviewList.module.scss';
 
 const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
@@ -30,9 +35,26 @@ export default function ReviewList() {
   const currentReviewType = useRef<string>('최신순');
   const checkboxRef = useRef<HTMLInputElement>(null);
   const selectorRef = useRef<HTMLDivElement>(null);
-  const [filteredReview, setFilteredReview] = useState(reviews);
+  const [
+    filteredReview,
+    setFilteredReview] = useState([...reviews].sort((a, b) => check(b, a)));
   const [openDropdown, setOpenDropdowm] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const portalManager = useModalPortal();
+  const { data: userInfo } = useUser();
+
+  const checkUser = ():boolean => {
+    if (!userInfo) {
+      portalManager.open((portalOption: Portal) => (
+        <LoginRequiredModal
+          title={REVEIW_LOGIN[0]}
+          description={REVEIW_LOGIN[1]}
+          closeModal={portalOption.close}
+        />
+      ));
+    }
+    return !userInfo;
+  };
 
   // 정렬 후 메모된 값을 사용
   const memoHighest = useMemo(() => [...reviews].sort((a, b) => b.rating - a.rating), [reviews]);
@@ -41,7 +63,7 @@ export default function ReviewList() {
   const memoOld = useMemo(() => [...reviews].sort((a, b) => check(a, b)), [reviews]);
   // reviews 배열 복사 후 정렬, sort는 원본을 바꿈
 
-  const filter = (type: string) => {
+  const filter = useCallback((type: string) => {
     if (!checkboxRef.current?.checked) {
       if (type === '별점높은순') {
         setFilteredReview(memoHighest);
@@ -57,7 +79,7 @@ export default function ReviewList() {
       }
     }
     currentReviewType.current = type; // 현재 정렬 타입 저장
-  };
+  }, [memoHighest, memoLowest, memoRecent, memoOld]);
 
   const findMyReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
@@ -67,12 +89,12 @@ export default function ReviewList() {
     } else filter(currentReviewType.current); // 토글 시 기존에 정렬된 상태의 값을 사용
   };
 
-  const getNextReview = useCallback(() => {
-    if (hasNextPage) {
+  const getNextReview = useCallback((entries: IntersectionObserverEntry[]) => {
+    if (hasNextPage && entries[0].isIntersecting) {
       fetchNextPage()
-        .then((result) => setFilteredReview(result.data!.pages.flatMap((page) => page.reviews)));
+        .then(() => filter(currentReviewType.current));
     } // 다음 페이지가 있으면 패치
-  }, [hasNextPage, fetchNextPage]);
+  }, [hasNextPage, fetchNextPage, filter]);
 
   const setStickyMode = useCallback((entries: IntersectionObserverEntry[]) => {
     if (entries[0].boundingClientRect.top < 0) setIsSticky(true); // 옵저버가 지정한 top에 닿으면 조건부 렌더링
@@ -98,6 +120,7 @@ export default function ReviewList() {
         const { target } = e;
         if (target instanceof HTMLElement) {
           if (target.matches('button')) {
+            if (checkUser()) return;
             setOpenDropdowm((prev) => !prev);
           } else {
             setOpenDropdowm(false);
@@ -178,7 +201,11 @@ export default function ReviewList() {
           <div>
             {checkboxRef.current?.checked
               ? <div className={styles['not-found']}>작성한 리뷰가 없어요 :)</div>
-              : <NoReview />}
+              : (
+                <div className={styles['not-found']}>
+                  <NoReview />
+                </div>
+              )}
           </div>
         )}
       <div ref={endOfPage} />
