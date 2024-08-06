@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ReactComponent as StarIcon } from 'assets/svg/empty-star.svg';
 import { ReactComponent as DeleteMenuIcon } from 'assets/svg/trash-can-icon.svg';
 import { ReactComponent as DeleteImageIcon } from 'assets/svg/delete-icon.svg';
@@ -17,6 +18,9 @@ interface Props {
 }
 
 function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [rate, setRate] = useState(initialData?.rating ?? 0);
   const [reviewText, setReviewText] = useState(initialData?.content ?? '');
   const [menuList, setMenuList] = useState<{ id: string, name: string }[]>(
@@ -62,6 +66,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
     };
     if (rate) {
       mutate(reviewData);
+      navigate(`/store/${storeDetail.id!}`);
     }
   };
 
@@ -187,7 +192,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
           [styles['form__button--active']]: rate !== 0,
         })}
       >
-        작성하기
+        {location.pathname.includes('/edit') ? '수정하기' : '작성하기'}
       </button>
     </form>
   );
