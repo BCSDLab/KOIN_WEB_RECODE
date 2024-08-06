@@ -2,7 +2,7 @@ import { useGetReview } from 'pages/Store/StoreDetailPage/hooks/useGetReview';
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import { useLocation, useParams } from 'react-router-dom';
 import { useEditStoreReview } from './hooks/useEditStoreReview';
-import ReviewForm from './ReviewForm';
+import ReviewForm from './ReviewForm/ReviewForm';
 
 function EditReviewPage() {
   const params = useParams();
