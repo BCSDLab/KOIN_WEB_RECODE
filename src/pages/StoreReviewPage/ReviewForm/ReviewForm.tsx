@@ -1,26 +1,37 @@
-import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import { ReactComponent as StarIcon } from 'assets/svg/empty-star.svg';
 import { ReactComponent as DeleteMenuIcon } from 'assets/svg/trash-can-icon.svg';
 import { ReactComponent as DeleteImageIcon } from 'assets/svg/delete-icon.svg';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
-import styles from './StoreReviewPage.module.scss';
-import { useReivewStore } from './hooks/useStoreReview';
+import { StoreDetailResponse } from 'api/store/entity';
+import { UseMutateFunction } from '@tanstack/react-query';
+import { ReviewRequest } from 'api/review/entity';
+import styles from './ReviewForm.module.scss';
 
-function StoreReviewPage() {
-  const params = useParams();
-  const { storeDetail } = useStoreDetail(params.id!);
-  const [rate, setRate] = useState(0);
-  const [reviewText, setReviewText] = useState('');
-  const [menuList, setMenuList] = useState<{ id: string, name: string }[]>([]);
-  const { mutate } = useReivewStore(String(storeDetail.id));
+interface Props {
+  storeDetail:StoreDetailResponse;
+  mutate: UseMutateFunction<ReviewRequest, unknown, ReviewRequest, unknown>;
+  initialData: Partial<ReviewRequest>;
+}
+
+function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
+  const [rate, setRate] = useState(initialData?.rating ?? 0);
+  const [reviewText, setReviewText] = useState(initialData?.content ?? '');
+  const [menuList, setMenuList] = useState<{ id: string, name: string }[]>(
+    initialData.menu_names ? initialData.menu_names.map((name) => ({ id: uuidv4(), name })) : [],
+  );
 
   const {
     imageFile, imgRef, saveImgFile, setImageFile,
   } = useImageUpload();
+
+  useEffect(() => {
+    if (initialData?.image_urls) {
+      setImageFile(initialData.image_urls);
+    }
+  }, [initialData?.image_urls, setImageFile]);
 
   const addMenu = () => {
     setMenuList([...menuList, { id: uuidv4(), name: '' }]);
@@ -182,4 +193,4 @@ function StoreReviewPage() {
   );
 }
 
-export default StoreReviewPage;
+export default ReviewForm;
