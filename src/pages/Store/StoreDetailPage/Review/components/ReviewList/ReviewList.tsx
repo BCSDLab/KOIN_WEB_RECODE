@@ -2,7 +2,7 @@ import { useGetReview } from 'pages/Store/StoreDetailPage/hooks/useGetReview';
 import { useParams } from 'react-router-dom';
 import ReviewCard from 'pages/Store/StoreDetailPage/Review/components/ReviewCard/ReviewCard';
 import {
-  useCallback, useEffect, useMemo, useRef, useState,
+  useCallback, useEffect, useRef, useState,
 } from 'react';
 import { Review } from 'api/store/entity';
 import { ReactComponent as NoReview } from 'assets/svg/Review/no-review.svg';
@@ -56,30 +56,23 @@ export default function ReviewList() {
     return !userInfo;
   };
 
-  // 정렬 후 메모된 값을 사용
-  const memoHighest = useMemo(() => [...reviews].sort((a, b) => b.rating - a.rating), [reviews]);
-  const memoLowest = useMemo(() => [...reviews].sort((a, b) => a.rating - b.rating), [reviews]);
-  const memoRecent = useMemo(() => [...reviews].sort((a, b) => check(b, a)), [reviews]);
-  const memoOld = useMemo(() => [...reviews].sort((a, b) => check(a, b)), [reviews]);
-  // reviews 배열 복사 후 정렬, sort는 원본을 바꿈
-
   const filter = useCallback((type: string) => {
     if (!checkboxRef.current?.checked) {
       if (type === '별점높은순') {
-        setFilteredReview(memoHighest);
+        setFilteredReview([...reviews].sort((a, b) => b.rating - a.rating));
       }
       if (type === '별점낮은순') {
-        setFilteredReview(memoLowest);
+        setFilteredReview([...reviews].sort((a, b) => a.rating - b.rating));
       }
       if (type === '최신순') {
-        setFilteredReview(memoRecent);
+        setFilteredReview([...reviews].sort((a, b) => check(b, a)));
       }
       if (type === '오래된순') {
-        setFilteredReview(memoOld);
+        setFilteredReview([...reviews].sort((a, b) => check(a, b)));
       }
     }
     currentReviewType.current = type; // 현재 정렬 타입 저장
-  }, [memoHighest, memoLowest, memoRecent, memoOld]);
+  }, [reviews]);
 
   const findMyReview = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
@@ -91,10 +84,13 @@ export default function ReviewList() {
 
   const getNextReview = useCallback((entries: IntersectionObserverEntry[]) => {
     if (hasNextPage && entries[0].isIntersecting) {
-      fetchNextPage()
-        .then(() => filter(currentReviewType.current));
+      fetchNextPage().then((result) => {
+        const newListLength = result.data?.pages.length || 1;
+        const newList = result.data?.pages[newListLength - 1].reviews || [];
+        setFilteredReview((prev) => [...prev, ...newList]);
+      });
     } // 다음 페이지가 있으면 패치
-  }, [hasNextPage, fetchNextPage, filter]);
+  }, [hasNextPage, fetchNextPage]);
 
   const setStickyMode = useCallback((entries: IntersectionObserverEntry[]) => {
     if (entries[0].boundingClientRect.top < 0) setIsSticky(true); // 옵저버가 지정한 top에 닿으면 조건부 렌더링
