@@ -6,7 +6,10 @@ import { ReactComponent as ClickedKebab } from 'assets/svg/Review/clicked-kebab.
 import { ReactComponent as Mine } from 'assets/svg/Review/check-mine.svg';
 import { useEffect, useState } from 'react';
 import SelectButton from 'pages/Store/StoreDetailPage/Review/components/SelectButton/SelectButton';
+import ImageModal from 'components/common/Modal/ImageModal';
 import { cn } from '@bcsdlab/utils';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
 import styles from './ReviewCard.module.scss';
 
 export default function ReviewCard({
@@ -15,6 +18,13 @@ export default function ReviewCard({
   const [isKebabClick, setIsKebabClick] = useState(false);
   const emptyStarList = new Array(5 - rating).fill(false);
   const starList = new Array(rating).fill(true);
+  const portalManager = useModalPortal();
+
+  const onClickImage = (img: string[], index: number) => {
+    portalManager.open((portalOption: Portal) => (
+      <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
+    ));
+  };
 
   useEffect(() => {
     window.addEventListener('click', () => setIsKebabClick(false));
@@ -63,7 +73,14 @@ export default function ReviewCard({
         {content}
       </div>
       <div className={styles['image-wrapper']}>
-        {image_urls.map((src) => <img key={src} src={src} alt="메뉴 이미지" className={styles.menu__image} />)}
+        {image_urls.map((src, idx) => (
+          <button
+            onClick={() => onClickImage(image_urls, idx)}
+            type="button"
+          >
+            <img key={src} src={src} alt="메뉴 이미지" className={styles.menu__image} />
+          </button>
+        ))}
       </div>
       <div className={styles['menu-card']}>
         {menu_names.map((menu) => <div className={styles['menu-card__menu']} key={menu}>{menu}</div>)}
