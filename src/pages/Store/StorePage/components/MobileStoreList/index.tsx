@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { StoreListV2 } from 'api/store/entity';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { getJosaPicker } from '@bcsdlab/utils';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
 import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';
@@ -13,8 +14,7 @@ interface MobileStoreListProps {
 export default function MobileStoreList(mobileStoreListProps: MobileStoreListProps) {
   const { storeListData } = mobileStoreListProps;
   const logger = useLogger();
-  // eslint-disable-next-line
-  const Josa = require('josa-js');
+  const pickTopicJosa = getJosaPicker('은');
 
   return (
     <div className={styles['store-list']}>
@@ -38,7 +38,7 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
           && (
             <div className={styles['store-none-open']}>
               <span className={styles['store-none-open__name']}>{store.name}</span>
-              {`${Josa.c(store.name, '은/는')} `}
+              {`${pickTopicJosa(store.name)} `}
               준비중입니다.
             </div>
           )}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { StoreList } from 'api/store/entity';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
+import { getJosaPicker } from '@bcsdlab/utils';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './DesktopStoreList.module.scss';
@@ -18,9 +19,7 @@ export const getOpenCloseTime = (open_time: string | null, close_time: string | 
 export default function DesktopStoreList(storeListProps: StoreListProps) {
   const { storeListData } = storeListProps;
   const logger = useLogger();
-
-  // eslint-disable-next-line
-  const Josa = require('josa-js');
+  const pickTopicJosa = getJosaPicker('은');
 
   return (
     <div className={styles['store-list']}>
@@ -43,7 +42,7 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
           && (
             <div className={styles['store-none-open']}>
               <span className={styles['store-none-open__name']}>{store.name}</span>
-              {`${Josa.c(store.name, '은/는')} `}
+              {`${pickTopicJosa(store.name)}`}
               준비중입니다.
             </div>
           )}
