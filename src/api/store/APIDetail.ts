@@ -100,7 +100,12 @@ export class ReviewReport<R extends ReviewReportResponse> implements APIRequest<
 
   data: ReviewReportRequest;
 
-  constructor(shop_id: number, review_id: number, data: ReviewReportRequest) {
+  constructor(
+    shop_id: number,
+    review_id: number,
+    data: ReviewReportRequest,
+    public authorization?: string,
+  ) {
     this.path = `/shops/${shop_id}/reviews/${review_id}/reports`;
     this.data = data;
   }
