@@ -1,20 +1,47 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import CheckBox from 'components/common/Common\bCheckBox';
-import showToast from 'utils/ts/showToast';
+import { useParams } from 'react-router-dom';
+import CheckBox from 'components/common/CommonCheckBox';
 import ReportingLabel from './components/ReportingLabel';
 import styles from './ReviewReporting.module.scss';
+import useReviewReport from './query/useReviewReport';
+import getTitle from './query/getTitle';
+import getContent from './query/getContent';
+
+interface RequestOption {
+  title: string;
+  content: string;
+}
 
 export default function ReviewReportingPage() {
   const [selectOptions, setSelectOptions] = useState<string[]>([]);
+  const [requestOptions, setRequestOptions] = useState<RequestOption[]>([]);
   const [etcDescription, setEtcDescription] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const params = useParams<{ shopid: string; reviewid: string }>();
+  const { mutate } = useReviewReport(params.shopid!, params.reviewid!);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setSelectOptions((prevOptions) => (prevOptions.includes(value)
-      ? prevOptions.filter((option) => option !== value)
-      : [...prevOptions, value]));
+    setSelectOptions((prevOptions) => {
+      const isSelected = prevOptions.includes(value);
+      const updatedOptions = isSelected
+        ? prevOptions.filter((option) => option !== value)
+        : [...prevOptions, value];
+
+      const updatedRequestOptions = isSelected
+        ? requestOptions.filter((option) => option.title !== getTitle(value))
+        : [
+          ...requestOptions,
+          {
+            title: getTitle(value),
+            content: value === 'etc' ? etcDescription : getContent(value),
+          },
+        ];
+
+      setRequestOptions(updatedRequestOptions);
+      return updatedOptions;
+    });
   };
 
   useEffect(() => {
@@ -22,14 +49,22 @@ export default function ReviewReportingPage() {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 10}px`;
     }
+
+    setRequestOptions((prevOptions) => prevOptions.map((option) => (option.title === '기타'
+      ? { ...option, content: etcDescription }
+      : option)));
   }, [etcDescription]);
+
+  const handleReport = () => {
+    const reportData = { reports: requestOptions };
+    console.log(reportData);
+    mutate(reportData);
+  };
 
   return (
     <div className={styles['reporting-container']}>
       <div>
-        <div className={styles['reporting-title']}>
-          신고 이유를 선택해주세요.
-        </div>
+        <div className={styles['reporting-title']}>신고 이유를 선택해주세요.</div>
         <div className={styles['reporting-subtitle']}>
           접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.
           <br />
@@ -121,9 +156,7 @@ export default function ReviewReportingPage() {
           [styles['reporting-button--active']]: selectOptions.length > 0,
         })}
         type="submit"
-        onClick={() => {
-          showToast('success', '신고가 완료되었습니다.');
-        }}
+        onClick={handleReport}
         disabled={selectOptions.length === 0}
       >
         신고하기

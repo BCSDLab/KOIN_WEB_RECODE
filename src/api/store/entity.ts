@@ -163,7 +163,10 @@ export interface Review {
 }
 
 export interface ReviewReportRequest {
-  title: string,
-  content: string
+  reports: Array<{
+    title: string;
+    content: string;
+  }>;
 }
+
 export interface ReviewReportResponse extends APIResponse { }
