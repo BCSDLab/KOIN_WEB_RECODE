@@ -53,7 +53,7 @@ export class DiningTime {
   }
 
   public isTomorrowDining() {
-    return this.now.getHours() >= 18;
+    return this.now.getHours() >= 19;
   }
 
   public generateDiningDate() {

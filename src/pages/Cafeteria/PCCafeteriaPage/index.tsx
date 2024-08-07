@@ -7,7 +7,6 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/analytics/useLogger';
-// import { DiningTime } from 'utils/ts/cafeteria';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import DateNavigator from './components/DateNavigator';
