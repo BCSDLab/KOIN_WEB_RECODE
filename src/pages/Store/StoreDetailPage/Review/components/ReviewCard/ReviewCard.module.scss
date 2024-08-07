@@ -75,10 +75,9 @@
   display: flex;
   overflow-x: scroll;
   gap: 10px;
-  width: 100%;
 
   @include media.media-breakpoint(mobile) {
-    width: 95vw;
+    width: 100%;
   }
 
   &::-webkit-scrollbar {

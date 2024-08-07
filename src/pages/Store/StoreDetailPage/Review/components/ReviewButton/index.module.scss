@@ -1,11 +1,23 @@
+@use "src/utils/scss/media";
+
 .container {
-  width: 93%;
-  border: 1px solid #10477a;
-  color: #10477a;
-  height: 5vh;
+  width: 100px;
+  background-color: #10477a;
   border-radius: 0.25em;
-  cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s;
+  height: 30px;
+  color: white;
+  border: none;
+
+  @include media.media-breakpoint(mobile) {
+    width: 93%;
+    border: 1px solid #10477a;
+    color: #10477a;
+    height: 5vh;
+    border-radius: 0.25em;
+    background: white;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s;
+  }
 
   &:active {
     background-color: #10477a;
