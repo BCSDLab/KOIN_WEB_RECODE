@@ -107,7 +107,7 @@ const useStoreListMobile = (
       store.category_ids.some((id) => id === selectedCategory)
     );
 
-    if (params.storeName) store.name.includes(params.storeName ? params.storeName : '');
+    if (params.storeName) return store.name.includes(params.storeName ? params.storeName : '');
     return matchCategory && store.name.includes(params.storeName ? params.storeName : '');
   });
 };
