@@ -5,8 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-flow: column wrap;
   padding-top: 1vh;
 }
 
@@ -36,7 +35,6 @@
 
 .dropdown {
   position: relative;
-  font-family: NanumBarunGothic;
   color: #727272;
 
   &__list {
@@ -47,7 +45,7 @@
     align-items: flex-start;
     gap: 5px;
     border-radius: 10px;
-    padding: 3px 3px;
+    padding: 3px;
     box-sizing: border-box;
     animation: appear 0.15s linear forwards;
 
@@ -56,7 +54,6 @@
       text-align: left;
       border-radius: 10px;
       height: 40px;
-      font-family: NanumBarunGothic;
       color: #727272;
       padding-left: 3px;
 
@@ -71,8 +68,9 @@
   from {
     transform: translateY(-100%);
   }
+
   to {
-    transform: translateY(0) ;
+    transform: translateY(0);
   }
 }
 
