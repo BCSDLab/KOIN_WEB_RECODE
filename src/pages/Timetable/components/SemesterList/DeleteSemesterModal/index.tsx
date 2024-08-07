@@ -1,25 +1,16 @@
 import React from 'react';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
-import useDeleteSemester from 'pages/Timetable/hooks/useDeleteSemester';
 import styles from './DeleteSemesterModal.module.scss';
 
 export interface DeleteSemesterModalProps {
   onClose: () => void
-  token: string
-  semester: string
+  handleDeleteSemester: () => void
 }
 
 export default function DeleteSemesterModal({
   onClose,
-  token,
-  semester,
+  handleDeleteSemester,
 }: DeleteSemesterModalProps) {
-  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, semester);
-  const handleDeleteSemester = () => {
-    deleteTimetableFrame();
-    onClose();
-  };
-
   return (
     <div className={styles.background} aria-hidden>
       <div className={styles.container}>

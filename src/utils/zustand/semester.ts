@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 type State = {
   semester: string
@@ -10,12 +11,20 @@ type Action = {
   }
 };
 
-const useSemesterStore = create<State & Action>((set) => ({
-  semester: '',
-  action: {
-    updateSemester: (semester) => set(() => ({ semester })),
-  },
-}));
+const useSemesterStore = create(
+  persist<State & Action>(
+    (set) => ({
+      semester: '',
+      action: {
+        updateSemester: (semester) => set(() => ({ semester })),
+      },
+    }),
+    {
+      name: 'semester',
+      partialize: (state) => ({ semester: state.semester }) as State & Action,
+    },
+  ),
+);
 
 export const useSemester = () => useSemesterStore((state) => state.semester);
 

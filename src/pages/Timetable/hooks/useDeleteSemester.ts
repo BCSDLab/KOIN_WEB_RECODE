@@ -6,7 +6,7 @@ import useTimetableFrameList from './useTimetableFrameList';
 
 export default function useDeleteSemester(token: string, semester: string) {
   const queryClient = useQueryClient();
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(token);
   const slicedSemester = `${semester.slice(0, 4)}년도 ${semester.slice(4)}학기`;
   const recoverSemester = () => {
     // TODO: timetableFrame을 복구하는 recoverFrame을 학기 내 전체 timetableFrame에 대해 실행해야 함.

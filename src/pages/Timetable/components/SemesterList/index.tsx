@@ -11,6 +11,7 @@ import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
 import useTokenState from 'utils/hooks/useTokenState';
+import useDeleteSemester from 'pages/Timetable/hooks/useDeleteSemester';
 import AddSemesterModal from './AddSemesterModal';
 import styles from './SemesterList.module.scss';
 import DeleteSemesterModal from './DeleteSemesterModal';
@@ -24,16 +25,17 @@ function SemesterListbox() {
   };
   const semester = useSemester();
   const { updateSemester } = useSemesterAction();
-  const [semesterValue, setSemesterValue] = useState(semester);
+  const [currentSemester, setCurrentSemester] = useState(semester);
   const token = useTokenState();
   const onChangeSelect = (e: { target: { value: string } }) => {
     const { target } = e;
     updateSemester(target?.value);
-    setSemesterValue(target?.value);
+    setCurrentSemester(target?.value);
   };
   const semesterOptionList = useSemesterOptionList();
+  const recentSemester = semesterOptionList[0].value;
   React.useEffect(() => {
-    onChangeSelect({ target: { value: semesterOptionList[0].value } });
+    updateSemester(currentSemester);
   // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -42,7 +44,7 @@ function SemesterListbox() {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
     onChangeSelect({ target: { value: optionValue ?? '' } });
-    logger.actionEventClick({ actionTitle: 'USER', title: 'select_semester', value: semesterValue });
+    logger.actionEventClick({ actionTitle: 'USER', title: 'select_semester', value: currentSemester });
     closePopup();
   };
 
@@ -70,7 +72,15 @@ function SemesterListbox() {
     setSelectedSemester(semes);
     openDeleteSemesterModal();
   };
-
+  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester);
+  const handleDeleteSemester = () => {
+    deleteTimetableFrame();
+    if (selectedSemester === currentSemester) {
+      setCurrentSemester(recentSemester);
+      updateSemester(recentSemester);
+    }
+    closeDeleteSemesterModal();
+  };
   return (
     <div
       className={cn({
@@ -87,7 +97,7 @@ function SemesterListbox() {
           [styles['select__trigger--selected']]: isOpenedPopup,
         })}
       >
-        {semesterValue !== null ? semesterOptionList.find((item) => item.value === semesterValue)?.label : ''}
+        {currentSemester !== null ? semesterOptionList.find((item) => item.value === currentSemester)?.label : ''}
         {isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
@@ -98,10 +108,10 @@ function SemesterListbox() {
                 type="button"
                 className={cn({
                   [styles.select__option]: true,
-                  [styles['select__option--selected']]: optionValue.value === semesterValue,
+                  [styles['select__option--selected']]: optionValue.value === currentSemester,
                 })}
                 role="option"
-                aria-selected={optionValue.value === semesterValue}
+                aria-selected={optionValue.value === currentSemester}
                 data-value={optionValue.value}
                 onClick={onClickOption}
                 tabIndex={0}
@@ -140,8 +150,7 @@ function SemesterListbox() {
         {isDeleteSemesterModalOpen && (
         <DeleteSemesterModal
           onClose={closeDeleteSemesterModal}
-          token={token}
-          semester={selectedSemester}
+          handleDeleteSemester={handleDeleteSemester}
         />
         )}
       </div>
