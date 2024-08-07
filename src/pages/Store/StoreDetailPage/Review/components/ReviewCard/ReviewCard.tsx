@@ -75,6 +75,7 @@ export default function ReviewCard({
       <div className={styles['image-wrapper']}>
         {image_urls.map((src, idx) => (
           <button
+            key={src}
             onClick={() => onClickImage(image_urls, idx)}
             type="button"
           >
