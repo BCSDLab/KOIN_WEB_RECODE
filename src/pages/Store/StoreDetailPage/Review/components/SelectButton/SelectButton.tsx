@@ -13,32 +13,36 @@ export default function SelectButton({ is_mine, review_id }: Props) {
   const params = useParams();
   const navigate = useNavigate();
   return (
-    <div className={styles.container}>
-      {is_mine ? (
-        <>
-          <button
-            type="button"
-            onClick={() => navigate(
-              `/edit/review/${params.id!}`,
-              { state: { from: review_id } },
-            )}
-            className={styles.section}
-          >
-            수정하기
-            <Pen />
-          </button>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        {is_mine ? (
+          <>
+            <button
+              type="button"
+              onClick={() => navigate(
+                `/edit/review/${params.id!}`,
+                { state: { from: review_id } },
+              )}
+              className={styles.section}
+            >
+              수정하기
+              <Pen />
+            </button>
+            <button type="button" className={styles.section}>
+              삭제하기
+              <Trash />
+            </button>
+          </>
+        ) : (
           <button type="button" className={styles.section}>
-            삭제하기
-            <Trash />
+            신고하기
+            {' '}
+            <Complaint />
           </button>
-        </>
-      ) : (
-        <button type="button" className={styles.section}>
-          신고하기
-          {' '}
-          <Complaint />
-        </button>
-      )}
+        )}
+      </div>
+
     </div>
+
   );
 }
