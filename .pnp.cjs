@@ -29,7 +29,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
-            ["@bcsdlab/utils", "npm:0.0.12"],\
+            ["@bcsdlab/utils", "npm:0.0.15"],\
             ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.28.6"],\
             ["@testing-library/jest-dom", "npm:5.17.0"],\
             ["@testing-library/react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.4.0"],\
@@ -3191,10 +3191,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@bcsdlab/utils", [\
-        ["npm:0.0.12", {\
-          "packageLocation": "./.yarn/cache/@bcsdlab-utils-npm-0.0.12-85afb79bdf-ebcfc783e7.zip/node_modules/@bcsdlab/utils/",\
+        ["npm:0.0.15", {\
+          "packageLocation": "./.yarn/cache/@bcsdlab-utils-npm-0.0.15-dd5b1007f1-4fc9c8bdb3.zip/node_modules/@bcsdlab/utils/",\
           "packageDependencies": [\
-            ["@bcsdlab/utils", "npm:0.0.12"]\
+            ["@bcsdlab/utils", "npm:0.0.15"],\
+            ["@types/josa", "npm:3.0.5"],\
+            ["josa", "npm:3.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5005,6 +5007,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:29.5.12"],\
             ["expect", "npm:29.7.0"],\
             ["pretty-format", "npm:29.7.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/josa", [\
+        ["npm:3.0.5", {\
+          "packageLocation": "./.yarn/cache/@types-josa-npm-3.0.5-a7b1759723-33680d6f4e.zip/node_modules/@types/josa/",\
+          "packageDependencies": [\
+            ["@types/josa", "npm:3.0.5"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -12530,6 +12541,25 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["jongseong", [\
+        ["npm:0.4.2", {\
+          "packageLocation": "./.yarn/cache/jongseong-npm-0.4.2-59df5ce5d2-e3904d8644.zip/node_modules/jongseong/",\
+          "packageDependencies": [\
+            ["jongseong", "npm:0.4.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["josa", [\
+        ["npm:3.0.1", {\
+          "packageLocation": "./.yarn/cache/josa-npm-3.0.1-29853dc8f4-0930d8a1bc.zip/node_modules/josa/",\
+          "packageDependencies": [\
+            ["josa", "npm:3.0.1"],\
+            ["jongseong", "npm:0.4.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["josa-js", [\
         ["npm:0.0.2", {\
           "packageLocation": "./.yarn/cache/josa-js-npm-0.0.2-ebe2648964-15cf3663a0.zip/node_modules/josa-js/",\
@@ -12814,7 +12844,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["koin_web_recode", "workspace:."],\
             ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
-            ["@bcsdlab/utils", "npm:0.0.12"],\
+            ["@bcsdlab/utils", "npm:0.0.15"],\
             ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.28.6"],\
             ["@testing-library/jest-dom", "npm:5.17.0"],\
             ["@testing-library/react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.4.0"],\
