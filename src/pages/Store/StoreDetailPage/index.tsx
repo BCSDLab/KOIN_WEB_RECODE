@@ -19,6 +19,7 @@ import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
 import ReviewPage from './Review';
+import { useGetReview } from './hooks/useGetReview';
 
 function StoreDetailPage() {
   const params = useParams();
@@ -30,6 +31,7 @@ function StoreDetailPage() {
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
   const logger = useLogger();
+  const { data } = useGetReview(Number(params.id));
   const onClickCallNumber = () => {
     logger.click({
       title: 'store_detail_call_number',
@@ -243,6 +245,8 @@ function StoreDetailPage() {
             }}
           >
             리뷰
+            {' '}
+            {`(${data.pages[0].total_count})`}
           </button>
         </div>
         {tapType === '메뉴' && storeMenuCategories && storeMenuCategories.length > 0 && (
