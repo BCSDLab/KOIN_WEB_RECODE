@@ -57,7 +57,6 @@ export default function ReviewReportingPage() {
 
   const handleReport = () => {
     const reportData = { reports: requestOptions };
-    console.log(reportData);
     mutate(reportData);
   };
 
