@@ -1,10 +1,10 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-grey.svg';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
-import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
-import { Opens } from 'api/coopshop/entity';
+import { Opens, CoopshopResponse } from 'api/coopshop/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './CafeteriaInfo.module.scss';
 
 interface ScheduleTableProps {
@@ -17,8 +17,7 @@ function ScheduleTable({ title, schedules }: ScheduleTableProps) {
     <div className={styles.table}>
       <span className={styles.table__title}>
         {title}
-        &nbsp;
-        운영시간
+        &nbsp;운영시간
       </span>
       <table className={styles.table__content}>
         <thead>
@@ -43,15 +42,16 @@ function ScheduleTable({ title, schedules }: ScheduleTableProps) {
 }
 
 interface CafeteriaInfoProps {
-  closePopup: () => void;
+  cafeteriaInfo: CoopshopResponse;
+  closeInfo: () => void;
 }
 
-export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
-  const { cafeteriaInfo } = useCoopshopCafeteria();
+export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInfoProps) {
   const weekday = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '평일');
   const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '주말');
-  const { backgroundRef } = useOutsideClick({ onOutsideClick: closePopup });
-  useEscapeKeyDown({ onEscape: closePopup });
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });
+  useEscapeKeyDown({ onEscape: closeInfo });
+  useBodyScrollLock(true);
   const isMobile = useMediaQuery();
 
   return (
@@ -64,7 +64,7 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
               <button
                 type="button"
                 aria-label="닫기 버튼"
-                onClick={closePopup}
+                onClick={closeInfo}
               >
                 <BlackArrowBackIcon />
               </button>
@@ -95,7 +95,7 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
             type="button"
             aria-label="닫기 버튼"
             className={styles['header__close-button']}
-            onClick={closePopup}
+            onClick={closeInfo}
           >
             <CloseIcon />
           </button>
@@ -104,13 +104,10 @@ export default function CafeteriaInfo({ closePopup }: CafeteriaInfoProps) {
         <ScheduleTable title="평일" schedules={weekday} />
         <ScheduleTable title="주말" schedules={weekend} />
 
-        {isMobile && (
-          <div className={styles.update}>
-            {cafeteriaInfo.updated_at.split('-').join('.')}
-            &nbsp;
-            업데이트
-          </div>
-        )}
+        <div className={styles.update}>
+          {cafeteriaInfo.updated_at.split('-').join('.')}
+          &nbsp;업데이트
+        </div>
       </div>
     </div>
   );
