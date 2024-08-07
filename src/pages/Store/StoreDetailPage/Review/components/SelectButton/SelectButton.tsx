@@ -7,17 +7,16 @@ import LoginRequiredModal from 'components/common/LoginRequiredModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import styles from './SelectButton.module.scss';
-/* eslint-disable react/require-default-props */
+
 interface Props {
   is_mine: boolean;
-  shop_id?: number;
   review_id: number;
 }
 const REVEIW_REPORT_LOGIN = [
   '리뷰 신고 시 ',
   '리뷰 신고는 회원만 사용 가능합니다.',
 ];
-export default function SelectButton({ is_mine, shop_id, review_id }: Props) {
+export default function SelectButton({ is_mine, review_id }: Props) {
   const params = useParams();
   const navigate = useNavigate();
   const { data: userInfo } = useUser();
@@ -59,7 +58,7 @@ export default function SelectButton({ is_mine, shop_id, review_id }: Props) {
             className={styles.section}
             onClick={() => {
               if (userInfo) {
-                navigate(`/report/review/shopid/${shop_id}/reviewid/${review_id}`);
+                navigate(`/report/review/shopid/${params.id!}/reviewid/${review_id}`);
               } else {
                 openLoginModal();
               }
