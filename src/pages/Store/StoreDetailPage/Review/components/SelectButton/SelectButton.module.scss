@@ -1,14 +1,29 @@
-.container {
+.wrapper {
+  overflow: hidden;
   position: absolute;
   width: 110px;
   left: -90px;
+}
+
+.container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: #fafafa;
   border-radius: 10px;
   padding: 4px;
+  animation: appear 0.15s linear forwards;
+}
+
+@keyframes appear {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }
 
 .section {

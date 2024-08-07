@@ -5398,6 +5398,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.12":
+  version: 1.11.12
+  resolution: "dayjs@npm:1.11.12"
+  checksum: 40a4f67c2df3af125ae0ddec68d3a6d806d3009a7414bf45479aaf82f1dd82f3e139e6642e72391abccc37488897830c56afcabb4c819014130d283644df8128
+  languageName: node
+  linkType: hard
+
 "debug@npm:2.6.9, debug@npm:^2.6.0":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -9348,6 +9355,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.30.0
     "@typescript-eslint/parser": ^5.30.0
     axios: ^0.27.2
+    dayjs: ^1.11.12
     embla-carousel-autoplay: ^8.0.4
     embla-carousel-react: ^8.0.4
     eslint: ^8.18.0
@@ -9378,7 +9386,6 @@ __metadata:
     stylelint-config-standard-scss: ^4.0.0
     stylelint-selector-bem-pattern: ^2.1.1
     typescript: ^4.4.2
-    uuid: ^10.0.0
     web-vitals: ^2.1.0
     zustand: ^4.5.2
   languageName: unknown
@@ -14396,15 +14403,6 @@ __metadata:
   dependencies:
     base64-arraybuffer: ^1.0.2
   checksum: c96fbb7d4d8855a154327da0b18e39b7511cc70a7e4bcc3658e24f424bb884312d72b5ba777500b8858e34d365dc6b1a921dc5ca2f0d341182519c6b78e280a5
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "uuid@npm:10.0.0"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 4b81611ade2885d2313ddd8dc865d93d8dccc13ddf901745edca8f86d99bc46d7a330d678e7532e7ebf93ce616679fb19b2e3568873ac0c14c999032acb25869
   languageName: node
   linkType: hard
 

@@ -1,13 +1,14 @@
 import { cn } from '@bcsdlab/utils';
 import { useNavigate } from 'react-router-dom';
 import { CATEGORY, Submenu } from 'static/category';
-import useLogger from 'utils/hooks/useLogger';
-import { useLogout } from 'utils/hooks/useLogout';
-import { useUser } from 'utils/hooks/useUser';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useLogout } from 'utils/hooks/auth/useLogout';
+import { useUser } from 'utils/hooks/state/useUser';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
-import { useEffect } from 'react';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -20,6 +21,8 @@ export default function Panel({ openModal }: PanelProps) {
   const logout = useLogout();
   const logger = useLogger();
   const navigate = useNavigate();
+  useEscapeKeyDown({ onEscape: closeSidebar });
+  useBodyScrollLock(isSidebarOpen);
 
   const logShortcut = (title: string) => {
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: '주변상점' });
@@ -50,18 +53,6 @@ export default function Panel({ openModal }: PanelProps) {
     }
   };
 
-  useEffect(() => {
-    if (isSidebarOpen) {
-      document.body.style.cssText = 'overflow: hidden;';
-    } else {
-      document.body.style.cssText = '';
-    }
-
-    return () => {
-      document.body.style.cssText = '';
-    };
-  }, [isSidebarOpen]);
-
   return (
     <nav
       className={cn({
@@ -71,9 +62,9 @@ export default function Panel({ openModal }: PanelProps) {
     >
       <div className={styles.top}>
         <button
-          className={styles.top__close}
           type="button"
           aria-label="닫기 버튼"
+          className={styles.top__close}
           onClick={closeSidebar}
         >
           <BlackArrowBackIcon />

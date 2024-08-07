@@ -1,4 +1,4 @@
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { MobilePage } from 'pages/Timetable/TimetablePage/MobilePage';
 import DefaultPage from './DefaultPage';
 import styles from './ModifyTimetablePage.module.scss';

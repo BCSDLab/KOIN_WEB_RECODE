@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
 import showToast from 'utils/ts/showToast';
-import useLogger from 'utils/hooks/useLogger';
-import useModalPortal from 'utils/hooks/useModalPortal';
-import useScrollToTop from 'utils/hooks/useScrollToTop';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
-import { useScorllLogging } from 'utils/hooks/useScrollLogging';
+import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
 import Copy from 'assets/png/copy.png';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
@@ -174,19 +174,6 @@ function StoreDetailPage() {
                 >
                   상점목록
                 </button>
-                <button
-                  className={cn({
-                    [styles['button-wrapper__button']]: true,
-                    [styles['button-wrapper__button--store-list']]: true,
-                  })}
-                  aria-label="리뷰하기로 이동"
-                  type="button"
-                  onClick={() => {
-                    navigate(`/review/${params.id}`);
-                  }}
-                >
-                  리뷰하기
-                </button>
               </div>
               {isMobile && storeDetail?.updated_at && (
                 <UpdateInfo date={storeDetail.updated_at} />
@@ -262,7 +249,7 @@ function StoreDetailPage() {
           <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
         )}
         {tapType === '이벤트/공지' && <EventTable />}
-        {tapType === '리뷰' && <ReviewPage />}
+        {tapType === '리뷰' && <ReviewPage id={params.id!} />}
       </div>
     </div>
   );

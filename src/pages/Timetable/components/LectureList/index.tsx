@@ -11,7 +11,7 @@ import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import useSearch from 'pages/Timetable/hooks/useSearch';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import LectureTable from 'components/TimetablePage/LectureTable';
-import { useUser } from 'utils/hooks/useUser';
+import { useUser } from 'utils/hooks/state/useUser';
 import { useParams } from 'react-router-dom';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
@@ -64,7 +64,15 @@ function CurrentSemesterLectureList({
       )}
       onClickRow={
         (clickedLecture) => {
+          const isContainedLecture = myLectures.some(
+            (lecture) => lecture.code === clickedLecture.code
+            && lecture.lecture_class === clickedLecture.lecture_class,
+          );
           if ('class_title' in clickedLecture) {
+            return;
+          }
+          if (isContainedLecture) {
+            showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
             return;
           }
           const myLectureTimeValue = (

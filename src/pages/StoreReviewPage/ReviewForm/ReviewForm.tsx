@@ -1,20 +1,41 @@
-import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ReactComponent as StarIcon } from 'assets/svg/empty-star.svg';
 import { ReactComponent as DeleteMenuIcon } from 'assets/svg/trash-can-icon.svg';
 import { ReactComponent as DeleteImageIcon } from 'assets/svg/delete-icon.svg';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import uuidv4 from 'utils/ts/uuidGenerater';
-import styles from './StoreReviewPage.module.scss';
+import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import { StoreDetailResponse } from 'api/store/entity';
+import { UseMutateFunction } from '@tanstack/react-query';
+import { ReviewRequest } from 'api/review/entity';
+import styles from './ReviewForm.module.scss';
 
-function StoreReviewPage() {
-  const params = useParams();
-  const { storeDetail } = useStoreDetail(params.id!);
-  const [rate, setRate] = useState(0);
-  const [imageList, setImageList] = useState<string[]>([]);
-  const [reviewText, setReviewText] = useState('');
-  const [menuList, setMenuList] = useState<{ id: string, name: string }[]>([]);
+interface Props {
+  storeDetail:StoreDetailResponse;
+  mutate: UseMutateFunction<ReviewRequest, unknown, ReviewRequest, unknown>;
+  initialData: Partial<ReviewRequest>;
+}
+
+function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [rate, setRate] = useState(initialData?.rating ?? 0);
+  const [reviewText, setReviewText] = useState(initialData?.content ?? '');
+  const [menuList, setMenuList] = useState<{ id: string, name: string }[]>(
+    initialData.menu_names ? initialData.menu_names.map((name) => ({ id: uuidv4(), name })) : [],
+  );
+
+  const {
+    imageFile, imgRef, saveImgFile, setImageFile,
+  } = useImageUpload();
+
+  useEffect(() => {
+    if (initialData?.image_urls) {
+      setImageFile(initialData.image_urls);
+    }
+  }, [initialData?.image_urls, setImageFile]);
 
   const addMenu = () => {
     setMenuList([...menuList, { id: uuidv4(), name: '' }]);
@@ -31,19 +52,26 @@ function StoreReviewPage() {
     setMenuList(newMenuList);
   };
 
-  const addImage = (e:React.ChangeEvent<HTMLInputElement>) => {
-    const uploadImages = e.target.files!;
-    const newImageList = [...imageList,
-      ...Array.from(uploadImages).map((file) => URL.createObjectURL(file))];
-    setImageList(newImageList);
+  const deleteImage = (url: string) => {
+    setImageFile(imageFile.filter((image: string) => image !== url));
   };
 
-  const deleteImage = (url: string) => {
-    setImageList(imageList.filter((image) => image !== url));
+  const handleSumbit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const reviewData = {
+      rating: rate,
+      content: reviewText,
+      image_urls: imageFile,
+      menu_names: menuList.map((menu) => menu.name),
+    };
+    if (rate) {
+      mutate(reviewData);
+      navigate(`/store/${storeDetail.id!}`);
+    }
   };
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={handleSumbit}>
       <div className={styles.form__name}>
         <div>
           {storeDetail?.name}
@@ -76,16 +104,16 @@ function StoreReviewPage() {
           <span>사진</span>
           <span className={cn({
             [styles.template__title__count]: true,
-            [styles['template__title__count--active']]: imageList.length === 3,
+            [styles['template__title__count--active']]: imageFile.length === 3,
           })}
           >
-            {imageList.length}
+            {imageFile.length}
             /3
           </span>
         </div>
         <div className={styles.template__description}>리뷰와 관련된 사진을 업로드해주세요.</div>
         <ul className={styles.template__images}>
-          {imageList.map((url) => (
+          {imageFile.map((url: string) => (
             <li key={url}>
               <img src={url} alt="리뷰 이미지" />
               <button
@@ -100,7 +128,14 @@ function StoreReviewPage() {
         </ul>
         <label htmlFor="image-file" className={styles['template__upload-image']}>
           사진 등록하기
-          <input type="file" id="image-file" multiple onChange={addImage} />
+          <input
+            type="file"
+            ref={imgRef}
+            accept="image/*"
+            id="image-file"
+            multiple
+            onChange={saveImgFile}
+          />
         </label>
       </div>
       <div className={styles.template}>
@@ -157,10 +192,10 @@ function StoreReviewPage() {
           [styles['form__button--active']]: rate !== 0,
         })}
       >
-        작성하기
+        {location.pathname.includes('/edit') ? '수정하기' : '작성하기'}
       </button>
     </form>
   );
 }
 
-export default StoreReviewPage;
+export default ReviewForm;

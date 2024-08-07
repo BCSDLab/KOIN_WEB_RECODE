@@ -10,8 +10,7 @@ import { cn } from '@bcsdlab/utils';
 import styles from './ReviewCard.module.scss';
 
 export default function ReviewCard({
-  nick_name, rating, content, image_urls,
-  menu_names, is_mine, is_modified, created_at, review_id, shop_id,
+  nick_name, rating, content, image_urls, menu_names, is_mine, is_modified, created_at, review_id,
 }: Review) {
   const [isKebabClick, setIsKebabClick] = useState(false);
   const emptyStarList = new Array(5 - rating).fill(false);
@@ -46,13 +45,14 @@ export default function ReviewCard({
           })}
         >
           {isKebabClick ? <ClickedKebab /> : <Kebab />}
-          {isKebabClick
-           && <SelectButton is_mine={is_mine} shop_id={shop_id} review_id={review_id} />}
+          {isKebabClick && <SelectButton is_mine={is_mine} review_id={review_id} />}
         </button>
       </div>
       <div className={styles.rating}>
         <div>
-          {ratingList.map((ratio) => (ratio ? <Star /> : <EmptyStar />))}
+          {ratingList.map((ratio, idx) =>
+            // eslint-disable-next-line
+            (ratio ? <Star key={idx}/> : <EmptyStar key={idx}/>))}
         </div>
         <div className={styles.created}>
           {created_at}

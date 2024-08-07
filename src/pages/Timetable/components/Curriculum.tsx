@@ -1,11 +1,12 @@
 /* eslint-disable no-restricted-imports */
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { DeptListResponse } from 'api/dept/entity';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from 'pages/Timetable/TimetablePage/DefaultPage/DefaultPage.module.scss';
 
 export interface CurriculumListBoxProps {
@@ -14,6 +15,8 @@ export interface CurriculumListBoxProps {
 
 function CurriculumListBox({ list }: CurriculumListBoxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
+  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
+  useEscapeKeyDown({ onEscape: closePopup });
 
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -24,15 +27,13 @@ function CurriculumListBox({ list }: CurriculumListBoxProps) {
     closePopup();
   };
 
-  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
-
   return (
     <div
       className={cn({
         [styles.select]: true,
         [styles['select--opened']]: isOpenedPopup,
       })}
-      ref={target}
+      ref={containerRef}
     >
       <button
         type="button"

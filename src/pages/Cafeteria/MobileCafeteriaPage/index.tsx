@@ -1,9 +1,13 @@
 import { cn } from '@bcsdlab/utils';
 import { Suspense, useEffect, useState } from 'react';
+import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
+import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
-import useScrollToTop from 'utils/hooks/useScrollToTop';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { ReactComponent as InformationIcon } from 'assets/svg/information-icon.svg';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
@@ -18,6 +22,24 @@ export default function MobileCafeteriaPage({
 }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
+  const [isCafeteriaInfoOpen, setIsCafeteriaInfoOpen] = useState(false);
+  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
+
+  useBodyScrollLock(isCafeteriaInfoOpen);
+
+  useEffect(() => {
+    setButtonContent((
+      <button
+        type="button"
+        aria-label="학생식당 운영 정보 안내"
+        onClick={() => setIsCafeteriaInfoOpen(true)}
+      >
+        <InformationIcon />
+      </button>
+    ));
+
+    return () => setButtonContent(null);
+  }, [setButtonContent, setIsCafeteriaInfoOpen]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[dining] });
@@ -72,6 +94,15 @@ export default function MobileCafeteriaPage({
           <MobileDiningBlocks diningType={diningType} />
         </Suspense>
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
+      </div>
+
+      <div
+        className={cn({
+          [styles['cafeteria-info']]: true,
+          [styles['cafeteria-info--open']]: isCafeteriaInfoOpen,
+        })}
+      >
+        <CafeteriaInfo closePopup={() => setIsCafeteriaInfoOpen(false)} />
       </div>
     </>
   );

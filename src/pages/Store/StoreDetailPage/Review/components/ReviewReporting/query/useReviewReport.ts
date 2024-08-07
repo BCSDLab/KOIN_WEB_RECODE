@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { postReviewReport } from 'api/store';
 import { ReviewReportRequest } from 'api/store/entity';
 import { toast } from 'react-toastify';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 
 export default function useReviewReport(shopId: string, reviewId: string) {
   // const queryClient = useQueryClient();

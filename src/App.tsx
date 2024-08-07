@@ -26,7 +26,8 @@ import MetaHelmet from 'components/common/MetaHelmet';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
 import PrivateRoute from 'components/common/PrivateRoute';
 import ModifyTimetablePage from 'pages/Timetable/ModifyTimetablePage';
-import StoreReviewPage from 'pages/StoreReviewPage';
+import AddReviewPage from 'pages/StoreReviewPage/AddReviewPage';
+import EditReviewPage from 'pages/StoreReviewPage/EditReviewPage';
 import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/ReviewReporting';
 
 interface HelmetWrapperProps {
@@ -78,8 +79,10 @@ function App() {
           <Route path="findpw" element={<HelmetWrapper title="코인 - 비밀번호 찾기" element={<FindPasswordPage />} />} />
         </Route>
         <Route path="/" element={<BoardPage />}>
-          <Route path="review/:id" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 상점 리뷰" element={<StoreReviewPage />} />} />} />
+          <Route path="review/:id" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 상점 리뷰" element={<AddReviewPage />} />} />} />
+          <Route path="/edit/review/:id" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 상점 리뷰" element={<EditReviewPage />} />} />} />
           <Route path="/report/review/shopid/:shopid/reviewid/:reviewid" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 리뷰 신고" element={<ReviewReportingPage />} />} />} />
+
         </Route>
         <Route path="auth" element={<AuthPage />}>
           <Route path="modifyInfo" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보 변경" element={<ModifyInfoPage />} />} />} />
