@@ -5,7 +5,7 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import DeleteModal from 'pages/Store/StoreDetailPage/Review/components/DeleteModal/DeleteModal';
 import { useDeleteReview } from 'pages/Store/StoreDetailPage/hooks/useDeleteReview';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from './SelectButton.module.scss';
 
 interface Props {
@@ -14,6 +14,8 @@ interface Props {
 }
 
 export default function SelectButton({ is_mine, review_id }: Props) {
+  const params = useParams();
+  const navigate = useNavigate();
   const portalManager = useModalPortal();
   const param = useParams();
   const mutation = useDeleteReview(param.id!, review_id);
@@ -29,28 +31,36 @@ export default function SelectButton({ is_mine, review_id }: Props) {
       <div className={styles.container}>
         {is_mine ? (
           <>
-            <div className={styles.section}>
+            <button
+              type="button"
+              onClick={() => navigate(
+                `/edit/review/${params.id!}`,
+                { state: { from: review_id } },
+              )}
+              className={styles.section}
+            >
               수정하기
               <Pen />
-            </div>
-            <div
-              role="button"
-              aria-hidden
+            </button>
+            <button
+              type="button"
               onClick={openDeleteModal}
               className={styles.section}
             >
               삭제하기
               <Trash />
-            </div>
+            </button>
           </>
         ) : (
-          <div className={styles.section}>
+          <button type="button" className={styles.section}>
             신고하기
             {' '}
             <Complaint />
-          </div>
+          </button>
         )}
       </div>
+
     </div>
+
   );
 }
