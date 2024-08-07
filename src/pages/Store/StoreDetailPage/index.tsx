@@ -13,6 +13,8 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
 import Copy from 'assets/png/copy.png';
+import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
+import { ReactComponent as Phone } from 'assets/svg/Review/phone.svg';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
@@ -32,6 +34,7 @@ function StoreDetailPage() {
   const portalManager = useModalPortal();
   const logger = useLogger();
   const { data } = useGetReview(Number(params.id));
+  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
   const onClickCallNumber = () => {
     logger.click({
       title: 'store_detail_call_number',
@@ -65,6 +68,22 @@ function StoreDetailPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
   useScorllLogging('shop_detailView', storeDetail);
+
+  React.useEffect(() => {
+    setButtonContent((
+      // eslint-disable-next-line jsx-a11y/control-has-associated-label
+      <a
+        role="button"
+        aria-label="상점 전화하기"
+        href={`tel:${storeDetail?.phone}`}
+        onClick={onClickCallNumber}
+      >
+        <Phone />
+      </a>
+    )); // 버튼 내부에 text가 없음
+
+    return () => setButtonContent(null);
+  });
 
   return (
     <div className={styles.template}>
@@ -150,18 +169,6 @@ function StoreDetailPage() {
                 </span>
               </div>
               <div className={styles['button-wrapper']}>
-                <a
-                  className={cn({
-                    [styles['button-wrapper__button']]: true,
-                    [styles['button-wrapper__button--call']]: true,
-                  })}
-                  role="button"
-                  aria-label="상점 전화하기"
-                  href={`tel:${storeDetail?.phone}`}
-                  onClick={onClickCallNumber}
-                >
-                  전화하기
-                </a>
                 <button
                   className={cn({
                     [styles['button-wrapper__button']]: true,
@@ -171,7 +178,7 @@ function StoreDetailPage() {
                   type="button"
                   onClick={() => {
                     onClickList();
-                    navigate(-1);
+                    navigate('store');
                   }}
                 >
                   상점목록
