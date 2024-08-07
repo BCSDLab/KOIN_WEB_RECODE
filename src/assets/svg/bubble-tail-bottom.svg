@@ -1,0 +1,12 @@
+<svg width="17" height="10" viewBox="0 0 17 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Define the filter -->
+        <defs>
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="rgba(0, 0, 0, 0.04)"/>
+                <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0, 0, 0, 0.08)"/>
+            </filter>
+        </defs>
+
+        <!-- Apply the filter to the path -->
+        <path d="M7.08579 6.58579L0.5 0H16.5L9.91421 6.58579C9.13317 7.36684 7.86684 7.36684 7.08579 6.58579Z" fill="#FAFAFA" filter="url(#shadow)"/>
+</svg>

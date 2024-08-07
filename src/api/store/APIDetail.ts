@@ -2,12 +2,15 @@ import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { DeleteResponse } from 'api/auth/entity';
 import {
   StoreListResponse,
+  StoreListV2Response,
   StoreDetailResponse,
   StoreDetailMenuResponse,
   StoreCategoriesResponse,
   AllStoreEventResponse,
   StoreEventListResponse,
   ReviewListResponse,
+  StoreSorterType,
+  StoreFilterType,
 } from './entity';
 
 export class StoreList<R extends StoreListResponse> implements APIRequest<R> {
@@ -18,6 +21,25 @@ export class StoreList<R extends StoreListResponse> implements APIRequest<R> {
   response!: R;
 }
 
+export class StoreListV2<R extends StoreListV2Response> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'v2/shops';
+
+  response!: R;
+
+  params: {
+    sorter?: StoreSorterType,
+    filter?: StoreFilterType[],
+  };
+
+  constructor(sorter: StoreSorterType, filter: StoreFilterType[]) {
+    this.params = {
+      sorter,
+      filter,
+    };
+  }
+}
 export class StoreDetailInfo<R extends StoreDetailResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
