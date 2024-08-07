@@ -7,7 +7,6 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { DiningTime } from 'utils/ts/cafeteria';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import DateNavigator from './components/DateNavigator';
@@ -32,13 +31,11 @@ interface PCCafeteriaPageProps {
 export default function PCCafeteriaPage({
   diningType, setDiningType,
 }: PCCafeteriaPageProps) {
-  const { currentDate, checkToday } = useDatePicker();
+  const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
-  useEscapeKeyDown({ onEscape: closeDropdown });
 
-  const diningTime = new DiningTime();
   const handleDiningTypeChange = (value: DiningType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[value] });
     setDiningType(value);
@@ -50,13 +47,18 @@ export default function PCCafeteriaPage({
 
   const formatDiningDate = () => {
     if (checkToday(currentDate())) {
-      return diningTime.isTodayDining() ? '오늘' : '내일';
+      return '오늘';
+    }
+
+    if (checkTomorrow(currentDate())) {
+      return '내일';
     }
 
     return DAYS[currentDate().getDay()];
   };
 
   useScrollToTop();
+  useEscapeKeyDown({ onEscape: closeDropdown });
 
   return (
     <div className={styles.container}>

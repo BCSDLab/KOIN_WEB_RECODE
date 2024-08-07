@@ -8,6 +8,8 @@ export const useDatePicker = () => {
   const dateSearchParams = searchParams.get(DATE_KEY);
 
   const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
   const diningTime = new DiningTime();
   const currentDate = () => {
     if (dateSearchParams !== null) {
@@ -18,6 +20,7 @@ export const useDatePicker = () => {
   };
 
   const checkToday = (date: Date) => today.toDateString() === date.toDateString();
+  const checkTomorrow = (date: Date) => tomorrow.toDateString() === date.toDateString();
   const checkPast = (date: Date) => today > date;
 
   const setPrev = () => {
@@ -75,6 +78,7 @@ export const useDatePicker = () => {
   return {
     currentDate,
     checkToday,
+    checkTomorrow,
     checkPast,
     setPrev,
     setNext,
