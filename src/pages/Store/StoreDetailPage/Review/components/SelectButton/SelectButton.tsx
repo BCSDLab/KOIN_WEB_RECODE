@@ -18,7 +18,7 @@ export default function SelectButton({ is_mine, review_id }: Props) {
   const param = useParams();
   const mutation = useDeleteReview(param.id!, review_id);
 
-  const openLoginModal = () => {
+  const openDeleteModal = () => {
     portalManager.open((portalOption: Portal) => (
       <DeleteModal close={portalOption.close} deleteMyReview={mutation.mutate} />
     ));
@@ -36,7 +36,7 @@ export default function SelectButton({ is_mine, review_id }: Props) {
             <div
               role="button"
               aria-hidden
-              onClick={openLoginModal}
+              onClick={openDeleteModal}
               className={styles.section}
             >
               삭제하기
