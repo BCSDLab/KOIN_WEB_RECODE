@@ -10,7 +10,6 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 24px;
-  overflow: hidden;
 
   @include media.media-breakpoint(mobile) {
     min-width: 100%;
