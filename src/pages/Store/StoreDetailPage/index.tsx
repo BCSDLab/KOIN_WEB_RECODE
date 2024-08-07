@@ -71,7 +71,6 @@ function StoreDetailPage() {
 
   React.useEffect(() => {
     setButtonContent((
-      // eslint-disable-next-line jsx-a11y/control-has-associated-label
       <a
         role="button"
         aria-label="상점 전화하기"
@@ -80,7 +79,7 @@ function StoreDetailPage() {
       >
         <Phone />
       </a>
-    )); // 버튼 내부에 text가 없음
+    ));
 
     return () => setButtonContent(null);
   });
