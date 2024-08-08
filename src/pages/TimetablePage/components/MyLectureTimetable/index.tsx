@@ -2,8 +2,8 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import useImageDownload from 'utils/hooks/ui/useImageDownload';
-import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
+import useImageDownload from 'utils/hooks/useImageDownload';
+import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from '../../DefaultPage/DefaultPage.module.scss';

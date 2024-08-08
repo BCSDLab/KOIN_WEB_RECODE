@@ -3,14 +3,14 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useBooleanState from 'utils/hooks/useBooleanState';
+import useTokenState from 'utils/hooks/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useModalPortal from 'utils/hooks/useModalPortal';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
-import { useUser } from 'utils/hooks/state/useUser';
+import { useUser } from 'utils/hooks/useUser';
 import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
@@ -61,7 +61,7 @@ interface MappedFields {
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
 ): elementRef is ICustomFormInput => (elementRef !== null
-  && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+&& Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const fieldRefs = React.useRef<IFormType>({});
@@ -285,7 +285,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
   const { data: userInfo } = useUser();
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
-  const [major, setMajor] = React.useState<string | null>(null);
+  const [major, setMajor] = React.useState<string>(userInfo?.major || '');
   const deptOptionList = deptList.map((dept) => ({
     label: dept.name,
     value: dept.name,

@@ -1,17 +1,10 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
 interface Open {
-  open_time: string;
-  close_time: string;
-  closed: boolean;
-  day_of_week:
-  | 'MONDAY'
-  | 'TUESDAY'
-  | 'WEDNESDAY'
-  | 'THURSDAY'
-  | 'FRIDAY'
-  | 'SATURDAY'
-  | 'SUNDAY';
+  open_time: string,
+  close_time: string,
+  closed: boolean,
+  day_of_week: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY',
 }
 
 export interface StoreDetailResponse extends APIResponse {
@@ -29,8 +22,6 @@ export interface StoreDetailResponse extends APIResponse {
   phone: string;
   shop_categories: StoreCategory[];
   updated_at: string;
-  bank?: string;
-  account_number?: string;
 }
 
 interface MenuBase {
@@ -54,11 +45,7 @@ interface MultiPriceMenu extends MenuBase {
 
 export type Menu = SinglePriceMenu | MultiPriceMenu;
 
-export type MenuCategoryName =
-  | '추천 메뉴'
-  | '메인 메뉴'
-  | '세트 메뉴'
-  | '사이드 메뉴';
+export type MenuCategoryName = '추천 메뉴' | '메인 메뉴' | '세트 메뉴' | '사이드 메뉴';
 export interface MenuCategory {
   id: number;
   name: MenuCategoryName;
@@ -101,28 +88,28 @@ export interface StoreCategory {
 }
 
 export interface StoreEvent {
-  shop_id: number;
-  shop_name: string;
-  title: string;
-  content: string;
-  thumbnail_images: string[];
-  start_date: string;
-  end_date: string;
+  shop_id: number,
+  shop_name: string,
+  title: string,
+  content: string,
+  thumbnail_images: string[],
+  start_date: string,
+  end_date: string,
 }
 
 export interface AllStoreEventResponse extends APIResponse {
   events: {
-    shop_id: number;
-    event_id: number;
-    shop_name: string;
-    title: string;
-    content: string;
-    thumbnail_images: string[];
-    start_date: string;
-    end_date: string;
-  }[];
+    shop_id: number,
+    event_id: number,
+    shop_name: string,
+    title: string,
+    content: string,
+    thumbnail_images: string[],
+    start_date: string,
+    end_date: string,
+  }[]
 }
 
 export interface StoreEventListResponse extends APIResponse {
-  events: StoreEvent[];
+  events : StoreEvent[];
 }

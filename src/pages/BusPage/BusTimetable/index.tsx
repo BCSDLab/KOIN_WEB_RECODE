@@ -1,19 +1,21 @@
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import { BUS_TYPES } from 'static/bus';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { useBusStore } from 'utils/zustand/bus';
-import { useShallow } from 'zustand/react/shallow';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './BusTimetable.module.scss';
 import Timetable from './Timetable';
 
+type BusType = {
+  key: string,
+  tabName: string,
+  tableHeaders: string[],
+};
+
 function BusTimetable() {
-  const [selectedTab, setSelectedTab] = useBusStore(useShallow(
-    (state) => [state.selectedTab, state.setSelectedTab],
-  ));
+  const [selectedTab, setSelectedTab] = useState(BUS_TYPES[0]);
   const logger = useLogger();
-  const onClickBusTab = (type: typeof BUS_TYPES[number]) => {
+  const onClickBusTab = (type: BusType) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable', value: type.tabName });
     setSelectedTab(type);
   };

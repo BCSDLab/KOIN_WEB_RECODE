@@ -1,21 +1,13 @@
 @use "src/utils/scss/media" as media;
 
 .template {
-  min-width: 1132px;
-  max-width: 1200px;
+  width: 1132px;
   margin: 0 auto;
   padding: 40px 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 24px;
-
-  @include media.media-breakpoint(mobile) {
-    min-width: 100%;
-    width: 100%;
-    padding: 40px 0 0;
-  }
+  overflow: hidden;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
@@ -23,7 +15,7 @@
   }
 }
 
-.mobile-wrapper {
+.mobileWrapper {
   @include media.media-breakpoint(mobile) {
     width: 100%;
     display: flex;

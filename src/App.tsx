@@ -26,12 +26,12 @@ import MetaHelmet from 'components/common/MetaHelmet';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
 import PrivateRoute from 'components/common/PrivateRoute';
 
-interface HelmetWrapperProps {
+interface PageWrapperProps {
   title: string;
   element: ReactNode;
 }
 
-function HelmetWrapper({ title, element }: HelmetWrapperProps) {
+function HelmetWrapper({ title, element }: PageWrapperProps) {
   const location = useLocation();
 
   useEffect(() => {

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useUser } from 'utils/hooks/useUser';
 import * as gtag from 'lib/gtag';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import { UserResponse } from 'api/auth/entity';
-import { useUser } from 'utils/hooks/state/useUser';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
   let uuid = localStorage.getItem('uuid');
