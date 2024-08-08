@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-imports */
 import React, { useState } from 'react';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import useSemesterOptionList from '../hooks/useSemesterOptionList';
-import Listbox from '../../../components/TimetablePage/Listbox';
+import useSemesterOptionList from '../../hooks/useSemesterOptionList';
+import Listbox from '../../../../components/TimetablePage/Listbox';
 
 function SemesterListbox() {
   const semester = useSemester();
