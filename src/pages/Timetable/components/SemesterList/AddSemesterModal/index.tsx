@@ -40,7 +40,7 @@ export default function AddSemesterModal({
   };
   const token = useTokenState();
   const { mutate: addSemester } = useAddSemester(token);
-  const { data: mySemester } = useSemesterCheck();
+  const { data: mySemester } = useSemesterCheck(token);
   const handleAddSemester = (semesters: AddTimetableFrameRequest) => {
     if (mySemester) {
       if (mySemester.semesters.includes(semesters.semester)) {

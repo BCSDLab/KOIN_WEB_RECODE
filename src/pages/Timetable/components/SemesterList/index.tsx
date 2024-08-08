@@ -47,7 +47,7 @@ function SemesterListbox() {
     logTitle: '',
     version: 'default',
   };
-  const [selectedSemester, setSelectedSemester] = React.useState('20242');
+  const [selectedSemester, setSelectedSemester] = React.useState('');
   const [
     isAddSemesterModalOpen, openAddSemesterModal, closeAddSemesterModal,
   ] = useBooleanState(false);
@@ -65,7 +65,7 @@ function SemesterListbox() {
     setSelectedSemester(semes);
     openDeleteSemesterModal();
   };
-  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester);
+  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester || '20242');
   const handleDeleteSemester = () => {
     deleteTimetableFrame();
     if (selectedSemester === currentSemester) {

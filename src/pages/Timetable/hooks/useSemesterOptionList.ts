@@ -1,7 +1,7 @@
 import { timetable } from 'api';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import useTokenState from 'utils/hooks/useTokenState';
-import useSemesterCheck from './useMySemester';
+import useSemesterCheck, { MY_SEMESTER_INFO_KEY } from './useMySemester';
 
 const SEMESTER_INFO_KEY = 'semester';
 
@@ -20,8 +20,12 @@ const useSemester = () => {
 
 const useSemesterOptionList = () => {
   const token = useTokenState();
+  const queryClient = useQueryClient();
   const { data: semesterListFromLocalStorage } = useSemester();
-  const { data: mySemesterList } = useSemesterCheck();
+  const { data: mySemesterList } = useSemesterCheck(token);
+  if (mySemesterList === null) {
+    queryClient.invalidateQueries({ queryKey: [MY_SEMESTER_INFO_KEY] });
+  }
   const semesterList = token
     ? mySemesterList?.semesters
     : semesterListFromLocalStorage.map((item) => item.semester);
