@@ -31,14 +31,10 @@ export default function IndexTimeTable() {
   const semesterOptionList = useSemesterOptionList();
   const logger = useLogger();
 
-  const [initialized, setInitialized] = React.useState(false);
-
   useEffect(() => {
-    if (!initialized && semesterOptionList.length > 0) {
-      updateSemester(semesterOptionList[0].value);
-      setInitialized(true);
-    }
-  }, [initialized, semesterOptionList, updateSemester]);
+    if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.template}>
