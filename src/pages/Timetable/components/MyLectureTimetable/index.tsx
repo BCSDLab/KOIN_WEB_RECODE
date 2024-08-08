@@ -13,8 +13,8 @@ import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
 import Timetable from 'components/TimetablePage/Timetable';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
-import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import styles from './MyLectureTimetable.module.scss';
+import TotalGrades from './TotalGrades';
 
 export default function MainTimetable() {
   const { myLectures } = useMyLectures();
@@ -35,9 +35,7 @@ export default function MainTimetable() {
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
-        <div className={styles['page__total-grades']}>
-          <TotalGrades myLectureList={myLectures} />
-        </div>
+        <TotalGrades myLectureList={myLectures} />
         <CurriculumListBox
           list={deptList}
         />

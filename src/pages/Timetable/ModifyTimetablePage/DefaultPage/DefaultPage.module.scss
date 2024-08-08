@@ -60,13 +60,8 @@
   &__timetable-button-group {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
     height: 48px;
     margin-bottom: 16px;
-  }
-
-  &__total-grades {
-    margin-left: 16px;
   }
 
   &__delete-button {

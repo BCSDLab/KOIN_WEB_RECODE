@@ -1,5 +1,5 @@
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
-import styles from './TotalGrades.module.scss';
+import styles from './MyLectureTimetable.module.scss';
 
 interface TotalGradesProps {
   myLectureList: TimetableLectureInfo[] | LectureInfo[];
