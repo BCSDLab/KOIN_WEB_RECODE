@@ -6,7 +6,7 @@
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 16px;
   }
 }
 
@@ -43,6 +43,8 @@
     margin-left: auto;
     margin-right: auto;
     height: auto;
+    border: none;
+    margin-bottom: 13px;
   }
 
   &__header {
@@ -58,11 +60,7 @@
     width: 182px;
 
     @include media.media-breakpoint(mobile) {
-      justify-content: flex-start;
-      width: 100%;
-      font-size: 15px;
-      line-height: 1;
-      height: 17px;
+      display: none;
     }
   }
 
@@ -99,11 +97,20 @@
     & span {
       text-align: center;
       width: 100%;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+        font-weight: 400;
+      }
     }
 
     &--selected {
       color: #f7941e;
       font-weight: 700;
+    }
+
+    &--disabled {
+      display: none;
     }
 
     @media (min-width: 577px) {
@@ -133,54 +140,6 @@
   }
 }
 
-.search_bar {
-  text-align: center;
-  position: relative;
-
-  &__input {
-    font-family: NanumBarunGothic, serif;
-    border: solid 1px #d2dae2;
-    height: 45px;
-    width: 1068px;
-    font-size: 15px;
-    line-height: 1.6;
-    letter-spacing: -0.09px;
-    padding-left: 20px;
-    padding-right: 40px;
-
-    @include media.media-breakpoint(mobile) {
-      width: calc(100% - 95px);
-    }
-
-    &::placeholder {
-      color: #d2dae2;
-    }
-  }
-
-  &__icon {
-    position: absolute;
-    height: 24px;
-    right: 11px;
-    bottom: 13px;
-    z-index: 1;
-    border: 0;
-    background-color: #fff;
-    cursor: pointer;
-
-    @include media.media-breakpoint(mobile) {
-      right: 25px;
-      bottom: 10px;
-    }
-  }
-}
-
-.search-icon {
-  height: 24px;
-  z-index: 0;
-  border: 0;
-  background-color: #fff;
-}
-
 .option {
   display: flex;
   height: 24px;
@@ -194,6 +153,7 @@
     margin-right: auto;
     width: calc(100% - 32px);
     height: auto;
+    display: none;
   }
 
   &__count {
@@ -273,156 +233,14 @@
 }
 
 .store-mobile-header {
-  background-color: #e6ecf2;
-  color: #a1a1a1;
+  background-color: #f5f5f5;
+  color: #8e8e8e;
   line-height: 1.46;
   height: 31px;
   display: flex;
   align-items: center;
   font-size: 13px;
   padding-left: 16px;
-}
-
-.store-list {
-  width: 1131px;
-  min-height: 58vh;
-  margin-top: 15px;
-  margin-bottom: 30px;
-  height: 100%;
-  display: grid;
-  flex-flow: wrap;
-  flex-direction: row;
-  grid-template-columns: repeat(3, 358px);
-  grid-gap: 30px;
-  grid-column-gap: 29px;
-  grid-auto-rows: 176px;
-
-  @include media.media-breakpoint(mobile) {
-    margin-left: auto;
-    margin-right: auto;
-    width: calc(100% - 32px);
-    grid-template-columns: repeat(1, 1fr);
-    grid-auto-rows: 60px;
-    grid-row-gap: 14px;
-  }
-
-  &__item {
-    display: block;
-    border: 1px #175c8e solid;
-    border-radius: 5px;
-    padding: 22px 27px;
-    cursor: pointer;
-    position: relative;
-    color: #252525;
-    text-decoration: none;
-
-    &:hover {
-      border: 1px #175c8e solid;
-    }
-
-    &--event {
-      position: absolute;
-      top: -10px;
-      left: 5px;
-      border: 1px solid #6dbbdd;
-      border-radius: 100px;
-      color: #6dbbdd;
-      width: 45px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: white;
-      font-size: 8px;
-    }
-
-    @include media.media-breakpoint(mobile) {
-      width: auto;
-      height: auto;
-      padding: 0 16px;
-      box-shadow: 0 1px 6px rgb(0 0 0 / 10%);
-      border: solid 1px #d2dae2;
-      display: flex;
-      align-items: center;
-      flex: none;
-
-      &:hover {
-        border: 1px #175c8e solid;
-      }
-    }
-  }
-
-  &__title {
-    text-align: left;
-    font-size: 20px;
-    height: 39px;
-    width: 100%;
-    letter-spacing: -1px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-wrap: normal;
-    overflow: hidden;
-
-    & .store-list__item:hover {
-      color: #f7941e;
-    }
-
-    @include media.media-breakpoint(mobile) {
-      height: auto;
-      width: auto;
-      max-width: 120px;
-      word-break: break-all;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      font-size: 15px;
-      font-weight: 500;
-      line-height: 1.33;
-      letter-spacing: normal;
-      text-align: left;
-      color: #252525;
-
-      & .store-list__item:hover {
-        color: #f7941e;
-      }
-    }
-  }
-
-  &__phone {
-    text-align: left;
-    font-size: 13px;
-    height: 22px;
-    width: 100%;
-    letter-spacing: -0.7px;
-
-    & span {
-      display: inline-block;
-      margin-left: 17px;
-      color: #858585;
-    }
-
-    @include media.media-breakpoint(mobile) {
-      display: none;
-    }
-  }
-
-  &__open-time {
-    text-align: left;
-    font-size: 13px;
-    height: 32px;
-    width: 100%;
-    letter-spacing: -0.7px;
-
-    & span {
-      display: inline-block;
-      margin-left: 17px;
-      color: #858585;
-    }
-
-    @include media.media-breakpoint(mobile) {
-      display: none;
-    }
-  }
 }
 
 .store-none-open {
@@ -460,35 +278,38 @@
   }
 }
 
-.store-item {
-  display: flex;
-  align-items: center;
-  height: 24px;
+.filter {
+  display: none;
 
   @include media.media-breakpoint(mobile) {
-    margin-left: auto;
+    display: flex;
+    width: calc(100vw - 40px);
+    height: 25px;
+    padding: 12px 20px;
+    justify-content: space-between;
+    font-family: Pretendard, sans-serif;
   }
 
-  &__option {
-    border: 1px #175c8e solid;
-    margin-right: 4px;
-    font-size: 11px;
-    border-radius: 20px;
-    padding: 5px 10px;
-    background: #175c8e;
-    color: white;
-
+  &__box {
     @include media.media-breakpoint(mobile) {
-      font-size: 11px;
-      background: transparent;
-      color: #175c8e;
-      margin: 0 6px;
-      padding: 0;
-      border: 0;
+      display: flex;
+      width: 20%;
+      height: 25px;
+      border-radius: 5px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #e1e1e1;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 160%;
+      border: 1px solid #e1e1e1;
+    }
 
-      &[aria-hidden="true"] {
-        color: #d2dae2;
-      }
+    &--activate {
+      border: 1px solid #6dbbdd;
+      color: #6dbbdd;
     }
   }
 }

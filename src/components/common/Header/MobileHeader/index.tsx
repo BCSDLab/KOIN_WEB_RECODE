@@ -9,6 +9,7 @@ import { ReactComponent as HamburgerIcon } from 'assets/svg/hamburger-icon.svg';
 import { ReactComponent as KoinServiceLogo } from 'assets/svg/koin-service-logo.svg';
 import { ReactComponent as WhiteArrowBackIcon } from 'assets/svg/white-arrow-back-icon.svg';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
+import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
@@ -17,6 +18,7 @@ interface MobileHeaderProps {
 }
 
 export default function MobileHeader({ openModal }: MobileHeaderProps) {
+  useResetHeaderButton();
   const { pathname } = useLocation();
   const { openSidebar } = useMobileSidebar();
   const buttonState = useHeaderButtonStore((state) => state.buttonState);

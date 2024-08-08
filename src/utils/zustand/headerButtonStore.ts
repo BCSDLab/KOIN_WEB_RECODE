@@ -8,6 +8,7 @@ type CustomButtonState =
 type HeaderStore = {
   buttonState: CustomButtonState;
   setButtonContent: (content: ReactNode) => void;
+  resetButtonContent: () => void;
 };
 
 export const useHeaderButtonStore = create<HeaderStore>((set) => ({
@@ -16,5 +17,8 @@ export const useHeaderButtonStore = create<HeaderStore>((set) => ({
     buttonState: content
       ? { type: 'custom', content }
       : { type: 'default', content: null },
+  }),
+  resetButtonContent: () => set({
+    buttonState: { type: 'default', content: null },
   }),
 }));

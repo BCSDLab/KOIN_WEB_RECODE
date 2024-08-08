@@ -4,6 +4,8 @@ import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { ReactComponent as NotServed } from 'assets/svg/not-served.svg';
+import { ReactComponent as Close } from 'assets/svg/close-icon-grey.svg';
+import { ReactComponent as BubbleTailBottom } from 'assets/svg/bubble-tail-bottom.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -71,8 +73,12 @@ function IndexCafeteria() {
               <br />
               오늘의 식단을 확인해보세요.
             </button>
-            <button type="button" className={styles['header__tooltip-close']} onClick={handleTooltipCloseButtonClick}>닫기</button>
-            <img className={styles['header__tooltip-image']} src="https://stage-static.koreatech.in/upload/Tooltip.png" alt="툴팁" />
+
+            <button type="button" aria-label="close" className={styles['header__tooltip-close']} onClick={handleTooltipCloseButtonClick}>
+              <Close />
+            </button>
+
+            <BubbleTailBottom className={styles['header__tooltip-asset']} />
           </div>
         )}
       </h2>

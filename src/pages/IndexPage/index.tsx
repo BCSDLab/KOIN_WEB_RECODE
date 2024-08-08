@@ -10,7 +10,7 @@ function IndexPage() {
   return (
     <Suspense fallback={null}>
       <main className={styles.template}>
-        <div className={styles.mobileWrapper}>
+        <div className={styles['mobile-wrapper']}>
           <IndexStore />
           <IndexBus />
         </div>
@@ -19,6 +19,8 @@ function IndexPage() {
         </Suspense>
         <Suspense fallback={null}>
           <IndexNotice />
+        </Suspense>
+        <Suspense fallback={null}>
           <IndexCafeteria />
         </Suspense>
       </main>

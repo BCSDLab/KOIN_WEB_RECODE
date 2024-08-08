@@ -1,0 +1,211 @@
+@use "src/utils/scss/media";
+
+.store-list {
+  width: 1131px;
+  min-height: 58vh;
+  margin-bottom: 30px;
+  height: 100%;
+  display: grid;
+  flex-flow: wrap;
+  flex-direction: row;
+  grid-template-columns: repeat(3, 358px);
+  grid-gap: 30px;
+  grid-column-gap: 29px;
+  grid-auto-rows: 176px;
+  margin-top: 15px;
+
+  @include media.media-breakpoint(mobile) {
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 32px);
+    grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: 60px;
+    grid-row-gap: 14px;
+  }
+
+  &__item {
+    display: block;
+    border: 1px #175c8e solid;
+    border-radius: 5px;
+    padding: 22px 27px;
+    cursor: pointer;
+    position: relative;
+    color: #252525;
+    text-decoration: none;
+
+    &:hover {
+      border: 1px #175c8e solid;
+    }
+
+    &--event {
+      position: absolute;
+      top: -10px;
+      left: 5px;
+      border: 1px solid #6dbbdd;
+      border-radius: 100px;
+      color: #6dbbdd;
+      width: 45px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      font-size: 8px;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: auto;
+      height: auto;
+      padding: 0 16px;
+      box-shadow: 0 1px 6px rgb(0 0 0 / 10%);
+      border: solid 1px #d2dae2;
+      display: flex;
+      align-items: center;
+      flex: none;
+
+      &:hover {
+        border: 1px #175c8e solid;
+      }
+    }
+  }
+
+  &__title {
+    text-align: left;
+    font-size: 20px;
+    height: 39px;
+    width: 100%;
+    letter-spacing: -1px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    overflow: hidden;
+
+    & .store-list__item:hover {
+      color: #f7941e;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      height: auto;
+      width: auto;
+      max-width: 120px;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.33;
+      letter-spacing: normal;
+      text-align: left;
+      color: #252525;
+
+      & .store-list__item:hover {
+        color: #f7941e;
+      }
+    }
+  }
+
+  &__phone {
+    text-align: left;
+    font-size: 13px;
+    height: 22px;
+    width: 100%;
+    letter-spacing: -0.7px;
+
+    & span {
+      display: inline-block;
+      margin-left: 17px;
+      color: #858585;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__open-time {
+    text-align: left;
+    font-size: 13px;
+    height: 32px;
+    width: 100%;
+    letter-spacing: -0.7px;
+
+    & span {
+      display: inline-block;
+      margin-left: 17px;
+      color: #858585;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+}
+
+.store-item {
+  display: flex;
+  align-items: center;
+  height: 24px;
+
+  @include media.media-breakpoint(mobile) {
+    margin-left: auto;
+  }
+
+  &__option {
+    border: 1px #175c8e solid;
+    margin-right: 4px;
+    font-size: 11px;
+    border-radius: 20px;
+    padding: 5px 10px;
+    background: #175c8e;
+    color: white;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 11px;
+      background: transparent;
+      color: #175c8e;
+      margin: 0 6px;
+      padding: 0;
+      border: 0;
+
+      &[aria-hidden="true"] {
+        color: #d2dae2;
+      }
+    }
+  }
+}
+
+.store-none-open {
+  background-color: rgba(4 26 68 / 40%);
+  backdrop-filter: blur(3px);
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  color: #fff;
+
+  &__name {
+    color: #fccc77;
+    margin-left: 15px;
+  }
+
+  &::after {
+    // font-family: NotoSansCJKKR;추가 요망
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 15px;
+      border-radius: 5px;
+    }
+  }
+}

@@ -54,37 +54,43 @@
   &__tooltip {
     z-index: 10;
     position: absolute;
-    top: -120px;
-    left: 64px;
+    top: -84px;
+    right: -72px;
+    display: flex;
+    width: fit-content;
+    gap: 8px;
+    border-radius: 8px;
+    background: #fafafa;
+    padding: 16px;
+    box-shadow: 0 1px 4px 0 rgba(0 0 0 / 4%), 0 4px 10px 0 rgba(0 0 0 / 8%);
+
+    &-content {
+      text-align: left;
+      color: #4b4b4b;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+    }
+
+    &-close {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+
+      & > svg > path {
+        fill: #cacaca;
+      }
+    }
+
+    &-asset {
+      position: absolute;
+      width: 100%;
+      margin: 0 auto;
+      bottom: -10px;
+    }
 
     @include media.media-breakpoint(mobile) {
       display: none;
     }
-  }
-
-  &__tooltip-content {
-    position: absolute;
-    top: 20px;
-    left: 24px;
-    color: #4b4b4b;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-  }
-
-  &__tooltip-close {
-    position: absolute;
-    bottom: 36px;
-    right: 24px;
-    display: flex;
-    padding: 8px 12px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
-    background: #e1e1e1;
-  }
-
-  &__tooltip-image {
-    width: 332px;
   }
 }
 

@@ -3,7 +3,7 @@ import useBusTimetable, { useCityBusTimetable } from 'pages/BusPage/hooks/useBus
 import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
 import {
   BUS_TYPES, cityBusDirections, CITY_COURSES,
-  DEFAULT_CITY_BUS_NUMBER, EXPRESS_COURSES, SHUTTLE_COURSES, TERMINAL_CITY_BUS,
+  EXPRESS_COURSES, SHUTTLE_COURSES, TERMINAL_CITY_BUS,
 } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { ChangeEvent, useState } from 'react';
@@ -119,14 +119,11 @@ function CityTimetable() {
   const [selectedDirection, setSelectedDirection] = useState(cityBusDirections[0].value);
   const [selectedBusNumber, setSelectedBusNumber] = useState(CITY_COURSES[0].bus_number);
 
-  const handleDirectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDirection(e.target.value);
-    const filterBusNumber = CITY_COURSES.filter((course) => (
-      e.target.value === 'to' ? course.direction !== TERMINAL_CITY_BUS : course.direction === TERMINAL_CITY_BUS
-    )).map((course) => course.bus_number);
-    if (!filterBusNumber.includes(selectedBusNumber)) {
-      setSelectedBusNumber(filterBusNumber[0] || DEFAULT_CITY_BUS_NUMBER);
-    }
+  const handleDirectionToggle = () => {
+    setSelectedDirection((prevDirection) => (
+      prevDirection === cityBusDirections[0].value
+        ? cityBusDirections[1].value : cityBusDirections[0].value
+    ));
   };
 
   const handleBusNumberChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -170,17 +167,13 @@ function CityTimetable() {
   return (
     <>
       <div className={styles['timetable__dropdown-wrapper']}>
-        <select
-          className={styles.timetable__dropdown}
-          value={selectedDirection}
-          onChange={handleDirectionChange}
+        <button
+          className={styles.timetable__button}
+          onClick={handleDirectionToggle}
+          type="button"
         >
-          {cityBusDirections.map((direction) => (
-            <option key={direction.value} value={direction.value}>
-              {direction.label}
-            </option>
-          ))}
-        </select>
+          {cityBusDirections.find((direction) => direction.value === selectedDirection)?.label}
+        </button>
         <select
           className={styles.timetable__dropdown}
           value={selectedBusNumber}
@@ -204,7 +197,6 @@ function CityTimetable() {
         업데이트 날짜:
         {' '}
         {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
-
       </div>
     </>
   );
