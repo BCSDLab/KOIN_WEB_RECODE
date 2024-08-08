@@ -2,7 +2,7 @@ import * as api from 'api';
 import { useMutation } from '@tanstack/react-query';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { CheckPasswordRequest } from 'api/auth/entity';
 import { useState } from 'react';
 

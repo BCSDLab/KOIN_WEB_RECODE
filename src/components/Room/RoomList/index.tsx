@@ -2,11 +2,11 @@ import { LandList } from 'api/room/entity';
 import { Link } from 'react-router-dom';
 import styles from './RoomList.module.scss';
 
-interface LandListProps {
+interface RoomListProps {
   lands: LandList[] | undefined;
 }
 
-function RoomList(props: LandListProps) {
+function RoomList(props: RoomListProps) {
   const { lands } = props;
   return (
     <ul className={styles.list}>

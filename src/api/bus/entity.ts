@@ -20,6 +20,11 @@ export interface Course {
   region: string;
 }
 
+export interface CityBusParams {
+  bus_number: number;
+  direction: string;
+}
+
 export type CourseResponse = Course[];
 
 export interface BusResponse extends APIResponse {
@@ -34,11 +39,16 @@ export interface BusResponse extends APIResponse {
   } | null;
 }
 
-export type BusTimetableResponse = Array<BusRouteInfo> | Array<ExpressInfo>;
+export type BusTimetableResponse = BusRouteInfo | ExpressInfo;
+
+export type CityInfoResponse = CityInfo;
 
 export interface BusRouteInfo {
-  route_name: string;
-  arrival_info: ArrivalInfo[];
+  bus_timetables: {
+    route_name: string;
+    arrival_info: ArrivalInfo[];
+  }[],
+  updated_at: string;
 }
 
 export interface ArrivalInfo {
@@ -47,7 +57,23 @@ export interface ArrivalInfo {
 }
 
 export interface ExpressInfo {
-  departure: string;
-  arrival: string;
-  charge: number;
+  bus_timetables: {
+    departure: string;
+    arrival: string;
+    charge: number;
+  }[];
+  updated_at: string;
+}
+
+export interface CityInfo {
+  updated_at: string;
+  bus_info: {
+    number: number;
+    depart_node: string;
+    arrival_node: string;
+  };
+  bus_timetables: {
+    day_of_week: string;
+    depart_info: [];
+  }[];
 }
