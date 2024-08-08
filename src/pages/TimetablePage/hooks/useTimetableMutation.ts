@@ -1,5 +1,5 @@
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
 import useAddTimetableLecture from './useAddTimetableLecture';

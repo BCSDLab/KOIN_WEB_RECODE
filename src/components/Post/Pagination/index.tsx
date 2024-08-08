@@ -1,15 +1,11 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
-import useParamsHandler from 'utils/hooks/useParamsHandler';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import usePagination from './hooks/usePagination';
 import styles from './Pagination.module.scss';
 
 const LIMIT_COUNT = [0, 1, 2, 3, 4];
-
-interface PaginationProps {
-  totalPageNum: number
-}
 
 const onHandlePrevPage = (moveNumber: number) => {
   if (moveNumber <= 0) {
@@ -28,6 +24,10 @@ const onHandleNextPage = (moveNumber: number, totalPageNum: number) => {
 
   return String(moveNumber);
 };
+
+interface PaginationProps {
+  totalPageNum: number
+}
 
 function Pagination(props: PaginationProps) {
   const { calcIndexPage, onClickMove } = usePagination();
