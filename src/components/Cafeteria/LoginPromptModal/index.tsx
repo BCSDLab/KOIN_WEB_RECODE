@@ -1,5 +1,4 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -13,7 +12,6 @@ interface LoginPromptModalProps {
 export default function LoginPromptModal({
   action, closeModal,
 }: LoginPromptModalProps): JSX.Element {
-  const isMobile = useMediaQuery();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
   useBodyScrollLock(true);
@@ -32,33 +30,16 @@ export default function LoginPromptModal({
           </button>
         </div>
         <div className={styles['modal-middle']}>
-          {isMobile ? (
-            <>
-              <span className={styles['modal-middle__bold']}>
-                더 맛있는 학식을 먹는 방법,
-                <br />
-                로그인하고 좋아요를 남겨주세요!
-              </span>
-              <span className={styles['modal-middle__thin']}>
-                여러분의 좋아요가 영양사님이 더 나은
-                <br />
-                식단을 제공할 수 있도록 도와줍니다.
-              </span>
-            </>
-          ) : (
-            <>
-              <span className={styles['modal-middle__bold']}>
-                더 맛있는 학식을 먹는 방법,
-                <br />
-                로그인 후 좋아요 남기기!
-              </span>
-              <span className={styles['modal-middle__thin']}>
-                여러분의 의견은 영양사님이 더 맛있는
-                <br />
-                학식을 제공하는데 큰 도움이 됩니다.
-              </span>
-            </>
-          )}
+          <span className={styles['modal-middle__bold']}>
+            더 맛있는 학식을 먹는 방법,
+            <br />
+            로그인 후 좋아요 남기기!
+          </span>
+          <span className={styles['modal-middle__thin']}>
+            여러분의 의견은 영양사님이 더 맛있는
+            <br />
+            학식을 제공하는데 큰 도움이 됩니다.
+          </span>
         </div>
         <div className={styles['modal-bottom']}>
           <button
@@ -73,7 +54,7 @@ export default function LoginPromptModal({
             className={styles['modal-bottom__cancel']}
             onClick={closeModal}
           >
-            {isMobile ? '닫기' : '다음에 하기'}
+            다음에 하기
           </button>
         </div>
       </div>
