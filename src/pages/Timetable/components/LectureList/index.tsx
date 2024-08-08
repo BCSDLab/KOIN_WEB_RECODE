@@ -35,7 +35,6 @@ function CurrentSemesterLectureList({
   const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation();
-  const { data: userInfo } = useUser();
 
   return (
     <LectureTable
@@ -80,20 +79,7 @@ function CurrentSemesterLectureList({
             .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
 
           if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
-            const myLectureList = myLectures as Array<LectureInfo & TimetableLectureInfo>;
-            const alreadySelectedLecture = myLectureList.find(
-              (lecture) => lecture.class_time.some(
-                (time) => clickedLecture.class_time.includes(time),
-              ),
-            );
-            if (!alreadySelectedLecture) {
-              return;
-            }
-            if (userInfo) {
-              showToast('error', `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`);
-              return;
-            }
-            showToast('error', `${alreadySelectedLecture.name}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`);
+            showToast('error', '시간이 중복되어 추가할 수 없습니다.');
           } else {
             addMyLecture(clickedLecture);
           }
