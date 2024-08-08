@@ -8,6 +8,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
+import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
 import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
@@ -77,11 +78,8 @@ function SemesterListbox() {
           [styles['select__trigger--selected']]: isOpenedPopup,
         })}
       >
-        {semesterValue !== null
-          ? semesterOptionList.find((item) => item.value === semesterValue)
-            ?.label
-          : ''}
-        <DownArrowIcon />
+        {semesterValue !== null ? semesterOptionList.find((item) => item.value === semesterValue)?.label : ''}
+        {isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">
@@ -90,8 +88,7 @@ function SemesterListbox() {
               type="button"
               className={cn({
                 [styles.select__option]: true,
-                [styles['select__option--selected']]:
-                  optionValue.value === semesterValue,
+                [styles['select__option--selected']]: optionValue.value === semesterValue,
               })}
               role="option"
               aria-selected={optionValue.value === semesterValue}
@@ -123,7 +120,11 @@ function SemesterListbox() {
           </button>
         </ul>
       )}
-      <div>{isModalOpen && <SemesterSettingModal onClose={closeModal} />}</div>
+      <div>
+        {isModalOpen && (
+        <SemesterSettingModal onClose={closeModal} />
+        )}
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { DeptListResponse } from 'api/dept/entity';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
+import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -47,39 +48,39 @@ function CurriculumListBox({ list }: CurriculumListBoxProps) {
           <CurriculumIcon />
           커리큘럼
         </div>
-        <DownArrowIcon />
+        {isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
-        <div className={styles['select__curriculum-list']} role="listbox">
-          {list.map((dept) => (
-            <a
-              href={dept.curriculum_link}
-              target="_blank"
-              rel="noreferrer"
-              onClick={onClickOption}
-            >
-              <span
-                className={styles.select__curriculum}
-                key={dept.name}
-                role="option"
-                aria-selected="false"
-                data-value={dept.name}
-                tabIndex={0}
-              >
-                {dept.name}
-              </span>
-            </a>
-          ))}
+      <div className={styles['select__curriculum-list']} role="listbox">
+        {list.map((dept) => (
           <a
-            href="https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002"
+            href={dept.curriculum_link}
             target="_blank"
             rel="noreferrer"
             onClick={onClickOption}
-            className={styles.select__curriculum}
           >
-            대학 요람
+            <span
+              className={styles.select__curriculum}
+              key={dept.name}
+              role="option"
+              aria-selected="false"
+              data-value={dept.name}
+              tabIndex={0}
+            >
+              {dept.name}
+            </span>
           </a>
-        </div>
+        ))}
+        <a
+          href="https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002"
+          target="_blank"
+          rel="noreferrer"
+          onClick={onClickOption}
+          className={styles.select__curriculum}
+        >
+          대학 요람
+        </a>
+      </div>
       )}
     </div>
   );

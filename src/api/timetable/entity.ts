@@ -3,7 +3,7 @@ import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 
 export type SemesterInfo = {
   id: number;
-  semester: string;
+  'semester': string;
 };
 
 export type VersionType = 'android' | 'timetable' | 'shuttle_bus_timetable' | 'express_bus_timetable' | 'city_bus_timetable';
