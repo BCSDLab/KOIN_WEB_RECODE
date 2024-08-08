@@ -8,6 +8,8 @@ import {
   AllStoreEventResponse,
   StoreEventListResponse,
   ReviewListResponse,
+  ReviewReportResponse,
+  ReviewReportRequest,
   StoreSorterType,
   StoreFilterType,
 } from './entity';
@@ -108,5 +110,25 @@ export class ReviewList<R extends ReviewListResponse> implements APIRequest<R> {
 
   constructor(id: number, pageParam: number, public authorization?: string) {
     this.path = `shops/${id}/reviews?page=${pageParam}&limit=10`;
+  }
+}
+
+export class ReviewReport<R extends ReviewReportResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/shops/:shopId/reviews/:reviewId/reports';
+
+  response!: R;
+
+  data: ReviewReportRequest;
+
+  constructor(
+    shop_id: number,
+    review_id: number,
+    data: ReviewReportRequest,
+    public authorization?: string,
+  ) {
+    this.path = `/shops/${shop_id}/reviews/${review_id}/reports`;
+    this.data = data;
   }
 }
