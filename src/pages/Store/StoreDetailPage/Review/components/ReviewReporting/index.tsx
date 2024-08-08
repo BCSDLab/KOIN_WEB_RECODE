@@ -5,13 +5,34 @@ import CheckBox from 'components/common/CommonCheckBox';
 import ReportingLabel from './components/ReportingLabel';
 import styles from './ReviewReporting.module.scss';
 import useReviewReport from './query/useReviewReport';
-import getTitle from './query/getTitle';
-import getContent from './query/getContent';
 
 interface RequestOption {
   title: string;
   content: string;
 }
+
+const REVIEW_CONTEXT = {
+  notRelevant: {
+    title: '주제에 맞지않음',
+    content: '해당 음식점과 관련 없는 리뷰입니다.',
+  },
+  containsAd: {
+    title: '광고가 포함된 리뷰',
+    content: '리뷰에 광고성 내용이 포함되어 있습니다.',
+  },
+  abusiveLanguage: {
+    title: '욕설 포함',
+    content: '리뷰에 욕설이 포함되어 있습니다.',
+  },
+  personalInfo: {
+    title: '개인정보 포함',
+    content: '리뷰에 개인정보가 포함되어 있습니다.',
+  },
+  etc: {
+    title: '기타',
+    content: '',
+  },
+};
 
 export default function ReviewReportingPage() {
   const [selectOptions, setSelectOptions] = useState<string[]>([]);
@@ -30,13 +51,14 @@ export default function ReviewReportingPage() {
         : [...prevOptions, value];
 
       const updatedRequestOptions = isSelected
-        ? requestOptions.filter((option) => option.title !== getTitle(value))
+        ? requestOptions.filter(
+          (option) => option.title !== REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT].title,
+        )
         : [
           ...requestOptions,
-          {
-            title: getTitle(value),
-            content: value === 'etc' ? etcDescription : getContent(value),
-          },
+          value === 'etc'
+            ? { ...REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT], content: etcDescription }
+            : REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT],
         ];
 
       setRequestOptions(updatedRequestOptions);
@@ -50,9 +72,11 @@ export default function ReviewReportingPage() {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 10}px`;
     }
 
-    setRequestOptions((prevOptions) => prevOptions.map((option) => (option.title === '기타'
-      ? { ...option, content: etcDescription }
-      : option)));
+    setRequestOptions(
+      (prevOptions) => prevOptions.map((option) => (option.title === REVIEW_CONTEXT.etc.title
+        ? { ...option, content: etcDescription }
+        : option)),
+    );
   }, [etcDescription]);
 
   const handleReport = () => {
@@ -71,71 +95,21 @@ export default function ReviewReportingPage() {
         </div>
       </div>
       <div className={styles['option-container']}>
-        <div className={styles['reporting-option']}>
-          <CheckBox
-            value="notRelevant"
-            name="reason"
-            checked={selectOptions.includes('notRelevant')}
-            onChange={handleChange}
-          />
-          <ReportingLabel
-            title="주제에 맞지않음"
-            description="해당 음식점과 관련 없는 리뷰입니다."
-            active={false}
-          />
-        </div>
-        <div className={styles['reporting-option']}>
-          <CheckBox
-            value="containsAd"
-            name="reason"
-            checked={selectOptions.includes('containsAd')}
-            onChange={handleChange}
-          />
-          <ReportingLabel
-            title="광고가 포함된 리뷰"
-            description="리뷰에 광고성 내용이 포함되어 있습니다."
-            active={false}
-          />
-        </div>
-        <div className={styles['reporting-option']}>
-          <CheckBox
-            value="abusiveLanguage"
-            name="reason"
-            checked={selectOptions.includes('abusiveLanguage')}
-            onChange={handleChange}
-          />
-          <ReportingLabel
-            title="욕설 포함"
-            description="리뷰에 욕설이 포함되어 있습니다."
-            active={false}
-          />
-        </div>
-        <div className={styles['reporting-option']}>
-          <CheckBox
-            value="personalInfo"
-            name="reason"
-            checked={selectOptions.includes('personalInfo')}
-            onChange={handleChange}
-          />
-          <ReportingLabel
-            title="개인정보 포함"
-            description="리뷰에 개인정보가 포함되어 있습니다."
-            active={false}
-          />
-        </div>
-        <div className={styles['reporting-option--etc']}>
-          <CheckBox
-            value="etc"
-            name="reason"
-            checked={selectOptions.includes('etc')}
-            onChange={handleChange}
-          />
-          <ReportingLabel
-            title="기타"
-            description={`${etcDescription.length}/150 자`}
-            active={selectOptions.includes('etc')}
-          />
-        </div>
+        {Object.keys(REVIEW_CONTEXT).map((key) => (
+          <div key={key} className={key === 'etc' ? styles['reporting-option--etc'] : styles['reporting-option']}>
+            <CheckBox
+              value={key}
+              name="reason"
+              checked={selectOptions.includes(key)}
+              onChange={handleChange}
+            />
+            <ReportingLabel
+              title={REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].title}
+              description={key === 'etc' ? `${etcDescription.length}/150 자` : REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].content}
+              active={selectOptions.includes(key)}
+            />
+          </div>
+        ))}
         <textarea
           ref={textareaRef}
           className={cn({
