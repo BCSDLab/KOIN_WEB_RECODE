@@ -114,7 +114,7 @@ export default function ReviewList() {
                 >
                   {currentReviewType.current}
                   {' '}
-                  <Arrow style={{ transform: openDropdown ? '' : 'rotate(180deg)', transition: 'transform 0.15s' }} />
+                  <Arrow style={{ transform: openDropdown ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }} />
                   <div className={styles.wrapper}>
                     {openDropdown && (
                     <div className={styles.dropdown__list}>

@@ -16,7 +16,7 @@ export default function useReviewReport(shopId: string, reviewId: string) {
       data: ReviewReportRequest,
     ) => postReviewReport(Number(shopId), Number(reviewId), data, token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reviewReport'] });
+      queryClient.invalidateQueries({ queryKey: ['review', Number(shopId)] });
       toast('리뷰가 성공적으로 신고되었습니다.');
       navigate(-1);
     },
