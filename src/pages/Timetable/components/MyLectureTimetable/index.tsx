@@ -7,10 +7,6 @@ import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useNavigate } from 'react-router-dom';
-import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
-import CurriculumListBox from 'pages/Timetable/components/Curriculum';
-import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
-import { ReactComponent as EditIcon } from 'assets/svg/edit-icon.svg';
 import styles from '../../TimetablePage/DefaultPage/DefaultPage.module.scss';
 import Timetable from '../../../../components/TimetablePage/Timetable';
 import useLectureList from '../../hooks/useLectureList';
@@ -31,28 +27,26 @@ export default function MainTimetable() {
 
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const myLectureDayValue = useTimetableDayList(myLectures);
-  const { data: deptList } = useDeptList();
 
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
-        <CurriculumListBox
-          list={deptList}
-        />
+        {/* TODO: CurriculumListBox 수정 필요 */}
+        {/* <CurriculumListBox /> */}
         <button
           type="button"
           className={styles.page__button}
           onClick={() => onTimetableImageDownload('my-timetable')}
         >
-          <DownloadIcon />
-          이미지 저장
+          <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="" />
+          이미지로 저장하기
         </button>
         <button
           type="button"
           className={styles.page__button}
           onClick={() => navigate('/timetable/modify/regular')}
         >
-          <EditIcon />
+          <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="" />
           시간표 수정
         </button>
       </div>
@@ -65,7 +59,7 @@ export default function MainTimetable() {
               selectedLectureIndex={selectedLectureIndex}
               columnWidth={140}
               firstColumnWidth={70}
-              rowHeight={33}
+              rowHeight={32.5}
               totalHeight={700}
             />
           </React.Suspense>

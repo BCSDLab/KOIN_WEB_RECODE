@@ -16,9 +16,9 @@ function CurrentSemesterTimetable(): JSX.Element {
   return myLectureDayValue ? (
     <Timetable
       lectures={myLectureDayValue}
-      columnWidth={44}
-      firstColumnWidth={29}
-      rowHeight={17.3}
+      columnWidth={40}
+      firstColumnWidth={42}
+      rowHeight={16}
       totalHeight={369}
     />
   ) : (

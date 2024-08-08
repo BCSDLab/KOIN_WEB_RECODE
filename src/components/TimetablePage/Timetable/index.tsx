@@ -34,7 +34,7 @@ function Timetable({
 
   return (
     <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
-      <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight + 5}px` }}>
+      <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight * 1.5}px` }}>
         <div
           className={cn({
             [styles.timetable__col]: true,
@@ -60,19 +60,20 @@ function Timetable({
           {TIME_STRING.map((value, index) => (
             <div
               className={styles['timetable__row-line']}
-              style={{ height: `${rowHeight + 1}px` }}
+              style={{ height: `${rowHeight + 1}px`, fontSize: `${firstColumnWidth / 10}px` }}
               // index값이 변경되지 않음
               // eslint-disable-next-line react/no-array-index-key
               key={`value-${index}`}
             />
           ))}
+          <div className={styles['timetable__row-line']} />
         </div>
         <div
           className={cn({
             [styles.timetable__col]: true,
             [styles['timetable__col--time']]: true,
           })}
-          style={{ width: `${firstColumnWidth}px`, fontSize: `${rowHeight / 2}px` }}
+          style={{ width: `${firstColumnWidth}px`, fontSize: `${firstColumnWidth / 4}px` }}
           aria-hidden="true"
         >
           {TIME_STRING.map((value, index) => (
@@ -81,7 +82,6 @@ function Timetable({
               // index값이 변경되지 않음
               // eslint-disable-next-line react/no-array-index-key
               key={`value-${index}`}
-              className={columnWidth > 50 ? styles['timetable__content--time'] : styles['timetable__content--time-main']}
             >
               {value}
             </div>
