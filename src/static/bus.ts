@@ -1,5 +1,3 @@
-import { CityBusParams } from 'api/bus/entity';
-
 export const BUS_TYPES = [{
   key: 'shuttle',
   tabName: '학교셔틀',
@@ -11,7 +9,7 @@ export const BUS_TYPES = [{
 }, {
   key: 'city',
   tabName: '시내버스',
-  tableHeaders: ['오전', '오후'],
+  tableHeaders: ['기점', '종합터미널 - 병천'],
 }];
 
 export const BUS_DIRECTIONS = ['한기대', '야우리', '천안역'];
@@ -104,47 +102,8 @@ export const EXPRESS_COURSES = [
   },
 ] as const;
 
-export interface BusLink {
-  label: string;
-  link: string;
-  key: string;
-  type: typeof BUS_TYPES[number];
-}
-
-export const busLink: BusLink[] = [
-  {
-    label: '유니버스 바로가기',
-    link: 'https://koreatech.unibus.kr/',
-    key: 'shuttle',
-    type: BUS_TYPES[0],
-  },
-  {
-    label: '시간표 보러가기',
-    link: '/bus',
-    key: 'express',
-    type: BUS_TYPES[1],
-  },
-  {
-    label: '시간표 보러가기',
-    link: '/bus',
-    key: 'city',
-    type: BUS_TYPES[2],
-  },
+export const CITY_BUS_TIMETABLE = [
+  ['시간표(터미널)', '6:00(첫) - 22:30(막) (10분간격)'],
+  ['시간표(병천)', '6:10(첫) - 22:45(막) (10분간격)'],
+  ['소요시간', '약 40분'],
 ];
-
-export const cityBusDirections = [
-  { label: '병천 → 터미널', value: 'from' },
-  { label: '터미널 → 병천', value: 'to' },
-];
-
-export const CITY_COURSES: CityBusParams[] = [
-  { bus_number: 400, direction: '병천3리' },
-  { bus_number: 402, direction: '황사동' },
-  { bus_number: 405, direction: '유관순열사사적지' },
-  { bus_number: 400, direction: '종합터미널' },
-  { bus_number: 402, direction: '종합터미널' },
-  { bus_number: 405, direction: '종합터미널' },
-];
-
-export const DEFAULT_CITY_BUS_NUMBER = 400;
-export const TERMINAL_CITY_BUS = '종합터미널'; // 공통 시내버스 종점

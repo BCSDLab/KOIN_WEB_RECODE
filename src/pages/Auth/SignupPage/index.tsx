@@ -2,9 +2,9 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useBooleanState from 'utils/hooks/useBooleanState';
 import { koin, privacy } from 'static/terms';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import useLogger from 'utils/hooks/useLogger';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
 import styles from './SignupPage.module.scss';
@@ -12,7 +12,7 @@ import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
 import useSignup from './hooks/useSignup';
 
-const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/;
+const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
 
 const PHONENUMBER_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
 
@@ -103,42 +103,31 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 }, ref) => {
   const [password, setPassword] = React.useState('');
   const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
-  const [isPasswordValid, setIsPasswordValid] = React.useState(false);
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handlePasswordValidCheck = () => {
-    setIsPasswordValid(PASSWORD_REGEX.test(password));
-  };
-
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = true;
     if (password !== passwordConfirmValue) {
       valid = '입력하신 비밀번호가 일치하지 않습니다.';
     } else if (password.length < 6 || password.length > 18) {
       valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
-    } else if (!isPasswordValid) {
+    } else if (!PASSWORD_REGEX.test(password)) {
       valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
     }
     return {
       valid,
       value: password,
     };
-  }, [password, passwordConfirmValue, isPasswordValid]);
+  }, [password, passwordConfirmValue]);
   return (
     <>
       <input
         className={cn({
           [styles['form-input']]: true,
-          [styles['form-input--invalid']]: password.trim() !== '' && !isPasswordValid,
+          [styles['form-input--invalid']]: password.trim() !== '' && password !== passwordConfirmValue,
         })}
         type="password"
         autoComplete="new-password"
         placeholder="비밀번호 (필수)"
-        onChange={handlePasswordChange}
-        onBlur={handlePasswordValidCheck}
+        onChange={(e) => setPassword(e.target.value)}
         required={required}
         name={name}
       />
@@ -146,10 +135,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
       </span>
       <input
-        className={cn({
-          [styles['form-input']]: true,
-          [styles['form-input--invalid']]: passwordConfirmValue.trim() !== '' && password !== passwordConfirmValue,
-        })}
+        className={styles['form-input']}
         type="password"
         onChange={(e) => setPasswordConfirmValue(e.target.value)}
         autoComplete="new-password"
@@ -222,7 +208,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     label: dept.name,
     value: dept.name,
   }));
-  const [major, setMajor] = React.useState<string | null>(null);
+  const [major, setMajor] = React.useState<string>(deptOptionList[0].value);
 
   const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
@@ -477,13 +463,6 @@ function SignupDefaultPage() {
   const logger = useLogger();
   return (
     <>
-      <div>
-        <div className={styles.term__title}>개인정보 이용약관</div>
-        <textarea className={styles.term__content} defaultValue={privacy} readOnly />
-        <div className={styles.term__title}>코인 이용약관</div>
-        <textarea className={styles.term__content} defaultValue={koin} readOnly />
-        <TermsCheckboxes {...register('terms', { required: true })} />
-      </div>
       <form className={styles.signup} onSubmit={onSubmitSignupForm}>
         <input
           className={styles['form-input']}
@@ -544,6 +523,7 @@ function SignupDefaultPage() {
           })}
         />
         <GenderListbox {...register('gender')} />
+        <TermsCheckboxes {...register('terms', { required: true })} />
         <button
           type="submit"
           disabled={status === 'pending'}
@@ -564,11 +544,17 @@ function SignupDefaultPage() {
           회원가입
         </button>
       </form>
-      <span className={styles.signup__copyright}>
-        COPYRIGHT ⓒ&nbsp;
-        {new Date().getFullYear()}
-        &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
-      </span>
+      <div className={styles.signup__section}>
+        <div className={styles.term__title}>개인정보 이용약관</div>
+        <textarea className={styles.term__content} defaultValue={privacy} readOnly />
+        <div className={styles.term__title}>코인 이용약관</div>
+        <textarea className={styles.term__content} defaultValue={koin} readOnly />
+        <span className={styles.signup__copyright}>
+          COPYRIGHT ⓒ&nbsp;
+          {new Date().getFullYear()}
+          &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
+        </span>
+      </div>
     </>
   );
 }

@@ -18,7 +18,6 @@
     "@types/react-query": "^1.2.9",
     "@types/react-window": "^1.8.5",
     "axios": "^0.27.2",
-    "dayjs": "^1.11.12",
     "embla-carousel-autoplay": "^8.0.4",
     "embla-carousel-react": "^8.0.4",
     "file-saver": "^2.0.5",
@@ -41,7 +40,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test --coverage",
     "eject": "react-scripts eject",
     "lint": "yarn lint:eslint && yarn lint:stylelint",

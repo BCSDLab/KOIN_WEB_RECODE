@@ -1,11 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as LeftArrow } from 'assets/svg/left-angle-bracket.svg';
 import { ReactComponent as RightArrow } from 'assets/svg/right-angle-bracket.svg';
-import { ReactComponent as InformationIcon } from 'assets/svg/information.svg';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
-import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {
@@ -48,56 +44,38 @@ export default function DateNavigator() {
     setToday,
     setDate,
   } = useDatePicker();
-  const portalManager = useModalPortal();
-  const { cafeteriaInfo } = useCoopshopCafeteria();
 
-  const thisWeek = generateWeek(currentDate());
-
-  const handleInformationClick = () => {
-    portalManager.open(() => (
-      <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={portalManager.close} />
-    ));
-  };
+  const thisWeek = generateWeek(currentDate);
 
   return (
     <div className={styles.container}>
-      <div className={styles['date-wrapper']}>
-        <div className={styles.date}>
-          <button
-            className={styles.date__button}
-            type="button"
-            aria-label="이전 날짜"
-            onClick={setPrevWeek}
-          >
-            <LeftArrow />
-          </button>
-          <button
-            className={cn({
-              [styles.date__button]: true,
-              [styles['date__button--today']]: checkToday(currentDate()),
-            })}
-            type="button"
-            aria-label="오늘 날짜"
-            onClick={setToday}
-          >
-            오늘
-          </button>
-          <button
-            className={styles.date__button}
-            type="button"
-            aria-label="다음 날짜"
-            onClick={setNextWeek}
-          >
-            <RightArrow />
-          </button>
-        </div>
+      <div className={styles.date}>
         <button
+          className={styles.date__button}
           type="button"
-          className={styles.information}
-          onClick={() => handleInformationClick()}
+          aria-label="이전 날짜"
+          onClick={setPrevWeek}
         >
-          <InformationIcon />
-          학생식당정보
+          <LeftArrow />
+        </button>
+        <button
+          className={cn({
+            [styles.date__button]: true,
+            [styles['date__button--today']]: checkToday(currentDate),
+          })}
+          type="button"
+          aria-label="오늘 날짜"
+          onClick={setToday}
+        >
+          오늘
+        </button>
+        <button
+          className={styles.date__button}
+          type="button"
+          aria-label="다음 날짜"
+          onClick={setNextWeek}
+        >
+          <RightArrow />
         </button>
       </div>
 
@@ -107,7 +85,7 @@ export default function DateNavigator() {
             key={dayInfo.weekDay}
             className={cn({
               [styles['week__one-day']]: true,
-              [styles['week__one-day--selected']]: dayInfo.date.toDateString() === currentDate().toDateString(),
+              [styles['week__one-day--selected']]: dayInfo.date.toDateString() === currentDate.toDateString(),
             })}
             type="button"
             onClick={() => setDate(dayInfo.date)}

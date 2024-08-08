@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import * as api from 'api';
 import showToast from 'utils/ts/showToast';
 import { UserUpdateRequest } from 'api/auth/entity';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useTokenState from 'utils/hooks/useTokenState';
 import { useMutation } from '@tanstack/react-query';
 
 interface UserUpdateOption {

@@ -1,5 +1,4 @@
 import { useSearchParams } from 'react-router-dom';
-import { DiningTime } from 'utils/ts/cafeteria';
 
 const DATE_KEY = 'date';
 
@@ -8,23 +7,13 @@ export const useDatePicker = () => {
   const dateSearchParams = searchParams.get(DATE_KEY);
 
   const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  const diningTime = new DiningTime();
-  const currentDate = () => {
-    if (dateSearchParams !== null) {
-      return new Date(dateSearchParams);
-    }
-
-    return diningTime.generateDiningDate();
-  };
+  const currentDate = dateSearchParams !== null ? new Date(dateSearchParams) : today;
 
   const checkToday = (date: Date) => today.toDateString() === date.toDateString();
-  const checkTomorrow = (date: Date) => tomorrow.toDateString() === date.toDateString();
   const checkPast = (date: Date) => today > date;
 
   const setPrev = () => {
-    const newDate = new Date(currentDate());
+    const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() - 1);
     searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
     setSearchParams(searchParams, {
@@ -33,7 +22,7 @@ export const useDatePicker = () => {
   };
 
   const setNext = () => {
-    const newDate = new Date(currentDate());
+    const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + 1);
     searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
     setSearchParams(searchParams, {
@@ -42,7 +31,7 @@ export const useDatePicker = () => {
   };
 
   const setPrevWeek = () => {
-    const newDate = new Date(currentDate());
+    const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() - 7);
     searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
     setSearchParams(searchParams, {
@@ -51,7 +40,7 @@ export const useDatePicker = () => {
   };
 
   const setNextWeek = () => {
-    const newDate = new Date(currentDate());
+    const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + 7);
     searchParams.set(DATE_KEY, newDate.toISOString().slice(0, 10));
     setSearchParams(searchParams, {
@@ -78,7 +67,6 @@ export const useDatePicker = () => {
   return {
     currentDate,
     checkToday,
-    checkTomorrow,
     checkPast,
     setPrev,
     setNext,

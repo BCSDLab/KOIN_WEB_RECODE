@@ -26,11 +26,11 @@ export const PortalContext = React.createContext<PortalManager | undefined>(
   undefined,
 );
 
-interface PortalProviderProps {
+interface ProviderProps {
   children: ReactNode
 }
 
-const PortalProvider = function PortalProvider({ children }: PortalProviderProps) {
+const PortalProvider = function PortalProvider({ children }: ProviderProps) {
   const [modalPortal, setModalPortal] = React.useState<ReactNode>();
 
   const open: OpenFunc = React.useCallback((element, options = {}) => {

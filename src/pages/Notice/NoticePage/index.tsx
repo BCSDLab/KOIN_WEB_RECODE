@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 
 import LoadingSpinner from 'components/common/LoadingSpinner';
 

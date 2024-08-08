@@ -1,50 +1,30 @@
 import { cn } from '@bcsdlab/utils';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { Suspense, useEffect, useState } from 'react';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
-import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
-import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
-import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { DiningType } from 'interfaces/Cafeteria';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { ReactComponent as InformationIcon } from 'assets/svg/information-icon.svg';
-import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
-import MobileDiningBlocks from './components/MobileDiningBlocks';
+import { useEffect, useState } from 'react';
+import { CAFETERIA_CATEGORY, MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
+import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
+import useCafeteriaList from 'pages/Cafeteria/hooks/useCafeteriaList';
+import { convertDateToSimpleString } from 'utils/ts/cafeteria';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
+import { MealType } from 'interfaces/Cafeteria';
+import useLogger from 'utils/hooks/useLogger';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
+import MobileMenuBlock from './components/MobileMenuBlock';
 import styles from './MobileCafeteriaPage.module.scss';
 
-interface MobileCafeteriaPageProps {
-  diningType: DiningType;
-  setDiningType: (diningType: DiningType) => void;
+interface Props {
+  mealType: MealType;
+  setMealType: (mealType: MealType) => void;
 }
 
-export default function MobileCafeteriaPage({
-  diningType, setDiningType,
-}: MobileCafeteriaPageProps) {
+export default function MobileCafeteriaPage({ mealType, setMealType }: Props) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
-  const { cafeteriaInfo } = useCoopshopCafeteria();
-  const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
-  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
+  const { currentDate } = useDatePicker();
+  const { cafeteriaList } = useCafeteriaList(convertDateToSimpleString(currentDate));
 
-  useBodyScrollLock(isCafeteriaInfoOpen);
-
-  useEffect(() => {
-    setButtonContent((
-      <button
-        type="button"
-        aria-label="학생식당 운영 정보 안내"
-        onClick={openCafeteriaInfo}
-      >
-        <InformationIcon />
-      </button>
-    ));
-  }, [setButtonContent, openCafeteriaInfo]);
-
-  const handleDiningTypeChange = (dining: DiningType) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[dining] });
-    setDiningType(dining);
+  const handleMealTypeChange = (meal: MealType) => {
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[meal] });
+    setMealType(meal);
   };
 
   useEffect(() => {
@@ -55,7 +35,7 @@ export default function MobileCafeteriaPage({
       const scrollPercentage = (scrolled / maxHeight) * 100;
 
       if (scrollPercentage > 70 && !hasLoggedScroll) {
-        logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[diningType] });
+        logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[mealType] });
         setHasLoggedScroll(true);
       }
     };
@@ -64,46 +44,48 @@ export default function MobileCafeteriaPage({
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [hasLoggedScroll, logger, diningType]);
+  }, [hasLoggedScroll, logger, mealType]);
 
   useEffect(() => {
     setHasLoggedScroll(false);
-  }, [diningType]);
+  }, [mealType]);
 
   useScrollToTop();
 
   return (
     <>
       <WeeklyDatePicker />
-      <div className={styles['type-select']}>
-        {DINING_TYPES.map((dining) => (
+      <div className={styles['meal-select']}>
+        {MEAL_TYPES.map((meal) => (
           <button
             className={cn({
-              [styles['type-select__button']]: true,
-              [styles['type-select__button--selected']]: dining === diningType,
+              [styles['meal-select__button']]: true,
+              [styles['meal-select__button--selected']]: meal === mealType,
             })}
-            key={dining}
+            key={meal}
             type="button"
-            onClick={() => handleDiningTypeChange(dining)}
+            onClick={() => handleMealTypeChange(meal)}
           >
-            {DINING_TYPE_MAP[dining]}
+            {MEAL_TYPE_MAP[meal]}
           </button>
         ))}
       </div>
-      <div className={styles.blocks}>
-        <Suspense fallback={<div />}>
-          <MobileDiningBlocks diningType={diningType} />
-        </Suspense>
-        <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
-      </div>
-
-      <div
-        className={cn({
-          [styles['cafeteria-info']]: true,
-          [styles['cafeteria-info--open']]: isCafeteriaInfoOpen,
-        })}
-      >
-        <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={closeCafeteriaInfo} />
+      <div className={styles.table}>
+        {cafeteriaList.find((item) => item.type === mealType)
+          ? CAFETERIA_CATEGORY
+            .map((cafeteriaCategory) => (
+              <MobileMenuBlock
+                key={cafeteriaCategory.id}
+                menu={cafeteriaList}
+                mealType={mealType}
+                category={cafeteriaCategory}
+              />
+            )) : (
+              <div className={styles['table--empty']}>
+                현재 조회 가능한 식단 정보가 없습니다.
+              </div>
+          )}
+        <span className={styles.table__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
     </>
   );

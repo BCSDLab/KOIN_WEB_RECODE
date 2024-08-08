@@ -1,11 +1,11 @@
 import useClickArrow from 'pages/Room/RoomDetailPage/hooks/useClickArrow';
 import styles from './RoomDetailImg.module.scss';
 
-interface RoomDetailImgProps {
+interface ImgProps {
   imgUrl: string[];
 }
 
-function RoomDetailImg({ imgUrl }: RoomDetailImgProps) {
+function RoomDetailImg({ imgUrl }: ImgProps) {
   const { imgIndex, clickRightArrow, clickLeftArrow } = useClickArrow(imgUrl.length);
   return (
     <div className={styles['img-slider']}>

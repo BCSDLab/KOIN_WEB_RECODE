@@ -1,21 +1,16 @@
-import { Link, useNavigate } from 'react-router-dom';
-import useBusLeftTime from 'pages/BusPage/hooks/useBusLeftTime';
-import {
-  BUS_DIRECTIONS, BUS_TYPES, BusLink, busLink,
-} from 'static/bus';
+import { Link } from 'react-router-dom';
+import useBusLeftTIme from 'pages/BusPage/hooks/useBusLeftTime';
+import { BUS_DIRECTIONS, BUS_TYPES } from 'static/bus';
 import { cn } from '@bcsdlab/utils';
 import { getLeftTimeString, getStartTimeString, directionToEnglish } from 'pages/BusPage/ts/busModules';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
-import { ReactComponent as ReverseDestination } from 'assets/svg/reverse-destination.svg';
-import { useBusStore } from 'utils/zustand/bus';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './IndexBus.module.scss';
 import useIndexBusDirection from './hooks/useIndexBusDirection';
 import useMobileBusCarousel from './hooks/useMobileBusCarousel';
 
 function IndexBus() {
   const { toSchoolList, toggleDirection } = useIndexBusDirection();
-  const { data: busData } = useBusLeftTime({
+  const { data: busData } = useBusLeftTIme({
     departList: toSchoolList.map((depart) => directionToEnglish(BUS_DIRECTIONS[Number(depart)])),
     arrivalList: toSchoolList.map((depart) => directionToEnglish(BUS_DIRECTIONS[Number(!depart)])),
   });
@@ -23,56 +18,13 @@ function IndexBus() {
     isMobile, sliderRef, mobileBusTypes, matchToMobileType,
   } = useMobileBusCarousel();
   const logger = useLogger();
-  const setSelectedTab = useBusStore((state) => state.setSelectedTab);
-  const navigate = useNavigate();
-
-  const getBusDetail = (type: string): BusLink => {
-    const links = matchToMobileType(busLink);
-    return links.find((link) => link.key === type) || {
-      label: '시간표 보러가기', link: '/bus', key: 'shuttle', type: BUS_TYPES[0],
-    };
-  };
-
-  const handleCardClick = (type: string) => {
-    const selectedTab = BUS_TYPES.find((busType) => busType.key === type);
-    if (selectedTab) {
-      setSelectedTab(selectedTab);
-    }
-
-    if (type === 'shuttle') {
-      navigate('/bus');
-      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
-    } else {
-      navigate(getBusDetail(type).link);
-      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
-    }
-  };
-
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement,
-  MouseEvent>, type: string) => {
-    e.stopPropagation();
-
-    if (getBusDetail(type).link.includes('https')) {
-      window.open(getBusDetail(type).link, '_blank');
-    } else {
-      const selectedTab = BUS_TYPES.find((busType) => busType.key === type);
-      if (selectedTab) {
-        setSelectedTab(selectedTab);
-      }
-      navigate(getBusDetail(type).link);
-      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
-    }
-  };
 
   return (
     <section className={styles.template}>
       <Link
         to="/bus"
         className={styles.template__title}
-        onClick={() => {
-          setSelectedTab(BUS_TYPES[0]);
-          logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
-        }}
+        onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' })}
       >
         버스/교통
       </Link>
@@ -84,15 +36,6 @@ function IndexBus() {
               [styles.cards__card]: true,
               [styles['cards__card--sm']]: idx !== 1,
             })}
-            tabIndex={0}
-            role="button"
-            aria-label=""
-            onClick={() => handleCardClick(type)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                handleCardClick(type);
-              }
-            }}
           >
             <div className={cn({ [styles.cards__head]: true, [styles[`cards__head--${type}`]]: true })}>
               <img className={styles['cards__bus-icon']} src="http://static.koreatech.in/assets/img/ic-bus.png" alt="" />
@@ -114,26 +57,16 @@ function IndexBus() {
                 <span>{BUS_DIRECTIONS[Number(matchToMobileType(toSchoolList)[idx])]}</span>
                 <button
                   type="button"
-                  aria-label="목적지 변경"
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
                     toggleDirection(isMobile ? mobileBusTypes[idx] : idx);
                     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus_changeToFrom', value: BUS_TYPES[idx].tabName });
                   }}
                   className={styles.cards__toggle}
                 >
-                  <ReverseDestination className={styles['cards__toggle--image']} />
+                  <img src="http://static.koreatech.in/assets/img/reverse_destination.png" alt="목적지 변경" className={styles['cards__toggle--image']} />
                 </button>
                 <span>{BUS_DIRECTIONS[Number(!matchToMobileType(toSchoolList)[idx])]}</span>
               </div>
-              <button
-                className={styles.cards__redirect}
-                onClick={(e) => handleButtonClick(e, type)}
-                type="button"
-              >
-                {getBusDetail(type).label}
-                <RightArrow />
-              </button>
             </div>
           </div>
         ))}

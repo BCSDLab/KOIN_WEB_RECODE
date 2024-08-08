@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import useLogger from 'utils/hooks/useLogger';
+import useModalPortal from 'utils/hooks/useModalPortal';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
-import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
-import Copy from 'assets/png/copy.png';
+import { useScorllLogging } from 'utils/hooks/useScrollLogging';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
@@ -50,9 +49,6 @@ function StoreDetailPage() {
   };
   const onClickEventList = () => {
     logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_detailView_event', value: `${storeDetail.name}` });
-  };
-  const copyAccount = async (account: string) => {
-    await navigator.clipboard.writeText(account);
   };
 
   useScrollToTop();
@@ -99,22 +95,6 @@ function StoreDetailPage() {
                 {storeDetail?.delivery_price.toLocaleString()}
                 원
                 <br />
-                {storeDetail.bank && storeDetail.account_number && (
-                  <>
-                    <span>계좌번호</span>
-                    <div className={styles.account}>
-                      {`${storeDetail.bank} ${storeDetail.account_number}`}
-                      <button type="button" onClick={() => copyAccount(`${storeDetail.bank} ${storeDetail.account_number}`)}>
-                        <img
-                          src={Copy}
-                          alt="복사하기"
-                          className={styles.copy}
-                        />
-                      </button>
-                    </div>
-                    <br />
-                  </>
-                )}
                 <div className={styles.etc}>
                   <span>기타정보</span>
                   <div className={styles.etc__content}>{storeDescription}</div>

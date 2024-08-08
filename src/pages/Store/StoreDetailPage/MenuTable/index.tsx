@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { MenuCategory } from 'api/store/entity';
 import { cn } from '@bcsdlab/utils';
 import MENU_CATEGORY from 'static/menu';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 import styles from './MenuTable.module.scss';
 
 interface MenuTableProps {
@@ -122,7 +122,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
               </div>
             ) : (
               menu.option_prices.map((item) => (
-                <div className={styles['menu-info']} key={menu.id + item.option + item.price}>
+                <div className={styles['menu-info']} key={menu.id + item.option}>
                   <div className={styles['menu-info__card']}>
                     <span>{`${menu.name} - ${item.option}`}</span>
                     <span>

@@ -1,16 +1,15 @@
 import React from 'react';
 import { LoginResponse } from 'api/auth/entity';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { setCookie } from 'utils/ts/cookie';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useBooleanState from 'utils/hooks/useBooleanState';
 import { auth } from 'api';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { useTokenStore } from 'utils/zustand/auth';
-import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -31,7 +30,7 @@ const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 
 const useLogin = (state: IsAutoLogin) => {
   const { setToken, setRefreshToken } = useTokenStore();
-  const { redirectAfterLogin } = useLoginRedirect();
+  const navigate = useNavigate();
 
   const postLogin = useMutation({
     mutationFn: auth.login,
@@ -41,7 +40,7 @@ const useLogin = (state: IsAutoLogin) => {
       }
       setCookie('AUTH_TOKEN_KEY', data.token);
       setToken(data.token);
-      redirectAfterLogin();
+      navigate('/');
     },
     onError: (error) => {
       if (isKoinError(error)) {

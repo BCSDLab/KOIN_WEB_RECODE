@@ -1,15 +1,15 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import useBusDirection from 'pages/BusPage/hooks/useBusDirection';
-import useBusLeftTime from 'pages/BusPage/hooks/useBusLeftTime';
+import useBusLeftTIme from 'pages/BusPage/hooks/useBusLeftTime';
 import { getBusName, getLeftTimeString, getStartTimeString } from 'pages/BusPage/ts/busModules';
 import { BUS_DIRECTIONS, BUS_TYPES } from 'static/bus';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './BusLookUp.module.scss';
 
 function BusLookUp() {
   const { depart, arrival } = useBusDirection(BUS_DIRECTIONS);
-  const { data: busData } = useBusLeftTime({
+  const { data: busData } = useBusLeftTIme({
     departList: [depart.value, depart.value, depart.value],
     arrivalList: [arrival.value, arrival.value, arrival.value],
   });
