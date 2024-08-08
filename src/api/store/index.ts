@@ -4,6 +4,7 @@ import {
   StoreEventList,
   ReviewList,
   DeleteReview,
+  GetMyReviews,
 } from './APIDetail';
 
 export const getStoreList = APIClient.of(StoreList);
@@ -23,3 +24,5 @@ export const getStoreEventList = APIClient.of(StoreEventList);
 export const getReviewList = APIClient.of(ReviewList);
 
 export const deleteReview = APIClient.of(DeleteReview);
+
+export const getMyReview = APIClient.of(GetMyReviews);

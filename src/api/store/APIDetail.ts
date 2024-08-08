@@ -11,6 +11,7 @@ import {
   ReviewListResponse,
   StoreSorterType,
   StoreFilterType,
+  MyReviewResponse,
 } from './entity';
 
 export class StoreList<R extends StoreListResponse> implements APIRequest<R> {
@@ -121,5 +122,17 @@ export class DeleteReview<R extends DeleteResponse> implements APIRequest<R> {
 
   constructor(reviewId: number, shopId: string, public authorization: string) {
     this.path = `shops/${shopId}/reviews/${reviewId}`;
+  }
+}
+
+export class GetMyReviews<R extends MyReviewResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'shops/:shopId/reviews/me';
+
+  response!: R;
+
+  constructor(shopId: string, sorter: string, public authorization: string) {
+    this.path = `shops/${shopId}/reviews/me?sorter=${sorter}`;
   }
 }

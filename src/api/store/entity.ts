@@ -182,3 +182,8 @@ export interface Review {
   is_modified: boolean,
   created_at: string
 }
+
+export interface MyReviewResponse {
+  count: number;
+  reviews: Review[];
+}

@@ -12,6 +12,7 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/StarList';
 import { REVEIW_LOGIN } from 'pages/Store/StoreDetailPage/Review/components/ReviewButton/index';
 import { useUser } from 'utils/hooks/state/useUser';
+import { useGetMyReview } from 'pages/Store/StoreDetailPage/hooks/useGetMyReview';
 import styles from './ReviewList.module.scss';
 
 const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
@@ -33,7 +34,8 @@ export default function ReviewList() {
     data, hasNextPage, fetchNextPage,
   } = useGetReview(Number(param.id), currentSortType);
   const reviews = data.pages.flatMap((page) => page.reviews);
-  const checkboxRef = useRef<HTMLInputElement>(null);
+  const { myReview } = useGetMyReview(param.id!, currentSortType);
+  const [isCheckboxClicked, setIsCheckboxClicked] = useState<boolean>(false);
   const selectorRef = useRef<HTMLDivElement>(null);
   const [openDropdown, setOpenDropdowm] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
@@ -94,7 +96,7 @@ export default function ReviewList() {
       aria-hidden
     >
       <div ref={startReview} />
-      {(reviews.length > 0 || checkboxRef.current?.checked)
+      {(reviews.length > 0 || isCheckboxClicked)
       && (
         <div className={styles.selector} ref={selectorRef} style={{ background: isSticky ? '#fafafa' : 'white' }}>
           {
@@ -142,37 +144,49 @@ export default function ReviewList() {
             <input
               type="checkbox"
               id="myReview"
-              ref={checkboxRef}
+              onChange={() => {
+                if (checkUser()) return;
+                setIsCheckboxClicked((prev) => !prev);
+              }}
             />
             내가 리뷰 작성한 리뷰
           </label>
         </div>
       )}
-      {reviews.length > 0
-        ? reviews.map((review) => (
+      {isCheckboxClicked && (
+        myReview.length > 0 ? (myReview.map((mine) => (
           <ReviewCard
-            key={review.review_id}
-            rating={review.rating}
-            nick_name={review.nick_name}
-            content={review.content}
-            image_urls={review.image_urls}
-            menu_names={review.menu_names}
-            is_mine={review.is_mine}
-            is_modified={review.is_modified}
-            created_at={review.created_at}
-            review_id={review.review_id}
+            review_id={mine.review_id}
+            rating={mine.rating}
+            nick_name={mine.nick_name}
+            content={mine.content}
+            image_urls={mine.image_urls}
+            menu_names={mine.menu_names}
+            is_mine={mine.is_mine}
+            is_modified={mine.is_modified}
+            created_at={mine.created_at}
           />
-        )) : (
-          <div>
-            {checkboxRef.current?.checked
-              ? <div className={styles['not-found']}>작성한 리뷰가 없어요 :)</div>
-              : (
-                <div className={styles['not-found']}>
-                  <NoReview />
-                </div>
-              )}
-          </div>
-        )}
+        ))) : <div className={styles['not-found']}>작성한 리뷰가 없어요 :)</div>
+      )}
+      {!isCheckboxClicked
+      && (reviews.length > 0 ? reviews.map((review) => (
+        <ReviewCard
+          key={review.review_id}
+          rating={review.rating}
+          nick_name={review.nick_name}
+          content={review.content}
+          image_urls={review.image_urls}
+          menu_names={review.menu_names}
+          is_mine={review.is_mine}
+          is_modified={review.is_modified}
+          created_at={review.created_at}
+          review_id={review.review_id}
+        />
+      )) : (
+        <div className={styles['not-found']}>
+          <NoReview />
+        </div>
+      ))}
       <div ref={endOfPage} />
     </div>
   );
