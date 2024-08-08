@@ -11,7 +11,7 @@ import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
 import { ReactComponent as HeartIcon } from 'assets/svg/heart.svg';
 import { ReactComponent as FilledHeartIcon } from 'assets/svg/heart-filled.svg';
-import { useAuthentication } from 'utils/zustand/authentication';
+import { useUser } from 'utils/hooks/state/useUser';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import styles from './PCDiningBlocks.module.scss';
@@ -24,7 +24,7 @@ interface PCDiningBlocksProps {
 export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
-  const isAuthenticated = useAuthentication();
+  const { data: isAuth } = useUser();
   const { currentDate } = useDatePicker();
   const { dinings, likeDining } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
@@ -45,9 +45,12 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
   };
 
   const handleLikeClick = ({ id, is_liked }: Dining) => {
-    if (!isAuthenticated) {
+    if (!isAuth) {
       portalManager.open((portalOption: Portal) => (
-        <LoginPromptModal closeModal={portalOption.close} />
+        <LoginPromptModal
+          action={() => likeDining(id, is_liked)}
+          closeModal={portalOption.close}
+        />
       ));
     } else {
       likeDining(id, is_liked);

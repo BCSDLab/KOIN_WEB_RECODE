@@ -5,10 +5,13 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LoginPromptModal.module.scss';
 
 interface LoginPromptModalProps {
+  action: () => void;
   closeModal: () => void;
 }
 
-export default function LoginPromptModal({ closeModal }: LoginPromptModalProps): JSX.Element {
+export default function LoginPromptModal({
+  action, closeModal,
+}: LoginPromptModalProps): JSX.Element {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
   useBodyScrollLock(true);
@@ -42,12 +45,14 @@ export default function LoginPromptModal({ closeModal }: LoginPromptModalProps):
           <button
             type="button"
             className={styles['modal-bottom__login']}
+            onClick={action}
           >
             로그인하기
           </button>
           <button
             type="button"
             className={styles['modal-bottom__cancel']}
+            onClick={closeModal}
           >
             다음에 하기
           </button>
