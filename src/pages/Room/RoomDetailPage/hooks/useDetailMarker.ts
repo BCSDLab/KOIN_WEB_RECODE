@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import MarkerIcon from 'components/Room/MarkerIcon';
 
-interface MarkerProps {
+interface DetailMarkerProps {
   map: naver.maps.Map | null
   latitude: number | undefined
   longitude: number | undefined
 }
 
-function useDetailMarker({ map, latitude, longitude }: MarkerProps) {
+function useDetailMarker({ map, latitude, longitude }: DetailMarkerProps) {
   const [marker, setMarker] = useState<naver.maps.Marker>();
 
   useEffect(() => {

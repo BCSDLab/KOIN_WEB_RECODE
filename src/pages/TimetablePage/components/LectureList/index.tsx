@@ -62,15 +62,7 @@ function CurrentSemesterLectureList({
       onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
       onClickLastColumn={
           (clickedLecture) => {
-            const isContainedLecture = myLectures.some(
-              (lecture) => lecture.code === clickedLecture.code
-              && lecture.lecture_class === clickedLecture.lecture_class,
-            );
             if ('class_title' in clickedLecture) {
-              return;
-            }
-            if (isContainedLecture) {
-              showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
               return;
             }
             const myLectureTimeValue = (

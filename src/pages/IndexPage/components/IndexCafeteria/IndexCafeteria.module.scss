@@ -7,63 +7,103 @@
   }
 }
 
-.title {
-  font-family: NanumSquare, serif;
-  font-size: 17px;
-  font-weight: bold;
-  color: #175c8e;
-  text-decoration: none;
+.header {
+  position: relative;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin: 0;
 
-  @include media.media-breakpoint(mobile) {
-    font-size: 18px;
-    padding: 0 16px;
-    box-sizing: border-box;
+  &__title {
+    color: #175c8e;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 15px;
+      padding-left: 3px;
+      margin-left: 16px;
+      box-sizing: border-box;
+    }
   }
 
-  div {
-    cursor: pointer;
+  &__more {
+    font-family: NanumBarunGothic, sans-serif;
+    font-size: 12px;
+    color: #252525;
+    font-weight: 400;
+    line-height: 13.79px;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    position: relative;
+    left: 8px;
+
+    svg {
+      position: relative;
+      top: -1px;
+      right: 3px;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__tooltip {
+    z-index: 10;
+    position: absolute;
+    top: -84px;
+    right: -72px;
+    display: flex;
+    width: fit-content;
+    gap: 8px;
+    border-radius: 8px;
+    background: #fafafa;
+    padding: 16px;
+    box-shadow: 0 1px 4px 0 rgba(0 0 0 / 4%), 0 4px 10px 0 rgba(0 0 0 / 8%);
+
+    &-content {
+      text-align: left;
+      color: #4b4b4b;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+    }
+
+    &-close {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+
+      & > svg > path {
+        fill: #cacaca;
+      }
+    }
+
+    &-asset {
+      position: absolute;
+      width: 100%;
+      margin: 0 auto;
+      bottom: -10px;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
   }
 }
 
-.moreLink {
-  font-family: NanumBarunGothic, sans-serif;
-  font-size: 12px;
-  color: #252525;
-  text-decoration: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-weight: 400;
-
-  ::after {
-    display: inline-block;
-    width: 12px;
-    height: 8px;
-    background: url("https://static.koreatech.in/assets/img/bus_dropdown.png") center/12px 8px no-repeat;
-    transform: rotate(-90deg);
-    content: "";
-  }
-
-  @include media.media-breakpoint(mobile) {
-    display: none;
-  }
-}
-
-.cafeteriaCard {
+.card {
   display: grid;
-  grid-template: 26px 159px / 27px 1fr;
+  grid-template-columns: 1fr 5fr;
+  grid-template-rows: 1fr 5fr;
   width: 256px;
-  height: 203px;
+  height: 204px;
   margin-top: 16px;
-  padding: 15px 12px 0;
-  border: solid 1px #e4e4e4;
+  padding: 12px;
+  border: 1px solid #e4e4e4;
   box-sizing: border-box;
-  cursor: pointer;
 
   @include media.media-breakpoint(mobile) {
     display: flex;
@@ -79,12 +119,11 @@
   }
 }
 
-.cafeteriaContainer {
+.place {
+  grid-column: 1 / 2;
+  grid-row: 1 / 6;
   display: flex;
   flex-direction: column;
-  grid-row: 1 / 3;
-  width: 27px;
-  height: 100%;
 
   @include media.media-breakpoint(mobile) {
     height: auto;
@@ -95,159 +134,164 @@
     width: 100%;
     background-color: #fff;
   }
-}
 
-.cafeteria {
-  margin: 8px 0;
-  width: 42px;
-  font-size: 14px;
-  text-align: center;
-  color: #bbb;
-  cursor: pointer;
+  &__name {
+    margin: auto 0;
+    font-size: 14px;
+    text-align: center;
+    color: #bbb;
 
-  &--selected {
-    color: #175c8e;
+    &--selected {
+      color: #175c8e;
+
+      @include media.media-breakpoint(mobile) {
+        border-bottom: 1px solid #10477a;
+      }
+    }
 
     @include media.media-breakpoint(mobile) {
-      border-bottom: 1px solid #10477a;
+      margin-bottom: 0;
+      padding: 16px 16px 12px;
+      cursor: pointer;
     }
-  }
-
-  @include media.media-breakpoint(mobile) {
-    margin-bottom: 0;
-    padding: 16px 16px 12px;
-    cursor: pointer;
   }
 }
 
-.menuBox {
+.type {
+  grid-column: 2 / 6;
+  grid-row: 1 / 2;
+  font-family: NanumSquare, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 26px;
+  text-align: center;
+  white-space: nowrap;
+  color: #000;
+  height: 26px;
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.menus {
+  position: relative;
+  grid-column: 2 / 6;
+  grid-row: 2 / 6;
+  padding: 15px;
+  box-sizing: border-box;
+
   @include media.media-breakpoint(mobile) {
     border: 1px solid #e1e1e1;
     border-radius: 8px;
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    height: 200px;
     margin: 16px 24px 20px;
+    padding: 0;
+    box-sizing: border-box;
     cursor: pointer;
   }
-}
 
-.typeContainer {
-  display: flex;
-  justify-content: center;
-}
-
-.type {
-  font-family: NanumSquare, sans-serif;
-  font-size: 14px;
-  font-weight: bold;
-  color: #000;
-  line-height: 26px;
-  text-align: center;
-
-  @include media.media-breakpoint(mobile) {
+  &__type {
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    color: #000;
+    width: 100%;
+    height: 56px;
+    padding: 15px;
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
-    font-size: 16px;
-    padding: 16px;
-    line-height: normal;
+    align-items: center;
     border-bottom: 1px solid #eee;
   }
 
-  &__block {
-    display: none;
+  &__chip {
+    position: absolute;
+    top: 11px;
+    right: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 19px;
+    width: 21px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #fff7e1;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffad0d;
+  }
 
-    &--soldOut {
-      @include media.media-breakpoint(mobile) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 4px 8px;
-        border-radius: 4px;
-        background-color: #fff7e1;
-        font-size: 12px;
-        font-weight: 500;
-        color: #ffad0d;
-      }
+  &__list {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+
+    @include media.media-breakpoint(mobile) {
+      max-height: 76%;
+      padding: 15px;
+      box-sizing: border-box;
     }
   }
-}
 
-.typeControlButton {
-  width: 26px;
-  height: 26px;
-  margin: 0 8px;
-  padding: 0;
-  border: 0;
-  background: url("https://static.koreatech.in/assets/img/ic-more.png") center/26px 26px no-repeat;
-  cursor: pointer;
+  &__name {
+    font-family: NanumBarunGothic, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 13.79px;
+    text-align: left;
+    color: #252525;
+    max-width: 50%;
+    height: 20%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-  &.left {
-    transform: rotate(180deg);
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      align-items: center;
+      height: 24px;
+    }
   }
 
-  @include media.media-breakpoint(mobile) {
-    display: none;
-  }
-}
-
-.menuContainer {
-  display: flex;
-  justify-content: flex-start;
-  flex-flow: column wrap;
-  width: 100%;
-  height: 160px;
-  box-sizing: border-box;
-  padding: 15px 0 0 27px;
-
-  @include media.media-breakpoint(mobile) {
-    padding: 16px;
-  }
-}
-
-.menu {
-  font-size: 12px;
-  color: #252525;
-  text-align: left;
-  margin-bottom: 14px;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 75px;
-
-  &.long {
-    width: 100%;
+  &--not-served {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
-  @include media.media-breakpoint(mobile) {
-    margin-bottom: 10px;
-    width: 50%;
-  }
-}
+  &__not-served {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: NanumBarunGothic, serif;
+    font-size: 12px;
+    color: #252525;
+    text-align: center;
 
-.noMenuContent {
-  text-align: center;
-  margin-top: 21px;
+    & svg {
+      margin-bottom: 12px;
+    }
 
-  @include media.media-breakpoint(mobile) {
-    margin: 0;
-  }
-}
-
-.noMenuImage {
-  width: 52px;
-  height: 47px;
-  margin-left: -19px;
-}
-
-.noMenu {
-  height: 31px;
-  font-family: NanumBarunGothic, serif;
-  font-size: 12px;
-  color: #252525;
-  text-align: center;
-  margin: 15px 0 0 -15px;
-
-  @include media.media-breakpoint(mobile) {
-    margin: 8px 0 0 -19px;
+    @include media.media-breakpoint(mobile) {
+      margin-top: 20px;
+    }
   }
 }

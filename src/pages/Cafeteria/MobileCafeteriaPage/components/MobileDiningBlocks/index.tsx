@@ -1,0 +1,110 @@
+import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
+import { ReactComponent as HeartIcon } from 'assets/svg/heart.svg';
+import { ReactComponent as FilledHeartIcon } from 'assets/svg/heart-filled.svg';
+import { Dining, DiningType } from 'interfaces/Cafeteria';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import { useEffect } from 'react';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
+import useDinings from 'pages/Cafeteria/hooks/useDinings';
+import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
+import { DINING_TYPE_MAP } from 'static/cafeteria';
+import { filterDinings } from 'utils/ts/cafeteria';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import styles from './MobileDiningBlocks.module.scss';
+
+interface MobileDiningBlocksProps {
+  diningType: DiningType;
+}
+
+export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksProps) {
+  const portalManager = useModalPortal();
+  const handleClose = () => {
+    portalManager.close();
+  };
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: handleClose });
+  useEscapeKeyDown({ onEscape: handleClose });
+
+  const { currentDate } = useDatePicker();
+  const { dinings, likeDining } = useDinings(currentDate());
+  const filteredDinings = filterDinings(dinings, diningType);
+
+  const logger = useLogger();
+  const handleImageClick = (dining: Dining) => {
+    if (dining.image_url) {
+      logger.actionEventClick({
+        actionTitle: 'CAMPUS',
+        title: 'menu_image',
+        value: `${DINING_TYPE_MAP[dining.type]}_${dining.place}`,
+      });
+
+      portalManager.open((portalOption: Portal) => (
+        <div className={styles.photo} ref={backgroundRef}>
+          <button
+            type="button"
+            aria-label="닫기"
+            className={styles.photo__close}
+            onClick={handleClose}
+          >
+            <CloseIcon onClick={portalOption.close} />
+          </button>
+          <img src={dining.image_url as string} alt="mealDetail" />
+        </div>
+      ));
+    }
+  };
+
+  useEffect(() => () => portalManager.close(), [
+    portalManager,
+  ]);
+
+  return (
+    <>
+      {filteredDinings.map((dining) => (
+        <div className={styles.category} key={dining.id}>
+          <ul className={styles['category__menu-list-row']}>
+            <div className={styles.category__header}>
+              <div className={styles.category__type}>
+                <div className={styles['category__type--title']}>
+                  {dining.place}
+                  <div className={styles.category__calorie}>
+                    {!!dining.kcal && `${dining.kcal}Kcal •`}
+                  </div>
+                  <div className={styles.category__price}>
+                    {!!dining.price_cash && `${dining.price_cash}원/`}
+                    {!!dining.price_card && ` ${dining.price_card}원`}
+                  </div>
+                </div>
+                {dining.soldout_at && <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>품절</span>}
+                {!dining.soldout_at && dining.changed_at && <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>변경됨</span>}
+              </div>
+            </div>
+            <li className={styles['category__menu-list']}>
+              <ul>
+                {dining.menu.map((menuItem) => (
+                  <li
+                    className={styles.category__menu}
+                    key={menuItem.id}
+                  >
+                    {menuItem.name}
+                  </li>
+                ))}
+              </ul>
+              <MobileMealImage dining={dining} handleImageClick={handleImageClick} />
+            </li>
+            <button
+              type="button"
+              className={styles.like}
+              onClick={() => likeDining(dining.id, dining.is_liked)}
+            >
+              {dining.is_liked ? <FilledHeartIcon /> : <HeartIcon />}
+              <span className={styles.like__count}>{dining.likes === 0 ? '좋아요' : dining.likes.toLocaleString()}</span>
+            </button>
+          </ul>
+        </div>
+      ))}
+    </>
+  );
+}

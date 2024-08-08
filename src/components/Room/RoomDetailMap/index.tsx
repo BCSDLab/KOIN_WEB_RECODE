@@ -2,13 +2,13 @@ import useDetailMarker from 'pages/Room/RoomDetailPage/hooks/useDetailMarker';
 import useNaverMap from 'pages/Room/RoomPage/hooks/useNaverMap';
 import styles from './RoomDetailMap.module.scss';
 
-interface MapProps {
+interface RoomDetailMapProps {
   latitude: number
   longitude: number
   address: string
 }
 
-function RoomDetailMap({ latitude, longitude, address }: MapProps) {
+function RoomDetailMap({ latitude, longitude, address }: RoomDetailMapProps) {
   const map = useNaverMap(latitude, longitude);
   useDetailMarker({ map, latitude, longitude });
   return (
