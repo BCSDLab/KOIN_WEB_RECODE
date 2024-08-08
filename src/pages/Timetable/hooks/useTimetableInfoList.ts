@@ -17,7 +17,7 @@ function useTimetableInfoList(
   [string, string]
   >(
     {
-      queryKey: [TIMETABLE_INFO_LIST, semester + authorization],
+      queryKey: [TIMETABLE_INFO_LIST, semester],
       queryFn: () => (authorization && semester ? getTimetableInfo(authorization, semester) : null),
       select: (data) => (data ? data.timetable : undefined),
     },
