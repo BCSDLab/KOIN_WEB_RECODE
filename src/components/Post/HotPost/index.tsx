@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { HotPostResponse } from 'api/notice/entity';
 import useHotArticleList from 'pages/Notice/NoticePage/hooks/useHotArticle';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './HotPost.module.scss';
 
 const LINK_LIST = [

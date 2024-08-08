@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
 
 const useMobileBusCarousel = () => {
   const isMobile = useMediaQuery();
@@ -13,10 +13,10 @@ const useMobileBusCarousel = () => {
     const slider = sliderRef.current;
     if (slider?.scrollLeft) {
       slider.scrollLeft = (window.innerWidth * 0.75
-        - (window.innerWidth - window.innerWidth * 0.75) / 2);
+      - (window.innerWidth - window.innerWidth * 0.75) / 2);
     }
 
-    const slideTouchStart = (e: TouchEvent) => {
+    const slideTouchStart = (e:TouchEvent) => {
       if (slider) {
         startX = e.touches[0].pageX - slider.offsetLeft;
         scrollValue = slider.scrollLeft;
@@ -36,7 +36,7 @@ const useMobileBusCarousel = () => {
       walk = 0;
     };
 
-    const slideTouchMove = (e: TouchEvent) => {
+    const slideTouchMove = (e:TouchEvent) => {
       e.preventDefault();
       if (slider) {
         walk = (e.touches[0].pageX - slider.offsetLeft - startX) * 0.9;

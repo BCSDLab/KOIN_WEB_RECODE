@@ -1,13 +1,39 @@
-import { DiningTypes, DiningPlace } from 'interfaces/Cafeteria';
+import { MealTypes } from 'interfaces/Cafeteria';
 
-export const PLACE_ORDER: Array<DiningPlace> = ['A코너', 'B코너', 'C코너', '능수관', '2캠퍼스'];
+export const CAFETERIA_CATEGORY = [
+  {
+    id: 1,
+    place: 'A코너',
+    isShowMain: true,
+  },
+  {
+    id: 2,
+    place: 'B코너',
+    isShowMain: true,
+  },
+  {
+    id: 3,
+    place: 'C코너',
+    isShowMain: true,
+  },
+  {
+    id: 4,
+    place: '능수관',
+    isShowMain: true,
+  },
+  {
+    id: 5,
+    place: '2캠퍼스',
+    isShowMain: false,
+  },
+] as const;
 
-export const DINING_TYPES: DiningTypes = ['BREAKFAST', 'LUNCH', 'DINNER'];
-
-export const DINING_TYPE_MAP = {
+export const MEAL_TYPE_MAP = {
   BREAKFAST: '아침',
   LUNCH: '점심',
   DINNER: '저녁',
 } as const;
 
-export const DAYS = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+export const MEAL_TYPES: MealTypes = ['BREAKFAST', 'LUNCH', 'DINNER'];
+
+export const placeOrder = ['A코너', 'B코너', 'C코너', '능수관', '2캠퍼스'];

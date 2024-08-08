@@ -1,6 +1,6 @@
-import { APIResponse } from 'interfaces/APIResponse';
-import { Dining } from 'interfaces/Cafeteria';
+import { type APIResponse } from 'interfaces/APIResponse';
+import { type CafeteriaMenu } from 'interfaces/Cafeteria';
 
-export interface DiningResponseType extends APIResponse {
-  [index: number]: Dining;
+export interface CafeteriaListResponse extends APIResponse {
+  [index: number]: CafeteriaMenu;
 }

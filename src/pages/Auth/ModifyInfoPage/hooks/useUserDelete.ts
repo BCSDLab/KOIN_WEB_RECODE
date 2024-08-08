@@ -1,5 +1,5 @@
 import * as api from 'api';
-import { useLogout } from 'utils/hooks/auth/useLogout';
+import { useLogout } from 'utils/hooks/useLogout';
 import showToast from 'utils/ts/showToast';
 import { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';

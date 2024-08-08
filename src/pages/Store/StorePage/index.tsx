@@ -4,14 +4,14 @@ import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
 
 import { cn } from '@bcsdlab/utils';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useLogger from 'utils/hooks/useLogger';
+import useParamsHandler from 'utils/hooks/useParamsHandler';
 import { useQuery } from '@tanstack/react-query';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 
-import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
+import { useScorllLogging } from 'utils/hooks/useScrollLogging';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';

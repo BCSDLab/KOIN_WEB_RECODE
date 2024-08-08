@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import useBooleanState from 'utils/hooks/useBooleanState';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './Listbox.module.scss';
 
 export interface ListboxRef {

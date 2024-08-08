@@ -1,7 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom';
 // import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import useLogger from 'utils/hooks/useLogger';
 import styles from './IndexStore.module.scss';
 
 interface Category {
