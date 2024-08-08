@@ -2,75 +2,62 @@ import { useGetReview } from 'pages/Store/StoreDetailPage/hooks/useGetReview';
 import { useParams } from 'react-router-dom';
 import ReviewCard from 'pages/Store/StoreDetailPage/Review/components/ReviewCard/ReviewCard';
 import {
-  useCallback, useEffect, useMemo, useRef, useState,
+  useCallback, useEffect, useRef, useState,
 } from 'react';
-import { Review } from 'api/store/entity';
 import { ReactComponent as NoReview } from 'assets/svg/Review/no-review.svg';
 import { ReactComponent as Arrow } from 'assets/svg/up-arrow-icon.svg';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import LoginRequiredModal from 'components/common/LoginRequiredModal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/StarList';
+import { REVEIW_LOGIN } from 'pages/Store/StoreDetailPage/Review/components/ReviewButton/index';
+import { useUser } from 'utils/hooks/state/useUser';
+import { useGetMyReview } from 'pages/Store/StoreDetailPage/hooks/useGetMyReview';
 import styles from './ReviewList.module.scss';
 
 const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
 
-const check = (one: Review, two: Review) => {
-  const oneDate = new Date(one.created_at);
-  const twoDate = new Date(two.created_at);
-
-  return oneDate >= twoDate ? 1 : -1;
+const sortType = {
+  최신순: 'LATEST',
+  오래된순: 'OLDEST',
+  별점높은순: 'HIGHEST_RATING',
+  별점낮은순: 'LOWEST_RATING',
 };
 
 export default function ReviewList() {
   const param = useParams();
-  const {
-    data, hasNextPage, fetchNextPage,
-  } = useGetReview(Number(param.id));
   const endOfPage = useRef(null);
   const startReview = useRef(null);
-  const reviews = data.pages.flatMap((page) => page.reviews);
   const currentReviewType = useRef<string>('최신순');
-  const checkboxRef = useRef<HTMLInputElement>(null);
+  const [currentSortType, setCurrentSortType] = useState(sortType.최신순);
+  const {
+    data, hasNextPage, fetchNextPage,
+  } = useGetReview(Number(param.id), currentSortType);
+  const reviews = data.pages.flatMap((page) => page.reviews);
+  const { data: myReview } = useGetMyReview(param.id!, currentSortType);
+  const [isCheckboxClicked, setIsCheckboxClicked] = useState<boolean>(false);
   const selectorRef = useRef<HTMLDivElement>(null);
-  const [filteredReview, setFilteredReview] = useState(reviews);
   const [openDropdown, setOpenDropdowm] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const portalManager = useModalPortal();
+  const { data: userInfo } = useUser();
 
-  // 정렬 후 메모된 값을 사용
-  const memoHighest = useMemo(() => [...reviews].sort((a, b) => b.rating - a.rating), [reviews]);
-  const memoLowest = useMemo(() => [...reviews].sort((a, b) => a.rating - b.rating), [reviews]);
-  const memoRecent = useMemo(() => [...reviews].sort((a, b) => check(b, a)), [reviews]);
-  const memoOld = useMemo(() => [...reviews].sort((a, b) => check(a, b)), [reviews]);
-  // reviews 배열 복사 후 정렬, sort는 원본을 바꿈
-
-  const filter = (type: string) => {
-    if (!checkboxRef.current?.checked) {
-      if (type === '별점높은순') {
-        setFilteredReview(memoHighest);
-      }
-      if (type === '별점낮은순') {
-        setFilteredReview(memoLowest);
-      }
-      if (type === '최신순') {
-        setFilteredReview(memoRecent);
-      }
-      if (type === '오래된순') {
-        setFilteredReview(memoOld);
-      }
+  const checkUser = ():boolean => {
+    if (!userInfo) {
+      portalManager.open((portalOption: Portal) => (
+        <LoginRequiredModal
+          title={REVEIW_LOGIN[0]}
+          description={REVEIW_LOGIN[1]}
+          closeModal={portalOption.close}
+        />
+      ));
     }
-    currentReviewType.current = type; // 현재 정렬 타입 저장
+    return !userInfo;
   };
 
-  const findMyReview = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      const myReviews = filteredReview.filter((review) => review.is_mine);
-      if (myReviews) setFilteredReview(myReviews);
-      else setFilteredReview([]);
-    } else filter(currentReviewType.current); // 토글 시 기존에 정렬된 상태의 값을 사용
-  };
-
-  const getNextReview = useCallback(() => {
-    if (hasNextPage) {
-      fetchNextPage()
-        .then((result) => setFilteredReview(result.data!.pages.flatMap((page) => page.reviews)));
+  const getNextReview = useCallback((entries: IntersectionObserverEntry[]) => {
+    if (hasNextPage && entries[0].isIntersecting) {
+      fetchNextPage();
     } // 다음 페이지가 있으면 패치
   }, [hasNextPage, fetchNextPage]);
 
@@ -98,6 +85,7 @@ export default function ReviewList() {
         const { target } = e;
         if (target instanceof HTMLElement) {
           if (target.matches('button')) {
+            if (checkUser()) return;
             setOpenDropdowm((prev) => !prev);
           } else {
             setOpenDropdowm(false);
@@ -108,7 +96,7 @@ export default function ReviewList() {
       aria-hidden
     >
       <div ref={startReview} />
-      {(filteredReview.length > 0 || checkboxRef.current?.checked)
+      {(reviews.length > 0 || isCheckboxClicked)
       && (
         <div className={styles.selector} ref={selectorRef} style={{ background: isSticky ? '#fafafa' : 'white' }}>
           {
@@ -116,7 +104,7 @@ export default function ReviewList() {
               ? (
                 <div className={styles.point}>
                   <StarList average_rating={data.pages[0].statistics.average_rating} />
-                  {`${data.pages[0].statistics.average_rating}점`}
+                  {`${data.pages[0].statistics.average_rating.toFixed()}점`}
                 </div>
               )
               : (
@@ -134,7 +122,10 @@ export default function ReviewList() {
                         <button
                           type="button"
                           key={select}
-                          onClick={() => filter(select)}
+                          onClick={() => {
+                            setCurrentSortType(sortType[select]);
+                            currentReviewType.current = select;
+                          }}
                           className={styles['dropdown__list--item']}
                         >
                           {select}
@@ -153,34 +144,50 @@ export default function ReviewList() {
             <input
               type="checkbox"
               id="myReview"
-              onChange={findMyReview}
-              ref={checkboxRef}
+              checked={isCheckboxClicked}
+              onChange={() => {
+                if (checkUser()) setIsCheckboxClicked(false);
+                else setIsCheckboxClicked((prev) => !prev);
+              }}
             />
             내가 리뷰 작성한 리뷰
           </label>
         </div>
       )}
-      {filteredReview.length > 0
-        ? filteredReview.map((review) => (
+      {isCheckboxClicked && myReview && (
+        myReview.reviews.length > 0 ? (myReview.reviews.map((mine) => (
           <ReviewCard
-            key={review.review_id}
-            rating={review.rating}
-            nick_name={review.nick_name}
-            content={review.content}
-            image_urls={review.image_urls}
-            menu_names={review.menu_names}
-            is_mine={review.is_mine}
-            is_modified={review.is_modified}
-            created_at={review.created_at}
-            review_id={review.review_id}
+            review_id={mine.review_id}
+            rating={mine.rating}
+            nick_name={mine.nick_name}
+            content={mine.content}
+            image_urls={mine.image_urls}
+            menu_names={mine.menu_names}
+            is_mine={mine.is_mine}
+            is_modified={mine.is_modified}
+            created_at={mine.created_at}
           />
-        )) : (
-          <div>
-            {checkboxRef.current?.checked
-              ? <div className={styles['not-found']}>작성한 리뷰가 없어요 :)</div>
-              : <NoReview />}
-          </div>
-        )}
+        ))) : <div className={styles['not-found']}>작성한 리뷰가 없어요 :)</div>
+      )}
+      {!isCheckboxClicked
+      && (reviews.length > 0 ? reviews.map((review) => (
+        <ReviewCard
+          key={review.review_id}
+          rating={review.rating}
+          nick_name={review.nick_name}
+          content={review.content}
+          image_urls={review.image_urls}
+          menu_names={review.menu_names}
+          is_mine={review.is_mine}
+          is_modified={review.is_modified}
+          created_at={review.created_at}
+          review_id={review.review_id}
+        />
+      )) : (
+        <div className={styles['not-found']}>
+          <NoReview />
+        </div>
+      ))}
       <div ref={endOfPage} />
     </div>
   );

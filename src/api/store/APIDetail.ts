@@ -1,4 +1,5 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { DeleteResponse } from 'api/auth/entity';
 import {
   StoreListResponse,
   StoreListV2Response,
@@ -12,6 +13,7 @@ import {
   ReviewReportRequest,
   StoreSorterType,
   StoreFilterType,
+  MyReviewResponse,
 } from './entity';
 
 export class StoreList<R extends StoreListResponse> implements APIRequest<R> {
@@ -108,8 +110,32 @@ export class ReviewList<R extends ReviewListResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(id: number, pageParam: number, public authorization?: string) {
-    this.path = `shops/${id}/reviews?page=${pageParam}&limit=10`;
+  constructor(id: number, pageParam: number, sorter: string, public authorization?: string) {
+    this.path = `shops/${id}/reviews?page=${pageParam}&limit=10&sorter=${sorter}`;
+  }
+}
+
+export class DeleteReview<R extends DeleteResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path = 'shops/:shopId/reviews/:reviewId';
+
+  response!: R;
+
+  constructor(reviewId: number, shopId: string, public authorization: string) {
+    this.path = `shops/${shopId}/reviews/${reviewId}`;
+  }
+}
+
+export class GetMyReviews<R extends MyReviewResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'shops/:shopId/reviews/me';
+
+  response!: R;
+
+  constructor(shopId: string, sorter: string, public authorization: string) {
+    this.path = `shops/${shopId}/reviews/me?sorter=${sorter}`;
   }
 }
 

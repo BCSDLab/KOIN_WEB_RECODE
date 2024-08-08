@@ -183,6 +183,11 @@ export interface Review {
   created_at: string
 }
 
+export interface MyReviewResponse {
+  count: number;
+  reviews: Review[];
+}
+
 export interface ReviewReportRequest {
   reports: Array<{
     title: string;

@@ -3,6 +3,8 @@ import {
   StoreList, StoreListV2, StoreDetailInfo, StoreDetailMenu, StoreCategories, AllStoreEvent,
   StoreEventList,
   ReviewList,
+  DeleteReview,
+  GetMyReviews,
   ReviewReport,
 } from './APIDetail';
 
@@ -21,5 +23,9 @@ export const getAllEvent = APIClient.of(AllStoreEvent);
 export const getStoreEventList = APIClient.of(StoreEventList);
 
 export const getReviewList = APIClient.of(ReviewList);
+
+export const deleteReview = APIClient.of(DeleteReview);
+
+export const getMyReview = APIClient.of(GetMyReviews);
 
 export const postReviewReport = APIClient.of(ReviewReport);
