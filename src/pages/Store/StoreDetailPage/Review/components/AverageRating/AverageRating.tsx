@@ -6,7 +6,7 @@ import styles from './AverageRating.module.scss';
 
 export default function AverageRating() {
   const params = useParams();
-  const { data } = useGetReview(Number(params.id));
+  const { data } = useGetReview(Number(params.id), 'LATEST');
   const totalReviewCount = data.pages[0].total_count;
 
   const ratingObject = data.pages[0].statistics;

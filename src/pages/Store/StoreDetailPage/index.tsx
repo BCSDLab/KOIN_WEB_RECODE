@@ -33,7 +33,7 @@ function StoreDetailPage() {
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
   const logger = useLogger();
-  const { data } = useGetReview(Number(params.id));
+  const { data } = useGetReview(Number(params.id), 'LATEST');
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
   const onClickCallNumber = () => {
     logger.click({

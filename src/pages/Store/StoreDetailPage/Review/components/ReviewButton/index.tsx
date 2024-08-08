@@ -41,7 +41,7 @@ export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void
     >
       리뷰 작성하기
       {' '}
-      {!isMobile && <Pen />}
+      {!isMobile && <Pen style={{ width: '18px' }} />}
     </button>
   );
 }
