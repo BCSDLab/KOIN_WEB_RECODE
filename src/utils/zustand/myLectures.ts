@@ -17,11 +17,6 @@ type Action = {
   }
 };
 
-interface TimeStringState {
-  timeString: string[];
-  setTimeString: (newTimeString: string[]) => void;
-}
-
 export const useLecturesStore = create<State & Action>(
   (set, get) => ({
     lectures: JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}'),
@@ -60,8 +55,3 @@ export const useLecturesState = () => {
 };
 
 export const useLecturesAction = () => useLecturesStore((state) => state.action);
-
-export const useTimeString = create<TimeStringState>((set) => ({
-  timeString: ['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [time, '']),
-  setTimeString: (newTimeString: string[]) => set({ timeString: newTimeString }),
-}));
