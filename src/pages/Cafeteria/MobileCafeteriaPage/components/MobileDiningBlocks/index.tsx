@@ -1,18 +1,17 @@
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon.svg';
 import { ReactComponent as HeartIcon } from 'assets/svg/heart.svg';
 import { ReactComponent as FilledHeartIcon } from 'assets/svg/heart-filled.svg';
 import { Dining, DiningType } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
-import { useEffect } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import DetailImage from 'pages/Cafeteria/MobileCafeteriaPage/components/DetailImage';
+import LoginPromptModal from 'components/Cafeteria/LoginPromptModal';
+import { useUser } from 'utils/hooks/state/useUser';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
@@ -20,18 +19,13 @@ interface MobileDiningBlocksProps {
 }
 
 export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksProps) {
+  const logger = useLogger();
   const portalManager = useModalPortal();
-  const handleClose = () => {
-    portalManager.close();
-  };
-  const { backgroundRef } = useOutsideClick({ onOutsideClick: handleClose });
-  useEscapeKeyDown({ onEscape: handleClose });
-
+  const { data: isAuth } = useUser();
   const { currentDate } = useDatePicker();
   const { dinings, likeDining } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
 
-  const logger = useLogger();
   const handleImageClick = (dining: Dining) => {
     if (dining.image_url) {
       logger.actionEventClick({
@@ -41,24 +35,23 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
       });
 
       portalManager.open((portalOption: Portal) => (
-        <div className={styles.photo} ref={backgroundRef}>
-          <button
-            type="button"
-            aria-label="닫기"
-            className={styles.photo__close}
-            onClick={handleClose}
-          >
-            <CloseIcon onClick={portalOption.close} />
-          </button>
-          <img src={dining.image_url as string} alt="mealDetail" />
-        </div>
+        <DetailImage url={dining?.image_url} close={() => portalOption.close()} />
       ));
     }
   };
 
-  useEffect(() => () => portalManager.close(), [
-    portalManager,
-  ]);
+  const handleLikeClick = ({ id, is_liked }: Dining) => {
+    if (!isAuth) {
+      portalManager.open((portalOption: Portal) => (
+        <LoginPromptModal
+          action={() => likeDining(id, is_liked)}
+          closeModal={portalOption.close}
+        />
+      ));
+    } else {
+      likeDining(id, is_liked);
+    }
+  };
 
   return (
     <>
@@ -97,7 +90,7 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
             <button
               type="button"
               className={styles.like}
-              onClick={() => likeDining(dining.id, dining.is_liked)}
+              onClick={() => handleLikeClick(dining)}
             >
               {dining.is_liked ? <FilledHeartIcon /> : <HeartIcon />}
               <span className={styles.like__count}>{dining.likes === 0 ? '좋아요' : dining.likes.toLocaleString()}</span>
