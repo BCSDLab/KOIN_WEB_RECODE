@@ -62,13 +62,9 @@
       }
     }
 
-    &--selected-in-modal {
-      border: 1px solid #eee;
+    &--selected-v2 {
+      border: 1px solid #cacaca;
       background-color: #fff;
-
-      &--opened {
-        border: 1px solid #cacaca;
-      }
     }
   }
 

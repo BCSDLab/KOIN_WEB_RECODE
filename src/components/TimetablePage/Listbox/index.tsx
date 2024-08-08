@@ -72,8 +72,7 @@ function Listbox({
         className={cn({
           [styleClasses.select__trigger]: true,
           [styleClasses['select__trigger--selected']]: isOpenedPopup && version === 'new',
-          [styleClasses['select__trigger--selected-in-modal']]: version === 'inModal',
-          [styleClasses['select__trigger--selected-in-modal--opened']]: isOpenedPopup && version === 'inModal',
+          [styleClasses['select__trigger--selected-v2']]: isOpenedPopup && version === 'inModal',
         })}
       >
         {value !== null ? list.find((item) => item.value === value)?.label : '학부'}

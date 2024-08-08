@@ -83,7 +83,7 @@
 
   &__save-button {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     width: 155px;
     height: 48px;
@@ -92,14 +92,18 @@
     padding: 12px 20px;
     background-color: #fafafa;
     box-shadow: 0 2px 4px 0 #0000000a;
-    font-size: 15.5px;
-    gap: 8px;
+    font-size: 18px;
     font-weight: 500;
     color: #4b4b4b;
     cursor: pointer;
   }
 
   &__trash-can-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  &__pen-icon {
     width: 22px;
     height: 22px;
   }
