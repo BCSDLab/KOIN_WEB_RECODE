@@ -76,8 +76,16 @@ export default class APIClient {
   }
 
   private errorMiddleware(error: KoinError | CustomAxiosError) {
+    const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
     if (error.status === 401) {
       deleteCookie('AUTH_TOKEN_KEY');
+      if (refreshTokenStorage) {
+        const refreshToken = JSON.parse(refreshTokenStorage);
+        if (refreshToken.state.refreshToken !== '') {
+          window.location.reload();
+          return;
+        }
+      }
       window.location.href = '/auth';
     }
   }
