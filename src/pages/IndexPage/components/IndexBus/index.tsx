@@ -41,8 +41,10 @@ function IndexBus() {
 
     if (type === 'shuttle') {
       navigate('/bus');
+      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
     } else {
       navigate(getBusDetail(type).link);
+      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
     }
   };
 
@@ -58,6 +60,7 @@ function IndexBus() {
         setSelectedTab(selectedTab);
       }
       navigate(getBusDetail(type).link);
+      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
     }
   };
 

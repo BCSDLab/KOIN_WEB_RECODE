@@ -20,12 +20,11 @@ import BusPage from 'pages/BusPage';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
-import TimetablePage from 'pages/Timetable/TimetablePage';
+import TimetablePage from 'pages/TimetablePage';
 import CafeteriaPage from 'pages/Cafeteria';
 import MetaHelmet from 'components/common/MetaHelmet';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
 import PrivateRoute from 'components/common/PrivateRoute';
-import ModifyTimetablePage from 'pages/Timetable/ModifyTimetablePage';
 import AddReviewPage from 'pages/StoreReviewPage/AddReviewPage';
 import EditReviewPage from 'pages/StoreReviewPage/EditReviewPage';
 import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/ReviewReporting';
@@ -58,10 +57,8 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<BoardPage />}>
-          <Route path="/" element={<HelmetWrapper title="코인 - 한기대 커뮤니티" element={<IndexPage />} />} />
           <Route path="timetable" element={<HelmetWrapper title="코인 - 시간표" element={<TimetablePage />} />} />
-          <Route path="timetable/modify/regular/:semester" element={<HelmetWrapper title="코인 - 시간표 수정" element={<ModifyTimetablePage />} />} />
-          <Route path="timetable/modify/direct/:semester" element={<HelmetWrapper title="코인 - 시간표 수정" element={<ModifyTimetablePage />} />} />
+          <Route path="/" element={<HelmetWrapper title="코인 - 한기대 커뮤니티" element={<IndexPage />} />} />
           <Route path="/store" element={<HelmetWrapper title="코인 - 상점" element={<StorePage />} />} />
           <Route path="/store/:id" element={<HelmetWrapper title="코인 - 상점 상세" element={<StoreDetailPage />} />} />
           <Route path="/bus" element={<HelmetWrapper title="코인 - 버스" element={<BusPage />} />} />
@@ -85,7 +82,7 @@ function App() {
 
         </Route>
         <Route path="auth" element={<AuthPage />}>
-          <Route path="modifyInfo" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보 변경" element={<ModifyInfoPage />} />} />} />
+          <Route path="modifyInfo" element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보변경" element={<ModifyInfoPage />} />} />} />
         </Route>
       </Routes>
       <Toast />
