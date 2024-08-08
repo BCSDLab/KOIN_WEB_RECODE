@@ -1,17 +1,19 @@
 /* eslint-disable no-param-reassign */
 import { Dining, DiningType } from 'interfaces/Cafeteria';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import DetailModal from 'pages/Cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
+import LoginPromptModal from 'pages/Cafeteria/PCCafeteriaPage/components/LoginPromptModal';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { filterDinings } from 'utils/ts/cafeteria';
 import { ReactComponent as HeartIcon } from 'assets/svg/heart.svg';
 import { ReactComponent as FilledHeartIcon } from 'assets/svg/heart-filled.svg';
-import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useAuthentication } from 'utils/zustand/authentication';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {
@@ -22,6 +24,7 @@ interface PCDiningBlocksProps {
 export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
+  const isAuthenticated = useAuthentication();
   const { currentDate } = useDatePicker();
   const { dinings, likeDining } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
@@ -35,8 +38,20 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
       title: 'menu_image',
       value: `${DINING_TYPE_MAP[dining.type]}_${dining.place}`,
     });
-    setSelectedDining(dining);
-    setIsModalOpenTrue();
+
+    portalManager.open((portalOption: Portal) => (
+      <DetailModal dining={dining} closeModal={portalOption.close} />
+    ));
+  };
+
+  const handleLikeClick = ({ id, is_liked }: Dining) => {
+    if (!isAuthenticated) {
+      portalManager.open((portalOption: Portal) => (
+        <LoginPromptModal closeModal={portalOption.close} />
+      ));
+    } else {
+      likeDining(id, is_liked);
+    }
   };
 
   useEffect(() => {
