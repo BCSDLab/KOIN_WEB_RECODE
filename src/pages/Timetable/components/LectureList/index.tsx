@@ -4,7 +4,7 @@ import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import { useTempLectureAction } from 'utils/zustand/myTempLecture';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/Timetable/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
@@ -32,9 +32,11 @@ function CurrentSemesterLectureList({
   myLectures,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
+  const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation();
   const { data: userInfo } = useUser();
+
   return (
     <LectureTable
       height={612}
@@ -58,11 +60,9 @@ function CurrentSemesterLectureList({
             return true;
           })
       }
-      myLectures={myLectures}
-      onHover={(hoveredLecture) => (
-        hoveredLecture !== null && 'name' in hoveredLecture ? updateTempLecture(hoveredLecture) : updateTempLecture(null)
-      )}
-      onClickRow={
+      selectedLecture={tempLecture ?? undefined}
+      onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
+      onDoubleClickRow={
         (clickedLecture) => {
           const isContainedLecture = myLectures.some(
             (lecture) => lecture.code === clickedLecture.code

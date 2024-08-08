@@ -1,15 +1,16 @@
 import type { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import { FixedSizeList as List } from 'react-window';
+import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { cn } from '@bcsdlab/utils';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
   list: Array<LectureInfo> | Array<TimetableLectureInfo>;
   height: number;
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
-  onHover: ((value: LectureInfo | TimetableLectureInfo | null) => void);
+  selectedLecture: LectureInfo | TimetableLectureInfo | undefined;
   onClickRow: ((value: LectureInfo | TimetableLectureInfo) => void) | undefined;
+  onDoubleClickRow: ((value: LectureInfo | TimetableLectureInfo) => void) | undefined;
 }
 
 const LECTURE_TABLE_HEADER = [
@@ -37,20 +38,13 @@ const useFlexibleWidth = (length: number, initialValue: number[]) => {
 function LectureTable({
   list,
   height,
-  myLectures,
-  onHover,
+  selectedLecture,
   onClickRow,
+  onDoubleClickRow,
 }: LectureTableProps): JSX.Element {
   const { widthInfo } = useFlexibleWidth(9, [65, 173, 45, 65, 65, 45, 45, 45, 65]);
-  const handleHover = (value: LectureInfo | TimetableLectureInfo | null) => {
-    if (onHover !== null) {
-      if (value !== null) {
-        onHover(value);
-      } else {
-        onHover(null);
-      }
-    }
-  };
+  const tempLecture = useTempLecture();
+
   const handleTableRowClick = (
     value: LectureInfo | TimetableLectureInfo,
     e: React.MouseEvent<HTMLButtonElement>,
@@ -58,7 +52,14 @@ function LectureTable({
     if (e.detail === 1 && onClickRow !== undefined) {
       onClickRow(value);
     }
+    if (e.detail === 2 && onDoubleClickRow !== undefined) {
+      onDoubleClickRow(value);
+      if (tempLecture !== null && onClickRow !== undefined) {
+        onClickRow(value);
+      }
+    }
   };
+
   return (
     <div className={styles.table}>
       <div className={styles.table__content} role="table">
@@ -101,8 +102,10 @@ function LectureTable({
               <div
                 className={cn({
                   [styles.table__row]: true,
-                  [styles['table__row--include']]: myLectures.some((item) => item.code === currentItem.code && item.lecture_class === currentItem.lecture_class),
+                  [styles['table__row--even']]: index % 2 === 0,
+                  [styles['table__row--selected']]: selectedLecture === currentItem,
                 })}
+                aria-selected={selectedLecture === currentItem}
                 role="row"
                 key={`${currentItem.code}-${currentItem.lecture_class}`}
                 style={style}
@@ -113,8 +116,6 @@ function LectureTable({
                   aria-label={onClickRow !== undefined ? '시간표에서 미리 보기' : undefined}
                   className={styles['table__row-button']}
                   onClick={(e) => handleTableRowClick(currentItem, e)}
-                  onMouseEnter={() => handleHover(currentItem)}
-                  onMouseLeave={() => handleHover(null)}
                 >
                   {LECTURE_TABLE_HEADER
                     .map((headerItem, headerItemIndex) => (headerItem.key !== null

@@ -25,6 +25,8 @@ import styles from './Timetable.module.scss';
 
 interface TimetableProps {
   lectures: TimetableDayLectureInfo[][];
+  selectedLectureIndex?: number;
+  similarSelectedLecture?: TimetableDayLectureInfo[][];
   firstColumnWidth: number;
   columnWidth: number;
   rowHeight: number;
@@ -39,6 +41,8 @@ interface RemoveLectureProps {
 
 function Timetable({
   lectures,
+  selectedLectureIndex,
+  similarSelectedLecture,
   firstColumnWidth,
   columnWidth,
   rowHeight,
@@ -52,11 +56,6 @@ function Timetable({
   const isEditable = pathname.includes('/timetable/modify');
   const { removeMyLecture } = useTimetableMutation();
   const { myLectures } = useMyLectures();
-  const semester = useSemester();
-  const { data: lectureList } = useLectureList(semester);
-  const newLectureList = lectureList?.filter((lecture) => lecture) ?? [];
-  const lectureByDayList = useTimetableDayList(newLectureList);
-  const tempLecture = useTempLecture();
   const { timeString, setTimeString } = useTimeString();
   const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
     let lectureToRemove: LectureInfo | TimetableLectureInfo | null = null;
@@ -93,38 +92,16 @@ function Timetable({
 
     return timeArray;
   };
-  const scrollRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
     const fixedMaxTime = findMaxTime(lectures);
-    let maxTime = 0;
-    let minimumTime = 999;
-    if (tempLecture) {
-      const classTimeArr = tempLecture.class_time.map((time) => time % 100);
-      maxTime = Math.max(...classTimeArr);
-      minimumTime = Math.min(...classTimeArr);
-    }
-    if (fixedMaxTime > maxTime) {
-      setTimeString(updateTimeString(fixedMaxTime));
-    } else {
+    const maxTime = findMaxTime(similarSelectedLecture);
+    if (fixedMaxTime <= maxTime) {
       setTimeString(updateTimeString(maxTime));
+    } else {
+      setTimeString(updateTimeString(fixedMaxTime));
     }
+  }, [lectures, setTimeString, similarSelectedLecture]);
 
-    if (scrollRef.current) {
-      if (scrollRef.current.scrollTop >= minimumTime * 33.5) {
-        scrollRef.current.scrollTo({
-          top: minimumTime * 33.5,
-          left: 0,
-          behavior: 'smooth',
-        });
-      } else if (scrollRef.current.scrollTop < (maxTime - 19) * 33.5) {
-        scrollRef.current.scrollTo({
-          top: (maxTime - 19) * 33.5,
-          left: 0,
-          behavior: 'smooth',
-        });
-      }
-    }
-  }, [lectures, setTimeString, tempLecture]);
   return (
     <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
       <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight + 5}px` }}>
@@ -148,7 +125,7 @@ function Timetable({
           </div>
         ))}
       </div>
-      <div className={styles.timetable__content} ref={scrollRef} style={forDownload ? undefined : { height: `${20 * rowHeight}px` }}>
+      <div className={styles.timetable__content} style={forDownload ? undefined : { height: `${20 * rowHeight}px` }}>
         <div className={styles['timetable__row-container']} aria-hidden="true">
           {timeString.map((value, index) => (
             <div
@@ -236,75 +213,27 @@ function Timetable({
                 </span>
               </div>
             ))}
+            {similarSelectedLecture?.[index].map(({
+              start,
+              end,
+              index: lectureIndex,
+            }) => (
+              <div
+                className={cn({
+                  [styles.timetable__lecture]: true,
+                  [styles['timetable__lecture--selected']]: true,
+                })}
+                key={lectureIndex}
+                style={{
+                  borderWidth: selectedLectureIndex === lectureIndex ? '2px' : '1px',
+                  top: `${start * rowHeight}px`,
+                  width: isMobile ? undefined : `${columnWidth}px`,
+                  height: `${(end - start + 1) * rowHeight}px`,
+                }}
+              />
+            ))}
           </div>
         ))}
-        <div>
-          {tempLecture && (
-            DAYS_STRING.map((day, index) => (
-              <div
-                key={day}
-                className={cn({
-                  [styles.timetable__col]: true,
-                  [styles['timetable__col--preview']]: true,
-                })}
-              >
-                {lectureByDayList[index].map(({
-                  name,
-                  start,
-                  end,
-                  index: lectureIndex,
-                  lecture_class,
-                  professor,
-                }) => (((tempLecture.name === name
-                  && tempLecture.lecture_class === lecture_class
-                  && tempLecture.professor === professor)
-                && !myLectures.some((lecture) => JSON.stringify(lecture)
-                === JSON.stringify(tempLecture)))
-                && (
-                <div
-                  className={cn({
-                    [styles.timetable__lecture]: true,
-                    [styles['timetable__lecture--selected']]: true,
-                  })}
-                  key={lectureIndex}
-                  style={{
-                    top: `${start * rowHeight + 1}px`,
-                    left: `${firstColumnWidth + index * columnWidth + index + 1}px`,
-                    width: isMobile ? undefined : `${columnWidth}px`,
-                    height: `${(end - start + 1) * rowHeight - 1}px`,
-                    padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
-                    gap: `${rowHeight / 5.5}px`,
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: `${rowHeight / 3 + 1}px`,
-                      fontWeight: '500',
-                      lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
-                    }}
-                  >
-                    {name}
-                  </div>
-                  <span
-                    style={{
-                      fontSize: `${rowHeight / 3 + 1}px`,
-                      fontWeight: '400',
-                      lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
-                    }}
-                  >
-                    {lecture_class}
-                  &nbsp;
-                    {professor}
-                  </span>
-                </div>
-                )
-                ))}
-              </div>
-            ))
-          )}
-        </div>
       </div>
     </div>
   );

@@ -26,6 +26,10 @@
   &__col {
     border-right: #f5f5f5 1px solid;
 
+    &:last-child {
+      border-right: none;
+    }
+
     @include media.media-breakpoint(mobile) {
       width: calc((100% - 52px) / 5);
     }
@@ -40,10 +44,6 @@
       line-height: 25.6px;
       text-align: left;
       letter-spacing: normal;
-    }
-
-    &--preview {
-      border: none;
     }
   }
 
@@ -132,8 +132,8 @@
     }
 
     &--selected {
-      border-top: 2px solid #cacaca;
-      background-color: #eee;
+      border-color: #000;
+      border-style: solid;
 
       @include media.media-breakpoint(mobile) {
         width: calc((100% - 55px) / 5);
