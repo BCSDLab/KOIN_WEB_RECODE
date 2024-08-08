@@ -23,7 +23,7 @@ export interface ListboxProps {
   value: string | null;
   onChange: (event: { target: ListboxRef }) => void;
   logTitle?: string;
-  version?: 'default' | 'new' | 'inModal' | 'addLecture';
+  version?: 'default' | 'new' | 'inModal';
 }
 
 function Listbox({
@@ -74,8 +74,6 @@ function Listbox({
           [styleClasses['select__trigger--selected']]: isOpenedPopup && version === 'new',
           [styleClasses['select__trigger--selected-in-modal']]: version === 'inModal',
           [styleClasses['select__trigger--selected-in-modal--opened']]: isOpenedPopup && version === 'inModal',
-          [styleClasses['select__trigger--selected-add-lecture']]: version === 'addLecture',
-          [styleClasses['select__trigger--selected-add-lecture--opened']]: isOpenedPopup && version === 'addLecture',
         })}
       >
         {value !== null ? list.find((item) => item.value === value)?.label : '학부'}
@@ -88,9 +86,7 @@ function Listbox({
               type="button"
               className={cn({
                 [styleClasses.select__option]: true,
-                [styleClasses['select__option--add-lecture']]: version === 'addLecture',
                 [styleClasses['select__option--selected']]: optionValue.value === value,
-                [styleClasses['select__option--selected-add-lecture']]: optionValue.value === value,
               })}
               key={optionValue.value}
               role="option"

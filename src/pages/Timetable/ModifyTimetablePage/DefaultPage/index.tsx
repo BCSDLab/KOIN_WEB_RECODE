@@ -13,7 +13,6 @@ import { useSemester } from 'utils/zustand/semester';
 import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/Timetable/components/LectureList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
-import CustomLecture from 'pages/Timetable/components/CustomLecture';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage() {
@@ -80,8 +79,7 @@ export default function DefaultPage() {
             {isRegularCourseSelected ? (
               <LectureList />
             ) : (
-              <CustomLecture />
-              // <div>직접 추가 UI</div>
+              <div>직접 추가 UI</div>
             )}
           </div>
           <div className={styles.page__timetable}>
