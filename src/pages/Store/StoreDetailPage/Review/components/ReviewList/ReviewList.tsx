@@ -34,7 +34,7 @@ export default function ReviewList() {
     data, hasNextPage, fetchNextPage,
   } = useGetReview(Number(param.id), currentSortType);
   const reviews = data.pages.flatMap((page) => page.reviews);
-  const { myReview } = useGetMyReview(param.id!, currentSortType);
+  const { data: myReview } = useGetMyReview(param.id!, currentSortType);
   const [isCheckboxClicked, setIsCheckboxClicked] = useState<boolean>(false);
   const selectorRef = useRef<HTMLDivElement>(null);
   const [openDropdown, setOpenDropdowm] = useState(false);
@@ -144,17 +144,18 @@ export default function ReviewList() {
             <input
               type="checkbox"
               id="myReview"
+              checked={isCheckboxClicked}
               onChange={() => {
-                if (checkUser()) return;
-                setIsCheckboxClicked((prev) => !prev);
+                if (checkUser()) setIsCheckboxClicked(false);
+                else setIsCheckboxClicked((prev) => !prev);
               }}
             />
             내가 리뷰 작성한 리뷰
           </label>
         </div>
       )}
-      {isCheckboxClicked && (
-        myReview.length > 0 ? (myReview.map((mine) => (
+      {isCheckboxClicked && myReview && (
+        myReview.reviews.length > 0 ? (myReview.reviews.map((mine) => (
           <ReviewCard
             review_id={mine.review_id}
             rating={mine.rating}
