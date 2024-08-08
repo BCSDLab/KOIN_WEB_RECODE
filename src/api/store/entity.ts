@@ -187,3 +187,12 @@ export interface MyReviewResponse {
   count: number;
   reviews: Review[];
 }
+
+export interface ReviewReportRequest {
+  reports: Array<{
+    title: string;
+    content: string;
+  }>;
+}
+
+export interface ReviewReportResponse extends APIResponse { }

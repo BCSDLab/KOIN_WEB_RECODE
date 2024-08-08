@@ -9,6 +9,8 @@ import {
   AllStoreEventResponse,
   StoreEventListResponse,
   ReviewListResponse,
+  ReviewReportResponse,
+  ReviewReportRequest,
   StoreSorterType,
   StoreFilterType,
   MyReviewResponse,
@@ -134,5 +136,25 @@ export class GetMyReviews<R extends MyReviewResponse> implements APIRequest<R> {
 
   constructor(shopId: string, sorter: string, public authorization: string) {
     this.path = `shops/${shopId}/reviews/me?sorter=${sorter}`;
+  }
+}
+
+export class ReviewReport<R extends ReviewReportResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/shops/:shopId/reviews/:reviewId/reports';
+
+  response!: R;
+
+  data: ReviewReportRequest;
+
+  constructor(
+    shop_id: number,
+    review_id: number,
+    data: ReviewReportRequest,
+    public authorization?: string,
+  ) {
+    this.path = `/shops/${shop_id}/reviews/${review_id}/reports`;
+    this.data = data;
   }
 }
