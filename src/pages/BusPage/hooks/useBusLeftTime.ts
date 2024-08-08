@@ -4,7 +4,7 @@ import { BUS_TYPES } from 'static/bus';
 
 const BUS_KEY = 'bus_info';
 
-interface Props {
+interface BusLeftTimeProps {
   departList: string[];
   arrivalList: string[];
 }
@@ -20,7 +20,7 @@ const emptyRouteData = {
   },
 } as const;
 
-const useBusLeftTIme = ({ departList, arrivalList }: Props) => {
+const useBusLeftTime = ({ departList, arrivalList }: BusLeftTimeProps) => {
   const results = useQueries({
     // 이부분에서 suspense: true를 했던 이유를 모르겠습니다. v5의 경우 suspense에서 keepPreviousData를 사용할 수 없다고 합니다.
     queries: BUS_TYPES.map(({ key: type }, idx) => ({
@@ -40,4 +40,4 @@ const useBusLeftTIme = ({ departList, arrivalList }: Props) => {
   };
 };
 
-export default useBusLeftTIme;
+export default useBusLeftTime;

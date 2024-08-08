@@ -46,7 +46,6 @@
 
   &__card {
     width: 272px;
-    height: 202px;
 
     @include media.media-breakpoint(mobile) {
       display: inline-block;
@@ -70,6 +69,8 @@
     color: white;
     font-size: 14px;
     font-weight: bold;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
 
     &--shuttle {
       background-color: rgb(247 148 30);
@@ -103,21 +104,24 @@
   }
 
   &__body {
-    height: 162px;
+    height: auto;
     border: 1px solid;
     border-color: rgb(228 228 228);
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 15px;
+    border-radius: 0 0 8px 8px;
+    padding-bottom: 16px;
 
     @include media.media-breakpoint(mobile) {
-      height: 106px;
+      gap: 10px;
     }
   }
 
   &__remain-time {
-    margin-top: 41px;
     font-weight: bold;
+    margin-top: 15px;
 
     @include media.media-breakpoint(mobile) {
       margin-top: 27px;
@@ -125,13 +129,11 @@
   }
 
   &__detail {
-    margin-top: 5px;
     font-size: 12px;
     height: 12px;
   }
 
   &__directions {
-    margin-top: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -157,5 +159,21 @@
       height: 16px;
       width: 16px;
     }
+  }
+
+  &__redirect {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #727272;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background-color: #f5f5f5;
+    width: 80%;
+    height: 36px;
+    cursor: pointer;
   }
 }

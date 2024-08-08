@@ -1,0 +1,50 @@
+.image {
+  position: relative;
+  width: 252px;
+  height: 157.5px;
+  border-radius: 8px;
+  background-color: transparent;
+
+  &--no-image {
+    cursor: default;
+  }
+
+  & img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  & svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &--sold-out {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 157.5px;
+    border-radius: 8px;
+    background-color: rgba(0 0 0 / 50%);
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    color: white;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19.09px;
+
+    & svg {
+      width: 42px;
+      height: 42px;
+    }
+  }
+}

@@ -1,6 +1,4 @@
-@use "utils/scss/media.scss" as media;
-
-.meal-select {
+.type-select {
   display: flex;
   justify-content: space-around;
   margin: 0;
@@ -26,7 +24,7 @@
   }
 }
 
-.table {
+.blocks {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -47,5 +45,21 @@
     font-size: 13px;
     font-weight: 500;
     line-height: 15.51px;
+  }
+}
+
+.cafeteria-info {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  z-index: 20;
+  transform: translateX(100%);
+  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+
+  &--open {
+    transform: translateX(0);
   }
 }

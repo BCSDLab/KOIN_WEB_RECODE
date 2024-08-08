@@ -8,7 +8,7 @@ import {
   DAYS_STRING,
   TIME_STRING,
 } from 'static/timetable';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
