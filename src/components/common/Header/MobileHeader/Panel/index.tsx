@@ -27,6 +27,9 @@ export default function Panel({ openModal }: PanelProps) {
   const logShortcut = (title: string) => {
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: '주변상점' });
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger_timetable', value: '햄버거 시간표' });
+    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_bus', value: '버스' });
+    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_dining', value: '식단' });
+    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_notice', value: '공지사항' });
   };
 
   const handleMyInfoClick = () => {

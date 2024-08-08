@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useSemesterAction } from 'utils/zustand/semester';
-import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
+import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
@@ -16,9 +16,9 @@ function CurrentSemesterTimetable(): JSX.Element {
   return myLectureDayValue ? (
     <Timetable
       lectures={myLectureDayValue}
-      columnWidth={44}
-      firstColumnWidth={29}
-      rowHeight={17.3}
+      columnWidth={40}
+      firstColumnWidth={42}
+      rowHeight={16}
       totalHeight={369}
     />
   ) : (
