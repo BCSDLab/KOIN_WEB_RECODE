@@ -33,13 +33,6 @@ function SemesterListbox() {
     setCurrentSemester(target?.value);
   };
   const semesterOptionList = useSemesterOptionList();
-  const recentSemester = semesterOptionList[0].value;
-  React.useEffect(() => {
-    updateSemester(currentSemester);
-  // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const onClickOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
@@ -54,7 +47,7 @@ function SemesterListbox() {
     logTitle: '',
     version: 'default',
   };
-  const [selectedSemester, setSelectedSemester] = React.useState('');
+  const [selectedSemester, setSelectedSemester] = React.useState('20242');
   const [
     isAddSemesterModalOpen, openAddSemesterModal, closeAddSemesterModal,
   ] = useBooleanState(false);
@@ -76,8 +69,8 @@ function SemesterListbox() {
   const handleDeleteSemester = () => {
     deleteTimetableFrame();
     if (selectedSemester === currentSemester) {
-      setCurrentSemester(recentSemester);
-      updateSemester(recentSemester);
+      setCurrentSemester(semesterOptionList[0].value);
+      updateSemester(semesterOptionList[0].value);
     }
     closeDeleteSemesterModal();
   };

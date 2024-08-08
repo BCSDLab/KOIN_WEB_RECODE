@@ -18,7 +18,7 @@ export default function TimetableList() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const semester = useSemester();
   const token = useTokenState();
-  const { data: timetableFrameList } = useTimetableFrameList(token);
+  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
   const [currentFrameIndex, setCurrentFrameIndex] = React.useState(

@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
 import { Link } from 'react-router-dom';
@@ -31,10 +31,14 @@ export default function IndexTimeTable() {
   const semesterOptionList = useSemesterOptionList();
   const logger = useLogger();
 
+  const [initialized, setInitialized] = React.useState(false);
+
   useEffect(() => {
-    updateSemester(semesterOptionList[0]?.value);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!initialized && semesterOptionList.length > 0) {
+      updateSemester(semesterOptionList[0].value);
+      setInitialized(true);
+    }
+  }, [initialized, semesterOptionList, updateSemester]);
 
   return (
     <div className={styles.template}>
