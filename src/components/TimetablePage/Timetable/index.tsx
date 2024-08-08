@@ -6,6 +6,7 @@ import { LectureInfo, TimetableDayLectureInfo, TimetableLectureInfo } from 'inte
 import {
   BACKGROUND_COLOR,
   DAYS_STRING,
+  TIME_STRING,
 } from 'static/timetable';
 import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -48,7 +49,7 @@ function Timetable({
   const isEditable = pathname.includes('/timetable/modify');
   const { removeMyLecture } = useTimetableMutation();
   const { myLectures } = useMyLectures();
-  const [timeString, setTimeString] = React.useState(['9', '10', '11', '12', '13', '14', '15', '16', '17', '18'].flatMap((time) => [time, '']));
+
   const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
     let lectureToRemove: LectureInfo | TimetableLectureInfo | null = null;
     myLectures.forEach((lecture) => {
@@ -62,37 +63,6 @@ function Timetable({
       ));
     }
   };
-  const findMaxTime = (myTimetableLectures: TimetableDayLectureInfo[][] | undefined) => {
-    let maxTime = 19;
-    if (myTimetableLectures !== undefined) {
-      const flatedMyLectures = myTimetableLectures.flat();
-      flatedMyLectures.forEach((lecture) => {
-        if (lecture.end > maxTime) {
-          maxTime = lecture.end;
-        }
-      });
-    }
-    return maxTime;
-  };
-  const updateTimeString = (maxTime: number) => {
-    const startHour = 9;
-    const timeArray = [];
-    const realMaxTime = 9 + maxTime / 2;
-    for (let hour = startHour; hour <= realMaxTime; hour += 1) {
-      timeArray.push(hour.toString(), '');
-    }
-
-    return timeArray;
-  };
-  React.useEffect(() => {
-    const fixedMaxTime = findMaxTime(lectures);
-    const maxTime = findMaxTime(similarSelectedLecture);
-    if (fixedMaxTime <= maxTime) {
-      setTimeString(updateTimeString(maxTime));
-    } else {
-      setTimeString(updateTimeString(fixedMaxTime));
-    }
-  }, [lectures, similarSelectedLecture]);
 
   return (
     <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
@@ -117,9 +87,9 @@ function Timetable({
           </div>
         ))}
       </div>
-      <div className={styles.timetable__content} style={{ height: `${20 * rowHeight}px` }}>
+      <div className={styles.timetable__content}>
         <div className={styles['timetable__row-container']} aria-hidden="true">
-          {timeString.map((value, index) => (
+          {TIME_STRING.map((value, index) => (
             <div
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
@@ -134,10 +104,10 @@ function Timetable({
             [styles.timetable__col]: true,
             [styles['timetable__col--time']]: true,
           })}
-          style={{ width: `${firstColumnWidth}px`, fontSize: `${rowHeight / 2}px`, height: `${timeString.length * rowHeight}px` }}
+          style={{ width: `${firstColumnWidth}px`, fontSize: `${rowHeight / 2}px` }}
           aria-hidden="true"
         >
-          {timeString.map((value, index) => (
+          {TIME_STRING.map((value, index) => (
             <div
               style={{ height: `${rowHeight}px` }}
               // index값이 변경되지 않음
@@ -152,7 +122,7 @@ function Timetable({
         {DAYS_STRING.map((day, index) => (
           <div
             className={styles.timetable__col}
-            style={{ width: isMobile ? undefined : `${columnWidth}px`, height: `${timeString.length * rowHeight}px` }}
+            style={{ width: isMobile ? undefined : `${columnWidth}px` }}
             key={day}
           >
             {lectures[index].map(({
