@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import { BrowserRouter } from 'react-router-dom';
-
 import PortalProvider from 'components/common/Modal/PortalProvider';
 import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -27,13 +26,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <RecoilRoot>
-      <PortalProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <PortalProvider>
           <QueryClientProvider client={queryClient}>
             <App />
           </QueryClientProvider>
-        </BrowserRouter>
-      </PortalProvider>
+        </PortalProvider>
+      </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>,
 );

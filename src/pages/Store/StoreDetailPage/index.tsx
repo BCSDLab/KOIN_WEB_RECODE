@@ -6,17 +6,22 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import showToast from 'utils/ts/showToast';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
 import Copy from 'assets/png/copy.png';
+import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
+import { ReactComponent as Phone } from 'assets/svg/Review/phone.svg';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
+import ReviewPage from './Review';
+import { useGetReview } from './hooks/useGetReview';
 
 function StoreDetailPage() {
   const params = useParams();
@@ -28,6 +33,8 @@ function StoreDetailPage() {
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
   const logger = useLogger();
+  const { data } = useGetReview(Number(params.id), 'LATEST');
+  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
   const onClickCallNumber = () => {
     logger.click({
       title: 'store_detail_call_number',
@@ -39,6 +46,7 @@ function StoreDetailPage() {
       value: storeDetail!.name,
     });
   };
+
   const onClickImage = (img: string[], index: number) => {
     logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name });
     portalManager.open((portalOption: Portal) => (
@@ -53,12 +61,28 @@ function StoreDetailPage() {
   };
   const copyAccount = async (account: string) => {
     await navigator.clipboard.writeText(account);
+    showToast('info', '계좌번호가 복사되었습니다.');
   };
 
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
   useScorllLogging('shop_detailView', storeDetail);
+
+  React.useEffect(() => {
+    setButtonContent((
+      <a
+        role="button"
+        aria-label="상점 전화하기"
+        href={`tel:${storeDetail?.phone}`}
+        onClick={onClickCallNumber}
+      >
+        <Phone />
+      </a>
+    ));
+
+    return () => setButtonContent(null);
+  });
 
   return (
     <div className={styles.template}>
@@ -144,18 +168,6 @@ function StoreDetailPage() {
                 </span>
               </div>
               <div className={styles['button-wrapper']}>
-                <a
-                  className={cn({
-                    [styles['button-wrapper__button']]: true,
-                    [styles['button-wrapper__button--call']]: true,
-                  })}
-                  role="button"
-                  aria-label="상점 전화하기"
-                  href={`tel:${storeDetail?.phone}`}
-                  onClick={onClickCallNumber}
-                >
-                  전화하기
-                </a>
                 <button
                   className={cn({
                     [styles['button-wrapper__button']]: true,
@@ -165,7 +177,7 @@ function StoreDetailPage() {
                   type="button"
                   onClick={() => {
                     onClickList();
-                    navigate(-1);
+                    navigate('/store');
                   }}
                 >
                   상점목록
@@ -227,15 +239,27 @@ function StoreDetailPage() {
           >
             이벤트/공지
           </button>
+          <button
+            className={cn({
+              [styles.tap__type]: true,
+              [styles['tap__type--active']]: tapType === '리뷰',
+            })}
+            type="button"
+            onClick={() => {
+              onClickEventList();
+              setTapType('리뷰');
+            }}
+          >
+            리뷰
+            {' '}
+            {`(${data.pages[0].total_count})`}
+          </button>
         </div>
-        {tapType === '메뉴' ? (
-          storeMenuCategories && storeMenuCategories.length > 0 && (
-            <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
-          )
-        )
-          : (
-            <EventTable />
-          )}
+        {tapType === '메뉴' && storeMenuCategories && storeMenuCategories.length > 0 && (
+          <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
+        )}
+        {tapType === '이벤트/공지' && <EventTable />}
+        {tapType === '리뷰' && <ReviewPage id={params.id!} />}
       </div>
     </div>
   );

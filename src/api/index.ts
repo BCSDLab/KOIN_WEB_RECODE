@@ -7,3 +7,4 @@ export * as notice from './notice';
 export * as room from './room';
 export * as cafeteria from './cafeteria';
 export * as coopshop from './coopshop';
+export * as review from './review';

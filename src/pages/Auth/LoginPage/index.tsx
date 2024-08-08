@@ -39,6 +39,7 @@ const useLogin = (state: IsAutoLogin) => {
       if (state.isAutoLoginFlag) {
         setRefreshToken(data.refresh_token);
       }
+
       setCookie('AUTH_TOKEN_KEY', data.token);
       setToken(data.token);
       redirectAfterLogin();

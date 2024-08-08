@@ -14,6 +14,8 @@ interface Open {
   | 'SUNDAY';
 }
 
+export type StoreSorterType = 'NONE' | 'COUNT' | 'RATING' | '';
+export type StoreFilterType = 'OPEN' | 'DELIVERY' | '';
 export interface StoreDetailResponse extends APIResponse {
   address: string;
   delivery: boolean;
@@ -84,9 +86,29 @@ export type StoreList = {
   is_open: boolean;
 };
 
+export type StoreListV2 = {
+  id: number;
+  name: string;
+  phone: string;
+  delivery: boolean;
+  pay_card: boolean;
+  pay_bank: boolean;
+  open: Open[];
+  category_ids: number[];
+  is_event: boolean;
+  is_open: boolean;
+  average_rate: number;
+  review_count: number;
+};
+
 export interface StoreListResponse extends APIResponse {
   count: number;
   shops: StoreList[];
+}
+
+export interface StoreListV2Response extends APIResponse {
+  count: number;
+  shops: StoreListV2[];
 }
 
 export interface StoreCategoriesResponse extends APIResponse {
@@ -126,3 +148,51 @@ export interface AllStoreEventResponse extends APIResponse {
 export interface StoreEventListResponse extends APIResponse {
   events: StoreEvent[];
 }
+
+export interface ReviewListResponse extends APIResponse {
+  total_count: number,
+  current_count: number,
+  total_page: number,
+  current_page: number,
+  statistics: {
+    average_rating: number,
+    ratings: {
+      1: number,
+      2: number,
+      3: number,
+      4: number,
+      5: number
+    }
+  },
+  reviews: Review[]
+}
+
+export interface Review {
+  review_id: number,
+  rating: number,
+  nick_name: string,
+  content: string,
+  image_urls: [
+    string,
+  ],
+  menu_names: [
+    string,
+  ],
+  is_mine: boolean,
+  is_modified: boolean,
+  created_at: string
+}
+
+export interface MyReviewResponse {
+  count: number;
+  reviews: Review[];
+}
+
+export interface ReviewReportRequest {
+  reports: Array<{
+    title: string;
+    content: string;
+  }>;
+}
+
+export interface ReviewReportResponse extends APIResponse { }
