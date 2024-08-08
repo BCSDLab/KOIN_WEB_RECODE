@@ -84,7 +84,10 @@ export default function ReviewCard({
         ))}
       </div>
       <div className={styles['menu-card']}>
-        {menu_names.map((menu) => <div className={styles['menu-card__menu']} key={menu}>{menu}</div>)}
+        {
+        // eslint-disable-next-line
+        menu_names.map((menu, idx) => <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>{menu}</div>) // 수정, 삭제하지 않음
+        }
       </div>
     </div>
   );
