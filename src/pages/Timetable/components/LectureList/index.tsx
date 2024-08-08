@@ -3,15 +3,15 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
+import showToast from 'utils/ts/showToast';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/Timetable/hooks/useSelect';
-import showToast from 'utils/ts/showToast';
-import useLectureList from 'pages/Timetable/hooks/useLectureList';
+import useLectureList from '../../hooks/useLectureList';
 import DeptListbox from './DeptListbox ';
 import LastUpdatedDate from './LastUpdatedDate';
-import styles from './LectureList.module.scss';
+import styles from '../../DefaultPage/DefaultPage.module.scss';
 import useSearch from '../../hooks/useSearch';
 import LectureTable from '../../../../components/TimetablePage/LectureTable';
 import useMyLectures from '../../hooks/useMyLectures';
@@ -37,54 +37,52 @@ function CurrentSemesterLectureList({
 
   return (
     <LectureTable
-      height={612}
+      height={459}
       list={
-        (lectureList ?? [])
-          .filter((lecture) => {
-            const searchFilter = filter.search.toUpperCase();
-            const departmentFilter = filter.department;
+          (lectureList ?? [])
+            .filter((lecture) => {
+              const searchFilter = filter.search.toUpperCase();
+              const departmentFilter = filter.department;
 
-            if (searchFilter !== '' && departmentFilter !== '전체') {
-              return lecture.name.toUpperCase().includes(searchFilter)
-                && lecture.department === departmentFilter;
-            }
-            if (searchFilter !== '') {
-              return lecture.name.toUpperCase().includes(searchFilter);
-            }
-            if (departmentFilter !== '전체') {
-              return lecture.department === departmentFilter;
-            }
+              if (searchFilter !== '' && departmentFilter !== '전체') {
+                return lecture.name.toUpperCase().includes(searchFilter)
+                  && lecture.department === departmentFilter;
+              }
+              if (searchFilter !== '') {
+                return lecture.name.toUpperCase().includes(searchFilter);
+              }
+              if (departmentFilter !== '전체') {
+                return lecture.department === departmentFilter;
+              }
 
-            return true;
-          })
-      }
+              return true;
+            })
+        }
       selectedLecture={tempLecture ?? undefined}
       onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
-      onDoubleClickRow={
-        (clickedLecture) => {
-          const isContainedLecture = myLectures.some(
-            (lecture) => lecture.code === clickedLecture.code
-            && lecture.lecture_class === clickedLecture.lecture_class,
-          );
-          if ('class_title' in clickedLecture) {
-            return;
-          }
-          if (isContainedLecture) {
-            showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
-            return;
-          }
-          const myLectureTimeValue = (
-            myLectures as Array<LectureInfo | TimetableLectureInfo>)
-            .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
+      onClickLastColumn={
+          (clickedLecture) => {
+            if ('class_title' in clickedLecture) {
+              return;
+            }
+            const myLectureTimeValue = (
+              myLectures as Array<LectureInfo | TimetableLectureInfo>)
+              .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
 
-          if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
-            showToast('error', '시간이 중복되어 추가할 수 없습니다.');
-          } else {
-            addMyLecture(clickedLecture);
+            if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
+              showToast('error', '시간이 중복되어 추가할 수 없습니다.');
+            } else {
+              addMyLecture(clickedLecture);
+            }
           }
         }
-      }
-    />
+    >
+      {(props: { onClick: () => void }) => (
+        <button type="button" className={styles.list__button} onClick={props.onClick}>
+          <img src="https://static.koreatech.in/assets/img/ic-add.png" alt="추가" />
+        </button>
+      )}
+    </LectureTable>
   );
 }
 
@@ -100,13 +98,13 @@ function LectureList() {
   const { myLectures } = useMyLectures();
 
   return (
-    <div className={styles.page}>
+    <div>
       <div className={styles.page__filter}>
         <div className={styles['search-input']}>
           <input
             ref={searchInputRef}
             className={styles['search-input__input']}
-            placeholder="검색어를 입력해주세요."
+            placeholder="교과명을 입력하세요."
             onKeyDown={onKeyDownSearchInput}
           />
           <button
@@ -126,12 +124,13 @@ function LectureList() {
           </React.Suspense>
         </div>
       </div>
+
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner size="50" />}>
           <CurrentSemesterLectureList
             semesterKey={semester}
             filter={{
-              // 백엔드 수정하면 제거
+            // 백엔드 수정하면 제거
               department: departmentFilterValue ?? '전체',
               search: searchValue ?? '',
             }}
