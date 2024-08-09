@@ -1,40 +1,7 @@
-.photo {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 0 24px;
-  box-sizing: border-box;
-  background-color: rgb(0 0 0 / 40%);
-  z-index: 999;
-
-  &__close {
-    width: 100%;
-    height: auto;
-    border: none;
-    background-color: transparent;
-
-    svg {
-      float: right;
-    }
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-  }
-}
-
 .category {
   display: block;
   margin: 0;
-  background: #fff;
+  background-color: #fff;
 
   &__menu-list-row {
     display: flex;
