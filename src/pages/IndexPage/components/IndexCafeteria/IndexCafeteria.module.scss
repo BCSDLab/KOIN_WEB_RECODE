@@ -16,9 +16,9 @@
 
   &__title {
     color: #175c8e;
-    font-family: Pretendard, sans-serif;
-    font-size: 20px;
-    font-weight: 500;
+    font-family: NanumSquare, serif;
+    font-size: 17px;
+    font-weight: bold;
 
     @include media.media-breakpoint(mobile) {
       font-size: 15px;
