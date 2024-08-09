@@ -9,6 +9,7 @@ import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { StoreDetailResponse } from 'api/store/entity';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { ReviewRequest } from 'api/review/entity';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import styles from './ReviewForm.module.scss';
 
 interface Props {
@@ -20,6 +21,8 @@ interface Props {
 function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
+
+  useScrollToTop();
 
   const [rate, setRate] = useState(initialData?.rating ?? 0);
   const [reviewText, setReviewText] = useState(initialData?.content ?? '');
@@ -62,11 +65,12 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
       rating: rate,
       content: reviewText,
       image_urls: imageFile,
-      menu_names: menuList.map((menu) => menu.name),
+      menu_names: menuList.map((menu) => menu.name).filter((name) => name !== ''),
     };
+
     if (rate) {
       mutate(reviewData);
-      navigate(`/store/${storeDetail.id!}`);
+      navigate(`/store/${storeDetail.id!}`, { replace: true });
     }
   };
 
