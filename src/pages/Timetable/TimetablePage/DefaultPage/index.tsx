@@ -17,7 +17,6 @@ export default function DefaultPage() {
       >
         <div className={styles.page__content}>
           <TimetableList />
-          {/* <MainTimetable /> */}
         </div>
       </Suspense>
     </div>

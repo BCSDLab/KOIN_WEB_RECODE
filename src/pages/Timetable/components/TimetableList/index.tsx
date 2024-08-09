@@ -22,11 +22,7 @@ export default function TimetableList() {
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
-  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(
-    timetableFrameList
-      ? timetableFrameList.findIndex((frame) => frame.is_main === true)
-      : 0,
-  );
+  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(0);
   const selectFrame = (index: number) => {
     setCurrentFrameIndex(index);
   };
@@ -34,13 +30,13 @@ export default function TimetableList() {
     setFocusFrame(frame);
     openModal();
   };
-  // 초기값을 어떤식으로 받아와야할까?
-  console.log('timetableFrameList', timetableFrameList);
-  console.log('index', currentFrameIndex);
 
   React.useEffect(() => {
     if (timetableFrameList) {
-      setCurrentFrameIndex((timetableFrameList.findIndex((frame) => frame.is_main === true)));
+      const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
+      if (mainFrame) {
+        setCurrentFrameIndex(mainFrame.id);
+      }
     }
   }, [timetableFrameList]);
 

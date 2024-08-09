@@ -1,17 +1,9 @@
-import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import styles from './TotalGrades.module.scss';
 
-interface TotalGradesProps {
-  myLectureList: TimetableLectureInfo[] | LectureInfo[];
-}
-
-function TotalGrades({ myLectureList }: TotalGradesProps) {
-  const lectureList = myLectureList as (TimetableLectureInfo | LectureInfo)[];
-  const total = lectureList.reduce((acc, lecture) => acc + Number(lecture.grades), 0);
-
+function TotalGrades({ grades }: { grades: number | undefined }) {
   return (
     <div className={styles.grades}>
-      <div className={styles.grades__number}>{total}</div>
+      <div className={styles.grades__number}>{grades}</div>
       학점
     </div>
   );

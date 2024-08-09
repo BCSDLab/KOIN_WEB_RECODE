@@ -1,41 +1,44 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import CurriculumListBox from 'pages/Timetable/components/Curriculum';
 import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
 import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
 import Timetable from 'components/TimetablePage/Timetable';
-import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
-import TotalGrades from 'pages/Timetable/components/TotalGrades';
-import { useSemester } from 'utils/zustand/semester';
 import useBooleanState from 'utils/hooks/useBooleanState';
+import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
+import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
 export default function MainTimetable({ frameId }: { frameId: number }) {
-  const { myLectures } = useMyLectures();
+  const { data: myLectureList } = useTimetableV2InfoList(frameId);
+  const [myLectureListDetail, setMyLectureListDetail] = React.useState<any>();
   const navigate = useNavigate();
-  const myLectureDayValue = useTimetableDayList(myLectures);
+  const myLectureDayValue = useTimetableDayListV2(myLectureListDetail);
   const { data: deptList } = useDeptList();
-  const semester = useSemester();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     openModal();
   };
-  console.log(frameId);
+
+  React.useEffect(() => {
+    if (myLectureList && myLectureList.timetable) {
+      setMyLectureListDetail(myLectureList.timetable);
+    }
+  }, [myLectureList]);
+
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
         <div className={styles['page__total-grades']}>
-          <TotalGrades myLectureList={myLectures} />
+          <TotalGrades grades={myLectureList?.grades} />
         </div>
-        <CurriculumListBox
-          list={deptList}
-        />
+        <CurriculumListBox list={deptList} />
         <button
           type="button"
           className={styles.page__button}
@@ -47,7 +50,7 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
         <button
           type="button"
           className={styles.page__button}
-          onClick={() => navigate(`/timetable/modify/regular/${semester}`)}
+          onClick={() => navigate(`/timetable/modify/regular/${frameId}`)}
         >
           <EditIcon />
           시간표 수정
@@ -67,9 +70,7 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
         </ErrorBoundary>
       </div>
       <div>
-        {isModalOpen && (
-          <DownloadTimetableModal onClose={closeModal} />
-        )}
+        {isModalOpen && <DownloadTimetableModal onClose={closeModal} />}
       </div>
     </div>
   );

@@ -73,26 +73,26 @@ export interface UpdateTimetableFrameRequest {
 export interface DeleteTimetableFrameResponse extends APIResponse { }
 
 export interface TimetableLectureInfoV2Response extends APIResponse {
-  '시간표프레임 id': number;
-  '시간표 상세정보': TimetableDetailInfo[];
-  '해당 학기 학점': number;
-  '전체 학기 학점': number;
+  timetable_frame_id: number;
+  timetable: TimetableDetailInfo[];
+  grades: number;
+  total_grades: number;
 }
 
 export interface TimetableDetailInfo {
-  '시간표 id': number;
-  '수강 정원': string;
-  '과목 코드': string;
+  id: number;
+  regular_number: string;
+  code: string;
   design_score: string;
   class_time: number[];
   class_place: string;
   memo: string;
-  '학점': string;
-  '강의(커스텀) 이름': string;
-  '분반': string;
-  '대상': string;
-  '강의 교수': string;
-  '학부': string;
+  grades: string;
+  class_title: string;
+  lecture_class: string;
+  target: string;
+  professor: string;
+  department: string;
 }
 
 export interface AddTimetableLectureV2Request {
