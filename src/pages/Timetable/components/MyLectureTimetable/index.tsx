@@ -15,7 +15,7 @@ import useBooleanState from 'utils/hooks/useBooleanState';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
-export default function MainTimetable() {
+export default function MainTimetable({ frameId }: { frameId: number }) {
   const { myLectures } = useMyLectures();
   const navigate = useNavigate();
   const myLectureDayValue = useTimetableDayList(myLectures);
@@ -26,6 +26,7 @@ export default function MainTimetable() {
     e.stopPropagation();
     openModal();
   };
+  console.log(frameId);
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>

@@ -13,6 +13,7 @@ import { TimetableFrameInfo } from 'api/timetable/entity';
 import useAddTimetableFrame from 'pages/Timetable/hooks/useAddTimetableFrame';
 import { cn } from '@bcsdlab/utils';
 import styles from './TimetableList.module.scss';
+import MainTimetable from '../MyLectureTimetable';
 
 export default function TimetableList() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -33,6 +34,9 @@ export default function TimetableList() {
     setFocusFrame(frame);
     openModal();
   };
+  // 초기값을 어떤식으로 받아와야할까?
+  console.log('timetableFrameList', timetableFrameList);
+  console.log('index', currentFrameIndex);
 
   React.useEffect(() => {
     if (timetableFrameList) {
@@ -41,53 +45,56 @@ export default function TimetableList() {
   }, [timetableFrameList]);
 
   return (
-    <div className={styles['timetable-list']}>
-      <SemesterListbox />
-      <ul className={styles['timetable-list__list']} role="listbox">
-        <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
-          {timetableFrameList?.map((frame, index) => (
-            <button
-              type="button"
-              className={cn({
-                [styles['timetable-list__item']]: true,
-                [styles['timetable-list__item--selected']]: currentFrameIndex === index,
-              })}
-              key={frame.id}
-              onClick={() => selectFrame(index)}
-            >
-              <li>
-                {frame.timetable_name}
-              </li>
+    <div className={styles['timetable-cover']}>
+      <div className={styles['timetable-list']}>
+        <SemesterListbox />
+        <ul className={styles['timetable-list__list']} role="listbox">
+          <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
+            {timetableFrameList?.map((frame) => (
               <button
                 type="button"
-                className={styles['timetable-list__item--setting']}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleOpenModal(frame);
-                }}
+                className={cn({
+                  [styles['timetable-list__item']]: true,
+                  [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id,
+                })}
+                key={frame.id}
+                onClick={() => selectFrame(frame.id)}
               >
-                {currentFrameIndex === index ? <BlueSettingIcon /> : <SettingIcon />}
-                설정
+                <li>
+                  {frame.timetable_name}
+                </li>
+                <button
+                  type="button"
+                  className={styles['timetable-list__item--setting']}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenModal(frame);
+                  }}
+                >
+                  {currentFrameIndex === frame.id ? <BlueSettingIcon /> : <SettingIcon />}
+                  설정
+                </button>
               </button>
-            </button>
-          ))}
-        </div>
-        <button
-          type="button"
-          className={styles['timetable-list__list--add']}
-          onClick={() => addTimetableFrame({ semester: String(semester) })}
-        >
-          시간표 추가하기
-          <AddIcon />
-        </button>
-      </ul>
-      {isModalOpen && (
+            ))}
+          </div>
+          <button
+            type="button"
+            className={styles['timetable-list__list--add']}
+            onClick={() => addTimetableFrame({ semester: String(semester) })}
+          >
+            시간표 추가하기
+            <AddIcon />
+          </button>
+        </ul>
+        {isModalOpen && (
         <TimetableSettingModal
           focusFrame={focusFrame!}
           setFocusFrame={setFocusFrame}
           onClose={closeModal}
         />
-      )}
+        )}
+      </div>
+      <MainTimetable frameId={currentFrameIndex} />
     </div>
   );
 }

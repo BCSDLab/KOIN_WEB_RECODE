@@ -1,3 +1,9 @@
+.timetable-cover {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+}
+
 .timetable-list {
   display: flex;
   flex-direction: column;
