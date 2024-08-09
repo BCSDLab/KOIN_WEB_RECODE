@@ -1,7 +1,6 @@
 import React from 'react';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-// import { MobilePage } from 'pages/Timetable/TimetablePage/MobilePage';
-// import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import { MobilePage } from 'pages/Timetable/TimetablePage/MobilePage';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import styles from './TimetablePage.module.scss';
 import DefaultPage from './DefaultPage';
@@ -15,8 +14,7 @@ function TimetablePage() {
       {!isMobile ? (
         <DefaultPage />
       ) : (
-        // <MobilePage />
-        <div />
+        <MobilePage />
       ) }
     </div>
   );
