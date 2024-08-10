@@ -65,7 +65,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
       rating: rate,
       content: reviewText,
       image_urls: imageFile,
-      menu_names: menuList.map((menu) => menu.name).filter((name) => name !== ''),
+      menu_names: menuList.map((menu) => menu.name).filter((name) => name.trim() !== ''),
     };
 
     if (rate) {
@@ -176,6 +176,11 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
                 placeholder="메뉴를 직접 입력해주세요."
                 value={menu.name}
                 onChange={(e) => handleMenuChange(e, menu.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                  }
+                }}
               />
               <button
                 type="button"
