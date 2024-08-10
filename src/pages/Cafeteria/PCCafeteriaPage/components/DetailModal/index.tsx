@@ -13,7 +13,7 @@ interface DetailModalProps {
 export default function DetailModal({ dining, closeModal }: DetailModalProps): JSX.Element {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
-  useBodyScrollLock(true);
+  useBodyScrollLock();
 
   if (!dining) return <div />;
 

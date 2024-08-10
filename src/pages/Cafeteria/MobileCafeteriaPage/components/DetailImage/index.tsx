@@ -12,7 +12,7 @@ interface DetailModalProps {
 export default function DetailModal({ url, close }: DetailModalProps): JSX.Element {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: close });
   useEscapeKeyDown({ onEscape: close });
-  useBodyScrollLock(true);
+  useBodyScrollLock();
 
   if (!url) return <div />;
 

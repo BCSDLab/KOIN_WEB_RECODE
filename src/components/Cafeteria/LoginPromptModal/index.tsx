@@ -14,7 +14,7 @@ export default function LoginPromptModal({
 }: LoginPromptModalProps): JSX.Element {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
-  useBodyScrollLock(true);
+  useBodyScrollLock();
 
   return (
     <div className={styles.background} ref={backgroundRef}>
