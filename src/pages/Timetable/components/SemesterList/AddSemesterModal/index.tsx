@@ -52,6 +52,7 @@ export default function AddSemesterModal({
     }
   };
   const semesterParam = yearValue.replace('년도', '') + (semesterValue.length === 3 ? '' : '-') + semesterValue.replace('학기', '');
+
   return (
     <div className={styles.background} aria-hidden>
       <div className={styles.container}>
