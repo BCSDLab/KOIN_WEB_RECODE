@@ -62,6 +62,14 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const logger = useLogger();
   const token = useTokenState();
   const isLoggedin = !!token;
+  const logShortcut = (title: string) => {
+    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '식단' });
+    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '버스/교통' });
+    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '공지사항' });
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '주변상점' });
+    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '복덕방' });
+    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
+  };
 
   return (
     <>
@@ -119,7 +127,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 <Link
                   className={styles.megamenu__link}
                   to={menu.link}
-                  onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: menu.title })}
+                  onClick={() => logShortcut(menu.title)}
                 >
                   {menu.title}
                 </Link>
