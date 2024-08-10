@@ -85,7 +85,6 @@ export default function ReviewList() {
         const { target } = e;
         if (target instanceof HTMLElement) {
           if (target.matches('button')) {
-            if (checkUser()) return;
             setOpenDropdowm((prev) => !prev);
           } else {
             setOpenDropdowm(false);
