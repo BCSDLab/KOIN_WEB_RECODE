@@ -71,17 +71,10 @@ export default class APIClient {
 
   static refresh = this.of(Refresh);
 
-  private async refreshAccessToken() {
-    const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
-
-    if (refreshTokenStorage) {
-      const refreshToken = JSON.parse(refreshTokenStorage);
-      if (refreshToken.state.refreshToken !== '') {
-        const result = await APIClient.refresh({ refresh_token: refreshToken.state.refreshToken });
-        setCookie('AUTH_TOKEN_KEY', result.token);
-        useTokenStore.getState().setToken(result.token);
-      }
-    }
+  private async refreshAccessToken(refreshToken: string) {
+    const result = await APIClient.refresh({ refresh_token: refreshToken });
+    setCookie('AUTH_TOKEN_KEY', result.token);
+    useTokenStore.getState().setToken(result.token);
   }
 
   private convertBody(data: any) {
@@ -99,10 +92,12 @@ export default class APIClient {
       const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
       if (refreshTokenStorage) {
         const refreshToken = JSON.parse(refreshTokenStorage);
+        // refreshToken이 존재할 시 accessToken 재발급 요청
         if (refreshToken.state.refreshToken !== '') {
-          this.refreshAccessToken();
+          this.refreshAccessToken(refreshToken.state.refreshToken);
           return;
         }
+        // refreshToken이 존재하지 않을 시 로그인 페이지로 이동
         redirectToLogin();
       }
     }
