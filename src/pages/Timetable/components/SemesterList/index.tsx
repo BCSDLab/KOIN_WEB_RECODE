@@ -5,13 +5,14 @@ import Listbox from 'components/TimetablePage/Listbox';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useLogger from 'utils/hooks/useLogger';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
-import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
 import useTokenState from 'utils/hooks/useTokenState';
 import useDeleteSemester from 'pages/Timetable/hooks/useDeleteSemester';
+import useModalPortal from 'utils/hooks/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
 import AddSemesterModal from './AddSemesterModal';
 import styles from './SemesterList.module.scss';
 import DeleteSemesterModal from './DeleteSemesterModal';
@@ -19,6 +20,7 @@ import DeleteSemesterModal from './DeleteSemesterModal';
 function SemesterListbox() {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const logger = useLogger();
+  const portalManger = useModalPortal();
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     triggerPopup();
@@ -48,23 +50,16 @@ function SemesterListbox() {
     version: 'default',
   };
   const [selectedSemester, setSelectedSemester] = React.useState('');
-  const [
-    isAddSemesterModalOpen, openAddSemesterModal, closeAddSemesterModal,
-  ] = useBooleanState(false);
-  const [
-    isDeleteSemesterModalOpen, openDeleteSemesterModal, closeDeleteSemesterModal,
-  ] = useBooleanState(false);
+  const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 
   const onClickAddSemester = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    openAddSemesterModal();
+    setModalOpenTrue();
+    portalManger.open((portalOption: Portal) => (
+      <AddSemesterModal onClose={portalOption.close} setModalOpenFalse={setModalOpenFalse} />
+    ));
   };
 
-  const onClickDeleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: string) => {
-    e.stopPropagation();
-    setSelectedSemester(semes);
-    openDeleteSemesterModal();
-  };
   const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester || '20242');
   const handleDeleteSemester = () => {
     deleteTimetableFrame();
@@ -72,15 +67,28 @@ function SemesterListbox() {
       setCurrentSemester(semesterOptionList[0].value);
       updateSemester(semesterOptionList[0].value);
     }
-    closeDeleteSemesterModal();
   };
+
+  const onClickDeleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: string) => {
+    e.stopPropagation();
+    setSelectedSemester(semes);
+    setModalOpenTrue();
+    portalManger.open((portalOption: Portal) => (
+      <DeleteSemesterModal
+        onClose={portalOption.close}
+        handleDeleteSemester={handleDeleteSemester}
+        setModalOpenFalse={setModalOpenFalse}
+      />
+    ));
+  };
+
   return (
     <div
       className={cn({
         [styles.select]: true,
         [styles['select--opened']]: isOpenedPopup,
       })}
-      ref={target}
+      ref={isModalOpen ? null : target}
     >
       <button
         type="button"
@@ -91,7 +99,7 @@ function SemesterListbox() {
         })}
       >
         {currentSemester !== null ? semesterOptionList.find((item) => item.value === currentSemester)?.label : ''}
-        {isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />}
+        <DownArrowIcon />
       </button>
       {isOpenedPopup && (
         <div className={styles.select__content}>
@@ -134,19 +142,6 @@ function SemesterListbox() {
           </button>
         </div>
       )}
-      <div>
-        {isAddSemesterModalOpen && (
-        <AddSemesterModal onClose={closeAddSemesterModal} />
-        )}
-      </div>
-      <div>
-        {isDeleteSemesterModalOpen && (
-        <DeleteSemesterModal
-          onClose={closeDeleteSemesterModal}
-          handleDeleteSemester={handleDeleteSemester}
-        />
-        )}
-      </div>
     </div>
   );
 }

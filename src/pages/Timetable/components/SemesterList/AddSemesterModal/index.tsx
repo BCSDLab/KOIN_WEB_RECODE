@@ -11,10 +11,12 @@ import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {
   onClose: () => void
+  setModalOpenFalse: () => void
 }
 
 export default function AddSemesterModal({
   onClose,
+  setModalOpenFalse,
 }: AddSemesterModalProps) {
   /* 학기 API 완성 시 수정 예정 */
   const year = [{ label: '2024년도', value: '2024년도' },
@@ -41,13 +43,17 @@ export default function AddSemesterModal({
   const token = useTokenState();
   const { mutate: addSemester } = useAddSemester(token);
   const { data: mySemester } = useSemesterCheck(token);
+  const closeModal = () => {
+    setModalOpenFalse();
+    onClose();
+  };
   const handleAddSemester = (semesters: AddTimetableFrameRequest) => {
     if (mySemester) {
       if (mySemester.semesters.includes(semesters.semester)) {
         showToast('info', '이미 있는 학기입니다.');
       } else {
         addSemester(semesters);
-        onClose();
+        closeModal();
       }
     }
   };
@@ -58,7 +64,10 @@ export default function AddSemesterModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>학기 추가</span>
-          <CloseIcon className={styles['container__close-button']} onClick={onClose} />
+          <CloseIcon
+            className={styles['container__close-button']}
+            onClick={closeModal}
+          />
         </header>
         <div className={styles.container__semester}>
           <Listbox list={year} value={yearValue} onChange={onChangeYear} version="inModal" />
@@ -70,7 +79,7 @@ export default function AddSemesterModal({
             className={cn({
               [styles['container__button--delete']]: true,
             })}
-            onClick={onClose}
+            onClick={closeModal}
           >
             취소하기
           </button>
