@@ -6,7 +6,7 @@ export const useGetMyReview = (shopId: string, sorter: string) => {
   const token = useTokenState();
 
   const { data } = useQuery({
-    queryKey: ['myReview', shopId],
+    queryKey: ['review', 'myReview', shopId],
     queryFn: () => getMyReview(shopId, sorter, token),
     enabled: !!token,
   });

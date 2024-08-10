@@ -7,7 +7,7 @@ import { auth } from 'api';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -32,6 +32,7 @@ const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 const useLogin = (state: IsAutoLogin) => {
   const { setToken, setRefreshToken } = useTokenStore();
   const { redirectAfterLogin } = useLoginRedirect();
+  const queryClient = useQueryClient();
 
   const postLogin = useMutation({
     mutationFn: auth.login,
@@ -40,6 +41,7 @@ const useLogin = (state: IsAutoLogin) => {
         setRefreshToken(data.refresh_token);
       }
 
+      queryClient.invalidateQueries();
       setCookie('AUTH_TOKEN_KEY', data.token);
       setToken(data.token);
       redirectAfterLogin();
