@@ -44,7 +44,7 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
     if (!isAuth) {
       portalManager.open((portalOption: Portal) => (
         <LoginPromptModal
-          action={() => likeDining(id, is_liked)}
+          onConfirm={() => likeDining(id, is_liked)}
           closeModal={portalOption.close}
         />
       ));
