@@ -149,7 +149,7 @@ export default function ReviewList() {
                 else setIsCheckboxClicked((prev) => !prev);
               }}
             />
-            내가 리뷰 작성한 리뷰
+            내가 작성한 리뷰
           </label>
         </div>
       )}
