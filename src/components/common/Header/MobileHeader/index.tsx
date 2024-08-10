@@ -38,11 +38,6 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
 
   const handleHamburgerClick = () => {
     openSidebar();
-    logger.actionEventClick({
-      actionTitle: 'USER',
-      title: 'hamburger',
-      value: '햄버거',
-    });
   };
 
   return (

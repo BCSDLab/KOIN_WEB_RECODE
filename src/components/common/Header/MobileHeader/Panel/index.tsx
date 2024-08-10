@@ -34,14 +34,14 @@ export default function Panel({ openModal }: PanelProps) {
 
   const handleMyInfoClick = () => {
     if (userInfo) {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        title: 'hamburger',
+        value: '정보수정',
+      });
       closeSidebar();
       openModal();
     } else {
-      logger.actionEventClick({
-        actionTitle: 'USER',
-        title: 'hamburger_login',
-        value: '햄버거 로그인',
-      });
       navigate('/auth');
     }
   };
@@ -95,7 +95,25 @@ export default function Panel({ openModal }: PanelProps) {
         <button
           className={styles.auth__font}
           type="button"
-          onClick={userInfo ? logout : () => navigate('/auth')}
+          onClick={
+            userInfo
+              ? () => {
+                logout();
+                logger.actionEventClick({
+                  actionTitle: 'USER',
+                  title: 'hamburger',
+                  value: '로그아웃',
+                });
+              }
+              : () => {
+                navigate('/auth');
+                logger.actionEventClick({
+                  actionTitle: 'USER',
+                  title: 'hamburger',
+                  value: '로그인',
+                });
+              }
+          }
         >
           {userInfo ? '로그아웃' : '로그인'}
         </button>

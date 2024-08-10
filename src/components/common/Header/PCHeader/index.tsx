@@ -140,12 +140,30 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         {!isLoggedin ? (
           <>
             <li className={styles['header__auth-link']}>
-              <Link to="/auth/signup">
+              <Link
+                to="/auth/signup"
+                onClick={() => {
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'header',
+                    value: '회원가입',
+                  });
+                }}
+              >
                 회원가입
               </Link>
             </li>
             <li className={styles['header__auth-link']}>
-              <Link to="/auth">
+              <Link
+                to="/auth"
+                onClick={() => {
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'header',
+                    value: '로그인',
+                  });
+                }}
+              >
                 로그인
               </Link>
             </li>
@@ -153,12 +171,34 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         ) : (
           <>
             <li className={styles['header__auth-link']}>
-              <button type="button" className={styles['header__auth-button']} onClick={openModal}>
+              <button
+                type="button"
+                className={styles['header__auth-button']}
+                onClick={() => {
+                  openModal();
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'header',
+                    value: '정보수정',
+                  });
+                }}
+              >
                 정보수정
               </button>
             </li>
             <li className={styles['header__auth-link']}>
-              <button onClick={logout} type="button" className={styles['header__auth-button']}>
+              <button
+                onClick={() => {
+                  logout();
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'header',
+                    value: '로그아웃',
+                  });
+                }}
+                type="button"
+                className={styles['header__auth-button']}
+              >
                 로그아웃
               </button>
             </li>
