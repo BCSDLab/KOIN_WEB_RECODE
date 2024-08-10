@@ -3,6 +3,7 @@ import { ArticleList } from 'api/notice/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import setPostCreateDate from 'utils/ts/setPostCreateDate';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
+import ROUTES from 'static/routes';
 import styles from './PostList.module.scss';
 
 interface PostListProps {
@@ -19,7 +20,7 @@ function PostList(props: PostListProps) {
         articles?.map((article) => (
           <Link
             className={styles.list}
-            to={`/board/notice/${article.id}`}
+            to={`${ROUTES.BOARD_NOTICE_DETAIL.replace(':id', String(article.id))}`}
             key={article.id}
           >
             <div className={styles.list__id}>{ article.id }</div>

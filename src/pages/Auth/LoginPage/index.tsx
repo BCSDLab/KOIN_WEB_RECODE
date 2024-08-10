@@ -11,6 +11,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -168,8 +169,8 @@ function LoginPage() {
         >
           아이디 찾기
         </a>
-        <Link className={styles.help__link} to="/auth/findpw">비밀번호 찾기</Link>
-        <Link className={styles.help__link} to="/auth/signup">회원가입</Link>
+        <Link className={styles.help__link} to={ROUTES.AUTH_FINDPW}>비밀번호 찾기</Link>
+        <Link className={styles.help__link} to={ROUTES.AUTH_SIGNUP}>회원가입</Link>
       </div>
       <span className={styles.template__copyright}>
         COPYRIGHT ⓒ&nbsp;

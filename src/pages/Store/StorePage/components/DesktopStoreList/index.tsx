@@ -4,6 +4,7 @@ import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 import { getJosaPicker } from '@bcsdlab/utils';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {
@@ -25,7 +26,7 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
     <div className={styles['store-list']}>
       {storeListData?.map((store: StoreList) => (
         <Link
-          to={`/store/${store.id}`}
+          to={`${ROUTES.STORE_DETAIL.replace(':id', String(store.id))}`}
           className={styles['store-list__item']}
           key={store.id}
           onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}

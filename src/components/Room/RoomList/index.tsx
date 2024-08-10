@@ -1,5 +1,6 @@
 import { LandList } from 'api/room/entity';
 import { Link } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import styles from './RoomList.module.scss';
 
 interface RoomListProps {
@@ -12,7 +13,7 @@ function RoomList(props: RoomListProps) {
     <ul className={styles.list}>
       {lands?.map((room) => (
         <li className={styles.list__item} key={room.id}>
-          <Link className={styles.list__link} to={`/room/${room.id}`}>
+          <Link className={styles.list__link} to={`${ROUTES.ROOM_DETAIL.replace(':id', String(room.id))}`}>
             <div className={styles.list__box}>
               <div className={styles.list__name}>{room.name}</div>
               <div className={styles.fee}>

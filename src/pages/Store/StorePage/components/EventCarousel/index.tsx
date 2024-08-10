@@ -3,6 +3,7 @@ import { useGetAllEvents } from 'pages/Store/StorePage/components/hooks/useGetAl
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './EventCarousel.module.scss';
 
 export default function EventCarousel() {
@@ -24,7 +25,7 @@ export default function EventCarousel() {
           <div className={styles.swipe}>
             {carouselList.map((item) => (
               <Link
-                to={`${item.shop_id}`}
+                to={`${ROUTES.STORE_DETAIL.replace(':id', String(item.shop_id))}`}
                 key={item.event_id}
                 className={styles['swipe-item']}
                 onClick={() => eventLogging(item.shop_name)}

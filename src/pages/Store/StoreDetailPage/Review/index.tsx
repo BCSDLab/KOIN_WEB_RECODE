@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import AverageRating from './components/AverageRating/AverageRating';
 import ReviewButton from './components/ReviewButton';
 import ReviewList from './components/ReviewList/ReviewList';
@@ -12,7 +13,7 @@ export default function ReviewPage({ id }: { id: string }) {
     <Suspense fallback={<div />}>
       <div className={styles.container}>
         <div className={styles['button-wrapper']}>
-          <ReviewButton goReviewPage={() => navigate(`/review/${id}`)} />
+          <ReviewButton goReviewPage={() => navigate(`${ROUTES.REVIEW.replace(':id', id)}`)} />
         </div>
         <AverageRating />
       </div>

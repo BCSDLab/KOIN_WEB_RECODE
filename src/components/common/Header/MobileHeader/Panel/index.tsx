@@ -6,6 +6,7 @@ import { useLogout } from 'utils/hooks/auth/useLogout';
 import { useUser } from 'utils/hooks/state/useUser';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
+import ROUTES from 'static/routes';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -42,7 +43,7 @@ export default function Panel({ openModal }: PanelProps) {
         title: 'hamburger_login',
         value: '햄버거 로그인',
       });
-      navigate('/auth');
+      navigate(ROUTES.AUTH);
     }
   };
 
@@ -95,7 +96,7 @@ export default function Panel({ openModal }: PanelProps) {
         <button
           className={styles.auth__font}
           type="button"
-          onClick={userInfo ? logout : () => navigate('/auth')}
+          onClick={userInfo ? logout : () => navigate(ROUTES.AUTH)}
         >
           {userInfo ? '로그아웃' : '로그인'}
         </button>

@@ -8,6 +8,7 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useSemesterAction } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
+import ROUTES from 'static/routes';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable(): JSX.Element {
@@ -39,7 +40,7 @@ export default function IndexTimeTable() {
   return (
     <div className={styles.template}>
       <Link
-        to="/timetable"
+        to={ROUTES.TIMETABLE}
         className={styles.title}
         onClick={() => {
           logger.actionEventClick({
@@ -54,7 +55,7 @@ export default function IndexTimeTable() {
       <ErrorBoundary fallbackClassName="loading">
         <Suspense fallback={null}>
           <Link
-            to="/timetable"
+            to={ROUTES.TIMETABLE}
             onClick={() => {
               logger.actionEventClick({
                 actionTitle: 'USER',

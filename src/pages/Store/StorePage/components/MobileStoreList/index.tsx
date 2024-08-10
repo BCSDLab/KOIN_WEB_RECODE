@@ -5,6 +5,7 @@ import { getJosaPicker } from '@bcsdlab/utils';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
 import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';
+import ROUTES from 'static/routes';
 import styles from './MobileStoreList.module.scss';
 
 interface MobileStoreListProps {
@@ -21,7 +22,7 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
       {
         storeListData?.map((store: StoreListV2) => (
           <Link
-            to={`/store/${store.id}`}
+            to={`${ROUTES.STORE_DETAIL.replace(':id', String(store.id))}`}
             className={styles['store-list__item']}
             key={store.id}
             onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}

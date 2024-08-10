@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import { setRedirectPath } from 'utils/ts/auth';
 import styles from './LoginRequiredModal.module.scss';
 
@@ -27,7 +28,7 @@ export default function LoginRequiredModal({ title = '', description = '', close
             type="button"
             onClick={() => {
               setRedirectPath(`${location.pathname}`);
-              navigate('/auth');
+              navigate(ROUTES.AUTH);
             }}
           >
             로그인하기

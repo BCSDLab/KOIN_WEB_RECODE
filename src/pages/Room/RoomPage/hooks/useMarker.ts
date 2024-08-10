@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { LandListResponse } from 'api/room/entity';
 import MarkerIcon from 'components/Room/MarkerIcon';
 import { useNavigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
 
 interface MarkerProps {
   map: naver.maps.Map | null
@@ -25,7 +26,7 @@ function useMarker({ map, roomList }: MarkerProps) {
         clickable: true,
       });
       marker.addListener('click', () => {
-        navigate(`/room/${land.id}`);
+        navigate(`${ROUTES.ROOM_DETAIL.replace(':id', String(land.id))}`);
       });
       return marker;
     });

@@ -8,7 +8,7 @@ import { useDeleteReview } from 'pages/Store/StoreDetailPage/hooks/useDeleteRevi
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from 'utils/hooks/state/useUser';
 import LoginRequiredModal from 'components/common/LoginRequiredModal';
-
+import ROUTES from 'static/routes';
 import styles from './SelectButton.module.scss';
 
 interface Props {
@@ -51,7 +51,7 @@ export default function SelectButton({ is_mine, review_id }: Props) {
             <button
               type="button"
               onClick={() => navigate(
-                `/edit/review/${params.id!}`,
+                `${ROUTES.REVIEW_EDIT.replace(':id', String(params.id))}`,
                 { state: { from: review_id } },
               )}
               className={styles.section}
@@ -74,7 +74,7 @@ export default function SelectButton({ is_mine, review_id }: Props) {
             className={styles.section}
             onClick={() => {
               if (userInfo) {
-                navigate(`/report/review/shopid/${params.id!}/reviewid/${review_id}`);
+                navigate(`${ROUTES.REVIEW_REPORT.replace(':shopid', String(params.id)).replace(':reviewid', String(review_id))}`);
               } else {
                 openLoginModal();
               }

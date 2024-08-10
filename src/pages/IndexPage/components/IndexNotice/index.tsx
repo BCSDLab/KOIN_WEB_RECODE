@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import useArticleList from 'pages/Notice/NoticeListPage/hooks/useArticleList';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './IndexNotice.module.scss';
 
 const getArticleType = (id: number) => {
@@ -34,14 +35,14 @@ function IndexNotice() {
     <section className={styles.template}>
       <div className={styles.template__header}>
         <Link
-          to="board/notice"
+          to={ROUTES.BOARD_NOTICE}
           className={styles['template__title-link']}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice', value: '공지사항' })}
         >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
         <Link
-          to="/board/notice"
+          to={ROUTES.BOARD_NOTICE}
           className={styles.template__link}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice_detail', value: '공지사항' })}
         >
@@ -55,7 +56,7 @@ function IndexNotice() {
           {articleList.articles.slice(0, 7).map((article) => (
             <li key={article.id} className={styles.list__item}>
               <Link
-                to={`/board/notice/${article.id}`}
+                to={`${ROUTES.BOARD_NOTICE_DETAIL.replace(':id', String(article.id))}`}
                 className={styles['list__item-link']}
               >
                 <span className={styles['list__item-type']}>

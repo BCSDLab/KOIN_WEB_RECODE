@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { HotPostResponse } from 'api/notice/entity';
 import useHotArticleList from 'pages/Notice/NoticePage/hooks/useHotArticle';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './HotPost.module.scss';
 
 const LINK_LIST = [
@@ -43,7 +44,7 @@ function HotPost() {
         hotArticleList.map((hotPost: HotPostResponse, index: number) => (
           <Link
             className={styles.hotpost__content}
-            to={`/board/notice/${hotPost.id}`}
+            to={`${ROUTES.BOARD_NOTICE_DETAIL.replace(':id', String(hotPost.id))}`}
             key={hotPost.id + hotPost.board_id}
             onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'notice_hot', value: hotPost.title })}
           >

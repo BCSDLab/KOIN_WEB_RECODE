@@ -12,6 +12,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { DiningTime } from 'utils/ts/cafeteria';
 import { DiningPlace } from 'interfaces/Cafeteria';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import ROUTES from 'static/routes';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
@@ -30,7 +31,7 @@ function IndexCafeteria() {
 
   const handleMoreClick = () => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
-    navigate('/cafeteria');
+    navigate(ROUTES.CAAFETERIA);
   };
 
   const handlePlaceClick = (place: DiningPlace) => {

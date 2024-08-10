@@ -15,6 +15,7 @@ import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
 import Copy from 'assets/png/copy.png';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { ReactComponent as Phone } from 'assets/svg/Review/phone.svg';
+import ROUTES from 'static/routes';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
@@ -93,7 +94,7 @@ function StoreDetailPage() {
               className={styles['section__header--button']}
               aria-label="주변 상점 리스트 이동"
               type="button"
-              onClick={() => navigate('/store')}
+              onClick={() => navigate(ROUTES.STORE)}
             >
               주변 상점
             </button>
@@ -177,7 +178,7 @@ function StoreDetailPage() {
                   type="button"
                   onClick={() => {
                     onClickList();
-                    navigate('/store');
+                    navigate(ROUTES.STORE);
                   }}
                 >
                   상점목록

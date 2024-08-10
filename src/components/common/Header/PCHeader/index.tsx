@@ -2,6 +2,7 @@ import { cn } from '@bcsdlab/utils';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -132,12 +133,12 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         {!isLoggedin ? (
           <>
             <li className={styles['header__auth-link']}>
-              <Link to="/auth/signup">
+              <Link to={ROUTES.AUTH_SIGNUP}>
                 회원가입
               </Link>
             </li>
             <li className={styles['header__auth-link']}>
-              <Link to="/auth">
+              <Link to={ROUTES.AUTH}>
                 로그인
               </Link>
             </li>
