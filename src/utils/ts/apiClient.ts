@@ -3,7 +3,9 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
 import { CustomAxiosError, KoinError } from 'interfaces/APIError';
-import { deleteCookie } from './cookie';
+import { Refresh } from 'api/auth/APIDetail';
+import { useTokenStore } from 'utils/zustand/auth';
+import { deleteCookie, setCookie } from './cookie';
 
 const API_URL = process.env.REACT_APP_API_PATH;
 
@@ -66,6 +68,21 @@ export default class APIClient {
     });
   }
 
+  static refresh = this.of(Refresh);
+
+  private async refreshAccessToken() {
+    const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
+
+    if (refreshTokenStorage) {
+      const refreshToken = JSON.parse(refreshTokenStorage);
+      if (refreshToken.state.refreshToken !== '') {
+        const result = await APIClient.refresh({ refresh_token: refreshToken.state.refreshToken });
+        setCookie('AUTH_TOKEN_KEY', result.token);
+        useTokenStore.getState().setToken(result.token);
+      }
+    }
+  }
+
   private convertBody(data: any) {
     return JSON.stringify(data);
   }
@@ -76,17 +93,17 @@ export default class APIClient {
   }
 
   private errorMiddleware(error: KoinError | CustomAxiosError) {
-    const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
     if (error.status === 401) {
       deleteCookie('AUTH_TOKEN_KEY');
+      const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
       if (refreshTokenStorage) {
         const refreshToken = JSON.parse(refreshTokenStorage);
         if (refreshToken.state.refreshToken !== '') {
-          window.location.reload();
+          this.refreshAccessToken();
           return;
         }
+        window.location.href = '/auth';
       }
-      window.location.href = '/auth';
     }
   }
 
