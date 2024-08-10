@@ -9,6 +9,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { ReactComponent as ReverseDestination } from 'assets/svg/reverse-destination.svg';
 import { useBusStore } from 'utils/zustand/bus';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './IndexBus.module.scss';
 import useIndexBusDirection from './hooks/useIndexBusDirection';
 import useMobileBusCarousel from './hooks/useMobileBusCarousel';
@@ -25,6 +26,7 @@ function IndexBus() {
   const logger = useLogger();
   const setSelectedTab = useBusStore((state) => state.setSelectedTab);
   const navigate = useNavigate();
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(1);
 
   const getBusDetail = (type: string): BusLink => {
     const links = matchToMobileType(busLink);
@@ -32,6 +34,27 @@ function IndexBus() {
       label: '시간표 보러가기', link: '/bus', key: 'shuttle', type: BUS_TYPES[0],
     };
   };
+
+  const handleScroll = useCallback(() => {
+    if (sliderRef.current) {
+      const index = Math.round(
+        sliderRef.current.scrollLeft / (sliderRef.current.scrollWidth / mobileBusTypes.length),
+      );
+
+      if (index !== currentSlideIndex) {
+        const fromCard = BUS_TYPES[mobileBusTypes[currentSlideIndex]].tabName;
+        const toCard = BUS_TYPES[mobileBusTypes[index]].tabName;
+
+        logger.actionEventClick({
+          actionTitle: 'CAMPUS',
+          title: 'main_bus_scroll',
+          value: `${fromCard}>${toCard}`,
+        });
+
+        setCurrentSlideIndex(index);
+      }
+    }
+  }, [sliderRef, mobileBusTypes, currentSlideIndex, logger]);
 
   const handleCardClick = (type: string) => {
     const selectedTab = BUS_TYPES.find((busType) => busType.key === type);
@@ -63,6 +86,18 @@ function IndexBus() {
       logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
     }
   };
+
+  useEffect(() => {
+    const sliderElement = sliderRef.current;
+
+    if (sliderElement) {
+      sliderElement.addEventListener('scroll', handleScroll);
+      return () => {
+        sliderElement.removeEventListener('scroll', handleScroll);
+      };
+    }
+    return undefined;
+  }, [handleScroll, sliderRef]);
 
   return (
     <section className={styles.template}>
