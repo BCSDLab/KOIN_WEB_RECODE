@@ -2,11 +2,11 @@ import OPTION_CATEGORY from 'static/optionCategory';
 import { cn } from '@bcsdlab/utils';
 import styles from './RoomDetailOption.module.scss';
 
-type OptionProps = {
+type RoomDetailOptionProps = {
   [key in typeof OPTION_CATEGORY[number]['img_code']]: boolean;
 };
 
-function RoomDetailOption({ roomOptions }: { roomOptions: OptionProps }) {
+function RoomDetailOption({ roomOptions }: { roomOptions: RoomDetailOptionProps }) {
   return (
     <ul className={styles.option}>
       {OPTION_CATEGORY.map((option) => (

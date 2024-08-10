@@ -6,6 +6,7 @@ import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
 import { deleteCookie, setCookie } from './cookie';
+import { redirectToLogin } from './auth';
 
 const API_URL = process.env.REACT_APP_API_PATH;
 
@@ -102,7 +103,7 @@ export default class APIClient {
           this.refreshAccessToken();
           return;
         }
-        window.location.href = '/auth';
+        redirectToLogin();
       }
     }
   }

@@ -26,16 +26,16 @@ jobs:
                 "pullRequestLink": ${{ steps.check_pr_merged.outputs.pullRequestLink }}
               }'
 
-      # - name: Get branch names
-      #   id: get_branch_name
-      #   run: |
-      #     baseBranch=${{ github.event.pull_request.base.ref }}
-      #     headBranch=${{ github.event.pull_request.head.ref }}
-      #     echo "::set-output name=baseBranch::${baseBranch}"
-      #     echo "::set-output name=headBranch::${headBranch}"
+      - name: Get branch names
+        id: get_branch_name
+        run: |
+          baseBranch=${{ github.event.pull_request.base.ref }}
+          headBranch=${{ github.event.pull_request.head.ref }}
+          echo "::set-output name=baseBranch::${baseBranch}"
+          echo "::set-output name=headBranch::${headBranch}"
 
-      # - name: Delete Branch
-      #   if: ${{ steps.get_branch_name.outputs.baseBranch }} != ${{ steps.get_branch_name.outputs.headBranch }}
-      #   run: |
-      #     git checkout ${{ steps.get_branch_name.outputs.baseBranch }}
-      #     git push origin --delete ${{ steps.get_branch_name.outputs.headBranch }}
+      - name: Delete Branch
+        if: ${{ steps.get_branch_name.outputs.headBranch != 'main' && steps.get_branch_name.outputs.headBranch != 'develop' }}
+        run: |
+          git checkout ${{ steps.get_branch_name.outputs.baseBranch }}
+          git push origin --delete ${{ steps.get_branch_name.outputs.headBranch }}

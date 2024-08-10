@@ -1,4 +1,8 @@
 import APIClient from 'utils/ts/apiClient';
-import CafeteriaList from './APIDetail';
+import DiningResponse, { DiningLikePatcher, CancelDiningLikePatcher } from './APIDetail';
 
-export default APIClient.of(CafeteriaList);
+export const like = APIClient.of(DiningLikePatcher);
+
+export const cancelLike = APIClient.of(CancelDiningLikePatcher);
+
+export default APIClient.of(DiningResponse);

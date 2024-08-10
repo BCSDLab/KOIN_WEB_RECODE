@@ -1,4 +1,4 @@
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesState } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
 import useTimetableInfoList from './useTimetableInfoList';

@@ -1,16 +1,16 @@
-import {
-  RefObject, Suspense, useEffect, useRef,
-} from 'react';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import { Suspense } from 'react';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
 import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
-import { MEAL_TYPES, MEAL_TYPE_MAP } from 'static/cafeteria';
-import useScrollToTop from 'utils/hooks/useScrollToTop';
-import { MealType } from 'interfaces/Cafeteria';
+import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import DateNavigator from './components/DateNavigator';
-import PCMenuBlocks from './components/PCMenuBlocks';
+import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
 
 const getWeekAgo = () => {
@@ -23,56 +23,47 @@ const getWeekAgo = () => {
   return twoWeeksAgoSunday;
 };
 
-const useOutsideAlerter = (
-  { ref, closeFunction }: { ref: RefObject<HTMLElement>, closeFunction: () => void },
-) => {
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        ref.current
-        && !ref.current.contains(event.target as Node)
-        && !((event.target as HTMLElement).id === 'dropdown-button')
-      ) {
-        closeFunction();
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref, closeFunction]);
-};
-
-interface Props {
-  mealType: MealType;
-  setMealType: (mealType: MealType) => void;
+interface PCCafeteriaPageProps {
+  diningType: DiningType;
+  setDiningType: (diningType: DiningType) => void;
 }
 
 export default function PCCafeteriaPage({
-  mealType, setMealType,
-}: Props) {
-  const { currentDate, checkToday } = useDatePicker();
-  const wrapperRef = useRef(null);
+  diningType, setDiningType,
+}: PCCafeteriaPageProps) {
+  const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
-  useOutsideAlerter({ ref: wrapperRef, closeFunction: closeDropdown });
-
   const logger = useLogger();
-  const handleMealTypeChange = (value: MealType) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: MEAL_TYPE_MAP[value] });
-    setMealType(value);
+  const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
+
+  const handleDiningTypeChange = (value: DiningType) => {
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[value] });
+    setDiningType(value);
     toggleDropdown();
   };
 
   const 지난주일요일 = getWeekAgo();
-  const recentDate = 지난주일요일 < currentDate;
+  const isThisWeek = 지난주일요일 < currentDate();
+
+  const formatDiningDate = () => {
+    if (checkToday(currentDate())) {
+      return '오늘';
+    }
+
+    if (checkTomorrow(currentDate())) {
+      return '내일';
+    }
+
+    return DAYS[currentDate().getDay()];
+  };
 
   useScrollToTop();
+  useEscapeKeyDown({ onEscape: closeDropdown });
 
   return (
     <div className={styles.container}>
-      <div className={styles['meal-type-selector']}>
-        {checkToday(currentDate) && '오늘'}
+      <div className={styles['type-selector']}>
+        {formatDiningDate()}
         <div className={styles['dropdown-wrapper']}>
           <button
             id="dropdown-button"
@@ -80,22 +71,19 @@ export default function PCCafeteriaPage({
             type="button"
             onClick={toggleDropdown}
           >
-            {`${MEAL_TYPE_MAP[mealType]}식단`}
+            {`${DINING_TYPE_MAP[diningType]}식단`}
             {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
           </button>
           {dropdownOpen && (
-            <div
-              className={styles.dropdown__box}
-              ref={wrapperRef}
-            >
-              {MEAL_TYPES.map((type: MealType) => (
+            <div className={styles.dropdown__box} ref={containerRef}>
+              {DINING_TYPES.map((type: DiningType) => (
                 <button
                   key={type}
-                  className={styles.dropdown__meal}
+                  className={styles.dropdown__type}
                   type="button"
-                  onClick={() => handleMealTypeChange(type)}
+                  onClick={() => handleDiningTypeChange(type)}
                 >
-                  {`${MEAL_TYPE_MAP[type]}식단`}
+                  {`${DINING_TYPE_MAP[type]}식단`}
                 </button>
               ))}
             </div>
@@ -108,7 +96,7 @@ export default function PCCafeteriaPage({
       </div>
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
-          <PCMenuBlocks mealType={mealType} recentDate={recentDate} />
+          <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />
         </Suspense>
         <span className={styles['pc-menu-blocks__caution']}>식단 정보는 운영 상황에 따라 변동될 수 있습니다.</span>
       </div>
