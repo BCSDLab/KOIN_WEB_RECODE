@@ -70,7 +70,7 @@ const useLogger = () => {
     value,
   }: ActionClickLoggerProps) => {
     logEvent({
-      action: actionTitle, category: 'button', label: title, value,
+      action: actionTitle, category: 'click', label: title, value,
     });
   };
 
