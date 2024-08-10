@@ -27,6 +27,7 @@ type LoggerEventProps = {
   value: string,
   duration_time?: number,
   previous_page?: string,
+  current_page?: string,
 };
 
 const useLogger = () => {
@@ -39,9 +40,10 @@ const useLogger = () => {
     value,
     duration_time,
     previous_page,
+    current_page,
   }: LoggerEventProps) => {
     const event = {
-      action, category, label, value, duration_time, previous_page,
+      action, category, label, value, duration_time, previous_page, current_page,
     };
     if (
       !prevEvent.current
@@ -51,6 +53,7 @@ const useLogger = () => {
       || prevEvent.current.value !== value
       || prevEvent.current.duration_time !== duration_time
       || prevEvent.current.previous_page !== previous_page
+      || prevEvent.current.current_page !== current_page
     ) {
       gtag.event(event);
       prevEvent.current = event;
@@ -80,9 +83,10 @@ const useLogger = () => {
     value,
     duration_time,
     previous_page,
+    current_page,
   }: ActionClickLoggerProps) => {
     logEvent({
-      action: actionTitle, category: 'button', label: title, value, duration_time, previous_page,
+      action: actionTitle, category: 'button', label: title, value, duration_time, previous_page, current_page,
     });
   };
 

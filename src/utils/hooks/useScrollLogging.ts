@@ -1,11 +1,11 @@
-import { StoreCategoriesResponse, StoreDetailResponse } from 'api/store/entity';
+import { StoreCategoriesResponse, StoreDetailResponse, StoreEventListResponse } from 'api/store/entity';
 import { useEffect, useState } from 'react';
 import useLogger from './useLogger';
 import useParamsHandler from './useParamsHandler';
 
 export const useScorllLogging = (
   title: string,
-  data: StoreCategoriesResponse | StoreDetailResponse | undefined,
+  data: StoreCategoriesResponse | StoreDetailResponse | StoreEventListResponse | undefined,
 ) => {
   const [currentHeignt, setCurrentHeight] = useState<number>(window.scrollY);
   const { params, searchParams } = useParamsHandler();
@@ -17,13 +17,20 @@ export const useScorllLogging = (
       window.addEventListener('scroll', onScroll);
     }
     if (document.body.scrollHeight * 0.7 < currentHeignt && data) {
-      if ('delivery_price' in data) {
-        logger.actionEventClick({ actionTitle: 'BUSINESS', title, value: `scoll in ${data.name}` });
-      }
-      if ('total_count' in data) {
+      if ('total_count' in data && title === 'shop_categories') {
         const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
         logger.actionEventClick({
           actionTitle: 'BUSINESS', title, value: `scoll in ${data.shop_categories[currentCategoryId]?.name}`, event_category: 'scroll',
+        });
+      }
+      if (title === 'shop_detail_view' && 'name' in data) {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS', title, value: data.name, event_category: 'scroll',
+        });
+      }
+      if (title === 'shop_detail_view_event' && 'events' in data) {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS', title, value: data.events[0].shop_name, event_category: 'scroll',
         });
       }
     }

@@ -14,7 +14,9 @@ export default function EventCarousel() {
   const logger = useLogger();
 
   const eventLogging = (shopName: string) => {
-    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_event', value: `${shopName}` });
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_categories_event', value: `${shopName}`, event_category: 'click',
+    });
   };
 
   return (
