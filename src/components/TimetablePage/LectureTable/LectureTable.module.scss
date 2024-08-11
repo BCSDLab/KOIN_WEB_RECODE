@@ -54,9 +54,14 @@
     background-color: #fff;
     color: #4b4b4b;
 
+    &--selected.table__row > .table__row-button {
+      background-color: #eee;
+    }
+  
     &--include.table__row > .table__row-button {
       color: #4590bb;
     }
+
   }
 
   &__col {

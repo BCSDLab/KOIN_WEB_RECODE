@@ -12,6 +12,8 @@ import LectureList from 'pages/Timetable/components/LectureList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import CustomLecture from 'pages/Timetable/components/CustomLecture';
 import { useSemester } from 'utils/zustand/semester';
+import { useTempLecture } from 'utils/zustand/myTempLecture';
+import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage() {
@@ -20,8 +22,16 @@ export default function DefaultPage() {
   const isRegularCourseSelected = selectedCourseType === 'regular';
 
   const { myLectures } = useMyLectures();
-  const myLectureDayValue = useTimetableDayList(myLectures);
   const semester = useSemester();
+  const myLectureDayValue = useTimetableDayList(myLectures);
+  const tempLecture = useTempLecture();
+  const { data: lectureList } = useLectureList(semester);
+  const similarSelectedLecture = lectureList
+    ?.filter((lecture) => lecture.code === tempLecture?.code)
+    ?? [];
+  const selectedLectureIndex = similarSelectedLecture
+    .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
+  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
 
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
@@ -87,6 +97,8 @@ export default function DefaultPage() {
               <React.Suspense fallback={<LoadingSpinner size="50" />}>
                 <Timetable
                   lectures={myLectureDayValue}
+                  similarSelectedLecture={similarSelectedLectureDayList}
+                  selectedLectureIndex={selectedLectureIndex}
                   columnWidth={88.73}
                   firstColumnWidth={44.36}
                   rowHeight={33.07}

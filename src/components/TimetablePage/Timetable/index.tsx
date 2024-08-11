@@ -16,15 +16,14 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import AlertModal from 'components/common/Modal/AlertModal';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
-import { useSemester } from 'utils/zustand/semester';
-import useLectureList from 'pages/Timetable/hooks/useLectureList';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
   lectures: TimetableDayLectureInfo[][];
+  selectedLectureIndex?: number;
+  similarSelectedLecture?: TimetableDayLectureInfo[][];
   firstColumnWidth: number;
   columnWidth: number;
   rowHeight: number;
@@ -39,6 +38,8 @@ interface RemoveLectureProps {
 
 function Timetable({
   lectures,
+  selectedLectureIndex,
+  similarSelectedLecture,
   firstColumnWidth,
   columnWidth,
   rowHeight,
@@ -52,10 +53,6 @@ function Timetable({
   const isEditable = pathname.includes('/timetable/modify');
   const { removeMyLecture } = useTimetableMutation();
   const { myLectures } = useMyLectures();
-  const semester = useSemester();
-  const { data: lectureList } = useLectureList(semester);
-  const newLectureList = lectureList?.filter((lecture) => lecture) ?? [];
-  const lectureByDayList = useTimetableDayList(newLectureList);
   const tempLecture = useTempLecture();
   const { timeString, setTimeString } = useTimeString();
   const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
@@ -125,6 +122,7 @@ function Timetable({
       }
     }
   }, [lectures, setTimeString, tempLecture]);
+
   return (
     <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
       <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight + 5}px` }}>
@@ -236,8 +234,30 @@ function Timetable({
                 </span>
               </div>
             ))}
+            {similarSelectedLecture?.[index].map(({
+              start,
+              end,
+              index: lectureIndex,
+            }) => (
+              <div
+                className={cn({
+                  [styles.timetable__lecture]: true,
+                  [styles['timetable__lecture--selected']]: true,
+                })}
+                key={lectureIndex}
+                style={{
+                  borderWidth: selectedLectureIndex === lectureIndex ? '2px' : '1px',
+                  top: `${start * rowHeight}px`,
+                  width: isMobile ? undefined : `${columnWidth}px`,
+                  height: `${(end - start + 1) * rowHeight}px`,
+                }}
+              />
+            ))}
           </div>
         ))}
+      </div>
+
+      {/*
         <div>
           {tempLecture && (
             DAYS_STRING.map((day, index) => (
@@ -272,7 +292,7 @@ function Timetable({
                     left: `${firstColumnWidth + index * columnWidth + index + 1}px`,
                     width: isMobile ? undefined : `${columnWidth}px`,
                     height: `${(end - start + 1) * rowHeight - 1}px`,
-                    padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
+                    padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px`,
                     gap: `${rowHeight / 5.5}px`,
                   }}
                 >
@@ -306,6 +326,7 @@ function Timetable({
           )}
         </div>
       </div>
+      */ }
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import { useTempLectureAction } from 'utils/zustand/myTempLecture';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/Timetable/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
@@ -32,9 +32,11 @@ function CurrentSemesterLectureList({
   myLectures,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
+  const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation();
   const { data: userInfo } = useUser();
+
   return (
     <LectureTable
       height={612}
@@ -59,10 +61,9 @@ function CurrentSemesterLectureList({
           })
       }
       myLectures={myLectures}
-      onHover={(hoveredLecture) => (
-        hoveredLecture !== null && 'name' in hoveredLecture ? updateTempLecture(hoveredLecture) : updateTempLecture(null)
-      )}
-      onClickRow={
+      selectedLecture={tempLecture ?? undefined}
+      onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
+      onDoubleClickRow={
         (clickedLecture) => {
           if ('class_title' in clickedLecture) {
             return;
@@ -107,7 +108,7 @@ function LectureList() {
   } = useSearch();
   const semester = useSemester();
   const { updateSemester } = useSemesterAction();
-  updateSemester(semesterParams || '20241');
+  updateSemester(semesterParams || '20242');
   // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
 
   const { myLectures } = useMyLectures();

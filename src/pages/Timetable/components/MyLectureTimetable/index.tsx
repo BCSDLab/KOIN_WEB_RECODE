@@ -18,9 +18,9 @@ import DownloadTimetableModal from './DownloadTimetableModal';
 export default function MainTimetable() {
   const { myLectures } = useMyLectures();
   const navigate = useNavigate();
+  const semester = useSemester();
   const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: deptList } = useDeptList();
-  const semester = useSemester();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
