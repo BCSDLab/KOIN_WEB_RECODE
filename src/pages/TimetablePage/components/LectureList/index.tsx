@@ -8,6 +8,7 @@ import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/TimetablePage/hooks/useSelect';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useLectureList from '../../hooks/useLectureList';
 import DeptListbox from './DeptListbox ';
 import LastUpdatedDate from './LastUpdatedDate';
@@ -94,6 +95,7 @@ function LectureList() {
   const {
     onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef,
   } = useSearch();
+  const logger = useLogger();
   const semester = useSemester();
   const { myLectures } = useMyLectures();
 
@@ -105,12 +107,28 @@ function LectureList() {
             ref={searchInputRef}
             className={styles['search-input__input']}
             placeholder="교과명을 입력하세요."
-            onKeyDown={onKeyDownSearchInput}
+            onKeyDown={(e) => {
+              onKeyDownSearchInput(e);
+              if (e.key === 'Enter') {
+                logger.actionEventClick({
+                  actionTitle: 'USER',
+                  title: 'timetable',
+                  value: 'search',
+                });
+              }
+            }}
           />
           <button
             className={styles['search-input__button']}
             type="button"
-            onClick={onClickSearchButton}
+            onClick={() => {
+              onClickSearchButton();
+              logger.actionEventClick({
+                actionTitle: 'USER',
+                title: 'timetable',
+                value: 'search',
+              });
+            }}
           >
             <img src="https://static.koreatech.in/assets/img/ic-search-gray.png" alt="search" />
           </button>

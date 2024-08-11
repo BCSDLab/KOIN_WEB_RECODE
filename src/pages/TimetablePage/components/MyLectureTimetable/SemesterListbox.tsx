@@ -26,6 +26,7 @@ function SemesterListbox() {
       list={semesterOptionList}
       value={value}
       onChange={onChangeSelect}
+      logTitle="select_semester"
     />
   );
 }
