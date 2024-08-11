@@ -32,7 +32,9 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const backInDetailPage = async () => {
     if (pathname.includes('/store/') && params) {
       const response = await api.store.getStoreDetailInfo(params.id!);
-      logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_back_button', value: response.name }); // 상점 내 뒤로가기 버튼 로깅
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: response.name, event_category: 'click',
+      }); // 상점 내 뒤로가기 버튼 로깅
     }
   };
 

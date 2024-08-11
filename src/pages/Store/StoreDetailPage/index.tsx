@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -22,12 +22,23 @@ function StoreDetailPage() {
   const params = useParams();
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
+
+  const enterCategoryTimeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (enterCategoryTimeRef.current === null) {
+      const currentTime = new Date().getTime();
+      sessionStorage.setItem('enter_storeDetail', currentTime.toString());
+      enterCategoryTimeRef.current = currentTime;
+    }
+  }, []);
   const { storeDetail, storeDescription } = useStoreDetail(params.id!);
   const { data: storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [tapType, setTapType] = useState('메뉴');
   const portalManager = useModalPortal();
   const logger = useLogger();
+  const koreanCategory = storeDetail.shop_categories.filter((category) => category.name !== '전체보기')[0].name;
   const onClickCallNumber = () => {
     logger.click({
       title: 'store_detail_call_number',
@@ -37,19 +48,27 @@ function StoreDetailPage() {
       actionTitle: 'BUSINESS',
       title: 'shop_call',
       value: storeDetail!.name,
+      event_category: 'click',
+      duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail')),
     });
   };
   const onClickImage = (img: string[], index: number) => {
-    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name });
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name, event_category: 'click',
+    });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
     ));
   };
   const onClickList = () => {
-    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_list', value: 'shopList' });
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: koreanCategory, duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail')),
+    });
   };
   const onClickEventList = () => {
-    logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_detailView_event', value: `${storeDetail.name}` });
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
+    });
   };
   const copyAccount = async (account: string) => {
     await navigator.clipboard.writeText(account);
@@ -58,7 +77,7 @@ function StoreDetailPage() {
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
-  useScorllLogging('shop_detailView', storeDetail);
+  useScorllLogging('shop_detail_view', storeDetail);
 
   return (
     <div className={styles.template}>

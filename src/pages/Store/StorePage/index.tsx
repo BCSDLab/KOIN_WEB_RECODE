@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import * as api from 'api';
@@ -96,9 +96,12 @@ function StorePage() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const selectedCategory = Number(searchParams.get('category'));
+  const koreanCategory = categories?.shop_categories.find(
+    (category) => category.id === selectedCategory,
+  )?.name;
   const loggingCheckbox = (id: string) => {
     if (id && searchParams.get(id)) {
-      logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_can', value: `check_${id}_${koreanCategory}` });
     }
   };
   // eslint-disable-next-line
@@ -106,6 +109,15 @@ function StorePage() {
   useScrollToTop();
   useScorllLogging('shop_categories', categories);
 
+  const enterCategoryTimeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (enterCategoryTimeRef.current === null) {
+      const currentTime = new Date().getTime();
+      sessionStorage.setItem('enter_category', currentTime.toString());
+      enterCategoryTimeRef.current = currentTime;
+    }
+  }, []);
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
@@ -122,7 +134,15 @@ function StorePage() {
               aria-checked={category.id === selectedCategory}
               type="button"
               onClick={() => {
-                logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
+                logger.actionEventClick({
+                  actionTitle: 'BUSINESS',
+                  title: 'shop_categories',
+                  value: category.name,
+                  event_category: 'click',
+                  previous_page: categories?.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '',
+                  duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+                  current_page: category.name,
+                });
                 setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}
@@ -153,7 +173,11 @@ function StorePage() {
           }}
           onFocus={() => {
             const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
-            if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
+            if (categories) {
+              logger.actionEventClick({
+                actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}`, event_category: 'click',
+              });
+            }
           }}
         />
         <button
@@ -213,7 +237,9 @@ function StorePage() {
             to={`/store/${store.id}`}
             className={styles['store-list__item']}
             key={store.id}
-            onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}
+            onClick={() => logger.actionEventClick({
+              actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory}`, current_page: `${store.name}`, duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+            })}
           >
             {store.is_event
               && store.is_open

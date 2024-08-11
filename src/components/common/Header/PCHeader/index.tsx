@@ -119,7 +119,14 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 <Link
                   className={styles.megamenu__link}
                   to={menu.link}
-                  onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: menu.title })}
+                  onClick={() => {
+                    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: menu.title });
+                    if (menu.title === '주변상점') {
+                      logger.actionEventClick({
+                        actionTitle: 'BUSINESS', title: 'header', value: '주변상점', event_category: 'click',
+                      });
+                    }
+                  }}
                 >
                   {menu.title}
                 </Link>
