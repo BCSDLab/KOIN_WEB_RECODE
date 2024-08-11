@@ -62,6 +62,14 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const logger = useLogger();
   const token = useTokenState();
   const isLoggedin = !!token;
+  const logShortcut = (title: string) => {
+    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '식단' });
+    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '버스/교통' });
+    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '공지사항' });
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '주변상점' });
+    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '복덕방' });
+    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
+  };
 
   return (
     <>
@@ -119,7 +127,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 <Link
                   className={styles.megamenu__link}
                   to={menu.link}
-                  onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: menu.title })}
+                  onClick={() => logShortcut(menu.title)}
                 >
                   {menu.title}
                 </Link>
@@ -132,12 +140,30 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         {!isLoggedin ? (
           <>
             <li className={styles['header__auth-link']}>
-              <Link to="/auth/signup">
+              <Link
+                to="/auth/signup"
+                onClick={() => {
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'header',
+                    value: '회원가입',
+                  });
+                }}
+              >
                 회원가입
               </Link>
             </li>
             <li className={styles['header__auth-link']}>
-              <Link to="/auth">
+              <Link
+                to="/auth"
+                onClick={() => {
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'header',
+                    value: '로그인',
+                  });
+                }}
+              >
                 로그인
               </Link>
             </li>
@@ -145,12 +171,34 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         ) : (
           <>
             <li className={styles['header__auth-link']}>
-              <button type="button" className={styles['header__auth-button']} onClick={openModal}>
+              <button
+                type="button"
+                className={styles['header__auth-button']}
+                onClick={() => {
+                  openModal();
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'header',
+                    value: '정보수정',
+                  });
+                }}
+              >
                 정보수정
               </button>
             </li>
             <li className={styles['header__auth-link']}>
-              <button onClick={logout} type="button" className={styles['header__auth-button']}>
+              <button
+                onClick={() => {
+                  logout();
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'header',
+                    value: '로그아웃',
+                  });
+                }}
+                type="button"
+                className={styles['header__auth-button']}
+              >
                 로그아웃
               </button>
             </li>
