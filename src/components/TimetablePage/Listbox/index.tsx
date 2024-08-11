@@ -31,7 +31,7 @@ function Listbox({
   const logger = useLogger();
   const handleLogClick = (optionValue: string) => {
     if (logTitle === 'select_dept') {
-      logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click${optionValue}` });
+      logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click_${optionValue}` });
       return;
     }
     if (logTitle === 'select_semester') {
