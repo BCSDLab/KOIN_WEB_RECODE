@@ -2,7 +2,8 @@ import type { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import { FixedSizeList as List } from 'react-window';
 import { cn } from '@bcsdlab/utils';
-import { useTempLecture } from 'utils/zustand/myTempLecture';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
+import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
@@ -46,6 +47,9 @@ function LectureTable({
 }: LectureTableProps): JSX.Element {
   const { widthInfo } = useFlexibleWidth(9, [65, 173, 45, 65, 65, 45, 45, 45, 65]);
   const tempLecture = useTempLecture();
+  const { updateTempLecture } = useTempLectureAction();
+  const { target } = useOnClickOutside<HTMLDivElement>(() => updateTempLecture(null));
+
   const handleTableRowClick = (
     value: LectureInfo | TimetableLectureInfo,
     e: React.MouseEvent<HTMLButtonElement>,
@@ -89,36 +93,37 @@ function LectureTable({
             </div>
           ))}
         </div>
-        <List
-          width={613}
-          height={height}
-          itemSize={34}
-          itemCount={list.length}
-          itemData={list}
-        >
-          {({ index, data: items, style }) => {
-            const currentItem = items[index];
-            return (
-              <div
-                className={cn({
-                  [styles.table__row]: true,
-                  [styles['table__row--include']]: myLectures.some((item) => item.code === currentItem.code && item.lecture_class === currentItem.lecture_class),
-                  [styles['table__row--selected']]: selectedLecture === currentItem,
-                })}
-                aria-selected={selectedLecture === currentItem}
-                role="row"
-                key={`${currentItem.code}-${currentItem.lecture_class}`}
-                style={style}
-              >
-                <button
-                  type="button"
-                  role={onClickRow !== undefined ? undefined : 'null'}
-                  aria-label={onClickRow !== undefined ? '시간표에서 미리 보기' : undefined}
-                  className={styles['table__row-button']}
-                  onClick={(e) => handleTableRowClick(currentItem, e)}
+        <div className={styles['table__lecture-list']} ref={target}>
+          <List
+            width={613}
+            height={height}
+            itemSize={34}
+            itemCount={list.length}
+            itemData={list}
+          >
+            {({ index, data: items, style }) => {
+              const currentItem = items[index];
+              return (
+                <div
+                  className={cn({
+                    [styles.table__row]: true,
+                    [styles['table__row--include']]: myLectures.some((item) => item.code === currentItem.code && item.lecture_class === currentItem.lecture_class),
+                    [styles['table__row--selected']]: selectedLecture === currentItem,
+                  })}
+                  aria-selected={selectedLecture === currentItem}
+                  role="row"
+                  key={`${currentItem.code}-${currentItem.lecture_class}`}
+                  style={style}
                 >
-                  {LECTURE_TABLE_HEADER
-                    .map((headerItem, headerItemIndex) => (headerItem.key !== null
+                  <button
+                    type="button"
+                    role={onClickRow !== undefined ? undefined : 'null'}
+                    aria-label={onClickRow !== undefined ? '시간표에서 미리 보기' : undefined}
+                    className={styles['table__row-button']}
+                    onClick={(e) => handleTableRowClick(currentItem, e)}
+                  >
+                    {LECTURE_TABLE_HEADER
+                      .map((headerItem, headerItemIndex) => (headerItem.key !== null
                       && (
                         <div
                           style={{
@@ -138,11 +143,12 @@ function LectureTable({
                           {headerItem.key !== null && headerItem.key !== 'professor' && headerItem.key !== 'name' && currentItem[headerItem.key]}
                         </div>
                       )))}
-                </button>
-              </div>
-            );
-          }}
-        </List>
+                  </button>
+                </div>
+              );
+            }}
+          </List>
+        </div>
       </div>
     </div>
   );

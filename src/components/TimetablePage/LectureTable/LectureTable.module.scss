@@ -9,7 +9,7 @@
   white-space: nowrap;
 
   &__content {
-    & > div {
+    & > div > div {
       -ms-overflow-style: none;
 
       // Firefox 대응
