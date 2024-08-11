@@ -30,7 +30,7 @@ export const event = ({
     value,
   });
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.REACT_APP_API_PATH?.includes('stage')) {
     // eslint-disable-next-line no-console
     console.table({
       팀: action, '이벤트 Category': category, '이벤트 Title': label, 값: value, '체류 시간': duration_time, '이전 카테고리': previous_page, '현재 페이지': current_page,

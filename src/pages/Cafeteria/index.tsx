@@ -1,42 +1,33 @@
 import { useState } from 'react';
-import useScrollToTop from 'utils/hooks/useScrollToTop';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
-import { MealType } from 'interfaces/Cafeteria';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { DiningType } from 'interfaces/Cafeteria';
 import MobileCafeteriaPage from 'pages/Cafeteria/MobileCafeteriaPage';
+import { DiningTime } from 'utils/ts/cafeteria';
 import PCCafeteriaPage from './PCCafeteriaPage';
-import styles from './Cafeteria.module.scss';
 import { useDatePicker } from './hooks/useDatePicker';
-
-const getType = () => {
-  const hour = new Date().getHours();
-  if (hour < 9) {
-    return 'BREAKFAST';
-  } if (hour < 14) {
-    return 'LUNCH';
-  }
-  return 'DINNER';
-};
+import styles from './Cafeteria.module.scss';
 
 function CafeteriaPage() {
   const isMobile = useMediaQuery();
-  const [mealType, setMealType] = useState<MealType>(getType());
+  const [diningType, setDiningType] = useState<DiningType>(new DiningTime().getType());
   const { currentDate } = useDatePicker();
 
   useScrollToTop();
 
   return (
     <div className={styles.page}>
-      <div className={styles.page__content} key={currentDate.toISOString()}>
+      <div className={styles.page__content} key={currentDate().toISOString()}>
         {isMobile
           ? (
             <MobileCafeteriaPage
-              mealType={mealType}
-              setMealType={setMealType}
+              diningType={diningType}
+              setDiningType={setDiningType}
             />
           ) : (
             <PCCafeteriaPage
-              mealType={mealType}
-              setMealType={setMealType}
+              diningType={diningType}
+              setDiningType={setDiningType}
             />
           )}
       </div>

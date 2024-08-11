@@ -8,8 +8,10 @@ import { ReactComponent as WarningMobileIcon } from 'assets/svg/warning-mobile-i
 import useCheckPassword from 'components/common/Header/hooks/useCheckPassword';
 import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useAuthenticationActions } from 'utils/zustand/authentication';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -19,14 +21,17 @@ export interface AuthenticateUserModalProps {
 export default function AuthenticateUserModal({
   onClose,
 }: AuthenticateUserModalProps) {
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+  useEscapeKeyDown({ onEscape: onClose });
+
+  const isMobile = useMediaQuery();
+  const { updateAuthentication } = useAuthenticationActions();
   const {
     mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error, errorMessage,
   } = useCheckPassword();
-  const { updateAuthentication } = useAuthenticationActions();
-  const isMobile = useMediaQuery();
-  const navigate = useNavigate();
 
   const handleCheckPassword = async () => {
     if (password === '') {
@@ -36,7 +41,7 @@ export default function AuthenticateUserModal({
     checkPassword({ password: hashedPassword });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleCheckPassword();
     }
@@ -54,12 +59,19 @@ export default function AuthenticateUserModal({
     }
   });
 
-  window.addEventListener('unload', () => {
-    updateAuthentication(false);
-  });
+  useEffect(() => {
+    const handleUnload = () => {
+      updateAuthentication(false);
+    };
+
+    window.addEventListener('unload', handleUnload);
+    return () => {
+      window.removeEventListener('unload', handleUnload);
+    };
+  }, [updateAuthentication]);
 
   return (
-    <div className={styles.background} aria-hidden>
+    <div className={styles.background} aria-hidden ref={backgroundRef}>
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>내 정보 수정하기</span>
@@ -84,7 +96,7 @@ export default function AuthenticateUserModal({
               })}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleEnterKeyDown}
             />
             <button type="button" onClick={changeIsBlind} className={styles['container__blind-button']}>
               {isBlind ? <BlindIcon /> : <ShowIcon />}

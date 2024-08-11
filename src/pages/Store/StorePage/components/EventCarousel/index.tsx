@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useGetAllEvents } from 'pages/Store/StorePage/components/hooks/useGetAllEvents';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './EventCarousel.module.scss';
 
 export default function EventCarousel() {
