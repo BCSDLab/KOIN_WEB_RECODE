@@ -2,7 +2,7 @@ import { useGetReview } from 'pages/Store/StoreDetailPage/hooks/useGetReview';
 import { useParams } from 'react-router-dom';
 import ReviewCard from 'pages/Store/StoreDetailPage/Review/components/ReviewCard/ReviewCard';
 import {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useDeferredValue, useEffect, useRef, useState,
 } from 'react';
 import { ReactComponent as NoReview } from 'assets/svg/Review/no-review.svg';
 import { ReactComponent as Arrow } from 'assets/svg/up-arrow-icon.svg';
@@ -30,9 +30,10 @@ export default function ReviewList() {
   const startReview = useRef(null);
   const currentReviewType = useRef<string>('최신순');
   const [currentSortType, setCurrentSortType] = useState(sortType.최신순);
+  const previousSortType = useDeferredValue(currentSortType);
   const {
     data, hasNextPage, fetchNextPage,
-  } = useGetReview(Number(param.id), currentSortType);
+  } = useGetReview(Number(param.id), previousSortType);
   const reviews = data.pages.flatMap((page) => page.reviews);
   const { data: myReview } = useGetMyReview(param.id!, currentSortType);
   const [isCheckboxClicked, setIsCheckboxClicked] = useState<boolean>(false);
