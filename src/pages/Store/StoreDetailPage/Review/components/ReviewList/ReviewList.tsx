@@ -35,7 +35,7 @@ export default function ReviewList() {
     data, hasNextPage, fetchNextPage,
   } = useGetReview(Number(param.id), previousSortType);
   const reviews = data.pages.flatMap((page) => page.reviews);
-  const { data: myReview } = useGetMyReview(param.id!, currentSortType);
+  const { data: myReview } = useGetMyReview(param.id!, previousSortType);
   const [isCheckboxClicked, setIsCheckboxClicked] = useState<boolean>(false);
   const selectorRef = useRef<HTMLDivElement>(null);
   const [openDropdown, setOpenDropdowm] = useState(false);
@@ -166,6 +166,7 @@ export default function ReviewList() {
             is_mine={mine.is_mine}
             is_modified={mine.is_modified}
             created_at={mine.created_at}
+            key={mine.review_id}
           />
         ))) : <div className={styles['not-found']}>작성한 리뷰가 없어요 :)</div>
       )}
