@@ -35,7 +35,7 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
     <div className={styles['store-list']}>
       {storeListData?.map((store: StoreList) => (
         <Link
-          to={`${ROUTES.STORE_DETAIL.replace(':id', String(store.id))}`}
+          to={ROUTES.StoreDetail.general(store.id)}
           className={styles['store-list__item']}
           key={store.id}
           onClick={() => logger.actionEventClick({

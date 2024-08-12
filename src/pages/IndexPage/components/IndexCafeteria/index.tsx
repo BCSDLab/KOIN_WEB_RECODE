@@ -31,7 +31,7 @@ function IndexCafeteria() {
 
   const handleMoreClick = () => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
-    navigate(ROUTES.CAAFETERIA);
+    navigate(ROUTES.Cafeteria);
   };
 
   const handlePlaceClick = (place: DiningPlace) => {

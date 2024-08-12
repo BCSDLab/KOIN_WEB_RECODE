@@ -40,7 +40,7 @@ export default function IndexTimeTable() {
   return (
     <div className={styles.template}>
       <Link
-        to={ROUTES.TIMETABLE}
+        to={ROUTES.Timetable}
         className={styles.title}
         onClick={() => {
           logger.actionEventClick({
@@ -55,7 +55,7 @@ export default function IndexTimeTable() {
       <ErrorBoundary fallbackClassName="loading">
         <Suspense fallback={null}>
           <Link
-            to={ROUTES.TIMETABLE}
+            to={ROUTES.Timetable}
             onClick={() => {
               logger.actionEventClick({
                 actionTitle: 'USER',

@@ -64,7 +64,7 @@ function IndexBus() {
     }
 
     if (type === 'shuttle') {
-      navigate(ROUTES.BUS);
+      navigate(ROUTES.Bus);
       logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
     } else {
       navigate(getBusDetail(type).link);
@@ -103,7 +103,7 @@ function IndexBus() {
   return (
     <section className={styles.template}>
       <Link
-        to={ROUTES.BUS}
+        to={ROUTES.Bus}
         className={styles.template__title}
         onClick={() => {
           setSelectedTab(BUS_TYPES[0]);

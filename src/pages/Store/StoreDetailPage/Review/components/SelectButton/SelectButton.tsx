@@ -51,7 +51,7 @@ export default function SelectButton({ is_mine, review_id }: Props) {
             <button
               type="button"
               onClick={() => navigate(
-                `${ROUTES.REVIEW_EDIT.replace(':id', String(params.id))}`,
+                ROUTES.ReviewEdit.general(params.id!),
                 { state: { from: review_id } },
               )}
               className={styles.section}
@@ -74,7 +74,7 @@ export default function SelectButton({ is_mine, review_id }: Props) {
             className={styles.section}
             onClick={() => {
               if (userInfo) {
-                navigate(`${ROUTES.REVIEW_REPORT.replace(':shopid', String(params.id)).replace(':reviewid', String(review_id))}`);
+                navigate(ROUTES.ReviewReport.general(params.id!, review_id));
               } else {
                 openLoginModal();
               }

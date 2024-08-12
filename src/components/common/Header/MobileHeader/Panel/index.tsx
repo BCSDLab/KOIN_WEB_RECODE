@@ -37,7 +37,7 @@ export default function Panel({ openModal }: PanelProps) {
 
   // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
   const logExitExistingPage = () => {
-    if (pathname === ROUTES.TIMETABLE) logger.actionEventClick({ actionTitle: 'USER', title: 'timetable_back', value: '햄버거' });
+    if (pathname === ROUTES.Timetable) logger.actionEventClick({ actionTitle: 'USER', title: 'timetable_back', value: '햄버거' });
   };
 
   const handleMyInfoClick = () => {
@@ -50,7 +50,7 @@ export default function Panel({ openModal }: PanelProps) {
       closeSidebar();
       openModal();
     } else {
-      navigate(ROUTES.AUTH);
+      navigate(ROUTES.Auth);
     }
   };
 
@@ -115,7 +115,7 @@ export default function Panel({ openModal }: PanelProps) {
                 });
               }
               : () => {
-                navigate(ROUTES.AUTH);
+                navigate(ROUTES.Auth);
                 logger.actionEventClick({
                   actionTitle: 'USER',
                   title: 'hamburger',

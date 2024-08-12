@@ -80,7 +80,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     <>
       <Link
         className={styles.header__logo}
-        to={ROUTES.MAIN}
+        to={ROUTES.Main}
         tabIndex={0}
       >
         <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
@@ -146,7 +146,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           <>
             <li className={styles['header__auth-link']}>
               <Link
-                to={ROUTES.AUTH_SIGNUP}
+                to={ROUTES.AuthSignup}
                 onClick={() => {
                   logger.actionEventClick({
                     actionTitle: 'USER',
@@ -160,7 +160,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
             </li>
             <li className={styles['header__auth-link']}>
               <Link
-                to={ROUTES.AUTH}
+                to={ROUTES.Auth}
                 onClick={() => {
                   logger.actionEventClick({
                     actionTitle: 'USER',

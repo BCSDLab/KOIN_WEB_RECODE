@@ -14,7 +14,7 @@ export default function PrivateRoute({ element, requireAuthentication }: Pirvate
   // const isAuthenticated = useAuthentication();
 
   if (requireAuthentication && !token) {
-    return <Navigate replace to={ROUTES.MAIN} />;
+    return <Navigate replace to={ROUTES.Main} />;
   }
 
   // if (requireAuthentication && !isAuthenticated) {

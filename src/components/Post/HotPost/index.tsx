@@ -44,7 +44,7 @@ function HotPost() {
         hotArticleList.map((hotPost: HotPostResponse, index: number) => (
           <Link
             className={styles.hotpost__content}
-            to={`${ROUTES.BOARD_NOTICE_DETAIL.replace(':id', String(hotPost.id))}`}
+            to={ROUTES.BoardNoticeDetail.general(hotPost.id)}
             key={hotPost.id + hotPost.board_id}
             onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'notice_hot', value: hotPost.title })}
           >

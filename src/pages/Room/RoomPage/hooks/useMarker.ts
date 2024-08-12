@@ -26,7 +26,7 @@ function useMarker({ map, roomList }: MarkerProps) {
         clickable: true,
       });
       marker.addListener('click', () => {
-        navigate(`${ROUTES.ROOM_DETAIL.replace(':id', String(land.id))}`);
+        navigate(ROUTES.RoomDetail.general(land.id));
       });
       return marker;
     });

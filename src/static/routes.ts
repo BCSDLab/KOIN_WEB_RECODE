@@ -1,21 +1,39 @@
 const ROUTES = {
-  MAIN: '/',
-  TIMETABLE: '/timetable',
-  STORE: '/store',
-  STORE_DETAIL: '/store/:id',
-  BUS: '/bus',
-  CAAFETERIA: '/cafeteria',
-  BOARD_NOTICE: '/board/notice',
-  BOARD_NOTICE_DETAIL: '/board/notice/:id',
-  ROOM: '/room',
-  ROOM_DETAIL: '/room/:id',
-  AUTH: '/auth',
-  AUTH_SIGNUP: '/auth/signup',
-  AUTH_FINDPW: '/auth/findpw',
-  AUTH_MODIFYINFO: '/auth/modifyinfo',
-  REVIEW: '/review/:id',
-  REVIEW_EDIT: '/edit/review/:id',
-  REVIEW_REPORT: '/report/review/shopid/:shopid/reviewid/:reviewid',
+  Main: '/',
+  Timetable: '/timetable',
+  Store: '/store',
+  StoreDetail: {
+    path: '/store/:id',
+    general: (id: number) => `/store/${id}`,
+  },
+  Bus: '/bus',
+  Cafeteria: '/cafeteria',
+  BoardNotice: '/board/notice',
+  BoardNoticeDetail: {
+    path: '/board/notice/:id',
+    general: (id: number) => `/borad/notice/${id}`,
+  },
+  Room: '/room',
+  RoomDetail: {
+    path: '/room/:id',
+    general: (id: number) => `/room/${id}`,
+  },
+  Auth: '/auth',
+  AuthSignup: '/auth/signup',
+  AuthFindPW: '/auth/findpw',
+  AuthModifyInfo: '/auth/modifyinfo',
+  Review: {
+    path: '/review/:id',
+    general: (id: string) => `/reivew/${id}`,
+  },
+  ReviewEdit: {
+    path: '/edit/review/:id',
+    general: (id: string) => `/edit/review/${id}`,
+  },
+  ReviewReport: {
+    path: '/report/review/shopid/:shopid/reviewid/:reviewid',
+    general: (shopid: string, reviewid: number) => `/report/review/shopid/${shopid}/reviewid/${reviewid}`,
+  },
 };
 
 export default ROUTES;

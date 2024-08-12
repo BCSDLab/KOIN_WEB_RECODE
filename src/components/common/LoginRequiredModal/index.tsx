@@ -28,7 +28,7 @@ export default function LoginRequiredModal({ title = '', description = '', close
             type="button"
             onClick={() => {
               setRedirectPath(`${location.pathname}`);
-              navigate(ROUTES.AUTH);
+              navigate(ROUTES.Auth);
             }}
           >
             로그인하기

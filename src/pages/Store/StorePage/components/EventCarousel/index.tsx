@@ -27,7 +27,7 @@ export default function EventCarousel() {
           <div className={styles.swipe}>
             {carouselList.map((item) => (
               <Link
-                to={`${ROUTES.STORE_DETAIL.replace(':id', String(item.shop_id))}`}
+                to={ROUTES.StoreDetail.general(item.shop_id)}
                 key={item.event_id}
                 className={styles['swipe-item']}
                 onClick={() => eventLogging(item.shop_name)}

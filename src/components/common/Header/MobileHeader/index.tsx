@@ -24,14 +24,14 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const { openSidebar } = useMobileSidebar();
   const buttonState = useHeaderButtonStore((state) => state.buttonState);
 
-  const isMain = pathname === ROUTES.MAIN;
+  const isMain = pathname === ROUTES.Main;
   const isCustomButton = buttonState.type === 'custom';
   const navigate = useNavigate();
   const logger = useLogger();
   const params = useParams();
 
   const backInDetailPage = async () => {
-    if (pathname.includes(ROUTES.STORE) && params) {
+    if (pathname.includes(ROUTES.Store) && params) {
       const response = await api.store.getStoreDetailInfo(params.id!);
       logger.actionEventClick({
         actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: response.name, event_category: 'click',

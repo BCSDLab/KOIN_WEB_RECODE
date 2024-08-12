@@ -31,7 +31,7 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
       {
         storeListData?.map((store: StoreListV2) => (
           <Link
-            to={`${ROUTES.STORE_DETAIL.replace(':id', String(store.id))}`}
+            to={ROUTES.StoreDetail.general(store.id)}
             className={styles['store-list__item']}
             key={store.id}
             onClick={() => logger.actionEventClick({

@@ -20,7 +20,7 @@ function PostList(props: PostListProps) {
         articles?.map((article) => (
           <Link
             className={styles.list}
-            to={`${ROUTES.BOARD_NOTICE_DETAIL.replace(':id', String(article.id))}`}
+            to={ROUTES.BoardNoticeDetail.general(article.id)}
             key={article.id}
           >
             <div className={styles.list__id}>{ article.id }</div>
