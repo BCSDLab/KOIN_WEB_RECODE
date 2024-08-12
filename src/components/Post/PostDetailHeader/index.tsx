@@ -7,7 +7,6 @@ type PostDetailHeaderProps = {
   boardId: number
   title: string
   createdAt: string
-  commentCount: number
   nickname: string
   hit: number
 };
@@ -17,7 +16,6 @@ function PostDetailHeader(props: PostDetailHeaderProps) {
     boardId,
     title,
     createdAt,
-    commentCount,
     nickname,
     hit,
   } = props;
@@ -28,7 +26,6 @@ function PostDetailHeader(props: PostDetailHeaderProps) {
       <div className={styles.title}>
         <span className={styles['title__board-id']}>{convertNoticeTag(boardId)}</span>
         <span className={styles.title__content}>{title}</span>
-        <span className={styles['title__comment-count']}>{`[${commentCount}]`}</span>
         { setPostCreateDate(createdAt)[1] && (
           <img
             className={styles['title__new-tag']}
