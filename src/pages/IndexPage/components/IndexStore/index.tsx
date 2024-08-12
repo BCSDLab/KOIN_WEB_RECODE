@@ -16,20 +16,24 @@ function IndexStore() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
-
+  const durationTime = new Date().getTime() - Number(sessionStorage.getItem('enterMain'));
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'main_shop_categories',
       value: category.name,
+      event_category: 'click',
+      previous_page: '메인',
+      current_page: category.name,
+      duration_time: durationTime,
     });
     navigate(`${ROUTES.STORE}?category=${category.id}`);
   };
 
   return (
     <section className={styles.template}>
-      <Link to="/store" className={styles.template__title}>주변상점</Link>
+      <Link to={ROUTES.STORE} className={styles.template__title}>주변상점</Link>
       <div className={styles.category__wrapper}>
         {categories?.shop_categories.map((category) => (
           <div

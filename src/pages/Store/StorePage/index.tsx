@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import * as api from 'api';
 
@@ -163,10 +163,13 @@ function StorePage() {
   const logger = useLogger();
 
   const selectedCategory = Number(searchParams.get('category'));
+  const koreanCategory = categories?.shop_categories.find(
+    (category) => category.id === selectedCategory,
+  )?.name;
   const loggingCheckbox = (id: string) => {
     if (id && searchParams.get(id)) {
       // eslint-disable-next-line max-len
-      logger.actionEventClick({ actionTitle: 'BUSINESS', title: `shop_can_${id}`, value: `check_${id}` });
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_can', value: `check_${id}_${koreanCategory}` });
     }
   };
   const onClickMobileStoreListFilter = (item: StoreSorterType | StoreFilterType) => {
@@ -190,6 +193,15 @@ function StorePage() {
   useScrollToTop();
   useScorllLogging('shop_categories', categories);
 
+  const enterCategoryTimeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (enterCategoryTimeRef.current === null) {
+      const currentTime = new Date().getTime();
+      sessionStorage.setItem('enter_category', currentTime.toString());
+      enterCategoryTimeRef.current = currentTime;
+    }
+  }, []);
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
@@ -208,8 +220,15 @@ function StorePage() {
               aria-checked={category.id === selectedCategory}
               type="button"
               onClick={() => {
-                logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories', value: category.name });
-                setParams('storeName', '', { deleteBeforeParam: true, replacePage: true });
+                logger.actionEventClick({
+                  actionTitle: 'BUSINESS',
+                  title: 'shop_categories',
+                  value: category.name,
+                  event_category: 'click',
+                  previous_page: categories?.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '',
+                  duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+                  current_page: category.name,
+                });
                 setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}

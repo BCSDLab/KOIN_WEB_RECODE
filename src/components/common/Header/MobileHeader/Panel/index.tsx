@@ -1,5 +1,5 @@
 import { cn } from '@bcsdlab/utils';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CATEGORY, Submenu } from 'static/category';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
@@ -19,6 +19,7 @@ interface PanelProps {
 export default function Panel({ openModal }: PanelProps) {
   const { isSidebarOpen, closeSidebar } = useMobileSidebar();
   const { data: userInfo } = useUser();
+  const { pathname } = useLocation();
   const logout = useLogout();
   const logger = useLogger();
   const navigate = useNavigate();
@@ -26,29 +27,36 @@ export default function Panel({ openModal }: PanelProps) {
   useBodyScrollLock(isSidebarOpen);
 
   const logShortcut = (title: string) => {
-    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: '주변상점' });
-    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger_timetable', value: '햄버거 시간표' });
-    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_bus', value: '버스' });
     if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_dining', value: '식단' });
+    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_bus', value: '버스' });
     if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_notice', value: '공지사항' });
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: '주변상점' });
+    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger', value: '복덕방' });
+    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger', value: '시간표' });
+  };
+
+  // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
+  const logExitExistingPage = () => {
+    if (pathname === ROUTES.TIMETABLE) logger.actionEventClick({ actionTitle: 'USER', title: 'timetable_back', value: '햄버거' });
   };
 
   const handleMyInfoClick = () => {
     if (userInfo) {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        title: 'hamburger',
+        value: '정보수정',
+      });
       closeSidebar();
       openModal();
     } else {
-      logger.actionEventClick({
-        actionTitle: 'USER',
-        title: 'hamburger_login',
-        value: '햄버거 로그인',
-      });
       navigate(ROUTES.AUTH);
     }
   };
 
   const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
+    logExitExistingPage();
     closeSidebar();
     if (submenu.openInNewTab) {
       window.open(submenu.link, '_blank');
@@ -96,7 +104,25 @@ export default function Panel({ openModal }: PanelProps) {
         <button
           className={styles.auth__font}
           type="button"
-          onClick={userInfo ? logout : () => navigate(ROUTES.AUTH)}
+          onClick={
+            userInfo
+              ? () => {
+                logout();
+                logger.actionEventClick({
+                  actionTitle: 'USER',
+                  title: 'hamburger',
+                  value: '로그아웃',
+                });
+              }
+              : () => {
+                navigate(ROUTES.AUTH);
+                logger.actionEventClick({
+                  actionTitle: 'USER',
+                  title: 'hamburger',
+                  value: '로그인',
+                });
+              }
+          }
         >
           {userInfo ? '로그아웃' : '로그인'}
         </button>

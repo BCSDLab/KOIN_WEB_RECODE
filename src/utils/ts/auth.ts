@@ -1,3 +1,5 @@
+import ROUTES from 'static/routes';
+
 const REDIRECT_KEY = 'REDIRECT_AFTER_LOGIN';
 
 export function setRedirectPath(path: string) {
@@ -5,7 +7,7 @@ export function setRedirectPath(path: string) {
 }
 
 export function getRedirectPath(): string {
-  return sessionStorage.getItem(REDIRECT_KEY) || '/';
+  return sessionStorage.getItem(REDIRECT_KEY) || ROUTES.MAIN;
 }
 
 export function clearRedirectPath() {
@@ -15,5 +17,5 @@ export function clearRedirectPath() {
 export function redirectToLogin(currentPath?: string) {
   const pathToSave = currentPath || window.location.pathname;
   setRedirectPath(pathToSave);
-  window.location.href = '/auth';
+  window.location.href = ROUTES.AUTH;
 }

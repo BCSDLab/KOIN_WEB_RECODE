@@ -4,6 +4,8 @@ import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 import { getJosaPicker } from '@bcsdlab/utils';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import ROUTES from 'static/routes';
 import styles from './DesktopStoreList.module.scss';
 
@@ -22,6 +24,13 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
   const logger = useLogger();
   const pickTopicJosa = getJosaPicker('은');
 
+  const { searchParams } = useParamsHandler();
+  const { data: categories } = useStoreCategories();
+  const selectedCategory = Number(searchParams.get('category'));
+  const koreanCategory = categories?.shop_categories.find(
+    (category) => category.id === selectedCategory,
+  )?.name;
+
   return (
     <div className={styles['store-list']}>
       {storeListData?.map((store: StoreList) => (
@@ -29,7 +38,9 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
           to={`${ROUTES.STORE_DETAIL.replace(':id', String(store.id))}`}
           className={styles['store-list__item']}
           key={store.id}
-          onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}
+          onClick={() => logger.actionEventClick({
+            actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory}`, current_page: `${store.name}`, duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+          })}
         >
           {store.is_event
           && store.is_open

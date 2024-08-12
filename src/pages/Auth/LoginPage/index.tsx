@@ -129,7 +129,7 @@ function LoginPage() {
             logger.actionEventClick({
               actionTitle: 'USER',
               title: 'login',
-              value: '로그인',
+              value: '로그인완료',
             });
           }}
         >
@@ -144,13 +144,6 @@ function LoginPage() {
             onChange={toggleIsAutoLoginFlag}
             type="checkbox"
             id="autoLoginCheckBox"
-            onClick={() => {
-              logger.actionEventClick({
-                actionTitle: 'USER',
-                title: 'auto_login',
-                value: '자동 로그인',
-              });
-            }}
           />
           자동 로그인
         </label>
@@ -162,15 +155,39 @@ function LoginPage() {
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',
-              title: 'find_id',
-              value: '아이디 찾기',
+              title: 'login',
+              value: '아이디찾기',
             });
           }}
         >
           아이디 찾기
         </a>
-        <Link className={styles.help__link} to={ROUTES.AUTH_FINDPW}>비밀번호 찾기</Link>
-        <Link className={styles.help__link} to={ROUTES.AUTH_SIGNUP}>회원가입</Link>
+        <Link
+          className={styles.help__link}
+          to={ROUTES.AUTH_FINDPW}
+          onClick={() => {
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              title: 'login',
+              value: '비밀번호찾기',
+            });
+          }}
+        >
+          비밀번호 찾기
+        </Link>
+        <Link
+          className={styles.help__link}
+          to={ROUTES.AUTH_SIGNUP}
+          onClick={() => {
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              title: 'login',
+              value: '회원가입',
+            });
+          }}
+        >
+          회원가입
+        </Link>
       </div>
       <span className={styles.template__copyright}>
         COPYRIGHT ⓒ&nbsp;

@@ -45,8 +45,8 @@ export default function IndexTimeTable() {
         onClick={() => {
           logger.actionEventClick({
             actionTitle: 'USER',
-            title: 'entry_text_timetable',
-            value: '시간표 텍스트 진입',
+            title: 'main_timetable',
+            value: 'text',
           });
         }}
       >
@@ -59,8 +59,8 @@ export default function IndexTimeTable() {
             onClick={() => {
               logger.actionEventClick({
                 actionTitle: 'USER',
-                title: 'entry_table_timetable',
-                value: '시간표 테이블 진입',
+                title: 'main_timetable',
+                value: 'table',
               });
             }}
           >
