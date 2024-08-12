@@ -39,7 +39,6 @@ function CurrentSemesterLectureList({
 
   return (
     <LectureTable
-      height={612}
       list={
         (lectureList ?? [])
           .filter((lecture) => {
