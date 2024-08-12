@@ -45,8 +45,13 @@ function LectureTable({
   const { widthInfo } = useFlexibleWidth(9, [65, 173, 45, 65, 65, 45, 45, 45, 65]);
   const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
-  const { target } = useOnClickOutside<HTMLDivElement>(() => updateTempLecture(null));
   const [cursor, setCursor] = React.useState(-1);
+  const { target } = useOnClickOutside<HTMLDivElement>(
+    () => {
+      updateTempLecture(null);
+      setCursor(-1);
+    },
+  );
   const handleTableRowClick = (
     value: LectureInfo | TimetableLectureInfo,
     e: React.MouseEvent<HTMLButtonElement>,
