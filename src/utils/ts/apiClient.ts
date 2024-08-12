@@ -4,7 +4,9 @@ import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
 import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import qsStringify from 'utils/ts/qsStringfy';
-import { deleteCookie } from './cookie';
+import { Refresh } from 'api/auth/APIDetail';
+import { useTokenStore } from 'utils/zustand/auth';
+import { deleteCookie, setCookie } from './cookie';
 import { redirectToLogin } from './auth';
 
 const API_URL = process.env.REACT_APP_API_PATH;
@@ -70,6 +72,14 @@ export default class APIClient {
     });
   }
 
+  static refresh = this.of(Refresh);
+
+  private async refreshAccessToken(refreshToken: string) {
+    const result = await APIClient.refresh({ refresh_token: refreshToken });
+    setCookie('AUTH_TOKEN_KEY', result.token);
+    useTokenStore.getState().setToken(result.token);
+  }
+
   private convertBody(data: any) {
     return JSON.stringify(data);
   }
@@ -82,7 +92,17 @@ export default class APIClient {
   private errorMiddleware(error: KoinError | CustomAxiosError) {
     if (error.status === 401) {
       deleteCookie('AUTH_TOKEN_KEY');
-      redirectToLogin();
+      const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
+      if (refreshTokenStorage) {
+        const refreshToken = JSON.parse(refreshTokenStorage);
+        // refreshToken이 존재할 시 accessToken 재발급 요청
+        if (refreshToken.state.refreshToken !== '') {
+          this.refreshAccessToken(refreshToken.state.refreshToken);
+          return;
+        }
+        // refreshToken이 존재하지 않을 시 로그인 페이지로 이동
+        redirectToLogin();
+      }
     }
   }
 
