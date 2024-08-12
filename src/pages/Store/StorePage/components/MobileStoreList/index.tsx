@@ -5,6 +5,8 @@ import { getJosaPicker } from '@bcsdlab/utils';
 import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
 import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';
+import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import styles from './MobileStoreList.module.scss';
 
 interface MobileStoreListProps {
@@ -16,6 +18,13 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
   const logger = useLogger();
   const pickTopicJosa = getJosaPicker('은');
 
+  const { searchParams } = useParamsHandler();
+  const { data: categories } = useStoreCategories();
+  const selectedCategory = Number(searchParams.get('category'));
+  const koreanCategory = categories?.shop_categories.find(
+    (category) => category.id === selectedCategory,
+  )?.name;
+
   return (
     <div className={styles['store-list']}>
       {
@@ -24,7 +33,9 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
             to={`/store/${store.id}`}
             className={styles['store-list__item']}
             key={store.id}
-            onClick={() => logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_click', value: store.name })}
+            onClick={() => logger.actionEventClick({
+              actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory}`, current_page: `${store.name}`, duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+            })}
           >
             {store.is_event
           && store.is_open
