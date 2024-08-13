@@ -13,6 +13,7 @@ import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { useUser } from 'utils/hooks/useUser';
 import { useParams } from 'react-router-dom';
+import ToggleButton from 'components/common/ToggleButton';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
@@ -152,11 +153,14 @@ function LectureList() {
           />
         </React.Suspense>
       </ErrorBoundary>
-      <ErrorBoundary fallbackClassName="loading">
-        <React.Suspense fallback={<LoadingSpinner size="50" />}>
-          <LastUpdatedDate />
-        </React.Suspense>
-      </ErrorBoundary>
+      <div>
+        <ToggleButton width="40" height="20" />
+        <ErrorBoundary fallbackClassName="loading">
+          <React.Suspense fallback={<LoadingSpinner size="50" />}>
+            <LastUpdatedDate />
+          </React.Suspense>
+        </ErrorBoundary>
+      </div>
     </div>
   );
 }
