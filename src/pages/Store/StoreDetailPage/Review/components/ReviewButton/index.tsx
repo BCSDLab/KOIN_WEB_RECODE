@@ -3,8 +3,6 @@ import LoginRequiredModal from 'components/common/LoginRequiredModal';
 
 import { useUser } from 'utils/hooks/state/useUser';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { ReactComponent as Pen } from 'assets/svg/pen-icon.svg';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './index.module.scss';
 
 export const REVEIW_LOGIN = [
@@ -15,7 +13,6 @@ export const REVEIW_LOGIN = [
 export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void }) {
   const { data: userInfo } = useUser();
   const portalManager = useModalPortal();
-  const isMobile = useMediaQuery();
 
   const openLoginModal = () => {
     portalManager.open((portalOption: Portal) => (
@@ -40,8 +37,6 @@ export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void
       }}
     >
       리뷰 작성하기
-      {' '}
-      {!isMobile && <Pen style={{ width: '18px' }} />}
     </button>
   );
 }
