@@ -13,6 +13,7 @@ import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/Sta
 import { REVEIW_LOGIN } from 'pages/Store/StoreDetailPage/Review/components/ReviewButton/index';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useGetMyReview } from 'pages/Store/StoreDetailPage/hooks/useGetMyReview';
+import { useDropdown } from 'pages/Store/StoreDetailPage/hooks/useDropdown';
 import styles from './ReviewList.module.scss';
 
 const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
@@ -38,10 +39,10 @@ export default function ReviewList() {
   const { data: myReview } = useGetMyReview(param.id!, previousSortType);
   const [isCheckboxClicked, setIsCheckboxClicked] = useState<boolean>(false);
   const selectorRef = useRef<HTMLDivElement>(null);
-  const [openDropdown, setOpenDropdowm] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const portalManager = useModalPortal();
   const { data: userInfo } = useUser();
+  const { openDropdown, toggleDropdown, closeDropdown } = useDropdown();
 
   const checkUser = ():boolean => {
     if (!userInfo) {
@@ -86,9 +87,9 @@ export default function ReviewList() {
         const { target } = e;
         if (target instanceof HTMLElement) {
           if (target.matches('button')) {
-            setOpenDropdowm((prev) => !prev);
+            toggleDropdown('sort');
           } else {
-            setOpenDropdowm(false);
+            closeDropdown();
           }
         }
       }}
@@ -114,9 +115,9 @@ export default function ReviewList() {
                 >
                   {currentReviewType.current}
                   {' '}
-                  <Arrow style={{ transform: openDropdown ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }} />
+                  <Arrow style={{ transform: openDropdown === 'sort' ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }} />
                   <div className={styles.wrapper}>
-                    {openDropdown && (
+                    {openDropdown === 'sort' && (
                     <div className={styles.dropdown__list}>
                       {option.map((select) => (
                         <button

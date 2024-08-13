@@ -4,21 +4,23 @@ import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
 import { ReactComponent as Kebab } from 'assets/svg/Review/kebab.svg';
 import { ReactComponent as ClickedKebab } from 'assets/svg/Review/clicked-kebab.svg';
 import { ReactComponent as Mine } from 'assets/svg/Review/check-mine.svg';
-import { useEffect, useState } from 'react';
 import SelectButton from 'pages/Store/StoreDetailPage/Review/components/SelectButton/SelectButton';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { cn } from '@bcsdlab/utils';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
+import { useDropdown } from 'pages/Store/StoreDetailPage/hooks/useDropdown';
+import { useCallback, useEffect } from 'react';
 import styles from './ReviewCard.module.scss';
 
 export default function ReviewCard({
   nick_name, rating, content, image_urls, menu_names, is_mine, is_modified, created_at, review_id,
 }: Review) {
-  const [isKebabClick, setIsKebabClick] = useState(false);
   const emptyStarList = new Array(5 - rating).fill(false);
   const starList = new Array(rating).fill(true);
   const portalManager = useModalPortal();
+  const { openDropdown, toggleDropdown, closeDropdown } = useDropdown();
+  const isOpen = openDropdown === String(review_id);
 
   const onClickImage = (img: string[], index: number) => {
     portalManager.open((portalOption: Portal) => (
@@ -26,11 +28,16 @@ export default function ReviewCard({
     ));
   };
 
-  useEffect(() => {
-    window.addEventListener('click', () => setIsKebabClick(false));
+  const handleDropdown = useCallback(() => {
+    if (openDropdown === 'sort') return;
+    closeDropdown();
+  }, [closeDropdown, openDropdown]);
 
-    return window.removeEventListener('click', () => setIsKebabClick(false));
-  }, []);
+  useEffect(() => {
+    window.addEventListener('click', handleDropdown);
+
+    return () => window.removeEventListener('click', handleDropdown);
+  }, [handleDropdown]);
 
   const ratingList = [...starList, ...emptyStarList];
   return (
@@ -45,17 +52,18 @@ export default function ReviewCard({
         <div className={styles['nick-name']}>{nick_name}</div>
         <button
           type="button"
+          className={cn({
+            [styles.top__kebab]: true,
+            [styles['top__kebab--clicked']]: isOpen,
+          })}
           onClick={(e) => {
             e.stopPropagation();
-            setIsKebabClick((prev) => !prev);
+            toggleDropdown(String(review_id));
           }}
-          className={cn({
-            [styles.top__kebab]: !isKebabClick,
-            [styles['top__kebab--clicked']]: isKebabClick,
-          })}
         >
-          {isKebabClick ? <ClickedKebab /> : <Kebab />}
-          {isKebabClick && <SelectButton is_mine={is_mine} review_id={review_id} />}
+          {isOpen ? <ClickedKebab /> : <Kebab />}
+          {isOpen
+          && <SelectButton is_mine={is_mine} review_id={review_id} />}
         </button>
       </div>
       <div className={styles.rating}>
