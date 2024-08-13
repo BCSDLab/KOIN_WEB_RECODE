@@ -11,7 +11,7 @@ const ROUTES = {
   BoardNotice: '/board/notice',
   BoardNoticeDetail: {
     path: '/board/notice/:id',
-    general: (id: number) => `/borad/notice/${id}`,
+    general: (id: number) => `/board/notice/${id}`,
   },
   Room: '/room',
   RoomDetail: {
@@ -23,8 +23,8 @@ const ROUTES = {
   AuthFindPW: '/auth/findpw',
   AuthModifyInfo: '/auth/modifyinfo',
   Review: {
-    path: '/review/:id',
-    general: (id: string) => `/reivew/${id}`,
+    path: 'review/:id',
+    general: (id: string) => `/review/${id}`,
   },
   ReviewEdit: {
     path: '/edit/review/:id',

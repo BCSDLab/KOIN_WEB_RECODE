@@ -59,14 +59,14 @@ function App() {
     <>
       <Routes>
         <Route path={ROUTES.Main} element={<BoardPage />}>
+          <Route index element={<HelmetWrapper title="코인 - 한기대 커뮤니티" element={<IndexPage />} />} />
           <Route path={ROUTES.Timetable} element={<HelmetWrapper title="코인 - 시간표" element={<TimetablePage />} />} />
-          <Route path={ROUTES.Main} element={<HelmetWrapper title="코인 - 한기대 커뮤니티" element={<IndexPage />} />} />
           <Route path={ROUTES.Store} element={<HelmetWrapper title="코인 - 상점" element={<StorePage />} />} />
           <Route path={ROUTES.StoreDetail.path} element={<HelmetWrapper title="코인 - 상점 상세" element={<StoreDetailPage />} />} />
           <Route path={ROUTES.Bus} element={<HelmetWrapper title="코인 - 버스" element={<BusPage />} />} />
           <Route path={ROUTES.Cafeteria} element={<HelmetWrapper title="코인 - 식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.BoardNotice} element={<HelmetWrapper title="코인 - 공지사항" element={<NoticePage />} />}>
-            <Route path={ROUTES.BoardNotice} element={<NoticeListPage />} />
+            <Route index element={<NoticeListPage />} />
             <Route path={ROUTES.BoardNoticeDetail.path} element={<HelmetWrapper title="코인 - 공지사항 상세" element={<NoticeDetailPage />} />} />
           </Route>
           <Route path={ROUTES.Room} element={<HelmetWrapper title="코인 - 복덕방" element={<RoomPage />} />} />
@@ -82,8 +82,8 @@ function App() {
           <Route path={ROUTES.ReviewEdit.path} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 상점 리뷰" element={<EditReviewPage />} />} />} />
           <Route path={ROUTES.ReviewReport.path} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 리뷰 신고" element={<ReviewReportingPage />} />} />} />
         </Route>
-        <Route path={ROUTES.Auth} element={<AuthPage />}>
-          <Route path={ROUTES.AuthModifyInfo} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보변경" element={<ModifyInfoPage />} />} />} />
+        <Route path={ROUTES.Auth} element={<PrivateRoute requireAuthentication element={<AuthPage />} />}>
+          <Route path={ROUTES.AuthModifyInfo} element={<HelmetWrapper title="코인 - 유저 정보변경" element={<ModifyInfoPage />} />} />
         </Route>
       </Routes>
       <Toast />
