@@ -13,7 +13,6 @@ function NoticeDetailPage() {
         boardId={articleDetail.board_id}
         title={articleDetail.title}
         createdAt={articleDetail.created_at}
-        commentCount={articleDetail.comment_count}
         nickname={articleDetail.nickname}
         hit={articleDetail.hit}
       />
