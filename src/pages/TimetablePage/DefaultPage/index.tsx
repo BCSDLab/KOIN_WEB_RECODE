@@ -11,7 +11,6 @@ import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage() {
   const logger = useLogger();
-  const isClickedFirst = React.useRef(false);
   const handlePopState = React.useCallback(() => {
     history.back();
     sessionStorage.removeItem('timetableVisited');
@@ -26,11 +25,8 @@ export default function DefaultPage() {
   }, [logger]);
 
   React.useEffect(() => {
-    const hasVisited = sessionStorage.getItem('timetableVisited');
-    if (!hasVisited) {
+    if (history.state.state !== 'timetable') {
       history.pushState({ state: 'timetable' }, '');
-      sessionStorage.setItem('timetableVisited', 'true');
-      isClickedFirst.current = true;
     }
   }, []);
 
