@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useParams } from 'react-router-dom';
 import CheckBox from 'components/common/CommonCheckBox';
+import { toast } from 'react-toastify';
 import ReportingLabel from './components/ReportingLabel';
 import styles from './ReviewReporting.module.scss';
 import useReviewReport from './query/useReviewReport';
@@ -80,6 +81,11 @@ export default function ReviewReportingPage() {
   }, [etcDescription]);
 
   const handleReport = () => {
+    if (selectOptions.includes('etc') && etcDescription.trim() === '') {
+      toast.error('신고 사유를 입력해주세요.');
+      setEtcDescription('');
+      return;
+    }
     const reportData = { reports: requestOptions };
     mutate(reportData);
   };
@@ -88,10 +94,13 @@ export default function ReviewReportingPage() {
     <div className={styles['reporting-container']}>
       <div>
         <div className={styles['reporting-title']}>신고 이유를 선택해주세요.</div>
-        <div className={styles['reporting-subtitle']}>
-          접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.
-          <br />
-          블라인드 처리까지 시간이 소요될 수 있습니다.
+        <div className={styles['reporting-subtitle-box']}>
+          <p className={styles['reporting-subtitle']}>
+            접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.
+          </p>
+          <p className={styles['reporting-subtitle']}>
+            블라인드 처리까지 시간이 소요될 수 있습니다.
+          </p>
         </div>
       </div>
       <div className={styles['option-container']}>
@@ -102,12 +111,13 @@ export default function ReviewReportingPage() {
               name="reason"
               checked={selectOptions.includes(key)}
               onChange={handleChange}
-            />
-            <ReportingLabel
-              title={REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].title}
-              description={key === 'etc' ? `${etcDescription.length}/150 자` : REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].content}
-              active={selectOptions.includes(key)}
-            />
+            >
+              <ReportingLabel
+                title={REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].title}
+                description={key === 'etc' ? `${etcDescription.length}/150 자` : REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].content}
+                disable={etcDescription.length === 150}
+              />
+            </CheckBox>
           </div>
         ))}
         <textarea
@@ -118,7 +128,7 @@ export default function ReviewReportingPage() {
           })}
           disabled={!selectOptions.includes('etc')}
           placeholder="신고 사유를 입력해주세요."
-          maxLength={150}
+          maxLength={149}
           value={etcDescription}
           onChange={(e) => setEtcDescription(e.target.value)}
         />
