@@ -35,8 +35,17 @@ export default function Panel({ openModal }: PanelProps) {
   };
 
   // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
-  const logExitExistingPage = () => {
-    if (pathname === '/timetable') logger.actionEventClick({ actionTitle: 'USER', title: 'timetable_back', value: '햄버거' });
+  const logExitExistingPage = (title: string) => {
+    if (pathname === '/timetable') {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        title: 'timetable_back',
+        value: '햄버거',
+        previous_page: '시간표',
+        current_page: title,
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+      });
+    }
   };
 
   const handleMyInfoClick = () => {
@@ -55,7 +64,7 @@ export default function Panel({ openModal }: PanelProps) {
 
   const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
-    logExitExistingPage();
+    logExitExistingPage(submenu.title);
     closeSidebar();
     if (submenu.openInNewTab) {
       window.open(submenu.link, '_blank');
