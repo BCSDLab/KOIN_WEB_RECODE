@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useParams } from 'react-router-dom';
 import CheckBox from 'components/common/CommonCheckBox';
+import { toast } from 'react-toastify';
 import ReportingLabel from './components/ReportingLabel';
 import styles from './ReviewReporting.module.scss';
 import useReviewReport from './query/useReviewReport';
@@ -80,6 +81,11 @@ export default function ReviewReportingPage() {
   }, [etcDescription]);
 
   const handleReport = () => {
+    if (selectOptions.includes('etc') && etcDescription.trim() === '') {
+      toast.error('신고 사유를 입력해주세요.');
+      setEtcDescription('');
+      return;
+    }
     const reportData = { reports: requestOptions };
     mutate(reportData);
   };
