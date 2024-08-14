@@ -44,7 +44,7 @@ export default function Panel({ openModal }: PanelProps) {
       logger.actionEventClick({
         actionTitle: 'USER',
         title: 'hamburger',
-        value: '정보수정',
+        value: '내정보',
       });
       closeSidebar();
       openModal();
