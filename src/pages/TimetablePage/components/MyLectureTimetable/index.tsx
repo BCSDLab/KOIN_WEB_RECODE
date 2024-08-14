@@ -44,6 +44,7 @@ export default function MyLectureTimetable() {
               actionTitle: 'USER',
               title: 'timetable',
               value: '이미지저장',
+              duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
             });
           }}
         >
