@@ -10,7 +10,7 @@ type ScrollLoggerProps = {
   title: string,
 };
 
-type ActionClickLoggerProps = {
+type ActionLoggerProps = {
   actionTitle: string,
   title: string,
   value: string,
@@ -84,9 +84,22 @@ const useLogger = () => {
     duration_time,
     previous_page,
     current_page,
-  }: ActionClickLoggerProps) => {
+  }: ActionLoggerProps) => {
     logEvent({
-      action: actionTitle, category: 'button', label: title, value, duration_time, previous_page, current_page,
+      action: actionTitle, category: 'click', label: title, value, duration_time, previous_page, current_page,
+    });
+  };
+
+  const actionEventSwipe = ({
+    actionTitle,
+    title,
+    value,
+    duration_time,
+    previous_page,
+    current_page,
+  }: ActionLoggerProps) => {
+    logEvent({
+      action: actionTitle, category: 'swipe', label: title, value, duration_time, previous_page, current_page,
     });
   };
 
@@ -94,6 +107,7 @@ const useLogger = () => {
     click,
     scroll,
     actionEventClick,
+    actionEventSwipe,
   };
 };
 
