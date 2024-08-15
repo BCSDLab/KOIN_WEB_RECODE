@@ -5,17 +5,34 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import useLogger from 'utils/hooks/useLogger';
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
-import { useSemesterAction } from 'utils/zustand/semester';
+import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
+import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
+import useTokenState from 'utils/hooks/useTokenState';
 import styles from './IndexTimetable.module.scss';
 
-function CurrentSemesterTimetable(): JSX.Element {
-  const { myLectures } = useMyLectures();
-  const myLectureDayValue = useTimetableDayList(myLectures);
+function CurrentSemesterTimetable() {
+  const semester = useSemester();
+  const token = useTokenState();
+  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const [currentFrameIndex, setCurrentFrameIndex] = React.useState<number>(0);
+
+  useEffect(() => {
+    if (timetableFrameList) {
+      const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
+      if (mainFrame) {
+        setCurrentFrameIndex(mainFrame.id);
+      }
+    }
+  }, [timetableFrameList]);
+
+  const { myLecturesV2 } = useMyLecturesV2(currentFrameIndex);
+  const myLectureDayValue = useTimetableDayList(myLecturesV2);
+
   return myLectureDayValue ? (
     <Timetable
-      frameId={18782}
+      frameId={currentFrameIndex}
       lectures={myLectureDayValue}
       columnWidth={44}
       firstColumnWidth={29}

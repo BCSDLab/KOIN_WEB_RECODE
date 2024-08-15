@@ -15,6 +15,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 import { useTempLecture } from 'utils/zustand/myTempLectureV2';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import { useSemester } from 'utils/zustand/semester';
+import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage({ frameId }: { frameId: string | undefined }) {
@@ -23,13 +24,13 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
   const semester = useSemester();
   const [selectedCourseType, setSelectedCourseType] = useState('regular');
   const isRegularCourseSelected = selectedCourseType === 'regular';
-  const [myLectureListDetail, setMyLectureListDetail] = React.useState<any>();
+  const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
+  const myLectureDayValue = useTimetableDayListV2(myLecturesV2);
   const { data: myLectureList } = useTimetableV2InfoList(
     Number(frameId),
     token,
   );
   const { data: lectureList } = useLectureList(semester);
-  const myLectureDayValue = useTimetableDayListV2(myLectureListDetail);
   const tempLecture = useTempLecture();
   const similarSelectedLecture = lectureList
     ?.filter((lecture) => lecture.code === tempLecture?.code)
@@ -42,12 +43,6 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
     setSelectedCourseType(courseType);
     navigate(`/timetable/modify/${courseType}/${frameId}`);
   };
-
-  React.useEffect(() => {
-    if (myLectureList && myLectureList) {
-      setMyLectureListDetail(myLectureList);
-    }
-  }, [myLectureList]);
 
   return (
     <div className={styles.page}>

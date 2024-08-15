@@ -9,18 +9,15 @@ import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
 import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
 import Timetable from 'components/TimetablePage/Timetable';
 import useBooleanState from 'utils/hooks/useBooleanState';
-import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
-import useTokenState from 'utils/hooks/useTokenState';
+import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
 export default function MainTimetable({ frameId }: { frameId: number }) {
-  const token = useTokenState();
-  const { data: myLectureList } = useTimetableV2InfoList(frameId, token);
-  const [myLectureListDetail, setMyLectureListDetail] = React.useState<any>();
+  const { myLecturesV2 } = useMyLecturesV2(frameId);
   const navigate = useNavigate();
-  const myLectureDayValue = useTimetableDayListV2(myLectureListDetail);
+  const myLectureDayValue = useTimetableDayListV2(myLecturesV2);
   const { data: deptList } = useDeptList();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,17 +25,11 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
     openModal();
   };
 
-  React.useEffect(() => {
-    if (myLectureList && myLectureList) {
-      setMyLectureListDetail(myLectureList);
-    }
-  }, [myLectureList]);
-
   return (
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
         <div className={styles['page__total-grades']}>
-          <TotalGrades myLectureList={myLectureList} />
+          <TotalGrades myLectureList={myLecturesV2} />
         </div>
         <CurriculumListBox list={deptList} />
         <button
@@ -73,7 +64,9 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
         </ErrorBoundary>
       </div>
       <div>
-        {isModalOpen && <DownloadTimetableModal onClose={closeModal} frameId={frameId} />}
+        {isModalOpen && (
+          <DownloadTimetableModal onClose={closeModal} frameId={frameId} />
+        )}
       </div>
     </div>
   );
