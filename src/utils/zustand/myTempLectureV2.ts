@@ -1,8 +1,8 @@
-import { LectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import { create } from 'zustand';
 
 type State = {
-  tempLecture: LectureInfo | null;
+  tempLecture: LectureInfo | TimetableLectureInfoV2 | null;
 };
 
 type Action = {
@@ -15,9 +15,11 @@ const useTempLectureStore = create<State & Action>((set, get) => ({
   tempLecture: null,
   action: {
     updateTempLecture: (tempLecture) => {
-      if (get().tempLecture !== tempLecture) {
-        set(() => ({ tempLecture }));
+      if (get().tempLecture === tempLecture) {
+        set(() => ({ tempLecture: null }));
+        return;
       }
+      set(() => ({ tempLecture }));
     },
   },
 }));

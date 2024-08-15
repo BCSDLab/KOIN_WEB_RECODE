@@ -12,11 +12,15 @@ import CustomLecture from 'pages/Timetable/components/CustomLecture';
 import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import useTokenState from 'utils/hooks/useTokenState';
+import { useTempLecture } from 'utils/zustand/myTempLectureV2';
+import useLectureList from 'pages/Timetable/hooks/useLectureList';
+import { useSemester } from 'utils/zustand/semester';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage({ frameId }: { frameId: string | undefined }) {
   const navigate = useNavigate();
   const token = useTokenState();
+  const semester = useSemester();
   const [selectedCourseType, setSelectedCourseType] = useState('regular');
   const isRegularCourseSelected = selectedCourseType === 'regular';
   const [myLectureListDetail, setMyLectureListDetail] = React.useState<any>();
@@ -24,8 +28,15 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
     Number(frameId),
     token,
   );
+  const { data: lectureList } = useLectureList(semester);
   const myLectureDayValue = useTimetableDayListV2(myLectureListDetail);
-
+  const tempLecture = useTempLecture();
+  const similarSelectedLecture = lectureList
+    ?.filter((lecture) => lecture.code === tempLecture?.code)
+    ?? [];
+  const selectedLectureIndex = similarSelectedLecture
+    .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
+  const similarSelectedLectureDayList = useTimetableDayListV2(similarSelectedLecture);
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
     setSelectedCourseType(courseType);
@@ -108,6 +119,8 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
                 <Timetable
                   frameId={Number(frameId)}
                   lectures={myLectureDayValue}
+                  similarSelectedLecture={similarSelectedLectureDayList}
+                  selectedLectureIndex={selectedLectureIndex}
                   columnWidth={88.73}
                   firstColumnWidth={44.36}
                   rowHeight={33.07}

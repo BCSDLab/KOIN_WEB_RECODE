@@ -1,15 +1,16 @@
 import type { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import React from 'react';
-import { FixedSizeList as List } from 'react-window';
 import { cn } from '@bcsdlab/utils';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLectureV2';
+import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
   list: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
-  height: number;
   myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
-  onHover: ((value:LectureInfo | TimetableLectureInfoV2 | null) => void);
+  selectedLecture:LectureInfo | TimetableLectureInfoV2 | undefined;
   onClickRow: ((value:LectureInfo | TimetableLectureInfoV2) => void) | undefined;
+  onDoubleClickRow: ((value: LectureInfo | TimetableLectureInfoV2) => void) | undefined;
 }
 
 const LECTURE_TABLE_HEADER = [
@@ -38,21 +39,21 @@ const useFlexibleWidth = (length: number, initialValue: number[]) => {
 
 function LectureTable({
   list,
-  height,
   myLecturesV2,
-  onHover,
+  selectedLecture,
   onClickRow,
+  onDoubleClickRow,
 }: LectureTableProps): JSX.Element {
   const { widthInfo } = useFlexibleWidth(9, [65, 173, 45, 65, 65, 45, 45, 45, 65]);
-  const handleHover = (value:LectureInfo | TimetableLectureInfoV2 | null) => {
-    if (onHover !== null) {
-      if (value !== null) {
-        onHover(value);
-      } else {
-        onHover(null);
-      }
-    }
-  };
+  const tempLecture = useTempLecture();
+  const { updateTempLecture } = useTempLectureAction();
+  const [cursor, setCursor] = React.useState(-1);
+  const { target } = useOnClickOutside<HTMLDivElement>(
+    () => {
+      updateTempLecture(null);
+      setCursor(-1);
+    },
+  );
   const handleTableRowClick = (
     value: LectureInfo | TimetableLectureInfoV2,
     e: React.MouseEvent<HTMLButtonElement>,
@@ -60,7 +61,60 @@ function LectureTable({
     if (e.detail === 1 && onClickRow !== undefined) {
       onClickRow(value);
     }
+    if (e.detail === 2 && onDoubleClickRow !== undefined) {
+      onDoubleClickRow(value);
+      if (tempLecture !== null && onClickRow !== undefined) {
+        onClickRow(value);
+      }
+    }
   };
+  function useKeyboardEvent() {
+    React.useEffect(() => {
+      function keyboardNavigation(e: KeyboardEvent) {
+        if (tempLecture && onClickRow !== undefined) {
+          if (e.key === 'ArrowDown') {
+            if (cursor < list.length - 1) {
+              e.preventDefault();
+              onClickRow(list[cursor + 1]);
+              setCursor((prev) => prev + 1);
+            }
+          }
+          if (e.key === 'ArrowUp') {
+            if (cursor > 0) {
+              e.preventDefault();
+              onClickRow(list[cursor - 1]);
+              setCursor((prev) => prev - 1);
+            }
+          }
+          if (e.key === 'Escape') {
+            updateTempLecture(null);
+            setCursor(-1);
+          }
+          if (e.key === 'Enter' && cursor > 0 && onDoubleClickRow !== undefined) {
+            e.preventDefault();
+            onDoubleClickRow(list[cursor]);
+          }
+        }
+      }
+      window.addEventListener('keydown', keyboardNavigation, true);
+      return () => {
+        window.removeEventListener('keydown', keyboardNavigation, true);
+      };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cursor]);
+  }
+  useKeyboardEvent();
+  React.useEffect(() => {
+    if (target.current) {
+      const selectedList = target.current.children[cursor];
+      selectedList?.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth',
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cursor]);
+
   return (
     <div className={styles.table}>
       <div className={styles.table__content} role="table">
@@ -90,43 +144,37 @@ function LectureTable({
             </div>
           ))}
         </div>
-        <List
-          width={613}
-          height={height}
-          itemSize={34}
-          itemCount={list.length}
-          itemData={list}
-        >
-          {({ index, data: items, style }) => {
-            const currentItem = items[index];
-            return (
-              <div
-                className={cn({
-                  [styles.table__row]: true,
-                  [styles['table__row--include']]: myLecturesV2.some(
-                    (item) => item.code === currentItem.code
-                      && item.lecture_class === currentItem.lecture_class,
-                  ),
-                })}
-                role="row"
-                key={`${currentItem.code}-${currentItem.lecture_class}`}
-                style={style}
-              >
-                <button
-                  type="button"
-                  role={onClickRow !== undefined ? undefined : 'null'}
-                  aria-label={
+        <div className={styles['table__lecture-list']} ref={target}>
+          {list.map((lecture, index) => (
+            <div
+              className={cn({
+                [styles.table__row]: true,
+                [styles['table__row--include']]: myLecturesV2.some(
+                  (item) => item.code === lecture.code
+                      && item.lecture_class === lecture.lecture_class,
+                ),
+                [styles['table__row--selected']]: selectedLecture === lecture,
+              })}
+              aria-selected={selectedLecture === lecture}
+              role="row"
+              key={`${lecture.code}-${lecture.lecture_class}`}
+            >
+              <button
+                type="button"
+                role={onClickRow !== undefined ? undefined : 'null'}
+                aria-label={
                     onClickRow !== undefined
                       ? '시간표에서 미리 보기'
                       : undefined
                   }
-                  className={styles['table__row-button']}
-                  onClick={(e) => handleTableRowClick(currentItem, e)}
-                  onMouseEnter={() => handleHover(currentItem)}
-                  onMouseLeave={() => handleHover(null)}
-                >
-                  {LECTURE_TABLE_HEADER.map(
-                    (headerItem, headerItemIndex) => headerItem.key !== null && (
+                className={styles['table__row-button']}
+                onClick={(e) => {
+                  setCursor(index);
+                  handleTableRowClick(lecture, e);
+                }}
+              >
+                {LECTURE_TABLE_HEADER.map(
+                  (headerItem, headerItemIndex) => headerItem.key !== null && (
                     <div
                       style={{
                         width: `${widthInfo[headerItemIndex]}px`,
@@ -139,28 +187,27 @@ function LectureTable({
                       key={headerItem.key}
                     >
                       {headerItem.key === 'professor'
-                            && (currentItem[headerItem.key] === ''
+                            && (lecture[headerItem.key] === ''
                               ? '미배정'
-                              : currentItem[headerItem.key])}
+                              : lecture[headerItem.key])}
                       {headerItem.key === null && '수정'}
                       {headerItem.key === 'name'
-                            && isLectureInfo(currentItem)
-                            && currentItem.name}
+                            && isLectureInfo(lecture)
+                            && lecture.name}
                       {headerItem.key === 'name'
-                            && !isLectureInfo(currentItem)
-                            && currentItem.class_title}
+                            && !isLectureInfo(lecture)
+                            && lecture.class_title}
                       {headerItem.key !== null
                             && headerItem.key !== 'professor'
                             && headerItem.key !== 'name'
-                            && currentItem[headerItem.key]}
+                            && lecture[headerItem.key]}
                     </div>
-                    ),
-                  )}
-                </button>
-              </div>
-            );
-          }}
-        </List>
+                  ),
+                )}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
