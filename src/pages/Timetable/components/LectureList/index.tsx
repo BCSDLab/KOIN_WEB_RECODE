@@ -99,7 +99,7 @@ function CurrentSemesterLectureList({
 
 function LectureList() {
   const semesterParams = useParams().semester;
-
+  const mostRecentSemester = '20242';
   const {
     value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
@@ -109,7 +109,7 @@ function LectureList() {
   } = useSearch();
   const semester = useSemester();
   const { updateSemester } = useSemesterAction();
-  updateSemester(semesterParams || '20242');
+  updateSemester(semesterParams || mostRecentSemester);
   // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
 
   const { myLectures } = useMyLectures();
