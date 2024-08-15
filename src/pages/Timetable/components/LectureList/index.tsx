@@ -4,7 +4,7 @@ import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 import React from 'react';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import { useTempLectureAction } from 'utils/zustand/myTempLecture';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import useSelect from 'pages/Timetable/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
@@ -32,24 +32,27 @@ function CurrentSemesterLectureList({
   myLectures,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
+  const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation();
   const { data: userInfo } = useUser();
+
   return (
     <LectureTable
-      height={612}
       list={
         (lectureList ?? [])
           .filter((lecture) => {
             const searchFilter = filter.search.toUpperCase();
             const departmentFilter = filter.department;
+            const searchCondition = lecture.name.toUpperCase().includes(searchFilter)
+            || lecture.code.toUpperCase().includes(searchFilter)
+            || lecture.professor.toUpperCase().includes(searchFilter);
 
             if (searchFilter !== '' && departmentFilter !== '전체') {
-              return lecture.name.toUpperCase().includes(searchFilter)
-                && lecture.department === departmentFilter;
+              return searchCondition && lecture.department === departmentFilter;
             }
             if (searchFilter !== '') {
-              return lecture.name.toUpperCase().includes(searchFilter);
+              return searchCondition;
             }
             if (departmentFilter !== '전체') {
               return lecture.department === departmentFilter;
@@ -59,10 +62,9 @@ function CurrentSemesterLectureList({
           })
       }
       myLectures={myLectures}
-      onHover={(hoveredLecture) => (
-        hoveredLecture !== null && 'name' in hoveredLecture ? updateTempLecture(hoveredLecture) : updateTempLecture(null)
-      )}
-      onClickRow={
+      selectedLecture={tempLecture ?? undefined}
+      onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
+      onDoubleClickRow={
         (clickedLecture) => {
           if ('class_title' in clickedLecture) {
             return;
@@ -97,7 +99,7 @@ function CurrentSemesterLectureList({
 
 function LectureList() {
   const semesterParams = useParams().semester;
-
+  const mostRecentSemester = '20242';
   const {
     value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
@@ -107,7 +109,7 @@ function LectureList() {
   } = useSearch();
   const semester = useSemester();
   const { updateSemester } = useSemesterAction();
-  updateSemester(semesterParams || '20241');
+  updateSemester(semesterParams || mostRecentSemester);
   // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
 
   const { myLectures } = useMyLectures();
