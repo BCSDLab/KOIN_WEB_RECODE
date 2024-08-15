@@ -11,11 +11,13 @@ import Timetable from 'components/TimetablePage/Timetable';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
+import useTokenState from 'utils/hooks/useTokenState';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
 export default function MainTimetable({ frameId }: { frameId: number }) {
-  const { data: myLectureList } = useTimetableV2InfoList(frameId);
+  const token = useTokenState();
+  const { data: myLectureList } = useTimetableV2InfoList(frameId, token);
   const [myLectureListDetail, setMyLectureListDetail] = React.useState<any>();
   const navigate = useNavigate();
   const myLectureDayValue = useTimetableDayListV2(myLectureListDetail);
@@ -27,8 +29,8 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
   };
 
   React.useEffect(() => {
-    if (myLectureList && myLectureList.timetable) {
-      setMyLectureListDetail(myLectureList.timetable);
+    if (myLectureList && myLectureList) {
+      setMyLectureListDetail(myLectureList);
     }
   }, [myLectureList]);
 
@@ -36,7 +38,7 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
         <div className={styles['page__total-grades']}>
-          <TotalGrades grades={myLectureList?.grades} />
+          <TotalGrades myLectureList={myLectureList} />
         </div>
         <CurriculumListBox list={deptList} />
         <button
@@ -60,6 +62,7 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
         <ErrorBoundary fallbackClassName="loading">
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <Timetable
+              frameId={frameId}
               lectures={myLectureDayValue}
               columnWidth={140}
               firstColumnWidth={70}
@@ -70,7 +73,7 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
         </ErrorBoundary>
       </div>
       <div>
-        {isModalOpen && <DownloadTimetableModal onClose={closeModal} />}
+        {isModalOpen && <DownloadTimetableModal onClose={closeModal} frameId={frameId} />}
       </div>
     </div>
   );

@@ -15,6 +15,7 @@ function CurrentSemesterTimetable(): JSX.Element {
   const myLectureDayValue = useTimetableDayList(myLectures);
   return myLectureDayValue ? (
     <Timetable
+      frameId={18782}
       lectures={myLectureDayValue}
       columnWidth={44}
       firstColumnWidth={29}

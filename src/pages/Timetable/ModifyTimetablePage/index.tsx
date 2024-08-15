@@ -12,7 +12,7 @@ export default function ModifyTimetablePage() {
       {!isMobile ? (
         <DefaultPage frameId={frameId} />
       ) : (
-        <MobilePage />
+        <MobilePage frameId={frameId} />
       )}
     </div>
   );

@@ -1,26 +1,29 @@
 import React from 'react';
 import Timetable from 'components/TimetablePage/Timetable';
 import useImageDownload from 'utils/hooks/useImageDownload';
-import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { useTimeString } from 'utils/zustand/myLectures';
+import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
 import styles from './DownloadTimetableModal.module.scss';
 
 interface DownloadTimetableModalProps {
-  onClose: () => void
+  onClose: () => void,
+  frameId: number
 }
 
 interface TimetableDownloadProps {
-  rowNumber: number
-  forMobile: boolean
+  rowNumber: number,
+  forMobile: boolean,
+  frameId: number,
 }
 
-function TimetableDownload({ rowNumber, forMobile }: TimetableDownloadProps) {
-  const { myLectures } = useMyLectures();
-  const myLectureDayValue = useTimetableDayList(myLectures);
+function TimetableDownload({ rowNumber, forMobile, frameId }: TimetableDownloadProps) {
+  const { myLecturesV2 } = useMyLecturesV2(frameId);
+  const myLectureDayValue = useTimetableDayList(myLecturesV2);
   return (
     <Timetable
+      frameId={frameId}
       lectures={myLectureDayValue}
       columnWidth={forMobile ? 88.73 : 140}
       firstColumnWidth={forMobile ? 44.36 : 70}
@@ -33,6 +36,7 @@ function TimetableDownload({ rowNumber, forMobile }: TimetableDownloadProps) {
 
 export default function DownloadTimetableModal({
   onClose,
+  frameId,
 }: DownloadTimetableModalProps) {
   const { onImageDownload: DownloadForPC, divRef: pcTimetableRef } = useImageDownload();
   const { onImageDownload: DownloadForMobile, divRef: mobileTimetableRef } = useImageDownload();
@@ -60,10 +64,10 @@ export default function DownloadTimetableModal({
         </div>
       </div>
       <div ref={pcTimetableRef} className={styles['container__timetable-image']}>
-        <TimetableDownload rowNumber={timeString.length} forMobile={false} />
+        <TimetableDownload rowNumber={timeString.length} forMobile={false} frameId={frameId} />
       </div>
       <div ref={mobileTimetableRef} className={styles['container__timetable-image']}>
-        <TimetableDownload rowNumber={timeString.length} forMobile />
+        <TimetableDownload rowNumber={timeString.length} forMobile frameId={frameId} />
       </div>
     </div>
   );

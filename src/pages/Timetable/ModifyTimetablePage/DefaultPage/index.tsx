@@ -5,21 +5,26 @@ import Timetable from 'components/TimetablePage/Timetable';
 import TimetableHeader from 'pages/Timetable/components/TimetableHeader';
 import React, { Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
+import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/Timetable/components/LectureList';
 import CustomLecture from 'pages/Timetable/components/CustomLecture';
 import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
+import useTokenState from 'utils/hooks/useTokenState';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage({ frameId }: { frameId: string | undefined }) {
   const navigate = useNavigate();
+  const token = useTokenState();
   const [selectedCourseType, setSelectedCourseType] = useState('regular');
   const isRegularCourseSelected = selectedCourseType === 'regular';
   const [myLectureListDetail, setMyLectureListDetail] = React.useState<any>();
-  const { data: myLectureList } = useTimetableV2InfoList(Number(frameId));
-  const myLectureDayValue = useTimetableDayList(myLectureListDetail);
+  const { data: myLectureList } = useTimetableV2InfoList(
+    Number(frameId),
+    token,
+  );
+  const myLectureDayValue = useTimetableDayListV2(myLectureListDetail);
 
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
@@ -28,8 +33,8 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
   };
 
   React.useEffect(() => {
-    if (myLectureList && myLectureList.timetable) {
-      setMyLectureListDetail(myLectureList.timetable);
+    if (myLectureList && myLectureList) {
+      setMyLectureListDetail(myLectureList);
     }
   }, [myLectureList]);
 
@@ -79,7 +84,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
             </div>
             {/* TODO: 직접 추가 UI, 강의 리스트 UI 추가 */}
             {isRegularCourseSelected ? (
-              <LectureList />
+              <LectureList frameId={Number(frameId)} />
             ) : (
               <CustomLecture frameId={frameId} />
             )}
@@ -87,7 +92,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
           <div className={styles.page__timetable}>
             <div className={styles['page__timetable-button-group']}>
               <div className={styles['page__total-grades']}>
-                <TotalGrades grades={myLectureList?.grades} />
+                <TotalGrades myLectureList={myLectureList} />
               </div>
               <button
                 type="button"
@@ -101,6 +106,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
             <ErrorBoundary fallbackClassName="loading">
               <React.Suspense fallback={<LoadingSpinner size="50" />}>
                 <Timetable
+                  frameId={Number(frameId)}
                   lectures={myLectureDayValue}
                   columnWidth={88.73}
                   firstColumnWidth={44.36}

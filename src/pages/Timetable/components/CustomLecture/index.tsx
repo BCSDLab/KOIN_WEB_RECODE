@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
+import useTokenState from 'utils/hooks/useTokenState';
 import styles from './CustomLecture.module.scss';
 import CustomLectureDefaultInput from './CustomLectureDefaultInput';
 import CustomLectureLocationTimeSetting from './CustomLectureLocationTimeSetting';
@@ -9,8 +10,9 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const handleAddLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
+  const token = useTokenState();
 
-  const { data: timetableInfoList } = useTimetableV2InfoList(Number(frameId));
+  const { data: timetableInfoList } = useTimetableV2InfoList(Number(frameId), token);
 
   console.log('customLecture', timetableInfoList);
 

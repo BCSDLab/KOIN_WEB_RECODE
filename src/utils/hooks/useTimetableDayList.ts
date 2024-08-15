@@ -30,6 +30,7 @@ export default function useTimetableDayList(myLectures: LectureInfo[] | Timetabl
 
         groups.forEach((item) => {
           currentDayInfo.push({
+            id: 'id' in lecture ? lecture.id : 0,
             start: item[0],
             end: item[item.length - 1],
             name: 'name' in lecture ? lecture.name : lecture.class_title,

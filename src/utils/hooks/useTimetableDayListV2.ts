@@ -1,11 +1,12 @@
 import React from 'react';
 import {
+  LectureInfo,
   TimetableDayLectureInfo,
-  TimetableLectureDetailInfoV2,
+  TimetableLectureInfoV2,
 } from 'interfaces/Lecture';
 
 export default function useTimetableDayList(
-  myLectures: TimetableLectureDetailInfoV2 [] | undefined,
+  myLectures: TimetableLectureInfoV2 [] | LectureInfo[],
 ) {
   return React.useMemo(() => (Array.from({ length: 5 }, (_, index) => {
     const currentDayInfo = [] as TimetableDayLectureInfo[];
@@ -31,9 +32,10 @@ export default function useTimetableDayList(
 
         groups.forEach((item) => {
           currentDayInfo.push({
+            id: 'id' in lecture ? lecture.id : 0,
             start: item[0],
             end: item[item.length - 1],
-            name: lecture.class_title,
+            name: 'name' in lecture ? lecture.name : lecture.class_title,
             lecture_class: lecture.lecture_class,
             professor: lecture.professor,
             index: lectureIndex,

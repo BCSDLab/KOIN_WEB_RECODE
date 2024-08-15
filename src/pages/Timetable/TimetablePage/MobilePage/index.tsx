@@ -6,13 +6,15 @@ import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
 import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
-import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
+// import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import SemesterListbox from 'pages/Timetable/components/SemesterList';
+import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
 import styles from './MobilePage.module.scss';
 
-function MobilePage() {
+function MobilePage({ frameId }: { frameId: string | undefined }) {
   const logger = useLogger();
-  const { myLectures } = useMyLectures();
+  // const { myLectures } = useMyLectures(); // 아마 최근 시간표만 저장 됐을 꺼같음. 지금까지는 어떤식으로 해왔을까?
+  const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -22,14 +24,20 @@ function MobilePage() {
     });
     onTimetableImageDownload('my-timetable');
   };
-  const myLectureDayValue = useTimetableDayList(myLectures);
+  const myLectureDayValue = useTimetableDayList(myLecturesV2);
 
   return (
     <>
       <div className={styles['page__timetable-wrap']}>
         <div className={styles.page__filter}>
           <div className={styles.page__semester}>
-            <React.Suspense fallback={<LoadingSpinner className={styles['dropdown-loading-spinner']} />}>
+            <React.Suspense
+              fallback={(
+                <LoadingSpinner
+                  className={styles['dropdown-loading-spinner']}
+                />
+              )}
+            >
               <SemesterListbox />
             </React.Suspense>
           </div>
@@ -38,14 +46,22 @@ function MobilePage() {
             className={styles.page__button}
             onClick={(e) => handleImageDownloadClick(e)}
           >
-            <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
+            <img
+              src="https://static.koreatech.in/assets/img/ic-image.png"
+              alt="이미지"
+            />
             이미지로 저장하기
           </button>
         </div>
         <div ref={timetableRef} className={styles.page__timetable}>
           <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense fallback={<LoadingSpinner className={styles['top-loading-spinner']} />}>
+            <React.Suspense
+              fallback={
+                <LoadingSpinner className={styles['top-loading-spinner']} />
+              }
+            >
               <Timetable
+                frameId={Number(frameId)}
                 lectures={myLectureDayValue}
                 columnWidth={55}
                 firstColumnWidth={52}

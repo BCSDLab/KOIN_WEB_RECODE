@@ -42,6 +42,20 @@ export interface TimetableAddLectureRequest {
   }];
 }
 
+export interface UpdateTimetableLectureV2Request {
+  timetable_frame_id: number;
+  timetable_lecture: [{
+    // id: number;
+    // lecture_id: number;
+    class_title: string;
+    class_time: number[];
+    // class_place: string;
+    // professor: string;
+    grades: string;
+    // memo: string;
+  }];
+}
+
 export type TimetableRemoveLectureResponse = TimetableLectureInfo[];
 
 export interface VersionInfoResponse extends APIResponse {
@@ -79,6 +93,11 @@ export interface TimetableLectureInfoV2Response extends APIResponse {
   total_grades: number;
 }
 
+export interface TimetableLectureInfoV2AddResponse extends APIResponse {
+  timetable_frame_id: number;
+  timetable: TimetableDetailInfo[];
+}
+
 export interface TimetableDetailInfo {
   id: number;
   regular_number: string;
@@ -98,30 +117,13 @@ export interface TimetableDetailInfo {
 export interface AddTimetableLectureV2Request {
   timetable_frame_id: number;
   timetable_lecture: [{
+    // id: number;
+    // lecture_id: number;
     class_title: string;
     class_time: number[];
-    class_place: string;
-    professor: string;
+    // class_place: string;
+    // professor: string;
     grades: string;
-    memo: string;
-    lecture_id: number;
+    // memo: string;
   }];
-}
-
-export interface UpdateTimetableLectureV2Request {
-  timetable_frame_id: number;
-  timetable_lecture: [{
-    id: number;
-    lecture_id: number;
-    class_title: string;
-    class_time: number[];
-    class_place: string;
-    '강의 교수': string;
-    grades: string;
-    memo: string;
-  }];
-}
-
-export interface DeleteTimetableLectureV2Request {
-  id: number;
 }
