@@ -128,9 +128,13 @@ export default function ReviewReportingPage() {
           })}
           disabled={!selectOptions.includes('etc')}
           placeholder="신고 사유를 입력해주세요."
-          maxLength={149}
+          maxLength={150}
           value={etcDescription}
-          onChange={(e) => setEtcDescription(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length <= 150) {
+              setEtcDescription(e.target.value);
+            }
+          }}
         />
       </div>
       <button
