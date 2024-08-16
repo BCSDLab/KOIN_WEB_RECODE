@@ -79,7 +79,6 @@ function Timetable({
           onClose={portalOption.close}
           onConfirm={() => {
             removeMyLectureV2(lectureToRemove!, id);
-            // console.log('dfd', id);
           }}
         />
       ));

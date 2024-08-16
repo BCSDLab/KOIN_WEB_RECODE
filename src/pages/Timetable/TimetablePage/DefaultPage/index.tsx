@@ -3,7 +3,6 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import TimetableHeader from 'pages/Timetable/components/TimetableHeader';
 import { Suspense } from 'react';
 import TimetableList from 'pages/Timetable/components/TimetableList';
-// import MainTimetable from 'pages/Timetable/components/MyLectureTimetable';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage() {

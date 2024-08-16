@@ -12,22 +12,6 @@ export interface LectureInfo {
   class_time: Array<number>;
 }
 
-// export interface LectureInfo {
-//   id: number;
-//   regular_number: string;
-//   code: string;
-//   design_score: string;
-//   class_time: Array<number>;
-//   class_place: string | null;
-//   memo: string | null;
-//   grades: string;
-//   class_title: string;
-//   lecture_class: string;
-//   target: string;
-//   professor: string;
-//   department: string;
-// }
-
 export interface TimetableLectureInfo {
   id: number;
   regular_number: string;

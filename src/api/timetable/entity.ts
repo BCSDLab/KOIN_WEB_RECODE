@@ -45,14 +45,9 @@ export interface TimetableAddLectureRequest {
 export interface UpdateTimetableLectureV2Request {
   timetable_frame_id: number;
   timetable_lecture: [{
-    // id: number;
-    // lecture_id: number;
     class_title: string;
     class_time: number[];
-    // class_place: string;
-    // professor: string;
     grades: string;
-    // memo: string;
   }];
 }
 
@@ -117,13 +112,9 @@ export interface TimetableDetailInfo {
 export interface AddTimetableLectureV2Request {
   timetable_frame_id: number;
   timetable_lecture: [{
-    // id: number;
     lecture_id: number;
     class_title: string;
     class_time: number[];
-    // class_place: string;
-    // professor: string;
     grades: string;
-    // memo: string;
   }];
 }
