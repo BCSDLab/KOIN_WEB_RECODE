@@ -1,5 +1,4 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postReviewReport } from 'api/store';
 import { ReviewReportRequest } from 'api/store/entity';
@@ -9,7 +8,6 @@ import showToast from 'utils/ts/showToast';
 
 export default function useReviewReport(shopId: string, reviewId: string) {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const token = useTokenState();
   const openToast = useKoinToast();
 
@@ -20,7 +18,6 @@ export default function useReviewReport(shopId: string, reviewId: string) {
     onSuccess: () => {
       openToast({ message: '해당 리뷰의 신고가 완료되었습니다.' });
       queryClient.invalidateQueries({ queryKey: ['review', Number(shopId)] });
-      navigate(`/store/${shopId}?state=리뷰`, { replace: true });
     },
     onError: (error) => {
       if (isKoinError(error)) {
