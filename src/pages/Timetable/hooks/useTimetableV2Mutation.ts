@@ -17,11 +17,18 @@ export default function useTimetableV2Mutation(frameId: number) {
     if (token && clickedLecture) {
       mutateAddWithServer({
         timetable_frame_id: frameId,
-        timetable_lecture: [{ class_title: clickedLecture.name, ...clickedLecture }],
+        timetable_lecture: [
+          {
+            class_title: clickedLecture.name,
+            lecture_id: clickedLecture.id,
+            ...clickedLecture,
+          },
+        ],
       });
     } else {
       addLectureFromLocalStorage(clickedLecture, frameId);
     }
+    console.log(clickedLecture);
   };
 
   const removeMyLectureV2 = (clickedLecture: LectureInfo | TimetableLectureInfoV2, id: number) => {

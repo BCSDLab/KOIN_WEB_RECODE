@@ -1,4 +1,5 @@
 export interface LectureInfo {
+  id: number;
   code: string;
   name: string;
   grades: string;

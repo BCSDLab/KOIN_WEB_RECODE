@@ -118,7 +118,7 @@ export interface AddTimetableLectureV2Request {
   timetable_frame_id: number;
   timetable_lecture: [{
     // id: number;
-    // lecture_id: number;
+    lecture_id: number;
     class_title: string;
     class_time: number[];
     // class_place: string;
