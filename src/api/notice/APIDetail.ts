@@ -36,7 +36,7 @@ export class GetArticle<R extends ArticleList> implements APIRequest<R> {
 export class HotNoticeList<R extends HotPostResponse[]> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/articles/hot/list';
+  path = '/articles/hot';
 
   response!: R;
 
