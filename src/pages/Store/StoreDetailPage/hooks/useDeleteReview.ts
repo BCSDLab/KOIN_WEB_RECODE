@@ -13,7 +13,7 @@ export const useDeleteReview = (shopId: string, reviewId: number) => {
     mutationFn: () => deleteReview(reviewId, shopId, token),
     onSuccess: () => {
       openToast({ message: '리뷰가 삭제되었습니다.' });
-      queryClient.invalidateQueries({ queryKey: ['review', Number(shopId)] });
+      queryClient.invalidateQueries({ queryKey: ['review'] });
     },
     onError: (e) => {
       if (isKoinError(e)) {
