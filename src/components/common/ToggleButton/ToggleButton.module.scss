@@ -1,41 +1,45 @@
 .button {
   margin: 0;
-  width: 100%;
-  height: 100%;
+  width: inherit;
+  height: inherit;
   background: white;
-  border-radius: 2em;
+
   &::before {
     content: "";
+    align-items: center;
     text-align: center;
-    width: 40px;
-    height: 20px;
+    width: inherit;
+    height: inherit;
     display: block;
     position: absolute;
     border-radius: 30px;
-    background-color: white;
-    box-shadow: 0 0 16px 3px rgba(0 0 0 / 15%);
+    background-color: #E1E1E1;
     transition: all 0.2s ease-in;
     cursor: pointer;
   }
+
   &::after {
     content: "";
     display: block;
     position: relative;
-    width: 16px;
-    height: 16px;
-    top: 2px;
-    left: 2px;
+    width: 33%;
+    height: 66%;
+    top: 17%;
+    left: 8%;
     border-radius: 50%;
-    background: #2f3640;
+    background: #FFFFFF;
     transition: all 0.2s ease-in;
   }
+
   &:checked {
+  
     &::before {
-      background-color: #585d6d;
+      background-color: #175C8E;
     }
+  
     &::after {
       background-color: white;
-      left: calc(100% - 20px);
+      left: 59%;
     }
   }
 }
