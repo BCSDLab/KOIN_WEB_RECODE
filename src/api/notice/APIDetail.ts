@@ -5,7 +5,7 @@ import {
   HotArticlesResponse,
 } from './entity';
 
-const BOARD_TYPES = {
+const BOARD_IDS = {
   자유게시판: 1,
   취업게시판: 2,
   익명게시판: 3,
@@ -31,7 +31,7 @@ export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
   auth = false;
 
   constructor(page: string | undefined) {
-    this.path = `/articles?boardId=${BOARD_TYPES.학사공지}&page=${page}`; // limit default 10
+    this.path = `/articles?boardId=${BOARD_IDS.학사공지}&page=${page}`; // limit default 10
   }
 }
 
