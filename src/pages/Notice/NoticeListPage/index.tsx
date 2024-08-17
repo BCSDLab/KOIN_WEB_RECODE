@@ -1,24 +1,24 @@
-import Pagination from 'components/Post/Pagination';
-import PostHeader from 'components/Post/PostHeader';
-import PostList from 'components/Post/PostList';
-import usePageParams from 'pages/Notice/NoticeListPage/hooks/usePageParams';
-import useArticleList from 'pages/Notice/NoticeListPage/hooks/useArticleList';
+import Pagination from 'pages/Notice/components/Pagination';
+import NoticeHeader from 'pages/Notice/components/NoticeHeader';
+import NoticeList from 'pages/Notice/components/NoticeList';
+import usePageParams from 'pages/Notice/hooks/usePageParams';
+import useArticles from 'pages/Notice/hooks/useArticles';
 
-function NoticePage() {
+export default function NoticeListPage() {
   const paramsPage = usePageParams();
-  const articleList = useArticleList(paramsPage);
+  const { articles, pageData } = useArticles(paramsPage);
+
+  if (!articles) return <div>Loading...</div>;
 
   return (
     <>
-      <PostHeader />
-      <PostList
-        articles={articleList.articles}
+      <NoticeHeader />
+      <NoticeList
+        articles={articles}
       />
       <Pagination
-        totalPageNum={articleList === null ? 5 : articleList!.totalPage}
+        totalPageNum={articles === null ? 5 : pageData.total_count}
       />
     </>
   );
 }
-
-export default NoticePage;
