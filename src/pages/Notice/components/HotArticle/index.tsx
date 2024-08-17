@@ -31,18 +31,18 @@ export default function HotArticles() {
   const logger = useLogger();
 
   return (
-    <aside className={styles.hotpost}>
-      <div className={styles.hotpost__list}>
-        <div className={styles.hotpost__title}>가장 많이 본 게시물</div>
+    <aside className={styles['hot-article']}>
+      <div className={styles['hot-article__list']}>
+        <div className={styles['hot-article__title']}>가장 많이 본 게시물</div>
         {hotArticles.map((article, index) => (
           <Link
-            className={styles.hotpost__content}
+            className={styles['hot-article__content']}
             to={`/board/notice/${article.id}`}
             key={article.id + article.board_id}
             onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'notice_hot', value: article.title })}
           >
-            <span className={styles.hotpost__rank}>{ index + 1 }</span>
-            <span className={styles.hotpost__item}>{ article.title }</span>
+            <span className={styles['hot-article__rank']}>{ index + 1 }</span>
+            <span className={styles['hot-article__item']}>{ article.title }</span>
           </Link>
         ))}
       </div>

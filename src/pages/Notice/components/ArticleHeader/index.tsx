@@ -1,4 +1,4 @@
-import setPostCreateDate from 'utils/ts/setPostCreateDate';
+import setArticleCreateDate from 'utils/ts/setArticleCreateDate';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ArticleHeader.module.scss';
@@ -21,7 +21,7 @@ export default function ArticleHeader({
       <div className={styles.title}>
         <span className={styles['title__board-id']}>{convertNoticeTag(boardId)}</span>
         <span className={styles.title__content}>{title}</span>
-        {setPostCreateDate(createdAt)[1] && (
+        {setArticleCreateDate(createdAt)[1] && (
           <img
             className={styles['title__new-tag']}
             src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
