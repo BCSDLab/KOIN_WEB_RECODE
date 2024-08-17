@@ -5,7 +5,7 @@ import {
   TimetableLectureInfoV2,
 } from 'interfaces/Lecture';
 
-export default function useTimetableDayList(
+export default function useTimetableDayListV2(
   myLectures: TimetableLectureInfoV2 [] | LectureInfo[],
 ) {
   return React.useMemo(() => (Array.from({ length: 5 }, (_, index) => {

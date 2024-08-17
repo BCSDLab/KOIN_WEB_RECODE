@@ -1,10 +1,10 @@
 import React from 'react';
 import Timetable from 'components/TimetablePage/Timetable';
 import useImageDownload from 'utils/hooks/useImageDownload';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { useTimeString } from 'utils/zustand/myLectures';
 import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import styles from './DownloadTimetableModal.module.scss';
 
 interface DownloadTimetableModalProps {
@@ -20,11 +20,11 @@ interface TimetableDownloadProps {
 
 function TimetableDownload({ rowNumber, forMobile, frameId }: TimetableDownloadProps) {
   const { myLecturesV2 } = useMyLecturesV2(frameId);
-  const myLectureDayValue = useTimetableDayList(myLecturesV2);
+  const myLectureDayValueV2 = useTimetableDayListV2(myLecturesV2);
   return (
     <Timetable
       frameId={frameId}
-      lectures={myLectureDayValue}
+      lectures={myLectureDayValueV2}
       columnWidth={forMobile ? 88.73 : 140}
       firstColumnWidth={forMobile ? 44.36 : 70}
       rowHeight={forMobile ? 33.07 : 33}

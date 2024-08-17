@@ -30,7 +30,7 @@ function TimetablePage() {
   return (
     <div className={styles.page}>
       {!isMobile ? (
-        <DefaultPage />
+        <DefaultPage frameId={String(currentFrameIndex)} />
       ) : (
         <MobilePage frameId={String(currentFrameIndex)} />
       )}

@@ -1,5 +1,4 @@
 import React, { Suspense, useEffect } from 'react';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
@@ -10,6 +9,7 @@ import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
 import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
 import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
 import useTokenState from 'utils/hooks/useTokenState';
+import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable() {
@@ -28,12 +28,12 @@ function CurrentSemesterTimetable() {
   }, [timetableFrameList]);
 
   const { myLecturesV2 } = useMyLecturesV2(currentFrameIndex);
-  const myLectureDayValue = useTimetableDayList(myLecturesV2);
+  const myLectureDayValueV2 = useTimetableDayListV2(myLecturesV2);
 
-  return myLectureDayValue ? (
+  return myLectureDayValueV2 ? (
     <Timetable
       frameId={currentFrameIndex}
-      lectures={myLectureDayValue}
+      lectures={myLectureDayValueV2}
       columnWidth={44}
       firstColumnWidth={29}
       rowHeight={17.3}

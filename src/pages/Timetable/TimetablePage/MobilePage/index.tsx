@@ -4,10 +4,10 @@ import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg
 import showToast from 'utils/ts/showToast';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
-import useTimetableDayList from 'utils/hooks/useTimetableDayList';
 import Timetable from 'components/TimetablePage/Timetable';
 import SemesterListbox from 'pages/Timetable/components/SemesterList';
 import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import styles from './MobilePage.module.scss';
 
 function MobilePage({ frameId }: { frameId: string | undefined }) {
@@ -22,7 +22,8 @@ function MobilePage({ frameId }: { frameId: string | undefined }) {
     });
     onTimetableImageDownload('my-timetable');
   };
-  const myLectureDayValue = useTimetableDayList(myLecturesV2);
+
+  const myLectureDayValueV2 = useTimetableDayListV2(myLecturesV2);
 
   return (
     <>
@@ -60,7 +61,7 @@ function MobilePage({ frameId }: { frameId: string | undefined }) {
             >
               <Timetable
                 frameId={Number(frameId)}
-                lectures={myLectureDayValue}
+                lectures={myLectureDayValueV2}
                 columnWidth={55}
                 firstColumnWidth={52}
                 rowHeight={21}
