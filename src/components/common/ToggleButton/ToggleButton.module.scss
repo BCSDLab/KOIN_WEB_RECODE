@@ -13,7 +13,7 @@
     display: block;
     position: absolute;
     border-radius: 30px;
-    background-color: #E1E1E1;
+    background-color: #e1e1e1;
     transition: all 0.2s ease-in;
     cursor: pointer;
   }
@@ -27,16 +27,15 @@
     top: 17%;
     left: 8%;
     border-radius: 50%;
-    background: #FFFFFF;
+    background: #fff;
     transition: all 0.2s ease-in;
   }
 
   &:checked {
-  
     &::before {
-      background-color: #175C8E;
+      background-color: #175c8e;
     }
-  
+
     &::after {
       background-color: white;
       left: 59%;
