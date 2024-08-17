@@ -5,7 +5,7 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import HotArticles from 'pages/Notice/components/HotArticle';
 import styles from './NoticePage.module.scss';
 
-function Notice() {
+export default function Notice() {
   useScrollToTop();
 
   return (
@@ -24,5 +24,3 @@ function Notice() {
     </div>
   );
 }
-
-export default Notice;

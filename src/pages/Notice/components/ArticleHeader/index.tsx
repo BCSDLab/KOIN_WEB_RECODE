@@ -11,14 +11,9 @@ type ArticleHeaderProps = {
   hit: number
 };
 
-function ArticleHeader(props: ArticleHeaderProps) {
-  const {
-    boardId,
-    title,
-    createdAt,
-    nickname,
-    hit,
-  } = props;
+export default function ArticleHeader({
+  boardId, title, createdAt, nickname, hit,
+}: ArticleHeaderProps) {
   const isMobile = useMediaQuery();
 
   return (
@@ -26,7 +21,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
       <div className={styles.title}>
         <span className={styles['title__board-id']}>{convertNoticeTag(boardId)}</span>
         <span className={styles.title__content}>{title}</span>
-        { setPostCreateDate(createdAt)[1] && (
+        {setPostCreateDate(createdAt)[1] && (
           <img
             className={styles['title__new-tag']}
             src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
@@ -35,11 +30,9 @@ function ArticleHeader(props: ArticleHeaderProps) {
         )}
       </div>
       <div className={styles.content}>
-        <div className={styles.content__author}>{ isMobile ? `조회 ${hit} · ${nickname}` : nickname }</div>
+        <div className={styles.content__author}>{isMobile ? `조회 ${hit} · ${nickname}` : nickname}</div>
         <div className={styles['content__create-at']}>{createdAt}</div>
       </div>
     </div>
   );
 }
-
-export default ArticleHeader;

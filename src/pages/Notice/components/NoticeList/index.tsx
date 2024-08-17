@@ -9,7 +9,7 @@ interface NoticeListProps {
   articles: Article[]
 }
 
-function NoticeList({ articles }: NoticeListProps) {
+export default function NoticeList({ articles }: NoticeListProps) {
   const isMobile = useMediaQuery();
 
   return (
@@ -41,5 +41,3 @@ function NoticeList({ articles }: NoticeListProps) {
     </div>
   );
 }
-
-export default NoticeList;

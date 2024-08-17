@@ -4,7 +4,7 @@ interface ArticleContentProps {
   content: string
 }
 
-function ArticleContent({ content }: ArticleContentProps) {
+export default function ArticleContent({ content }: ArticleContentProps) {
   return (
     <div className={styles.content}>
       {/* eslint-disable-next-line  */}
@@ -12,5 +12,3 @@ function ArticleContent({ content }: ArticleContentProps) {
     </div>
   );
 }
-
-export default ArticleContent;
