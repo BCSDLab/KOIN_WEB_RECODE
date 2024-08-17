@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { HotArticle } from 'api/notice/entity';
 import useHotArticleList from 'pages/Notice/hooks/useHotArticle';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import styles from './HotPost.module.scss';
+import styles from './HotArticles.module.scss';
 
 const LINK_LIST = [
   {
@@ -31,7 +31,7 @@ const LINK_LIST = [
   },
 ];
 
-function HotPost() {
+function HotArticles() {
   const { hotArticles } = useHotArticleList();
   const logger = useLogger();
 
@@ -40,15 +40,15 @@ function HotPost() {
       <div className={styles.hotpost__list}>
         <div className={styles.hotpost__title}>가장 많이 본 게시물</div>
         {
-        hotArticles.map((hotPost: HotArticle, index: number) => (
+        hotArticles.map((article: HotArticle, index: number) => (
           <Link
             className={styles.hotpost__content}
-            to={`/board/notice/${hotPost.id}`}
-            key={hotPost.id + hotPost.board_id}
-            onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'notice_hot', value: hotPost.title })}
+            to={`/board/notice/${article.id}`}
+            key={article.id + article.board_id}
+            onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'notice_hot', value: article.title })}
           >
             <span className={styles.hotpost__rank}>{ index + 1 }</span>
-            <span className={styles.hotpost__item}>{ hotPost.title }</span>
+            <span className={styles.hotpost__item}>{ article.title }</span>
           </Link>
         ))
         }
@@ -77,4 +77,4 @@ function HotPost() {
   );
 }
 
-export default HotPost;
+export default HotArticles;

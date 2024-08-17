@@ -17,19 +17,17 @@ export default function NoticeHeader() {
     <div className={styles.header}>
       <div className={styles.header__container}>
         <div className={styles.header__row}>
-          {
-            Object.keys(HEADER_ROW).map((key) => (
-              <div
-                key={HEADER_ROW[key]}
-                className={cn({
-                  [styles.info]: true,
-                  [styles[`info--${key}`]]: true,
-                })}
-              >
-                {HEADER_ROW[key]}
-              </div>
-            ))
-          }
+          {Object.keys(HEADER_ROW).map((key) => (
+            <div
+              key={HEADER_ROW[key]}
+              className={cn({
+                [styles.info]: true,
+                [styles[`info--${key}`]]: true,
+              })}
+            >
+              {HEADER_ROW[key]}
+            </div>
+          ))}
         </div>
       </div>
     </div>

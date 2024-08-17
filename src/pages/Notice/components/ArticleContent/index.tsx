@@ -1,10 +1,10 @@
 import styles from './ArticleContent.module.scss';
 
-interface PostDetailContentProps {
+interface ArticleContentProps {
   content: string
 }
 
-function ArticleContent({ content }: PostDetailContentProps) {
+function ArticleContent({ content }: ArticleContentProps) {
   return (
     <div className={styles.content}>
       {/* eslint-disable-next-line  */}

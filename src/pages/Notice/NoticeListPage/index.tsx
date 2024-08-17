@@ -3,22 +3,19 @@ import NoticeHeader from 'pages/Notice/components/NoticeHeader';
 import NoticeList from 'pages/Notice/components/NoticeList';
 import usePageParams from 'pages/Notice/hooks/usePageParams';
 import useArticles from 'pages/Notice/hooks/useArticles';
+import { Suspense } from 'react';
 
 export default function NoticeListPage() {
   const paramsPage = usePageParams();
   const { articles, pageData } = useArticles(paramsPage);
 
-  if (!articles) return <div>Loading...</div>;
-
   return (
     <>
       <NoticeHeader />
-      <NoticeList
-        articles={articles}
-      />
-      <Pagination
-        totalPageNum={articles === null ? 5 : pageData.total_count}
-      />
+      <Suspense fallback={<div />}>
+        <NoticeList articles={articles} />
+        <Pagination totalPageNum={articles === null ? 5 : pageData.total_count} />
+      </Suspense>
     </>
   );
 }

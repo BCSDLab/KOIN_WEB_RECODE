@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import HotPost from 'pages/Notice/components/HotPost';
+import HotArticles from 'pages/Notice/components/HotArticle';
 import styles from './NoticePage.module.scss';
 
 function Notice() {
@@ -19,7 +19,7 @@ function Notice() {
         </Suspense>
       </div>
       <Suspense fallback={<LoadingSpinner size="80px" />}>
-        <HotPost />
+        <HotArticles />
       </Suspense>
     </div>
   );
