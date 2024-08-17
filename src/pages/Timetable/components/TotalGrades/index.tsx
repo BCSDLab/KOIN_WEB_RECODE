@@ -1,17 +1,25 @@
-import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { useEffect, useState } from 'react';
 import styles from './TotalGrades.module.scss';
 
 interface TotalGradesProps {
-  myLectureList: TimetableLectureInfo[] | LectureInfo[];
+  myLectureList: LectureInfo[] | TimetableLectureInfoV2[] | undefined;
 }
 
-function TotalGrades({ myLectureList }: TotalGradesProps) {
-  const lectureList = myLectureList as (TimetableLectureInfo | LectureInfo)[];
-  const total = lectureList.reduce((acc, lecture) => acc + Number(lecture.grades), 0);
+function TotalGrades({ myLectureList = [] }: TotalGradesProps) {
+  const [totalGrades, setTotalGrades] = useState(0);
+
+  useEffect(() => {
+    let sum = 0;
+    myLectureList.forEach((item) => {
+      sum += Number(item.grades);
+    });
+    setTotalGrades(sum);
+  }, [myLectureList]);
 
   return (
     <div className={styles.grades}>
-      <div className={styles.grades__number}>{total}</div>
+      <div className={styles.grades__number}>{totalGrades}</div>
       학점
     </div>
   );

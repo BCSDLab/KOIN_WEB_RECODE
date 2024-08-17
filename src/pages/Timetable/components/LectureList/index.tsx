@@ -1,18 +1,21 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
+import {
+  LectureInfo,
+  TimetableLectureInfoV2,
+} from 'interfaces/Lecture';
 import React from 'react';
-import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
+import useTimetableV2Mutation from 'pages/Timetable/hooks/useTimetableV2Mutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLectureV2';
 import useSelect from 'pages/Timetable/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import useSearch from 'pages/Timetable/hooks/useSearch';
-import useMyLectures from 'pages/Timetable/hooks/useMyLectures';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { useUser } from 'utils/hooks/useUser';
 import { useParams } from 'react-router-dom';
+import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
@@ -23,58 +26,66 @@ interface CurrentSemesterLectureListProps {
     department: string;
     search: string;
   };
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
+  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
+  frameId: number;
 }
 
 function CurrentSemesterLectureList({
   semesterKey,
   filter,
-  myLectures,
+  myLecturesV2,
+  frameId,
 }: CurrentSemesterLectureListProps) {
   const { data: lectureList } = useLectureList(semesterKey);
   const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
-  const { addMyLecture } = useTimetableMutation();
+  const { addMyLectureV2 } = useTimetableV2Mutation(frameId);
   const { data: userInfo } = useUser();
 
   return (
     <LectureTable
-      list={
-        (lectureList ?? [])
-          .filter((lecture) => {
-            const searchFilter = filter.search.toUpperCase();
-            const departmentFilter = filter.department;
-            const searchCondition = lecture.name.toUpperCase().includes(searchFilter)
+      list={(lectureList ?? []).filter((lecture) => {
+        const searchFilter = filter.search.toUpperCase();
+        const departmentFilter = filter.department;
+        const searchCondition = lecture.name.toUpperCase().includes(searchFilter)
             || lecture.code.toUpperCase().includes(searchFilter)
             || lecture.professor.toUpperCase().includes(searchFilter);
 
-            if (searchFilter !== '' && departmentFilter !== '전체') {
-              return searchCondition && lecture.department === departmentFilter;
-            }
-            if (searchFilter !== '') {
-              return searchCondition;
-            }
-            if (departmentFilter !== '전체') {
-              return lecture.department === departmentFilter;
-            }
+        if (searchFilter !== '' && departmentFilter !== '전체') {
+          return searchCondition && lecture.department === departmentFilter;
+        }
+        if (searchFilter !== '') {
+          return searchCondition;
+        }
+        if (departmentFilter !== '전체') {
+          return lecture.department === departmentFilter;
+        }
 
-            return true;
-          })
-      }
-      myLectures={myLectures}
+        return true;
+      })}
+      myLecturesV2={myLecturesV2}
       selectedLecture={tempLecture ?? undefined}
-      onClickRow={(clickedLecture) => ('name' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
+      onClickRow={(clickedLecture) => ('code' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
       onDoubleClickRow={
         (clickedLecture) => {
           if ('class_title' in clickedLecture) {
             return;
           }
           const myLectureTimeValue = (
-            myLectures as Array<LectureInfo | TimetableLectureInfo>)
-            .reduce((acc, cur) => acc.concat(cur.class_time), [] as number[]);
+            myLecturesV2 as Array<LectureInfo | TimetableLectureInfoV2>
+          ).reduce((acc, cur) => {
+            if (cur.class_time) {
+              return acc.concat(cur.class_time);
+            }
+            return acc;
+          }, [] as number[]);
 
-          if (clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))) {
-            const myLectureList = myLectures as Array<LectureInfo & TimetableLectureInfo>;
+          if (
+            clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))
+          ) {
+            const myLectureList = myLecturesV2 as Array<
+            LectureInfo & TimetableLectureInfoV2
+            >;
             const alreadySelectedLecture = myLectureList.find(
               (lecture) => lecture.class_time.some(
                 (time) => clickedLecture.class_time.includes(time),
@@ -84,20 +95,26 @@ function CurrentSemesterLectureList({
               return;
             }
             if (userInfo) {
-              showToast('error', `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`);
+              showToast(
+                'error',
+                `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+              );
               return;
             }
-            showToast('error', `${alreadySelectedLecture.name}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`);
+            showToast(
+              'error',
+              `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+            );
           } else {
-            addMyLecture(clickedLecture);
+            addMyLectureV2(clickedLecture);
           }
         }
-      }
+}
     />
   );
 }
 
-function LectureList() {
+function LectureList({ frameId }: { frameId: number }) {
   const semesterParams = useParams().semester;
   const mostRecentSemester = '20242';
   const {
@@ -112,7 +129,7 @@ function LectureList() {
   updateSemester(semesterParams || mostRecentSemester);
   // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
 
-  const { myLectures } = useMyLectures();
+  const { myLecturesV2 } = useMyLecturesV2(frameId);
 
   return (
     <div className={styles.page}>
@@ -129,7 +146,10 @@ function LectureList() {
             type="button"
             onClick={onClickSearchButton}
           >
-            <img src="https://static.koreatech.in/assets/img/ic-search-gray.png" alt="search" />
+            <img
+              src="https://static.koreatech.in/assets/img/ic-search-gray.png"
+              alt="search"
+            />
           </button>
         </div>
         <div className={styles.page__depart}>
@@ -144,13 +164,14 @@ function LectureList() {
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner size="50" />}>
           <CurrentSemesterLectureList
+            frameId={frameId}
             semesterKey={semester}
             filter={{
               // 백엔드 수정하면 제거
               department: departmentFilterValue ?? '전체',
               search: searchValue ?? '',
             }}
-            myLectures={myLectures}
+            myLecturesV2={myLecturesV2}
           />
         </React.Suspense>
       </ErrorBoundary>

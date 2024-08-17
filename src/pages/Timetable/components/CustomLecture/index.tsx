@@ -1,20 +1,20 @@
 /* eslint-disable no-console */
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
-import useTokenState from 'utils/hooks/useTokenState';
 import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
+import useTokenState from 'utils/hooks/useTokenState';
 import styles from './CustomLecture.module.scss';
 import CustomLectureDefaultInput from './CustomLectureDefaultInput';
 import CustomLectureLocationTimeSetting from './CustomLectureLocationTimeSetting';
 
-function CustomLecture({ frameId }: { frameId: number }) {
+function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const handleAddLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
-
   const token = useTokenState();
-  const { data: timetableInfoList } = useTimetableV2InfoList(frameId, token);
 
-  console.log('dlddld', timetableInfoList);
+  const { data: timetableInfoList } = useTimetableV2InfoList(Number(frameId), token);
+
+  console.log('customLecture', timetableInfoList);
 
   // 해당 파트의 api 명세가 어떻게 나오느냐에 따라 html 구조의 변동이 있을 수 있을 것 같습니다.
   return (

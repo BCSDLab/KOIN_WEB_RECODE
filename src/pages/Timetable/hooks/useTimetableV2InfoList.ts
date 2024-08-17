@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getTimetableLectureInfoV2 } from 'api/timetable';
-import { TimetableLectureInfoV2Response } from 'api/timetable/entity';
+import { TimetableLectureInfoV2AddResponse } from 'api/timetable/entity';
 import { KoinError } from 'interfaces/APIError';
-// import { TimetableLectureInfo } from 'interfaces/Lecture';
+import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
 
 export const TIMETABLE_INFO_V2_LIST = 'TIMETABLE_INFO_V2_LIST';
 
@@ -11,13 +11,16 @@ function useTimetableV2InfoList(
   authorization: string,
 ) {
   const { data: timetableV2InfoList } = useSuspenseQuery<
-  TimetableLectureInfoV2Response | null,
-  KoinError
+  TimetableLectureInfoV2AddResponse | null,
+  KoinError,
+  TimetableLectureInfoV2[] | undefined,
+  [string, string]
   >(
     {
       queryKey: [TIMETABLE_INFO_V2_LIST, timetableFrameId + authorization],
       queryFn: () => (authorization && timetableFrameId
         ? getTimetableLectureInfoV2(authorization, timetableFrameId) : null),
+      select: (data) => (data ? data.timetable : undefined),
     },
   );
   return { data: timetableV2InfoList };

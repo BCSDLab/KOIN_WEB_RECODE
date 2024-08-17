@@ -1,4 +1,5 @@
 export interface LectureInfo {
+  id: number;
   code: string;
   name: string;
   grades: string;
@@ -13,19 +14,40 @@ export interface LectureInfo {
 
 export interface TimetableLectureInfo {
   id: number;
-  code: string;
-  class_title: string;
-  grades: string;
-  lecture_class: string;
   regular_number: string;
-  department: string;
-  target: string;
-  professor: string;
+  code: string;
   design_score: string;
   class_time: Array<number>;
+
+  class_title: string;
+  lecture_class: string;
+  target: string;
+  grades: string;
+  professor: string;
+  department: string;
+}
+
+export interface TimetableLectureInfoV2 {
+  id: number;
+  regular_number: string;
+  code: string;
+  design_score: string;
+  class_time: Array<number>;
+  class_place: string;
+  memo: string;
+  grades: string;
+  class_title: string;
+  lecture_class: string;
+  target: string;
+  professor: string;
+  department: string;
 }
 
 export interface TimetableInfoFromLocalStorage {
+  [key: string]: LectureInfo[];
+}
+
+export interface TimetableInfoFromLocalStorageV2 {
   [key: string]: LectureInfo[];
 }
 
@@ -36,4 +58,5 @@ export interface TimetableDayLectureInfo {
   lecture_class: string;
   professor: string;
   index: number;
+  id: number;
 }
