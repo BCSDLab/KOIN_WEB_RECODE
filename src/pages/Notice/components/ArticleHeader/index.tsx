@@ -3,13 +3,13 @@ import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ArticleHeader.module.scss';
 
-type ArticleHeaderProps = {
+interface ArticleHeaderProps {
   boardId: number
   title: string
   createdAt: string
   nickname: string
   hit: number
-};
+}
 
 export default function ArticleHeader({
   boardId, title, createdAt, nickname, hit,
