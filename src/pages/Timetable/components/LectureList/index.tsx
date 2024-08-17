@@ -27,6 +27,10 @@ interface CurrentSemesterLectureListProps {
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
 }
 
+interface MyLectureListBoxProps {
+  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo>;
+}
+
 function CurrentSemesterLectureList({
   semesterKey,
   filter,
@@ -94,6 +98,20 @@ function CurrentSemesterLectureList({
           }
         }
       }
+      version="semesterLectureList"
+    />
+  );
+}
+
+function MyLectureListBox({ myLectures }: MyLectureListBoxProps) {
+  return (
+    <LectureTable
+      list={myLectures}
+      myLectures={undefined}
+      selectedLecture={undefined}
+      onClickRow={undefined}
+      onDoubleClickRow={undefined}
+      version="myLectureList"
     />
   );
 }
@@ -114,6 +132,11 @@ function LectureList() {
   // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
 
   const { myLectures } = useMyLectures();
+  const [isToggled, setIsToggled] = React.useState(false);
+
+  const toggleLectureList = () => {
+    setIsToggled((prev) => !prev);
+  };
 
   return (
     <div className={styles.page}>
@@ -144,19 +167,26 @@ function LectureList() {
       </div>
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner size="50" />}>
-          <CurrentSemesterLectureList
-            semesterKey={semester}
-            filter={{
-              // 백엔드 수정하면 제거
-              department: departmentFilterValue ?? '전체',
-              search: searchValue ?? '',
-            }}
-            myLectures={myLectures}
-          />
+          {!isToggled
+            ? (
+              <CurrentSemesterLectureList
+                semesterKey={semester}
+                filter={{
+                  // 백엔드 수정하면 제거
+                  department: departmentFilterValue ?? '전체',
+                  search: searchValue ?? '',
+                }}
+                myLectures={myLectures}
+              />
+            )
+            : <MyLectureListBox myLectures={myLectures} />}
         </React.Suspense>
       </ErrorBoundary>
-      <div>
-        <ToggleButton width="40" height="20" />
+      <div className={styles.page__foot}>
+        <div className={styles.page__toggle}>
+          <ToggleButton width="46" height="24" handleToggle={toggleLectureList} />
+          <div>시간표에 추가한 과목</div>
+        </div>
         <ErrorBoundary fallbackClassName="loading">
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <LastUpdatedDate />
