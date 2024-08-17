@@ -18,9 +18,11 @@ export default function NoticePage() {
           <Outlet />
         </Suspense>
       </div>
-      <Suspense fallback={<LoadingSpinner size="80px" />}>
-        <HotArticles />
-      </Suspense>
+      <div className={styles.aside}>
+        <Suspense fallback={<LoadingSpinner size="80px" />}>
+          <HotArticles />
+        </Suspense>
+      </div>
     </div>
   );
 }
