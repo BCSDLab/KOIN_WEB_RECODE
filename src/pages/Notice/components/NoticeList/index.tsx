@@ -26,14 +26,14 @@ export default function NoticeList({ articles }: NoticeListProps) {
             <div className={styles.title__content}>{ article.title }</div>
             { setArticleCreateDate(article.created_at)[1] && (
               <img
-                className={styles.title__newTag}
+                className={styles['title__new-tag']}
                 src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
                 alt="new"
               />
             )}
           </div>
           <div className={styles.list__author}>{ isMobile ? `${article.nickname}` : article.nickname }</div>
-          <div className={styles.list__created_at}>
+          <div className={styles['list__created-at']}>
             { setArticleCreateDate(article.created_at)[0] }
           </div>
         </Link>

@@ -28,10 +28,8 @@ export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
 
   response!: R;
 
-  auth = false;
-
   constructor(page: string | undefined) {
-    this.path = `/articles?boardId=${BOARD_IDS.학사공지}&page=${page}`; // limit default 10
+    this.path = `/articles?boardId=${BOARD_IDS.공지사항}&page=${page}`; // limit default 10
   }
 }
 
@@ -41,8 +39,6 @@ export class GetArticle<R extends ArticleResponse> implements APIRequest<R> {
   path: string;
 
   response!: R;
-
-  auth = false;
 
   constructor(id: string | undefined) {
     this.path = `/articles/${id}`;
@@ -55,6 +51,4 @@ export class GetHotArticles<R extends HotArticlesResponse> implements APIRequest
   path = '/articles/hot';
 
   response!: R;
-
-  auth = false;
 }
