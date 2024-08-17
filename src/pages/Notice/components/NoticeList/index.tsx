@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import { ArticleList } from 'api/notice/entity';
+import { Article } from 'api/notice/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import setPostCreateDate from 'utils/ts/setPostCreateDate';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
-import styles from './PostList.module.scss';
+import styles from './NoticeList.module.scss';
 
 interface PostListProps {
-  articles: ArticleList[] | undefined
+  articles: Article[] | undefined
 }
 
 function PostList(props: PostListProps) {

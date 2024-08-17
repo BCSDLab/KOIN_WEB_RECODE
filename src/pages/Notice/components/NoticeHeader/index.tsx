@@ -1,5 +1,5 @@
 import { cn } from '@bcsdlab/utils';
-import styles from './PostHeader.module.scss';
+import styles from './NoticeHeader.module.scss';
 
 type HeaderRowInfo = {
   [key: string]: string
@@ -12,7 +12,7 @@ const HEADER_ROW: HeaderRowInfo = {
   date: '날짜',
 };
 
-function PostHeader() {
+export default function NoticeHeader() {
   return (
     <div className={styles.header}>
       <div className={styles.header__container}>
@@ -35,5 +35,3 @@ function PostHeader() {
     </div>
   );
 }
-
-export default PostHeader;

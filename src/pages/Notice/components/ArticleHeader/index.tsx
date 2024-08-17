@@ -1,9 +1,9 @@
 import setPostCreateDate from 'utils/ts/setPostCreateDate';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import styles from './PostDetailHeader.module.scss';
+import styles from './ArticleHeader.module.scss';
 
-type PostDetailHeaderProps = {
+type ArticleHeaderProps = {
   boardId: number
   title: string
   createdAt: string
@@ -11,7 +11,7 @@ type PostDetailHeaderProps = {
   hit: number
 };
 
-function PostDetailHeader(props: PostDetailHeaderProps) {
+function ArticleHeader(props: ArticleHeaderProps) {
   const {
     boardId,
     title,
@@ -42,4 +42,4 @@ function PostDetailHeader(props: PostDetailHeaderProps) {
   );
 }
 
-export default PostDetailHeader;
+export default ArticleHeader;

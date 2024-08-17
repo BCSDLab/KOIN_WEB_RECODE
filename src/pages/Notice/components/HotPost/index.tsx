@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { HotPostResponse } from 'api/notice/entity';
-import useHotArticleList from 'pages/Notice/NoticePage/hooks/useHotArticle';
+import { HotArticle } from 'api/notice/entity';
+import useHotArticleList from 'pages/Notice/hooks/useHotArticle';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './HotPost.module.scss';
 
@@ -32,7 +32,7 @@ const LINK_LIST = [
 ];
 
 function HotPost() {
-  const hotArticleList = useHotArticleList();
+  const { hotArticles } = useHotArticleList();
   const logger = useLogger();
 
   return (
@@ -40,7 +40,7 @@ function HotPost() {
       <div className={styles.hotpost__list}>
         <div className={styles.hotpost__title}>가장 많이 본 게시물</div>
         {
-        hotArticleList.map((hotPost: HotPostResponse, index: number) => (
+        hotArticles.map((hotPost: HotArticle, index: number) => (
           <Link
             className={styles.hotpost__content}
             to={`/board/notice/${hotPost.id}`}
