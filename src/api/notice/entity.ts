@@ -5,30 +5,28 @@ export type GetNoticeRequest = {
   page: string
 };
 
-export type ArticleList = {
+export type Article = {
   id: number
   board_id: number
-  comment_count: number
   title: string
-  content: string
   nickname: string
-  updated_at: string
-  created_at: string
-  is_delete: boolean
   hit: number
+  created_at: string // yyyy-MM-dd HH:mm:ss 이하 형식 동일
+  updated_at: string
 };
 
-export interface NoticeResponse extends APIResponse {
-  totalPage: number
-  articles: ArticleList[]
+export interface ArticlesResponse extends APIResponse {
+  articles: Article[]
+  total_count: number
+  current_count: number
+  total_page: number
+  current_page: number
 }
 
-export interface HotPostResponse extends APIResponse {
-  board_id: number
-  comment_count: number
-  contentSummary: string
-  title: string
-  id: number
-  created_at: string
-  hit: number
+export interface ArticleResponse extends Article, APIResponse {
+  content: string;
 }
+
+export interface HotArticle extends Article { }
+
+export type HotArticlesResponse = HotArticle[];
