@@ -6,7 +6,7 @@ import styles from './HotArticles.module.scss';
 const LINK_LIST = [
   {
     title: ['코리아텍', '바로가기'],
-    url: 'https://www.koreatech.ac.kr/kor.do',
+    url: 'https://www.koreatech.ac.kr/kor',
     image: 'https://static.koreatech.in/assets/img/banner_koreatech.png',
   },
   {
