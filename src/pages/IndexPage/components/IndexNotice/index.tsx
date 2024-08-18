@@ -1,6 +1,7 @@
+import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
-import useArticleList from 'pages/Notice/NoticeListPage/hooks/useArticleList';
+import useArticles from 'pages/Notice/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexNotice.module.scss';
 
@@ -27,7 +28,7 @@ const isNew = (createdAt: string) => {
 };
 
 function IndexNotice() {
-  const articleList = useArticleList('1');
+  const { articles } = useArticles();
   const logger = useLogger();
 
   return (
@@ -50,9 +51,9 @@ function IndexNotice() {
         </Link>
       </div>
 
-      {articleList && (
+      <Suspense fallback={<div />}>
         <ul className={styles.list}>
-          {articleList.articles.slice(0, 7).map((article) => (
+          {articles.slice(0, 7).map((article) => (
             <li key={article.id} className={styles.list__item}>
               <Link
                 to={`/board/notice/${article.id}`}
@@ -79,7 +80,7 @@ function IndexNotice() {
             </li>
           ))}
         </ul>
-      )}
+      </Suspense>
     </section>
   );
 }
