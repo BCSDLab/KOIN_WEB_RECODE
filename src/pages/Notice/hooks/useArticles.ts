@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notice } from 'api';
+import { PaginationInfo } from 'api/notice/entity';
 
 const useArticles = (page = '1') => {
   const { data: articleData } = useSuspenseQuery(
@@ -17,11 +18,11 @@ const useArticles = (page = '1') => {
           articles, total_count, current_count, total_page, current_page,
         } = data;
 
-        const pageData = {
+        const paginationInfo: PaginationInfo = {
           total_count, current_count, total_page, current_page,
         };
 
-        return { articles, pageData };
+        return { articles, paginationInfo };
       },
     },
   );

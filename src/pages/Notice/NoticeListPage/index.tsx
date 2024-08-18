@@ -7,14 +7,14 @@ import { Suspense } from 'react';
 
 export default function NoticeListPage() {
   const paramsPage = usePageParams();
-  const { articles, pageData } = useArticles(paramsPage);
+  const { articles, paginationInfo } = useArticles(paramsPage);
 
   return (
     <>
       <NoticeHeader />
       <Suspense fallback={<div />}>
         <NoticeList articles={articles} />
-        <Pagination totalPageNum={articles === null ? 5 : pageData.total_count} />
+        <Pagination totalPageNum={articles === null ? 5 : paginationInfo.total_count} />
       </Suspense>
     </>
   );
