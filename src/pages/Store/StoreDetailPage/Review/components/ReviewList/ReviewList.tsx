@@ -169,7 +169,11 @@ export default function ReviewList() {
             created_at={mine.created_at}
             key={mine.review_id}
           />
-        ))) : <div className={styles['not-found']}>작성한 리뷰가 없어요 :)</div>
+        ))) : (
+          <div className={styles['not-found']}>
+            <NoReview />
+          </div>
+        )
       )}
       {!isCheckboxClicked
       && (reviews.length > 0 ? reviews.map((review) => (

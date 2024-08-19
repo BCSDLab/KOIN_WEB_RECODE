@@ -24,7 +24,8 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
 
   useScrollToTop();
 
-  const [rate, setRate] = useState(initialData?.rating ?? 0);
+  const [rate, setRate] = useState(initialData.rating || 0);
+
   const [reviewText, setReviewText] = useState(initialData?.content ?? '');
   const [menuList, setMenuList] = useState<{ id: string, name: string }[]>(
     initialData.menu_names ? initialData.menu_names.map((name) => ({ id: uuidv4(), name })) : [],
@@ -38,7 +39,10 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
     if (initialData?.image_urls) {
       setImageFile(initialData.image_urls);
     }
-  }, [initialData?.image_urls, setImageFile]);
+    if (initialData.rating) {
+      setRate(initialData.rating);
+    }
+  }, [initialData, setImageFile]);
 
   const addMenu = () => {
     setMenuList([...menuList, { id: uuidv4(), name: '' }]);
@@ -70,7 +74,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
 
     if (rate) {
       mutate(reviewData);
-      navigate(`/store/${storeDetail.id!}`, { replace: true });
+      navigate(`/store/${storeDetail.id!}?state=리뷰`, { replace: true });
     }
   };
 

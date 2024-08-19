@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CheckBox from 'components/common/CommonCheckBox';
 import { toast } from 'react-toastify';
 import ReportingLabel from './components/ReportingLabel';
@@ -42,6 +42,7 @@ export default function ReviewReportingPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const params = useParams<{ shopid: string; reviewid: string }>();
   const { mutate } = useReviewReport(params.shopid!, params.reviewid!);
+  const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -88,6 +89,7 @@ export default function ReviewReportingPage() {
     }
     const reportData = { reports: requestOptions };
     mutate(reportData);
+    navigate(`/store/${params.shopid!}?state=리뷰`, { replace: true });
   };
 
   return (

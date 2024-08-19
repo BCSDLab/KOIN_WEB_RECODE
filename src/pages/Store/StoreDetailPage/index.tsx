@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -40,7 +40,8 @@ function StoreDetailPage() {
   const { storeDetail, storeDescription } = useStoreDetail(params.id!);
   const { data: storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
-  const [tapType, setTapType] = useState('메뉴');
+  const [param, setParam] = useSearchParams();
+  const tapType = param.get('state') ?? '메뉴';
   const portalManager = useModalPortal();
   const logger = useLogger();
   const { data } = useGetReview(Number(params.id), 'LATEST');
@@ -241,7 +242,10 @@ function StoreDetailPage() {
               [styles['tap__type--active']]: tapType === '메뉴',
             })}
             type="button"
-            onClick={() => setTapType('메뉴')}
+            onClick={() => {
+              param.set('state', '메뉴');
+              setParam(param);
+            }}
           >
             메뉴
           </button>
@@ -253,7 +257,8 @@ function StoreDetailPage() {
             type="button"
             onClick={() => {
               onClickEventList();
-              setTapType('이벤트/공지');
+              param.set('state', '이벤트/공지');
+              setParam(param);
             }}
           >
             이벤트/공지
@@ -266,7 +271,8 @@ function StoreDetailPage() {
             type="button"
             onClick={() => {
               onClickEventList();
-              setTapType('리뷰');
+              param.set('state', '리뷰');
+              setParam(param);
             }}
           >
             리뷰

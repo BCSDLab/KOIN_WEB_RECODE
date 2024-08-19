@@ -26,7 +26,7 @@ export default function AverageRating() {
           <Rating
             point={rate}
             count={ratingObject.ratings[rate]}
-            rate={(ratingObject.ratings[rate] / totalReviewCount) * 100}
+            rate={totalReviewCount ? (ratingObject.ratings[rate] / totalReviewCount) * 100 : 0}
             key={rate}
           />
         ))}

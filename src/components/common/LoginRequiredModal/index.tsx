@@ -26,7 +26,7 @@ export default function LoginRequiredModal({ title = '', description = '', close
           <button
             type="button"
             onClick={() => {
-              setRedirectPath(`${location.pathname}`);
+              setRedirectPath(`${location.pathname}${location.search}`);
               navigate('/auth');
             }}
           >
