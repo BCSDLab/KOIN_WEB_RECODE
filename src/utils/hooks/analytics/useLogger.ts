@@ -65,7 +65,7 @@ const useLogger = () => {
     value,
   } : ClickLoggerProps) => {
     logEvent({
-      action: 'click', category: 'button', label: title, value,
+      action: 'click', category: 'click', label: title, value,
     });
   };
 
@@ -84,9 +84,16 @@ const useLogger = () => {
     duration_time,
     previous_page,
     current_page,
+    event_category,
   }: ActionClickLoggerProps) => {
     logEvent({
-      action: actionTitle, category: 'button', label: title, value, duration_time, previous_page, current_page,
+      action: actionTitle,
+      category: event_category || 'click',
+      label: title,
+      value,
+      duration_time,
+      previous_page,
+      current_page,
     });
   };
 

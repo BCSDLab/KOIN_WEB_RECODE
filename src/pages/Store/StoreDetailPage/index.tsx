@@ -40,16 +40,12 @@ function StoreDetailPage() {
   const logger = useLogger();
   const koreanCategory = storeDetail.shop_categories.filter((category) => category.name !== '전체보기')[0].name;
   const onClickCallNumber = () => {
-    logger.click({
-      title: 'store_detail_call_number',
-      value: storeDetail!.phone,
-    });
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'shop_call',
       value: storeDetail!.name,
       event_category: 'click',
-      duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail')),
+      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickImage = (img: string[], index: number) => {
@@ -62,7 +58,7 @@ function StoreDetailPage() {
   };
   const onClickList = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: koreanCategory, duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail')),
+      actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: koreanCategory, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickEventList = () => {
@@ -229,7 +225,12 @@ function StoreDetailPage() {
               [styles['tap__type--active']]: tapType === '메뉴',
             })}
             type="button"
-            onClick={() => setTapType('메뉴')}
+            onClick={() => {
+              logger.actionEventClick({
+                actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail!.name, event_category: 'click',
+              });
+              setTapType('메뉴');
+            }}
           >
             메뉴
           </button>
