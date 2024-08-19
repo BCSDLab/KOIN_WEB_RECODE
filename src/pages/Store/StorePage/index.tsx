@@ -139,10 +139,11 @@ function StorePage() {
                   title: 'shop_categories',
                   value: category.name,
                   event_category: 'click',
-                  previous_page: categories?.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '',
-                  duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+                  previous_page: categories?.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '전체보기',
+                  duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
                   current_page: category.name,
                 });
+                sessionStorage.setItem('enter_category', new Date().getTime().toString());
                 setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}
@@ -175,7 +176,7 @@ function StorePage() {
             const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
             if (categories) {
               logger.actionEventClick({
-                actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}`, event_category: 'click',
+                actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId] && categories.shop_categories[currentCategoryId].name ? categories.shop_categories[currentCategoryId].name : '전체보기'}`, event_category: 'click',
               });
             }
           }}
@@ -238,7 +239,7 @@ function StorePage() {
             className={styles['store-list__item']}
             key={store.id}
             onClick={() => logger.actionEventClick({
-              actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory}`, current_page: `${store.name}`, duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+              actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
             })}
           >
             {store.is_event

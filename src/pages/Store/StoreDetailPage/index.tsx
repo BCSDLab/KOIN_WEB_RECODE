@@ -62,7 +62,7 @@ function StoreDetailPage() {
   };
   const onClickList = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: koreanCategory, duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail')),
+      actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: koreanCategory, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickEventList = () => {
