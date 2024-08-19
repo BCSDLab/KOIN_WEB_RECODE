@@ -34,7 +34,7 @@ function IndexCafeteria() {
   };
 
   const handlePlaceClick = (place: DiningPlace) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: selectedPlace });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: place });
     setSelectedPlace(place);
   };
 
