@@ -9,6 +9,7 @@ import DefaultPage from './DefaultPage';
 function TimetablePage() {
   const isMobile = useMediaQuery();
   useScrollToTop();
+  sessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
 
   return (
     <div className={styles.page}>

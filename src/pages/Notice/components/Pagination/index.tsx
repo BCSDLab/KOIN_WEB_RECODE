@@ -1,8 +1,8 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import usePagination from './hooks/usePagination';
+import usePagination from 'pages/Notice/hooks/usePagination';
 import styles from './Pagination.module.scss';
 
 const LIMIT_COUNT = [0, 1, 2, 3, 4];
@@ -29,14 +29,14 @@ interface PaginationProps {
   totalPageNum: number
 }
 
-function Pagination(props: PaginationProps) {
+export default function Pagination(props: PaginationProps) {
   const { calcIndexPage, onClickMove } = usePagination();
   const { params, setParams } = useParamsHandler();
-  const [currentPage, setCurrentPage] = React.useState(Number(params.page) || 1);
+  const [currentPage, setCurrentPage] = useState(Number(params.page) || 1);
   const { totalPageNum } = props;
   const totalPage = Array.from({ length: totalPageNum ?? 5 }, (v, i) => i + 1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(Number(params.page) || 1);
   }, [params.page]);
 
@@ -101,5 +101,3 @@ function Pagination(props: PaginationProps) {
     </div>
   );
 }
-
-export default Pagination;

@@ -20,11 +20,12 @@ function Curriculum() {
                 <a
                   className={styles.page__curriculum}
                   href={dept.curriculum_link}
+                  target="_blank"
                   onClick={() => {
                     logger.actionEventClick({
                       actionTitle: 'USER',
                       title: 'timetable',
-                      value: `click_${dept.name}`,
+                      value: `click_curriculum_${dept.name}`,
                     });
                   }}
                   rel="noreferrer"
@@ -37,11 +38,12 @@ function Curriculum() {
               <a
                 className={styles.page__curriculum}
                 href="https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002"
+                target="_blank"
                 onClick={() => {
                   logger.actionEventClick({
                     actionTitle: 'USER',
                     title: 'timetable',
-                    value: 'click_대학요람',
+                    value: 'click_curriculum_대학요람',
                   });
                 }}
                 rel="noreferrer"
