@@ -146,6 +146,7 @@ function StorePage() {
                   current_page: category.name,
                 });
                 sessionStorage.setItem('enter_category', new Date().getTime().toString());
+
                 setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}

@@ -40,10 +40,6 @@ function StoreDetailPage() {
   const logger = useLogger();
   const koreanCategory = storeDetail.shop_categories.filter((category) => category.name !== '전체보기')[0].name;
   const onClickCallNumber = () => {
-    logger.click({
-      title: 'store_detail_call_number',
-      value: storeDetail!.phone,
-    });
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'shop_call',
@@ -229,7 +225,12 @@ function StoreDetailPage() {
               [styles['tap__type--active']]: tapType === '메뉴',
             })}
             type="button"
-            onClick={() => setTapType('메뉴')}
+            onClick={() => {
+              logger.actionEventClick({
+                actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail!.name, event_category: 'click',
+              });
+              setTapType('메뉴');
+            }}
           >
             메뉴
           </button>
