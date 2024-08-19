@@ -45,7 +45,7 @@ function StoreDetailPage() {
       title: 'shop_call',
       value: storeDetail!.name,
       event_category: 'click',
-      duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail')),
+      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickImage = (img: string[], index: number) => {
