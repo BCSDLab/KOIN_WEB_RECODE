@@ -95,12 +95,14 @@ function StorePage() {
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
-  const selectedCategory = Number(searchParams.get('category'));
-  const koreanCategory = categories?.shop_categories.find(
-    (category) => category.id === selectedCategory,
-  )?.name;
-  const loggingCheckbox = (id: string) => {
-    if (id && searchParams.get(id)) {
+  const selectedCategory = Number(searchParams.get('category')) ?? -1;
+
+  const koreanCategory = selectedCategory === -1
+    ? '전체보기'
+    : categories?.shop_categories.find((category) => category.id === selectedCategory)?.name || '전체보기';
+
+  const loggingCheckbox = (id: string, isChecked: boolean) => {
+    if (isChecked) {
       logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_can', value: `check_${id}_${koreanCategory}` });
     }
   };
@@ -214,10 +216,10 @@ function StorePage() {
                 <input
                   id={item.id}
                   type="checkbox"
-                  checked={searchParams.get(item.id) ? true : undefined}
+                  checked={!!searchParams.get(item.id)}
                   className={styles['option-checkbox__input']}
                   onChange={() => {
-                    loggingCheckbox(item.id);
+                    loggingCheckbox(item.id, !searchParams.get(item.id));
                     setParams(item.id, item.value, {
                       deleteBeforeParam: true,
                       replacePage: true,

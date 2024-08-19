@@ -16,10 +16,7 @@ export const useScorllLogging = (
     if (document.body.scrollHeight * 0.7 > currentHeignt) {
       window.addEventListener('scroll', onScroll);
     }
-    console.log(document.body.scrollHeight * 0.7);
-    console.log(currentHeignt);
     if (document.body.scrollHeight * 0.7 < currentHeignt && data) {
-      console.log('test');
       if ('total_count' in data && title === 'shop_categories') {
         const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
         logger.actionEventClick({
