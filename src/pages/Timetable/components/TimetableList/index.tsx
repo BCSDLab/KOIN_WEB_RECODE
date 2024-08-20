@@ -14,17 +14,20 @@ import useAddTimetableFrame from 'pages/Timetable/hooks/useAddTimetableFrame';
 import { cn } from '@bcsdlab/utils';
 import styles from './TimetableList.module.scss';
 
-export default function TimetableList() {
+interface TimetableListInfo {
+  currentFrameIndex: number,
+  setCurrentFrameIndex: (index: number) => void
+}
+
+export default function TimetableList({
+  currentFrameIndex, setCurrentFrameIndex,
+}: TimetableListInfo) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const semester = useSemester();
   const token = useTokenState();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
-  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(0);
-  const selectFrame = (index: number) => {
-    setCurrentFrameIndex(index);
-  };
   const handleOpenModal = (frame: TimetableFrameInfo) => {
     setFocusFrame(frame);
     openModal();
@@ -37,7 +40,7 @@ export default function TimetableList() {
         setCurrentFrameIndex(mainFrame.id);
       }
     }
-  }, [timetableFrameList]);
+  }, [setCurrentFrameIndex, timetableFrameList]);
 
   return (
     <div className={styles['timetable-list']}>
@@ -52,7 +55,7 @@ export default function TimetableList() {
                 [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id,
               })}
               key={frame.id}
-              onClick={() => selectFrame(frame.id)}
+              onClick={() => setCurrentFrameIndex(frame.id)}
             >
               <li>
                 {frame.timetable_name}
