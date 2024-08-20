@@ -2,9 +2,30 @@
 
 .form-container {
   display: flex;
+  position: relative;
   flex-direction: column;
   gap: 10px;
   width: 613px;
+
+  &__instruction {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7); /* 반투명 검정 배경 */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-align: center;
+    z-index: 10; /* 다른 요소들보다 위에 배치 */
+  }
+
+  &--non-login {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
 }
 
 .require-mark {

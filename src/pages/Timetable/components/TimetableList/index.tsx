@@ -40,7 +40,6 @@ export default function TimetableList({
       showToast('warning', '로그인 후 이용 가능합니다.');
     }
   };
-  console.log(timetableFrameList);
 
   React.useEffect(() => {
     if (timetableFrameList) {
