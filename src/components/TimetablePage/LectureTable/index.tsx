@@ -1,16 +1,25 @@
 import type { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import React from 'react';
+import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
 import { cn } from '@bcsdlab/utils';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLectureV2';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
+import useToast from 'components/common/Toast/useToast';
+import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
   list: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
-  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
+  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2> | undefined;
   selectedLecture:LectureInfo | TimetableLectureInfoV2 | undefined;
   onClickRow: ((value:LectureInfo | TimetableLectureInfoV2) => void) | undefined;
   onDoubleClickRow: ((value: LectureInfo | TimetableLectureInfoV2) => void) | undefined;
+  version: 'semesterLectureList' | 'myLectureList'
+}
+
+interface RemoveLectureProps {
+  lecture_class: string;
+  professor: string;
 }
 
 const LECTURE_TABLE_HEADER = [
@@ -43,8 +52,9 @@ function LectureTable({
   selectedLecture,
   onClickRow,
   onDoubleClickRow,
+  version,
 }: LectureTableProps): JSX.Element {
-  const { widthInfo } = useFlexibleWidth(9, [65, 173, 45, 65, 65, 45, 45, 45, 65]);
+  const { widthInfo } = useFlexibleWidth(9, [61, 173, 41, 61, 61, 41, 41, 41, 61]);
   const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
   const [cursor, setCursor] = React.useState(-1);
@@ -54,6 +64,24 @@ function LectureTable({
       setCursor(-1);
     },
   );
+  const toast = useToast();
+  const { removeMyLecture } = useTimetableMutation();
+  const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
+    const recoverLecture = () => {
+
+    };
+    let lectureToRemove: LectureInfo | TimetableLectureInfoV2 | null = null;
+    (myLecturesV2 || list).forEach((lecture) => {
+      if (lecture.lecture_class === lecture_class && lecture.professor === professor) {
+        lectureToRemove = lecture;
+      }
+    });
+    if (lectureToRemove) {
+      removeMyLecture(lectureToRemove);
+      toast.open({ message: '해당 과목이 삭제되었습니다.', recoverMessage: '해당 과목이 복구되었습니다.', onRecover: recoverLecture });
+    }
+  };
+  const [isMouseOver, setIsMouseOver] = React.useState(-1);
   const handleTableRowClick = (
     value: LectureInfo | TimetableLectureInfoV2,
     e: React.MouseEvent<HTMLButtonElement>,
@@ -124,10 +152,7 @@ function LectureTable({
               style={{
                 width: `${widthInfo[headerIndex]}px`,
               }}
-              className={cn({
-                [styles.table__col]: true,
-                [styles['table__col--header']]: true,
-              })}
+              className={styles.table__col}
               role="columnheader"
               key={header.key}
             >
@@ -149,10 +174,10 @@ function LectureTable({
             <div
               className={cn({
                 [styles.table__row]: true,
-                [styles['table__row--include']]: myLecturesV2.some(
+                [styles['table__row--include']]: myLecturesV2 ? myLecturesV2.some(
                   (item) => item.code === lecture.code
                       && item.lecture_class === lecture.lecture_class,
-                ),
+                ) : false,
                 [styles['table__row--selected']]: selectedLecture === lecture,
               })}
               aria-selected={selectedLecture === lecture}
@@ -167,12 +192,29 @@ function LectureTable({
                       ? '시간표에서 미리 보기'
                       : undefined
                   }
-                className={styles['table__row-button']}
+                className={cn({
+                  [styles['table__row-button']]: true,
+                  [styles['table__row-button--toggled']]: version === 'myLectureList',
+                })}
                 onClick={(e) => {
                   setCursor(index);
                   handleTableRowClick(lecture, e);
                 }}
+                onMouseEnter={() => setIsMouseOver(index)}
+                onMouseLeave={() => setIsMouseOver(-1)}
               >
+                {isMouseOver === index && version === 'myLectureList' && (
+                  <div className={styles['table__delete-button']}>
+                    <LectureCloseIcon
+                      onClick={() => {
+                        handleRemoveLectureClick({
+                          lecture_class: lecture.lecture_class,
+                          professor: lecture.professor,
+                        });
+                      }}
+                    />
+                  </div>
+                )}
                 {LECTURE_TABLE_HEADER.map(
                   (headerItem, headerItemIndex) => headerItem.key !== null && (
                     <div
@@ -181,7 +223,11 @@ function LectureTable({
                       }}
                       className={cn({
                         [styles.table__col]: true,
-                        [styles['table__col--body']]: true,
+                        [styles['table__col--text-center']]:
+                              headerItem.label === '분반'
+                              || headerItem.label === '학점'
+                              || headerItem.label === '정원'
+                              || headerItem.label === '설계',
                       })}
                       role="cell"
                       key={headerItem.key}
