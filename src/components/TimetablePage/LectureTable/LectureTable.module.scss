@@ -1,13 +1,46 @@
 .table {
   width: 613px;
-  font-size: 13px;
+  height: 609px;
   text-align: left;
   word-break: break-all;
   border: none;
   white-space: nowrap;
 
+  &__header {
+    display: flex;
+    padding: 10px 16px;
+    text-align: left;
+    background-color: #175c8e1a;
+  }
+
+  &__col {
+    position: relative;
+    padding-right: 5px;
+    align-items: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    text-align: left;
+    word-break: break-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #4b4b4b;
+
+    .table__row > &:last-child {
+      border: none;
+      padding: 0;
+    }
+
+    &--text-center {
+      padding-left: 7px;
+    }
+  }
+
   &__lecture-list {
-    height: 612px;
+    height: 567px;
     overflow: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -17,22 +50,12 @@
     }
   }
 
-  &__header {
-    display: flex;
-    height: 37px;
-    line-height: 37px;
-    border: none;
-    background-color: #175c8e1a;
-    color: #4b4b4b;
-  }
-
   &__row-button {
+    position: relative;
     display: flex;
-    padding: 0;
-    border: none;
+    padding: 10px 16px;
     background: rgb(255 255 255);
     color: rgb(133 133 133);
-    text-align: left;
     cursor: pointer;
     outline: none;
 
@@ -43,11 +66,18 @@
     &:active {
       background-color: #e1e1e1;
     }
+
+    &--toggled {
+      color: #1f1f1f;
+
+      &:hover {
+        background-color: #fafafa;
+      }
+    }
   }
 
   &__row {
     display: flex;
-    line-height: 34px;
     background-color: #fff;
     color: #4b4b4b;
 
@@ -60,69 +90,23 @@
     }
   }
 
-  &__col {
-    position: relative;
-    overflow: hidden;
-    background-color: transparent;
-    box-sizing: border-box;
-
-    .table__row > &:last-child {
-      border: none;
-      padding: 0;
-    }
-
-    &--header {
-      padding-left: 10px;
-      border: none;
-      word-break: break-all;
-      white-space: nowrap;
-      height: 100%;
-      color: #555;
-      overflow-y: hidden;
-      cursor: default;
-    }
-
-    &--body {
-      line-height: 34px;
-      border: none;
-      word-break: break-all;
-      white-space: nowrap;
-      padding-left: 10px;
-      height: 34px;
-      text-overflow: ellipsis;
-
-      &:nth-child(3),
-      &:nth-child(6),
-      &:nth-child(7),
-      &:nth-child(8) {
-        padding: 0;
-        text-align: center;
-      }
-    }
-  }
-
-  &__button {
+  &__delete-button {
     position: absolute;
-    right: 0;
-    top: 5px;
-    border: none;
-    padding: 0;
-    width: 24px;
-    background-color: transparent;
-
-    & > img {
-      width: 100%;
-    }
-  }
-
-  &__resize {
-    position: absolute;
+    width: 101px;
+    height: 100%;
+    left: 0;
     top: 0;
-    right: 0;
-    width: 2px;
-    height: 38px;
-    background: transparent;
-    user-select: none;
+    background: linear-gradient(90deg, rgb(255 255 255 / 0%) 0%, #d9d9d9 74.17%);
     z-index: 2;
+    transform: rotate(180deg);
+    cursor: pointer;
+
+    > svg {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      right: 10px;
+      bottom: 13px;
+    }
   }
 }

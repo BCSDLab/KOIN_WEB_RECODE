@@ -16,6 +16,7 @@ import LectureTable from 'components/TimetablePage/LectureTable';
 import { useUser } from 'utils/hooks/useUser';
 import { useParams } from 'react-router-dom';
 import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import ToggleButton from 'components/common/ToggleButton';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
@@ -28,6 +29,10 @@ interface CurrentSemesterLectureListProps {
   };
   myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
   frameId: number;
+}
+
+interface MyLectureListBoxProps {
+  myLectures: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
 }
 
 function CurrentSemesterLectureList({
@@ -109,7 +114,21 @@ function CurrentSemesterLectureList({
             addMyLectureV2(clickedLecture);
           }
         }
+      }
+      version="semesterLectureList"
+    />
+  );
 }
+
+function MyLectureListBox({ myLectures }: MyLectureListBoxProps) {
+  return (
+    <LectureTable
+      list={myLectures}
+      myLecturesV2={undefined}
+      selectedLecture={undefined}
+      onClickRow={undefined}
+      onDoubleClickRow={undefined}
+      version="myLectureList"
     />
   );
 }
@@ -130,6 +149,11 @@ function LectureList({ frameId }: { frameId: number }) {
   // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
 
   const { myLecturesV2 } = useMyLecturesV2(frameId);
+  const [isToggled, setIsToggled] = React.useState(false);
+
+  const toggleLectureList = () => {
+    setIsToggled((prev) => !prev);
+  };
 
   return (
     <div className={styles.page}>
@@ -163,23 +187,33 @@ function LectureList({ frameId }: { frameId: number }) {
       </div>
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner size="50" />}>
-          <CurrentSemesterLectureList
-            frameId={frameId}
-            semesterKey={semester}
-            filter={{
-              // 백엔드 수정하면 제거
-              department: departmentFilterValue ?? '전체',
-              search: searchValue ?? '',
-            }}
-            myLecturesV2={myLecturesV2}
-          />
+          {!isToggled
+            ? (
+              <CurrentSemesterLectureList
+                frameId={frameId}
+                semesterKey={semester}
+                filter={{
+                  // 백엔드 수정하면 제거
+                  department: departmentFilterValue ?? '전체',
+                  search: searchValue ?? '',
+                }}
+                myLecturesV2={myLecturesV2}
+              />
+            )
+            : <MyLectureListBox myLectures={myLecturesV2} />}
         </React.Suspense>
       </ErrorBoundary>
-      <ErrorBoundary fallbackClassName="loading">
-        <React.Suspense fallback={<LoadingSpinner size="50" />}>
-          <LastUpdatedDate />
-        </React.Suspense>
-      </ErrorBoundary>
+      <div className={styles.page__foot}>
+        <div className={styles.page__toggle}>
+          <ToggleButton width="46" height="24" handleToggle={toggleLectureList} />
+          <div>시간표에 추가한 과목</div>
+        </div>
+        <ErrorBoundary fallbackClassName="loading">
+          <React.Suspense fallback={<LoadingSpinner size="50" />}>
+            <LastUpdatedDate />
+          </React.Suspense>
+        </ErrorBoundary>
+      </div>
     </div>
   );
 }
