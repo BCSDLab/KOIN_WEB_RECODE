@@ -21,7 +21,7 @@ function TimetablePage() {
       const mainFrame = timetableFrameList.find(
         (frame) => frame.is_main === true,
       );
-      if (mainFrame) {
+      if (mainFrame && mainFrame.id) {
         setCurrentFrameIndex(mainFrame.id);
       }
     }

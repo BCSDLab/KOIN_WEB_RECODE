@@ -7,7 +7,7 @@ export type SemesterInfo = {
 };
 
 export type TimetableFrameInfo = {
-  id: number;
+  id: number | null;
   timetable_name: string;
   is_main: boolean;
 };

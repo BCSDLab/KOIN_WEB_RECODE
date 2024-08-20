@@ -16,7 +16,7 @@ export default function useDeleteSemester(token: string, semester: string) {
     mutationFn: async () => {
       if (timetableFrameList) {
         await Promise.all(timetableFrameList.map((frame) => (
-          timetable.deleteTimetableFrame(token, frame.id)
+          timetable.deleteTimetableFrame(token, frame.id!)
         )));
       }
     },

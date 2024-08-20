@@ -12,6 +12,7 @@ import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useAddTimetableFrame from 'pages/Timetable/hooks/useAddTimetableFrame';
 import { cn } from '@bcsdlab/utils';
+import showToast from 'utils/ts/showToast';
 import styles from './TimetableList.module.scss';
 
 export default function TimetableList() {
@@ -21,7 +22,7 @@ export default function TimetableList() {
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
-  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(0);
+  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(-1);
   const selectFrame = (index: number) => {
     setCurrentFrameIndex(index);
   };
@@ -29,11 +30,19 @@ export default function TimetableList() {
     setFocusFrame(frame);
     openModal();
   };
+  const handleAddTimetableClick = () => {
+    if (token) {
+      addTimetableFrame({ semester: String(semester) });
+    } else {
+      showToast('warning', '로그인 후 이용 가능합니다.');
+    }
+  };
+  console.log(timetableFrameList);
 
   React.useEffect(() => {
     if (timetableFrameList) {
       const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
-      if (mainFrame) {
+      if (mainFrame && mainFrame.id) {
         setCurrentFrameIndex(mainFrame.id);
       }
     }
@@ -49,10 +58,10 @@ export default function TimetableList() {
               type="button"
               className={cn({
                 [styles['timetable-list__item']]: true,
-                [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id,
+                [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id || !frame.id,
               })}
               key={frame.id}
-              onClick={() => selectFrame(frame.id)}
+              onClick={() => (frame.id && selectFrame(frame.id))}
             >
               <li>
                 {frame.timetable_name}
@@ -65,7 +74,9 @@ export default function TimetableList() {
                   handleOpenModal(frame);
                 }}
               >
-                {currentFrameIndex === frame.id ? <BlueSettingIcon /> : <SettingIcon />}
+                {(currentFrameIndex === frame.id || !frame.id)
+                  ? <BlueSettingIcon />
+                  : <SettingIcon />}
                 설정
               </button>
             </button>
@@ -74,7 +85,7 @@ export default function TimetableList() {
         <button
           type="button"
           className={styles['timetable-list__list--add']}
-          onClick={() => addTimetableFrame({ semester: String(semester) })}
+          onClick={handleAddTimetableClick}
         >
           시간표 추가하기
           <AddIcon />

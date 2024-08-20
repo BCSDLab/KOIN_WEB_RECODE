@@ -13,6 +13,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 import useDeleteSemester from 'pages/Timetable/hooks/useDeleteSemester';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
+import showToast from 'utils/ts/showToast';
 import AddSemesterModal from './AddSemesterModal';
 import styles from './SemesterList.module.scss';
 import DeleteSemesterModal from './DeleteSemesterModal';
@@ -62,6 +63,10 @@ function SemesterListbox() {
 
   const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester || '20242');
   const handleDeleteSemester = () => {
+    if (!token) {
+      showToast('warning', '로그인 후 이용 가능합니다.');
+      return;
+    }
     deleteTimetableFrame();
     if (selectedSemester === currentSemester) {
       setCurrentSemester(semesterOptionList[0].value);

@@ -9,7 +9,7 @@ function useTimetableFrameList(token: string, semester: string) {
       queryKey: [TIMETABLE_FRAME_KEY + semester],
       queryFn: () => (token
         ? timetable.getTimetableFrame(token, semester)
-        : [{ id: 1, timetable_name: '기본 시간표', is_main: true }]
+        : [{ id: null, timetable_name: '기본 시간표', is_main: true }]
       ),
     },
   );

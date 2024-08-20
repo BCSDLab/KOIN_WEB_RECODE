@@ -14,7 +14,7 @@ export default function useUpdateTimetableFrame() {
       mutationFn: (frameInfo: TimetableFrameInfo) => (
         updateTimetableFrame(
           token,
-          frameInfo.id,
+          frameInfo.id!,
           { name: frameInfo.timetable_name, is_main: frameInfo.is_main },
         )
       ),
