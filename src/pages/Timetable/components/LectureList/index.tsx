@@ -124,7 +124,7 @@ function MyLectureListBox({ myLectures }: MyLectureListBoxProps) {
   return (
     <LectureTable
       list={myLectures}
-      myLectures={undefined}
+      myLecturesV2={undefined}
       selectedLecture={undefined}
       onClickRow={undefined}
       onDoubleClickRow={undefined}
@@ -191,7 +191,7 @@ function LectureList({ frameId }: { frameId: number }) {
             ? (
               <CurrentSemesterLectureList
                 frameId={frameId}
-            semesterKey={semester}
+                semesterKey={semester}
                 filter={{
                   // 백엔드 수정하면 제거
                   department: departmentFilterValue ?? '전체',
