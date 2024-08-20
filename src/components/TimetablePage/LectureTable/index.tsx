@@ -1,19 +1,19 @@
-import type { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
+import type { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import React from 'react';
 import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
 import { cn } from '@bcsdlab/utils';
-import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLectureV2';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useToast from 'components/common/Toast/useToast';
 import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
-  list: Array<LectureInfo> | Array<TimetableLectureInfo>;
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfo> | undefined;
-  selectedLecture: LectureInfo | TimetableLectureInfo | undefined;
-  onClickRow: ((value: LectureInfo | TimetableLectureInfo) => void) | undefined;
-  onDoubleClickRow: ((value: LectureInfo | TimetableLectureInfo) => void) | undefined;
+  list: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
+  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2> | undefined;
+  selectedLecture:LectureInfo | TimetableLectureInfoV2 | undefined;
+  onClickRow: ((value:LectureInfo | TimetableLectureInfoV2) => void) | undefined;
+  onDoubleClickRow: ((value: LectureInfo | TimetableLectureInfoV2) => void) | undefined;
   version: 'semesterLectureList' | 'myLectureList'
 }
 
@@ -34,7 +34,9 @@ const LECTURE_TABLE_HEADER = [
   { key: 'department', label: '개설학부' },
 ] as const;
 
-const isLectureInfo = (value: LectureInfo | TimetableLectureInfo): value is LectureInfo => 'name' in value;
+const isLectureInfo = (
+  value: LectureInfo | TimetableLectureInfoV2,
+): value is LectureInfo => 'name' in value;
 
 const useFlexibleWidth = (length: number, initialValue: number[]) => {
   const [widthInfo] = React.useState(() => initialValue);
@@ -46,7 +48,7 @@ const useFlexibleWidth = (length: number, initialValue: number[]) => {
 
 function LectureTable({
   list,
-  myLectures,
+  myLecturesV2,
   selectedLecture,
   onClickRow,
   onDoubleClickRow,
@@ -68,8 +70,8 @@ function LectureTable({
     const recoverLecture = () => {
 
     };
-    let lectureToRemove: LectureInfo | TimetableLectureInfo | null = null;
-    (myLectures || list).forEach((lecture) => {
+    let lectureToRemove: LectureInfo | TimetableLectureInfoV2 | null = null;
+    (myLecturesV2 || list).forEach((lecture) => {
       if (lecture.lecture_class === lecture_class && lecture.professor === professor) {
         lectureToRemove = lecture;
       }
@@ -81,7 +83,7 @@ function LectureTable({
   };
   const [isMouseOver, setIsMouseOver] = React.useState(-1);
   const handleTableRowClick = (
-    value: LectureInfo | TimetableLectureInfo,
+    value: LectureInfo | TimetableLectureInfoV2,
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     if (e.detail === 1 && onClickRow !== undefined) {
@@ -140,6 +142,7 @@ function LectureTable({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cursor]);
+
   return (
     <div className={styles.table}>
       <div className={styles.table__content} role="table">
@@ -171,7 +174,10 @@ function LectureTable({
             <div
               className={cn({
                 [styles.table__row]: true,
-                [styles['table__row--include']]: myLectures ? myLectures.some((item) => item.code === lecture.code && item.lecture_class === lecture.lecture_class) : false,
+                [styles['table__row--include']]: myLecturesV2 ? myLecturesV2.some(
+                  (item) => item.code === lecture.code
+                      && item.lecture_class === lecture.lecture_class,
+                ) : false,
                 [styles['table__row--selected']]: selectedLecture === lecture,
               })}
               aria-selected={selectedLecture === lecture}
@@ -181,7 +187,11 @@ function LectureTable({
               <button
                 type="button"
                 role={onClickRow !== undefined ? undefined : 'null'}
-                aria-label={onClickRow !== undefined ? '시간표에서 미리 보기' : undefined}
+                aria-label={
+                    onClickRow !== undefined
+                      ? '시간표에서 미리 보기'
+                      : undefined
+                  }
                 className={cn({
                   [styles['table__row-button']]: true,
                   [styles['table__row-button--toggled']]: version === 'myLectureList',
@@ -205,31 +215,41 @@ function LectureTable({
                     />
                   </div>
                 )}
-                {LECTURE_TABLE_HEADER
-                  .map((headerItem, headerItemIndex) => (headerItem.key !== null
-                      && (
-                        <div
-                          style={{
-                            width: `${widthInfo[headerItemIndex]}px`,
-                          }}
-                          className={cn({
-                            [styles.table__col]: true,
-                            [styles['table__col--text-center']]:
+                {LECTURE_TABLE_HEADER.map(
+                  (headerItem, headerItemIndex) => headerItem.key !== null && (
+                    <div
+                      style={{
+                        width: `${widthInfo[headerItemIndex]}px`,
+                      }}
+                      className={cn({
+                        [styles.table__col]: true,
+                        [styles['table__col--text-center']]:
                               headerItem.label === '분반'
                               || headerItem.label === '학점'
                               || headerItem.label === '정원'
                               || headerItem.label === '설계',
-                          })}
-                          role="cell"
-                          key={headerItem.key}
-                        >
-                          {headerItem.key === 'professor' && (lecture[headerItem.key] === '' ? '미배정' : lecture[headerItem.key])}
-                          {headerItem.key === null && '수정'}
-                          {headerItem.key === 'name' && isLectureInfo(lecture) && lecture.name}
-                          {headerItem.key === 'name' && !isLectureInfo(lecture) && lecture.class_title}
-                          {headerItem.key !== null && headerItem.key !== 'professor' && headerItem.key !== 'name' && lecture[headerItem.key]}
-                        </div>
-                      )))}
+                      })}
+                      role="cell"
+                      key={headerItem.key}
+                    >
+                      {headerItem.key === 'professor'
+                            && (lecture[headerItem.key] === ''
+                              ? '미배정'
+                              : lecture[headerItem.key])}
+                      {headerItem.key === null && '수정'}
+                      {headerItem.key === 'name'
+                            && isLectureInfo(lecture)
+                            && lecture.name}
+                      {headerItem.key === 'name'
+                            && !isLectureInfo(lecture)
+                            && lecture.class_title}
+                      {headerItem.key !== null
+                            && headerItem.key !== 'professor'
+                            && headerItem.key !== 'name'
+                            && lecture[headerItem.key]}
+                    </div>
+                  ),
+                )}
               </button>
             </div>
           ))}

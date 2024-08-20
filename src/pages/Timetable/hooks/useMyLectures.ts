@@ -9,7 +9,9 @@ export default function useMyLectures() {
   const myLecturesFromLocalStorageValue = useLecturesState();
   const { data: myLecturesFromServer } = useTimetableInfoList(semester, token);
 
-  const myLectures = token ? (myLecturesFromServer ?? []) : (myLecturesFromLocalStorageValue ?? []);
+  const myLectures = token
+    ? (myLecturesFromServer ?? [])
+    : (myLecturesFromLocalStorageValue ?? []);
 
   return { myLectures };
 }

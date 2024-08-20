@@ -21,11 +21,7 @@ export default function TimetableList() {
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
-  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(
-    timetableFrameList
-      ? timetableFrameList.findIndex((frame) => frame.is_main === true)
-      : 0,
-  );
+  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(0);
   const selectFrame = (index: number) => {
     setCurrentFrameIndex(index);
   };
@@ -36,7 +32,10 @@ export default function TimetableList() {
 
   React.useEffect(() => {
     if (timetableFrameList) {
-      setCurrentFrameIndex((timetableFrameList.findIndex((frame) => frame.is_main === true)));
+      const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
+      if (mainFrame) {
+        setCurrentFrameIndex(mainFrame.id);
+      }
     }
   }, [timetableFrameList]);
 
@@ -45,15 +44,15 @@ export default function TimetableList() {
       <SemesterListbox />
       <ul className={styles['timetable-list__list']} role="listbox">
         <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
-          {timetableFrameList?.map((frame, index) => (
+          {timetableFrameList?.map((frame) => (
             <button
               type="button"
               className={cn({
                 [styles['timetable-list__item']]: true,
-                [styles['timetable-list__item--selected']]: currentFrameIndex === index,
+                [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id,
               })}
               key={frame.id}
-              onClick={() => selectFrame(index)}
+              onClick={() => selectFrame(frame.id)}
             >
               <li>
                 {frame.timetable_name}
@@ -66,7 +65,7 @@ export default function TimetableList() {
                   handleOpenModal(frame);
                 }}
               >
-                {currentFrameIndex === index ? <BlueSettingIcon /> : <SettingIcon />}
+                {currentFrameIndex === frame.id ? <BlueSettingIcon /> : <SettingIcon />}
                 설정
               </button>
             </button>
