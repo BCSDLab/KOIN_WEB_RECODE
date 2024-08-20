@@ -1,12 +1,17 @@
 /* eslint-disable no-restricted-imports */
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import TimetableHeader from 'pages/Timetable/components/TimetableHeader';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import TimetableList from 'pages/Timetable/components/TimetableList';
 import MainTimetable from 'pages/Timetable/components/MyLectureTimetable';
 import styles from './DefaultPage.module.scss';
 
-export default function DefaultPage({ frameId }: { frameId: string }) {
+interface DefaultPageProps {
+  frameId: number,
+  setCurrentFrameId: (index: number) => void,
+}
+
+export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageProps) {
   return (
     <div className={styles.page}>
       <TimetableHeader />
@@ -18,8 +23,8 @@ export default function DefaultPage({ frameId }: { frameId: string }) {
         )}
       >
         <div className={styles.page__content}>
-          <TimetableList />
-          <MainTimetable frameId={Number(frameId)} />
+          <TimetableList currentFrameIndex={frameId} setCurrentFrameIndex={setCurrentFrameId} />
+          <MainTimetable frameId={frameId} />
         </div>
       </Suspense>
     </div>
