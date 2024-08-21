@@ -4,6 +4,7 @@ import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
 import { ReactComponent as Kebab } from 'assets/svg/Review/kebab.svg';
 import { ReactComponent as ClickedKebab } from 'assets/svg/Review/clicked-kebab.svg';
 import { ReactComponent as Mine } from 'assets/svg/Review/check-mine.svg';
+import { ReactComponent as InformationIcon } from 'assets/svg/information-icon.svg';
 import SelectButton from 'pages/Store/StoreDetailPage/Review/components/SelectButton/SelectButton';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { cn } from '@bcsdlab/utils';
@@ -14,7 +15,8 @@ import { useCallback, useEffect } from 'react';
 import styles from './ReviewCard.module.scss';
 
 export default function ReviewCard({
-  nick_name, rating, content, image_urls, menu_names, is_mine, is_modified, created_at, review_id,
+  nick_name, rating, content, image_urls, menu_names,
+  is_mine, is_modified, created_at, review_id, is_reported,
 }: Review) {
   const emptyStarList = new Array(5 - rating).fill(false);
   const starList = new Array(rating).fill(true);
@@ -63,7 +65,7 @@ export default function ReviewCard({
         >
           {isOpen ? <ClickedKebab /> : <Kebab />}
           {isOpen
-          && <SelectButton is_mine={is_mine} review_id={review_id} />}
+          && <SelectButton is_mine={is_mine} review_id={review_id} is_reported={is_reported} />}
         </button>
       </div>
       <div className={styles.rating}>
@@ -77,26 +79,37 @@ export default function ReviewCard({
           {is_modified && '(수정됨)'}
         </div>
       </div>
-      <div className={styles.content}>
-        {content}
-      </div>
-      <div className={styles['image-wrapper']}>
-        {image_urls.map((src, idx) => (
-          <button
-            key={src}
-            onClick={() => onClickImage(image_urls, idx)}
-            type="button"
-          >
-            <img key={src} src={src} alt="메뉴 이미지" className={styles.menu__image} />
-          </button>
-        ))}
-      </div>
-      <div className={styles['menu-card']}>
-        {
-        // eslint-disable-next-line
-        menu_names.map((menu, idx) => <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>{menu}</div>) // 수정, 삭제하지 않음
-        }
-      </div>
+      {is_reported
+        ? (
+          <div className={styles.reported}>
+            <InformationIcon />
+            신고에 의해 숨김 처리되었습니다.
+          </div>
+        ) : (
+          <>
+            <div className={styles.content}>
+              {content}
+            </div>
+            <div className={styles['image-wrapper']}>
+              {image_urls.map((src, idx) => (
+                <button
+                  key={src}
+                  onClick={() => onClickImage(image_urls, idx)}
+                  type="button"
+                >
+                  <img key={src} src={src} alt="메뉴 이미지" className={styles.menu__image} />
+                </button>
+              ))}
+            </div>
+            <div className={styles['menu-card']}>
+              {
+            // eslint-disable-next-line
+            menu_names.map((menu, idx) => <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>{menu}</div>) // 수정, 삭제하지 않음
+          }
+            </div>
+          </>
+        )}
+
     </div>
   );
 }

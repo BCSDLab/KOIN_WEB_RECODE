@@ -112,3 +112,15 @@
     font-size: 14px;
   }
 }
+
+.reported {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #cacaca;
+
+  & > svg > path {
+    fill: #cacaca;
+  }
+}
