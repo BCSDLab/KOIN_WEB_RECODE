@@ -18,7 +18,6 @@ import DownloadTimetableModal from './DownloadTimetableModal';
 
 export default function MainTimetable({ frameId }: { frameId: number }) {
   const { myLecturesV2 } = useMyLecturesV2(frameId);
-  console.log(myLecturesV2);
   const navigate = useNavigate();
   const token = useTokenState();
   const semester = useSemester();
