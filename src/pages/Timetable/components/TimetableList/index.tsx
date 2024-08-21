@@ -12,7 +12,9 @@ import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useAddTimetableFrame from 'pages/Timetable/hooks/useAddTimetableFrame';
 import { cn } from '@bcsdlab/utils';
-import showToast from 'utils/ts/showToast';
+import useModalPortal from 'utils/hooks/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import InducingLoginModal from 'pages/Timetable/components/InducingLoginModal';
 import styles from './TimetableList.module.scss';
 
 interface TimetableListInfo {
@@ -24,20 +26,37 @@ export default function TimetableList({
   currentFrameIndex, setCurrentFrameIndex,
 }: TimetableListInfo) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const portalManager = useModalPortal();
   const semester = useSemester();
   const token = useTokenState();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
-  const handleOpenModal = (frame: TimetableFrameInfo) => {
-    setFocusFrame(frame);
-    openModal();
+  const handleTimetableSettingClick = (frame: TimetableFrameInfo) => {
+    if (token) {
+      setFocusFrame(frame);
+      openModal();
+    } else {
+      portalManager.open((portalOption: Portal) => (
+        <InducingLoginModal
+          actionTitle="시간표 설정"
+          detailExplanation="시간표 설정은 회원만 사용 가능합니다. 회원가입 또는 로그인 후 이용해주세요 :-)"
+          onClose={portalOption.close}
+        />
+      ));
+    }
   };
   const handleAddTimetableClick = () => {
     if (token) {
       addTimetableFrame({ semester: String(semester) });
     } else {
-      showToast('warning', '로그인 후 이용 가능합니다.');
+      portalManager.open((portalOption: Portal) => (
+        <InducingLoginModal
+          actionTitle="시간표 추가"
+          detailExplanation="시간표 추가는 회원만 사용 가능합니다. 회원가입 또는 로그인 후 이용해주세요 :-)"
+          onClose={portalOption.close}
+        />
+      ));
     }
   };
 
@@ -73,7 +92,7 @@ export default function TimetableList({
                 className={styles['timetable-list__item--setting']}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleOpenModal(frame);
+                  handleTimetableSettingClick(frame);
                 }}
               >
                 {(currentFrameIndex === frame.id || !frame.id)
