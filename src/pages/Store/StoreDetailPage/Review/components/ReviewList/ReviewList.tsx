@@ -188,6 +188,7 @@ export default function ReviewList() {
           is_modified={review.is_modified}
           created_at={review.created_at}
           review_id={review.review_id}
+          is_reported={review.is_reported}
         />
       )) : (
         <div className={styles['not-found']}>

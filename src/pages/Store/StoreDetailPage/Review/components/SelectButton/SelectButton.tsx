@@ -9,17 +9,19 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from 'utils/hooks/state/useUser';
 import LoginRequiredModal from 'components/common/LoginRequiredModal';
 
+import showToast from 'utils/ts/showToast';
 import styles from './SelectButton.module.scss';
 
 interface Props {
   is_mine: boolean;
   review_id: number;
+  is_reported: boolean | undefined;
 }
 const REVEIW_REPORT_LOGIN = [
   '리뷰 신고 시 ',
   '리뷰 신고는 회원만 사용 가능합니다.',
 ];
-export default function SelectButton({ is_mine, review_id }: Props) {
+export default function SelectButton({ is_mine, review_id, is_reported }: Props) {
   const params = useParams();
   const navigate = useNavigate();
   const portalManager = useModalPortal();
@@ -73,6 +75,10 @@ export default function SelectButton({ is_mine, review_id }: Props) {
             type="button"
             className={styles.section}
             onClick={() => {
+              if (is_reported) {
+                showToast('error', '이미 신고된 리뷰입니다.');
+                return;
+              }
               if (userInfo) {
                 navigate(`/report/review/shopid/${params.id!}/reviewid/${review_id}`);
               } else {
