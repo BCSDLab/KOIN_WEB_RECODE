@@ -9,9 +9,7 @@ import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/Timetable/components/LectureList';
 import CustomLecture from 'pages/Timetable/components/CustomLecture';
-import useTimetableV2InfoList from 'pages/Timetable/hooks/useTimetableV2InfoList';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
-import useTokenState from 'utils/hooks/useTokenState';
 import { useTempLecture } from 'utils/zustand/myTempLectureV2';
 import useLectureList from 'pages/Timetable/hooks/useLectureList';
 import { useSemester } from 'utils/zustand/semester';
@@ -20,16 +18,11 @@ import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage({ frameId }: { frameId: string | undefined }) {
   const navigate = useNavigate();
-  const token = useTokenState();
   const semester = useSemester();
   const [selectedCourseType, setSelectedCourseType] = useState('regular');
   const isRegularCourseSelected = selectedCourseType === 'regular';
   const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
   const myLectureDayValue = useTimetableDayListV2(myLecturesV2);
-  const { data: myLectureList } = useTimetableV2InfoList(
-    Number(frameId),
-    token,
-  );
   const { data: lectureList } = useLectureList(semester);
   const tempLecture = useTempLecture();
   const similarSelectedLecture = lectureList
@@ -98,7 +91,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
           <div className={styles.page__timetable}>
             <div className={styles['page__timetable-button-group']}>
               <div className={styles['page__total-grades']}>
-                <TotalGrades myLectureList={myLectureList} />
+                <TotalGrades myLectureList={myLecturesV2} />
               </div>
               <button
                 type="button"

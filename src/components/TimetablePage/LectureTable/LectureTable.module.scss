@@ -27,7 +27,6 @@
     word-break: break-all;
     white-space: nowrap;
     text-overflow: ellipsis;
-    color: #4b4b4b;
 
     .table__row > &:last-child {
       border: none;
@@ -55,7 +54,7 @@
     display: flex;
     padding: 10px 16px;
     background: rgb(255 255 255);
-    color: rgb(133 133 133);
+    color: #4b4b4b;
     cursor: pointer;
     outline: none;
 
@@ -79,7 +78,6 @@
   &__row {
     display: flex;
     background-color: #fff;
-    color: #4b4b4b;
 
     &--selected.table__row > .table__row-button {
       background-color: #eee;

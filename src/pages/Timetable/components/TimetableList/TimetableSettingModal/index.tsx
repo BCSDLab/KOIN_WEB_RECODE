@@ -9,6 +9,7 @@ import useDeleteTimetableFrame from 'pages/Timetable/hooks/useDeleteTimetableFra
 import useTokenState from 'utils/hooks/useTokenState';
 import { useSemester } from 'utils/zustand/semester';
 import useToast from 'components/common/Toast/useToast';
+import showToast from 'utils/ts/showToast';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
@@ -33,6 +34,10 @@ export default function TimetableSettingModal({
   const { mutate: updateFrameInfo } = useUpdateTimetableFrame();
 
   const onSubmit = (submitFrame: TimetableFrameInfo) => {
+    if (!submitFrame.id) {
+      showToast('warning', '로그인 후 이용 가능합니다.');
+      return;
+    }
     updateFrameInfo(submitFrame);
     onClose();
   };
@@ -41,6 +46,10 @@ export default function TimetableSettingModal({
   };
   const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, semester);
   const onDelete = (frame: TimetableFrameInfo) => {
+    if (!focusFrame.id) {
+      showToast('warning', '로그인 후 이용 가능합니다.');
+      return;
+    }
     toast.open({ message: `선택하신 [${frame.timetable_name}]이 삭제되었습니다.`, recoverMessage: `[${frame.timetable_name}]이 복구되었습니다.`, onRecover: recoverFrame });
     deleteTimetableFrame(focusFrame.id);
     onClose();

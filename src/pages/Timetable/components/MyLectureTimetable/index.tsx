@@ -11,12 +11,16 @@ import Timetable from 'components/TimetablePage/Timetable';
 import useBooleanState from 'utils/hooks/useBooleanState';
 import TotalGrades from 'pages/Timetable/components/TotalGrades';
 import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import { useSemester } from 'utils/zustand/semester';
+import useTokenState from 'utils/hooks/useTokenState';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
 export default function MainTimetable({ frameId }: { frameId: number }) {
   const { myLecturesV2 } = useMyLecturesV2(frameId);
   const navigate = useNavigate();
+  const token = useTokenState();
+  const semester = useSemester();
   const myLectureDayValue = useTimetableDayListV2(myLecturesV2);
   const { data: deptList } = useDeptList();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -43,7 +47,7 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
         <button
           type="button"
           className={styles.page__button}
-          onClick={() => navigate(`/timetable/modify/regular/${frameId}`)}
+          onClick={() => navigate(`/timetable/modify/regular/${token ? frameId : semester}`)}
         >
           <EditIcon />
           시간표 수정

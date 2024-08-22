@@ -12,6 +12,9 @@ import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useAddTimetableFrame from 'pages/Timetable/hooks/useAddTimetableFrame';
 import { cn } from '@bcsdlab/utils';
+import useModalPortal from 'utils/hooks/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import InducingLoginModal from 'pages/Timetable/components/InducingLoginModal';
 import styles from './TimetableList.module.scss';
 
 interface TimetableListInfo {
@@ -23,20 +26,44 @@ export default function TimetableList({
   currentFrameIndex, setCurrentFrameIndex,
 }: TimetableListInfo) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const portalManager = useModalPortal();
   const semester = useSemester();
   const token = useTokenState();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
-  const handleOpenModal = (frame: TimetableFrameInfo) => {
-    setFocusFrame(frame);
-    openModal();
+  const handleTimetableSettingClick = (frame: TimetableFrameInfo) => {
+    if (token) {
+      setFocusFrame(frame);
+      openModal();
+    } else {
+      portalManager.open((portalOption: Portal) => (
+        <InducingLoginModal
+          actionTitle="시간표 설정"
+          detailExplanation="시간표 설정은 회원만 사용 가능합니다. 회원가입 또는 로그인 후 이용해주세요 :-)"
+          onClose={portalOption.close}
+        />
+      ));
+    }
+  };
+  const handleAddTimetableClick = () => {
+    if (token) {
+      addTimetableFrame({ semester: String(semester) });
+    } else {
+      portalManager.open((portalOption: Portal) => (
+        <InducingLoginModal
+          actionTitle="시간표 추가"
+          detailExplanation="시간표 추가는 회원만 사용 가능합니다. 회원가입 또는 로그인 후 이용해주세요 :-)"
+          onClose={portalOption.close}
+        />
+      ));
+    }
   };
 
   React.useEffect(() => {
     if (timetableFrameList) {
       const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
-      if (mainFrame) {
+      if (mainFrame && mainFrame.id) {
         setCurrentFrameIndex(mainFrame.id);
       }
     }
@@ -52,10 +79,10 @@ export default function TimetableList({
               type="button"
               className={cn({
                 [styles['timetable-list__item']]: true,
-                [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id,
+                [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id || !frame.id,
               })}
               key={frame.id}
-              onClick={() => setCurrentFrameIndex(frame.id)}
+              onClick={() => (frame.id && setCurrentFrameIndex(frame.id))}
             >
               <li>
                 {frame.timetable_name}
@@ -65,10 +92,12 @@ export default function TimetableList({
                 className={styles['timetable-list__item--setting']}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleOpenModal(frame);
+                  handleTimetableSettingClick(frame);
                 }}
               >
-                {currentFrameIndex === frame.id ? <BlueSettingIcon /> : <SettingIcon />}
+                {(currentFrameIndex === frame.id || !frame.id)
+                  ? <BlueSettingIcon />
+                  : <SettingIcon />}
                 설정
               </button>
             </button>
@@ -77,7 +106,7 @@ export default function TimetableList({
         <button
           type="button"
           className={styles['timetable-list__list--add']}
-          onClick={() => addTimetableFrame({ semester: String(semester) })}
+          onClick={handleAddTimetableClick}
         >
           시간표 추가하기
           <AddIcon />

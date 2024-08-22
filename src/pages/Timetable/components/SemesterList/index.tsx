@@ -13,6 +13,7 @@ import useTokenState from 'utils/hooks/useTokenState';
 import useDeleteSemester from 'pages/Timetable/hooks/useDeleteSemester';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
+import InducingLoginModal from 'pages/Timetable/components/InducingLoginModal';
 import AddSemesterModal from './AddSemesterModal';
 import styles from './SemesterList.module.scss';
 import DeleteSemesterModal from './DeleteSemesterModal';
@@ -20,7 +21,7 @@ import DeleteSemesterModal from './DeleteSemesterModal';
 function SemesterListbox() {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const logger = useLogger();
-  const portalManger = useModalPortal();
+  const portalManager = useModalPortal();
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     triggerPopup();
@@ -54,10 +55,20 @@ function SemesterListbox() {
 
   const onClickAddSemester = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setModalOpenTrue();
-    portalManger.open((portalOption: Portal) => (
-      <AddSemesterModal onClose={portalOption.close} setModalOpenFalse={setModalOpenFalse} />
-    ));
+    if (token) {
+      setModalOpenTrue();
+      portalManager.open((portalOption: Portal) => (
+        <AddSemesterModal onClose={portalOption.close} setModalOpenFalse={setModalOpenFalse} />
+      ));
+    } else {
+      portalManager.open((portalOption: Portal) => (
+        <InducingLoginModal
+          actionTitle="학기 추가"
+          detailExplanation="학기 추가는 회원만 사용 가능합니다. 회원가입 또는 로그인 후 이용해주세요 :-)"
+          onClose={portalOption.close}
+        />
+      ));
+    }
   };
 
   const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester || '20242');
@@ -71,15 +82,25 @@ function SemesterListbox() {
 
   const onClickDeleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: string) => {
     e.stopPropagation();
-    setSelectedSemester(semes);
-    setModalOpenTrue();
-    portalManger.open((portalOption: Portal) => (
-      <DeleteSemesterModal
-        onClose={portalOption.close}
-        handleDeleteSemester={handleDeleteSemester}
-        setModalOpenFalse={setModalOpenFalse}
-      />
-    ));
+    if (token) {
+      setSelectedSemester(semes);
+      setModalOpenTrue();
+      portalManager.open((portalOption: Portal) => (
+        <DeleteSemesterModal
+          onClose={portalOption.close}
+          handleDeleteSemester={handleDeleteSemester}
+          setModalOpenFalse={setModalOpenFalse}
+        />
+      ));
+    } else {
+      portalManager.open((portalOption: Portal) => (
+        <InducingLoginModal
+          actionTitle="학기 삭제"
+          detailExplanation="학기 삭제는 회원만 사용 가능합니다. 회원가입 또는 로그인 후 이용해주세요 :-)"
+          onClose={portalOption.close}
+        />
+      ));
+    }
   };
 
   return (

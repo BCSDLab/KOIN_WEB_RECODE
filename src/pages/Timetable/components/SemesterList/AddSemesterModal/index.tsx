@@ -48,6 +48,10 @@ export default function AddSemesterModal({
     onClose();
   };
   const handleAddSemester = (semesters: AddTimetableFrameRequest) => {
+    if (!token) {
+      showToast('warning', '로그인 후 이용 가능합니다.');
+      return;
+    }
     if (mySemester) {
       if (mySemester.semesters.includes(semesters.semester)) {
         showToast('info', '이미 있는 학기입니다.');

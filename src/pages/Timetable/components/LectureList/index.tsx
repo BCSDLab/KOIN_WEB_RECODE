@@ -134,8 +134,14 @@ function MyLectureListBox({ myLectures }: MyLectureListBoxProps) {
 }
 
 function LectureList({ frameId }: { frameId: number }) {
-  const semesterParams = useParams().semester;
+  const semesterParams = useParams().id;
+  const semester = useSemester();
   const mostRecentSemester = '20242';
+  const { updateSemester } = useSemesterAction();
+  if (semesterParams !== String(frameId)) {
+    // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
+    updateSemester(semesterParams || mostRecentSemester);
+  }
   const {
     value: departmentFilterValue,
     onChangeSelect: onChangeDeptSelect,
@@ -143,11 +149,6 @@ function LectureList({ frameId }: { frameId: number }) {
   const {
     onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef,
   } = useSearch();
-  const semester = useSemester();
-  const { updateSemester } = useSemesterAction();
-  updateSemester(semesterParams || mostRecentSemester);
-  // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
-
   const { myLecturesV2 } = useMyLecturesV2(frameId);
   const [isToggled, setIsToggled] = React.useState(false);
 

@@ -3,7 +3,7 @@ import { LectureInfo, TimetableInfoFromLocalStorageV2 } from 'interfaces/Lecture
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
-const MY_LECTURES_V2_KEY = 'my-lectures-v2';
+const MY_LECTURES_KEY = 'my-lectures';
 
 type State = {
   lecturesV2: TimetableInfoFromLocalStorageV2;
@@ -11,8 +11,8 @@ type State = {
 
 type Action = {
   action: {
-    addLecture: (lecture: LectureInfo, frameId: number) => void;
-    removeLecture: (lecture: LectureInfo, frameId: number) => void;
+    addLecture: (lecture: LectureInfo, semester: string) => void;
+    removeLecture: (lecture: LectureInfo, semester: string) => void;
   }
 };
 
@@ -23,38 +23,40 @@ interface TimeStringState {
 
 export const useLecturesStore = create<State & Action>(
   (set, get) => ({
-    lecturesV2: JSON.parse(localStorage.getItem(MY_LECTURES_V2_KEY) ?? '{}'),
+    lecturesV2: JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}'),
     action: {
-      addLecture: (lecture, frameId) => {
+      addLecture: (lecture, semester) => {
         const timetableInfoList = get().lecturesV2;
-        const newValue = [...(timetableInfoList[frameId] || [])];
+        const newValue = [...(timetableInfoList[semester] || [])];
         newValue.push(lecture);
 
         localStorage.setItem(
-          MY_LECTURES_V2_KEY,
-          JSON.stringify({ ...timetableInfoList, [frameId]: newValue }),
+          MY_LECTURES_KEY,
+          JSON.stringify({ ...timetableInfoList, [semester]: newValue }),
         );
-        set(() => ({ lecturesV2: { ...timetableInfoList, [frameId]: newValue } }));
+        set(() => ({ lecturesV2: { ...timetableInfoList, [semester]: newValue } }));
       },
-      removeLecture: (lecture, frameId) => {
+      removeLecture: (lecture, semester) => {
         const timetableInfoList = get().lecturesV2;
-        const timetableInfoWithNewValue = timetableInfoList[frameId].filter(
+        const timetableInfoWithNewValue = timetableInfoList[semester].filter(
           (newValue) => (lecture.code !== newValue.code)
             || (lecture.lecture_class !== newValue.lecture_class),
         );
         localStorage.setItem(
-          MY_LECTURES_V2_KEY,
-          JSON.stringify({ ...timetableInfoList, [frameId]: timetableInfoWithNewValue }),
+          MY_LECTURES_KEY,
+          JSON.stringify({ ...timetableInfoList, [semester]: timetableInfoWithNewValue }),
         );
-        set(() => ({ lecturesV2: { ...timetableInfoList, [frameId]: timetableInfoWithNewValue } }));
+        set(() => (
+          { lecturesV2: { ...timetableInfoList, [semester]: timetableInfoWithNewValue } }
+        ));
       },
     },
   }),
 );
 
-export const useLecturesState = (frameId: number) => {
+export const useLecturesState = (semester: string) => {
   const lecturesV2 = useLecturesStore(useShallow((state) => state.lecturesV2));
-  return lecturesV2[frameId];
+  return lecturesV2[semester];
 };
 
 export const useLecturesAction = () => useLecturesStore((state) => state.action);
