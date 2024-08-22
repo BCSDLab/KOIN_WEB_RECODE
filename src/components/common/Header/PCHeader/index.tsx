@@ -1,6 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
@@ -61,6 +61,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const logout = useLogout();
   const logger = useLogger();
   const token = useTokenState();
+  const { pathname } = useLocation();
   const isLoggedin = !!token;
   const logShortcut = (title: string) => {
     if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '식단' });
@@ -74,6 +75,18 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '복덕방' });
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
   };
+  const escapeByLogo = () => {
+    if (pathname === '/timetable') {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        title: 'timetable_back',
+        value: '로고',
+        previous_page: '시간표',
+        current_page: '메인',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+      });
+    }
+  };
 
   return (
     <>
@@ -81,6 +94,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         className={styles.header__logo}
         to="/"
         tabIndex={0}
+        onClick={escapeByLogo}
       >
         <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
       </Link>
