@@ -161,14 +161,14 @@ function StorePage() {
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
+  const selectedCategory = Number(searchParams.get('category')) ?? -1;
 
-  const selectedCategory = Number(searchParams.get('category'));
-  const koreanCategory = categories?.shop_categories.find(
-    (category) => category.id === selectedCategory,
-  )?.name;
-  const loggingCheckbox = (id: string) => {
-    if (id && searchParams.get(id)) {
-      // eslint-disable-next-line max-len
+  const koreanCategory = selectedCategory === -1
+    ? '전체보기'
+    : categories?.shop_categories.find((category) => category.id === selectedCategory)?.name || '전체보기';
+
+  const loggingCheckbox = (id: string, isChecked: boolean) => {
+    if (isChecked) {
       logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_can', value: `check_${id}_${koreanCategory}` });
     }
   };
@@ -225,10 +225,12 @@ function StorePage() {
                   title: 'shop_categories',
                   value: category.name,
                   event_category: 'click',
-                  previous_page: categories?.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '',
-                  duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+                  previous_page: categories?.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '전체보기',
+                  duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
                   current_page: category.name,
                 });
+                sessionStorage.setItem('enter_category', new Date().getTime().toString());
+
                 setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
               }}
               key={category.id}
@@ -256,11 +258,11 @@ function StorePage() {
                 <input
                   id={item.id}
                   type="checkbox"
-                  checked={searchParams.get(item.id) ? true : undefined}
+                  checked={!!searchParams.get(item.id)}
                   className={styles['option-checkbox__input']}
                   onChange={() => {
-                    loggingCheckbox(item.id);
-                    setParams(item.id, String(item.value), {
+                    loggingCheckbox(item.id, !searchParams.get(item.id));
+                    setParams(item.id, item.value, {
                       deleteBeforeParam: true,
                       replacePage: true,
                     });

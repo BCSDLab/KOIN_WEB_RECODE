@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import IndexBus from './components/IndexBus';
 import IndexCafeteria from './components/IndexCafeteria';
 import IndexNotice from './components/IndexNotice';
@@ -7,7 +7,9 @@ import IndexTimetable from './components/IndexTimetable';
 import styles from './IndexPage.module.scss';
 
 function IndexPage() {
-  sessionStorage.setItem('enterMain', new Date().getTime().toString());
+  useEffect(() => {
+    sessionStorage.setItem('enterMain', new Date().getTime().toString());
+  }, []);
   return (
     <Suspense fallback={null}>
       <main className={styles.template}>

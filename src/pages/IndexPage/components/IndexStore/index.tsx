@@ -25,7 +25,7 @@ function IndexStore() {
       event_category: 'click',
       previous_page: '메인',
       current_page: category.name,
-      duration_time: durationTime,
+      duration_time: durationTime / 1000,
     });
     navigate(`/store?category=${category.id}`);
   };
