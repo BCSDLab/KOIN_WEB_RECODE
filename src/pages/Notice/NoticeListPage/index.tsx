@@ -7,7 +7,6 @@ import useArticleList from 'pages/Notice/NoticeListPage/hooks/useArticleList';
 function NoticePage() {
   const paramsPage = usePageParams();
   const articleList = useArticleList(paramsPage);
-
   return (
     <>
       <PostHeader />
@@ -15,7 +14,7 @@ function NoticePage() {
         articles={articleList.articles}
       />
       <Pagination
-        totalPageNum={articleList === null ? 5 : articleList!.totalPage}
+        totalPageNum={articleList === null ? 5 : articleList!.total_page}
       />
     </>
   );

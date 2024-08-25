@@ -19,7 +19,7 @@ export type ArticleList = {
 };
 
 export interface NoticeResponse extends APIResponse {
-  totalPage: number
+  total_page: number
   articles: ArticleList[]
 }
 
