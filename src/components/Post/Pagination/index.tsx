@@ -94,7 +94,11 @@ function Pagination(props: PaginationProps) {
         type="button"
         aria-label="다음 페이지로"
         className={styles.pagination__move}
-        onClick={() => setParams('page', onHandleNextPage(Number(params.page) + 1, Number(totalPageNum)), { deleteBeforeParam: false, replacePage: true })}
+        onClick={() => setParams(
+          'page',
+          onHandleNextPage(Number(params.page || 1) + 1, Number(totalPageNum)),
+          { deleteBeforeParam: false, replacePage: true },
+        )}
       >
         다음으로
       </button>
