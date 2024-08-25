@@ -30,7 +30,6 @@ export default function useTimetableV2Mutation(frameId: number) {
     } else {
       addLectureFromLocalStorage(clickedLecture, semester);
     }
-    console.log(clickedLecture);
   };
 
   const removeMyLectureV2 = (clickedLecture: LectureInfo | TimetableLectureInfoV2, id: number) => {

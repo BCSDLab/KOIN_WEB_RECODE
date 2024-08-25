@@ -5,10 +5,11 @@ import { cn } from '@bcsdlab/utils';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLectureV2';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useToast from 'components/common/Toast/useToast';
-import useTimetableMutation from 'pages/Timetable/hooks/useTimetableMutation';
+import useTimetableV2Mutation from 'pages/Timetable/hooks/useTimetableV2Mutation';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
+  frameId: number;
   list: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
   myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2> | undefined;
   selectedLecture:LectureInfo | TimetableLectureInfoV2 | undefined;
@@ -47,6 +48,7 @@ const useFlexibleWidth = (length: number, initialValue: number[]) => {
 };
 
 function LectureTable({
+  frameId,
   list,
   myLecturesV2,
   selectedLecture,
@@ -65,7 +67,7 @@ function LectureTable({
     },
   );
   const toast = useToast();
-  const { removeMyLecture } = useTimetableMutation();
+  const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
   const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
     const recoverLecture = () => {
 
@@ -77,7 +79,7 @@ function LectureTable({
       }
     });
     if (lectureToRemove) {
-      removeMyLecture(lectureToRemove);
+      removeMyLectureV2(lectureToRemove, frameId);
       toast.open({ message: '해당 과목이 삭제되었습니다.', recoverMessage: '해당 과목이 복구되었습니다.', onRecover: recoverLecture });
     }
   };

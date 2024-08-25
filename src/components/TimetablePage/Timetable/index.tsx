@@ -18,7 +18,7 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import AlertModal from 'components/common/Modal/AlertModal';
 import useTimetableV2Mutation from 'pages/Timetable/hooks/useTimetableV2Mutation';
 import { useTempLecture } from 'utils/zustand/myTempLectureV2';
-import { useTimeString } from 'utils/zustand/myLectures';
+import { useTimeString } from 'utils/zustand/myLecturesV2';
 import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
 import styles from './Timetable.module.scss';
 

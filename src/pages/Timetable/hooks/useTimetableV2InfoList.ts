@@ -4,7 +4,7 @@ import { TimetableLectureInfoV2AddResponse } from 'api/timetable/entity';
 import { KoinError } from 'interfaces/APIError';
 import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
 
-export const TIMETABLE_INFO_V2_LIST = 'TIMETABLE_INFO_V2_LIST';
+export const TIMETABLE_INFO_LIST = 'TIMETABLE_INFO_LIST';
 
 function useTimetableV2InfoList(
   timetableFrameId: number,
@@ -14,10 +14,10 @@ function useTimetableV2InfoList(
   TimetableLectureInfoV2AddResponse | null,
   KoinError,
   TimetableLectureInfoV2[] | undefined,
-  [string, string]
+  [string, number]
   >(
     {
-      queryKey: [TIMETABLE_INFO_V2_LIST, timetableFrameId + authorization],
+      queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
       queryFn: () => (authorization && timetableFrameId
         ? getTimetableLectureInfoV2(authorization, timetableFrameId) : null),
       select: (data) => (data ? data.timetable : undefined),
