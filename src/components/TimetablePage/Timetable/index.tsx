@@ -40,6 +40,7 @@ interface RemoveLectureProps {
   lecture_class: string;
   professor: string;
   id: number;
+  name: string;
 }
 
 function Timetable({
@@ -65,15 +66,18 @@ function Timetable({
   const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
   const customDayValue = useTimetableDayListV2(customTempLectureArray);
   const { timeString, setTimeString } = useTimeString();
-
-  const handleRemoveLectureClick = ({ lecture_class, professor, id }: RemoveLectureProps) => {
+  const handleRemoveLectureClick = ({
+    lecture_class, professor, id, name,
+  }: RemoveLectureProps) => {
     let lectureToRemove: LectureInfo | TimetableLectureInfoV2 | null = null;
+    let lectureId = id;
     myLecturesV2.forEach((lecture) => {
-      if (
-        lecture.lecture_class === lecture_class
-        && lecture.professor === professor
-      ) {
+      if ((lecture.lecture_class === lecture_class && lecture.professor === professor)
+        || (lecture.class_time.includes(-1)
+          && lecture.professor === professor
+          && (lecture as TimetableLectureInfoV2).class_title) === name) {
         lectureToRemove = lecture;
+        lectureId = lecture.id;
       }
     });
     if (lectureToRemove) {
@@ -83,7 +87,7 @@ function Timetable({
           description="삭제한 강의는 복구가 불가능합니다."
           onClose={portalOption.close}
           onConfirm={() => {
-            removeMyLectureV2(lectureToRemove!, id);
+            removeMyLectureV2(lectureToRemove!, lectureId);
           }}
         />
       ));
@@ -261,7 +265,9 @@ function Timetable({
                   {isMouseOver === `${day}-${start}-${end}` && isEditable && (
                     <LectureCloseIcon
                       className={styles['timetable__delete-button']}
-                      onClick={() => handleRemoveLectureClick({ lecture_class, professor, id })}
+                      onClick={() => handleRemoveLectureClick({
+                        lecture_class, professor, id, name,
+                      })}
                     />
                   )}
                   <div
