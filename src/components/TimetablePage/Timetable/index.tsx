@@ -319,7 +319,7 @@ function Timetable({
             ))}
           </div>
         ))}
-        {customTempLecture && (
+        {pathname.includes('direct') && customTempLecture && (
           DAYS_STRING.map((day, index) => (
             <div
               key={`custom-${day}`}
