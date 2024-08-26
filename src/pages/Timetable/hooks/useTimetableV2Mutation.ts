@@ -1,4 +1,4 @@
-import { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { CustomTimetableLectureInfo, LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLecturesV2';
 import { useSemester } from 'utils/zustand/semester';
@@ -15,22 +15,37 @@ export default function useTimetableV2Mutation(frameId: number) {
   const { mutate: removeLectureFromServer } = useDeleteTimetableLectureV2(token);
   const semester = useSemester();
 
-  const addMyLectureV2 = (clickedLecture: LectureInfo) => {
-    if (token && clickedLecture) {
-      mutateAddWithServer({
-        timetable_frame_id: frameId,
-        timetable_lecture: [
-          {
-            class_title: clickedLecture.name,
-            lecture_id: clickedLecture.id,
-            ...clickedLecture,
-          },
-        ],
-      });
-    } else {
+  const addMyLectureV2 = (clickedLecture: LectureInfo | CustomTimetableLectureInfo) => {
+    if (token) {
+      if ('class_title' in clickedLecture) {
+        mutateAddWithServer({
+          timetable_frame_id: frameId,
+          timetable_lecture: [
+            {
+              ...clickedLecture,
+              class_time: clickedLecture.class_time.flatMap((subArr) => [
+                ...subArr,
+                -1,
+              ]),
+              class_place: clickedLecture.class_place ? clickedLecture.class_place.join(', ') : '',
+            },
+          ],
+        });
+      } else {
+        mutateAddWithServer({
+          timetable_frame_id: frameId,
+          timetable_lecture: [
+            {
+              ...clickedLecture,
+              class_title: clickedLecture.name,
+              lecture_id: clickedLecture.id,
+            },
+          ],
+        });
+      }
+    } else if ('code' in clickedLecture) {
       addLectureFromLocalStorage(clickedLecture, semester);
     }
-    console.log(clickedLecture);
   };
 
   const removeMyLectureV2 = (clickedLecture: LectureInfo | TimetableLectureInfoV2, id: number) => {
@@ -38,8 +53,6 @@ export default function useTimetableV2Mutation(frameId: number) {
       removeLectureFromLocalStorage(clickedLecture, semester);
     } else if (id !== undefined) {
       removeLectureFromServer(id);
-    } else {
-      console.error('removeMyLectureV2: id is undefined');
     }
   };
 

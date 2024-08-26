@@ -1,21 +1,56 @@
 import { cn } from '@bcsdlab/utils';
 import Listbox from 'components/TimetablePage/Listbox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
-
 import styles from './CustomLectureTimeInput.module.scss';
 
-function CustomLectureTimeInput() {
-  // 임의로 작성한 state api 구조 확인 후 수정예정
+interface CustomLectureTimeInputProps {
+  onLectureTimeChange:(value: number[]) => void;
+}
 
+function CustomLectureTimeInput({ onLectureTimeChange }: CustomLectureTimeInputProps) {
+  // 임의로 작성한 state api 구조 확인 후 수정예정
   const [timeInfo, setTimeInfo] = useState({
-    startHour: '00시',
+    startHour: '09시',
     startMinute: '00분',
-    endHour: '00시',
+    endHour: '10시',
     endMinute: '00분',
   });
+  const [weekInfo, setWeekInfo] = useState<string[]>(['월']);
 
-  const [weekInfo, setWeekInfo] = useState<string[]>([]);
+  const realTimeToTimetableTime = () => {
+    const start = Number(timeInfo.startHour.slice(0, 2) + timeInfo.startMinute.slice(0, 2));
+    const timetableStart = (Number(timeInfo.startHour.slice(0, 2)) - 9) * 2
+    + Number(timeInfo.startMinute.slice(0, 2)) / 30;
+    const end = Number(timeInfo.endHour.slice(0, 2) + timeInfo.endMinute.slice(0, 2));
+    const timetableEnd = timetableStart + Math.floor((end - start) / 100) * 2
+    + ((end - start) % 100) / 30 - 1;
+
+    return Array.from(
+      { length: timetableEnd - timetableStart + 1 },
+      (_, index) => timetableStart + index,
+    );
+  };
+  useEffect(() => {
+    const timetableTime = realTimeToTimetableTime();
+    const updatedTime: number[] = [];
+    weekInfo.forEach((week) => {
+      if (week === '월') {
+        updatedTime.push(...timetableTime);
+      } else if (week === '화') {
+        updatedTime.push(...timetableTime.map((time) => time + 100));
+      } else if (week === '수') {
+        updatedTime.push(...timetableTime.map((time) => time + 200));
+      } else if (week === '목') {
+        updatedTime.push(...timetableTime.map((time) => time + 300));
+      } else {
+        updatedTime.push(...timetableTime.map((time) => time + 400));
+      }
+    });
+    onLectureTimeChange(updatedTime);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeInfo, weekInfo]);
 
   const onChangeStartHours = (key: string) => (e: { target: { value: string } }) => {
     const { target } = e;
