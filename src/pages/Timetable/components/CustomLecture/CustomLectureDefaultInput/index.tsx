@@ -7,12 +7,13 @@ interface Props {
   placeholder:string;
   require:boolean;
   isRightInput?: boolean;
+  inputValue: string;
   onInputChange: (name: string) => void;
 }
 
-const CustomLectureDefaultInput = React.forwardRef(({
-  title, placeholder, require, isRightInput = true, onInputChange,
-}: Props) => {
+function CustomLectureDefaultInput({
+  title, placeholder, require, isRightInput = true, inputValue, onInputChange,
+}: Props) {
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (title === '수업명') {
       onInputChange(e.target.value);
@@ -41,12 +42,13 @@ const CustomLectureDefaultInput = React.forwardRef(({
         id="courseName"
         name="courseName"
         placeholder={placeholder}
+        value={inputValue}
         onChange={(e) => handleInputValue(e)}
         autoComplete="off"
       />
     </div>
   );
-});
+}
 
 CustomLectureDefaultInput.defaultProps = {
   isRightInput: true,

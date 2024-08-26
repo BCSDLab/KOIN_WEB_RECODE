@@ -17,6 +17,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const [professorName, setProfessorName] = React.useState('');
   const [placeNames, setPlaceNames] = React.useState<string[]>([]);
   const [lectureTimes, setLectureTimes] = React.useState<number[][]>([]);
+  const [components, setComponents] = React.useState([0]);
 
   const [isRightInput] = React.useState(true);
   const { addMyLectureV2 } = useTimetableV2Mutation(Number(frameId));
@@ -24,11 +25,18 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     e.preventDefault();
     if (customTempLecture) {
       addMyLectureV2(customTempLecture);
-      updateCustomTempLecture(null);
+      setLectureName('');
+      setProfessorName('');
+      setComponents([0]);
+      setPlaceNames([]);
+      setLectureTimes([]);
+      updateCustomTempLecture({
+        class_title: '',
+        class_time: [],
+      });
     }
   };
 
-  const [components, setComponents] = React.useState([0]);
   const handlePlaceNameChange = (index: number, value: string) => {
     setPlaceNames((prevPlaceNames) => {
       const updatedPlaceNames = [...prevPlaceNames];
@@ -71,11 +79,13 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       })}
     >
       {!token && <div className={styles['form-container__instruction']}>로그인이 필요한 서비스입니다.</div>}
-      <CustomLectureDefaultInput title="수업명" placeholder="수업명을 입력하세요." require isRightInput={isRightInput} onInputChange={setLectureName} />
-      <CustomLectureDefaultInput title="교수명" placeholder="교수명을 입력하세요." require={false} onInputChange={setProfessorName} />
+      <CustomLectureDefaultInput title="수업명" placeholder="수업명을 입력하세요." require isRightInput={isRightInput} inputValue={lectureName} onInputChange={setLectureName} />
+      <CustomLectureDefaultInput title="교수명" placeholder="교수명을 입력하세요." require={false} inputValue={professorName} onInputChange={setProfessorName} />
       {components.map((key) => (
         <CustomLectureLocationTimeSetting
           key={key}
+          placeName={placeNames[key]}
+          lectureTime={lectureTimes[key]}
           onPlaceNameChange={(value) => handlePlaceNameChange(key, value)}
           onLectureTimeChange={(value) => handleLectureTimeChange(key, value)}
         />

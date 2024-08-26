@@ -42,7 +42,6 @@ export default function useTimetableDayListV2(
             .map((time) => time % 100)
             .sort((a, b) => a - b)
         ));
-        console.log(currentDayClassTimeArr);
         currentDayClassPlaceArr = (lecture as TimetableLectureInfoV2).class_place?.split(', ');
       }
       currentDayClassTimeArr.forEach((item, idx) => {

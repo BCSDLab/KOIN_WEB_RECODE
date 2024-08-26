@@ -5,11 +5,11 @@ import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
 import styles from './CustomLectureTimeInput.module.scss';
 
 interface CustomLectureTimeInputProps {
+  lectureTime: number[];
   onLectureTimeChange:(value: number[]) => void;
 }
 
-function CustomLectureTimeInput({ onLectureTimeChange }: CustomLectureTimeInputProps) {
-  // 임의로 작성한 state api 구조 확인 후 수정예정
+function CustomLectureTimeInput({ lectureTime, onLectureTimeChange }: CustomLectureTimeInputProps) {
   const [timeInfo, setTimeInfo] = useState({
     startHour: '09시',
     startMinute: '00분',
@@ -51,6 +51,18 @@ function CustomLectureTimeInput({ onLectureTimeChange }: CustomLectureTimeInputP
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeInfo, weekInfo]);
+
+  useEffect(() => {
+    if (!lectureTime) {
+      setTimeInfo({
+        startHour: '09시',
+        startMinute: '00분',
+        endHour: '10시',
+        endMinute: '00분',
+      });
+      setWeekInfo(['월']);
+    }
+  }, [lectureTime]);
 
   const onChangeStartHours = (key: string) => (e: { target: { value: string } }) => {
     const { target } = e;
