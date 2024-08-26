@@ -191,7 +191,14 @@ function StorePage() {
     }
   };
   useScrollToTop();
-  useScorllLogging('shop_categories', categories);
+  const storeScrollLogging = () => {
+    const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_categories', value: `scoll in ${categories?.shop_categories[currentCategoryId]?.name}`, event_category: 'scroll',
+    });
+  };
+
+  useScorllLogging(storeScrollLogging);
 
   const enterCategoryTimeRef = useRef<number | null>(null);
 

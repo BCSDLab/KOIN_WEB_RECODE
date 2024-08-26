@@ -75,15 +75,37 @@ function StoreDetailPage() {
       actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
     });
   };
+  const onClickReviewList = () => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: `${storeDetail.name}`, event_category: 'click',
+    });
+  };
   const copyAccount = async (account: string) => {
     await navigator.clipboard.writeText(account);
     showToast('info', '계좌번호가 복사되었습니다.');
+  };
+  const detailScrollLogging = () => {
+    if ((param.get('state') === '메뉴' || param.get('state') === undefined)) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
+      });
+    }
+    if (param.get('state') === '이벤트/공지') {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: storeDetail.name, event_category: 'scroll',
+      });
+    }
+    if (param.get('state') === '리뷰') {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: storeDetail.name, event_category: 'scroll',
+      });
+    }
   };
 
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
-  useScorllLogging('shop_detail_view', storeDetail);
+  useScorllLogging(detailScrollLogging);
 
   React.useEffect(() => {
     setButtonContent((
@@ -98,7 +120,8 @@ function StoreDetailPage() {
     ));
 
     return () => setButtonContent(null);
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // dependency 불필요
 
   return (
     <div className={styles.template}>
@@ -269,8 +292,8 @@ function StoreDetailPage() {
             })}
             type="button"
             onClick={() => {
-              onClickEventList();
               param.set('state', '리뷰');
+              onClickReviewList();
               setParam(param);
             }}
           >
