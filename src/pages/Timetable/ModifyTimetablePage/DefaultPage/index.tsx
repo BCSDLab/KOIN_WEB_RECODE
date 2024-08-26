@@ -3,8 +3,8 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Timetable from 'components/TimetablePage/Timetable';
 import TimetableHeader from 'pages/Timetable/components/TimetableHeader';
-import React, { Suspense, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/Timetable/components/LectureList';
@@ -19,8 +19,7 @@ import styles from './DefaultPage.module.scss';
 export default function DefaultPage({ frameId }: { frameId: string | undefined }) {
   const navigate = useNavigate();
   const semester = useSemester();
-  const [selectedCourseType, setSelectedCourseType] = useState('regular');
-  const isRegularCourseSelected = selectedCourseType === 'regular';
+  const { pathname } = useLocation();
   const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
   const myLectureDayValue = useTimetableDayListV2(myLecturesV2);
   const { data: lectureList } = useLectureList(semester);
@@ -33,7 +32,6 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
   const similarSelectedLectureDayList = useTimetableDayListV2(similarSelectedLecture);
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
-    setSelectedCourseType(courseType);
     navigate(`/timetable/modify/${courseType}/${frameId}`);
   };
 
@@ -55,13 +53,13 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
                 className={cn({
                   [styles['page__regular-course-button']]: true,
                   [styles['page__regular-course-button--active']]:
-                    isRegularCourseSelected,
+                    pathname.includes('/regular'),
                   [styles['page__regular-course-button--inactive']]:
-                    !isRegularCourseSelected,
+                    pathname.includes('/direct'),
                 })}
                 value="regular"
                 onClick={handleCourseClick}
-                disabled={isRegularCourseSelected}
+                disabled={pathname.includes('/regular')}
               >
                 정규 과목
               </button>
@@ -70,19 +68,19 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
                 className={cn({
                   [styles['page__directly-add-button']]: true,
                   [styles['page__directly-add-button--active']]:
-                    !isRegularCourseSelected,
+                    pathname.includes('/direct'),
                   [styles['page__directly-add-button--inactive']]:
-                    isRegularCourseSelected,
+                    pathname.includes('/regular'),
                 })}
                 value="direct"
                 onClick={handleCourseClick}
-                disabled={!isRegularCourseSelected}
+                disabled={pathname.includes('/direct')}
               >
                 직접 추가
               </button>
             </div>
             {/* TODO: 직접 추가 UI, 강의 리스트 UI 추가 */}
-            {isRegularCourseSelected ? (
+            {pathname.includes('/regular') ? (
               <LectureList frameId={Number(frameId)} />
             ) : (
               <CustomLecture frameId={frameId} />
