@@ -110,6 +110,12 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     });
   };
   const handleAddTimeSpaceComponent = () => {
+    if (timeSpaceComponents.length > 4) {
+      showToast(
+        'info',
+        '"시간 및 장소 추가"는 최대 5개까지 가능합니다.',
+      );
+    }
     setTimeSpaceComponents((prevComponents) => [...prevComponents, prevComponents.length]);
     setIsRightLectureTime(() => [...isRightLectureTime, true]);
     setIsClickAddLectrue(false);
@@ -136,23 +142,27 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
         [styles['form-container--non-login']]: !token,
       })}
     >
-      {!token && <div className={styles['form-container__instruction']}>로그인이 필요한 서비스입니다.</div>}
-      <CustomLectureDefaultInput title="수업명" placeholder="수업명을 입력하세요." require isRightInput={isRightLectureName} inputValue={lectureName} onInputChange={setLectureName} />
-      <CustomLectureDefaultInput title="교수명" placeholder="교수명을 입력하세요." require={false} inputValue={professorName} onInputChange={setProfessorName} />
-      {timeSpaceComponents.map((key) => (
-        <CustomLectureLocationTimeSetting
-          key={key}
-          placeName={placeNames[key]}
-          lectureTime={lectureTimes[key]}
-          onPlaceNameChange={(value) => handlePlaceNameChange(key, value)}
-          onLectureTimeChange={(value) => handleLectureTimeChange(key, value)}
-          isRightInput={isRightLectureTime[key]}
-        />
-      ))}
-      <button type="button" className={styles['form-group-add-button']} onClick={handleAddTimeSpaceComponent}>
-        <span>시간 및 장소 추가</span>
-        <AddIcon />
-      </button>
+      <div className={styles['form-container__inputbox']}>
+        {!token && <div className={styles['form-container__instruction']}>로그인이 필요한 서비스입니다.</div>}
+        <CustomLectureDefaultInput title="수업명" placeholder="수업명을 입력하세요." require isRightInput={isRightLectureName} inputValue={lectureName} onInputChange={setLectureName} />
+        <CustomLectureDefaultInput title="교수명" placeholder="교수명을 입력하세요." require={false} inputValue={professorName} onInputChange={setProfessorName} />
+        <div className={styles['form-container__inputbox--space']}>
+          {timeSpaceComponents.map((key) => (
+            <CustomLectureLocationTimeSetting
+              key={key}
+              placeName={placeNames[key]}
+              lectureTime={lectureTimes[key]}
+              onPlaceNameChange={(value) => handlePlaceNameChange(key, value)}
+              onLectureTimeChange={(value) => handleLectureTimeChange(key, value)}
+              isRightInput={isRightLectureTime[key]}
+            />
+          ))}
+        </div>
+        <button type="button" className={styles['form-group-add-button']} onClick={handleAddTimeSpaceComponent}>
+          <span>시간 및 장소 추가</span>
+          <AddIcon />
+        </button>
+      </div>
       <button type="submit" className={styles['submit-button']}>일정 저장</button>
     </form>
   );

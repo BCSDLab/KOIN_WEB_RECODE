@@ -38,7 +38,6 @@ function CustomLectureTimeInput(
 
   useEffect(() => {
     const timetableTime = realTimeToTimetableTime();
-    console.log(timetableTime);
     const updatedTime: number[] = [];
     weekInfo.forEach((week) => {
       if (week === '월') {
