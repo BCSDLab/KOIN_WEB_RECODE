@@ -2,16 +2,16 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { changeTimetableInfoByRemoveLectureV2 } from 'api/timetable';
 import { toast } from 'react-toastify';
-import { TIMETABLE_INFO_V2_LIST } from './useTimetableV2InfoList';
+import { TIMETABLE_INFO_LIST } from './useTimetableV2InfoList';
 
 export default function useDeleteTimetableLectureV2(authorization: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: number) => changeTimetableInfoByRemoveLectureV2(authorization, id),
-    onSuccess: (_, id) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_INFO_V2_LIST, id] },
+        { queryKey: [TIMETABLE_INFO_LIST] },
       );
     },
     onError: (error) => {

@@ -2,7 +2,7 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { changeTimetableInfoByAddLectureV2 } from 'api/timetable';
 import { toast } from 'react-toastify';
-import { TIMETABLE_INFO_V2_LIST } from './useTimetableV2InfoList';
+import { TIMETABLE_INFO_LIST } from './useTimetableV2InfoList';
 
 export default function useAddTimetableLectureV2(token: string) {
   const queryClient = useQueryClient();
@@ -13,7 +13,7 @@ export default function useAddTimetableLectureV2(token: string) {
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
         [
-          TIMETABLE_INFO_V2_LIST,
+          TIMETABLE_INFO_LIST,
           variables.timetable_frame_id,
         ],
         data,
