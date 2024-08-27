@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
 export const useScorllLogging = (
   loggingFunc: () => void,
@@ -9,6 +10,7 @@ export const useScorllLogging = (
     if (id.current) clearTimeout(id.current);
     id.current = setTimeout(func, 200);
   };
+  const isMoblie = useMediaQuery();
 
   useEffect(() => {
     const onScroll = () => debounce(() => setCurrentHeight(window.scrollY));
@@ -19,5 +21,5 @@ export const useScorllLogging = (
       loggingFunc();
     }
     return () => window.removeEventListener('scroll', onScroll); // 웹 사이트 높이의 70퍼센트를 넘을 때 로깅
-  }, [currentHeignt, loggingFunc]);
+  }, [currentHeignt, loggingFunc, isMoblie]);
 };
