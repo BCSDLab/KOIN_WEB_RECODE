@@ -33,6 +33,7 @@ interface CurrentSemesterLectureListProps {
 
 interface MyLectureListBoxProps {
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
+  frameId: number;
 }
 
 function CurrentSemesterLectureList({
@@ -49,6 +50,7 @@ function CurrentSemesterLectureList({
 
   return (
     <LectureTable
+      frameId={Number(frameId)}
       list={(lectureList ?? []).filter((lecture) => {
         const searchFilter = filter.search.toUpperCase();
         const departmentFilter = filter.department;
@@ -120,9 +122,10 @@ function CurrentSemesterLectureList({
   );
 }
 
-function MyLectureListBox({ myLectures }: MyLectureListBoxProps) {
+function MyLectureListBox({ myLectures, frameId }: MyLectureListBoxProps) {
   return (
     <LectureTable
+      frameId={frameId}
       list={myLectures}
       myLecturesV2={undefined}
       selectedLecture={undefined}
@@ -201,7 +204,7 @@ function LectureList({ frameId }: { frameId: number }) {
                 myLecturesV2={myLecturesV2}
               />
             )
-            : <MyLectureListBox myLectures={myLecturesV2} />}
+            : <MyLectureListBox myLectures={myLecturesV2} frameId={frameId} />}
         </React.Suspense>
       </ErrorBoundary>
       <div className={styles.page__foot}>
