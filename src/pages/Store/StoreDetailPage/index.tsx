@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -37,6 +37,7 @@ function StoreDetailPage() {
       enterCategoryTimeRef.current = currentTime;
     }
   }, []);
+
   const { storeDetail, storeDescription } = useStoreDetail(params.id!);
   const { data: storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
@@ -56,7 +57,36 @@ function StoreDetailPage() {
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
+  const onSwipeBack = useCallback(() => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
+      title: 'shop_detail_view_back',
+      value: storeDetail!.name,
+      event_category: 'swipe',
+      current_page: koreanCategory,
+      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+    });
 
+    // 스와이프 상태 초기화
+    sessionStorage.setItem('swipeToBack', 'false');
+  }, [logger, storeDetail, koreanCategory]);
+
+  useEffect(() => {
+    // 스와이프 동작 감지
+    const handleSwipe = (e: WheelEvent) => {
+      if (e.deltaX < -100) {
+        // 스와이프 동작을 감지한 경우
+        sessionStorage.setItem('swipeToBack', 'true');
+        onSwipeBack();
+      }
+    };
+
+    window.addEventListener('wheel', handleSwipe);
+
+    return () => {
+      window.removeEventListener('wheel', handleSwipe);
+    };
+  }, [onSwipeBack]);
   const onClickImage = (img: string[], index: number) => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name, event_category: 'click',
@@ -75,6 +105,7 @@ function StoreDetailPage() {
       actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
     });
   };
+
   const copyAccount = async (account: string) => {
     await navigator.clipboard.writeText(account);
     showToast('info', '계좌번호가 복사되었습니다.');
