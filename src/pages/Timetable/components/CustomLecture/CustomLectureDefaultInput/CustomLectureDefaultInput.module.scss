@@ -21,7 +21,7 @@
   box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
 
   &__require {
-    border: 1px solid #F7941E;
+    border: 1px solid #f7941e;
   }
 
   & > label {
@@ -71,13 +71,13 @@
       color: #fff;
     }
   }
-  
+
   &__warning {
     display: flex;
     align-items: center;
     gap: 4px;
-    color: #F7941E;
-    font-family: Pretendard;
+    color: #f7941e;
+    font-family: Pretendard, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;

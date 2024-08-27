@@ -40,7 +40,7 @@
     }
 
     &--require {
-      border: 1px solid #F7941E;
+      border: 1px solid #f7941e;
     }
   }
 
@@ -145,13 +145,13 @@
       }
     }
   }
-  
+
   &__warning {
     display: flex;
     align-items: center;
     gap: 4px;
-    color: #F7941E;
-    font-family: Pretendard;
+    color: #f7941e;
+    font-family: Pretendard, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
