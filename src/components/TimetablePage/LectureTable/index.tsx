@@ -68,9 +68,9 @@ function LectureTable({
   const toast = useToast();
   const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
   const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
-    const recoverLecture = () => {
-
-    };
+    // const recoverLecture = () => {
+    //
+    // };
     let lectureToRemove: LectureInfo | TimetableLectureInfoV2 | null = null;
     const lectureId = id;
     myLecturesV2.forEach((lecture) => {
@@ -80,7 +80,11 @@ function LectureTable({
     });
     if (lectureToRemove) {
       removeMyLectureV2(lectureToRemove!, lectureId);
-      toast.open({ message: '해당 과목이 삭제되었습니다.', recoverMessage: '해당 과목이 복구되었습니다.', onRecover: recoverLecture });
+      toast.open({
+        message: '해당 과목이 삭제되었습니다.',
+        // recoverMessage: '해당 과목이 복구되었습니다.',
+        // onRecover: recoverLecture,
+      });
     }
   };
   const [isMouseOver, setIsMouseOver] = React.useState(-1);
