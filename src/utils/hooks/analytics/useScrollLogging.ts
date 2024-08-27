@@ -11,12 +11,11 @@ export const useScorllLogging = (
   };
 
   useEffect(() => {
-    const onScroll = () => debounce(() => setCurrentHeight(window.scrollY + window.innerHeight));
+    const onScroll = () => debounce(() => setCurrentHeight(window.scrollY));
     if (document.body.scrollHeight * 0.7 > currentHeignt) {
       window.addEventListener('scroll', onScroll);
     }
-
-    if (document.body.scrollHeight * 0.7 < currentHeignt) {
+    if ((document.body.scrollHeight - window.innerHeight) * 0.7 < currentHeignt) {
       loggingFunc();
     }
     return () => window.removeEventListener('scroll', onScroll); // 웹 사이트 높이의 70퍼센트를 넘을 때 로깅
