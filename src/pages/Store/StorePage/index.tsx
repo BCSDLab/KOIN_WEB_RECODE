@@ -194,7 +194,7 @@ function StorePage() {
   const storeScrollLogging = () => {
     const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_categories', value: `scoll in ${categories?.shop_categories[currentCategoryId]?.name}`, event_category: 'scroll',
+      actionTitle: 'BUSINESS', title: 'shop_categories', value: `scoll in ${categories?.shop_categories[currentCategoryId]?.name || '전체보기'}`, event_category: 'scroll',
     });
   };
 
