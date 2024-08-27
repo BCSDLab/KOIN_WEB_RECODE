@@ -141,11 +141,6 @@ function StoreDetailPage() {
       </a>
     ));
 
-    return () => setButtonContent(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [param]); // param이 바뀌어도 버튼이 적용되어야 함
-
-  useEffect(() => {
     if (param.get('state') !== '리뷰') {
       if (sessionStorage.getItem('enterReviewPage')) {
         logger.actionEventClick({
@@ -160,7 +155,12 @@ function StoreDetailPage() {
         sessionStorage.removeItem('enterReviewPage');
       }
     }
-  });
+
+    return () => setButtonContent(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [param]); // param이 바뀌어도 버튼이 적용되어야 함
+
+  useEffect(() => () => sessionStorage.removeItem('enterReviewPage'), []);
 
   return (
     <div className={styles.template}>
