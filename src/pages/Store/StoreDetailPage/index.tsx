@@ -166,7 +166,7 @@ function StoreDetailPage() {
         event_category: 'swipe',
         current_page: sessionStorage.getItem('cameFrom') || '전체보기',
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
-      });
+      }); // os의 뒤로가기 감지. 다른 로깅과 중복으로 뜨는데 da가 구분하겠다고 함
       setButtonContent(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
