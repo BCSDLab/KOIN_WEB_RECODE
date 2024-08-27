@@ -34,7 +34,7 @@ export default function SearchBar() {
         }}
         onFocus={() => {
           const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
-          if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId].name}` });
+          if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId]?.name || '전체보기'}` });
         }}
       />
       <button
