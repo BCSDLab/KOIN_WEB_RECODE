@@ -78,6 +78,18 @@ const CHECK_BOX = [
   },
 ];
 
+const toggleNameLabel = {
+  COUNT: 'review',
+  RATING: 'star',
+  OPEN: 'open',
+  DELIVERY: 'delivery',
+} as const;
+
+const loggingCategoryToggleValue = (
+  toggleName: 'COUNT' | 'RATING' | 'OPEN' | 'DELIVERY',
+  category: string | undefined,
+) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
+
 const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
   if (checked === undefined) {
     return false;
@@ -178,6 +190,12 @@ function StorePage() {
         ...prevState,
         sorter: item,
       }));
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_can',
+        value: loggingCategoryToggleValue(item, categories?.shop_categories[selectedCategory].name),
+        event_category: 'click',
+      });
     } else if (item === 'DELIVERY' || item === 'OPEN') {
       setStoreMobileFilterState((prevState) => {
         const newFilter = prevState.filter.includes(item)
@@ -187,6 +205,12 @@ function StorePage() {
           ...prevState,
           filter: newFilter,
         };
+      });
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_can',
+        value: loggingCategoryToggleValue(item, categories?.shop_categories[selectedCategory].name),
+        event_category: 'click',
       });
     }
   };
