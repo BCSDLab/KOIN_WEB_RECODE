@@ -232,7 +232,8 @@ function StorePage() {
       sessionStorage.setItem('enter_category', currentTime.toString());
       enterCategoryTimeRef.current = currentTime;
     }
-  }, []);
+    sessionStorage.setItem('cameFrom', categories?.shop_categories[selectedCategory]?.name || '전체보기');
+  }, [categories, selectedCategory]);
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>

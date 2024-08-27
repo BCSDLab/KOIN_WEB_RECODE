@@ -9,12 +9,15 @@ export const useScorllLogging = (loggingFunc: () => void, targetPercent = 0.7) =
     id.current = setTimeout(func, 200);
   };
   const isMoblie = useMediaQuery();
-
   useEffect(() => {
-    const onScroll = () => debounce(() => setCurrentHeight(window.scrollY));
-    if (document.body.scrollHeight * targetPercent > currentHeignt) {
-      window.addEventListener('scroll', onScroll);
-    }
+    const onScroll = () => debounce(() => {
+      if (document.body.scrollHeight * targetPercent > window.scrollY) {
+        setCurrentHeight(window.scrollY);
+      }
+    });
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', () => setCurrentHeight(window.scrollY));
+
     if ((document.body.scrollHeight - window.innerHeight) * targetPercent < currentHeignt) {
       loggingFunc();
     }

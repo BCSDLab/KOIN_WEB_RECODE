@@ -47,6 +47,7 @@ function StoreDetailPage() {
   const { data } = useGetReview(Number(params.id), 'LATEST');
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
   const koreanCategory = storeDetail.shop_categories.filter((category) => category.name !== '전체보기')[0].name;
+
   const onClickCallNumber = () => {
     if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
@@ -106,8 +107,9 @@ function StoreDetailPage() {
     await navigator.clipboard.writeText(account);
     showToast('info', '계좌번호가 복사되었습니다.');
   };
+
   const detailScrollLogging = () => {
-    if ((param.get('state') === '메뉴' || param.get('state') === undefined)) {
+    if ((param.get('state') === '메뉴' || !param.get('state'))) {
       logger.actionEventClick({
         actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
       });
@@ -156,7 +158,17 @@ function StoreDetailPage() {
       }
     }
 
-    return () => setButtonContent(null);
+    return () => {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_back',
+        value: storeDetail.name,
+        event_category: 'swipe',
+        current_page: sessionStorage.getItem('cameFrom') || '전체보기',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      });
+      setButtonContent(null);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param]); // param이 바뀌어도 버튼이 적용되어야 함
 
