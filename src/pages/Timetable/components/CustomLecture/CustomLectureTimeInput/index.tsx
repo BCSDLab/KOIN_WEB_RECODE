@@ -2,14 +2,18 @@ import { cn } from '@bcsdlab/utils';
 import Listbox from 'components/TimetablePage/Listbox';
 import { useEffect, useState } from 'react';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
+import { ReactComponent as WarningIcon } from 'assets/svg/warning-icon.svg';
 import styles from './CustomLectureTimeInput.module.scss';
 
 interface CustomLectureTimeInputProps {
   lectureTime: number[];
   onLectureTimeChange:(value: number[]) => void;
+  isRightLectureTime: boolean;
 }
 
-function CustomLectureTimeInput({ lectureTime, onLectureTimeChange }: CustomLectureTimeInputProps) {
+function CustomLectureTimeInput(
+  { lectureTime, onLectureTimeChange, isRightLectureTime }: CustomLectureTimeInputProps,
+) {
   const [timeInfo, setTimeInfo] = useState({
     startHour: '09시',
     startMinute: '00분',
@@ -31,6 +35,7 @@ function CustomLectureTimeInput({ lectureTime, onLectureTimeChange }: CustomLect
       (_, index) => timetableStart + index,
     );
   };
+
   useEffect(() => {
     const timetableTime = realTimeToTimetableTime();
     const updatedTime: number[] = [];
@@ -48,7 +53,6 @@ function CustomLectureTimeInput({ lectureTime, onLectureTimeChange }: CustomLect
       }
     });
     onLectureTimeChange(updatedTime);
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeInfo, weekInfo]);
 
@@ -81,42 +85,56 @@ function CustomLectureTimeInput({ lectureTime, onLectureTimeChange }: CustomLect
   };
 
   return (
-    <div className={styles['form-group-time']}>
-      <label htmlFor="place">
-        <div className={styles['form-group-time__title']}>
-          시간
-          <span className={styles['require-mark']}>*</span>
-        </div>
-      </label>
-      <div className={styles['form-group-time__container']}>
-        <div className={styles['form-group-time__weekdays']}>
-          {DAYS_STRING.map((weekday) => (
-            <div key={weekday}>
-              <button
-                type="button"
-                className={cn({
-                  [styles['form-group-time__weekdays-button']]: true,
-                  [styles['form-group-time__weekdays-button--checked']]: weekInfo.includes(weekday),
-                })}
-                onClick={() => onChangeWeekdays(weekday)}
-              >
-                {weekday}
-              </button>
-            </div>
-          ))}
-        </div>
-        <div className={styles['form-group-time__time']}>
-          <div className={styles['form-group-time__time-section']}>
-            <Listbox list={HOUR} value={timeInfo.startHour} onChange={onChangeStartHours('startHour')} version="addLecture" />
-            <Listbox list={MINUTE} value={timeInfo.startMinute} onChange={onChangeStartHours('startMinute')} version="addLecture" />
+    <div>
+      <div className={styles['form-group-time']}>
+        <label
+          htmlFor="place"
+          className={cn({
+            [styles['form-group-time__title']]: true,
+            [styles['form-group-time__title--require']]: !isRightLectureTime,
+          })}
+        >
+          <div className={styles['form-group-time__title--text']}>
+            시간
+            <span className={styles['require-mark']}>*</span>
           </div>
-          <span>-</span>
-          <div className={styles['form-group-time__time-section']}>
-            <Listbox list={HOUR} value={timeInfo.endHour} onChange={onChangeStartHours('endHour')} version="addLecture" />
-            <Listbox list={MINUTE} value={timeInfo.endMinute} onChange={onChangeStartHours('endMinute')} version="addLecture" />
+        </label>
+        <div className={styles['form-group-time__container']}>
+          <div className={styles['form-group-time__weekdays']}>
+            {DAYS_STRING.map((weekday) => (
+              <div key={weekday}>
+                <button
+                  type="button"
+                  className={cn({
+                    [styles['form-group-time__weekdays-button']]: true,
+                    [styles['form-group-time__weekdays-button--checked']]: weekInfo.includes(weekday),
+                  })}
+                  onClick={() => onChangeWeekdays(weekday)}
+                >
+                  {weekday}
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className={styles['form-group-time__time']}>
+            <div className={styles['form-group-time__time-section']}>
+              <Listbox list={HOUR} value={timeInfo.startHour} onChange={onChangeStartHours('startHour')} version="addLecture" />
+              <Listbox list={MINUTE} value={timeInfo.startMinute} onChange={onChangeStartHours('startMinute')} version="addLecture" />
+            </div>
+            <span>-</span>
+            <div className={styles['form-group-time__time-section']}>
+              <Listbox list={HOUR} value={timeInfo.endHour} onChange={onChangeStartHours('endHour')} version="addLecture" />
+              <Listbox list={MINUTE} value={timeInfo.endMinute} onChange={onChangeStartHours('endMinute')} version="addLecture" />
+            </div>
           </div>
         </div>
       </div>
+      {!isRightLectureTime && (
+      <div className={styles['form-group-time__warning']}>
+        <WarningIcon />
+        시간을 입력해주세요.
+      </div>
+      )}
     </div>
   );
 }

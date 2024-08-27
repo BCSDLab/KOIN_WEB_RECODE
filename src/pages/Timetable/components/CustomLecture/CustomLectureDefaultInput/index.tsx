@@ -1,5 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import React from 'react';
+import { ReactComponent as WarningIcon } from 'assets/svg/warning-icon.svg';
 import styles from './CustomLectureDefaultInput.module.scss';
 
 interface Props {
@@ -25,27 +26,35 @@ function CustomLectureDefaultInput({
   };
 
   return (
-    <div className={cn({
-      [styles['form-group']]: true,
-      [styles['form-group--require']]: isRightInput,
-    })}
-    >
-      <label htmlFor="courseName">
-        <div className={styles['form-group__title']}>
-          {title}
-          {require && <span className={styles['require-mark']}>*</span>}
-        </div>
-      </label>
-      <div className={styles['form-group__block']} />
-      <input
-        type="text"
-        id="courseName"
-        name="courseName"
-        placeholder={placeholder}
-        value={inputValue}
-        onChange={(e) => handleInputValue(e)}
-        autoComplete="off"
-      />
+    <div>
+      <div className={cn({
+        [styles['form-group']]: true,
+        [styles['form-group__require']]: !isRightInput,
+      })}
+      >
+        <label htmlFor="courseName">
+          <div className={styles['form-group__title']}>
+            {title}
+            {require && <span className={styles['require-mark']}>*</span>}
+          </div>
+        </label>
+        <div className={styles['form-group__block']} />
+        <input
+          type="text"
+          id="courseName"
+          name="courseName"
+          placeholder={placeholder}
+          value={inputValue}
+          onChange={(e) => handleInputValue(e)}
+          autoComplete="off"
+        />
+      </div>
+      {!isRightInput && (
+      <div className={styles['form-group__warning']}>
+        <WarningIcon />
+        수업명을 입력해주세요
+      </div>
+      )}
     </div>
   );
 }

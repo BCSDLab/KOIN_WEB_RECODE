@@ -7,6 +7,7 @@ interface CustomLectureLocationTimeSettingProps {
   lectureTime: number[];
   onPlaceNameChange: (value: string) => void;
   onLectureTimeChange:(value: number[]) => void;
+  isRightInput: boolean;
 }
 
 function CustomLectureLocationTimeSetting({
@@ -14,6 +15,7 @@ function CustomLectureLocationTimeSetting({
   lectureTime,
   onPlaceNameChange,
   onLectureTimeChange,
+  isRightInput,
 }: CustomLectureLocationTimeSettingProps) {
   React.useEffect(() => {
     if (!placeName) {
@@ -24,7 +26,11 @@ function CustomLectureLocationTimeSetting({
 
   return (
     <>
-      <CustomLectureTimeInput lectureTime={lectureTime} onLectureTimeChange={onLectureTimeChange} />
+      <CustomLectureTimeInput
+        lectureTime={lectureTime}
+        onLectureTimeChange={onLectureTimeChange}
+        isRightLectureTime={isRightInput}
+      />
       <CustomLectureDefaultInput
         title="장소"
         placeholder="장소를 입력하세요."

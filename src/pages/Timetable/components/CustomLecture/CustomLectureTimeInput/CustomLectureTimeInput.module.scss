@@ -18,7 +18,7 @@
   height: 81px;
   position: relative;
 
-  & > label {
+  &__title {
     display: flex;
     min-width: 42px;
     width: 75px;
@@ -26,6 +26,7 @@
     padding: 0 16px;
     justify-content: center;
     align-items: center;
+    border-radius: 5px;
     background: #fafafa;
     box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
     color: #000;
@@ -33,10 +34,14 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 160%;
-  }
 
-  &__title {
-    position: relative;
+    &--text {
+      position: relative;
+    }
+
+    &--require {
+      border: 1px solid #F7941E;
+    }
   }
 
   &__container {
@@ -138,6 +143,23 @@
         margin-right: 3px;
         background-color: transparent;
       }
+    }
+  }
+  
+  &__warning {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #F7941E;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%; /* 22.4px */
+
+    & > svg {
+      width: 20px;
+      height: 20px;
     }
   }
 }

@@ -17,7 +17,12 @@
   padding: 4px;
   background: #fafafa;
   position: relative;
+  border-radius: 5px;
   box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
+
+  &__require {
+    border: 1px solid #F7941E;
+  }
 
   & > label {
     display: flex;
@@ -64,6 +69,23 @@
     &:focus ~ .container__check-button {
       background-color: #175c8e;
       color: #fff;
+    }
+  }
+  
+  &__warning {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #F7941E;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%; /* 22.4px */
+
+    & > svg {
+      width: 20px;
+      height: 20px;
     }
   }
 }
