@@ -171,7 +171,7 @@ function LectureTable({
             </div>
           ))}
         </div>
-        {(list.length !== 0 && myLecturesV2.length !== 0)
+        {(list.length !== 0 || myLecturesV2.length !== 0)
           ? (
             <div className={styles['table__lecture-list']} ref={target}>
               {list.map((lecture, index) => (
