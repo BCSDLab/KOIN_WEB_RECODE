@@ -4,12 +4,16 @@ import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import useTimetableV2Mutation from 'pages/Timetable/hooks/useTimetableV2Mutation';
 import useTokenState from 'utils/hooks/useTokenState';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
+import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import showToast from 'utils/ts/showToast';
 import styles from './CustomLecture.module.scss';
 import CustomLectureDefaultInput from './CustomLectureDefaultInput';
 import CustomLectureLocationTimeSetting from './CustomLectureLocationTimeSetting';
 
 function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const token = useTokenState();
+  const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
   const customTempLecture = useCustomTempLecture();
   const { updateCustomTempLecture } = useCustomTempLectureAction();
 
@@ -35,13 +39,37 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       setIsRightLectureName(true);
     }
   };
-
   React.useEffect(() => {
     if (isRightLectureTime.includes(false) || !isRightLectureName) {
+      setIsClickAddLectrue(false);
       return;
     }
 
     if (customTempLecture && isClickAddLecture) {
+      const myLectureTimeValue = (myLecturesV2 as TimetableLectureInfoV2[])
+        .reduce((acc, cur) => {
+          if (cur.class_time) {
+            return acc.concat(cur.class_time).filter((num) => num !== -1);
+          }
+          return acc;
+        }, [] as number[]);
+      if (customTempLecture.class_time
+        .flat()
+        .some((time) => myLectureTimeValue.includes(time))) {
+        const myLectureList = myLecturesV2 as TimetableLectureInfoV2[];
+        const alreadySelectedLecture = myLectureList.find(
+          (lecture) => lecture.class_time.filter((num) => num !== -1).some(
+            (time) => customTempLecture.class_time.flat().includes(time),
+          ),
+        );
+        if (alreadySelectedLecture) {
+          showToast(
+            'error',
+            `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+          );
+          return;
+        }
+      }
       addMyLectureV2(customTempLecture);
       setIsClickAddLectrue(false);
       setLectureName('');
@@ -84,6 +112,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const handleAddTimeSpaceComponent = () => {
     setTimeSpaceComponents((prevComponents) => [...prevComponents, prevComponents.length]);
     setIsRightLectureTime(() => [...isRightLectureTime, true]);
+    setIsClickAddLectrue(false);
   };
 
   React.useEffect(() => {
