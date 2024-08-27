@@ -48,6 +48,17 @@ function StoreDetailPage() {
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
   const koreanCategory = storeDetail.shop_categories.filter((category) => category.name !== '전체보기')[0].name;
   const onClickCallNumber = () => {
+    if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_review_back',
+        value: '',
+        event_category: 'click',
+        previous_page: '리뷰',
+        current_page: '전화',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+      });
+    }
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'shop_call',
@@ -66,6 +77,17 @@ function StoreDetailPage() {
     ));
   };
   const onClickList = () => {
+    if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_review_back',
+        value: storeDetail.name,
+        event_category: 'click',
+        previous_page: '리뷰',
+        current_page: '전체보기',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+      });
+    }
     logger.actionEventClick({
       actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: koreanCategory, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
@@ -121,7 +143,24 @@ function StoreDetailPage() {
 
     return () => setButtonContent(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // dependency 불필요
+  }, [param]); // param이 바뀌어도 버튼이 적용되어야 함
+
+  useEffect(() => {
+    if (param.get('state') !== '리뷰') {
+      if (sessionStorage.getItem('enterReviewPage')) {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS',
+          title: 'shop_detail_view_review_back',
+          value: storeDetail.name,
+          event_category: 'click',
+          previous_page: '리뷰',
+          current_page: param.get('state') || '메뉴',
+          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+        });
+        sessionStorage.removeItem('enterReviewPage');
+      }
+    }
+  });
 
   return (
     <div className={styles.template}>

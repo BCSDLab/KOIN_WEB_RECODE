@@ -10,6 +10,8 @@ import { useUser } from 'utils/hooks/state/useUser';
 import LoginRequiredModal from 'components/common/LoginRequiredModal';
 
 import showToast from 'utils/ts/showToast';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import styles from './SelectButton.module.scss';
 
 interface Props {
@@ -27,10 +29,22 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
   const portalManager = useModalPortal();
   const param = useParams();
   const mutation = useDeleteReview(param.id!, review_id);
+  const logger = useLogger();
+  const { storeDetail } = useStoreDetail(params.id!);
 
   const openDeleteModal = () => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
+      title: 'shop_detail_view_review_delete',
+      value: storeDetail.name,
+      event_category: 'click',
+    });
     portalManager.open((portalOption: Portal) => (
-      <DeleteModal close={portalOption.close} deleteMyReview={mutation.mutate} />
+      <DeleteModal
+        close={portalOption.close}
+        deleteMyReview={mutation.mutate}
+        storeDetail={storeDetail}
+      />
     ));
   };
 
@@ -42,9 +56,21 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
         title={REVEIW_REPORT_LOGIN[0]}
         description={REVEIW_REPORT_LOGIN[1]}
         closeModal={portalOption.close}
+        type="report"
+        shopName={storeDetail.name}
       />
     ));
   };
+
+  const loggingReportClick = () => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
+      title: 'shop_detail_view_review_report',
+      value: storeDetail.name,
+      event_category: 'click',
+    });
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
@@ -80,6 +106,7 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
                 return;
               }
               if (userInfo) {
+                loggingReportClick();
                 navigate(`/report/review/shopid/${params.id!}/reviewid/${review_id}`);
               } else {
                 openLoginModal();

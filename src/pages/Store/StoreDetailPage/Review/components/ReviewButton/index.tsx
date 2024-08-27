@@ -3,6 +3,9 @@ import LoginRequiredModal from 'components/common/LoginRequiredModal';
 
 import { useUser } from 'utils/hooks/state/useUser';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useParams } from 'react-router-dom';
+import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import styles from './index.module.scss';
 
 export const REVEIW_LOGIN = [
@@ -13,6 +16,9 @@ export const REVEIW_LOGIN = [
 export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void }) {
   const { data: userInfo } = useUser();
   const portalManager = useModalPortal();
+  const logger = useLogger();
+  const params = useParams();
+  const { storeDetail } = useStoreDetail(params.id!);
 
   const openLoginModal = () => {
     portalManager.open((portalOption: Portal) => (
@@ -20,8 +26,20 @@ export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void
         title={REVEIW_LOGIN[0]}
         description={REVEIW_LOGIN[1]}
         closeModal={portalOption.close}
+        type="write"
+        shopName={storeDetail.name}
       />
     ));
+  };
+
+  const goReviewPageLogging = () => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
+      title: 'shop_detail_view_review_write',
+      event_category: 'click',
+      value: storeDetail.name,
+    });
+    sessionStorage.setItem('enterReview', new Date().getTime().toString());
   };
 
   return (
@@ -30,6 +48,7 @@ export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void
       className={styles.container}
       onClick={() => {
         if (userInfo) {
+          goReviewPageLogging();
           goReviewPage();
         } else {
           openLoginModal();
