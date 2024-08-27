@@ -11,7 +11,7 @@ import styles from './LectureTable.module.scss';
 interface LectureTableProps {
   frameId: number;
   list: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
-  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2> | undefined;
+  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
   selectedLecture:LectureInfo | TimetableLectureInfoV2 | undefined;
   onClickRow: ((value:LectureInfo | TimetableLectureInfoV2) => void) | undefined;
   onDoubleClickRow: ((value: LectureInfo | TimetableLectureInfoV2) => void) | undefined;
@@ -19,8 +19,7 @@ interface LectureTableProps {
 }
 
 interface RemoveLectureProps {
-  lecture_class: string;
-  professor: string;
+  id: number;
 }
 
 const LECTURE_TABLE_HEADER = [
@@ -66,20 +65,22 @@ function LectureTable({
       setCursor(-1);
     },
   );
+  console.log(myLecturesV2);
   const toast = useToast();
   const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
-  const handleRemoveLectureClick = ({ lecture_class, professor }: RemoveLectureProps) => {
+  const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
     const recoverLecture = () => {
 
     };
     let lectureToRemove: LectureInfo | TimetableLectureInfoV2 | null = null;
-    (myLecturesV2 || list).forEach((lecture) => {
-      if (lecture.lecture_class === lecture_class && lecture.professor === professor) {
+    const lectureId = id;
+    myLecturesV2.forEach((lecture) => {
+      if (lecture.id === id) {
         lectureToRemove = lecture;
       }
     });
     if (lectureToRemove) {
-      removeMyLectureV2(lectureToRemove, frameId);
+      removeMyLectureV2(lectureToRemove!, lectureId);
       toast.open({ message: '해당 과목이 삭제되었습니다.', recoverMessage: '해당 과목이 복구되었습니다.', onRecover: recoverLecture });
     }
   };
@@ -210,8 +211,7 @@ function LectureTable({
                     <LectureCloseIcon
                       onClick={() => {
                         handleRemoveLectureClick({
-                          lecture_class: lecture.lecture_class,
-                          professor: lecture.professor,
+                          id: lecture.id,
                         });
                       }}
                     />

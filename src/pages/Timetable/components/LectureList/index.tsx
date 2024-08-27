@@ -135,7 +135,7 @@ function MyLectureListBox({ myLectures, frameId }: MyLectureListBoxProps) {
     <LectureTable
       frameId={frameId}
       list={myLectures}
-      myLecturesV2={undefined}
+      myLecturesV2={myLectures}
       selectedLecture={undefined}
       onClickRow={undefined}
       onDoubleClickRow={undefined}
