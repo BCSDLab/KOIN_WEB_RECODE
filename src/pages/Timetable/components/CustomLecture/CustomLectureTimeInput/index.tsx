@@ -28,7 +28,7 @@ function CustomLectureTimeInput(
     + Number(timeInfo.startMinute.slice(0, 2)) / 30;
     const end = Number(timeInfo.endHour.slice(0, 2) + timeInfo.endMinute.slice(0, 2));
     const timetableEnd = timetableStart + Math.floor((end - start) / 100) * 2
-    + ((end - start) % 100) / 30 - 1;
+    + (((end - start) % 100) + 20) / 50 - 1;
 
     return Array.from(
       { length: timetableEnd - timetableStart + 1 },
@@ -38,6 +38,7 @@ function CustomLectureTimeInput(
 
   useEffect(() => {
     const timetableTime = realTimeToTimetableTime();
+    console.log(timetableTime);
     const updatedTime: number[] = [];
     weekInfo.forEach((week) => {
       if (week === '월') {
