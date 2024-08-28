@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import {
+  useNavigate, useParams, useSearchParams,
+} from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -159,20 +161,33 @@ function StoreDetailPage() {
     }
 
     return () => {
-      logger.actionEventClick({
-        actionTitle: 'BUSINESS',
-        title: 'shop_detail_view_back',
-        value: storeDetail.name,
-        event_category: 'swipe',
-        current_page: sessionStorage.getItem('cameFrom') || '전체보기',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
-      }); // os의 뒤로가기 감지. 다른 로깅과 중복으로 뜨는데 da가 구분하겠다고 함
       setButtonContent(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param]); // param이 바뀌어도 버튼이 적용되어야 함
 
-  useEffect(() => () => sessionStorage.removeItem('enterReviewPage'), []);
+  useEffect(
+    () => {
+      const handlePopState = () => {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS',
+          title: 'shop_detail_view_back',
+          value: storeDetail.name,
+          event_category: 'swipe',
+          current_page: sessionStorage.getItem('cameFrom') || '전체보기',
+          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+        });
+        navigate('/store');
+      };
+      window.addEventListener('popstate', handlePopState);
+      return () => {
+        sessionStorage.removeItem('enterReviewPage');
+        window.removeEventListener('popstate', handlePopState);
+      };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <div className={styles.template}>

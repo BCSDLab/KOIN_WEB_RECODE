@@ -15,7 +15,7 @@ function IndexStore() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
-  const durationTime = new Date().getTime() - Number(sessionStorage.getItem('enterMain'));
+
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
     logger.actionEventClick({
@@ -25,7 +25,7 @@ function IndexStore() {
       event_category: 'click',
       previous_page: '메인',
       current_page: category.name,
-      duration_time: durationTime / 1000,
+      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     });
     navigate(`/store?category=${category.id}`);
   };

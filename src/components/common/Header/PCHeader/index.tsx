@@ -1,6 +1,7 @@
 import { cn } from '@bcsdlab/utils';
+import * as api from 'api';
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
@@ -61,7 +62,9 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const logout = useLogout();
   const logger = useLogger();
   const token = useTokenState();
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
+  const navigate = useNavigate();
+
   const isLoggedin = !!token;
   const logShortcut = (title: string) => {
     if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '식단' });
@@ -75,7 +78,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '복덕방' });
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
   };
-  const escapeByLogo = () => {
+  const escapeByLogo = async () => {
     if (pathname === '/timetable') {
       logger.actionEventClick({
         actionTitle: 'USER',
@@ -86,18 +89,31 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
+    if (pathname.includes('/store') && search.includes('state')) {
+      const shopId = pathname.split('/')[2];
+      const shopName = await api.store.getStoreDetailInfo(shopId);
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_back',
+        value: shopName.name,
+        event_category: 'logo',
+        current_page: sessionStorage.getItem('cameFrom') || '전체보기',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      });
+    }
+    navigate('/', { replace: true });
   };
 
   return (
     <>
-      <Link
+      <button
         className={styles.header__logo}
-        to="/"
         tabIndex={0}
         onClick={escapeByLogo}
+        type="button"
       >
         <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
-      </Link>
+      </button>
       <div
         className={cn({
           [styles.header__megamenu]: true,

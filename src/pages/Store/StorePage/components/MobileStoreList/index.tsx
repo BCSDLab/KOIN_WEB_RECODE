@@ -34,8 +34,9 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
             className={styles['store-list__item']}
             key={store.id}
             onClick={() => logger.actionEventClick({
-              actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
+              actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory || '전체보기'}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
             })}
+            replace
           >
             {store.is_event
           && store.is_open

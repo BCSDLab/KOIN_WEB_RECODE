@@ -19,7 +19,7 @@ interface MobileHeaderProps {
 
 export default function MobileHeader({ openModal }: MobileHeaderProps) {
   useResetHeaderButton();
-  const { pathname, search } = useLocation();
+  const { pathname } = useLocation();
   const { openSidebar } = useMobileSidebar();
   const buttonState = useHeaderButtonStore((state) => state.buttonState);
 
@@ -30,7 +30,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const params = useParams();
 
   const backInDetailPage = async () => {
-    if (pathname.includes('/store/') && !search.includes('state') && params) {
+    if (pathname.includes('/store/') && params) {
       const response = await api.store.getStoreDetailInfo(params.id!);
       logger.actionEventClick({
         actionTitle: 'BUSINESS',
@@ -40,6 +40,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         current_page: sessionStorage.getItem('cameFrom') || '',
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
       }); // 상점 내 뒤로가기 버튼 로깅
+      navigate('/store');
+      return;
     }
     if (pathname === '/timetable') {
       logger.actionEventClick({
