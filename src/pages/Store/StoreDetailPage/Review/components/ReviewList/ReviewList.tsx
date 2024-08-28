@@ -104,8 +104,8 @@ export default function ReviewList() {
             isSticky
               ? (
                 <div className={styles.point}>
-                  <StarList average_rating={data.pages[0].statistics.average_rating} />
-                  {`${data.pages[0].statistics.average_rating.toFixed()}점`}
+                  <StarList average_rating={Math.floor(data.pages[0].statistics.average_rating)} />
+                  {`${Math.floor(data.pages[0].statistics.average_rating).toFixed()}점`}
                 </div>
               )
               : (

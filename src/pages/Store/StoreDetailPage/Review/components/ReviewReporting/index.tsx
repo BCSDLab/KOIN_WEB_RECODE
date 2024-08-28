@@ -3,6 +3,8 @@ import { cn } from '@bcsdlab/utils';
 import { useNavigate, useParams } from 'react-router-dom';
 import CheckBox from 'components/common/CommonCheckBox';
 import { toast } from 'react-toastify';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import ReportingLabel from './components/ReportingLabel';
 import styles from './ReviewReporting.module.scss';
 import useReviewReport from './query/useReviewReport';
@@ -43,6 +45,8 @@ export default function ReviewReportingPage() {
   const params = useParams<{ shopid: string; reviewid: string }>();
   const { mutate } = useReviewReport(params.shopid!, params.reviewid!);
   const navigate = useNavigate();
+  const logger = useLogger();
+  const { storeDetail } = useStoreDetail(params.shopid!);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -81,6 +85,15 @@ export default function ReviewReportingPage() {
     );
   }, [etcDescription]);
 
+  const loggingReportDone = () => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
+      title: 'shop_detail_view_review_report_done',
+      value: storeDetail.name,
+      event_category: 'click',
+    });
+  };
+
   const handleReport = () => {
     if (selectOptions.includes('etc') && etcDescription.trim() === '') {
       toast.error('신고 사유를 입력해주세요.');
@@ -89,6 +102,7 @@ export default function ReviewReportingPage() {
     }
     const reportData = { reports: requestOptions };
     mutate(reportData);
+    loggingReportDone();
     navigate(`/store/${params.shopid!}?state=리뷰`, { replace: true });
   };
 

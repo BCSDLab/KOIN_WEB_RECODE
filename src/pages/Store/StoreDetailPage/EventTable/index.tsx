@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { StoreEvent } from 'api/store/entity';
-import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
 import EventCard from './components/EventCard';
 import useStoreMenus from './hooks/useStoreEventList';
 import styles from './EventTable.module.scss';
@@ -8,8 +7,6 @@ import styles from './EventTable.module.scss';
 export default function EventTable() {
   const params = useParams();
   const { storeEventList } = useStoreMenus(params.id!);
-
-  useScorllLogging('shop_detail_view_event', storeEventList);
 
   return (
     <div className={styles.eventContainer}>

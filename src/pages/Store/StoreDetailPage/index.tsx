@@ -47,7 +47,19 @@ function StoreDetailPage() {
   const { data } = useGetReview(Number(params.id), 'LATEST');
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
   const koreanCategory = storeDetail.shop_categories.filter((category) => category.name !== '전체보기')[0].name;
+
   const onClickCallNumber = () => {
+    if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_review_back',
+        value: '',
+        event_category: 'click',
+        previous_page: '리뷰',
+        current_page: '전화',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+      });
+    }
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'shop_call',
@@ -66,6 +78,17 @@ function StoreDetailPage() {
     ));
   };
   const onClickList = () => {
+    if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_review_back',
+        value: storeDetail.name,
+        event_category: 'click',
+        previous_page: '리뷰',
+        current_page: '전체보기',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+      });
+    }
     logger.actionEventClick({
       actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: koreanCategory, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
@@ -75,15 +98,38 @@ function StoreDetailPage() {
       actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
     });
   };
+  const onClickReviewList = () => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: `${storeDetail.name}`, event_category: 'click',
+    });
+  };
   const copyAccount = async (account: string) => {
     await navigator.clipboard.writeText(account);
     showToast('info', '계좌번호가 복사되었습니다.');
   };
 
+  const detailScrollLogging = () => {
+    if ((param.get('state') === '메뉴' || !param.get('state'))) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
+      });
+    }
+    if (param.get('state') === '이벤트/공지') {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: storeDetail.name, event_category: 'scroll',
+      });
+    }
+    if (param.get('state') === '리뷰') {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: storeDetail.name, event_category: 'scroll',
+      });
+    }
+  };
+
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
-  useScorllLogging('shop_detail_view', storeDetail);
+  useScorllLogging(detailScrollLogging);
 
   React.useEffect(() => {
     setButtonContent((
@@ -97,8 +143,36 @@ function StoreDetailPage() {
       </a>
     ));
 
-    return () => setButtonContent(null);
-  });
+    if (param.get('state') !== '리뷰') {
+      if (sessionStorage.getItem('enterReviewPage')) {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS',
+          title: 'shop_detail_view_review_back',
+          value: storeDetail.name,
+          event_category: 'click',
+          previous_page: '리뷰',
+          current_page: param.get('state') || '메뉴',
+          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+        });
+        sessionStorage.removeItem('enterReviewPage');
+      }
+    }
+
+    return () => {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_back',
+        value: storeDetail.name,
+        event_category: 'swipe',
+        current_page: sessionStorage.getItem('cameFrom') || '전체보기',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      }); // os의 뒤로가기 감지. 다른 로깅과 중복으로 뜨는데 da가 구분하겠다고 함
+      setButtonContent(null);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [param]); // param이 바뀌어도 버튼이 적용되어야 함
+
+  useEffect(() => () => sessionStorage.removeItem('enterReviewPage'), []);
 
   return (
     <div className={styles.template}>
@@ -269,8 +343,8 @@ function StoreDetailPage() {
             })}
             type="button"
             onClick={() => {
-              onClickEventList();
               param.set('state', '리뷰');
+              onClickReviewList();
               setParam(param);
             }}
           >

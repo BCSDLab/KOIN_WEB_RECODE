@@ -78,6 +78,18 @@ const CHECK_BOX = [
   },
 ];
 
+const toggleNameLabel = {
+  COUNT: 'review',
+  RATING: 'star',
+  OPEN: 'open',
+  DELIVERY: 'delivery',
+} as const;
+
+const loggingCategoryToggleValue = (
+  toggleName: 'COUNT' | 'RATING' | 'OPEN' | 'DELIVERY',
+  category: string | undefined,
+) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
+
 const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
   if (checked === undefined) {
     return false;
@@ -178,6 +190,12 @@ function StorePage() {
         ...prevState,
         sorter: item,
       }));
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_can',
+        value: loggingCategoryToggleValue(item, categories?.shop_categories[selectedCategory].name),
+        event_category: 'click',
+      });
     } else if (item === 'DELIVERY' || item === 'OPEN') {
       setStoreMobileFilterState((prevState) => {
         const newFilter = prevState.filter.includes(item)
@@ -188,10 +206,23 @@ function StorePage() {
           filter: newFilter,
         };
       });
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_can',
+        value: loggingCategoryToggleValue(item, categories?.shop_categories[selectedCategory].name),
+        event_category: 'click',
+      });
     }
   };
   useScrollToTop();
-  useScorllLogging('shop_categories', categories);
+  const storeScrollLogging = () => {
+    const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_categories', value: `scoll in ${categories?.shop_categories[currentCategoryId]?.name || '전체보기'}`, event_category: 'scroll',
+    });
+  };
+
+  useScorllLogging(storeScrollLogging);
 
   const enterCategoryTimeRef = useRef<number | null>(null);
 
@@ -201,7 +232,8 @@ function StorePage() {
       sessionStorage.setItem('enter_category', currentTime.toString());
       enterCategoryTimeRef.current = currentTime;
     }
-  }, []);
+    sessionStorage.setItem('cameFrom', categories?.shop_categories[selectedCategory]?.name || '전체보기');
+  }, [categories, selectedCategory]);
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
