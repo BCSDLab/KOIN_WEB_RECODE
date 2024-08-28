@@ -140,13 +140,17 @@ export default class APIClient {
     if (request.authorization) {
       headers.Authorization = `Bearer ${request.authorization}`;
     }
-
+    console.log(request);
     // json body 사용
     if (
       request.method === HTTP_METHOD.POST
       || request.method === HTTP_METHOD.PUT
     ) {
-      headers['Content-Type'] = 'application/json';
+      if (request.path.includes('upload/file')) {
+        headers['Content-Type'] = 'multipart/form-data';
+      } else {
+        headers['Content-Type'] = 'application/json';
+      }
     }
 
     // 기타 헤더 삽입
