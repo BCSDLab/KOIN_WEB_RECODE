@@ -4125,13 +4125,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.27.2":
-  version: 0.27.2
-  resolution: "axios@npm:0.27.2"
+"axios@npm:^1.7.5":
+  version: 1.7.5
+  resolution: "axios@npm:1.7.5"
   dependencies:
-    follow-redirects: ^1.14.9
+    follow-redirects: ^1.15.6
     form-data: ^4.0.0
-  checksum: 38cb7540465fe8c4102850c4368053c21683af85c5fdf0ea619f9628abbcb59415d1e22ebc8a6390d2bbc9b58a9806c874f139767389c862ec9b772235f06854
+    proxy-from-env: ^1.1.0
+  checksum: 2859fe01437cf133eee35571abc1d4b5224bb13e530e66cb3581ca226e170541dd5eef9f46abb41592cee0a2f54930c9e4978354e0cf1064748fc20d9a05e9d5
   languageName: node
   linkType: hard
 
@@ -6983,13 +6984,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.9":
+"follow-redirects@npm:^1.0.0":
   version: 1.15.5
   resolution: "follow-redirects@npm:1.15.5"
   peerDependenciesMeta:
     debug:
       optional: true
   checksum: 5ca49b5ce6f44338cbfc3546823357e7a70813cecc9b7b768158a1d32c1e62e7407c944402a918ea8c38ae2e78266312d617dc68783fac502cbb55e1047b34ec
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.15.6":
+  version: 1.15.6
+  resolution: "follow-redirects@npm:1.15.6"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: a62c378dfc8c00f60b9c80cab158ba54e99ba0239a5dd7c81245e5a5b39d10f0c35e249c3379eae719ff0285fff88c365dd446fab19dee771f1d76252df1bbf5
   languageName: node
   linkType: hard
 
@@ -7403,13 +7414,6 @@ __metadata:
   dependencies:
     duplexer: ^0.1.2
   checksum: 2df97f359696ad154fc171dcb55bc883fe6e833bca7a65e457b9358f3cb6312405ed70a8da24a77c1baac0639906cd52358dc0ce2ec1a937eaa631b934c94194
-  languageName: node
-  linkType: hard
-
-"hamt_plus@npm:1.0.2":
-  version: 1.0.2
-  resolution: "hamt_plus@npm:1.0.2"
-  checksum: af26ea32db03009019cc83dfa9411521a2fa16079443de1a502c9be46d8b3c975acda8ed93fc5750ef08d3186d35901e2d8cfe717dd54bea67b358601fa74e4c
   languageName: node
   linkType: hard
 
@@ -9098,13 +9102,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"josa-js@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "josa-js@npm:0.0.2"
-  checksum: 15cf3663a08db6b6da9331ed7a26a3f1391efbd0c6eb4620934b4c38a8600b53b3d1aacc0fea272649c2e9b27e47f348f8755a2f00cc9369f12b735c87b25e05
-  languageName: node
-  linkType: hard
-
 "josa@npm:^3.0.1":
   version: 3.0.1
   resolution: "josa@npm:3.0.1"
@@ -9380,7 +9377,7 @@ __metadata:
     "@types/react-window": ^1.8.5
     "@typescript-eslint/eslint-plugin": ^5.30.0
     "@typescript-eslint/parser": ^5.30.0
-    axios: ^0.27.2
+    axios: ^1.7.5
     dayjs: ^1.11.12
     embla-carousel-autoplay: ^8.0.4
     embla-carousel-react: ^8.0.4
@@ -9396,7 +9393,6 @@ __metadata:
     file-saver: ^2.0.5
     html-react-parser: ^5.1.10
     html2canvas: ^1.4.1
-    josa-js: ^0.0.2
     react: ^18.2.0
     react-dom: ^18.2.0
     react-helmet: ^6.1.0
@@ -9404,7 +9400,6 @@ __metadata:
     react-scripts: 5.0.1
     react-toastify: ^9.0.8
     react-window: ^1.8.7
-    recoil: ^0.7.4
     reset-css: ^5.0.1
     sass: ^1.53.0
     stylelint: ^14.9.1
@@ -11760,6 +11755,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"proxy-from-env@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "proxy-from-env@npm:1.1.0"
+  checksum: ed7fcc2ba0a33404958e34d95d18638249a68c430e30fcb6c478497d72739ba64ce9810a24f53a7d921d0c065e5b78e3822759800698167256b04659366ca4d4
+  languageName: node
+  linkType: hard
+
 "psl@npm:^1.1.33":
   version: 1.9.0
   resolution: "psl@npm:1.9.0"
@@ -12185,22 +12187,6 @@ __metadata:
   dependencies:
     picomatch: ^2.2.1
   checksum: 1ced032e6e45670b6d7352d71d21ce7edf7b9b928494dcaba6f11fba63180d9da6cd7061ebc34175ffda6ff529f481818c962952004d273178acd70f7059b320
-  languageName: node
-  linkType: hard
-
-"recoil@npm:^0.7.4":
-  version: 0.7.7
-  resolution: "recoil@npm:0.7.7"
-  dependencies:
-    hamt_plus: 1.0.2
-  peerDependencies:
-    react: ">=16.13.1"
-  peerDependenciesMeta:
-    react-dom:
-      optional: true
-    react-native:
-      optional: true
-  checksum: 65edecbcb8d2cde89bfd61ec679c200483472a6cd343c33e4e9142b6ce524fb17d1fecc2bfd8c392926aaa8178c81457f165b32abce2a9662f51f98822c0a9cc
   languageName: node
   linkType: hard
 
