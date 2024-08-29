@@ -56,8 +56,14 @@ export default function AddSemesterModal({
       if (mySemester.semesters.includes(semesters.semester)) {
         showToast('info', '이미 있는 학기입니다.');
       } else {
-        addSemester(semesters);
-        closeModal();
+        addSemester(semesters, {
+          onSuccess: () => {
+            closeModal();
+          },
+          onError: () => {
+            showToast('error', '아직 존재하지 않는 학기입니다.');
+          },
+        });
       }
     }
   };
