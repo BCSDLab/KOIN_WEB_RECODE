@@ -15,12 +15,14 @@ import styles from './IndexTimetable.module.scss';
 function CurrentSemesterTimetable() {
   const semester = useSemester();
   const token = useTokenState();
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [currentFrameIndex, setCurrentFrameIndex] = React.useState<number>(0);
+  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
 
   useEffect(() => {
     if (timetableFrameList) {
-      const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
+      const mainFrame = timetableFrameList.find(
+        (frame) => frame.is_main === true,
+      );
       if (mainFrame && mainFrame.id) {
         setCurrentFrameIndex(mainFrame.id);
       }
