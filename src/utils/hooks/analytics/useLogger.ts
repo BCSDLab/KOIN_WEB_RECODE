@@ -45,19 +45,8 @@ const useLogger = () => {
     const event = {
       action, category, label, value, duration_time, previous_page, current_page,
     };
-    if (
-      !prevEvent.current
-      || prevEvent.current.action !== action
-      || prevEvent.current.category !== category
-      || prevEvent.current.label !== label
-      || prevEvent.current.value !== value
-      || prevEvent.current.duration_time !== duration_time
-      || prevEvent.current.previous_page !== previous_page
-      || prevEvent.current.current_page !== current_page
-    ) {
-      gtag.event(event);
-      prevEvent.current = event;
-    }
+    gtag.event(event);
+    prevEvent.current = event;
   };
 
   const click = ({
