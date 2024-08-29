@@ -190,12 +190,17 @@ function StorePage() {
         ...prevState,
         sorter: item,
       }));
-      logger.actionEventClick({
-        actionTitle: 'BUSINESS',
-        title: 'shop_can',
-        value: loggingCategoryToggleValue(item, categories?.shop_categories[selectedCategory].name),
-        event_category: 'click',
-      });
+      if (storeMobileFilterState.sorter !== item) {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS',
+          title: 'shop_can',
+          value: loggingCategoryToggleValue(
+            item,
+            categories?.shop_categories[selectedCategory]?.name,
+          ),
+          event_category: 'click',
+        });
+      }
     } else if (item === 'DELIVERY' || item === 'OPEN') {
       setStoreMobileFilterState((prevState) => {
         const newFilter = prevState.filter.includes(item)
@@ -206,14 +211,21 @@ function StorePage() {
           filter: newFilter,
         };
       });
-      logger.actionEventClick({
-        actionTitle: 'BUSINESS',
-        title: 'shop_can',
-        value: loggingCategoryToggleValue(item, categories?.shop_categories[selectedCategory].name),
-        event_category: 'click',
-      });
+      // 현재상태와 바뀔 상태를 비교해서 토글이 on 되는지 판단함
+      if (!storeMobileFilterState.filter.includes(item)) {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS',
+          title: 'shop_can',
+          value: loggingCategoryToggleValue(
+            item,
+            categories?.shop_categories[selectedCategory]?.name,
+          ),
+          event_category: 'click',
+        });
+      }
     }
   };
+
   useScrollToTop();
   const storeScrollLogging = () => {
     const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
