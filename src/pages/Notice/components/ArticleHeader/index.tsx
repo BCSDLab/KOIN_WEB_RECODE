@@ -7,12 +7,12 @@ interface ArticleHeaderProps {
   boardId: number
   title: string
   createdAt: string
-  nickname: string
+  author: string
   hit: number
 }
 
 export default function ArticleHeader({
-  boardId, title, createdAt, nickname, hit,
+  boardId, title, createdAt, author, hit,
 }: ArticleHeaderProps) {
   const isMobile = useMediaQuery();
 
@@ -30,7 +30,7 @@ export default function ArticleHeader({
         )}
       </div>
       <div className={styles.content}>
-        <div className={styles.content__author}>{isMobile ? `조회 ${hit} · ${nickname}` : nickname}</div>
+        <div className={styles.content__author}>{isMobile ? `조회 ${hit} · ${author}` : author}</div>
         <div className={styles['content__create-at']}>{createdAt}</div>
       </div>
     </div>
