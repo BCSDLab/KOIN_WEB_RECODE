@@ -21,6 +21,8 @@ const getArticleType = (id: number) => {
   }
 };
 
+const NOTICE_LINK = 'board/notice?page=1';
+
 function IndexNotice() {
   const { articles } = useArticles();
   const logger = useLogger();
@@ -29,14 +31,14 @@ function IndexNotice() {
     <section className={styles.template}>
       <div className={styles.template__header}>
         <Link
-          to="board/notice"
+          to={NOTICE_LINK}
           className={styles['template__title-link']}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice', value: '공지사항' })}
         >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
         <Link
-          to="/board/notice"
+          to={NOTICE_LINK}
           className={styles.template__link}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice_detail', value: '공지사항' })}
         >
