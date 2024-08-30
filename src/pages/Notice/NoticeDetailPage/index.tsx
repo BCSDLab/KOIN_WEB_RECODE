@@ -14,7 +14,7 @@ export default function NoticeDetailPage() {
         boardId={article.board_id}
         title={article.title}
         createdAt={article.created_at}
-        nickname={article.author}
+        author={article.author}
         hit={article.hit}
       />
       <ArticleContent
