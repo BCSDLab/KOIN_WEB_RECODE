@@ -9,18 +9,10 @@ export interface Article {
   id: number
   board_id: number
   title: string
-  author: string
+  nickname: string
   hit: number
-  registered_at: string // yyyy-MM-dd 아우누리에 게시판에 등록된 날짜
-  updated_at: string // yyyy-MM-dd HH:mm:ss 이하 형식 동일
-}
-
-export interface Attachment {
-  id: 1,
-  name: string,
-  url: string,
-  created_at: string,
-  updated_at: string,
+  created_at: string // yyyy-MM-dd HH:mm:ss 이하 형식 동일
+  updated_at: string
 }
 
 export interface PaginationInfo {
@@ -39,9 +31,6 @@ export type ArticlesSearchResponse = PaginatedResponse<Article>;
 
 export interface ArticleResponse extends Article, APIResponse {
   content: string;
-  attachments: Attachment[];
-  prev_id: number;
-  next_id: number;
 }
 
 export interface HotArticle extends Article { }
