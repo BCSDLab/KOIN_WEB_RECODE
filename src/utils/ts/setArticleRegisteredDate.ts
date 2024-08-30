@@ -7,10 +7,8 @@ const isCheckNewArticle = (registered: number[]) => {
   return false;
 };
 
-const convertDate = (time: string) => time.replaceAll('-', '.');
-
 function setArticleRegisteredDate(time: string) {
-  const registered = convertDate(time).split('.').map((item: string) => parseInt(item, 10));
+  const registered = time.split('.').map((item: string) => parseInt(item, 10));
 
   if (isCheckNewArticle(registered)) {
     return [`${registered.join('.')}`, true];
