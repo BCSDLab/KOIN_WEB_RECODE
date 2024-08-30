@@ -32,7 +32,7 @@ export default function NoticeList({ articles }: NoticeListProps) {
               />
             )}
           </div>
-          <div className={styles.list__author}>{ isMobile ? `${article.nickname}` : article.nickname }</div>
+          <div className={styles.list__author}>{ isMobile ? `${article.author}` : article.author }</div>
           <div className={styles['list__created-at']}>
             { setArticleCreateDate(article.created_at)[0] }
           </div>

@@ -5,7 +5,7 @@ import {
   HotArticlesResponse,
 } from './entity';
 
-const BOARD_IDS = {
+const BOARD_IDS = { // 4~9번 게시판 현재 공개 중
   자유게시판: 1,
   취업게시판: 2,
   익명게시판: 3,
