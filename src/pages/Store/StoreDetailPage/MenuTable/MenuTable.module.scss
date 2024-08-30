@@ -67,7 +67,7 @@
 .menu-info {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  padding: 20px;
+  padding: 20px 0;
   border-bottom: 1px solid #eee;
   gap: 10px;
 
@@ -115,6 +115,7 @@
 
 .image {
   display: flex;
+  justify-content: center;
 
   &__button {
     border: none;
@@ -126,6 +127,31 @@
       border-radius: 5px;
       width: 75px;
       height: 80px;
+    }
+  }
+}
+
+.empty-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    width: 68px;
+    height: 68px;
+
+    svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: 75px;
     }
   }
 }

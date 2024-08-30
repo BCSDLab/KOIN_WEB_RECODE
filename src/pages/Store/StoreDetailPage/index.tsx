@@ -49,7 +49,7 @@ function StoreDetailPage() {
   const { data } = useGetReview(Number(params.id), 'LATEST');
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
   const koreanCategory = storeDetail.shop_categories.filter((category) => category.name !== '전체보기')[0].name;
-
+  console.log(storeMenuCategories);
   const onClickCallNumber = () => {
     if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
