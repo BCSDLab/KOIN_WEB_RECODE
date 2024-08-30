@@ -1,4 +1,4 @@
-import setArticleCreateDate from 'utils/ts/setArticleCreateDate';
+import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ArticleHeader.module.scss';
@@ -6,13 +6,13 @@ import styles from './ArticleHeader.module.scss';
 interface ArticleHeaderProps {
   boardId: number
   title: string
-  createdAt: string
+  registeredAt: string
   author: string
   hit: number
 }
 
 export default function ArticleHeader({
-  boardId, title, createdAt, author, hit,
+  boardId, title, registeredAt, author, hit,
 }: ArticleHeaderProps) {
   const isMobile = useMediaQuery();
 
@@ -21,7 +21,7 @@ export default function ArticleHeader({
       <div className={styles.title}>
         <span className={styles['title__board-id']}>{convertNoticeTag(boardId)}</span>
         <span className={styles.title__content}>{title}</span>
-        {setArticleCreateDate(createdAt)[1] && (
+        {setArticleRegisteredDate(registeredAt)[1] && (
           <img
             className={styles['title__new-tag']}
             src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
@@ -31,7 +31,7 @@ export default function ArticleHeader({
       </div>
       <div className={styles.content}>
         <div className={styles.content__author}>{isMobile ? `조회 ${hit} · ${author}` : author}</div>
-        <div className={styles['content__create-at']}>{createdAt}</div>
+        <div className={styles['content__registered-at']}>{registeredAt}</div>
       </div>
     </div>
   );

@@ -65,7 +65,7 @@ function IndexNotice() {
                 <span className={styles['list__item-title']}>
                   {article.title}
                 </span>
-                {isNew(article.created_at) && (
+                {isNew(article.registered_at) && (
                   <img
                     className={styles['list__item-tag']}
                     src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
@@ -75,7 +75,7 @@ function IndexNotice() {
                 )}
               </Link>
               <span className={styles['list__item-created']}>
-                {article.created_at.slice(0, 10).replaceAll('-', '.')}
+                {article.registered_at.replaceAll('-', '.')}
               </span>
             </li>
           ))}
