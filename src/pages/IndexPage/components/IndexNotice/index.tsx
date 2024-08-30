@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import useArticles from 'pages/Notice/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
 import styles from './IndexNotice.module.scss';
 
 const getArticleType = (id: number) => {
@@ -18,13 +19,6 @@ const getArticleType = (id: number) => {
     default:
       return '[공지]';
   }
-};
-
-const isNew = (createdAt: string) => {
-  const now = new Date();
-  const created = new Date(createdAt);
-
-  return (now.getTime() - created.getTime()) < 1000 * 60 * 60 * 24 * 1;
 };
 
 function IndexNotice() {
@@ -65,7 +59,7 @@ function IndexNotice() {
                 <span className={styles['list__item-title']}>
                   {article.title}
                 </span>
-                {isNew(article.registered_at) && (
+                {setArticleRegisteredDate(article.registered_at) && (
                   <img
                     className={styles['list__item-tag']}
                     src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
@@ -74,7 +68,7 @@ function IndexNotice() {
                   />
                 )}
               </Link>
-              <span className={styles['list__item-created']}>
+              <span className={styles['list__item-registered']}>
                 {article.registered_at.replaceAll('-', '.')}
               </span>
             </li>
