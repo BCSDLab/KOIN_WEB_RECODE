@@ -13,8 +13,8 @@ export default function NoticeDetailPage() {
       <ArticleHeader
         boardId={article.board_id}
         title={article.title}
-        createdAt={article.created_at}
-        nickname={article.nickname}
+        registeredAt={article.registered_at}
+        author={article.author}
         hit={article.hit}
       />
       <ArticleContent
