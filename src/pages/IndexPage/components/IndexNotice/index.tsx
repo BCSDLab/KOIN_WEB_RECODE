@@ -36,14 +36,22 @@ function IndexNotice() {
         <Link
           to="board/notice"
           className={styles['template__title-link']}
-          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice', value: '공지사항' })}
+          onClick={() => logger.actionEventClick({
+            actionTitle: 'CAMPUS',
+            title: 'main_notice',
+            value: '공지사항',
+          })}
         >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
         <Link
           to="/board/notice"
           className={styles.template__link}
-          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice_detail', value: '공지사항' })}
+          onClick={() => logger.actionEventClick({
+            actionTitle: 'CAMPUS',
+            title: 'main_notice_detail',
+            value: '공지사항',
+          })}
         >
           더보기
           <RightArrow aria-hidden />
@@ -74,7 +82,9 @@ function IndexNotice() {
                 )}
               </Link>
               <span className={styles['list__item-created']}>
-                {article.created_at.slice(0, 10).replaceAll('-', '.')}
+                {article.created_at
+                  ? article.created_at.slice(0, 10).replaceAll('-', '.')
+                  : '날짜 정보 없음'}
               </span>
             </li>
           ))}
