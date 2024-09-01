@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
 import { CustomAxiosError, KoinError } from 'interfaces/APIError';
+import qsStringify from 'utils/ts/qsStringfy';
 import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
 import { deleteCookie, setCookie } from './cookie';
@@ -49,7 +50,9 @@ export default class APIClient {
           url: request.path,
           method: request.method,
           params: request.params,
-          data: (request.convertBody || this.convertBody)(request.data),
+          data: request.data instanceof FormData
+            ? request.data : (request.convertBody || this.convertBody)(request.data),
+          paramsSerializer: (params) => qsStringify(params),
           timeout: this.timeout,
           baseURL: request.baseURL || this.baseURL,
           headers: this.createHeaders(request),
@@ -106,6 +109,7 @@ export default class APIClient {
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
     const { response } = error;
     return response?.status !== undefined
+      && response?.data !== undefined
       && response.data.code !== undefined
       && response.data.message !== undefined;
   }

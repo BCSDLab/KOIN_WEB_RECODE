@@ -31,11 +31,11 @@ function Listbox({
   const logger = useLogger();
   const handleLogClick = (optionValue: string) => {
     if (logTitle === 'select_dept') {
-      logger.actionEventClick({ actionTitle: 'USER', title: 'select_dept', value: optionValue });
+      logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click_curriculum_${optionValue}` });
       return;
     }
     if (logTitle === 'select_semester') {
-      logger.actionEventClick({ actionTitle: 'USER', title: 'select_semester', value: optionValue });
+      logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click_semester_${optionValue}` });
     }
   };
 

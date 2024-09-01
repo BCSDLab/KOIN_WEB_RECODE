@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import getDayOfWeek from 'utils/ts/getDayOfWeek';
+import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import * as api from 'api';
 
 import { cn } from '@bcsdlab/utils';
@@ -9,9 +8,11 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 
 import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
+import SearchBar from 'pages/Store/StorePage/components/SearchBar';
+import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
+import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
@@ -23,6 +24,41 @@ type StoreSearchQueryType = {
   bank?: string;
   card?: string;
 };
+
+interface StoreMobileState {
+  sorter: StoreSorterType | '',
+  filter: StoreFilterType[],
+  storeName?: string;
+}
+
+interface MobileCheckBoxItem {
+  id: StoreSorterType | StoreFilterType;
+  content: string;
+  value: number;
+}
+
+const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
+  {
+    id: 'COUNT',
+    content: '# 리뷰순',
+    value: 1,
+  },
+  {
+    id: 'RATING',
+    content: '# 별점순',
+    value: 2,
+  },
+  {
+    id: 'OPEN',
+    content: '# 영업중',
+    value: 3,
+  },
+  {
+    id: 'DELIVERY',
+    content: '# 배달 가능',
+    value: 4,
+  },
+];
 
 const CHECK_BOX = [
   {
@@ -42,11 +78,50 @@ const CHECK_BOX = [
   },
 ];
 
+const toggleNameLabel = {
+  COUNT: 'review',
+  RATING: 'star',
+  OPEN: 'open',
+  DELIVERY: 'delivery',
+} as const;
+
+const loggingCategoryToggleValue = (
+  toggleName: 'COUNT' | 'RATING' | 'OPEN' | 'DELIVERY',
+  category: string | undefined,
+) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
+
 const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
   if (checked === undefined) {
     return false;
   }
   return true;
+};
+
+const useStoreListMobile = (
+  sorter: StoreSorterType,
+  filter: StoreFilterType[],
+  params: StoreSearchQueryType,
+) => {
+  const { data: storeListMobile } = useQuery(
+    {
+      queryKey: ['storeListV2', sorter, filter],
+      queryFn: () => api.store.getStoreListV2(
+        sorter,
+        filter,
+      ),
+      retry: 0,
+    },
+  );
+  const selectedCategory = Number(params.category);
+
+  return storeListMobile?.shops.filter((store) => {
+    const matchCategory = params.category === undefined || (
+      store.category_ids.some((id) => id === selectedCategory)
+    );
+
+    if (params.storeName) return store.name.includes(params.storeName ? params.storeName : '');
+    return matchCategory && store.name.includes(params.storeName ? params.storeName : '');
+  });
 };
 
 const useStoreList = (params: StoreSearchQueryType) => {
@@ -78,20 +153,23 @@ const useStoreList = (params: StoreSearchQueryType) => {
 
     const isMatchAllSelectedConditions = matchConditions.every((condition) => condition === true);
 
+    if (params.storeName) return (matchConditions.length === 0 || isMatchAllSelectedConditions) && store.name.includes(params.storeName ? params.storeName : '');
     return matchCategory && (matchConditions.length === 0 || isMatchAllSelectedConditions) && store.name.includes(params.storeName ? params.storeName : '');
   });
 };
 
-const getOpenCloseTime = (open_time: string | null, close_time: string | null) => {
-  if (open_time === null && close_time === null) return '운영정보없음';
-  if (open_time === '00:00' && close_time === '00:00') return '24시간 운영';
-  return `${open_time}~${close_time}`;
-};
-
 function StorePage() {
-  const storeRef = React.useRef<HTMLInputElement | null>(null);
+  const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
+    sorter: '',
+    filter: [],
+  });
   const { params, searchParams, setParams } = useParamsHandler();
   const storeList = useStoreList(params);
+  const storeListMobile = useStoreListMobile(
+    storeMobileFilterState.sorter,
+    storeMobileFilterState.filter,
+    params,
+  );
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
@@ -106,10 +184,57 @@ function StorePage() {
       logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_can', value: `check_${id}_${koreanCategory}` });
     }
   };
-  // eslint-disable-next-line
-  const Josa = require('josa-js');
+  const onClickMobileStoreListFilter = (item: StoreSorterType | StoreFilterType) => {
+    if (item === 'COUNT' || item === 'RATING') {
+      setStoreMobileFilterState((prevState) => ({
+        ...prevState,
+        sorter: item,
+      }));
+      if (storeMobileFilterState.sorter !== item) {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS',
+          title: 'shop_can',
+          value: loggingCategoryToggleValue(
+            item,
+            categories?.shop_categories[selectedCategory]?.name,
+          ),
+          event_category: 'click',
+        });
+      }
+    } else if (item === 'DELIVERY' || item === 'OPEN') {
+      setStoreMobileFilterState((prevState) => {
+        const newFilter = prevState.filter.includes(item)
+          ? prevState.filter.filter((filterItem) => filterItem !== item)
+          : [...prevState.filter, item];
+        return {
+          ...prevState,
+          filter: newFilter,
+        };
+      });
+      // 현재상태와 바뀔 상태를 비교해서 토글이 on 되는지 판단함
+      if (!storeMobileFilterState.filter.includes(item)) {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS',
+          title: 'shop_can',
+          value: loggingCategoryToggleValue(
+            item,
+            categories?.shop_categories[selectedCategory]?.name,
+          ),
+          event_category: 'click',
+        });
+      }
+    }
+  };
+
   useScrollToTop();
-  useScorllLogging('shop_categories', categories);
+  const storeScrollLogging = () => {
+    const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_categories', value: `scoll in ${categories?.shop_categories[currentCategoryId]?.name || '전체보기'}`, event_category: 'scroll',
+    });
+  };
+
+  useScorllLogging(storeScrollLogging);
 
   const enterCategoryTimeRef = useRef<number | null>(null);
 
@@ -119,10 +244,15 @@ function StorePage() {
       sessionStorage.setItem('enter_category', currentTime.toString());
       enterCategoryTimeRef.current = currentTime;
     }
-  }, []);
+    if (sessionStorage.getItem('pushStateCalled')) {
+      sessionStorage.removeItem('pushStateCalled');
+    }
+    sessionStorage.setItem('cameFrom', categories?.shop_categories[selectedCategory]?.name || '전체보기');
+  }, [categories, selectedCategory]);
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
+      { isMobile && <SearchBar /> }
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
@@ -131,6 +261,7 @@ function StorePage() {
               className={cn({
                 [styles.category__menu]: true,
                 [styles['category__menu--selected']]: category.id === selectedCategory,
+                [styles['category__menu--disabled']]: category.id === 1 && isMobile,
               })}
               role="radio"
               aria-checked={category.id === selectedCategory}
@@ -157,50 +288,7 @@ function StorePage() {
           ))}
         </div>
       </div>
-      <div className={styles.search_bar}>
-        <input
-          ref={storeRef}
-          className={styles.search_bar__input}
-          defaultValue={
-            searchParams.get('storeName') === undefined ? '' : searchParams.get('storeName') ?? ''
-          }
-          type="text"
-          name="search"
-          placeholder="상점명을 입력하세요"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              setParams('storeName', e.currentTarget.value, {
-                deleteBeforeParam: searchParams.get('storeName') === undefined,
-                replacePage: true,
-              });
-            }
-          }}
-          onFocus={() => {
-            const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
-            if (categories) {
-              logger.actionEventClick({
-                actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId] && categories.shop_categories[currentCategoryId].name ? categories.shop_categories[currentCategoryId].name : '전체보기'}`, event_category: 'click',
-              });
-            }
-          }}
-        />
-        <button
-          className={styles.search_bar__icon}
-          type="button"
-          onClick={() => {
-            setParams('storeName', storeRef.current?.value ?? '', {
-              deleteBeforeParam: searchParams.get('storeName') === undefined,
-              replacePage: true,
-            });
-          }}
-        >
-          <img
-            className={styles['search-icon']}
-            src="https://static.koreatech.in/assets/img/search.png"
-            alt="store_icon"
-          />
-        </button>
-      </div>
+      { !isMobile && <SearchBar />}
       <div className={styles.option}>
         <div className={styles.option__count}>
           총
@@ -235,66 +323,29 @@ function StorePage() {
       </div>
       {isMobile && <div className={styles['store-mobile-header']}>상점목록</div>}
       <EventCarousel />
-      <div className={styles['store-list']}>
-        {storeList?.map((store) => (
-          <Link
-            to={`/store/${store.id}`}
-            className={styles['store-list__item']}
-            key={store.id}
-            onClick={() => logger.actionEventClick({
-              actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
-            })}
-          >
-            {store.is_event
-              && store.is_open
-              && (
-                <div className={styles['store-list__item--event']}>
-                  이벤트
-                  <EventIcon />
-                </div>
-              )}
-            {!store.is_open
-              && (
-                <div className={styles['store-none-open']}>
-                  <span className={styles['store-none-open__name']}>{store.name}</span>
-                  {`${Josa.c(store.name, '은/는')} `}
-                  준비중입니다.
-                </div>
-              )}
-            <div className={styles['store-list__title']}>{store.name}</div>
-            <div className={styles['store-list__phone']}>
-              전화번호
-              <span>{store.phone}</span>
-            </div>
-            <div className={styles['store-list__open-time']}>
-              운영시간
-              <span>
-                {store.open[getDayOfWeek()] && getOpenCloseTime(
-                  store.open[getDayOfWeek()].open_time,
-                  store.open[getDayOfWeek()].close_time,
-                )}
-              </span>
-            </div>
-            <div className={styles['store-item']}>
-              {(store.delivery || isMobile) && (
-                <div className={styles['store-item__option']} aria-hidden={!store.delivery}>
-                  {!isMobile ? '#배달가능' : '배달'}
-                </div>
-              )}
-              {(store.pay_card || isMobile) && (
-                <div className={styles['store-item__option']} aria-hidden={!store.pay_card}>
-                  {!isMobile ? '#카드가능' : '카드'}
-                </div>
-              )}
-              {(store.pay_bank || isMobile) && (
-                <div className={styles['store-item__option']} aria-hidden={!store.pay_bank}>
-                  {!isMobile ? '#계좌이체가능' : '계좌이체'}
-                </div>
-              )}
-            </div>
-          </Link>
-        ))}
+      <div className={styles.filter}>
+        {
+          MOBILE_CHECK_BOX.map((item) => (
+            <button
+              className={cn({
+                [styles.filter__box]: true,
+                [styles['filter__box--activate']]: storeMobileFilterState.sorter.includes(item.id) || (
+                  storeMobileFilterState.filter.includes(item.id as StoreFilterType)
+                ),
+              })}
+              key={item.value}
+              type="button"
+              onClick={() => onClickMobileStoreListFilter(item.id)}
+            >
+              {item.content}
+            </button>
+          ))
+        }
       </div>
+      {
+        !isMobile ? <DesktopStoreList storeListData={storeList} />
+          : <MobileStoreList storeListData={storeListMobile} />
+      }
     </div>
   );
 }

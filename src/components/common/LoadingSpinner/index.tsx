@@ -4,8 +4,7 @@ interface LoadingSpinnerProps {
   size: string
 }
 
-function LoadingSpinner(props: LoadingSpinnerProps) {
-  const { size } = props;
+export default function LoadingSpinner({ size }: LoadingSpinnerProps) {
   return (
     <div
       className={styles['loading-wrapper']}
@@ -21,5 +20,3 @@ function LoadingSpinner(props: LoadingSpinnerProps) {
     </div>
   );
 }
-
-export default LoadingSpinner;

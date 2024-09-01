@@ -1,12 +1,12 @@
 import APIClient from 'utils/ts/apiClient';
 import {
-  NoticeList,
-  HotNoticeList,
+  GetArticles,
+  GetHotArticles,
   GetArticle,
 } from './APIDetail';
 
-export const PostList = APIClient.of(NoticeList);
+export const getArticles = APIClient.of(GetArticles);
 
-export const HotPostList = APIClient.of(HotNoticeList);
+export const getArticle = APIClient.of(GetArticle);
 
-export const Post = APIClient.of(GetArticle);
+export const getHotArticles = APIClient.of(GetHotArticles);

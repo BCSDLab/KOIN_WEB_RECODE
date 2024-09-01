@@ -6,6 +6,7 @@ import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
 import { useSemester } from 'utils/zustand/semester';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from '../../DefaultPage/DefaultPage.module.scss';
 import SemesterListbox from './SemesterListbox';
 import Timetable from '../../../../components/TimetablePage/Timetable';
@@ -14,7 +15,7 @@ import useMyLectures from '../../hooks/useMyLectures';
 
 export default function MyLectureTimetable() {
   const { myLectures } = useMyLectures();
-
+  const logger = useLogger();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const semester = useSemester();
   const tempLecture = useTempLecture();
@@ -37,7 +38,15 @@ export default function MyLectureTimetable() {
         <button
           type="button"
           className={styles.page__button}
-          onClick={() => onTimetableImageDownload('my-timetable')}
+          onClick={() => {
+            onTimetableImageDownload('my-timetable');
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              title: 'timetable',
+              value: '이미지저장',
+              duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+            });
+          }}
         >
           <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
           이미지로 저장하기

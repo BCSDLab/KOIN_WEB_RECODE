@@ -1,22 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+  useNavigate, useParams, useSearchParams,
+} from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import showToast from 'utils/ts/showToast';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
 import Copy from 'assets/png/copy.png';
+import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
+import { ReactComponent as Phone } from 'assets/svg/Review/phone.svg';
 import useStoreDetail from './hooks/useStoreDetail';
 import useStoreMenus from './hooks/useStoreMenus';
 import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
+import ReviewPage from './Review';
+import { useGetReview } from './hooks/useGetReview';
 
 function StoreDetailPage() {
   const params = useParams();
@@ -35,11 +42,25 @@ function StoreDetailPage() {
   const { storeDetail, storeDescription } = useStoreDetail(params.id!);
   const { data: storeMenus } = useStoreMenus(params.id!);
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
-  const [tapType, setTapType] = useState('메뉴');
+  const [param, setParam] = useSearchParams();
+  const tapType = param.get('state') ?? '메뉴';
   const portalManager = useModalPortal();
   const logger = useLogger();
-  const koreanCategory = storeDetail.shop_categories.filter((category) => category.name !== '전체보기')[0].name;
+  const { data } = useGetReview(Number(params.id), 'LATEST');
+  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
+
   const onClickCallNumber = () => {
+    if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_review_back',
+        value: '',
+        event_category: 'click',
+        previous_page: '리뷰',
+        current_page: '전화',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+      });
+    }
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'shop_call',
@@ -48,6 +69,7 @@ function StoreDetailPage() {
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
+
   const onClickImage = (img: string[], index: number) => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name, event_category: 'click',
@@ -57,8 +79,19 @@ function StoreDetailPage() {
     ));
   };
   const onClickList = () => {
+    if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_review_back',
+        value: storeDetail.name,
+        event_category: 'click',
+        previous_page: '리뷰',
+        current_page: '전체보기',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+      });
+    }
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: koreanCategory, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: sessionStorage.getItem('cameFrom') || '전체보기', duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickEventList = () => {
@@ -66,14 +99,99 @@ function StoreDetailPage() {
       actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
     });
   };
+  const onClickReviewList = () => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: `${storeDetail.name}`, event_category: 'click',
+    });
+  };
   const copyAccount = async (account: string) => {
     await navigator.clipboard.writeText(account);
+    showToast('info', '계좌번호가 복사되었습니다.');
+  };
+
+  const detailScrollLogging = () => {
+    if ((param.get('state') === '메뉴' || !param.get('state'))) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
+      });
+    }
+    if (param.get('state') === '이벤트/공지') {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: storeDetail.name, event_category: 'scroll',
+      });
+    }
+    if (param.get('state') === '리뷰') {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: storeDetail.name, event_category: 'scroll',
+      });
+    }
   };
 
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
-  useScorllLogging('shop_detail_view', storeDetail);
+  useScorllLogging(detailScrollLogging);
+
+  React.useEffect(() => {
+    setButtonContent((
+      <a
+        role="button"
+        aria-label="상점 전화하기"
+        href={`tel:${storeDetail?.phone}`}
+        onClick={onClickCallNumber}
+      >
+        <Phone />
+      </a>
+    ));
+
+    if (param.get('state') !== '리뷰') {
+      if (sessionStorage.getItem('enterReviewPage')) {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS',
+          title: 'shop_detail_view_review_back',
+          value: storeDetail.name,
+          event_category: 'click',
+          previous_page: '리뷰',
+          current_page: param.get('state') || '메뉴',
+          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+        });
+        sessionStorage.removeItem('enterReviewPage');
+      }
+    }
+
+    return () => {
+      setButtonContent(null);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [param]); // param이 바뀌어도 버튼이 적용되어야 함
+
+  useEffect(
+    () => {
+      if (!sessionStorage.getItem('pushStateCalled')) {
+        // eslint-disable-next-line
+        history.pushState(null, '', '');
+        sessionStorage.setItem('pushStateCalled', 'true');
+      }
+      const handlePopState = () => {
+        logger.actionEventClick({
+          actionTitle: 'BUSINESS',
+          title: 'shop_detail_view_back',
+          value: storeDetail.name,
+          event_category: 'swipe',
+          current_page: sessionStorage.getItem('cameFrom') || '전체보기',
+          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+        });
+        navigate(-1);
+      };
+      window.addEventListener('popstate', handlePopState);
+      return () => {
+        sessionStorage.removeItem('enterReviewPage');
+        window.removeEventListener('popstate', handlePopState);
+      };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <div className={styles.template}>
@@ -159,18 +277,6 @@ function StoreDetailPage() {
                 </span>
               </div>
               <div className={styles['button-wrapper']}>
-                <a
-                  className={cn({
-                    [styles['button-wrapper__button']]: true,
-                    [styles['button-wrapper__button--call']]: true,
-                  })}
-                  role="button"
-                  aria-label="상점 전화하기"
-                  href={`tel:${storeDetail?.phone}`}
-                  onClick={onClickCallNumber}
-                >
-                  전화하기
-                </a>
                 <button
                   className={cn({
                     [styles['button-wrapper__button']]: true,
@@ -226,10 +332,11 @@ function StoreDetailPage() {
             })}
             type="button"
             onClick={() => {
+              param.set('state', '메뉴');
+              setParam(param, { replace: true });
               logger.actionEventClick({
                 actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail!.name, event_category: 'click',
               });
-              setTapType('메뉴');
             }}
           >
             메뉴
@@ -242,20 +349,34 @@ function StoreDetailPage() {
             type="button"
             onClick={() => {
               onClickEventList();
-              setTapType('이벤트/공지');
+              param.set('state', '이벤트/공지');
+              setParam(param, { replace: true });
             }}
           >
             이벤트/공지
           </button>
+          <button
+            className={cn({
+              [styles.tap__type]: true,
+              [styles['tap__type--active']]: tapType === '리뷰',
+            })}
+            type="button"
+            onClick={() => {
+              param.set('state', '리뷰');
+              onClickReviewList();
+              setParam(param, { replace: true });
+            }}
+          >
+            리뷰
+            {' '}
+            {`(${data.pages[0].total_count})`}
+          </button>
         </div>
-        {tapType === '메뉴' ? (
-          storeMenuCategories && storeMenuCategories.length > 0 && (
-            <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
-          )
-        )
-          : (
-            <EventTable />
-          )}
+        {tapType === '메뉴' && storeMenuCategories && storeMenuCategories.length > 0 && (
+          <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
+        )}
+        {tapType === '이벤트/공지' && <EventTable />}
+        {tapType === '리뷰' && <ReviewPage id={params.id!} />}
       </div>
     </div>
   );

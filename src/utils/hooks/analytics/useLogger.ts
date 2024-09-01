@@ -10,7 +10,7 @@ type ScrollLoggerProps = {
   title: string,
 };
 
-type ActionClickLoggerProps = {
+type ActionLoggerProps = {
   actionTitle: string,
   title: string,
   value: string,
@@ -45,19 +45,8 @@ const useLogger = () => {
     const event = {
       action, category, label, value, duration_time, previous_page, current_page,
     };
-    if (
-      !prevEvent.current
-      || prevEvent.current.action !== action
-      || prevEvent.current.category !== category
-      || prevEvent.current.label !== label
-      || prevEvent.current.value !== value
-      || prevEvent.current.duration_time !== duration_time
-      || prevEvent.current.previous_page !== previous_page
-      || prevEvent.current.current_page !== current_page
-    ) {
-      gtag.event(event);
-      prevEvent.current = event;
-    }
+    gtag.event(event);
+    prevEvent.current = event;
   };
 
   const click = ({
@@ -85,15 +74,22 @@ const useLogger = () => {
     previous_page,
     current_page,
     event_category,
-  }: ActionClickLoggerProps) => {
+  }: ActionLoggerProps) => {
     logEvent({
-      action: actionTitle,
-      category: event_category || 'click',
-      label: title,
-      value,
-      duration_time,
-      previous_page,
-      current_page,
+      action: actionTitle, category: event_category || 'click', label: title, value, duration_time, previous_page, current_page,
+    });
+  };
+
+  const actionEventSwipe = ({
+    actionTitle,
+    title,
+    value,
+    duration_time,
+    previous_page,
+    current_page,
+  }: ActionLoggerProps) => {
+    logEvent({
+      action: actionTitle, category: 'swipe', label: title, value, duration_time, previous_page, current_page,
     });
   };
 
@@ -101,6 +97,7 @@ const useLogger = () => {
     click,
     scroll,
     actionEventClick,
+    actionEventSwipe,
   };
 };
 

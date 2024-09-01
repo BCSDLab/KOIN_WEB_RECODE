@@ -1,0 +1,126 @@
+@use "src/utils/scss/media";
+
+%container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5vh;
+  padding: 2vh 5%;
+  box-sizing: border-box;
+}
+
+.container {
+  @extend %container;
+
+  &--mine {
+    @extend %container;
+
+    background: #175c8e08;
+  }
+}
+
+.mine {
+  color: #175c8e;
+  font-size: 14px;
+  display: flex;
+  gap: 5px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+
+  &__kebab {
+    position: relative;
+    background: #d9d9d9;
+    border-radius: 150px;
+    width: 25px;
+    height: 25px;
+
+    &--clicked {
+      position: relative;
+      border-radius: 150px;
+      width: 25px;
+      height: 25px;
+      background: #727272;
+    }
+  }
+}
+
+.nick-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+
+.created {
+  color: #8e8e8e;
+  font-size: 12px;
+}
+
+.content {
+  font-weight: 500;
+  font-size: 16px;
+  width: 100%;
+}
+
+.image-wrapper {
+  display: flex;
+  overflow-x: scroll;
+  gap: 10px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.menu {
+  &__image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+    flex-shrink: 0;
+  }
+}
+
+.menu-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 3vw;
+  }
+
+  &__menu {
+    border: 1px solid #6dbbdd;
+    color: #6dbbdd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+}
+
+.reported {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #cacaca;
+
+  & > svg > path {
+    fill: #cacaca;
+  }
+}
