@@ -244,6 +244,9 @@ function StorePage() {
       sessionStorage.setItem('enter_category', currentTime.toString());
       enterCategoryTimeRef.current = currentTime;
     }
+    if (sessionStorage.getItem('pushStateCalled')) {
+      sessionStorage.removeItem('pushStateCalled');
+    }
     sessionStorage.setItem('cameFrom', categories?.shop_categories[selectedCategory]?.name || '전체보기');
   }, [categories, selectedCategory]);
   return (
