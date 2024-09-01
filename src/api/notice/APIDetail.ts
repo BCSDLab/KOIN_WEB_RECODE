@@ -29,7 +29,7 @@ export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
   response!: R;
 
   constructor(page: string | undefined) {
-    this.path = `/articles?boardId=${BOARD_IDS.공지사항}&page=${page}&limit=10`;
+    this.path = `/articles?boardId=${BOARD_IDS.공지사항}&page=${page}`; // limit default 10
   }
 }
 

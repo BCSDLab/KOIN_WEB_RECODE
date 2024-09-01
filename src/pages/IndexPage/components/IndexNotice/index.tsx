@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import useArticles from 'pages/Notice/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
 import styles from './IndexNotice.module.scss';
 
 const getArticleType = (id: number) => {
@@ -21,7 +20,12 @@ const getArticleType = (id: number) => {
   }
 };
 
-const NOTICE_LINK = 'board/notice?page=1';
+const isNew = (createdAt: string) => {
+  const now = new Date();
+  const created = new Date(createdAt);
+
+  return (now.getTime() - created.getTime()) < 1000 * 60 * 60 * 24 * 1;
+};
 
 function IndexNotice() {
   const { articles } = useArticles();
@@ -31,14 +35,14 @@ function IndexNotice() {
     <section className={styles.template}>
       <div className={styles.template__header}>
         <Link
-          to={NOTICE_LINK}
+          to="board/notice"
           className={styles['template__title-link']}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice', value: '공지사항' })}
         >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
         <Link
-          to={NOTICE_LINK}
+          to="/board/notice"
           className={styles.template__link}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice_detail', value: '공지사항' })}
         >
@@ -61,7 +65,7 @@ function IndexNotice() {
                 <span className={styles['list__item-title']}>
                   {article.title}
                 </span>
-                {setArticleRegisteredDate(article.registered_at) && (
+                {isNew(article.registered_at) && (
                   <img
                     className={styles['list__item-tag']}
                     src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
@@ -70,7 +74,7 @@ function IndexNotice() {
                   />
                 )}
               </Link>
-              <span className={styles['list__item-registered']}>
+              <span className={styles['list__item-created']}>
                 {article.registered_at.replaceAll('-', '.')}
               </span>
             </li>
