@@ -68,18 +68,18 @@ function LectureTable({
   const toast = useToast();
   const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
   const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
+    // TODO: 되돌리기 구현
     // const recoverLecture = () => {
     //
     // };
     let lectureToRemove: LectureInfo | TimetableLectureInfoV2 | null = null;
-    const lectureId = id;
     myLecturesV2.forEach((lecture) => {
       if (lecture.id === id) {
         lectureToRemove = lecture;
       }
     });
     if (lectureToRemove) {
-      removeMyLectureV2(lectureToRemove!, lectureId);
+      removeMyLectureV2(lectureToRemove!, id);
       toast.open({
         message: '해당 과목이 삭제되었습니다.',
         // recoverMessage: '해당 과목이 복구되었습니다.',

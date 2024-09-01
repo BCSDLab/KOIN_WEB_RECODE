@@ -8,19 +8,31 @@ import useTokenState from 'utils/hooks/useTokenState';
 import { ReactComponent as WarningIcon } from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';
+import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import styles from './CustomLecture.module.scss';
+
+type TimeSpaceComponents = {
+  time: {
+    startHour: string,
+    startMinute: string,
+    endHour: string,
+    endMinute: string,
+  }
+  week: string[],
+  lectureTime: number[],
+  place: string,
+};
 
 function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const token = useTokenState();
   const customTempLecture = useCustomTempLecture();
   const { updateCustomTempLecture } = useCustomTempLectureAction();
+  const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
 
   const [lectureName, setLectureName] = React.useState('');
   const [professorName, setProfessorName] = React.useState('');
-  const [placeNames, setPlaceNames] = React.useState<string>('');
-  const [lectureTimes, setLectureTimes] = React.useState<number[]>([]);
-
-  const [timeSpaceComponents, setTimeSpaceComponents] = React.useState([{
+  const [timeSpaceComponents, setTimeSpaceComponents] = React.useState<TimeSpaceComponents[]>([{
     time: {
       startHour: '09시',
       startMinute: '00분',
@@ -28,14 +40,56 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       endMinute: '00분',
     },
     week: ['월'],
-    lectureTime: lectureTimes,
-    place: placeNames,
+    lectureTime: [0, 1],
+    place: '',
   }]);
+  const isValid = (lectureName !== ''
+    && !timeSpaceComponents.some((time) => time.lectureTime.length === 0));
 
   const { addMyLectureV2 } = useTimetableV2Mutation(Number(frameId));
   const handleAddLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!isValid) {
+      return;
+    }
+    const myLectureTimeValue = (myLecturesV2 as TimetableLectureInfoV2[])
+      .reduce((acc, cur) => {
+        if (cur.class_time) {
+          return acc.concat(cur.class_time).filter((num) => num !== -1);
+        }
+        return acc;
+      }, [] as number[]);
+    if (customTempLecture!.class_time
+      .flat()
+      .some((time) => myLectureTimeValue.includes(time))) {
+      const myLectureList = myLecturesV2 as TimetableLectureInfoV2[];
+      const alreadySelectedLecture = myLectureList.find(
+        (lecture) => lecture.class_time.filter((num) => num !== -1).some(
+          (time) => customTempLecture!.class_time.flat().includes(time),
+        ),
+      );
+      if (alreadySelectedLecture) {
+        showToast(
+          'error',
+          `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+        );
+        return;
+      }
+    }
     addMyLectureV2(customTempLecture!);
+    setLectureName('');
+    setProfessorName('');
+    setTimeSpaceComponents([{
+      time: {
+        startHour: '09시',
+        startMinute: '00분',
+        endHour: '10시',
+        endMinute: '00분',
+      },
+      week: ['월'],
+      lectureTime: [0, 1],
+      place: '',
+    }]);
   };
 
   const handleAddTimeSpaceComponent = () => {
@@ -58,47 +112,52 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       place: '',
     }]);
   };
+  const changeToTimetableTime = (timeInfo: {
+    startHour: string;
+    startMinute: string;
+    endHour: string;
+    endMinute: string;
+  }) => {
+    const timetableStart = (Number(timeInfo.startHour.slice(0, 2)) - 9) * 2
+      + Number(timeInfo.startMinute.slice(0, 2)) / 30;
+    const timetableEnd = (Number(timeInfo.endHour.slice(0, 2)) - 9) * 2
+      + Number(timeInfo.endMinute.slice(0, 2)) / 30;
+    return Array.from(
+      { length: timetableEnd - timetableStart },
+      (_, idx) => timetableStart + idx,
+    );
+  };
+  const addWeekTime = (
+    weekInfo: string[],
+    timetableTime: number[],
+  ) => weekInfo.reduce((acc: number[], week) => {
+    const mappedTimes = timetableTime.map((time) => {
+      switch (week) {
+        case '월':
+          return time;
+        case '화':
+          return time + 100;
+        case '수':
+          return time + 200;
+        case '목':
+          return time + 300;
+        default:
+          return time + 400;
+      }
+    });
+    return [...acc, ...mappedTimes];
+  }, []);
 
-  // eslint-disable-next-line max-len
-  const handleLectureTimeByTime = (key: string, index: number) => (e: { target: { value: string } }) => {
+  const handleLectureTimeByTime = (key: string, index: number) => (
+    e: { target: { value: string } },
+  ) => {
     const { target } = e;
     const newTimeInfo = {
       ...timeSpaceComponents[index].time,
       [key]: target?.value,
     };
-    const realTimeToTimetableTimeNew = () => {
-      const start = Number(newTimeInfo.startHour.slice(0, 2) + newTimeInfo.startMinute.slice(0, 2));
-      const timetableStart = (Number(newTimeInfo.startHour.slice(0, 2)) - 9) * 2
-      + Number(newTimeInfo.startMinute.slice(0, 2)) / 30;
-      const end = Number(newTimeInfo.endHour.slice(0, 2) + newTimeInfo.endMinute.slice(0, 2));
-      const timetableEnd = timetableStart + Math.floor((end - start) / 100) * 2
-      + (((end - start) % 100) + 20) / 50 - 1;
-
-      return Array.from(
-        { length: timetableEnd - timetableStart + 1 },
-        (_, idx) => timetableStart + idx,
-      );
-    };
-    const newTimetableTime = realTimeToTimetableTimeNew();
-    const updatedTime = timeSpaceComponents[index].week.reduce((acc: number[], week) => {
-      const mappedTimes = newTimetableTime.map((time) => {
-        switch (week) {
-          case '월':
-            return time;
-          case '화':
-            return time + 100;
-          case '수':
-            return time + 200;
-          case '목':
-            return time + 300;
-          default:
-            return time + 400;
-        }
-      });
-      return [...acc, ...mappedTimes];
-    }, []);
-
-    setLectureTimes(updatedTime);
+    const newTimetableTime = changeToTimetableTime(newTimeInfo);
+    const updatedTime = addWeekTime(timeSpaceComponents[index].week, newTimetableTime);
     const updatedComponents = [...timeSpaceComponents];
     updatedComponents[index] = {
       ...updatedComponents[index],
@@ -109,22 +168,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   };
 
   const handleLectureTimeByWeek = (weekday: string, index: number) => {
-    const realTimeToTimetableTime = () => {
-      // eslint-disable-next-line max-len
-      const start = Number(timeSpaceComponents[index].time.startHour.slice(0, 2) + timeSpaceComponents[index].time.startMinute.slice(0, 2));
-      const timetableStart = (Number(timeSpaceComponents[index].time.startHour.slice(0, 2)) - 9) * 2
-      + Number(timeSpaceComponents[index].time.startMinute.slice(0, 2)) / 30;
-      // eslint-disable-next-line max-len
-      const end = Number(timeSpaceComponents[index].time.endHour.slice(0, 2) + timeSpaceComponents[index].time.endMinute.slice(0, 2));
-      const timetableEnd = timetableStart + Math.floor((end - start) / 100) * 2
-      + (((end - start) % 100) + 20) / 50 - 1;
-
-      return Array.from(
-        { length: timetableEnd - timetableStart + 1 },
-        (_, idx) => timetableStart + idx,
-      );
-    };
-    const timetableTime = realTimeToTimetableTime();
+    const timetableTime = changeToTimetableTime(timeSpaceComponents[index].time);
     let newWeekInfo = [...timeSpaceComponents[index].week];
     if (newWeekInfo.includes(weekday)) {
       newWeekInfo = newWeekInfo.filter((day) => day !== weekday);
@@ -132,26 +176,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     } else {
       newWeekInfo = [...newWeekInfo, weekday];
     }
-
-    const updatedTime = newWeekInfo.reduce((acc: number[], week) => {
-      const mappedTimes = timetableTime.map((time) => {
-        switch (week) {
-          case '월':
-            return time;
-          case '화':
-            return time + 100;
-          case '수':
-            return time + 200;
-          case '목':
-            return time + 300;
-          default:
-            return time + 400;
-        }
-      });
-      return [...acc, ...mappedTimes];
-    }, []);
-    console.log(updatedTime);
-    setLectureTimes(updatedTime);
+    const updatedTime = addWeekTime(newWeekInfo, timetableTime);
     const updatedComponents = [...timeSpaceComponents];
     updatedComponents[index] = {
       ...updatedComponents[index],
@@ -162,7 +187,6 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   };
 
   const handlePlaceName = (placeName: string, index: number) => {
-    setPlaceNames(placeName);
     const updatedComponents = [...timeSpaceComponents];
     updatedComponents[index] = {
       ...updatedComponents[index],
@@ -171,7 +195,6 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     setTimeSpaceComponents(updatedComponents);
   };
 
-  // 시간표 미리보기(회색배경)을 위한 코드.
   React.useEffect(() => {
     if (customTempLecture) {
       updateCustomTempLecture({
@@ -184,6 +207,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lectureName, professorName, timeSpaceComponents]);
+
   return (
     <form
       onSubmit={(e) => handleAddLecture(e)}
@@ -192,51 +216,46 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
         [styles['form-container--non-login']]: !token,
       })}
     >
-      <div className={styles['form-container__inputbox']}>
-        {!token && <div className={styles['form-container__instruction']}>로그인이 필요한 서비스입니다.</div>}
-
+      <div className={styles.inputbox}>
+        {!token && <div className={styles.inputbox__instruction}>로그인이 필요한 서비스입니다.</div>}
         <div>
           <div className={cn({
-            [styles['form-group']]: true,
-            [styles['form-group__require']]: lectureName !== '',
+            [styles.inputbox__name]: true,
+            [styles['inputbox__name--require']]: lectureName === '',
           })}
           >
             <label htmlFor="courseName">
-              <div className={styles['form-group__title']}>
+              <div className={styles['inputbox__name--title']}>
                 수업명
                 <span className={styles['require-mark']}>*</span>
               </div>
             </label>
-            <div className={styles['form-group__block']} />
+            <div className={styles['inputbox__name--block']} />
             <input
               type="text"
-              id="courseName"
-              name="courseName"
               placeholder="수업명을 입력하세요."
               value={lectureName}
               onChange={(e) => setLectureName(e.target.value)}
               autoComplete="off"
             />
           </div>
-          {lectureName !== '' && (
-          <div className={styles['form-group__warning']}>
+          {lectureName === '' && (
+          <div className={styles.inputbox__warning}>
             <WarningIcon />
             수업명을 입력해주세요
           </div>
           )}
         </div>
         <div>
-          <div className={styles['form-group']}>
+          <div className={styles.inputbox__name}>
             <label htmlFor="courseName">
-              <div className={styles['form-group__title']}>
+              <div className={styles['inputbox__name--title']}>
                 교수명
               </div>
             </label>
-            <div className={styles['form-group__block']} />
+            <div className={styles['inputbox__name--block']} />
             <input
               type="text"
-              id="courseName"
-              name="courseName"
               placeholder="교수명을 입력하세요"
               value={professorName}
               onChange={(e) => setProfessorName(e.target.value)}
@@ -244,14 +263,14 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             />
           </div>
         </div>
-        <div className={styles['form-container__inputbox--space']}>
+        <div className={styles['time-space-container']}>
           {timeSpaceComponents.map(({
             time,
             week,
             lectureTime,
             place,
           }, index) => (
-            <div>
+            <div className={styles['time-space-container__component']}>
               <div className={styles['form-group-time']}>
                 <label
                   htmlFor="place"
@@ -296,22 +315,24 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                 </div>
               </div>
               {lectureTime.length === 0 && (
-              <div className={styles['form-group-time__warning']}>
-                <WarningIcon />
-                시간을 입력해주세요.
-              </div>
+                <div className={cn({
+                  [styles.inputbox__warning]: true,
+                  [styles['inputbox__warning--time']]: true,
+                })}
+                >
+                  <WarningIcon />
+                  시간을 입력해주세요.
+                </div>
               )}
-              <div className={styles['form-group']}>
+              <div className={styles.inputbox__name}>
                 <label htmlFor="courseName">
-                  <div className={styles['form-group__title']}>
+                  <div className={styles['inputbox__name--title']}>
                     장소
                   </div>
                 </label>
-                <div className={styles['form-group__block']} />
+                <div className={styles['inputbox__name--block']} />
                 <input
                   type="text"
-                  id="courseName"
-                  name="courseName"
                   placeholder="장소를 입력하세요."
                   value={place}
                   onChange={(e) => handlePlaceName(e.target.value, index)}
@@ -321,12 +342,20 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             </div>
           ))}
         </div>
-        <button type="button" className={styles['form-group-add-button']} onClick={handleAddTimeSpaceComponent}>
+        <button type="button" className={styles['inputbox__add-button']} onClick={handleAddTimeSpaceComponent}>
           <span>시간 및 장소 추가</span>
           <AddIcon />
         </button>
       </div>
-      <button type="submit" className={styles['submit-button']}>일정 저장</button>
+      <button
+        type="submit"
+        className={cn({
+          [styles['submit-button']]: true,
+          [styles['submit-button__active']]: isValid,
+        })}
+      >
+        일정 저장
+      </button>
     </form>
   );
 }

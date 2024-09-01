@@ -340,7 +340,7 @@ function Timetable({
                 end,
                 professor,
                 class_place,
-              }) => (end && (
+              }) => (end !== undefined && (
                 <div
                   className={cn({
                     [styles.timetable__lecture]: true,
