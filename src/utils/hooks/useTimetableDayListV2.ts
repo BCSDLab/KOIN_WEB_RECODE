@@ -24,19 +24,17 @@ export default function useTimetableDayListV2(
           ));
         currentDayClassPlaceArr = lecture.class_place;
       } else if (lecture.class_time.includes(-1)) {
-        const classTimeResult: number[][] = [];
-        let subClassTimeArr: number[] = [];
-        lecture.class_time.forEach((item, idx) => {
-          if (idx === lecture.class_time.length - 1) return;
-          if (item === -1) {
-            classTimeResult.push(subClassTimeArr);
-            subClassTimeArr = [];
-          } else {
-            subClassTimeArr.push(item);
-          }
-        });
-        classTimeResult.push(subClassTimeArr);
-        currentDayClassTimeArr = (classTimeResult ?? []).map((item) => (
+        const splitArray = (arr: number[]) => arr
+          .reduce((result: number[][], value) => {
+            if (value === -1) {
+              result.push([]);
+            } else {
+              result[result.length - 1].push(value);
+            }
+            return result;
+          }, [[]]);
+        const outputArray = splitArray(lecture.class_time);
+        currentDayClassTimeArr = (outputArray ?? []).map((item) => (
           item
             .filter((time) => Math.floor(time / 100) === index)
             .map((time) => time % 100)
@@ -44,65 +42,49 @@ export default function useTimetableDayListV2(
         ));
         currentDayClassPlaceArr = (lecture as TimetableLectureInfoV2).class_place?.split(', ');
       }
-      currentDayClassTimeArr.forEach((item, idx) => {
-        const groups: number[][] = [];
-        let currentGroup = [item[0]];
-        for (let i = 1; i < item.length; i += 1) {
-          if (item[i] === item[i - 1] + 1) {
-            currentGroup.push(item[i]);
-          } else {
-            groups.push(currentGroup);
-            currentGroup = [item[i]];
-          }
+      // eslint-disable-next-line max-len
+      const newClassTimeArr = currentDayClassTimeArr.reduce((result: TimetableDayLectureInfo[], value, currIdx) => {
+        if (value[0] !== undefined) {
+          result.push({
+            id: -1,
+            start: value[0],
+            end: value[value.length - 1],
+            name: 'name' in lecture ? lecture.name : lecture.class_title,
+            lecture_class: '',
+            professor: lecture.professor ?? '',
+            class_place: ('class_place' in lecture && currentDayClassPlaceArr) ? currentDayClassPlaceArr[currIdx] : '',
+            index: lectureIndex,
+          });
         }
-        groups.push(currentGroup);
-        groups.forEach((list) => {
-          if (list[0] !== undefined) {
-            currentDayInfo.push({
-              id: 0,
-              start: list[0],
-              end: list[list.length - 1],
-              name: 'name' in lecture ? lecture.name : lecture.class_title,
-              lecture_class: '',
-              professor: lecture.professor ?? '',
-              class_place: ('class_place' in lecture && currentDayClassPlaceArr) ? currentDayClassPlaceArr[idx] : '',
-              index: lectureIndex,
-            });
-          }
-        });
-      });
+        return result;
+      }, []);
+      currentDayInfo.push(...newClassTimeArr);
+
       if (('code' in lecture) && (!lecture.class_time.includes(-1))) {
         const currentDayClassTime = (lecture.class_time ?? [])
           .filter((time) => Math.floor(time / 100) === index)
           .map((time) => time % 100)
           .sort((a, b) => a - b);
         if (currentDayClassTime.length) {
-          const groups = [];
-          let currentGroup = [currentDayClassTime[0]];
-
-          for (let i = 1; i < currentDayClassTime.length; i += 1) {
-            if (currentDayClassTime[i] === currentDayClassTime[i - 1] + 1) {
-              currentGroup.push(currentDayClassTime[i]);
+          const groups = currentDayClassTime.slice(1).reduce((acc, curr, i) => {
+            if (curr === currentDayClassTime[i]) {
+              acc[acc.length - 1].push(curr);
             } else {
-              groups.push(currentGroup);
-              currentGroup = [currentDayClassTime[i]];
+              acc.push([curr]);
             }
-          }
-
-          groups.push(currentGroup);
-
-          groups.forEach((item) => {
-            currentDayInfo.push({
-              id: lecture.id,
-              start: item[0],
-              end: item[item.length - 1],
-              name: 'name' in lecture ? lecture.name : lecture.class_title,
-              lecture_class: 'lecture_class' in lecture ? lecture.lecture_class : '',
-              professor: lecture.professor ?? '',
-              class_place: 'class_place' in lecture ? lecture.class_place : '',
-              index: lectureIndex,
-            });
-          });
+            return acc;
+          }, [[currentDayClassTime[0]]]);
+          const updatedCurrentDayInfo = groups.map((item) => ({
+            id: lecture.id,
+            start: item[0],
+            end: item[item.length - 1],
+            name: 'name' in lecture ? lecture.name : lecture.class_title,
+            lecture_class: 'lecture_class' in lecture ? lecture.lecture_class : '',
+            professor: lecture.professor ?? '',
+            class_place: 'class_place' in lecture ? lecture.class_place : '',
+            index: lectureIndex,
+          }));
+          currentDayInfo.push(...updatedCurrentDayInfo);
         }
       }
     });

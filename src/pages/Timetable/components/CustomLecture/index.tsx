@@ -52,29 +52,18 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     if (!isValid) {
       return;
     }
-    const myLectureTimeValue = (myLecturesV2 as TimetableLectureInfoV2[])
-      .reduce((acc, cur) => {
-        if (cur.class_time) {
-          return acc.concat(cur.class_time).filter((num) => num !== -1);
-        }
-        return acc;
-      }, [] as number[]);
-    if (customTempLecture!.class_time
-      .flat()
-      .some((time) => myLectureTimeValue.includes(time))) {
-      const myLectureList = myLecturesV2 as TimetableLectureInfoV2[];
-      const alreadySelectedLecture = myLectureList.find(
-        (lecture) => lecture.class_time.filter((num) => num !== -1).some(
-          (time) => customTempLecture!.class_time.flat().includes(time),
-        ),
+    const myLectureList = myLecturesV2 as TimetableLectureInfoV2[];
+    const alreadySelectedLecture = myLectureList.find(
+      (lecture) => lecture.class_time.filter((num) => num !== -1).some(
+        (time) => customTempLecture!.class_time.flat().includes(time),
+      ),
+    );
+    if (alreadySelectedLecture) {
+      showToast(
+        'error',
+        `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
       );
-      if (alreadySelectedLecture) {
-        showToast(
-          'error',
-          `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
-        );
-        return;
-      }
+      return;
     }
     addMyLectureV2(customTempLecture!);
     setLectureName('');
