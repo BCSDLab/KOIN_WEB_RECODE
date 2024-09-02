@@ -124,7 +124,7 @@ function LectureTable({
             updateTempLecture(null);
             setCursor(-1);
           }
-          if (e.key === 'Enter' && cursor > 0 && onDoubleClickRow !== undefined) {
+          if (e.key === 'Enter' && cursor >= 0 && onDoubleClickRow !== undefined) {
             e.preventDefault();
             onDoubleClickRow(list[cursor]);
           }
