@@ -66,7 +66,7 @@ export default function useTimetableDayListV2(
           .map((time) => time % 100)
           .sort((a, b) => a - b);
         if (currentDayClassTime.length) {
-          const groups = currentDayClassTime.slice(1).reduce((acc, curr, i) => {
+          const groups = currentDayClassTime.reduce((acc, curr, i) => {
             if (curr === currentDayClassTime[i]) {
               acc[acc.length - 1].push(curr);
             } else {
