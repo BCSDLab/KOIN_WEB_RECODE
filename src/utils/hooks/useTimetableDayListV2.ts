@@ -43,7 +43,7 @@ export default function useTimetableDayListV2(
         currentDayClassPlaceArr = (lecture as TimetableLectureInfoV2).class_place?.split(', ');
       }
       // eslint-disable-next-line max-len
-      const newClassTimeArr = currentDayClassTimeArr.reduce((result: TimetableDayLectureInfo[], value, currIdx) => {
+      const newCurrentDayInfo = currentDayClassTimeArr.reduce((result: TimetableDayLectureInfo[], value, currIdx) => {
         if (value[0] !== undefined) {
           result.push({
             id: -1,
@@ -58,7 +58,7 @@ export default function useTimetableDayListV2(
         }
         return result;
       }, []);
-      currentDayInfo.push(...newClassTimeArr);
+      currentDayInfo.push(...newCurrentDayInfo);
 
       if (('code' in lecture) && (!lecture.class_time.includes(-1))) {
         const currentDayClassTime = (lecture.class_time ?? [])

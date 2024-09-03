@@ -70,7 +70,7 @@
       font-weight: 400;
       line-height: 160%;
     }
-  
+
     &--title {
       position: relative;
       letter-spacing: -2px;
@@ -82,24 +82,24 @@
       background-color: #eee;
       margin: 0 4px;
     }
-  
+
     & > input {
       padding: 12px 16px;
       width: 100%;
       border: none;
       background-color: transparent;
-  
+
       &::placeholder {
         color: #8e8e8e;
         font-size: 16px;
         font-weight: 400;
         line-height: 160%; /* 25.6px */
       }
-  
+
       &:focus {
         outline: 1px solid #4590bb;
       }
-  
+
       &:focus ~ .container__check-button {
         background-color: #175c8e;
         color: #fff;
@@ -185,7 +185,7 @@
   cursor: not-allowed;
 
   &__active {
-    background-color: #175C8E;
+    background-color: #175c8e;
     color: #fff;
     cursor: pointer;
   }
