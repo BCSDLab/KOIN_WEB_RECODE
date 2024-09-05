@@ -64,7 +64,7 @@ export default function PCCafeteriaPage({
     <div className={styles.container}>
       <div className={styles['type-selector']}>
         {formatDiningDate()}
-        <div className={styles['dropdown-wrapper']}>
+        <div className={styles['dropdown-wrapper']} ref={containerRef}>
           <button
             id="dropdown-button"
             className={styles.dropdown}
@@ -75,7 +75,7 @@ export default function PCCafeteriaPage({
             {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
           </button>
           {dropdownOpen && (
-            <div className={styles.dropdown__box} ref={containerRef}>
+            <div className={styles.dropdown__box}>
               {DINING_TYPES.map((type: DiningType) => (
                 <button
                   key={type}
