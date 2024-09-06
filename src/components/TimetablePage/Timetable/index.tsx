@@ -193,7 +193,6 @@ function Timetable({
               key={`value-${index}`}
             />
           ))}
-          <div className={styles['timetable__row-line']} />
         </div>
         <div
           className={cn({
@@ -222,9 +221,6 @@ function Timetable({
               {value}
             </div>
           ))}
-          <div style={{ height: `${rowHeight * 2}px` }}>
-            <span>그 이후</span>
-          </div>
         </div>
         {DAYS_STRING.map((day, index) => (
           <div
