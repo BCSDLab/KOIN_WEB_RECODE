@@ -1,7 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom';
 // import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -22,6 +22,10 @@ function IndexStore() {
       actionTitle: 'BUSINESS',
       title: 'main_shop_categories',
       value: category.name,
+      event_category: 'click',
+      previous_page: '메인',
+      current_page: category.name,
+      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     });
     navigate(`/store?category=${category.id}`);
   };

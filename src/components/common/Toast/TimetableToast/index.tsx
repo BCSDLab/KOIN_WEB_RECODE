@@ -2,7 +2,7 @@ import { cn } from '@bcsdlab/utils';
 import {
   useCallback, useEffect, useRef,
 } from 'react';
-import useToastTimer from 'utils/hooks/useToastTimer';
+import useToastTimer from 'utils/hooks/ui/useToastTimer';
 import styles from './TimetableToast.module.scss';
 
 export interface Toast {

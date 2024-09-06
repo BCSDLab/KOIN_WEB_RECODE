@@ -8,7 +8,7 @@ const useStoreEventList = (id: string) => {
   });
 
   return {
-    storeEventList: isStoreEventListError ? null : storeEventList,
+    storeEventList: isStoreEventListError ? undefined : storeEventList,
   };
 };
 

@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import { MenuCategory } from 'api/store/entity';
 import { cn } from '@bcsdlab/utils';
+import { ReactComponent as EmptyImageIcon } from 'assets/svg/empty-thumbnail.svg';
 import MENU_CATEGORY from 'static/menu';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './MenuTable.module.scss';
 
 interface MenuTableProps {
@@ -28,7 +29,6 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
       }
     });
   };
-
   useEffect(() => {
     storeMenuCategories.forEach((menu) => {
       const element = document.getElementById(menu.name);
@@ -97,6 +97,23 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
           {menuCategories.menus.map((menu) => (
             menu.option_prices === null ? (
               <div className={styles['menu-info']} key={menu.id}>
+                {menu.image_urls.length > 0 ? (
+                  <div key={`${menu.id}`} className={styles.image}>
+                    <button
+                      className={styles.image__button}
+                      type="button"
+                      onClick={() => onClickImage(menu.image_urls, 0)}
+                    >
+                      <img src={`${menu.image_urls[0]}`} alt={`${menu.name}`} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className={styles['empty-image']}>
+                    <div>
+                      <EmptyImageIcon />
+                    </div>
+                  </div>
+                )}
                 <div className={styles['menu-info__card']}>
                   <span title={menu.name}>{menu.name}</span>
                   <span>
@@ -106,23 +123,25 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                     원
                   </span>
                 </div>
-                {menu.image_urls.length > 0 ? (
-                  menu.image_urls.map((img, idx) => (
-                    <div key={`${img}`} className={styles.image}>
-                      <button
-                        className={styles.image__button}
-                        type="button"
-                        onClick={() => onClickImage(menu.image_urls, idx)}
-                      >
-                        <img src={`${img}`} alt={`${menu.name}`} />
-                      </button>
-                    </div>
-                  )))
-                  : null}
               </div>
             ) : (
               menu.option_prices.map((item) => (
                 <div className={styles['menu-info']} key={menu.id + item.option + item.price}>
+                  {menu.image_urls.length > 0 ? (
+                    <div key={`${menu.id}`} className={styles.image}>
+                      <button
+                        className={styles.image__button}
+                        type="button"
+                        onClick={() => onClickImage(menu.image_urls, 0)}
+                      >
+                        <img src={`${menu.image_urls[0]}`} alt={`${menu.name}`} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className={styles['empty-image']}>
+                      <EmptyImageIcon />
+                    </div>
+                  )}
                   <div className={styles['menu-info__card']}>
                     <span>{`${menu.name} - ${item.option}`}</span>
                     <span>
@@ -130,19 +149,6 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                       원
                     </span>
                   </div>
-                  {menu.image_urls.length > 0 ? (
-                    menu.image_urls.map((img, idx) => (
-                      <div key={`${img}`} className={styles.image}>
-                        <button
-                          className={styles.image__button}
-                          type="button"
-                          onClick={() => onClickImage(menu.image_urls, idx)}
-                        >
-                          <img src={`${img}`} alt={`${menu.name}`} />
-                        </button>
-                      </div>
-                    )))
-                    : null}
                 </div>
               ))
             )

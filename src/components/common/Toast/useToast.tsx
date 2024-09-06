@@ -1,4 +1,4 @@
-import useModalPortal from 'utils/hooks/useModalPortal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import TimetableToast, { Toast } from 'components/common/Toast/TimetableToast';
 

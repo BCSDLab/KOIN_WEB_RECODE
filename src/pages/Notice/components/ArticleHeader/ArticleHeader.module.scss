@@ -1,0 +1,102 @@
+@use "src/utils/scss/media" as media;
+
+.header {
+  border-top: 2px solid #175c8e;
+  border-bottom: 1px solid #175c8e;
+  width: 834px;
+  height: 100%;
+  text-align: left;
+  user-select: text;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    border-top: 0;
+    padding: 15px 16px;
+    border-bottom: 1px solid #ececec;
+  }
+}
+
+.title {
+  font-family: NanumBarunGothic, serif;
+  font-size: 20px;
+  letter-spacing: -1px;
+  color: #252525;
+  padding: 26px 20px 7px;
+  width: 794px;
+  overflow-wrap: break-word;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 16px;
+    color: rgb(0 0 0 / 87%);
+    letter-spacing: -0.8px;
+    line-height: 1.5;
+    word-break: break-all;
+    width: calc(100% - 40px);
+    padding: 0;
+  }
+
+  &__board-id {
+    font-weight: 600;
+  }
+
+  &__comment-count {
+    font-size: 15px;
+    letter-spacing: -0.8px;
+    color: #175c8e;
+    padding-left: 3px;
+  }
+
+  &__new-tag {
+    width: 13.5px;
+    height: 14px;
+    position: relative;
+    margin-left: 11px;
+    top: 0;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  padding: 0 20px 27px;
+
+  @include media.media-breakpoint(mobile) {
+    margin-top: 1px;
+    color: #a1a1a1;
+    font-size: 13px;
+    line-height: 1.54;
+    letter-spacing: -0.7px;
+    width: calc(100% - 40px);
+    display: flex;
+    padding: 0;
+    justify-content: space-between;
+  }
+
+  &__author {
+    font-family: NanumBarunGothic, serif;
+    font-size: 13px;
+    letter-spacing: -0.7px;
+    color: #175c8e;
+    margin-right: 16px;
+
+    @include media.media-breakpoint(mobile) {
+      display: inline;
+      color: #a1a1a1;
+    }
+  }
+
+  &__registered_at {
+    font-family: NanumBarunGothic, serif;
+    font-size: 13px;
+    letter-spacing: -0.7px;
+    color: #858585;
+
+    @include media.media-breakpoint(mobile) {
+      display: inline;
+      float: right;
+    }
+  }
+}

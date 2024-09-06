@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import IndexBus from './components/IndexBus';
 import IndexCafeteria from './components/IndexCafeteria';
 import IndexNotice from './components/IndexNotice';
@@ -7,10 +7,13 @@ import IndexTimetable from './components/IndexTimetable';
 import styles from './IndexPage.module.scss';
 
 function IndexPage() {
+  useEffect(() => {
+    sessionStorage.setItem('enterMain', new Date().getTime().toString());
+  }, []);
   return (
     <Suspense fallback={null}>
       <main className={styles.template}>
-        <div className={styles.mobileWrapper}>
+        <div className={styles['mobile-wrapper']}>
           <IndexStore />
           <IndexBus />
         </div>
@@ -19,6 +22,8 @@ function IndexPage() {
         </Suspense>
         <Suspense fallback={null}>
           <IndexNotice />
+        </Suspense>
+        <Suspense fallback={null}>
           <IndexCafeteria />
         </Suspense>
       </main>

@@ -1659,10 +1659,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bcsdlab/utils@npm:^0.0.12":
-  version: 0.0.12
-  resolution: "@bcsdlab/utils@npm:0.0.12"
-  checksum: ebcfc783e72688f7033d99c03bf34552e2863487ca8e8145be744c3048091d5ddc47d751ec00be982c53e4122cb648281e32b82fb0ba1834736b23dbb8affb07
+"@bcsdlab/utils@npm:^0.0.15":
+  version: 0.0.15
+  resolution: "@bcsdlab/utils@npm:0.0.15"
+  dependencies:
+    "@types/josa": ^3.0.5
+    josa: ^3.0.1
+  checksum: 4fc9c8bdb39a705a5bdcc1b9fa931129b723d329c02eafc323ee7a3ef348cc3b4a6191861d7768db1ab8f0dcad48ce7ad3a9bebae1d86c2dd864f866b785d393
   languageName: node
   linkType: hard
 
@@ -2996,6 +2999,13 @@ __metadata:
     jest-matcher-utils: ^27.0.0
     pretty-format: ^27.0.0
   checksum: 7e11c6826aa429ad990dc262e4e4b54aa36573287fddf15773e4137f07d11d3105f0dd9f1baff73252160a057df23f5529bb83b1bf83cd3f45f9460a5ca5c22e
+  languageName: node
+  linkType: hard
+
+"@types/josa@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "@types/josa@npm:3.0.5"
+  checksum: 33680d6f4e0f435b16b4f04744e1df28b8443766fc2f30f5c85e18116ca27c182cf301a05855e4d69f103e179bf418fb14abcd9f5c14f893c420433337f6d229
   languageName: node
   linkType: hard
 
@@ -5395,6 +5405,13 @@ __metadata:
     whatwg-mimetype: ^2.3.0
     whatwg-url: ^8.0.0
   checksum: 97caf828aac25e25e04ba6869db0f99c75e6859bb5b424ada28d3e7841941ebf08ddff3c1b1bb4585986bd507a5d54c2a716853ea6cb98af877400e637393e71
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:^1.11.12":
+  version: 1.11.12
+  resolution: "dayjs@npm:1.11.12"
+  checksum: 40a4f67c2df3af125ae0ddec68d3a6d806d3009a7414bf45479aaf82f1dd82f3e139e6642e72391abccc37488897830c56afcabb4c819014130d283644df8128
   languageName: node
   linkType: hard
 
@@ -9074,10 +9091,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jongseong@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "jongseong@npm:0.4.2"
+  checksum: e3904d8644f6c4910b34391fa826c831aad4b845ae8f0c01c5f2f4bf5165076c609bdb3e824135ad0692e38852d989236b95538d381878cfbc12197ea0d2bf97
+  languageName: node
+  linkType: hard
+
 "josa-js@npm:^0.0.2":
   version: 0.0.2
   resolution: "josa-js@npm:0.0.2"
   checksum: 15cf3663a08db6b6da9331ed7a26a3f1391efbd0c6eb4620934b4c38a8600b53b3d1aacc0fea272649c2e9b27e47f348f8755a2f00cc9369f12b735c87b25e05
+  languageName: node
+  linkType: hard
+
+"josa@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "josa@npm:3.0.1"
+  dependencies:
+    jongseong: ^0.4.2
+  checksum: 0930d8a1bcffe6778ee6306a4488d9feff84ba8231d97873794a831c5f8bd36dd09e479bd5927114caf19f28a6c04bd1b6ef96e12f482004f4a3aebcc1814970
   languageName: node
   linkType: hard
 
@@ -9330,7 +9363,7 @@ __metadata:
   resolution: "koin_web_recode@workspace:."
   dependencies:
     "@bcsdlab/koin": ^0.0.15
-    "@bcsdlab/utils": ^0.0.12
+    "@bcsdlab/utils": ^0.0.15
     "@tanstack/react-query": ^5.28.6
     "@testing-library/jest-dom": ^5.14.1
     "@testing-library/react": ^13.0.0
@@ -9348,6 +9381,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.30.0
     "@typescript-eslint/parser": ^5.30.0
     axios: ^0.27.2
+    dayjs: ^1.11.12
     embla-carousel-autoplay: ^8.0.4
     embla-carousel-react: ^8.0.4
     eslint: ^8.18.0

@@ -1,0 +1,24 @@
+@use "src/utils/scss/media";
+
+.container {
+  width: 30%;
+  height: 5vh;
+  border-radius: 0.25em;
+  border: 1px solid #10477a;
+  color: #10477a;
+  background: white;
+  transition: transform 0.2s, background-color 0.3s;
+
+  @include media.media-breakpoint(mobile) {
+    width: 93%;
+    border: 1px solid #10477a;
+    display: block;
+  }
+
+  &:active {
+    background-color: #10477a;
+    color: white;
+    transform: scale(0.985);
+    transition: transform 0.2s, background-color 0.3s;
+  }
+}

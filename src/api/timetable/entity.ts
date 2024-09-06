@@ -3,7 +3,7 @@ import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 
 export type SemesterInfo = {
   id: number;
-  semester: string;
+  'semester': string;
 };
 
 export type TimetableFrameInfo = {

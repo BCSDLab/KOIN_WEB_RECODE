@@ -5,7 +5,7 @@
   padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 12px;
   box-sizing: border-box;
   border-radius: 12px;
   background-color: white;
@@ -14,7 +14,6 @@
 
 .header {
   width: 100%;
-  height: 39px;
   position: relative;
 
   &__place {
@@ -76,5 +75,28 @@
     font-size: 16px;
     font-weight: 400;
     line-height: 19.09px;
+  }
+
+  &__like {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    padding: 4px;
+    gap: 4px;
+    margin-inline: auto 0;
+
+    &:hover {
+      border-radius: 8px;
+      background: #f5f5f5;
+    }
+
+    &__count {
+      font-family: Pretendard, sans-serif;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 160%; /* 19.2px */
+      color: #4b4b4b;
+    }
   }
 }

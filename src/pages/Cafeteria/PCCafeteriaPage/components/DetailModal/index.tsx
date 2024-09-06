@@ -1,6 +1,8 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
 import { Dining } from 'interfaces/Cafeteria';
-import { useEffect } from 'react';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DetailModal.module.scss';
 
 interface DetailModalProps {
@@ -9,39 +11,14 @@ interface DetailModalProps {
 }
 
 export default function DetailModal({ dining, closeModal }: DetailModalProps): JSX.Element {
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target !== e.currentTarget) return;
-    closeModal();
-  };
-
-  const handleModalClose = () => {
-    closeModal();
-  };
-
-  const handleEscapeKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      closeModal();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleEscapeKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleEscapeKeyDown);
-    };
-  });
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
+  useEscapeKeyDown({ onEscape: closeModal });
+  useBodyScrollLock();
 
   if (!dining) return <div />;
 
   return (
-    <div
-      className={styles.overlay}
-      role="button"
-      tabIndex={0}
-      onClick={handleOverlayClick}
-      onKeyDown={handleEscapeKeyDown}
-    >
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.modal}>
         <div className={styles['modal-header']}>
           <div className={styles['modal-header__place-chip']}>
@@ -58,7 +35,7 @@ export default function DetailModal({ dining, closeModal }: DetailModalProps): J
             type="button"
             aria-label="닫기"
             className={styles['modal-header__close']}
-            onClick={handleModalClose}
+            onClick={() => closeModal()}
           >
             <CloseIcon />
           </button>

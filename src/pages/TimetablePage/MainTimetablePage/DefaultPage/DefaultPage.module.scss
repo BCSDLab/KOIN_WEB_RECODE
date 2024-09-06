@@ -1,30 +1,39 @@
 @use "utils/scss/media.scss" as media;
 
 .page {
-  width: 1150px;
-  margin: 80px auto 0;
-
   &__content {
-    display: flex;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: 766px 1fr;
+    grid-template-rows: 535px 336px;
+    gap: 66px 28px;
   }
 
   &__title {
-    display: flex;
-    gap: 6px;
-    width: 129px;
-    height: 40px;
-    margin-bottom: 40px;
+    text-align: left;
+    font-family: NanumSquare, serif;
+    font-size: 30px;
+    font-weight: 800;
     color: #175c8e;
+    width: 100%;
+    height: 32px;
+    margin: 0 0 21px;
+    padding-bottom: 26px;
+    border-bottom: 2px solid #175c8e;
 
-    &--name {
-      width: 83px;
-      text-align: left;
-      font-size: 31px;
-      font-weight: 500;
-      line-height: 38.19px;
-      margin: 1px 0;
+    &--sub {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.2;
+      border-bottom: 0;
+      color: #175c8e;
+      margin-bottom: 26px;
     }
+  }
+
+  &__filter {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
   }
 
   &__depart {
@@ -34,6 +43,70 @@
   &__semester {
     width: 150px;
   }
+<<<<<<<< HEAD:src/pages/TimetablePage/MainTimetablePage/DefaultPage/DefaultPage.module.scss
+========
+
+  &__curriculum-list {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  &__curriculum {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    line-height: 40px;
+    font-size: 12px;
+    letter-spacing: -0.2px;
+    color: #252525;
+    width: 158px;
+    height: 38px;
+    border: 1px solid #f7941e;
+    background-color: #fff;
+    margin-bottom: 17px;
+    cursor: pointer;
+  }
+
+  &__last-update {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 14px;
+    color: #888686;
+    margin-top: 5px;
+
+    &--info {
+      margin-left: 4px;
+    }
+  }
+
+  &__timetable-wrap {
+    height: 560px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid rgb(23 92 142);
+    padding: 1px 6px;
+    width: 170px;
+    height: 45px;
+    background-color: rgb(23 92 142);
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgb(253 253 253);
+    cursor: pointer;
+
+    & > img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+>>>>>>>> develop:src/pages/TimetablePage/DefaultPage/DefaultPage.module.scss
 }
 
 .search-input {
@@ -129,116 +202,4 @@
   align-items: center;
   width: 100%;
   height: 100vh;
-}
-
-.timetable-list {
-  width: 331px;
-  height: 763px;
-
-  &__list {
-    height: 699px;
-    background-color: white;
-    margin-top: 16px;
-  }
-}
-
-.select {
-  position: relative;
-  display: inline-block;
-  width: 260px;
-  background-color: #fff;
-  border-radius: 5px;
-
-  svg:not(.select__curriculum-title svg) {
-    transform: rotate(360deg);
-    transition: transform 0.3s ease;
-  }
-
-  &--opened {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    box-shadow: 0 8px 32px 0 #00000014;
-    box-shadow: 0 2px 20px 0 #0000000a;
-
-    svg:not(.select__curriculum-title svg) {
-      transform: rotate(180deg);
-      transition: transform 0.3s ease;
-    }
-  }
-
-  &__trigger {
-    position: relative;
-    width: 100%;
-    height: 48px;
-    padding: 12px 20px;
-    border-radius: 5px;
-    border: none;
-    box-sizing: border-box;
-    background-color: #fafafa;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #eee;
-    }
-
-    &:active {
-      background-color: #e1e1e1;
-    }
-  }
-
-  &__curriculum-title {
-    display: flex;
-    gap: 8px;
-    color: #4b4b4b;
-    font-size: 18px;
-    font-family: Pretendard, sans-serif;
-    font-weight: 500;
-    line-height: 21.48px;
-  }
-
-  &__curriculum-list {
-    position: absolute;
-    z-index: 5;
-    box-shadow: 0 8px 32px 0 #00000014;
-    box-shadow: 0 2px 20px 0 #0000000a;
-    background-color: #fafafa;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-  }
-
-  &__curriculum {
-    width: 260px;
-    height: 48px;
-    box-sizing: border-box;
-    background-color: #fafafa;
-    cursor: pointer;
-    font-family: Pretendard, sans-serif;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 21.48px;
-    color: #8e8e8e;
-    display: block;
-    padding: 14px 24px;
-
-    &:last-child {
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-    }
-
-    &[aria-selected="true"] {
-      color: #175c8e;
-    }
-
-    &:hover {
-      background-color: #eee;
-      border-radius: 5px;
-    }
-
-    &:active {
-      background-color: #e1e1e1;
-    }
-  }
 }

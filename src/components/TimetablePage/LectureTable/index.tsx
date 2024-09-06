@@ -32,6 +32,7 @@ const LECTURE_TABLE_HEADER = [
   { key: 'regular_number', label: '정원' },
   { key: 'design_score', label: '설계' },
   { key: 'department', label: '개설학부' },
+  { key: null, label: '' },
 ] as const;
 
 const isLectureInfo = (

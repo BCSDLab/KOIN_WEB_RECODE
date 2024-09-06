@@ -18,6 +18,8 @@ export type OriginalDining = {
   updated_at: string;
   soldout_at: string | null;
   changed_at: string | null;
+  is_liked: boolean;
+  likes: number;
 };
 
 export type MenuItem = {

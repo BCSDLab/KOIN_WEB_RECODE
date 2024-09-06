@@ -6,9 +6,9 @@ import {
   LectureInfo, TimetableDayLectureInfo, TimetableLectureInfoV2,
 } from 'interfaces/Lecture';
 import {
-  BORDER_TOP_COLOR,
   BACKGROUND_COLOR,
   DAYS_STRING,
+  TIME_STRING,
 } from 'static/timetable';
 import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
@@ -26,6 +26,8 @@ import styles from './Timetable.module.scss';
 
 interface TimetableProps {
   lectures: TimetableDayLectureInfo[][];
+  selectedLectureIndex?: number;
+  similarSelectedLecture?: TimetableDayLectureInfo[][];
   selectedLectureIndex?: number;
   similarSelectedLecture?: TimetableDayLectureInfo[][];
   firstColumnWidth: number;
@@ -48,11 +50,12 @@ function Timetable({
   lectures,
   selectedLectureIndex,
   similarSelectedLecture,
+  selectedLectureIndex,
+  similarSelectedLecture,
   firstColumnWidth,
   columnWidth,
   rowHeight,
   totalHeight,
-  forDownload,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
@@ -184,7 +187,7 @@ function Timetable({
         style={forDownload ? undefined : { height: `${20 * rowHeight}px` }}
       >
         <div className={styles['timetable__row-container']} aria-hidden="true">
-          {timeString.map((value, index) => (
+          {TIME_STRING.map((value, index) => (
             <div
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
@@ -193,6 +196,7 @@ function Timetable({
               key={`value-${index}`}
             />
           ))}
+          <div className={styles['timetable__row-line']} />
         </div>
         <div
           className={cn({
@@ -206,7 +210,7 @@ function Timetable({
           }}
           aria-hidden="true"
         >
-          {timeString.map((value, index) => (
+          {TIME_STRING.map((value, index) => (
             <div
               style={{ height: `${rowHeight}px` }}
               // index값이 변경되지 않음
@@ -221,6 +225,9 @@ function Timetable({
               {value}
             </div>
           ))}
+          <div style={{ height: `${rowHeight * 2}px` }}>
+            <span>그 이후</span>
+          </div>
         </div>
         {DAYS_STRING.map((day, index) => (
           <div

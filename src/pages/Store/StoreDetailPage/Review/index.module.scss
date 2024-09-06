@@ -1,0 +1,21 @@
+@use "src/utils/scss/media";
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1vh;
+  overflow-x: hidden;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+
+  @include media.media-breakpoint(mobile) {
+    width: 93%;
+    justify-content: center;
+  }
+}

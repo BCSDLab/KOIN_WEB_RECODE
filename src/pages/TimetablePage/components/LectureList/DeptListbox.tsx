@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-imports */
 import React from 'react';
-import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
+import Listbox, { ListboxProps } from '../../../../components/TimetablePage/Listbox';
 
 type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 
@@ -20,11 +21,11 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
     if (deptOptionList.length !== 0) {
       onChange({ target: { value: deptOptionList[0].value } });
     }
-    // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Listbox list={deptOptionList} value={value} onChange={onChange} version="new" />
+    <Listbox list={deptOptionList} value={value} onChange={onChange} />
   );
 }
 

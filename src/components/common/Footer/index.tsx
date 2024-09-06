@@ -1,12 +1,20 @@
 import { Link } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
-import useLogger from 'utils/hooks/useLogger';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Footer.module.scss';
 
 function Footer(): JSX.Element {
   const isMobile = useMediaQuery();
   const logger = useLogger();
+  const logShortcut = (title: string) => {
+    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: '식단' });
+    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: '버스/교통' });
+    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: '공지사항' });
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'footer', value: '주변상점' });
+    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'footer', value: '복덕방' });
+    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'footer', value: '시간표' });
+  };
 
   return (
     <footer className={styles.footer}>
@@ -15,9 +23,9 @@ function Footer(): JSX.Element {
           <ul className={styles.footer__services}>
             {CATEGORY
               .flatMap((categoryInfo) => categoryInfo.submenu)
-              .map((submenuInfo) => (
+              .slice(0, -2).map((submenuInfo) => (
                 <li className={styles.footer__service} key={submenuInfo.title}>
-                  <Link to={submenuInfo.link} onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: submenuInfo.title })}>
+                  <Link to={submenuInfo.link} onClick={() => logShortcut(submenuInfo.title)}>
                     {submenuInfo.title}
                   </Link>
                 </li>

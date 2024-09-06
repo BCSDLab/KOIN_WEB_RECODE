@@ -1,15 +1,17 @@
 import { useNavigate } from 'react-router-dom';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { ReactComponent as NotServed } from 'assets/svg/not-served.svg';
+import { ReactComponent as Close } from 'assets/svg/close-icon-grey.svg';
+import { ReactComponent as BubbleTailBottom } from 'assets/svg/bubble-tail-bottom.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { DiningTime } from 'utils/ts/cafeteria';
 import { DiningPlace } from 'interfaces/Cafeteria';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
@@ -27,12 +29,12 @@ function IndexCafeteria() {
     .find((dining) => dining.place === selectedPlace && dining.type === diningTime.getType());
 
   const handleMoreClick = () => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: '식단' });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단` });
     navigate('/cafeteria');
   };
 
   const handlePlaceClick = (place: DiningPlace) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: selectedPlace });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: place });
     setSelectedPlace(place);
   };
 
@@ -71,8 +73,12 @@ function IndexCafeteria() {
               <br />
               오늘의 식단을 확인해보세요.
             </button>
-            <button type="button" className={styles['header__tooltip-close']} onClick={handleTooltipCloseButtonClick}>닫기</button>
-            <img className={styles['header__tooltip-image']} src="https://stage-static.koreatech.in/upload/Tooltip.png" alt="툴팁" />
+
+            <button type="button" aria-label="close" className={styles['header__tooltip-close']} onClick={handleTooltipCloseButtonClick}>
+              <Close />
+            </button>
+
+            <BubbleTailBottom className={styles['header__tooltip-asset']} />
           </div>
         )}
       </h2>

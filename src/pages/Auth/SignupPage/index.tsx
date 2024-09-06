@@ -2,9 +2,9 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { koin, privacy } from 'static/terms';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
 import styles from './SignupPage.module.scss';
@@ -502,7 +502,9 @@ function SignupDefaultPage() {
               if (value.indexOf('@koreatech.ac.kr') !== -1) {
                 return '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.';
               }
-
+              if (value.indexOf('@') !== -1) {
+                return '이메일의 아이디 부분만 입력해주세요.';
+              }
               return true;
             },
           })}

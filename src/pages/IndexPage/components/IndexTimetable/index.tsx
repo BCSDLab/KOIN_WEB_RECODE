@@ -2,7 +2,7 @@ import React, { Suspense, useEffect } from 'react';
 import Timetable from 'components/TimetablePage/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
-import useLogger from 'utils/hooks/useLogger';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
@@ -64,8 +64,8 @@ export default function IndexTimeTable() {
         onClick={() => {
           logger.actionEventClick({
             actionTitle: 'USER',
-            title: 'entry_text_timetable',
-            value: '시간표 텍스트 진입',
+            title: 'main_timetable',
+            value: 'text',
           });
         }}
       >
@@ -78,8 +78,8 @@ export default function IndexTimeTable() {
             onClick={() => {
               logger.actionEventClick({
                 actionTitle: 'USER',
-                title: 'entry_table_timetable',
-                value: '시간표 테이블 진입',
+                title: 'main_timetable',
+                value: 'table',
               });
             }}
           >

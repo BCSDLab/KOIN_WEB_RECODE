@@ -1,14 +1,13 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import useScrollToTop from 'utils/hooks/useScrollToTop';
-
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-
-import HotPost from 'components/Post/HotPost';
+import HotArticles from 'pages/Notice/components/HotArticle';
 import styles from './NoticePage.module.scss';
 
-function Notice() {
+export default function NoticePage() {
   useScrollToTop();
+
   return (
     <div className={styles.template}>
       <div className={styles.content}>
@@ -19,11 +18,11 @@ function Notice() {
           <Outlet />
         </Suspense>
       </div>
-      <Suspense fallback={<LoadingSpinner size="80px" />}>
-        <HotPost />
-      </Suspense>
+      <div className={styles.aside}>
+        <Suspense fallback={<LoadingSpinner size="80px" />}>
+          <HotArticles />
+        </Suspense>
+      </div>
     </div>
   );
 }
-
-export default Notice;
