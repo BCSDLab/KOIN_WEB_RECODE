@@ -41,8 +41,17 @@
   &__lecture-list {
     height: 567px;
     overflow: auto;
+    background-color: #fff;
     -ms-overflow-style: none;
     scrollbar-width: none;
+
+    &--no-lecture {
+      height: 567px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
     &::-webkit-scrollbar {
       display: none !important;

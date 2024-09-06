@@ -1,22 +1,20 @@
 import { cn } from '@bcsdlab/utils';
 import {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useEffect, useRef,
 } from 'react';
 import useToastTimer from 'utils/hooks/useToastTimer';
 import styles from './TimetableToast.module.scss';
 
 export interface Toast {
   message: string;
-  recoverMessage: string;
   onClose: () => void;
-  onRecover: () => void;
   duration?: number;
 }
 
 export default function TimetableToast({
-  message, recoverMessage, onClose, onRecover, duration = 5000,
+  message, onClose, duration = 5000,
 }: Toast) {
-  const [isClicked, setIsClicked] = useState(false);
+  // const [isClicked, setIsClicked] = useState(false);
   const toastRef = useRef<HTMLDivElement | null>(null);
 
   const [toastProps, isVisible, closeToast] = useToastTimer({
@@ -33,10 +31,10 @@ export default function TimetableToast({
     }
   }, []);
 
-  const handleRecoverClick = () => {
-    setIsClicked(true);
-    onRecover();
-  };
+  // const handleRecoverClick = () => {
+  //   setIsClicked(true);
+  //   onRecover();
+  // };
 
   useEffect(() => {
     updateToastPosition();
@@ -56,10 +54,13 @@ export default function TimetableToast({
       onMouseEnter={toastProps.onMouseEnter}
       onMouseLeave={toastProps.onMouseLeave}
     >
+      {/* TODO: 되돌리기 구현하기
       {!isClicked ? (
         <>
           <div className={styles.toast__message}>{message}</div>
-          <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>되돌리기</button>
+          <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>
+            되돌리기
+          </button>
         </>
       ) : (
         <>
@@ -67,6 +68,9 @@ export default function TimetableToast({
           <button className={styles.toast__button} type="button" onClick={closeToast}>확인</button>
         </>
       )}
+      */}
+      <div className={styles.toast__message}>{message}</div>
+      <button className={styles.toast__button} type="button" onClick={closeToast}>확인</button>
     </div>
   );
 }

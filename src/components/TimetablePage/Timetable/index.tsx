@@ -20,6 +20,8 @@ import useTimetableV2Mutation from 'pages/Timetable/hooks/useTimetableV2Mutation
 import { useTempLecture } from 'utils/zustand/myTempLectureV2';
 import { useTimeString } from 'utils/zustand/myLecturesV2';
 import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
+import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -38,6 +40,7 @@ interface RemoveLectureProps {
   lecture_class: string;
   professor: string;
   id: number;
+  name: string;
 }
 
 function Timetable({
@@ -59,16 +62,22 @@ function Timetable({
   const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
   const { myLecturesV2 } = useMyLecturesV2(frameId);
   const tempLecture = useTempLecture();
+  const customTempLecture = useCustomTempLecture();
+  const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
+  const customDayValue = useTimetableDayListV2(customTempLectureArray);
   const { timeString, setTimeString } = useTimeString();
-
-  const handleRemoveLectureClick = ({ lecture_class, professor, id }: RemoveLectureProps) => {
+  const handleRemoveLectureClick = ({
+    lecture_class, professor, id, name,
+  }: RemoveLectureProps) => {
     let lectureToRemove: LectureInfo | TimetableLectureInfoV2 | null = null;
+    let lectureId = id;
     myLecturesV2.forEach((lecture) => {
-      if (
-        lecture.lecture_class === lecture_class
-        && lecture.professor === professor
-      ) {
+      if ((lecture.lecture_class === lecture_class && lecture.professor === professor)
+        || (lecture.class_time.includes(-1)
+          && lecture.professor === professor
+          && (lecture as TimetableLectureInfoV2).class_title) === name) {
         lectureToRemove = lecture;
+        lectureId = lecture.id;
       }
     });
     if (lectureToRemove) {
@@ -78,7 +87,7 @@ function Timetable({
           description="삭제한 강의는 복구가 불가능합니다."
           onClose={portalOption.close}
           onConfirm={() => {
-            removeMyLectureV2(lectureToRemove!, id);
+            removeMyLectureV2(lectureToRemove!, lectureId);
           }}
         />
       ));
@@ -111,8 +120,9 @@ function Timetable({
     const fixedMaxTime = findMaxTime(lectures);
     let maxTime = 0;
     let minimumTime = 999;
-    if (tempLecture) {
-      const classTimeArr = tempLecture.class_time.map((time) => time % 100);
+    const myLectureClassTime = tempLecture?.class_time ?? customTempLecture?.class_time.flat();
+    if (myLectureClassTime) {
+      const classTimeArr = myLectureClassTime.map((time) => time % 100);
       maxTime = Math.max(...classTimeArr);
       minimumTime = Math.min(...classTimeArr);
     }
@@ -137,7 +147,7 @@ function Timetable({
         });
       }
     }
-  }, [lectures, setTimeString, tempLecture]);
+  }, [lectures, setTimeString, tempLecture, customTempLecture]);
 
   return (
     <div
@@ -201,7 +211,7 @@ function Timetable({
               style={{ height: `${rowHeight}px` }}
               // index값이 변경되지 않음
               // eslint-disable-next-line react/no-array-index-key
-              key={`value-${index}`}
+              key={`${value}-${index}`}
               className={
                 columnWidth > 50
                   ? styles['timetable__content--time']
@@ -219,7 +229,8 @@ function Timetable({
               width: isMobile ? undefined : `${columnWidth}px`,
               height: `${timeString.length * rowHeight}px`,
             }}
-            key={day}
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${day}-${index}`}
           >
             {lectures[index].map(
               ({
@@ -229,6 +240,7 @@ function Timetable({
                 index: lectureIndex,
                 lecture_class,
                 professor,
+                class_place,
                 id,
               }) => (
                 <div
@@ -253,7 +265,9 @@ function Timetable({
                   {isMouseOver === `${day}-${start}-${end}` && isEditable && (
                     <LectureCloseIcon
                       className={styles['timetable__delete-button']}
-                      onClick={() => handleRemoveLectureClick({ lecture_class, professor, id })}
+                      onClick={() => handleRemoveLectureClick({
+                        lecture_class, professor, id, name,
+                      })}
                     />
                   )}
                   <div
@@ -278,6 +292,16 @@ function Timetable({
                     &nbsp;
                     {professor}
                   </span>
+                  <div
+                    style={{
+                      fontSize: `${rowHeight / 3 - 1}px`,
+                      fontWeight: '500',
+                      lineHeight: `${rowHeight / 2}px`,
+                      fontFamily: 'Pretendard',
+                    }}
+                  >
+                    {class_place}
+                  </div>
                 </div>
               ),
             )}
@@ -291,7 +315,6 @@ function Timetable({
                   [styles.timetable__lecture]: true,
                   [styles['timetable__lecture--selected']]: true,
                 })}
-                key={lectureIndex}
                 style={{
                   borderWidth: selectedLectureIndex === lectureIndex ? '2px' : '1px',
                   top: `${start * rowHeight}px`,
@@ -302,6 +325,71 @@ function Timetable({
             ))}
           </div>
         ))}
+        {pathname.includes('direct') && customTempLecture && (
+          DAYS_STRING.map((day, index) => (
+            <div
+              key={`custom-${day}`}
+              className={cn({
+                [styles.timetable__col]: true,
+                [styles['timetable__col--preview']]: true,
+              })}
+            >
+              {customDayValue[index].map(({
+                name,
+                start,
+                end,
+                professor,
+                class_place,
+              }) => (end !== undefined && (
+                <div
+                  className={cn({
+                    [styles.timetable__lecture]: true,
+                    [styles['timetable__lecture--preview']]: true,
+                  })}
+                  style={{
+                    top: `${start * rowHeight + 1}px`,
+                    left: `${firstColumnWidth + index * columnWidth + index + 1}px`,
+                    width: isMobile ? undefined : `${columnWidth}px`,
+                    height: `${(end - start + 1) * rowHeight - 1}px`,
+                    padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
+                    gap: `${rowHeight / 5.5}px`,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: `${rowHeight / 3 + 1}px`,
+                      fontWeight: '500',
+                      lineHeight: `${rowHeight / 2}px`,
+                      fontFamily: 'Pretendard',
+                    }}
+                  >
+                    {name}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: `${rowHeight / 3 + 1}px`,
+                      fontWeight: '400',
+                      lineHeight: `${rowHeight / 2}px`,
+                      fontFamily: 'Pretendard',
+                    }}
+                  >
+                    {professor}
+                  </span>
+                  <div
+                    style={{
+                      fontSize: `${rowHeight / 3 - 1}px`,
+                      fontWeight: '500',
+                      lineHeight: `${rowHeight / 2}px`,
+                      fontFamily: 'Pretendard',
+                    }}
+                  >
+                    {class_place}
+                  </div>
+                </div>
+              )))}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

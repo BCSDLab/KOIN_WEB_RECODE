@@ -139,6 +139,11 @@
         width: calc((100% - 55px) / 5);
       }
     }
+
+    &--preview {
+      border-top: solid 2px #cacaca;
+      background-color: #ddd9;
+    }
   }
 
   &__delete-button {

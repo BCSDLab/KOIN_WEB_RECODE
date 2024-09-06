@@ -75,7 +75,15 @@ function CurrentSemesterLectureList({
       onClickRow={(clickedLecture) => ('code' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
       onDoubleClickRow={
         (clickedLecture) => {
+          const isContainedLecture = myLecturesV2.some(
+            (lecture) => lecture.code === clickedLecture.code
+            && lecture.lecture_class === clickedLecture.lecture_class,
+          );
           if ('class_title' in clickedLecture) {
+            return;
+          }
+          if (isContainedLecture) {
+            showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
             return;
           }
           const myLectureTimeValue = (
@@ -127,7 +135,7 @@ function MyLectureListBox({ myLectures, frameId }: MyLectureListBoxProps) {
     <LectureTable
       frameId={frameId}
       list={myLectures}
-      myLecturesV2={undefined}
+      myLecturesV2={myLectures}
       selectedLecture={undefined}
       onClickRow={undefined}
       onDoubleClickRow={undefined}

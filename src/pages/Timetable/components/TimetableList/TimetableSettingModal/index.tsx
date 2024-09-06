@@ -41,16 +41,20 @@ export default function TimetableSettingModal({
     updateFrameInfo(submitFrame);
     onClose();
   };
-  const recoverFrame = () => {
-  // TODO: v2/timetables/lecture api 연결 후 시간표 프레임 추가와 강의 정보 추가로 recover 구현 예정.
-  };
+  // const recoverFrame = () => {
+  // // TODO: v2/timetables/lecture api 연결 후 시간표 프레임 추가와 강의 정보 추가로 recover 구현 예정.
+  // };
   const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, semester);
   const onDelete = (frame: TimetableFrameInfo) => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
       return;
     }
-    toast.open({ message: `선택하신 [${frame.timetable_name}]이 삭제되었습니다.`, recoverMessage: `[${frame.timetable_name}]이 복구되었습니다.`, onRecover: recoverFrame });
+    toast.open({
+      message: `선택하신 [${frame.timetable_name}]이 삭제되었습니다.`,
+      // recoverMessage: `[${frame.timetable_name}]이 복구되었습니다.`,
+      // onRecover: recoverFrame,
+    });
     deleteTimetableFrame(focusFrame.id);
     onClose();
   };

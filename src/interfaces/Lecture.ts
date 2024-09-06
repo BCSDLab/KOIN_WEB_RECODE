@@ -43,6 +43,16 @@ export interface TimetableLectureInfoV2 {
   department: string;
 }
 
+export interface CustomTimetableLectureInfo {
+  class_title: string;
+  class_time: number[][];
+  class_place?: string[];
+  professor?: string;
+  memo?: string;
+  grades?: string;
+  lecture_id?: number;
+}
+
 export interface TimetableInfoFromLocalStorage {
   [key: string]: LectureInfo[];
 }
@@ -58,5 +68,6 @@ export interface TimetableDayLectureInfo {
   lecture_class: string;
   professor: string;
   index: number;
+  class_place?: string;
   id: number;
 }
