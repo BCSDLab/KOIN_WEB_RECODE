@@ -9,7 +9,7 @@ export default function useTimetableDayList(myLectures: LectureInfo[] | Timetabl
   return React.useMemo(() => (Array.from({ length: 5 }, (_, index) => {
     const currentDayInfo = [] as TimetableDayLectureInfo[];
     (myLectures ?? []).forEach((lecture, lectureIndex) => {
-      const currentDayClassTime = lecture.class_time
+      const currentDayClassTime = (lecture.class_time ?? [])
         .filter((time) => Math.floor(time / 100) === index)
         .map((time) => time % 100)
         .sort((a, b) => a - b);

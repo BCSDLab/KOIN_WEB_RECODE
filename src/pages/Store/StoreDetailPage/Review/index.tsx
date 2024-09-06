@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DropdownProvider } from 'pages/Store/StoreDetailPage/hooks/useDropdown';
 import ROUTES from 'static/routes';
@@ -9,6 +9,11 @@ import styles from './index.module.scss';
 
 export default function ReviewPage({ id }: { id: string }) {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // 리뷰 페이지 진입 시간 기록
+    sessionStorage.setItem('enterReviewPage', new Date().getTime().toString());
+  }, []);
 
   return (
     <Suspense fallback={<div />}>

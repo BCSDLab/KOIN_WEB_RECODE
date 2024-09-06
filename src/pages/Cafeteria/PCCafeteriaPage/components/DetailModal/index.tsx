@@ -1,5 +1,6 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
 import { Dining } from 'interfaces/Cafeteria';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DetailModal.module.scss';
@@ -12,6 +13,7 @@ interface DetailModalProps {
 export default function DetailModal({ dining, closeModal }: DetailModalProps): JSX.Element {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
+  useBodyScrollLock();
 
   if (!dining) return <div />;
 

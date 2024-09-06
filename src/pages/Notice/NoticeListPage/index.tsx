@@ -1,24 +1,21 @@
-import Pagination from 'components/Post/Pagination';
-import PostHeader from 'components/Post/PostHeader';
-import PostList from 'components/Post/PostList';
-import usePageParams from 'pages/Notice/NoticeListPage/hooks/usePageParams';
-import useArticleList from 'pages/Notice/NoticeListPage/hooks/useArticleList';
+import Pagination from 'pages/Notice/components/Pagination';
+import NoticeHeader from 'pages/Notice/components/NoticeHeader';
+import NoticeList from 'pages/Notice/components/NoticeList';
+import usePageParams from 'pages/Notice/hooks/usePageParams';
+import useArticles from 'pages/Notice/hooks/useArticles';
+import { Suspense } from 'react';
 
-function NoticePage() {
+export default function NoticeListPage() {
   const paramsPage = usePageParams();
-  const articleList = useArticleList(paramsPage);
+  const { articles, paginationInfo } = useArticles(paramsPage);
 
   return (
     <>
-      <PostHeader />
-      <PostList
-        articles={articleList.articles}
-      />
-      <Pagination
-        totalPageNum={articleList === null ? 5 : articleList!.totalPage}
-      />
+      <NoticeHeader />
+      <Suspense fallback={<div />}>
+        <NoticeList articles={articles} />
+        <Pagination totalPageNum={articles === null ? 5 : paginationInfo.total_count} />
+      </Suspense>
     </>
   );
 }
-
-export default NoticePage;

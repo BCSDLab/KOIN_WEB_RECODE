@@ -27,17 +27,26 @@ export default function Panel({ openModal }: PanelProps) {
   useBodyScrollLock(isSidebarOpen);
 
   const logShortcut = (title: string) => {
-    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_dining', value: '식단' });
-    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_bus', value: '버스' });
-    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger_notice', value: '공지사항' });
+    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '식단' });
+    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '버스' });
+    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '공지사항' });
     if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: '주변상점' });
     if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger', value: '복덕방' });
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger', value: '시간표' });
   };
 
   // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
-  const logExitExistingPage = () => {
-    if (pathname === ROUTES.Timetable) logger.actionEventClick({ actionTitle: 'USER', title: 'timetable_back', value: '햄버거' });
+  const logExitExistingPage = (title: string) => {
+    if (pathname === '/timetable') {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        title: 'timetable_back',
+        value: '햄버거',
+        previous_page: '시간표',
+        current_page: title,
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+      });
+    }
   };
 
   const handleMyInfoClick = () => {
@@ -45,7 +54,7 @@ export default function Panel({ openModal }: PanelProps) {
       logger.actionEventClick({
         actionTitle: 'USER',
         title: 'hamburger',
-        value: '정보수정',
+        value: '내정보',
       });
       closeSidebar();
       openModal();
@@ -56,7 +65,7 @@ export default function Panel({ openModal }: PanelProps) {
 
   const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
-    logExitExistingPage();
+    logExitExistingPage(submenu.title);
     closeSidebar();
     if (submenu.openInNewTab) {
       window.open(submenu.link, '_blank');
@@ -134,7 +143,7 @@ export default function Panel({ openModal }: PanelProps) {
               {category.title}
             </div>
             <ul className={styles.category__submenus}>
-              {category.submenu.slice(0, -2).map((submenu) => (
+              {category.submenu.slice(0, -3).map((submenu) => (
                 <li key={submenu.title} className={styles.category__submenu}>
                   <button
                     type="button"

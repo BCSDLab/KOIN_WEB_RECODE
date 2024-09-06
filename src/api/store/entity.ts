@@ -180,6 +180,7 @@ export interface Review {
   ],
   is_mine: boolean,
   is_modified: boolean,
+  is_reported?: boolean,
   created_at: string
 }
 

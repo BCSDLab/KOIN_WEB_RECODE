@@ -1,27 +1,25 @@
+import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
-import PostDetailHeader from 'components/Post/PostDetailHeader';
-import PostDetailContent from 'components/Post/PostDetailContent';
-import useArticleDetail from 'pages/Notice/NoticeDetailPage/hooks/useArticleDetail';
+import ArticleHeader from 'pages/Notice/components/ArticleHeader';
+import ArticleContent from 'pages/Notice/components/ArticleContent';
+import useArticle from 'pages/Notice/hooks/useArticle';
 
-function NoticeDetailPage() {
+export default function NoticeDetailPage() {
   const params = useParams();
-  const articleDetail = useArticleDetail(params.id!);
+  const { article } = useArticle(params.id!);
 
   return (
-    <div>
-      <PostDetailHeader
-        boardId={articleDetail.board_id}
-        title={articleDetail.title}
-        createdAt={articleDetail.created_at}
-        commentCount={articleDetail.comment_count}
-        nickname={articleDetail.nickname}
-        hit={articleDetail.hit}
+    <Suspense>
+      <ArticleHeader
+        boardId={article.board_id}
+        title={article.title}
+        registeredAt={article.registered_at}
+        author={article.author}
+        hit={article.hit}
       />
-      <PostDetailContent
-        content={articleDetail.content}
+      <ArticleContent
+        content={article.content}
       />
-    </div>
+    </Suspense>
   );
 }
-
-export default NoticeDetailPage;

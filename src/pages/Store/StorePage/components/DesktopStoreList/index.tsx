@@ -6,7 +6,6 @@ import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
-import ROUTES from 'static/routes';
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {
@@ -35,11 +34,11 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
     <div className={styles['store-list']}>
       {storeListData?.map((store: StoreList) => (
         <Link
-          to={ROUTES.StoreDetail.general(store.id)}
+          to={`/store/${store.id}?state=메뉴`}
           className={styles['store-list__item']}
           key={store.id}
           onClick={() => logger.actionEventClick({
-            actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory}`, current_page: `${store.name}`, duration_time: new Date().getTime() - Number(sessionStorage.getItem('enter_category')),
+            actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory || '전체보기'}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
           })}
         >
           {store.is_event

@@ -34,9 +34,27 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
     if (pathname.includes(ROUTES.Store) && params) {
       const response = await api.store.getStoreDetailInfo(params.id!);
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: response.name, event_category: 'click',
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_back',
+        value: response.name,
+        event_category: 'click',
+        current_page: sessionStorage.getItem('cameFrom') || '',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
       }); // 상점 내 뒤로가기 버튼 로깅
+      navigate('/store');
+      return;
     }
+    if (pathname === '/timetable') {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        title: 'timetable_back',
+        value: '뒤로가기버튼',
+        previous_page: '시간표',
+        current_page: '메인',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+      });
+    }
+    navigate(-1);
   };
 
   const handleHamburgerClick = () => {
@@ -56,7 +74,6 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
             aria-label="뒤로가기 버튼"
             onClick={() => {
               backInDetailPage();
-              navigate(-1);
             }}
           >
             <WhiteArrowBackIcon />

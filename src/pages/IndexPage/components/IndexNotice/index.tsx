@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
-import useArticleList from 'pages/Notice/NoticeListPage/hooks/useArticleList';
+import useArticles from 'pages/Notice/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
 import styles from './IndexNotice.module.scss';
 
@@ -20,15 +22,8 @@ const getArticleType = (id: number) => {
   }
 };
 
-const isNew = (createdAt: string) => {
-  const now = new Date();
-  const created = new Date(createdAt);
-
-  return (now.getTime() - created.getTime()) < 1000 * 60 * 60 * 24 * 1;
-};
-
 function IndexNotice() {
-  const articleList = useArticleList('1');
+  const { articles } = useArticles();
   const logger = useLogger();
 
   return (
@@ -51,12 +46,12 @@ function IndexNotice() {
         </Link>
       </div>
 
-      {articleList && (
+      <Suspense fallback={<div />}>
         <ul className={styles.list}>
-          {articleList.articles.slice(0, 7).map((article) => (
+          {articles.slice(0, 7).map((article) => (
             <li key={article.id} className={styles.list__item}>
               <Link
-                to={ROUTES.BoardNoticeDetail.general(article.id)}
+                to={`/board/notice/${article.id}`}
                 className={styles['list__item-link']}
               >
                 <span className={styles['list__item-type']}>
@@ -65,7 +60,7 @@ function IndexNotice() {
                 <span className={styles['list__item-title']}>
                   {article.title}
                 </span>
-                {isNew(article.created_at) && (
+                {setArticleRegisteredDate(article.registered_at) && (
                   <img
                     className={styles['list__item-tag']}
                     src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
@@ -74,13 +69,13 @@ function IndexNotice() {
                   />
                 )}
               </Link>
-              <span className={styles['list__item-created']}>
-                {article.created_at.slice(0, 10).replaceAll('-', '.')}
+              <span className={styles['list__item-registered']}>
+                {article.registered_at.replaceAll('-', '.')}
               </span>
             </li>
           ))}
         </ul>
-      )}
+      </Suspense>
     </section>
   );
 }

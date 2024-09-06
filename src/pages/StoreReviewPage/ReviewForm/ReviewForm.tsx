@@ -10,6 +10,7 @@ import { StoreDetailResponse } from 'api/store/entity';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { ReviewRequest } from 'api/review/entity';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ReviewForm.module.scss';
 
 interface Props {
@@ -21,10 +22,12 @@ interface Props {
 function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
+  const logger = useLogger();
 
   useScrollToTop();
 
-  const [rate, setRate] = useState(initialData?.rating ?? 0);
+  const [rate, setRate] = useState(initialData.rating || 0);
+
   const [reviewText, setReviewText] = useState(initialData?.content ?? '');
   const [menuList, setMenuList] = useState<{ id: string, name: string }[]>(
     initialData.menu_names ? initialData.menu_names.map((name) => ({ id: uuidv4(), name })) : [],
@@ -38,7 +41,10 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
     if (initialData?.image_urls) {
       setImageFile(initialData.image_urls);
     }
-  }, [initialData?.image_urls, setImageFile]);
+    if (initialData.rating) {
+      setRate(initialData.rating);
+    }
+  }, [initialData, setImageFile]);
 
   const addMenu = () => {
     setMenuList([...menuList, { id: uuidv4(), name: '' }]);
@@ -59,6 +65,17 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
     setImageFile(imageFile.filter((image: string) => image !== url));
   };
 
+  const reviewSuccessLogging = () => {
+    const getReviewDurationTime = (new Date().getTime() - Number(sessionStorage.getItem('enterReview'))) / 1000;
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
+      title: 'shop_detail_view_review_write_done',
+      value: storeDetail.name,
+      event_category: 'click',
+      duration_time: getReviewDurationTime,
+    });
+  };
+
   const handleSumbit = (e: React.FormEvent) => {
     e.preventDefault();
     const reviewData = {
@@ -70,7 +87,8 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
 
     if (rate) {
       mutate(reviewData);
-      navigate(`/store/${storeDetail.id!}`, { replace: true });
+      reviewSuccessLogging();
+      navigate(`/store/${storeDetail.id!}?state=리뷰`, { replace: true });
     }
   };
 

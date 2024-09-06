@@ -4,10 +4,10 @@ import styles from './ReportingLabel.module.scss';
 interface ReportingLabelProps {
   title:string;
   description:string;
-  active: boolean;
+  disable: boolean;
 }
 
-export default function ReportingLabel({ title, description, active }:ReportingLabelProps) {
+export default function ReportingLabel({ title, description, disable }:ReportingLabelProps) {
   return (
     <div className={styles.label}>
       <span className={styles.label__title}>
@@ -16,7 +16,7 @@ export default function ReportingLabel({ title, description, active }:ReportingL
       {title === '기타' ? (
         <span className={cn({
           [styles['etc-description']]: true,
-          [styles['etc-description--active']]: active,
+          [styles['etc-description--disable']]: disable,
         })}
         >
           {description}

@@ -104,8 +104,8 @@ export default function ReviewList() {
             isSticky
               ? (
                 <div className={styles.point}>
-                  <StarList average_rating={data.pages[0].statistics.average_rating} />
-                  {`${data.pages[0].statistics.average_rating.toFixed()}점`}
+                  <StarList average_rating={Math.floor(data.pages[0].statistics.average_rating)} />
+                  {`${Math.floor(data.pages[0].statistics.average_rating).toFixed()}점`}
                 </div>
               )
               : (
@@ -169,7 +169,11 @@ export default function ReviewList() {
             created_at={mine.created_at}
             key={mine.review_id}
           />
-        ))) : <div className={styles['not-found']}>작성한 리뷰가 없어요 :)</div>
+        ))) : (
+          <div className={styles['not-found']}>
+            <NoReview />
+          </div>
+        )
       )}
       {!isCheckboxClicked
       && (reviews.length > 0 ? reviews.map((review) => (
@@ -184,6 +188,7 @@ export default function ReviewList() {
           is_modified={review.is_modified}
           created_at={review.created_at}
           review_id={review.review_id}
+          is_reported={review.is_reported}
         />
       )) : (
         <div className={styles['not-found']}>

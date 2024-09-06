@@ -1,8 +1,8 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import usePagination from './hooks/usePagination';
+import usePagination from 'pages/Notice/hooks/usePagination';
 import styles from './Pagination.module.scss';
 
 const LIMIT_COUNT = [0, 1, 2, 3, 4];
@@ -29,14 +29,14 @@ interface PaginationProps {
   totalPageNum: number
 }
 
-function Pagination(props: PaginationProps) {
+export default function Pagination(props: PaginationProps) {
   const { calcIndexPage, onClickMove } = usePagination();
   const { params, setParams } = useParamsHandler();
-  const [currentPage, setCurrentPage] = React.useState(Number(params.page) || 1);
+  const [currentPage, setCurrentPage] = useState(Number(params.page) || 1);
   const { totalPageNum } = props;
   const totalPage = Array.from({ length: totalPageNum ?? 5 }, (v, i) => i + 1);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(Number(params.page) || 1);
   }, [params.page]);
 
@@ -51,7 +51,7 @@ function Pagination(props: PaginationProps) {
         type="button"
         aria-label="이전 페이지로"
         className={styles.pagination__move}
-        onClick={() => onClickMove(onHandlePrevPage(Number(params.page) - 1))}
+        onClick={() => onClickMove(onHandlePrevPage(Number(params.page || 1) - 1))}
       >
         이전으로
       </button>
@@ -94,12 +94,14 @@ function Pagination(props: PaginationProps) {
         type="button"
         aria-label="다음 페이지로"
         className={styles.pagination__move}
-        onClick={() => setParams('page', onHandleNextPage(Number(params.page) + 1, Number(totalPageNum)), { deleteBeforeParam: false, replacePage: true })}
+        onClick={() => setParams(
+          'page',
+          onHandleNextPage(Number(params.page || 1) + 1, Number(totalPageNum)),
+          { deleteBeforeParam: false, replacePage: true },
+        )}
       >
         다음으로
       </button>
     </div>
   );
 }
-
-export default Pagination;
