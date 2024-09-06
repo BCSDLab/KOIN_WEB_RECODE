@@ -52,6 +52,16 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     if (!isValid) {
       return;
     }
+    const allClassTime = customTempLecture!.class_time.flat();
+    const isDuplicatedTime = allClassTime
+      .some((x) => allClassTime.indexOf(x) !== allClassTime.lastIndexOf(x));
+    if (isDuplicatedTime) {
+      showToast(
+        'error',
+        '중복된 시간 추가가 있습니다. 추가한 시간을 확인해주세요',
+      );
+      return;
+    }
     const myLectureList = myLecturesV2 as TimetableLectureInfoV2[];
     const alreadySelectedLecture = myLectureList.find(
       (lecture) => lecture.class_time.filter((num) => num !== -1).some(
