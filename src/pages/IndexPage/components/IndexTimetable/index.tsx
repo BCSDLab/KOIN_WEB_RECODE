@@ -1,24 +1,44 @@
-import { Suspense, useEffect } from 'react';
-import useTimetableDayList from 'utils/hooks/data/useTimetableDayList';
+import React, { Suspense, useEffect } from 'react';
 import Timetable from 'components/TimetablePage/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
-import { useSemesterAction } from 'utils/zustand/semester';
+import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
+import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
+import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexTimetable.module.scss';
 
-function CurrentSemesterTimetable(): JSX.Element {
-  const { myLectures } = useMyLectures();
-  const myLectureDayValue = useTimetableDayList(myLectures);
-  return myLectureDayValue ? (
+function CurrentSemesterTimetable() {
+  const semester = useSemester();
+  const token = useTokenState();
+  const [currentFrameIndex, setCurrentFrameIndex] = React.useState<number>(0);
+  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+
+  useEffect(() => {
+    if (timetableFrameList) {
+      const mainFrame = timetableFrameList.find(
+        (frame) => frame.is_main,
+      );
+      if (mainFrame && mainFrame.id) {
+        setCurrentFrameIndex(mainFrame.id);
+      }
+    }
+  }, [timetableFrameList]);
+
+  const { myLecturesV2 } = useMyLecturesV2(currentFrameIndex);
+  const myLectureDayValueV2 = useTimetableDayListV2(myLecturesV2);
+
+  return myLectureDayValueV2 ? (
     <Timetable
-      lectures={myLectureDayValue}
-      columnWidth={40}
-      firstColumnWidth={42}
-      rowHeight={16}
+      frameId={currentFrameIndex}
+      lectures={myLectureDayValueV2}
+      columnWidth={44}
+      firstColumnWidth={29}
+      rowHeight={17.3}
       totalHeight={369}
     />
   ) : (
@@ -32,7 +52,7 @@ export default function IndexTimeTable() {
   const logger = useLogger();
 
   useEffect(() => {
-    updateSemester(semesterOptionList[0]?.value);
+    if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -44,8 +64,8 @@ export default function IndexTimeTable() {
         onClick={() => {
           logger.actionEventClick({
             actionTitle: 'USER',
-            title: 'main_timetable',
-            value: 'text',
+            title: 'entry_text_timetable',
+            value: '시간표 텍스트 진입',
           });
         }}
       >
@@ -58,8 +78,8 @@ export default function IndexTimeTable() {
             onClick={() => {
               logger.actionEventClick({
                 actionTitle: 'USER',
-                title: 'main_timetable',
-                value: 'table',
+                title: 'entry_table_timetable',
+                value: '시간표 테이블 진입',
               });
             }}
           >
