@@ -4,9 +4,9 @@ import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import Listbox from 'components/TimetablePage/Listbox';
 import useTokenState from 'utils/hooks/useTokenState';
 import { AddTimetableFrameRequest } from 'api/timetable/entity';
-import useSemesterCheck from 'pages/Timetable/hooks/useMySemester';
+import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import showToast from 'utils/ts/showToast';
-import useAddSemester from 'pages/Timetable/hooks/useAddSemester';
+import useAddSemester from 'pages/TimetablePage/hooks/useAddSemester';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {

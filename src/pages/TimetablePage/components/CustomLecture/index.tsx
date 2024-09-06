@@ -1,14 +1,14 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
-import useTimetableV2Mutation from 'pages/Timetable/hooks/useTimetableV2Mutation';
+import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import Listbox from 'components/TimetablePage/Listbox';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
 import useTokenState from 'utils/hooks/useTokenState';
 import { ReactComponent as WarningIcon } from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';
-import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import styles from './CustomLecture.module.scss';
 

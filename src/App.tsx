@@ -20,12 +20,12 @@ import BusPage from 'pages/BusPage';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
-import TimetablePage from 'pages/Timetable/TimetablePage';
+import TimetablePage from 'pages/TimetablePage/MainTimetablePage';
 import CafeteriaPage from 'pages/Cafeteria';
 import MetaHelmet from 'components/common/MetaHelmet';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
 import PrivateRoute from 'components/common/PrivateRoute';
-import ModifyTimetablePage from 'pages/Timetable/ModifyTimetablePage';
+import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
 
 interface HelmetWrapperProps {
   title: string;

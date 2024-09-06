@@ -1,20 +1,20 @@
 /* eslint-disable no-restricted-imports */
 import React from 'react';
 import useBooleanState from 'utils/hooks/useBooleanState';
-import TimetableSettingModal from 'pages/Timetable/components/TimetableList/TimetableSettingModal';
+import TimetableSettingModal from 'pages/TimetablePage/components/TimetableList/TimetableSettingModal';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
 import { ReactComponent as BlueSettingIcon } from 'assets/svg/setting-icon-blue.svg';
-import SemesterListbox from 'pages/Timetable/components/SemesterList';
+import SemesterListbox from 'pages/TimetablePage/components/SemesterList';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/useTokenState';
-import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import { TimetableFrameInfo } from 'api/timetable/entity';
-import useAddTimetableFrame from 'pages/Timetable/hooks/useAddTimetableFrame';
+import useAddTimetableFrame from 'pages/TimetablePage/hooks/useAddTimetableFrame';
 import { cn } from '@bcsdlab/utils';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
-import InducingLoginModal from 'pages/Timetable/components/InducingLoginModal';
+import InducingLoginModal from 'pages/TimetablePage/components/InducingLoginModal';
 import styles from './TimetableList.module.scss';
 
 interface TimetableListInfo {

@@ -1,10 +1,10 @@
 import React from 'react';
 import useMediaQuery from 'utils/hooks/useMediaQuery';
-import { MobilePage } from 'pages/Timetable/TimetablePage/MobilePage';
+import { MobilePage } from 'pages/TimetablePage/MainTimetablePage/MobilePage';
 import useScrollToTop from 'utils/hooks/useScrollToTop';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/useTokenState';
-import useTimetableFrameList from 'pages/Timetable/hooks/useTimetableFrameList';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import styles from './TimetablePage.module.scss';
 import DefaultPage from './DefaultPage';
 

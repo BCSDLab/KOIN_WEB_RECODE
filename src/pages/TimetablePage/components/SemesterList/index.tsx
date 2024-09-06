@@ -8,12 +8,12 @@ import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg'
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
-import useSemesterOptionList from 'pages/Timetable/hooks/useSemesterOptionList';
+import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useTokenState from 'utils/hooks/useTokenState';
-import useDeleteSemester from 'pages/Timetable/hooks/useDeleteSemester';
+import useDeleteSemester from 'pages/TimetablePage/hooks/useDeleteSemester';
 import useModalPortal from 'utils/hooks/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
-import InducingLoginModal from 'pages/Timetable/components/InducingLoginModal';
+import InducingLoginModal from 'pages/TimetablePage/components/InducingLoginModal';
 import AddSemesterModal from './AddSemesterModal';
 import styles from './SemesterList.module.scss';
 import DeleteSemesterModal from './DeleteSemesterModal';

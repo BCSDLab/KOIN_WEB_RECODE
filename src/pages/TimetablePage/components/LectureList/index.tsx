@@ -5,17 +5,17 @@ import {
   TimetableLectureInfoV2,
 } from 'interfaces/Lecture';
 import React from 'react';
-import useTimetableV2Mutation from 'pages/Timetable/hooks/useTimetableV2Mutation';
+import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLectureV2';
-import useSelect from 'pages/Timetable/hooks/useSelect';
+import useSelect from 'pages/TimetablePage/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
-import useLectureList from 'pages/Timetable/hooks/useLectureList';
-import useSearch from 'pages/Timetable/hooks/useSearch';
+import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
+import useSearch from 'pages/TimetablePage/hooks/useSearch';
 import LectureTable from 'components/TimetablePage/LectureTable';
 import { useUser } from 'utils/hooks/useUser';
 import { useParams } from 'react-router-dom';
-import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import ToggleButton from 'components/common/ToggleButton';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';

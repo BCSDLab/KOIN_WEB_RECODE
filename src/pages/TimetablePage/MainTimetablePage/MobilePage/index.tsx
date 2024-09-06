@@ -5,8 +5,8 @@ import showToast from 'utils/ts/showToast';
 import useImageDownload from 'utils/hooks/useImageDownload';
 import useLogger from 'utils/hooks/useLogger';
 import Timetable from 'components/TimetablePage/Timetable';
-import SemesterListbox from 'pages/Timetable/components/SemesterList';
-import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import SemesterListbox from 'pages/TimetablePage/components/SemesterList';
+import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import styles from './MobilePage.module.scss';
 

@@ -6,7 +6,7 @@ import { DeptListResponse } from 'api/dept/entity';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
-import styles from 'pages/Timetable/TimetablePage/DefaultPage/DefaultPage.module.scss';
+import styles from 'pages/TimetablePage/MainTimetablePage/DefaultPage/DefaultPage.module.scss';
 
 export interface CurriculumListBoxProps {
   list: DeptListResponse;

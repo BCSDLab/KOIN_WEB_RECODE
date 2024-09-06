@@ -1,4 +1,4 @@
-import useVersionInfo from 'pages/Timetable/hooks/useVersionInfo';
+import useVersionInfo from 'pages/TimetablePage/hooks/useVersionInfo';
 import styles from './LectureList.module.scss';
 
 function LastUpdatedDate() {

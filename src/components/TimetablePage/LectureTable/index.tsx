@@ -5,7 +5,7 @@ import { cn } from '@bcsdlab/utils';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLectureV2';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useToast from 'components/common/Toast/useToast';
-import useTimetableV2Mutation from 'pages/Timetable/hooks/useTimetableV2Mutation';
+import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {

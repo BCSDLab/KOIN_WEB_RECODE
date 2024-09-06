@@ -2,18 +2,18 @@ import { cn } from '@bcsdlab/utils';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Timetable from 'components/TimetablePage/Timetable';
-import TimetableHeader from 'pages/Timetable/components/TimetableHeader';
+import TimetableHeader from 'pages/TimetablePage/components/TimetableHeader';
 import React, { Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
-import LectureList from 'pages/Timetable/components/LectureList';
-import CustomLecture from 'pages/Timetable/components/CustomLecture';
-import TotalGrades from 'pages/Timetable/components/TotalGrades';
+import LectureList from 'pages/TimetablePage/components/LectureList';
+import CustomLecture from 'pages/TimetablePage/components/CustomLecture';
+import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
 import { useTempLecture } from 'utils/zustand/myTempLectureV2';
-import useLectureList from 'pages/Timetable/hooks/useLectureList';
+import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
 import { useSemester } from 'utils/zustand/semester';
-import useMyLecturesV2 from 'pages/Timetable/hooks/useMyLecturesV2';
+import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage({ frameId }: { frameId: string | undefined }) {
