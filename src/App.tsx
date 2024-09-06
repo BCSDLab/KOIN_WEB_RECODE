@@ -28,6 +28,7 @@ import PrivateRoute from 'components/common/PrivateRoute';
 import AddReviewPage from 'pages/StoreReviewPage/AddReviewPage';
 import EditReviewPage from 'pages/StoreReviewPage/EditReviewPage';
 import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/ReviewReporting';
+import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
 
 interface HelmetWrapperProps {
   title: string;

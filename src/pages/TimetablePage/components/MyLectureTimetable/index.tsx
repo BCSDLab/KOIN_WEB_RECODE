@@ -8,11 +8,11 @@ import CurriculumListBox from 'pages/TimetablePage/components/Curriculum';
 import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
 import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
 import Timetable from 'components/TimetablePage/Timetable';
-import useBooleanState from 'utils/hooks/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import { useSemester } from 'utils/zustand/semester';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 

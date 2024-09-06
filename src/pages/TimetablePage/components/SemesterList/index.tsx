@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import Listbox from 'components/TimetablePage/Listbox';
-import useBooleanState from 'utils/hooks/useBooleanState';
-import useLogger from 'utils/hooks/useLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useDeleteSemester from 'pages/TimetablePage/hooks/useDeleteSemester';
-import useModalPortal from 'utils/hooks/useModalPortal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import InducingLoginModal from 'pages/TimetablePage/components/InducingLoginModal';
 import AddSemesterModal from './AddSemesterModal';
@@ -44,7 +44,7 @@ function SemesterListbox() {
     closePopup();
   };
 
-  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: closePopup });
 
   Listbox.defaultProps = {
     logTitle: '',
@@ -109,7 +109,7 @@ function SemesterListbox() {
         [styles.select]: true,
         [styles['select--opened']]: isOpenedPopup,
       })}
-      ref={isModalOpen ? null : target}
+      ref={isModalOpen ? null : backgroundRef}
     >
       <button
         type="button"

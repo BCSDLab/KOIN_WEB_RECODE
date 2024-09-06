@@ -1,4 +1,4 @@
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { MobilePage } from 'pages/TimetablePage/MainTimetablePage/MobilePage';
 import { useParams } from 'react-router-dom';
 import DefaultPage from './DefaultPage';

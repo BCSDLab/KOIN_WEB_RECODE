@@ -6,7 +6,7 @@ import { ReactComponent as NotCheckedIcon } from 'assets/svg/not-checked-icon.sv
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useUpdateTimetableFrame from 'pages/TimetablePage/hooks/useUpdateTimetableFrame';
 import useDeleteTimetableFrame from 'pages/TimetablePage/hooks/useDeleteTimetableFrame';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useSemester } from 'utils/zustand/semester';
 import useToast from 'components/common/Toast/useToast';
 import showToast from 'utils/ts/showToast';

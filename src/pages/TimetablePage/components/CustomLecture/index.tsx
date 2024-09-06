@@ -4,7 +4,7 @@ import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import Listbox from 'components/TimetablePage/Listbox';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { ReactComponent as WarningIcon } from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';

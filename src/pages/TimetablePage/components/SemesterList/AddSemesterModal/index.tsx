@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import Listbox from 'components/TimetablePage/Listbox';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { AddTimetableFrameRequest } from 'api/timetable/entity';
 import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import showToast from 'utils/ts/showToast';

@@ -1,6 +1,6 @@
 import React from 'react';
 import Timetable from 'components/TimetablePage/Timetable';
-import useImageDownload from 'utils/hooks/useImageDownload';
+import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import { useTimeString } from 'utils/zustand/myLecturesV2';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';

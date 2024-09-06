@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateTimetableFrame } from 'api/timetable';
-import useTokenState from 'utils/hooks/useTokenState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import { useSemester } from 'utils/zustand/semester';
 import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';

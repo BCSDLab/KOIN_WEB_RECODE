@@ -6,14 +6,14 @@ import {
   LectureInfo, TimetableDayLectureInfo, TimetableLectureInfoV2,
 } from 'interfaces/Lecture';
 import {
+  BORDER_TOP_COLOR,
   BACKGROUND_COLOR,
   DAYS_STRING,
-  TIME_STRING,
 } from 'static/timetable';
 import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
-import useMediaQuery from 'utils/hooks/useMediaQuery';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useLocation } from 'react-router-dom';
-import useModalPortal from 'utils/hooks/useModalPortal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import AlertModal from 'components/common/Modal/AlertModal';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
@@ -26,8 +26,6 @@ import styles from './Timetable.module.scss';
 
 interface TimetableProps {
   lectures: TimetableDayLectureInfo[][];
-  selectedLectureIndex?: number;
-  similarSelectedLecture?: TimetableDayLectureInfo[][];
   selectedLectureIndex?: number;
   similarSelectedLecture?: TimetableDayLectureInfo[][];
   firstColumnWidth: number;
@@ -50,12 +48,11 @@ function Timetable({
   lectures,
   selectedLectureIndex,
   similarSelectedLecture,
-  selectedLectureIndex,
-  similarSelectedLecture,
   firstColumnWidth,
   columnWidth,
   rowHeight,
   totalHeight,
+  forDownload,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
@@ -187,7 +184,7 @@ function Timetable({
         style={forDownload ? undefined : { height: `${20 * rowHeight}px` }}
       >
         <div className={styles['timetable__row-container']} aria-hidden="true">
-          {TIME_STRING.map((value, index) => (
+          {timeString.map((value, index) => (
             <div
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
@@ -210,7 +207,7 @@ function Timetable({
           }}
           aria-hidden="true"
         >
-          {TIME_STRING.map((value, index) => (
+          {timeString.map((value, index) => (
             <div
               style={{ height: `${rowHeight}px` }}
               // index값이 변경되지 않음

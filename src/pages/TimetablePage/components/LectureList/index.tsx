@@ -13,7 +13,7 @@ import showToast from 'utils/ts/showToast';
 import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
 import useSearch from 'pages/TimetablePage/hooks/useSearch';
 import LectureTable from 'components/TimetablePage/LectureTable';
-import { useUser } from 'utils/hooks/useUser';
+import { useUser } from 'utils/hooks/state/useUser';
 import { useParams } from 'react-router-dom';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import ToggleButton from 'components/common/ToggleButton';
