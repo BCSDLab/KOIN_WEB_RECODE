@@ -1,0 +1,48 @@
+@use "utils/scss/media.scss" as media;
+
+.page {
+  &__timetable-wrap {
+    height: 560px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__total-grades {
+    margin-right: 75px;
+  }
+
+  &__filter {
+    display: flex;
+    position: relative;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  &__button {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    width: 155px;
+    height: 48px;
+    background-color: #fafafa;
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 15.5px;
+    line-height: 21.48px;
+    color: #4b4b4b;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &:active {
+      background-color: #e1e1e1;
+    }
+  }
+}

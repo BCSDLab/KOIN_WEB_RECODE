@@ -2,16 +2,17 @@
 
 .timetable {
   background-color: #fff;
+  border: 1px solid #f5f5f5;
+  border-radius: 5px;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
   }
 
   &__head {
-    background-color: #f1f1f1;
-    border-top: solid 1px #d2dae2;
-    border-left: solid 1px #d2dae2;
+    background-color: #fff;
     display: flex;
+    border-radius: 5px;
 
     @include media.media-breakpoint(mobile) {
       height: 18px;
@@ -23,7 +24,7 @@
   }
 
   &__col {
-    border-right: #dadada 1px solid;
+    border-right: #f5f5f5 1px solid;
 
     @include media.media-breakpoint(mobile) {
       width: calc((100% - 52px) / 5);
@@ -33,35 +34,70 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      border-right: solid 1px #d2dae2;
       height: 100%;
-      font-family: NanumBarunGothic, serif;
+      font-family: Pretendard, sans-serif;
+      font-weight: 400;
+      line-height: 25.6px;
+      text-align: left;
       letter-spacing: normal;
-      color: #555;
     }
 
-    &--time {
-      & > div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: Arial, Helvetica, sans-serif;
-      }
+    &--preview {
+      border: none;
     }
   }
 
   &__content {
     width: 100%;
-    overflow: hidden;
+    overflow: auto;
     display: inline-flex;
     flex: none;
     position: relative;
-    border-bottom: #d2dae2 1px solid;
-    border-left: solid 1px #d2dae2;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    &--time {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Pretendard, sans-serif;
+      font-weight: 400;
+      line-height: 25.6px;
+      text-align: left;
+
+      &:nth-child(odd) {
+        position: relative;
+        z-index: 2;
+        top: 16px;
+        background-color: #fff;
+      }
+    }
+
+    &--time-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Pretendard, sans-serif;
+      font-weight: 400;
+      line-height: 25.6px;
+      text-align: left;
+
+      &:nth-child(odd) {
+        position: relative;
+        z-index: 2;
+        top: 10px;
+        background-color: #fff;
+        font-size: 9px;
+      }
+    }
   }
 
   &__row-container {
-    border-top: #d2dae2 1px solid;
+    border-top: #f5f5f5 1px solid;
   }
 
   &__row-line {
@@ -71,14 +107,15 @@
       content: "";
       position: absolute;
       width: 100%;
+      border-bottom: #f5f5f5;
     }
 
     &:nth-child(odd)::after {
-      border-bottom: #dadada 1px solid;
+      border-bottom: #f5f5f5 1px solid;
     }
 
     &:nth-child(even)::after {
-      border-bottom: rgb(218 218 218 / 30%) 1px solid;
+      border-bottom: #f5f5f5 1px solid;
     }
   }
 
@@ -87,9 +124,6 @@
     flex-direction: column;
     position: absolute;
     z-index: 3;
-    padding: 6px 4px 0;
-    font-size: 0.9em;
-    line-height: 1.2;
     font-family: NanumSquare, serif;
     box-sizing: border-box;
 
@@ -106,13 +140,16 @@
       }
     }
 
-    & > h4 {
-      font-weight: 700;
-      margin-bottom: 2px;
+    &--preview {
+      border-top: solid 2px #cacaca;
+      background-color: #ddd9;
     }
+  }
 
-    & > span {
-      font-size: 1em;
-    }
+  &__delete-button {
+    position: absolute;
+    right: 0;
+    top: 3px;
+    cursor: pointer;
   }
 }

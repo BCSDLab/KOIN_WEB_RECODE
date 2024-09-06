@@ -1,0 +1,115 @@
+.page {
+  width: 1150px;
+  margin: 80px auto 0;
+
+  &__content {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__button-group {
+    display: flex;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  &__regular-course-button {
+    width: 305px;
+    height: 48px;
+    border: 0;
+    border-radius: 5px, 0, 0, 5px;
+    padding: 13.5px 75px;
+    box-shadow: 0 2px 4px 0 #0000000a;
+    font-size: 18px;
+    font-weight: 500;
+
+    &--active {
+      color: #175c8e;
+      background-color: #175c8e1a;
+    }
+
+    &--inactive {
+      color: #8e8e8e;
+      background-color: #fff;
+      cursor: pointer;
+    }
+  }
+
+  &__directly-add-button {
+    width: 308px;
+    height: 48px;
+    border: 0;
+    border-radius: 0, 5px, 5px, 0;
+    padding: 13.5px 75px;
+    box-shadow: 0 2px 4px 0 #0000000a;
+    font-size: 18px;
+    font-weight: 500;
+
+    &--active {
+      color: #175c8e;
+      background-color: #175c8e1a;
+    }
+
+    &--inactive {
+      color: #8e8e8e;
+      background-color: #fff;
+      cursor: pointer;
+    }
+  }
+
+  &__timetable-button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  &__total-grades {
+    margin-left: 16px;
+  }
+
+  &__delete-button {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 104px;
+    height: 48px;
+    border: 0;
+    border-radius: 5px;
+    padding: 12px 20px;
+    background-color: #e1e1e1;
+    box-shadow: 0 2px 4px 0 #0000000a;
+    font-size: 18px;
+    font-weight: 500;
+    color: #4b4b4b;
+    cursor: pointer;
+  }
+
+  &__save-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 155px;
+    height: 48px;
+    border: 0;
+    border-radius: 5px;
+    padding: 12px 20px;
+    background-color: #fafafa;
+    box-shadow: 0 2px 4px 0 #0000000a;
+    font-size: 15.5px;
+    gap: 8px;
+    font-weight: 500;
+    color: #4b4b4b;
+    cursor: pointer;
+  }
+
+  &__trash-can-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  &__lecture-list {
+    width: 613px;
+  }
+}

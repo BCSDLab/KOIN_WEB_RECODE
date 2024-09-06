@@ -1,62 +1,87 @@
 /* eslint-disable no-restricted-imports */
-import ErrorBoundary from 'components/common/ErrorBoundary';
-import LoadingSpinner from 'components/common/LoadingSpinner';
-import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import React from 'react';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import styles from '../DefaultPage/DefaultPage.module.scss';
+import { cn } from '@bcsdlab/utils';
+import { DeptListResponse } from 'api/dept/entity';
+import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
+import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
+import styles from 'pages/TimetablePage/MainTimetablePage/DefaultPage/DefaultPage.module.scss';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 
-function Curriculum() {
-  const { data: deptList } = useDeptList();
-  const logger = useLogger();
+export interface CurriculumListBoxProps {
+  list: DeptListResponse;
+}
+
+function CurriculumListBox({ list }: CurriculumListBoxProps) {
+  const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
+
+  const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    triggerPopup();
+  };
+
+  const onClickOption = () => {
+    closePopup();
+  };
+
+  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
+
   return (
-    <div>
-      <h3 className={styles['page__title--sub']}>커리큘럼</h3>
-      <ErrorBoundary fallbackClassName="loading">
-        <React.Suspense fallback={<LoadingSpinner size="50" />}>
-          <ul className={styles['page__curriculum-list']}>
-            {deptList.map((dept) => (
-              <li key={dept.name}>
-                <a
-                  className={styles.page__curriculum}
-                  href={dept.curriculum_link}
-                  target="_blank"
-                  onClick={() => {
-                    logger.actionEventClick({
-                      actionTitle: 'USER',
-                      title: 'timetable',
-                      value: `click_curriculum_${dept.name}`,
-                    });
-                  }}
-                  rel="noreferrer"
-                >
-                  {dept.name}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a
-                className={styles.page__curriculum}
-                href="https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002"
-                target="_blank"
-                onClick={() => {
-                  logger.actionEventClick({
-                    actionTitle: 'USER',
-                    title: 'timetable',
-                    value: 'click_curriculum_대학요람',
-                  });
-                }}
-                rel="noreferrer"
+    <div
+      className={cn({
+        [styles.select]: true,
+        [styles['select--opened']]: isOpenedPopup,
+      })}
+      ref={target}
+    >
+      <button
+        type="button"
+        onClick={handleToggleListBox}
+        className={cn({
+          [styles.select__trigger]: true,
+          [styles['select__trigger--opened']]: isOpenedPopup,
+        })}
+      >
+        <div className={styles['select__curriculum-title']}>
+          <CurriculumIcon />
+          커리큘럼
+        </div>
+        <DownArrowIcon />
+      </button>
+      {isOpenedPopup && (
+        <div className={styles['select__curriculum-list']} role="listbox">
+          {list.map((dept) => (
+            <a
+              href={dept.curriculum_link}
+              target="_blank"
+              rel="noreferrer"
+              onClick={onClickOption}
+            >
+              <span
+                className={styles.select__curriculum}
+                key={dept.name}
+                role="option"
+                aria-selected="false"
+                data-value={dept.name}
+                tabIndex={0}
               >
-                대학 요람
-              </a>
-            </li>
-          </ul>
-        </React.Suspense>
-      </ErrorBoundary>
+                {dept.name}
+              </span>
+            </a>
+          ))}
+          <a
+            href="https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002"
+            target="_blank"
+            rel="noreferrer"
+            onClick={onClickOption}
+            className={styles.select__curriculum}
+          >
+            대학 요람
+          </a>
+        </div>
+      )}
     </div>
-
   );
 }
 
-export default Curriculum;
+export default CurriculumListBox;
