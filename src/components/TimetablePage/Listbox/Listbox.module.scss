@@ -49,6 +49,10 @@
   &__content {
     position: absolute;
     z-index: 5;
+
+    &--up {
+      transform: translateY(-100%);
+    }
   }
 
   &__option {
