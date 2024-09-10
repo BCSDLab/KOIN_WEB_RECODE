@@ -15,6 +15,7 @@ function TimetablePage() {
   const semester = useSemester();
   const [currentFrameIndex, setCurrentFrameIndex] = React.useState(0);
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  sessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
 
   React.useEffect(() => {
     if (timetableFrameList) {

@@ -45,6 +45,7 @@
       ],
       "import/extensions": "off",
       "react/react-in-jsx-scope": "off",
+      "react/require-default-props": "off",
       "max-classes-per-file": "off",
       "class-methods-use-this": "off",
       "react/jsx-props-no-spreading": "off",
