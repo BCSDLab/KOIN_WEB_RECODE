@@ -4,7 +4,6 @@ import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg'
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './Listbox.module.scss';
 import newStyles from './NewListbox.module.scss';
 
@@ -21,7 +20,6 @@ export interface ListboxProps {
   list: ListItem[];
   value: string | null;
   onChange: (event: { target: ListboxRef }) => void;
-  logTitle?: string;
   version?: 'default' | 'new' | 'inModal' | 'addLecture';
 }
 
@@ -29,20 +27,9 @@ function Listbox({
   list,
   value,
   onChange,
-  logTitle = '',
   version = 'default',
 }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
-  const logger = useLogger();
-  const handleLogClick = (optionValue: string) => {
-    if (logTitle === 'select_dept') {
-      logger.actionEventClick({ actionTitle: 'USER', title: 'select_dept', value: optionValue });
-      return;
-    }
-    if (logTitle === 'select_semester') {
-      logger.actionEventClick({ actionTitle: 'USER', title: 'select_semester', value: optionValue });
-    }
-  };
 
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -54,7 +41,6 @@ function Listbox({
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
     onChange({ target: { value: optionValue ?? '' } });
-    handleLogClick(optionValue ?? '');
     closePopup();
   };
   const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
@@ -107,7 +93,6 @@ function Listbox({
 }
 
 Listbox.defaultProps = {
-  logTitle: '',
   version: 'default',
 };
 

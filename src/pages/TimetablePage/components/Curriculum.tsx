@@ -1,18 +1,19 @@
-/* eslint-disable no-restricted-imports */
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { DeptListResponse } from 'api/dept/entity';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
-import styles from 'pages/TimetablePage/MainTimetablePage/DefaultPage/DefaultPage.module.scss';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import styles from 'pages/TimetablePage/MainTimetablePage/DefaultPage/DefaultPage.module.scss';
 
 export interface CurriculumListBoxProps {
   list: DeptListResponse;
 }
 
 function CurriculumListBox({ list }: CurriculumListBoxProps) {
+  const logger = useLogger();
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
 
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -20,7 +21,12 @@ function CurriculumListBox({ list }: CurriculumListBoxProps) {
     triggerPopup();
   };
 
-  const onClickOption = () => {
+  const onClickOption = (dept: string) => {
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      title: 'timetable',
+      value: `click_currirculum_${dept}`,
+    });
     closePopup();
   };
 
@@ -55,7 +61,7 @@ function CurriculumListBox({ list }: CurriculumListBoxProps) {
               href={dept.curriculum_link}
               target="_blank"
               rel="noreferrer"
-              onClick={onClickOption}
+              onClick={() => onClickOption(dept.name)}
             >
               <span
                 className={styles.select__curriculum}
@@ -73,7 +79,7 @@ function CurriculumListBox({ list }: CurriculumListBoxProps) {
             href="https://www.koreatech.ac.kr/board.es?mid=a10103010000&bid=0002"
             target="_blank"
             rel="noreferrer"
-            onClick={onClickOption}
+            onClick={() => onClickOption('대학요람')}
             className={styles.select__curriculum}
           >
             대학 요람

@@ -40,14 +40,13 @@ function SemesterListbox() {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
     onChangeSelect({ target: { value: optionValue ?? '' } });
-    logger.actionEventClick({ actionTitle: 'USER', title: 'select_semester', value: currentSemester });
+    logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click_semester_${optionValue}` });
     closePopup();
   };
 
   const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
 
   Listbox.defaultProps = {
-    logTitle: '',
     version: 'default',
   };
   const [selectedSemester, setSelectedSemester] = React.useState('');
