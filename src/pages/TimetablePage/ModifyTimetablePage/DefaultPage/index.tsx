@@ -97,7 +97,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
                 onClick={() => navigate('/timetable')}
               >
                 <PenIcon className={styles['page__pen-icon']} />
-                시간표 저장
+                수정 완료
               </button>
             </div>
             <ErrorBoundary fallbackClassName="loading">
