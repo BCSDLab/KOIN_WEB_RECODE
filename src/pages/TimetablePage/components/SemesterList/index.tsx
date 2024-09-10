@@ -14,6 +14,8 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useAddSemester from 'pages/TimetablePage/hooks/useAddSemester';
+import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';
 import AddSemesterModal from './AddSemesterModal';
@@ -52,13 +54,20 @@ function SemesterListbox() {
   };
   const [selectedSemester, setSelectedSemester] = React.useState('');
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
+  const { mutate: addSemester } = useAddSemester(token);
+  const { data: mySemester } = useSemesterCheck(token);
 
   const onClickAddSemester = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (token) {
       setModalOpenTrue();
       portalManager.open((portalOption: Portal) => (
-        <AddSemesterModal onClose={portalOption.close} setModalOpenFalse={setModalOpenFalse} />
+        <AddSemesterModal
+          onClose={portalOption.close}
+          setModalOpenFalse={setModalOpenFalse}
+          addSemester={addSemester}
+          mySemester={mySemester}
+        />
       ));
     } else {
       portalManager.open((portalOption: Portal) => (

@@ -147,7 +147,8 @@ function MyLectureListBox({ myLectures, frameId }: MyLectureListBoxProps) {
 function LectureList({ frameId }: { frameId: number }) {
   const semesterParams = useParams().id;
   const semester = useSemester();
-  const mostRecentSemester = '20242';
+  // 가장 최신연도와 월을 가져옴
+  const mostRecentSemester = `${new Date().getFullYear()}${new Date().getMonth() > 5 ? 2 : 1}`;
   const { updateSemester } = useSemesterAction();
   if (semesterParams !== String(frameId)) {
     // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
