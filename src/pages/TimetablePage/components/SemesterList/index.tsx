@@ -5,7 +5,6 @@ import Listbox from 'components/TimetablePage/Listbox';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useDeleteSemester from 'pages/TimetablePage/hooks/useDeleteSemester';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -14,6 +13,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';
 import AddSemesterModal from './AddSemesterModal';
@@ -44,7 +44,7 @@ function SemesterListbox() {
     closePopup();
   };
 
-  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
+  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
 
   Listbox.defaultProps = {
     logTitle: '',
@@ -109,7 +109,7 @@ function SemesterListbox() {
         [styles.select]: true,
         [styles['select--opened']]: isOpenedPopup,
       })}
-      ref={isModalOpen ? null : target}
+      ref={isModalOpen ? null : containerRef}
     >
       <button
         type="button"

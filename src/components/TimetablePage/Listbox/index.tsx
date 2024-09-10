@@ -2,9 +2,9 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './Listbox.module.scss';
 import newStyles from './NewListbox.module.scss';
 
@@ -57,12 +57,12 @@ function Listbox({
     handleLogClick(optionValue ?? '');
     closePopup();
   };
-  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
+  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
   const styleClasses = version !== 'default' ? newStyles : styles;
   return (
     <div
       className={styleClasses.select}
-      ref={target}
+      ref={containerRef}
     >
       <button
         type="button"
