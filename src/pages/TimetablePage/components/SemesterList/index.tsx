@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import Listbox from 'components/TimetablePage/Listbox';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
@@ -45,10 +44,6 @@ function SemesterListbox() {
   };
 
   const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
-
-  Listbox.defaultProps = {
-    version: 'default',
-  };
   const [selectedSemester, setSelectedSemester] = React.useState('');
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 

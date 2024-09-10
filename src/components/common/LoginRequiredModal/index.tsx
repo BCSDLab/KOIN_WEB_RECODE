@@ -75,8 +75,3 @@ export default function LoginRequiredModal({
     </div>
   );
 }
-
-LoginRequiredModal.defaultProps = {
-  type: undefined,
-  shopName: undefined,
-};

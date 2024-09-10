@@ -92,8 +92,4 @@ function Listbox({
   );
 }
 
-Listbox.defaultProps = {
-  version: 'default',
-};
-
 export default Listbox;
