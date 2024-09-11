@@ -17,6 +17,7 @@ import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import ToggleButton from 'components/common/ToggleButton';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
@@ -145,6 +146,7 @@ function MyLectureListBox({ myLectures, frameId }: MyLectureListBoxProps) {
 }
 
 function LectureList({ frameId }: { frameId: number }) {
+  const logger = useLogger();
   const semesterParams = useParams().id;
   const semester = useSemester();
   // 가장 최신연도와 월을 가져옴
@@ -181,7 +183,14 @@ function LectureList({ frameId }: { frameId: number }) {
           <button
             className={styles['search-input__button']}
             type="button"
-            onClick={onClickSearchButton}
+            onClick={() => {
+              onClickSearchButton();
+              logger.actionEventClick({
+                actionTitle: 'USER',
+                title: 'timetable',
+                value: 'search',
+              });
+            }}
           >
             <img
               src="https://static.koreatech.in/assets/img/ic-search-gray.png"
