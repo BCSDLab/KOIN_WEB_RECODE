@@ -157,11 +157,32 @@
   gap: 10px;
   max-height: 460px;
   overflow: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  overflow-x: hidden;
 
-  ::-webkit-scrollbar {
-    display: none;
+  &__overflow {
+    overflow: visible;
+  }
+
+  /* Firefox 전용 스크롤바 스타일 */
+  @-moz-document url-prefix("") {
+    & {
+      scrollbar-width: thin;
+      scrollbar-color: #d9d9d9 transparent;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 65px;
+    border-radius: 5px;
+    background: #d9d9d9;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
   }
 
   &__component {
@@ -261,33 +282,28 @@
 
   &__time {
     display: flex;
+    position: relative;
+    width: 522px;
+    height: 46px;
+    gap: 8px;
     align-items: center;
     justify-content: space-between;
 
     & > span {
-      color: #fafafa;
+      color: #000;
       text-shadow: 0 1px 1px rgba(0 0 0 / 2%), 0 2px 4px rgba(0 0 0 / 4%);
       font-family: Pretendard, sans-serif;
       font-size: 20px;
       font-weight: 500;
       margin: 0 20px;
     }
-  }
-
-  &__time-section {
-    display: flex;
-    position: relative;
-    width: 234px;
-    height: 46px;
-    gap: 8px;
-    align-items: center;
 
     & button {
       display: flex;
       padding: 16px 24px;
       justify-content: space-between;
       font-family: Pretendard, sans-serif;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 400;
       line-height: 21.48px;
       text-align: left;
@@ -295,11 +311,10 @@
 
     & li {
       display: flex;
-      padding: 16px 24px;
       justify-content: space-between;
       gap: 8px;
       font-family: Pretendard, sans-serif;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 400;
       line-height: 21.48px;
       text-align: left;
@@ -307,21 +322,41 @@
     }
 
     & ul {
+      width: 98.5%;
       top: 50px;
       border: 1px solid #cacaca;
       border-radius: 5px;
       max-height: 288px;
       overflow-y: scroll;
 
+      @-moz-document url-prefix("") {
+        & {
+          scrollbar-width: thin;
+          scrollbar-color: #d9d9d9 transparent;
+        }
+      }
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
       &::-webkit-scrollbar-thumb {
         height: 65px;
-        border-radius: 5px 0;
-        background: #d9d9d9;
+        border: 3px solid #fff;
+        background-clip: padding-box;
+        border-radius: 5px;
+        background-color: #d9d9d9;
       }
 
       &::-webkit-scrollbar-track {
-        margin-right: 3px;
         background-color: transparent;
+      }
+    }
+
+    &--reverse {
+      & ul {
+        top: inherit;
+        bottom: 50px;
       }
     }
   }

@@ -91,6 +91,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     }]);
   };
 
+  const timeSpaceContainerRef = React.useRef<HTMLDivElement>(null);
   const handleAddTimeSpaceComponent = () => {
     if (timeSpaceComponents.length > 4) {
       showToast(
@@ -110,6 +111,23 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       lectureTime: [],
       place: '',
     }]);
+    setTimeout(() => {
+      timeSpaceContainerRef.current!.scrollTo({
+        behavior: 'smooth',
+        top: 999,
+      });
+    }, 0);
+  };
+
+  const isOverflow = timeSpaceContainerRef.current
+    ? timeSpaceContainerRef.current.getBoundingClientRect().height > 400
+    : false;
+  const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
+  const [positionValues, setPositionValues] = React.useState<number[]>([]);
+  const handleScroll = () => {
+    const updatedValues = reverseRef.current
+      .map((element) => element?.getBoundingClientRect().bottom || 0);
+    setPositionValues(updatedValues);
   };
   const changeToTimetableTime = (timeInfo: {
     startHour: string;
@@ -262,7 +280,14 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             />
           </div>
         </div>
-        <div className={styles['time-space-container']}>
+        <div
+          className={cn({
+            [styles['time-space-container']]: true,
+            [styles['time-space-container__overflow']]: !isOverflow,
+          })}
+          ref={timeSpaceContainerRef}
+          onScroll={handleScroll}
+        >
           {timeSpaceComponents.map(({
             time,
             week,
@@ -300,16 +325,20 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                       </div>
                     ))}
                   </div>
-                  <div className={styles['form-group-time__time']}>
-                    <div className={styles['form-group-time__time-section']}>
-                      <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" />
-                      <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" />
-                    </div>
+                  <div
+                    className={cn({
+                      [styles['form-group-time__time']]: true,
+                      [styles['form-group-time__time--reverse']]: timeSpaceContainerRef.current ? timeSpaceContainerRef.current.getBoundingClientRect().bottom - positionValues[index] < 150 : false,
+                    })}
+                    ref={(element) => {
+                      reverseRef.current[index] = element;
+                    }}
+                  >
+                    <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" />
+                    <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" />
                     <span>-</span>
-                    <div className={styles['form-group-time__time-section']}>
-                      <Listbox list={HOUR} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" />
-                      <Listbox list={MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" />
-                    </div>
+                    <Listbox list={HOUR} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" />
+                    <Listbox list={MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" />
                   </div>
                 </div>
               </div>
