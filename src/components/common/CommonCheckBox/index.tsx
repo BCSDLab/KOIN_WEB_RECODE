@@ -8,7 +8,6 @@ interface CadioBoxProps {
   name: string;
   checked: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  // eslint-disable-next-line react/require-default-props
   children?: React.ReactNode;
 }
 

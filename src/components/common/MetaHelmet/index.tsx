@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props */
 import { Helmet } from 'react-helmet';
 
 type MetaHelmetProps = {

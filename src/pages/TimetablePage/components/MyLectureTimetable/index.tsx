@@ -13,6 +13,7 @@ import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
@@ -21,11 +22,18 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
   const navigate = useNavigate();
   const token = useTokenState();
   const semester = useSemester();
+  const logger = useLogger();
   const myLectureDayValue = useTimetableDayListV2(myLecturesV2);
   const { data: deptList } = useDeptList();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      title: 'timetable',
+      value: '이미지저장',
+      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+    });
     openModal();
   };
 
