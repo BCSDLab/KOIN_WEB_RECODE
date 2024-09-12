@@ -83,7 +83,7 @@ export default function TimetableSettingModal({
         </div>
         <div className={styles['container__setting-message']}>
           <button
-            id="defaultCheckBox"
+            id="default-checkbox"
             type="button"
             className={styles.container__checkbox}
             onClick={toggleIsChecked}
@@ -91,7 +91,7 @@ export default function TimetableSettingModal({
             {focusFrame.is_main ? <CheckedIcon /> : <NotCheckedIcon />}
           </button>
           <label
-            htmlFor="defaultCheckBox"
+            htmlFor="default-checkbox"
             className={styles['container__set-default-timetable']}
           >
             기본 시간표로 설정하기
