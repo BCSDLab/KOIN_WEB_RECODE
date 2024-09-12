@@ -302,7 +302,7 @@
       margin: 0 20px;
     }
 
-    & button {
+    button {
       display: flex;
       padding: 16px 24px;
       justify-content: space-between;
@@ -313,7 +313,7 @@
       text-align: left;
     }
 
-    & li {
+    li {
       display: flex;
       justify-content: space-between;
       gap: 8px;
@@ -325,7 +325,7 @@
       align-items: center;
     }
 
-    & ul {
+    ul {
       width: 98.5%;
       top: 50px;
       border: 1px solid #cacaca;
@@ -342,7 +342,7 @@
     }
 
     &--reverse {
-      & ul {
+      ul {
         top: inherit;
         bottom: 50px;
       }
