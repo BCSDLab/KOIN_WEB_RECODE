@@ -49,7 +49,7 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
           className={styles.page__button}
           onClick={() => navigate(`/timetable/modify/regular/${token ? frameId : semester}`)}
         >
-          <EditIcon />
+          <EditIcon className={styles['page__edit-icon']} />
           시간표 수정
         </button>
       </div>

@@ -29,13 +29,16 @@
     padding: 12px 20px;
     width: 155px;
     height: 48px;
-    background-color: #fafafa;
-    font-family: Pretendard, sans-serif;
-    font-weight: 500;
-    font-size: 15.5px;
-    line-height: 21.48px;
-    color: #4b4b4b;
+    background-color: #fff;
     cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28.8px;
+    color: #4b4b4b;
+    align-items: center;
 
     &:hover {
       background-color: #eee;
@@ -44,5 +47,11 @@
     &:active {
       background-color: #e1e1e1;
     }
+  }
+
+  &__edit-icon {
+    display: flex;
+    width: 24px;
+    height: 24px;
   }
 }
