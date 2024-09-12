@@ -1,5 +1,29 @@
 @use "utils/scss/media.scss" as media;
 
+@mixin scrollbar($width) {
+  /* Firefox 전용 스크롤바 스타일 */
+  @-moz-document url-prefix("") {
+    & {
+      scrollbar-width: thin;
+      scrollbar-color: #d9d9d9 transparent;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 65px;
+    border-radius: 5px;
+    background: #d9d9d9;
+  }
+}
+
 .form-container {
   display: flex;
   width: 613px;
@@ -163,27 +187,7 @@
     overflow: visible;
   }
 
-  /* Firefox 전용 스크롤바 스타일 */
-  @-moz-document url-prefix("") {
-    & {
-      scrollbar-width: thin;
-      scrollbar-color: #d9d9d9 transparent;
-    }
-  }
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    height: 65px;
-    border-radius: 5px;
-    background: #d9d9d9;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
+  @include scrollbar(6px);
 
   &__component {
     padding: 1px 2px 0 0;
@@ -329,27 +333,11 @@
       max-height: 288px;
       overflow-y: scroll;
 
-      @-moz-document url-prefix("") {
-        & {
-          scrollbar-width: thin;
-          scrollbar-color: #d9d9d9 transparent;
-        }
-      }
-
-      &::-webkit-scrollbar {
-        width: 8px;
-      }
+      @include scrollbar(8px);
 
       &::-webkit-scrollbar-thumb {
-        height: 65px;
         border: 3px solid #fff;
         background-clip: padding-box;
-        border-radius: 5px;
-        background-color: #d9d9d9;
-      }
-
-      &::-webkit-scrollbar-track {
-        background-color: transparent;
       }
     }
 
