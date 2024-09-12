@@ -48,19 +48,6 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
   const [positionValues, setPositionValues] = React.useState<number[]>([]);
 
-  React.useEffect(() => {
-    if (customTempLecture) {
-      updateCustomTempLecture({
-        ...customTempLecture,
-        class_title: lectureName,
-        professor: professorName,
-        class_time: timeSpaceComponents.map((item) => item.lectureTime),
-        class_place: timeSpaceComponents.map((item) => item.place),
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lectureName, professorName, timeSpaceComponents]);
-
   const isValid = (lectureName !== ''
     && !timeSpaceComponents.some((time) => time.lectureTime.length === 0));
   const isOverflow = timeSpaceContainerRef.current
@@ -231,6 +218,19 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     };
     setTimeSpaceComponents(updatedComponents);
   };
+
+  React.useEffect(() => {
+    if (customTempLecture) {
+      updateCustomTempLecture({
+        ...customTempLecture,
+        class_title: lectureName,
+        professor: professorName,
+        class_time: timeSpaceComponents.map((item) => item.lectureTime),
+        class_place: timeSpaceComponents.map((item) => item.place),
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lectureName, professorName, timeSpaceComponents]);
 
   return (
     <form
