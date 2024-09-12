@@ -78,12 +78,24 @@ export default function TimetableSettingModal({
             onChange={(e) => setFocusFrame({ ...focusFrame, timetable_name: e.target.value })}
           />
         </div>
-        <div className={styles['container__setting-message']}>
-          <button type="button" className={styles.container__checkbox} onClick={toggleIsChecked}>
-            {focusFrame.is_main ? <CheckedIcon /> : <NotCheckedIcon />}
-          </button>
-          <div className={styles['container__set-default-timetable']}>기본 시간표로 설정하기</div>
-        </div>
+        {focusFrame.is_main ? (
+          <div className={styles['container__set-default-timetable-message']}>
+            기본 시간표로 설정되었습니다.
+          </div>
+        ) : (
+          <div className={styles['container__setting-message']}>
+            <button
+              type="button"
+              className={styles.container__checkbox}
+              onClick={toggleIsChecked}
+            >
+              {focusFrame.is_main ? <CheckedIcon /> : <NotCheckedIcon />}
+            </button>
+            <div className={styles['container__set-default-timetable']}>
+              기본 시간표로 설정하기
+            </div>
+          </div>
+        )}
         <div className={styles.container__button}>
           <button
             type="button"
