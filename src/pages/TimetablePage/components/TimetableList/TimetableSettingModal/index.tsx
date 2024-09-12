@@ -13,9 +13,9 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
-  focusFrame: TimetableFrameInfo
-  setFocusFrame: (frame: TimetableFrameInfo) => void
-  onClose: () => void
+  focusFrame: TimetableFrameInfo;
+  setFocusFrame: (frame: TimetableFrameInfo) => void;
+  onClose: () => void;
 }
 
 export default function TimetableSettingModal({
@@ -42,9 +42,12 @@ export default function TimetableSettingModal({
     onClose();
   };
   const recoverFrame = () => {
-  // TODO: v2/timetables/lecture api 연결 후 시간표 프레임 추가와 강의 정보 추가로 recover 구현 예정.
+    // TODO: v2/timetables/lecture api 연결 후 시간표 프레임 추가와 강의 정보 추가로 recover 구현 예정.
   };
-  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, semester);
+  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(
+    token,
+    semester,
+  );
   const onDelete = (frame: TimetableFrameInfo) => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
@@ -79,10 +82,20 @@ export default function TimetableSettingModal({
           />
         </div>
         <div className={styles['container__setting-message']}>
-          <button type="button" className={styles.container__checkbox} onClick={toggleIsChecked}>
+          <button
+            id="defaultCheckBox"
+            type="button"
+            className={styles.container__checkbox}
+            onClick={toggleIsChecked}
+          >
             {focusFrame.is_main ? <CheckedIcon /> : <NotCheckedIcon />}
           </button>
-          <div className={styles['container__set-default-timetable']}>기본 시간표로 설정하기</div>
+          <label
+            htmlFor="defaultCheckBox"
+            className={styles['container__set-default-timetable']}
+          >
+            기본 시간표로 설정하기
+          </label>
         </div>
         <div className={styles.container__button}>
           <button
