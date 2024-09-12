@@ -29,6 +29,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const customTempLecture = useCustomTempLecture();
   const { updateCustomTempLecture } = useCustomTempLectureAction();
   const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
+  const { addMyLectureV2 } = useTimetableV2Mutation(Number(frameId));
 
   const [lectureName, setLectureName] = React.useState('');
   const [professorName, setProfessorName] = React.useState('');
@@ -43,10 +44,65 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     lectureTime: [0, 1],
     place: '',
   }]);
+  const timeSpaceContainerRef = React.useRef<HTMLDivElement>(null);
+  const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
+  const [positionValues, setPositionValues] = React.useState<number[]>([]);
+
+  React.useEffect(() => {
+    if (customTempLecture) {
+      updateCustomTempLecture({
+        ...customTempLecture,
+        class_title: lectureName,
+        professor: professorName,
+        class_time: timeSpaceComponents.map((item) => item.lectureTime),
+        class_place: timeSpaceComponents.map((item) => item.place),
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lectureName, professorName, timeSpaceComponents]);
+
   const isValid = (lectureName !== ''
     && !timeSpaceComponents.some((time) => time.lectureTime.length === 0));
+  const isOverflow = timeSpaceContainerRef.current
+    ? timeSpaceContainerRef.current.getBoundingClientRect().height > 400
+    : false;
 
-  const { addMyLectureV2 } = useTimetableV2Mutation(Number(frameId));
+  const changeToTimetableTime = (timeInfo: {
+    startHour: string;
+    startMinute: string;
+    endHour: string;
+    endMinute: string;
+  }) => {
+    const timetableStart = (Number(timeInfo.startHour.slice(0, 2)) - 9) * 2
+      + Number(timeInfo.startMinute.slice(0, 2)) / 30;
+    const timetableEnd = (Number(timeInfo.endHour.slice(0, 2)) - 9) * 2
+      + Number(timeInfo.endMinute.slice(0, 2)) / 30;
+    return Array.from(
+      { length: timetableEnd - timetableStart },
+      (_, idx) => timetableStart + idx,
+    );
+  };
+  const addWeekTime = (
+    weekInfo: string[],
+    timetableTime: number[],
+  ) => weekInfo.reduce((acc: number[], week) => {
+    const mappedTimes = timetableTime.map((time) => {
+      switch (week) {
+        case '월':
+          return time;
+        case '화':
+          return time + 100;
+        case '수':
+          return time + 200;
+        case '목':
+          return time + 300;
+        default:
+          return time + 400;
+      }
+    });
+    return [...acc, ...mappedTimes];
+  }, []);
+
   const handleAddLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isValid) {
@@ -91,7 +147,12 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     }]);
   };
 
-  const timeSpaceContainerRef = React.useRef<HTMLDivElement>(null);
+  const handleScroll = () => {
+    const updatedValues = reverseRef.current
+      .map((element) => element?.getBoundingClientRect().bottom || 0);
+    setPositionValues(updatedValues);
+  };
+
   const handleAddTimeSpaceComponent = () => {
     if (timeSpaceComponents.length > 4) {
       showToast(
@@ -118,52 +179,6 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       });
     }, 0);
   };
-
-  const isOverflow = timeSpaceContainerRef.current
-    ? timeSpaceContainerRef.current.getBoundingClientRect().height > 400
-    : false;
-  const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
-  const [positionValues, setPositionValues] = React.useState<number[]>([]);
-  const handleScroll = () => {
-    const updatedValues = reverseRef.current
-      .map((element) => element?.getBoundingClientRect().bottom || 0);
-    setPositionValues(updatedValues);
-  };
-  const changeToTimetableTime = (timeInfo: {
-    startHour: string;
-    startMinute: string;
-    endHour: string;
-    endMinute: string;
-  }) => {
-    const timetableStart = (Number(timeInfo.startHour.slice(0, 2)) - 9) * 2
-      + Number(timeInfo.startMinute.slice(0, 2)) / 30;
-    const timetableEnd = (Number(timeInfo.endHour.slice(0, 2)) - 9) * 2
-      + Number(timeInfo.endMinute.slice(0, 2)) / 30;
-    return Array.from(
-      { length: timetableEnd - timetableStart },
-      (_, idx) => timetableStart + idx,
-    );
-  };
-  const addWeekTime = (
-    weekInfo: string[],
-    timetableTime: number[],
-  ) => weekInfo.reduce((acc: number[], week) => {
-    const mappedTimes = timetableTime.map((time) => {
-      switch (week) {
-        case '월':
-          return time;
-        case '화':
-          return time + 100;
-        case '수':
-          return time + 200;
-        case '목':
-          return time + 300;
-        default:
-          return time + 400;
-      }
-    });
-    return [...acc, ...mappedTimes];
-  }, []);
 
   const handleLectureTimeByTime = (key: string, index: number) => (
     e: { target: { value: string } },
@@ -211,19 +226,6 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     };
     setTimeSpaceComponents(updatedComponents);
   };
-
-  React.useEffect(() => {
-    if (customTempLecture) {
-      updateCustomTempLecture({
-        ...customTempLecture,
-        class_title: lectureName,
-        professor: professorName,
-        class_time: timeSpaceComponents.map((item) => item.lectureTime),
-        class_place: timeSpaceComponents.map((item) => item.place),
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lectureName, professorName, timeSpaceComponents]);
 
   return (
     <form
