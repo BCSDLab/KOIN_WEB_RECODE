@@ -66,6 +66,11 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const isOverflow = timeSpaceContainerRef.current
     ? timeSpaceContainerRef.current.getBoundingClientRect().height > 400
     : false;
+  const isReverseDropdown = positionValues.map(
+    (value) => (timeSpaceContainerRef.current
+      ? timeSpaceContainerRef.current.getBoundingClientRect().bottom - value < 150
+      : false),
+  );
 
   const changeToTimetableTime = (timeInfo: {
     startHour: string;
@@ -330,7 +335,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                   <div
                     className={cn({
                       [styles['form-group-time__time']]: true,
-                      [styles['form-group-time__time--reverse']]: timeSpaceContainerRef.current ? timeSpaceContainerRef.current.getBoundingClientRect().bottom - positionValues[index] < 150 : false,
+                      [styles['form-group-time__time--reverse']]: isReverseDropdown[index],
                     })}
                     ref={(element) => {
                       reverseRef.current[index] = element;
