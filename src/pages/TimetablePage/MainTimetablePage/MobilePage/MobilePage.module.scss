@@ -1,11 +1,12 @@
 @use "utils/scss/media.scss" as media;
 
 .page {
-  &__timetable {
+  &__timetable-wrap {
     display: flex;
+    flex-direction: column;
   }
 
-  &__filter {
+  &__header {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -14,11 +15,6 @@
 
   &__semester {
     width: 150px;
-  }
-
-  &__timetable-wrap {
-    display: flex;
-    flex-direction: column;
   }
 
   &__button {
@@ -39,6 +35,10 @@
       width: 24px;
       height: 24px;
     }
+  }
+
+  &__timetable {
+    display: flex;
   }
 }
 

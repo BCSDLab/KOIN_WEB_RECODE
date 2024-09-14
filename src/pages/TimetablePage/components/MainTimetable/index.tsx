@@ -4,10 +4,10 @@ import React from 'react';
 import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
 import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
-import CurriculumListBox from 'pages/TimetablePage/components/Curriculum';
+import Curriculum from 'pages/TimetablePage/components/Curriculum';
 import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
 import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
-import Timetable from 'components/TimetablePage/Timetable';
+import Timetable from 'pages/TimetablePage/components/Timetable';
 import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import { useSemester } from 'utils/zustand/semester';
@@ -17,7 +17,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
-export default function MainTimetable({ frameId }: { frameId: number }) {
+function MainTimetable({ frameId }: { frameId: number }) {
   const { myLecturesV2 } = useMyLecturesV2(frameId);
   const navigate = useNavigate();
   const token = useTokenState();
@@ -43,7 +43,7 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
         <div className={styles['page__total-grades']}>
           <TotalGrades myLectureList={myLecturesV2} />
         </div>
-        <CurriculumListBox list={deptList} />
+        <Curriculum list={deptList} />
         <button
           type="button"
           className={styles.page__button}
@@ -83,3 +83,5 @@ export default function MainTimetable({ frameId }: { frameId: number }) {
     </div>
   );
 }
+
+export default MainTimetable;

@@ -43,11 +43,11 @@ function CurrentSemesterLectureList({
   myLecturesV2,
   frameId,
 }: CurrentSemesterLectureListProps) {
-  const { data: lectureList } = useLectureList(semesterKey);
   const tempLecture = useTempLecture();
+  const { data: userInfo } = useUser();
+  const { data: lectureList } = useLectureList(semesterKey);
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLectureV2 } = useTimetableV2Mutation(frameId);
-  const { data: userInfo } = useUser();
 
   return (
     <LectureTable
@@ -147,27 +147,28 @@ function MyLectureListBox({ myLectures, frameId }: MyLectureListBoxProps) {
 
 function LectureList({ frameId }: { frameId: number }) {
   const logger = useLogger();
-  const semesterParams = useParams().id;
   const semester = useSemester();
+  const semesterParams = useParams().id;
   const mostRecentSemester = '20242';
-  const { updateSemester } = useSemesterAction();
-  if (semesterParams !== String(frameId)) {
-    // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
-    updateSemester(semesterParams || mostRecentSemester);
-  }
-  const {
-    value: departmentFilterValue,
-    onChangeSelect: onChangeDeptSelect,
-  } = useSelect();
-  const {
-    onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef,
-  } = useSearch();
-  const { myLecturesV2 } = useMyLecturesV2(frameId);
+  const { value: departmentFilterValue, onChangeSelect: onChangeDeptSelect } = useSelect();
   const [isToggled, setIsToggled] = React.useState(false);
+  const { updateSemester } = useSemesterAction();
+  const { myLecturesV2 } = useMyLecturesV2(frameId);
+  const {
+    onClickSearchButton,
+    onKeyDownSearchInput,
+    value: searchValue,
+    searchInputRef,
+  } = useSearch();
 
   const toggleLectureList = () => {
     setIsToggled((prev) => !prev);
   };
+
+  if (semesterParams !== String(frameId)) {
+    // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
+    updateSemester(semesterParams || mostRecentSemester);
+  }
 
   return (
     <div className={styles.page}>
@@ -208,25 +209,29 @@ function LectureList({ frameId }: { frameId: number }) {
       </div>
       <ErrorBoundary fallbackClassName="loading">
         <React.Suspense fallback={<LoadingSpinner size="50" />}>
-          {!isToggled
-            ? (
-              <CurrentSemesterLectureList
-                frameId={frameId}
-                semesterKey={semester}
-                filter={{
-                  // 백엔드 수정하면 제거
-                  department: departmentFilterValue ?? '전체',
-                  search: searchValue ?? '',
-                }}
-                myLecturesV2={myLecturesV2}
-              />
-            )
-            : <MyLectureListBox myLectures={myLecturesV2} frameId={frameId} />}
+          {!isToggled ? (
+            <CurrentSemesterLectureList
+              frameId={frameId}
+              semesterKey={semester}
+              filter={{
+                // 백엔드 수정하면 제거
+                department: departmentFilterValue ?? '전체',
+                search: searchValue ?? '',
+              }}
+              myLecturesV2={myLecturesV2}
+            />
+          ) : (
+            <MyLectureListBox myLectures={myLecturesV2} frameId={frameId} />
+          )}
         </React.Suspense>
       </ErrorBoundary>
       <div className={styles.page__foot}>
         <div className={styles.page__toggle}>
-          <ToggleButton width="46" height="24" handleToggle={toggleLectureList} />
+          <ToggleButton
+            width="46"
+            height="24"
+            handleToggle={toggleLectureList}
+          />
           <div>시간표에 추가한 과목</div>
         </div>
         <ErrorBoundary fallbackClassName="loading">
