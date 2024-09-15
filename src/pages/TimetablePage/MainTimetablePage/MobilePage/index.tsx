@@ -2,7 +2,7 @@ import React from 'react';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import showToast from 'utils/ts/showToast';
-import Timetable from 'components/TimetablePage/Timetable';
+import Timetable from 'pages/TimetablePage/components/Timetable';
 import SemesterListbox from 'pages/TimetablePage/components/SemesterList';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
@@ -28,7 +28,7 @@ function MobilePage({ frameId }: { frameId: string | undefined }) {
   return (
     <>
       <div className={styles['page__timetable-wrap']}>
-        <div className={styles.page__filter}>
+        <div className={styles.page__header}>
           <div className={styles.page__semester}>
             <React.Suspense
               fallback={(

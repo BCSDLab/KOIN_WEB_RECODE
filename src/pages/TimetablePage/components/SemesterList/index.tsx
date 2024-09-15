@@ -17,24 +17,35 @@ import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';
 import AddSemesterModal from './AddSemesterModal';
 
-function SemesterListbox() {
-  const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
+function SemesterList() {
   const logger = useLogger();
+  const semester = useSemester();
+  const token = useTokenState();
   const portalManager = useModalPortal();
-  const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const semesterOptionList = useSemesterOptionList();
+  const { updateSemester } = useSemesterAction();
+
+  const [currentSemester, setCurrentSemester] = useState(semester);
+  const [isOpenSemesterList, , closePopup, triggerPopup] = useBooleanState(false);
+  const [selectedSemester, setSelectedSemester] = React.useState('');
+  const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
+
+  const { mutate: deleteTimetableFrame } = useDeleteSemester(
+    token,
+    selectedSemester || '20242',
+  );
+
+  const semesterListToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     triggerPopup();
   };
-  const semester = useSemester();
-  const { updateSemester } = useSemesterAction();
-  const [currentSemester, setCurrentSemester] = useState(semester);
-  const token = useTokenState();
+
   const onChangeSelect = (e: { target: { value: string } }) => {
     const { target } = e;
     updateSemester(target?.value);
     setCurrentSemester(target?.value);
   };
-  const semesterOptionList = useSemesterOptionList();
+
   const onClickOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
@@ -44,8 +55,6 @@ function SemesterListbox() {
   };
 
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
-  const [selectedSemester, setSelectedSemester] = React.useState('');
-  const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 
   const onClickAddSemester = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -65,7 +74,6 @@ function SemesterListbox() {
     }
   };
 
-  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester || '20242');
   const handleDeleteSemester = () => {
     deleteTimetableFrame();
     if (selectedSemester === currentSemester) {
@@ -101,22 +109,26 @@ function SemesterListbox() {
     <div
       className={cn({
         [styles.select]: true,
-        [styles['select--opened']]: isOpenedPopup,
+        [styles['select--opened']]: isOpenSemesterList,
       })}
       ref={isModalOpen ? null : containerRef}
     >
       <button
         type="button"
-        onClick={handleToggleListBox}
+        onClick={semesterListToggle}
         className={cn({
           [styles.select__trigger]: true,
-          [styles['select__trigger--selected']]: isOpenedPopup,
+          [styles['select__trigger--selected']]: isOpenSemesterList,
         })}
       >
-        {currentSemester !== null ? semesterOptionList.find((item) => item.value === currentSemester)?.label : ''}
+        {currentSemester !== null
+          ? semesterOptionList.find((item) => item.value === currentSemester)
+            ?.label
+          : ''}
         <DownArrowIcon />
       </button>
-      {isOpenedPopup && (
+
+      {isOpenSemesterList && (
         <div className={styles.select__content}>
           <ul className={styles['select__content--list']} role="listbox">
             {semesterOptionList.map((optionValue) => (
@@ -124,13 +136,15 @@ function SemesterListbox() {
                 type="button"
                 className={cn({
                   [styles.select__option]: true,
-                  [styles['select__option--selected']]: optionValue.value === currentSemester,
+                  [styles['select__option--selected']]:
+                    optionValue.value === currentSemester,
                 })}
                 role="option"
                 aria-selected={optionValue.value === currentSemester}
                 data-value={optionValue.value}
                 onClick={onClickOption}
                 tabIndex={0}
+                key={optionValue.value}
               >
                 <li
                   className={styles['select__option--item']}
@@ -141,7 +155,7 @@ function SemesterListbox() {
                 <div>
                   <button
                     type="button"
-                    className={styles['select__option--setting']}
+                    className={styles['select__option--delete-button']}
                     onClick={(e) => onClickDeleteSemester(e, optionValue.value)}
                   >
                     <TrashCanIcon />
@@ -151,7 +165,11 @@ function SemesterListbox() {
               </button>
             ))}
           </ul>
-          <button type="button" className={styles.add} onClick={onClickAddSemester}>
+          <button
+            type="button"
+            className={styles['add-button']}
+            onClick={onClickAddSemester}
+          >
             <div>학기 추가하기</div>
             <AddIcon />
           </button>
@@ -161,4 +179,4 @@ function SemesterListbox() {
   );
 }
 
-export default SemesterListbox;
+export default SemesterList;

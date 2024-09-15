@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect } from 'react';
-import Timetable from 'components/TimetablePage/Timetable';
+import Timetable from 'pages/TimetablePage/components/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
