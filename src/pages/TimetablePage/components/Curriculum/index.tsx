@@ -6,13 +6,13 @@ import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import styles from 'pages/TimetablePage/MainTimetablePage/DefaultPage/DefaultPage.module.scss';
+import styles from './Curriculum.module.scss';
 
 export interface CurriculumListBoxProps {
   list: DeptListResponse;
 }
 
-function CurriculumListBox({ list }: CurriculumListBoxProps) {
+function Curriculum({ list }: CurriculumListBoxProps) {
   const logger = useLogger();
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
 
@@ -90,4 +90,4 @@ function CurriculumListBox({ list }: CurriculumListBoxProps) {
   );
 }
 
-export default CurriculumListBox;
+export default Curriculum;

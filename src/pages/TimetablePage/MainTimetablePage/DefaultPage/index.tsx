@@ -1,10 +1,10 @@
 /* eslint-disable no-restricted-globals */
-import LoadingSpinner from 'components/common/LoadingSpinner';
-import TimetableHeader from 'pages/TimetablePage/components/TimetableHeader';
 import React, { Suspense } from 'react';
+import LoadingSpinner from 'components/common/LoadingSpinner';
 import TimetableList from 'pages/TimetablePage/components/TimetableList';
-import MainTimetable from 'pages/TimetablePage/components/MyLectureTimetable';
+import MainTimetable from 'pages/TimetablePage/components/MainTimetable';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { ReactComponent as TimetableIcon } from 'assets/svg/timetable-icon.svg';
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {
@@ -68,7 +68,10 @@ export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageP
 
   return (
     <div className={styles.page}>
-      <TimetableHeader />
+      <div className={styles['timetable-header']}>
+        <TimetableIcon />
+        <h1 className={styles['timetable-header__title']}>시간표</h1>
+      </div>
       <Suspense
         fallback={(
           <div className={styles['central-loading-spinner']}>
@@ -77,7 +80,10 @@ export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageP
         )}
       >
         <div className={styles.page__content}>
-          <TimetableList currentFrameIndex={frameId} setCurrentFrameIndex={setCurrentFrameId} />
+          <TimetableList
+            currentFrameIndex={frameId}
+            setCurrentFrameIndex={setCurrentFrameId}
+          />
           <MainTimetable frameId={frameId} />
         </div>
       </Suspense>
