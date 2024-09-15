@@ -7,7 +7,7 @@ import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
+import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexTimetable.module.scss';

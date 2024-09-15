@@ -4,7 +4,7 @@ import { DeptListResponse } from 'api/dept/entity';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './Curriculum.module.scss';
 
@@ -30,7 +30,7 @@ function Curriculum({ list }: CurriculumListBoxProps) {
     closePopup();
   };
 
-  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
+  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
 
   return (
     <div
@@ -38,7 +38,7 @@ function Curriculum({ list }: CurriculumListBoxProps) {
         [styles.select]: true,
         [styles['select--opened']]: isOpenedPopup,
       })}
-      ref={target}
+      ref={containerRef}
     >
       <button
         type="button"

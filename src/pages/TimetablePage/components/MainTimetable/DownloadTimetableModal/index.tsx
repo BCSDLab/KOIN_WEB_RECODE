@@ -2,7 +2,7 @@ import React from 'react';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
-import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
+import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import { useTimeString } from 'utils/zustand/myLectures';
 import styles from './DownloadTimetableModal.module.scss';

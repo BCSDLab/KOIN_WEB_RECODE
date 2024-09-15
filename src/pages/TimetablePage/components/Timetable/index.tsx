@@ -1,18 +1,24 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
+import {
+  LectureInfo, TimetableDayLectureInfo, TimetableLectureInfoV2,
+} from 'interfaces/Lecture';
+import {
+  BORDER_TOP_COLOR,
+  BACKGROUND_COLOR,
+  DAYS_STRING,
+} from 'static/timetable';
+import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
 import { useLocation } from 'react-router-dom';
 import { Portal } from 'components/common/Modal/PortalProvider';
-import { LectureInfo, TimetableDayLectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
-import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
-import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
-import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
+import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
-import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
-import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
+import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
 import AlertModal from 'components/common/Modal/AlertModal';
 import styles from './Timetable.module.scss';
 
@@ -48,19 +54,16 @@ function Timetable({
 }: TimetableProps) {
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
+  const [isMouseOver, setIsMouseOver] = React.useState('');
   const { pathname } = useLocation();
   const isEditable = pathname.includes('/timetable/modify');
   const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
   const { myLecturesV2 } = useMyLecturesV2(frameId);
-  const { timeString, setTimeString } = useTimeString();
   const tempLecture = useTempLecture();
   const customTempLecture = useCustomTempLecture();
   const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
   const customDayValue = useTimetableDayListV2(customTempLectureArray);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-
-  const [isMouseOver, setIsMouseOver] = React.useState('');
-
+  const { timeString, setTimeString } = useTimeString();
   const handleRemoveLectureClick = ({
     lecture_class, professor, id, name,
   }: RemoveLectureProps) => {
@@ -88,7 +91,6 @@ function Timetable({
       ));
     }
   };
-
   const findMaxTime = (myTimetableLectures: TimetableDayLectureInfo[][] | undefined) => {
     let maxTime = 19;
     if (myTimetableLectures !== undefined) {
@@ -99,22 +101,19 @@ function Timetable({
         }
       });
     }
-
     return maxTime;
   };
-
   const updateTimeString = (maxTime: number) => {
     const startHour = 9;
     const timeArray = [];
     const realMaxTime = 9 + maxTime / 2;
-
     for (let hour = startHour; hour <= realMaxTime; hour += 1) {
       timeArray.push(hour.toString(), '');
     }
 
     return timeArray;
   };
-
+  const scrollRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
     const fixedMaxTime = findMaxTime(lectures);
     let maxTime = 0;
