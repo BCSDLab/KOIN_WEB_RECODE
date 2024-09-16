@@ -80,7 +80,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
   };
   const escapeByLogo = async () => {
-    if (pathname === '/timetable') {
+    if (pathname === ROUTES.Timetable()) {
       logger.actionEventClick({
         actionTitle: 'USER',
         title: 'timetable_back',
@@ -90,7 +90,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
-    if (pathname.includes('/store') && search.includes('state')) {
+    if (pathname.includes(ROUTES.Store()) && search.includes('state')) {
       const shopId = pathname.split('/')[2];
       const shopName = await api.store.getStoreDetailInfo(shopId);
       logger.actionEventClick({
@@ -102,14 +102,14 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
       });
     }
-    navigate('/', { replace: true });
+    navigate(ROUTES.Main(), { replace: true });
   };
 
   return (
     <>
       <Link
         className={styles.header__logo}
-        to={ROUTES.Main}
+        to={ROUTES.Main()}
         tabIndex={0}
         onClick={escapeByLogo}
         type="button"
@@ -177,7 +177,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           <>
             <li className={styles['header__auth-link']}>
               <Link
-                to={ROUTES.AuthSignup}
+                to={ROUTES.AuthSignup()}
                 onClick={() => {
                   logger.actionEventClick({
                     actionTitle: 'USER',
@@ -191,7 +191,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
             </li>
             <li className={styles['header__auth-link']}>
               <Link
-                to={ROUTES.Auth}
+                to={ROUTES.Auth()}
                 onClick={() => {
                   logger.actionEventClick({
                     actionTitle: 'USER',

@@ -59,7 +59,7 @@ export default function Panel({ openModal }: PanelProps) {
       closeSidebar();
       openModal();
     } else {
-      navigate(ROUTES.Auth);
+      navigate(ROUTES.Auth());
     }
   };
 
@@ -124,7 +124,7 @@ export default function Panel({ openModal }: PanelProps) {
                 });
               }
               : () => {
-                navigate(ROUTES.Auth);
+                navigate(ROUTES.Auth());
                 logger.actionEventClick({
                   actionTitle: 'USER',
                   title: 'hamburger',

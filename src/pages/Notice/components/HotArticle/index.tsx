@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import useHotArticleList from 'pages/Notice/hooks/useHotArticle';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './HotArticles.module.scss';
 
 const LINK_LIST = [
@@ -37,7 +38,7 @@ export default function HotArticles() {
         {hotArticles.map((article, index) => (
           <Link
             className={styles['hot-article__content']}
-            to={`/board/notice/${article.id}`}
+            to={ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true })}
             key={article.id + article.board_id}
             onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'notice_hot', value: article.title })}
           >

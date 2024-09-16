@@ -6,6 +6,7 @@ import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
+import ROUTES from 'static/routes';
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {
@@ -34,7 +35,7 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
     <div className={styles['store-list']}>
       {storeListData?.map((store: StoreList) => (
         <Link
-          to={`/store/${store.id}?state=메뉴`}
+          to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴`}
           className={styles['store-list__item']}
           key={store.id}
           onClick={() => logger.actionEventClick({

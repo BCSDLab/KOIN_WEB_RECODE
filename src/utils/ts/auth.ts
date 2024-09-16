@@ -7,7 +7,7 @@ export function setRedirectPath(path: string) {
 }
 
 export function getRedirectPath(): string {
-  return sessionStorage.getItem(REDIRECT_KEY) || ROUTES.Main;
+  return sessionStorage.getItem(REDIRECT_KEY) || ROUTES.Main();
 }
 
 export function clearRedirectPath() {
@@ -17,5 +17,5 @@ export function clearRedirectPath() {
 export function redirectToLogin(currentPath?: string) {
   const pathToSave = currentPath || window.location.pathname;
   setRedirectPath(pathToSave);
-  window.location.href = ROUTES.Auth;
+  window.location.href = ROUTES.Auth();
 }

@@ -434,7 +434,7 @@ const useModifyInfoForm = () => {
   const navigate = useNavigate();
   const token = useTokenState();
   const onSuccess = () => {
-    navigate(ROUTES.Main);
+    navigate(ROUTES.Main());
     queryClient.invalidateQueries({ queryKey: ['userInfo', token] });
   };
   const { status, mutate } = useUserInfoUpdate({ onSuccess });
@@ -469,7 +469,7 @@ function ModifyInfoDefaultPage() {
   const onClickUserDeleteConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     deleteUser(token);
-    navigate(ROUTES.Main);
+    navigate(ROUTES.Main());
   };
 
   const onClickDeleteUser = (e: React.MouseEvent<HTMLButtonElement>) => {

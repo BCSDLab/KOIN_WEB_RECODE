@@ -30,14 +30,14 @@ function IndexNotice() {
     <section className={styles.template}>
       <div className={styles.template__header}>
         <Link
-          to={ROUTES.BoardNotice}
+          to={ROUTES.BoardNotice()}
           className={styles['template__title-link']}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice', value: '공지사항' })}
         >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
         <Link
-          to={ROUTES.BoardNotice}
+          to={ROUTES.BoardNotice()}
           className={styles.template__link}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice_detail', value: '공지사항' })}
         >
@@ -51,7 +51,7 @@ function IndexNotice() {
           {articles.slice(0, 7).map((article) => (
             <li key={article.id} className={styles.list__item}>
               <Link
-                to={`/board/notice/${article.id}`}
+                to={ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true })}
                 className={styles['list__item-link']}
               >
                 <span className={styles['list__item-type']}>

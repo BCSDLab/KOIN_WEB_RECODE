@@ -28,12 +28,12 @@ function IndexStore() {
       current_page: category.name,
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     });
-    navigate(`${ROUTES.Store}?category=${category.id}`);
+    navigate(`${ROUTES.Store()}?category=${category.id}`);
   };
 
   return (
     <section className={styles.template}>
-      <Link to={ROUTES.Store} className={styles.template__title}>주변상점</Link>
+      <Link to={ROUTES.Store()} className={styles.template__title}>주변상점</Link>
       <div className={styles.category__wrapper}>
         {categories?.shop_categories.map((category) => (
           <div

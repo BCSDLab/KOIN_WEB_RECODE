@@ -80,7 +80,7 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
             <button
               type="button"
               onClick={() => navigate(
-                ROUTES.ReviewEdit.general(params.id!),
+                ROUTES.ReviewEdit({ id: params.id!, isLink: true }),
                 { state: { from: review_id } },
               )}
               className={styles.section}
@@ -108,7 +108,11 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
               }
               if (userInfo) {
                 loggingReportClick();
-                navigate(ROUTES.ReviewReport.general(params.id!, review_id));
+                navigate(ROUTES.ReviewReport({
+                  shopid: params.id!,
+                  reviewid: String(review_id),
+                  isLink: true,
+                }));
               } else {
                 openLoginModal();
               }

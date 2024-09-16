@@ -3,6 +3,7 @@ import { Article } from 'api/notice/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
+import ROUTES from 'static/routes';
 import styles from './NoticeList.module.scss';
 
 interface NoticeListProps {
@@ -17,7 +18,7 @@ export default function NoticeList({ articles }: NoticeListProps) {
       {articles.map((article) => (
         <Link
           className={styles.list}
-          to={`/board/notice/${article.id}`}
+          to={ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true })}
           key={article.id}
         >
           <div className={styles.list__id}>{ article.id }</div>

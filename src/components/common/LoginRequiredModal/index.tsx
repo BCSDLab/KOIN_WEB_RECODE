@@ -66,7 +66,7 @@ export default function LoginRequiredModal({
             onClick={() => {
               setRedirectPath(`${location.pathname}${location.search}`);
               loggingLoginClick();
-              navigate(ROUTES.Auth);
+              navigate(ROUTES.Auth());
             }}
           >
             로그인하기

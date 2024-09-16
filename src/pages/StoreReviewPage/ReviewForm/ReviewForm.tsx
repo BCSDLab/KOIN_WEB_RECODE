@@ -11,6 +11,7 @@ import { UseMutateFunction } from '@tanstack/react-query';
 import { ReviewRequest } from 'api/review/entity';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './ReviewForm.module.scss';
 
 interface Props {
@@ -88,7 +89,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
     if (rate) {
       mutate(reviewData);
       reviewSuccessLogging();
-      navigate(`/store/${storeDetail.id!}?state=리뷰`, { replace: true });
+      navigate(`${ROUTES.StoreDetail({ id: String(storeDetail.id), isLink: true })}?state=리뷰`, { replace: true });
     }
   };
 

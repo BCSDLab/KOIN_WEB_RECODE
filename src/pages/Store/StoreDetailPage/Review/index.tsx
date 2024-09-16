@@ -19,7 +19,7 @@ export default function ReviewPage({ id }: { id: string }) {
     <Suspense fallback={<div />}>
       <div className={styles.container}>
         <div className={styles['button-wrapper']}>
-          <ReviewButton goReviewPage={() => navigate(ROUTES.Review.general(id))} />
+          <ReviewButton goReviewPage={() => navigate(ROUTES.Review({ id, isLink: true }))} />
         </div>
         <AverageRating />
       </div>

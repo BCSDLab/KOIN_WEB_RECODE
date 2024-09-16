@@ -56,7 +56,7 @@ export default function AuthenticateUserModal({
     if (isCheckPasswordSuccess) {
       updateAuthentication(isCheckPasswordSuccess);
       onClose();
-      navigate(ROUTES.AuthModifyInfo);
+      navigate(ROUTES.AuthModifyInfo());
     }
   });
 

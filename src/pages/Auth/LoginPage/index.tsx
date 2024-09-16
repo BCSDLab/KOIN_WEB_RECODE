@@ -166,7 +166,7 @@ function LoginPage() {
         </a>
         <Link
           className={styles.help__link}
-          to={ROUTES.AuthFindPW}
+          to={ROUTES.AuthFindPW()}
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',
@@ -179,7 +179,7 @@ function LoginPage() {
         </Link>
         <Link
           className={styles.help__link}
-          to={ROUTES.AuthSignup}
+          to={ROUTES.AuthSignup()}
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',

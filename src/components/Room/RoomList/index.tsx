@@ -13,7 +13,10 @@ function RoomList(props: RoomListProps) {
     <ul className={styles.list}>
       {lands?.map((room) => (
         <li className={styles.list__item} key={room.id}>
-          <Link className={styles.list__link} to={ROUTES.RoomDetail.general(room.id)}>
+          <Link
+            className={styles.list__link}
+            to={ROUTES.RoomDetail({ id: String(room.id), isLink: true })}
+          >
             <div className={styles.list__box}>
               <div className={styles.list__name}>{room.name}</div>
               <div className={styles.fee}>

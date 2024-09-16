@@ -203,7 +203,7 @@ function StoreDetailPage() {
               className={styles['section__header--button']}
               aria-label="주변 상점 리스트 이동"
               type="button"
-              onClick={() => navigate(ROUTES.Store)}
+              onClick={() => navigate(ROUTES.Store())}
             >
               주변 상점
             </button>
@@ -287,7 +287,7 @@ function StoreDetailPage() {
                   type="button"
                   onClick={() => {
                     onClickList();
-                    navigate(ROUTES.Store);
+                    navigate(ROUTES.Store());
                   }}
                 >
                   상점목록

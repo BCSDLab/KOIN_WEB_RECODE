@@ -450,7 +450,7 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
 const useSignupForm = () => {
   const navigate = useNavigate();
   const onSuccess = () => {
-    navigate(ROUTES.Main);
+    navigate(ROUTES.Main());
   };
   const { status, mutate } = useSignup({ onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
