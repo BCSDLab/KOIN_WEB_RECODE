@@ -12,6 +12,7 @@ import LoginRequiredModal from 'components/common/LoginRequiredModal';
 import showToast from 'utils/ts/showToast';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
+import ROUTES from 'static/routes';
 import styles from './SelectButton.module.scss';
 
 interface Props {
@@ -79,7 +80,7 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
             <button
               type="button"
               onClick={() => navigate(
-                `/edit/review/${params.id!}`,
+                ROUTES.ReviewEdit({ id: params.id!, isLink: true }),
                 { state: { from: review_id } },
               )}
               className={styles.section}
@@ -107,7 +108,11 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
               }
               if (userInfo) {
                 loggingReportClick();
-                navigate(`/report/review/shopid/${params.id!}/reviewid/${review_id}`);
+                navigate(ROUTES.ReviewReport({
+                  shopid: params.id!,
+                  reviewid: String(review_id),
+                  isLink: true,
+                }));
               } else {
                 openLoginModal();
               }

@@ -10,6 +10,7 @@ import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameLi
 import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable() {
@@ -59,7 +60,7 @@ export default function IndexTimeTable() {
   return (
     <div className={styles.template}>
       <Link
-        to="/timetable"
+        to={ROUTES.Timetable()}
         className={styles.title}
         onClick={() => {
           logger.actionEventClick({
@@ -74,7 +75,7 @@ export default function IndexTimeTable() {
       <ErrorBoundary fallbackClassName="loading">
         <Suspense fallback={null}>
           <Link
-            to="/timetable"
+            to={ROUTES.Timetable()}
             onClick={() => {
               logger.actionEventClick({
                 actionTitle: 'USER',

@@ -7,6 +7,7 @@ import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
 import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import ROUTES from 'static/routes';
 import styles from './MobileStoreList.module.scss';
 
 interface MobileStoreListProps {
@@ -30,7 +31,7 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
       {
         storeListData?.map((store: StoreListV2) => (
           <Link
-            to={`/store/${store.id}`}
+            to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴`}
             className={styles['store-list__item']}
             key={store.id}
             onClick={() => logger.actionEventClick({
