@@ -70,7 +70,3 @@ export default function TimetableToast({
     </div>
   );
 }
-
-TimetableToast.defaultProps = {
-  duration: 5000,
-};

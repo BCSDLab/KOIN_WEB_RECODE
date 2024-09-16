@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props, no-restricted-globals */
 import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';

@@ -1,0 +1,155 @@
+@use "utils/scss/media.scss" as media;
+
+.timetable {
+  background-color: #fff;
+  border: 1px solid #f5f5f5;
+  border-radius: 5px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+  }
+
+  &__head {
+    background-color: #fff;
+    display: flex;
+    border-radius: 5px;
+
+    @include media.media-breakpoint(mobile) {
+      height: 18px;
+
+      & div:last-child {
+        border-right: none;
+      }
+    }
+  }
+
+  &__col {
+    border-right: #f5f5f5 1px solid;
+
+    @include media.media-breakpoint(mobile) {
+      width: calc((100% - 52px) / 5);
+    }
+
+    &--head {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      font-family: Pretendard, sans-serif;
+      font-weight: 400;
+      line-height: 25.6px;
+      text-align: left;
+      letter-spacing: normal;
+    }
+
+    &--preview {
+      border: none;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    overflow: auto;
+    display: inline-flex;
+    flex: none;
+    position: relative;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    &--time {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Pretendard, sans-serif;
+      font-weight: 400;
+      line-height: 25.6px;
+      text-align: left;
+
+      &:nth-child(odd) {
+        position: relative;
+        z-index: 2;
+        top: 16px;
+        background-color: #fff;
+      }
+    }
+
+    &--time-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Pretendard, sans-serif;
+      font-weight: 400;
+      line-height: 25.6px;
+      text-align: left;
+
+      &:nth-child(odd) {
+        position: relative;
+        z-index: 2;
+        top: 10px;
+        background-color: #fff;
+        font-size: 9px;
+      }
+    }
+  }
+
+  &__row-container {
+    border-top: #f5f5f5 1px solid;
+  }
+
+  &__row-line {
+    margin-top: -1px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      border-bottom: #f5f5f5;
+    }
+
+    &:nth-child(odd)::after {
+      border-bottom: #f5f5f5 1px solid;
+    }
+
+    &:nth-child(even)::after {
+      border-bottom: #f5f5f5 1px solid;
+    }
+  }
+
+  &__lecture {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 3;
+    font-family: NanumSquare, serif;
+    box-sizing: border-box;
+
+    @include media.media-breakpoint(mobile) {
+      width: calc((100% - 57px) / 5);
+    }
+
+    &--selected {
+      border-color: #000;
+      border-style: solid;
+
+      @include media.media-breakpoint(mobile) {
+        width: calc((100% - 55px) / 5);
+      }
+    }
+
+    &--preview {
+      border-top: solid 2px #cacaca;
+      background-color: #ddd9;
+    }
+  }
+
+  &__delete-button {
+    position: absolute;
+    right: 0;
+    top: 3px;
+    cursor: pointer;
+  }
+}
