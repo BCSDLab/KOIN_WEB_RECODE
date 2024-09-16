@@ -50,7 +50,16 @@ export default function TimetableList({
 
   const handleAddTimetableClick = () => {
     if (token) {
-      addTimetableFrame({ semester: String(semester) });
+      addTimetableFrame(
+        { semester: String(semester) },
+        {
+          onSuccess: (newTimetable) => {
+            if (newTimetable && newTimetable.id) {
+              setCurrentFrameIndex(newTimetable.id);
+            }
+          },
+        },
+      );
     } else {
       portalManager.open((portalOption: Portal) => (
         <InducingLoginModal
@@ -61,15 +70,6 @@ export default function TimetableList({
       ));
     }
   };
-
-  React.useEffect(() => {
-    if (timetableFrameList) {
-      const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
-      if (mainFrame && mainFrame.id) {
-        setCurrentFrameIndex(mainFrame.id);
-      }
-    }
-  }, [setCurrentFrameIndex, timetableFrameList]);
 
   return (
     <div className={styles['timetable-list']}>
