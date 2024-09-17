@@ -26,7 +26,8 @@ function TimetablePage() {
         setCurrentFrameIndex(mainFrame.id);
       }
     }
-  }, [timetableFrameList]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.page}>
