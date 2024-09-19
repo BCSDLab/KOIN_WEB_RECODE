@@ -42,8 +42,15 @@ function Listbox({
     onChange({ target: { value: optionValue ?? '' } });
     closePopup();
   };
+
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
+
+  const isOverHalf = containerRef.current
+    ? containerRef.current.getBoundingClientRect().bottom
+    > window.innerHeight / 2
+    : !!containerRef.current;
   const styleClasses = version !== 'default' ? newStyles : styles;
+
   return (
     <div
       className={styleClasses.select}
@@ -65,7 +72,15 @@ function Listbox({
         {version !== 'default' && <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
-        <ul className={styleClasses.select__content} role="listbox">
+        <ul
+          className={
+          cn({
+            [styleClasses.select__content]: true,
+            [styleClasses['select__content--up']]: isOverHalf,
+          })
+}
+          role="listbox"
+        >
           {list.map((optionValue) => (
             <button
               type="button"
