@@ -176,11 +176,31 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     e: { target: { value: string } },
   ) => {
     const { target } = e;
-    const newTimeInfo = {
+    let newTimeInfo = {
       ...timeSpaceComponents[index].time,
       [key]: target?.value,
     };
-    const newTimetableTime = changeToTimetableTime(newTimeInfo);
+
+    let newTimetableTime = changeToTimetableTime(newTimeInfo);
+    // 올바르지 않은 시간을 선택했을 시
+    if (newTimetableTime.length === 0) {
+      const newStartTime = Number(newTimeInfo.startHour.slice(0, 2));
+      const newEndTime = Number(newTimeInfo.endHour.slice(0, 2));
+      if (key.slice(0, 5) === 'start') {
+        newTimeInfo = {
+          ...newTimeInfo,
+          endHour: `${newStartTime + 1}시`,
+          endMinute: newStartTime + 1 === 24 ? '00분' : newTimeInfo.startMinute,
+        };
+      } else {
+        newTimeInfo = {
+          ...newTimeInfo,
+          startHour: newEndTime - 1 < 10 ? '09시' : `${newEndTime - 1}시`,
+          startMinute: newEndTime - 1 < 9 ? '00분' : newTimeInfo.endMinute,
+        };
+      }
+      newTimetableTime = changeToTimetableTime(newTimeInfo);
+    }
     const updatedTime = addWeekTime(timeSpaceComponents[index].week, newTimetableTime);
     const updatedComponents = [...timeSpaceComponents];
     updatedComponents[index] = {
@@ -344,8 +364,8 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                     <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" />
                     <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" />
                     <span>-</span>
-                    <Listbox list={HOUR} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" />
-                    <Listbox list={MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" />
+                    <Listbox list={[...HOUR, { label: '24시', value: '24시' }]} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" />
+                    <Listbox list={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" />
                   </div>
                 </div>
               </div>
