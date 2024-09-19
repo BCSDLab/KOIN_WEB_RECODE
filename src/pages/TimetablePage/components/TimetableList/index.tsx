@@ -28,10 +28,12 @@ export default function TimetableList({
   const portalManager = useModalPortal();
   const semester = useSemester();
   const token = useTokenState();
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
-  const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const { data } = useTimetableFrameList(token, semester);
   const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
+  const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
+  const defaultFrame = data.filter((frame) => frame.is_main);
+  const timetableFrameList = data.filter((frame) => !frame.is_main);
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const handleTimetableSettingClick = (frame: TimetableFrameInfo) => {
     if (token) {
@@ -76,6 +78,34 @@ export default function TimetableList({
       <SemesterList />
       <ul className={styles['timetable-list__list']} role="listbox">
         <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
+          {defaultFrame.map((frame) => (
+            <button
+              type="button"
+              className={cn({
+                [styles['timetable-list__item']]: true,
+                [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id || !frame.id,
+              })}
+              key={frame.id}
+              onClick={() => (frame.id && setCurrentFrameIndex(frame.id))}
+            >
+              <li>
+                {frame.timetable_name}
+              </li>
+              <button
+                type="button"
+                className={styles['timetable-list__item--setting']}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleTimetableSettingClick(frame);
+                }}
+              >
+                {(currentFrameIndex === frame.id || !frame.id)
+                  ? <BlueSettingIcon />
+                  : <SettingIcon />}
+                설정
+              </button>
+            </button>
+          ))}
           {timetableFrameList?.map((frame) => (
             <button
               type="button"
