@@ -2,21 +2,24 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import Listbox from 'components/TimetablePage/Listbox';
-import { AddTimetableFrameRequest } from 'api/timetable/entity';
-import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
+import { AddTimetableFrameRequest, SemesterCheckResponse, TimetableFrameInfo } from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';
-import useAddSemester from 'pages/TimetablePage/hooks/useAddSemester';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import { UseMutateFunction } from '@tanstack/react-query';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {
-  onClose: () => void
-  setModalOpenFalse: () => void
+  onClose: () => void;
+  setModalOpenFalse: () => void;
+  addSemester:
+  UseMutateFunction<TimetableFrameInfo, unknown, AddTimetableFrameRequest, unknown>;
+  mySemester: SemesterCheckResponse | null;
 }
 
 export default function AddSemesterModal({
   onClose,
   setModalOpenFalse,
+  addSemester,
+  mySemester,
 }: AddSemesterModalProps) {
   /* 학기 API 완성 시 수정 예정 */
   const year = [{ label: '2024년도', value: '2024년도' },
@@ -40,18 +43,11 @@ export default function AddSemesterModal({
     const { target } = e;
     setSemesterValue(target?.value);
   };
-  const token = useTokenState();
-  const { mutate: addSemester } = useAddSemester(token);
-  const { data: mySemester } = useSemesterCheck(token);
   const closeModal = () => {
     setModalOpenFalse();
     onClose();
   };
   const handleAddSemester = (semesters: AddTimetableFrameRequest) => {
-    if (!token) {
-      showToast('warning', '로그인 후 이용 가능합니다.');
-      return;
-    }
     if (mySemester) {
       if (mySemester.semesters.includes(semesters.semester)) {
         showToast('info', '이미 있는 학기입니다.');

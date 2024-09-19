@@ -147,13 +147,21 @@ function MyLectureListBox({ myLectures, frameId }: MyLectureListBoxProps) {
 
 function LectureList({ frameId }: { frameId: number }) {
   const logger = useLogger();
+  // 가장 최신연도와 월을 가져옴
   const semester = useSemester();
-  const semesterParams = useParams().id;
-  const mostRecentSemester = '20242';
-  const { value: departmentFilterValue, onChangeSelect: onChangeDeptSelect } = useSelect();
-  const [isToggled, setIsToggled] = React.useState(false);
   const { updateSemester } = useSemesterAction();
+  const mostRecentSemester = `${new Date().getFullYear()}${new Date().getMonth() > 5 ? 2 : 1}`;
+  const semesterParams = useParams().id;
+  if (semesterParams !== String(frameId)) {
+    // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
+    updateSemester(semesterParams || mostRecentSemester);
+  }
+  const {
+    value: departmentFilterValue,
+    onChangeSelect: onChangeDeptSelect,
+  } = useSelect();
   const { myLecturesV2 } = useMyLecturesV2(frameId);
+  const [isToggled, setIsToggled] = React.useState(false);
   const {
     onClickSearchButton,
     onKeyDownSearchInput,
@@ -164,11 +172,6 @@ function LectureList({ frameId }: { frameId: number }) {
   const toggleLectureList = () => {
     setIsToggled((prev) => !prev);
   };
-
-  if (semesterParams !== String(frameId)) {
-    // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
-    updateSemester(semesterParams || mostRecentSemester);
-  }
 
   return (
     <div className={styles.page}>
