@@ -1,7 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
-import { ReactComponent as UpArrowIcon } from 'assets/svg/up-arrow-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './Listbox.module.scss';
@@ -63,7 +62,7 @@ function Listbox({
         })}
       >
         {value !== null ? list.find((item) => item.value === value)?.label : '학부'}
-        {version !== 'default' && (isOpenedPopup ? <UpArrowIcon /> : <DownArrowIcon />)}
+        {version !== 'default' && <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
         <ul className={styleClasses.select__content} role="listbox">
