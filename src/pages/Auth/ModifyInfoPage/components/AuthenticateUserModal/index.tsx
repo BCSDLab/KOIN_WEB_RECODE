@@ -12,6 +12,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useAuthenticationActions } from 'utils/zustand/authentication';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import ROUTES from 'static/routes';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -55,7 +56,7 @@ export default function AuthenticateUserModal({
     if (isCheckPasswordSuccess) {
       updateAuthentication(isCheckPasswordSuccess);
       onClose();
-      navigate('/auth/modifyInfo');
+      navigate(ROUTES.AuthModifyInfo());
     }
   });
 

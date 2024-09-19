@@ -29,6 +29,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const customTempLecture = useCustomTempLecture();
   const { updateCustomTempLecture } = useCustomTempLectureAction();
   const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
+  const { addMyLectureV2 } = useTimetableV2Mutation(Number(frameId));
 
   const [lectureName, setLectureName] = React.useState('');
   const [professorName, setProfessorName] = React.useState('');
@@ -43,10 +44,57 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     lectureTime: [0, 1],
     place: '',
   }]);
+  const timeSpaceContainerRef = React.useRef<HTMLDivElement>(null);
+  const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
+  const [positionValues, setPositionValues] = React.useState<number[]>([]);
+
   const isValid = (lectureName !== ''
     && !timeSpaceComponents.some((time) => time.lectureTime.length === 0));
+  const isOverflow = timeSpaceContainerRef.current
+    ? timeSpaceContainerRef.current.getBoundingClientRect().height > 400
+    : false;
+  const isReverseDropdown = positionValues.map(
+    (value) => (timeSpaceContainerRef.current
+      ? timeSpaceContainerRef.current.getBoundingClientRect().bottom - value < 150
+      : false),
+  );
 
-  const { addMyLectureV2 } = useTimetableV2Mutation(Number(frameId));
+  const changeToTimetableTime = (timeInfo: {
+    startHour: string;
+    startMinute: string;
+    endHour: string;
+    endMinute: string;
+  }) => {
+    const timetableStart = (Number(timeInfo.startHour.slice(0, 2)) - 9) * 2
+      + Number(timeInfo.startMinute.slice(0, 2)) / 30;
+    const timetableEnd = (Number(timeInfo.endHour.slice(0, 2)) - 9) * 2
+      + Number(timeInfo.endMinute.slice(0, 2)) / 30;
+    return Array.from(
+      { length: timetableEnd - timetableStart },
+      (_, idx) => timetableStart + idx,
+    );
+  };
+  const addWeekTime = (
+    weekInfo: string[],
+    timetableTime: number[],
+  ) => weekInfo.reduce((acc: number[], week) => {
+    const mappedTimes = timetableTime.map((time) => {
+      switch (week) {
+        case '월':
+          return time;
+        case '화':
+          return time + 100;
+        case '수':
+          return time + 200;
+        case '목':
+          return time + 300;
+        default:
+          return time + 400;
+      }
+    });
+    return [...acc, ...mappedTimes];
+  }, []);
+
   const handleAddLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isValid) {
@@ -91,6 +139,12 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     }]);
   };
 
+  const handleScroll = () => {
+    const updatedValues = reverseRef.current
+      .map((element) => element?.getBoundingClientRect().bottom || 0);
+    setPositionValues(updatedValues);
+  };
+
   const handleAddTimeSpaceComponent = () => {
     if (timeSpaceComponents.length > 4) {
       showToast(
@@ -110,42 +164,13 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       lectureTime: [],
       place: '',
     }]);
+    setTimeout(() => {
+      timeSpaceContainerRef.current!.scrollTo({
+        behavior: 'smooth',
+        top: 999,
+      });
+    }, 0);
   };
-  const changeToTimetableTime = (timeInfo: {
-    startHour: string;
-    startMinute: string;
-    endHour: string;
-    endMinute: string;
-  }) => {
-    const timetableStart = (Number(timeInfo.startHour.slice(0, 2)) - 9) * 2
-      + Number(timeInfo.startMinute.slice(0, 2)) / 30;
-    const timetableEnd = (Number(timeInfo.endHour.slice(0, 2)) - 9) * 2
-      + Number(timeInfo.endMinute.slice(0, 2)) / 30;
-    return Array.from(
-      { length: timetableEnd - timetableStart },
-      (_, idx) => timetableStart + idx,
-    );
-  };
-  const addWeekTime = (
-    weekInfo: string[],
-    timetableTime: number[],
-  ) => weekInfo.reduce((acc: number[], week) => {
-    const mappedTimes = timetableTime.map((time) => {
-      switch (week) {
-        case '월':
-          return time;
-        case '화':
-          return time + 100;
-        case '수':
-          return time + 200;
-        case '목':
-          return time + 300;
-        default:
-          return time + 400;
-      }
-    });
-    return [...acc, ...mappedTimes];
-  }, []);
 
   const handleLectureTimeByTime = (key: string, index: number) => (
     e: { target: { value: string } },
@@ -262,7 +287,14 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             />
           </div>
         </div>
-        <div className={styles['time-space-container']}>
+        <div
+          className={cn({
+            [styles['time-space-container']]: true,
+            [styles['time-space-container__overflow']]: !isOverflow,
+          })}
+          ref={timeSpaceContainerRef}
+          onScroll={handleScroll}
+        >
           {timeSpaceComponents.map(({
             time,
             week,
@@ -300,16 +332,20 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                       </div>
                     ))}
                   </div>
-                  <div className={styles['form-group-time__time']}>
-                    <div className={styles['form-group-time__time-section']}>
-                      <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" />
-                      <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" />
-                    </div>
+                  <div
+                    className={cn({
+                      [styles['form-group-time__time']]: true,
+                      [styles['form-group-time__time--reverse']]: isReverseDropdown[index],
+                    })}
+                    ref={(element) => {
+                      reverseRef.current[index] = element;
+                    }}
+                  >
+                    <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" />
+                    <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" />
                     <span>-</span>
-                    <div className={styles['form-group-time__time-section']}>
-                      <Listbox list={HOUR} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" />
-                      <Listbox list={MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" />
-                    </div>
+                    <Listbox list={HOUR} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" />
+                    <Listbox list={MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" />
                   </div>
                 </div>
               </div>

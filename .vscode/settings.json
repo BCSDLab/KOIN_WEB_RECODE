@@ -7,5 +7,10 @@
   "eslint.nodePath": ".yarn/sdks",
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "cSpell.words": ["bcsdlab", "Koin", "tanstack"]
+  "cSpell.words": [
+    "bcsdlab",
+    "Koin",
+    "tanstack",
+    "zustand"
+  ]
 }

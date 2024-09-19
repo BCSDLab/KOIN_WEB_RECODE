@@ -6,6 +6,7 @@ import { useLogout } from 'utils/hooks/auth/useLogout';
 import { useUser } from 'utils/hooks/state/useUser';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
 import { ReactComponent as PersonIcon } from 'assets/svg/person.svg';
+import ROUTES from 'static/routes';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -58,7 +59,7 @@ export default function Panel({ openModal }: PanelProps) {
       closeSidebar();
       openModal();
     } else {
-      navigate('/auth');
+      navigate(ROUTES.Auth());
     }
   };
 
@@ -123,7 +124,7 @@ export default function Panel({ openModal }: PanelProps) {
                 });
               }
               : () => {
-                navigate('/auth');
+                navigate(ROUTES.Auth());
                 logger.actionEventClick({
                   actionTitle: 'USER',
                   title: 'hamburger',

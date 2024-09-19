@@ -10,6 +10,7 @@ import { ReactComponent as KoinServiceLogo } from 'assets/svg/koin-service-logo.
 import { ReactComponent as WhiteArrowBackIcon } from 'assets/svg/white-arrow-back-icon.svg';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
+import ROUTES from 'static/routes';
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
@@ -23,14 +24,14 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const { openSidebar } = useMobileSidebar();
   const buttonState = useHeaderButtonStore((state) => state.buttonState);
 
-  const isMain = pathname === '/';
+  const isMain = pathname === ROUTES.Main();
   const isCustomButton = buttonState.type === 'custom';
   const navigate = useNavigate();
   const logger = useLogger();
   const params = useParams();
 
   const backInDetailPage = async () => {
-    if (pathname.includes('/store/') && params) {
+    if (pathname.includes(ROUTES.Store()) && params) {
       const response = await api.store.getStoreDetailInfo(params.id!);
       logger.actionEventClick({
         actionTitle: 'BUSINESS',
@@ -40,7 +41,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         current_page: sessionStorage.getItem('cameFrom') || '',
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
       }); // 상점 내 뒤로가기 버튼 로깅
-      navigate('/store');
+      navigate(ROUTES.Store());
       return;
     }
     if (pathname === '/timetable') {

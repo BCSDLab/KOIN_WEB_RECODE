@@ -10,6 +10,7 @@ import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import { ReactComponent as ReverseDestination } from 'assets/svg/reverse-destination.svg';
 import { useBusStore } from 'utils/zustand/bus';
 import { useCallback, useEffect, useState } from 'react';
+import ROUTES from 'static/routes';
 import styles from './IndexBus.module.scss';
 import useIndexBusDirection from './hooks/useIndexBusDirection';
 import useMobileBusCarousel from './hooks/useMobileBusCarousel';
@@ -63,7 +64,7 @@ function IndexBus() {
     }
 
     if (type === 'shuttle') {
-      navigate('/bus');
+      navigate(ROUTES.Bus());
       logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_bus', value: '버스' });
     } else {
       navigate(getBusDetail(type).link);
@@ -102,7 +103,7 @@ function IndexBus() {
   return (
     <section className={styles.template}>
       <Link
-        to="/bus"
+        to={ROUTES.Bus()}
         className={styles.template__title}
         onClick={() => {
           setSelectedTab(BUS_TYPES[0]);

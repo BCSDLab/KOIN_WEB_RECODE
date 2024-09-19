@@ -4,15 +4,15 @@ import { DeptListResponse } from 'api/dept/entity';
 import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
 import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import styles from 'pages/TimetablePage/MainTimetablePage/DefaultPage/DefaultPage.module.scss';
+import styles from './Curriculum.module.scss';
 
 export interface CurriculumListBoxProps {
   list: DeptListResponse;
 }
 
-function CurriculumListBox({ list }: CurriculumListBoxProps) {
+function Curriculum({ list }: CurriculumListBoxProps) {
   const logger = useLogger();
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
 
@@ -30,7 +30,7 @@ function CurriculumListBox({ list }: CurriculumListBoxProps) {
     closePopup();
   };
 
-  const { target } = useOnClickOutside<HTMLDivElement>(closePopup);
+  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
 
   return (
     <div
@@ -38,7 +38,7 @@ function CurriculumListBox({ list }: CurriculumListBoxProps) {
         [styles.select]: true,
         [styles['select--opened']]: isOpenedPopup,
       })}
-      ref={target}
+      ref={containerRef}
     >
       <button
         type="button"
@@ -90,4 +90,4 @@ function CurriculumListBox({ list }: CurriculumListBoxProps) {
   );
 }
 
-export default CurriculumListBox;
+export default Curriculum;

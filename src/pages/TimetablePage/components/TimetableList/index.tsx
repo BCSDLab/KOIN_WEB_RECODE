@@ -1,31 +1,30 @@
 /* eslint-disable no-restricted-imports */
 import React from 'react';
-import TimetableSettingModal from 'pages/TimetablePage/components/TimetableList/TimetableSettingModal';
+import { cn } from '@bcsdlab/utils';
+import { useSemester } from 'utils/zustand/semester';
+import { TimetableFrameInfo } from 'api/timetable/entity';
+import { Portal } from 'components/common/Modal/PortalProvider';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
 import { ReactComponent as BlueSettingIcon } from 'assets/svg/setting-icon-blue.svg';
-import SemesterListbox from 'pages/TimetablePage/components/SemesterList';
-import { useSemester } from 'utils/zustand/semester';
-import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import { TimetableFrameInfo } from 'api/timetable/entity';
-import useAddTimetableFrame from 'pages/TimetablePage/hooks/useAddTimetableFrame';
-import { cn } from '@bcsdlab/utils';
-import { Portal } from 'components/common/Modal/PortalProvider';
+import TimetableSettingModal from 'pages/TimetablePage/components/TimetableList/TimetableSettingModal';
 import InducingLoginModal from 'pages/TimetablePage/components/InducingLoginModal';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
+import SemesterList from 'pages/TimetablePage/components/SemesterList';
+import useAddTimetableFrame from 'pages/TimetablePage/hooks/useAddTimetableFrame';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './TimetableList.module.scss';
 
-interface TimetableListInfo {
+interface TimetableListProps {
   currentFrameIndex: number,
   setCurrentFrameIndex: (index: number) => void
 }
 
 export default function TimetableList({
   currentFrameIndex, setCurrentFrameIndex,
-}: TimetableListInfo) {
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+}: TimetableListProps) {
   const portalManager = useModalPortal();
   const semester = useSemester();
   const token = useTokenState();
@@ -34,6 +33,8 @@ export default function TimetableList({
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
   const defaultFrame = data.filter((frame) => frame.is_main);
   const timetableFrameList = data.filter((frame) => !frame.is_main);
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
   const handleTimetableSettingClick = (frame: TimetableFrameInfo) => {
     if (token) {
       setFocusFrame(frame);
@@ -48,9 +49,19 @@ export default function TimetableList({
       ));
     }
   };
+
   const handleAddTimetableClick = () => {
     if (token) {
-      addTimetableFrame({ semester: String(semester) });
+      addTimetableFrame(
+        { semester: String(semester) },
+        {
+          onSuccess: (newTimetable) => {
+            if (newTimetable && newTimetable.id) {
+              setCurrentFrameIndex(newTimetable.id);
+            }
+          },
+        },
+      );
     } else {
       portalManager.open((portalOption: Portal) => (
         <InducingLoginModal
@@ -62,18 +73,9 @@ export default function TimetableList({
     }
   };
 
-  React.useEffect(() => {
-    if (timetableFrameList) {
-      const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
-      if (mainFrame && mainFrame.id) {
-        setCurrentFrameIndex(mainFrame.id);
-      }
-    }
-  }, [setCurrentFrameIndex, timetableFrameList]);
-
   return (
     <div className={styles['timetable-list']}>
-      <SemesterListbox />
+      <SemesterList />
       <ul className={styles['timetable-list__list']} role="listbox">
         <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
           {defaultFrame.map((frame) => (

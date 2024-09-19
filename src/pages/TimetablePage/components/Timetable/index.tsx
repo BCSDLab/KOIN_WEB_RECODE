@@ -18,7 +18,7 @@ import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
-import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
+import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
 import AlertModal from 'components/common/Modal/AlertModal';
 import styles from './Timetable.module.scss';
 

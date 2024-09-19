@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect } from 'react';
-import Timetable from 'components/TimetablePage/Timetable';
+import Timetable from 'pages/TimetablePage/components/Timetable';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
@@ -7,9 +7,10 @@ import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
+import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable() {
@@ -59,7 +60,7 @@ export default function IndexTimeTable() {
   return (
     <div className={styles.template}>
       <Link
-        to="/timetable"
+        to={ROUTES.Timetable()}
         className={styles.title}
         onClick={() => {
           logger.actionEventClick({
@@ -74,7 +75,7 @@ export default function IndexTimeTable() {
       <ErrorBoundary fallbackClassName="loading">
         <Suspense fallback={null}>
           <Link
-            to="/timetable"
+            to={ROUTES.Timetable()}
             onClick={() => {
               logger.actionEventClick({
                 actionTitle: 'USER',

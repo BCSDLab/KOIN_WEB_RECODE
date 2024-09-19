@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {
@@ -165,7 +166,7 @@ function LoginPage() {
         </a>
         <Link
           className={styles.help__link}
-          to="/auth/findpw"
+          to={ROUTES.AuthFindPW()}
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',
@@ -178,7 +179,7 @@ function LoginPage() {
         </Link>
         <Link
           className={styles.help__link}
-          to="/auth/signup"
+          to={ROUTES.AuthSignup()}
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',

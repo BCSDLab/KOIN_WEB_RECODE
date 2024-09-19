@@ -2,6 +2,7 @@ import { useNavigate, Link } from 'react-router-dom';
 // import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import ROUTES from 'static/routes';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -27,12 +28,12 @@ function IndexStore() {
       current_page: category.name,
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     });
-    navigate(`/store?category=${category.id}`);
+    navigate(`${ROUTES.Store()}?category=${category.id}`);
   };
 
   return (
     <section className={styles.template}>
-      <Link to="/store" className={styles.template__title}>주변상점</Link>
+      <Link to={ROUTES.Store()} className={styles.template__title}>주변상점</Link>
       <div className={styles.category__wrapper}>
         {categories?.shop_categories.map((category) => (
           <div

@@ -90,18 +90,20 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 155px;
+    width: 139px;
     height: 48px;
     border: 0;
     border-radius: 5px;
     padding: 12px 20px;
-    background-color: #fafafa;
+    background-color: #fff;
     box-shadow: 0 2px 4px 0 #0000000a;
-    font-size: 15.5px;
+    font-size: 18px;
     gap: 8px;
     font-weight: 500;
     color: #4b4b4b;
     cursor: pointer;
+    line-height: 28.8px;
+    font-family: Pretendard, sans-serif;
   }
 
   &__trash-can-icon {
@@ -111,5 +113,25 @@
 
   &__lecture-list {
     width: 613px;
+  }
+
+  &__pen-icon {
+    display: flex;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.timetable {
+  display: flex;
+  align-items: flex-end;
+  height: 40px;
+  margin-bottom: 40px;
+
+  &__title {
+    font-size: 32px;
+    font-weight: 500;
+    color: #175c8e;
+    margin-left: 6px;
   }
 }

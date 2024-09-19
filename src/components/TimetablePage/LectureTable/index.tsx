@@ -2,10 +2,10 @@ import type { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import React from 'react';
 import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
 import { cn } from '@bcsdlab/utils';
-import useOnClickOutside from 'utils/hooks/useOnClickOutside';
 import useToast from 'components/common/Toast/useToast';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
@@ -59,12 +59,13 @@ function LectureTable({
   const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
   const [cursor, setCursor] = React.useState(-1);
-  const { target } = useOnClickOutside<HTMLDivElement>(
-    () => {
+  const { containerRef } = useOutsideClick({
+    onOutsideClick: () => {
       updateTempLecture(null);
       setCursor(-1);
     },
-  );
+  });
+
   const toast = useToast();
   const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
   const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
@@ -139,8 +140,8 @@ function LectureTable({
   }
   useKeyboardEvent();
   React.useEffect(() => {
-    if (target.current) {
-      const selectedList = target.current.children[cursor];
+    if (containerRef.current) {
+      const selectedList = containerRef.current.children[cursor];
       selectedList?.scrollIntoView({
         block: 'nearest',
         behavior: 'smooth',
@@ -177,7 +178,7 @@ function LectureTable({
         </div>
         {(list.length !== 0 || myLecturesV2.length !== 0)
           ? (
-            <div className={styles['table__lecture-list']} ref={target}>
+            <div className={styles['table__lecture-list']} ref={containerRef}>
               {list.map((lecture, index) => (
                 <div
                   className={cn({

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import useTokenState from 'utils/hooks/state/useTokenState';
 // import { useAuthentication } from 'utils/zustand/authentication';
 import { Navigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
 
 interface PirvateRouteProps {
   requireAuthentication: boolean;
@@ -13,7 +14,7 @@ export default function PrivateRoute({ element, requireAuthentication }: Pirvate
   // const isAuthenticated = useAuthentication();
 
   if (requireAuthentication && !token) {
-    return <Navigate replace to="/" />;
+    return <Navigate replace to={ROUTES.Main()} />;
   }
 
   // if (requireAuthentication && !isAuthenticated) {

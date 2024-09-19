@@ -1,11 +1,10 @@
 import { cn } from '@bcsdlab/utils';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import Timetable from 'components/TimetablePage/Timetable';
-import TimetableHeader from 'pages/TimetablePage/components/TimetableHeader';
+import Timetable from 'pages/TimetablePage/components/Timetable';
 import React, { Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useTimetableDayListV2 from 'utils/hooks/useTimetableDayListV2';
+import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
 import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/TimetablePage/components/LectureList';
 import CustomLecture from 'pages/TimetablePage/components/CustomLecture';
@@ -14,6 +13,7 @@ import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
 import { useSemester } from 'utils/zustand/semester';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
+import { ReactComponent as TimetableIcon } from 'assets/svg/timetable-icon.svg';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage({ frameId }: { frameId: string | undefined }) {
@@ -37,7 +37,10 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
 
   return (
     <div className={styles.page}>
-      <TimetableHeader />
+      <div className={styles.timetable}>
+        <TimetableIcon className={styles.timetable__icon} />
+        <h1 className={styles.timetable__title}>시간표</h1>
+      </div>
       <Suspense
         fallback={(
           <div className={styles['central-loading-spinner']}>
@@ -97,7 +100,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
                 onClick={() => navigate('/timetable')}
               >
                 <PenIcon className={styles['page__pen-icon']} />
-                시간표 저장
+                수정 완료
               </button>
             </div>
             <ErrorBoundary fallbackClassName="loading">

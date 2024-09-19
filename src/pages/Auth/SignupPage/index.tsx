@@ -7,6 +7,7 @@ import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
+import ROUTES from 'static/routes';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
@@ -449,7 +450,7 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
 const useSignupForm = () => {
   const navigate = useNavigate();
   const onSuccess = () => {
-    navigate('/');
+    navigate(ROUTES.Main());
   };
   const { status, mutate } = useSignup({ onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
