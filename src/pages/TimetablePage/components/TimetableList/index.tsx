@@ -136,11 +136,9 @@ export default function TimetableList({
                   handleTimetableSettingClick(frame);
                 }}
               >
-                {currentFrameIndex === frame.id || !frame.id ? (
-                  <BlueSettingIcon />
-                ) : (
-                  <SettingIcon />
-                )}
+                {currentFrameIndex === frame.id || !frame.id
+                  ? <BlueSettingIcon />
+                  : <SettingIcon />}
                 설정
               </button>
             </button>
