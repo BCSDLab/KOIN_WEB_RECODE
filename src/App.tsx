@@ -29,6 +29,7 @@ import AddReviewPage from 'pages/StoreReviewPage/AddReviewPage';
 import EditReviewPage from 'pages/StoreReviewPage/EditReviewPage';
 import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/ReviewReporting';
 import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
+import TestPage from 'pages/TestPage';
 
 interface HelmetWrapperProps {
   title: string;
@@ -72,6 +73,7 @@ function App() {
           </Route>
           <Route path="/room" element={<HelmetWrapper title="코인 - 복덕방" element={<RoomPage />} />} />
           <Route path="/room/:id" element={<HelmetWrapper title="코인 - 복덕방 상세" element={<RoomDetailPage />} />} />
+          <Route path="/ab-test-qa" element={<TestPage />} />
         </Route>
         <Route path="auth" element={<PrivateRoute requireAuthentication={false} element={<AuthPage />} />}>
           <Route index element={<HelmetWrapper title="코인 - 로그인" element={<LoginPage />} />} />

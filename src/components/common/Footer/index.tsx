@@ -56,6 +56,9 @@ function Footer(): JSX.Element {
               <li className={styles.sitemap__link}>
                 <Link to="/privacy-policy">개인정보 처리방침</Link>
               </li>
+              <li className={styles.sitemap__link}>
+                <Link to="/ab-test-qa">AB테스트 QA</Link>
+              </li>
             </ul>
           ) : (
             <ul className={styles.sitemap__content}>
@@ -70,6 +73,9 @@ function Footer(): JSX.Element {
               </li>
               <li className={styles.sitemap__link}>
                 <Link to="/privacy-policy">개인정보 처리방침</Link>
+              </li>
+              <li className={styles.sitemap__link}>
+                <Link to="/ab-test-qa">AB테스트 QA</Link>
               </li>
             </ul>
           )}

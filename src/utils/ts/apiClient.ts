@@ -135,7 +135,7 @@ export default class APIClient {
 
   // Create headers
   private createHeaders<U extends APIResponse>(request: APIRequest<U>): any {
-    const headers: Record<string, string> = {};
+    const headers: Record<string, string | number> = {};
     // 인증 토큰 삽입
     if (request.authorization) {
       headers.Authorization = `Bearer ${request.authorization}`;
