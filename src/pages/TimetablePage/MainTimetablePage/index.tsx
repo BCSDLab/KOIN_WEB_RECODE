@@ -26,8 +26,8 @@ function TimetablePage() {
         setCurrentFrameIndex(mainFrame.id);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [semester]);
 
   return (
     <div className={styles.page}>
