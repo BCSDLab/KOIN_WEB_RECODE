@@ -67,6 +67,18 @@ export class StoreDetailMenu<R extends StoreDetailMenuResponse> implements APIRe
   }
 }
 
+export class StoreBenefitList<R extends StoreListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  response!: R;
+
+  path = 'benefit/:id/shops';
+
+  constructor(id: string) {
+    this.path = `benefit/${id}/shops`;
+  }
+}
+
 export class StoreCategories<R extends StoreCategoriesResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
