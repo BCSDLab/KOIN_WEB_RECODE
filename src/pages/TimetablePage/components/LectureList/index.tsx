@@ -119,7 +119,7 @@ function CurrentSemesterLectureList({
             }
             showToast(
               'error',
-              `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+              `${alreadySelectedLecture.name}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
             );
           } else {
             addMyLectureV2(clickedLecture);
