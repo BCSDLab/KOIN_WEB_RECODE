@@ -111,9 +111,16 @@ function CurrentSemesterLectureList({
               return;
             }
             if (userInfo) {
-              showToast(
+              if (alreadySelectedLecture.lecture_class) { // 분반이 존재하는 경우
+                showToast(
+                  'error',
+                  `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                );
+                return;
+              }
+              showToast( // 직접 강의를 추가하여 분반이 존재하지 않는 경우
                 'error',
-                `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                `${alreadySelectedLecture.class_title} 강의가 중복되어 추가할 수 없습니다.`,
               );
               return;
             }
