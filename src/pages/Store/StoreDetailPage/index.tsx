@@ -18,21 +18,19 @@ import Copy from 'assets/png/copy.png';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { ReactComponent as Phone } from 'assets/svg/Review/phone.svg';
 import ROUTES from 'static/routes';
-import useStoreDetail from './hooks/useStoreDetail';
-import useStoreMenus from './hooks/useStoreMenus';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import * as api from 'api';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
 import ReviewPage from './Review';
-import { useGetReview } from './hooks/useGetReview';
 
 function StoreDetailPage() {
   const params = useParams();
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
-
   const enterCategoryTimeRef = useRef<number | null>(null);
-
   useEffect(() => {
     if (enterCategoryTimeRef.current === null) {
       const currentTime = new Date().getTime();
@@ -40,16 +38,38 @@ function StoreDetailPage() {
       enterCategoryTimeRef.current = currentTime;
     }
   }, []);
-  const { storeDetail, storeDescription } = useStoreDetail(params.id!);
-  const { data: storeMenus } = useStoreMenus(params.id!);
+  const queryClient = useQueryClient();
+  const token = useTokenState();
+  // waterfall 현상 막기
+  const { data: paralleData } = useSuspenseQuery({
+    queryKey: [],
+    queryFn: () => Promise.all([
+      queryClient.fetchQuery({
+        queryKey: ['storeDetail', params.id],
+        queryFn: () => api.store.getStoreDetailInfo(params.id!),
+      }),
+      queryClient.fetchQuery({
+        queryKey: ['storeDetailMenu', params.id],
+        queryFn: () => api.store.getStoreDetailMenu(params.id!),
+      }),
+      queryClient.fetchQuery({
+        queryKey: ['review'],
+        queryFn: () => api.store.getReviewList(Number(params.id!), 1, 'LATEST', token),
+      }),
+    ]),
+  });
+  const storeDetail = paralleData[0];
+  const storeDescription = storeDetail?.description
+    ? storeDetail?.description.replace(/(?:\/)/g, '\n')
+    : '-';
+  const storeMenus = paralleData[1];
+  const data = paralleData[2];
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [param, setParam] = useSearchParams();
   const tapType = param.get('state') ?? '메뉴';
   const portalManager = useModalPortal();
   const logger = useLogger();
-  const { data } = useGetReview(Number(params.id), 'LATEST');
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
-
   const onClickCallNumber = () => {
     if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
@@ -370,7 +390,7 @@ function StoreDetailPage() {
           >
             리뷰
             {' '}
-            {`(${data.pages[0].total_count})`}
+            {`(${data.total_count})`}
           </button>
         </div>
         {tapType === '메뉴' && storeMenuCategories && storeMenuCategories.length > 0 && (
