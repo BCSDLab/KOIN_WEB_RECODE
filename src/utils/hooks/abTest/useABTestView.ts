@@ -1,10 +1,10 @@
-import { abTestAssign } from 'api/abTest';
-import { useQuery } from '@tanstack/react-query';
+import * as api from 'api';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useABTestView = (title: string, authorization?: string, accessHistoryId?: string) => {
-  const { data: abTestView } = useQuery({
+  const { data: abTestView } = useSuspenseQuery({
     queryKey: ['abTestView', title, accessHistoryId],
-    queryFn: () => abTestAssign(title, authorization, accessHistoryId),
+    queryFn: () => api.abTest.abTestAssign(title, authorization, accessHistoryId),
   });
 
   return { abTestView };
