@@ -8,14 +8,17 @@
   }
 
   &__total-grades {
-    margin-right: 75px;
+    position: absolute;
+    left: 16px;
+    top: 18px;
   }
 
   &__filter {
     display: flex;
     position: relative;
-    justify-content: flex-end;
+    width: 776px;
     align-items: flex-end;
+    justify-content: flex-end;
     gap: 16px;
     margin-bottom: 14px;
   }
@@ -27,9 +30,9 @@
     border: none;
     border-radius: 5px;
     padding: 12px 20px;
-    width: 155px;
     height: 48px;
     background-color: #fff;
+    font-family: Pretendard, sans-serif;
     cursor: pointer;
     justify-content: center;
     font-weight: 500;
