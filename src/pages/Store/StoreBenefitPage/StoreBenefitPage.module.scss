@@ -1,1 +1,100 @@
 @use "src/utils/scss/media";
+
+.section {
+  width: 1131px;
+  margin: 63px auto 0;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  &__tabs {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: flex-start;
+
+    :nth-child(4) {
+      margin-right: 0;
+    }  
+  }
+
+  &__title {
+    color: #727272;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 150%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 32px 0;
+    height: 36px;
+  }
+
+  &__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.header {
+  width: 100%;
+  height: 32px;
+  font-size: 30px;
+  font-family: NanumSquare, serif;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: #175c8e;
+  text-align: left;
+  margin-bottom: 19px;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.tab {
+  width: 280px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background: #FFF;
+  box-shadow: 0px 1px 9px 1px rgba(0, 0, 0, 0.06);
+  margin-right: 4px;
+
+  &__content{
+    display: flex;
+    justify-content: center;
+  
+    &--logo {
+      
+    }
+  
+    &--text {
+      color:#727272;
+      text-align: center;
+      font-family: Pretendard;
+      font-size: 20px;      
+      font-weight: 400;
+      line-height: 150%;
+    }
+  }
+}
+
+.option {
+  display: flex;
+  justify-content: flex-start;
+  color: #858585;
+  font-family: NanumBarunGothicOTF;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.072px;
+}
