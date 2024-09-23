@@ -7,9 +7,9 @@ import { TimetableFrameInfo } from 'api/timetable/entity';
 import useUpdateTimetableFrame from 'pages/TimetablePage/hooks/useUpdateTimetableFrame';
 import useDeleteTimetableFrame from 'pages/TimetablePage/hooks/useDeleteTimetableFrame';
 import { useSemester } from 'utils/zustand/semester';
-import useToast from 'components/common/Toast/useToast';
 import showToast from 'utils/ts/showToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
@@ -25,7 +25,7 @@ export default function TimetableSettingModal({
 }: TimetableSettingModalProps) {
   const token = useTokenState();
   const semester = useSemester();
-  const toast = useToast();
+  const myLectures = useMyLecturesV2(focusFrame.id!);
   const toggleIsChecked = () => {
     if (focusFrame.is_main) setFocusFrame({ ...focusFrame, is_main: false });
     else setFocusFrame({ ...focusFrame, is_main: true });
@@ -41,21 +41,15 @@ export default function TimetableSettingModal({
     updateFrameInfo(submitFrame);
     onClose();
   };
-  const recoverFrame = () => {
-  // TODO: v2/timetables/lecture api 연결 후 시간표 프레임 추가와 강의 정보 추가로 recover 구현 예정.
-  };
+
   const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, semester);
-  const onDelete = (frame: TimetableFrameInfo) => {
+  const onDelete = () => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
       return;
     }
-    toast.open({
-      message: `선택하신 [${frame.timetable_name}]이 삭제되었습니다.`,
-      recoverMessage: `[${frame.timetable_name}]이 복구되었습니다.`,
-      onRecover: recoverFrame,
-    });
-    deleteTimetableFrame(focusFrame.id);
+    sessionStorage.setItem('restoreLecturesInFrame', JSON.stringify(myLectures));
+    deleteTimetableFrame({ id: focusFrame.id, frame: focusFrame });
     onClose();
   };
 
@@ -102,7 +96,7 @@ export default function TimetableSettingModal({
             className={cn({
               [styles['container__button--delete']]: true,
             })}
-            onClick={() => onDelete(focusFrame)}
+            onClick={() => onDelete()}
           >
             삭제하기
           </button>
