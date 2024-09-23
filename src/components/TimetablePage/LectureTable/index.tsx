@@ -2,7 +2,6 @@ import type { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import React from 'react';
 import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
 import { cn } from '@bcsdlab/utils';
-import useToast from 'components/common/Toast/useToast';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -66,27 +65,13 @@ function LectureTable({
     },
   });
 
-  const toast = useToast();
   const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
   const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
-    // TODO: 되돌리기 구현
-    const recoverLecture = () => {
-
-    };
-    let lectureToRemove: LectureInfo | TimetableLectureInfoV2 | null = null;
     myLecturesV2.forEach((lecture) => {
       if (lecture.id === id) {
-        lectureToRemove = lecture;
+        removeMyLectureV2.mutate({ clickedLecture: lecture, id });
       }
     });
-    if (lectureToRemove) {
-      removeMyLectureV2(lectureToRemove!, id);
-      toast.open({
-        message: '해당 과목이 삭제되었습니다.',
-        recoverMessage: '해당 과목이 복구되었습니다.',
-        onRecover: recoverLecture,
-      });
-    }
   };
   const [isMouseOver, setIsMouseOver] = React.useState(-1);
   const handleTableRowClick = (

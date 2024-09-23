@@ -85,7 +85,7 @@ function Timetable({
           description="삭제한 강의는 복구가 불가능합니다."
           onClose={portalOption.close}
           onConfirm={() => {
-            removeMyLectureV2(lectureToRemove!, lectureId);
+            removeMyLectureV2.mutate({ clickedLecture: lectureToRemove!, id: lectureId });
           }}
         />
       ));
