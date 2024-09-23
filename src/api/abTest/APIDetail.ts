@@ -17,7 +17,7 @@ export class ABTestAssign<R extends ABTestAssignResponse> implements APIRequest<
   constructor(
     title: string,
     public authorization?: string,
-    public accessHistoryId?: string | number,
+    public accessHistoryId?: string | number | null,
   ) {
     this.data = ({ title });
 
