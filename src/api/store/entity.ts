@@ -122,6 +122,14 @@ export interface StoreCategory {
   image_url: string;
 }
 
+export interface StoreBenefitCategory {
+  id: number;
+  title: string;
+  detail: string;
+  on_image_url: string;
+  off_image_url: string;
+}
+
 export interface StoreEvent {
   shop_id: number;
   shop_name: string;
@@ -130,6 +138,10 @@ export interface StoreEvent {
   thumbnail_images: string[];
   start_date: string;
   end_date: string;
+}
+
+export interface StoreBenefitCategoryResponse extends APIResponse {
+  benefits: StoreBenefitCategory[];
 }
 
 export interface AllStoreEventResponse extends APIResponse {
