@@ -42,7 +42,7 @@ function StoreDetailPage() {
   const token = useTokenState();
   // waterfall 현상 막기
   const { data: paralleData } = useSuspenseQuery({
-    queryKey: [],
+    queryKey: ['storeDetail', 'storeDetailMenu', 'review'],
     queryFn: () => Promise.all([
       queryClient.fetchQuery({
         queryKey: ['storeDetail', params.id],
@@ -63,7 +63,7 @@ function StoreDetailPage() {
     ? storeDetail?.description.replace(/(?:\/)/g, '\n')
     : '-';
   const storeMenus = paralleData[1];
-  const data = paralleData[2];
+  const reviews = paralleData[2];
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [param, setParam] = useSearchParams();
   const tapType = param.get('state') ?? '메뉴';
@@ -390,7 +390,7 @@ function StoreDetailPage() {
           >
             리뷰
             {' '}
-            {`(${data.total_count})`}
+            {`(${reviews.total_count})`}
           </button>
         </div>
         {tapType === '메뉴' && storeMenuCategories && storeMenuCategories.length > 0 && (
