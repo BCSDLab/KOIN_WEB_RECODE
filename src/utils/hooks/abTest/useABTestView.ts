@@ -7,6 +7,7 @@ export const useABTestView = (title: string, authorization?: string) => {
     queryKey: ['abTestView', title, accessHistoryId],
     queryFn: () => api.abTest.abTestAssign(title, authorization, accessHistoryId),
   });
-  const result = abTestView.variable_name;
+  localStorage.setItem('access_history_id', abTestView.access_history_id.toString());
+  const result = abTestView;
   return result;
 };
