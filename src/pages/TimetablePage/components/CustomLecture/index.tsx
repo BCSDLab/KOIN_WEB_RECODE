@@ -184,19 +184,19 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     let newTimetableTime = changeToTimetableTime(newTimeInfo);
     // 올바르지 않은 시간을 선택했을 시
     if (newTimetableTime.length === 0) {
-      const newStartTime = Number(newTimeInfo.startHour.slice(0, 2));
-      const newEndTime = Number(newTimeInfo.endHour.slice(0, 2));
+      const newStartHour = Number(newTimeInfo.startHour.slice(0, 2));
+      const newEndHour = Number(newTimeInfo.endHour.slice(0, 2));
       if (key.slice(0, 5) === 'start') {
         newTimeInfo = {
           ...newTimeInfo,
-          endHour: `${newStartTime + 1}시`,
-          endMinute: newStartTime + 1 === 24 ? '00분' : newTimeInfo.startMinute,
+          endHour: `${newStartHour + 1}시`,
+          endMinute: newStartHour + 1 === 24 ? '00분' : newTimeInfo.startMinute,
         };
       } else {
         newTimeInfo = {
           ...newTimeInfo,
-          startHour: newEndTime - 1 < 10 ? '09시' : `${newEndTime - 1}시`,
-          startMinute: newEndTime - 1 < 9 ? '00분' : newTimeInfo.endMinute,
+          startHour: newEndHour - 1 < 10 ? '09시' : `${newEndHour - 1}시`,
+          startMinute: newEndHour - 1 < 9 ? '00분' : newTimeInfo.endMinute,
         };
       }
       newTimetableTime = changeToTimetableTime(newTimeInfo);
