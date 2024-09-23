@@ -10,7 +10,7 @@ const useBenefitCategory = () => {
   );
 
   return {
-    benefitCategory,
+    benefitCategory: benefitCategory?.benefits,
   };
 };
 
