@@ -95,6 +95,7 @@ export default function TimetableSettingModal({
               name="frame"
               placeholder={focusFrame.timetable_name}
               className={styles['container__timetable-name']}
+              defaultValue={focusFrame.timetable_name}
             />
           </div>
           {!focusFrame.is_main ? (
