@@ -67,22 +67,35 @@
   background: #FFF;
   box-shadow: 0px 1px 9px 1px rgba(0, 0, 0, 0.06);
   margin-right: 4px;
+  color:#727272;
+
+  &--selected {
+    color: #175C8E;
+    border: 1px solid #175C8E;
+  }
 
   &__content{
     display: flex;
     justify-content: center;
   
     &--logo {
-      
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 8px;
     }
   
     &--text {
-      color:#727272;
       text-align: center;
       font-family: Pretendard;
       font-size: 20px;      
       font-weight: 400;
-      line-height: 150%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 32px;
     }
   }
 }
