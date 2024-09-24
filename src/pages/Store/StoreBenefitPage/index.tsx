@@ -1,3 +1,4 @@
+import { cn } from '@bcsdlab/utils';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import useBenefitCategory from 'pages/Store/StoreBenefitPage/hooks/useBenefitCategory';
@@ -5,8 +6,9 @@ import useStoreBenefitList from 'pages/Store/StoreBenefitPage/hooks/useStoreBene
 import styles from './StoreBenefitPage.module.scss';
 
 function StoreBenefitPage() {
-  const { params, setParams } = useParamsHandler();
+  const { params, searchParams, setParams } = useParamsHandler();
   const { count, storeBenefitList } = useStoreBenefitList(params?.category ?? '1');
+  const selectedCategory = Number(searchParams.get('category')) ?? 1;
   const { benefitCategory } = useBenefitCategory();
   const onClickBenefitTab = (id: number) => {
     setParams('category', `${id}`, { deleteBeforeParam: false, replacePage: false });
@@ -20,13 +22,22 @@ function StoreBenefitPage() {
           benefitCategory?.map((item) => (
             <button
               type="button"
-              className={styles.tab}
+              className={cn({
+                [styles.tab]: true,
+                [styles['tab--selected']]: item.id === selectedCategory,
+              })}
               key={item.id}
               onClick={() => onClickBenefitTab(item.id)}
             >
               <div className={styles.tab__content}>
                 <div className={styles['tab__content--logo']}>
-                  로고
+                  {
+                    selectedCategory === item.id ? (
+                      <img src={benefitCategory[item.id - 1]?.on_image_url ?? ''} alt="off_img" />
+                    ) : (
+                      <img src={benefitCategory[item.id - 1]?.off_image_url ?? ''} alt="off_img" />
+                    )
+                  }
                 </div>
                 <div className={styles['tab__content--text']}>
                   {item.title}
@@ -38,7 +49,7 @@ function StoreBenefitPage() {
       </div>
       <div className={styles.section__title}>
         {
-
+          benefitCategory ? benefitCategory[selectedCategory]?.detail : ''
         }
       </div>
       <div className={styles.section__content}>
