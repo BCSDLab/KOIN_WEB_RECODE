@@ -28,7 +28,7 @@ export default function TimetableSettingModal({
   );
 
   const recoverFrame = () => {
-  // TODO: v2/timetables/lecture api 연결 후 시간표 프레임 추가와 강의 정보 추가로 recover 구현 예정.
+    // TODO: v2/timetables/lecture api 연결 후 시간표 프레임 추가와 강의 정보 추가로 recover 구현 예정.
   };
 
   const submitFrameForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -112,6 +112,7 @@ export default function TimetableSettingModal({
           ) : <div className={styles['container__none-checkbox']} />}
           <div className={styles.container__button}>
             <button
+              id="default_timetable"
               type="button"
               className={styles['container__button--delete']}
               onClick={() => onDelete(focusFrame)}

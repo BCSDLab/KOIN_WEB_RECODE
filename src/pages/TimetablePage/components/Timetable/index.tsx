@@ -287,8 +287,7 @@ function Timetable({
                     }}
                   >
                     {lecture_class}
-                    &nbsp;
-                    {professor}
+                    {` ${professor}`}
                   </span>
                   <div
                     style={{
