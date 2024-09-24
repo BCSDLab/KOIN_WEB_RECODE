@@ -153,17 +153,17 @@
     cursor: pointer;
     appearance: none;
     background-color: #fff;
-    border: 2px solid #8E8E8E;
+    border: 2px solid #8e8e8e;
     border-radius: 2px;
     position: relative;
 
     &:checked {
-      background-color: #175C8E;
+      background-color: #175c8e;
       border: none;
     }
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       display: none;
       left: 6px;
