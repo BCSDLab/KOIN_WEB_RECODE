@@ -29,7 +29,7 @@ export class DiningTime {
 
   constructor() {
     this.now = new Date();
-    this.lunchTransitionTime.setHours(10, 30, 0, 0);
+    this.lunchTransitionTime.setHours(9, 0, 0, 0);
     this.dinnerTransitionTime.setHours(13, 30, 0, 0);
     this.breakfastTransitionTime.setHours(18, 30, 0, 0);
   }
