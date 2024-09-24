@@ -13,9 +13,9 @@ import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
-  focusFrame: TimetableFrameInfo
-  setFocusFrame: (frame: TimetableFrameInfo) => void
-  onClose: () => void
+  focusFrame: TimetableFrameInfo;
+  setFocusFrame: (frame: TimetableFrameInfo) => void;
+  onClose: () => void;
 }
 
 export default function TimetableSettingModal({
@@ -79,15 +79,19 @@ export default function TimetableSettingModal({
         ) : (
           <div className={styles['container__setting-message']}>
             <button
+              id="default_timetable"
               type="button"
               className={styles.container__checkbox}
               onClick={toggleIsChecked}
             >
               {focusFrame.is_main ? <CheckedIcon /> : <NotCheckedIcon />}
             </button>
-            <div className={styles['container__set-default-timetable']}>
+            <label
+              htmlFor="default_timetable"
+              className={styles['container__set-default-timetable']}
+            >
               기본 시간표로 설정하기
-            </div>
+            </label>
           </div>
         )}
         <div className={styles.container__button}>
