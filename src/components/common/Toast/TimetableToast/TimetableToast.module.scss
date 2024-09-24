@@ -1,29 +1,30 @@
 @keyframes slide-up {
   0% {
-    opacity: 0;
-    transform: translateY(100%);
+    opacity: 1;
+    transform: translateY(0);
   }
 
   100% {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 0;
+    transform: translateY(-30px);
   }
 }
 
 @keyframes slide-down {
   0% {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 0;
+    transform: translateY(-30px);
   }
 
   100% {
-    opacity: 0;
-    transform: translateY(100%);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 .toast {
-  position: absolute;
+  position: fixed;
+  top: 112px;
   left: calc(50vw - 446.5px);
   display: flex;
   justify-content: space-between;
@@ -34,7 +35,7 @@
   border-radius: 5px;
   background-color: #041a44cc;
   z-index: 5;
-  animation: slide-up 500ms;
+  animation: slide-down 500ms;
 
   &:hover {
     button {
@@ -45,7 +46,7 @@
   }
 
   &__close {
-    animation: slide-down 400ms;
+    animation: slide-up 400ms;
   }
 
   &__message {
