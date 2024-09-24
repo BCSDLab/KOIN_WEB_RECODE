@@ -10,16 +10,13 @@ import {
 } from 'static/timetable';
 import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
 import { useLocation } from 'react-router-dom';
-import { Portal } from 'components/common/Modal/PortalProvider';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
-import AlertModal from 'components/common/Modal/AlertModal';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -53,7 +50,6 @@ function Timetable({
   forDownload,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
-  const portalManager = useModalPortal();
   const [isMouseOver, setIsMouseOver] = React.useState('');
   const { pathname } = useLocation();
   const isEditable = pathname.includes('/timetable/modify');
@@ -79,16 +75,7 @@ function Timetable({
       }
     });
     if (lectureToRemove) {
-      portalManager.open((portalOption: Portal) => (
-        <AlertModal
-          title="강의를 삭제하겠습니까?"
-          description="삭제한 강의는 복구가 불가능합니다."
-          onClose={portalOption.close}
-          onConfirm={() => {
-            removeMyLectureV2.mutate({ clickedLecture: lectureToRemove!, id: lectureId });
-          }}
-        />
-      ));
+      removeMyLectureV2.mutate({ clickedLecture: lectureToRemove!, id: lectureId });
     }
   };
   const findMaxTime = (myTimetableLectures: TimetableDayLectureInfo[][] | undefined) => {
