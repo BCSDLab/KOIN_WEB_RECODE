@@ -38,6 +38,9 @@
     cursor: pointer;
     width: 24px;
     height: 24px;
+    border: none;
+    background-color: transparent;
+    border-radius: 4px;
 
     &:hover {
       background-color: #eee;
@@ -84,31 +87,20 @@
     }
   }
 
-  &__setting-message {
+  &__check-container {
     display: flex;
-    padding: 8px 24px;
     gap: 8px;
+    padding: 8px 24px;
     align-items: center;
   }
 
-  &__set-default-timetable {
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 25.6px;
-    text-align: left;
-    color: #8e8e8e;
-  }
-
-  &__set-default-timetable-message {
+  &__checkbox-title {
     display: flex;
     font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 25.6px;
-    text-align: left;
     color: #8e8e8e;
-    padding: 12px 32px 6px;
   }
 
   &__button {
@@ -156,9 +148,40 @@
   }
 
   &__checkbox {
-    padding: 0;
-    background-color: #fff;
-    border: none;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
+    appearance: none;
+    background-color: #fff;
+    border: 2px solid #8E8E8E;
+    border-radius: 2px;
+    position: relative;
+
+    &:checked {
+      background-color: #175C8E;
+      border: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    &:checked::after {
+      display: block;
+    }
+  }
+
+  &__none-checkbox {
+    display: flex;
+    height: 42px;
   }
 }

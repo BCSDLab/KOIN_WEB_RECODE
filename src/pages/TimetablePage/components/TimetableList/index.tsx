@@ -156,7 +156,6 @@ export default function TimetableList({
       {isModalOpen && (
         <TimetableSettingModal
           focusFrame={focusFrame!}
-          setFocusFrame={setFocusFrame}
           onClose={closeModal}
         />
       )}
