@@ -25,6 +25,8 @@ interface TimetableListProps {
   setCurrentFrameIndex: (index: number) => void
 }
 
+// 콘골
+
 export default function TimetableList({
   currentFrameIndex, setCurrentFrameIndex,
 }: TimetableListProps) {
