@@ -75,7 +75,7 @@ function Timetable({
       }
     });
     if (lectureToRemove) {
-      removeMyLectureV2.mutate({ clickedLecture: lectureToRemove!, id: lectureId });
+      removeMyLectureV2.mutate({ clickedLecture: lectureToRemove, id: lectureId });
     }
   };
   const findMaxTime = (myTimetableLectures: TimetableDayLectureInfo[][] | undefined) => {
