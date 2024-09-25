@@ -47,6 +47,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const timeSpaceContainerRef = React.useRef<HTMLDivElement>(null);
   const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
   const [positionValues, setPositionValues] = React.useState<number[]>([]);
+  const [isFirstSubmit, setIsFirstSubmit] = React.useState(true);
 
   const isValid = (lectureName !== ''
     && !timeSpaceComponents.some((time) => time.lectureTime.length === 0));
@@ -98,6 +99,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const handleAddLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isValid) {
+      setIsFirstSubmit(false);
       return;
     }
     const allClassTime = customTempLecture!.class_time.flat();
@@ -119,7 +121,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     if (alreadySelectedLecture) {
       showToast(
         'error',
-        `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+        `${alreadySelectedLecture.class_title} ${alreadySelectedLecture.lecture_class ? `(${alreadySelectedLecture.lecture_class})` : ''} 강의가 중복되어 추가할 수 없습니다.`,
       );
       return;
     }
@@ -137,6 +139,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       lectureTime: [0, 1],
       place: '',
     }]);
+    setIsFirstSubmit(true);
   };
 
   const handleScroll = () => {
@@ -265,7 +268,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
         <div>
           <div className={cn({
             [styles.inputbox__name]: true,
-            [styles['inputbox__name--require']]: lectureName === '',
+            [styles['inputbox__name--require']]: !isFirstSubmit && lectureName === '',
           })}
           >
             <label htmlFor="courseName">
@@ -283,7 +286,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
               autoComplete="off"
             />
           </div>
-          {lectureName === '' && (
+          {!isFirstSubmit && lectureName === '' && (
           <div className={styles.inputbox__warning}>
             <WarningIcon />
             수업명을 입력해주세요
@@ -327,7 +330,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                   htmlFor="place"
                   className={cn({
                     [styles['form-group-time__title']]: true,
-                    [styles['form-group-time__title--require']]: lectureTime.length === 0,
+                    [styles['form-group-time__title--require']]: !isFirstSubmit && lectureTime.length === 0,
                   })}
                 >
                   <div className={styles['form-group-time__title--text']}>
@@ -369,7 +372,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                   </div>
                 </div>
               </div>
-              {lectureTime.length === 0 && (
+              {!isFirstSubmit && lectureTime.length === 0 && (
                 <div className={cn({
                   [styles.inputbox__warning]: true,
                   [styles['inputbox__warning--time']]: true,
@@ -406,7 +409,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
         type="submit"
         className={cn({
           [styles['submit-button']]: true,
-          [styles['submit-button__active']]: isValid,
+          [styles['submit-button__active']]: isFirstSubmit || isValid,
         })}
       >
         일정 저장
