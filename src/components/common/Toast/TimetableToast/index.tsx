@@ -19,7 +19,7 @@ export default function TimetableToast({
   const [isClicked, setIsClicked] = useState(false);
   const toastRef = useRef<HTMLDivElement | null>(null);
 
-  const [toastProps, isVisible, closeToast] = useToastTimer({
+  const [toastProps, isVisible] = useToastTimer({
     autoCloseTime: duration,
     onClose,
   });
@@ -46,15 +46,11 @@ export default function TimetableToast({
           <div className={styles.toast__message}>{message}</div>
           {
             recoverMessage
-              ? <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>되돌리기</button>
-              : <button className={styles.toast__button} type="button" onClick={closeToast}>확인</button>
+              && <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>취소하기</button>
           }
         </>
       ) : (
-        <>
-          <div className={styles.toast__message}>{recoverMessage}</div>
-          <button className={styles.toast__button} type="button" onClick={closeToast}>확인</button>
-        </>
+        <div className={styles.toast__message}>{recoverMessage}</div>
       )}
     </div>
   );
