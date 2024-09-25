@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -12,11 +13,11 @@ interface Category {
 }
 
 function IndexStore() {
-  // const isMobile = useMediaQuery();
+  const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
-
+  const AB = 'a';
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
     logger.actionEventClick({
@@ -35,21 +36,40 @@ function IndexStore() {
     <section className={styles.template}>
       <Link to={ROUTES.Store()} className={styles.template__title}>주변상점</Link>
       <div className={styles.category__wrapper}>
-        {categories?.shop_categories.map((category) => (
-          <div
-            key={category.id}
-            className={styles.category__item}
-            onClick={(e) => handleStoreCategoryClick(e, category)}
-            aria-hidden
-          >
-            <img
-              src={category.image_url}
-              alt={category.name}
-              className={styles.category__image}
-            />
-            {category.name}
-          </div>
-        ))}
+        {isMobile && AB === 'a'
+          ? (
+            <div className={styles['store-branch-container']}>
+              <button
+                type="button"
+                className={styles['store-branch-button']}
+                onClick={() => navigate(`${ROUTES.Store()}?category=1`)}
+              >
+                상점 목록
+              </button>
+              <button
+                type="button"
+                className={styles['store-branch-button']}
+                onClick={() => navigate(`${ROUTES.StoreBenefit()}`)}
+              >
+                전화 주문 혜택
+              </button>
+            </div>
+          )
+          : categories?.shop_categories.map((category) => (
+            <div
+              key={category.id}
+              className={styles.category__item}
+              onClick={(e) => handleStoreCategoryClick(e, category)}
+              aria-hidden
+            >
+              <img
+                src={category.image_url}
+                alt={category.name}
+                className={styles.category__image}
+              />
+              {category.name}
+            </div>
+          ))}
       </div>
     </section>
   );
