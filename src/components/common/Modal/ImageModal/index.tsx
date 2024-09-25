@@ -7,9 +7,9 @@ import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
-  imageList: string[]
-  imageIndex: number
-  onClose: () => void
+  imageList: string[];
+  imageIndex: number;
+  onClose: () => void;
 }
 
 function ImageModal({

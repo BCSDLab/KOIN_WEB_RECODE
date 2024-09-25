@@ -9,8 +9,8 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
-  focusFrame: TimetableFrameInfo
-  onClose: () => void
+  focusFrame: TimetableFrameInfo;
+  onClose: () => void;
 }
 
 export default function TimetableSettingModal({
