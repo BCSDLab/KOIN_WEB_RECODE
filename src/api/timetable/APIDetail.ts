@@ -43,10 +43,10 @@ export class VersionInfo<R extends VersionInfoResponse> implements APIRequest<R>
 
   response!: R;
 
-  path = 'versions/:type';
+  path = 'version/:type';
 
   constructor(type: VersionType) {
-    this.path = `/versions/${type}`;
+    this.path = `/version/${type}`;
   }
 }
 
