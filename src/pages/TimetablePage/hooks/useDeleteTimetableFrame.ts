@@ -6,7 +6,7 @@ import useAddTimetableFrame from './useAddTimetableFrame';
 import useAddTimetableLectureV2 from './useAddTimetableLectureV2';
 import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
 
-type DeleteTimetableFrmaeProps = {
+type DeleteTimetableFrameProps = {
   id: number,
   frame: TimetableFrameInfo,
 };
@@ -29,7 +29,7 @@ export default function useDeleteTimetableFrame(token: string, semester: string)
   };
 
   return useMutation({
-    mutationFn: ({ id, frame }: DeleteTimetableFrmaeProps) => {
+    mutationFn: ({ id, frame }: DeleteTimetableFrameProps) => {
       sessionStorage.setItem('restoreFrame', JSON.stringify(frame));
       return timetable.deleteTimetableFrame(token, id);
     },
