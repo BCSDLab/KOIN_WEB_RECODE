@@ -18,7 +18,7 @@ export interface TimetableSettingModalProps {
   focusFrame: TimetableFrameInfo;
   setFocusFrame: (frame: TimetableFrameInfo) => void;
   onClose: () => void;
-  setCurrentFrameIndex: (id: number) => void;
+  setCurrentFrameIndex: React.Dispatch<number>;
 }
 
 export default function TimetableSettingModal({
@@ -66,11 +66,10 @@ export default function TimetableSettingModal({
         onRecover: recoverFrame,
       });
 
-      const defaultFrame = myFrames.find((table) => table.is_main);
-      if (defaultFrame && defaultFrame.id) setCurrentFrameIndex(defaultFrame.id);
+      const defaultFrameId = myFrames.find((table) => table.is_main)?.id;
+      if (defaultFrameId) setCurrentFrameIndex(defaultFrameId);
       onClose();
     } catch (err) {
-      //
       if (isKoinError(err)) {
         showToast('error', err.message);
         return;
