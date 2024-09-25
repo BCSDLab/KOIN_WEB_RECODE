@@ -47,7 +47,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const timeSpaceContainerRef = React.useRef<HTMLDivElement>(null);
   const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
   const [positionValues, setPositionValues] = React.useState<number[]>([]);
-  const [isFirstSubmit, SetIsFirstSubmit] = React.useState(true);
+  const [isFirstSubmit, setIsFirstSubmit] = React.useState(true);
 
   const isValid = (lectureName !== ''
     && !timeSpaceComponents.some((time) => time.lectureTime.length === 0));
@@ -99,7 +99,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const handleAddLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isValid) {
-      SetIsFirstSubmit(false);
+      setIsFirstSubmit(false);
       return;
     }
     const allClassTime = customTempLecture!.class_time.flat();
@@ -139,7 +139,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       lectureTime: [0, 1],
       place: '',
     }]);
-    SetIsFirstSubmit(true);
+    setIsFirstSubmit(true);
   };
 
   const handleScroll = () => {
