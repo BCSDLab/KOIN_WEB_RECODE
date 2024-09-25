@@ -121,7 +121,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     if (alreadySelectedLecture) {
       showToast(
         'error',
-        `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+        `${alreadySelectedLecture.class_title} ${alreadySelectedLecture.lecture_class ? `(${alreadySelectedLecture.lecture_class})` : ''} 강의가 중복되어 추가할 수 없습니다.`,
       );
       return;
     }
