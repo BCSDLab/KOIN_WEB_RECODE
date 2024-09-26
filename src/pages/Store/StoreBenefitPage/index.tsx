@@ -3,10 +3,14 @@ import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import useBenefitCategory from 'pages/Store/StoreBenefitPage/hooks/useBenefitCategory';
 import useStoreBenefitList from 'pages/Store/StoreBenefitPage/hooks/useStoreBenefitList';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './StoreBenefitPage.module.scss';
+// eslint-disable-next-line no-restricted-imports
+import MobileStoreList from '../StorePage/components/MobileStoreList';
 
 function StoreBenefitPage() {
   const { params, searchParams, setParams } = useParamsHandler();
+  const isMobile = useMediaQuery();
   const { count, storeBenefitList } = useStoreBenefitList(params?.category ?? '1');
   const selectedCategory = Number(searchParams.get('category')) ?? 1;
   const { benefitCategory } = useBenefitCategory();
@@ -63,7 +67,9 @@ function StoreBenefitPage() {
             있습니다.
           </div>
         </div>
-        <DesktopStoreList storeListData={storeBenefitList} />
+        {isMobile
+          ? <MobileStoreList storeListData={storeBenefitList} />
+          : <DesktopStoreList storeListData={storeBenefitList} />}
       </div>
     </div>
   );
