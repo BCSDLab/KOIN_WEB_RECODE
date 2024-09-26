@@ -58,12 +58,16 @@ export default function useTimetableV2Mutation(frameId: number) {
 
   const restoreLecture = () => {
     const restoredLecture = JSON.parse(sessionStorage.getItem('restoreLecture')!);
-    mutateAddWithServer({
-      timetable_frame_id: frameId,
-      timetable_lecture: [
-        restoredLecture,
-      ],
-    });
+    if ('name' in restoreLecture) {
+      addLectureFromLocalStorage(restoredLecture, semester);
+    } else {
+      mutateAddWithServer({
+        timetable_frame_id: frameId,
+        timetable_lecture: [
+          restoredLecture,
+        ],
+      });
+    }
   };
 
   const removeMyLectureV2 = useMutation({
