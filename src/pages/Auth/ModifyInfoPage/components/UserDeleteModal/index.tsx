@@ -2,7 +2,7 @@ import styles from './UserDeleteModal.module.scss';
 
 export interface UserDeleteModalProps {
   deleteUser: (event: React.MouseEvent<HTMLButtonElement>) => void
-  onClose: () => void
+  onClose: () => void;
 }
 
 export default function UserDeleteModal({

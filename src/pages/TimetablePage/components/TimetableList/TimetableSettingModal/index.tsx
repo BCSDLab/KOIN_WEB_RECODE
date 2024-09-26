@@ -1,9 +1,5 @@
-import React from 'react';
-import { cn } from '@bcsdlab/utils';
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
-import { ReactComponent as CheckedIcon } from 'assets/svg/checked-icon.svg';
-import { ReactComponent as NotCheckedIcon } from 'assets/svg/not-checked-icon.svg';
-import { TimetableFrameInfo } from 'api/timetable/entity';
+import type { TimetableFrameInfo } from 'api/timetable/entity';
 import useUpdateTimetableFrame from 'pages/TimetablePage/hooks/useUpdateTimetableFrame';
 import useDeleteTimetableFrame from 'pages/TimetablePage/hooks/useDeleteTimetableFrame';
 import { useSemester } from 'utils/zustand/semester';
@@ -16,7 +12,6 @@ import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
   focusFrame: TimetableFrameInfo;
-  setFocusFrame: (frame: TimetableFrameInfo) => void;
   onClose: () => void;
   setCurrentFrameIndex: React.Dispatch<number>;
   currentFrameIndex: number;
@@ -24,7 +19,6 @@ export interface TimetableSettingModalProps {
 
 export default function TimetableSettingModal({
   focusFrame,
-  setFocusFrame,
   onClose,
   setCurrentFrameIndex,
   currentFrameIndex,
@@ -33,20 +27,34 @@ export default function TimetableSettingModal({
   const semester = useSemester();
   const { data: myFrames } = useTimetableFrameList(token, semester);
   const myLectures = useMyLecturesV2(focusFrame.id!);
-  const toggleIsChecked = () => {
-    if (focusFrame.is_main) setFocusFrame({ ...focusFrame, is_main: false });
-    else setFocusFrame({ ...focusFrame, is_main: true });
-  };
-
   const { mutate: updateFrameInfo } = useUpdateTimetableFrame();
 
-  const onSubmit = (submitFrame: TimetableFrameInfo) => {
-    if (!submitFrame.id) {
-      showToast('warning', '로그인 후 이용 가능합니다.');
-      return;
+  const submitFrameForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const target = e.currentTarget;
+
+    if (!focusFrame.id) {
+      return showToast('warning', '로그인 후 이용 가능합니다.');
     }
-    updateFrameInfo(submitFrame);
-    onClose();
+
+    if (target?.checker) {
+      updateFrameInfo({
+        ...focusFrame,
+        timetable_name: target.frame.value,
+        is_main: target.checker.checked,
+      });
+    }
+
+    if (focusFrame.is_main) {
+      updateFrameInfo({
+        ...focusFrame,
+        timetable_name: target.frame.value,
+        is_main: true,
+      });
+    }
+
+    return onClose();
   };
 
   const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(
@@ -80,66 +88,57 @@ export default function TimetableSettingModal({
   };
 
   return (
-    <div className={styles.background} aria-hidden>
+    <div className={styles.background}>
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>시간표 설정</span>
-          <CloseIcon
-            className={styles['container__close-button']}
+          <button
+            aria-label="close-modal"
+            type="button"
             onClick={onClose}
-          />
+            className={styles['container__close-button']}
+          >
+            <CloseIcon />
+          </button>
         </header>
-        <div className={styles.container__input}>
-          <input
-            placeholder={focusFrame.timetable_name}
-            className={cn({
-              [styles['container__timetable-name']]: true,
-            })}
-            onChange={(e) => setFocusFrame({ ...focusFrame, timetable_name: e.target.value })}
-          />
-        </div>
-        {focusFrame.is_main ? (
-          <div className={styles['container__set-default-timetable-message']}>
-            기본 시간표로 설정되었습니다.
+
+        <form onSubmit={submitFrameForm}>
+          <div className={styles.container__input}>
+            <input
+              name="frame"
+              placeholder={focusFrame.timetable_name}
+              className={styles['container__timetable-name']}
+              defaultValue={focusFrame.timetable_name}
+            />
           </div>
-        ) : (
-          <div className={styles['container__setting-message']}>
+
+          <label className={styles['container__check-container']}>
+            <input
+              type="checkbox"
+              name="checker"
+              className={styles.container__checkbox}
+              disabled={focusFrame.is_main}
+              checked={focusFrame.is_main ? true : undefined}
+            />
+            <span className={styles['container__checkbox-title']}>
+              기본 시간표로 설정하기
+            </span>
+          </label>
+
+          <div className={styles.container__button}>
             <button
               id="default_timetable"
               type="button"
-              className={styles.container__checkbox}
-              onClick={toggleIsChecked}
+              className={styles['container__button--delete']}
+              onClick={() => onDelete()}
             >
-              {focusFrame.is_main ? <CheckedIcon /> : <NotCheckedIcon />}
+              삭제하기
             </button>
-            <label
-              htmlFor="default_timetable"
-              className={styles['container__set-default-timetable']}
-            >
-              기본 시간표로 설정하기
-            </label>
+            <button type="submit" className={styles['container__button--save']}>
+              저장하기
+            </button>
           </div>
-        )}
-        <div className={styles.container__button}>
-          <button
-            type="button"
-            className={cn({
-              [styles['container__button--delete']]: true,
-            })}
-            onClick={() => onDelete()}
-          >
-            삭제하기
-          </button>
-          <button
-            type="button"
-            className={cn({
-              [styles['container__button--save']]: true,
-            })}
-            onClick={() => onSubmit(focusFrame)}
-          >
-            저장하기
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   );
