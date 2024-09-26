@@ -23,7 +23,7 @@ import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';
 
 interface CurrentSemesterLectureListProps {
-  rowWidth: number[];
+  rowWidthList: number[];
   semesterKey: string;
   filter: {
     department: string;
@@ -34,7 +34,7 @@ interface CurrentSemesterLectureListProps {
 }
 
 interface MyLectureListBoxProps {
-  rowWidth: number[];
+  rowWidthList: number[];
   myLectures: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
   frameId: number;
 }
@@ -48,7 +48,7 @@ const useFlexibleWidth = (length: number, initialValue: number[]) => {
 };
 
 function CurrentSemesterLectureList({
-  rowWidth,
+  rowWidthList,
   semesterKey,
   filter,
   myLecturesV2,
@@ -63,7 +63,7 @@ function CurrentSemesterLectureList({
   return (
     lectureList?.length !== 0 ? (
       <LectureTable
-        rowWidth={rowWidth}
+        rowWidthList={rowWidthList}
         frameId={Number(frameId)}
         list={(lectureList ?? []).filter((lecture) => {
           const searchFilter = filter.search.toUpperCase();
@@ -157,11 +157,11 @@ function CurrentSemesterLectureList({
   );
 }
 
-function MyLectureListBox({ rowWidth, myLectures, frameId }: MyLectureListBoxProps) {
+function MyLectureListBox({ rowWidthList, myLectures, frameId }: MyLectureListBoxProps) {
   return (
     myLectures.length !== 0 ? (
       <LectureTable
-        rowWidth={rowWidth}
+        rowWidthList={rowWidthList}
         frameId={frameId}
         list={myLectures}
         myLecturesV2={myLectures}
@@ -271,7 +271,7 @@ function LectureList({ frameId }: { frameId: number }) {
         <React.Suspense fallback={<LoadingSpinner size="50" />}>
           {!isToggled ? (
             <CurrentSemesterLectureList
-              rowWidth={widthInfo}
+              rowWidthList={widthInfo}
               frameId={frameId}
               semesterKey={semester}
               filter={{
@@ -283,7 +283,7 @@ function LectureList({ frameId }: { frameId: number }) {
             />
           ) : (
             <MyLectureListBox
-              rowWidth={widthInfo}
+              rowWidthList={widthInfo}
               myLectures={myLecturesV2}
               frameId={frameId}
             />

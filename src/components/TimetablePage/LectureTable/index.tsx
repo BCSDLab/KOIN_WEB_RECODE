@@ -9,7 +9,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
-  rowWidth: number[];
+  rowWidthList: number[];
   frameId: number;
   list: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
   myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
@@ -40,7 +40,7 @@ export const LECTURE_TABLE_HEADER = [
 ] as const;
 
 function LectureTable({
-  rowWidth,
+  rowWidthList,
   frameId,
   list,
   myLecturesV2,
@@ -193,7 +193,7 @@ function LectureTable({
                 (headerItem, headerItemIndex) => headerItem.key !== null && (
                   <div
                     style={{
-                      width: `${rowWidth[headerItemIndex]}px`,
+                      width: `${rowWidthList[headerItemIndex]}px`,
                     }}
                     className={cn({
                       [styles.table__col]: true,
