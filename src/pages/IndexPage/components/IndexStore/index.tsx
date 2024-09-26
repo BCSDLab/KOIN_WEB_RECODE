@@ -17,7 +17,7 @@ function IndexStore() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
-  const AB = 'a';
+  const AB = 'B';
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
     logger.actionEventClick({
@@ -36,7 +36,7 @@ function IndexStore() {
     <section className={styles.template}>
       <Link to={ROUTES.Store()} className={styles.template__title}>주변상점</Link>
       <div className={styles.category__wrapper}>
-        {isMobile && AB === 'a'
+        {isMobile && AB === 'B'
           ? (
             <div className={styles['store-branch-container']}>
               <button
