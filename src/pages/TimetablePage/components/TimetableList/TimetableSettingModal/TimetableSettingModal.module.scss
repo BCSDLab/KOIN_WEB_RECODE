@@ -178,6 +178,20 @@
     &:checked::after {
       display: block;
     }
+
+    &:disabled {
+      background-color: #e0e0e0;
+      border-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    &:disabled::after {
+      border-color: #ccc
+    }
+
+    &:disabled:checked {
+      background-color: #999;
+    }
   }
 
   &__none-checkbox {

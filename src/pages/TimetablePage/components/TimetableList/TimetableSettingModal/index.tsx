@@ -117,18 +117,20 @@ export default function TimetableSettingModal({
               defaultValue={focusFrame.timetable_name}
             />
           </div>
-          {!focusFrame.is_main ? (
-            <label className={styles['container__check-container']}>
-              <input
-                type="checkbox"
-                name="checker"
-                className={styles.container__checkbox}
-              />
-              <span className={styles['container__checkbox-title']}>
-                기본 시간표로 설정하기
-              </span>
-            </label>
-          ) : <div className={styles['container__none-checkbox']} />}
+
+          <label className={styles['container__check-container']}>
+            <input
+              type="checkbox"
+              name="checker"
+              className={styles.container__checkbox}
+              disabled={focusFrame.is_main}
+              checked={focusFrame.is_main ? true : undefined}
+            />
+            <span className={styles['container__checkbox-title']}>
+              기본 시간표로 설정하기
+            </span>
+          </label>
+
           <div className={styles.container__button}>
             <button
               id="default_timetable"
