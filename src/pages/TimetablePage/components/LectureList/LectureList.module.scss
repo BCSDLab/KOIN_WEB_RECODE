@@ -80,3 +80,54 @@
     cursor: pointer;
   }
 }
+
+.table {
+  width: 613px;
+  height: 609px;
+  text-align: left;
+  word-break: break-all;
+  border: none;
+  white-space: nowrap;
+
+  &__header {
+    display: flex;
+    padding: 10px 16px;
+    text-align: left;
+    background-color: #175c8e1a;
+  }
+
+  &__col {
+    position: relative;
+    padding-right: 5px;
+    align-items: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    text-align: left;
+    word-break: break-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    .table__row > &:last-child {
+      border: none;
+      padding: 0;
+    }
+  }
+}
+
+.empty-list {
+  height: 567px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28.8px;
+  text-align: center;
+  color: #727272;
+}
