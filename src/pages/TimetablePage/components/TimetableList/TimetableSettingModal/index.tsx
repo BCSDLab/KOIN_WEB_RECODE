@@ -9,6 +9,8 @@ import useDeleteTimetableFrame from 'pages/TimetablePage/hooks/useDeleteTimetabl
 import { useSemester } from 'utils/zustand/semester';
 import showToast from 'utils/ts/showToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import styles from './TimetableSettingModal.module.scss';
 
@@ -16,15 +18,20 @@ export interface TimetableSettingModalProps {
   focusFrame: TimetableFrameInfo;
   setFocusFrame: (frame: TimetableFrameInfo) => void;
   onClose: () => void;
+  setCurrentFrameIndex: React.Dispatch<number>;
+  currentFrameIndex: number;
 }
 
 export default function TimetableSettingModal({
   focusFrame,
   setFocusFrame,
   onClose,
+  setCurrentFrameIndex,
+  currentFrameIndex,
 }: TimetableSettingModalProps) {
   const token = useTokenState();
   const semester = useSemester();
+  const { data: myFrames } = useTimetableFrameList(token, semester);
   const myLectures = useMyLecturesV2(focusFrame.id!);
   const toggleIsChecked = () => {
     if (focusFrame.is_main) setFocusFrame({ ...focusFrame, is_main: false });
@@ -42,11 +49,30 @@ export default function TimetableSettingModal({
     onClose();
   };
 
-  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, semester);
-  const onDelete = () => {
+  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(
+    token,
+    semester,
+  );
+  const onDelete = async () => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
       return;
+    }
+    try {
+      await deleteTimetableFrame({ id: focusFrame.id, frame: focusFrame });
+
+      // 현재 선택된 프레임이 삭제되면 메인 프레임으로 변경
+      if (currentFrameIndex === focusFrame.id) {
+        const defaultFrameId = myFrames.find((table) => table.is_main)?.id;
+        if (defaultFrameId) setCurrentFrameIndex(defaultFrameId);
+      }
+      onClose();
+    } catch (err) {
+      if (isKoinError(err)) {
+        showToast('error', err.message);
+        return;
+      }
+      sendClientError(err);
     }
     sessionStorage.setItem('restoreLecturesInFrame', JSON.stringify(myLectures));
     deleteTimetableFrame({ id: focusFrame.id, frame: focusFrame });
