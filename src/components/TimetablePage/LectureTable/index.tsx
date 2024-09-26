@@ -161,7 +161,6 @@ function LectureTable({
           >
             <button
               type="button"
-              role={onClickRow !== undefined ? undefined : 'null'}
               aria-label={
                     onClickRow !== undefined
                       ? '시간표에서 미리 보기'
