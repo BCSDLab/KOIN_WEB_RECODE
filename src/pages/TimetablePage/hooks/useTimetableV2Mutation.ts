@@ -58,7 +58,7 @@ export default function useTimetableV2Mutation(frameId: number) {
 
   const restoreLecture = () => {
     const restoredLecture = JSON.parse(sessionStorage.getItem('restoreLecture')!);
-    if ('name' in restoreLecture) {
+    if ('name' in restoredLecture) {
       addLectureFromLocalStorage(restoredLecture, semester);
     } else {
       mutateAddWithServer({
