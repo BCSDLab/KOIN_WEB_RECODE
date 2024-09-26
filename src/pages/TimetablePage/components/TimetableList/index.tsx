@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-imports */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSemester } from 'utils/zustand/semester';
 import { TimetableFrameInfo } from 'api/timetable/entity';
@@ -80,6 +80,14 @@ export default function TimetableList({
     }
   };
 
+  useEffect(() => {
+    // console.log(defaultFrame.find((frame) => frame.id === currentFrameIndex));
+    if (!data.find((frame) => frame.id === currentFrameIndex)) {
+      const mainFrameId = data.find((frame) => frame.is_main)?.id;
+      if (mainFrameId) setCurrentFrameIndex(mainFrameId);
+    }
+  }, [data, setCurrentFrameIndex, currentFrameIndex]);
+
   return (
     <div className={styles['timetable-list']}>
       <SemesterList />
@@ -95,7 +103,7 @@ export default function TimetableList({
               className={cn({
                 [styles['timetable-list__item']]: true,
                 [styles['timetable-list__item--selected']]:
-                  currentFrameIndex === frame.id || !frame.id,
+                  currentFrameIndex === frame.id,
               })}
               key={frame.id}
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
@@ -158,6 +166,7 @@ export default function TimetableList({
           focusFrame={focusFrame!}
           setFocusFrame={setFocusFrame}
           setCurrentFrameIndex={setCurrentFrameIndex}
+          currentFrameIndex={currentFrameIndex}
           onClose={closeModal}
         />
       )}

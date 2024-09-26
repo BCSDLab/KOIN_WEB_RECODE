@@ -75,7 +75,7 @@ export interface AddTimetableFrameRequest {
 }
 
 export interface UpdateTimetableFrameRequest {
-  name: string,
+  timetable_name: string,
   is_main: boolean,
 }
 
