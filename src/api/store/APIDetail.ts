@@ -68,7 +68,7 @@ export class StoreDetailMenu<R extends StoreDetailMenuResponse> implements APIRe
   }
 }
 
-export class StoreBenefitList<R extends StoreListResponse> implements APIRequest<R> {
+export class StoreBenefitList<R extends StoreListV2Response> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   response!: R;
