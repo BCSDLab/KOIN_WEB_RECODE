@@ -186,7 +186,7 @@
     }
 
     &:disabled::after {
-      border-color: #ccc
+      border-color: #ccc;
     }
 
     &:disabled:checked {
