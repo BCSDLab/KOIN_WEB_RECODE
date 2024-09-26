@@ -72,6 +72,7 @@ export type AddTimetableFrameResponse = TimetableFrameInfo;
 
 export interface AddTimetableFrameRequest {
   semester: string;
+  timetable_name?: string;
 }
 
 export interface UpdateTimetableFrameRequest {

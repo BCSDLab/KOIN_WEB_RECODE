@@ -1,3 +1,5 @@
+import { useMutation } from '@tanstack/react-query';
+import useToast from 'components/common/Toast/useToast';
 import { CustomTimetableLectureInfo, LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLectures';
@@ -5,8 +7,14 @@ import { useSemester } from 'utils/zustand/semester';
 import useAddTimetableLectureV2 from './useAddTimetableLectureV2';
 import useDeleteTimetableLectureV2 from './useDeleteTimetableLectureV2';
 
+type RemoveMyLectureV2Props = {
+  clickedLecture: LectureInfo | TimetableLectureInfoV2,
+  id: number
+};
+
 export default function useTimetableV2Mutation(frameId: number) {
   const token = useTokenState();
+  const toast = useToast();
   const { mutate: mutateAddWithServer } = useAddTimetableLectureV2(token);
   const {
     addLecture: addLectureFromLocalStorage,
@@ -48,13 +56,36 @@ export default function useTimetableV2Mutation(frameId: number) {
     }
   };
 
-  const removeMyLectureV2 = (clickedLecture: LectureInfo | TimetableLectureInfoV2, id: number) => {
-    if ('name' in clickedLecture) {
-      removeLectureFromLocalStorage(clickedLecture, semester);
-    } else if (id !== undefined) {
-      removeLectureFromServer(id);
+  const restoreLecture = () => {
+    const restoredLecture = JSON.parse(sessionStorage.getItem('restoreLecture')!);
+    if ('name' in restoreLecture) {
+      addLectureFromLocalStorage(restoredLecture, semester);
+    } else {
+      mutateAddWithServer({
+        timetable_frame_id: frameId,
+        timetable_lecture: [
+          restoredLecture,
+        ],
+      });
     }
   };
+
+  const removeMyLectureV2 = useMutation({
+    mutationFn: async ({ clickedLecture, id } : RemoveMyLectureV2Props) => {
+      sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
+      if ('name' in clickedLecture) {
+        return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, semester));
+      }
+      return removeLectureFromServer(id);
+    },
+    onSuccess: () => {
+      toast.open({
+        message: '해당 과목이 삭제되었습니다.',
+        recoverMessage: '해당 과목이 복구되었습니다.',
+        onRecover: restoreLecture,
+      });
+    },
+  });
 
   return { addMyLectureV2, removeMyLectureV2 };
 }

@@ -104,7 +104,7 @@ export default function TimetableList({
               className={cn({
                 [styles['timetable-list__item']]: true,
                 [styles['timetable-list__item--selected']]:
-                  currentFrameIndex === frame.id,
+                  currentFrameIndex === frame.id || !frame.id,
               })}
               key={frame.id}
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}

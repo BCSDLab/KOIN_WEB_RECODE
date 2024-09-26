@@ -3,11 +3,11 @@ import type { TimetableFrameInfo } from 'api/timetable/entity';
 import useUpdateTimetableFrame from 'pages/TimetablePage/hooks/useUpdateTimetableFrame';
 import useDeleteTimetableFrame from 'pages/TimetablePage/hooks/useDeleteTimetableFrame';
 import { useSemester } from 'utils/zustand/semester';
-import useToast from 'components/common/Toast/useToast';
 import showToast from 'utils/ts/showToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
@@ -25,17 +25,9 @@ export default function TimetableSettingModal({
 }: TimetableSettingModalProps) {
   const token = useTokenState();
   const semester = useSemester();
-  const toast = useToast();
   const { data: myFrames } = useTimetableFrameList(token, semester);
+  const myLectures = useMyLecturesV2(focusFrame.id!);
   const { mutate: updateFrameInfo } = useUpdateTimetableFrame();
-  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(
-    token,
-    semester,
-  );
-
-  const recoverFrame = () => {
-    // TODO: v2/timetables/lecture api 연결 후 시간표 프레임 추가와 강의 정보 추가로 recover 구현 예정.
-  };
 
   const submitFrameForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,18 +57,17 @@ export default function TimetableSettingModal({
     return onClose();
   };
 
-  const onDelete = async (frame: TimetableFrameInfo) => {
+  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(
+    token,
+    semester,
+  );
+  const onDelete = async () => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
       return;
     }
     try {
-      await deleteTimetableFrame(focusFrame.id);
-      toast.open({
-        message: `선택하신 [${frame.timetable_name}]이 삭제되었습니다.`,
-        recoverMessage: `[${frame.timetable_name}]이 복구되었습니다.`,
-        onRecover: recoverFrame,
-      });
+      await deleteTimetableFrame({ id: focusFrame.id, frame: focusFrame });
 
       // 현재 선택된 프레임이 삭제되면 메인 프레임으로 변경
       if (currentFrameIndex === focusFrame.id) {
@@ -91,6 +82,9 @@ export default function TimetableSettingModal({
       }
       sendClientError(err);
     }
+    sessionStorage.setItem('restoreLecturesInFrame', JSON.stringify(myLectures));
+    deleteTimetableFrame({ id: focusFrame.id, frame: focusFrame });
+    onClose();
   };
 
   return (
@@ -136,7 +130,7 @@ export default function TimetableSettingModal({
               id="default_timetable"
               type="button"
               className={styles['container__button--delete']}
-              onClick={() => onDelete(focusFrame)}
+              onClick={() => onDelete()}
             >
               삭제하기
             </button>
