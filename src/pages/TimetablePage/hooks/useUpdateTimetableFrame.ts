@@ -16,7 +16,7 @@ export default function useUpdateTimetableFrame() {
         updateTimetableFrame(
           token,
           frameInfo.id!,
-          { name: frameInfo.timetable_name, is_main: frameInfo.is_main },
+          { timetable_name: frameInfo.timetable_name, is_main: frameInfo.is_main },
         )
       ),
       onSuccess: () => {

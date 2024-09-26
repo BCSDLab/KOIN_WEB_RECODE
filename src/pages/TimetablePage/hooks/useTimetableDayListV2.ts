@@ -14,6 +14,7 @@ export default function useTimetableDayListV2(
     (myLectures ?? []).forEach((lecture, lectureIndex) => {
       let currentDayClassTimeArr: number[][] = [];
       let currentDayClassPlaceArr: string[] | undefined = [];
+      // 커스텀 시간표 구성 시 시간표 미리보기를 위함.
       if (!('code' in lecture)) {
         currentDayClassTimeArr = (lecture.class_time ?? [])
           .map((item) => (
@@ -67,7 +68,7 @@ export default function useTimetableDayListV2(
           .sort((a, b) => a - b);
         if (currentDayClassTime.length) {
           const groups = currentDayClassTime.reduce((acc, curr, i) => {
-            if (curr === currentDayClassTime[i]) {
+            if (i === 0 || curr === currentDayClassTime[i - 1] + 1) {
               acc[acc.length - 1].push(curr);
             } else {
               acc.push([curr]);

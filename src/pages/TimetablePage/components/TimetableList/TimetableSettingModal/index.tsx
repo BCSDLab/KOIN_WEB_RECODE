@@ -6,21 +6,27 @@ import { useSemester } from 'utils/zustand/semester';
 import useToast from 'components/common/Toast/useToast';
 import showToast from 'utils/ts/showToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
   focusFrame: TimetableFrameInfo;
   onClose: () => void;
+  setCurrentFrameIndex: React.Dispatch<number>;
+  currentFrameIndex: number;
 }
 
 export default function TimetableSettingModal({
   focusFrame,
   onClose,
+  setCurrentFrameIndex,
+  currentFrameIndex,
 }: TimetableSettingModalProps) {
   const token = useTokenState();
   const semester = useSemester();
   const toast = useToast();
-
+  const { data: myFrames } = useTimetableFrameList(token, semester);
   const { mutate: updateFrameInfo } = useUpdateTimetableFrame();
   const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(
     token,
@@ -59,19 +65,32 @@ export default function TimetableSettingModal({
     return onClose();
   };
 
-  const onDelete = (frame: TimetableFrameInfo) => {
+  const onDelete = async (frame: TimetableFrameInfo) => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
       return;
     }
+    try {
+      await deleteTimetableFrame(focusFrame.id);
+      toast.open({
+        message: `선택하신 [${frame.timetable_name}]이 삭제되었습니다.`,
+        recoverMessage: `[${frame.timetable_name}]이 복구되었습니다.`,
+        onRecover: recoverFrame,
+      });
 
-    toast.open({
-      message: `선택하신 [${frame.timetable_name}]이 삭제되었습니다.`,
-      recoverMessage: `[${frame.timetable_name}]이 복구되었습니다.`,
-      onRecover: recoverFrame,
-    });
-    deleteTimetableFrame(focusFrame.id);
-    onClose();
+      // 현재 선택된 프레임이 삭제되면 메인 프레임으로 변경
+      if (currentFrameIndex === focusFrame.id) {
+        const defaultFrameId = myFrames.find((table) => table.is_main)?.id;
+        if (defaultFrameId) setCurrentFrameIndex(defaultFrameId);
+      }
+      onClose();
+    } catch (err) {
+      if (isKoinError(err)) {
+        showToast('error', err.message);
+        return;
+      }
+      sendClientError(err);
+    }
   };
 
   return (
