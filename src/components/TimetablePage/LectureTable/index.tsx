@@ -9,6 +9,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
+  rowWidth: number[];
   frameId: number;
   list: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
   myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
@@ -22,7 +23,11 @@ interface RemoveLectureProps {
   id: number;
 }
 
-const LECTURE_TABLE_HEADER = [
+const isLectureInfo = (
+  value: LectureInfo | TimetableLectureInfoV2,
+): value is LectureInfo => 'name' in value;
+
+export const LECTURE_TABLE_HEADER = [
   { key: 'code', label: '코드' },
   { key: 'name', label: '과목명' },
   { key: 'lecture_class', label: '분반' },
@@ -34,19 +39,8 @@ const LECTURE_TABLE_HEADER = [
   { key: 'department', label: '개설학부' },
 ] as const;
 
-const isLectureInfo = (
-  value: LectureInfo | TimetableLectureInfoV2,
-): value is LectureInfo => 'name' in value;
-
-const useFlexibleWidth = (length: number, initialValue: number[]) => {
-  const [widthInfo] = React.useState(() => initialValue);
-  // TODO: flexible width 생성(mouseMove 이벤트)
-  return {
-    widthInfo,
-  };
-};
-
 function LectureTable({
+  rowWidth,
   frameId,
   list,
   myLecturesV2,
@@ -55,7 +49,6 @@ function LectureTable({
   onDoubleClickRow,
   version,
 }: LectureTableProps): JSX.Element {
-  const { widthInfo } = useFlexibleWidth(9, [61, 173, 41, 61, 61, 41, 41, 41, 61]);
   const tempLecture = useTempLecture();
   const { updateTempLecture } = useTempLectureAction();
   const [cursor, setCursor] = React.useState(-1);
@@ -149,137 +142,91 @@ function LectureTable({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cursor]);
-
   return (
     <div className={styles.table}>
-      <div className={styles.table__content} role="table">
-        <div className={styles.table__header} role="row">
-          {LECTURE_TABLE_HEADER.map((header, headerIndex) => (
-            <div
-              style={{
-                width: `${widthInfo[headerIndex]}px`,
-              }}
-              className={styles.table__col}
-              role="columnheader"
-              key={header.key}
-            >
-              {header.label}
-              {/* 내림차순 기능 추가할때 다시 복구 */}
-              {/* {headerIndex !== LECTURE_TABLE_HEADER.length - 1 && (
-                <>
-                  <button type="button" className={styles.table__button}>
-                    <img src="https://static.koreatech.in/assets/img/ic-arrow-down.png" alt="내림차순" />
-                  </button>
-                  <div className={styles.table__resize} aria-hidden />
-                </>
-              )} */}
-            </div>
-          ))}
-        </div>
-        {(list.length !== 0 || myLecturesV2.length !== 0)
-          ? (
-            <div className={styles['table__lecture-list']} ref={containerRef}>
-              {list.map((lecture, index) => (
-                <div
-                  className={cn({
-                    [styles.table__row]: true,
-                    [styles['table__row--include']]: version !== 'myLectureList' ? myLecturesV2.some(
-                      (item) => item.code === lecture.code
+      <div className={styles['table__lecture-list']} ref={containerRef}>
+        {list.map((lecture, index) => (
+          <div
+            className={cn({
+              [styles.table__row]: true,
+              [styles['table__row--include']]: version !== 'myLectureList' ? myLecturesV2.some(
+                (item) => item.code === lecture.code
                       && item.lecture_class === lecture.lecture_class,
-                    ) : false,
-                    [styles['table__row--selected']]: selectedLecture === lecture,
-                  })}
-                  aria-selected={selectedLecture === lecture}
-                  role="row"
-                  key={`${lecture.code}-${lecture.lecture_class}`}
-                >
-                  <button
-                    type="button"
-                    role={onClickRow !== undefined ? undefined : 'null'}
-                    aria-label={
+              ) : false,
+              [styles['table__row--selected']]: selectedLecture === lecture,
+            })}
+            aria-selected={selectedLecture === lecture}
+            role="row"
+            key={`${lecture.code}-${lecture.lecture_class}`}
+          >
+            <button
+              type="button"
+              role={onClickRow !== undefined ? undefined : 'null'}
+              aria-label={
                     onClickRow !== undefined
                       ? '시간표에서 미리 보기'
                       : undefined
                   }
-                    className={cn({
-                      [styles['table__row-button']]: true,
-                      [styles['table__row-button--toggled']]: version === 'myLectureList',
-                    })}
-                    onClick={(e) => {
-                      setCursor(index);
-                      handleTableRowClick(lecture, e);
+              className={cn({
+                [styles['table__row-button']]: true,
+                [styles['table__row-button--toggled']]: version === 'myLectureList',
+              })}
+              onClick={(e) => {
+                setCursor(index);
+                handleTableRowClick(lecture, e);
+              }}
+              onMouseEnter={() => setIsMouseOver(index)}
+              onMouseLeave={() => setIsMouseOver(-1)}
+            >
+              {isMouseOver === index && version === 'myLectureList' && (
+                <div className={styles['table__delete-button']}>
+                  <LectureCloseIcon
+                    onClick={() => {
+                      handleRemoveLectureClick({
+                        id: lecture.id,
+                      });
                     }}
-                    onMouseEnter={() => setIsMouseOver(index)}
-                    onMouseLeave={() => setIsMouseOver(-1)}
-                  >
-                    {isMouseOver === index && version === 'myLectureList' && (
-                    <div className={styles['table__delete-button']}>
-                      <LectureCloseIcon
-                        onClick={() => {
-                          handleRemoveLectureClick({
-                            id: lecture.id,
-                          });
-                        }}
-                      />
-                    </div>
-                    )}
-                    {LECTURE_TABLE_HEADER.map(
-                      (headerItem, headerItemIndex) => headerItem.key !== null && (
-                      <div
-                        style={{
-                          width: `${widthInfo[headerItemIndex]}px`,
-                        }}
-                        className={cn({
-                          [styles.table__col]: true,
-                          [styles['table__col--text-center']]:
+                  />
+                </div>
+              )}
+              {LECTURE_TABLE_HEADER.map(
+                (headerItem, headerItemIndex) => headerItem.key !== null && (
+                  <div
+                    style={{
+                      width: `${rowWidth[headerItemIndex]}px`,
+                    }}
+                    className={cn({
+                      [styles.table__col]: true,
+                      [styles['table__col--text-center']]:
                               headerItem.label === '분반'
                               || headerItem.label === '학점'
                               || headerItem.label === '정원'
                               || headerItem.label === '설계',
-                        })}
-                        role="cell"
-                        key={headerItem.key}
-                      >
-                        {headerItem.key === 'professor'
+                    })}
+                    role="cell"
+                    key={headerItem.key}
+                  >
+                    {headerItem.key === 'professor'
                             && (lecture[headerItem.key] === ''
                               ? '미배정'
                               : lecture[headerItem.key])}
-                        {headerItem.key === null && '수정'}
-                        {headerItem.key === 'name'
+                    {headerItem.key === null && '수정'}
+                    {headerItem.key === 'name'
                             && isLectureInfo(lecture)
                             && lecture.name}
-                        {headerItem.key === 'name'
+                    {headerItem.key === 'name'
                             && !isLectureInfo(lecture)
                             && lecture.class_title}
-                        {headerItem.key !== null
+                    {headerItem.key !== null
                             && headerItem.key !== 'professor'
                             && headerItem.key !== 'name'
                             && lecture[headerItem.key]}
-                      </div>
-                      ),
-                    )}
-                  </button>
-                </div>
-              ))}
-            </div>
-          )
-          : (
-            <div className={styles['table__lecture-list--no-lecture']}>
-              {/* TODO: 빈 강의 정보에 대한 UI가 나오면 수정
-              {(version === 'semesterLectureList')
-                ? (
-                  <div>
-                    현재 학기의 강의 정보가 없습니다.
                   </div>
-                )
-                : (
-                  <div>
-                    담긴 강의가 없습니다. 강의를 추가해 보세요!
-                  </div>
-                )}
-              */}
-            </div>
-          )}
+                ),
+              )}
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

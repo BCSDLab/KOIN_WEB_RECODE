@@ -1,17 +1,9 @@
 .table {
   width: 613px;
-  height: 609px;
   text-align: left;
   word-break: break-all;
   border: none;
   white-space: nowrap;
-
-  &__header {
-    display: flex;
-    padding: 10px 16px;
-    text-align: left;
-    background-color: #175c8e1a;
-  }
 
   &__col {
     position: relative;
