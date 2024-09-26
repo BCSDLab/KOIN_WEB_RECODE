@@ -61,9 +61,21 @@
     font-family: Pretendard, sans-serif;
     font-size: 18px;
     font-weight: 500;
-    line-height: 21.48px;
+    line-height: 28.8px;
     text-align: left;
     color: #8e8e8e;
+
+    &--title-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      text-align: center;
+    }
+
+    &--bookmark-icon {
+      width: 20px;
+      height: 20px;
+    }
 
     &--selected {
       color: #175c8e;

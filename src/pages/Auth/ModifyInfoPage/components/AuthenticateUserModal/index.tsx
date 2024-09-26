@@ -16,7 +16,7 @@ import ROUTES from 'static/routes';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 export default function AuthenticateUserModal({

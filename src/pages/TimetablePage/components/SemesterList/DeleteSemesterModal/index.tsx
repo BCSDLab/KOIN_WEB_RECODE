@@ -3,9 +3,9 @@ import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import styles from './DeleteSemesterModal.module.scss';
 
 export interface DeleteSemesterModalProps {
-  onClose: () => void
-  handleDeleteSemester: () => void
-  setModalOpenFalse: () => void
+  onClose: () => void;
+  handleDeleteSemester: () => void;
+  setModalOpenFalse: () => void;
 }
 
 export default function DeleteSemesterModal({

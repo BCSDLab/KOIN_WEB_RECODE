@@ -7,6 +7,7 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
 import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
 import { ReactComponent as BlueSettingIcon } from 'assets/svg/setting-icon-blue.svg';
+import { ReactComponent as BookMarkIcon } from 'assets/svg/book-mark.svg';
 import TimetableSettingModal from 'pages/TimetablePage/components/TimetableList/TimetableSettingModal';
 import InducingLoginModal from 'pages/TimetablePage/components/InducingLoginModal';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
@@ -108,7 +109,10 @@ export default function TimetableList({
               key={frame.id}
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
             >
-              <li>{frame.timetable_name}</li>
+              <div className={styles['timetable-list__item--title-container']}>
+                <li>{frame.timetable_name}</li>
+                <BookMarkIcon className={styles['timetable-list__item--bookmark-icon']} />
+              </div>
               <button
                 type="button"
                 className={styles['timetable-list__item--setting']}
@@ -144,9 +148,11 @@ export default function TimetableList({
                   handleTimetableSettingClick(frame);
                 }}
               >
-                {currentFrameIndex === frame.id || !frame.id
-                  ? <BlueSettingIcon />
-                  : <SettingIcon />}
+                {currentFrameIndex === frame.id || !frame.id ? (
+                  <BlueSettingIcon />
+                ) : (
+                  <SettingIcon />
+                )}
                 설정
               </button>
             </button>
@@ -164,7 +170,6 @@ export default function TimetableList({
       {isModalOpen && (
         <TimetableSettingModal
           focusFrame={focusFrame!}
-          setFocusFrame={setFocusFrame}
           setCurrentFrameIndex={setCurrentFrameIndex}
           currentFrameIndex={currentFrameIndex}
           onClose={closeModal}
