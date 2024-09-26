@@ -19,6 +19,7 @@ export interface TimetableSettingModalProps {
   setFocusFrame: (frame: TimetableFrameInfo) => void;
   onClose: () => void;
   setCurrentFrameIndex: React.Dispatch<number>;
+  currentFrameIndex: number;
 }
 
 export default function TimetableSettingModal({
@@ -26,6 +27,7 @@ export default function TimetableSettingModal({
   setFocusFrame,
   onClose,
   setCurrentFrameIndex,
+  currentFrameIndex,
 }: TimetableSettingModalProps) {
   const token = useTokenState();
   const semester = useSemester();
@@ -66,8 +68,11 @@ export default function TimetableSettingModal({
         onRecover: recoverFrame,
       });
 
-      const defaultFrameId = myFrames.find((table) => table.is_main)?.id;
-      if (defaultFrameId) setCurrentFrameIndex(defaultFrameId);
+      // 현재 선택된 프레임이 삭제되면 메인 프레임으로 변경
+      if (currentFrameIndex === focusFrame.id) {
+        const defaultFrameId = myFrames.find((table) => table.is_main)?.id;
+        if (defaultFrameId) setCurrentFrameIndex(defaultFrameId);
+      }
       onClose();
     } catch (err) {
       if (isKoinError(err)) {
