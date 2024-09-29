@@ -8,7 +8,7 @@ type GTagEvent = {
   current_page?: string;
 };
 
-export const GA_TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
+export const GA_TRACKING_ID = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageView = (url: string, userId?: string) => {
@@ -30,7 +30,7 @@ export const event = ({
     value,
   });
 
-  if (process.env.REACT_APP_API_PATH?.includes('stage')) {
+  if (import.meta.env.VITE_API_PATH?.includes('stage')) {
     // eslint-disable-next-line no-console
     console.table({
       팀: action, '이벤트 Category': category, '이벤트 Title': label, 값: value, '체류 시간': duration_time, '이전 카테고리': previous_page, '현재 페이지': current_page,

@@ -103,10 +103,10 @@ export default function AuthenticateUserModal({
               {isBlind ? <BlindIcon /> : <ShowIcon />}
             </button>
             {isMobile && isKoinError(error) && (
-            <span className={styles['container__mobile-error-message']}>
-              <WarningMobileIcon />
-              {errorMessage}
-            </span>
+              <span className={styles['container__mobile-error-message']}>
+                <WarningMobileIcon />
+                {errorMessage}
+              </span>
             )}
             <button
               type="button"
@@ -121,12 +121,12 @@ export default function AuthenticateUserModal({
           </div>
         </div>
         {!isMobile && isKoinError(error) && error
-           && (
-           <span className={styles['container__error-message']}>
-             <WarningIcon />
-             {errorMessage}
-           </span>
-           )}
+          && (
+            <span className={styles['container__error-message']}>
+              <WarningIcon />
+              {errorMessage}
+            </span>
+          )}
       </div>
     </div>
   );

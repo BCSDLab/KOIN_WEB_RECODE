@@ -29,7 +29,6 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
     "react-toastify": "^9.0.8",
     "react-window": "^1.8.7",
     "recoil": "^0.7.4",
@@ -40,10 +39,9 @@
     "zustand": "^4.5.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "CI=false && react-scripts build",
-    "test": "react-scripts test --coverage",
-    "eject": "react-scripts eject",
+    "start": "vite --open --host",
+    "build": "CI=false && vite build",
+    "test": "test --coverage",
     "lint": "yarn lint:eslint && yarn lint:stylelint",
     "lint:eslint": "eslint src/ --ext .tsx,.ts",
     "lint:stylelint": "stylelint \"src/**/*.scss\" --config .stylelint.json"
@@ -71,6 +69,7 @@
     "@types/gtag.js": "^0.0.19",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^8.18.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
@@ -83,7 +82,11 @@
     "stylelint": "^14.9.1",
     "stylelint-config-standard": "^26.0.0",
     "stylelint-config-standard-scss": "^4.0.0",
-    "stylelint-selector-bem-pattern": "^2.1.1"
+    "stylelint-selector-bem-pattern": "^2.1.1",
+    "vite": "^5.4.8",
+    "vite-plugin-svgr": "3.3.0",
+    "vite-tsconfig-paths": "^5.0.1"
   },
+  "type": "module",
   "packageManager": "yarn@3.8.0"
 }
