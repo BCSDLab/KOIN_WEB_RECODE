@@ -26,28 +26,3 @@ export class ABTestAssign<R extends ABTestAssignResponse> implements APIRequest<
     }
   }
 }
-
-export class GetMyABTest<R extends string> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/abtest/me';
-
-  response!: R;
-
-  title: string;
-
-  headers: Record<string, string | number> = {};
-
-  auth = true;
-
-  constructor(
-    title: string,
-    public accessHistoryId: string | number,
-    public authorization?: string,
-  ) {
-    this.title = title;
-    this.headers = {
-      access_history_id: this.accessHistoryId,
-    };
-  }
-}
