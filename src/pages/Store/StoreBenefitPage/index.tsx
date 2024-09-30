@@ -53,20 +53,24 @@ function StoreBenefitPage() {
       </div>
       <div className={styles.section__title}>
         {
-          benefitCategory ? benefitCategory[selectedCategory]?.detail : ''
+          benefitCategory ? benefitCategory[selectedCategory - 1]?.detail : ''
         }
       </div>
       <div className={styles.section__content}>
-        <div className={styles.option}>
-          <div className={styles.option__count}>
-            총&nbsp;
-            <strong>
-              {count}
-              개의 업체가
-            </strong>
-            있습니다.
-          </div>
-        </div>
+        {isMobile
+          ? <div className={styles['divide-bar']} />
+          : (
+            <div className={styles.option}>
+              <div className={styles.option__count}>
+                총&nbsp;
+                <strong>
+                  {count}
+                  개의 업체가
+                </strong>
+                있습니다.
+              </div>
+            </div>
+          )}
         {isMobile
           ? <MobileStoreList storeListData={storeBenefitList} />
           : <DesktopStoreList storeListData={storeBenefitList} />}
