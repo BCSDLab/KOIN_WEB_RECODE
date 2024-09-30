@@ -91,7 +91,11 @@
 
 .store-branch-button {
   width: 100%;
-  padding: 16px 24px;
+  padding: 16px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   border-radius: 8px;
   background: #fff;
   box-shadow: 0 1px 9px 1px rgb(0 0 0 / 6%);
@@ -100,4 +104,9 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+  }
 }

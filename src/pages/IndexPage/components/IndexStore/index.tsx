@@ -44,6 +44,7 @@ function IndexStore() {
                 className={styles['store-branch-button']}
                 onClick={() => navigate(`${ROUTES.Store()}?category=1`)}
               >
+                <img className={styles['store-branch-button__icon']} src="https://team-kap-koin-storage.s3.ap-northeast-2.amazonaws.com/assets/img/icon/shop_icon.png" alt="이미지 오류" />
                 상점 목록
               </button>
               <button
@@ -51,6 +52,7 @@ function IndexStore() {
                 className={styles['store-branch-button']}
                 onClick={() => navigate(`${ROUTES.StoreBenefit()}`)}
               >
+                <img className={styles['store-branch-button__icon']} src="https://team-kap-koin-storage.s3.ap-northeast-2.amazonaws.com/assets/img/icon/call_icon.png" alt="이미지 오류" />
                 전화 주문 혜택
               </button>
             </div>
