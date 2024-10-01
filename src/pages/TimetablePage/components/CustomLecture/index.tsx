@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
+import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import Listbox from 'components/TimetablePage/Listbox';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
@@ -175,6 +176,14 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     }, 0);
   };
 
+  const handleDeleteTimeSpaceComponent = (index: number) => {
+    setTimeSpaceComponents((prev) => {
+      const updatedComponent = [...prev];
+      updatedComponent.splice(index, 1);
+      return updatedComponent;
+    });
+  };
+
   const handleLectureTimeByTime = (key: string, index: number) => (
     e: { target: { value: string } },
   ) => {
@@ -325,6 +334,17 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             place,
           }, index) => (
             <div className={styles['time-space-container__component']}>
+              <button
+                aria-label="delete-time-space-component"
+                type="button"
+                onClick={() => handleDeleteTimeSpaceComponent(index)}
+                className={cn({
+                  [styles['time-space-container__delete-button']]: true,
+                  [styles['time-space-container__delete-button--invisible']]: index === 0,
+                })}
+              >
+                <CloseIcon />
+              </button>
               <div className={styles['form-group-time']}>
                 <label
                   htmlFor="place"
