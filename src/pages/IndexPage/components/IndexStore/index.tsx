@@ -61,19 +61,35 @@ function IndexStore() {
             </div>
           )
           : categories?.shop_categories.map((category) => (
-            <div
-              key={category.id}
-              className={styles.category__item}
-              onClick={(e) => handleStoreCategoryClick(e, category)}
-              aria-hidden
-            >
-              <img
-                src={category.image_url}
-                alt={category.name}
-                className={styles.category__image}
-              />
-              {category.name}
-            </div>
+            category.name === '전체보기' && ABView === 'B' ? (
+              <div
+                className={styles.category__item}
+                onClick={() => navigate('/storebenefit?category=1')}
+                aria-hidden
+              >
+                <img
+                  src="https://team-kap-koin-storage.s3.ap-northeast-2.amazonaws.com/assets/img/icon/call_icon.png"
+                  alt={category.name}
+                  className={styles.category__image}
+                />
+                전화 주문 혜택
+              </div>
+            )
+              : (
+                <div
+                  key={category.id}
+                  className={styles.category__item}
+                  onClick={(e) => handleStoreCategoryClick(e, category)}
+                  aria-hidden
+                >
+                  <img
+                    src={category.image_url}
+                    alt={category.name}
+                    className={styles.category__image}
+                  />
+                  {category.name}
+                </div>
+              )
           ))}
       </div>
     </section>
