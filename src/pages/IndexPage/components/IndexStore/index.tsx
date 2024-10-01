@@ -79,7 +79,7 @@ function IndexStore() {
                 aria-hidden
               >
                 <img
-                  src="https://team-kap-koin-storage.s3.ap-northeast-2.amazonaws.com/assets/img/icon/call_icon.png"
+                  src="https://static.koreatech.in/assets/img/icon/call_icon_2.png"
                   alt={category.name}
                   className={styles.category__image}
                 />
