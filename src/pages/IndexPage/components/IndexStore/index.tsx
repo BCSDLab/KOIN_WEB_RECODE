@@ -4,6 +4,8 @@ import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList'
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -14,10 +16,11 @@ interface Category {
 
 function IndexStore() {
   const isMobile = useMediaQuery();
+  const token = useTokenState();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
-  const AB = 'B';
+  const ABView = useABTestView('benefitPage', token);
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
     logger.actionEventClick({
@@ -36,7 +39,7 @@ function IndexStore() {
     <section className={styles.template}>
       <Link to={ROUTES.Store()} className={styles.template__title}>주변상점</Link>
       <div className={styles.category__wrapper}>
-        {isMobile && AB === 'B'
+        {isMobile && ABView === 'B'
           ? (
             <div className={styles['store-branch-container']}>
               <button
