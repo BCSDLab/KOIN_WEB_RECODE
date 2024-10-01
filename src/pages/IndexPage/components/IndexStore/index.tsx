@@ -34,7 +34,18 @@ function IndexStore() {
     });
     navigate(`${ROUTES.Store()}?category=${category.id}`);
   };
-
+  const hadleStoreClick = () => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
+      title: 'main_shop_benefit',
+      value: '전화주문혜택',
+      event_category: 'click',
+      previous_page: '메인',
+      current_page: 'benefit',
+      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
+    });
+    navigate('/storebenefit?category=1');
+  };
   return (
     <section className={styles.template}>
       <Link to={ROUTES.Store()} className={styles.template__title}>주변상점</Link>
@@ -63,8 +74,8 @@ function IndexStore() {
           : categories?.shop_categories.map((category) => (
             category.name === '전체보기' && ABView === 'B' ? (
               <div
-                className={styles.category__item}
-                onClick={() => navigate('/storebenefit?category=1')}
+                className={styles.category__benefit}
+                onClick={() => hadleStoreClick()}
                 aria-hidden
               >
                 <img
