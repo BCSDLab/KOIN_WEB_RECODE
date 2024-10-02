@@ -1,18 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import * as api from 'api';
-
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-
 import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
 import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
+import { STORE_PAGE } from 'static/store';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
@@ -343,8 +342,18 @@ function StorePage() {
         }
       </div>
       {
-        !isMobile ? <DesktopStoreList storeListData={storeList} />
-          : <MobileStoreList storeListData={storeListMobile} />
+        !isMobile ? (
+          <DesktopStoreList
+            storeListData={storeList}
+            storeType={STORE_PAGE.MAIN}
+          />
+        )
+          : (
+            <MobileStoreList
+              storeListData={storeListMobile}
+              storeType={STORE_PAGE.MAIN}
+            />
+          )
       }
     </div>
   );

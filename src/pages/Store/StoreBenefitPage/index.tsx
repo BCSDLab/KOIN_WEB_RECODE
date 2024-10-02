@@ -4,6 +4,7 @@ import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList'
 import useBenefitCategory from 'pages/Store/StoreBenefitPage/hooks/useBenefitCategory';
 import useStoreBenefitList from 'pages/Store/StoreBenefitPage/hooks/useStoreBenefitList';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { STORE_PAGE } from 'static/store';
 import { useEffect } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './StoreBenefitPage.module.scss';
@@ -88,8 +89,18 @@ function StoreBenefitPage() {
             </div>
           )}
         {isMobile
-          ? <MobileStoreList storeListData={storeBenefitList} />
-          : <DesktopStoreList storeListData={storeBenefitList} />}
+          ? (
+            <MobileStoreList
+              storeListData={storeBenefitList}
+              storeType={STORE_PAGE.BENEFIT_STORE}
+            />
+          )
+          : (
+            <DesktopStoreList
+              storeListData={storeBenefitList}
+              storeType={STORE_PAGE.BENEFIT_STORE}
+            />
+          )}
       </div>
     </div>
   );
