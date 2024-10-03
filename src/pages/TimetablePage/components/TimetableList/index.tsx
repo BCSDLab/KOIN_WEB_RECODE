@@ -82,7 +82,6 @@ export default function TimetableList({
   };
 
   useEffect(() => {
-    // console.log(defaultFrame.find((frame) => frame.id === currentFrameIndex));
     if (!data.find((frame) => frame.id === currentFrameIndex)) {
       const mainFrameId = data.find((frame) => frame.is_main)?.id;
       if (mainFrameId) setCurrentFrameIndex(mainFrameId);
@@ -98,6 +97,15 @@ export default function TimetableList({
           role="button"
           tabIndex={0}
         >
+
+          {defaultFrame.length === 0 && (
+            <div className={styles['timetable-list__empty-list']}>
+              {mySemester?.semesters.length === 0
+                ? '학기를 추가해 시간표 기능을 사용해보세요!'
+                : '시간표를 추가해 시간표 기능을 사용해보세요!'}
+            </div>
+          )}
+
           {defaultFrame.map((frame) => (
             <button
               type="button"
@@ -111,7 +119,9 @@ export default function TimetableList({
             >
               <div className={styles['timetable-list__item--title-container']}>
                 <li>{frame.timetable_name}</li>
-                <BookMarkIcon className={styles['timetable-list__item--bookmark-icon']} />
+                <BookMarkIcon
+                  className={styles['timetable-list__item--bookmark-icon']}
+                />
               </div>
               <button
                 type="button"
@@ -121,9 +131,11 @@ export default function TimetableList({
                   handleTimetableSettingClick(frame);
                 }}
               >
-                {currentFrameIndex === frame.id || !frame.id
-                  ? <BlueSettingIcon />
-                  : <SettingIcon />}
+                {currentFrameIndex === frame.id || !frame.id ? (
+                  <BlueSettingIcon />
+                ) : (
+                  <SettingIcon />
+                )}
                 설정
               </button>
             </button>
