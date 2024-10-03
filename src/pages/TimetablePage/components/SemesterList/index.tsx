@@ -92,6 +92,12 @@ function SemesterList() {
     }
   };
 
+  React.useEffect(() => {
+    if (mySemester) {
+      updateSemester(mySemester?.semesters[0]);
+    }
+  });
+
   const onClickDeleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: string) => {
     e.stopPropagation();
     if (token) {
