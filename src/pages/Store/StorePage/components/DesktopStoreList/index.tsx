@@ -6,11 +6,13 @@ import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
+import { StorePageType } from 'static/store';
 import ROUTES from 'static/routes';
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {
   storeListData: StoreList[] | undefined;
+  storeType: StorePageType;
 }
 
 export const getOpenCloseTime = (open_time: string | null, close_time: string | null) => {
@@ -20,7 +22,7 @@ export const getOpenCloseTime = (open_time: string | null, close_time: string | 
 };
 
 export default function DesktopStoreList(storeListProps: StoreListProps) {
-  const { storeListData } = storeListProps;
+  const { storeListData, storeType } = storeListProps;
   const logger = useLogger();
   const pickTopicJosa = getJosaPicker('은');
 
@@ -35,11 +37,11 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
     <div className={styles['store-list']}>
       {storeListData?.map((store: StoreList) => (
         <Link
-          to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴`}
+          to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴?type=${storeType}`}
           className={styles['store-list__item']}
           key={store.id}
           onClick={() => logger.actionEventClick({
-            actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory || '전체보기'}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
+            actionTitle: 'BUSINESS', title: `${storeType}_click`, value: store.name, event_category: 'click', previous_page: `${koreanCategory || '전체보기'}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
           })}
         >
           {store.is_event
