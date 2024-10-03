@@ -6,16 +6,18 @@ import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
 import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
 import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
+import { StorePageType } from 'static/store';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import ROUTES from 'static/routes';
 import styles from './MobileStoreList.module.scss';
 
 interface MobileStoreListProps {
   storeListData: StoreListV2[] | undefined;
+  storeType: StorePageType;
 }
 
 export default function MobileStoreList(mobileStoreListProps: MobileStoreListProps) {
-  const { storeListData } = mobileStoreListProps;
+  const { storeListData, storeType } = mobileStoreListProps;
   const logger = useLogger();
   const pickTopicJosa = getJosaPicker('은');
 
@@ -31,11 +33,11 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
       {
         storeListData?.map((store: StoreListV2) => (
           <Link
-            to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴`}
+            to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴?type=${storeType}`}
             className={styles['store-list__item']}
             key={store.id}
             onClick={() => logger.actionEventClick({
-              actionTitle: 'BUSINESS', title: 'shop_click', value: store.name, event_category: 'click', previous_page: `${koreanCategory || '전체보기'}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
+              actionTitle: 'BUSINESS', title: `${storeType}_click`, value: store.name, event_category: 'click', previous_page: `${koreanCategory || '전체보기'}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
             })}
           >
             {store.is_event

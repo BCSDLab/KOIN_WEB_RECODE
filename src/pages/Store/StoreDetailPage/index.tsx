@@ -67,6 +67,7 @@ function StoreDetailPage() {
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const [param, setParam] = useSearchParams();
   const tapType = param.get('state') ?? '메뉴';
+  const storeType = param.get('type') ?? 'shop';
   const portalManager = useModalPortal();
   const logger = useLogger();
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
@@ -84,7 +85,7 @@ function StoreDetailPage() {
     }
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: 'shop_call',
+      title: `${storeType}_call`,
       value: storeDetail!.name,
       event_category: 'click',
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
