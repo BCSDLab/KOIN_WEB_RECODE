@@ -66,6 +66,8 @@ export interface SemesterCheckResponse extends APIResponse {
   semesters: string[];
 }
 
+export interface DeleteSemesterResponse extends APIResponse { }
+
 export type TimetableFrameListResponse = TimetableFrameInfo[];
 
 export type AddTimetableFrameResponse = TimetableFrameInfo;

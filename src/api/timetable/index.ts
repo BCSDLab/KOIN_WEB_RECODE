@@ -7,6 +7,7 @@ import {
   TimetableRemoveLecture,
   VersionInfo,
   SemesterCheck,
+  DeleteSemester,
   TimetableFrameList,
   AddTimetableFrame,
   UpdateTimetableFrame,
@@ -29,6 +30,8 @@ export const changeTimetableInfoByRemoveLecture = APIClient.of(TimetableRemoveLe
 export const getVersion = APIClient.of(VersionInfo);
 
 export const getMySemester = APIClient.of(SemesterCheck);
+
+export const deleteSemester = APIClient.of(DeleteSemester);
 
 export const getTimetableFrame = APIClient.of(TimetableFrameList);
 
