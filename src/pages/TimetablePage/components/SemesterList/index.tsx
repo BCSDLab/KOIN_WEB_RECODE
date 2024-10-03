@@ -85,6 +85,7 @@ function SemesterList() {
 
   const handleDeleteSemester = () => {
     deleteTimetableFrame();
+    closePopup();
     if (selectedSemester === currentSemester) {
       setCurrentSemester(semesterOptionList[0].value);
       updateSemester(semesterOptionList[0].value);
@@ -124,17 +125,25 @@ function SemesterList() {
     >
       <button
         type="button"
-        onClick={semesterListToggle}
+        onClick={
+          semesterOptionList.length > 0 && currentSemester !== null
+            ? semesterListToggle
+            : onClickAddSemester
+        }
         className={cn({
           [styles.select__trigger]: true,
           [styles['select__trigger--selected']]: isOpenSemesterList,
         })}
       >
-        {currentSemester !== null
+        {semesterOptionList.length > 0 && currentSemester !== null
           ? semesterOptionList.find((item) => item.value === currentSemester)
             ?.label
-          : ''}
-        <DownArrowIcon />
+          : '학기 추가하기'}
+        {semesterOptionList.length > 0 && currentSemester !== null ? (
+          <DownArrowIcon />
+        ) : (
+          <AddIcon />
+        )}
       </button>
 
       {isOpenSemesterList && (
