@@ -60,7 +60,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       ? timeSpaceContainerRef.current.getBoundingClientRect().bottom - value < 150
       : false),
   );
-  const isOneComponent = timeSpaceComponents.length === 1;
+  const isSingleTimeSpaceComponent = timeSpaceComponents.length === 1;
 
   const changeToTimetableTime = (timeInfo: {
     startHour: string;
@@ -341,7 +341,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                 onClick={() => handleDeleteTimeSpaceComponent(index)}
                 className={cn({
                   [styles['time-space-container__delete-button']]: true,
-                  [styles['time-space-container__delete-button--invisible']]: isOneComponent,
+                  [styles['time-space-container__delete-button--invisible']]: isSingleTimeSpaceComponent,
                 })}
               >
                 <CloseIcon />
