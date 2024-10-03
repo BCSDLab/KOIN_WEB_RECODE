@@ -9,6 +9,7 @@ import {
   VersionInfoResponse,
   VersionType,
   SemesterCheckResponse,
+  DeleteSemesterResponse,
   AddTimetableFrameRequest,
   UpdateTimetableFrameRequest,
   TimetableFrameListResponse,
@@ -122,6 +123,26 @@ export class SemesterCheck<R extends SemesterCheckResponse> implements APIReques
   auth = true;
 
   constructor(public authorization: string) {}
+}
+
+export class DeleteSemester<R extends DeleteSemesterResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path = '/v2/all/timetables/frame';
+
+  response!: R;
+
+  auth = true;
+
+  params: {
+    [index: string]: string;
+  };
+
+  constructor(public authorization: string, semester: string) {
+    this.params = {
+      semester,
+    };
+  }
 }
 
 export class TimetableFrameList<R extends TimetableFrameListResponse> implements APIRequest<R> {
