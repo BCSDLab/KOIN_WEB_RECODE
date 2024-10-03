@@ -28,6 +28,9 @@ export const event = ({
     event_category: category,
     event_label: label,
     value,
+    duration_time,
+    previous_page,
+    current_page,
   });
 
   if (process.env.REACT_APP_API_PATH?.includes('stage')) {
