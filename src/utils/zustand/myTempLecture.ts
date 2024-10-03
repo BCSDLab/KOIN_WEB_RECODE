@@ -1,8 +1,8 @@
-import { LectureInfo } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import { create } from 'zustand';
 
 type State = {
-  tempLecture: LectureInfo | null;
+  tempLecture: LectureInfo | TimetableLectureInfoV2 | null;
 };
 
 type Action = {

@@ -1,0 +1,132 @@
+.timetable-list {
+  display: flex;
+  flex-direction: column;
+  width: 331px;
+  gap: 16px;
+
+  &__empty-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    line-height: 24px;
+    color: #727272;
+  }
+
+  &__list {
+    position: relative;
+    width: 100%;
+    height: 700px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fafafa;
+
+    &--scroll {
+      height: 642px;
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    &--add {
+      position: absolute;
+      display: flex;
+      width: 100%;
+      bottom: 0;
+      border: none;
+      border-radius: 5px;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background-color: #fafafa;
+      color: #8e8e8e;
+      font-family: Pretendard, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 25.6px;
+      text-align: left;
+
+      &:hover {
+        background-color: #eee;
+      }
+
+      &:active {
+        background-color: #e1e1e1;
+        color: #4b4b4b;
+      }
+    }
+  }
+
+  &__item {
+    display: flex;
+    width: 100%;
+    border-radius: 5px;
+    justify-content: space-between;
+    padding: 12px 16px 12px 24px;
+    align-items: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 28.8px;
+    text-align: left;
+    color: #8e8e8e;
+
+    &--title-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      text-align: center;
+    }
+
+    &--bookmark-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    &--selected {
+      color: #175c8e;
+    }
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &:active {
+      background-color: #e1e1e1;
+      color: #4b4b4b;
+    }
+
+    &--setting {
+      display: flex;
+      border: none;
+      background-color: inherit;
+      cursor: pointer;
+      align-items: center;
+      padding: 6px 8px;
+      border-radius: 5px;
+      gap: 4px;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 16.71px;
+      text-align: left;
+      color: inherit;
+
+      &:hover {
+        background-color: #e1e1e1;
+      }
+
+      &:active {
+        background-color: #cacaca;
+        color: #4b4b4b;
+      }
+    }
+  }
+}

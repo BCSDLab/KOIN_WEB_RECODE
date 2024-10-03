@@ -5,6 +5,7 @@ import CheckBox from 'components/common/CommonCheckBox';
 import { toast } from 'react-toastify';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
+import ROUTES from 'static/routes';
 import ReportingLabel from './components/ReportingLabel';
 import styles from './ReviewReporting.module.scss';
 import useReviewReport from './query/useReviewReport';
@@ -103,7 +104,7 @@ export default function ReviewReportingPage() {
     const reportData = { reports: requestOptions };
     mutate(reportData);
     loggingReportDone();
-    navigate(`/store/${params.shopid!}?state=리뷰`, { replace: true });
+    navigate(`${ROUTES.StoreDetail({ id: params.shopid!, isLink: true })}?state=리뷰`, { replace: true });
   };
 
   return (

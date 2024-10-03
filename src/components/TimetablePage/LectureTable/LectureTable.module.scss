@@ -1,123 +1,111 @@
 .table {
-  width: 766px;
-  font-size: 13px;
+  width: 613px;
   text-align: left;
   word-break: break-all;
-  border-bottom: #858585 1px solid;
-  overflow-x: auto;
-  overflow-y: hidden;
+  border: none;
   white-space: nowrap;
-
-  &__content {
-    & > div {
-      -ms-overflow-style: none;
-
-      // Firefox 대응
-      scrollbar-width: none;
-
-      &::-webkit-scrollbar {
-        display: none !important;
-      }
-    }
-  }
-
-  &__header {
-    display: flex;
-    height: 37px;
-    line-height: 37px;
-    border-bottom: #858585 1px solid;
-    background: #f6f6f6;
-  }
-
-  &__row-button {
-    display: flex;
-    padding: 0;
-    border: 0;
-    background: rgb(255 255 255);
-    color: rgb(133 133 133);
-    text-align: left;
-    cursor: pointer;
-
-    &:hover {
-      background: rgb(219 243 255 / 38%);
-    }
-  }
-
-  &__row {
-    display: flex;
-    line-height: 34px;
-
-    &--even > .table__row-button {
-      background: rgb(247 247 247);
-    }
-
-    &--selected.table__row > .table__row-button {
-      background: rgb(219 243 255);
-    }
-  }
 
   &__col {
     position: relative;
+    padding-right: 5px;
+    align-items: center;
     overflow: hidden;
-    background-color: transparent;
     box-sizing: border-box;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    text-align: left;
+    word-break: break-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
     .table__row > &:last-child {
       border: none;
       padding: 0;
     }
 
-    &--header {
-      padding-left: 10px;
-      border-right: #d2dae2 1px solid;
-      word-break: break-all;
-      white-space: nowrap;
-      height: 100%;
-      color: #555;
-      overflow-y: hidden;
-      cursor: default;
+    &--text-center {
+      padding-left: 7px;
+    }
+  }
+
+  &__lecture-list {
+    height: 567px;
+    overflow: auto;
+    background-color: #fff;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &--no-lecture {
+      height: 567px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    &--body {
-      line-height: 34px;
-      border-right: 1px solid rgb(210 218 226);
-      word-break: break-all;
-      white-space: nowrap;
-      padding-left: 10px;
-      height: 34px;
+    &::-webkit-scrollbar {
+      display: none !important;
+    }
+  }
 
-      &:nth-child(3),
-      &:nth-child(6),
-      &:nth-child(7),
-      &:nth-child(8) {
-        padding: 0;
-        text-align: center;
+  &__row-button {
+    position: relative;
+    display: flex;
+    padding: 10px 16px;
+    background: rgb(255 255 255);
+    color: #4b4b4b;
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &:active {
+      background-color: #e1e1e1;
+    }
+
+    &--toggled {
+      color: #1f1f1f;
+
+      &:hover {
+        background-color: #fafafa;
       }
     }
   }
 
-  &__button {
-    position: absolute;
-    right: 0;
-    top: 5px;
-    border: none;
-    padding: 0;
-    width: 24px;
-    background-color: transparent;
+  &__row {
+    display: flex;
+    background-color: #fff;
 
-    & > img {
-      width: 100%;
+    &--selected.table__row > .table__row-button {
+      background-color: #eee;
+    }
+
+    &--include.table__row > .table__row-button {
+      color: #4590bb;
     }
   }
 
-  &__resize {
+  &__delete-button {
     position: absolute;
+    width: 101px;
+    height: 100%;
+    left: 0;
     top: 0;
-    right: 0;
-    width: 2px;
-    height: 38px;
-    background: transparent;
-    user-select: none;
+    background: linear-gradient(90deg, rgb(255 255 255 / 0%) 0%, #d9d9d9 74.17%);
     z-index: 2;
+    transform: rotate(180deg);
+    cursor: pointer;
+
+    > svg {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      right: 10px;
+      bottom: 13px;
+    }
   }
 }

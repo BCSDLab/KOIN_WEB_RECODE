@@ -19,7 +19,7 @@ export type APIRequest<R extends APIResponse> = {
   data?: any
   baseURL?: string
   authorization?: string;
-  headers?: Record<string, string>
+  headers?: Record<string, string | number>
   parse?: (data: AxiosResponse<R>) => R
   convertBody?: (data: any) => any
 };

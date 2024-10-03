@@ -4,6 +4,7 @@ import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
 import useArticles from 'pages/Notice/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
+import ROUTES from 'static/routes';
 import styles from './IndexNotice.module.scss';
 
 const getArticleType = (id: number) => {
@@ -21,8 +22,6 @@ const getArticleType = (id: number) => {
   }
 };
 
-const NOTICE_LINK = 'board/notice?page=1';
-
 function IndexNotice() {
   const { articles } = useArticles();
   const logger = useLogger();
@@ -31,14 +30,14 @@ function IndexNotice() {
     <section className={styles.template}>
       <div className={styles.template__header}>
         <Link
-          to={NOTICE_LINK}
+          to={ROUTES.BoardNotice()}
           className={styles['template__title-link']}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice', value: '공지사항' })}
         >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
         <Link
-          to={NOTICE_LINK}
+          to={ROUTES.BoardNotice()}
           className={styles.template__link}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice_detail', value: '공지사항' })}
         >
@@ -52,7 +51,7 @@ function IndexNotice() {
           {articles.slice(0, 7).map((article) => (
             <li key={article.id} className={styles.list__item}>
               <Link
-                to={`/board/notice/${article.id}`}
+                to={ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true })}
                 className={styles['list__item-link']}
               >
                 <span className={styles['list__item-type']}>

@@ -3,6 +3,7 @@ import * as api from 'api';
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -79,7 +80,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
   };
   const escapeByLogo = async () => {
-    if (pathname === '/timetable') {
+    if (pathname === ROUTES.Timetable()) {
       logger.actionEventClick({
         actionTitle: 'USER',
         title: 'timetable_back',
@@ -89,7 +90,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
-    if (pathname.includes('/store') && search.includes('state')) {
+    if (pathname.includes(ROUTES.Store()) && search.includes('state')) {
       const shopId = pathname.split('/')[2];
       const shopName = await api.store.getStoreDetailInfo(shopId);
       logger.actionEventClick({
@@ -101,19 +102,20 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
       });
     }
-    navigate('/', { replace: true });
+    navigate(ROUTES.Main(), { replace: true });
   };
 
   return (
     <>
-      <button
+      <Link
         className={styles.header__logo}
+        to={ROUTES.Main()}
         tabIndex={0}
         onClick={escapeByLogo}
         type="button"
       >
         <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
-      </button>
+      </Link>
       <div
         className={cn({
           [styles.header__megamenu]: true,
@@ -175,7 +177,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           <>
             <li className={styles['header__auth-link']}>
               <Link
-                to="/auth/signup"
+                to={ROUTES.AuthSignup()}
                 onClick={() => {
                   logger.actionEventClick({
                     actionTitle: 'USER',
@@ -189,7 +191,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
             </li>
             <li className={styles['header__auth-link']}>
               <Link
-                to="/auth"
+                to={ROUTES.Auth()}
                 onClick={() => {
                   logger.actionEventClick({
                     actionTitle: 'USER',

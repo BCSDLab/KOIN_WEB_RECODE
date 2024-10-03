@@ -1,0 +1,57 @@
+@use "utils/scss/media.scss" as media;
+
+.page {
+  &__timetable-wrap {
+    height: 560px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__total-grades {
+    position: absolute;
+    left: 16px;
+    top: 18px;
+  }
+
+  &__filter {
+    display: flex;
+    position: relative;
+    width: 776px;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  &__button {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    height: 48px;
+    background-color: #fff;
+    font-family: Pretendard, sans-serif;
+    cursor: pointer;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28.8px;
+    color: #4b4b4b;
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &:active {
+      background-color: #e1e1e1;
+    }
+  }
+
+  &__edit-icon {
+    display: flex;
+    width: 24px;
+    height: 24px;
+  }
+}

@@ -1,0 +1,44 @@
+.button {
+  margin: 0;
+  width: inherit;
+  height: inherit;
+  background: white;
+
+  &::before {
+    content: "";
+    align-items: center;
+    text-align: center;
+    width: inherit;
+    height: inherit;
+    display: block;
+    position: absolute;
+    border-radius: 30px;
+    background-color: #e1e1e1;
+    transition: all 0.2s ease-in;
+    cursor: pointer;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    position: relative;
+    width: 33%;
+    height: 66%;
+    top: 17%;
+    left: 8%;
+    border-radius: 50%;
+    background: #fff;
+    transition: all 0.2s ease-in;
+  }
+
+  &:checked {
+    &::before {
+      background-color: #175c8e;
+    }
+
+    &::after {
+      background-color: white;
+      left: 59%;
+    }
+  }
+}

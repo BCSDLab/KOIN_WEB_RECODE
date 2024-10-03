@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props, no-restricted-globals */
 import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
@@ -14,6 +13,7 @@ import { useUser } from 'utils/hooks/state/useUser';
 import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
+import ROUTES from 'static/routes';
 import useUserInfoUpdate from './hooks/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
@@ -434,7 +434,7 @@ const useModifyInfoForm = () => {
   const navigate = useNavigate();
   const token = useTokenState();
   const onSuccess = () => {
-    navigate('/');
+    navigate(ROUTES.Main());
     queryClient.invalidateQueries({ queryKey: ['userInfo', token] });
   };
   const { status, mutate } = useUserInfoUpdate({ onSuccess });
@@ -469,7 +469,7 @@ function ModifyInfoDefaultPage() {
   const onClickUserDeleteConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     deleteUser(token);
-    navigate('/');
+    navigate(ROUTES.Main());
   };
 
   const onClickDeleteUser = (e: React.MouseEvent<HTMLButtonElement>) => {

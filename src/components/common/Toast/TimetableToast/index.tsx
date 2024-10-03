@@ -1,15 +1,15 @@
 import { cn } from '@bcsdlab/utils';
 import {
-  useCallback, useEffect, useRef, useState,
+  useRef, useState,
 } from 'react';
 import useToastTimer from 'utils/hooks/ui/useToastTimer';
 import styles from './TimetableToast.module.scss';
 
 export interface Toast {
   message: string;
-  recoverMessage: string;
+  recoverMessage?: string;
   onClose: () => void;
-  onRecover: () => void;
+  onRecover?: () => void;
   duration?: number;
 }
 
@@ -19,32 +19,17 @@ export default function TimetableToast({
   const [isClicked, setIsClicked] = useState(false);
   const toastRef = useRef<HTMLDivElement | null>(null);
 
-  const [toastProps, isVisible, closeToast] = useToastTimer({
+  const [toastProps, isVisible] = useToastTimer({
     autoCloseTime: duration,
     onClose,
   });
 
-  const updateToastPosition = useCallback(() => {
-    const toast = toastRef.current;
-    const distanceFromBottom = 32;
-    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-    if (toast) {
-      toast.style.bottom = `${distanceFromBottom - scrollPosition}px`;
-    }
-  }, []);
-
   const handleRecoverClick = () => {
     setIsClicked(true);
-    onRecover();
+    if (onRecover !== undefined) {
+      onRecover();
+    }
   };
-
-  useEffect(() => {
-    updateToastPosition();
-    window.addEventListener('scroll', updateToastPosition);
-    return () => {
-      window.removeEventListener('scroll', updateToastPosition);
-    };
-  }, [updateToastPosition]);
 
   return (
     <div
@@ -59,18 +44,14 @@ export default function TimetableToast({
       {!isClicked ? (
         <>
           <div className={styles.toast__message}>{message}</div>
-          <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>되돌리기</button>
+          {
+            recoverMessage
+              && <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>취소하기</button>
+          }
         </>
       ) : (
-        <>
-          <div className={styles.toast__message}>{recoverMessage}</div>
-          <button className={styles.toast__button} type="button" onClick={closeToast}>확인</button>
-        </>
+        <div className={styles.toast__message}>{recoverMessage}</div>
       )}
     </div>
   );
 }
-
-TimetableToast.defaultProps = {
-  duration: 5000,
-};

@@ -8,3 +8,4 @@ export * as room from './room';
 export * as cafeteria from './cafeteria';
 export * as coopshop from './coopshop';
 export * as review from './review';
+export * as abTest from './abTest';
