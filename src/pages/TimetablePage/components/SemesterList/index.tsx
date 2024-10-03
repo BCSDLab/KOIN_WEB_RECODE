@@ -137,8 +137,9 @@ function SemesterList() {
       >
         {semesterOptionList.length > 0 && currentSemester !== null
           ? semesterOptionList.find((item) => item.value === currentSemester)
-            ?.label
+            ?.label || semesterOptionList[0].label
           : '학기 추가하기'}
+
         {semesterOptionList.length > 0 && currentSemester !== null ? (
           <DownArrowIcon />
         ) : (
