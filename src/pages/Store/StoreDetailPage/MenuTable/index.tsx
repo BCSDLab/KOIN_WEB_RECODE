@@ -139,7 +139,9 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                     </div>
                   ) : (
                     <div className={styles['empty-image']}>
-                      <EmptyImageIcon />
+                      <div>
+                        <EmptyImageIcon />
+                      </div>
                     </div>
                   )}
                   <div className={styles['menu-info__card']}>
