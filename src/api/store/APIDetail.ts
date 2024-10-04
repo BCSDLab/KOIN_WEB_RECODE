@@ -6,6 +6,7 @@ import {
   StoreDetailResponse,
   StoreDetailMenuResponse,
   StoreCategoriesResponse,
+  StoreBenefitCategoryResponse,
   AllStoreEventResponse,
   StoreEventListResponse,
   ReviewListResponse,
@@ -65,6 +66,26 @@ export class StoreDetailMenu<R extends StoreDetailMenuResponse> implements APIRe
   constructor(id: string) {
     this.path = `shops/${id}/menus`;
   }
+}
+
+export class StoreBenefitList<R extends StoreListV2Response> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  response!: R;
+
+  path = 'benefit/:id/shops';
+
+  constructor(id: string) {
+    this.path = `benefit/${id}/shops`;
+  }
+}
+
+export class StoreBenefitCategory<R extends StoreBenefitCategoryResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/benefit/categories';
+
+  response!: R;
 }
 
 export class StoreCategories<R extends StoreCategoriesResponse> implements APIRequest<R> {

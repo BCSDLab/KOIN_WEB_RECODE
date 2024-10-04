@@ -14,6 +14,9 @@ import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
+import { toast } from 'react-toastify';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
@@ -25,6 +28,8 @@ function MainTimetable({ frameId }: { frameId: number }) {
   const logger = useLogger();
   const myLectureDayValue = useTimetableDayListV2(myLecturesV2);
   const { data: deptList } = useDeptList();
+  const { data: mySemester } = useSemesterCheck(token);
+  const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -35,6 +40,16 @@ function MainTimetable({ frameId }: { frameId: number }) {
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
     });
     openModal();
+  };
+
+  const onClickEdit = () => {
+    if (mySemester?.semesters.length === 0) {
+      toast('학기가 존재하지 않습니다. 학기를 추가해주세요.');
+    } else if (timeTableFrameList.length === 0) {
+      toast('시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
+    } else {
+      navigate(`/timetable/modify/regular/${token ? frameId : semester}`);
+    }
   };
 
   return (
@@ -55,7 +70,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
         <button
           type="button"
           className={styles.page__button}
-          onClick={() => navigate(`/timetable/modify/regular/${token ? frameId : semester}`)}
+          onClick={onClickEdit}
         >
           <EditIcon className={styles['page__edit-icon']} />
           시간표 수정

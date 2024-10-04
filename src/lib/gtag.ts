@@ -28,6 +28,9 @@ export const event = ({
     event_category: category,
     event_label: label,
     value,
+    duration_time,
+    previous_page,
+    current_page,
   });
 
   if (import.meta.env.VITE_API_PATH?.includes('stage')) {

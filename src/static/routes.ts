@@ -15,6 +15,7 @@ const ROUTES = {
   TimetableRegular: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `timetable/modify/regular/${id}` : 'timetable/modify/regular/:id'),
   TimetableDirect: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `timetable/modify/direct/${id}` : 'timetable/modify/direct/:id'),
   Store: () => '/store',
+  StoreBenefit: () => '/storebenefit',
   StoreDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/store/${id}` : '/store/:id'),
   Bus: () => '/bus',
   Cafeteria: () => '/cafeteria',

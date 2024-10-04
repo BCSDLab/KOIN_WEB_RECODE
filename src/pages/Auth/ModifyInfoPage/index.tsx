@@ -285,7 +285,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
   const { data: userInfo } = useUser();
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
-  const [major, setMajor] = React.useState<string | null>(null);
+  const [major, setMajor] = React.useState<string | null>(userInfo?.major || '');
   const deptOptionList = deptList.map((dept) => ({
     label: dept.name,
     value: dept.name,
