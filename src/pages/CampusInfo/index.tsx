@@ -1,6 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import useCampusInfo from './hooks/useCampusInfo';
 import styles from './CampusInfo.module.scss';
+
 import { ReactComponent as Book } from './svg/book.svg';
 import { ReactComponent as Cafe } from './svg/cafe.svg';
 import { ReactComponent as Cut } from './svg/cut.svg';
@@ -95,13 +96,13 @@ function CampusInfo() {
                   <tr className={styles['table-head__tr']}>
                     <th>시간</th>
                     {CAFETERIA_HEAD_TABLE.row.map((type) => (
-                      <th className={styles['table-head__th']}>{type}</th>
+                      <th className={styles['table-head__th']} key={type}>{type}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {CAFETERIA_HEAD_TABLE.col.map((type) => (
-                    <tr className={styles['table-body__tr']}>
+                    <tr className={styles['table-body__tr']} key={type}>
                       <td className={styles['table-body__td']}>{type}</td>
                       {CAFETERIA_HEAD_TABLE.row.map((day) => (
                         <td
@@ -110,6 +111,7 @@ function CampusInfo() {
                             [styles.closed]:
                               getTimeToTypeAndDay(type, day) === '미운영',
                           })}
+                          key={`${type}-${day}`}
                         >
                           {getTimeToTypeAndDay(type, day)}
                         </td>
@@ -121,45 +123,45 @@ function CampusInfo() {
             </div>
           </div>
 
-          {filteredCampusInfo.slice(0, 1).map(({ name, opens }) => (
-            <div className={styles['info-block']}>
+          {filteredCampusInfo.slice(0, 1).map(({ id, name, opens }) => (
+            <div className={styles['info-block']} key={id}>
               <div className={styles['icon-wrapper']}>
                 {SHOP_ICON[name as keyof typeof SHOP_ICON]}
               </div>
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
-                  <div className={styles['info-description']}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
+                  <div className={styles['info-description']} key={`${id}-${day_of_week}`}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
                 ))}
               </div>
             </div>
           ))}
         </div>
         <div className={styles['info-column']}>
-          {filteredCampusInfo.slice(1, 4).map(({ name, opens }) => (
-            <div className={styles['info-block']}>
+          {filteredCampusInfo.slice(1, 4).map(({ id, name, opens }) => (
+            <div className={styles['info-block']} key={id}>
               <div className={styles['icon-wrapper']}>
                 {SHOP_ICON[name as keyof typeof SHOP_ICON]}
               </div>
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
-                  <div className={styles['info-description']}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
+                  <div className={styles['info-description']} key={`${id}-${day_of_week}`}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
                 ))}
               </div>
             </div>
           ))}
         </div>
         <div className={styles['info-column']}>
-          {filteredCampusInfo.slice(4, -1).map(({ name, opens }) => (
-            <div className={styles['info-block']}>
+          {filteredCampusInfo.slice(4, -1).map(({ id, name, opens }) => (
+            <div className={styles['info-block']} key={id}>
               <div className={styles['icon-wrapper']}>
                 {SHOP_ICON[name as keyof typeof SHOP_ICON]}
               </div>
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
-                  <div className={styles['info-description']}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
+                  <div className={styles['info-description']} key={`${id}-${day_of_week}`}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
                 ))}
               </div>
             </div>

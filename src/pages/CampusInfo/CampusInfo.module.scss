@@ -4,9 +4,10 @@
   margin: 0 auto;
   width: 100%;
   max-width: 1132px;
+  user-select: none;
 
   @include media.media-breakpoint(mobile) {
-    margin: 0 24px 62px 24px;
+    margin: 0 24px 62px;
     max-width: 100%;
     width: auto;
   }
@@ -17,17 +18,16 @@
   flex-direction: column;
   gap: 8px;
   justify-content: center;
-  margin: 50px 0 84px 0;
+  margin: 50px 0 84px;
 
   @include media.media-breakpoint(mobile) {
-    margin: 12px 0 28px 0;
+    margin: 12px 0 28px;
   }
 }
 
 .title {
   color: #000;
-
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 30px;
   font-style: normal;
   font-weight: 700;
@@ -41,8 +41,7 @@
 
 .subtitle {
   color: #4b4b4b;
-
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -57,7 +56,7 @@
   display: flex;
   width: 100%;
   gap: 24px;
-  flex-wrap: wrap;  
+  flex-wrap: wrap;
 }
 
 .info-column {
@@ -68,20 +67,17 @@
 }
 
 .info-block {
-  box-sizing: border-box; 
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   gap: 12px;
   border-radius: 16px;
-  background: var(--Gray-50, #FAFAFA);
+  background: #fafafa;
   padding: 16px 24px;
   height: fit-content;
   width: 360px;
-
-  // 긴 단어 왔을 시 줄바꿈
-  overflow: hidden;
+  overflow: hidden; // 긴 단어 왔을 시 줄바꿈
   word-wrap: break-word;
-  box-sizing: border-box;
 
   @include media.media-breakpoint(mobile) {
     width: calc(100vw - 48px);
@@ -89,9 +85,8 @@
 }
 
 .icon-wrapper {
-  width: fit-content;
   border-radius: 8px;
-  background: var(--Info-100, #F1F8FF);
+  background: #f1f8ff;
   padding: 12px;
   width: 32px;
   height: 32px;
@@ -105,9 +100,8 @@
 }
 
 .info-title {
-  color: var(--Neutral-800, #000);
-
-  font-family: Pretendard;
+  color: #000;
+  font-family: Pretendard, sans-serif;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -126,14 +120,13 @@
 }
 
 .table-head__tr {
-  border-top: 1px solid var(--Neutral-400, #CACACA);
-  border-bottom: 1px solid var(--Neutral-400, #CACACA);
-  background: var(--Neutral-200, #EEE);
+  border-top: 1px solid #cacaca;
+  border-bottom: 1px solid #cacaca;
+  background: #eee;
 
   & > th {
-    color: var(--Primary-main-800, #072552);
-
-    font-family: Pretendard;
+    color: #072552;
+    font-family: Pretendard, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -143,17 +136,16 @@
 }
 
 .table-body__tr {
-  border-bottom: 0.5px solid #CACACA;
+  border-bottom: 0.5px solid #cacaca;
 
   &:last-child {
-    border-bottom: 1px solid #CACACA;
+    border-bottom: 1px solid #cacaca;
   }
 }
 
 .table-body__td {
-  color: var(--Primary-main-800, #072552);
-
-  font-family: Pretendard;
+  color: #072552;
+  font-family: Pretendard, sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -163,7 +155,7 @@
 }
 
 .closed {
-  color: #4590BB;
+  color: #4590bb;
 }
 
 .info-cafeteria {
@@ -179,9 +171,8 @@
 }
 
 .info-description {
-  color: var(--Primary-main-900, #041A44);
-
-  font-family: Pretendard;
+  color: #041a44;
+  font-family: Pretendard, sans-serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
