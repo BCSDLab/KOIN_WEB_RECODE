@@ -95,6 +95,10 @@ function App() {
         <Route path={ROUTES.Auth()} element={<AuthPage />}>
           <Route path={ROUTES.AuthModifyInfo()} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보변경" element={<ModifyInfoPage />} />} />} />
         </Route>
+
+        <Route path={ROUTES.Webview()}>
+          <Route path={ROUTES.WebviewCampusInfo()} element={<HelmetWrapper title="코인 - 교내 시설물 정보" element={<CampusInfo />} />} />
+        </Route>
       </Routes>
       <Toast />
     </>

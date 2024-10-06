@@ -1,0 +1,193 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1132px;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 0 24px 62px 24px;
+    max-width: 100%;
+    width: auto;
+  }
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  margin: 50px 0 84px 0;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 12px 0 28px 0;
+  }
+}
+
+.title {
+  color: #000;
+
+  font-family: Pretendard;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 20px;
+    line-height: 160%; /* 32px */
+  }
+}
+
+.subtitle {
+  color: #4b4b4b;
+
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%; /* 25.6px */
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 14px;
+  }
+}
+
+.info-container {
+  display: flex;
+  width: 100%;
+  gap: 24px;
+  flex-wrap: wrap;  
+}
+
+.info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}
+
+.info-block {
+  box-sizing: border-box; 
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 16px;
+  background: var(--Gray-50, #FAFAFA);
+  padding: 16px 24px;
+  height: fit-content;
+  width: 360px;
+
+  // 긴 단어 왔을 시 줄바꿈
+  overflow: hidden;
+  word-wrap: break-word;
+  box-sizing: border-box;
+
+  @include media.media-breakpoint(mobile) {
+    width: calc(100vw - 48px);
+  }
+}
+
+.icon-wrapper {
+  width: fit-content;
+  border-radius: 8px;
+  background: var(--Info-100, #F1F8FF);
+  padding: 12px;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+}
+
+.info-title-container {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.info-title {
+  color: var(--Neutral-800, #000);
+
+  font-family: Pretendard;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 160%; /* 32px */
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 160%; /* 25.6px */
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-head__tr {
+  border-top: 1px solid var(--Neutral-400, #CACACA);
+  border-bottom: 1px solid var(--Neutral-400, #CACACA);
+  background: var(--Neutral-200, #EEE);
+
+  & > th {
+    color: var(--Primary-main-800, #072552);
+
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+    padding: 6px 0;
+  }
+}
+
+.table-body__tr {
+  border-bottom: 0.5px solid #CACACA;
+
+  &:last-child {
+    border-bottom: 1px solid #CACACA;
+  }
+}
+
+.table-body__td {
+  color: var(--Primary-main-800, #072552);
+
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%; /* 22.4px */
+  text-align: center;
+  padding: 4px 0;
+}
+
+.closed {
+  color: #4590BB;
+}
+
+.info-cafeteria {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-description-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-description {
+  color: var(--Primary-main-900, #041A44);
+
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%; /* 25.6px */
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 14px;
+  }
+}

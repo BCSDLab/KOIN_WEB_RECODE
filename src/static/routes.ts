@@ -36,6 +36,8 @@ const ROUTES = {
     isLink,
   }: ROUTESParams<'shopid' | 'reviewid'>) => (isLink ? `/report/review/shopid/${shopid}/reviewid/${reviewid}`
     : '/report/review/shopid/:shopid/reviewid/:reviewid'),
+  Webview: () => '/webview',
+  WebviewCampusInfo: () => '/webview/campusinfo',
 };
 
 export default ROUTES;
