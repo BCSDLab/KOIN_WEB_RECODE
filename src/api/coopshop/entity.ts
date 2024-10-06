@@ -9,7 +9,14 @@ export type Opens = {
   close_time: string | null, // HH:mm
 };
 
-export interface CoopshopResponse extends APIResponse {
+export interface CoopShopResponse extends APIResponse {
+  semester: string, // 00-0학기
+  from_date: string, // yyyy-MM-dd
+  to_date: string, // yyyy-MM-dd
+  coop_shops: CoopShopDetailResponse[];
+}
+
+export interface CoopShopDetailResponse extends APIResponse {
   id: number;
   name: string; // 학생식당, 세탁소, 복사실 등
   semester: Semester;
