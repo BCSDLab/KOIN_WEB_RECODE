@@ -1,7 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import useCampusInfo from './hooks/useCampusInfo';
 import styles from './CampusInfo.module.scss';
-
 import { ReactComponent as Book } from './svg/book.svg';
 import { ReactComponent as Cafe } from './svg/cafe.svg';
 import { ReactComponent as Cut } from './svg/cut.svg';
