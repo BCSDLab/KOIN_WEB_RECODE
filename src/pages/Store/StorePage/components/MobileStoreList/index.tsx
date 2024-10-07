@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import { StoreListV2 } from 'api/store/entity';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { getJosaPicker } from '@bcsdlab/utils';
-import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
-import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
-import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';
+import EventIcon from 'assets/svg/event.svg';
+import Star from 'assets/svg/Review/star.svg';
+import EmptyStar from 'assets/svg/Review/empty-star.svg';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import { StorePageType } from 'static/store';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -41,21 +41,21 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
             })}
           >
             {store.is_event
-          && store.is_open
-          && (
-            <div className={styles['store-list__item--event']}>
-              이벤트
-              <EventIcon />
-            </div>
-          )}
+              && store.is_open
+              && (
+                <div className={styles['store-list__item--event']}>
+                  이벤트
+                  <EventIcon />
+                </div>
+              )}
             {!store.is_open
-          && (
-            <div className={styles['store-none-open']}>
-              <span className={styles['store-none-open__name']}>{store.name}</span>
-              {`${pickTopicJosa(store.name)} `}
-              준비중입니다.
-            </div>
-          )}
+              && (
+                <div className={styles['store-none-open']}>
+                  <span className={styles['store-none-open__name']}>{store.name}</span>
+                  {`${pickTopicJosa(store.name)} `}
+                  준비중입니다.
+                </div>
+              )}
             <div className={styles['store-list__title']}>{store.name}</div>
             <div className={styles['store-list__content']}>
               {

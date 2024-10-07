@@ -8,7 +8,7 @@ import {
   BACKGROUND_COLOR,
   DAYS_STRING,
 } from 'static/timetable';
-import { ReactComponent as LectureCloseIcon } from 'assets/svg/lecture-close-icon.svg';
+import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import { useLocation } from 'react-router-dom';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
@@ -233,15 +233,13 @@ function Timetable({
                   key={lectureIndex}
                   style={{
                     backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 15]}`,
-                    borderTop: `2px solid ${
-                      BORDER_TOP_COLOR[lectureIndex % 15]
-                    }`,
+                    borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]
+                      }`,
                     top: `${start * rowHeight + 1}px`,
                     width: isMobile ? undefined : `${columnWidth}px`,
                     height: `${(end - start + 1) * rowHeight - 1}px`,
-                    padding: `${rowHeight / 4}px ${rowHeight / 4}px ${
-                      rowHeight / 4 - 2
-                    }px ${rowHeight / 4}px`,
+                    padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2
+                      }px ${rowHeight / 4}px`,
                     gap: `${rowHeight / 5.5}px`,
                   }}
                   onMouseEnter={() => setIsMouseOver(`${day}-${start}-${end}`)}

@@ -5,8 +5,8 @@ import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayList
 import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import Curriculum from 'pages/TimetablePage/components/Curriculum';
-import { ReactComponent as DownloadIcon } from 'assets/svg/download-icon.svg';
-import { ReactComponent as EditIcon } from 'assets/svg/pen-icon.svg';
+import DownloadIcon from 'assets/svg/download-icon.svg';
+import EditIcon from 'assets/svg/pen-icon.svg';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';

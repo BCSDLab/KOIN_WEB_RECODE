@@ -1,6 +1,6 @@
-import { ReactComponent as Trash } from 'assets/svg/trash-can-icon.svg';
-import { ReactComponent as Pen } from 'assets/svg/pen-icon.svg';
-import { ReactComponent as Complaint } from 'assets/svg/Review/complaint.svg';
+import Trash from 'assets/svg/trash-can-icon.svg';
+import Pen from 'assets/svg/pen-icon.svg';
+import Complaint from 'assets/svg/Review/complaint.svg';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import DeleteModal from 'pages/Store/StoreDetailPage/Review/components/DeleteModal/DeleteModal';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import styles from './DeleteSemesterModal.module.scss';
 
 export interface DeleteSemesterModalProps {

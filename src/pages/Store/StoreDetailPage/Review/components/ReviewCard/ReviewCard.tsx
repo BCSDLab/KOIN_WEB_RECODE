@@ -1,10 +1,10 @@
 import { Review } from 'api/store/entity';
-import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';
-import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
-import { ReactComponent as Kebab } from 'assets/svg/Review/kebab.svg';
-import { ReactComponent as ClickedKebab } from 'assets/svg/Review/clicked-kebab.svg';
-import { ReactComponent as Mine } from 'assets/svg/Review/check-mine.svg';
-import { ReactComponent as InformationIcon } from 'assets/svg/information-icon.svg';
+import EmptyStar from 'assets/svg/Review/empty-star.svg';
+import Star from 'assets/svg/Review/star.svg';
+import Kebab from 'assets/svg/Review/kebab.svg';
+import ClickedKebab from 'assets/svg/Review/clicked-kebab.svg';
+import Mine from 'assets/svg/Review/check-mine.svg';
+import InformationIcon from 'assets/svg/information-icon.svg';
 import SelectButton from 'pages/Store/StoreDetailPage/Review/components/SelectButton/SelectButton';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { cn } from '@bcsdlab/utils';
@@ -45,10 +45,10 @@ export default function ReviewCard({
   return (
     <div className={is_mine ? styles['container--mine'] : styles.container}>
       {is_mine && (
-      <div className={styles.mine}>
-        <Mine />
-        내가 작성한 리뷰
-      </div>
+        <div className={styles.mine}>
+          <Mine />
+          내가 작성한 리뷰
+        </div>
       )}
       <div className={styles.top}>
         <div className={styles['nick-name']}>{nick_name}</div>
@@ -65,14 +65,14 @@ export default function ReviewCard({
         >
           {isOpen ? <ClickedKebab /> : <Kebab />}
           {isOpen
-          && <SelectButton is_mine={is_mine} review_id={review_id} is_reported={is_reported} />}
+            && <SelectButton is_mine={is_mine} review_id={review_id} is_reported={is_reported} />}
         </button>
       </div>
       <div className={styles.rating}>
         <div>
           {ratingList.map((ratio, idx) =>
             // eslint-disable-next-line
-            (ratio ? <Star key={idx}/> : <EmptyStar key={idx}/>))}
+            (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}
         </div>
         <div className={styles.created}>
           {created_at}
@@ -103,9 +103,9 @@ export default function ReviewCard({
             </div>
             <div className={styles['menu-card']}>
               {
-            // eslint-disable-next-line
-            menu_names.map((menu, idx) => <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>{menu}</div>) // 수정, 삭제하지 않음
-          }
+                // eslint-disable-next-line
+                menu_names.map((menu, idx) => <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>{menu}</div>) // 수정, 삭제하지 않음
+              }
             </div>
           </>
         )}

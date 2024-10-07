@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { StoreList } from 'api/store/entity';
-import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
+import EventIcon from 'assets/svg/event.svg';
 import { getJosaPicker } from '@bcsdlab/utils';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -45,21 +45,21 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
           })}
         >
           {store.is_event
-          && store.is_open
-          && (
-            <div className={styles['store-list__item--event']}>
-              이벤트
-              <EventIcon />
-            </div>
-          )}
+            && store.is_open
+            && (
+              <div className={styles['store-list__item--event']}>
+                이벤트
+                <EventIcon />
+              </div>
+            )}
           {!store.is_open
-          && (
-            <div className={styles['store-none-open']}>
-              <span className={styles['store-none-open__name']}>{store.name}</span>
-              {`${pickTopicJosa(store.name)}`}
-              준비중입니다.
-            </div>
-          )}
+            && (
+              <div className={styles['store-none-open']}>
+                <span className={styles['store-none-open__name']}>{store.name}</span>
+                {`${pickTopicJosa(store.name)}`}
+                준비중입니다.
+              </div>
+            )}
           <div className={styles['store-list__title']}>{store.name}</div>
           <div className={styles['store-list__phone']}>
             전화번호
@@ -76,19 +76,19 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
           </div>
           <div className={styles['store-item']}>
             {(store.delivery) && (
-            <div className={styles['store-item__option']} aria-hidden={!store.delivery}>
-              배달
-            </div>
+              <div className={styles['store-item__option']} aria-hidden={!store.delivery}>
+                배달
+              </div>
             )}
             {(store.pay_card) && (
-            <div className={styles['store-item__option']} aria-hidden={!store.pay_card}>
-              카드
-            </div>
+              <div className={styles['store-item__option']} aria-hidden={!store.pay_card}>
+                카드
+              </div>
             )}
             {(store.pay_bank) && (
-            <div className={styles['store-item__option']} aria-hidden={!store.pay_bank}>
-              계좌이체
-            </div>
+              <div className={styles['store-item__option']} aria-hidden={!store.pay_bank}>
+                계좌이체
+              </div>
             )}
           </div>
         </Link>

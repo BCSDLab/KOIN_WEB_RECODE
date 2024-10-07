@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ReactComponent as StarIcon } from 'assets/svg/empty-star.svg';
-import { ReactComponent as DeleteMenuIcon } from 'assets/svg/trash-can-icon.svg';
-import { ReactComponent as DeleteImageIcon } from 'assets/svg/delete-icon.svg';
+import StarIcon from 'assets/svg/empty-star.svg';
+import DeleteMenuIcon from 'assets/svg/trash-can-icon.svg';
+import DeleteImageIcon from 'assets/svg/delete-icon.svg';
 import { useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import uuidv4 from 'utils/ts/uuidGenerater';
@@ -15,7 +15,7 @@ import ROUTES from 'static/routes';
 import styles from './ReviewForm.module.scss';
 
 interface Props {
-  storeDetail:StoreDetailResponse;
+  storeDetail: StoreDetailResponse;
   mutate: UseMutateFunction<ReviewRequest, unknown, ReviewRequest, unknown>;
   initialData: Partial<ReviewRequest>;
 }
@@ -55,7 +55,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
     setMenuList(menuList.filter((menu) => menu.id !== id));
   };
 
-  const handleMenuChange = (e:React.ChangeEvent<HTMLInputElement>, id: string) => {
+  const handleMenuChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
     const newMenuList = menuList.map((menu) => (
       menu.id === id ? { ...menu, name: e.target.value } : menu));
 

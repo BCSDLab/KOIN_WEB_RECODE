@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
+import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'pages/Notice/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';

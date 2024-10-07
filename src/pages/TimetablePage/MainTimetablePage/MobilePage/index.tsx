@@ -1,6 +1,6 @@
 import React from 'react';
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import showToast from 'utils/ts/showToast';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import SemesterListbox from 'pages/TimetablePage/components/SemesterList';

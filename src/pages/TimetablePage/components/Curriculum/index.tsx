@@ -1,8 +1,8 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { DeptListResponse } from 'api/dept/entity';
-import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
-import { ReactComponent as CurriculumIcon } from 'assets/svg/curriculum-icon.svg';
+import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
+import CurriculumIcon from 'assets/svg/curriculum-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useLogger from 'utils/hooks/analytics/useLogger';

@@ -9,8 +9,8 @@ import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage'
 import LoginPromptModal from 'pages/Cafeteria/PCCafeteriaPage/components/LoginPromptModal';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
-import { ReactComponent as HeartIcon } from 'assets/svg/heart.svg';
-import { ReactComponent as FilledHeartIcon } from 'assets/svg/heart-filled.svg';
+import HeartIcon from 'assets/svg/heart.svg';
+import FilledHeartIcon from 'assets/svg/heart-filled.svg';
 import { useUser } from 'utils/hooks/state/useUser';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';

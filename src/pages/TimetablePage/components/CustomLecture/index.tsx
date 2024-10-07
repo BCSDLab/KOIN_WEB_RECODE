@@ -1,11 +1,11 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
+import AddIcon from 'assets/svg/add-icon.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import Listbox from 'components/TimetablePage/Listbox';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
-import { ReactComponent as WarningIcon } from 'assets/svg/warning-icon.svg';
+import WarningIcon from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
@@ -262,7 +262,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
         class_place: timeSpaceComponents.map((item) => item.place),
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lectureName, professorName, timeSpaceComponents]);
 
   return (
@@ -297,10 +297,10 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             />
           </div>
           {!isFirstSubmit && lectureName === '' && (
-          <div className={styles.inputbox__warning}>
-            <WarningIcon />
-            수업명을 입력해주세요
-          </div>
+            <div className={styles.inputbox__warning}>
+              <WarningIcon />
+              수업명을 입력해주세요
+            </div>
           )}
         </div>
         <div>

@@ -1,4 +1,4 @@
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import { useEffect } from 'react';
 import styles from './AlertModal.module.scss';
 

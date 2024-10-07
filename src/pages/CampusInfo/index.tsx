@@ -1,13 +1,13 @@
 import { cn } from '@bcsdlab/utils';
 import useCampusInfo from './hooks/useCampusInfo';
 import styles from './CampusInfo.module.scss';
-import { ReactComponent as Book } from './svg/book.svg';
-import { ReactComponent as Cafe } from './svg/cafe.svg';
-import { ReactComponent as Cut } from './svg/cut.svg';
-import { ReactComponent as Flatware } from './svg/flatware.svg';
-import { ReactComponent as Laundry } from './svg/laundry.svg';
-import { ReactComponent as PostOffice } from './svg/post-office.svg';
-import { ReactComponent as Print } from './svg/print.svg';
+import Book from './svg/book.svg';
+import Cafe from './svg/cafe.svg';
+import Cut from './svg/cut.svg';
+import Flatware from './svg/flatware.svg';
+import Laundry from './svg/laundry.svg';
+import PostOffice from './svg/post-office.svg';
+import Print from './svg/print.svg';
 
 const CAFETERIA_HEAD_TABLE = {
   row: ['평일', '주말'],

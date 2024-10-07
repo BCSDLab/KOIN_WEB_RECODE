@@ -4,7 +4,7 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import TimetableList from 'pages/TimetablePage/components/TimetableList';
 import MainTimetable from 'pages/TimetablePage/components/MainTimetable';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { ReactComponent as TimetableIcon } from 'assets/svg/timetable-icon.svg';
+import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {
