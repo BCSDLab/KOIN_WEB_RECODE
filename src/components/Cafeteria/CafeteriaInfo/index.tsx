@@ -1,6 +1,6 @@
 import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-grey.svg';
 import { ReactComponent as BlackArrowBackIcon } from 'assets/svg/black-arrow-back-icon.svg';
-import { Opens, CoopshopResponse } from 'api/coopshop/entity';
+import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -42,7 +42,7 @@ function ScheduleTable({ title, schedules }: ScheduleTableProps) {
 }
 
 interface CafeteriaInfoProps {
-  cafeteriaInfo: CoopshopResponse;
+  cafeteriaInfo: CoopShopDetailResponse;
   closeInfo: () => void;
 }
 
