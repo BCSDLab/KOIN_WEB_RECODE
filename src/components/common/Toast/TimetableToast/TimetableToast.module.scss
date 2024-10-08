@@ -37,14 +37,6 @@
   z-index: 5;
   animation: slide-down 500ms;
 
-  &:hover {
-    button {
-      color: #fff;
-      background-color: #0000004d;
-      border-radius: 5px;
-    }
-  }
-
   &__close {
     animation: slide-up 400ms;
   }
@@ -62,5 +54,16 @@
     border: none;
     font-weight: 500;
     line-height: 25.6px;
+    border-radius: 5px;
+
+    &:hover {
+      color: #fff;
+      background-color: #0000004d;
+    }
+
+    &:active {
+      background-color: #00000080;
+      color: #f7941e;
+    }
   }
 }

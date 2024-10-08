@@ -47,6 +47,10 @@
     border-radius: 5px;
     cursor: pointer;
 
+    &:hover {
+      background-color: #eee;
+    }
+
     @include media.media-breakpoint(mobile) {
       padding: 0 8px;
       font-size: 15px;
@@ -59,10 +63,15 @@
 
     &--selected {
       background-color: #175c8e26;
+      pointer-events: auto;
 
       svg {
         transform: rotate(180deg);
         transition: transform 0.3s ease;
+      }
+
+      &:hover {
+        background-color: #175c8e35;
       }
     }
   }
