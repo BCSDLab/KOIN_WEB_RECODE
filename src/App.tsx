@@ -17,6 +17,7 @@ import SignupPage from 'pages/Auth/SignupPage';
 import FindPasswordPage from 'pages/Auth/FindPasswordPage';
 import StoreDetailPage from 'pages/Store/StoreDetailPage';
 import StoreBenefitPage from 'pages/Store/StoreBenefitPage';
+import CampusInfo from 'pages/CampusInfo';
 import BusPage from 'pages/BusPage';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
@@ -75,6 +76,7 @@ function App() {
           </Route>
           <Route path={ROUTES.Room()} element={<HelmetWrapper title="코인 - 복덕방" element={<RoomPage />} />} />
           <Route path={ROUTES.RoomDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 복덕방 상세" element={<RoomDetailPage />} />} />
+          <Route path={ROUTES.CampusInfo()} element={<HelmetWrapper title="코인 - 교내 시설물 정보" element={<CampusInfo />} />} />
         </Route>
         <Route
           path={ROUTES.Auth()}
@@ -92,6 +94,10 @@ function App() {
         </Route>
         <Route path={ROUTES.Auth()} element={<AuthPage />}>
           <Route path={ROUTES.AuthModifyInfo()} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 유저 정보변경" element={<ModifyInfoPage />} />} />} />
+        </Route>
+
+        <Route path={ROUTES.Webview()}>
+          <Route path={ROUTES.WebviewCampusInfo()} element={<HelmetWrapper title="코인 - 교내 시설물 정보" element={<CampusInfo />} />} />
         </Route>
       </Routes>
       <Toast />

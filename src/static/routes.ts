@@ -23,6 +23,7 @@ const ROUTES = {
   BoardNoticeDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/board/notice/${id}` : '/board/notice/:id'),
   Room: () => '/room',
   RoomDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/room/${id}` : '/room/:id'),
+  CampusInfo: () => '/campusinfo',
   Auth: () => '/auth',
   AuthSignup: () => '/auth/signup',
   AuthFindPW: () => '/auth/findpw',
@@ -35,6 +36,8 @@ const ROUTES = {
     isLink,
   }: ROUTESParams<'shopid' | 'reviewid'>) => (isLink ? `/report/review/shopid/${shopid}/reviewid/${reviewid}`
     : '/report/review/shopid/:shopid/reviewid/:reviewid'),
+  Webview: () => '/webview',
+  WebviewCampusInfo: () => '/webview/campusinfo',
 };
 
 export default ROUTES;
