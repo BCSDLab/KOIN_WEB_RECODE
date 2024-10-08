@@ -54,8 +54,7 @@ export default function IndexTimeTable() {
 
   useEffect(() => {
     if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [semesterOptionList, updateSemester]);
 
   return (
     <div className={styles.template}>
