@@ -21,16 +21,19 @@ import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
 function MainTimetable({ frameId }: { frameId: number }) {
-  const { myLecturesV2 } = useMyLecturesV2(frameId);
-  const navigate = useNavigate();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const token = useTokenState();
   const semester = useSemester();
   const logger = useLogger();
-  const myLectureDayValue = useTimetableDayListV2(myLecturesV2);
+  const navigate = useNavigate();
+  const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
+  const { myLecturesV2 } = useMyLecturesV2(frameId);
+  const myLectureDayValue = useTimetableDayListV2(
+    timeTableFrameList.length > 0 ? myLecturesV2 : [],
+  );
   const { data: deptList } = useDeptList();
   const { data: mySemester } = useSemesterCheck(token);
-  const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     logger.actionEventClick({
