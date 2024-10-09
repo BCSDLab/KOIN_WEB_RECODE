@@ -23,7 +23,7 @@ function Footer(): JSX.Element {
           <ul className={styles.footer__services}>
             {CATEGORY
               .flatMap((categoryInfo) => categoryInfo.submenu)
-              .slice(0, -3).map((submenuInfo) => (
+              .slice(0, -4).map((submenuInfo) => (
                 <li className={styles.footer__service} key={submenuInfo.title}>
                   <Link to={submenuInfo.link} onClick={() => logShortcut(submenuInfo.title)}>
                     {submenuInfo.title}

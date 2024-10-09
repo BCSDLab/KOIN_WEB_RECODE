@@ -6,6 +6,7 @@ import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { useEffect } from 'react';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -21,6 +22,18 @@ function IndexStore() {
   const logger = useLogger();
   const navigate = useNavigate();
   const ABView = useABTestView('benefitPage', token);
+  useEffect(() => {
+    if (logger && logger.actionEventClick) {
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'Benefit_page_ver1',
+        value: ABView === 'A' ? '혜택X' : '혜택O',
+        event_category: 'a/b test 로깅(3차 스프린트, 혜택페이지)',
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
     logger.actionEventClick({
@@ -44,7 +57,7 @@ function IndexStore() {
       current_page: 'benefit',
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     });
-    navigate('/storebenefit?category=1');
+    navigate('/benefitstore?category=1');
   };
   return (
     <section className={styles.template}>
