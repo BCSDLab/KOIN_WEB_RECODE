@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -7,9 +7,9 @@ import styles from './Footer.module.scss';
 function Footer(): JSX.Element {
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const { pathname } = useLocation();
-  const isStage = pathname.includes('stage');
-  console.log(pathname);
+  // const pathname = useParams();
+  const isStage = process.env.REACT_APP_API_PATH?.includes('stage');
+
   const logShortcut = (title: string) => {
     if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: '식단' });
     if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: '버스/교통' });
