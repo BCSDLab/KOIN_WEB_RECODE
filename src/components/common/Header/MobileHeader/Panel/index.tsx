@@ -143,7 +143,7 @@ export default function Panel({ openModal }: PanelProps) {
               {category.title}
             </div>
             <ul className={styles.category__submenus}>
-              {category.submenu.slice(0, -3).map((submenu) => (
+              {category.submenu.slice(0, -4).map((submenu) => (
                 <li key={submenu.title} className={styles.category__submenu}>
                   <button
                     type="button"
