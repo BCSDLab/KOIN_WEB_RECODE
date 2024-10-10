@@ -44,7 +44,6 @@ export const event = ({
       '체류 시간': duration_time,
       '이전 카테고리': previous_page,
       '현재 페이지': current_page,
-      env: process.env.REACT_APP_API_PATH?.includes('stage') ? 'stage' : 'prod',
     });
   }
 };
