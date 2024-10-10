@@ -9,6 +9,7 @@ function Footer(): JSX.Element {
   const logger = useLogger();
   const { pathname } = useLocation();
   const isStage = pathname.includes('stage');
+  console.log(isStage);
   const logShortcut = (title: string) => {
     if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: '식단' });
     if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: '버스/교통' });
