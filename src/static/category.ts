@@ -7,6 +7,7 @@ export interface Submenu {
   planFlag: boolean;
   tag: number | null;
   openInNewTab?: boolean;
+  stageLink?:string;
 }
 
 export type CategoryTitle = '서비스';
@@ -78,6 +79,7 @@ export const CATEGORY: Category[] = [
         planFlag: false,
         tag: null,
         openInNewTab: true,
+        stageLink: 'https://owner.stage.koreatech.in',
       },
       {
         title: '리뷰 작성하기',
