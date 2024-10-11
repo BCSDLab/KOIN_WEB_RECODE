@@ -17,6 +17,8 @@ const getArticleType = (id: number) => {
       return '[학사공지]';
     case 8:
       return '[취업공지]';
+    case 9:
+      return '[코인공지]';
     default:
       return '[공지]';
   }
