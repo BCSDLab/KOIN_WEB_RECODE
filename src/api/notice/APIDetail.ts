@@ -5,7 +5,7 @@ import {
   HotArticlesResponse,
 } from './entity';
 
-const BOARD_IDS = { // 4~9번 게시판 현재 공개 중
+const BOARD_IDS = {
   자유게시판: 1,
   취업게시판: 2,
   익명게시판: 3,
@@ -17,8 +17,8 @@ const BOARD_IDS = { // 4~9번 게시판 현재 공개 중
   코인공지: 9,
   질문게시판: 10,
   홍보게시판: 11,
-  // 현장실습: 12, 추가 예정
-  // 학생생활: 13, 추가 예정
+  현장실습: 12,
+  학생생활: 13,
 } as const;
 
 export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
