@@ -57,7 +57,6 @@ function CampusInfo() {
 
   const cafeteriaInfo = campusInfo?.coop_shops.find((shop) => shop.name === '학생식당');
   const filteredCampusInfo = campusInfo?.coop_shops.filter((shop) => shop.name !== '학생식당');
-  console.log(filteredCampusInfo);
 
   const getFormattedShopTime = (open: string, close: string) => {
     if (open === close) {
