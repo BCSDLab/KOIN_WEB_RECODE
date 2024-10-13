@@ -21,7 +21,7 @@ function IndexStore() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
-  const ABView = useABTestView('Benefit_page_ver1', token);
+  const ABView = useABTestView('Benefit', token);
   useEffect(() => {
     if (logger) {
       logger.actionEventClick({
