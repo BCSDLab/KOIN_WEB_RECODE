@@ -26,7 +26,7 @@ function IndexStore() {
     if (logger) {
       logger.actionEventClick({
         actionTitle: 'A/B_TEST',
-        title: 'Benefit_page_ver1',
+        title: 'BUSINESS_benefit_1',
         value: ABView === 'A' ? '혜택X' : '혜택O',
         event_category: 'a/b test 로깅(3차 스프린트, 혜택페이지)',
       });
