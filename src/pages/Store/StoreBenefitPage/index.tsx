@@ -19,7 +19,9 @@ function StoreBenefitPage() {
   const selectedCategory = Number(searchParams.get('category')) ?? 1;
   const { benefitCategory } = useBenefitCategory();
   useEffect(() => {
-    sessionStorage.setItem('enterMain', new Date().getTime().toString());
+    const currentCount = new Date().getTime();
+    sessionStorage.setItem('enterMain', currentCount.toString());
+    sessionStorage.setItem('enter_category', currentCount.toString());
   }, [selectedCategory]);
   const onClickBenefitTab = (id: number, value :string) => {
     logger.actionEventClick({
