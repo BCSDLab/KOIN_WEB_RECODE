@@ -25,6 +25,7 @@ export default function Panel({ openModal }: PanelProps) {
   const navigate = useNavigate();
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
+  const isStage = process.env.REACT_APP_API_PATH?.includes('stage');
 
   const logShortcut = (title: string) => {
     if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '식단' });
@@ -68,7 +69,7 @@ export default function Panel({ openModal }: PanelProps) {
     logExitExistingPage(submenu.title);
     closeSidebar();
     if (submenu.openInNewTab) {
-      window.open(submenu.link, '_blank');
+      window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
     } else {
       navigate(submenu.link);
     }
