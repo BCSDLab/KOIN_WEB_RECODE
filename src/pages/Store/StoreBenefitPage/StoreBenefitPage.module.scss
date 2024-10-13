@@ -1,0 +1,146 @@
+@use "src/utils/scss/media";
+
+.section {
+  width: 1131px;
+  margin: 63px auto 0;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  &__tabs {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: flex-start;
+
+    :nth-child(4) {
+      margin-right: 0;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      width: calc(100% - 32px);
+      height: auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 15px;
+      padding: 0 16px;
+    }
+  }
+
+  &__title {
+    color: #727272;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 150%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 32px 0;
+    height: 36px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      padding: 24px 0;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.header {
+  width: 100%;
+  height: 32px;
+  font-size: 30px;
+  font-family: NanumSquare, serif;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: #175c8e;
+  text-align: left;
+  margin-bottom: 19px;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+}
+
+.tab {
+  width: 280px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 9px 1px rgb(0 0 0 / 6%);
+  margin-right: 4px;
+  color: #727272;
+
+  &--selected {
+    color: #175c8e;
+    border: 1px solid #175c8e;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &--logo {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 8px;
+
+      @include media.media-breakpoint(mobile) {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    &--text {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 400;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 32px;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+      }
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    height: 60px;
+  }
+}
+
+.option {
+  display: flex;
+  justify-content: flex-start;
+  color: #858585;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.072px;
+}
+
+.divide-bar {
+  width: 100%;
+  height: 12px;
+  background: #f5f5f5;
+  margin-bottom: 20px;
+}

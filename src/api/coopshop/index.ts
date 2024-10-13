@@ -1,4 +1,5 @@
 import APIClient from 'utils/ts/apiClient';
-import { CoopshopCafeteria } from './APIDetail';
+import { CoopShopCafeteria, CoopShop } from './APIDetail';
 
-export const getCafeteriaInfo = APIClient.of(CoopshopCafeteria);
+export const getCafeteriaInfo = APIClient.of(CoopShopCafeteria);
+export const getAllShopInfo = APIClient.of(CoopShop);
