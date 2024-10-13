@@ -37,7 +37,7 @@ function StoreBenefitPage() {
 
   return (
     <div className={styles.section}>
-      <div className={styles.header}>전화 주문 헤택</div>
+      <div className={styles.header}>전화 주문 혜택</div>
       <div className={styles.section__tabs}>
         {
           benefitCategory?.map((item) => (

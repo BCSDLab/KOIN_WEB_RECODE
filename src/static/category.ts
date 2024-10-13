@@ -1,4 +1,4 @@
-export type SubmenuTitle = '공지사항' | '버스/교통' | '식단' | '시간표' | '복덕방' | '주변상점' | '교내 시설물 정보' | '코인 for Business' | '리뷰 작성하기' | '리뷰 수정하기' | '리뷰 신고하기'; // 헤더에 리뷰 신고하기 제목 추가
+export type SubmenuTitle = '공지사항' | '버스/교통' | '식단' | '시간표' | '복덕방' | '주변상점' | '교내 시설물 정보' | '코인 for Business' | '리뷰 작성하기' | '리뷰 수정하기' | '리뷰 신고하기' | '전화 주문 혜택';// 헤더에 리뷰 신고하기 제목 추가
 
 export interface Submenu {
   title: SubmenuTitle;
@@ -98,6 +98,13 @@ export const CATEGORY: Category[] = [
       {
         title: '리뷰 신고하기',
         link: '/report/review', // 리뷰 신고하기 제목을 위한 추가
+        newFlag: false,
+        planFlag: false,
+        tag: null,
+      },
+      {
+        title: '전화 주문 혜택',
+        link: '/benefitstore',
         newFlag: false,
         planFlag: false,
         tag: null,
