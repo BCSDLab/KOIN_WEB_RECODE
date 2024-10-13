@@ -24,6 +24,7 @@ const SHOP_ICON = {
   복사실: <Print />,
   학생식당: <Flatware />,
   복지관식당: <Flatware />,
+  오락실: <Cafe />,
 };
 
 const formatDateRange = (fromDate: string, toDate: string) => {
@@ -56,6 +57,7 @@ function CampusInfo() {
 
   const cafeteriaInfo = campusInfo?.coop_shops.find((shop) => shop.name === '학생식당');
   const filteredCampusInfo = campusInfo?.coop_shops.filter((shop) => shop.name !== '학생식당');
+  console.log(filteredCampusInfo);
 
   const getFormattedShopTime = (open: string, close: string) => {
     if (open === close) {
@@ -122,7 +124,7 @@ function CampusInfo() {
             </div>
           </div>
 
-          {filteredCampusInfo.slice(0, 1).map(({ id, name, opens }) => (
+          {filteredCampusInfo.slice(0, 2).map(({ id, name, opens }) => (
             <div className={styles['info-block']} key={id}>
               <div className={styles['icon-wrapper']}>
                 {SHOP_ICON[name as keyof typeof SHOP_ICON]}
@@ -137,7 +139,7 @@ function CampusInfo() {
           ))}
         </div>
         <div className={styles['info-column']}>
-          {filteredCampusInfo.slice(1, 4).map(({ id, name, opens }) => (
+          {filteredCampusInfo.slice(2, 5).map(({ id, name, opens }) => (
             <div className={styles['info-block']} key={id}>
               <div className={styles['icon-wrapper']}>
                 {SHOP_ICON[name as keyof typeof SHOP_ICON]}
@@ -152,7 +154,7 @@ function CampusInfo() {
           ))}
         </div>
         <div className={styles['info-column']}>
-          {filteredCampusInfo.slice(4, -1).map(({ id, name, opens }) => (
+          {filteredCampusInfo.slice(5).map(({ id, name, opens }) => (
             <div className={styles['info-block']} key={id}>
               <div className={styles['icon-wrapper']}>
                 {SHOP_ICON[name as keyof typeof SHOP_ICON]}

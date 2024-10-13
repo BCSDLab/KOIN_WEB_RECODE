@@ -5,6 +5,7 @@
   width: 100%;
   max-width: 1132px;
   user-select: none;
+  margin-bottom: 62px; 
 
   @include media.media-breakpoint(mobile) {
     margin: 0 24px 62px;
