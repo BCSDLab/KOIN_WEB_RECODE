@@ -23,7 +23,7 @@ function IndexStore() {
   const navigate = useNavigate();
   const ABView = useABTestView('benefitPage', token);
   useEffect(() => {
-    if (logger && logger.actionEventClick) {
+    if (logger) {
       logger.actionEventClick({
         actionTitle: 'BUSINESS',
         title: 'Benefit_page_ver1',
