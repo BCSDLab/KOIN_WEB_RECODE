@@ -83,8 +83,6 @@ export default function TimetableSettingModal({
       sendClientError(err);
     }
     sessionStorage.setItem('restoreLecturesInFrame', JSON.stringify(myLectures));
-    deleteTimetableFrame({ id: focusFrame.id, frame: focusFrame });
-    onClose();
   };
 
   return (

@@ -19,8 +19,10 @@ function StoreBenefitPage() {
   const selectedCategory = Number(searchParams.get('category')) ?? 1;
   const { benefitCategory } = useBenefitCategory();
   useEffect(() => {
-    sessionStorage.setItem('enterBenefitPage', new Date().getTime().toString());
-  }, []);
+    const currentCount = new Date().getTime();
+    sessionStorage.setItem('enterMain', currentCount.toString());
+    sessionStorage.setItem('enter_category', currentCount.toString());
+  }, [selectedCategory]);
   const onClickBenefitTab = (id: number, value :string) => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
@@ -37,7 +39,7 @@ function StoreBenefitPage() {
 
   return (
     <div className={styles.section}>
-      <div className={styles.header}>전화 주문 헤택</div>
+      <div className={styles.header}>전화 주문 혜택</div>
       <div className={styles.section__tabs}>
         {
           benefitCategory?.map((item) => (

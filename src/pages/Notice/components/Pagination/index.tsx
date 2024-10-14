@@ -64,7 +64,7 @@ export default function Pagination(props: PaginationProps) {
                 aria-label="페이지 이동"
                 className={cn({
                   [styles.pagination__number]: true,
-                  [styles['pagination__number--selected']]: params.page === calcIndexPage(limit, totalPageNum, params.page),
+                  [styles['pagination__number--selected']]: (!params.page && limit === 0) || params.page === calcIndexPage(limit, totalPageNum, params.page),
                 })}
                 onClick={() => onClickMove(calcIndexPage(limit, totalPageNum, params.page ?? '1'))}
               >

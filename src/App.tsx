@@ -66,7 +66,7 @@ function App() {
           <Route path={ROUTES.TimetableDirect({ isLink: false })} element={<HelmetWrapper title="코인 - 시간표 수정" element={<ModifyTimetablePage />} />} />
           <Route path={ROUTES.Main()} element={<HelmetWrapper title="코인 - 한기대 커뮤니티" element={<IndexPage />} />} />
           <Route path={ROUTES.Store()} element={<HelmetWrapper title="코인 - 상점" element={<StorePage />} />} />
-          <Route path={ROUTES.StoreBenefit()} element={<HelmetWrapper title="코인 - 전화 혜택" element={<StoreBenefitPage />} />} />
+          <Route path={ROUTES.BenefitStore()} element={<HelmetWrapper title="코인 - 전화 혜택" element={<StoreBenefitPage />} />} />
           <Route path={ROUTES.StoreDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 상점 상세" element={<StoreDetailPage />} />} />
           <Route path={ROUTES.Bus()} element={<HelmetWrapper title="코인 - 버스" element={<BusPage />} />} />
           <Route path={ROUTES.Cafeteria()} element={<HelmetWrapper title="코인 - 식단" element={<CafeteriaPage />} />} />

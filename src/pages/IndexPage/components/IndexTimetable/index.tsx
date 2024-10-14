@@ -43,7 +43,9 @@ function CurrentSemesterTimetable() {
       totalHeight={369}
     />
   ) : (
-    <LoadingSpinner className={styles['template__loading-spinner']} />
+    <div className={styles['template__loading-spinner']}>
+      <LoadingSpinner />
+    </div>
   );
 }
 
@@ -54,8 +56,7 @@ export default function IndexTimeTable() {
 
   useEffect(() => {
     if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [semesterOptionList, updateSemester]);
 
   return (
     <div className={styles.template}>
