@@ -33,7 +33,7 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
       {
         storeListData?.map((store: StoreListV2) => (
           <Link
-            to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴?type=${storeType}`}
+            to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴&type=${storeType}`}
             className={styles['store-list__item']}
             key={store.id}
             onClick={() => logger.actionEventClick({
@@ -41,21 +41,21 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
             })}
           >
             {store.is_event
-          && store.is_open
-          && (
-            <div className={styles['store-list__item--event']}>
-              이벤트
-              <EventIcon />
-            </div>
-          )}
+              && store.is_open
+              && (
+                <div className={styles['store-list__item--event']}>
+                  이벤트
+                  <EventIcon />
+                </div>
+              )}
             {!store.is_open
-          && (
-            <div className={styles['store-none-open']}>
-              <span className={styles['store-none-open__name']}>{store.name}</span>
-              {`${pickTopicJosa(store.name)} `}
-              준비중입니다.
-            </div>
-          )}
+              && (
+                <div className={styles['store-none-open']}>
+                  <span className={styles['store-none-open__name']}>{store.name}</span>
+                  {`${pickTopicJosa(store.name)} `}
+                  준비중입니다.
+                </div>
+              )}
             <div className={styles['store-list__title']}>{store.name}</div>
             <div className={styles['store-list__content']}>
               {

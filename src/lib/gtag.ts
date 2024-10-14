@@ -31,7 +31,6 @@ export const event = ({
     duration_time,
     previous_page,
     current_page,
-    koin_env: process.env.REACT_APP_API_PATH?.includes('stage') ? 'stage' : 'prod',
   });
 
   if (process.env.REACT_APP_API_PATH?.includes('stage')) {
