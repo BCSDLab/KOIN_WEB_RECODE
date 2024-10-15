@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { notice } from 'api';
+import { notice } from 'api/index';
 import { PaginationInfo } from 'api/notice/entity';
 
 const useArticles = (page = '1') => {

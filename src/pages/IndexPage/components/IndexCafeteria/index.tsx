@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
-import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
-import { ReactComponent as NotServed } from 'assets/svg/not-served.svg';
-import { ReactComponent as Close } from 'assets/svg/close-icon-grey.svg';
-import { ReactComponent as BubbleTailBottom } from 'assets/svg/bubble-tail-bottom.svg';
+import RightArrow from 'assets/svg/right-arrow.svg';
+import NotServed from 'assets/svg/not-served.svg';
+import Close from 'assets/svg/close-icon-grey.svg';
+import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -24,7 +24,7 @@ function IndexCafeteria() {
   const { dinings } = useDinings(diningTime.generateDiningDate());
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
-  const [isTooltipOpen,,closeTooltip] = useBooleanState(localStorage.getItem('cafeteria-tooltip') === null);
+  const [isTooltipOpen, , closeTooltip] = useBooleanState(localStorage.getItem('cafeteria-tooltip') === null);
 
   const selectedDining = dinings
     .find((dining) => dining.place === selectedPlace && dining.type === diningTime.getType());
@@ -78,8 +78,9 @@ function IndexCafeteria() {
             <button type="button" aria-label="close" className={styles['header__tooltip-close']} onClick={handleTooltipCloseButtonClick}>
               <Close />
             </button>
-
-            <BubbleTailBottom className={styles['header__tooltip-asset']} />
+            <div className={styles['header__tooltip-asset']}>
+              <BubbleTailBottom />
+            </div>
           </div>
         )}
       </h2>

@@ -6,8 +6,8 @@ import {
 import { cn } from '@bcsdlab/utils';
 import { getLeftTimeString, getStartTimeString, directionToEnglish } from 'pages/BusPage/ts/busModules';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { ReactComponent as RightArrow } from 'assets/svg/right-arrow.svg';
-import { ReactComponent as ReverseDestination } from 'assets/svg/reverse-destination.svg';
+import RightArrow from 'assets/svg/right-arrow.svg';
+import ReverseDestination from 'assets/svg/reverse-destination.svg';
 import { useBusStore } from 'utils/zustand/bus';
 import { useCallback, useEffect, useState } from 'react';
 import ROUTES from 'static/routes';
@@ -72,8 +72,7 @@ function IndexBus() {
     }
   };
 
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement,
-  MouseEvent>, type: string) => {
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, type: string) => {
     e.stopPropagation();
 
     if (getBusDetail(type).link.includes('https')) {
@@ -139,13 +138,13 @@ function IndexBus() {
                 {getLeftTimeString(matchToMobileType(busData)[idx]?.now_bus?.remain_time)}
               </span>
               {!isMobile
-              && (
-              <span className={styles.cards__detail}>
-                {typeof busData[idx]?.now_bus?.remain_time === 'number' && (
-                  `${getStartTimeString(busData[idx]?.now_bus?.remain_time, true)} 출발`
+                && (
+                  <span className={styles.cards__detail}>
+                    {typeof busData[idx]?.now_bus?.remain_time === 'number' && (
+                      `${getStartTimeString(busData[idx]?.now_bus?.remain_time, true)} 출발`
+                    )}
+                  </span>
                 )}
-              </span>
-              )}
               <div className={styles.cards__directions}>
                 <span>{BUS_DIRECTIONS[Number(matchToMobileType(toSchoolList)[idx])]}</span>
                 <button
@@ -158,7 +157,9 @@ function IndexBus() {
                   }}
                   className={styles.cards__toggle}
                 >
-                  <ReverseDestination className={styles['cards__toggle--image']} />
+                  <div className={styles['cards__toggle--image']}>
+                    <ReverseDestination />
+                  </div>
                 </button>
                 <span>{BUS_DIRECTIONS[Number(!matchToMobileType(toSchoolList)[idx])]}</span>
               </div>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { StoreList } from 'api/store/entity';
-import { ReactComponent as EventIcon } from 'assets/svg/event.svg';
+import EventIcon from 'assets/svg/event.svg';
 import { getJosaPicker } from '@bcsdlab/utils';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import useLogger from 'utils/hooks/analytics/useLogger';

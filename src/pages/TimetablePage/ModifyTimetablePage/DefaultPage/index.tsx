@@ -5,7 +5,7 @@ import Timetable from 'pages/TimetablePage/components/Timetable';
 import React, { Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
-import { ReactComponent as PenIcon } from 'assets/svg/pen-icon.svg';
+import PenIcon from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/TimetablePage/components/LectureList';
 import CustomLecture from 'pages/TimetablePage/components/CustomLecture';
 import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
@@ -13,7 +13,7 @@ import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
 import { useSemester } from 'utils/zustand/semester';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
-import { ReactComponent as TimetableIcon } from 'assets/svg/timetable-icon.svg';
+import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage({ frameId }: { frameId: string | undefined }) {
@@ -38,7 +38,9 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
   return (
     <div className={styles.page}>
       <div className={styles.timetable}>
-        <TimetableIcon className={styles.timetable__icon} />
+        <div className={styles.timetable__icon}>
+          <TimetableIcon />
+        </div>
         <h1 className={styles.timetable__title}>시간표</h1>
       </div>
       <Suspense
@@ -99,7 +101,9 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
                 className={styles['page__save-button']}
                 onClick={() => navigate('/timetable')}
               >
-                <PenIcon className={styles['page__pen-icon']} />
+                <div className={styles['page__pen-icon']}>
+                  <PenIcon />
+                </div>
                 수정 완료
               </button>
             </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ReactComponent as SeeInfoArrow } from 'assets/svg/see-info-arrow.svg';
-import { ReactComponent as HiddenInfoArrow } from 'assets/svg/hidden-info-arrow.svg';
+import SeeInfoArrow from 'assets/svg/see-info-arrow.svg';
+import HiddenInfoArrow from 'assets/svg/hidden-info-arrow.svg';
 import { cn } from '@bcsdlab/utils';
 import { StoreEvent } from 'api/store/entity';
 import styles from './EventCard.module.scss';
@@ -8,7 +8,7 @@ import EventContent from './EventContent';
 
 export default function EventCard({ event }: { event: StoreEvent }) {
   const [hiddenInfo, setHiddenInfo] = useState<boolean>(true);
-  const toggleHiddenInfo = (state:boolean) => {
+  const toggleHiddenInfo = (state: boolean) => {
     if (state) {
       setHiddenInfo(false);
     } else setHiddenInfo(true);
@@ -66,7 +66,7 @@ export default function EventCard({ event }: { event: StoreEvent }) {
             onClick={() => { toggleHiddenInfo(hiddenInfo); }}
           >
             전체보기
-            {hiddenInfo ? <SeeInfoArrow /> : <HiddenInfoArrow /> }
+            {hiddenInfo ? <SeeInfoArrow /> : <HiddenInfoArrow />}
           </button>
         </div>
         <div className={cn({

@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { ReactComponent as LowerArrow } from 'assets/svg/lower-angle-bracket.svg';
-import { ReactComponent as UpperArrow } from 'assets/svg/upper-angle-bracket.svg';
+import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
+import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
@@ -32,7 +32,7 @@ export default function PCCafeteriaPage({
   diningType, setDiningType,
 }: PCCafeteriaPageProps) {
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
-  const [dropdownOpen,, closeDropdown, toggleDropdown] = useBooleanState(false);
+  const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
 

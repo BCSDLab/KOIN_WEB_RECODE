@@ -1,4 +1,4 @@
-import { ReactComponent as CloseIcon } from 'assets/svg/modal-close-icon.svg';
+import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';

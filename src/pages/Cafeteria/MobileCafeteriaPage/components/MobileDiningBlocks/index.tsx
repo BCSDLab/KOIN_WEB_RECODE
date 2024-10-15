@@ -1,5 +1,5 @@
-import { ReactComponent as HeartIcon } from 'assets/svg/heart.svg';
-import { ReactComponent as FilledHeartIcon } from 'assets/svg/heart-filled.svg';
+import HeartIcon from 'assets/svg/heart.svg';
+import FilledHeartIcon from 'assets/svg/heart-filled.svg';
 import { Dining, DiningType } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';

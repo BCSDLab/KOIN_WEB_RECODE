@@ -1,10 +1,10 @@
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useEffect, useState } from 'react';
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
-import { ReactComponent as BlindIcon } from 'assets/svg/blind-icon.svg';
-import { ReactComponent as ShowIcon } from 'assets/svg/show-icon.svg';
-import { ReactComponent as WarningIcon } from 'assets/svg/warning-icon.svg';
-import { ReactComponent as WarningMobileIcon } from 'assets/svg/warning-mobile-icon.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
+import BlindIcon from 'assets/svg/blind-icon.svg';
+import ShowIcon from 'assets/svg/show-icon.svg';
+import WarningIcon from 'assets/svg/warning-icon.svg';
+import WarningMobileIcon from 'assets/svg/warning-mobile-icon.svg';
 import useCheckPassword from 'components/common/Header/hooks/useCheckPassword';
 import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
@@ -76,7 +76,14 @@ export default function AuthenticateUserModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>내 정보 수정하기</span>
-          <CloseIcon className={styles['container__close-button']} onClick={onClose} />
+          <div
+            className={styles['container__close-button']}
+            onClick={onClose}
+            role="button"
+            aria-hidden
+          >
+            <CloseIcon />
+          </div>
         </header>
         <div
           className={cn({
@@ -103,10 +110,10 @@ export default function AuthenticateUserModal({
               {isBlind ? <BlindIcon /> : <ShowIcon />}
             </button>
             {isMobile && isKoinError(error) && (
-            <span className={styles['container__mobile-error-message']}>
-              <WarningMobileIcon />
-              {errorMessage}
-            </span>
+              <span className={styles['container__mobile-error-message']}>
+                <WarningMobileIcon />
+                {errorMessage}
+              </span>
             )}
             <button
               type="button"
@@ -121,12 +128,12 @@ export default function AuthenticateUserModal({
           </div>
         </div>
         {!isMobile && isKoinError(error) && error
-           && (
-           <span className={styles['container__error-message']}>
-             <WarningIcon />
-             {errorMessage}
-           </span>
-           )}
+          && (
+            <span className={styles['container__error-message']}>
+              <WarningIcon />
+              {errorMessage}
+            </span>
+          )}
       </div>
     </div>
   );

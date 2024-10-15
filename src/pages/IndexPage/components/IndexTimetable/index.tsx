@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect } from 'react';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import { Link } from 'react-router-dom';
-import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
@@ -43,7 +43,9 @@ function CurrentSemesterTimetable() {
       totalHeight={369}
     />
   ) : (
-    <LoadingSpinner className={styles['template__loading-spinner']} />
+    <div className={styles['template__loading-spinner']}>
+      <LoadingSpinner />
+    </div>
   );
 }
 

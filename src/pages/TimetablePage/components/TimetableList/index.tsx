@@ -4,10 +4,10 @@ import { cn } from '@bcsdlab/utils';
 import { useSemester } from 'utils/zustand/semester';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import { Portal } from 'components/common/Modal/PortalProvider';
-import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
-import { ReactComponent as SettingIcon } from 'assets/svg/setting-icon.svg';
-import { ReactComponent as BlueSettingIcon } from 'assets/svg/setting-icon-blue.svg';
-import { ReactComponent as BookMarkIcon } from 'assets/svg/book-mark.svg';
+import AddIcon from 'assets/svg/add-icon.svg';
+import SettingIcon from 'assets/svg/setting-icon.svg';
+import BlueSettingIcon from 'assets/svg/setting-icon-blue.svg';
+import BookMarkIcon from 'assets/svg/book-mark.svg';
 import TimetableSettingModal from 'pages/TimetablePage/components/TimetableList/TimetableSettingModal';
 import InducingLoginModal from 'pages/TimetablePage/components/InducingLoginModal';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
@@ -119,9 +119,9 @@ export default function TimetableList({
             >
               <div className={styles['timetable-list__item--title-container']}>
                 <li>{frame.timetable_name}</li>
-                <BookMarkIcon
-                  className={styles['timetable-list__item--bookmark-icon']}
-                />
+                <div className={styles['timetable-list__item--bookmark-icon']}>
+                  <BookMarkIcon />
+                </div>
               </div>
               <button
                 type="button"
