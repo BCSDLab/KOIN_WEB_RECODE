@@ -104,7 +104,9 @@ export default function ReviewList() {
               isSticky
                 ? (
                   <div className={styles.point}>
-                    <StarList average_rating={Math.floor(data.pages[0].statistics.average_rating)} />
+                    <StarList
+                      average_rating={Math.floor(data.pages[0].statistics.average_rating)}
+                    />
                     {`${Math.floor(data.pages[0].statistics.average_rating).toFixed()}점`}
                   </div>
                 )
@@ -115,7 +117,9 @@ export default function ReviewList() {
                   >
                     {currentReviewType.current}
                     {' '}
-                    <Arrow style={{ transform: openDropdown === 'sort' ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }} />
+                    <div style={{ transform: openDropdown === 'sort' ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }}>
+                      <Arrow />
+                    </div>
                     <div className={styles.wrapper}>
                       {openDropdown === 'sort' && (
                         <div className={styles.dropdown__list}>

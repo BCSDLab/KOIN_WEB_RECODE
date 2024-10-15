@@ -247,3 +247,17 @@
     }
   }
 }
+
+.star {
+  &--empty {
+    & > svg > path {
+      fill: #CACACA;
+    }
+  }
+
+  &--fill {
+    & > svg > path {
+      fill: #FFC62B;
+    }
+  }
+}

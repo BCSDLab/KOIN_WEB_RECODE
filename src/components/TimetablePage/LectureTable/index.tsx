@@ -163,14 +163,17 @@ function LectureTable({
               onMouseLeave={() => setIsMouseOver(-1)}
             >
               {isMouseOver === index && version === 'myLectureList' && (
-                <div className={styles['table__delete-button']}>
-                  <LectureCloseIcon
-                    onClick={() => {
-                      handleRemoveLectureClick({
-                        id: lecture.id,
-                      });
-                    }}
-                  />
+                <div
+                  className={styles['table__delete-button']}
+                  onClick={() => {
+                    handleRemoveLectureClick({
+                      id: lecture.id,
+                    });
+                  }}
+                  role="button"
+                  aria-hidden
+                >
+                  <LectureCloseIcon />
                 </div>
               )}
               {LECTURE_TABLE_HEADER.map(

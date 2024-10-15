@@ -49,7 +49,9 @@ export default function SearchBar() {
       >
         {
           isMobile ? (
-            <MobileSearchIcon className={styles['search-icon']} />
+            <div className={styles['search-icon']}>
+              <MobileSearchIcon />
+            </div>
           ) : (
             <img
               className={styles['search-icon']}

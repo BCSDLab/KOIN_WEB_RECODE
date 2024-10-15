@@ -61,7 +61,9 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
               {
                 store?.review_count > 0 ? (
                   <div className={styles['store-list__review']}>
-                    <Star className={styles['store-list__star']} />
+                    <div className={styles['store-list__star']}>
+                      <Star />
+                    </div>
                     <div className={styles['store-list__rate']}>{`${store.average_rate.toFixed(1)}`}</div>
                     <div className={styles['store-list__review--text']}>
                       &#40;&nbsp;
@@ -71,7 +73,9 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
                   </div>
                 ) : (
                   <div className={styles['store-list__empty']}>
-                    <EmptyStar className={styles['store-list__star']} />
+                    <div className={styles['store-list__star']}>
+                      <EmptyStar />
+                    </div>
                     <div className={styles['store-list__rate']}>0.0</div>
                     <div className={styles['store-list__empty--text']}>
                       첫 번째 리뷰를 작성해보세요 :&#41;

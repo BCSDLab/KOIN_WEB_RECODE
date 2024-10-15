@@ -119,9 +119,9 @@ export default function TimetableList({
             >
               <div className={styles['timetable-list__item--title-container']}>
                 <li>{frame.timetable_name}</li>
-                <BookMarkIcon
-                  className={styles['timetable-list__item--bookmark-icon']}
-                />
+                <div className={styles['timetable-list__item--bookmark-icon']}>
+                  <BookMarkIcon />
+                </div>
               </div>
               <button
                 type="button"

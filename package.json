@@ -40,7 +40,7 @@
   },
   "scripts": {
     "start": "vite --open --host",
-    "build": "CI=false && vite build",
+    "build": "tsc && vite build",
     "test": "test --coverage",
     "lint": "yarn lint:eslint && yarn lint:stylelint",
     "lint:eslint": "eslint src/ --ext .tsx,.ts",

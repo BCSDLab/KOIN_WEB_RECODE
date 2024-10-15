@@ -75,7 +75,9 @@ function MainTimetable({ frameId }: { frameId: number }) {
           className={styles.page__button}
           onClick={onClickEdit}
         >
-          <EditIcon className={styles['page__edit-icon']} />
+          <div className={styles['page__edit-icon']}>
+            <EditIcon />
+          </div>
           시간표 수정
         </button>
       </div>

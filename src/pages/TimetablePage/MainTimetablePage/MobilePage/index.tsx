@@ -32,9 +32,9 @@ function MobilePage({ frameId }: { frameId: string | undefined }) {
           <div className={styles.page__semester}>
             <React.Suspense
               fallback={(
-                <LoadingSpinner
-                  className={styles['dropdown-loading-spinner']}
-                />
+                <div className={styles['dropdown-loading-spinner']}>
+                  <LoadingSpinner />
+                </div>
               )}
             >
               <SemesterListbox />
@@ -55,9 +55,11 @@ function MobilePage({ frameId }: { frameId: string | undefined }) {
         <div ref={timetableRef} className={styles.page__timetable}>
           <ErrorBoundary fallbackClassName="loading">
             <React.Suspense
-              fallback={
-                <LoadingSpinner className={styles['top-loading-spinner']} />
-              }
+              fallback={(
+                <div className={styles['top-loading-spinner']}>
+                  <LoadingSpinner />
+                </div>
+              )}
             >
               <Timetable
                 frameId={Number(frameId)}

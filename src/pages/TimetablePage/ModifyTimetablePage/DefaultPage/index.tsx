@@ -38,7 +38,9 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
   return (
     <div className={styles.page}>
       <div className={styles.timetable}>
-        <TimetableIcon className={styles.timetable__icon} />
+        <div className={styles.timetable__icon}>
+          <TimetableIcon />
+        </div>
         <h1 className={styles.timetable__title}>시간표</h1>
       </div>
       <Suspense
@@ -99,7 +101,9 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
                 className={styles['page__save-button']}
                 onClick={() => navigate('/timetable')}
               >
-                <PenIcon className={styles['page__pen-icon']} />
+                <div className={styles['page__pen-icon']}>
+                  <PenIcon />
+                </div>
                 수정 완료
               </button>
             </div>

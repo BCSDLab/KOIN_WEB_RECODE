@@ -231,27 +231,33 @@ function Timetable({
                 <div
                   className={styles.timetable__lecture}
                   key={lectureIndex}
-                  style={{
-                    backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 15]}`,
-                    borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]
+                  style={
+                    {
+                      backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 15]}`,
+                      borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]
                       }`,
-                    top: `${start * rowHeight + 1}px`,
-                    width: isMobile ? undefined : `${columnWidth}px`,
-                    height: `${(end - start + 1) * rowHeight - 1}px`,
-                    padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2
+                      top: `${start * rowHeight + 1}px`,
+                      width: isMobile ? undefined : `${columnWidth}px`,
+                      height: `${(end - start + 1) * rowHeight - 1}px`,
+                      padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2
                       }px ${rowHeight / 4}px`,
-                    gap: `${rowHeight / 5.5}px`,
-                  }}
+                      gap: `${rowHeight / 5.5}px`,
+                    }
+                  }
                   onMouseEnter={() => setIsMouseOver(`${day}-${start}-${end}`)}
                   onMouseLeave={() => setIsMouseOver('')}
                 >
                   {isMouseOver === `${day}-${start}-${end}` && isEditable && (
-                    <LectureCloseIcon
+                    <div
                       className={styles['timetable__delete-button']}
                       onClick={() => handleRemoveLectureClick({
                         lecture_class, professor, id, name,
                       })}
-                    />
+                      role="button"
+                      aria-hidden
+                    >
+                      <LectureCloseIcon />
+                    </div>
                   )}
                   <div
                     style={{

@@ -76,7 +76,14 @@ export default function AuthenticateUserModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>내 정보 수정하기</span>
-          <CloseIcon className={styles['container__close-button']} onClick={onClose} />
+          <div
+            className={styles['container__close-button']}
+            onClick={onClose}
+            role="button"
+            aria-hidden
+          >
+            <CloseIcon />
+          </div>
         </header>
         <div
           className={cn({

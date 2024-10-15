@@ -55,7 +55,14 @@ export default function DownloadTimetableModal({
       <div className={styles.container}>
         <div className={styles.container__header}>
           <div className={styles['container__header--text']}>시간표 저장</div>
-          <CloseIcon onClick={onClose} className={styles['container__header--close-button']} />
+          <div
+            onClick={onClose}
+            className={styles['container__header--close-button']}
+            role="button"
+            aria-hidden
+          >
+            <CloseIcon />
+          </div>
         </div>
         <div className={styles['container__image-option']}>저장할 이미지 형식을 선택해 주세요.</div>
         <div className={styles.container__button}>

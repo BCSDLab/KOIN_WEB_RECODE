@@ -113,10 +113,15 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
             onClick={() => setRate(num)}
             aria-label="별점 주기"
           >
-            <StarIcon
-              key={num}
-              fill={rate >= num ? '#FFC62B' : '#CACACA'}
-            />
+            <div className={cn({
+              [styles['star--empty']]: true,
+              [styles['star--fill']]: rate >= num,
+            })}
+            >
+              <StarIcon
+                key={num}
+              />
+            </div>
           </button>
         ))}
         {rate}
