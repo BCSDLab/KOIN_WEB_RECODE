@@ -9,7 +9,7 @@ import { useTokenStore } from 'utils/zustand/auth';
 import { deleteCookie, setCookie } from './cookie';
 import { redirectToLogin } from './auth';
 
-const API_URL = process.env.REACT_APP_API_PATH;
+const API_URL = import.meta.env.VITE_API_PATH;
 
 type Constructor<T> = new (...args: any[]) => T;
 

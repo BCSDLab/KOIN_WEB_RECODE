@@ -8,7 +8,7 @@ function Footer(): JSX.Element {
   const isMobile = useMediaQuery();
   const logger = useLogger();
   // const pathname = useParams();
-  const isStage = process.env.REACT_APP_API_PATH?.includes('stage');
+  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
   const logShortcut = (title: string) => {
     if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'footer', value: '식단' });

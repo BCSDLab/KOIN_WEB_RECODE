@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import Listbox from 'components/TimetablePage/Listbox';
 import { AddTimetableFrameRequest, SemesterCheckResponse, TimetableFrameInfo } from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';
@@ -64,10 +64,14 @@ export default function AddSemesterModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>학기 추가</span>
-          <CloseIcon
+          <div
             className={styles['container__close-button']}
             onClick={closeModal}
-          />
+            role="button"
+            aria-hidden
+          >
+            <CloseIcon />
+          </div>
         </header>
         <div className={styles.container__semester}>
           <Listbox list={year} value={yearValue} onChange={onChangeYear} version="inModal" />

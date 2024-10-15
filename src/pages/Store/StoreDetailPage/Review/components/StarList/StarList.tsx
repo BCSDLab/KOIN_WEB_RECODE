@@ -1,5 +1,5 @@
-import { ReactComponent as EmptyStar } from 'assets/svg/Review/empty-star.svg';
-import { ReactComponent as Star } from 'assets/svg/Review/star.svg';
+import EmptyStar from 'assets/svg/Review/empty-star.svg';
+import Star from 'assets/svg/Review/star.svg';
 
 interface Props {
   average_rating: number;

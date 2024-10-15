@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { cn } from '@bcsdlab/utils';
-import { ReactComponent as LoadingSpinner } from 'assets/svg/loading-spinner.svg';
+import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import { BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
@@ -39,7 +39,12 @@ function BusTimetable() {
         ))}
       </ul>
 
-      <Suspense fallback={<LoadingSpinner className={styles['template__loading-spinner']} />}>
+      <Suspense fallback={(
+        <div className={styles['template__loading-spinner']}>
+          <LoadingSpinner />
+        </div>
+      )}
+      >
         {selectedTab.key === 'shuttle' && <Timetable.Shuttle />}
         {selectedTab.key === 'express' && <Timetable.Express />}
         {selectedTab.key === 'city' && <Timetable.City />}

@@ -1,9 +1,9 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
-import { ReactComponent as AddIcon } from 'assets/svg/add-icon.svg';
-import { ReactComponent as TrashCanIcon } from 'assets/svg/trash-can-icon.svg';
+import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
+import AddIcon from 'assets/svg/add-icon.svg';
+import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useDeleteSemester from 'pages/TimetablePage/hooks/useDeleteSemester';
 import { Portal } from 'components/common/Modal/PortalProvider';

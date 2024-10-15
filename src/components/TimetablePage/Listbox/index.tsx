@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import { ReactComponent as DownArrowIcon } from 'assets/svg/down-arrow-icon.svg';
+import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './Listbox.module.scss';
@@ -74,11 +74,11 @@ function Listbox({
       {isOpenedPopup && (
         <ul
           className={
-          cn({
-            [styleClasses.select__content]: true,
-            [styleClasses['select__content--up']]: isOverHalf,
-          })
-}
+            cn({
+              [styleClasses.select__content]: true,
+              [styleClasses['select__content--up']]: isOverHalf,
+            })
+          }
           role="listbox"
         >
           {list.map((optionValue) => (

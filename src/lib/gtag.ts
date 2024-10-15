@@ -8,7 +8,7 @@ type GTagEvent = {
   current_page?: string;
 };
 
-export const GA_TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
+export const GA_TRACKING_ID = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageView = (url: string, userId?: string) => {
@@ -33,7 +33,7 @@ export const event = ({
     current_page,
   });
 
-  if (process.env.REACT_APP_API_PATH?.includes('stage')) {
+  if (import.meta.env.VITE_API_PATH?.includes('stage')) {
     // eslint-disable-next-line no-console
     console.table({
       팀: action,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as MobileSearchIcon } from 'assets/svg/mobile-store-search-icon.svg';
+import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -19,8 +19,8 @@ export default function SearchBar() {
         ref={storeRef}
         className={styles.search_bar__input}
         defaultValue={
-            searchParams.get('storeName') === undefined ? '' : searchParams.get('storeName') ?? ''
-          }
+          searchParams.get('storeName') === undefined ? '' : searchParams.get('storeName') ?? ''
+        }
         type="text"
         name="search"
         placeholder="상점명을 입력하세요"
@@ -49,7 +49,9 @@ export default function SearchBar() {
       >
         {
           isMobile ? (
-            <MobileSearchIcon className={styles['search-icon']} />
+            <div className={styles['search-icon']}>
+              <MobileSearchIcon />
+            </div>
           ) : (
             <img
               className={styles['search-icon']}

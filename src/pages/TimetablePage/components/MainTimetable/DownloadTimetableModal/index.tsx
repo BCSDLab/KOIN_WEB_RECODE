@@ -1,6 +1,6 @@
 import React from 'react';
 import Timetable from 'pages/TimetablePage/components/Timetable';
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
@@ -55,7 +55,14 @@ export default function DownloadTimetableModal({
       <div className={styles.container}>
         <div className={styles.container__header}>
           <div className={styles['container__header--text']}>시간표 저장</div>
-          <CloseIcon onClick={onClose} className={styles['container__header--close-button']} />
+          <div
+            onClick={onClose}
+            className={styles['container__header--close-button']}
+            role="button"
+            aria-hidden
+          >
+            <CloseIcon />
+          </div>
         </div>
         <div className={styles['container__image-option']}>저장할 이미지 형식을 선택해 주세요.</div>
         <div className={styles.container__button}>

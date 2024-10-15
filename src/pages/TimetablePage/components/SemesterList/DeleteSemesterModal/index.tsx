@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import styles from './DeleteSemesterModal.module.scss';
 
 export interface DeleteSemesterModalProps {
@@ -23,7 +23,14 @@ export default function DeleteSemesterModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>학기를 삭제하시겠습니까?</span>
-          <CloseIcon className={styles['container__close-button']} onClick={closeModal} />
+          <div
+            className={styles['container__close-button']}
+            onClick={closeModal}
+            role="button"
+            aria-hidden
+          >
+            <CloseIcon />
+          </div>
         </header>
         <div className={styles.container__instructions}>삭제한 학기는 복구가 불가능합니다.</div>
         <div className={styles.container__button}>

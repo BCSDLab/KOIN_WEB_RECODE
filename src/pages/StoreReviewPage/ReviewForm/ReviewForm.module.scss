@@ -78,6 +78,20 @@
   }
 }
 
+.star {
+  &--empty {
+    & > svg > path {
+      fill: #cacaca;
+    }
+  }
+
+  &--fill {
+    & > svg > path {
+      fill: #ffc62b;
+    }
+  }
+}
+
 .template {
   margin-bottom: 40px;
 

@@ -1,4 +1,4 @@
-import { ReactComponent as CloseIcon } from 'assets/svg/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import { useEffect } from 'react';
 import styles from './AlertModal.module.scss';
 
@@ -38,7 +38,14 @@ export default function AlertModal({
       <div className={styles.modal}>
         <div className={styles.modal__header}>
           <h1 className={styles.modal__title}>{title}</h1>
-          <CloseIcon className={styles['modal__close-icon']} onClick={onClose} />
+          <div
+            className={styles['modal__close-icon']}
+            onClick={onClose}
+            role="button"
+            aria-hidden
+          >
+            <CloseIcon />
+          </div>
         </div>
         <p className={styles.modal__description}>{description}</p>
         <div className={styles['modal__button-group']}>
