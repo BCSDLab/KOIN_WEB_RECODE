@@ -37,7 +37,7 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
     <div className={styles['store-list']}>
       {storeListData?.map((store: StoreList) => (
         <Link
-          to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴?type=${storeType}`}
+          to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴&type=${storeType}`}
           className={styles['store-list__item']}
           key={store.id}
           onClick={() => logger.actionEventClick({
@@ -56,8 +56,7 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
             && (
               <div className={styles['store-none-open']}>
                 <span className={styles['store-none-open__name']}>{store.name}</span>
-                {`${pickTopicJosa(store.name)}`}
-                준비중입니다.
+                {`${pickTopicJosa(store.name)} 준비중입니다.`}
               </div>
             )}
           <div className={styles['store-list__title']}>{store.name}</div>
