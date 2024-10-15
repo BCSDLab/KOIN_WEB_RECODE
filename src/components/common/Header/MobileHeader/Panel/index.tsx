@@ -25,7 +25,7 @@ export default function Panel({ openModal }: PanelProps) {
   const navigate = useNavigate();
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
-  const isStage = process.env.REACT_APP_API_PATH?.includes('stage');
+  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
   const logShortcut = (title: string) => {
     if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '식단' });

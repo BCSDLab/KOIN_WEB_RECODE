@@ -65,7 +65,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const token = useTokenState();
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
-  const isStage = process.env.REACT_APP_API_PATH?.includes('stage');
+  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
   const isLoggedin = !!token;
   const logShortcut = (title: string) => {
