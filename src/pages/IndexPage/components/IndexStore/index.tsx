@@ -25,7 +25,7 @@ function IndexStore() {
   useEffect(() => {
     if (logger) {
       logger.actionEventClick({
-        actionTitle: 'A/B_TEST',
+        actionTitle: 'AB_TEST',
         title: 'BUSINESS_benefit_1',
         value: ABView === 'A' ? '혜택X' : '혜택O',
         event_category: 'a/b test 로깅(3차 스프린트, 혜택페이지)',
