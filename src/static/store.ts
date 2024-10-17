@@ -1,6 +1,6 @@
-export type StorePageType = 'benefit_store' | 'store';
+export type StorePageType = 'benefit_shop' | 'shop';
 
 export const STORE_PAGE = {
-  BENEFIT_STORE: 'benefit_store',
-  MAIN: 'store',
+  BENEFIT_STORE: 'benefit_shop',
+  MAIN: 'shop',
 } as const;
