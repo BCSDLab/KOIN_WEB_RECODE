@@ -32,6 +32,7 @@ import EditReviewPage from 'pages/StoreReviewPage/EditReviewPage';
 import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/ReviewReporting';
 import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
 import ROUTES from 'static/routes';
+import PageNotFound from 'pages/Error/PageNotFound';
 
 interface HelmetWrapperProps {
   title: string;
@@ -99,6 +100,7 @@ function App() {
         <Route path={ROUTES.Webview()}>
           <Route path={ROUTES.WebviewCampusInfo()} element={<HelmetWrapper title="코인 - 교내 시설물 정보" element={<CampusInfo />} />} />
         </Route>
+        <Route path={ROUTES.NotFound()} element={<HelmetWrapper title="코인 - 404 Not Found" element={<PageNotFound />} />} />
       </Routes>
       <Toast />
     </>
