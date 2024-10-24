@@ -216,7 +216,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   ref,
 ) => {
   const { data: userInfo } = useUser();
-  const nicknameElementRef = React.useRef<HTMLInputElement>(null);
+  const [currentNicknameValue, setCurrentNicknameValue] = React.useState<string>(userInfo?.nickname || '');
 
   const {
     changeTargetNickname,
@@ -224,15 +224,18 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     currentCheckedNickname,
   } = useNicknameDuplicateCheck();
 
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentNicknameValue(e.target.value);
+  };
+
   // 닉네임 중복 확인 버튼 클릭 핸들러
   const onClickNicknameDuplicateCheckButton = () => {
-    const currentInputValue = nicknameElementRef.current?.value ?? '';
     // 현재 입력된 닉네임과 기존 닉네임이 같다면 중복 검사를 수행하지 않습니다.
-    if (currentInputValue === userInfo?.nickname) {
+    if (currentNicknameValue === userInfo?.nickname) {
       showToast('info', '기존의 닉네임과 동일합니다.');
       return;
     }
-    changeTargetNickname(currentInputValue);
+    changeTargetNickname(currentNicknameValue);
   };
 
   useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
@@ -240,15 +243,16 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     () => {
       // 닉네임 유효성 검사 로직
       let valid: string | true = true;
-      if (nicknameElementRef && nicknameElementRef.current?.value !== userInfo?.nickname && (status !== 'success' || nicknameElementRef.current?.value !== currentCheckedNickname)) {
+      const isNicknameVerified = currentNicknameValue === currentCheckedNickname;
+      if (currentNicknameValue !== (userInfo?.nickname || '') && (status !== 'success' || !isNicknameVerified)) {
         valid = '닉네임 중복확인을 해주세요.';
       }
       return {
-        value: nicknameElementRef.current?.value,
+        value: currentNicknameValue,
         valid,
       };
     },
-    [currentCheckedNickname, status, nicknameElementRef, userInfo?.nickname],
+    [currentCheckedNickname, currentNicknameValue, status, userInfo?.nickname],
   );
 
   return (
@@ -259,7 +263,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       })}
     >
       <input
-        ref={nicknameElementRef}
+        onChange={handleNicknameChange}
         className={styles['form-input']}
         type="text"
         autoComplete="nickname"
