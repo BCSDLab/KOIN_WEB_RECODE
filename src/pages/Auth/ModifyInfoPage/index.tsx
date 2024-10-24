@@ -216,7 +216,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   ref,
 ) => {
   const { data: userInfo } = useUser();
-  const nicknameElementRef = React.useRef<HTMLInputElement>(null);
+  const [nickname, setNickname] = React.useState<string>(userInfo?.nickname || '');
 
   const {
     changeTargetNickname,
@@ -224,9 +224,13 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     currentCheckedNickname,
   } = useNicknameDuplicateCheck();
 
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+  };
+
   // 닉네임 중복 확인 버튼 클릭 핸들러
   const onClickNicknameDuplicateCheckButton = () => {
-    const currentInputValue = nicknameElementRef.current?.value ?? '';
+    const currentInputValue = nickname;
     // 현재 입력된 닉네임과 기존 닉네임이 같다면 중복 검사를 수행하지 않습니다.
     if (currentInputValue === userInfo?.nickname) {
       showToast('info', '기존의 닉네임과 동일합니다.');
@@ -240,15 +244,15 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     () => {
       // 닉네임 유효성 검사 로직
       let valid: string | true = true;
-      if (!nicknameElementRef.current?.value !== !userInfo?.nickname && (status !== 'success' || nicknameElementRef.current?.value !== currentCheckedNickname)) {
+      if (nickname !== userInfo?.nickname && (status !== 'success' || nickname !== currentCheckedNickname)) {
         valid = '닉네임 중복확인을 해주세요.';
       }
       return {
-        value: nicknameElementRef.current?.value,
+        value: nickname,
         valid,
       };
     },
-    [currentCheckedNickname, status, nicknameElementRef, userInfo?.nickname],
+    [currentCheckedNickname, nickname, status, userInfo?.nickname],
   );
 
   return (
@@ -259,7 +263,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       })}
     >
       <input
-        ref={nicknameElementRef}
+        onChange={handleNicknameChange}
         className={styles['form-input']}
         type="text"
         autoComplete="nickname"
