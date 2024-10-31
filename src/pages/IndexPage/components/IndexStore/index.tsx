@@ -84,7 +84,7 @@ function IndexStore() {
               </button>
             </div>
           )
-          : categories?.shop_categories.map((category) => (
+          : categories?.shop_categories.slice(isMobile ? 1 : 0, 12).map((category) => (
             category.name === '전체보기' && ABView === 'B' ? (
               <div
                 className={styles.category__benefit}
