@@ -79,6 +79,11 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     }
     if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '복덕방' });
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
+    if (title === '교내 시설물 정보') {
+      logger.actionEventClick({
+        actionTitle: 'CAMPUS', title: 'header', value: '교내 시설물 정보', event_category: 'click',
+      });
+    }
   };
 
   const escapeByLogo = async () => {
