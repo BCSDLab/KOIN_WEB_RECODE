@@ -139,6 +139,7 @@ function SemesterList() {
         className={cn({
           [styles.select__trigger]: true,
           [styles['select__trigger--selected']]: isOpenSemesterList,
+          [styles['select__trigger--no-option']]: semesterOptionList.length === 0,
         })}
       >
         {semesterOptionList.length > 0 && semester !== null
