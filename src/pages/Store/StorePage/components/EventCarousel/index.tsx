@@ -4,14 +4,35 @@ import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
+import { useCallback, useEffect, useState } from 'react';
+import ArrowLeft from 'assets/svg/left-angle-bracket.svg';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './EventCarousel.module.scss';
 
 export default function EventCarousel() {
   const carouselList = useGetAllEvents();
-  const [emblaRef] = useEmblaCarousel(
-    { loop: true },
-    [Autoplay({ stopOnInteraction: false, delay: 2000 })],
+  const isMobile = useMediaQuery();
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      slidesToScroll: isMobile ? 1 : 2,
+    },
+    [Autoplay({
+      stopOnInteraction: false,
+      delay: 4000,
+    })],
   );
+  const [canPrevClick, setCanPrevClick] = useState(false);
+  const [canNextClick, setCanNextClick] = useState(false);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
   const logger = useLogger();
 
   const eventLogging = (shopName: string) => {
@@ -20,8 +41,26 @@ export default function EventCarousel() {
     });
   };
 
+  useEffect(() => {
+    if (!emblaApi) return;
+    setCanPrevClick(emblaApi.canScrollPrev());
+    setCanNextClick(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
   return (
-    <div>
+    <div className={styles.carousel}>
+      {
+        canPrevClick && (
+          // eslint-disable-next-line
+          <button
+            type="button"
+            onClick={scrollPrev}
+            className={styles['carousel-button--prev']}
+          >
+            <ArrowLeft />
+          </button>
+        )
+      }
       {carouselList && carouselList.length > 0 ? (
         <div className={styles.container} ref={emblaRef}>
           <div className={styles.swipe}>
@@ -52,9 +91,30 @@ export default function EventCarousel() {
                 </div>
               </Link>
             ))}
+            { // pc 환경에서 이벤트 개수가 홀수면 빈 이미지 추가
+            !isMobile && carouselList.length % 2 !== 0 && (
+              <div className={styles['swipe-item']}>
+                <div className={styles['swipe-item__empty-image']}>
+                  <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
+                </div>
+              </div>
+            )
+}
           </div>
         </div>
       ) : null}
+      {
+        canNextClick && (
+          // eslint-disable-next-line
+          <button
+            type="button"
+            onClick={scrollNext}
+            className={styles['carousel-button--next']}
+          >
+            <ArrowLeft />
+          </button>
+        )
+      }
     </div>
   );
 }
