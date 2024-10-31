@@ -142,7 +142,7 @@ function LectureTable({
             })}
             aria-selected={selectedLecture === lecture}
             role="row"
-            key={`${lecture.code}-${lecture.lecture_class}`}
+            key={version !== 'myLectureList' ? `${lecture.code}-${lecture.lecture_class}` : lecture.class_time[0]}
           >
             <button
               type="button"
@@ -191,7 +191,7 @@ function LectureTable({
                         || headerItem.label === '설계',
                     })}
                     role="cell"
-                    key={headerItem.key}
+                    key={`${headerItem.key}value`}
                   >
                     {headerItem.key === 'professor'
                       && (lecture[headerItem.key] === ''

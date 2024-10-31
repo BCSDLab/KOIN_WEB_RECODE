@@ -334,7 +334,8 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             lectureTime,
             place,
           }, index) => (
-            <div className={styles['time-space-container__component']}>
+            // eslint-disable-next-line react/no-array-index-key
+            <div className={styles['time-space-container__component']} key={`${index}-${time.startHour}-${time.endHour}`}>
               <button
                 aria-label="delete-time-space-component"
                 type="button"
