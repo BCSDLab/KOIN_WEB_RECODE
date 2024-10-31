@@ -71,7 +71,7 @@
     width: calc(100% - 182px);
 
     @include media.media-breakpoint(mobile) {
-      width: 330px;
+      width: 100%;
     }
   }
 
@@ -88,7 +88,7 @@
     border: 0;
     line-height: 1.2;
     height: 100%;
-    width: 70px;
+    width: 6%;
     padding: 0;
     color: rgb(37 37 37);
     margin-right: 22px;
@@ -121,7 +121,7 @@
 
     @include media.media-breakpoint(mobile) {
       letter-spacing: -0.8px;
-      width: 64px;
+      width: 15%;
       padding-top: 11px;
       margin-right: 2px;
     }
