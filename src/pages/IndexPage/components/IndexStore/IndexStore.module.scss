@@ -55,6 +55,7 @@
     text-decoration: none;
     cursor: pointer;
     font-size: 12px;
+    white-space: nowrap;
 
     &:hover {
       color: #f7941e;
@@ -65,7 +66,7 @@
       width: 12%;
       padding-top: 11px;
       margin-right: 8px;
-      font-size: 12px;
+      font-size: 10px;
       color: #252525;
     }
   }

@@ -82,7 +82,7 @@
     flex-direction: column;
     font-family: NanumBarunGothic, serif;
     font-weight: normal;
-    font-size: 15px;
+    font-size: 12px;
     text-align: center;
     background-color: #fff;
     border: 0;
@@ -93,13 +93,14 @@
     color: rgb(37 37 37);
     margin-right: 22px;
     cursor: pointer;
+    white-space: nowrap;
 
     & span {
       text-align: center;
       width: 100%;
 
       @include media.media-breakpoint(mobile) {
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 400;
       }
     }
@@ -134,8 +135,8 @@
     margin: 0 auto 13px;
 
     @include media.media-breakpoint(mobile) {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
     }
   }
 }
