@@ -66,8 +66,22 @@ export default function DownloadTimetableModal({
         </div>
         <div className={styles['container__image-option']}>저장할 이미지 형식을 선택해 주세요.</div>
         <div className={styles.container__button}>
-          <button type="button" className={styles['container__button--mobile']} onClick={() => onClickImageDownload('Mobile')}>모바일 이미지 저장</button>
-          <button type="button" className={styles['container__button--pc']} onClick={() => onClickImageDownload('PC')}>PC용 이미지 저장</button>
+          <div
+            role="button"
+            className={styles['container__button--mobile']}
+            onClick={() => onClickImageDownload('Mobile')}
+            aria-hidden
+          >
+            모바일 이미지 저장
+          </div>
+          <div
+            role="button"
+            className={styles['container__button--pc']}
+            onClick={() => onClickImageDownload('PC')}
+            aria-hidden
+          >
+            PC용 이미지 저장
+          </div>
         </div>
       </div>
       <div ref={pcTimetableRef} className={styles['container__timetable-image']}>
