@@ -400,8 +400,6 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
     >
       <button
         type="button"
-        // onMouseOver={openPopup}
-        // onFocus={openPopup}
         onClick={triggerPopup}
         name={name}
         className={cn({
