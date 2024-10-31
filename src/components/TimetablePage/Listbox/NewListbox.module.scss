@@ -35,16 +35,11 @@
 
     @include media.media-breakpoint(mobile) {
       height: 36px;
-
-      &::after {
-        top: 5px;
-        right: 5px;
-      }
     }
 
     svg {
-      transform: rotate(360deg);
-      transition: transform 0.3s ease;
+      width: 17px;
+      height: 17px;
     }
 
     &:hover {

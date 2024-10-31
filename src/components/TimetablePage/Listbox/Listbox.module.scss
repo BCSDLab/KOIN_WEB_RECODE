@@ -26,23 +26,13 @@
     border: 1px solid #d2dae2;
     cursor: pointer;
 
-    &::after {
-      position: absolute;
-      top: 9px;
-      right: 15px;
-      background: no-repeat center/24px 24px url("https://static.koreatech.in/assets/img/ic-arrow-up-down.png");
-      width: 24px;
-      height: 24px;
-      content: "";
-    }
-
     @include media.media-breakpoint(mobile) {
       height: 36px;
+  }
 
-      &::after {
-        top: 5px;
-        right: 5px;
-      }
+    svg {
+      width: 17px;
+      height: 17px;
     }
   }
 

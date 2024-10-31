@@ -91,16 +91,6 @@
       font-size: 14px;
       height: 36px;
     }
-
-    &::after {
-      position: absolute;
-      top: 11px;
-      right: 15px;
-      background: no-repeat center/17px 12px url("https://static.koreatech.in/assets/img/bus_dropdown.png");
-      width: 17px;
-      height: 17px;
-      content: "";
-    }
   }
 
   &__content {
