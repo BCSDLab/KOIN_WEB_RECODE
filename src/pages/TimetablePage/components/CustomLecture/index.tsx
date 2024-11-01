@@ -23,6 +23,7 @@ type TimeSpaceComponents = {
   week: string[],
   lectureTime: number[],
   place: string,
+  id: number,
 };
 
 function CustomLecture({ frameId }: { frameId: string | undefined }) {
@@ -44,6 +45,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     week: ['월'],
     lectureTime: [0, 1],
     place: '',
+    id: Date.now() + Math.random(),
   }]);
   const timeSpaceContainerRef = React.useRef<HTMLDivElement>(null);
   const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
@@ -140,6 +142,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       week: ['월'],
       lectureTime: [0, 1],
       place: '',
+      id: Date.now() + Math.random(),
     }]);
     setIsFirstSubmit(true);
   };
@@ -168,6 +171,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       week: [],
       lectureTime: [],
       place: '',
+      id: Date.now() + Math.random(), // key값으로 넣을 고유 식별자가 없어서 추가
     }]);
     setTimeout(() => {
       timeSpaceContainerRef.current!.scrollTo({
@@ -333,9 +337,9 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             week,
             lectureTime,
             place,
+            id,
           }, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div className={styles['time-space-container__component']} key={`${index}-${time.startHour}-${time.endHour}`}>
+            <div className={styles['time-space-container__component']} key={id}>
               <button
                 aria-label="delete-time-space-component"
                 type="button"
