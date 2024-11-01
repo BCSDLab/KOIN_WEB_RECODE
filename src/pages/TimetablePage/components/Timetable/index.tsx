@@ -344,7 +344,7 @@ function Timetable({
                     gap: `${rowHeight / 5.5}px`,
                   }}
                   // eslint-disable-next-line react/no-array-index-key
-                  key={`preview-custom-${index}`}
+                  key={`${index}-${start}-${end}`}
                 >
                   <div
                     style={{
