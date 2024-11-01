@@ -142,7 +142,7 @@ function LectureTable({
             })}
             aria-selected={selectedLecture === lecture}
             role="row"
-            key={version !== 'myLectureList' ? `${lecture.code}-${lecture.lecture_class}` : lecture.class_time[0]}
+            key={lecture.id}
           >
             <button
               type="button"
