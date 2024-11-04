@@ -20,7 +20,6 @@ interface PCDiningBlocksProps {
 export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
-  // const { data: isAuth } = useUser();
   const { currentDate } = useDatePicker();
   const { dinings } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
