@@ -11,6 +11,7 @@ import showToast from 'utils/ts/showToast';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
 
 type TimeSpaceComponents = {
@@ -23,7 +24,7 @@ type TimeSpaceComponents = {
   week: string[],
   lectureTime: number[],
   place: string,
-  id: number,
+  id: string,
 };
 
 function CustomLecture({ frameId }: { frameId: string | undefined }) {
@@ -45,7 +46,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     week: ['월'],
     lectureTime: [0, 1],
     place: '',
-    id: Date.now() + Math.random(),
+    id: uuidv4(),
   }]);
   const timeSpaceContainerRef = React.useRef<HTMLDivElement>(null);
   const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
@@ -142,7 +143,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       week: ['월'],
       lectureTime: [0, 1],
       place: '',
-      id: Date.now() + Math.random(),
+      id: uuidv4(),
     }]);
     setIsFirstSubmit(true);
   };
@@ -171,7 +172,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       week: [],
       lectureTime: [],
       place: '',
-      id: Date.now() + Math.random(), // key값으로 넣을 고유 식별자가 없어서 추가
+      id: uuidv4(),
     }]);
     setTimeout(() => {
       timeSpaceContainerRef.current!.scrollTo({
