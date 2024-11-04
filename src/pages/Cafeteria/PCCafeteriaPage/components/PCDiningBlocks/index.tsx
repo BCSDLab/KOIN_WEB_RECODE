@@ -6,12 +6,8 @@ import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import DetailModal from 'pages/Cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
-import LoginPromptModal from 'pages/Cafeteria/PCCafeteriaPage/components/LoginPromptModal';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
-import HeartIcon from 'assets/svg/heart.svg';
-import FilledHeartIcon from 'assets/svg/heart-filled.svg';
-import { useUser } from 'utils/hooks/state/useUser';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import styles from './PCDiningBlocks.module.scss';
@@ -24,9 +20,9 @@ interface PCDiningBlocksProps {
 export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
-  const { data: isAuth } = useUser();
+  // const { data: isAuth } = useUser();
   const { currentDate } = useDatePicker();
-  const { dinings, likeDining } = useDinings(currentDate());
+  const { dinings } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -42,19 +38,6 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
     portalManager.open((portalOption: Portal) => (
       <DetailModal dining={dining} closeModal={portalOption.close} />
     ));
-  };
-
-  const handleLikeClick = ({ id, is_liked }: Dining) => {
-    if (!isAuth) {
-      portalManager.open((portalOption: Portal) => (
-        <LoginPromptModal
-          action={() => likeDining(id, is_liked)}
-          closeModal={portalOption.close}
-        />
-      ));
-    } else {
-      likeDining(id, is_liked);
-    }
   };
 
   useEffect(() => {
@@ -101,14 +84,6 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
                 <div key={menuItem.id}>{menuItem.name}</div>
               ))}
             </div>
-            <button
-              type="button"
-              className={styles.content__like}
-              onClick={() => handleLikeClick(dining)}
-            >
-              {dining.is_liked ? <FilledHeartIcon /> : <HeartIcon />}
-              <span className={styles.content__like__count}>{dining.likes === 0 ? '좋아요' : dining.likes.toLocaleString()}</span>
-            </button>
           </div>
         </div>
       ))}
