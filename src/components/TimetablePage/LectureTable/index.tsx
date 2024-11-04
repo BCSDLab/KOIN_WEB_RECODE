@@ -191,7 +191,7 @@ function LectureTable({
                         || headerItem.label === '설계',
                     })}
                     role="cell"
-                    key={`${headerItem.key}value`}
+                    key={headerItem.key}
                   >
                     {headerItem.key === 'professor'
                       && (lecture[headerItem.key] === ''
