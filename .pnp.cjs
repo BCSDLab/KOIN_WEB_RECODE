@@ -48,7 +48,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\
             ["@typescript-eslint/parser", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\
             ["@vitejs/plugin-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.3.1"],\
-            ["axios", "npm:0.27.2"],\
+            ["axios", "npm:1.7.7"],\
             ["dayjs", "npm:1.11.12"],\
             ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
             ["embla-carousel-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -65,8 +65,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["html-react-parser", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.1.10"],\
             ["html2canvas", "npm:1.4.1"],\
             ["jest", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:29.7.0"],\
-            ["josa-js", "npm:0.0.2"],\
-            ["lodash", "npm:4.17.21"],\
             ["postcss", "npm:8.4.47"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:18.2.0"],\
@@ -74,7 +72,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-router-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:6.22.0"],\
             ["react-toastify", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:9.1.3"],\
             ["react-window", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:1.8.10"],\
-            ["recoil", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.7.7"],\
             ["reset-css", "npm:5.0.2"],\
             ["sass", "npm:1.70.0"],\
             ["stylelint", "npm:14.16.1"],\
@@ -85,7 +82,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["vite", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.4.8"],\
             ["vite-plugin-svgr", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.2.0"],\
             ["vite-tsconfig-paths", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.0.1"],\
-            ["web-vitals", "npm:2.1.4"],\
             ["zustand", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.5.2"]\
           ],\
           "linkType": "SOFT"\
@@ -1272,7 +1268,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
             ["@types/axios", null],\
-            ["axios", "npm:0.27.2"]\
+            ["axios", "npm:1.7.7"]\
           ],\
           "packagePeers": [\
             "@types/axios",\
@@ -3706,12 +3702,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["axios", [\
-        ["npm:0.27.2", {\
-          "packageLocation": "./.yarn/cache/axios-npm-0.27.2-dbe3a48aea-38cb754046.zip/node_modules/axios/",\
+        ["npm:1.7.7", {\
+          "packageLocation": "./.yarn/cache/axios-npm-1.7.7-cfbedc233d-882d4fe0ec.zip/node_modules/axios/",\
           "packageDependencies": [\
-            ["axios", "npm:0.27.2"],\
-            ["follow-redirects", "virtual:dbe3a48aea1dd5649e16abaf23d4ae05582d2149e16141955113766a0f84f681baf358c77ddccfc82eb23e4ccc66c6c912df62a9c01f2a83f1842bf86cc297b1#npm:1.15.5"],\
-            ["form-data", "npm:4.0.0"]\
+            ["axios", "npm:1.7.7"],\
+            ["follow-redirects", "virtual:cfbedc233d4c16068d815547ad303dec1092fdb3b8bb4ec9ab9c56bdd55b4e87650c7a525a88805756f4d2819c03abfd96a9983cfa927fedf995d1b8b879db38#npm:1.15.9"],\
+            ["form-data", "npm:4.0.0"],\
+            ["proxy-from-env", "npm:1.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5881,17 +5878,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["follow-redirects", [\
-        ["npm:1.15.5", {\
-          "packageLocation": "./.yarn/cache/follow-redirects-npm-1.15.5-9d14db76ca-5ca49b5ce6.zip/node_modules/follow-redirects/",\
+        ["npm:1.15.9", {\
+          "packageLocation": "./.yarn/cache/follow-redirects-npm-1.15.9-539785d34c-859e2bacc7.zip/node_modules/follow-redirects/",\
           "packageDependencies": [\
-            ["follow-redirects", "npm:1.15.5"]\
+            ["follow-redirects", "npm:1.15.9"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:dbe3a48aea1dd5649e16abaf23d4ae05582d2149e16141955113766a0f84f681baf358c77ddccfc82eb23e4ccc66c6c912df62a9c01f2a83f1842bf86cc297b1#npm:1.15.5", {\
-          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-c3a9c2b13a/0/cache/follow-redirects-npm-1.15.5-9d14db76ca-5ca49b5ce6.zip/node_modules/follow-redirects/",\
+        ["virtual:cfbedc233d4c16068d815547ad303dec1092fdb3b8bb4ec9ab9c56bdd55b4e87650c7a525a88805756f4d2819c03abfd96a9983cfa927fedf995d1b8b879db38#npm:1.15.9", {\
+          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-334ade9a15/0/cache/follow-redirects-npm-1.15.9-539785d34c-859e2bacc7.zip/node_modules/follow-redirects/",\
           "packageDependencies": [\
-            ["follow-redirects", "virtual:dbe3a48aea1dd5649e16abaf23d4ae05582d2149e16141955113766a0f84f681baf358c77ddccfc82eb23e4ccc66c6c912df62a9c01f2a83f1842bf86cc297b1#npm:1.15.5"],\
+            ["follow-redirects", "virtual:cfbedc233d4c16068d815547ad303dec1092fdb3b8bb4ec9ab9c56bdd55b4e87650c7a525a88805756f4d2819c03abfd96a9983cfa927fedf995d1b8b879db38#npm:1.15.9"],\
             ["@types/debug", null],\
             ["debug", null]\
           ],\
@@ -6226,15 +6223,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/graphemer-npm-1.4.0-0627732d35-bab8f0be9b.zip/node_modules/graphemer/",\
           "packageDependencies": [\
             ["graphemer", "npm:1.4.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["hamt_plus", [\
-        ["npm:1.0.2", {\
-          "packageLocation": "./.yarn/cache/hamt_plus-npm-1.0.2-67a52ee1df-af26ea32db.zip/node_modules/hamt_plus/",\
-          "packageDependencies": [\
-            ["hamt_plus", "npm:1.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -7620,15 +7608,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["josa-js", [\
-        ["npm:0.0.2", {\
-          "packageLocation": "./.yarn/cache/josa-js-npm-0.0.2-ebe2648964-15cf3663a0.zip/node_modules/josa-js/",\
-          "packageDependencies": [\
-            ["josa-js", "npm:0.0.2"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["js-sha3", [\
         ["npm:0.8.0", {\
           "packageLocation": "./.yarn/cache/js-sha3-npm-0.8.0-decf3ddcfa-75df77c1fc.zip/node_modules/js-sha3/",\
@@ -7824,7 +7803,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/eslint-plugin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\
             ["@typescript-eslint/parser", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.62.0"],\
             ["@vitejs/plugin-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.3.1"],\
-            ["axios", "npm:0.27.2"],\
+            ["axios", "npm:1.7.7"],\
             ["dayjs", "npm:1.11.12"],\
             ["embla-carousel-autoplay", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
             ["embla-carousel-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:8.0.4"],\
@@ -7850,7 +7829,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-router-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:6.22.0"],\
             ["react-toastify", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:9.1.3"],\
             ["react-window", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:1.8.10"],\
-            ["recoil", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.7.7"],\
             ["reset-css", "npm:5.0.2"],\
             ["sass", "npm:1.70.0"],\
             ["stylelint", "npm:14.16.1"],\
@@ -7861,7 +7839,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["vite", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.4.8"],\
             ["vite-plugin-svgr", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.2.0"],\
             ["vite-tsconfig-paths", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.0.1"],\
-            ["web-vitals", "npm:2.1.4"],\
             ["zustand", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:4.5.2"]\
           ],\
           "linkType": "SOFT"\
@@ -9070,6 +9047,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["proxy-from-env", [\
+        ["npm:1.1.0", {\
+          "packageLocation": "./.yarn/cache/proxy-from-env-npm-1.1.0-c13d07f26b-ed7fcc2ba0.zip/node_modules/proxy-from-env/",\
+          "packageDependencies": [\
+            ["proxy-from-env", "npm:1.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["punycode", [\
         ["npm:2.3.1", {\
           "packageLocation": "./.yarn/cache/punycode-npm-2.3.1-97543c420d-bb0a0ceedc.zip/node_modules/punycode/",\
@@ -9408,37 +9394,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["readdirp", "npm:3.6.0"],\
             ["picomatch", "npm:2.3.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["recoil", [\
-        ["npm:0.7.7", {\
-          "packageLocation": "./.yarn/cache/recoil-npm-0.7.7-4452f58b67-65edecbcb8.zip/node_modules/recoil/",\
-          "packageDependencies": [\
-            ["recoil", "npm:0.7.7"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.7.7", {\
-          "packageLocation": "./.yarn/__virtual__/recoil-virtual-14ad7fb32c/0/cache/recoil-npm-0.7.7-4452f58b67-65edecbcb8.zip/node_modules/recoil/",\
-          "packageDependencies": [\
-            ["recoil", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.7.7"],\
-            ["@types/react", "npm:18.2.55"],\
-            ["@types/react-dom", "npm:18.2.19"],\
-            ["@types/react-native", null],\
-            ["hamt_plus", "npm:1.0.2"],\
-            ["react", "npm:18.2.0"],\
-            ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:18.2.0"],\
-            ["react-native", null]\
-          ],\
-          "packagePeers": [\
-            "@types/react-dom",\
-            "@types/react-native",\
-            "@types/react",\
-            "react-dom",\
-            "react-native",\
-            "react"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -11111,15 +11066,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["walker", "npm:1.0.8"],\
             ["makeerror", "npm:1.0.12"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["web-vitals", [\
-        ["npm:2.1.4", {\
-          "packageLocation": "./.yarn/cache/web-vitals-npm-2.1.4-68bdd9ecb2-03d3f47dbf.zip/node_modules/web-vitals/",\
-          "packageDependencies": [\
-            ["web-vitals", "npm:2.1.4"]\
           ],\
           "linkType": "HARD"\
         }]\
