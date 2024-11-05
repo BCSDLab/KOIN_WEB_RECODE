@@ -51,7 +51,7 @@ export default function DownloadTimetableModal({
   const { timeString } = useTimeString();
 
   return (
-    <div className={styles.background} aria-hidden>
+    <div className={styles.background}>
       <div className={styles.container}>
         <div className={styles.container__header}>
           <div className={styles['container__header--text']}>시간표 저장</div>
