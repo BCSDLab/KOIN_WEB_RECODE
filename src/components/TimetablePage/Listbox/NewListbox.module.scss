@@ -35,11 +35,6 @@
 
     @include media.media-breakpoint(mobile) {
       height: 36px;
-
-      &::after {
-        top: 5px;
-        right: 5px;
-      }
     }
 
     svg {
