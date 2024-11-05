@@ -2,6 +2,7 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
+import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -289,7 +290,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
   required,
 }, ref) => {
   const [currentValue, setCurrentValue] = React.useState<number | null>(null);
-  const [isOpenedPopup, openPopup, closePopup, triggerPopup] = useBooleanState(false);
+  const [isOpenedPopup,, closePopup, triggerPopup] = useBooleanState(false);
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
     const { currentTarget } = event;
     const value = currentTarget.getAttribute('data-value');
@@ -325,13 +326,10 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         [styles.select]: true,
         [styles['select--flex-end']]: true,
       })}
-      onMouseLeave={closePopup}
       onBlur={onBlurSelect}
     >
       <button
         type="button"
-        onMouseOver={openPopup}
-        onFocus={openPopup}
         onClick={triggerPopup}
         name={name}
         className={cn({
@@ -340,6 +338,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         })}
       >
         {currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'}
+        <ChervronUpDown />
       </button>
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">
@@ -417,7 +416,7 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
           onChange={onChangeAllTerms}
           name={name}
         />
-        아래 이용약관에 모두 동의합니다.
+        위 이용약관에 모두 동의합니다.
       </label>
       <label
         className={styles['signup__checkbox-label']}

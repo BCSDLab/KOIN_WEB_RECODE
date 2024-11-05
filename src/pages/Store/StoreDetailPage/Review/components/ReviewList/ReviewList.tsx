@@ -5,7 +5,7 @@ import {
   useCallback, useDeferredValue, useEffect, useRef, useState,
 } from 'react';
 import NoReview from 'assets/svg/Review/no-review.svg';
-import Arrow from 'assets/svg/up-arrow-icon.svg';
+import ChervronUp from 'assets/svg/chervron-up.svg';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import LoginRequiredModal from 'components/common/LoginRequiredModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -118,7 +118,7 @@ export default function ReviewList() {
                     {currentReviewType.current}
                     {' '}
                     <div style={{ transform: openDropdown === 'sort' ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }}>
-                      <Arrow />
+                      <ChervronUp />
                     </div>
                     <div className={styles.wrapper}>
                       {openDropdown === 'sort' && (
