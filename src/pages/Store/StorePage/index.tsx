@@ -12,6 +12,7 @@ import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import { STORE_PAGE } from 'static/store';
+import IntroToolTip from 'components/common/IntroToolTip';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
@@ -25,8 +26,8 @@ type StoreSearchQueryType = {
 };
 
 interface StoreMobileState {
-  sorter: StoreSorterType | '',
-  filter: StoreFilterType[],
+  sorter: StoreSorterType | '';
+  filter: StoreFilterType[];
   storeName?: string;
 }
 
@@ -101,59 +102,70 @@ const useStoreListMobile = (
   filter: StoreFilterType[],
   params: StoreSearchQueryType,
 ) => {
-  const { data: storeListMobile } = useQuery(
-    {
-      queryKey: ['storeListV2', sorter, filter],
-      queryFn: () => api.store.getStoreListV2(
-        sorter,
-        filter,
-      ),
-      retry: 0,
-    },
-  );
+  const { data: storeListMobile } = useQuery({
+    queryKey: ['storeListV2', sorter, filter],
+    queryFn: () => api.store.getStoreListV2(sorter, filter),
+    retry: 0,
+  });
   const selectedCategory = Number(params.category);
 
   return storeListMobile?.shops.filter((store) => {
-    const matchCategory = params.category === undefined || (
-      store.category_ids.some((id) => id === selectedCategory)
-    );
+    const matchCategory = params.category === undefined
+      || store.category_ids.some((id) => id === selectedCategory);
 
     if (params.storeName) return store.name.includes(params.storeName ? params.storeName : '');
-    return matchCategory && store.name.includes(params.storeName ? params.storeName : '');
+    return (
+      matchCategory
+      && store.name.includes(params.storeName ? params.storeName : '')
+    );
   });
 };
 
 const useStoreList = (params: StoreSearchQueryType) => {
-  const { data: storeList } = useQuery(
-    {
-      queryKey: ['storeList', params],
-      queryFn: api.store.getStoreList,
-      retry: 0,
-    },
-  );
+  const { data: storeList } = useQuery({
+    queryKey: ['storeList', params],
+    queryFn: api.store.getStoreList,
+    retry: 0,
+  });
 
   const selectedCategory = Number(params.category);
 
   return storeList?.shops.filter((store) => {
-    const matchCategory = params.category === undefined || (
-      store.category_ids.some((id) => id === selectedCategory)
-    );
+    const matchCategory = params.category === undefined
+      || store.category_ids.some((id) => id === selectedCategory);
     const matchConditions = [];
 
     if (params.delivery !== undefined) {
-      matchConditions.push(store.delivery === searchStorePayCheckBoxFilter(params.delivery));
+      matchConditions.push(
+        store.delivery === searchStorePayCheckBoxFilter(params.delivery),
+      );
     }
     if (params.bank !== undefined) {
-      matchConditions.push(store.pay_bank === searchStorePayCheckBoxFilter(params.bank));
+      matchConditions.push(
+        store.pay_bank === searchStorePayCheckBoxFilter(params.bank),
+      );
     }
     if (params.card !== undefined) {
-      matchConditions.push(store.pay_card === searchStorePayCheckBoxFilter(params.card));
+      matchConditions.push(
+        store.pay_card === searchStorePayCheckBoxFilter(params.card),
+      );
     }
 
-    const isMatchAllSelectedConditions = matchConditions.every((condition) => condition === true);
+    const isMatchAllSelectedConditions = matchConditions.every(
+      (condition) => condition === true,
+    );
 
-    if (params.storeName) return (matchConditions.length === 0 || isMatchAllSelectedConditions) && store.name.includes(params.storeName ? params.storeName : '');
-    return matchCategory && (matchConditions.length === 0 || isMatchAllSelectedConditions) && store.name.includes(params.storeName ? params.storeName : '');
+    if (params.storeName) {
+      return (
+        (matchConditions.length === 0 || isMatchAllSelectedConditions)
+        && store.name.includes(params.storeName ? params.storeName : '')
+      );
+    }
+    return (
+      matchCategory
+      && (matchConditions.length === 0 || isMatchAllSelectedConditions)
+      && store.name.includes(params.storeName ? params.storeName : '')
+    );
   });
 };
 
@@ -162,6 +174,7 @@ function StorePage() {
     sorter: '',
     filter: [],
   });
+  const [isToolTipOpen, setIsToolTipOpen] = React.useState(true);
   const { params, searchParams, setParams } = useParamsHandler();
   const storeList = useStoreList(params);
   const storeListMobile = useStoreListMobile(
@@ -176,14 +189,22 @@ function StorePage() {
 
   const koreanCategory = selectedCategory === -1
     ? '전체보기'
-    : categories?.shop_categories.find((category) => category.id === selectedCategory)?.name || '전체보기';
+    : categories?.shop_categories.find(
+      (category) => category.id === selectedCategory,
+    )?.name || '전체보기';
 
   const loggingCheckbox = (id: string, isChecked: boolean) => {
     if (isChecked) {
-      logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_can', value: `check_${id}_${koreanCategory}` });
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'shop_can',
+        value: `check_${id}_${koreanCategory}`,
+      });
     }
   };
-  const onClickMobileStoreListFilter = (item: StoreSorterType | StoreFilterType) => {
+  const onClickMobileStoreListFilter = (
+    item: StoreSorterType | StoreFilterType,
+  ) => {
     if (item === 'COUNT' || item === 'RATING') {
       setStoreMobileFilterState((prevState) => ({
         ...prevState,
@@ -227,9 +248,16 @@ function StorePage() {
 
   useScrollToTop();
   const storeScrollLogging = () => {
-    const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
+    const currentCategoryId = searchParams.get('category') === undefined
+      ? 0
+      : Number(searchParams.get('category')) - 1;
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_categories', value: `scoll in ${categories?.shop_categories[currentCategoryId]?.name || '전체보기'}`, event_category: 'scroll',
+      actionTitle: 'BUSINESS',
+      title: 'shop_categories',
+      value: `scoll in ${
+        categories?.shop_categories[currentCategoryId]?.name || '전체보기'
+      }`,
+      event_category: 'scroll',
     });
   };
 
@@ -246,12 +274,15 @@ function StorePage() {
     if (sessionStorage.getItem('pushStateCalled')) {
       sessionStorage.removeItem('pushStateCalled');
     }
-    sessionStorage.setItem('cameFrom', categories?.shop_categories[selectedCategory]?.name || '전체보기');
+    sessionStorage.setItem(
+      'cameFrom',
+      categories?.shop_categories[selectedCategory]?.name || '전체보기',
+    );
   }, [categories, selectedCategory]);
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
-      { isMobile && <SearchBar /> }
+      {isMobile && <SearchBar />}
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
@@ -259,8 +290,10 @@ function StorePage() {
             <button
               className={cn({
                 [styles.category__menu]: true,
-                [styles['category__menu--selected']]: category.id === selectedCategory,
-                [styles['category__menu--disabled']]: category.id === 1 && isMobile,
+                [styles['category__menu--selected']]:
+                  category.id === selectedCategory,
+                [styles['category__menu--disabled']]:
+                  category.id === 1 && isMobile,
               })}
               role="radio"
               aria-checked={category.id === selectedCategory}
@@ -271,23 +304,39 @@ function StorePage() {
                   title: 'shop_categories',
                   value: category.name,
                   event_category: 'click',
-                  previous_page: categories?.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '전체보기',
-                  duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
+                  previous_page:
+                    categories?.shop_categories.find(
+                      (item) => item.id === Number(searchParams.get('category')),
+                    )?.name || '전체보기',
+                  duration_time:
+                    (new Date().getTime()
+                      - Number(sessionStorage.getItem('enter_category')))
+                    / 1000,
                   current_page: category.name,
                 });
-                sessionStorage.setItem('enter_category', new Date().getTime().toString());
+                sessionStorage.setItem(
+                  'enter_category',
+                  new Date().getTime().toString(),
+                );
 
-                setParams('category', `${category.id} `, { deleteBeforeParam: false, replacePage: true });
+                setParams('category', `${category.id} `, {
+                  deleteBeforeParam: false,
+                  replacePage: true,
+                });
               }}
               key={category.id}
             >
-              <img className={styles.category__image} src={category.image_url} alt="category_img" />
+              <img
+                className={styles.category__image}
+                src={category.image_url}
+                alt="category_img"
+              />
               <span>{category.name}</span>
             </button>
           ))}
         </div>
       </div>
-      { !isMobile && <SearchBar />}
+      {!isMobile && <SearchBar />}
       <div className={styles.option}>
         <div className={styles.option__count}>
           총
@@ -300,7 +349,10 @@ function StorePage() {
         <div className={styles.option__checkbox}>
           {CHECK_BOX.map((item) => (
             <div key={item.id} className={styles['option-checkbox']}>
-              <label htmlFor={item.id} className={styles['option-checkbox__label']}>
+              <label
+                htmlFor={item.id}
+                className={styles['option-checkbox__label']}
+              >
                 <input
                   id={item.id}
                   type="checkbox"
@@ -320,41 +372,46 @@ function StorePage() {
           ))}
         </div>
       </div>
-      {isMobile && <div className={styles['store-mobile-header']}>상점목록</div>}
+      {isMobile && (
+        <div className={styles['store-mobile-header']}>상점목록</div>
+      )}
       <EventCarousel />
       <div className={styles.filter}>
-        {
-          MOBILE_CHECK_BOX.map((item) => (
-            <button
-              className={cn({
-                [styles.filter__box]: true,
-                [styles['filter__box--activate']]: storeMobileFilterState.sorter.includes(item.id) || (
-                  storeMobileFilterState.filter.includes(item.id as StoreFilterType)
+        {MOBILE_CHECK_BOX.map((item) => (
+          <button
+            className={cn({
+              [styles.filter__box]: true,
+              [styles['filter__box--activate']]:
+                storeMobileFilterState.sorter.includes(item.id)
+                || storeMobileFilterState.filter.includes(
+                  item.id as StoreFilterType,
                 ),
-              })}
-              key={item.value}
-              type="button"
-              onClick={() => onClickMobileStoreListFilter(item.id)}
-            >
-              {item.content}
-            </button>
-          ))
-        }
-      </div>
-      {
-        !isMobile ? (
-          <DesktopStoreList
-            storeListData={storeList}
-            storeType={STORE_PAGE.MAIN}
+            })}
+            key={item.value}
+            type="button"
+            onClick={() => onClickMobileStoreListFilter(item.id)}
+          >
+            {item.content}
+          </button>
+        ))}
+        {isToolTipOpen && (
+          <IntroToolTip
+            content="지금 리뷰가 가장 많은 상점을 확인해보세요!"
+            setCloseState={setIsToolTipOpen}
           />
-        )
-          : (
-            <MobileStoreList
-              storeListData={storeListMobile}
-              storeType={STORE_PAGE.MAIN}
-            />
-          )
-      }
+        )}
+      </div>
+      {!isMobile ? (
+        <DesktopStoreList
+          storeListData={storeList}
+          storeType={STORE_PAGE.MAIN}
+        />
+      ) : (
+        <MobileStoreList
+          storeListData={storeListMobile}
+          storeType={STORE_PAGE.MAIN}
+        />
+      )}
     </div>
   );
 }
