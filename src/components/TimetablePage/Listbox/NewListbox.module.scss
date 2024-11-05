@@ -38,6 +38,8 @@
     }
 
     svg {
+      transform: rotate(360deg);
+      transition: transform 0.3s ease;
       width: 17px;
       height: 17px;
     }
