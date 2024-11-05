@@ -2,7 +2,7 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import UpDownArrowIcon from 'assets/svg/up-down-arrow-icon.svg';
+import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -338,7 +338,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         })}
       >
         {currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'}
-        <UpDownArrowIcon />
+        <ChervronUpDown />
       </button>
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">
