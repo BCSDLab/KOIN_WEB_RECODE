@@ -38,7 +38,7 @@
 
   @include media.media-breakpoint(mobile) {
     justify-content: center;
-    width: calc(100% - 34px);
+    width: 100%;
     padding: 10px 0 14px;
     margin-left: auto;
     margin-right: auto;
@@ -71,7 +71,7 @@
     width: calc(100% - 182px);
 
     @include media.media-breakpoint(mobile) {
-      width: 330px;
+      width: 100%;
     }
   }
 
@@ -99,7 +99,7 @@
       width: 100%;
 
       @include media.media-breakpoint(mobile) {
-        font-size: 14px;
+        font-size: 10px;
         font-weight: 400;
       }
     }
@@ -134,8 +134,8 @@
     margin: 0 auto 13px;
 
     @include media.media-breakpoint(mobile) {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
     }
   }
 }
