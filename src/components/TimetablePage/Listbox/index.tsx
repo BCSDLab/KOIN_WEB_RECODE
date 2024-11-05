@@ -69,8 +69,8 @@ function Listbox({
           [styleClasses['select__trigger--selected-add-lecture--opened']]: isOpenedPopup && version === 'addLecture',
         })}
       >
-        {value !== null ? list.find((item) => item.value === value)?.label : '학부'}
-        {version !== 'default' ? <DownArrowIcon /> : <UpDownArrowIcon />}
+        {value === null ? '학부' : list.find((item) => item.value === value)?.label}
+        {version === 'default' ? <UpDownArrowIcon /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
         <ul
