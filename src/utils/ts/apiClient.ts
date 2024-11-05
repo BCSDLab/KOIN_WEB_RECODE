@@ -9,7 +9,7 @@ import { useTokenStore } from 'utils/zustand/auth';
 import { deleteCookie, setCookie } from './cookie';
 import { redirectToLogin } from './auth';
 
-const API_URL = import.meta.env.VITE_API_PATH;
+const API_URL = process.env.REACT_APP_API_PATH;
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -133,20 +133,27 @@ export default class APIClient {
     };
   }
 
+  private getContentType<U extends APIResponse>(request: APIRequest<U>): string {
+    if (request.bodyType === 'multipart') {
+      return 'multipart/form-data';
+    }
+    return 'application/json';
+  }
+
   // Create headers
   private createHeaders<U extends APIResponse>(request: APIRequest<U>): any {
     const headers: Record<string, string> = {};
+
     // 인증 토큰 삽입
     if (request.authorization) {
       headers.Authorization = `Bearer ${request.authorization}`;
     }
-
     // json body 사용
     if (
       request.method === HTTP_METHOD.POST
       || request.method === HTTP_METHOD.PUT
     ) {
-      headers['Content-Type'] = 'application/json';
+      headers['Content-Type'] = this.getContentType(request);
     }
 
     // 기타 헤더 삽입

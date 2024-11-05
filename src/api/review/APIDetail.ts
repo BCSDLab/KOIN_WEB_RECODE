@@ -1,4 +1,4 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { APIRequest, HTTP_METHOD, BODY_TYPE } from 'interfaces/APIRequest';
 import { ReviewRequest, ReviewResponse, UploadImage } from './entity';
 
 export class GetStoreReview<R extends ReviewResponse> implements APIRequest<R> {
@@ -57,6 +57,8 @@ export class UploadFile<R extends UploadImage> implements APIRequest<R> {
   path = 'SHOPS/upload/file';
 
   auth = true;
+
+  bodyType = BODY_TYPE.MULTIPART;
 
   data: FormData;
 
