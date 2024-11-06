@@ -66,7 +66,7 @@ export default function EventCarousel() {
           <div className={styles.swipe}>
             {carouselList.map((item) => (
               <Link
-                to={`${ROUTES.StoreDetail({ id: String(item.shop_id), isLink: true })}?state=메뉴`}
+                to={`${ROUTES.StoreDetail({ id: String(item.shop_id), isLink: true })}?state=이벤트/공지`}
                 key={item.event_id}
                 className={styles['swipe-item']}
                 onClick={() => eventLogging(item.shop_name)}
@@ -96,6 +96,15 @@ export default function EventCarousel() {
               <div className={styles['swipe-item']}>
                 <div className={styles['swipe-item__empty-image']}>
                   <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
+                </div>
+                <div className={styles['swipe-item__text']}>
+                  <div>
+                    <span className={styles['swipe-item__name']}>
+                      코인
+                    </span>
+                    {' 에서'}
+                  </div>
+                  <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>
                 </div>
               </div>
             )
