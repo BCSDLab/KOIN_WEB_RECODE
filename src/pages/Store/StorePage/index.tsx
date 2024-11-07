@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import * as api from 'api';
 import { cn } from '@bcsdlab/utils';
@@ -13,6 +13,9 @@ import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList'
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import { STORE_PAGE } from 'static/store';
 import IntroToolTip from 'components/common/IntroToolTip';
+import AscSelectArrow from 'assets/svg/store-filter-arrow-asc-select.svg';
+import DescSelectArrow from 'assets/svg/store-filter-arrow-desc-select.svg';
+import DescArrow from 'assets/svg/store-filter-arrow-desc.svg';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
@@ -40,12 +43,12 @@ interface MobileCheckBoxItem {
 const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
   {
     id: 'COUNT',
-    content: '# 리뷰순',
+    content: '리뷰순',
     value: 1,
   },
   {
     id: 'RATING',
-    content: '# 별점순',
+    content: '별점순',
     value: 2,
   },
   {
@@ -186,6 +189,10 @@ function StorePage() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const selectedCategory = Number(searchParams.get('category')) ?? -1;
+  const [filterSortingState, setFilterSortingState] = useState({
+    COUNT: false,
+    RATING: false,
+  });
 
   const koreanCategory = selectedCategory === -1
     ? '전체보기'
@@ -210,6 +217,11 @@ function StorePage() {
         ...prevState,
         sorter: item,
       }));
+      setFilterSortingState((preFilterSortingState) => ({
+        COUNT: item === 'COUNT' ? !preFilterSortingState.COUNT : false,
+        RATING: item === 'RATING' ? !preFilterSortingState.RATING : false,
+      }));
+
       if (storeMobileFilterState.sorter !== item) {
         logger.actionEventClick({
           actionTitle: 'BUSINESS',
@@ -264,7 +276,18 @@ function StorePage() {
   useScorllLogging(storeScrollLogging);
 
   const enterCategoryTimeRef = useRef<number | null>(null);
+  const handleIcon = (item: MobileCheckBoxItem) => {
+    if (item.id === 'COUNT' || item.id === 'RATING') {
+      const isSelected = storeMobileFilterState.sorter === item.id;
 
+      if (isSelected) {
+        return filterSortingState[item.id] ? <DescSelectArrow /> : <AscSelectArrow />;
+      }
+
+      return <DescArrow />;
+    }
+    return null;
+  };
   useEffect(() => {
     if (enterCategoryTimeRef.current === null) {
       const currentTime = new Date().getTime();
@@ -391,6 +414,7 @@ function StorePage() {
             type="button"
             onClick={() => onClickMobileStoreListFilter(item.id)}
           >
+            {handleIcon(item)}
             {item.content}
           </button>
         ))}
@@ -408,7 +432,8 @@ function StorePage() {
         />
       ) : (
         <MobileStoreList
-          storeListData={storeListMobile}
+          storeListData={filterSortingState.COUNT || filterSortingState.RATING
+            ? storeListMobile : storeListMobile?.reverse()}
           storeType={STORE_PAGE.MAIN}
         />
       )}
