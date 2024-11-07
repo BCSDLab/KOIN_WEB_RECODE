@@ -1,13 +1,7 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import {
-  LectureInfo, TimetableDayLectureInfo, TimetableLectureInfoV2,
-} from 'interfaces/Lecture';
-import {
-  BORDER_TOP_COLOR,
-  BACKGROUND_COLOR,
-  DAYS_STRING,
-} from 'static/timetable';
+import { LectureInfo, TimetableDayLectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import { useLocation } from 'react-router-dom';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
@@ -50,16 +44,17 @@ function Timetable({
   forDownload,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
-  const [isMouseOver, setIsMouseOver] = React.useState('');
   const { pathname } = useLocation();
-  const isEditable = pathname.includes('/timetable/modify');
-  const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
   const { myLecturesV2 } = useMyLecturesV2(frameId);
+  const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
+  const { timeString, setTimeString } = useTimeString();
+  const [isMouseOver, setIsMouseOver] = useState('');
+  const isEditable = pathname.includes('/timetable/modify');
   const tempLecture = useTempLecture();
   const customTempLecture = useCustomTempLecture();
   const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
   const customDayValue = useTimetableDayListV2(customTempLectureArray);
-  const { timeString, setTimeString } = useTimeString();
+
   const handleRemoveLectureClick = ({
     lecture_class, professor, id, name,
   }: RemoveLectureProps) => {
@@ -78,6 +73,7 @@ function Timetable({
       removeMyLectureV2.mutate({ clickedLecture: lectureToRemove, id: lectureId });
     }
   };
+
   const findMaxTime = (myTimetableLectures: TimetableDayLectureInfo[][] | undefined) => {
     let maxTime = 19;
     if (myTimetableLectures !== undefined) {
@@ -88,8 +84,10 @@ function Timetable({
         }
       });
     }
+
     return maxTime;
   };
+
   const updateTimeString = (maxTime: number) => {
     const startHour = 9;
     const timeArray = [];
@@ -100,12 +98,22 @@ function Timetable({
 
     return timeArray;
   };
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-  React.useEffect(() => {
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const cellRef = useRef<{ element: HTMLDivElement, key: number }[]>([]);
+
+  const isCellOverflowing = (index: number) => {
+    const height = cellRef?.current?.find(({ key }) => key === index)?.element?.offsetHeight;
+
+    return (height || 0) > rowHeight * 2;
+  };
+
+  useEffect(() => {
     const fixedMaxTime = findMaxTime(lectures);
     let maxTime = 0;
     let minimumTime = 999;
     const myLectureClassTime = tempLecture?.class_time ?? customTempLecture?.class_time.flat();
+
     if (myLectureClassTime) {
       const classTimeArr = myLectureClassTime.map((time) => time % 100);
       maxTime = Math.max(...classTimeArr);
@@ -163,6 +171,7 @@ function Timetable({
           </div>
         ))}
       </div>
+
       <div
         className={styles.timetable__content}
         ref={scrollRef}
@@ -180,10 +189,7 @@ function Timetable({
           ))}
         </div>
         <div
-          className={cn({
-            [styles.timetable__col]: true,
-            [styles['timetable__col--time']]: true,
-          })}
+          className={styles.timetable__col}
           style={{
             width: `${firstColumnWidth}px`,
             fontSize: `${rowHeight / 2}px`,
@@ -207,6 +213,7 @@ function Timetable({
             </div>
           ))}
         </div>
+
         {DAYS_STRING.map((day, index) => (
           <div
             className={styles.timetable__col}
@@ -229,8 +236,13 @@ function Timetable({
                 id,
               }) => (
                 <div
-                  className={styles.timetable__lecture}
                   key={lectureIndex}
+                  ref={(el) => {
+                    if (el && !cellRef?.current?.find(({ key }) => key === lectureIndex)) {
+                      cellRef.current.push({ element: el, key: lectureIndex });
+                    }
+                  }}
+                  className={styles.timetable__lecture}
                   style={
                     {
                       backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 15]}`,
@@ -260,32 +272,39 @@ function Timetable({
                     </div>
                   )}
                   <div
+                    className={styles['timetable__lecture-name']}
                     style={{
                       fontSize: `${rowHeight / 3 + 1}px`,
-                      fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
+                      minHeight: `${isCellOverflowing(lectureIndex) ? rowHeight : rowHeight / 2}px`,
+                      WebkitLineClamp: isCellOverflowing(lectureIndex) ? 2 : 1,
                     }}
                   >
                     {name}
                   </div>
+
                   <span
+                    className={styles['timetable__lecture-professor']}
                     style={{
                       fontSize: `${rowHeight / 3 + 1}px`,
-                      fontWeight: '400',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
+                      height: `${rowHeight / 2}px`,
+                      minHeight: `${isCellOverflowing(lectureIndex) ? rowHeight : rowHeight / 2}px`,
+                      WebkitLineClamp: isCellOverflowing(lectureIndex) ? 2 : 1,
                     }}
                   >
                     {lecture_class}
                     {` ${professor}`}
                   </span>
                   <div
+                    className={styles['timetable__lecture-place']}
                     style={{
+                      display: `${isCellOverflowing(lectureIndex) ? '-webkit-box' : 'none'}`,
                       fontSize: `${rowHeight / 3 - 1}px`,
-                      fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
+                      height: `${rowHeight / 2}px`,
+                      minHeight: `${isCellOverflowing(lectureIndex) ? rowHeight : rowHeight / 2}px`,
+                      WebkitLineClamp: isCellOverflowing(lectureIndex) ? 2 : 1,
                     }}
                   >
                     {class_place}
@@ -351,9 +370,9 @@ function Timetable({
                       fontSize: `${rowHeight / 3 + 1}px`,
                       fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
                     }}
                   >
+
                     {name}
                   </div>
                   <span
@@ -361,7 +380,6 @@ function Timetable({
                       fontSize: `${rowHeight / 3 + 1}px`,
                       fontWeight: '400',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
                     }}
                   >
                     {professor}
@@ -371,7 +389,6 @@ function Timetable({
                       fontSize: `${rowHeight / 3 - 1}px`,
                       fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
                     }}
                   >
                     {class_place}
