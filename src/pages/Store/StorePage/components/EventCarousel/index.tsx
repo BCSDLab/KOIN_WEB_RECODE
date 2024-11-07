@@ -26,7 +26,8 @@ function EventCarouselWrapper({ children }: WrapperProps) {
     },
     [Autoplay(
       {
-        stopOnInteraction: true,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true,
         delay: 4000,
       },
     )],
