@@ -4,6 +4,10 @@
 .carousel {
   display: flex;
   align-items: center;
+
+  @include media.media-breakpoint(mobile) {
+    position: relative;
+  }
 }
 
 .container {
@@ -131,10 +135,39 @@
     width: 50px;
   }
   &--next {
-    transform: rotate(180deg);
     & > svg > path {
       fill: #CACACA;
     }
     width: 50px;
+  }
+}
+
+.pagination {
+  position: absolute;
+  right: 8%;
+  bottom: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  background: #4B4B4B99;
+  width: 64px;
+  height: 20px;
+  border-radius: 16px;
+  font-size: 10px;
+}
+
+.pagination-button {
+  &--prev {
+    & > svg > path {
+      fill: #fff;
+    }
+  }
+
+  &--next {
+    & > svg > path {
+      fill: #fff;
+    }
   }
 }
