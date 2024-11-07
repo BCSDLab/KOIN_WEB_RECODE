@@ -56,6 +56,10 @@ function EventCarouselWrapper({ children }: WrapperProps) {
     setCanPrevClick(emblaApi.canScrollPrev());
     setCanNextClick(emblaApi.canScrollNext());
     emblaApi.on('slidesInView', updateIndex);
+    // eslint-disable-next-line
+    return () => { // 클린업 함수 사용을 위해 off
+      emblaApi.off('slidesInView', updateIndex);
+    };
   }, [emblaApi, updateIndex]);
 
   return (
