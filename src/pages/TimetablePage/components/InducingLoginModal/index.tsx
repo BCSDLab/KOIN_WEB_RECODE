@@ -17,7 +17,7 @@ function InducingLoginModal({ actionTitle, detailExplanation, onClose }: Inducin
   };
 
   return (
-    <div className={styles.background} aria-hidden>
+    <div className={styles.background}>
       <div className={styles.container}>
         <div className={styles.container__title}>
           {`${actionTitle} 시 ` }
