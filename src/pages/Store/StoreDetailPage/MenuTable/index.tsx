@@ -127,7 +127,14 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
             ) : (
               menu.option_prices.map((item) => (
                 <div className={styles['menu-info']} key={menu.id + item.option + item.price}>
-                  {menu.image_urls.length > 0 ? (
+                  <div className={styles['menu-info__card']}>
+                    <span>{`${menu.name} - ${item.option}`}</span>
+                    <span>
+                      {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                      원
+                    </span>
+                  </div>
+                  {menu.image_urls.length > 0 && (
                     <div key={`${menu.id}`} className={styles.image}>
                       <button
                         className={styles.image__button}
@@ -137,20 +144,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                         <img src={`${menu.image_urls[0]}`} alt={`${menu.name}`} />
                       </button>
                     </div>
-                  ) : (
-                    <div className={styles['empty-image']}>
-                      <div>
-                        <EmptyImageIcon />
-                      </div>
-                    </div>
                   )}
-                  <div className={styles['menu-info__card']}>
-                    <span>{`${menu.name} - ${item.option}`}</span>
-                    <span>
-                      {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                      원
-                    </span>
-                  </div>
                 </div>
               ))
             )
