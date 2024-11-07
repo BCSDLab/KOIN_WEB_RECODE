@@ -130,14 +130,17 @@
 .carousel-button {
   &--prev {
     & > svg > path {
-      fill: #CACACA;
+      fill: #cacaca;
     }
+
     width: 50px;
   }
+
   &--next {
     & > svg > path {
-      fill: #CACACA;
+      fill: #cacaca;
     }
+
     width: 50px;
   }
 }
@@ -151,7 +154,7 @@
   justify-content: center;
   gap: 8px;
   color: #fff;
-  background: #4B4B4B99;
+  background: #4b4b4b99;
   width: 64px;
   height: 20px;
   border-radius: 16px;
