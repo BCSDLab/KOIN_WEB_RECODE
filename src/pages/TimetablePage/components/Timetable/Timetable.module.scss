@@ -2,6 +2,7 @@
 
 @mixin lecture-styles {
   overflow: hidden;
+  /* stylelint-disable value-no-vendor-prefix */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
@@ -163,16 +164,19 @@
 
   &__lecture-name {
     @include lecture-styles;
+
     font-weight: 500;
   }
 
   &__lecture-professor {
     @include lecture-styles;
+
     font-weight: 400;
   }
 
   &__lecture-place {
     @include lecture-styles;
+
     font-weight: 500;
   }
 }
