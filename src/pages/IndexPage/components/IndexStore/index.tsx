@@ -47,7 +47,7 @@ function IndexStore() {
     });
     navigate(`${ROUTES.Store()}?category=${category.id}`);
   };
-  const hadleStoreClick = () => {
+  const handleStoreClick = () => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'main_shop_benefit',
@@ -77,7 +77,7 @@ function IndexStore() {
               <button
                 type="button"
                 className={styles['store-branch-button']}
-                onClick={() => hadleStoreClick()}
+                onClick={() => handleStoreClick()}
               >
                 <img className={styles['store-branch-button__icon']} src="https://team-kap-koin-storage.s3.ap-northeast-2.amazonaws.com/assets/img/icon/call_icon.png" alt="이미지 오류" />
                 전화 주문 혜택
@@ -87,8 +87,9 @@ function IndexStore() {
           : categories?.shop_categories.slice(isMobile ? 1 : 0, 12).map((category) => (
             category.name === '전체보기' && ABView === 'B' ? (
               <div
+                key={category.id}
                 className={styles.category__benefit}
-                onClick={() => hadleStoreClick()}
+                onClick={() => handleStoreClick()}
                 aria-hidden
               >
                 <img
