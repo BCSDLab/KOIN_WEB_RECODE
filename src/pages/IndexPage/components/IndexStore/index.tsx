@@ -79,6 +79,7 @@ function IndexStore() {
           : categories?.shop_categories.slice(0, 12).map((category) => (
             category.name === '전체보기' ? (
               <div
+                key={category.id}
                 className={styles.category__benefit}
                 onClick={() => handleStoreClick()}
                 aria-hidden
