@@ -127,6 +127,11 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       );
       return;
     }
+    const isContainComma = timeSpaceComponents.some((item) => item.place.includes(','));
+    if (isContainComma) {
+      showToast('error', '쉼표 문자 ( , )를 제외하고 입력해 주세요.');
+      return;
+    }
     addMyLectureV2(customTempLecture!);
     setLectureName('');
     setProfessorName('');
