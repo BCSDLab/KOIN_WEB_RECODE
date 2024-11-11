@@ -313,7 +313,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             <div className={styles['inputbox__name--block']} />
             <input
               type="text"
-              placeholder="교수명을 입력하세요"
+              placeholder="교수명을 입력하세요."
               value={professorName}
               onChange={(e) => setProfessorName(e.target.value)}
               autoComplete="off"
@@ -412,7 +412,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                 <div className={styles['inputbox__name--block']} />
                 <input
                   type="text"
-                  placeholder="장소를 입력하세요."
+                  placeholder="장소를 입력하세요. (쉼표(,) 제외)"
                   value={place}
                   onChange={(e) => handlePlaceName(e.target.value, index)}
                   autoComplete="off"
