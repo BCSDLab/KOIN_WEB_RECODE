@@ -4,7 +4,7 @@ import * as api from 'api';
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import Close from 'assets/svg/close-icon.svg';
+import Close from 'assets/svg/close-icon-20x20.svg';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';

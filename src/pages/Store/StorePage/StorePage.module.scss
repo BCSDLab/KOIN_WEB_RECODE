@@ -240,20 +240,22 @@
   top: 25px;
   left: -8px;
   display: flex;
-  width: 230px;
+  width: 225px;
   text-align: center;
-  height: 28px;
+  height: 20px;
   border-radius: 8px;
   background: #4B4B4B;
   padding: 8px 12px;
 
   &__content {
     font-family: Pretendard;
+    margin-top: 2px;
     font-size: 12px;
     font-weight: 500;
-    line-height: 20px;
+    line-height: 19.2px;
     display: flex;
     align-items: center;
+    white-space: nowrap;
     text-align: left;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
@@ -262,10 +264,17 @@
   }
 
   &__close {
-    width: 20px;
-    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 20;
   }
+
+  &__close svg {
+    width: 20px;
+    height: 20px;
+  }
+
 
   &__tail {
     position: absolute;
