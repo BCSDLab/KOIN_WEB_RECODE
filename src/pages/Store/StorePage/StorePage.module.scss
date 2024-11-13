@@ -248,7 +248,6 @@
   padding: 8px 12px;
 
   &__content {
-    font-family: Pretendard;
     margin-top: 2px;
     font-size: 12px;
     font-weight: 500;
@@ -259,7 +258,7 @@
     text-align: left;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
-    color: #FFFFFF;
+    color: #FFF;
     border: none;
   }
 
@@ -274,7 +273,6 @@
     width: 20px;
     height: 20px;
   }
-
 
   &__tail {
     position: absolute;
