@@ -174,9 +174,10 @@
   &__checkbox {
     margin-left: auto;
     display: flex;
+    position: relative;
     width: auto;
 
-    :nth-child(3) {
+    :nth-child(4) {
       margin-right: 0;
     }
 
@@ -230,6 +231,46 @@
       background-image: url("https://static.koreatech.in/assets/img/check.png");
       background-size: cover;
     }
+  }
+}
+
+.tooltip {
+  z-index: 10;
+  position: absolute;
+  top: 25px;
+  left: -8px;
+  display: flex;
+  width: 230px;
+  text-align: center;
+  height: 28px;
+  border-radius: 8px;
+  background: #4B4B4B;
+  padding: 8px 12px;
+
+  &__content {
+    font-family: Pretendard;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: #FFFFFF;
+    border: none;
+  }
+
+  &__close {
+    width: 20px;
+    height: 20px;
+    z-index: 20;
+  }
+
+  &__tail {
+    position: absolute;
+    top: -10px;
+    left: 8px;
   }
 }
 
