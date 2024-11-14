@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -25,7 +25,9 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
   const navigate = useNavigate();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
   useEscapeKeyDown({ onEscape: onClose });
-
+  useEffect(() => {
+    storeRef.current?.focus();
+  }, []);
   return (
     <div className={styles['search-bar-modal__background']} ref={backgroundRef}>
       <div className={styles['search-bar-modal__container']}>
