@@ -26,6 +26,7 @@ type StoreSearchQueryType = {
   delivery?: string;
   bank?: string;
   card?: string;
+  shopIds?: string;
 };
 
 interface StoreMobileState {
@@ -116,7 +117,12 @@ const useStoreListMobile = (
     const matchCategory = params.category === undefined
       || store.category_ids.some((id) => id === selectedCategory);
 
-    if (params.storeName) return store.name.includes(params.storeName ? params.storeName : '');
+    if (!params.shopIds && params.storeName) return store.name.includes(params.storeName ? params.storeName : '');
+    // 메뉴검색시 메뉴를 가진 가게를 반환
+    if (params.shopIds) {
+      const shopIdsArr = params.shopIds.split(',').map(Number);
+      return shopIdsArr.includes(store.id);
+    }
     return (
       matchCategory
       && store.name.includes(params.storeName ? params.storeName : '')
@@ -134,6 +140,10 @@ const useStoreList = (params: StoreSearchQueryType) => {
   const selectedCategory = Number(params.category);
 
   return storeList?.shops.filter((store) => {
+    if (params.shopIds) {
+      const shopIdsArr = params.shopIds.split(',').map(Number);
+      return shopIdsArr.includes(store.id);
+    }
     const matchCategory = params.category === undefined
       || store.category_ids.some((id) => id === selectedCategory);
     const matchConditions = [];
@@ -158,7 +168,7 @@ const useStoreList = (params: StoreSearchQueryType) => {
       (condition) => condition === true,
     );
 
-    if (params.storeName) {
+    if (!params.shopIds && params.storeName) {
       return (
         (matchConditions.length === 0 || isMatchAllSelectedConditions)
         && store.name.includes(params.storeName ? params.storeName : '')
