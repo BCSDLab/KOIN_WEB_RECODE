@@ -15,6 +15,7 @@ import {
   StoreSorterType,
   StoreFilterType,
   MyReviewResponse,
+  RelatedSearchResponse,
 } from './entity';
 
 export class StoreList<R extends StoreListResponse> implements APIRequest<R> {
@@ -35,12 +36,14 @@ export class StoreListV2<R extends StoreListV2Response> implements APIRequest<R>
   params: {
     sorter?: StoreSorterType,
     filter?: StoreFilterType[],
+    query?: string,
   };
 
-  constructor(sorter: StoreSorterType, filter: StoreFilterType[]) {
+  constructor(sorter: StoreSorterType, filter: StoreFilterType[], query: string | undefined) {
     this.params = {
       sorter,
       filter,
+      query,
     };
   }
 }
@@ -177,5 +180,17 @@ export class ReviewReport<R extends ReviewReportResponse> implements APIRequest<
   ) {
     this.path = `/shops/${shop_id}/reviews/${review_id}/reports`;
     this.data = data;
+  }
+}
+
+export class GetRelatedSearchItem<R extends RelatedSearchResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/shops/search/related/:query';
+
+  response!: R;
+
+  constructor(query: string) {
+    this.path = `/shops/search/related/${query}`;
   }
 }

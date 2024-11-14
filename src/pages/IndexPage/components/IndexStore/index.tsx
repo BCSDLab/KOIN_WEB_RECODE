@@ -45,7 +45,7 @@ function IndexStore() {
       current_page: category.name,
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     });
-    navigate(`${ROUTES.Store()}?category=${category.id}`);
+    navigate(`${ROUTES.Store()}?category=${category.id}&COUNT=1`);
   };
   const hadleStoreClick = () => {
     logger.actionEventClick({
