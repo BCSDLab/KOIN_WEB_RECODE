@@ -209,3 +209,13 @@ export interface ReviewReportRequest {
 }
 
 export interface ReviewReportResponse extends APIResponse { }
+
+export interface RelatedSearchResponse extends APIResponse {
+  keywords: RelatedSearchItem[]
+}
+
+export interface RelatedSearchItem {
+  keyword: string,
+  shop_ids: string[],
+  shop_id: string
+}

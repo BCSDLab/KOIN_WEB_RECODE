@@ -7,6 +7,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { STORE_PAGE } from 'static/store';
 import { useEffect } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import EventCarousel from 'pages/Store/StorePage/components/EventCarousel';
 import styles from './StoreBenefitPage.module.scss';
 // eslint-disable-next-line no-restricted-imports
 import MobileStoreList from '../StorePage/components/MobileStoreList';
@@ -90,6 +91,7 @@ function StoreBenefitPage() {
               </div>
             </div>
           )}
+        {isMobile && <EventCarousel />}
         {isMobile
           ? (
             <MobileStoreList

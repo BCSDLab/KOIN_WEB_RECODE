@@ -94,6 +94,7 @@
       padding-bottom: 20px;
 
       @include media.media-breakpoint(mobile) {
+        padding-top: 7px;
         padding-bottom: 12px;
         width: 250px;
         overflow: hidden;
