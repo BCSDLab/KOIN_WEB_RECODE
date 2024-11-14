@@ -7,7 +7,7 @@ import ROUTES from 'static/routes';
 import {
   useCallback, useEffect, useState,
 } from 'react';
-import ArrowLeft from 'assets/svg/left-angle-bracket.svg';
+import LeftBracket from 'assets/svg/left-angle-bracket.svg';
 import RightBracket from 'assets/svg/right-angle-bracket.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './EventCarousel.module.scss';
@@ -40,14 +40,11 @@ function EventCarouselWrapper({ children }: WrapperProps) {
       setCurrentIndex(emblaApi.selectedScrollSnap());
     }
   }, [emblaApi]);
-  const scrollPrev = useCallback(() => {
+
+  const scrollTo = useCallback((direction: 'prev' | 'next') => {
     if (emblaApi) {
-      emblaApi.scrollPrev();
-    }
-  }, [emblaApi]);
-  const scrollNext = useCallback(() => {
-    if (emblaApi) {
-      emblaApi.scrollNext();
+      if (direction === 'next') emblaApi.scrollNext();
+      if (direction === 'prev')emblaApi.scrollPrev();
     }
   }, [emblaApi]);
 
@@ -69,10 +66,10 @@ function EventCarouselWrapper({ children }: WrapperProps) {
           // eslint-disable-next-line
           <button
             type="button"
-            onClick={scrollPrev}
+            onClick={() => scrollTo('prev')}
             className={styles['carousel-button--prev']}
           >
-            <ArrowLeft />
+            <LeftBracket />
           </button>
         )
       }
@@ -86,7 +83,7 @@ function EventCarouselWrapper({ children }: WrapperProps) {
           // eslint-disable-next-line
           <button
             type="button"
-            onClick={scrollNext}
+            onClick={() => scrollTo('next')}
             className={styles['carousel-button--next']}
           >
             <RightBracket />
@@ -99,10 +96,10 @@ function EventCarouselWrapper({ children }: WrapperProps) {
             { // eslint-disable-next-line
               <button
                 type="button"
-                onClick={scrollPrev}
+                onClick={() => scrollTo('prev')}
                 className={styles['pagination-button--prev']}
               >
-                <ArrowLeft />
+                <LeftBracket />
               </button>
             }
             {currentIndex + 1}
@@ -111,7 +108,7 @@ function EventCarouselWrapper({ children }: WrapperProps) {
             { // eslint-disable-next-line
             <button
               type="button"
-              onClick={scrollNext}
+              onClick={() => scrollTo('next')}
               className={styles['pagination-button--next']}
             >
               <RightBracket />
