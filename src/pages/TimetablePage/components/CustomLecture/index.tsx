@@ -130,6 +130,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       );
       return;
     }
+
     addMyLectureV2(customTempLecture!);
     setLectureName('');
     setProfessorName('');

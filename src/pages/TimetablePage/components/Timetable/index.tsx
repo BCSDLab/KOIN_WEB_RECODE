@@ -54,7 +54,6 @@ function Timetable({
   const customTempLecture = useCustomTempLecture();
   const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
   const customDayValue = useTimetableDayListV2(customTempLectureArray);
-
   const handleRemoveLectureClick = ({
     lecture_class, professor, id, name,
   }: RemoveLectureProps) => {
@@ -100,12 +99,28 @@ function Timetable({
   };
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const cellRef = useRef<{ element: HTMLDivElement, key: number }[]>([]);
 
-  const isCellOverflowing = (index: number) => {
-    const height = cellRef?.current?.find(({ key }) => key === index)?.element?.offsetHeight;
+  const calculateMinHeight = (block: number, kind: string) => {
+    if (block === 1) return kind === 'name' ? rowHeight / 2 : 0;
 
-    return (height || 0) > rowHeight * 2;
+    if (block === 2) return (kind === 'name' || kind === 'professor') ? rowHeight / 2 : 0;
+
+    if (block === 3) {
+      if (kind === 'name' || kind === 'professor' || kind === 'place') return rowHeight / 2;
+      if (kind === 'name') return rowHeight;
+    }
+
+    return rowHeight;
+  };
+
+  const calculateLineClamp = (block: number, kind: string, hasLocation: boolean) => {
+    if (block === 1) return kind === 'name' ? 1 : 0;
+
+    if (block === 2) return (kind === 'name' || kind === 'professor') ? 1 : 0;
+
+    if (block === 3) return hasLocation ? 1 : 2;
+
+    return 2;
   };
 
   useEffect(() => {
@@ -237,11 +252,6 @@ function Timetable({
               }) => (
                 <div
                   key={lectureIndex}
-                  ref={(el) => {
-                    if (el && !cellRef?.current?.find(({ key }) => key === lectureIndex)) {
-                      cellRef.current.push({ element: el, key: lectureIndex });
-                    }
-                  }}
                   className={styles.timetable__lecture}
                   style={
                     {
@@ -276,8 +286,8 @@ function Timetable({
                     style={{
                       fontSize: `${rowHeight / 3 + 1}px`,
                       lineHeight: `${rowHeight / 2}px`,
-                      minHeight: `${isCellOverflowing(lectureIndex) ? rowHeight : rowHeight / 2}px`,
-                      WebkitLineClamp: isCellOverflowing(lectureIndex) ? 2 : 1,
+                      minHeight: `${calculateMinHeight((end - start + 1), 'name')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'name', !!class_place),
                     }}
                   >
                     {name}
@@ -289,8 +299,8 @@ function Timetable({
                       fontSize: `${rowHeight / 3 + 1}px`,
                       lineHeight: `${rowHeight / 2}px`,
                       height: `${rowHeight / 2}px`,
-                      minHeight: `${isCellOverflowing(lectureIndex) ? rowHeight : rowHeight / 2}px`,
-                      WebkitLineClamp: isCellOverflowing(lectureIndex) ? 2 : 1,
+                      minHeight: `${calculateMinHeight((end - start + 1), 'professor')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'professor', !!class_place),
                     }}
                   >
                     {lecture_class}
@@ -299,12 +309,12 @@ function Timetable({
                   <div
                     className={styles['timetable__lecture-place']}
                     style={{
-                      display: `${isCellOverflowing(lectureIndex) ? '-webkit-box' : 'none'}`,
+                      display: `${(end - start + 1) > 2 ? '-webkit-box' : 'none'}`,
                       fontSize: `${rowHeight / 3 - 1}px`,
                       lineHeight: `${rowHeight / 2}px`,
                       height: `${rowHeight / 2}px`,
-                      minHeight: `${isCellOverflowing(lectureIndex) ? rowHeight : rowHeight / 2}px`,
-                      WebkitLineClamp: isCellOverflowing(lectureIndex) ? 2 : 1,
+                      minHeight: `${calculateMinHeight((end - start + 1), 'place')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'place', !!(class_place)),
                     }}
                   >
                     {class_place}
