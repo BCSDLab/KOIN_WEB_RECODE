@@ -1,97 +1,107 @@
 import { Link } from 'react-router-dom';
 import { useGetAllEvents } from 'pages/Store/StorePage/components/hooks/useGetAllEvents';
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
-import {
-  useCallback, useEffect, useState,
-} from 'react';
 import LeftBracket from 'assets/svg/left-angle-bracket.svg';
 import RightBracket from 'assets/svg/right-angle-bracket.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './EventCarousel.module.scss';
+import useCarouselController from './hooks/useCarouselController';
 
-interface WrapperProps {
-  children: React.ReactNode;
+interface CardProps {
+  shop_id: number;
+  event_id: number;
+  shop_name: string;
+  thumbnail_images: string[];
+  onClick: (name: string) => void
 }
 
-function EventCarouselWrapper({ children }: WrapperProps) {
+function PCEmptyCard() {
+  return (
+    (
+      <div className={styles['swipe-item']}>
+        <div className={styles['swipe-item__empty-image']}>
+          <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
+        </div>
+        <div className={styles['swipe-item__text']}>
+          <div>
+            <span className={styles['swipe-item__name']}>
+              코인
+            </span>
+            {' 에서'}
+          </div>
+          <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>
+        </div>
+      </div>
+    )
+  );
+}
+
+function Card({
+  shop_id, event_id, shop_name, thumbnail_images, onClick,
+}: CardProps) {
+  return (
+    <Link
+      to={`${ROUTES.StoreDetail({ id: String(shop_id), isLink: true })}?state=이벤트/공지`}
+      key={event_id}
+      className={styles['swipe-item']}
+      onClick={() => onClick(shop_name)}
+    >
+      {thumbnail_images && thumbnail_images.length > 0 ? (
+        <div className={styles['swipe-item__image']}>
+          <img src={thumbnail_images[0]} alt="가게 이미지" />
+        </div>
+      ) : (
+        <div className={styles['swipe-item__empty-image']}>
+          <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
+        </div>
+      )}
+      <div className={styles['swipe-item__text']}>
+        <div>
+          <span className={styles['swipe-item__name']}>
+            {shop_name}
+          </span>
+          {' 에서'}
+        </div>
+        <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>
+      </div>
+    </Link>
+  );
+}
+
+function EventCarousel() {
   const carouselList = useGetAllEvents();
   const isMobile = useMediaQuery();
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    {
-      loop: true,
-      slidesToScroll: isMobile ? 1 : 2,
-    },
-    [Autoplay(
-      {
-        stopOnInteraction: false,
-        stopOnMouseEnter: true,
-        delay: 4000,
-      },
-    )],
-  );
-  const [canPrevClick, setCanPrevClick] = useState(false);
-  const [canNextClick, setCanNextClick] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const updateIndex = useCallback(() => {
-    if (emblaApi) {
-      setCurrentIndex(emblaApi.selectedScrollSnap());
-    }
-  }, [emblaApi]);
+  const {
+    emblaRef, canNextClick, canPrevClick, currentIndex, scrollTo,
+  } = useCarouselController(isMobile);
+  const logger = useLogger();
+  const eventLogging = (shopName: string) => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', title: 'shop_categories_event', value: `${shopName}`, event_category: 'click',
+    });
+  };
 
-  const scrollTo = useCallback((direction: 'prev' | 'next') => {
-    if (emblaApi) {
-      if (direction === 'next') emblaApi.scrollNext();
-      if (direction === 'prev')emblaApi.scrollPrev();
-    }
-  }, [emblaApi]);
+  if (!carouselList) return null;
+  if (carouselList.length < 1) return null;
 
-  useEffect(() => {
-    if (!emblaApi) return;
-    setCanPrevClick(emblaApi.canScrollPrev());
-    setCanNextClick(emblaApi.canScrollNext());
-    emblaApi.on('slidesInView', updateIndex);
-    // eslint-disable-next-line
-    return () => { // 클린업 함수 사용을 위해 off
-      emblaApi.off('slidesInView', updateIndex);
-    };
-  }, [emblaApi, updateIndex]);
+  const targetList = carouselList.length > 10 ? carouselList?.slice(0, 10) : carouselList;
 
-  return (
-    <div className={styles.carousel}>
-      {
-        !isMobile && canPrevClick && (
-          // eslint-disable-next-line
-          <button
-            type="button"
-            onClick={() => scrollTo('prev')}
-            className={styles['carousel-button--prev']}
-          >
-            <LeftBracket />
-          </button>
-        )
-      }
-      {carouselList && carouselList.length > 0 ? (
+  if (isMobile) {
+    return (
+      <div className={styles.carousel}>
         <div className={styles.container} ref={emblaRef}>
-          {children}
-        </div>
-      ) : null}
-      {
-        !isMobile && canNextClick && (
-          // eslint-disable-next-line
-          <button
-            type="button"
-            onClick={() => scrollTo('next')}
-            className={styles['carousel-button--next']}
-          >
-            <RightBracket />
-          </button>
-        )
-      }
-      {
-        carouselList && isMobile && (
+          <div className={styles.swipe}>
+            {targetList.map((item) => (
+              <Card
+                shop_id={item.shop_id}
+                event_id={item.event_id}
+                shop_name={item.shop_name}
+                thumbnail_images={item.thumbnail_images}
+                onClick={eventLogging}
+              />
+            ))}
+          </div>
           <div className={styles.pagination}>
             { // eslint-disable-next-line
               <button
@@ -115,81 +125,53 @@ function EventCarouselWrapper({ children }: WrapperProps) {
             </button>
             }
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.carousel}>
+      {
+        canPrevClick && (
+          // eslint-disable-next-line
+          <button
+            type="button"
+            onClick={() => scrollTo('prev')}
+            className={styles['carousel-button--prev']}
+          >
+            <LeftBracket />
+          </button>
+        )
+      }
+      <div className={styles.container} ref={emblaRef}>
+        <div className={styles.swipe}>
+          {targetList.map((item) => (
+            <Card
+              shop_id={item.shop_id}
+              event_id={item.event_id}
+              shop_name={item.shop_name}
+              thumbnail_images={item.thumbnail_images}
+              onClick={eventLogging}
+            />
+          ))}
+          {targetList.length % 2 !== 0 && <PCEmptyCard />}
+        </div>
+      </div>
+      {
+        canNextClick && (
+          // eslint-disable-next-line
+          <button
+            type="button"
+            onClick={() => scrollTo('next')}
+            className={styles['carousel-button--next']}
+          >
+            <RightBracket />
+          </button>
         )
       }
     </div>
   );
 }
 
-function EventCarousel() {
-  const carouselList = useGetAllEvents();
-  const isMobile = useMediaQuery();
-  const logger = useLogger();
-  const eventLogging = (shopName: string) => {
-    logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_categories_event', value: `${shopName}`, event_category: 'click',
-    });
-  };
-
-  if (!carouselList) return null;
-
-  const targetList = carouselList.length > 10 ? carouselList?.slice(0, 10) : carouselList;
-
-  return (
-    <div className={styles.swipe}>
-      {targetList && targetList.map((item) => (
-        <Link
-          to={`${ROUTES.StoreDetail({ id: String(item.shop_id), isLink: true })}?state=이벤트/공지`}
-          key={item.event_id}
-          className={styles['swipe-item']}
-          onClick={() => eventLogging(item.shop_name)}
-        >
-          {item.thumbnail_images && item.thumbnail_images.length > 0 ? (
-            <div className={styles['swipe-item__image']}>
-              <img src={item.thumbnail_images[0]} alt="가게 이미지" />
-            </div>
-          ) : (
-            <div className={styles['swipe-item__empty-image']}>
-              <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
-            </div>
-          )}
-          <div className={styles['swipe-item__text']}>
-            <div>
-              <span className={styles['swipe-item__name']}>
-                {item.shop_name}
-              </span>
-              {' 에서'}
-            </div>
-            <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>
-          </div>
-        </Link>
-      ))}
-      { // pc 환경에서 이벤트 개수가 홀수면 빈 이미지 추가
-            !isMobile && targetList && targetList.length % 2 !== 0 && (
-              <div className={styles['swipe-item']}>
-                <div className={styles['swipe-item__empty-image']}>
-                  <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
-                </div>
-                <div className={styles['swipe-item__text']}>
-                  <div>
-                    <span className={styles['swipe-item__name']}>
-                      코인
-                    </span>
-                    {' 에서'}
-                  </div>
-                  <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>
-                </div>
-              </div>
-            )
-      }
-    </div>
-  );
-}
-
-export default function EventBanner() {
-  return (
-    <EventCarouselWrapper>
-      <EventCarousel />
-    </EventCarouselWrapper>
-  );
-}
+export default EventCarousel;
