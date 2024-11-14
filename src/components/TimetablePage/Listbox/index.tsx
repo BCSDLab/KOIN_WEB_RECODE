@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
+import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -68,8 +69,8 @@ function Listbox({
           [styleClasses['select__trigger--selected-add-lecture--opened']]: isOpenedPopup && version === 'addLecture',
         })}
       >
-        {value !== null ? list.find((item) => item.value === value)?.label : '학부'}
-        {version !== 'default' && <DownArrowIcon />}
+        {value === null ? '학부' : list.find((item) => item.value === value)?.label}
+        {version === 'default' ? <ChervronUpDown /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
         <ul

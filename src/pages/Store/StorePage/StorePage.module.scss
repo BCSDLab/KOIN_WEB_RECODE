@@ -82,17 +82,18 @@
     flex-direction: column;
     font-family: NanumBarunGothic, serif;
     font-weight: normal;
-    font-size: 15px;
+    font-size: 12px;
     text-align: center;
     background-color: #fff;
     border: 0;
     line-height: 1.2;
     height: 100%;
-    width: 70px;
+    width: 6%;
     padding: 0;
     color: rgb(37 37 37);
     margin-right: 22px;
     cursor: pointer;
+    white-space: nowrap;
 
     & span {
       text-align: center;

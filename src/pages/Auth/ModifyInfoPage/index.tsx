@@ -2,6 +2,7 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
+import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -216,7 +217,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   ref,
 ) => {
   const { data: userInfo } = useUser();
-  const nicknameElementRef = React.useRef<HTMLInputElement>(null);
+  const [currentNicknameValue, setCurrentNicknameValue] = React.useState<string>(userInfo?.nickname || '');
 
   const {
     changeTargetNickname,
@@ -224,15 +225,18 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     currentCheckedNickname,
   } = useNicknameDuplicateCheck();
 
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentNicknameValue(e.target.value);
+  };
+
   // 닉네임 중복 확인 버튼 클릭 핸들러
   const onClickNicknameDuplicateCheckButton = () => {
-    const currentInputValue = nicknameElementRef.current?.value ?? '';
     // 현재 입력된 닉네임과 기존 닉네임이 같다면 중복 검사를 수행하지 않습니다.
-    if (currentInputValue === userInfo?.nickname) {
+    if (currentNicknameValue === userInfo?.nickname) {
       showToast('info', '기존의 닉네임과 동일합니다.');
       return;
     }
-    changeTargetNickname(currentInputValue);
+    changeTargetNickname(currentNicknameValue);
   };
 
   useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
@@ -240,15 +244,16 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     () => {
       // 닉네임 유효성 검사 로직
       let valid: string | true = true;
-      if (nicknameElementRef && nicknameElementRef.current?.value !== userInfo?.nickname && (status !== 'success' || nicknameElementRef.current?.value !== currentCheckedNickname)) {
+      const isNicknameVerified = currentNicknameValue === currentCheckedNickname;
+      if (currentNicknameValue !== (userInfo?.nickname || '') && (status !== 'success' || !isNicknameVerified)) {
         valid = '닉네임 중복확인을 해주세요.';
       }
       return {
-        value: nicknameElementRef.current?.value,
+        value: currentNicknameValue,
         valid,
       };
     },
-    [currentCheckedNickname, status, nicknameElementRef, userInfo?.nickname],
+    [currentCheckedNickname, currentNicknameValue, status, userInfo?.nickname],
   );
 
   return (
@@ -259,7 +264,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       })}
     >
       <input
-        ref={nicknameElementRef}
+        onChange={handleNicknameChange}
         className={styles['form-input']}
         type="text"
         autoComplete="nickname"
@@ -285,7 +290,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
   const { data: userInfo } = useUser();
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
-  const [major, setMajor] = React.useState<string | null>(userInfo?.major || '');
+  const [major, setMajor] = React.useState<string | null>(userInfo?.major || null);
   const deptOptionList = deptList.map((dept) => ({
     label: dept.name,
     value: dept.name,
@@ -352,7 +357,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
 }, ref) => {
   const { data: userInfo } = useUser();
   const [currentValue, setCurrentValue] = React.useState<number | null>(userInfo?.gender || null);
-  const [isOpenedPopup, openPopup, closePopup, triggerPopup] = useBooleanState(false);
+  const [isOpenedPopup,, closePopup, triggerPopup] = useBooleanState(false);
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
     const { currentTarget } = event;
     const value = currentTarget.getAttribute('data-value');
@@ -392,12 +397,9 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         [styles.select]: true,
         [styles['select--flex-end']]: true,
       })}
-      onMouseLeave={closePopup}
     >
       <button
         type="button"
-        onMouseOver={openPopup}
-        onFocus={openPopup}
         onClick={triggerPopup}
         name={name}
         className={cn({
@@ -407,6 +409,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         {
           currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'
         }
+        <ChervronUpDown />
       </button>
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">

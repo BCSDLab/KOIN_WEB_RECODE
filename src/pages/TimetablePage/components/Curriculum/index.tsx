@@ -60,12 +60,12 @@ function Curriculum({ list }: CurriculumListBoxProps) {
             <a
               href={dept.curriculum_link}
               target="_blank"
+              key={dept.name}
               rel="noreferrer"
               onClick={() => onClickOption(dept.name)}
             >
               <span
                 className={styles.select__curriculum}
-                key={dept.name}
                 role="option"
                 aria-selected="false"
                 data-value={dept.name}
