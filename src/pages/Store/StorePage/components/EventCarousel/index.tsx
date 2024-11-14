@@ -9,11 +9,11 @@ import styles from './EventCarousel.module.scss';
 import useCarouselController from './hooks/useCarouselController';
 
 interface CardProps {
-  shop_id: number;
+  shop_id: string;
   event_id: number;
   shop_name: string;
   thumbnail_images: string[];
-  onClick: (name: string) => void
+  onClick: () => void
 }
 
 function PCEmptyCard() {
@@ -42,10 +42,10 @@ function Card({
 }: CardProps) {
   return (
     <Link
-      to={`${ROUTES.StoreDetail({ id: String(shop_id), isLink: true })}?state=이벤트/공지`}
+      to={`${ROUTES.StoreDetail({ id: shop_id, isLink: true })}?state=이벤트/공지`}
       key={event_id}
       className={styles['swipe-item']}
-      onClick={() => onClick(shop_name)}
+      onClick={onClick}
     >
       {thumbnail_images && thumbnail_images.length > 0 ? (
         <div className={styles['swipe-item__image']}>
@@ -94,11 +94,11 @@ function EventCarousel() {
           <div className={styles.swipe}>
             {targetList.map((item) => (
               <Card
-                shop_id={item.shop_id}
+                shop_id={String(item.shop_id)}
                 event_id={item.event_id}
                 shop_name={item.shop_name}
                 thumbnail_images={item.thumbnail_images}
-                onClick={eventLogging}
+                onClick={() => eventLogging(item.shop_name)}
               />
             ))}
           </div>
@@ -148,11 +148,11 @@ function EventCarousel() {
         <div className={styles.swipe}>
           {targetList.map((item) => (
             <Card
-              shop_id={item.shop_id}
+              shop_id={String(item.shop_id)}
               event_id={item.event_id}
               shop_name={item.shop_name}
               thumbnail_images={item.thumbnail_images}
-              onClick={eventLogging}
+              onClick={() => eventLogging(item.shop_name)}
             />
           ))}
           {targetList.length % 2 !== 0 && <PCEmptyCard />}
