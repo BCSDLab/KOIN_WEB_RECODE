@@ -147,7 +147,7 @@ function EventCarousel() {
           className={styles['swipe-item']}
           onClick={() => eventLogging(item.shop_name)}
         >
-          {item.thumbnail_images.length > 0 ? (
+          {item.thumbnail_images && item.thumbnail_images.length > 0 ? (
             <div className={styles['swipe-item__image']}>
               <img src={item.thumbnail_images[0]} alt="가게 이미지" />
             </div>
