@@ -177,10 +177,6 @@
     position: relative;
     width: auto;
 
-    :nth-child(4) {
-      margin-right: 0;
-    }
-
     @include media.media-breakpoint(mobile) {
       width: 100%;
       display: flex;
@@ -196,7 +192,7 @@
   letter-spacing: -0.6px;
   margin-right: 25px;
 
-  :not(:last-of-type) {
+  &--last {
     margin-right: 0;
   }
 

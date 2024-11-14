@@ -288,8 +288,14 @@ function StorePage() {
           있습니다.
         </div>
         <div className={styles.option__checkbox}>
-          {MOBILE_CHECK_BOX.map((item) => (
-            <div key={item.id} className={styles['option-checkbox']}>
+          {MOBILE_CHECK_BOX.map((item, index) => (
+            <div
+              key={item.id}
+              className={cn({
+                [styles['option-checkbox']]: true,
+                [styles['option-checkbox--last']]: index === MOBILE_CHECK_BOX.length - 1,
+              })}
+            >
               <label htmlFor={item.id} className={styles['option-checkbox__label']}>
                 <input
                   id={item.id}
