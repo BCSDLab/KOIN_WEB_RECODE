@@ -268,17 +268,20 @@
     align-items: center;
     z-index: 20;
   }
+}
 
-  &__close svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  &__tail {
-    position: absolute;
-    top: -10px;
-    left: 8px;
-  }
+.tooltip:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 10%;
+	transform: translateX(-50%) translateY(-100%); /* 중앙 정렬 및 위쪽으로 이동 */
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #4b4b4b; /* 꼬리 색상 */
+	margin-top: 3px; /* 꼬리가 말풍선 위에 붙도록 조정 */
 }
 
 .store-mobile-header {

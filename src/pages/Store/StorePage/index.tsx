@@ -9,7 +9,6 @@ import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
-import BubbleTailTop from 'assets/svg/bubble-tail-top.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
@@ -312,9 +311,6 @@ function StorePage() {
           {
             isTooltipOpen && (
             <div className={styles.tooltip}>
-              <div className={styles.tooltip__tail}>
-                <BubbleTailTop />
-              </div>
               <div className={styles.tooltip__content}>
                 지금 리뷰가 가장 많은 상점을 확인해보세요!
               </div>
