@@ -174,11 +174,8 @@
   &__checkbox {
     margin-left: auto;
     display: flex;
+    position: relative;
     width: auto;
-
-    :nth-child(3) {
-      margin-right: 0;
-    }
 
     @include media.media-breakpoint(mobile) {
       width: 100%;
@@ -195,7 +192,7 @@
   letter-spacing: -0.6px;
   margin-right: 25px;
 
-  :not(:last-of-type) {
+  &--last {
     margin-right: 0;
   }
 
@@ -231,6 +228,56 @@
       background-size: cover;
     }
   }
+}
+
+.tooltip {
+  z-index: 10;
+  position: absolute;
+  top: 25px;
+  left: -8px;
+  display: flex;
+  width: 225px;
+  text-align: center;
+  height: 20px;
+  border-radius: 8px;
+  background: #4b4b4b;
+  padding: 8px 12px;
+
+  &__content {
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 19.2px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: #fff;
+    border: none;
+  }
+
+  &__close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+  }
+}
+
+.tooltip:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 6.5%;
+	transform: translateX(-50%) translateY(-100%); /* 중앙 정렬 및 위쪽으로 이동 */
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #4b4b4b; /* 꼬리 색상 */
+	margin-top: 3px; /* 꼬리가 말풍선 위에 붙도록 조정 */
 }
 
 .store-mobile-header {

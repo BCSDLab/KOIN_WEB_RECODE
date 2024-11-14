@@ -36,12 +36,14 @@ export class StoreListV2<R extends StoreListV2Response> implements APIRequest<R>
   params: {
     sorter?: StoreSorterType,
     filter?: StoreFilterType[],
+    query?: string,
   };
 
-  constructor(sorter: StoreSorterType, filter: StoreFilterType[]) {
+  constructor(sorter: StoreSorterType, filter: StoreFilterType[], query: string | undefined) {
     this.params = {
       sorter,
       filter,
+      query,
     };
   }
 }

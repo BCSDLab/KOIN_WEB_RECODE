@@ -4,10 +4,12 @@ import * as api from 'api';
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import Close from 'assets/svg/close-icon-20x20.svg';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
@@ -54,31 +56,13 @@ const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
   },
   {
     id: 'OPEN',
-    content: '# 영업중',
+    content: '영업중',
     value: 3,
   },
   {
     id: 'DELIVERY',
-    content: '# 배달 가능',
-    value: 4,
-  },
-];
-
-const CHECK_BOX = [
-  {
-    id: 'delivery',
     content: '배달 가능',
-    value: '1',
-  },
-  {
-    id: 'card',
-    content: '카드결제 가능',
-    value: '1',
-  },
-  {
-    id: 'bank',
-    content: '계좌이체 가능',
-    value: '1',
+    value: 4,
   },
 ];
 
@@ -106,11 +90,18 @@ const useStoreListMobile = (
   filter: StoreFilterType[],
   params: StoreSearchQueryType,
 ) => {
-  const { data: storeListMobile } = useQuery({
-    queryKey: ['storeListV2', sorter, filter],
-    queryFn: () => api.store.getStoreListV2(sorter, filter),
-    retry: 0,
-  });
+  const { data: storeListMobile } = useQuery(
+    {
+      queryKey: ['storeListV2', sorter, filter],
+      queryFn: () => api.store.getStoreListV2(
+        sorter,
+        filter,
+        params.storeName,
+      ),
+      retry: 0,
+    },
+  );
+
   const selectedCategory = Number(params.category);
 
   return storeListMobile?.shops.filter((store) => {
@@ -199,6 +190,11 @@ function StorePage() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const selectedCategory = Number(searchParams.get('category')) ?? -1;
+  const [isTooltipOpen, , closeTooltip] = useBooleanState(localStorage.getItem('store-review-tooltip') === null);
+  const handleTooltipCloseButtonClick = () => {
+    localStorage.setItem('store-review-tooltip', 'used');
+    closeTooltip();
+  };
   const [filterSortingState, setFilterSortingState] = useState({
     COUNT: false,
     RATING: false,
@@ -312,6 +308,7 @@ function StorePage() {
       categories?.shop_categories[selectedCategory]?.name || '전체보기',
     );
   }, [categories, selectedCategory]);
+
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
@@ -380,12 +377,15 @@ function StorePage() {
           있습니다.
         </div>
         <div className={styles.option__checkbox}>
-          {CHECK_BOX.map((item) => (
-            <div key={item.id} className={styles['option-checkbox']}>
-              <label
-                htmlFor={item.id}
-                className={styles['option-checkbox__label']}
-              >
+          {MOBILE_CHECK_BOX.map((item, index) => (
+            <div
+              key={item.id}
+              className={cn({
+                [styles['option-checkbox']]: true,
+                [styles['option-checkbox--last']]: index === MOBILE_CHECK_BOX.length - 1,
+              })}
+            >
+              <label htmlFor={item.id} className={styles['option-checkbox__label']}>
                 <input
                   id={item.id}
                   type="checkbox"
@@ -393,7 +393,7 @@ function StorePage() {
                   className={styles['option-checkbox__input']}
                   onChange={() => {
                     loggingCheckbox(item.id, !searchParams.get(item.id));
-                    setParams(item.id, item.value, {
+                    setParams(item.id, String(item.value), {
                       deleteBeforeParam: true,
                       replacePage: true,
                     });
@@ -403,6 +403,18 @@ function StorePage() {
               </label>
             </div>
           ))}
+          {
+            isTooltipOpen && (
+            <div className={styles.tooltip}>
+              <div className={styles.tooltip__content}>
+                지금 리뷰가 가장 많은 상점을 확인해보세요!
+              </div>
+              <button type="button" aria-label="리뷰 툴팁 닫기" className={styles.tooltip__close} onClick={handleTooltipCloseButtonClick}>
+                <Close />
+              </button>
+            </div>
+            )
+          }
         </div>
       </div>
       {isMobile && (
