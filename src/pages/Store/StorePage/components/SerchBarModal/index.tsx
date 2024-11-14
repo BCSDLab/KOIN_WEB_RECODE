@@ -42,7 +42,6 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
             onKeyDown={async (e) => {
               if (e.key === 'Enter') {
                 const data = await getRelateSearch(e.currentTarget.value) || '';
-                console.log(data);
                 setRelateSearchItems(data);
               // setParams('storeName', e.currentTarget.value, {
               //   deleteBeforeParam: searchParams.get('storeName') === undefined,
@@ -58,7 +57,10 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
           <button
             className={styles['search-bar-modal__icon']}
             type="button"
-            onClick={() => {
+            onClick={async () => {
+              const value = storeRef.current?.value ?? '';
+              const data = await getRelateSearch(value);
+              setRelateSearchItems(data);
               setParams('storeName', storeRef.current?.value ?? '', {
                 deleteBeforeParam: searchParams.get('storeName') === undefined,
                 replacePage: true,

@@ -14,7 +14,7 @@
     font-family: NanumBarunGothic, serif;
     border: solid 1px #d2dae2;
     height: 45px;
-    width: 1068px;
+    width: 98%;
     font-size: 15px;
     line-height: 1.6;
     letter-spacing: -0.09px;
@@ -49,14 +49,15 @@
   &__icon {
     position: absolute;
     height: 24px;
-    right: 11px;
-    bottom: 13px;
+    right: 20px;
+    top: 13px;
     z-index: 1;
     border: 0;
     background-color: #fff;
     cursor: pointer;
 
     @include media.media-breakpoint(mobile) {
+      top: 9px;
       right: 33px;
       bottom: 8px;
     }

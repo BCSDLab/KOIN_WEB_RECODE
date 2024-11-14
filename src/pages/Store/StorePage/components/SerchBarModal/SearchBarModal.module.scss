@@ -62,8 +62,8 @@
   &__icon {
     position: absolute;
     height: 24px;
-    right: 11px;
-    bottom: 13px;
+    right: 20px;
+    top: 13px;
     z-index: 1;
     border: 0;
     background-color: #fff;
@@ -72,7 +72,7 @@
     @include media.media-breakpoint(mobile) {
       position: absolute;
       top: 27px;
-      right: 9.3%;
+      right: 9%;
     }
   }
 }

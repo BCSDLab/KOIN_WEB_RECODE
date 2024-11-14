@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -16,13 +16,16 @@ export default function SearchBar() {
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
-
+  const [toggle, setToggle] = useState(true);
   return (
     <div className={styles.search_bar}>
+      {toggle
+      && (
       <button
         className={styles.search_bar__input}
         type="button"
         onClick={() => {
+          if (!isMobile) setToggle(false);
           const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
           if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId]?.name || '전체보기'}` });
           openModal();
@@ -30,6 +33,7 @@ export default function SearchBar() {
       >
         검색어를 입력해주세요
       </button>
+      )}
       {/* <input
         ref={storeRef}
         className={styles.search_bar__input}
