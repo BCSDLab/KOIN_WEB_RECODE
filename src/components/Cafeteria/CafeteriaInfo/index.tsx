@@ -51,7 +51,6 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
   const weekend = cafeteriaInfo.opens.filter((schedule) => schedule.day_of_week === '주말');
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });
   useEscapeKeyDown({ onEscape: closeInfo });
-  useBodyScrollLock();
   const isMobile = useMediaQuery();
 
   return (
