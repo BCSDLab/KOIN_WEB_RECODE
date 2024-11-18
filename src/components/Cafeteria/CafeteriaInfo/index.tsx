@@ -4,7 +4,6 @@ import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './CafeteriaInfo.module.scss';
 
 interface ScheduleTableProps {
