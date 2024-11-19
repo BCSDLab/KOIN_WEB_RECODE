@@ -45,7 +45,10 @@ export default function useTimetableV2Mutation(frameId: number) {
           timetable_lecture: [
             {
               ...clickedLecture,
-              class_title: clickedLecture.name,
+              class_title: null,
+              class_time: null,
+              professor: null,
+              grades: '0',
               lecture_id: clickedLecture.id,
             },
           ],

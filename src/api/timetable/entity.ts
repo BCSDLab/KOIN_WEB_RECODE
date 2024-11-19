@@ -115,10 +115,10 @@ export interface TimetableDetailInfo {
 export interface AddTimetableLectureV2Request {
   timetable_frame_id: number;
   timetable_lecture: [{
-    class_title: string;
-    class_time: number[];
+    class_title: string | null;
+    class_time: number[] | null;
     class_place?: string;
-    professor?: string;
+    professor?: string | null;
     memo?: string;
     grades?: string;
     lecture_id?: number;
