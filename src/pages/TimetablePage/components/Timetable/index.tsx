@@ -376,29 +376,38 @@ function Timetable({
                   key={`${index}-${start}-${end}`}
                 >
                   <div
+                    className={styles['timetable__lecture-name']}
                     style={{
                       fontSize: `${rowHeight / 3 + 1}px`,
                       fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
+                      minHeight: `${calculateMinHeight((end - start + 1), 'name')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'name', !!class_place),
                     }}
                   >
 
                     {name}
                   </div>
                   <span
+                    className={styles['timetable__lecture-professor']}
                     style={{
                       fontSize: `${rowHeight / 3 + 1}px`,
                       fontWeight: '400',
                       lineHeight: `${rowHeight / 2}px`,
+                      minHeight: `${calculateMinHeight((end - start + 1), 'professor')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'professor', !!class_place),
                     }}
                   >
                     {professor}
                   </span>
                   <div
+                    className={styles['timetable__lecture-place']}
                     style={{
                       fontSize: `${rowHeight / 3 - 1}px`,
                       fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
+                      minHeight: `${calculateMinHeight((end - start + 1), 'place')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'place', !!class_place),
                     }}
                   >
                     {class_place}
