@@ -316,7 +316,7 @@ function StorePage() {
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
-          {categories?.shop_categories.slice(isMobile ? 1 : 0, 12).map((category) => (
+          {categories?.shop_categories.slice(0, 12).map((category) => (
             <button
               className={cn({
                 [styles.category__menu]: true,
