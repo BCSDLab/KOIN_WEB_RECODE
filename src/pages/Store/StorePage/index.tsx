@@ -6,7 +6,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import Close from 'assets/svg/close-icon-20x20.svg';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -83,7 +83,7 @@ const useStoreList = (
   filter: StoreFilterType[],
   params: StoreSearchQueryType,
 ) => {
-  const { data: storeList } = useQuery(
+  const { data: storeList } = useSuspenseQuery(
     {
       queryKey: ['storeListV2', sorter, filter],
       queryFn: () => api.store.getStoreListV2(
@@ -97,7 +97,7 @@ const useStoreList = (
 
   const selectedCategory = Number(params.category);
 
-  return storeList?.shops.filter((store) => {
+  return storeList.shops.filter((store) => {
     const matchCategory = params.category === undefined
       || store.category_ids.some((id) => id === selectedCategory);
 
@@ -142,7 +142,7 @@ function StorePage() {
 
   const koreanCategory = selectedCategory === -1
     ? '전체보기'
-    : categories?.shop_categories.find(
+    : categories.shop_categories.find(
       (category) => category.id === selectedCategory,
     )?.name || '전체보기';
 
@@ -174,7 +174,7 @@ function StorePage() {
           title: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
-            categories?.shop_categories[selectedCategory]?.name,
+            categories.shop_categories[selectedCategory].name,
           ),
           event_category: 'click',
         });
@@ -196,7 +196,7 @@ function StorePage() {
           title: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
-            categories?.shop_categories[selectedCategory]?.name,
+            categories.shop_categories[selectedCategory].name,
           ),
           event_category: 'click',
         });
@@ -213,7 +213,7 @@ function StorePage() {
       actionTitle: 'BUSINESS',
       title: 'shop_categories',
       value: `scroll in ${
-        categories?.shop_categories[currentCategoryId]?.name || '전체보기'
+        categories.shop_categories[currentCategoryId].name || '전체보기'
       }`,
       event_category: 'scroll',
     });
@@ -245,7 +245,7 @@ function StorePage() {
     }
     sessionStorage.setItem(
       'cameFrom',
-      categories?.shop_categories[selectedCategory]?.name || '전체보기',
+      categories.shop_categories[selectedCategory].name || '전체보기',
     );
   }, [categories, selectedCategory]);
 
@@ -256,7 +256,7 @@ function StorePage() {
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
-          {categories?.shop_categories.slice(isMobile ? 1 : 0, 12).map((category) => (
+          {categories.shop_categories.slice(isMobile ? 1 : 0, 12).map((category) => (
             <button
               className={cn({
                 [styles.category__menu]: true,
@@ -275,7 +275,7 @@ function StorePage() {
                   value: category.name,
                   event_category: 'click',
                   previous_page:
-                    categories?.shop_categories.find(
+                    categories.shop_categories.find(
                       (item) => item.id === Number(searchParams.get('category')),
                     )?.name || '전체보기',
                   duration_time:
@@ -311,7 +311,7 @@ function StorePage() {
         <div className={styles.option__count}>
           총
           <strong>
-            {storeList?.length}
+            {storeList.length}
             개의 업체가
           </strong>
           있습니다.
@@ -390,13 +390,13 @@ function StorePage() {
       {!isMobile ? (
         <DesktopStoreList
           storeListData={filterSortingState.COUNT || filterSortingState.RATING
-            ? storeList : storeList?.reverse()}
+            ? storeList : storeList.reverse()}
           storeType={STORE_PAGE.MAIN}
         />
       ) : (
         <MobileStoreList
           storeListData={filterSortingState.COUNT || filterSortingState.RATING
-            ? storeList : storeList?.reverse()}
+            ? storeList : storeList.reverse()}
           storeType={STORE_PAGE.MAIN}
         />
       )}
