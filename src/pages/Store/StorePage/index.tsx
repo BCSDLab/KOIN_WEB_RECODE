@@ -449,7 +449,8 @@ function StorePage() {
       </div>
       {!isMobile ? (
         <DesktopStoreList
-          storeListData={storeList}
+          storeListData={filterSortingState.COUNT || filterSortingState.RATING
+            ? storeListMobile : storeListMobile?.reverse()}
           storeType={STORE_PAGE.MAIN}
         />
       ) : (
