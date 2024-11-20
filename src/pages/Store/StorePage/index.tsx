@@ -8,7 +8,7 @@ import Close from 'assets/svg/close-icon-20x20.svg';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
+import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
@@ -78,19 +78,12 @@ const loggingCategoryToggleValue = (
   category: string | undefined,
 ) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
 
-const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
-  if (checked === undefined) {
-    return false;
-  }
-  return true;
-};
-
-const useStoreListMobile = (
+const useStoreList = (
   sorter: StoreSorterType,
   filter: StoreFilterType[],
   params: StoreSearchQueryType,
 ) => {
-  const { data: storeListMobile } = useQuery(
+  const { data: storeList } = useQuery(
     {
       queryKey: ['storeListV2', sorter, filter],
       queryFn: () => api.store.getStoreListV2(
@@ -104,7 +97,7 @@ const useStoreListMobile = (
 
   const selectedCategory = Number(params.category);
 
-  return storeListMobile?.shops.filter((store) => {
+  return storeList?.shops.filter((store) => {
     const matchCategory = params.category === undefined
       || store.category_ids.some((id) => id === selectedCategory);
 
@@ -121,58 +114,6 @@ const useStoreListMobile = (
   });
 };
 
-const useStoreList = (params: StoreSearchQueryType) => {
-  const { data: storeList } = useQuery({
-    queryKey: ['storeList', params],
-    queryFn: api.store.getStoreList,
-    retry: 0,
-  });
-
-  const selectedCategory = Number(params.category);
-
-  return storeList?.shops.filter((store) => {
-    if (params.shopIds) {
-      const shopIdsArr = params.shopIds.split(',').map(Number);
-      return shopIdsArr.includes(store.id);
-    }
-    const matchCategory = params.category === undefined
-      || store.category_ids.some((id) => id === selectedCategory);
-    const matchConditions = [];
-
-    if (params.delivery !== undefined) {
-      matchConditions.push(
-        store.delivery === searchStorePayCheckBoxFilter(params.delivery),
-      );
-    }
-    if (params.bank !== undefined) {
-      matchConditions.push(
-        store.pay_bank === searchStorePayCheckBoxFilter(params.bank),
-      );
-    }
-    if (params.card !== undefined) {
-      matchConditions.push(
-        store.pay_card === searchStorePayCheckBoxFilter(params.card),
-      );
-    }
-
-    const isMatchAllSelectedConditions = matchConditions.every(
-      (condition) => condition === true,
-    );
-
-    if (!params.shopIds && params.storeName) {
-      return (
-        (matchConditions.length === 0 || isMatchAllSelectedConditions)
-        && store.name.includes(params.storeName ? params.storeName : '')
-      );
-    }
-    return (
-      matchCategory
-      && (matchConditions.length === 0 || isMatchAllSelectedConditions)
-      && store.name.includes(params.storeName ? params.storeName : '')
-    );
-  });
-};
-
 function StorePage() {
   const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
     sorter: '',
@@ -180,8 +121,7 @@ function StorePage() {
   });
   const [isToolTipOpen, setIsToolTipOpen] = React.useState(true);
   const { params, searchParams, setParams } = useParamsHandler();
-  const storeList = useStoreList(params);
-  const storeListMobile = useStoreListMobile(
+  const storeList = useStoreList(
     storeMobileFilterState.sorter,
     storeMobileFilterState.filter,
     params,
@@ -272,14 +212,14 @@ function StorePage() {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'shop_categories',
-      value: `scoll in ${
+      value: `scroll in ${
         categories?.shop_categories[currentCategoryId]?.name || '전체보기'
       }`,
       event_category: 'scroll',
     });
   };
 
-  useScorllLogging(storeScrollLogging);
+  useScrollLogging(storeScrollLogging);
 
   const enterCategoryTimeRef = useRef<number | null>(null);
   const handleIcon = (item: MobileCheckBoxItem) => {
@@ -450,13 +390,13 @@ function StorePage() {
       {!isMobile ? (
         <DesktopStoreList
           storeListData={filterSortingState.COUNT || filterSortingState.RATING
-            ? storeListMobile : storeListMobile?.reverse()}
+            ? storeList : storeList?.reverse()}
           storeType={STORE_PAGE.MAIN}
         />
       ) : (
         <MobileStoreList
           storeListData={filterSortingState.COUNT || filterSortingState.RATING
-            ? storeListMobile : storeListMobile?.reverse()}
+            ? storeList : storeList?.reverse()}
           storeType={STORE_PAGE.MAIN}
         />
       )}
