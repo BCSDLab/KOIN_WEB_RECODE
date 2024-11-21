@@ -24,6 +24,7 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
+import SearchBarModal from './components/SearchBarModal';
 
 type StoreSearchQueryType = {
   storeName?: string;
@@ -296,6 +297,14 @@ function StorePage() {
                   deleteBeforeParam: false,
                   replacePage: true,
                 });
+                setParams('shopIds', '', {
+                  deleteBeforeParam: true,
+                  replacePage: true,
+                });
+                setParams('searchWord', '', {
+                  deleteBeforeParam: true,
+                  replacePage: true,
+                });
               }}
               key={category.id}
             >
@@ -309,16 +318,31 @@ function StorePage() {
           ))}
         </div>
       </div>
-      {!isMobile && <SearchBar />}
+      {!isMobile && <SearchBarModal onClose={() => {}} />}
       <div className={styles.option}>
-        <div className={styles.option__count}>
-          총
-          <strong>
-            {storeList.length}
-            개의 업체가
-          </strong>
-          있습니다.
-        </div>
+        {params.searchWord ? (
+          <div className={styles.option__count}>
+            <strong>
+              {params.searchWord}
+            </strong>
+            메뉴를 가진 가게가
+            <strong>
+              {storeList.length}
+              개
+            </strong>
+            있습니다.
+          </div>
+        ) : (
+          <div className={styles.option__count}>
+            총
+            <strong>
+              {storeList.length}
+              개의 업체가
+            </strong>
+            있습니다.
+          </div>
+        )}
+
         <div className={styles.option__checkbox}>
           {MOBILE_CHECK_BOX.map((item, index) => (
             <div
