@@ -13,7 +13,7 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
-import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
+import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import Copy from 'assets/png/copy.png';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import Phone from 'assets/svg/Review/phone.svg';
@@ -152,7 +152,7 @@ function StoreDetailPage() {
   useScrollToTop();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => () => portalManager.close(), []); // portalManeger dependency 불필요
-  useScorllLogging(detailScrollLogging);
+  useScrollLogging(detailScrollLogging);
 
   React.useEffect(() => {
     setButtonContent((

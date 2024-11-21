@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  Suspense, useEffect, useRef, useState,
+} from 'react';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import * as api from 'api';
 import { cn } from '@bcsdlab/utils';
@@ -18,6 +20,7 @@ import IntroToolTip from 'components/common/IntroToolTip';
 import AscSelectArrow from 'assets/svg/store-filter-arrow-asc-select.svg';
 import DescSelectArrow from 'assets/svg/store-filter-arrow-desc-select.svg';
 import DescArrow from 'assets/svg/store-filter-arrow-desc.svg';
+import LoadingSpinner from 'components/common/LoadingSpinner';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
@@ -387,19 +390,21 @@ function StorePage() {
           />
         )}
       </div>
-      {!isMobile ? (
-        <DesktopStoreList
-          storeListData={filterSortingState.COUNT || filterSortingState.RATING
-            ? storeList : storeList.reverse()}
-          storeType={STORE_PAGE.MAIN}
-        />
-      ) : (
-        <MobileStoreList
-          storeListData={filterSortingState.COUNT || filterSortingState.RATING
-            ? storeList : storeList.reverse()}
-          storeType={STORE_PAGE.MAIN}
-        />
-      )}
+      <Suspense fallback={<LoadingSpinner size="100" />}>
+        {!isMobile ? (
+          <DesktopStoreList
+            storeListData={filterSortingState.COUNT || filterSortingState.RATING
+              ? storeList : storeList.reverse()}
+            storeType={STORE_PAGE.MAIN}
+          />
+        ) : (
+          <MobileStoreList
+            storeListData={filterSortingState.COUNT || filterSortingState.RATING
+              ? storeList : storeList.reverse()}
+            storeType={STORE_PAGE.MAIN}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }
