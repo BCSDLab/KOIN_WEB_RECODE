@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  Suspense, useEffect, useRef, useState,
+} from 'react';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import * as api from 'api';
 import { cn } from '@bcsdlab/utils';
@@ -6,9 +8,9 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import Close from 'assets/svg/close-icon-20x20.svg';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { useScorllLogging } from 'utils/hooks/analytics/useScrollLogging';
+import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
@@ -18,9 +20,11 @@ import IntroToolTip from 'components/common/IntroToolTip';
 import AscSelectArrow from 'assets/svg/store-filter-arrow-asc-select.svg';
 import DescSelectArrow from 'assets/svg/store-filter-arrow-desc-select.svg';
 import DescArrow from 'assets/svg/store-filter-arrow-desc.svg';
+import LoadingSpinner from 'components/common/LoadingSpinner';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
+import SearchBarModal from './components/SearchBarModal';
 
 type StoreSearchQueryType = {
   storeName?: string;
@@ -78,19 +82,12 @@ const loggingCategoryToggleValue = (
   category: string | undefined,
 ) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
 
-const searchStorePayCheckBoxFilter = (checked: string | undefined) => {
-  if (checked === undefined) {
-    return false;
-  }
-  return true;
-};
-
-const useStoreListMobile = (
+const useStoreList = (
   sorter: StoreSorterType,
   filter: StoreFilterType[],
   params: StoreSearchQueryType,
 ) => {
-  const { data: storeListMobile } = useQuery(
+  const { data: storeList } = useSuspenseQuery(
     {
       queryKey: ['storeListV2', sorter, filter],
       queryFn: () => api.store.getStoreListV2(
@@ -104,7 +101,7 @@ const useStoreListMobile = (
 
   const selectedCategory = Number(params.category);
 
-  return storeListMobile?.shops.filter((store) => {
+  return storeList.shops.filter((store) => {
     const matchCategory = params.category === undefined
       || store.category_ids.some((id) => id === selectedCategory);
 
@@ -121,58 +118,6 @@ const useStoreListMobile = (
   });
 };
 
-const useStoreList = (params: StoreSearchQueryType) => {
-  const { data: storeList } = useQuery({
-    queryKey: ['storeList', params],
-    queryFn: api.store.getStoreList,
-    retry: 0,
-  });
-
-  const selectedCategory = Number(params.category);
-
-  return storeList?.shops.filter((store) => {
-    if (params.shopIds) {
-      const shopIdsArr = params.shopIds.split(',').map(Number);
-      return shopIdsArr.includes(store.id);
-    }
-    const matchCategory = params.category === undefined
-      || store.category_ids.some((id) => id === selectedCategory);
-    const matchConditions = [];
-
-    if (params.delivery !== undefined) {
-      matchConditions.push(
-        store.delivery === searchStorePayCheckBoxFilter(params.delivery),
-      );
-    }
-    if (params.bank !== undefined) {
-      matchConditions.push(
-        store.pay_bank === searchStorePayCheckBoxFilter(params.bank),
-      );
-    }
-    if (params.card !== undefined) {
-      matchConditions.push(
-        store.pay_card === searchStorePayCheckBoxFilter(params.card),
-      );
-    }
-
-    const isMatchAllSelectedConditions = matchConditions.every(
-      (condition) => condition === true,
-    );
-
-    if (!params.shopIds && params.storeName) {
-      return (
-        (matchConditions.length === 0 || isMatchAllSelectedConditions)
-        && store.name.includes(params.storeName ? params.storeName : '')
-      );
-    }
-    return (
-      matchCategory
-      && (matchConditions.length === 0 || isMatchAllSelectedConditions)
-      && store.name.includes(params.storeName ? params.storeName : '')
-    );
-  });
-};
-
 function StorePage() {
   const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
     sorter: '',
@@ -180,8 +125,7 @@ function StorePage() {
   });
   const [isToolTipOpen, setIsToolTipOpen] = React.useState(true);
   const { params, searchParams, setParams } = useParamsHandler();
-  const storeList = useStoreList(params);
-  const storeListMobile = useStoreListMobile(
+  const storeList = useStoreList(
     storeMobileFilterState.sorter,
     storeMobileFilterState.filter,
     params,
@@ -202,7 +146,7 @@ function StorePage() {
 
   const koreanCategory = selectedCategory === -1
     ? '전체보기'
-    : categories?.shop_categories.find(
+    : categories.shop_categories.find(
       (category) => category.id === selectedCategory,
     )?.name || '전체보기';
 
@@ -234,7 +178,7 @@ function StorePage() {
           title: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
-            categories?.shop_categories[selectedCategory]?.name,
+            categories.shop_categories[selectedCategory].name,
           ),
           event_category: 'click',
         });
@@ -256,7 +200,7 @@ function StorePage() {
           title: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
-            categories?.shop_categories[selectedCategory]?.name,
+            categories.shop_categories[selectedCategory].name,
           ),
           event_category: 'click',
         });
@@ -272,14 +216,14 @@ function StorePage() {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'shop_categories',
-      value: `scoll in ${
-        categories?.shop_categories[currentCategoryId]?.name || '전체보기'
+      value: `scroll in ${
+        categories.shop_categories[currentCategoryId].name || '전체보기'
       }`,
       event_category: 'scroll',
     });
   };
 
-  useScorllLogging(storeScrollLogging);
+  useScrollLogging(storeScrollLogging);
 
   const enterCategoryTimeRef = useRef<number | null>(null);
   const handleIcon = (item: MobileCheckBoxItem) => {
@@ -305,7 +249,7 @@ function StorePage() {
     }
     sessionStorage.setItem(
       'cameFrom',
-      categories?.shop_categories[selectedCategory]?.name || '전체보기',
+      categories.shop_categories[selectedCategory].name || '전체보기',
     );
   }, [categories, selectedCategory]);
 
@@ -316,7 +260,7 @@ function StorePage() {
       <div className={styles.category}>
         <div className={styles.category__header}>CATEGORY</div>
         <div className={styles.category__wrapper}>
-          {categories?.shop_categories.slice(0, 12).map((category) => (
+          {categories.shop_categories.slice(isMobile ? 1 : 0, 12).map((category) => (
             <button
               className={cn({
                 [styles.category__menu]: true,
@@ -335,7 +279,7 @@ function StorePage() {
                   value: category.name,
                   event_category: 'click',
                   previous_page:
-                    categories?.shop_categories.find(
+                    categories.shop_categories.find(
                       (item) => item.id === Number(searchParams.get('category')),
                     )?.name || '전체보기',
                   duration_time:
@@ -353,6 +297,14 @@ function StorePage() {
                   deleteBeforeParam: false,
                   replacePage: true,
                 });
+                setParams('shopIds', '', {
+                  deleteBeforeParam: true,
+                  replacePage: true,
+                });
+                setParams('searchWord', '', {
+                  deleteBeforeParam: true,
+                  replacePage: true,
+                });
               }}
               key={category.id}
             >
@@ -366,16 +318,31 @@ function StorePage() {
           ))}
         </div>
       </div>
-      {!isMobile && <SearchBar />}
+      {!isMobile && <SearchBarModal onClose={() => {}} />}
       <div className={styles.option}>
-        <div className={styles.option__count}>
-          총
-          <strong>
-            {storeList?.length}
-            개의 업체가
-          </strong>
-          있습니다.
-        </div>
+        {params.searchWord ? (
+          <div className={styles.option__count}>
+            <strong>
+              {params.searchWord}
+            </strong>
+            메뉴를 가진 가게가
+            <strong>
+              {storeList.length}
+              개
+            </strong>
+            있습니다.
+          </div>
+        ) : (
+          <div className={styles.option__count}>
+            총
+            <strong>
+              {storeList.length}
+              개의 업체가
+            </strong>
+            있습니다.
+          </div>
+        )}
+
         <div className={styles.option__checkbox}>
           {MOBILE_CHECK_BOX.map((item, index) => (
             <div
@@ -447,18 +414,21 @@ function StorePage() {
           />
         )}
       </div>
-      {!isMobile ? (
-        <DesktopStoreList
-          storeListData={storeList}
-          storeType={STORE_PAGE.MAIN}
-        />
-      ) : (
-        <MobileStoreList
-          storeListData={filterSortingState.COUNT || filterSortingState.RATING
-            ? storeListMobile : storeListMobile?.reverse()}
-          storeType={STORE_PAGE.MAIN}
-        />
-      )}
+      <Suspense fallback={<LoadingSpinner size="100" />}>
+        {!isMobile ? (
+          <DesktopStoreList
+            storeListData={filterSortingState.COUNT || filterSortingState.RATING
+              ? storeList : storeList.reverse()}
+            storeType={STORE_PAGE.MAIN}
+          />
+        ) : (
+          <MobileStoreList
+            storeListData={filterSortingState.COUNT || filterSortingState.RATING
+              ? storeList : storeList.reverse()}
+            storeType={STORE_PAGE.MAIN}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }

@@ -43,7 +43,7 @@ export class StoreListV2<R extends StoreListV2Response> implements APIRequest<R>
     this.params = {
       sorter,
       filter,
-      query,
+      query: query ?? '',
     };
   }
 }
