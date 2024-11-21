@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getStoreCategories } from 'api/store';
 
 export const useStoreCategories = () => {
-  const { data } = useQuery(
+  const { data } = useSuspenseQuery(
     {
       queryKey: ['storeCategories'],
       queryFn: getStoreCategories,
