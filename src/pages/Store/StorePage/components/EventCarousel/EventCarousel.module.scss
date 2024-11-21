@@ -43,11 +43,12 @@
 
   &__image {
     display: flex;
+    justify-content: flex-end;
     height: 100%;
 
     img {
+      max-width: 196px;
       border-radius: 5px;
-      width: 100%;
       object-fit: cover;
     }
 
@@ -60,7 +61,7 @@
       background: linear-gradient(
         to right,
         #f5f5f5 50%,
-        #f5f5f5e6 60%,
+        #f5f5f5e6 70%,
         transparent 100%
       );
 
@@ -86,7 +87,7 @@
 
   &__text {
     position: absolute;
-    padding-left: 20px;
+    padding-left: 30px;
     top: 30px;
     font-size: 18px;
     font-weight: 500;

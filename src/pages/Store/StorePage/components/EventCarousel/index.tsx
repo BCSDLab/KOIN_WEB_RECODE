@@ -85,14 +85,12 @@ function EventCarousel() {
   if (!carouselList) return null;
   if (carouselList.length < 1) return null;
 
-  const targetList = carouselList.length > 10 ? carouselList?.slice(0, 10) : carouselList;
-
   if (isMobile) {
     return (
       <div className={styles.carousel}>
         <div className={styles.container} ref={emblaRef}>
           <div className={styles.swipe}>
-            {targetList.map((item) => (
+            {carouselList.slice(0, 10).map((item) => (
               <Card
                 shop_id={String(item.shop_id)}
                 event_id={item.event_id}
@@ -146,7 +144,7 @@ function EventCarousel() {
       }
       <div className={styles.container} ref={emblaRef}>
         <div className={styles.swipe}>
-          {targetList.map((item) => (
+          {carouselList.map((item) => (
             <Card
               shop_id={String(item.shop_id)}
               event_id={item.event_id}
@@ -155,7 +153,7 @@ function EventCarousel() {
               onClick={() => eventLogging(item.shop_name)}
             />
           ))}
-          {targetList.length % 2 !== 0 && <PCEmptyCard />}
+          {carouselList.length % 2 !== 0 && <PCEmptyCard />}
         </div>
       </div>
       {
