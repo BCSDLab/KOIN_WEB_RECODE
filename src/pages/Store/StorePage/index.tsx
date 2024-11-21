@@ -217,7 +217,7 @@ function StorePage() {
       actionTitle: 'BUSINESS',
       title: 'shop_categories',
       value: `scroll in ${
-        categories.shop_categories[currentCategoryId].name || '전체보기'
+        categories.shop_categories[currentCategoryId]?.name || '전체보기'
       }`,
       event_category: 'scroll',
     });
@@ -249,7 +249,7 @@ function StorePage() {
     }
     sessionStorage.setItem(
       'cameFrom',
-      categories.shop_categories[selectedCategory].name || '전체보기',
+      categories.shop_categories[selectedCategory]?.name || '전체보기',
     );
   }, [categories, selectedCategory]);
 
