@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -28,6 +30,16 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
   useEffect(() => {
     storeRef.current?.focus();
   }, []);
+  const debounceTimeout = useRef<null | NodeJS.Timeout>(null);
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (value.length === 0) setRelateSearchItems(undefined);
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(async () => {
+      const data = await getRelateSearch(value);
+      setRelateSearchItems(data);
+    }, 200);
+  }, []);
   return (
     <div className={styles['search-bar-modal__background']} ref={backgroundRef}>
       <div className={styles['search-bar-modal__container']}>
@@ -41,7 +53,8 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
             type="text"
             name="search"
             placeholder="검색어를 입력하세요"
-            onKeyDown={async (e) => {
+            onChange={handleInputChange}
+            onKeyDown={(async (e) => {
               if (e.key === 'Enter') {
                 const data = await getRelateSearch(e.currentTarget.value) || '';
                 setRelateSearchItems(data);
@@ -50,7 +63,7 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
               //   replacePage: true,
               // });
               }
-            }}
+            })}
             onFocus={() => {
               const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
               if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId]?.name || '전체보기'}` });
@@ -63,10 +76,10 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
               const value = storeRef.current?.value ?? '';
               const data = await getRelateSearch(value);
               setRelateSearchItems(data);
-              setParams('storeName', storeRef.current?.value ?? '', {
-                deleteBeforeParam: searchParams.get('storeName') === undefined,
-                replacePage: true,
-              });
+              // setParams('storeName', storeRef.current?.value ?? '', {
+              //   deleteBeforeParam: searchParams.get('storeName') === undefined,
+              //   replacePage: true,
+              // });
             }}
           >
             {
@@ -98,6 +111,18 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
                     deleteBeforeParam: searchParams.get('shopIds') === undefined,
                     replacePage: true,
                   });
+                  setParams('searchWord', item.keyword, {
+                    deleteBeforeParam: searchParams.get('searchWord') === undefined,
+                    replacePage: true,
+                  });
+                  setParams('category', '1', {
+                    deleteBeforeParam: false,
+                    replacePage: true,
+                  });
+                  if (!isMobile && storeRef.current) {
+                    storeRef.current.value = '';
+                    setRelateSearchItems(undefined);
+                  }
                 }
                 onClose();
               }}

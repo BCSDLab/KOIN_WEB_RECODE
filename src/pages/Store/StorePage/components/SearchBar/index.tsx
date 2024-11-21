@@ -6,9 +6,9 @@ import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
+import SearchBarModal from 'pages/Store/StorePage/components/SearchBarModal';
 import styles from './SearchBar.module.scss';
 // eslint-disable-next-line no-restricted-imports
-import SearchBarModal from '../SerchBarModal';
 
 export default function SearchBar() {
   const { data: categories } = useStoreCategories();
