@@ -1,5 +1,5 @@
 import React, {
-  Suspense, useEffect, useRef, useState,
+  Suspense, useEffect, useRef,
 } from 'react';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import * as api from 'api';
@@ -17,9 +17,6 @@ import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList'
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import { STORE_PAGE } from 'static/store';
 import IntroToolTip from 'components/common/IntroToolTip';
-import AscSelectArrow from 'assets/svg/store-filter-arrow-asc-select.svg';
-import DescSelectArrow from 'assets/svg/store-filter-arrow-desc-select.svg';
-import DescArrow from 'assets/svg/store-filter-arrow-desc.svg';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
@@ -139,10 +136,6 @@ function StorePage() {
     localStorage.setItem('store-review-tooltip', 'used');
     closeTooltip();
   };
-  const [filterSortingState, setFilterSortingState] = useState({
-    COUNT: false,
-    RATING: false,
-  });
 
   const koreanCategory = selectedCategory === -1
     ? '전체보기'
@@ -166,10 +159,6 @@ function StorePage() {
       setStoreMobileFilterState((prevState) => ({
         ...prevState,
         sorter: item,
-      }));
-      setFilterSortingState((preFilterSortingState) => ({
-        COUNT: item === 'COUNT' ? !preFilterSortingState.COUNT : false,
-        RATING: item === 'RATING' ? !preFilterSortingState.RATING : false,
       }));
 
       if (storeMobileFilterState.sorter !== item) {
@@ -226,18 +215,6 @@ function StorePage() {
   useScrollLogging(storeScrollLogging);
 
   const enterCategoryTimeRef = useRef<number | null>(null);
-  const handleIcon = (item: MobileCheckBoxItem) => {
-    if (item.id === 'COUNT' || item.id === 'RATING') {
-      const isSelected = storeMobileFilterState.sorter === item.id;
-
-      if (isSelected) {
-        return filterSortingState[item.id] ? <DescSelectArrow /> : <AscSelectArrow />;
-      }
-
-      return <DescArrow />;
-    }
-    return null;
-  };
   useEffect(() => {
     if (enterCategoryTimeRef.current === null) {
       const currentTime = new Date().getTime();
@@ -403,7 +380,6 @@ function StorePage() {
             type="button"
             onClick={() => onClickMobileStoreListFilter(item.id)}
           >
-            {handleIcon(item)}
             {item.content}
           </button>
         ))}
@@ -417,14 +393,12 @@ function StorePage() {
       <Suspense fallback={<LoadingSpinner size="100" />}>
         {!isMobile ? (
           <DesktopStoreList
-            storeListData={filterSortingState.COUNT || filterSortingState.RATING
-              ? storeList : storeList.reverse()}
+            storeListData={storeList}
             storeType={STORE_PAGE.MAIN}
           />
         ) : (
           <MobileStoreList
-            storeListData={filterSortingState.COUNT || filterSortingState.RATING
-              ? storeList : storeList.reverse()}
+            storeListData={storeList}
             storeType={STORE_PAGE.MAIN}
           />
         )}
