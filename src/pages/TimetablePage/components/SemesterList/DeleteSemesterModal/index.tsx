@@ -1,5 +1,6 @@
 import React from 'react';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DeleteSemesterModal.module.scss';
 
 export interface DeleteSemesterModalProps {
@@ -13,13 +14,15 @@ export default function DeleteSemesterModal({
   handleDeleteSemester,
   setModalOpenFalse,
 }: DeleteSemesterModalProps) {
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+
   const closeModal = () => {
     setModalOpenFalse();
     onClose();
   };
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>학기를 삭제하시겠습니까?</span>

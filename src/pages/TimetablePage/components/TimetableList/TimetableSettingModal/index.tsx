@@ -8,6 +8,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
@@ -28,6 +29,7 @@ export default function TimetableSettingModal({
   const { data: myFrames } = useTimetableFrameList(token, semester);
   const myLectures = useMyLecturesV2(focusFrame.id!);
   const { mutate: updateFrameInfo } = useUpdateTimetableFrame();
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
   const submitFrameForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,7 +88,7 @@ export default function TimetableSettingModal({
   };
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>시간표 설정</span>
