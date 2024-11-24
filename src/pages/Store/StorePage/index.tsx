@@ -116,12 +116,12 @@ const useStoreList = (
 };
 
 function StorePage() {
-  const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
-    sorter: '',
-    filter: [],
-  });
   const [isToolTipOpen, setIsToolTipOpen] = React.useState(true);
   const { params, searchParams, setParams } = useParamsHandler();
+  const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
+    sorter: searchParams.get('COUNT') ? 'COUNT' : '',
+    filter: [],
+  });
   const storeList = useStoreList(
     storeMobileFilterState.sorter,
     storeMobileFilterState.filter,
@@ -167,7 +167,7 @@ function StorePage() {
           title: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
-            categories.shop_categories[selectedCategory].name,
+            categories.shop_categories[selectedCategory]?.name,
           ),
           event_category: 'click',
         });
@@ -189,7 +189,7 @@ function StorePage() {
           title: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
-            categories.shop_categories[selectedCategory].name,
+            categories.shop_categories[selectedCategory]?.name,
           ),
           event_category: 'click',
         });
