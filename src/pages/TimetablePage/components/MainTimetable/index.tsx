@@ -34,23 +34,37 @@ function MainTimetable({ frameId }: { frameId: number }) {
   const { data: deptList } = useDeptList();
   const { data: mySemester } = useSemesterCheck(token);
 
+  const isSemesterAndTimetableExist = () => {
+    if (mySemester?.semesters.length === 0) {
+      toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
+      return false;
+    }
+
+    if (timeTableFrameList.length === 0) {
+      toast.error('시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
+      return false;
+    }
+
+    return true;
+  };
+
   const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    logger.actionEventClick({
-      actionTitle: 'USER',
-      title: 'timetable',
-      value: '이미지저장',
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
-    });
-    openModal();
+
+    if (isSemesterAndTimetableExist()) {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        title: 'timetable',
+        value: '이미지저장',
+        duration_time:
+        (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+      });
+      openModal();
+    }
   };
 
   const onClickEdit = () => {
-    if (mySemester?.semesters.length === 0) {
-      toast('학기가 존재하지 않습니다. 학기를 추가해주세요.');
-    } else if (timeTableFrameList.length === 0) {
-      toast('시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
-    } else {
+    if (isSemesterAndTimetableExist()) {
       navigate(`/timetable/modify/regular/${token ? frameId : semester}`);
     }
   };
