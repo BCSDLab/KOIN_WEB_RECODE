@@ -53,6 +53,7 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
             type="text"
             name="search"
             placeholder="검색어를 입력하세요"
+            autoComplete="off"
             onChange={handleInputChange}
             onKeyDown={(async (e) => {
               if (e.key === 'Enter') {
