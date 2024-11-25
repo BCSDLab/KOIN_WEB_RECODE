@@ -107,7 +107,6 @@ function Timetable({
 
     if (block === 3) {
       if (kind === 'name' || kind === 'professor' || kind === 'place') return rowHeight / 2;
-      if (kind === 'name') return rowHeight;
     }
 
     return rowHeight;
