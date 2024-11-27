@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import useToast from 'components/common/Toast/useToast';
-import { CustomTimetableLectureInfo, LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { LectureInfo, LectureInfoV2 } from 'api/timetable/entity';
+import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
@@ -23,30 +24,30 @@ export default function useTimetableV2Mutation(frameId: number) {
   const { mutate: removeLectureFromServer } = useDeleteTimetableLectureV2(token);
   const semester = useSemester();
 
-  const addMyLectureV2 = (clickedLecture: LectureInfo | CustomTimetableLectureInfo) => {
+  const addMyLectureV2 = (clickedLecture: LectureInfo | LectureInfoV2) => {
     if (token) {
+      // 커스텀 강의 추가 시
       if ('class_title' in clickedLecture) {
         mutateAddWithServer({
           timetable_frame_id: frameId,
           timetable_lecture: [
             {
-              ...clickedLecture,
-              class_time: clickedLecture.class_time.flatMap((subArr) => [
-                ...subArr,
-                -1,
-              ]),
-              class_place: clickedLecture.class_place ? clickedLecture.class_place.join(', ') : '',
+              class_title: clickedLecture.class_title,
+              class_infos: clickedLecture.class_infos,
+              professor: clickedLecture.professor,
+              grades: clickedLecture.grades,
+              lecture_id: clickedLecture.id,
             },
           ],
         });
-      } else {
+      } else { // 정규 강의 추가 시
         mutateAddWithServer({
           timetable_frame_id: frameId,
           timetable_lecture: [
             {
-              ...clickedLecture,
+              ...clickedLecture, // 필요 없을 수도 있음
               class_title: null,
-              class_time: null,
+              class_infos: null,
               professor: null,
               grades: '0',
               lecture_id: clickedLecture.id,
@@ -54,11 +55,12 @@ export default function useTimetableV2Mutation(frameId: number) {
           ],
         });
       }
-    } else if ('code' in clickedLecture) {
+    } else if ('code' in clickedLecture) { // (비로그인)정규 강의 추가 시
       addLectureFromLocalStorage(clickedLecture, semester);
     }
   };
 
+  // 강의 복원
   const restoreLecture = () => {
     const restoredLecture = JSON.parse(sessionStorage.getItem('restoreLecture')!);
     if ('name' in restoredLecture) {

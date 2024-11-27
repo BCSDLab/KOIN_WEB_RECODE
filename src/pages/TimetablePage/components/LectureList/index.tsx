@@ -2,8 +2,7 @@ import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import {
   LectureInfo,
-  TimetableLectureInfoV2,
-} from 'interfaces/Lecture';
+} from 'api/timetable/entity';
 import React from 'react';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
@@ -24,18 +23,18 @@ import styles from './LectureList.module.scss';
 
 interface CurrentSemesterLectureListProps {
   rowWidthList: number[];
-  semesterKey: string;
+  currentSemester: string;
   filter: {
     department: string;
     search: string;
   };
-  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
+  myLecturesV2: Array<LectureInfo>;
   frameId: number;
 }
 
 interface MyLectureListBoxProps {
   rowWidthList: number[];
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
+  myLectures: Array<LectureInfo>;
   frameId: number;
 }
 
@@ -49,14 +48,14 @@ const useFlexibleWidth = (length: number, initialValue: number[]) => {
 
 function CurrentSemesterLectureList({
   rowWidthList,
-  semesterKey,
+  currentSemester,
   filter,
   myLecturesV2,
   frameId,
 }: CurrentSemesterLectureListProps) {
   const tempLecture = useTempLecture();
   const { data: userInfo } = useUser();
-  const { data: lectureList } = useLectureList(semesterKey);
+  const { data: lectureList } = useLectureList(currentSemester);
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLectureV2 } = useTimetableV2Mutation(frameId);
 
@@ -101,7 +100,7 @@ function CurrentSemesterLectureList({
               return;
             }
             const myLectureTimeValue = (
-              myLecturesV2 as Array<LectureInfo | TimetableLectureInfoV2>
+              myLecturesV2 as Array<LectureInfo>
             ).reduce((acc, cur) => {
               if (cur.class_time) {
                 return acc.concat(cur.class_time);
@@ -110,11 +109,9 @@ function CurrentSemesterLectureList({
             }, [] as number[]);
 
             if (
-              clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))
+              clickedLecture.class_time.some((time: number) => myLectureTimeValue.includes(time))
             ) {
-              const myLectureList = myLecturesV2 as Array<
-              LectureInfo & TimetableLectureInfoV2
-              >;
+              const myLectureList = myLecturesV2 as Array<LectureInfo>;
               const alreadySelectedLecture = myLectureList.find(
                 (lecture) => lecture.class_time.some(
                   (time) => clickedLecture.class_time.includes(time),
@@ -127,13 +124,13 @@ function CurrentSemesterLectureList({
                 if (alreadySelectedLecture.lecture_class) { // 분반이 존재하는 경우
                   showToast(
                     'error',
-                    `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                    `${alreadySelectedLecture.name}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
                   );
                   return;
                 }
                 showToast( // 직접 강의를 추가하여 분반이 존재하지 않는 경우
                   'error',
-                  `${alreadySelectedLecture.class_title} 강의가 중복되어 추가할 수 없습니다.`,
+                  `${alreadySelectedLecture.name} 강의가 중복되어 추가할 수 없습니다.`,
                 );
                 return;
               }
@@ -180,6 +177,18 @@ function MyLectureListBox({ rowWidthList, myLectures, frameId }: MyLectureListBo
 
 function LectureList({ frameId }: { frameId: number }) {
   const logger = useLogger();
+
+  const {
+    onClickSearchButton,
+    onKeyDownSearchInput,
+    value: searchValue,
+    searchInputRef,
+  } = useSearch();
+  const {
+    value: departmentFilterValue,
+    onChangeSelect: onChangeDeptSelect,
+  } = useSelect();
+
   // 가장 최신연도와 월을 가져옴
   const semester = useSemester();
   const { updateSemester } = useSemesterAction();
@@ -189,18 +198,10 @@ function LectureList({ frameId }: { frameId: number }) {
     // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
     updateSemester(semesterParams || mostRecentSemester);
   }
-  const {
-    value: departmentFilterValue,
-    onChangeSelect: onChangeDeptSelect,
-  } = useSelect();
+
   const { myLecturesV2 } = useMyLecturesV2(frameId);
+
   const [isToggled, setIsToggled] = React.useState(false);
-  const {
-    onClickSearchButton,
-    onKeyDownSearchInput,
-    value: searchValue,
-    searchInputRef,
-  } = useSearch();
   const { widthInfo } = useFlexibleWidth(9, [61, 173, 41, 61, 61, 41, 41, 41, 61]);
 
   const toggleLectureList = () => {
@@ -273,7 +274,7 @@ function LectureList({ frameId }: { frameId: number }) {
             <CurrentSemesterLectureList
               rowWidthList={widthInfo}
               frameId={frameId}
-              semesterKey={semester}
+              currentSemester={semester}
               filter={{
                 // 백엔드 수정하면 제거
                 department: departmentFilterValue ?? '전체',

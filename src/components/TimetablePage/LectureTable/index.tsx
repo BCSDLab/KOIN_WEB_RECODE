@@ -1,4 +1,4 @@
-import type { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { LectureInfo } from 'api/timetable/entity';
 import React from 'react';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import { cn } from '@bcsdlab/utils';
@@ -10,11 +10,11 @@ import styles from './LectureTable.module.scss';
 interface LectureTableProps {
   rowWidthList: number[];
   frameId: number;
-  list: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
-  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
-  selectedLecture: LectureInfo | TimetableLectureInfoV2 | undefined | Omit<TimetableLectureInfoV2, 'name'>;
-  onClickRow: ((value: LectureInfo | TimetableLectureInfoV2) => void) | undefined;
-  onDoubleClickRow: ((value: LectureInfo | TimetableLectureInfoV2) => void) | undefined;
+  list: Array<LectureInfo>;
+  myLecturesV2: Array<LectureInfo>;
+  selectedLecture: LectureInfo | undefined;
+  onClickRow: ((value: LectureInfo) => void) | undefined;
+  onDoubleClickRow: ((value: LectureInfo) => void) | undefined;
   version: 'semesterLectureList' | 'myLectureList'
 }
 
@@ -23,7 +23,7 @@ interface RemoveLectureProps {
 }
 
 const isLectureInfo = (
-  value: LectureInfo | TimetableLectureInfoV2,
+  value: LectureInfo,
 ): value is LectureInfo => 'name' in value;
 
 export const LECTURE_TABLE_HEADER = [
@@ -48,7 +48,7 @@ function LectureTable({
   onDoubleClickRow,
   version,
 }: LectureTableProps): JSX.Element {
-  const tempLecture = useTempLecture();
+  const tempLecture = useTempLecture(); // 이거 selectedLecture랑 같을 수 있음
   const { updateTempLecture } = useTempLectureAction();
   const [cursor, setCursor] = React.useState(-1);
   const { containerRef } = useOutsideClick({
@@ -68,7 +68,7 @@ function LectureTable({
   };
   const [isMouseOver, setIsMouseOver] = React.useState(-1);
   const handleTableRowClick = (
-    value: LectureInfo | TimetableLectureInfoV2,
+    value: LectureInfo,
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     if (e.detail === 1 && onClickRow !== undefined) {
@@ -134,7 +134,7 @@ function LectureTable({
           <div
             className={cn({
               [styles.table__row]: true,
-              [styles['table__row--include']]: version !== 'myLectureList' ? myLecturesV2.some(
+              [styles['table__row--include']]: version === 'semesterLectureList' ? myLecturesV2.some(
                 (item) => item.code === lecture.code
                   && item.lecture_class === lecture.lecture_class,
               ) : false,
@@ -201,9 +201,10 @@ function LectureTable({
                     {headerItem.key === 'name'
                       && isLectureInfo(lecture)
                       && lecture.name}
-                    {headerItem.key === 'name'
-                      && !isLectureInfo(lecture)
-                      && lecture.class_title}
+                    {// {headerItem.key === 'name'
+                    //   && !isLectureInfo(lecture)
+                    //   && lecture.class_title}
+                    }
                     {headerItem.key !== null
                       && headerItem.key !== 'professor'
                       && headerItem.key !== 'name'
