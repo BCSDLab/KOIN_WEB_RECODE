@@ -1,48 +1,42 @@
 import APIClient from 'utils/ts/apiClient';
 import {
-  LectureList,
   SemesterInfoList,
-  TimetableAddLecture,
-  TimetableInfo,
-  TimetableRemoveLecture,
-  VersionInfo,
   SemesterCheck,
-  DeleteSemester,
+  LectureList,
+  TimetableLectureInfo,
+  TimetableLectureEdit,
+  TimetableLectureAddition,
+  TimetableLectureDeletion,
   TimetableFrameList,
-  AddTimetableFrame,
-  UpdateTimetableFrame,
+  TimetableFrameAddition,
+  TimetableFrameEdit,
   DeleteTimetableFrame,
-  TimetableLectureInfoV2,
-  AddTimetableLectureV2,
-  DeleteTimetableLectureV2,
+  DeleteSemester,
+  VersionInfo,
 } from './APIDetail';
-
-export const getLectureList = APIClient.of(LectureList);
 
 export const getSemesterInfoList = APIClient.of(SemesterInfoList);
 
-export const getTimetableInfo = APIClient.of(TimetableInfo);
-
-export const changeTimetableInfoByAddLecture = APIClient.of(TimetableAddLecture);
-
-export const changeTimetableInfoByRemoveLecture = APIClient.of(TimetableRemoveLecture);
-
-export const getVersion = APIClient.of(VersionInfo);
-
 export const getMySemester = APIClient.of(SemesterCheck);
 
-export const deleteSemester = APIClient.of(DeleteSemester);
+export const getLectureList = APIClient.of(LectureList);
+
+export const getTimetableInfo = APIClient.of(TimetableLectureInfo);
+
+export const editTimetableLecture = APIClient.of(TimetableLectureEdit);
+
+export const changeTimetableInfoByAddLecture = APIClient.of(TimetableLectureAddition);
+
+export const changeTimetableInfoByRemoveLecture = APIClient.of(TimetableLectureDeletion);
 
 export const getTimetableFrame = APIClient.of(TimetableFrameList);
 
-export const addTimetableFrame = APIClient.of(AddTimetableFrame);
+export const addTimetableFrame = APIClient.of(TimetableFrameAddition);
 
-export const updateTimetableFrame = APIClient.of(UpdateTimetableFrame);
+export const editTimetableFrame = APIClient.of(TimetableFrameEdit);
 
 export const deleteTimetableFrame = APIClient.of(DeleteTimetableFrame);
 
-export const getTimetableLectureInfoV2 = APIClient.of(TimetableLectureInfoV2);
+export const deleteSemester = APIClient.of(DeleteSemester);
 
-export const changeTimetableInfoByAddLectureV2 = APIClient.of(AddTimetableLectureV2);
-
-export const changeTimetableInfoByRemoveLectureV2 = APIClient.of(DeleteTimetableLectureV2);
+export const getVersion = APIClient.of(VersionInfo);
