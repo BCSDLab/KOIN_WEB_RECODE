@@ -21,7 +21,7 @@ export const getMySemester = APIClient.of(SemesterCheck);
 
 export const getLectureList = APIClient.of(LectureList);
 
-export const getTimetableInfo = APIClient.of(TimetableLectureInfo);
+export const getTimetableLectureInfo = APIClient.of(TimetableLectureInfo);
 
 export const editTimetableLecture = APIClient.of(TimetableLectureEdit);
 

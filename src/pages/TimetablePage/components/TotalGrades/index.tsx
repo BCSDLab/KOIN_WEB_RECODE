@@ -1,9 +1,9 @@
-import { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { LectureInfo } from 'api/timetable/entity';
 import { useEffect, useState } from 'react';
 import styles from './TotalGrades.module.scss';
 
 interface TotalGradesProps {
-  myLectureList: LectureInfo[] | TimetableLectureInfoV2[] | undefined;
+  myLectureList: LectureInfo[] | undefined;
 }
 
 function TotalGrades({ myLectureList = [] }: TotalGradesProps) {
