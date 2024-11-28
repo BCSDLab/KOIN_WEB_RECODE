@@ -2,6 +2,7 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
+import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -289,7 +290,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
   const { data: userInfo } = useUser();
   const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
   const { data: deptList } = useDeptList();
-  const [major, setMajor] = React.useState<string | null>(userInfo?.major || '');
+  const [major, setMajor] = React.useState<string | null>(userInfo?.major || null);
   const deptOptionList = deptList.map((dept) => ({
     label: dept.name,
     value: dept.name,
@@ -302,16 +303,10 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = '오류가 발생했습니다';
-    if (!studentNumber) {
-      return {
-        value: '',
-        valid: true,
-      };
-    }
     const year = parseInt(studentNumber.slice(0, 4), 10);
     if (year < 1992 || year > new Date().getFullYear()) {
       valid = '올바른 입학년도가 아닙니다.';
-    } else if (studentNumber.length !== 10) {
+    } else if (studentNumber && studentNumber.length !== 10) {
       valid = '학번은 10자리여야 합니다.';
     } else {
       valid = true;
@@ -356,7 +351,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
 }, ref) => {
   const { data: userInfo } = useUser();
   const [currentValue, setCurrentValue] = React.useState<number | null>(userInfo?.gender || null);
-  const [isOpenedPopup, openPopup, closePopup, triggerPopup] = useBooleanState(false);
+  const [isOpenedPopup,, closePopup, triggerPopup] = useBooleanState(false);
   const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
     const { currentTarget } = event;
     const value = currentTarget.getAttribute('data-value');
@@ -396,12 +391,9 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         [styles.select]: true,
         [styles['select--flex-end']]: true,
       })}
-      onMouseLeave={closePopup}
     >
       <button
         type="button"
-        onMouseOver={openPopup}
-        onFocus={openPopup}
         onClick={triggerPopup}
         name={name}
         className={cn({
@@ -411,6 +403,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         {
           currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'
         }
+        <ChervronUpDown />
       </button>
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">

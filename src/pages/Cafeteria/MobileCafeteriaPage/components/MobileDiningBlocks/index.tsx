@@ -1,5 +1,3 @@
-import HeartIcon from 'assets/svg/heart.svg';
-import FilledHeartIcon from 'assets/svg/heart-filled.svg';
 import { Dining, DiningType } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -10,8 +8,6 @@ import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/Mobi
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
 import DetailImage from 'pages/Cafeteria/MobileCafeteriaPage/components/DetailImage';
-import LoginPromptModal from 'components/Cafeteria/LoginPromptModal';
-import { useUser } from 'utils/hooks/state/useUser';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
@@ -21,9 +17,8 @@ interface MobileDiningBlocksProps {
 export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksProps) {
   const logger = useLogger();
   const portalManager = useModalPortal();
-  const { data: isAuth } = useUser();
   const { currentDate } = useDatePicker();
-  const { dinings, likeDining } = useDinings(currentDate());
+  const { dinings } = useDinings(currentDate());
   const filteredDinings = filterDinings(dinings, diningType);
 
   const handleImageClick = (dining: Dining) => {
@@ -37,19 +32,6 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
       portalManager.open((portalOption: Portal) => (
         <DetailImage url={dining?.image_url} close={() => portalOption.close()} />
       ));
-    }
-  };
-
-  const handleLikeClick = ({ id, is_liked }: Dining) => {
-    if (!isAuth) {
-      portalManager.open((portalOption: Portal) => (
-        <LoginPromptModal
-          onConfirm={() => likeDining(id, is_liked)}
-          closeModal={portalOption.close}
-        />
-      ));
-    } else {
-      likeDining(id, is_liked);
     }
   };
 
@@ -87,14 +69,6 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
               </ul>
               <MobileMealImage dining={dining} handleImageClick={handleImageClick} />
             </li>
-            <button
-              type="button"
-              className={styles.like}
-              onClick={() => handleLikeClick(dining)}
-            >
-              {dining.is_liked ? <FilledHeartIcon /> : <HeartIcon />}
-              <span className={styles.like__count}>{dining.likes === 0 ? '좋아요' : dining.likes.toLocaleString()}</span>
-            </button>
           </ul>
         </div>
       ))}

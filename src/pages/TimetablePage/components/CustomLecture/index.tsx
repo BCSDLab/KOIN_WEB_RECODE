@@ -11,6 +11,7 @@ import showToast from 'utils/ts/showToast';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
 
 type TimeSpaceComponents = {
@@ -23,6 +24,7 @@ type TimeSpaceComponents = {
   week: string[],
   lectureTime: number[],
   place: string,
+  id: string,
 };
 
 function CustomLecture({ frameId }: { frameId: string | undefined }) {
@@ -44,6 +46,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
     week: ['월'],
     lectureTime: [0, 1],
     place: '',
+    id: uuidv4(),
   }]);
   const timeSpaceContainerRef = React.useRef<HTMLDivElement>(null);
   const reverseRef = React.useRef<HTMLDivElement[] | null[]>([]);
@@ -145,6 +148,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       week: ['월'],
       lectureTime: [0, 1],
       place: '',
+      id: uuidv4(),
     }]);
     setIsFirstSubmit(true);
   };
@@ -173,6 +177,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       week: [],
       lectureTime: [],
       place: '',
+      id: uuidv4(),
     }]);
     setTimeout(() => {
       timeSpaceContainerRef.current!.scrollTo({
@@ -338,8 +343,9 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             week,
             lectureTime,
             place,
+            id,
           }, index) => (
-            <div className={styles['time-space-container__component']}>
+            <div className={styles['time-space-container__component']} key={id}>
               <button
                 aria-label="delete-time-space-component"
                 type="button"

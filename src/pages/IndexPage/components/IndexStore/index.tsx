@@ -45,9 +45,9 @@ function IndexStore() {
       current_page: category.name,
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     });
-    navigate(`${ROUTES.Store()}?category=${category.id}`);
+    navigate(`${ROUTES.Store()}?category=${category.id}&COUNT=1`);
   };
-  const hadleStoreClick = () => {
+  const handleStoreClick = () => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'main_shop_benefit',
@@ -77,18 +77,18 @@ function IndexStore() {
               <button
                 type="button"
                 className={styles['store-branch-button']}
-                onClick={() => hadleStoreClick()}
+                onClick={() => handleStoreClick()}
               >
                 <img className={styles['store-branch-button__icon']} src="https://team-kap-koin-storage.s3.ap-northeast-2.amazonaws.com/assets/img/icon/call_icon.png" alt="이미지 오류" />
                 전화 주문 혜택
               </button>
             </div>
           )
-          : categories?.shop_categories.map((category) => (
+          : categories?.shop_categories.slice(isMobile ? 1 : 0, 12).map((category) => (
             category.name === '전체보기' && ABView === 'B' ? (
               <div
                 className={styles.category__benefit}
-                onClick={() => hadleStoreClick()}
+                onClick={() => handleStoreClick()}
                 aria-hidden
               >
                 <img

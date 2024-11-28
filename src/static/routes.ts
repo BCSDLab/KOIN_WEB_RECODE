@@ -11,6 +11,7 @@ type ROUTESParams<T extends string = string> = {
 
 const ROUTES = {
   Main: () => '/',
+  NotFound: () => '*',
   Timetable: () => '/timetable',
   TimetableRegular: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `timetable/modify/regular/${id}` : 'timetable/modify/regular/:id'),
   TimetableDirect: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `timetable/modify/direct/${id}` : 'timetable/modify/direct/:id'),
