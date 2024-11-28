@@ -44,7 +44,7 @@ export interface MyLectureInfo {
 
 export interface TimetableLectureInfo {
   id: number;
-  lecture_id?: number; // 정규 강의의 고유 id 같음(따라서 커스텀 강의에는 lecture_id가 없음)
+  lecture_id?: number;
   class_title: string | null;
   class_infos: LectureSchedule[] | null;
   professor?: string | null;
