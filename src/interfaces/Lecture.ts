@@ -3,9 +3,6 @@ import { LectureInfo } from 'api/timetable/entity';
 export interface TimetableInfoFromLocalStorage {
   [key: string]: LectureInfo[];
 }
-export interface TimetableInfoFromLocalStorageV2 {
-  [key: string]: LectureInfo[];
-}
 
 export interface TimetableDayLectureInfo {
   name: string;

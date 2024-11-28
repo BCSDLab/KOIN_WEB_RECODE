@@ -6,26 +6,26 @@ import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import useAddTimetableLectureV2 from './useAddTimetableLectureV2';
-import useDeleteTimetableLectureV2 from './useDeleteTimetableLectureV2';
+import useAddTimetableLecture from './useAddTimetableLecture';
+import useDeleteTimetableLecture from './useDeleteTimetableLecture';
 
-type RemoveMyLectureV2Props = {
+type RemoveMyLectureProps = {
   clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'> | null,
   id: number
 };
 
-export default function useTimetableV2Mutation(frameId: number) {
+export default function useTimetableMutation(frameId: number) {
   const token = useTokenState();
   const toast = useToast();
-  const { mutate: mutateAddWithServer } = useAddTimetableLectureV2(token);
+  const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const {
     addLecture: addLectureFromLocalStorage,
     removeLecture: removeLectureFromLocalStorage,
   } = useLecturesAction();
-  const { mutate: removeLectureFromServer } = useDeleteTimetableLectureV2(token);
+  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
   const semester = useSemester();
 
-  const addMyLectureV2 = (clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'>) => {
+  const addMyLecture = (clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'>) => {
     if (token) {
       // 커스텀 강의 추가 시
       if ('class_title' in clickedLecture) {
@@ -74,8 +74,8 @@ export default function useTimetableV2Mutation(frameId: number) {
     }
   };
 
-  const removeMyLectureV2 = useMutation({
-    mutationFn: async ({ clickedLecture, id } : RemoveMyLectureV2Props) => {
+  const removeMyLecture = useMutation({
+    mutationFn: async ({ clickedLecture, id } : RemoveMyLectureProps) => {
       sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
       if (clickedLecture && 'name' in clickedLecture) {
         return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, semester));
@@ -100,5 +100,5 @@ export default function useTimetableV2Mutation(frameId: number) {
     },
   });
 
-  return { addMyLectureV2, removeMyLectureV2 };
+  return { addMyLecture, removeMyLecture };
 }

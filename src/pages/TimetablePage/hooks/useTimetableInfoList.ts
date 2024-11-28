@@ -5,11 +5,11 @@ import { KoinError } from 'interfaces/APIError';
 
 export const TIMETABLE_INFO_LIST = 'TIMETABLE_INFO_LIST';
 
-function useTimetableV2InfoList(
+function useTimetableInfoList(
   timetableFrameId: number,
   authorization: string,
 ) {
-  const { data: timetableV2InfoList } = useSuspenseQuery<
+  const { data: timetableInfoList } = useSuspenseQuery<
   TimetableLectureInfoResponse | null,
   KoinError,
   MyLectureInfo[] | undefined,
@@ -22,7 +22,7 @@ function useTimetableV2InfoList(
       select: (data) => (data ? data.timetable : undefined),
     },
   );
-  return { data: timetableV2InfoList };
+  return { data: timetableInfoList };
 }
 
-export default useTimetableV2InfoList;
+export default useTimetableInfoList;

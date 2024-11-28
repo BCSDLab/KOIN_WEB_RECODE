@@ -2,13 +2,13 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
-import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import Listbox from 'components/TimetablePage/Listbox';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
 import WarningIcon from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';
-import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { MyLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
@@ -31,8 +31,8 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const token = useTokenState();
   const customTempLecture = useCustomTempLecture();
   const { updateCustomTempLecture } = useCustomTempLectureAction();
-  const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
-  const { addMyLectureV2 } = useTimetableV2Mutation(Number(frameId));
+  const { myLectures } = useMyLectures(Number(frameId));
+  const { addMyLecture } = useTimetableMutation(Number(frameId));
 
   const [lectureName, setLectureName] = React.useState('');
   const [professorName, setProfessorName] = React.useState('');
@@ -118,7 +118,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       );
       return;
     }
-    const myLectureList = myLecturesV2 as MyLectureInfo[];
+    const myLectureList = myLectures as MyLectureInfo[];
     const alreadySelectedLecture = myLectureList.find(
       (lecture) => lecture.class_infos.some((schedule) => (
         schedule.class_time.some(
@@ -138,7 +138,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       showToast('error', '쉼표 문자 ( , )를 제외하고 입력해 주세요.');
       return;
     }
-    addMyLectureV2(customTempLecture!);
+    addMyLecture(customTempLecture!);
     setLectureName('');
     setProfessorName('');
     setTimeSpaceComponents([{

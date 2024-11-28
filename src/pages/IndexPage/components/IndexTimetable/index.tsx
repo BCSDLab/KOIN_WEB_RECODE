@@ -5,9 +5,9 @@ import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
-import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
+import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
@@ -30,13 +30,13 @@ function CurrentSemesterTimetable() {
     }
   }, [timetableFrameList]);
 
-  const { myLecturesV2 } = useMyLecturesV2(currentFrameIndex);
-  const myLectureDayValueV2 = useTimetableDayListV2(myLecturesV2);
+  const { myLectures } = useMyLectures(currentFrameIndex);
+  const myLectureDayValue = useTimetableDayList(myLectures);
 
-  return myLectureDayValueV2 ? (
+  return myLectureDayValue ? (
     <Timetable
       frameId={currentFrameIndex}
-      lectures={myLectureDayValueV2}
+      lectures={myLectureDayValue}
       columnWidth={44}
       firstColumnWidth={29}
       rowHeight={17.3}

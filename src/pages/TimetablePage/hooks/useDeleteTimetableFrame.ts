@@ -3,7 +3,7 @@ import { timetable } from 'api';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useToast from 'components/common/Toast/useToast';
 import useAddTimetableFrame from './useAddTimetableFrame';
-import useAddTimetableLectureV2 from './useAddTimetableLectureV2';
+import useAddTimetableLecture from './useAddTimetableLecture';
 import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
 
 type DeleteTimetableFrameProps = {
@@ -15,7 +15,7 @@ export default function useDeleteTimetableFrame(token: string, semester: string)
   const queryClient = useQueryClient();
   const toast = useToast();
   const { mutateAsync: addTimetableFrame } = useAddTimetableFrame(token);
-  const { mutate: mutateAddWithServer } = useAddTimetableLectureV2(token);
+  const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const recoverFrame = async () => {
     const restoredFrame = JSON.parse(sessionStorage.getItem('restoreFrame')!);
     const restoredLectures = JSON.parse(sessionStorage.getItem('restoreLecturesInFrame')!);
@@ -24,7 +24,7 @@ export default function useDeleteTimetableFrame(token: string, semester: string)
     );
     mutateAddWithServer({
       timetable_frame_id: newTimetableFrame.id!,
-      timetable_lecture: restoredLectures.myLecturesV2,
+      timetable_lecture: restoredLectures.myLectures,
     });
   };
 

@@ -2,9 +2,9 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { changeTimetableInfoByRemoveLecture } from 'api/timetable';
 import { toast } from 'react-toastify';
-import { TIMETABLE_INFO_LIST } from './useTimetableV2InfoList';
+import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 
-export default function useDeleteTimetableLectureV2(authorization: string) {
+export default function useDeleteTimetableLecture(authorization: string) {
   const queryClient = useQueryClient();
 
   return useMutation({

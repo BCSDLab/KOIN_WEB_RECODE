@@ -4,15 +4,15 @@ import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import showToast from 'utils/ts/showToast';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import SemesterListbox from 'pages/TimetablePage/components/SemesterList';
-import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
-import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
+import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import styles from './MobilePage.module.scss';
 
 function MobilePage({ frameId }: { frameId: string | undefined }) {
   const logger = useLogger();
-  const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
+  const { myLectures } = useMyLectures(Number(frameId));
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ function MobilePage({ frameId }: { frameId: string | undefined }) {
     onTimetableImageDownload('my-timetable');
   };
 
-  const myLectureDayValueV2 = useTimetableDayListV2(myLecturesV2);
+  const myLectureDayValue = useTimetableDayList(myLectures);
 
   return (
     <>
@@ -63,7 +63,7 @@ function MobilePage({ frameId }: { frameId: string | undefined }) {
             >
               <Timetable
                 frameId={Number(frameId)}
-                lectures={myLectureDayValueV2}
+                lectures={myLectureDayValue}
                 columnWidth={55}
                 firstColumnWidth={52}
                 rowHeight={21}

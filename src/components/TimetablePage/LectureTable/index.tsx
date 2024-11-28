@@ -2,7 +2,7 @@ import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import React from 'react';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import { cn } from '@bcsdlab/utils';
-import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LectureTable.module.scss';
@@ -11,7 +11,7 @@ interface LectureTableProps {
   rowWidthList: number[];
   frameId: number;
   list: Array<LectureInfo> | Array<MyLectureInfo>;
-  myLecturesV2: Array<LectureInfo> | Array<MyLectureInfo>;
+  myLectures: Array<LectureInfo> | Array<MyLectureInfo>;
   selectedLecture: LectureInfo | undefined;
   onClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
   onDoubleClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
@@ -38,7 +38,7 @@ function LectureTable({
   rowWidthList,
   frameId,
   list,
-  myLecturesV2,
+  myLectures,
   selectedLecture,
   onClickRow,
   onDoubleClickRow,
@@ -54,11 +54,11 @@ function LectureTable({
     },
   });
 
-  const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
+  const { removeMyLecture } = useTimetableMutation(frameId);
   const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
-    myLecturesV2.forEach((lecture) => {
+    myLectures.forEach((lecture) => {
       if (lecture.id === id) {
-        removeMyLectureV2.mutate({ clickedLecture: lecture, id });
+        removeMyLecture.mutate({ clickedLecture: lecture, id });
       }
     });
   };
@@ -130,7 +130,7 @@ function LectureTable({
           <div
             className={cn({
               [styles.table__row]: true,
-              [styles['table__row--include']]: version === 'semesterLectureList' ? myLecturesV2.some(
+              [styles['table__row--include']]: version === 'semesterLectureList' ? myLectures.some(
                 (item) => item.code === lecture.code
                   && item.lecture_class === lecture.lecture_class,
               ) : false,

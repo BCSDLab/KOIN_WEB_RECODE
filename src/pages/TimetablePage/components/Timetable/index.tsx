@@ -9,13 +9,13 @@ import {
 } from 'static/timetable';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import { useLocation } from 'react-router-dom';
-import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
-import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
-import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
+import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -45,23 +45,23 @@ function Timetable({
   const [isMouseOver, setIsMouseOver] = React.useState('');
   const { pathname } = useLocation();
   const isEditable = pathname.includes('/timetable/modify');
-  const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
-  const { myLecturesV2 } = useMyLecturesV2(frameId);
+  const { removeMyLecture } = useTimetableMutation(frameId);
+  const { myLectures } = useMyLectures(frameId);
   const tempLecture = useTempLecture();
   const customTempLecture = useCustomTempLecture();
   const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
-  const customDayValue = useTimetableDayListV2(customTempLectureArray);
+  const customDayValue = useTimetableDayList(customTempLectureArray);
   const { timeString, setTimeString } = useTimeString();
   const handleRemoveLectureClick = (id: number) => {
     let lectureToRemove: LectureInfo | MyLectureInfo | null = null;
     let lectureId = id;
-    myLecturesV2.forEach((lecture: LectureInfo | MyLectureInfo) => {
+    myLectures.forEach((lecture: LectureInfo | MyLectureInfo) => {
       if (lecture.id === id) {
         lectureToRemove = lecture;
         lectureId = lecture.id;
       }
     });
-    removeMyLectureV2.mutate({ clickedLecture: lectureToRemove, id: lectureId });
+    removeMyLecture.mutate({ clickedLecture: lectureToRemove, id: lectureId });
   };
   const findMaxTime = (myTimetableLectures: TimetableDayLectureInfo[][] | undefined) => {
     let maxTime = 19;
