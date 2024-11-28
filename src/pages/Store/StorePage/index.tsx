@@ -116,7 +116,6 @@ const useStoreList = (
 };
 
 function StorePage() {
-  const [isToolTipOpen, setIsToolTipOpen] = React.useState(true);
   const { params, searchParams, setParams } = useParamsHandler();
   const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
     sorter: searchParams.get('COUNT') ? 'COUNT' : '',
@@ -383,10 +382,10 @@ function StorePage() {
             {item.content}
           </button>
         ))}
-        {isToolTipOpen && (
+        {isTooltipOpen && (
           <IntroToolTip
             content="지금 리뷰가 가장 많은 상점을 확인해보세요!"
-            setCloseState={setIsToolTipOpen}
+            closeTooltip={closeTooltip}
           />
         )}
       </div>
