@@ -7,7 +7,7 @@ import showToast from 'utils/ts/showToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
@@ -26,7 +26,7 @@ export default function TimetableSettingModal({
   const token = useTokenState();
   const semester = useSemester();
   const { data: myFrames } = useTimetableFrameList(token, semester);
-  const myLectures = useMyLecturesV2(focusFrame.id!);
+  const myLectures = useMyLectures(focusFrame.id!);
   const { mutate: updateFrameInfo } = useUpdateTimetableFrame();
 
   const submitFrameForm = (e: React.FormEvent<HTMLFormElement>) => {

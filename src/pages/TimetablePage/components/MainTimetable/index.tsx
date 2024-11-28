@@ -1,7 +1,7 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
+import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import Curriculum from 'pages/TimetablePage/components/Curriculum';
@@ -9,7 +9,7 @@ import DownloadIcon from 'assets/svg/download-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
-import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -27,9 +27,9 @@ function MainTimetable({ frameId }: { frameId: number }) {
   const logger = useLogger();
   const navigate = useNavigate();
   const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
-  const { myLecturesV2 } = useMyLecturesV2(frameId);
-  const myLectureDayValue = useTimetableDayListV2(
-    timeTableFrameList.length > 0 ? myLecturesV2 : [],
+  const { myLectures } = useMyLectures(frameId);
+  const myLectureDayValue = useTimetableDayList(
+    timeTableFrameList.length > 0 ? myLectures : [],
   );
   const { data: deptList } = useDeptList();
   const { data: mySemester } = useSemesterCheck(token);
@@ -73,7 +73,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
     <div className={styles['page__timetable-wrap']}>
       <div className={styles.page__filter}>
         <div className={styles['page__total-grades']}>
-          <TotalGrades myLectureList={myLecturesV2} />
+          <TotalGrades myLectureList={myLectures} />
         </div>
         <Curriculum list={deptList} />
         <button

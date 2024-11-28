@@ -1,8 +1,8 @@
-import type { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import React from 'react';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import { cn } from '@bcsdlab/utils';
-import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LectureTable.module.scss';
@@ -10,21 +10,17 @@ import styles from './LectureTable.module.scss';
 interface LectureTableProps {
   rowWidthList: number[];
   frameId: number;
-  list: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
-  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
-  selectedLecture: LectureInfo | TimetableLectureInfoV2 | undefined | Omit<TimetableLectureInfoV2, 'name'>;
-  onClickRow: ((value: LectureInfo | TimetableLectureInfoV2) => void) | undefined;
-  onDoubleClickRow: ((value: LectureInfo | TimetableLectureInfoV2) => void) | undefined;
+  list: Array<LectureInfo> | Array<MyLectureInfo>;
+  myLectures: Array<LectureInfo> | Array<MyLectureInfo>;
+  selectedLecture: LectureInfo | undefined;
+  onClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
+  onDoubleClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
   version: 'semesterLectureList' | 'myLectureList'
 }
 
 interface RemoveLectureProps {
   id: number;
 }
-
-const isLectureInfo = (
-  value: LectureInfo | TimetableLectureInfoV2,
-): value is LectureInfo => 'name' in value;
 
 export const LECTURE_TABLE_HEADER = [
   { key: 'code', label: '코드' },
@@ -42,13 +38,13 @@ function LectureTable({
   rowWidthList,
   frameId,
   list,
-  myLecturesV2,
+  myLectures,
   selectedLecture,
   onClickRow,
   onDoubleClickRow,
   version,
 }: LectureTableProps): JSX.Element {
-  const tempLecture = useTempLecture();
+  const tempLecture = useTempLecture(); // 이거 selectedLecture랑 같을 수 있음
   const { updateTempLecture } = useTempLectureAction();
   const [cursor, setCursor] = React.useState(-1);
   const { containerRef } = useOutsideClick({
@@ -58,17 +54,17 @@ function LectureTable({
     },
   });
 
-  const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
+  const { removeMyLecture } = useTimetableMutation(frameId);
   const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
-    myLecturesV2.forEach((lecture) => {
+    myLectures.forEach((lecture) => {
       if (lecture.id === id) {
-        removeMyLectureV2.mutate({ clickedLecture: lecture, id });
+        removeMyLecture.mutate({ clickedLecture: lecture, id });
       }
     });
   };
   const [isMouseOver, setIsMouseOver] = React.useState(-1);
   const handleTableRowClick = (
-    value: LectureInfo | TimetableLectureInfoV2,
+    value: LectureInfo | MyLectureInfo,
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     if (e.detail === 1 && onClickRow !== undefined) {
@@ -134,7 +130,7 @@ function LectureTable({
           <div
             className={cn({
               [styles.table__row]: true,
-              [styles['table__row--include']]: version !== 'myLectureList' ? myLecturesV2.some(
+              [styles['table__row--include']]: version === 'semesterLectureList' ? myLectures.some(
                 (item) => item.code === lecture.code
                   && item.lecture_class === lecture.lecture_class,
               ) : false,
@@ -199,11 +195,11 @@ function LectureTable({
                         : lecture[headerItem.key])}
                     {headerItem.key === null && '수정'}
                     {headerItem.key === 'name'
-                      && isLectureInfo(lecture)
+                      && 'class_time' in lecture
                       && lecture.name}
                     {headerItem.key === 'name'
-                      && !isLectureInfo(lecture)
-                      && lecture.class_title}
+                      && 'class_infos' in lecture
+                     && lecture.class_title}
                     {headerItem.key !== null
                       && headerItem.key !== 'professor'
                       && headerItem.key !== 'name'

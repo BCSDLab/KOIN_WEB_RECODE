@@ -1,10 +1,56 @@
 import { APIResponse } from 'interfaces/APIResponse';
-import { LectureInfo, TimetableLectureInfo } from 'interfaces/Lecture';
 
 export type SemesterInfo = {
   id: number;
   semester: string;
 };
+
+export interface LectureInfo {
+  id: number;
+  code: string;
+  name: string;
+  grades: string;
+  lecture_class: string;
+  regular_number: string;
+  department: string;
+  target: string;
+  professor: string;
+  is_english?: string;
+  design_score: string;
+  is_elearning?: string;
+  class_time: Array<number>;
+}
+
+export type LectureSchedule = {
+  class_time: number[],
+  class_place?: string,
+};
+
+export interface MyLectureInfo {
+  id: number;
+  lecture_id: number;
+  regular_number: string;
+  code: string;
+  design_score: string;
+  class_infos: LectureSchedule[];
+  memo: string;
+  grades: string;
+  class_title: string;
+  lecture_class: string;
+  target: string;
+  professor: string;
+  department: string;
+}
+
+export interface TimetableLectureInfo {
+  id: number;
+  lecture_id?: number;
+  class_title: string | null;
+  class_infos: LectureSchedule[] | null;
+  professor?: string | null;
+  grades?: string;
+  memo?: string;
+}
 
 export type TimetableFrameInfo = {
   id: number | null;
@@ -22,105 +68,58 @@ export type VersionInfo = {
   updated_at: string;
 };
 
+// V1-시간표
 export type SemesterResponse = SemesterInfo[];
 
 export type LectureInfoResponse = LectureInfo[];
-
-export interface TimetableInfoResponse extends APIResponse {
-  semester: string;
-  timetable: TimetableLectureInfo[];
-}
-
-export type TimetableAddLectureResponse = TimetableLectureInfo[];
-
-export interface TimetableAddLectureRequest {
-  semester: string;
-  timetable: [{
-    class_time: number[];
-    class_title: string;
-    grades: string;
-  }];
-}
-
-export interface UpdateTimetableLectureV2Request {
-  timetable_frame_id: number;
-  timetable_lecture: [{
-    class_title: string;
-    class_time: number[];
-    grades: string;
-  }];
-}
-
-export type TimetableRemoveLectureResponse = TimetableLectureInfo[];
-
-export interface VersionInfoResponse extends APIResponse {
-  id: string;
-  version: string;
-  type: string;
-  created_at: string;
-  updated_at: string;
-}
 
 export interface SemesterCheckResponse extends APIResponse {
   user_id: number;
   semesters: string[];
 }
 
-export interface DeleteSemesterResponse extends APIResponse { }
+// V2-시간표
+// 강의 관련 요청 / 응답
+export interface TimetableLectureInfoResponse extends APIResponse {
+  timetable_frame_id: number;
+  timetable: MyLectureInfo[];
+  grades: number;
+  total_grades: number;
+}
 
+export interface EditTimetableLectureRequest {
+  timetable_frame_id: number;
+  timetable_lecture: TimetableLectureInfo[];
+}
+
+export interface AddTimetableLectureRequest {
+  timetable_frame_id: number;
+  timetable_lecture: Omit<TimetableLectureInfo, 'id'>[];
+}
+
+export interface DeleteTimetableLectureResponse extends APIResponse { }
+
+// 시간표 프레임 관련 요청 / 응답
 export type TimetableFrameListResponse = TimetableFrameInfo[];
 
-export type AddTimetableFrameResponse = TimetableFrameInfo;
+export interface EditTimetableFrameRequest {
+  timetable_name: string;
+  is_main: boolean;
+}
 
 export interface AddTimetableFrameRequest {
   semester: string;
   timetable_name?: string;
 }
 
-export interface UpdateTimetableFrameRequest {
-  timetable_name: string,
-  is_main: boolean,
-}
-
 export interface DeleteTimetableFrameResponse extends APIResponse { }
 
-export interface TimetableLectureInfoV2Response extends APIResponse {
-  timetable_frame_id: number;
-  timetable: TimetableDetailInfo[];
-  grades: number;
-  total_grades: number;
-}
+export interface DeleteSemesterResponse extends APIResponse { }
 
-export interface TimetableLectureInfoV2AddResponse extends APIResponse {
-  timetable_frame_id: number;
-  timetable: TimetableDetailInfo[];
-}
-
-export interface TimetableDetailInfo {
+export interface VersionInfoResponse extends APIResponse {
   id: number;
-  regular_number: string;
-  code: string;
-  design_score: string;
-  class_time: number[];
-  class_place: string;
-  memo: string;
-  grades: string;
-  class_title: string;
-  lecture_class: string;
-  target: string;
-  professor: string;
-  department: string;
-}
-
-export interface AddTimetableLectureV2Request {
-  timetable_frame_id: number;
-  timetable_lecture: [{
-    class_title: string | null;
-    class_time: number[] | null;
-    class_place?: string;
-    professor?: string | null;
-    memo?: string;
-    grades?: string;
-    lecture_id?: number;
-  }];
+  version: string;
+  type: string;
+  created_at: string;
+  updated_at: string;
 }
