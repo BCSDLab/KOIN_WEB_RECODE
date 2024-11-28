@@ -1,14 +1,12 @@
 import React from 'react';
-import {
-  TimetableDayLectureInfo,
-} from 'interfaces/Lecture';
+import { TimetableDayLectureInfo } from 'interfaces/Lecture';
 import { LectureInfo, MyLectureInfo, TimetableLectureInfo } from 'api/timetable/entity';
 
 export default function useTimetableDayList(
   myLectures: Array<LectureInfo> | Array<MyLectureInfo> | Array<Omit<TimetableLectureInfo, 'id' | 'lecture_id'>>,
 ) {
   return React.useMemo(() => (Array.from({ length: 5 }, (_, index) => {
-    const currentDayInfo = [] as TimetableDayLectureInfo[];
+    const currentDayInfo: TimetableDayLectureInfo[] = [];
     (myLectures ?? []).forEach((lecture, lectureIndex) => {
       if ('class_infos' in lecture) {
         if (lecture.class_infos) {

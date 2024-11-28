@@ -64,7 +64,7 @@ function LectureTable({
   };
   const [isMouseOver, setIsMouseOver] = React.useState(-1);
   const handleTableRowClick = (
-    value: LectureInfo,
+    value: LectureInfo | MyLectureInfo,
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     if (e.detail === 1 && onClickRow !== undefined) {
@@ -153,7 +153,7 @@ function LectureTable({
               })}
               onClick={(e) => {
                 setCursor(index);
-                handleTableRowClick(lecture as LectureInfo, e);
+                handleTableRowClick(lecture, e);
               }}
               onMouseEnter={() => setIsMouseOver(index)}
               onMouseLeave={() => setIsMouseOver(-1)}
