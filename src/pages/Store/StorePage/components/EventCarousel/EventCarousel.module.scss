@@ -4,6 +4,7 @@
 .carousel {
   display: flex;
   align-items: center;
+  justify-content: center;
 
   @include media.media-breakpoint(mobile) {
     position: relative;
@@ -66,7 +67,7 @@
       );
 
       @include media.media-breakpoint(mobile) {
-        width: 353px;
+        width: 100%;
       }
     }
   }
