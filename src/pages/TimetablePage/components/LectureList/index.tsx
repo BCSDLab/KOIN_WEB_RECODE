@@ -1,8 +1,6 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import {
-  LectureInfo, MyLectureInfo,
-} from 'api/timetable/entity';
+import { MyLectureInfo } from 'api/timetable/entity';
 import React from 'react';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
@@ -28,7 +26,7 @@ interface CurrentSemesterLectureListProps {
     department: string;
     search: string;
   };
-  myLectures: Array<LectureInfo>;
+  myLectures: Array<MyLectureInfo>;
   frameId: number;
 }
 
@@ -99,23 +97,20 @@ function CurrentSemesterLectureList({
               showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
               return;
             }
-            const myLectureTimeValue = (
-              myLectures as Array<LectureInfo>
-            ).reduce((acc, cur) => {
-              if (cur.class_time) {
-                return acc.concat(cur.class_time);
-              }
-              return acc;
-            }, [] as number[]);
+            const myLectureTimeValue = myLectures.flatMap((item) => (
+              item.class_infos.flatMap((info) => info.class_time)
+            ));
 
             if (
               clickedLecture.class_time.some((time: number) => myLectureTimeValue.includes(time))
             ) {
-              const myLectureList = myLectures as Array<LectureInfo>;
+              const myLectureList = myLectures;
               const alreadySelectedLecture = myLectureList.find(
-                (lecture) => lecture.class_time.some(
-                  (time) => clickedLecture.class_time.includes(time),
-                ),
+                (lecture) => lecture.class_infos.some((schedule) => (
+                  schedule.class_time.some(
+                    (time) => clickedLecture.class_time.includes(time),
+                  )
+                )),
               );
               if (!alreadySelectedLecture) {
                 return;
@@ -124,19 +119,19 @@ function CurrentSemesterLectureList({
                 if (alreadySelectedLecture.lecture_class) { // 분반이 존재하는 경우
                   showToast(
                     'error',
-                    `${alreadySelectedLecture.name}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                    `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
                   );
                   return;
                 }
                 showToast( // 직접 강의를 추가하여 분반이 존재하지 않는 경우
                   'error',
-                  `${alreadySelectedLecture.name} 강의가 중복되어 추가할 수 없습니다.`,
+                  `${alreadySelectedLecture.class_title} 강의가 중복되어 추가할 수 없습니다.`,
                 );
                 return;
               }
               showToast(
                 'error',
-                `${alreadySelectedLecture.name}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
               );
             } else {
               addMyLecture(clickedLecture);
@@ -280,7 +275,7 @@ function LectureList({ frameId }: { frameId: number }) {
                 department: departmentFilterValue ?? '전체',
                 search: searchValue ?? '',
               }}
-              myLectures={myLectures as LectureInfo[]}
+              myLectures={myLectures as MyLectureInfo[]}
             />
           ) : (
             <MyLectureListBox
