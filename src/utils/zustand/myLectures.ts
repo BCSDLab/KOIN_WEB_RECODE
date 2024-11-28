@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { LectureInfo, TimetableInfoFromLocalStorageV2 } from 'interfaces/Lecture';
+import { LectureInfo } from 'api/timetable/entity';
+import { TimetableInfoFromLocalStorageV2 } from 'interfaces/Lecture';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
