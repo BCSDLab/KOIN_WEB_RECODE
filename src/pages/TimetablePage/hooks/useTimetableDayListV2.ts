@@ -2,34 +2,36 @@ import React from 'react';
 import {
   TimetableDayLectureInfo,
 } from 'interfaces/Lecture';
-import { LectureInfo, LectureInfoV2 } from 'api/timetable/entity';
+import { LectureInfo, LectureInfoV2, TimetableLectureInfo } from 'api/timetable/entity';
 
 export default function useTimetableDayListV2(
-  myLectures: Array<LectureInfo> | Array<LectureInfoV2>,
+  myLectures: Array<LectureInfo> | Array<LectureInfoV2> | Array<Omit<TimetableLectureInfo, 'id' | 'lecture_id'>>,
 ) {
   return React.useMemo(() => (Array.from({ length: 5 }, (_, index) => {
     const currentDayInfo = [] as TimetableDayLectureInfo[];
     (myLectures ?? []).forEach((lecture, lectureIndex) => {
       if ('class_infos' in lecture) {
-        lecture.class_infos.forEach((schedule) => {
-          const currentDayClassTime = (schedule.class_time ?? [])
-            .filter((time) => Math.floor(time / 100) === index)
-            .map((time) => time % 100)
-            .sort((a, b) => a - b);
-          if (currentDayClassTime.length) {
-            const updatedCurrentDayInfo = [{
-              id: lecture.id,
-              start: currentDayClassTime[0],
-              end: currentDayClassTime[currentDayClassTime.length - 1],
-              name: lecture.class_title,
-              lecture_class: lecture.lecture_class ?? '',
-              professor: lecture.professor ?? '',
-              class_place: schedule.class_place ?? '',
-              index: lectureIndex,
-            }];
-            currentDayInfo.push(...updatedCurrentDayInfo);
-          }
-        });
+        if (lecture.class_infos) {
+          lecture.class_infos.forEach((schedule) => {
+            const currentDayClassTime = (schedule.class_time ?? [])
+              .filter((time) => Math.floor(time / 100) === index)
+              .map((time) => time % 100)
+              .sort((a, b) => a - b);
+            if (currentDayClassTime.length) {
+              const updatedCurrentDayInfo = [{
+                id: 'id' in lecture ? lecture.id : undefined,
+                start: currentDayClassTime[0],
+                end: currentDayClassTime[currentDayClassTime.length - 1],
+                name: lecture.class_title ?? '',
+                lecture_class: 'lecture_class' in lecture ? lecture.lecture_class : '',
+                professor: lecture.professor ?? '',
+                class_place: schedule.class_place ?? '',
+                index: lectureIndex,
+              }];
+              currentDayInfo.push(...updatedCurrentDayInfo);
+            }
+          });
+        }
       } else {
         const currentDayClassTime = (lecture.class_time ?? [])
           .filter((time) => Math.floor(time / 100) === index)

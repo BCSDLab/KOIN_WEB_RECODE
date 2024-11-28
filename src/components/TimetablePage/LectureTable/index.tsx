@@ -1,4 +1,4 @@
-import { LectureInfo } from 'api/timetable/entity';
+import { LectureInfo, LectureInfoV2 } from 'api/timetable/entity';
 import React from 'react';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import { cn } from '@bcsdlab/utils';
@@ -10,21 +10,17 @@ import styles from './LectureTable.module.scss';
 interface LectureTableProps {
   rowWidthList: number[];
   frameId: number;
-  list: Array<LectureInfo>;
-  myLecturesV2: Array<LectureInfo>;
+  list: Array<LectureInfo> | Array<LectureInfoV2>;
+  myLecturesV2: Array<LectureInfo> | Array<LectureInfoV2>;
   selectedLecture: LectureInfo | undefined;
-  onClickRow: ((value: LectureInfo) => void) | undefined;
-  onDoubleClickRow: ((value: LectureInfo) => void) | undefined;
+  onClickRow: ((value: LectureInfo | LectureInfoV2) => void) | undefined;
+  onDoubleClickRow: ((value: LectureInfo | LectureInfoV2) => void) | undefined;
   version: 'semesterLectureList' | 'myLectureList'
 }
 
 interface RemoveLectureProps {
   id: number;
 }
-
-const isLectureInfo = (
-  value: LectureInfo,
-): value is LectureInfo => 'name' in value;
 
 export const LECTURE_TABLE_HEADER = [
   { key: 'code', label: '코드' },
@@ -157,7 +153,7 @@ function LectureTable({
               })}
               onClick={(e) => {
                 setCursor(index);
-                handleTableRowClick(lecture, e);
+                handleTableRowClick(lecture as LectureInfo, e);
               }}
               onMouseEnter={() => setIsMouseOver(index)}
               onMouseLeave={() => setIsMouseOver(-1)}
@@ -199,12 +195,11 @@ function LectureTable({
                         : lecture[headerItem.key])}
                     {headerItem.key === null && '수정'}
                     {headerItem.key === 'name'
-                      && isLectureInfo(lecture)
+                      && 'class_time' in lecture
                       && lecture.name}
-                    {// {headerItem.key === 'name'
-                    //   && !isLectureInfo(lecture)
-                    //   && lecture.class_title}
-                    }
+                    {headerItem.key === 'name'
+                      && 'class_infos' in lecture
+                     && lecture.class_title}
                     {headerItem.key !== null
                       && headerItem.key !== 'professor'
                       && headerItem.key !== 'name'

@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import useToast from 'components/common/Toast/useToast';
-import { LectureInfo, LectureInfoV2 } from 'api/timetable/entity';
-import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
@@ -9,7 +8,7 @@ import useAddTimetableLectureV2 from './useAddTimetableLectureV2';
 import useDeleteTimetableLectureV2 from './useDeleteTimetableLectureV2';
 
 type RemoveMyLectureV2Props = {
-  clickedLecture: LectureInfo | TimetableLectureInfoV2,
+  clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'> | null,
   id: number
 };
 
@@ -24,7 +23,7 @@ export default function useTimetableV2Mutation(frameId: number) {
   const { mutate: removeLectureFromServer } = useDeleteTimetableLectureV2(token);
   const semester = useSemester();
 
-  const addMyLectureV2 = (clickedLecture: LectureInfo | LectureInfoV2) => {
+  const addMyLectureV2 = (clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'>) => {
     if (token) {
       // 커스텀 강의 추가 시
       if ('class_title' in clickedLecture) {
@@ -35,8 +34,6 @@ export default function useTimetableV2Mutation(frameId: number) {
               class_title: clickedLecture.class_title,
               class_infos: clickedLecture.class_infos,
               professor: clickedLecture.professor,
-              grades: clickedLecture.grades,
-              lecture_id: clickedLecture.id,
             },
           ],
         });
@@ -78,7 +75,7 @@ export default function useTimetableV2Mutation(frameId: number) {
   const removeMyLectureV2 = useMutation({
     mutationFn: async ({ clickedLecture, id } : RemoveMyLectureV2Props) => {
       sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
-      if ('name' in clickedLecture) {
+      if (clickedLecture && 'name' in clickedLecture) {
         return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, semester));
       }
       return removeLectureFromServer(id);

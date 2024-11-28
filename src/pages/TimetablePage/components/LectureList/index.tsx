@@ -1,7 +1,7 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import {
-  LectureInfo,
+  LectureInfo, LectureInfoV2,
 } from 'api/timetable/entity';
 import React from 'react';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
@@ -34,7 +34,7 @@ interface CurrentSemesterLectureListProps {
 
 interface MyLectureListBoxProps {
   rowWidthList: number[];
-  myLectures: Array<LectureInfo>;
+  myLectures: Array<LectureInfoV2>;
   frameId: number;
 }
 
@@ -85,7 +85,7 @@ function CurrentSemesterLectureList({
         })}
         myLecturesV2={myLecturesV2}
         selectedLecture={tempLecture ?? undefined}
-        onClickRow={(clickedLecture) => ('code' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
+        onClickRow={(clickedLecture) => ('class_time' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
         onDoubleClickRow={
           (clickedLecture) => {
             const isContainedLecture = myLecturesV2.some(
@@ -280,12 +280,12 @@ function LectureList({ frameId }: { frameId: number }) {
                 department: departmentFilterValue ?? '전체',
                 search: searchValue ?? '',
               }}
-              myLecturesV2={myLecturesV2}
+              myLecturesV2={myLecturesV2 as LectureInfo[]}
             />
           ) : (
             <MyLectureListBox
               rowWidthList={widthInfo}
-              myLectures={myLecturesV2}
+              myLectures={myLecturesV2 as LectureInfoV2[]}
               frameId={frameId}
             />
           )}

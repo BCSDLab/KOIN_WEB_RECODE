@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import { LectureInfo } from 'api/timetable/entity';
+import { LectureInfo, LectureInfoV2 } from 'api/timetable/entity';
 import { TimetableDayLectureInfo } from 'interfaces/Lecture';
 import {
   BORDER_TOP_COLOR,
@@ -14,8 +14,8 @@ import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-// import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
-// import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
+import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
+import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -28,13 +28,6 @@ interface TimetableProps {
   totalHeight: number;
   forDownload?: boolean;
   frameId: number;
-}
-
-interface RemoveLectureProps {
-  lecture_class: string;
-  professor: string;
-  id: number;
-  name: string;
 }
 
 function Timetable({
@@ -55,24 +48,20 @@ function Timetable({
   const { removeMyLectureV2 } = useTimetableV2Mutation(frameId);
   const { myLecturesV2 } = useMyLecturesV2(frameId);
   const tempLecture = useTempLecture();
-  // const customTempLecture = useCustomTempLecture();
-  // const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
-  // const customDayValue = useTimetableDayListV2(customTempLectureArray);
+  const customTempLecture = useCustomTempLecture();
+  const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
+  const customDayValue = useTimetableDayListV2(customTempLectureArray);
   const { timeString, setTimeString } = useTimeString();
-  const handleRemoveLectureClick = ({
-    lecture_class, professor, id,
-  }: RemoveLectureProps) => {
-    let lectureToRemove: LectureInfo | null = null;
+  const handleRemoveLectureClick = (id: number) => {
+    let lectureToRemove: LectureInfo | LectureInfoV2 | null = null;
     let lectureId = id;
-    myLecturesV2.forEach((lecture: LectureInfo) => {
-      if (lecture.lecture_class === lecture_class && lecture.professor === professor) {
+    myLecturesV2.forEach((lecture: LectureInfo | LectureInfoV2) => {
+      if (lecture.id === id) {
         lectureToRemove = lecture;
         lectureId = lecture.id;
       }
     });
-    if (lectureToRemove) {
-      removeMyLectureV2.mutate({ clickedLecture: lectureToRemove, id: lectureId });
-    }
+    removeMyLectureV2.mutate({ clickedLecture: lectureToRemove, id: lectureId });
   };
   const findMaxTime = (myTimetableLectures: TimetableDayLectureInfo[][] | undefined) => {
     let maxTime = 19;
@@ -101,7 +90,8 @@ function Timetable({
     const fixedMaxTime = findMaxTime(lectures);
     let maxTime = 0;
     let minimumTime = 999;
-    const myLectureClassTime = tempLecture?.class_time;
+    const myLectureClassTime = tempLecture?.class_time
+    ?? customTempLecture?.class_infos?.map((schedule) => schedule.class_time).flat();
     if (myLectureClassTime) {
       const classTimeArr = myLectureClassTime.map((time) => time % 100);
       maxTime = Math.max(...classTimeArr);
@@ -128,7 +118,7 @@ function Timetable({
         });
       }
     }
-  }, [lectures, setTimeString, tempLecture]);
+  }, [lectures, setTimeString, tempLecture, customTempLecture]);
 
   return (
     <div
@@ -246,9 +236,7 @@ function Timetable({
                   {isMouseOver === `${day}-${start}-${end}` && isEditable && (
                     <div
                       className={styles['timetable__delete-button']}
-                      onClick={() => handleRemoveLectureClick({
-                        lecture_class, professor, id, name,
-                      })}
+                      onClick={() => handleRemoveLectureClick(id!)}
                       role="button"
                       aria-hidden
                     >
@@ -310,7 +298,7 @@ function Timetable({
             ))}
           </div>
         ))}
-        {/*
+
         {pathname.includes('direct') && customTempLecture && (
           DAYS_STRING.map((day, index) => (
             <div
@@ -379,7 +367,7 @@ function Timetable({
             </div>
           ))
         )}
-        */}
+
       </div>
     </div>
   );
