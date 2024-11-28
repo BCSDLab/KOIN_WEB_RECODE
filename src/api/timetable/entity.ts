@@ -15,9 +15,9 @@ export interface LectureInfo {
   department: string;
   target: string;
   professor: string;
-  is_english: string;
+  is_english?: string;
   design_score: string;
-  is_elearning: string;
+  is_elearning?: string;
   class_time: Array<number>;
 }
 
@@ -44,7 +44,7 @@ export interface LectureInfoV2 {
 
 export interface TimetableLectureInfo {
   id: number;
-  lecture_id: number; // 정규 강의의 고유 id 같음(따라서 커스텀 강의에는 lecture_id가 없음)
+  lecture_id?: number; // 정규 강의의 고유 id 같음(따라서 커스텀 강의에는 lecture_id가 없음)
   class_title: string | null;
   class_infos: LectureSchedule[] | null;
   professor?: string | null;
