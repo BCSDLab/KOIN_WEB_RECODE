@@ -4,14 +4,18 @@ import styles from './IntroToolTip.module.scss';
 
 interface IntroToolTipProps {
   content:string;
-  setCloseState: React.Dispatch<React.SetStateAction<boolean>>;
+  closeTooltip: ()=>void;
 }
 
-export default function IntroToolTip({ content, setCloseState } : IntroToolTipProps) {
+export default function IntroToolTip({ content, closeTooltip } : IntroToolTipProps) {
+  const handleTooltipCloseButtonClick = () => {
+    localStorage.setItem('store-review-tooltip', 'used');
+    closeTooltip();
+  };
   return (
     <div className={styles.tooltip}>
       {content}
-      <button type="button" className={styles['close-button']} onClick={() => setCloseState(false)}>
+      <button type="button" className={styles['close-button']} onClick={() => handleTooltipCloseButtonClick()}>
         <CloseIcon />
       </button>
     </div>
