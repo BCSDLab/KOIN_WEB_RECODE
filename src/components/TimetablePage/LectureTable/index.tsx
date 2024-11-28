@@ -1,4 +1,4 @@
-import { LectureInfo, LectureInfoV2 } from 'api/timetable/entity';
+import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import React from 'react';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import { cn } from '@bcsdlab/utils';
@@ -10,11 +10,11 @@ import styles from './LectureTable.module.scss';
 interface LectureTableProps {
   rowWidthList: number[];
   frameId: number;
-  list: Array<LectureInfo> | Array<LectureInfoV2>;
-  myLecturesV2: Array<LectureInfo> | Array<LectureInfoV2>;
+  list: Array<LectureInfo> | Array<MyLectureInfo>;
+  myLecturesV2: Array<LectureInfo> | Array<MyLectureInfo>;
   selectedLecture: LectureInfo | undefined;
-  onClickRow: ((value: LectureInfo | LectureInfoV2) => void) | undefined;
-  onDoubleClickRow: ((value: LectureInfo | LectureInfoV2) => void) | undefined;
+  onClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
+  onDoubleClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
   version: 'semesterLectureList' | 'myLectureList'
 }
 

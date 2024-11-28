@@ -3,13 +3,14 @@ import {
   SemesterResponse,
   LectureInfoResponse,
   SemesterCheckResponse,
-  TimetableLectureInfoInResponse,
+  TimetableLectureInfoResponse,
   EditTimetableLectureRequest,
   AddTimetableLectureRequest,
   DeleteTimetableLectureResponse,
   TimetableFrameListResponse,
   EditTimetableFrameRequest,
   AddTimetableFrameRequest,
+  TimetableFrameInfo,
   DeleteTimetableFrameResponse,
   DeleteSemesterResponse,
   VersionType,
@@ -57,7 +58,7 @@ export class LectureList<R extends LectureInfoResponse> implements APIRequest<R>
 }
 
 export class TimetableLectureInfo
-  <R extends TimetableLectureInfoInResponse> implements APIRequest<R> {
+  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/v2/timetables/lecture';
@@ -78,7 +79,7 @@ export class TimetableLectureInfo
 }
 
 export class TimetableLectureEdit
-  <R extends TimetableLectureInfoInResponse> implements APIRequest<R> {
+  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
   path = '/v2/timetables/lecture';
@@ -91,7 +92,7 @@ export class TimetableLectureEdit
 }
 
 export class TimetableLectureAddition
-  <R extends TimetableLectureInfoInResponse> implements APIRequest<R> {
+  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/v2/timetables/lecture';
@@ -141,7 +142,7 @@ export class TimetableFrameList<R extends TimetableFrameListResponse> implements
   }
 }
 
-export class TimetableFrameAddition<R extends TimetableFrameListResponse> implements APIRequest<R> {
+export class TimetableFrameAddition<R extends TimetableFrameInfo> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/v2/timetables/frame';
@@ -153,7 +154,7 @@ export class TimetableFrameAddition<R extends TimetableFrameListResponse> implem
   constructor(public data: AddTimetableFrameRequest, public authorization: string) {}
 }
 
-export class TimetableFrameEdit<R extends TimetableFrameListResponse> implements APIRequest<R> {
+export class TimetableFrameEdit<R extends TimetableFrameInfo> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
   path = '/v2/timetables/frame/:id';

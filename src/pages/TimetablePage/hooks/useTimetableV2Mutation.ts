@@ -4,6 +4,8 @@ import { LectureInfo, TimetableLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
+import showToast from 'utils/ts/showToast';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import useAddTimetableLectureV2 from './useAddTimetableLectureV2';
 import useDeleteTimetableLectureV2 from './useDeleteTimetableLectureV2';
 
@@ -86,6 +88,15 @@ export default function useTimetableV2Mutation(frameId: number) {
         recoverMessage: '해당 과목이 복구되었습니다.',
         onRecover: restoreLecture,
       });
+    },
+    onError: (error) => {
+      if (isKoinError(error)) {
+        // 추후에 코드별 에러 분기처리 진행
+        showToast('error', error.message || '강의 삭제에 실패했습니다.');
+      } else {
+        sendClientError(error);
+        showToast('error', '강의 삭제에 실패했습니다.');
+      }
     },
   });
 

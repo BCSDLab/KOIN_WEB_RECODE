@@ -9,7 +9,7 @@ import WarningIcon from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
-import { LectureInfoV2 } from 'api/timetable/entity';
+import { MyLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
@@ -118,7 +118,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       );
       return;
     }
-    const myLectureList = myLecturesV2 as LectureInfoV2[];
+    const myLectureList = myLecturesV2 as MyLectureInfo[];
     const alreadySelectedLecture = myLectureList.find(
       (lecture) => lecture.class_infos.some((schedule) => (
         schedule.class_time.some(

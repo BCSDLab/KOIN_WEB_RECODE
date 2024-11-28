@@ -1,7 +1,7 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import {
-  LectureInfo, LectureInfoV2,
+  LectureInfo, MyLectureInfo,
 } from 'api/timetable/entity';
 import React from 'react';
 import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
@@ -34,7 +34,7 @@ interface CurrentSemesterLectureListProps {
 
 interface MyLectureListBoxProps {
   rowWidthList: number[];
-  myLectures: Array<LectureInfoV2>;
+  myLectures: Array<MyLectureInfo>;
   frameId: number;
 }
 
@@ -285,7 +285,7 @@ function LectureList({ frameId }: { frameId: number }) {
           ) : (
             <MyLectureListBox
               rowWidthList={widthInfo}
-              myLectures={myLecturesV2 as LectureInfoV2[]}
+              myLectures={myLecturesV2 as MyLectureInfo[]}
               frameId={frameId}
             />
           )}

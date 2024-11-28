@@ -2,10 +2,10 @@ import React from 'react';
 import {
   TimetableDayLectureInfo,
 } from 'interfaces/Lecture';
-import { LectureInfo, LectureInfoV2, TimetableLectureInfo } from 'api/timetable/entity';
+import { LectureInfo, MyLectureInfo, TimetableLectureInfo } from 'api/timetable/entity';
 
 export default function useTimetableDayListV2(
-  myLectures: Array<LectureInfo> | Array<LectureInfoV2> | Array<Omit<TimetableLectureInfo, 'id' | 'lecture_id'>>,
+  myLectures: Array<LectureInfo> | Array<MyLectureInfo> | Array<Omit<TimetableLectureInfo, 'id' | 'lecture_id'>>,
 ) {
   return React.useMemo(() => (Array.from({ length: 5 }, (_, index) => {
     const currentDayInfo = [] as TimetableDayLectureInfo[];

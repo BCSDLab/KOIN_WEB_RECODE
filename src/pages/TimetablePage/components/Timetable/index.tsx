@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import { LectureInfo, LectureInfoV2 } from 'api/timetable/entity';
+import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import { TimetableDayLectureInfo } from 'interfaces/Lecture';
 import {
   BORDER_TOP_COLOR,
@@ -53,9 +53,9 @@ function Timetable({
   const customDayValue = useTimetableDayListV2(customTempLectureArray);
   const { timeString, setTimeString } = useTimeString();
   const handleRemoveLectureClick = (id: number) => {
-    let lectureToRemove: LectureInfo | LectureInfoV2 | null = null;
+    let lectureToRemove: LectureInfo | MyLectureInfo | null = null;
     let lectureId = id;
-    myLecturesV2.forEach((lecture: LectureInfo | LectureInfoV2) => {
+    myLecturesV2.forEach((lecture: LectureInfo | MyLectureInfo) => {
       if (lecture.id === id) {
         lectureToRemove = lecture;
         lectureId = lecture.id;
