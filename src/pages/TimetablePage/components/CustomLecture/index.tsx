@@ -9,7 +9,7 @@ import WarningIcon from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';
 import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
-import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { LectureInfoV2 } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
@@ -107,9 +107,10 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       setIsFirstSubmit(false);
       return;
     }
-    const allClassTime = customTempLecture!.class_time.flat();
-    const isDuplicatedTime = allClassTime
-      .some((x) => allClassTime.indexOf(x) !== allClassTime.lastIndexOf(x));
+    const allClassTime = customTempLecture!.class_infos!.map(
+      (schedule) => schedule.class_time,
+    );
+    const isDuplicatedTime = new Set(allClassTime.flat()).size !== allClassTime.flat().length;
     if (isDuplicatedTime) {
       showToast(
         'error',
@@ -117,11 +118,13 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       );
       return;
     }
-    const myLectureList = myLecturesV2 as TimetableLectureInfoV2[];
+    const myLectureList = myLecturesV2 as LectureInfoV2[];
     const alreadySelectedLecture = myLectureList.find(
-      (lecture) => lecture.class_time.filter((num) => num !== -1).some(
-        (time) => customTempLecture!.class_time.flat().includes(time),
-      ),
+      (lecture) => lecture.class_infos.some((schedule) => (
+        schedule.class_time.some(
+          (time) => customTempLecture!.class_infos!.some((tempSchedule) => (
+            tempSchedule.class_time.includes(time))),
+        ))),
     );
     if (alreadySelectedLecture) {
       showToast(
@@ -268,8 +271,10 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
         ...customTempLecture,
         class_title: lectureName,
         professor: professorName,
-        class_time: timeSpaceComponents.map((item) => item.lectureTime),
-        class_place: timeSpaceComponents.map((item) => item.place),
+        class_infos: timeSpaceComponents.map((schedule) => ({
+          class_time: schedule.lectureTime,
+          class_place: schedule.place,
+        })),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
