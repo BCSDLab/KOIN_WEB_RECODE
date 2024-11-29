@@ -1,11 +1,8 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import {
-  LectureInfo,
-  TimetableLectureInfoV2,
-} from 'interfaces/Lecture';
+import { MyLectureInfo } from 'api/timetable/entity';
 import React from 'react';
-import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import useSelect from 'pages/TimetablePage/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
@@ -13,7 +10,7 @@ import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
 import useSearch from 'pages/TimetablePage/hooks/useSearch';
 import LectureTable, { LECTURE_TABLE_HEADER } from 'components/TimetablePage/LectureTable';
 import { useParams } from 'react-router-dom';
-import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import ToggleButton from 'components/common/ToggleButton';
@@ -24,18 +21,18 @@ import styles from './LectureList.module.scss';
 
 interface CurrentSemesterLectureListProps {
   rowWidthList: number[];
-  semesterKey: string;
+  currentSemester: string;
   filter: {
     department: string;
     search: string;
   };
-  myLecturesV2: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
+  myLectures: Array<MyLectureInfo>;
   frameId: number;
 }
 
 interface MyLectureListBoxProps {
   rowWidthList: number[];
-  myLectures: Array<LectureInfo> | Array<TimetableLectureInfoV2>;
+  myLectures: Array<MyLectureInfo>;
   frameId: number;
 }
 
@@ -49,16 +46,16 @@ const useFlexibleWidth = (length: number, initialValue: number[]) => {
 
 function CurrentSemesterLectureList({
   rowWidthList,
-  semesterKey,
+  currentSemester,
   filter,
-  myLecturesV2,
+  myLectures,
   frameId,
 }: CurrentSemesterLectureListProps) {
   const tempLecture = useTempLecture();
   const { data: userInfo } = useUser();
-  const { data: lectureList } = useLectureList(semesterKey);
+  const { data: lectureList } = useLectureList(currentSemester);
   const { updateTempLecture } = useTempLectureAction();
-  const { addMyLectureV2 } = useTimetableV2Mutation(frameId);
+  const { addMyLecture } = useTimetableMutation(frameId);
 
   return (
     lectureList?.length !== 0 ? (
@@ -84,12 +81,12 @@ function CurrentSemesterLectureList({
 
           return true;
         })}
-        myLecturesV2={myLecturesV2}
+        myLectures={myLectures}
         selectedLecture={tempLecture ?? undefined}
-        onClickRow={(clickedLecture) => ('code' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
+        onClickRow={(clickedLecture) => ('class_time' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
         onDoubleClickRow={
           (clickedLecture) => {
-            const isContainedLecture = myLecturesV2.some(
+            const isContainedLecture = myLectures.some(
               (lecture) => lecture.code === clickedLecture.code
               && lecture.lecture_class === clickedLecture.lecture_class,
             );
@@ -100,25 +97,20 @@ function CurrentSemesterLectureList({
               showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
               return;
             }
-            const myLectureTimeValue = (
-              myLecturesV2 as Array<LectureInfo | TimetableLectureInfoV2>
-            ).reduce((acc, cur) => {
-              if (cur.class_time) {
-                return acc.concat(cur.class_time);
-              }
-              return acc;
-            }, [] as number[]);
+            const myLectureTimeValue = myLectures.flatMap((item) => (
+              item.class_infos.flatMap((info) => info.class_time)
+            ));
 
             if (
-              clickedLecture.class_time.some((time) => myLectureTimeValue.includes(time))
+              clickedLecture.class_time.some((time: number) => myLectureTimeValue.includes(time))
             ) {
-              const myLectureList = myLecturesV2 as Array<
-              LectureInfo & TimetableLectureInfoV2
-              >;
+              const myLectureList = myLectures;
               const alreadySelectedLecture = myLectureList.find(
-                (lecture) => lecture.class_time.some(
-                  (time) => clickedLecture.class_time.includes(time),
-                ),
+                (lecture) => lecture.class_infos.some((schedule) => (
+                  schedule.class_time.some(
+                    (time) => clickedLecture.class_time.includes(time),
+                  )
+                )),
               );
               if (!alreadySelectedLecture) {
                 return;
@@ -139,10 +131,10 @@ function CurrentSemesterLectureList({
               }
               showToast(
                 'error',
-                `${alreadySelectedLecture.name}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
               );
             } else {
-              addMyLectureV2(clickedLecture);
+              addMyLecture(clickedLecture);
             }
           }
         }
@@ -164,7 +156,7 @@ function MyLectureListBox({ rowWidthList, myLectures, frameId }: MyLectureListBo
         rowWidthList={rowWidthList}
         frameId={frameId}
         list={myLectures}
-        myLecturesV2={myLectures}
+        myLectures={myLectures}
         selectedLecture={undefined}
         onClickRow={undefined}
         onDoubleClickRow={undefined}
@@ -180,6 +172,18 @@ function MyLectureListBox({ rowWidthList, myLectures, frameId }: MyLectureListBo
 
 function LectureList({ frameId }: { frameId: number }) {
   const logger = useLogger();
+
+  const {
+    onClickSearchButton,
+    onKeyDownSearchInput,
+    value: searchValue,
+    searchInputRef,
+  } = useSearch();
+  const {
+    value: departmentFilterValue,
+    onChangeSelect: onChangeDeptSelect,
+  } = useSelect();
+
   // 가장 최신연도와 월을 가져옴
   const semester = useSemester();
   const { updateSemester } = useSemesterAction();
@@ -189,18 +193,10 @@ function LectureList({ frameId }: { frameId: number }) {
     // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
     updateSemester(semesterParams || mostRecentSemester);
   }
-  const {
-    value: departmentFilterValue,
-    onChangeSelect: onChangeDeptSelect,
-  } = useSelect();
-  const { myLecturesV2 } = useMyLecturesV2(frameId);
+
+  const { myLectures } = useMyLectures(frameId);
+
   const [isToggled, setIsToggled] = React.useState(false);
-  const {
-    onClickSearchButton,
-    onKeyDownSearchInput,
-    value: searchValue,
-    searchInputRef,
-  } = useSearch();
   const { widthInfo } = useFlexibleWidth(9, [61, 173, 41, 61, 61, 41, 41, 41, 61]);
 
   const toggleLectureList = () => {
@@ -273,18 +269,18 @@ function LectureList({ frameId }: { frameId: number }) {
             <CurrentSemesterLectureList
               rowWidthList={widthInfo}
               frameId={frameId}
-              semesterKey={semester}
+              currentSemester={semester}
               filter={{
                 // 백엔드 수정하면 제거
                 department: departmentFilterValue ?? '전체',
                 search: searchValue ?? '',
               }}
-              myLecturesV2={myLecturesV2}
+              myLectures={myLectures as MyLectureInfo[]}
             />
           ) : (
             <MyLectureListBox
               rowWidthList={widthInfo}
-              myLectures={myLecturesV2}
+              myLectures={myLectures as MyLectureInfo[]}
               frameId={frameId}
             />
           )}

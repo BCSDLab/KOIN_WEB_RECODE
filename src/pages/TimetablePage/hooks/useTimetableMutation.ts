@@ -1,61 +1,65 @@
 import { useMutation } from '@tanstack/react-query';
 import useToast from 'components/common/Toast/useToast';
-import { CustomTimetableLectureInfo, LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { LectureInfo, TimetableLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
-import useAddTimetableLectureV2 from './useAddTimetableLectureV2';
-import useDeleteTimetableLectureV2 from './useDeleteTimetableLectureV2';
+import showToast from 'utils/ts/showToast';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import useAddTimetableLecture from './useAddTimetableLecture';
+import useDeleteTimetableLecture from './useDeleteTimetableLecture';
 
-type RemoveMyLectureV2Props = {
-  clickedLecture: LectureInfo | TimetableLectureInfoV2,
+type RemoveMyLectureProps = {
+  clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'> | null,
   id: number
 };
 
-export default function useTimetableV2Mutation(frameId: number) {
+export default function useTimetableMutation(frameId: number) {
   const token = useTokenState();
   const toast = useToast();
-  const { mutate: mutateAddWithServer } = useAddTimetableLectureV2(token);
+  const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const {
     addLecture: addLectureFromLocalStorage,
     removeLecture: removeLectureFromLocalStorage,
   } = useLecturesAction();
-  const { mutate: removeLectureFromServer } = useDeleteTimetableLectureV2(token);
+  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
   const semester = useSemester();
 
-  const addMyLectureV2 = (clickedLecture: LectureInfo | CustomTimetableLectureInfo) => {
+  const addMyLecture = (clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'>) => {
     if (token) {
+      // 커스텀 강의 추가 시
       if ('class_title' in clickedLecture) {
         mutateAddWithServer({
           timetable_frame_id: frameId,
           timetable_lecture: [
             {
-              ...clickedLecture,
-              class_time: clickedLecture.class_time.flatMap((subArr) => [
-                ...subArr,
-                -1,
-              ]),
-              class_place: clickedLecture.class_place ? clickedLecture.class_place.join(', ') : '',
+              class_title: clickedLecture.class_title,
+              class_infos: clickedLecture.class_infos,
+              professor: clickedLecture.professor,
             },
           ],
         });
-      } else {
+      } else { // 정규 강의 추가 시
         mutateAddWithServer({
           timetable_frame_id: frameId,
           timetable_lecture: [
             {
-              ...clickedLecture,
-              class_title: clickedLecture.name,
+              ...clickedLecture, // 필요 없을 수도 있음
+              class_title: null,
+              class_infos: null,
+              professor: null,
+              grades: '0',
               lecture_id: clickedLecture.id,
             },
           ],
         });
       }
-    } else if ('code' in clickedLecture) {
+    } else if ('code' in clickedLecture) { // (비로그인)정규 강의 추가 시
       addLectureFromLocalStorage(clickedLecture, semester);
     }
   };
 
+  // 강의 복원
   const restoreLecture = () => {
     const restoredLecture = JSON.parse(sessionStorage.getItem('restoreLecture')!);
     if ('name' in restoredLecture) {
@@ -70,10 +74,10 @@ export default function useTimetableV2Mutation(frameId: number) {
     }
   };
 
-  const removeMyLectureV2 = useMutation({
-    mutationFn: async ({ clickedLecture, id } : RemoveMyLectureV2Props) => {
+  const removeMyLecture = useMutation({
+    mutationFn: async ({ clickedLecture, id } : RemoveMyLectureProps) => {
       sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
-      if ('name' in clickedLecture) {
+      if (clickedLecture && 'name' in clickedLecture) {
         return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, semester));
       }
       return removeLectureFromServer(id);
@@ -85,7 +89,16 @@ export default function useTimetableV2Mutation(frameId: number) {
         onRecover: restoreLecture,
       });
     },
+    onError: (error) => {
+      if (isKoinError(error)) {
+        // 추후에 코드별 에러 분기처리 진행
+        showToast('error', error.message || '강의 삭제에 실패했습니다.');
+      } else {
+        sendClientError(error);
+        showToast('error', '강의 삭제에 실패했습니다.');
+      }
+    },
   });
 
-  return { addMyLectureV2, removeMyLectureV2 };
+  return { addMyLecture, removeMyLecture };
 }

@@ -1,0 +1,29 @@
+.tooltip {
+  position: absolute;
+  left: 3em;
+  top: -35px;
+  width: auto;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 4%), 0 4px 10px 0 rgb(0 0 0 / 8%);
+  border-radius: 8px;
+  background: #4b4b4b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  bottom: -6px;
+  width: 15px;
+  height: 15px;
+  background: #4b4b4b;
+  transform: rotate(45deg);
+  border-radius: 2px;
+}

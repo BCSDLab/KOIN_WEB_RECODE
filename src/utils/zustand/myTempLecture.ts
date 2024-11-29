@@ -1,8 +1,8 @@
-import { LectureInfo, TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import { LectureInfo } from 'api/timetable/entity';
 import { create } from 'zustand';
 
 type State = {
-  tempLecture: LectureInfo | TimetableLectureInfoV2 | null;
+  tempLecture: LectureInfo | null;
 };
 
 type Action = {

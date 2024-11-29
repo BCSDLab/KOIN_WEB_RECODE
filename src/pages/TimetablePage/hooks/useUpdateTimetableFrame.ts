@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateTimetableFrame } from 'api/timetable';
+import { editTimetableFrame } from 'api/timetable';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useSemester } from 'utils/zustand/semester';
@@ -13,7 +13,7 @@ export default function useUpdateTimetableFrame() {
   const mutate = useMutation(
     {
       mutationFn: (frameInfo: TimetableFrameInfo) => (
-        updateTimetableFrame(
+        editTimetableFrame(
           token,
           frameInfo.id!,
           { timetable_name: frameInfo.timetable_name, is_main: frameInfo.is_main },

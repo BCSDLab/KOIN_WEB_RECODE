@@ -1,0 +1,31 @@
+.item {
+  &__box {
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+  }
+
+  &__left-box {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  &__icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  &__content {
+    color: #727272;
+    font-size: 10px;
+  }
+
+  &__navigate {
+    width: 16px;
+    height: 16px;
+  }
+}

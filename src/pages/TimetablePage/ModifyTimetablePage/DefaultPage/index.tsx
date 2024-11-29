@@ -4,14 +4,14 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import React, { Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useTimetableDayListV2 from 'pages/TimetablePage/hooks/useTimetableDayListV2';
+import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import PenIcon from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/TimetablePage/components/LectureList';
 import CustomLecture from 'pages/TimetablePage/components/CustomLecture';
 import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
 import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
 import { useSemester } from 'utils/zustand/semester';
-import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import styles from './DefaultPage.module.scss';
@@ -20,8 +20,8 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
   const navigate = useNavigate();
   const semester = useSemester();
   const { pathname } = useLocation();
-  const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
-  const myLectureDayValue = useTimetableDayListV2(myLecturesV2);
+  const { myLectures } = useMyLectures(Number(frameId));
+  const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: lectureList } = useLectureList(semester);
   const tempLecture = useTempLecture();
   const similarSelectedLecture = lectureList
@@ -29,7 +29,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
     ?? [];
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
-  const similarSelectedLectureDayList = useTimetableDayListV2(similarSelectedLecture);
+  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
     navigate(`/timetable/modify/${courseType}/${frameId}`);
@@ -94,7 +94,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
           <div className={styles.page__timetable}>
             <div className={styles['page__timetable-button-group']}>
               <div className={styles['page__total-grades']}>
-                <TotalGrades myLectureList={myLecturesV2} />
+                <TotalGrades myLectureList={myLectures} />
               </div>
               <button
                 type="button"

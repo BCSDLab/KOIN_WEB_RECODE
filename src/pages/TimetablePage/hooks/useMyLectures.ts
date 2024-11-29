@@ -1,17 +1,17 @@
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesState } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
-import useTimetableV2InfoList from './useTimetableV2InfoList';
+import useTimetableInfoList from './useTimetableInfoList';
 
-export default function useMyLecturesV2(frameId: number) {
+export default function useMyLectures(frameId: number) {
   const token = useTokenState();
   const semester = useSemester();
   const myLecturesFromLocalStorageValue = useLecturesState(semester);
-  const { data: myLecturesFromServer } = useTimetableV2InfoList(frameId, token);
+  const { data: myLecturesFromServer } = useTimetableInfoList(frameId, token);
 
-  const myLecturesV2 = token
+  const myLectures = token
     ? (myLecturesFromServer ?? [])
     : (myLecturesFromLocalStorageValue ?? []);
 
-  return { myLecturesV2 };
+  return { myLectures };
 }

@@ -2,14 +2,14 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
-import useTimetableV2Mutation from 'pages/TimetablePage/hooks/useTimetableV2Mutation';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import Listbox from 'components/TimetablePage/Listbox';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
 import WarningIcon from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';
-import useMyLecturesV2 from 'pages/TimetablePage/hooks/useMyLecturesV2';
-import { TimetableLectureInfoV2 } from 'interfaces/Lecture';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
+import { MyLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
@@ -31,8 +31,8 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
   const token = useTokenState();
   const customTempLecture = useCustomTempLecture();
   const { updateCustomTempLecture } = useCustomTempLectureAction();
-  const { myLecturesV2 } = useMyLecturesV2(Number(frameId));
-  const { addMyLectureV2 } = useTimetableV2Mutation(Number(frameId));
+  const { myLectures } = useMyLectures(Number(frameId));
+  const { addMyLecture } = useTimetableMutation(Number(frameId));
 
   const [lectureName, setLectureName] = React.useState('');
   const [professorName, setProfessorName] = React.useState('');
@@ -107,9 +107,10 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       setIsFirstSubmit(false);
       return;
     }
-    const allClassTime = customTempLecture!.class_time.flat();
-    const isDuplicatedTime = allClassTime
-      .some((x) => allClassTime.indexOf(x) !== allClassTime.lastIndexOf(x));
+    const allClassTime = customTempLecture!.class_infos!.map(
+      (schedule) => schedule.class_time,
+    );
+    const isDuplicatedTime = new Set(allClassTime.flat()).size !== allClassTime.flat().length;
     if (isDuplicatedTime) {
       showToast(
         'error',
@@ -117,11 +118,13 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       );
       return;
     }
-    const myLectureList = myLecturesV2 as TimetableLectureInfoV2[];
+    const myLectureList = myLectures as MyLectureInfo[];
     const alreadySelectedLecture = myLectureList.find(
-      (lecture) => lecture.class_time.filter((num) => num !== -1).some(
-        (time) => customTempLecture!.class_time.flat().includes(time),
-      ),
+      (lecture) => lecture.class_infos.some((schedule) => (
+        schedule.class_time.some(
+          (time) => customTempLecture!.class_infos!.some((tempSchedule) => (
+            tempSchedule.class_time.includes(time))),
+        ))),
     );
     if (alreadySelectedLecture) {
       showToast(
@@ -130,8 +133,12 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
       );
       return;
     }
-
-    addMyLectureV2(customTempLecture!);
+    const isContainComma = timeSpaceComponents.some((item) => item.place.includes(','));
+    if (isContainComma) {
+      showToast('error', '쉼표 문자 ( , )를 제외하고 입력해 주세요.');
+      return;
+    }
+    addMyLecture(customTempLecture!);
     setLectureName('');
     setProfessorName('');
     setTimeSpaceComponents([{
@@ -264,8 +271,10 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
         ...customTempLecture,
         class_title: lectureName,
         professor: professorName,
-        class_time: timeSpaceComponents.map((item) => item.lectureTime),
-        class_place: timeSpaceComponents.map((item) => item.place),
+        class_infos: timeSpaceComponents.map((schedule) => ({
+          class_time: schedule.lectureTime,
+          class_place: schedule.place,
+        })),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -319,7 +328,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
             <div className={styles['inputbox__name--block']} />
             <input
               type="text"
-              placeholder="교수명을 입력하세요"
+              placeholder="교수명을 입력하세요."
               value={professorName}
               onChange={(e) => setProfessorName(e.target.value)}
               autoComplete="off"
@@ -420,7 +429,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                 <div className={styles['inputbox__name--block']} />
                 <input
                   type="text"
-                  placeholder="장소를 입력하세요."
+                  placeholder="장소를 입력하세요. (쉼표(,) 제외)"
                   value={place}
                   onChange={(e) => handlePlaceName(e.target.value, index)}
                   autoComplete="off"

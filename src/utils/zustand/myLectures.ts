@@ -1,12 +1,12 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { LectureInfo, TimetableInfoFromLocalStorageV2 } from 'interfaces/Lecture';
+import { LectureInfo } from 'api/timetable/entity';
+import { TimetableInfoFromLocalStorage } from 'interfaces/Lecture';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
 const MY_LECTURES_KEY = 'my-lectures';
 
 type State = {
-  lecturesV2: TimetableInfoFromLocalStorageV2;
+  lectures: TimetableInfoFromLocalStorage;
 };
 
 type Action = {
@@ -23,10 +23,10 @@ interface TimeStringState {
 
 export const useLecturesStore = create<State & Action>(
   (set, get) => ({
-    lecturesV2: JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}'),
+    lectures: JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}'),
     action: {
       addLecture: (lecture, semester) => {
-        const timetableInfoList = get().lecturesV2;
+        const timetableInfoList = get().lectures;
         const newValue = [...(timetableInfoList[semester] || [])];
         newValue.push(lecture);
 
@@ -34,10 +34,10 @@ export const useLecturesStore = create<State & Action>(
           MY_LECTURES_KEY,
           JSON.stringify({ ...timetableInfoList, [semester]: newValue }),
         );
-        set(() => ({ lecturesV2: { ...timetableInfoList, [semester]: newValue } }));
+        set(() => ({ lectures: { ...timetableInfoList, [semester]: newValue } }));
       },
       removeLecture: (lecture, semester) => {
-        const timetableInfoList = get().lecturesV2;
+        const timetableInfoList = get().lectures;
         const timetableInfoWithNewValue = timetableInfoList[semester].filter(
           (newValue) => (lecture.code !== newValue.code)
             || (lecture.lecture_class !== newValue.lecture_class),
@@ -47,7 +47,7 @@ export const useLecturesStore = create<State & Action>(
           JSON.stringify({ ...timetableInfoList, [semester]: timetableInfoWithNewValue }),
         );
         set(() => (
-          { lecturesV2: { ...timetableInfoList, [semester]: timetableInfoWithNewValue } }
+          { lectures: { ...timetableInfoList, [semester]: timetableInfoWithNewValue } }
         ));
       },
     },
@@ -55,8 +55,8 @@ export const useLecturesStore = create<State & Action>(
 );
 
 export const useLecturesState = (semester: string) => {
-  const lecturesV2 = useLecturesStore(useShallow((state) => state.lecturesV2));
-  return lecturesV2[semester];
+  const lectures = useLecturesStore(useShallow((state) => state.lectures));
+  return lectures[semester];
 };
 
 export const useLecturesAction = () => useLecturesStore((state) => state.action);
