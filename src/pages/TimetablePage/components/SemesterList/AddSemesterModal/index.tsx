@@ -5,6 +5,7 @@ import Listbox from 'components/TimetablePage/Listbox';
 import { AddTimetableFrameRequest, SemesterCheckResponse, TimetableFrameInfo } from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';
 import { UseMutateFunction } from '@tanstack/react-query';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {
@@ -15,24 +16,27 @@ export interface AddSemesterModalProps {
   mySemester: SemesterCheckResponse | null;
 }
 
+const currentYear = new Date().getFullYear();
+const startYear = 2019;
+const years = Array.from({ length: currentYear - startYear + 1 }, (_, index) => {
+  const year = currentYear - index;
+  return { label: `${year}년도`, value: `${year}년도` };
+});
+
+const semester = [{ label: '겨울학기', value: '겨울학기' },
+  { label: '2학기', value: '2학기' },
+  { label: '여름학기', value: '여름학기' },
+  { label: '1학기', value: '1학기' }];
+
 export default function AddSemesterModal({
   onClose,
   setModalOpenFalse,
   addSemester,
   mySemester,
 }: AddSemesterModalProps) {
-  /* 학기 API 완성 시 수정 예정 */
-  const year = [{ label: '2024년도', value: '2024년도' },
-    { label: '2023년도', value: '2023년도' },
-    { label: '2022년도', value: '2022년도' },
-    { label: '2021년도', value: '2021년도' },
-    { label: '2020년도', value: '2020년도' },
-    { label: '2019년도', value: '2019년도' }];
-  const semester = [{ label: '겨울학기', value: '겨울학기' },
-    { label: '2학기', value: '2학기' },
-    { label: '여름학기', value: '여름학기' },
-    { label: '1학기', value: '1학기' }];
-  const [yearValue, setYearValue] = React.useState(year[0].label);
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+
+  const [yearValue, setYearValue] = React.useState(years[0].label);
   const [semesterValue, setSemesterValue] = React.useState(semester[0].label);
 
   const onChangeYear = (e: { target: { value: string } }) => {
@@ -60,7 +64,7 @@ export default function AddSemesterModal({
   const semesterParam = yearValue.replace('년도', '') + (semesterValue.length === 3 ? '' : '-') + semesterValue.replace('학기', '');
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>학기 추가</span>
@@ -74,7 +78,7 @@ export default function AddSemesterModal({
           </div>
         </header>
         <div className={styles.container__semester}>
-          <Listbox list={year} value={yearValue} onChange={onChangeYear} version="inModal" />
+          <Listbox list={years} value={yearValue} onChange={onChangeYear} version="inModal" />
           <Listbox list={semester} value={semesterValue} onChange={onChangeSemester} version="inModal" />
         </div>
         <div className={styles.container__button}>
