@@ -187,8 +187,6 @@ export default function TimetableList({
       {isModalOpen && (
         <TimetableSettingModal
           focusFrame={focusFrame!}
-          setCurrentFrameIndex={setCurrentFrameIndex}
-          currentFrameIndex={currentFrameIndex}
           onClose={closeModal}
         />
       )}
