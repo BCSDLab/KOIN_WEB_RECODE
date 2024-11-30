@@ -98,7 +98,7 @@ export default function Panel({ openModal }: PanelProps) {
           <div className={styles.greet__font}>
             <span
               className={cn({
-                [styles['greet--highlight']]: !!((userInfo.nickname || userInfo.name)),
+                [styles['greet--highlight']]: !!(userInfo.nickname || userInfo.name),
               })}
             >
               {userInfo.nickname ?? userInfo.name ?? '회원'}
