@@ -1,4 +1,4 @@
-@mixin textOverflow {
+@mixin textEllipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -92,12 +92,12 @@
 
     &--main-title {
       max-width: 193px;
-      @include textOverflow();
+      @include textEllipsis();
     }
 
     &--title {
       max-width: 223px;
-      @include textOverflow();
+      @include textEllipsis();
     }
 
     &--bookmark-icon {
