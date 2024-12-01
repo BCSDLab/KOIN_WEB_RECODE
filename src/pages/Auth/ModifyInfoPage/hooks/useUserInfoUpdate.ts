@@ -22,8 +22,8 @@ const useUserInfoUpdate = (options: UserUpdateOption) => {
         showToast('success', '성공적으로 정보를 수정하였습니다.');
       },
       onError: (error: AxiosError<{ message?: string }>) => {
-        if (error?.response?.data) {
-          showToast('error', error.response.data.message || '에러가 발생했습니다.');
+        if (error.message) {
+          showToast('error', error.message || '에러가 발생했습니다.');
         }
       },
     },

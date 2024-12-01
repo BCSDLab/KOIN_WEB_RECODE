@@ -13,7 +13,7 @@ function useNicknameCheckServer() {
     onError: (error) => {
       if (isKoinError(error)) {
         if (error.status === 409) {
-          showToast('error', '사용 불가능한 닉네임입니다.');
+          showToast('error', error.message);
           return;
         }
         if (error.status === 412) {
