@@ -185,7 +185,7 @@ function StoreDetailPage() {
       setButtonContent(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [param]); // param이 바뀌어도 버튼이 적용되어야 함
+  }, [param, storeDetail]); // param이 바뀌어도 버튼이 적용되어야 함
 
   useEffect(
     () => {
