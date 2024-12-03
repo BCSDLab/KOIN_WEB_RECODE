@@ -176,7 +176,6 @@ function CustomLecture({ frameId }: { frameId: number }) {
       return;
     }
     if (lecture) {
-      // 강의 수정 로직
       editMyLecture({
         id: lecture?.id,
         lecture_id: lecture?.lecture_id,
@@ -190,7 +189,6 @@ function CustomLecture({ frameId }: { frameId: number }) {
         memo: lecture?.memo,
       });
     } else {
-      // 강의 추가 로직
       addMyLecture(customTempLecture!);
     }
     setLectureName('');
@@ -335,7 +333,6 @@ function CustomLecture({ frameId }: { frameId: number }) {
 
     lecture.class_infos.forEach((classInfo: ClassInfo) => {
       if (lecture.lecture_id !== null) {
-        // lecture_id가 null이 아닌 경우 class_time을 그룹화
         const groupedTimes: number[][] = [];
         let currentGroup: number[] = [classInfo.class_time[0]];
 
