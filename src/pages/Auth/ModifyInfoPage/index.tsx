@@ -2,7 +2,7 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
+import ChevronUpDown from 'assets/svg/common/chevron/chevron-up-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -411,7 +411,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
         {
           currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'
         }
-        <ChervronUpDown />
+        <ChevronUpDown />
       </button>
       {isOpenedPopup && (
         <ul className={styles.select__content} role="listbox">

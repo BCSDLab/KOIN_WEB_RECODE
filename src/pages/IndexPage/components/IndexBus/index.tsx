@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
-import useBusLeftTime from 'pages/BusPage/hooks/useBusLeftTime';
+import useBusLeftTime from 'pages/PBusPage/hooks/useBusLeftTime';
 import {
   BUS_DIRECTIONS, BUS_TYPES, BusLink, busLink,
 } from 'static/bus';
 import { cn } from '@bcsdlab/utils';
-import { getLeftTimeString, getStartTimeString, directionToEnglish } from 'pages/BusPage/ts/busModules';
+import { getLeftTimeString, getStartTimeString, directionToEnglish } from 'pages/PBusPage/ts/busModules';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import ReverseDestination from 'assets/svg/reverse-destination.svg';

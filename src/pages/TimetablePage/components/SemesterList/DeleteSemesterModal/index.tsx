@@ -1,5 +1,5 @@
 import React from 'react';
-import CloseIcon from 'assets/svg/close-icon-black.svg';
+import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DeleteSemesterModal.module.scss';
 

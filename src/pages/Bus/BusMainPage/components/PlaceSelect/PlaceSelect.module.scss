@@ -1,0 +1,15 @@
+.box {
+  width: 178px;
+  height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.title {
+  font-family: Pretendard, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #175c8e;
+}
