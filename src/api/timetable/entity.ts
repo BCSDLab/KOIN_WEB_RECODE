@@ -28,9 +28,9 @@ export type LectureSchedule = {
 
 export interface MyLectureInfo {
   id: number;
+  code: string;
   lecture_id: number;
   regular_number: string;
-  code: string;
   design_score: string;
   class_infos: LectureSchedule[];
   memo: string;
@@ -80,6 +80,11 @@ export interface SemesterCheckResponse extends APIResponse {
 
 // V2-시간표
 // 강의 관련 요청 / 응답
+
+export type EditLectureInfoRequest = EditTimetableLectureRequest;
+
+export type EditLectureInfoResponse = TimetableLectureInfoResponse;
+
 export interface TimetableLectureInfoResponse extends APIResponse {
   timetable_frame_id: number;
   timetable: MyLectureInfo[];

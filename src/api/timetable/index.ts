@@ -3,6 +3,7 @@ import {
   SemesterInfoList,
   SemesterCheck,
   LectureList,
+  EditLectureInfo,
   TimetableLectureInfo,
   TimetableLectureEdit,
   TimetableLectureAddition,
@@ -20,6 +21,8 @@ export const getSemesterInfoList = APIClient.of(SemesterInfoList);
 export const getMySemester = APIClient.of(SemesterCheck);
 
 export const getLectureList = APIClient.of(LectureList);
+
+export const getEditLectureInfo = APIClient.of(EditLectureInfo);
 
 export const getTimetableLectureInfo = APIClient.of(TimetableLectureInfo);
 

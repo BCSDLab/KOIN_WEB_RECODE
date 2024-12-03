@@ -6,12 +6,11 @@ import useTimetableInfoList from './useTimetableInfoList';
 export default function useMyLectures(frameId: number) {
   const token = useTokenState();
   const semester = useSemester();
+  const { data: myLecturesFromServer } = useTimetableInfoList({
+    authorization: token, timetableFrameId: frameId,
+  });
   const myLecturesFromLocalStorageValue = useLecturesState(semester);
-  const { data: myLecturesFromServer } = useTimetableInfoList(frameId, token);
 
-  const myLectures = token
-    ? (myLecturesFromServer ?? [])
-    : (myLecturesFromLocalStorageValue ?? []);
-
+  const myLectures = token ? myLecturesFromServer : myLecturesFromLocalStorageValue;
   return { myLectures };
 }

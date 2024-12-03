@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useToast from 'components/common/Toast/useToast';
 import { LectureInfo, TimetableLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -6,8 +6,10 @@ import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 import useAddTimetableLecture from './useAddTimetableLecture';
 import useDeleteTimetableLecture from './useDeleteTimetableLecture';
+import useEditTimetableLecture from './useEditTimetableLecture';
 
 type RemoveMyLectureProps = {
   clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'> | null,
@@ -18,12 +20,14 @@ export default function useTimetableMutation(frameId: number) {
   const token = useTokenState();
   const toast = useToast();
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
+  const { mutate: mutateEditWithServer } = useEditTimetableLecture(token);
   const {
     addLecture: addLectureFromLocalStorage,
     removeLecture: removeLectureFromLocalStorage,
   } = useLecturesAction();
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
   const semester = useSemester();
+  const queryClient = useQueryClient();
 
   const addMyLecture = (clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'>) => {
     if (token) {
@@ -74,6 +78,34 @@ export default function useTimetableMutation(frameId: number) {
     }
   };
 
+  const editMyLecture = (editedLecture: TimetableLectureInfo) => {
+    mutateEditWithServer(
+      {
+        timetable_frame_id: frameId,
+        timetable_lecture: [editedLecture], // API 요청 형식에 맞게 데이터 전달
+      },
+      {
+        onSuccess: (data) => {
+          queryClient.setQueryData(
+            [TIMETABLE_INFO_LIST, frameId],
+            data,
+          );
+          showToast('success', '강의가 성공적으로 수정되었습니다.');
+        },
+        onError: (error) => {
+          if (isKoinError(error)) {
+            if (error.status === 401) showToast('error', '로그인을 해주세요');
+            if (error.status === 403) showToast('error', '강의 수정에 실패했습니다.');
+            if (error.status === 404) showToast('error', '강의 정보를 찾을 수 없습니다.');
+          } else {
+            sendClientError(error);
+            showToast('error', '강의 수정에 실패했습니다.');
+          }
+        },
+      },
+    );
+  };
+
   const removeMyLecture = useMutation({
     mutationFn: async ({ clickedLecture, id } : RemoveMyLectureProps) => {
       sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
@@ -100,5 +132,5 @@ export default function useTimetableMutation(frameId: number) {
     },
   });
 
-  return { addMyLecture, removeMyLecture };
+  return { addMyLecture, editMyLecture, removeMyLecture };
 }

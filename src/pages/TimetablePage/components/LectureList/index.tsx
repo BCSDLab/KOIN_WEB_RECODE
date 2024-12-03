@@ -61,13 +61,13 @@ function CurrentSemesterLectureList({
     lectureList?.length !== 0 ? (
       <LectureTable
         rowWidthList={rowWidthList}
-        frameId={Number(frameId)}
+        frameId={frameId}
         list={(lectureList ?? []).filter((lecture) => {
           const searchFilter = filter.search.toUpperCase();
           const departmentFilter = filter.department;
           const searchCondition = lecture.name.toUpperCase().includes(searchFilter)
-              || lecture.code.toUpperCase().includes(searchFilter)
-              || lecture.professor.toUpperCase().includes(searchFilter);
+            || lecture.code.toUpperCase().includes(searchFilter)
+            || lecture.professor.toUpperCase().includes(searchFilter);
 
           if (searchFilter !== '' && departmentFilter !== '전체') {
             return searchCondition && lecture.department === departmentFilter;
@@ -88,7 +88,7 @@ function CurrentSemesterLectureList({
           (clickedLecture) => {
             const isContainedLecture = myLectures.some(
               (lecture) => lecture.code === clickedLecture.code
-              && lecture.lecture_class === clickedLecture.lecture_class,
+                && lecture.lecture_class === clickedLecture.lecture_class,
             );
             if ('class_title' in clickedLecture) {
               return;
