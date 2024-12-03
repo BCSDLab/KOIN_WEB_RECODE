@@ -33,11 +33,13 @@ export default function TimetableList({
   const token = useTokenState();
   const { data } = useTimetableFrameList(token, semester);
   const { data: mySemester } = useSemesterCheck(token);
-  const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
+
+  const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
   const defaultFrame = data.filter((frame) => frame.is_main);
   const timetableFrameList = data.filter((frame) => !frame.is_main);
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const handleTimetableSettingClick = (frame: TimetableFrameInfo) => {
     if (token) {
@@ -87,6 +89,9 @@ export default function TimetableList({
       if (mainFrameId) setCurrentFrameIndex(mainFrameId);
     }
   }, [data, setCurrentFrameIndex, currentFrameIndex]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => portalManager.close(), []);
 
   return (
     <div className={styles['timetable-list']}>

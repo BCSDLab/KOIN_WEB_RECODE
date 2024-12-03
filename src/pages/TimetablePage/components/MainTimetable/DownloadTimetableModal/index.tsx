@@ -5,6 +5,7 @@ import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import { useTimeString } from 'utils/zustand/myLectures';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DownloadTimetableModal.module.scss';
 
 interface DownloadTimetableModalProps {
@@ -40,6 +41,9 @@ export default function DownloadTimetableModal({
 }: DownloadTimetableModalProps) {
   const { onImageDownload: DownloadForPC, divRef: pcTimetableRef } = useImageDownload();
   const { onImageDownload: DownloadForMobile, divRef: mobileTimetableRef } = useImageDownload();
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+  const { timeString } = useTimeString();
+
   const onClickImageDownload = (usage: string) => {
     if (usage === 'PC') {
       DownloadForPC('my-timetable');
@@ -48,10 +52,9 @@ export default function DownloadTimetableModal({
     }
     onClose();
   };
-  const { timeString } = useTimeString();
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <div className={styles.container__header}>
           <div className={styles['container__header--text']}>시간표 저장</div>

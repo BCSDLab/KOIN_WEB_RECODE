@@ -528,7 +528,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
                     <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" disabled={lecture?.lecture_id !== null && !!lecture} />
                     <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" disabled={lecture?.lecture_id !== null && !!lecture} />
                     <span>-</span>
-                    <Listbox list={[...HOUR, { label: '24시', value: '24시' }]} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" disabled={lecture?.lecture_id !== null && !!lecture} />
+                    <Listbox list={time.endMinute === '30분' ? HOUR : [...HOUR, { label: '24시', value: '24시' }]} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" disabled={lecture?.lecture_id !== null && !!lecture} />
                     <Listbox list={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" disabled={lecture?.lecture_id !== null && !!lecture} />
                   </div>
                 </div>

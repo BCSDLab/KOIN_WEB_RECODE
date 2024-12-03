@@ -1,4 +1,4 @@
-export type SubmenuTitle = '공지사항' | '버스/교통' | '식단' | '시간표' | '복덕방' | '주변상점' | '교내 시설물 정보' | '코인 for Business' | '리뷰 작성하기' | '리뷰 수정하기' | '리뷰 신고하기' | '전화 주문 혜택';// 헤더에 리뷰 신고하기 제목 추가
+export type SubmenuTitle = '공지사항' | '버스/교통' | '식단' | '시간표' | '복덕방' | '주변상점' | '교내 시설물 정보' | '코인 사장님' | '리뷰 작성하기' | '리뷰 수정하기' | '리뷰 신고하기' | '전화 주문 혜택';// 헤더에 리뷰 신고하기 제목 추가
 
 export interface Submenu {
   title: SubmenuTitle;
@@ -73,7 +73,7 @@ export const CATEGORY: Category[] = [
         tag: null,
       },
       {
-        title: '코인 for Business',
+        title: '코인 사장님',
         link: 'https://owner.koreatech.in/',
         newFlag: true,
         planFlag: false,
