@@ -1,0 +1,32 @@
+.box {
+  width: 708px;
+  height: 269px;
+  background-color: #fff;
+  border-radius: 16px;
+  margin-bottom: 60px;
+  padding: 33px 0 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.direction {
+  width: 555px;
+  height: 92px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 56px;
+}
+
+.submit-button {
+  width: 272px;
+  height: 53px;
+  border-radius: 4px;
+  background-color: #175C8E;
+  color: #fff;
+  font-family: Pretendard sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+}

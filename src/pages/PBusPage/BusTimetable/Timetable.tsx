@@ -1,6 +1,6 @@
-import { getCourseName } from 'pages/BusPage/ts/busModules';
-import useBusTimetable, { useCityBusTimetable } from 'pages/BusPage/hooks/useBusTimetable';
-import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
+import { getCourseName } from 'pages/PBusPage/ts/busModules';
+import useBusTimetable, { useCityBusTimetable } from 'pages/PBusPage/hooks/useBusTimetable';
+import useIndexValueSelect from 'pages/PBusPage/hooks/useIndexValueSelect';
 import {
   BUS_TYPES, cityBusDirections, CITY_COURSES,
   EXPRESS_COURSES, SHUTTLE_COURSES, TERMINAL_CITY_BUS,

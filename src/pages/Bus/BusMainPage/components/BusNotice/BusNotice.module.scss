@@ -1,0 +1,20 @@
+.container {
+  height: 99px;
+}
+
+.notice {
+  height: 58px;
+  padding: 0 24px;
+  border-radius: 8px;
+  background-color: #f1f8ff;
+  display: flex;
+  align-items: center;
+
+  &__description {
+    margin: 0 8px;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    text-align: center;
+    color: #175c8e;
+  }
+}

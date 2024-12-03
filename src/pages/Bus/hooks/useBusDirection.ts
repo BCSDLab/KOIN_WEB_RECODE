@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { directionToEnglish } from 'pages/BusPage/ts/busModules';
+import { directionToEnglish } from 'pages/PBusPage/ts/busModules';
 
 const useBusDirection = (directionList: string[]) => {
   const [depart, setDepart] = useState(directionList[0]);

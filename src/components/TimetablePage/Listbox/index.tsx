@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
+import ChevronUpDown from 'assets/svg/common/chevron/chevron-up-down.svg';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -73,7 +73,7 @@ function Listbox({
         disabled={disabled}
       >
         {value === null ? '학부' : list.find((item) => item.value === value)?.label}
-        {version === 'default' ? <ChervronUpDown /> : <DownArrowIcon />}
+        {version === 'default' ? <ChevronUpDown /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
         <ul
