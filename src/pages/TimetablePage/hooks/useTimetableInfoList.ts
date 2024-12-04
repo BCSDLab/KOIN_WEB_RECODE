@@ -5,24 +5,39 @@ import { KoinError } from 'interfaces/APIError';
 
 export const TIMETABLE_INFO_LIST = 'TIMETABLE_INFO_LIST';
 
-function useTimetableInfoList(
-  timetableFrameId: number,
-  authorization: string,
-) {
-  const { data: timetableInfoList } = useSuspenseQuery<
+interface QueryFunction {
+  timetableFrameId: number | undefined,
+  authorization: string | undefined,
+}
+
+function queryFunction({ authorization, timetableFrameId }: QueryFunction) {
+  if (authorization && timetableFrameId) {
+    return () => getTimetableLectureInfo(authorization, timetableFrameId);
+  }
+  return () => null;
+}
+
+interface UseTimetableInfoListProps {
+  authorization: string;
+  timetableFrameId: number;
+}
+
+function useTimetableInfoList({ authorization, timetableFrameId }: UseTimetableInfoListProps) {
+  const { data } = useSuspenseQuery<
   TimetableLectureInfoResponse | null,
   KoinError,
-  MyLectureInfo[] | undefined,
+  MyLectureInfo[],
   [string, number]
-  >(
-    {
-      queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
-      queryFn: () => (authorization && timetableFrameId
-        ? getTimetableLectureInfo(authorization, timetableFrameId) : null),
-      select: (data) => (data ? data.timetable : undefined),
+  >({
+    queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
+    queryFn: queryFunction({ authorization, timetableFrameId }),
+    select: (rawData) => {
+      if (rawData) return rawData.timetable;
+      return [];
     },
-  );
-  return { data: timetableInfoList };
+  });
+
+  return { data };
 }
 
 export default useTimetableInfoList;
