@@ -332,6 +332,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
               value={professorName}
               onChange={(e) => setProfessorName(e.target.value)}
               autoComplete="off"
+              maxLength={29}
             />
           </div>
         </div>
@@ -432,6 +433,7 @@ function CustomLecture({ frameId }: { frameId: string | undefined }) {
                   value={place}
                   onChange={(e) => handlePlaceName(e.target.value, index)}
                   autoComplete="off"
+                  maxLength={29}
                 />
               </div>
             </div>
