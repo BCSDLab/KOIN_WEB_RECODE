@@ -55,7 +55,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
   const [searchParams] = useSearchParams();
   const lectureIndex = searchParams.get('lectureIndex');
   const selectedLecture = lectureIndex ? myLectures[Number(lectureIndex)] : null;
-  const lecture = selectedLecture as MyLectureInfo | null;
+  const selectedEditLecture = selectedLecture as MyLectureInfo | null;
 
   const [lectureName, setLectureName] = useState('');
   const [professorName, setProfessorName] = useState('');
@@ -133,7 +133,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
     const myLectureList = myLectures as MyLectureInfo[];
 
     const isDuplicatedTime = myLectureList.some((myLecture) => {
-      if (lecture && myLecture.id === lecture.id) {
+      if (selectedEditLecture && myLecture.id === selectedEditLecture.id) {
         return false;
       }
 
@@ -163,7 +163,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
         ))
       ))
     ));
-    if (alreadySelectedLecture && (!lecture)) {
+    if (alreadySelectedLecture && (!selectedEditLecture)) {
       showToast(
         'error',
         `${alreadySelectedLecture.class_title} ${alreadySelectedLecture.lecture_class ? `(${alreadySelectedLecture.lecture_class})` : ''} 강의가 중복되어 추가할 수 없습니다.`,
@@ -175,18 +175,18 @@ function CustomLecture({ frameId }: { frameId: number }) {
       showToast('error', '쉼표 문자 ( , )를 제외하고 입력해 주세요.');
       return;
     }
-    if (lecture) {
+    if (selectedEditLecture) {
       editMyLecture({
-        id: lecture?.id,
-        lecture_id: lecture?.lecture_id,
+        id: selectedEditLecture?.id,
+        lecture_id: selectedEditLecture?.lecture_id,
         class_title: lectureName,
         professor: professorName,
         class_infos: timeSpaceComponents.map((schedule) => ({
           class_time: schedule.lectureTime,
           class_place: schedule.place,
         })),
-        grades: lecture?.grades,
-        memo: lecture?.memo,
+        grades: selectedEditLecture?.grades,
+        memo: selectedEditLecture?.memo,
       });
     } else {
       addMyLecture(customTempLecture!);
@@ -324,15 +324,15 @@ function CustomLecture({ frameId }: { frameId: number }) {
   }, [lectureName, professorName, timeSpaceComponents]);
 
   useEffect(() => {
-    if (!lecture) return;
+    if (!selectedEditLecture) return;
 
-    setLectureName(lecture.class_title);
-    setProfessorName(lecture.professor);
+    setLectureName(selectedEditLecture.class_title);
+    setProfessorName(selectedEditLecture.professor);
 
     const classInfoDefault: ClassInfo[] = [];
 
-    lecture.class_infos.forEach((classInfo: ClassInfo) => {
-      if (lecture.lecture_id !== null) {
+    selectedEditLecture.class_infos.forEach((classInfo: ClassInfo) => {
+      if (selectedEditLecture.lecture_id !== null) {
         const groupedTimes: number[][] = [];
         let currentGroup: number[] = [classInfo.class_time[0]];
 
@@ -392,7 +392,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
 
     setTimeSpaceComponents(updatedComponents);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lecture]);
+  }, [selectedEditLecture]);
 
   return (
     <form
@@ -435,7 +435,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
         <div>
           <div className={cn({
             [styles.inputbox__name]: true,
-            [styles['inputbox__name--disabled']]: lecture?.lecture_id !== null && (!!lecture),
+            [styles['inputbox__name--disabled']]: selectedEditLecture?.lecture_id !== null && (!!selectedEditLecture),
           })}
           >
             <label htmlFor="courseName">
@@ -450,7 +450,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
               value={professorName}
               onChange={(e) => setProfessorName(e.target.value)}
               autoComplete="off"
-              disabled={lecture?.lecture_id !== null && !!lecture}
+              disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture}
             />
           </div>
         </div>
@@ -487,7 +487,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
                   className={cn({
                     [styles['form-group-time__title']]: true,
                     [styles['form-group-time__title--require']]: !isFirstSubmit && lectureTime.length === 0,
-                    [styles['form-group-time__title--disabled']]: lecture?.lecture_id !== null && (!!lecture),
+                    [styles['form-group-time__title--disabled']]: selectedEditLecture?.lecture_id !== null && (!!selectedEditLecture),
                   })}
                 >
                   <div className={styles['form-group-time__title--text']}>
@@ -504,12 +504,13 @@ function CustomLecture({ frameId }: { frameId: number }) {
                           className={cn({
                             [styles['form-group-time__weekdays-button']]: true,
                             [styles['form-group-time__weekdays-button--checked']]: week.includes(weekday),
-                            [styles['form-group-time__weekdays-button--checked--disabled']]: lecture?.lecture_id !== null
-                              && (!!lecture) && week.includes(weekday),
-                            [styles['form-group-time__weekdays-button--disabled']]: lecture?.lecture_id !== null && (!!lecture),
+                            [styles['form-group-time__weekdays-button--checked--disabled']]: selectedEditLecture?.lecture_id !== null
+                              && (!!selectedEditLecture) && week.includes(weekday),
+                            [styles['form-group-time__weekdays-button--disabled']]: selectedEditLecture?.lecture_id !== null && (!!selectedEditLecture),
                           })}
                           onClick={() => handleLectureTimeByWeek(weekday, index)}
-                          disabled={lecture?.lecture_id !== null && !!lecture}
+                          disabled={selectedEditLecture?.lecture_id !== null
+                            && !!selectedEditLecture}
                         >
                           {weekday}
                         </button>
@@ -525,11 +526,11 @@ function CustomLecture({ frameId }: { frameId: number }) {
                       reverseRef.current[index] = element;
                     }}
                   >
-                    <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" disabled={lecture?.lecture_id !== null && !!lecture} />
-                    <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" disabled={lecture?.lecture_id !== null && !!lecture} />
+                    <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture} />
+                    <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture} />
                     <span>-</span>
-                    <Listbox list={time.endMinute === '30분' ? HOUR : [...HOUR, { label: '24시', value: '24시' }]} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" disabled={lecture?.lecture_id !== null && !!lecture} />
-                    <Listbox list={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" disabled={lecture?.lecture_id !== null && !!lecture} />
+                    <Listbox list={time.endMinute === '30분' ? HOUR : [...HOUR, { label: '24시', value: '24시' }]} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture} />
+                    <Listbox list={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture} />
                   </div>
                 </div>
               </div>
@@ -565,14 +566,14 @@ function CustomLecture({ frameId }: { frameId: number }) {
           type="button"
           className={cn({
             [styles['inputbox__add-button']]: true,
-            [styles['inputbox__add-button--disabled']]: lecture?.lecture_id !== null && !!lecture,
+            [styles['inputbox__add-button--disabled']]: selectedEditLecture?.lecture_id !== null && !!selectedEditLecture,
           })}
           onClick={handleAddTimeSpaceComponent}
         >
           <span>시간 및 장소 추가</span>
           <AddIcon />
         </button>
-        {lecture?.lecture_id !== null && !!lecture
+        {selectedEditLecture?.lecture_id !== null && !!selectedEditLecture
           && <span className={styles.inputbox__description}>정규 강의의 교수명과 시간은 수정이 불가능해요.</span>}
       </div>
       <button
