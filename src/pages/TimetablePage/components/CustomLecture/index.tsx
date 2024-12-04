@@ -177,8 +177,8 @@ function CustomLecture({ frameId }: { frameId: number }) {
     }
     if (selectedEditLecture) {
       editMyLecture({
-        id: selectedEditLecture?.id,
-        lecture_id: selectedEditLecture?.lecture_id,
+        id: selectedEditLecture.id,
+        lecture_id: selectedEditLecture.lecture_id,
         class_title: lectureName,
         professor: professorName,
         class_infos: timeSpaceComponents.map((schedule) => ({
