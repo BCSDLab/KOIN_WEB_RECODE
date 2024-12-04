@@ -10,15 +10,10 @@ import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/
 import showToast from 'utils/ts/showToast';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useSearchParams } from 'react-router-dom';
-import { MyLectureInfo } from 'api/timetable/entity';
+import { LectureSchedule, MyLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
-
-interface ClassInfo {
-  class_place?: string;
-  class_time: number[];
-}
 
 const initialTimeSpaceComponent = {
   time: {
@@ -329,51 +324,53 @@ function CustomLecture({ frameId }: { frameId: number }) {
     setLectureName(selectedEditLecture.class_title);
     setProfessorName(selectedEditLecture.professor);
 
-    const classInfoDefault: ClassInfo[] = [];
+    const classInfoDefault: LectureSchedule[] = [];
 
-    selectedEditLecture.class_infos.forEach((classInfo: ClassInfo) => {
-      if (selectedEditLecture.lecture_id !== null) {
-        const groupedTimes: number[][] = [];
-        let currentGroup: number[] = [classInfo.class_time[0]];
+    selectedEditLecture.class_infos.forEach(
+      (lectureSchedule: LectureSchedule) => {
+        if (selectedEditLecture.lecture_id !== null) {
+          const groupedTimes: number[][] = [];
+          let currentGroup: number[] = [lectureSchedule.class_time[0]];
 
-        for (let i = 1; i < classInfo.class_time.length; i += 1) {
-          if (classInfo.class_time[i] - classInfo.class_time[i - 1] === 1) {
-            currentGroup.push(classInfo.class_time[i]);
-          } else {
-            groupedTimes.push(currentGroup);
-            currentGroup = [classInfo.class_time[i]];
+          for (let i = 1; i < lectureSchedule.class_time.length; i += 1) {
+            if (lectureSchedule.class_time[i] - lectureSchedule.class_time[i - 1] === 1) {
+              currentGroup.push(lectureSchedule.class_time[i]);
+            } else {
+              groupedTimes.push(currentGroup);
+              currentGroup = [lectureSchedule.class_time[i]];
+            }
           }
-        }
 
-        if (currentGroup.length > 0) {
-          groupedTimes.push(currentGroup);
-        }
+          if (currentGroup.length > 0) {
+            groupedTimes.push(currentGroup);
+          }
 
-        groupedTimes.forEach((timeGroup) => {
-          classInfoDefault.push({
-            class_place: classInfo.class_place || undefined,
-            class_time: timeGroup,
+          groupedTimes.forEach((timeGroup) => {
+            classInfoDefault.push({
+              class_place: lectureSchedule.class_place || undefined,
+              class_time: timeGroup,
+            });
           });
-        });
-      } else {
-        classInfoDefault.push({
-          class_place: classInfo.class_place || undefined,
-          class_time: classInfo.class_time,
-        });
-      }
-    });
+        } else {
+          classInfoDefault.push({
+            class_place: lectureSchedule.class_place || undefined,
+            class_time: lectureSchedule.class_time,
+          });
+        }
+      },
+    );
 
-    const updatedComponents = classInfoDefault.map((classInfo: ClassInfo) => {
-      const startHour = Math.floor((classInfo.class_time[0] % 100) / 2) + 9 === 9
+    const updatedComponents = classInfoDefault.map((lectureSchedule: LectureSchedule) => {
+      const startHour = Math.floor((lectureSchedule.class_time[0] % 100) / 2) + 9 === 9
         ? '09시'
-        : `${Math.floor((classInfo.class_time[0] % 100) / 2) + 9}시`;
-      const startMinute = (classInfo.class_time[0] % 2 === 0) ? '00분' : '30분';
-      const endHour = `${Math.floor(((classInfo.class_time[classInfo.class_time.length - 1] % 100) + 1) / 2) + 9}시`;
-      const endMinute = ((classInfo.class_time[classInfo.class_time.length - 1] + 1) % 2 === 0) ? '00분' : '30분';
+        : `${Math.floor((lectureSchedule.class_time[0] % 100) / 2) + 9}시`;
+      const startMinute = (lectureSchedule.class_time[0] % 2 === 0) ? '00분' : '30분';
+      const endHour = `${Math.floor(((lectureSchedule.class_time[lectureSchedule.class_time.length - 1] % 100) + 1) / 2) + 9}시`;
+      const endMinute = ((lectureSchedule.class_time[lectureSchedule.class_time.length - 1] + 1) % 2 === 0) ? '00분' : '30분';
 
       const weekMapping = ['월', '화', '수', '목', '금'];
       const uniqueDays = Array.from(
-        new Set(classInfo.class_time.map((time) => weekMapping[Math.floor(time / 100)])),
+        new Set(lectureSchedule.class_time.map((time) => weekMapping[Math.floor(time / 100)])),
       );
 
       return {
@@ -384,8 +381,8 @@ function CustomLecture({ frameId }: { frameId: number }) {
           endMinute,
         },
         week: uniqueDays,
-        lectureTime: classInfo.class_time,
-        place: classInfo.class_place || '',
+        lectureTime: lectureSchedule.class_time,
+        place: lectureSchedule.class_place || '',
         id: uuidv4(),
       };
     });
