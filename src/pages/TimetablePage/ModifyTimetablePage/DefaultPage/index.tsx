@@ -99,7 +99,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
               <button
                 type="button"
                 className={styles['page__save-button']}
-                onClick={() => navigate('/timetable')}
+                onClick={() => navigate('/timetable', { state: { frameId } })}
               >
                 <div className={styles['page__pen-icon']}>
                   <PenIcon />

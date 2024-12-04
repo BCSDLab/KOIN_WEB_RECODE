@@ -123,7 +123,7 @@ export default function TimetableList({
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
             >
               <div className={styles['timetable-list__item--title-container']}>
-                <li>{frame.timetable_name}</li>
+                <li className={styles['timetable-list__item--main-title']}>{frame.timetable_name}</li>
                 <div className={styles['timetable-list__item--bookmark-icon']}>
                   <BookMarkIcon />
                 </div>
@@ -156,7 +156,7 @@ export default function TimetableList({
               key={frame.id}
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
             >
-              <li>{frame.timetable_name}</li>
+              <li className={styles['timetable-list__item--title']}>{frame.timetable_name}</li>
               <button
                 type="button"
                 className={styles['timetable-list__item--setting']}
@@ -187,8 +187,6 @@ export default function TimetableList({
       {isModalOpen && (
         <TimetableSettingModal
           focusFrame={focusFrame!}
-          setCurrentFrameIndex={setCurrentFrameIndex}
-          currentFrameIndex={currentFrameIndex}
           onClose={closeModal}
         />
       )}

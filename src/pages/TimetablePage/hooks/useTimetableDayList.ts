@@ -16,16 +16,24 @@ export default function useTimetableDayList(
               .map((time) => time % 100)
               .sort((a, b) => a - b);
             if (currentDayClassTime.length) {
-              const updatedCurrentDayInfo = [{
+              const groups = currentDayClassTime.reduce((acc, curr, i) => {
+                if (i === 0 || curr === currentDayClassTime[i - 1] + 1) {
+                  acc[acc.length - 1].push(curr);
+                } else {
+                  acc.push([curr]);
+                }
+                return acc;
+              }, [[currentDayClassTime[0]]]);
+              const updatedCurrentDayInfo = groups.map((item) => ({
                 id: 'id' in lecture ? lecture.id : undefined,
-                start: currentDayClassTime[0],
-                end: currentDayClassTime[currentDayClassTime.length - 1],
+                start: item[0],
+                end: item[item.length - 1],
                 name: lecture.class_title ?? '',
                 lecture_class: 'lecture_class' in lecture ? lecture.lecture_class : '',
                 professor: lecture.professor ?? '',
                 class_place: schedule.class_place ?? '',
                 index: lectureIndex,
-              }];
+              }));
               currentDayInfo.push(...updatedCurrentDayInfo);
             }
           });
