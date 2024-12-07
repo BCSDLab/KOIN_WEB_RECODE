@@ -9,6 +9,9 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 
+    0 2px 4px rgba(0 0 0 / 4%),
+    0 1px 1px rgba(0 0 0 / 2%);
 }
 
 .direction {
@@ -24,9 +27,9 @@
   width: 272px;
   height: 53px;
   border-radius: 4px;
-  background-color: #175C8E;
+  background-color: #175c8e;
   color: #fff;
-  font-family: Pretendard sans-serif;
+  font-family: Pretendard, sans-serif;
   font-size: 18px;
   font-weight: 500;
 }
