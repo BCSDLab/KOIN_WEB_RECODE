@@ -32,7 +32,7 @@ export default function DirectionSelect({ onDirectionChange }: DirectionSelectPr
         <div className={styles.direction}>
           <div className={styles.direction_select}>
             <PlaceSelect
-              type={PLACE_TYPE_KEYS.arrival}
+              type={PLACE_TYPE_KEYS.depart}
               place={depart}
               oppositePlace={arrival}
               setPlace={setDepart}

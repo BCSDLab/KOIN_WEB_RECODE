@@ -10,8 +10,10 @@ function BusMainPage() {
 
   const getRoute = () => {
     // mutate 함수
+    // 조회 버튼 클릭 시 페이지 이동
     setIsSelecting(true);
   };
+  console.log(direction, isSelecting, getRoute);
 
   useScrollToTop();
 
