@@ -5,6 +5,9 @@ import DirectionSelect from 'pages/Bus/BusLookupPage/components/DirectionSelect'
 import styles from './BusLookupPage.module.scss';
 
 function BusLookupPage() {
+  // params 어떻게 받아올 지 고민
+  // params를 DirectionSelect로 넘겨주기, DirectionSelect 기능 축소
+
   useScrollToTop();
 
   return (
