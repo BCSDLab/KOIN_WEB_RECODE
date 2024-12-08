@@ -1,21 +1,29 @@
 import ExchangeIcon from 'assets/svg/Bus/exchange-icon.svg';
 import PlaceSelect from 'pages/Bus/BusMainPage/components/PlaceSelect';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './DirectionSelect.module.scss';
 
 const PLACE_TYPE_KEYS = {
-  departure: 'departure',
-  destination: 'destination',
+  depart: 'depart',
+  arrival: 'arrival',
 } as const;
 
-export default function DirectionSelect() {
-  const [departure, setDeparture] = useState('');
-  const [destination, setDestination] = useState('');
+interface DirectionSelectProps {
+  onDirectionChange: (direction: { depart: string; arrival: string }) => void;
+}
+
+export default function DirectionSelect({ onDirectionChange }: DirectionSelectProps) {
+  const [depart, setDepart] = useState('');
+  const [arrival, setArrival] = useState('');
+
+  useEffect(() => {
+    onDirectionChange?.({ depart, arrival });
+  }, [depart, arrival, onDirectionChange]);
 
   const exchangePlace = () => {
-    const temp = departure;
-    setDeparture(destination);
-    setDestination(temp);
+    const temp = depart;
+    setDepart(arrival);
+    setArrival(temp);
   };
 
   return (
@@ -24,10 +32,10 @@ export default function DirectionSelect() {
         <div className={styles.direction}>
           <div className={styles.direction_select}>
             <PlaceSelect
-              type={PLACE_TYPE_KEYS.departure}
-              place={departure}
-              oppositePlace={destination}
-              setPlace={setDeparture}
+              type={PLACE_TYPE_KEYS.arrival}
+              place={depart}
+              oppositePlace={arrival}
+              setPlace={setDepart}
               exchangePlace={exchangePlace}
             />
           </div>
@@ -41,10 +49,10 @@ export default function DirectionSelect() {
           </button>
           <div className={styles.direction_select}>
             <PlaceSelect
-              type={PLACE_TYPE_KEYS.destination}
-              place={destination}
-              oppositePlace={departure}
-              setPlace={setDestination}
+              type={PLACE_TYPE_KEYS.arrival}
+              place={arrival}
+              oppositePlace={depart}
+              setPlace={setArrival}
               exchangePlace={exchangePlace}
             />
           </div>

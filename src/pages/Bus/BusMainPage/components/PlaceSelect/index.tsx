@@ -5,11 +5,11 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './PlaceSelect.module.scss';
 
 const placeType = {
-  departure: {
+  depart: {
     title: '출발',
     placeholder: '출발지 선택',
   },
-  destination: {
+  arrival: {
     title: '도착',
     placeholder: '목적지 선택',
   },
