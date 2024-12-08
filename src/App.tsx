@@ -19,6 +19,7 @@ import StoreDetailPage from 'pages/Store/StoreDetailPage';
 import StoreBenefitPage from 'pages/Store/StoreBenefitPage';
 import CampusInfo from 'pages/CampusInfo';
 import BusPage from 'pages/Bus/BusMainPage';
+import BusLookupPage from 'pages/Bus/BusLookupPage';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
@@ -71,6 +72,7 @@ function App() {
           <Route path={ROUTES.BenefitStore()} element={<HelmetWrapper title="코인 - 전화 혜택" element={<StoreBenefitPage />} />} />
           <Route path={ROUTES.StoreDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 상점 상세" element={<StoreDetailPage />} />} />
           <Route path={ROUTES.Bus()} element={<HelmetWrapper title="코인 - 버스" element={<BusPage />} />} />
+          <Route path={ROUTES.BusLookup()} element={<HelmetWrapper title="코인 - 버스 조회" element={<BusLookupPage />} />} />
           <Route path={ROUTES.Cafeteria()} element={<HelmetWrapper title="코인 - 식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.PrivatePolicy()} element={<HelmetWrapper title="코인 - 개인정보 처리방침" element={<PolicyPage />} />} />
           <Route path={ROUTES.BoardNotice()} element={<HelmetWrapper title="코인 - 공지사항" element={<NoticePage />} />}>
