@@ -8,6 +8,10 @@ import styles from './BusPage.module.scss';
 import RouteList from './components/RouteList';
 import BusSearchOptions from './components/BusSearchOptions';
 
+// "bus_type": "city",
+// "route_name": "400",
+// "depart_time": "16:56"
+
 export default function BusPage() {
   const [direction, setDirection] = useState({ depart: '', arrival: '' });
   const [isSearching, startSearch] = useBooleanState(false);
@@ -26,21 +30,25 @@ export default function BusPage() {
     <main>
       <div className={styles.container}>
         <BusGuide />
-        <div className={styles.contents}>
-          <BusNotice />
+        <div className={styles.place}>
+          <BusNotice isSearching={isSearching} />
           <DirectionSelect
             onDirectionChange={setDirection}
             isSearching={isSearching}
             getRoute={getRoute}
           />
-          <BusSearchOptions />
-          <RouteList />
         </div>
+        {isSearching && (
+          <>
+            <div className={styles.options}>
+              <BusSearchOptions />
+            </div>
+            <div className={styles['route-list']}>
+              <RouteList />
+            </div>
+          </>
+        )}
       </div>
     </main>
   );
 }
-
-// "bus_type": "city",
-// "route_name": "400",
-// "depart_time": "16:56"

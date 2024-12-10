@@ -62,3 +62,17 @@ export const getCourseName = (course: Course) => {
   if (course.direction === 'from') name += ' 하교';
   return name;
 };
+
+export const BUS_TYPE_MAP = {
+  express: '대성고속',
+  shuttle: '학교셔틀',
+  city: '시내버스',
+} as const;
+
+export const BUS_TYPES_EN = Object.keys(BUS_TYPE_MAP);
+
+export const BUS_TYPES_KR = Object.values(BUS_TYPE_MAP);
+
+export type BusType = keyof typeof BUS_TYPE_MAP;
+
+export const getShortBusType = (busType: BusType) => BUS_TYPE_MAP[busType].slice(0, 2);
