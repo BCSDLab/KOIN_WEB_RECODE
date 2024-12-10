@@ -13,6 +13,13 @@
   box-shadow: 
     0 2px 4px rgba(0 0 0 / 4%),
     0 1px 1px rgba(0 0 0 / 2%);
+
+  &--searching {
+    width: 640px;
+    height: 140px;
+    background-color: #f5f5f5;
+    padding: 24px 42.5px;
+  }
 }
 
 .direction {
@@ -24,7 +31,7 @@
   gap: 56px;
 }
 
-.submit-button {
+.lookup-button {
   width: 272px;
   height: 53px;
   border-radius: 4px;

@@ -1,18 +1,19 @@
+import { cn } from '@bcsdlab/utils';
 import ExchangeIcon from 'assets/svg/Bus/exchange-icon.svg';
-import PlaceSelect from 'pages/Bus/BusMainPage/components/PlaceSelect';
+import PlaceSelect from 'pages/BusPage/components/PlaceSelect';
+import { placeTypeKeys } from 'pages/BusPage/ts/busTypes';
 import { useEffect, useState } from 'react';
 import styles from './DirectionSelect.module.scss';
 
-const PLACE_TYPE_KEYS = {
-  depart: 'depart',
-  arrival: 'arrival',
-} as const;
-
 interface DirectionSelectProps {
   onDirectionChange: (direction: { depart: string; arrival: string }) => void;
+  isSearching: boolean,
+  getRoute: () => void,
 }
 
-export default function DirectionSelect({ onDirectionChange }: DirectionSelectProps) {
+export default function DirectionSelect({
+  onDirectionChange, isSearching, getRoute,
+}: DirectionSelectProps) {
   const [depart, setDepart] = useState('');
   const [arrival, setArrival] = useState('');
 
@@ -26,17 +27,27 @@ export default function DirectionSelect({ onDirectionChange }: DirectionSelectPr
     setArrival(temp);
   };
 
+  const handleLookupClick = () => {
+    getRoute();
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.box}>
+      <div
+        className={cn({
+          [styles.box]: true,
+          [styles['box--searching']]: isSearching,
+        })}
+      >
         <div className={styles.direction}>
           <div className={styles.direction_select}>
             <PlaceSelect
-              type={PLACE_TYPE_KEYS.depart}
+              type={placeTypeKeys.depart}
               place={depart}
               oppositePlace={arrival}
               setPlace={setDepart}
               exchangePlace={exchangePlace}
+              isSearching={isSearching}
             />
           </div>
           <button
@@ -49,20 +60,24 @@ export default function DirectionSelect({ onDirectionChange }: DirectionSelectPr
           </button>
           <div className={styles.direction_select}>
             <PlaceSelect
-              type={PLACE_TYPE_KEYS.arrival}
+              type={placeTypeKeys.arrival}
               place={arrival}
               oppositePlace={depart}
               setPlace={setArrival}
               exchangePlace={exchangePlace}
+              isSearching={isSearching}
             />
           </div>
         </div>
-        <button
-          className={styles['submit-button']}
-          type="button"
-        >
-          조회하기
-        </button>
+        {!isSearching && (
+          <button
+            className={styles['lookup-button']}
+            onClick={handleLookupClick}
+            type="button"
+          >
+            조회하기
+          </button>
+        )}
       </div>
     </div>
   );
