@@ -1,7 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import ExchangeIcon from 'assets/svg/Bus/exchange-icon.svg';
 import PlaceSelect from 'pages/BusPage/components/PlaceSelect';
-import { placeTypeKeys } from 'pages/BusPage/ts/busTypes';
+import { placeTypeKeys } from 'pages/BusPage/ts/placeModules';
 import { useEffect, useState } from 'react';
 import styles from './DirectionSelect.module.scss';
 
