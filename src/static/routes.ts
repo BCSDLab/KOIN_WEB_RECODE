@@ -19,7 +19,6 @@ const ROUTES = {
   BenefitStore: () => '/benefitstore',
   StoreDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/store/${id}` : '/store/:id'),
   Bus: () => '/bus',
-  BusLookup: () => '/buslookup',
   Cafeteria: () => '/cafeteria',
   BoardNotice: () => '/board/notice',
   BoardNoticeDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/board/notice/${id}` : '/board/notice/:id'),

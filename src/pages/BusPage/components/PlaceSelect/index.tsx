@@ -1,19 +1,9 @@
 import { cn } from '@bcsdlab/utils';
+import { places, placeType } from 'pages/BusPage/ts/busTypes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './PlaceSelect.module.scss';
-
-const placeType = {
-  depart: {
-    title: '출발',
-    placeholder: '출발지 선택',
-  },
-  arrival: {
-    title: '도착',
-    placeholder: '목적지 선택',
-  },
-};
 
 interface PlaceSelectProps {
   type: keyof typeof placeType;
@@ -21,12 +11,11 @@ interface PlaceSelectProps {
   setPlace: (value: string) => void;
   exchangePlace: () => void;
   oppositePlace: string;
+  isSearching: boolean;
 }
 
-const places = ['코리아텍', '천안역', '천안터미널'];
-
 export default function PlaceSelect({
-  type, place, setPlace, exchangePlace, oppositePlace,
+  type, place, setPlace, exchangePlace, oppositePlace, isSearching,
 }: PlaceSelectProps) {
   const typeInfo = placeType[type];
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
@@ -50,7 +39,10 @@ export default function PlaceSelect({
       <h1 className={styles.title}>{typeInfo.title}</h1>
       <div ref={containerRef}>
         <button
-          className={styles['select-box']}
+          className={cn({
+            [styles['select-box']]: true,
+            [styles['select-box--searching']]: isSearching,
+          })}
           onClick={toggleDropdown}
           type="button"
         >
