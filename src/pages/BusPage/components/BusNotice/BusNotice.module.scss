@@ -1,8 +1,31 @@
 .container {
   height: 99px;
+
+  &--searching {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .notice {
+  width: 100%;
+  height: 22px;
+  display: flex;
+  justify-content: flex-end;
+
+  &__description {
+    display: flex;
+    align-items: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    color: #8e8e8e;
+  }
+}
+
+.removable-notice {
   height: 58px;
   padding: 0 24px;
   border-radius: 8px;

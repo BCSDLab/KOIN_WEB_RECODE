@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import styles from './DirectionSelect.module.scss';
 
 interface DirectionSelectProps {
-  onDirectionChange: (direction: { depart: string; arrival: string }) => void;
+  onDirectionChange: (direction: { depart: string; arrival: string }) => void,
   isSearching: boolean,
   getRoute: () => void,
 }
