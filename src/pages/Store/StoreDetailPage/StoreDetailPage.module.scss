@@ -108,7 +108,7 @@
     }
 
     &--phone {
-      color: #175C8E;
+      color: #175c8e;
       display: inline-block;
     }
 
@@ -127,7 +127,7 @@
         }
 
         & > svg > g > path {
-          fill: #175C8E;
+          fill: #175c8e;
         }
       }
     }
@@ -352,13 +352,12 @@
   cursor: pointer;
 }
 
-
 .phone-button {
   &--floating {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #175C8E;
+    background-color: #175c8e;
     width: 56px;
     height: 56px;
     border-radius: 32px;
