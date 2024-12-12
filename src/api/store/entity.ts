@@ -99,7 +99,7 @@ export type StoreListV2 = {
   is_open: boolean;
   average_rate: number;
   review_count: number;
-  benefit_details: string[];
+  benefit_details: string[] | string;
 };
 
 export interface StoreListResponse extends APIResponse {

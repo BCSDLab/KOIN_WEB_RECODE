@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './BenefitRotator.module.scss';
 
 interface BenefitRotatorProps {
-  benefits:string[];
+  benefits:string[] | string;
 }
 function BenefitRotator({ benefits }:BenefitRotatorProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,7 +22,7 @@ function BenefitRotator({ benefits }:BenefitRotatorProps) {
 
   return (
     <div className={styles['benefit-content']}>
-      {benefits[currentIndex]}
+      {typeof benefits === 'string' ? benefits : benefits[currentIndex]}
     </div>
   );
 }
