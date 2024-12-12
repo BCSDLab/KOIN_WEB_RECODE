@@ -7,6 +7,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useEffect } from 'react';
+import BenefitIcon from 'assets/svg/benefit-icon.svg';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -63,29 +64,36 @@ function IndexStore() {
     <section className={styles.template}>
       <Link to={ROUTES.Store()} className={styles.template__title}>주변상점</Link>
       <div className={styles.category__wrapper}>
-        {isMobile && ABView === 'B'
-          ? (
-            <div className={styles['store-branch-container']}>
-              <button
-                type="button"
-                className={styles['store-branch-button']}
-                onClick={() => navigate(`${ROUTES.Store()}?category=1`)}
-              >
-                <img className={styles['store-branch-button__icon']} src="https://team-kap-koin-storage.s3.ap-northeast-2.amazonaws.com/assets/img/icon/shop_icon.png" alt="이미지 오류" />
-                상점 목록
-              </button>
-              <button
-                type="button"
-                className={styles['store-branch-button']}
+        {isMobile
+          ? categories?.shop_categories.slice(0, 12).map((category) => (
+            category.name === '전체보기' ? (
+              <div
+                className={styles.category__benefit}
                 onClick={() => handleStoreClick()}
+                aria-hidden
               >
-                <img className={styles['store-branch-button__icon']} src="https://team-kap-koin-storage.s3.ap-northeast-2.amazonaws.com/assets/img/icon/call_icon.png" alt="이미지 오류" />
-                전화 주문 혜택
-              </button>
-            </div>
-          )
-          : categories?.shop_categories.slice(isMobile ? 1 : 0, 12).map((category) => (
-            category.name === '전체보기' && ABView === 'B' ? (
+                <BenefitIcon />
+                혜택
+              </div>
+            )
+              : (
+                <div
+                  key={category.id}
+                  className={styles.category__item}
+                  onClick={(e) => handleStoreCategoryClick(e, category)}
+                  aria-hidden
+                >
+                  <img
+                    src={category.image_url}
+                    alt={category.name}
+                    className={styles.category__image}
+                  />
+                  {category.name}
+                </div>
+              )
+          ))
+          : categories?.shop_categories.slice(0, 12).map((category) => (
+            category.name === '전체보기' ? (
               <div
                 className={styles.category__benefit}
                 onClick={() => handleStoreClick()}
