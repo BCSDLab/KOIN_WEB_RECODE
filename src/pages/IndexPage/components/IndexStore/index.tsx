@@ -4,9 +4,6 @@ import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList'
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useABTestView } from 'utils/hooks/abTest/useABTestView';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { useEffect } from 'react';
 import BenefitIcon from 'assets/svg/benefit-icon.svg';
 import styles from './IndexStore.module.scss';
 
@@ -18,22 +15,9 @@ interface Category {
 
 function IndexStore() {
   const isMobile = useMediaQuery();
-  const token = useTokenState();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
-  const ABView = useABTestView('Benefit', token);
-  useEffect(() => {
-    if (logger) {
-      logger.actionEventClick({
-        actionTitle: 'AB_TEST',
-        title: 'BUSINESS_benefit_1',
-        value: ABView === 'A' ? '혜택X' : '혜택O',
-        event_category: 'a/b test 로깅(3차 스프린트, 혜택페이지)',
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
     e.preventDefault();
