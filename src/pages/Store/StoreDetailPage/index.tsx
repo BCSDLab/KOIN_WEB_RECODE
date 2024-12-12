@@ -15,12 +15,12 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import Copy from 'assets/png/copy.png';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import Phone from 'assets/svg/Review/phone.svg';
 import ROUTES from 'static/routes';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import * as api from 'api';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
@@ -40,6 +40,7 @@ function StoreDetailPage() {
   }, []);
   const queryClient = useQueryClient();
   const token = useTokenState();
+  const testValue = useABTestView('business_call', token);
   // waterfall 현상 막기
   const { data: paralleData } = useSuspenseQuery({
     queryKey: ['storeDetail', 'storeDetailMenu', 'review'],
@@ -70,7 +71,6 @@ function StoreDetailPage() {
   const storeType = param.get('type') ?? 'shop';
   const portalManager = useModalPortal();
   const logger = useLogger();
-  const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
   const onClickCallNumber = () => {
     if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
@@ -155,17 +155,6 @@ function StoreDetailPage() {
   useScrollLogging(detailScrollLogging);
 
   React.useEffect(() => {
-    setButtonContent((
-      <a
-        role="button"
-        aria-label="상점 전화하기"
-        href={`tel:${storeDetail?.phone}`}
-        onClick={onClickCallNumber}
-      >
-        <Phone />
-      </a>
-    ));
-
     if (param.get('state') !== '리뷰') {
       if (sessionStorage.getItem('enterReviewPage')) {
         logger.actionEventClick({
@@ -180,10 +169,6 @@ function StoreDetailPage() {
         sessionStorage.removeItem('enterReviewPage');
       }
     }
-
-    return () => {
-      setButtonContent(null);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param, storeDetail]); // param이 바뀌어도 버튼이 적용되어야 함
 
@@ -239,7 +224,23 @@ function StoreDetailPage() {
               <div className={styles.store__name}>{storeDetail?.name}</div>
               <div className={styles.store__detail}>
                 <span>전화번호</span>
-                {storeDetail?.phone}
+                {isMobile && testValue === 'call_number' ? (
+                  <a
+                    role="button"
+                    aria-label="상점 전화하기"
+                    href={`tel:${storeDetail?.phone}`}
+                    onClick={onClickCallNumber}
+                    className={styles['store__detail--phone']}
+                  >
+                    <div className={styles['store__detail--number']}>
+                      {storeDetail?.phone}
+                      {' '}
+                      <div>
+                        <Phone />
+                      </div>
+                    </div>
+                  </a>
+                ) : storeDetail?.phone}
                 <br />
                 <span>운영시간</span>
                 {storeDetail.open[getDayOfWeek()] && storeDetail?.open
@@ -400,6 +401,17 @@ function StoreDetailPage() {
         {tapType === '이벤트/공지' && <EventTable />}
         {tapType === '리뷰' && <ReviewPage id={params.id!} />}
       </div>
+      {testValue === 'call_floating' && (
+      <a
+        role="button"
+        aria-label="상점 전화하기"
+        href={`tel:${storeDetail?.phone}`}
+        onClick={onClickCallNumber}
+        className={styles['phone-button--floating']}
+      >
+        <Phone />
+      </a>
+      )}
     </div>
   );
 }
