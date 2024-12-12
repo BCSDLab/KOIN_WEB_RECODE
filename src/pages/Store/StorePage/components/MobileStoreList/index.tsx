@@ -60,6 +60,7 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
             <div className={styles['store-list__header']}>
               <div className={styles['store-list__title']}>{store.name}</div>
               {store.benefit_details && <BenefitRotator benefits={store.benefit_details} />}
+              {store.benefit_detail && <BenefitRotator benefits={store.benefit_detail} />}
             </div>
             <div className={styles['store-list__content']}>
               {
