@@ -51,7 +51,6 @@
 
   &__title {
     text-align: left;
-    height: 39px;
     text-overflow: ellipsis;
     word-wrap: normal;
     overflow: hidden;
@@ -138,6 +137,12 @@
     width: 18px;
     height: 17.7px;
     text-align: center;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 }
 
