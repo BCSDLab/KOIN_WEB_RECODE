@@ -51,6 +51,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
   const lectureIndex = searchParams.get('lectureIndex');
   const selectedLecture = lectureIndex ? myLectures[Number(lectureIndex)] : null;
   const selectedEditLecture = selectedLecture as MyLectureInfo | null;
+  const isEditStandardLecture = selectedEditLecture?.lecture_id !== null && !!selectedEditLecture;
 
   const [lectureName, setLectureName] = useState('');
   const [professorName, setProfessorName] = useState('');
@@ -447,7 +448,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
               value={professorName}
               onChange={(e) => setProfessorName(e.target.value)}
               autoComplete="off"
-              disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture}
+              disabled={isEditStandardLecture}
             />
           </div>
         </div>
@@ -523,11 +524,11 @@ function CustomLecture({ frameId }: { frameId: number }) {
                       reverseRef.current[index] = element;
                     }}
                   >
-                    <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture} />
-                    <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture} />
+                    <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour', index)} version="addLecture" disabled={isEditStandardLecture} />
+                    <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute', index)} version="addLecture" disabled={isEditStandardLecture} />
                     <span>-</span>
-                    <Listbox list={time.endMinute === '30분' ? HOUR : [...HOUR, { label: '24시', value: '24시' }]} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture} />
-                    <Listbox list={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" disabled={selectedEditLecture?.lecture_id !== null && !!selectedEditLecture} />
+                    <Listbox list={time.endMinute === '30분' ? HOUR : [...HOUR, { label: '24시', value: '24시' }]} value={time.endHour} onChange={handleLectureTimeByTime('endHour', index)} version="addLecture" disabled={isEditStandardLecture} />
+                    <Listbox list={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute', index)} version="addLecture" disabled={isEditStandardLecture} />
                   </div>
                 </div>
               </div>
@@ -563,14 +564,14 @@ function CustomLecture({ frameId }: { frameId: number }) {
           type="button"
           className={cn({
             [styles['inputbox__add-button']]: true,
-            [styles['inputbox__add-button--disabled']]: selectedEditLecture?.lecture_id !== null && !!selectedEditLecture,
+            [styles['inputbox__add-button--disabled']]: isEditStandardLecture,
           })}
           onClick={handleAddTimeSpaceComponent}
         >
           <span>시간 및 장소 추가</span>
           <AddIcon />
         </button>
-        {selectedEditLecture?.lecture_id !== null && !!selectedEditLecture
+        {isEditStandardLecture
           && <span className={styles.inputbox__description}>정규 강의의 교수명과 시간은 수정이 불가능해요.</span>}
       </div>
       <button
