@@ -59,6 +59,7 @@ function StoreDetailPage() {
         actionTitle: 'AB_TEST',
         title: 'BUSINESS_call_1',
         value: testValue === 'call_number' ? 'number' : 'floating',
+        event_category: 'a/b test 로깅(전화하기)',
       });
     }
     if (enterCategoryTimeRef.current === null) {
