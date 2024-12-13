@@ -56,7 +56,7 @@ function StoreDetailPage() {
   useEffect(() => {
     if (!sessionStorage.getItem('enter_storeDetail')) {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS',
+        actionTitle: 'AB_TEST',
         title: 'BUSINESS_call_1',
         value: testValue === 'call_number' ? 'number' : 'floating',
       });
