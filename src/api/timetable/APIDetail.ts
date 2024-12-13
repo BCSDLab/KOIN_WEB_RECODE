@@ -3,8 +3,6 @@ import {
   SemesterResponse,
   LectureInfoResponse,
   SemesterCheckResponse,
-  EditLectureInfoRequest,
-  EditLectureInfoResponse,
   TimetableLectureInfoResponse,
   EditTimetableLectureRequest,
   AddTimetableLectureRequest,
@@ -57,16 +55,6 @@ export class LectureList<R extends LectureInfoResponse> implements APIRequest<R>
       semester_date,
     };
   }
-}
-
-export class EditLectureInfo<R extends EditLectureInfoResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.PUT;
-
-  path = '/v2/timetables/lecture';
-
-  response!: R;
-
-  constructor(public data: EditLectureInfoRequest, public authorization: string) {}
 }
 
 export class TimetableLectureInfo
