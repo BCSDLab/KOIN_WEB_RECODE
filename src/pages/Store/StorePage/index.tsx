@@ -18,6 +18,8 @@ import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import { STORE_PAGE } from 'static/store';
 import IntroToolTip from 'components/common/IntroToolTip';
 import LoadingSpinner from 'components/common/LoadingSpinner';
+import ROUTES from 'static/routes';
+import { useNavigate } from 'react-router-dom';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
@@ -135,6 +137,7 @@ function StorePage() {
     localStorage.setItem('store-review-tooltip', 'used');
     closeTooltip();
   };
+  const navigation = useNavigate();
 
   const koreanCategory = selectedCategory === -1
     ? '전체보기'
@@ -293,6 +296,13 @@ function StorePage() {
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          onClick={() => navigation(`${ROUTES.BenefitStore()}?category=1`)}
+          className={styles.category__benefit}
+        >
+          혜택이 있는 상점 모아보기
+        </button>
       </div>
       {!isMobile && <SearchBarModal onClose={() => {}} />}
       <div className={styles.option}>

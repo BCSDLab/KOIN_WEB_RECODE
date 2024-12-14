@@ -107,6 +107,31 @@
       margin-bottom: 1px;
     }
 
+    &--phone {
+      color: #175c8e;
+      display: inline-block;
+    }
+
+    &--number {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+
+      & > div {
+        width: 16px;
+        height: 16px;
+
+        & > svg {
+          width: 100%;
+          height: 100%;
+        }
+
+        & > svg > g > path {
+          fill: #175c8e;
+        }
+      }
+    }
+
     @include media.media-breakpoint(mobile) {
       font-size: 14px;
 
@@ -325,4 +350,20 @@
   width: 14px;
   margin-left: 5px;
   cursor: pointer;
+}
+
+.phone-button {
+  &--floating {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #175c8e;
+    width: 56px;
+    height: 56px;
+    border-radius: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+  }
 }

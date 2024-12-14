@@ -34,17 +34,15 @@
   height: 142px;
   border-top: 2px #175c8e solid;
   border-bottom: 1px #175c8e solid;
-  margin-bottom: 25px;
 
   @include media.media-breakpoint(mobile) {
     justify-content: center;
     width: 100%;
-    padding: 10px 0 14px;
+    padding: 10px 0;
     margin-left: auto;
     margin-right: auto;
     height: auto;
     border: none;
-    margin-bottom: 13px;
   }
 
   &__header {
@@ -138,6 +136,17 @@
       width: 40px;
       height: 40px;
     }
+  }
+
+  &__benefit {
+    width: 100%;
+    color: #727272;
+    border-top: 1px solid #72727240;
+    border-bottom: 1px solid #72727240;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px 0;
+    font-size: 12px;
   }
 }
 
