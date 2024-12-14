@@ -1,4 +1,34 @@
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 .benefit-content {
   color: #6dbbdd;
   font-size: 12px;
+
+  &__fade-in {
+    animation-name: fade-in;
+    animation-duration: 1s;
+  }
+
+  &__fade-out {
+    animation-name: fade-out;
+    animation-duration: 1s;
+  }
 }
