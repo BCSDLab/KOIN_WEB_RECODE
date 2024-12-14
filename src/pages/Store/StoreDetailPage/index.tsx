@@ -31,16 +31,10 @@ function StoreDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const enterCategoryTimeRef = useRef<number | null>(null);
-  useEffect(() => {
-    if (enterCategoryTimeRef.current === null) {
-      const currentTime = new Date().getTime();
-      sessionStorage.setItem('enter_storeDetail', currentTime.toString());
-      enterCategoryTimeRef.current = currentTime;
-    }
-  }, []);
   const queryClient = useQueryClient();
   const token = useTokenState();
   const testValue = useABTestView('business_call', token);
+  const logger = useLogger();
   // waterfall 현상 막기
   const { data: paralleData } = useSuspenseQuery({
     queryKey: ['storeDetail', 'storeDetailMenu', 'review'],
@@ -59,6 +53,21 @@ function StoreDetailPage() {
       }),
     ]),
   });
+  useEffect(() => {
+    if (!sessionStorage.getItem('enter_storeDetail')) {
+      logger.actionEventClick({
+        actionTitle: 'AB_TEST',
+        title: 'BUSINESS_call_1',
+        value: testValue === 'call_number' ? 'number' : 'floating',
+        event_category: 'a/b test 로깅(전화하기)',
+      });
+    }
+    if (enterCategoryTimeRef.current === null) {
+      const currentTime = new Date().getTime();
+      sessionStorage.setItem('enter_storeDetail', currentTime.toString());
+      enterCategoryTimeRef.current = currentTime;
+    }
+  }, [logger, testValue]);
   const storeDetail = paralleData[0];
   const storeDescription = storeDetail?.description
     ? storeDetail?.description.replace(/(?:\/)/g, '\n')
@@ -70,7 +79,6 @@ function StoreDetailPage() {
   const tapType = param.get('state') ?? '메뉴';
   const storeType = param.get('type') ?? 'shop';
   const portalManager = useModalPortal();
-  const logger = useLogger();
   const onClickCallNumber = () => {
     if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
@@ -224,7 +232,7 @@ function StoreDetailPage() {
               <div className={styles.store__name}>{storeDetail?.name}</div>
               <div className={styles.store__detail}>
                 <span>전화번호</span>
-                {isMobile && testValue === 'call_number' ? (
+                {isMobile && (testValue === 'call_number' || testValue === 'default') ? (
                   <a
                     role="button"
                     aria-label="상점 전화하기"

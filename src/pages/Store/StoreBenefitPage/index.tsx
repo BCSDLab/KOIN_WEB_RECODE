@@ -27,7 +27,7 @@ function StoreBenefitPage() {
   const onClickBenefitTab = (id: number, value :string) => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: 'main_shop_categories',
+      title: 'benefit_shop_categories',
       value,
       // eslint-disable-next-line max-len
       event_category: 'click',
