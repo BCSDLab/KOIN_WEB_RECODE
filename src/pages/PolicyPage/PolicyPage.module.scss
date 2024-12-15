@@ -9,46 +9,44 @@
 
 .body {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   width: calc(100% - 40px);
   max-width: 1136px;
   height: 100%;
   padding: 40px;
-  flex-direction: column;
-  align-items: flex-start;
   gap: 80px;
-  flex-shrink: 0;
-  border: 1px solid var(--Neutral-300, #E1E1E1);
+  border: 1px solid #e1e1e1;
 
   &__content {
     display: flex;
-    gap: 20px;
     flex-direction: column;
+    gap: 20px;
+  }
 
-    &--title {
-      color: #000;
-      font-family: Pretendard;
-      font-size: 32px;
-      font-weight: 500;
-      line-height: normal;
-    }
+  &--title {
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: normal;
   }
 }
 
 @mixin text-style {
   color: #000;
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 160%;
-  color: var(--Neutral-800, #000);
 }
 
 .policy {
   gap: 20px;
-  
+
   &__title {
     color: #000;
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 22px;
     font-weight: 500;
     line-height: normal;
@@ -61,17 +59,8 @@
 
   &__items {
     @include text-style;
-    list-style-type: disc;
-    margin-left: 20px; 
-  }
 
-  &__additionalContent {
-    @include text-style;
-  }
-
-  &__additionalItems {
-    @include text-style;
     list-style-type: disc;
-    margin-left: 20px;  
+    margin-left: 20px;
   }
 }

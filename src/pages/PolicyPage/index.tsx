@@ -26,12 +26,12 @@ function PolicyPage() {
                 </ul>
               )}
               {policy.additionalContent && (
-                <div className={styles.policy__additionalContent}>{policy.additionalContent}</div>
+                <div className={styles.policy__content}>{policy.additionalContent}</div>
               )}
               {policy.additionalItems && (
                 <ul>
                   {policy.additionalItems.map((item, index) => (
-                    <li className={styles.policy__additionalItems} key={index}>{item}</li>
+                    <li className={styles.policy__items} key={index}>{item}</li>
                   ))}
                 </ul>
               )}
