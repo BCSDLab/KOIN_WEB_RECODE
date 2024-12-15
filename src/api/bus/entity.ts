@@ -77,3 +77,21 @@ export interface CityInfo {
     depart_info: [];
   }[];
 }
+
+export interface ShuttleCourseResponse {
+  route_regions: {
+    region: string;
+    routes: {
+      id: string;
+      type: string;
+      route_name: string;
+      sub_name: string;
+    }[];
+  }[];
+
+  semester_info: {
+    name: string;
+    from: string;
+    to: string;
+  }
+}

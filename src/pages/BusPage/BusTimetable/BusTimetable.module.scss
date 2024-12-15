@@ -54,8 +54,8 @@
     line-height: 1.5;
     color: rgb(133 133 133);
     background-color: white;
-    border: 1px solid rgb(133 133 133);
     appearance: none;
+    border-radius: 12px 0 0 0;
     cursor: pointer;
 
     @include media.media-breakpoint(mobile) {
@@ -64,8 +64,8 @@
 
     &--selected {
       color: rgb(23 92 142);
-      border-color: rgb(23 92 142);
-      border-bottom: 0;
+      border-bottom: 3px solid rgb(23 92 142);
+      
     }
   }
 }
@@ -150,7 +150,101 @@
     }
   }
 
-  &__cell {
+  &__label {
     vertical-align: middle;
+    color: #4b4b4b;
+    font-size: 18px;
+    font-weight: 400;
   }
+
+  &__cell_am {
+    vertical-align: middle;
+    color: #ffc62b;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  &__cell_pm {
+    vertical-align: middle;
+    color: #3a70e2;
+    font-size: 20px;
+    font-weight: 700;
+  }
+}
+
+.courseCategory {
+  background-color: #f5f5f5;
+  display: flex;
+  gap: 8px;
+  padding: 8px 24px;
+
+  &__button {
+    padding: 6px 16px;
+    color: #727272;
+    font-size: 16px;
+  }
+}
+
+$templateShuttleColors: (
+  '순환': #4ed92c,
+  '주중': #ffb443,
+  '주말': #34adff
+);
+
+.templateShuttle {
+  width: 500px;
+  background-color: #fff;
+  padding: 25px 5px;
+  border-radius: 16px;
+  border: 1px solid #eee;
+  margin: 20px 0;
+
+  &__title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 160%;
+    padding: 16px 24px;
+  }
+
+  &__list_wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 32px;
+  }
+
+  &__list_header {
+    display: flex;
+    padding: 6px 0;
+    gap: 8px;
+  }
+
+  &__list_type {
+    color: #fff;
+    padding: 5px 6px;
+    border-radius: 4px;
+    
+    @each $type, $color in $templateShuttleColors {
+      &.type-#{$type} {
+        background-color: $color;
+      }
+    }
+  }
+
+  &____list_name {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  &__list_sub_name {
+    color: #727272;
+    font-size: 12px;
+    font-weight: 400;
+  }
+}
+
+.layoutGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); // 2열
+  grid-template-rows: repeat(2, auto); // 2행
+  gap: 16px; // 카드 간 간격
 }

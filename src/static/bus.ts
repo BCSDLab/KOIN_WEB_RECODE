@@ -7,7 +7,7 @@ export const BUS_TYPES = [{
 }, {
   key: 'express',
   tabName: '대성고속',
-  tableHeaders: ['출발시간', '도착시간'],
+  tableHeaders: ['오전', '오후'],
 }, {
   key: 'city',
   tabName: '시내버스',
@@ -133,8 +133,8 @@ export const busLink: BusLink[] = [
 ];
 
 export const cityBusDirections = [
-  { label: '병천 → 터미널', value: 'from' },
-  { label: '터미널 → 병천', value: 'to' },
+  { label: '천안방면', value: 'from' },
+  { label: '병천방면', value: 'to' },
 ];
 
 export const CITY_COURSES: CityBusParams[] = [

@@ -5,6 +5,7 @@ import { BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
 import { useShallow } from 'zustand/react/shallow';
+import useShuttleCourse from 'pages/BusPage/hooks/useShuttleCourse';
 import styles from './BusTimetable.module.scss';
 import Timetable from './Timetable';
 
@@ -18,9 +19,11 @@ function BusTimetable() {
     setSelectedTab(type);
   };
 
+  const { shuttleCourse: tmp } = useShuttleCourse();
+  console.log(tmp);
+
   return (
     <section className={styles.template}>
-      <h2 className={styles.template__title}>전체 시간표 조회</h2>
 
       <ul className={styles.tabs} role="tablist">
         {BUS_TYPES.map((type) => (
