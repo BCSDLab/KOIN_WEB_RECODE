@@ -5,6 +5,9 @@
 }
 
 .time-table-title {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   padding: 32px 26px;
   gap: 8px;
 }
@@ -21,11 +24,22 @@
   line-height: 160%; /* 17.6px */
 }
 
+$templateShuttleColors: (
+  '순환': #4ed92c,
+  '주중': #ffb443,
+  '주말': #34adff
+);
+
 .bus-type {
   padding: 0 4px;
   color: #fff;
   border-radius: 4px;
-  background-color: #4ed92c;
+}
+
+@each $type, $color in $templateShuttleColors {
+  .type-#{$type} {
+    background-color: $color;
+  }
 }
 
 .time-table-wapper {
@@ -33,18 +47,31 @@
 }
 
 .header {
-
   &__title {
     display: flex;
     font-size: 22px;
     font-family: Pretendard, sans-serif;
   }
+
+  &__sub-title {
+    display: flex;
+    color: #727272;
+
+    font-family: Pretendard;
+    font-size: 14px;
+  }
 }
+
+
 
 .time-table {
   display: grid;
   grid-auto-flow: column;
   width: 100%;
+
+  &--short {
+    grid-template-columns: 126px 1fr;
+  }
 
   &__header {
     width: 100%;
@@ -69,9 +96,12 @@
     padding-left: 24px;
     height: 54px;
     gap: 8px;
-    border-right: 2.5px solid #f5f5f5;
     font-family: Pretendard, sans-serif;
     color: #000;
+
+    &--long {
+      border-right: 2.5px solid #f5f5f5;
+    }
   }
 
   &__node-detail {
@@ -87,6 +117,7 @@
   &__number {
     box-sizing: border-box;
     display: flex;
+    align-items: center;
     flex-direction: column;
     min-width: 64px;
     width: 100%;
@@ -96,13 +127,16 @@
     text-align: center;
     gap: 8px;
     font-family: Pretendard, sans-serif;
-    color: var(--Neutral-600, #4B4B4B);
-    font-family: Pretendard;
+    color: #4b4b4b;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: 160%; /* 25.6px */
     background-color: #f5f5f5;
+
+    &--selected {
+      max-width: 126px;
+    }
   }
 
   &__node-wrapper {
@@ -121,7 +155,6 @@
 
   &__time {
     display: flex;
-    height: 29px;
     padding: 8px 0px;
     justify-content: center;
     align-items: center;
@@ -130,5 +163,38 @@
     font-family: Pretendard, sans-serif;
     font-size: 18px;
     font-weight: 600;
+
+    &--selected {
+      max-width: 126px;
+    }
   }
+}
+
+.detail__button {
+  display: flex;
+  padding: 6px 16px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  background: #f5f5f5;
+  color: #727272;
+
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 160%; /* 25.6px */
+
+  &--selected {
+    background: #175c8e;
+    color: #fff;
+    font-weight: 600;
+  }
+}
+
+.detail__button-wrapper {
+  position: absolute;
+  display: flex;
+  gap: 12px;
+  bottom: 24px;
+  right: 24px;
 }

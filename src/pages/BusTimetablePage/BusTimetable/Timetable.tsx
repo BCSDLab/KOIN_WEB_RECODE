@@ -59,8 +59,7 @@ function TemplateShuttleVersion({
   }
 
   return (
-    // <div className={styles.templateShuttle}>
-    <div className={styles['template-shuttle']}>
+    <div className={styles.templateShuttle}>
       <h2 className={styles.templateShuttle__title}>{region}</h2>
       <div>
         {filteredRoutes(category).map((route) => (
