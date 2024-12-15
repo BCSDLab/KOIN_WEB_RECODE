@@ -91,13 +91,13 @@ export const SHUTTLE_COURSES = [
 
 export const EXPRESS_COURSES = [
   {
-    name: '한기대 → 야우리',
+    name: '병천방면',
     bus_type: 'express',
     direction: 'from',
     region: '천안',
   },
   {
-    name: '야우리 → 한기대',
+    name: '천안방면',
     bus_type: 'express',
     direction: 'to',
     region: '천안',
