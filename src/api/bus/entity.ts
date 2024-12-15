@@ -95,3 +95,20 @@ export interface ShuttleCourseResponse {
     to: string;
   }
 }
+
+export interface ShuttleTimetableDetailInfoResponse {
+  id: string,
+  region: string,
+  route_type: string,
+  route_name: string,
+  sub_name: null,
+  node_info: {
+    name: string,
+    detail: string,
+  }[],
+  route_info: {
+    name: string,
+    detail: string,
+    arrival_time: string[],
+  }[],
+}

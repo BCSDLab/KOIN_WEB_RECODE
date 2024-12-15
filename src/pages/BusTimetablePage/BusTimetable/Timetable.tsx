@@ -1,15 +1,7 @@
-// import { getCourseName } from 'pages/BusPage/ts/busModules';
-// import useBusTimetable, { useCityBusTimetable } from 'pages/BusPage/hooks/useBusTimetable';
 import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
-// import {
-//   BUS_TYPES, cityBusDirections, CITY_COURSES,
-//   EXPRESS_COURSES, SHUTTLE_COURSES, TERMINAL_CITY_BUS,
-// } from 'static/bus';
-// import useLogger from 'utils/hooks/analytics/useLogger';
-// import { ChangeEvent, useState } from 'react';
-// import { validateHeaderName } from 'http';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useShuttleCourse from 'pages/BusTimetablePage/hooks/useShuttleCourse';
+import useShuttleTimetableDetail from 'pages/BusTimetablePage/hooks/useShuttleTimetableDetail';
 import useBusTimetable, { useCityBusTimetable } from 'pages/BusTimetablePage/hooks/useBusTimetable';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import dayjs from 'dayjs';
@@ -25,8 +17,10 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './BusTimetable.module.scss';
 
 interface TemplateShuttleVersionProps {
+  routeIdHandler: (id: string | null) => void,
   region: string;
   routes: {
+    id: string;
     route_name: string;
     sub_name: string | null;
     type: string;
@@ -34,7 +28,12 @@ interface TemplateShuttleVersionProps {
   category: string;
 }
 
-function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVersionProps) {
+function TemplateShuttleVersion({
+  routeIdHandler,
+  region,
+  routes,
+  category,
+}: TemplateShuttleVersionProps) {
   const filteredRoutes = (route: string) => routes.filter(({ type }) => {
     if (route === '전체') {
       return true;
@@ -64,7 +63,12 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
       <h2 className={styles.templateShuttle__title}>{region}</h2>
       <div>
         {filteredRoutes(category).map((route) => (
-          <div className={styles.templateShuttle__list_wrapper}>
+          <button
+            type="button"
+            className={styles.templateShuttle__list_wrapper}
+            key={route.id}
+            onClick={() => routeIdHandler(route.id)}
+          >
             <span className={styles.templateShuttle__list}>
               <div className={styles.templateShuttle__list_header}>
                 <span
@@ -77,7 +81,7 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
               <div className={styles.templateShuttle__list_sub_name}>{route.sub_name}</div>
             </span>
             <RightArrow />
-          </div>
+          </button>
         ))}
       </div>
     </div>
@@ -88,24 +92,39 @@ function ShuttleTimetable() {
   const { shuttleCourse } = useShuttleCourse();
   const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
   const [category, setCategory] = useState('전체');
+  const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
+  const { shuttleTimetableDetail } = useShuttleTimetableDetail(selectedRouteId);
+
+  const changeRouteId = async (id: string | null) => {
+    setSelectedRouteId(id);
+  };
+
+  useEffect(() => {
+    console.log(shuttleTimetableDetail);
+  }, [shuttleTimetableDetail]);
 
   return (
     <div className={styles['timetable-container']}>
       <div className={styles['course-category']}>
         {courseCategory.map((value) => (
           <button
+            key={value}
             className={cn({
               [styles['course-category__button']]: true,
               [styles['course-category__button--selected']]: value === category,
             })}
             type="button"
-            onClick={() => setCategory(value)}
+            onClick={() => {
+              setCategory(value);
+              setSelectedRouteId(null);
+            }}
           >
             {value}
           </button>
         ))}
       </div>
 
+      {!selectedRouteId && (
       <div className={styles['main-timetable']}>
         <div className={styles['main-timetable__column']}>
           {[
@@ -113,6 +132,7 @@ function ShuttleTimetable() {
             shuttleCourse.route_regions[2], // 서울
           ].map((text) => (
             <TemplateShuttleVersion
+              routeIdHandler={changeRouteId}
               key={text.region}
               region={text.region}
               routes={text.routes}
@@ -126,6 +146,7 @@ function ShuttleTimetable() {
             shuttleCourse.route_regions[3], // 대전, 세종
           ].map((text) => (
             <TemplateShuttleVersion
+              routeIdHandler={changeRouteId}
               key={text.region}
               region={text.region}
               routes={text.routes}
@@ -134,6 +155,18 @@ function ShuttleTimetable() {
           ))}
         </div>
       </div>
+      )}
+
+      {selectedRouteId
+        && shuttleTimetableDetail
+        && shuttleTimetableDetail.route_info.length <= 2
+        && <div>등교, 하교</div>}
+
+      {selectedRouteId
+        && shuttleTimetableDetail
+        && shuttleTimetableDetail?.route_info.length > 2
+        && <div>회차</div>}
+
     </div>
   );
 }

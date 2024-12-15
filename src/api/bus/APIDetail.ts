@@ -2,6 +2,7 @@ import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
   CourseResponse, BusResponse, BusTimetableResponse,
   Course, CityBusParams, CityInfoResponse, ShuttleCourseResponse,
+  ShuttleTimetableDetailInfoResponse,
 } from './entity';
 
 export class CourseList<R extends CourseResponse> implements APIRequest<R> {
@@ -64,4 +65,19 @@ export class ShuttleCourseInfo<R extends ShuttleCourseResponse> implements APIRe
   response!: R;
 
   auth = false;
+}
+
+export class ShuttleTimetableDetailInfo<R extends ShuttleTimetableDetailInfoResponse>
+implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = false;
+
+  constructor({ id }: { id: string }) {
+    this.path = `/bus/timetable/shuttle/${id}`;
+  }
 }

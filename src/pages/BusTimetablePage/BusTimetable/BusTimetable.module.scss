@@ -238,8 +238,14 @@ $templateShuttleColors: (
     padding: 16px 24px;
   }
 
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__list_wrapper {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
     padding: 6px 32px;
@@ -274,6 +280,7 @@ $templateShuttleColors: (
   }
 
   &__list_sub_name {
+    text-align: left;
     color: #727272;
     font-size: 12px;
     font-weight: 400;
