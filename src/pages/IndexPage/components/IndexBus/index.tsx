@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
-import useBusLeftTime from 'pages/BusPage/hooks/useBusLeftTime';
+import useBusLeftTime from 'pages/BusRoutePage/hooks/useBusLeftTime';
 import {
   BUS_DIRECTIONS, BUS_TYPES, BusLink, busLink,
 } from 'static/bus';
 import { cn } from '@bcsdlab/utils';
-import { getLeftTimeString, getStartTimeString, directionToEnglish } from 'pages/BusPage/ts/busModules';
+import { getLeftTimeString, getStartTimeString, directionToEnglish } from 'pages/BusRoutePage/ts/busModules';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import ReverseDestination from 'assets/svg/reverse-destination.svg';
@@ -102,7 +102,7 @@ function IndexBus() {
   return (
     <section className={styles.template}>
       <Link
-        to={ROUTES.Bus()}
+        to={ROUTES.BusRoute()}
         className={styles.template__title}
         onClick={() => {
           setSelectedTab(BUS_TYPES[0]);

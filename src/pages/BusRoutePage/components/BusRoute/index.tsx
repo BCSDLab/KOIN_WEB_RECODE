@@ -1,6 +1,6 @@
 import BusIcon from 'assets/svg/Bus/bus-icon.svg';
 import { useState } from 'react';
-import { BusType, getShortBusType } from 'pages/BusPage/ts/busModules';
+import { BusType, getShortBusType } from 'pages/BusRoutePage/ts/busModules';
 import { cn } from '@bcsdlab/utils';
 import styles from './BusRoute.module.scss';
 

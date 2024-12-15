@@ -1,5 +1,5 @@
 import { cn } from '@bcsdlab/utils';
-import { places, placeType } from 'pages/BusPage/ts/placeModules';
+import { places, placeType } from 'pages/BusRoutePage/ts/placeModules';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';

@@ -1,5 +1,5 @@
-import BusRoute from 'pages/BusPage/components/BusRoute';
-import { BusType } from 'pages/BusPage/ts/busModules';
+import BusRoute from 'pages/BusRoutePage/components/BusRoute';
+import { BusType } from 'pages/BusRoutePage/ts/busModules';
 import styles from './RouteList.module.scss';
 
 interface RouteType {

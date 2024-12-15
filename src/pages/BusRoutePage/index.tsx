@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import BusNotice from 'pages/BusPage/components/BusNotice';
-import DirectionSelect from 'pages/BusPage/components/DirectionSelect';
+import BusNotice from 'pages/BusRoutePage/components/BusNotice';
+import DirectionSelect from 'pages/BusRoutePage/components/DirectionSelect';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import BusGuide from 'pages/BusPage/components/BusGuide';
-import styles from './BusPage.module.scss';
+import BusGuide from 'pages/BusRoutePage/components/BusGuide';
 import RouteList from './components/RouteList';
 import BusSearchOptions from './components/BusSearchOptions';
+import styles from './BusRoutePage.module.scss';
 
 // "bus_type": "city",
 // "route_name": "400",
 // "depart_time": "16:56"
 
-export default function BusPage() {
+export default function BusRoutePage() {
   const [direction, setDirection] = useState({ depart: '', arrival: '' });
   const [isSearching, startSearch] = useBooleanState(false);
   const [departTime, setDepartTime] = useState(0);
