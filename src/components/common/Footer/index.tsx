@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Footer.module.scss';
@@ -7,6 +8,7 @@ import styles from './Footer.module.scss';
 function Footer(): JSX.Element {
   const isMobile = useMediaQuery();
   const logger = useLogger();
+  const navigate = useNavigate();
   // const pathname = useParams();
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
@@ -60,9 +62,13 @@ function Footer(): JSX.Element {
               <li className={styles.sitemap__link}>
                 <a href="https://portal.koreatech.ac.kr" target="_blank" rel="noreferrer">아우누리 바로가기</a>
               </li>
-              <li className={styles.sitemap__link}>
-                <Link to="/privacy-policy">개인정보 처리방침</Link>
-              </li>
+              <button
+                type="button"
+                className={styles.sitemap__link}
+                onClick={() => { navigate(ROUTES.PrivatePolicy()); }}
+              >
+                개인정보 처리방침
+              </button>
             </ul>
           ) : (
             <ul className={styles.sitemap__content}>
@@ -75,9 +81,13 @@ function Footer(): JSX.Element {
               <li className={styles.sitemap__link}>
                 <a href="https://bcsdlab.com" target="_blank" rel="noreferrer">BCSD Lab 바로가기</a>
               </li>
-              <li className={styles.sitemap__link}>
-                <Link to="/privacy-policy">개인정보 처리방침</Link>
-              </li>
+              <button
+                type="button"
+                className={styles.sitemap__link}
+                onClick={() => { navigate(ROUTES.PrivatePolicy()); }}
+              >
+                개인정보 처리방침
+              </button>
             </ul>
           )}
           <div className={styles['sitemap__icon-links']}>
