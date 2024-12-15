@@ -17,12 +17,12 @@ function queryFunction({ authorization, timetableFrameId }: QueryFunction) {
   return () => null;
 }
 
-interface UseTimetableInfoListProps {
+interface UseTimetableInfoListParams {
   authorization: string;
   timetableFrameId: number;
 }
 
-function useTimetableInfoList({ authorization, timetableFrameId }: UseTimetableInfoListProps) {
+function useTimetableInfoList({ authorization, timetableFrameId }: UseTimetableInfoListParams) {
   const { data } = useSuspenseQuery<
   TimetableLectureInfoResponse | null,
   KoinError,

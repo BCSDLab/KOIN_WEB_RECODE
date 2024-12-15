@@ -7,7 +7,7 @@ import styles from './ModifyTimetablePage.module.scss';
 export default function ModifyTimetablePage() {
   const isMobile = useMediaQuery();
   const { id } = useParams();
-  const frameId = Number(id);
+  const frameId = id !== undefined ? Number(id) : NaN;
 
   return (
     <div className={styles.page}>

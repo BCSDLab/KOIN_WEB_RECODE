@@ -33,10 +33,6 @@ interface TimetableProps {
   frameId: number;
 }
 
-interface EditLectureProps {
-  lectureIndex: number;
-}
-
 function Timetable({
   frameId,
   lectures,
@@ -62,9 +58,7 @@ function Timetable({
   const { timeString, setTimeString } = useTimeString();
   const token = useTokenState();
 
-  const handleEditLectureClick = ({
-    lectureIndex,
-  }: EditLectureProps) => {
+  const handleEditLectureClick = (lectureIndex: number) => {
     if (!token) {
       toast.error('강의 수정은 로그인 후 이용할 수 있습니다.');
       return;
@@ -72,6 +66,7 @@ function Timetable({
 
     navigate(`/timetable/modify/direct/${frameId}?lectureIndex=${lectureIndex}`);
   };
+
   const handleRemoveLectureClick = (id: number) => {
     let lectureToRemove: LectureInfo | MyLectureInfo | null = null;
     let lectureId = id;
@@ -255,7 +250,7 @@ function Timetable({
                     <>
                       <div
                         className={styles['timetable__edit-button']}
-                        onClick={() => handleEditLectureClick({ lectureIndex })}
+                        onClick={() => handleEditLectureClick(lectureIndex)}
                         role="button"
                         aria-hidden
                       >
