@@ -1,7 +1,7 @@
+import BusTimetableDetail from 'pages/BusTimetablePage/BusTimetableDetail';
 import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useShuttleCourse from 'pages/BusTimetablePage/hooks/useShuttleCourse';
-import useShuttleTimetableDetail from 'pages/BusTimetablePage/hooks/useShuttleTimetableDetail';
 import useBusTimetable, { useCityBusTimetable } from 'pages/BusTimetablePage/hooks/useBusTimetable';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import dayjs from 'dayjs';
@@ -59,7 +59,8 @@ function TemplateShuttleVersion({
   }
 
   return (
-    <div className={styles.templateShuttle}>
+    // <div className={styles.templateShuttle}>
+    <div className={styles['template-shuttle']}>
       <h2 className={styles.templateShuttle__title}>{region}</h2>
       <div>
         {filteredRoutes(category).map((route) => (
@@ -93,15 +94,10 @@ function ShuttleTimetable() {
   const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
   const [category, setCategory] = useState('전체');
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
-  const { shuttleTimetableDetail } = useShuttleTimetableDetail(selectedRouteId);
 
   const changeRouteId = async (id: string | null) => {
     setSelectedRouteId(id);
   };
-
-  useEffect(() => {
-    console.log(shuttleTimetableDetail);
-  }, [shuttleTimetableDetail]);
 
   return (
     <div className={styles['timetable-container']}>
@@ -157,16 +153,7 @@ function ShuttleTimetable() {
       </div>
       )}
 
-      {selectedRouteId
-        && shuttleTimetableDetail
-        && shuttleTimetableDetail.route_info.length <= 2
-        && <div>등교, 하교</div>}
-
-      {selectedRouteId
-        && shuttleTimetableDetail
-        && shuttleTimetableDetail?.route_info.length > 2
-        && <div>회차</div>}
-
+      {selectedRouteId && <BusTimetableDetail routeId={selectedRouteId} />}
     </div>
   );
 }

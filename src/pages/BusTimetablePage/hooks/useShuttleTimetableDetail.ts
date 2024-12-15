@@ -3,7 +3,7 @@ import { getShuttleTimetableDetailInfo } from 'api/bus';
 
 function useShuttleTimetableDetail(id: string | null) {
   const { data: shuttleTimetableDetail } = useQuery({
-    queryKey: ['shuttle', 'timetable', id],
+    queryKey: ['bus', 'shuttle', 'timetable', id],
     queryFn: id ? async () => getShuttleTimetableDetailInfo({ id }) : skipToken,
     enabled: !!id,
   });

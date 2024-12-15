@@ -1,6 +1,6 @@
 import APIClient from 'utils/ts/apiClient';
 import {
-  BusInfo, BusTimetableInfo, CityBusTimetableInfo, CourseList,
+  BusInfo, BusNoticeInfo, BusTimetableInfo, CityBusTimetableInfo, CourseList,
   ShuttleCourseInfo, ShuttleTimetableDetailInfo,
 } from './APIDetail';
 
@@ -15,3 +15,5 @@ export const getCityBusTimetableInfo = APIClient.of(CityBusTimetableInfo);
 export const getShuttleCourseInfo = APIClient.of(ShuttleCourseInfo);
 
 export const getShuttleTimetableDetailInfo = APIClient.of(ShuttleTimetableDetailInfo);
+
+export const getBusNoticeInfo = APIClient.of(BusNoticeInfo);

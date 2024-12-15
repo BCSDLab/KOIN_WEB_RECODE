@@ -112,3 +112,8 @@ export interface ShuttleTimetableDetailInfoResponse {
     arrival_time: string[],
   }[],
 }
+
+export interface BusNoticeInfoResponse {
+  id: number,
+  title: string,
+}

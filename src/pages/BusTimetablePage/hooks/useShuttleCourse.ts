@@ -3,7 +3,7 @@ import { getShuttleCourseInfo } from 'api/bus';
 
 function useShuttleCourse() {
   const { data: shuttleCourse } = useSuspenseQuery({
-    queryKey: ['shuttle'],
+    queryKey: ['bus', 'courses', 'shuttle'],
     queryFn: async () => getShuttleCourseInfo(),
   });
 
