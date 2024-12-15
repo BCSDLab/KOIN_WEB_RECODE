@@ -11,6 +11,8 @@ export default function useMyLectures(frameId: number) {
   });
   const myLecturesFromLocalStorageValue = useLecturesState(semester);
 
-  const myLectures = token ? myLecturesFromServer : myLecturesFromLocalStorageValue;
+  const myLectures = (myLecturesFromServer.length > 0)
+    ? myLecturesFromServer
+    : myLecturesFromLocalStorageValue;
   return { myLectures };
 }
