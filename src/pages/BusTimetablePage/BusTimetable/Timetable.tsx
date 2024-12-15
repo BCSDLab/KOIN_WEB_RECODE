@@ -160,24 +160,19 @@ function ShuttleTimetable() {
 
 function Template({ headers, arrivalList }: { headers: string[], arrivalList: string[][] }) {
   return (
-    <table className={styles.timetable} aria-expanded="true">
-      <thead className={styles.timetable__head}>
-        <tr>
-          <th className={styles.timetable__label}>{headers[0]}</th>
-          <th className={styles.timetable__label}>{headers[1]}</th>
-        </tr>
-      </thead>
-
-      <tbody className={styles.timetable__body}>
-        {arrivalList.map(([arrival, time], idx) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <tr className={styles.timetable__row} key={`${arrival} - ${time} - ${idx}`}>
-            <td className={styles.timetable__cell_am}>{arrival}</td>
-            <td className={styles.timetable__cell_pm}>{time}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className={styles.timetable} aria-expanded="true">
+      <div className={styles['timetable__label-wrapper']}>
+        <span className={styles.timetable__label}>{headers[0]}</span>
+        <span className={styles.timetable__label}>{headers[1]}</span>
+      </div>
+      {arrivalList.map(([arrival, time], idx) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <div className={styles.timetable__row} key={`${arrival} - ${time} - ${idx}`}>
+          <span className={styles.timetable__cell_am}>{arrival}</span>
+          <span className={styles.timetable__cell_pm}>{time}</span>
+        </div>
+      ))}
+    </div>
   );
 }
 
