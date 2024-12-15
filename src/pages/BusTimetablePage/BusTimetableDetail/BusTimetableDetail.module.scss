@@ -28,7 +28,7 @@
   background-color: #4ed92c;
 }
 
-.time-tabel-wapper {
+.time-table-wapper {
   width: 100%;
 }
 
@@ -41,8 +41,9 @@
   }
 }
 
-.time-tabal {
-  display: flex;
+.time-table {
+  display: grid;
+  grid-auto-flow: column;
   width: 100%;
 
   &__header {
@@ -52,35 +53,29 @@
 
   &__classification {
     width: 100%;
-    padding: 8px 0;
     color: var(--Neutral-600, #4B4B4B);
     text-align: center;
-    justify-content: center;
     background-color: #f5f5f5;
 
     font-family: Pretendard;
     font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
     line-height: 160%; /* 25.6px */
   }
 
   &__node {
     display: flex;
-    width: 132px;
-    height: 45px;
-    padding: 1px 4px;
-    border-right: 2.5px solid #f5f5f5;
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: center;
+    padding-left: 24px;
+    height: 54px;
     gap: 8px;
+    border-right: 2.5px solid #f5f5f5;
     font-family: Pretendard, sans-serif;
     color: #000;
-    
   }
 
   &__node-detail {
-    color: var(--Neutral-500, #727272);
+    color: #727272;
     
     font-family: Pretendard;
     font-size: 12px;
@@ -90,9 +85,11 @@
   }
 
   &__number {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    width: 64px;
+    min-width: 64px;
+    width: 100%;
     padding: 8px;
     justify-content: center;
     align-items: center;
