@@ -17,8 +17,7 @@ function BusLookUp() {
 
   return (
     <div className={styles.lookup}>
-      <h1 className={styles.lookup__title}>버스 시간표</h1>
-      {/* 지우면 되는데 쫄려서 못 지움 */}
+      <h1 className={styles.lookup__title}>버스 / 교통 운행정보</h1>
       <div className={styles.lookup__description}>
         <h2 className={styles.lookup__subtitle}>
           어디를 가시나요?
