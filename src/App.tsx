@@ -34,7 +34,6 @@ import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
 import ROUTES from 'static/routes';
 import PageNotFound from 'pages/Error/PageNotFound';
 import PolicyPage from 'pages/PolicyPage';
-import BusTimeTablePage from 'pages/BusTimetablePage';
 
 interface HelmetWrapperProps {
   title: string;
@@ -72,7 +71,6 @@ function App() {
           <Route path={ROUTES.BenefitStore()} element={<HelmetWrapper title="코인 - 전화 혜택" element={<StoreBenefitPage />} />} />
           <Route path={ROUTES.StoreDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 상점 상세" element={<StoreDetailPage />} />} />
           <Route path={ROUTES.Bus()} element={<HelmetWrapper title="코인 - 버스" element={<BusPage />} />} />
-          <Route path={ROUTES.BusTimetable()} element={<HelmetWrapper title="코인 - 버스" element={<BusTimeTablePage />} />} />
           <Route path={ROUTES.Cafeteria()} element={<HelmetWrapper title="코인 - 식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.PrivatePolicy()} element={<HelmetWrapper title="코인 - 개인정보 처리방침" element={<PolicyPage />} />} />
           <Route path={ROUTES.BoardNotice()} element={<HelmetWrapper title="코인 - 공지사항" element={<NoticePage />} />}>
