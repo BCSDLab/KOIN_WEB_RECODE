@@ -1,8 +1,8 @@
 import useShuttleTimetableDetail from 'pages/BusTimetablePage/hooks/useShuttleTimetableDetail';
 import { useEffect } from 'react';
 import BusIcon from 'assets/svg/bus.svg';
-import styles from './BusTimetableDetail.module.scss';
 import { cn } from '@bcsdlab/utils';
+import styles from './BusTimetableDetail.module.scss';
 
 interface ShuttleTimetableDetailProps {
   routeId : string;

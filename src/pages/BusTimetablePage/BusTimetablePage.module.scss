@@ -28,3 +28,29 @@
   font-size: 18px;
   line-height: 160%;
 }
+
+.notion-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+
+  border-radius: 8px;
+  background: var(--Info-100, #F1F8FF);
+  
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+  margin-top: 24px;
+  margin-bottom: 32px;
+  
+  &__info-title {
+    overflow: hidden;
+    color: var(--Primary-main-500, #175C8E);
+    text-align: center;
+    text-overflow: ellipsis;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%; /* 25.6px */
+  }
+}

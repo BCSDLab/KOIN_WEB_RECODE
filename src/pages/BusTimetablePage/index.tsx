@@ -1,7 +1,13 @@
+import useBusNoticeInfo from 'pages/BusTimetablePage/hooks/useBusNoticeInfo';
+import InfoIcon from 'assets/svg/info.svg';
+import Close from 'assets/svg/close.svg';
 import BusTimetable from './BusTimetable';
 import styles from './BusTimetablePage.module.scss';
 
 function BusTimeTablePage() {
+  const { busNoticeInfo } = useBusNoticeInfo();
+  console.log({ busNoticeInfo });
+
   return (
     <main className={styles.container}>
       <header>
@@ -13,7 +19,16 @@ function BusTimeTablePage() {
         </div>
       </header>
 
+      <div className={styles['notion-info']}>
+        <InfoIcon />
+        <div className={styles['notion-info__info-title']}>
+          {busNoticeInfo?.title}
+        </div>
+        <Close />
+
+      </div>
       <BusTimetable />
+
     </main>
   );
 }
