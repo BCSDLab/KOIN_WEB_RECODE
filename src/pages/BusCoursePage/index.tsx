@@ -1,10 +1,10 @@
-import useBusNoticeInfo from 'pages/BusTimetablePage/hooks/useBusNoticeInfo';
+import useBusNoticeInfo from 'pages/BusCoursePage/hooks/useBusNoticeInfo';
 import InfoIcon from 'assets/svg/info.svg';
 import Close from 'assets/svg/close.svg';
 import BusTimetable from './BusTimetable';
-import styles from './BusTimetablePage.module.scss';
+import styles from './BusCoursePage.module.scss';
 
-function BusTimeTablePage() {
+function BusCoursePage() {
   const { busNoticeInfo } = useBusNoticeInfo();
 
   return (
@@ -32,4 +32,4 @@ function BusTimeTablePage() {
   );
 }
 
-export default BusTimeTablePage;
+export default BusCoursePage;

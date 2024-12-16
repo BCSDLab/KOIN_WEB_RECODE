@@ -1,4 +1,4 @@
-import useShuttleTimetableDetail from 'pages/BusTimetablePage/hooks/useShuttleTimetableDetail';
+import useShuttleTimetableDetail from 'pages/BusCoursePage/hooks/useShuttleTimetableDetail';
 import { useEffect, useState } from 'react';
 import BusIcon from 'assets/svg/bus.svg';
 import { cn } from '@bcsdlab/utils';

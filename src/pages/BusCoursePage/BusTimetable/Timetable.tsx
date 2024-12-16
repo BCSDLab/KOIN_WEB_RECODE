@@ -1,8 +1,8 @@
-import BusTimetableDetail from 'pages/BusTimetablePage/BusTimetableDetail';
-import useIndexValueSelect from 'pages/BusTimetablePage/hooks/useIndexValueSelect';
+import BusTimetableDetail from 'pages/BusCoursePage/BusTimetableDetail';
+import useIndexValueSelect from 'pages/BusCoursePage/hooks/useIndexValueSelect';
 import { useState } from 'react';
-import useShuttleCourse from 'pages/BusTimetablePage/hooks/useShuttleCourse';
-import useBusTimetable, { useCityBusTimetable } from 'pages/BusTimetablePage/hooks/useBusTimetable';
+import useShuttleCourse from 'pages/BusCoursePage/hooks/useShuttleCourse';
+import useBusTimetable, { useCityBusTimetable } from 'pages/BusCoursePage/hooks/useBusTimetable';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import dayjs from 'dayjs';
 import { cn } from '@bcsdlab/utils';
