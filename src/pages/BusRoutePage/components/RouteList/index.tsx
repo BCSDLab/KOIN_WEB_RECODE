@@ -13,15 +13,13 @@ export default function RouteList() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.list}>
-        {routes.map(({ busType, routeName, departTime }) => (
-          <BusRoute
-            busType={busType}
-            routeName={routeName}
-            departTime={departTime}
-          />
-        ))}
-      </div>
+      {routes.map(({ busType, routeName, departTime }) => (
+        <BusRoute
+          busType={busType}
+          routeName={routeName}
+          departTime={departTime}
+        />
+      ))}
     </div>
   );
 }

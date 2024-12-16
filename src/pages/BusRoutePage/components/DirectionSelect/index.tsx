@@ -47,7 +47,6 @@ export default function DirectionSelect({
               oppositePlace={arrival}
               setPlace={setDepart}
               exchangePlace={exchangePlace}
-              isSearching={isSearching}
             />
           </div>
           <button
@@ -65,7 +64,6 @@ export default function DirectionSelect({
               oppositePlace={depart}
               setPlace={setArrival}
               exchangePlace={exchangePlace}
-              isSearching={isSearching}
             />
           </div>
         </div>

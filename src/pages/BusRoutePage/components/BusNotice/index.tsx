@@ -42,11 +42,6 @@ export default function BusNotice({ isSearching }: BusNoticeProps) {
           </button>
         </div>
       )}
-      {isSearching && (
-        <div className={styles.notice}>
-          <p className={styles.notice__description}>현재는 정규학기(12월 20일까지)의 시간표를 제공하고 있어요.</p>
-        </div>
-      )}
     </div>
   );
 }

@@ -39,14 +39,14 @@ export default function BusRoutePage() {
           />
         </div>
         {isSearching && (
-          <>
+          <div className={styles.results}>
             <div className={styles.options}>
               <BusSearchOptions />
             </div>
             <div className={styles['route-list']}>
               <RouteList />
             </div>
-          </>
+          </div>
         )}
       </div>
     </main>

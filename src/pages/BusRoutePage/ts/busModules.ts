@@ -64,6 +64,7 @@ export const getCourseName = (course: Course) => {
 };
 
 export const BUS_TYPE_MAP = {
+  all: '전체 차종',
   express: '대성고속',
   shuttle: '학교셔틀',
   city: '시내버스',
@@ -76,3 +77,9 @@ export const BUS_TYPES_KR = Object.values(BUS_TYPE_MAP);
 export type BusType = keyof typeof BUS_TYPE_MAP;
 
 export const getShortBusType = (busType: BusType) => BUS_TYPE_MAP[busType].slice(0, 2);
+
+export const format12Hour = (hour: number, minute: number) => {
+  const period = hour >= 12 ? '오후' : '오전';
+  const displayHour = hour > 12 ? hour - 12 : hour;
+  return `${period} ${displayHour}:${String(minute).padStart(2, '0')}`;
+};

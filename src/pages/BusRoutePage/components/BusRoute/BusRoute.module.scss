@@ -1,13 +1,14 @@
 .box {
-  width: 721px;
+  width: 720px;
   height: 106px;
+  padding: 0 32px;
+  box-sizing: border-box;
   border: 1px solid #eee;
   background-color: white;
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 32px;
 }
 
 .route-info {

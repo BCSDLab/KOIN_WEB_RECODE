@@ -11,11 +11,10 @@ interface PlaceSelectProps {
   setPlace: (value: string) => void;
   exchangePlace: () => void;
   oppositePlace: string;
-  isSearching: boolean;
 }
 
 export default function PlaceSelect({
-  type, place, setPlace, exchangePlace, oppositePlace, isSearching,
+  type, place, setPlace, exchangePlace, oppositePlace,
 }: PlaceSelectProps) {
   const typeInfo = placeType[type];
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
@@ -39,10 +38,7 @@ export default function PlaceSelect({
       <h1 className={styles.title}>{typeInfo.title}</h1>
       <div ref={containerRef}>
         <button
-          className={cn({
-            [styles['select-box']]: true,
-            [styles['select-box--searching']]: isSearching,
-          })}
+          className={styles['select-box']}
           onClick={toggleDropdown}
           type="button"
         >
