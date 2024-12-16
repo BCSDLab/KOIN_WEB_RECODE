@@ -472,6 +472,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
                 aria-label="delete-time-space-component"
                 type="button"
                 onClick={() => handleDeleteTimeSpaceComponent(index)}
+                disabled={isEditStandardLecture}
                 className={cn({
                   [styles['time-space-container__delete-button']]: true,
                   [styles['time-space-container__delete-button--invisible']]: isSingleTimeSpaceComponent,
