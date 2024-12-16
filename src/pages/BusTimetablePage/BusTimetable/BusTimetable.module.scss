@@ -1,8 +1,8 @@
 @use "src/utils/scss/media" as media;
 
 .template {
-  width: 1131px;
-  margin: 65px auto 0;
+  width: 795px;
+  margin: 64px auto 0;
   min-height: 900px;
 
   @include media.media-breakpoint(mobile) {
@@ -69,118 +69,112 @@
   }
 }
 
-.timetable {
+.timetable-container {
   width: 100%;
-  text-align: center;
-  font-size: 15px;
-  table-layout: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
 
-  @include media.media-breakpoint(mobile) {
-    font-size: 13px;
-  }
+.timetable {
+  border-radius: 16px;
+  border: 1px solid #eee;
+  background: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
-  &__date {
-    float: left;
-    color: rgb(133 133 133);
-    letter-spacing: -0.6px;
-    font-size: 12px;
-    margin: 6px 0 24px;
-    line-height: 160%;
-  }
+.timetable__label-wrapper {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 16px 24px 8px;
+  box-sizing: border-box;
+}
 
-  &__dropdown-wrapper {
-    margin-top: 24px;
-    margin-bottom: 16px;
-    display: flex;
-    justify-content: space-between;
-  }
+.timetable__row {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 24px;
 
-  &__citybus-blank {
-    height: 82px;
-    flex-shrink: 0;
-  }
-
-  &__citybus-info {
-    float: right;
-    color: rgb(133 133 133);
-    letter-spacing: -0.6px;
-    font-size: 12px;
-    margin: 6px 0 24px;
-  }
-
-  &__dropdown {
-    border: 1px solid rgb(210 218 226);
-    height: 42px;
-    padding: 0 10px 0 7px;
-    letter-spacing: -0.8px;
-    font-size: 15px;
-  }
-
-  &__button {
-    border: 1px solid rgb(210 218 226);
-    height: 42px;
-    padding: 0 10px 0 7px;
-    letter-spacing: -0.8px;
-    font-size: 15px;
-  }
-
-  &__head {
-    border-top: 2px solid rgb(23 92 142);
-    height: 46px;
-    color: rgb(23 92 142);
-    font-weight: bold;
-  }
-
-  &__body {
-    border: solid rgb(23 92 142);
-    border-width: 1px 0;
-  }
-
-  &__row {
-    height: 68px;
-    border-top: 1px rgb(0 0 0 / 10%) solid;
-
-    @include media.media-breakpoint(mobile) {
-      height: 42px;
-    }
-
-    &:hover {
-      font-weight: bold;
-    }
-  }
-
-  &__label {
-    vertical-align: middle;
-    color: #4b4b4b;
-    font-size: 18px;
-    font-weight: 400;
-  }
-
-  &__cell_am {
-    vertical-align: middle;
-    color: #ffc62b;
-    font-size: 20px;
-    font-weight: 700;
-  }
-
-  &__cell_pm {
-    vertical-align: middle;
-    color: #3a70e2;
-    font-size: 20px;
-    font-weight: 700;
+  &:not(:last-child) > span {
+    border-bottom: 1px solid #eee;
   }
 }
 
-.courseCategory {
+.timetable__label {
+  flex: 1;
+  width: 100%;
+  color: #4b4b4b;
+  text-align: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  line-height: 160%;
+}
+
+.timetable__cell_am {
+  flex: 1;
+  width: 100%;
+  color: #ffc62b;
+  text-align: center;
+  padding: 16px 0;
+  font-family: Pretendard, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 160%;
+}
+
+.timetable__cell_pm {
+  flex: 1;
+  width: 100%;
+  color: #3a70e2;
+  text-align: center;
+  padding: 16px 0;
+  font-family: Pretendard, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 160%;
+}
+
+.course-category-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  border-radius: 0 0 12px 12px;
+}
+
+.course-category {
+  width: 100%;
   background-color: #f5f5f5;
   display: flex;
   gap: 8px;
+  box-sizing: border-box;
   padding: 8px 24px;
+  border-radius: 0 0 12px 12px;
 
   &__button {
+    display: flex;
     padding: 6px 16px;
+    justify-content: center;
+    align-items: center;
     color: #727272;
     font-size: 16px;
+    font-weight: 500;
+
+    &--selected {
+      border-radius: 50px;
+      background: #175c8e;
+      color: #fff;
+      font-weight: 600;
+      line-height: 160%;
+    }
   }
 }
 
@@ -191,12 +185,13 @@ $template-shuttle-colors: (
 );
 
 .templateShuttle {
-  width: 500px;
+  width: 100%;
+  box-sizing: border-box;
   background-color: #fff;
+  height: "fit-content";
   padding: 25px 5px;
   border-radius: 16px;
   border: 1px solid #eee;
-  margin: 20px 0;
 
   &__title {
     font-size: 18px;
@@ -205,22 +200,33 @@ $template-shuttle-colors: (
     padding: 16px 24px;
   }
 
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__list_wrapper {
     display: flex;
+    width: 100%;
     justify-content: space-between;
+    align-items: center;
     padding: 6px 32px;
   }
 
   &__list_header {
     display: flex;
+    align-items: center;
     padding: 6px 0;
     gap: 8px;
   }
 
   &__list_type {
     color: #fff;
-    padding: 5px 6px;
+    padding: 0 4px;
+    height: 18px;
     border-radius: 4px;
+    font-size: 11px;
+    line-height: 160%;
 
     @each $type, $color in $template-shuttle-colors {
       &.type-#{$type} {
@@ -229,21 +235,30 @@ $template-shuttle-colors: (
     }
   }
 
-  &____list_name {
+  &__list_name {
     font-size: 16px;
     font-weight: 500;
+    line-height: 160%;
   }
 
   &__list_sub_name {
+    text-align: left;
     color: #727272;
     font-size: 12px;
     font-weight: 400;
   }
 }
 
-.layoutGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); // 2열
-  grid-template-rows: repeat(2, auto); // 2행
-  gap: 16px; // 카드 간 간격
+.main-timetable {
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  gap: 12px;
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
 }

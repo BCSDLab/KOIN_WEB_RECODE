@@ -4,6 +4,7 @@ import BusTimetable from './BusTimetable';
 
 function BusPage() {
   useScrollToTop();
+
   return (
     <main>
       <BusLookUp />
