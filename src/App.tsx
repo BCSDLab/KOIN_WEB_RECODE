@@ -19,6 +19,7 @@ import StoreDetailPage from 'pages/Store/StoreDetailPage';
 import StoreBenefitPage from 'pages/Store/StoreBenefitPage';
 import CampusInfo from 'pages/CampusInfo';
 import BusRoutePage from 'pages/BusRoutePage';
+import BusCoursePage from 'pages/BusCoursePage';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
@@ -31,9 +32,9 @@ import AddReviewPage from 'pages/StoreReviewPage/AddReviewPage';
 import EditReviewPage from 'pages/StoreReviewPage/EditReviewPage';
 import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/ReviewReporting';
 import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
-import ROUTES from 'static/routes';
 import PageNotFound from 'pages/Error/PageNotFound';
 import PolicyPage from 'pages/PolicyPage';
+import ROUTES from 'static/routes';
 
 interface HelmetWrapperProps {
   title: string;
@@ -71,6 +72,7 @@ function App() {
           <Route path={ROUTES.BenefitStore()} element={<HelmetWrapper title="코인 - 전화 혜택" element={<StoreBenefitPage />} />} />
           <Route path={ROUTES.StoreDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 상점 상세" element={<StoreDetailPage />} />} />
           <Route path={ROUTES.BusRoute()} element={<HelmetWrapper title="코인 - 버스" element={<BusRoutePage />} />} />
+          <Route path={ROUTES.BusCourse()} element={<HelmetWrapper title="코인 - 버스" element={<BusCoursePage />} />} />
           <Route path={ROUTES.Cafeteria()} element={<HelmetWrapper title="코인 - 식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.PrivatePolicy()} element={<HelmetWrapper title="코인 - 개인정보 처리방침" element={<PolicyPage />} />} />
           <Route path={ROUTES.BoardNotice()} element={<HelmetWrapper title="코인 - 공지사항" element={<NoticePage />} />}>
