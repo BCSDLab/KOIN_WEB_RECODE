@@ -6,7 +6,6 @@ import styles from './BusTimetablePage.module.scss';
 
 function BusTimeTablePage() {
   const { busNoticeInfo } = useBusNoticeInfo();
-  console.log({ busNoticeInfo });
 
   return (
     <main className={styles.container}>

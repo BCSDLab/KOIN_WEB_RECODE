@@ -15,16 +15,14 @@
 
 .title {
   color: #175c8e;
-
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 32px;
   font-weight: 500;
 }
 
 .sub-title {
   color: #000;
-
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 18px;
   line-height: 160%;
 }
@@ -34,23 +32,21 @@
   align-items: center;
   gap: 8px;
   padding: 16px 24px;
-
   border-radius: 8px;
-  background: var(--Info-100, #F1F8FF);
-  
-  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
+  background: #f1f8ff;
+  box-shadow: 0 1px 1px 0 #00000005, 0 2px 4px 0 #0000000A;
   margin-top: 24px;
   margin-bottom: 32px;
-  
+
   &__info-title {
     overflow: hidden;
-    color: var(--Primary-main-500, #175C8E);
+    color: #175c8e;
     text-align: center;
     text-overflow: ellipsis;
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
-    line-height: 160%; /* 25.6px */
+    line-height: 160%;
   }
 }

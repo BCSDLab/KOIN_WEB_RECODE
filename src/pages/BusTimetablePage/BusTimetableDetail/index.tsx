@@ -16,7 +16,6 @@ function BusTimetableDetail({ routeId }: ShuttleTimetableDetailProps) {
     if (shuttleTimetableDetail) {
       setSelectedDetail(shuttleTimetableDetail.route_info[0].name);
     }
-    console.log(shuttleTimetableDetail);
   }, [shuttleTimetableDetail]);
 
   if (!shuttleTimetableDetail) return null;

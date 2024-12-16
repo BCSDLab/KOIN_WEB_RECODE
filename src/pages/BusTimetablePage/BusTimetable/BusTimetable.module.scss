@@ -55,7 +55,7 @@
     color: rgb(133 133 133);
     background-color: white;
     appearance: none;
-    border-radius: 12px 0 0 0;
+    border-radius: 12px 0 0;
     cursor: pointer;
 
     @include media.media-breakpoint(mobile) {
@@ -65,7 +65,6 @@
     &--selected {
       color: rgb(23 92 142);
       border-bottom: 3px solid rgb(23 92 142);
-      
     }
   }
 }
@@ -82,6 +81,9 @@
   border-radius: 16px;
   border: 1px solid #eee;
   background: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .timetable__label-wrapper {
@@ -99,7 +101,6 @@
   gap: 16px;
   justify-content: center;
   box-sizing: border-box;
-  gap: 16px;
   padding: 0 24px;
 
   &:not(:last-child) > span {
@@ -112,10 +113,9 @@
   width: 100%;
   color: #4b4b4b;
   text-align: center;
-
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 18px;
-  line-height: 160%; /* 28.8px */
+  line-height: 160%;
 }
 
 .timetable__cell_am {
@@ -124,8 +124,7 @@
   color: #ffc62b;
   text-align: center;
   padding: 16px 0;
-
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 20px;
   font-weight: 700;
   line-height: 160%;
@@ -137,17 +136,10 @@
   color: #3a70e2;
   text-align: center;
   padding: 16px 0;
-
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 20px;
   font-weight: 700;
   line-height: 160%;
-}
-
-.timetable {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .course-category-container {
@@ -155,7 +147,7 @@
   display: flex;
   flex-direction: column;
   background-color: #f5f5f5;
-  border-radius: 0px 0px 12px 12px;;
+  border-radius: 0 0 12px 12px;
 }
 
 .course-category {
@@ -165,7 +157,7 @@
   gap: 8px;
   box-sizing: border-box;
   padding: 8px 24px;
-  border-radius: 0px 0px 12px 12px;;
+  border-radius: 0 0 12px 12px;
 
   &__button {
     display: flex;
@@ -186,17 +178,17 @@
   }
 }
 
-$templateShuttleColors: (
-  '순환': #4ed92c,
-  '주중': #ffb443,
-  '주말': #34adff
+$template-shuttle-colors: (
+  "순환": #4ed92c,
+  "주중": #ffb443,
+  "주말": #34adff
 );
 
 .templateShuttle {
   width: 100%;
   box-sizing: border-box;
   background-color: #fff;
-  height: fit-content;
+  height: "fit-content";
   padding: 25px 5px;
   border-radius: 16px;
   border: 1px solid #eee;
@@ -235,15 +227,15 @@ $templateShuttleColors: (
     border-radius: 4px;
     font-size: 11px;
     line-height: 160%;
-    
-    @each $type, $color in $templateShuttleColors {
+
+    @each $type, $color in $template-shuttle-colors {
       &.type-#{$type} {
         background-color: $color;
       }
     }
   }
 
-  &____list_name {
+  &__list_name {
     font-size: 16px;
     font-weight: 500;
     line-height: 160%;

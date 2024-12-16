@@ -5,9 +5,8 @@ import { BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
 import { useShallow } from 'zustand/react/shallow';
-import useShuttleCourse from 'pages/BusPage/hooks/useShuttleCourse';
 import styles from './BusTimetable.module.scss';
-import Timetable from './Timetable';
+// import Timetable from './Timetable';
 
 function BusTimetable() {
   const [selectedTab, setSelectedTab] = useBusStore(useShallow(
@@ -18,9 +17,6 @@ function BusTimetable() {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable', value: type.tabName });
     setSelectedTab(type);
   };
-
-  const { shuttleCourse: tmp } = useShuttleCourse();
-  console.log(tmp);
 
   return (
     <section className={styles.template}>
@@ -48,9 +44,9 @@ function BusTimetable() {
         </div>
       )}
       >
-        {selectedTab.key === 'shuttle' && <Timetable.Shuttle />}
+        {/* {selectedTab.key === 'shuttle' && <Timetable.Shuttle />}
         {selectedTab.key === 'express' && <Timetable.Express />}
-        {selectedTab.key === 'city' && <Timetable.City />}
+        {selectedTab.key === 'city' && <Timetable.City />} */}
       </Suspense>
     </section>
   );
