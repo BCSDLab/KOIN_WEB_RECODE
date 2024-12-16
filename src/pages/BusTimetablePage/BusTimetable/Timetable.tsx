@@ -1,5 +1,5 @@
 import BusTimetableDetail from 'pages/BusTimetablePage/BusTimetableDetail';
-import useIndexValueSelect from 'pages/BusPage/hooks/useIndexValueSelect';
+import useIndexValueSelect from 'pages/BusTimetablePage/hooks/useIndexValueSelect';
 import { useState } from 'react';
 import useShuttleCourse from 'pages/BusTimetablePage/hooks/useShuttleCourse';
 import useBusTimetable, { useCityBusTimetable } from 'pages/BusTimetablePage/hooks/useBusTimetable';
