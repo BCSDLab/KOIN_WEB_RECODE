@@ -120,57 +120,56 @@ function CustomLecture({ frameId }: { frameId: number }) {
     return [...acc, ...mappedTimes];
   }, []);
 
+  const hasTimeConflict = (
+    currentComponents: TimeSpaceComponents[],
+    existingLectures: MyLectureInfo[],
+    excludeLectureId?: number,
+  ): boolean => {
+    const timeSet = new Set<number>();
+
+    // 현재 강의 내에서 중복 검사
+    const hasOverlapInCurrent = currentComponents.some((component) => component.lectureTime.some(
+      (time) => timeSet.has(time) || !timeSet.add(time),
+    ));
+
+    if (hasOverlapInCurrent) return true;
+
+    // 기존 강의와 중복 검사
+    return existingLectures.some((myLecture) => {
+      if (excludeLectureId && myLecture.id === excludeLectureId) {
+        return false; // 수정 중인 강의 제외
+      }
+      return myLecture.class_infos.some((schedule) => (
+        schedule.class_time.some((time) => (
+          currentComponents.some((tempSchedule) => (
+            tempSchedule.lectureTime.includes(time)
+          ))
+        ))
+      ));
+    });
+  };
+
   const handleSubmitLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isValid) {
       setIsFirstSubmit(false);
       return;
     }
+
     const myLectureList = myLectures as MyLectureInfo[];
 
-    const isDuplicatedTime = myLectureList.some((myLecture) => {
-      if (selectedEditLecture && myLecture.id === selectedEditLecture.id) {
-        return false;
-      }
-
-      return myLecture.class_infos.some((schedule) => (
-        schedule.class_time.some((time) => (
-          timeSpaceComponents.some((tempSchedule) => (
-            tempSchedule.lectureTime.includes(time)
-          ))
-        ))
-      ));
-    });
-
-    if (isDuplicatedTime) {
-      showToast(
-        'error',
-        '중복된 시간 추가가 있습니다. 추가한 시간을 확인해주세요',
-      );
+    // 중복 시간 검사
+    if (hasTimeConflict(timeSpaceComponents, myLectureList, selectedEditLecture?.id)) {
+      showToast('error', '강의가 중복되어 추가할 수 없습니다.');
       return;
     }
 
-    const alreadySelectedLecture = myLectureList.find((myLecture) => (
-      myLecture.class_infos.some((schedule) => (
-        schedule.class_time.some((time) => (
-          customTempLecture!.class_infos!.some((tempSchedule) => (
-            tempSchedule.class_time.includes(time)
-          ))
-        ))
-      ))
-    ));
-    if (alreadySelectedLecture && (!selectedEditLecture)) {
-      showToast(
-        'error',
-        `${alreadySelectedLecture.class_title} ${alreadySelectedLecture.lecture_class ? `(${alreadySelectedLecture.lecture_class})` : ''} 강의가 중복되어 추가할 수 없습니다.`,
-      );
-      return;
-    }
     const isContainComma = timeSpaceComponents.some((item) => item.place.includes(','));
     if (isContainComma) {
       showToast('error', '쉼표 문자 ( , )를 제외하고 입력해 주세요.');
       return;
     }
+
     if (selectedEditLecture) {
       editMyLecture({
         id: selectedEditLecture.id,
