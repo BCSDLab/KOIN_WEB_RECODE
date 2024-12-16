@@ -33,7 +33,7 @@ import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/R
 import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
 import ROUTES from 'static/routes';
 import PageNotFound from 'pages/Error/PageNotFound';
-import BusTimeTablePage from 'pages/BusTimeTablePage';
+import BusTimeTablePage from 'pages/BusTimetablePage';
 
 interface HelmetWrapperProps {
   title: string;
