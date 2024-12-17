@@ -8,7 +8,8 @@ import {
   DAYS_STRING,
 } from 'static/timetable';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
-import { useLocation } from 'react-router-dom';
+import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
@@ -16,6 +17,8 @@ import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { toast } from 'react-toastify';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -43,6 +46,7 @@ function Timetable({
 }: TimetableProps) {
   const isMobile = useMediaQuery();
   const [isMouseOver, setIsMouseOver] = React.useState('');
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const isEditable = pathname.includes('/timetable/modify');
   const { removeMyLecture } = useTimetableMutation(frameId);
@@ -52,6 +56,17 @@ function Timetable({
   const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
   const customDayValue = useTimetableDayList(customTempLectureArray);
   const { timeString, setTimeString } = useTimeString();
+  const token = useTokenState();
+
+  const handleEditLectureClick = (lectureIndex: number) => {
+    if (!token) {
+      toast.error('강의 수정은 로그인 후 이용할 수 있습니다.');
+      return;
+    }
+
+    navigate(`/timetable/modify/direct/${frameId}?lectureIndex=${lectureIndex}`);
+  };
+
   const handleRemoveLectureClick = (id: number) => {
     let lectureToRemove: LectureInfo | MyLectureInfo | null = null;
     let lectureId = id;
@@ -91,7 +106,7 @@ function Timetable({
     let maxTime = 0;
     let minimumTime = 999;
     const myLectureClassTime = tempLecture?.class_time
-    ?? customTempLecture?.class_infos?.map((schedule) => schedule.class_time).flat();
+      ?? customTempLecture?.class_infos?.map((schedule) => schedule.class_time).flat();
     if (myLectureClassTime) {
       const classTimeArr = myLectureClassTime.map((time) => time % 100);
       maxTime = Math.max(...classTimeArr);
@@ -220,13 +235,11 @@ function Timetable({
                   style={
                     {
                       backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 15]}`,
-                      borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]
-                      }`,
+                      borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]}`,
                       top: `${start * rowHeight + 1}px`,
                       width: isMobile ? undefined : `${columnWidth}px`,
                       height: `${(end - start + 1) * rowHeight - 1}px`,
-                      padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2
-                      }px ${rowHeight / 4}px`,
+                      padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
                       gap: `${rowHeight / 5.5}px`,
                     }
                   }
@@ -234,14 +247,24 @@ function Timetable({
                   onMouseLeave={() => setIsMouseOver('')}
                 >
                   {isMouseOver === `${day}-${start}-${end}` && isEditable && (
-                    <div
-                      className={styles['timetable__delete-button']}
-                      onClick={() => handleRemoveLectureClick(id!)}
-                      role="button"
-                      aria-hidden
-                    >
-                      <LectureCloseIcon />
-                    </div>
+                    <>
+                      <div
+                        className={styles['timetable__edit-button']}
+                        onClick={() => handleEditLectureClick(lectureIndex)}
+                        role="button"
+                        aria-hidden
+                      >
+                        <LectureEditIcon />
+                      </div>
+                      <div
+                        className={styles['timetable__delete-button']}
+                        onClick={() => handleRemoveLectureClick(id!)}
+                        role="button"
+                        aria-hidden
+                      >
+                        <LectureCloseIcon />
+                      </div>
+                    </>
                   )}
                   <div
                     style={{

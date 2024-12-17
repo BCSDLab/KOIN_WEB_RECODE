@@ -5,24 +5,39 @@ import { KoinError } from 'interfaces/APIError';
 
 export const TIMETABLE_INFO_LIST = 'TIMETABLE_INFO_LIST';
 
-function useTimetableInfoList(
-  timetableFrameId: number,
-  authorization: string,
-) {
-  const { data: timetableInfoList } = useSuspenseQuery<
+type QueryFunction = {
+  authorization?: string;
+  timetableFrameId?: number;
+};
+
+function queryFunction({
+  authorization,
+  timetableFrameId,
+}: QueryFunction): () => Promise<TimetableLectureInfoResponse | null> {
+  if (authorization && timetableFrameId) {
+    return () => getTimetableLectureInfo(authorization, timetableFrameId);
+  }
+  return () => Promise.resolve(null);
+}
+
+interface UseTimetableInfoListParams {
+  authorization: string;
+  timetableFrameId: number;
+}
+
+function useTimetableInfoList({ authorization, timetableFrameId }: UseTimetableInfoListParams) {
+  const { data } = useSuspenseQuery<
   TimetableLectureInfoResponse | null,
   KoinError,
-  MyLectureInfo[] | undefined,
+  MyLectureInfo[],
   [string, number]
-  >(
-    {
-      queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
-      queryFn: () => (authorization && timetableFrameId
-        ? getTimetableLectureInfo(authorization, timetableFrameId) : null),
-      select: (data) => (data ? data.timetable : undefined),
-    },
-  );
-  return { data: timetableInfoList };
+  >({
+    queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
+    queryFn: queryFunction({ authorization, timetableFrameId }),
+    select: (rawData) => rawData?.timetable || [],
+  });
+
+  return { data };
 }
 
 export default useTimetableInfoList;
