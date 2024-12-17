@@ -1,6 +1,7 @@
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesState } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
+import _ from 'lodash';
 import useTimetableInfoList from './useTimetableInfoList';
 
 export default function useMyLectures(frameId: number) {
@@ -11,7 +12,7 @@ export default function useMyLectures(frameId: number) {
   });
   const myLecturesFromLocalStorageValue = useLecturesState(semester);
 
-  const myLectures = (myLecturesFromServer.length > 0)
+  const myLectures = (!_.isEmpty(myLecturesFromServer))
     ? myLecturesFromServer
     : myLecturesFromLocalStorageValue;
   return { myLectures };

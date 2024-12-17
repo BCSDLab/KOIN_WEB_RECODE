@@ -5,16 +5,19 @@ import { KoinError } from 'interfaces/APIError';
 
 export const TIMETABLE_INFO_LIST = 'TIMETABLE_INFO_LIST';
 
-interface QueryFunction {
-  timetableFrameId: number | undefined,
-  authorization: string | undefined,
-}
+type QueryFunction = {
+  authorization?: string;
+  timetableFrameId?: number;
+};
 
-function queryFunction({ authorization, timetableFrameId }: QueryFunction) {
+function queryFunction({
+  authorization,
+  timetableFrameId,
+}: QueryFunction): () => Promise<TimetableLectureInfoResponse | null> {
   if (authorization && timetableFrameId) {
     return () => getTimetableLectureInfo(authorization, timetableFrameId);
   }
-  return () => null;
+  return () => Promise.resolve(null);
 }
 
 interface UseTimetableInfoListParams {
@@ -31,10 +34,7 @@ function useTimetableInfoList({ authorization, timetableFrameId }: UseTimetableI
   >({
     queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
     queryFn: queryFunction({ authorization, timetableFrameId }),
-    select: (rawData) => {
-      if (rawData) return rawData.timetable;
-      return [];
-    },
+    select: (rawData) => rawData?.timetable || [],
   });
 
   return { data };
