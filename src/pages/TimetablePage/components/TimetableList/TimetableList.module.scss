@@ -1,3 +1,9 @@
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .timetable-list {
   display: flex;
   flex-direction: column;
@@ -82,7 +88,18 @@
       display: flex;
       gap: 10px;
       align-items: center;
-      text-align: center;
+    }
+
+    &--main-title {
+      max-width: 193px;
+
+      @include text-ellipsis;
+    }
+
+    &--title {
+      max-width: 223px;
+
+      @include text-ellipsis;
     }
 
     &--bookmark-icon {

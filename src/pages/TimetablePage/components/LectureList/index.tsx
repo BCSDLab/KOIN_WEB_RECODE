@@ -1,6 +1,6 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import { MyLectureInfo } from 'api/timetable/entity';
+import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import React from 'react';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
@@ -26,7 +26,7 @@ interface CurrentSemesterLectureListProps {
     department: string;
     search: string;
   };
-  myLectures: Array<MyLectureInfo>;
+  myLectures: Array<MyLectureInfo> | Array<LectureInfo>;
   frameId: number;
 }
 
@@ -57,6 +57,10 @@ function CurrentSemesterLectureList({
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation(frameId);
 
+  const isMyLectureInfo = (
+    lectures: LectureInfo[] | MyLectureInfo[],
+  ): lectures is MyLectureInfo[] => (lectures as MyLectureInfo[])[0]?.class_infos !== undefined;
+
   return (
     lectureList?.length !== 0 ? (
       <LectureTable
@@ -86,52 +90,57 @@ function CurrentSemesterLectureList({
         onClickRow={(clickedLecture) => ('class_time' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
         onDoubleClickRow={
           (clickedLecture) => {
+            if ('class_title' in clickedLecture) {
+              return;
+            }
             const isContainedLecture = myLectures.some(
               (lecture) => lecture.code === clickedLecture.code
                 && lecture.lecture_class === clickedLecture.lecture_class,
             );
-            if ('class_title' in clickedLecture) {
-              return;
-            }
             if (isContainedLecture) {
               showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
               return;
             }
-            const myLectureTimeValue = myLectures.flatMap((item) => (
-              item.class_infos.flatMap((info) => info.class_time)
-            ));
-
+            const myLectureTimeValue = isMyLectureInfo(myLectures)
+              ? myLectures.flatMap((item) => (
+                item.class_infos.flatMap((info) => info.class_time)
+              ))
+              : myLectures.flatMap((item) => item.class_time);
             if (
               clickedLecture.class_time.some((time: number) => myLectureTimeValue.includes(time))
             ) {
-              const myLectureList = myLectures;
-              const alreadySelectedLecture = myLectureList.find(
-                (lecture) => lecture.class_infos.some((schedule) => (
-                  schedule.class_time.some(
-                    (time) => clickedLecture.class_time.includes(time),
-                  )
-                )),
-              );
+              const alreadySelectedLecture = isMyLectureInfo(myLectures)
+                ? myLectures.find(
+                  (lecture) => lecture.class_infos.some((schedule) => (
+                    schedule.class_time.some(
+                      (time) => clickedLecture.class_time.includes(time),
+                    )
+                  )),
+                )
+                : myLectures.find((lecture) => lecture.class_time.some(
+                  (time) => clickedLecture.class_time.includes(time),
+                ));
               if (!alreadySelectedLecture) {
                 return;
               }
+              const alreadySelectedLectureName = 'name' in alreadySelectedLecture ? alreadySelectedLecture.name : alreadySelectedLecture.class_title;
               if (userInfo) {
                 if (alreadySelectedLecture.lecture_class) { // 분반이 존재하는 경우
                   showToast(
                     'error',
-                    `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                    `${alreadySelectedLectureName}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
                   );
                   return;
                 }
                 showToast( // 직접 강의를 추가하여 분반이 존재하지 않는 경우
                   'error',
-                  `${alreadySelectedLecture.class_title} 강의가 중복되어 추가할 수 없습니다.`,
+                  `${alreadySelectedLectureName} 강의가 중복되어 추가할 수 없습니다.`,
                 );
                 return;
               }
               showToast(
                 'error',
-                `${alreadySelectedLecture.class_title}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                `${alreadySelectedLectureName}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
               );
             } else {
               addMyLecture(clickedLecture);
