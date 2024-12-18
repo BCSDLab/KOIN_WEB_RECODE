@@ -14,6 +14,7 @@ import {
   TERMINAL_CITY_BUS,
 } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import InfomationIcon from 'assets/svg/info-gray.svg';
 import styles from './BusTimetable.module.scss';
 
 interface TemplateShuttleVersionProps {
@@ -90,6 +91,8 @@ function TemplateShuttleVersion({
 
 function ShuttleTimetable() {
   const { shuttleCourse } = useShuttleCourse();
+  const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
+  const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
   const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
   const [category, setCategory] = useState('전체');
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
@@ -153,6 +156,23 @@ function ShuttleTimetable() {
       )}
 
       {selectedRouteId && <BusTimetableDetail routeId={selectedRouteId} />}
+
+      <div className={styles['info-footer']}>
+        <div className={styles['info-footer__date']}>
+          <div>
+            업데이트 날짜 :
+          </div>
+          <div>
+            {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+          </div>
+        </div>
+        <div className={styles['info-footer__icon']}>
+          <InfomationIcon />
+          <div>
+            정보가 정확하지 않나요?
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

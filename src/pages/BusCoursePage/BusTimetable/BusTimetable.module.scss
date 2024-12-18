@@ -262,3 +262,28 @@ $template-shuttle-colors: (
     width: 100%;
   }
 }
+
+.info-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #727272;
+  width: 100%;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+
+  &__date {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
