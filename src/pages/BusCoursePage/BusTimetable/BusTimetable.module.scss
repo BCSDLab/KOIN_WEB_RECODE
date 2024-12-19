@@ -3,13 +3,10 @@
 .template {
   width: 795px;
   margin: 64px auto 0;
-  min-height: 900px;
+  
 
   @include media.media-breakpoint(mobile) {
-    min-height: 550px;
-  }
-
-  @include media.media-breakpoint(mobile) {
+    min-height: 350px;
     width: 100%;
     margin: 0;
     padding: 10px 16px;
@@ -58,13 +55,15 @@
     border-radius: 12px 0 0;
     cursor: pointer;
 
-    @include media.media-breakpoint(mobile) {
-      font-size: 13px;
-    }
-
     &--selected {
       color: rgb(23 92 142);
       border-bottom: 3px solid rgb(23 92 142);
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      font-size: 16px;
+      padding: 12px 16px;
     }
   }
 }
@@ -75,6 +74,12 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  height: 100vh;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 13px;
+    margin-top: 19px;
+  }
 }
 
 .timetable {
@@ -176,6 +181,10 @@
       line-height: 160%;
     }
   }
+
+  @include media.media-breakpoint(mobile) {
+
+  }
 }
 
 $template-shuttle-colors: (
@@ -247,6 +256,12 @@ $template-shuttle-colors: (
     font-size: 12px;
     font-weight: 400;
   }
+
+  @include media.media-breakpoint(mobile) {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 .main-timetable {
@@ -261,6 +276,21 @@ $template-shuttle-colors: (
     gap: 12px;
     width: 100%;
   }
+
+  @include media.media-breakpoint(mobile) {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.main-timetable-mobile {
+  width: 100%;
+  gap: 12px;
+  min-height: 550px;
+  flex: 1;
+  overflow-y: auto;
+  gap: 12px;
+  
 }
 
 .info-footer {

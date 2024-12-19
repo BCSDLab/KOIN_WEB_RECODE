@@ -15,6 +15,7 @@ import {
 } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import InfomationIcon from 'assets/svg/info-gray.svg';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './BusTimetable.module.scss';
 
 interface TemplateShuttleVersionProps {
@@ -93,6 +94,7 @@ function ShuttleTimetable() {
   const { shuttleCourse } = useShuttleCourse();
   const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
   const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
+  const isMobile = useMediaQuery();
   const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
   const [category, setCategory] = useState('전체');
   const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
@@ -123,36 +125,50 @@ function ShuttleTimetable() {
       </div>
 
       {!selectedRouteId && (
-      <div className={styles['main-timetable']}>
-        <div className={styles['main-timetable__column']}>
-          {[
-            shuttleCourse.route_regions[0], // 천안, 아산
-            shuttleCourse.route_regions[2], // 서울
-          ].map((text) => (
-            <TemplateShuttleVersion
-              routeIdHandler={changeRouteId}
-              key={text.region}
-              region={text.region}
-              routes={text.routes}
-              category={category}
-            />
-          ))}
-        </div>
-        <div className={styles['main-timetable__column']}>
-          {[
-            shuttleCourse.route_regions[1], // 청주
-            shuttleCourse.route_regions[3], // 대전, 세종
-          ].map((text) => (
-            <TemplateShuttleVersion
-              routeIdHandler={changeRouteId}
-              key={text.region}
-              region={text.region}
-              routes={text.routes}
-              category={category}
-            />
-          ))}
-        </div>
-      </div>
+        !isMobile ? (
+          <div className={styles['main-timetable']}>
+            <div className={styles['main-timetable__column']}>
+              {[
+                shuttleCourse.route_regions[0], // 천안, 아산
+                shuttleCourse.route_regions[2], // 서울
+              ].map((text) => (
+                <TemplateShuttleVersion
+                  routeIdHandler={changeRouteId}
+                  key={text.region}
+                  region={text.region}
+                  routes={text.routes}
+                  category={category}
+                />
+              ))}
+            </div>
+            <div className={styles['main-timetable__column']}>
+              {[
+                shuttleCourse.route_regions[1], // 청주
+                shuttleCourse.route_regions[3], // 대전, 세종
+              ].map((text) => (
+                <TemplateShuttleVersion
+                  routeIdHandler={changeRouteId}
+                  key={text.region}
+                  region={text.region}
+                  routes={text.routes}
+                  category={category}
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className={styles['main-timetable-mobile']}>
+            {shuttleCourse.route_regions.map((text) => (
+              <TemplateShuttleVersion
+                routeIdHandler={changeRouteId}
+                key={text.region}
+                region={text.region}
+                routes={text.routes}
+                category={category}
+              />
+            ))}
+          </div>
+        )
       )}
 
       {selectedRouteId && <BusTimetableDetail routeId={selectedRouteId} />}
