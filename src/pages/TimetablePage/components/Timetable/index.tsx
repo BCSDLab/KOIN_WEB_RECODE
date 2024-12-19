@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import { TimetableDayLectureInfo } from 'interfaces/Lecture';
@@ -8,7 +8,8 @@ import {
   DAYS_STRING,
 } from 'static/timetable';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
-import { useLocation } from 'react-router-dom';
+import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useTimeString } from 'utils/zustand/myLectures';
@@ -16,6 +17,8 @@ import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { toast } from 'react-toastify';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -42,8 +45,9 @@ function Timetable({
   forDownload,
 }: TimetableProps) {
   const isMobile = useMediaQuery();
-  const [isMouseOver, setIsMouseOver] = React.useState('');
+  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [isMouseOver, setIsMouseOver] = useState('');
   const isEditable = pathname.includes('/timetable/modify');
   const { removeMyLecture } = useTimetableMutation(frameId);
   const { myLectures } = useMyLectures(frameId);
@@ -52,6 +56,17 @@ function Timetable({
   const customTempLectureArray = customTempLecture ? Array(customTempLecture) : [];
   const customDayValue = useTimetableDayList(customTempLectureArray);
   const { timeString, setTimeString } = useTimeString();
+  const token = useTokenState();
+
+  const handleEditLectureClick = (lectureIndex: number) => {
+    if (!token) {
+      toast.error('강의 수정은 로그인 후 이용할 수 있습니다.');
+      return;
+    }
+
+    navigate(`/timetable/modify/direct/${frameId}?lectureIndex=${lectureIndex}`);
+  };
+
   const handleRemoveLectureClick = (id: number) => {
     let lectureToRemove: LectureInfo | MyLectureInfo | null = null;
     let lectureId = id;
@@ -63,6 +78,7 @@ function Timetable({
     });
     removeMyLecture.mutate({ clickedLecture: lectureToRemove, id: lectureId });
   };
+
   const findMaxTime = (myTimetableLectures: TimetableDayLectureInfo[][] | undefined) => {
     let maxTime = 19;
     if (myTimetableLectures !== undefined) {
@@ -73,8 +89,10 @@ function Timetable({
         }
       });
     }
+
     return maxTime;
   };
+
   const updateTimeString = (maxTime: number) => {
     const startHour = 9;
     const timeArray = [];
@@ -85,13 +103,37 @@ function Timetable({
 
     return timeArray;
   };
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-  React.useEffect(() => {
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const calculateMinHeight = (block: number, kind: string) => {
+    if (block === 1) return kind === 'name' ? rowHeight / 2 : 0;
+
+    if (block === 2) return (kind === 'name' || kind === 'professor') ? rowHeight / 2 : 0;
+
+    if (block === 3) {
+      if (kind === 'name' || kind === 'professor' || kind === 'place') return rowHeight / 2;
+    }
+
+    return rowHeight;
+  };
+
+  const calculateLineClamp = (block: number, kind: string, hasLocation: boolean) => {
+    if (block === 1) return kind === 'name' ? 1 : 0;
+
+    if (block === 2) return (kind === 'name' || kind === 'professor') ? 1 : 0;
+
+    if (block === 3) return hasLocation ? 1 : 2;
+
+    return 2;
+  };
+
+  useEffect(() => {
     const fixedMaxTime = findMaxTime(lectures);
     let maxTime = 0;
     let minimumTime = 999;
     const myLectureClassTime = tempLecture?.class_time
-    ?? customTempLecture?.class_infos?.map((schedule) => schedule.class_time).flat();
+      ?? customTempLecture?.class_infos?.map((schedule) => schedule.class_time).flat();
     if (myLectureClassTime) {
       const classTimeArr = myLectureClassTime.map((time) => time % 100);
       maxTime = Math.max(...classTimeArr);
@@ -149,6 +191,7 @@ function Timetable({
           </div>
         ))}
       </div>
+
       <div
         className={styles.timetable__content}
         ref={scrollRef}
@@ -166,10 +209,7 @@ function Timetable({
           ))}
         </div>
         <div
-          className={cn({
-            [styles.timetable__col]: true,
-            [styles['timetable__col--time']]: true,
-          })}
+          className={styles.timetable__col}
           style={{
             width: `${firstColumnWidth}px`,
             fontSize: `${rowHeight / 2}px`,
@@ -193,6 +233,7 @@ function Timetable({
             </div>
           ))}
         </div>
+
         {DAYS_STRING.map((day, index) => (
           <div
             className={styles.timetable__col}
@@ -215,18 +256,16 @@ function Timetable({
                 id,
               }) => (
                 <div
-                  className={styles.timetable__lecture}
                   key={lectureIndex}
+                  className={styles.timetable__lecture}
                   style={
                     {
                       backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 15]}`,
-                      borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]
-                      }`,
+                      borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]}`,
                       top: `${start * rowHeight + 1}px`,
                       width: isMobile ? undefined : `${columnWidth}px`,
                       height: `${(end - start + 1) * rowHeight - 1}px`,
-                      padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2
-                      }px ${rowHeight / 4}px`,
+                      padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
                       gap: `${rowHeight / 5.5}px`,
                     }
                   }
@@ -234,42 +273,59 @@ function Timetable({
                   onMouseLeave={() => setIsMouseOver('')}
                 >
                   {isMouseOver === `${day}-${start}-${end}` && isEditable && (
-                    <div
-                      className={styles['timetable__delete-button']}
-                      onClick={() => handleRemoveLectureClick(id!)}
-                      role="button"
-                      aria-hidden
-                    >
-                      <LectureCloseIcon />
-                    </div>
+                    <>
+                      <div
+                        className={styles['timetable__edit-button']}
+                        onClick={() => handleEditLectureClick(lectureIndex)}
+                        role="button"
+                        aria-hidden
+                      >
+                        <LectureEditIcon />
+                      </div>
+                      <div
+                        className={styles['timetable__delete-button']}
+                        onClick={() => handleRemoveLectureClick(id!)}
+                        role="button"
+                        aria-hidden
+                      >
+                        <LectureCloseIcon />
+                      </div>
+                    </>
                   )}
                   <div
+                    className={styles['timetable__lecture-name']}
                     style={{
                       fontSize: `${rowHeight / 3 + 1}px`,
-                      fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
+                      minHeight: `${calculateMinHeight((end - start + 1), 'name')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'name', !!class_place),
                     }}
                   >
                     {name}
                   </div>
+
                   <span
+                    className={styles['timetable__lecture-professor']}
                     style={{
                       fontSize: `${rowHeight / 3 + 1}px`,
-                      fontWeight: '400',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
+                      height: `${rowHeight / 2}px`,
+                      minHeight: `${calculateMinHeight((end - start + 1), 'professor')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'professor', !!class_place),
                     }}
                   >
                     {lecture_class}
                     {` ${professor}`}
                   </span>
                   <div
+                    className={styles['timetable__lecture-place']}
                     style={{
+                      display: `${(end - start + 1) > 2 ? '-webkit-box' : 'none'}`,
                       fontSize: `${rowHeight / 3 - 1}px`,
-                      fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
+                      height: `${rowHeight / 2}px`,
+                      minHeight: `${calculateMinHeight((end - start + 1), 'place')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'place', !!(class_place)),
                     }}
                   >
                     {class_place}
@@ -333,31 +389,38 @@ function Timetable({
                   key={`${index}-${start}-${end}`}
                 >
                   <div
+                    className={styles['timetable__lecture-name']}
                     style={{
                       fontSize: `${rowHeight / 3 + 1}px`,
                       fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
+                      minHeight: `${calculateMinHeight((end - start + 1), 'name')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'name', !!class_place),
                     }}
                   >
+
                     {name}
                   </div>
                   <span
+                    className={styles['timetable__lecture-professor']}
                     style={{
                       fontSize: `${rowHeight / 3 + 1}px`,
                       fontWeight: '400',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
+                      minHeight: `${calculateMinHeight((end - start + 1), 'professor')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'professor', !!class_place),
                     }}
                   >
                     {professor}
                   </span>
                   <div
+                    className={styles['timetable__lecture-place']}
                     style={{
                       fontSize: `${rowHeight / 3 - 1}px`,
                       fontWeight: '500',
                       lineHeight: `${rowHeight / 2}px`,
-                      fontFamily: 'Pretendard',
+                      minHeight: `${calculateMinHeight((end - start + 1), 'place')}px`,
+                      WebkitLineClamp: calculateLineClamp((end - start + 1), 'place', !!class_place),
                     }}
                   >
                     {class_place}

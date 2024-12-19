@@ -29,7 +29,7 @@ function TimetablePage() {
     } else {
       setCurrentFrameIndex(mainFrame?.id ? mainFrame.id : 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   sessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
@@ -39,7 +39,7 @@ function TimetablePage() {
       {!isMobile ? (
         <DefaultPage frameId={currentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
       ) : (
-        <MobilePage frameId={String(currentFrameIndex)} />
+        <MobilePage frameId={currentFrameIndex} />
       )}
     </div>
   );

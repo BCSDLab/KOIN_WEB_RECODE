@@ -1,0 +1,66 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 60px 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: calc(100% - 40px);
+  max-width: 1136px;
+  height: 100%;
+  padding: 40px;
+  gap: 80px;
+  border: 1px solid #e1e1e1;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &--title {
+      color: #000;
+      font-family: Pretendard, sans-serif;
+      font-size: 32px;
+      font-weight: 500;
+      line-height: normal;
+    }
+  }
+}
+
+@mixin text-style {
+  color: #000;
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 160%;
+}
+
+.policy {
+  gap: 20px;
+
+  &__title {
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 20px;
+  }
+
+  &__content {
+    @include text-style;
+  }
+
+  &__items {
+    @include text-style;
+
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+}

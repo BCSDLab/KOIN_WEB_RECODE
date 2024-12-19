@@ -34,19 +34,17 @@ export default function TimetableSettingModal({
       return showToast('warning', '로그인 후 이용 가능합니다.');
     }
 
-    if (target?.checker) {
-      updateFrameInfo({
-        ...focusFrame,
-        timetable_name: target.frame.value,
-        is_main: target.checker.checked,
-      });
-    }
-
     if (focusFrame.is_main) {
       updateFrameInfo({
         ...focusFrame,
         timetable_name: target.frame.value,
         is_main: true,
+      });
+    } else if (target?.checker) {
+      updateFrameInfo({
+        ...focusFrame,
+        timetable_name: target.frame.value,
+        is_main: target.checker.checked,
       });
     }
 

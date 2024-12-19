@@ -1,10 +1,14 @@
 import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import React from 'react';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
+import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { toast } from 'react-toastify';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
@@ -44,15 +48,26 @@ function LectureTable({
   onDoubleClickRow,
   version,
 }: LectureTableProps): JSX.Element {
+  const navigate = useNavigate();
   const tempLecture = useTempLecture(); // 이거 selectedLecture랑 같을 수 있음
   const { updateTempLecture } = useTempLectureAction();
   const [cursor, setCursor] = React.useState(-1);
+  const token = useTokenState();
   const { containerRef } = useOutsideClick({
     onOutsideClick: () => {
       updateTempLecture(null);
       setCursor(-1);
     },
   });
+
+  const handleEditLectureClick = (lectureIndex: number) => {
+    if (!token) {
+      toast.error('강의 수정은 로그인 후 이용할 수 있습니다.');
+      return;
+    }
+
+    navigate(`/timetable/modify/direct/${frameId}?lectureIndex=${lectureIndex}`);
+  };
 
   const { removeMyLecture } = useTimetableMutation(frameId);
   const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
@@ -159,18 +174,28 @@ function LectureTable({
               onMouseLeave={() => setIsMouseOver(-1)}
             >
               {isMouseOver === index && version === 'myLectureList' && (
-                <div
-                  className={styles['table__delete-button']}
-                  onClick={() => {
-                    handleRemoveLectureClick({
-                      id: lecture.id,
-                    });
-                  }}
-                  role="button"
-                  aria-hidden
-                >
-                  <LectureCloseIcon />
-                </div>
+                <>
+                  <div
+                    className={styles['table__edit-button']}
+                    onClick={() => handleEditLectureClick(index)}
+                    role="button"
+                    aria-hidden
+                  >
+                    <LectureEditIcon />
+                  </div>
+                  <div
+                    className={styles['table__delete-button']}
+                    onClick={() => {
+                      handleRemoveLectureClick({
+                        id: lecture.id,
+                      });
+                    }}
+                    role="button"
+                    aria-hidden
+                  >
+                    <LectureCloseIcon />
+                  </div>
+                </>
               )}
               {LECTURE_TABLE_HEADER.map(
                 (headerItem, headerItemIndex) => headerItem.key !== null && (
@@ -199,7 +224,7 @@ function LectureTable({
                       && lecture.name}
                     {headerItem.key === 'name'
                       && 'class_infos' in lecture
-                     && lecture.class_title}
+                      && lecture.class_title}
                     {headerItem.key !== null
                       && headerItem.key !== 'professor'
                       && headerItem.key !== 'name'
