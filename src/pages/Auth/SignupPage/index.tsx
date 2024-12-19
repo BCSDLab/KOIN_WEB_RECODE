@@ -343,7 +343,7 @@ const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
               role="option"
               aria-selected={optionValue.value === currentValue}
               data-value={optionValue.value}
-              onClick={onClickOption}
+              onMouseDown={onClickOption}
               onKeyPress={onKeyPressOption}
             >
               {optionValue.label}
