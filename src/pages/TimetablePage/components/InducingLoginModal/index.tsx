@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './InducingLoginModal.module.scss';
 
 interface InducingLoginModalProps {
@@ -8,8 +9,10 @@ interface InducingLoginModalProps {
 }
 
 function InducingLoginModal({ actionTitle, detailExplanation, onClose }: InducingLoginModalProps) {
-  const sentences = detailExplanation.split('.');
   const navigate = useNavigate();
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
+
+  const sentences = detailExplanation.split('.');
 
   const goLogin = () => {
     onClose();
@@ -17,7 +20,7 @@ function InducingLoginModal({ actionTitle, detailExplanation, onClose }: Inducin
   };
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <div className={styles.container__title}>
           {`${actionTitle} 시 ` }

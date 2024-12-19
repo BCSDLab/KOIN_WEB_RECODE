@@ -155,10 +155,17 @@
     }
   }
 
+  &__edit-button {
+    position: absolute;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+  }
+
   &__delete-button {
     position: absolute;
     right: 0;
-    top: 3px;
+    top: 0;
     cursor: pointer;
   }
 

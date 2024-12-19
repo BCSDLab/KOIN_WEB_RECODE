@@ -243,14 +243,22 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     ref,
     () => {
       // 닉네임 유효성 검사 로직
-      let valid: string | true = true;
       const isNicknameVerified = currentNicknameValue === currentCheckedNickname;
+      if (currentNicknameValue === '') {
+        return {
+          value: currentNicknameValue,
+          valid: true,
+        };
+      }
       if (currentNicknameValue !== (userInfo?.nickname || '') && (status !== 'success' || !isNicknameVerified)) {
-        valid = '닉네임 중복확인을 해주세요.';
+        return {
+          value: currentNicknameValue,
+          valid: '닉네임 중복확인을 해주세요.',
+        };
       }
       return {
         value: currentNicknameValue,
-        valid,
+        valid: true,
       };
     },
     [currentCheckedNickname, currentNicknameValue, status, userInfo?.nickname],

@@ -8,6 +8,7 @@ import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import useAddTimetableLecture from './useAddTimetableLecture';
 import useDeleteTimetableLecture from './useDeleteTimetableLecture';
+import useEditTimetableLecture from './useEditTimetableLecture';
 
 type RemoveMyLectureProps = {
   clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'> | null,
@@ -18,6 +19,7 @@ export default function useTimetableMutation(frameId: number) {
   const token = useTokenState();
   const toast = useToast();
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
+  const { mutate: mutateEditWithServer } = useEditTimetableLecture();
   const {
     addLecture: addLectureFromLocalStorage,
     removeLecture: removeLectureFromLocalStorage,
@@ -74,6 +76,10 @@ export default function useTimetableMutation(frameId: number) {
     }
   };
 
+  const editMyLecture = (editedLecture: TimetableLectureInfo) => {
+    mutateEditWithServer({ frameId, editedLecture, token });
+  };
+
   const removeMyLecture = useMutation({
     mutationFn: async ({ clickedLecture, id } : RemoveMyLectureProps) => {
       sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
@@ -100,5 +106,5 @@ export default function useTimetableMutation(frameId: number) {
     },
   });
 
-  return { addMyLecture, removeMyLecture };
+  return { addMyLecture, editMyLecture, removeMyLecture };
 }

@@ -5,29 +5,25 @@ import useDeleteTimetableFrame from 'pages/TimetablePage/hooks/useDeleteTimetabl
 import { useSemester } from 'utils/zustand/semester';
 import showToast from 'utils/ts/showToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {
   focusFrame: TimetableFrameInfo;
   onClose: () => void;
-  setCurrentFrameIndex: React.Dispatch<number>;
-  currentFrameIndex: number;
 }
 
 export default function TimetableSettingModal({
   focusFrame,
   onClose,
-  setCurrentFrameIndex,
-  currentFrameIndex,
 }: TimetableSettingModalProps) {
   const token = useTokenState();
   const semester = useSemester();
-  const { data: myFrames } = useTimetableFrameList(token, semester);
   const myLectures = useMyLectures(focusFrame.id!);
   const { mutate: updateFrameInfo } = useUpdateTimetableFrame();
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
   const submitFrameForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,12 +62,6 @@ export default function TimetableSettingModal({
     }
     try {
       await deleteTimetableFrame({ id: focusFrame.id, frame: focusFrame });
-
-      // 현재 선택된 프레임이 삭제되면 메인 프레임으로 변경
-      if (currentFrameIndex === focusFrame.id) {
-        const defaultFrameId = myFrames.find((table) => table.is_main)?.id;
-        if (defaultFrameId) setCurrentFrameIndex(defaultFrameId);
-      }
       onClose();
     } catch (err) {
       if (isKoinError(err)) {
@@ -84,7 +74,7 @@ export default function TimetableSettingModal({
   };
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>시간표 설정</span>

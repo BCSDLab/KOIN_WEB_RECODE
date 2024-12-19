@@ -39,6 +39,7 @@ const ROUTES = {
     : '/report/review/shopid/:shopid/reviewid/:reviewid'),
   Webview: () => '/webview',
   WebviewCampusInfo: () => '/webview/campusinfo',
+  PrivatePolicy: () => '/policy',
 };
 
 export default ROUTES;

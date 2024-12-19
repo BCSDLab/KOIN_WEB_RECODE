@@ -16,7 +16,7 @@ import { useTempLecture } from 'utils/zustand/myTempLecture';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import styles from './DefaultPage.module.scss';
 
-export default function DefaultPage({ frameId }: { frameId: string | undefined }) {
+export default function DefaultPage({ frameId }: { frameId: number }) {
   const navigate = useNavigate();
   const semester = useSemester();
   const { pathname } = useLocation();
@@ -86,7 +86,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
             </div>
             {/* TODO: 직접 추가 UI, 강의 리스트 UI 추가 */}
             {pathname.includes('/regular') ? (
-              <LectureList frameId={Number(frameId)} />
+              <LectureList frameId={frameId} />
             ) : (
               <CustomLecture frameId={frameId} />
             )}
@@ -99,7 +99,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
               <button
                 type="button"
                 className={styles['page__save-button']}
-                onClick={() => navigate('/timetable')}
+                onClick={() => navigate('/timetable', { state: { frameId } })}
               >
                 <div className={styles['page__pen-icon']}>
                   <PenIcon />
@@ -110,7 +110,7 @@ export default function DefaultPage({ frameId }: { frameId: string | undefined }
             <ErrorBoundary fallbackClassName="loading">
               <React.Suspense fallback={<LoadingSpinner size="50" />}>
                 <Timetable
-                  frameId={Number(frameId)}
+                  frameId={frameId}
                   lectures={myLectureDayValue}
                   similarSelectedLecture={similarSelectedLectureDayList}
                   selectedLectureIndex={selectedLectureIndex}

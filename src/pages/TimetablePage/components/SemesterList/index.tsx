@@ -121,6 +121,9 @@ function SemesterList() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [semesterOptionList]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  React.useEffect(() => () => portalManager.close(), []);
+
   return (
     <div
       className={cn({

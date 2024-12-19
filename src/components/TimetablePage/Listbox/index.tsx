@@ -21,6 +21,7 @@ export interface ListboxProps {
   value: string | null;
   onChange: (event: { target: ListboxRef }) => void;
   version?: 'default' | 'new' | 'inModal' | 'addLecture';
+  disabled?: boolean;
 }
 
 function Listbox({
@@ -28,6 +29,7 @@ function Listbox({
   value,
   onChange,
   version = 'default',
+  disabled = false,
 }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
 
@@ -68,6 +70,7 @@ function Listbox({
           [styleClasses['select__trigger--selected-add-lecture']]: version === 'addLecture',
           [styleClasses['select__trigger--selected-add-lecture--opened']]: isOpenedPopup && version === 'addLecture',
         })}
+        disabled={disabled}
       >
         {value === null ? '학부' : list.find((item) => item.value === value)?.label}
         {version === 'default' ? <ChervronUpDown /> : <DownArrowIcon />}

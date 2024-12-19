@@ -33,11 +33,13 @@ export default function TimetableList({
   const token = useTokenState();
   const { data } = useTimetableFrameList(token, semester);
   const { data: mySemester } = useSemesterCheck(token);
-  const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
+
+  const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
   const defaultFrame = data.filter((frame) => frame.is_main);
   const timetableFrameList = data.filter((frame) => !frame.is_main);
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const handleTimetableSettingClick = (frame: TimetableFrameInfo) => {
     if (token) {
@@ -88,6 +90,9 @@ export default function TimetableList({
     }
   }, [data, setCurrentFrameIndex, currentFrameIndex]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => portalManager.close(), []);
+
   return (
     <div className={styles['timetable-list']}>
       <SemesterList />
@@ -118,7 +123,7 @@ export default function TimetableList({
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
             >
               <div className={styles['timetable-list__item--title-container']}>
-                <li>{frame.timetable_name}</li>
+                <li className={styles['timetable-list__item--main-title']}>{frame.timetable_name}</li>
                 <div className={styles['timetable-list__item--bookmark-icon']}>
                   <BookMarkIcon />
                 </div>
@@ -151,7 +156,7 @@ export default function TimetableList({
               key={frame.id}
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
             >
-              <li>{frame.timetable_name}</li>
+              <li className={styles['timetable-list__item--title']}>{frame.timetable_name}</li>
               <button
                 type="button"
                 className={styles['timetable-list__item--setting']}
@@ -182,8 +187,6 @@ export default function TimetableList({
       {isModalOpen && (
         <TimetableSettingModal
           focusFrame={focusFrame!}
-          setCurrentFrameIndex={setCurrentFrameIndex}
-          currentFrameIndex={currentFrameIndex}
           onClose={closeModal}
         />
       )}

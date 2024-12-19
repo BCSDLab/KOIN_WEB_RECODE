@@ -9,6 +9,7 @@ import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList'
 import { StorePageType } from 'static/store';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import ROUTES from 'static/routes';
+import BenefitRotator from 'components/Store/BenefitRotator';
 import styles from './MobileStoreList.module.scss';
 
 interface MobileStoreListProps {
@@ -56,7 +57,11 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
                   준비중입니다.
                 </div>
               )}
-            <div className={styles['store-list__title']}>{store.name}</div>
+            <div className={styles['store-list__header']}>
+              <div className={styles['store-list__title']}>{store.name}</div>
+              {store.benefit_details && <BenefitRotator benefits={store.benefit_details} />}
+              {store.benefit_detail && <BenefitRotator benefits={store.benefit_detail} />}
+            </div>
             <div className={styles['store-list__content']}>
               {
                 store?.review_count > 0 ? (

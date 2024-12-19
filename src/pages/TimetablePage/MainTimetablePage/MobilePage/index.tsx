@@ -10,9 +10,9 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import styles from './MobilePage.module.scss';
 
-function MobilePage({ frameId }: { frameId: string | undefined }) {
+function MobilePage({ frameId }: { frameId: number }) {
   const logger = useLogger();
-  const { myLectures } = useMyLectures(Number(frameId));
+  const { myLectures } = useMyLectures(frameId);
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -62,7 +62,7 @@ function MobilePage({ frameId }: { frameId: string | undefined }) {
               )}
             >
               <Timetable
-                frameId={Number(frameId)}
+                frameId={frameId}
                 lectures={myLectureDayValue}
                 columnWidth={55}
                 firstColumnWidth={52}
