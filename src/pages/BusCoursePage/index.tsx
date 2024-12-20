@@ -11,34 +11,35 @@ function BusCoursePage() {
 
   return (
     <main className={styles.container}>
-      {isMobile ? (
-        <header>
-          <div className={styles['mobile-title']}>셔틀버스 시간표</div>
-        </header>
-      ) : (
-        <header>
-          <h1 className={styles.title}>버스 시간표</h1>
-          <div className={styles['sub-title']}>
-            어디를 가시나요?
-            <br />
-            운행수단별로 간단히 비교해드립니다.
-          </div>
-        </header>
-      )}
-
-      <div className={styles['notion-info']}>
-        <InfoIcon />
-        {busNoticeInfo?.title ? (
-          <div className={styles['notion-info__info-title']}>
-            {busNoticeInfo.title.length > 30
-              ? `${busNoticeInfo.title.slice(0, 30)}...`
-              : busNoticeInfo.title}
-          </div>
+      <div className={styles['mobile-top-wrapper']}>
+        {isMobile ? (
+          <header className={styles['mobile-title']}>
+            셔틀버스 시간표
+          </header>
         ) : (
-          <div className={styles['notion-info__placeholder']} />
+          <header>
+            <h1 className={styles.title}>버스 시간표</h1>
+            <div className={styles['sub-title']}>
+              어디를 가시나요?
+              <br />
+              운행수단별로 간단히 비교해드립니다.
+            </div>
+          </header>
         )}
-        <Close />
 
+        <div className={styles['notion-info']}>
+          <InfoIcon />
+          {busNoticeInfo?.title ? (
+            <div className={styles['notion-info__info-title']}>
+              {busNoticeInfo.title.length > 30
+                ? `${busNoticeInfo.title.slice(0, 30)}...`
+                : busNoticeInfo.title}
+            </div>
+          ) : (
+            <div className={styles['notion-info__placeholder']} />
+          )}
+          <Close />
+        </div>
       </div>
       <BusTimetable />
 

@@ -20,6 +20,13 @@
   gap: 8px;
 }
 
+.mobile-top-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 24px;
+}
+
 .title {
   color: #175c8e;
   font-family: Pretendard, sans-serif;
@@ -34,7 +41,6 @@
   font-style: normal;
   font-weight: 700;
   line-height: 160%;
-  padding: 8px 24px;
 }
 
 .sub-title {
@@ -76,6 +82,7 @@
     font-size: 14px;
     font-weight: 500;
     padding: 16px;
+    margin-top: 0;
     margin-bottom: 8px;
   }
 }

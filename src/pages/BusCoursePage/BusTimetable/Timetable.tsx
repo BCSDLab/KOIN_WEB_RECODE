@@ -159,36 +159,55 @@ function ShuttleTimetable() {
         ) : (
           <div className={styles['main-timetable-mobile']}>
             {shuttleCourse.route_regions.map((text) => (
-              <TemplateShuttleVersion
-                routeIdHandler={changeRouteId}
-                key={text.region}
-                region={text.region}
-                routes={text.routes}
-                category={category}
-              />
+              <>
+                <TemplateShuttleVersion
+                  routeIdHandler={changeRouteId}
+                  key={text.region}
+                  region={text.region}
+                  routes={text.routes}
+                  category={category}
+                />
+                <div className={styles['main-timetable-mobile__line']}> </div>
+              </>
+
             ))}
+            <div className={styles['info-footer-mobile']}>
+              <div className={styles['info-footer-mobile__text']}>
+                정규학기(2024년 9월 2일 ~ 12월 20일)의
+                <br />
+                시간표가 제공됩니다.
+              </div>
+              <div className={styles['info-footer-mobile__icon']}>
+                <InfomationIcon />
+                <div>
+                  정보가 정확하지 않나요?
+                </div>
+              </div>
+            </div>
           </div>
         )
       )}
 
       {selectedRouteId && <BusTimetableDetail routeId={selectedRouteId} />}
 
-      <div className={styles['info-footer']}>
-        <div className={styles['info-footer__date']}>
-          <div>
-            업데이트 날짜 :
+      {!isMobile && (
+        <div className={styles['info-footer']}>
+          <div className={styles['info-footer__date']}>
+            <div>
+              업데이트 날짜 :
+            </div>
+            <div>
+              {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+            </div>
           </div>
-          <div>
-            {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+          <div className={styles['info-footer__icon']}>
+            <InfomationIcon />
+            <div>
+              정보가 정확하지 않나요?
+            </div>
           </div>
         </div>
-        <div className={styles['info-footer__icon']}>
-          <InfomationIcon />
-          <div>
-            정보가 정확하지 않나요?
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
