@@ -1,36 +1,29 @@
 import { useState } from 'react';
-import ChevronLeft from 'assets/svg/Bus/chevron-left.svg';
-import ChevronRight from 'assets/svg/Bus/chevron-right.svg';
 import ChevronDown from 'assets/svg/Bus/chevron-down.svg';
 import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
 import { cn } from '@bcsdlab/utils';
 import { BusType, BUS_TYPE_MAP, format12Hour } from 'pages/BusRoutePage/ts/busModules';
+import TimeDetail from 'pages/BusRoutePage/components/TimeDetail';
+import { useTimeSelect } from 'pages/BusRoutePage/ts/useTimeSelect';
 import styles from './BusSearchOptions.module.scss';
 
 export default function BusSearchOptions() {
-  const now = new Date();
-  const initialTime = {
-    hour: now.getHours(),
-    minute: Math.floor(now.getMinutes() / 10) * 10,
-  };
-
+  const timeSelect = useTimeSelect();
+  const { hour, minute } = timeSelect.timeState;
   const [isTimeDetailOpen, setIsTimeDetailOpen] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(initialTime);
   const [selectedBusType, setSelectedBusType] = useState<BusType>('shuttle');
   const [isBusTypeOpen, setIsBusTypeOpen] = useState(false);
 
-  // const hours = Array.from({ length: 19 }, (_, i) => i + 6); // 6시부터 24시까지
-
   return (
     <div className={styles.box}>
-      <div className={styles['time-type']}>
+      <div className={styles['time-bus']}>
         <button
           type="button"
           className={styles['depart-time']}
           onClick={() => setIsTimeDetailOpen(!isTimeDetailOpen)}
         >
           <span className={styles['depart-time__text']}>
-            {format12Hour(selectedTime.hour, selectedTime.minute)}
+            {format12Hour(hour, minute)}
           </span>
           <span className={styles['depart-time__description']}>출발</span>
           <span
@@ -82,52 +75,10 @@ export default function BusSearchOptions() {
           )}
         </div>
       </div>
-      {isTimeDetailOpen && (
-        <div className={styles['depart-time-detail']}>
-          <div className={styles.header}>
-            <span className={styles.title}>출발 시각 설정</span>
-            <span className={styles.description}>
-              현재는 정규학기(12월 20일까지)의 시간표를 제공하고 있어요.
-            </span>
-          </div>
-          <div className={styles.selector}>
-            <button
-              className={styles['time-nav']}
-              onClick={() => {
-                if (selectedTime.hour > 6) {
-                  setSelectedTime((prev) => ({ ...prev, hour: prev.hour - 1 }));
-                }
-              }}
-              type="button"
-              aria-label="이전 시간"
-            >
-              <ChevronLeft />
-            </button>
-            <div className={styles['time-display']}>
-              {`${selectedTime.hour}시`}
-            </div>
-            <button
-              className={styles['time-nav']}
-              onClick={() => {
-                if (selectedTime.hour < 24) {
-                  setSelectedTime((prev) => ({ ...prev, hour: prev.hour + 1 }));
-                }
-              }}
-              type="button"
-              aria-label="다음 시간"
-            >
-              <ChevronRight />
-            </button>
-          </div>
-          <button
-            className={styles['apply-button']}
-            onClick={() => setIsTimeDetailOpen(false)}
-            type="button"
-          >
-            지금 출발
-          </button>
-        </div>
-      )}
+      <TimeDetail
+        isTimeDetailOpen={isTimeDetailOpen}
+        timeSelect={timeSelect}
+      />
     </div>
   );
 }

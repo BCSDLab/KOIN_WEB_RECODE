@@ -16,13 +16,13 @@ export default function BusRoutePage() {
   const [direction, setDirection] = useState({ depart: '', arrival: '' });
   const [isSearching, startSearch] = useBooleanState(false);
   const [departTime, setDepartTime] = useState(0);
-  console.log(departTime, setDepartTime);
+  // console.log(departTime, setDepartTime);
 
   const getRoute = () => {
     // mutate 함수
     startSearch();
   };
-  console.log(direction, isSearching, getRoute);
+  // console.log(direction, isSearching, getRoute);
 
   useScrollToTop();
 

@@ -15,6 +15,7 @@ export default function RouteList() {
     <div className={styles.container}>
       {routes.map(({ busType, routeName, departTime }) => (
         <BusRoute
+          key={routeName}
           busType={busType}
           routeName={routeName}
           departTime={departTime}

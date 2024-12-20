@@ -15,7 +15,7 @@ export default function BusRoute({
 }: BusRouteProps) {
   const [period, setPeriod] = useState('오전');
   const busTypeName = getShortBusType(busType);
-  console.log(routeName);
+  // console.log(routeName);
 
   if (Number(departTime.slice(0, 2)) > 12) setPeriod('오후');
 
