@@ -40,13 +40,13 @@ export default function TimeDetail({
 
   const hours = [...Array(24)].map((_, index) => ({
     hour: index,
-    enable: index >= now.getHours(),
+    enable: date > now.getDate() || index >= now.getHours(),
     label: `${index}시`,
   }));
 
   const minutes = [...Array(6)].map((_, index) => ({
     minute: index * 10,
-    enable: hour > now.getHours() || index * 10 >= now.getMinutes(),
+    enable: date > now.getDate() || hour > now.getHours() || index * 10 >= now.getMinutes(),
     label: `${index * 10}분`,
   }));
 

@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ChevronLeft from 'assets/svg/Bus/chevron-left.svg';
 import ChevronRight from 'assets/svg/Bus/chevron-right.svg';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './SelectDropdown.module.scss';
 
 interface ValueType {
@@ -22,7 +25,11 @@ interface SelectDropdownProps {
 export default function SelectDropdown({
   type, values, selectedValue, setSelectedValue,
 }: SelectDropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen,, setClose, toggleOpen] = useBooleanState(false);
+  const { containerRef } = useOutsideClick({ onOutsideClick: setClose });
+  const selectedItemRef = useRef<HTMLButtonElement>(null);
+  useEscapeKeyDown({ onEscape: setClose });
+
   const getValue = (value: ValueType) => {
     if ('date' in value && value.date) return value.date;
     if ('hour' in value && value.hour) return value.hour;
@@ -34,18 +41,30 @@ export default function SelectDropdown({
     ? `${selectedValue}분`
     : values.find((value) => getValue(value) === selectedValue)?.label || '';
 
+  useEffect(() => {
+    if (isOpen && selectedItemRef.current) {
+      const selectedElement = selectedItemRef.current;
+
+      selectedElement.scrollIntoView({
+        block: 'center',
+        behavior: 'auto',
+      });
+    }
+  }, [isOpen]);
+
   return (
     <div
       className={cn({
         [styles.box]: true,
         [styles[`box--${type}`]]: true,
       })}
+      ref={containerRef}
     >
       <ChevronLeft />
       <button
         type="button"
         className={styles.selector}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => toggleOpen()}
       >
         <span className={styles.selector__text}>{selectedLabel}</span>
       </button>
@@ -55,6 +74,7 @@ export default function SelectDropdown({
           {values.map((value) => (
             <button
               key={getValue(value)}
+              ref={getValue(value) === selectedValue ? selectedItemRef : null}
               className={cn({
                 [styles.option]: true,
                 [styles['option--selected']]: getValue(value) === selectedValue,
@@ -63,7 +83,7 @@ export default function SelectDropdown({
               onClick={() => {
                 if (value.enable) {
                   setSelectedValue(getValue(value));
-                  setIsOpen(false);
+                  setClose();
                 }
               }}
               disabled={!value.enable}
