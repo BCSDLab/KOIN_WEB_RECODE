@@ -1,4 +1,4 @@
-import { BusTypeResponse, Course } from 'api/bus/entity';
+import { Course } from 'api/bus/entity';
 
 // 시간 반환 함수
 const getHour = (second: number) => Math.floor(second / 60 / 60) % 24;

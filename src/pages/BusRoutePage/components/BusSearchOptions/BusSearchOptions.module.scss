@@ -32,7 +32,7 @@
 
   &__arrow {
     margin-top: 3.5px;
-  
+
     &--open {
       margin-top: -3.5px;
       transform: rotate(-180deg);
@@ -53,8 +53,9 @@
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1),
-                0px 1px 1px 0px rgba(0, 0, 0, 0.05);
+    box-shadow:
+      0 2px 4px rgba(0 0 0 / 10%),
+      0 1px 1px rgba(0 0 0 / 5%);
   }
 
   &__text {
@@ -66,7 +67,7 @@
 
   &__arrow {
     margin-top: 3.5px;
-  
+
     &--open {
       margin-top: -3.5px;
       transform: rotate(-180deg);
@@ -81,8 +82,9 @@
     width: 127px;
     background-color: #fff;
     border-radius: 12px;
-    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.08),
-                0px 1px 4px 0px rgba(0, 0, 0, 0.04);
+    box-shadow:
+      0 4px 10px rgba(0 0 0 / 8%),
+      0 1px 4px rgba(0 0 0 / 4%);
   }
 
   &__option {
@@ -116,4 +118,3 @@
     }
   }
 }
-
