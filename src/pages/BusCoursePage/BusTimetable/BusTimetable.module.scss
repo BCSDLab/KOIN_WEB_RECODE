@@ -376,13 +376,14 @@ $template-shuttle-colors: (
 
 .main-timetable-mobile {
   width: 100%;
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
   min-height: 550px;
   flex: 1;
   overflow-y: auto;
   
   &__line {
-    width: 100%;
+    width: 100vw;
     height: 7px;
     background-color: #fafafa;
     margin: 10px 0 0;

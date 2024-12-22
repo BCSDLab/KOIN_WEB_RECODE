@@ -158,7 +158,7 @@ function ShuttleTimetable() {
           </div>
         ) : (
           <div className={styles['main-timetable-mobile']}>
-            {shuttleCourse.route_regions.map((text) => (
+            {shuttleCourse.route_regions.map((text, index) => (
               <>
                 <TemplateShuttleVersion
                   routeIdHandler={changeRouteId}
@@ -167,7 +167,9 @@ function ShuttleTimetable() {
                   routes={text.routes}
                   category={category}
                 />
-                <div className={styles['main-timetable-mobile__line']}> </div>
+                {index < shuttleCourse.route_regions.length - 1 && (
+                  <div className={styles['main-timetable-mobile__line']}>ㅤ</div>
+                )}
               </>
 
             ))}
