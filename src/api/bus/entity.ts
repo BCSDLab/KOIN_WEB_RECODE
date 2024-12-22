@@ -67,7 +67,7 @@ export interface BusRouteInfoResponseDTO {
   depart: Depart;
   arrival: Arrival;
   depart_date: string; // yyyy-MM-dd
-  depart_time: string; // HH:mm
+  depart_time: string; // HH:mm:ss
   schedule: ScheduleResponseDTO[];
 }
 

@@ -1,18 +1,24 @@
-import { BusTypeResponse } from 'api/bus/entity';
 import BusIcon from 'assets/svg/Bus/bus-icon.svg';
 import { SHORT_BUS_TYPE_MAP } from 'pages/BusRoutePage/ts/busModules';
 import { cn } from '@bcsdlab/utils';
+import { Schedule } from 'pages/BusRoutePage/ts/types';
+import { formatTimeDifference, getTimeDifference } from 'pages/BusRoutePage/ts/timeModule';
 import styles from './BusRoute.module.scss';
 
 interface BusRouteProps {
-  busType: BusTypeResponse,
-  busName: string,
-  departTime: string, // 'HH:mm:ss'
+  schedule: Schedule;
+  isSameDay: boolean;
+  departTime: string; // HH:mm:ss
 }
 
 export default function BusRoute({
-  busType, busName, departTime,
+  schedule, isSameDay, departTime: selectedDepartTime,
 }: BusRouteProps) {
+  const { busType, busName, departTime } = schedule;
+
+  const timeDiff = getTimeDifference(departTime, selectedDepartTime);
+  const isWithin4Hours = timeDiff.hours < 4;
+
   return (
     <div className={styles.box}>
       <div className={styles['route-info']}>
@@ -30,17 +36,19 @@ export default function BusRoute({
           </div>
         </div>
         <div className={styles['depart-time']}>
-          {`${Number(departTime.slice(0, 2)) > 12 ? '오전' : '오후'} ${departTime}`}
+          {`${Number(departTime.slice(0, 2)) > 12 ? '오전' : '오후'} ${departTime.slice(0, 5)}`}
         </div>
       </div>
       <div className={styles['before-arrive']}>
         {busType === 'city' && (
           <span className={styles['before-arrive__route-name']}>
-            {busName}
+            {`${busName}번`}
           </span>
         )}
-        <span className={styles['arrive-time__text']}>
-          몇 분 전
+        <span className={styles['before-arrive__text']}>
+          {isSameDay && isWithin4Hours
+            ? formatTimeDifference(departTime, selectedDepartTime)
+            : ''}
         </span>
       </div>
     </div>

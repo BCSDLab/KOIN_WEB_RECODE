@@ -68,6 +68,7 @@
 .before-arrive {
   display: flex;
   flex-direction: column;
+  align-items: end;
   gap: 4px;
 
   &__route-name {

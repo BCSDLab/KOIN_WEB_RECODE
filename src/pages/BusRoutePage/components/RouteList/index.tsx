@@ -25,15 +25,16 @@ export default function RouteList({
 
   if (!routeInfo) return null;
 
-  const { schedule } = routeInfo;
+  const { departDate, departTime, schedule } = routeInfo;
+  const isSameDay = departDate === formattedValues.date;
 
   return (
     <div className={styles.container}>
-      {schedule.map(({ busType: currentBusType, busName, departTime }) => (
+      {schedule.map((currentSchedule) => (
         <BusRoute
-          key={busName + departTime}
-          busType={currentBusType}
-          busName={busName}
+          key={currentSchedule.busName + currentSchedule.departTime}
+          schedule={currentSchedule}
+          isSameDay={isSameDay}
           departTime={departTime}
         />
       ))}
