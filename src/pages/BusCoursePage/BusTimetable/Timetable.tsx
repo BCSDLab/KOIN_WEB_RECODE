@@ -265,7 +265,23 @@ function ExpressTimetable() {
 
       <Template
         headers={BUS_TYPES[1].tableHeaders}
-        arrivalList={timetable.info.bus_timetables.map((info) => [info.departure, info.arrival])}
+        // arrivalList={timetable.info.bus_timetables.map((info) => [info.departure, info.arrival])}
+        arrivalList={(() => {
+          const getHours = (time: string) => parseInt(time.split(':')[0], 10);
+          const morning = timetable.info.bus_timetables
+            .map((info) => info.departure)
+            .filter((time) => getHours(time) < 12); // 오전
+          const afternoon = timetable.info.bus_timetables
+            .map((info) => info.departure)
+            .filter((time) => getHours(time) >= 12); // 오후
+
+          // 오전, 오후 길이 다를 시 맞추기
+          const maxLength = Math.max(morning.length, afternoon.length);
+          return Array.from({ length: maxLength }, (_, idx) => [
+            morning[idx] || '',
+            afternoon[idx] || '',
+          ]);
+        })()}
       />
       <div className={styles['express-footer']}>
         <div className={styles['express-footer__date']}>
