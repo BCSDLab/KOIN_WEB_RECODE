@@ -76,9 +76,11 @@
   flex-direction: column;
   align-items: center;
   height: 100vh;
+  gap: 20px;
 
   @include media.media-breakpoint(mobile) {
     font-size: 13px;
+    gap: 0
   }
 }
 
@@ -88,6 +90,7 @@
   flex-direction: column;
   align-items: center;
   height: 100%;
+  gap: 20px;
 
   @include media.media-breakpoint(mobile) {
     overflow: auto;
@@ -285,7 +288,6 @@ $template-shuttle-colors: (
   height: "fit-content";
   border-radius: 16px;
   border: 1px solid #eee;
-  margin-top: 20px;
 
   &__title {
     font-size: 18px;
@@ -443,7 +445,8 @@ $template-shuttle-colors: (
 
 .express-footer {
   display: flex;
-  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
   gap: 8px;
   color: #727272;
   font-family: Pretendard, sans-serif;
@@ -478,5 +481,6 @@ $template-shuttle-colors: (
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
+    flex-direction: column;
   }
 }
