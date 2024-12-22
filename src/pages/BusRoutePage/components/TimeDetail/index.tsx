@@ -1,19 +1,19 @@
+import { useState } from 'react';
 import { useTimeSelect } from 'pages/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'pages/BusRoutePage/components/SelectDropdown';
 import styles from './TimeDetail.module.scss';
 
 interface TimeDetailProps {
-  isTimeDetailOpen: boolean;
   timeSelect: ReturnType<typeof useTimeSelect>;
 }
 
-export default function TimeDetail({
-  isTimeDetailOpen, timeSelect,
-}: TimeDetailProps) {
-  if (!isTimeDetailOpen) return <div className={styles.empty} />;
-
+export default function TimeDetail({ timeSelect }: TimeDetailProps) {
   const { date, hour, minute } = timeSelect.timeState;
   const { setDate, setHour, setMinute } = timeSelect.timeHandler;
+
+  const [selectedDate, setSelectedDate] = useState(date);
+  const [selectedHour, setSelectedHour] = useState(hour);
+  const [selectedMinute, setSelectedMinute] = useState(minute);
 
   const now = new Date();
   const last = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
@@ -40,15 +40,23 @@ export default function TimeDetail({
 
   const hours = [...Array(24)].map((_, index) => ({
     hour: index,
-    enable: date > now.getDate() || index >= now.getHours(),
+    enable: selectedDate > now.getDate() || index >= now.getHours(),
     label: `${index}시`,
   }));
 
   const minutes = [...Array(6)].map((_, index) => ({
     minute: index * 10,
-    enable: date > now.getDate() || hour > now.getHours() || index * 10 >= now.getMinutes(),
+    enable: selectedDate > now.getDate()
+    || selectedHour > now.getHours()
+    || index * 10 >= now.getMinutes(),
     label: `${index * 10}분`,
   }));
+
+  const handleTimeDetailButtonClick = () => {
+    setDate(selectedDate);
+    setHour(selectedHour);
+    setMinute(selectedMinute);
+  };
 
   return (
     <div className={styles.box}>
@@ -60,24 +68,25 @@ export default function TimeDetail({
         <SelectDropdown
           type="left"
           values={dates}
-          selectedValue={date}
-          setSelectedValue={setDate}
+          selectedValue={selectedDate}
+          setSelectedValue={setSelectedDate}
         />
         <SelectDropdown
           type="middle"
           values={hours}
-          selectedValue={hour}
-          setSelectedValue={setHour}
+          selectedValue={selectedHour}
+          setSelectedValue={setSelectedHour}
         />
         <SelectDropdown
           type="right"
           values={minutes}
-          selectedValue={minute}
-          setSelectedValue={setMinute}
+          selectedValue={selectedMinute}
+          setSelectedValue={setSelectedMinute}
         />
         <button
           className={styles['time-detail__button']}
           type="button"
+          onClick={handleTimeDetailButtonClick}
         >
           지금 출발
         </button>

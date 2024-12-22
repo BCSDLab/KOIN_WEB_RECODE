@@ -48,7 +48,7 @@ export default function BusRoutePage() {
                 timeSelect={timeSelect}
               />
             </div>
-            <Suspense fallback={null}>
+            <Suspense fallback={(<div>d</div>)}>
               <div className={styles['route-list']}>
                 <RouteList
                   timeSelect={timeSelect}

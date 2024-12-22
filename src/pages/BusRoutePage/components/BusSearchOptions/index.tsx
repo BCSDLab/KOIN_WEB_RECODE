@@ -82,10 +82,7 @@ export default function BusSearchOptions({
           )}
         </div>
       </div>
-      <TimeDetail
-        isTimeDetailOpen={isTimeDetailOpen}
-        timeSelect={timeSelect}
-      />
+      {isTimeDetailOpen && (<TimeDetail timeSelect={timeSelect} />)}
     </div>
   );
 }
