@@ -216,8 +216,8 @@ function Template({ headers, arrivalList }: { headers: string[], arrivalList: st
   return (
     <div className={styles.timetable} aria-expanded="true">
       <div className={styles['timetable__label-wrapper']}>
-        <span className={styles.timetable__label}>{headers[0]}</span>
-        <span className={styles.timetable__label}>{headers[1]}</span>
+        <div className={styles.timetable__label}>오전</div>
+        <div className={styles.timetable__label}>오후</div>
       </div>
       {arrivalList.map(([arrival, time], idx) => (
         // eslint-disable-next-line react/no-array-index-key
@@ -267,10 +267,17 @@ function ExpressTimetable() {
         headers={BUS_TYPES[1].tableHeaders}
         arrivalList={timetable.info.bus_timetables.map((info) => [info.departure, info.arrival])}
       />
-      <div className={styles.timetable__date}>
-        업데이트 날짜:
-        {' '}
-        {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+      <div className={styles['express-footer']}>
+        <div className={styles['express-footer__date']}>
+          업데이트 날짜:
+          {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+        </div>
+        <div className={styles['express-footer__icon']}>
+          <InfomationIcon />
+          <div>
+            정보가 정확하지 않나요?
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -312,9 +319,9 @@ function CityTimetable() {
   };
 
   return (
-    <div className={styles['timetable-container']}>
-      <div className={styles['course-category-container']}>
-        <div className={styles['course-category']}>
+    <div className={styles['timetable-city-container']}>
+      <div className={styles['course-category-city-container']}>
+        <div className={styles['course-category-city']}>
           <div className={styles['course-category__button']}>노선</div>
           {CITY_COURSES.slice(0, 3).map((cityCourse) => (
             <button
@@ -333,10 +340,11 @@ function CityTimetable() {
               }}
             >
               {cityCourse.bus_number}
+              번
             </button>
           ))}
         </div>
-        <div className={styles['course-category']}>
+        <div className={styles['course-category-city']}>
           <div className={styles['course-category__button']}>운행</div>
           {cityBusDirections.map((cityBusDirection) => (
             <button
@@ -364,12 +372,17 @@ function CityTimetable() {
         arrivalList={getTodayTimetable()}
       />
 
-      <div className={styles.timetable__date}>
-        기점 출발 시간표로 노선 별로 기점이 상이할 수 있습니다.
-        <br />
-        업데이트 날짜:
-        {' '}
-        {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+      <div className={styles['express-footer']}>
+        <div className={styles['express-footer__date']}>
+          업데이트 날짜:
+          {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+        </div>
+        <div className={styles['express-footer__icon']}>
+          <InfomationIcon />
+          <div>
+            정보가 정확하지 않나요?
+          </div>
+        </div>
       </div>
     </div>
   );

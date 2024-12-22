@@ -3,13 +3,12 @@
 .template {
   width: 795px;
   margin: 64px auto 0;
-  
 
   @include media.media-breakpoint(mobile) {
     min-height: 350px;
     width: 100%;
     margin: 0;
-    padding: 0 16px 10px 16px;
+    //padding: 0 16px 10px 16px;
     box-sizing: border-box;
   }
 
@@ -32,8 +31,13 @@
 .tabs {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  height: 60px;
+  height: 56px;
   list-style: none;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100vw;
+    height: 100%;
+  }
   
   &__tab {
     width: 100%;
@@ -50,6 +54,7 @@
     border-radius: 12px 0 0;
     font-family: Pretendard, sans-serif;
     border-bottom: 2px solid #cacaca;
+    padding: 16px 16px 12px 16px;
     cursor: pointer;
 
     &--selected {
@@ -74,7 +79,18 @@
 
   @include media.media-breakpoint(mobile) {
     font-size: 13px;
-    margin-top: 19px;
+  }
+}
+
+.timetable-city-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+
+  @include media.media-breakpoint(mobile) {
+    overflow: auto;
   }
 }
 
@@ -94,6 +110,11 @@
   justify-content: center;
   padding: 16px 24px 8px;
   box-sizing: border-box;
+
+  @include media.media-breakpoint(mobile) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .timetable__row {
@@ -106,6 +127,11 @@
 
   &:not(:last-child) > span {
     border-bottom: 1px solid #eee;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -129,6 +155,12 @@
   font-size: 20px;
   font-weight: 700;
   line-height: 160%;
+
+  @include media.media-breakpoint(mobile) {
+    flex: 0;
+    font-size: 18px;
+    text-align: left;
+  }
 }
 
 .timetable__cell_pm {
@@ -141,6 +173,12 @@
   font-size: 20px;
   font-weight: 700;
   line-height: 160%;
+
+  @include media.media-breakpoint(mobile) {
+    flex: 0;
+    font-size: 18px;
+    text-align: left;
+  }
 }
 
 .course-category-container {
@@ -149,6 +187,19 @@
   flex-direction: column;
   background-color: #f5f5f5;
   border-radius: 0 0 12px 12px;
+}
+
+.course-category-city-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  border-radius: 0 0 12px 12px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 8px;
+    padding: 14px 24px;
+  }
 }
 
 .course-category {
@@ -182,6 +233,7 @@
   @include media.media-breakpoint(mobile) {
     width: 100vw;
     border-radius: 0;
+    padding: 8px 24px;
   }
 }
 
@@ -190,6 +242,41 @@ $template-shuttle-colors: (
   "주중": #ffb443,
   "주말": #34adff
 );
+
+.course-category-city {
+  width: 100%;
+  background-color: #f5f5f5;
+  display: flex;
+  gap: 8px;
+  box-sizing: border-box;
+  padding: 8px 24px;
+  border-radius: 0 0 12px 12px;
+
+  &__button {
+    display: flex;
+    padding: 6px 16px;
+    justify-content: center;
+    align-items: center;
+    color: #727272;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: Pretendard, sans-serif;
+
+    &--selected {
+      border-radius: 50px;
+      background: #175c8e;
+      color: #fff;
+      font-weight: 600;
+      line-height: 160%;
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100vw;
+    border-radius: 0;
+    padding: 0 24px;
+  }
+}
 
 .templateShuttle {
   width: 100%;
@@ -351,5 +438,45 @@ $template-shuttle-colors: (
     font-style: normal;
     font-weight: 400;
     line-height: 160%;
+  }
+}
+
+.express-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #727272;
+  font-family: Pretendard, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+
+  &__date {
+    padding: 8px 24px;
+    font-size: 14px;
+  }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+    font-size: 12px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      justify-content: start;
+      padding: 0 24px;
+      margin-bottom: 30px;
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
   }
 }

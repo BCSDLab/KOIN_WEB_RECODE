@@ -6,15 +6,15 @@ import ROUTES from './routes';
 
 export const BUS_TYPES = [{
   key: 'shuttle',
-  tabName: '학교셔틀',
+  tabName: '학교',
   tableHeaders: ['승차장소', '시간'],
 }, {
   key: 'express',
-  tabName: '대성고속',
+  tabName: '대성',
   tableHeaders: ['출발시간', '도착시간'],
 }, {
   key: 'city',
-  tabName: '시내버스',
+  tabName: '시내',
   tableHeaders: ['오전', '오후'],
 }];
 
@@ -95,18 +95,51 @@ export const SHUTTLE_COURSES = [
 
 export const EXPRESS_COURSES = [
   {
-    name: '한기대 → 야우리',
+    name: '천안방면',
     bus_type: 'express',
     direction: 'from',
     region: '천안',
   },
   {
-    name: '야우리 → 한기대',
+    name: '병천방면',
     bus_type: 'express',
     direction: 'to',
     region: '천안',
   },
 ] as const;
+
+export interface BusLink {
+  label: string;
+  link: string;
+  key: string;
+  type: typeof BUS_TYPES[number];
+}
+
+export const busLink: BusLink[] = [
+  {
+    label: '유니버스 바로가기',
+    link: 'https://koreatech.unibus.kr/',
+    key: 'shuttle',
+    type: BUS_TYPES[0],
+  },
+  {
+    label: '시간표 보러가기',
+    link: '/bus',
+    key: 'express',
+    type: BUS_TYPES[1],
+  },
+  {
+    label: '시간표 보러가기',
+    link: '/bus',
+    key: 'city',
+    type: BUS_TYPES[2],
+  },
+];
+
+export const cityBusDirections = [
+  { label: '천안방면', value: 'from' },
+  { label: '병천방면', value: 'to' },
+];
 
 export const CITY_COURSES: CityBusParams[] = [
   { bus_number: 400, direction: '병천3리' },
