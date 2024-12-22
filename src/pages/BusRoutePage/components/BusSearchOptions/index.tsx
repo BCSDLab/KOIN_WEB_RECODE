@@ -2,16 +2,23 @@ import { useState } from 'react';
 import ChevronDown from 'assets/svg/Bus/chevron-down.svg';
 import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
 import { cn } from '@bcsdlab/utils';
-import { BusType, BUS_TYPE_MAP, format12Hour } from 'pages/BusRoutePage/ts/busModules';
+import { BUS_TYPE_MAP, format12Hour } from 'pages/BusRoutePage/ts/busModules';
 import TimeDetail from 'pages/BusRoutePage/components/TimeDetail';
-import { useTimeSelect } from 'pages/BusRoutePage/ts/useTimeSelect';
+import { UseTimeSelectReturn } from 'pages/BusRoutePage/hooks/useTimeSelect';
+import { BusTypeRequest } from 'api/bus/entity';
 import styles from './BusSearchOptions.module.scss';
 
-export default function BusSearchOptions() {
-  const timeSelect = useTimeSelect();
+interface BusSearchOptionsProps {
+  busType: BusTypeRequest;
+  setBusType: (busType: BusTypeRequest) => void;
+  timeSelect: UseTimeSelectReturn;
+}
+
+export default function BusSearchOptions({
+  busType, setBusType, timeSelect,
+}: BusSearchOptionsProps) {
   const { hour, minute } = timeSelect.timeState;
   const [isTimeDetailOpen, setIsTimeDetailOpen] = useState(false);
-  const [selectedBusType, setSelectedBusType] = useState<BusType>('shuttle');
   const [isBusTypeOpen, setIsBusTypeOpen] = useState(false);
 
   return (
@@ -42,7 +49,7 @@ export default function BusSearchOptions() {
             onClick={() => setIsBusTypeOpen(!isBusTypeOpen)}
           >
             <span className={styles['bus-type__text']}>
-              {BUS_TYPE_MAP[selectedBusType]}
+              {BUS_TYPE_MAP[busType]}
             </span>
             <span
               className={cn({
@@ -55,15 +62,15 @@ export default function BusSearchOptions() {
           </button>
           {isBusTypeOpen && (
             <div className={styles['bus-type__dropdown']}>
-              {(Object.entries(BUS_TYPE_MAP) as [BusType, string][]).map(([type, name]) => (
+              {(Object.entries(BUS_TYPE_MAP) as [BusTypeRequest, string][]).map(([type, name]) => (
                 <button
                   key={type}
                   className={cn({
                     [styles['bus-type__option']]: true,
-                    [styles['bus-type__option--selected']]: selectedBusType === type,
+                    [styles['bus-type__option--selected']]: busType === type,
                   })}
                   onClick={() => {
-                    setSelectedBusType(type);
+                    setBusType(type);
                     setIsBusTypeOpen(false);
                   }}
                   type="button"

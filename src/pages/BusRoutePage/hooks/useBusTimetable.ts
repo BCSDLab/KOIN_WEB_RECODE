@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getBusTimetableInfo, getCityBusTimetableInfo } from 'api/bus';
 import {
-  BusRouteInfo as ShuttleInfo, CityBusParams,
+  RouteInfo as ShuttleInfo, CityBusParams,
   CityInfo, Course, ExpressCourse, ExpressInfo, ShuttleCourse,
 } from 'api/bus/entity';
 
@@ -26,8 +26,7 @@ function useBusTimetable(course: ShuttleCourse): ShuttleTimetable;
 
 function useBusTimetable(course: ExpressCourse): ExpressTimetable;
 
-function useBusTimetable(course: Course): ShuttleTimetable |
-ExpressTimetable | undefined {
+function useBusTimetable(course: Course): ShuttleTimetable | ExpressTimetable | undefined {
   const { bus_type: busType, direction: busDirection, region: busRegion } = course;
 
   const { data } = useSuspenseQuery(

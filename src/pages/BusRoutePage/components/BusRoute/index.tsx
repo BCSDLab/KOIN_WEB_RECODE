@@ -1,24 +1,18 @@
+import { BusTypeResponse } from 'api/bus/entity';
 import BusIcon from 'assets/svg/Bus/bus-icon.svg';
-import { useState } from 'react';
-import { BusType, getShortBusType } from 'pages/BusRoutePage/ts/busModules';
+import { SHORT_BUS_TYPE_MAP } from 'pages/BusRoutePage/ts/busModules';
 import { cn } from '@bcsdlab/utils';
 import styles from './BusRoute.module.scss';
 
 interface BusRouteProps {
-  busType: BusType,
-  routeName: string,
-  departTime: string,
+  busType: BusTypeResponse,
+  busName: string,
+  departTime: string, // 'HH:mm:ss'
 }
 
 export default function BusRoute({
-  busType, routeName, departTime,
+  busType, busName, departTime,
 }: BusRouteProps) {
-  const [period, setPeriod] = useState('오전');
-  const busTypeName = getShortBusType(busType);
-  // console.log(routeName);
-
-  if (Number(departTime.slice(0, 2)) > 12) setPeriod('오후');
-
   return (
     <div className={styles.box}>
       <div className={styles['route-info']}>
@@ -32,15 +26,22 @@ export default function BusRoute({
               [styles[`bus-type__name--${busType}`]]: true,
             })}
           >
-            {busTypeName}
+            {SHORT_BUS_TYPE_MAP[busType]}
           </div>
         </div>
         <div className={styles['depart-time']}>
-          {`${period} ${departTime}`}
+          {`${Number(departTime.slice(0, 2)) > 12 ? '오전' : '오후'} ${departTime}`}
         </div>
       </div>
-      <div>
-        몇 분 전
+      <div className={styles['before-arrive']}>
+        {busType === 'city' && (
+          <span className={styles['before-arrive__route-name']}>
+            {busName}
+          </span>
+        )}
+        <span className={styles['arrive-time__text']}>
+          몇 분 전
+        </span>
       </div>
     </div>
   );

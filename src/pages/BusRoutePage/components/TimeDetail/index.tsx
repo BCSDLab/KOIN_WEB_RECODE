@@ -1,4 +1,4 @@
-import { useTimeSelect } from 'pages/BusRoutePage/ts/useTimeSelect';
+import { useTimeSelect } from 'pages/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'pages/BusRoutePage/components/SelectDropdown';
 import styles from './TimeDetail.module.scss';
 
@@ -13,7 +13,7 @@ export default function TimeDetail({
   if (!isTimeDetailOpen) return <div className={styles.empty} />;
 
   const { date, hour, minute } = timeSelect.timeState;
-  const { setDate, setHour, setMinute } = timeSelect.handlers;
+  const { setDate, setHour, setMinute } = timeSelect.timeHandler;
 
   const now = new Date();
   const last = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();

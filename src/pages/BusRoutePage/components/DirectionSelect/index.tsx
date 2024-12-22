@@ -1,34 +1,26 @@
 import { cn } from '@bcsdlab/utils';
+import { Arrival, Depart } from 'api/bus/entity';
 import ExchangeIcon from 'assets/svg/Bus/exchange-icon.svg';
 import PlaceSelect from 'pages/BusRoutePage/components/PlaceSelect';
-import { placeTypeKeys } from 'pages/BusRoutePage/ts/placeModules';
-import { useEffect, useState } from 'react';
+import { LOCATION_TYPE_KEY } from 'pages/BusRoutePage/constants/location';
 import styles from './DirectionSelect.module.scss';
 
 interface DirectionSelectProps {
-  onDirectionChange: (direction: { depart: string; arrival: string }) => void,
-  isSearching: boolean,
-  getRoute: () => void,
+  depart: Depart | '';
+  setDepart: (depart: Depart | '') => void;
+  arrival: Arrival | '';
+  setArrival: (arrival: Arrival | '') => void;
+  isSearching: boolean;
+  lookUp: () => void;
 }
 
 export default function DirectionSelect({
-  onDirectionChange, isSearching, getRoute,
+  depart, setDepart, arrival, setArrival, isSearching, lookUp,
 }: DirectionSelectProps) {
-  const [depart, setDepart] = useState('');
-  const [arrival, setArrival] = useState('');
-
-  useEffect(() => {
-    onDirectionChange?.({ depart, arrival });
-  }, [depart, arrival, onDirectionChange]);
-
   const exchangePlace = () => {
     const temp = depart;
     setDepart(arrival);
     setArrival(temp);
-  };
-
-  const handleLookupClick = () => {
-    getRoute();
   };
 
   return (
@@ -42,7 +34,7 @@ export default function DirectionSelect({
         <div className={styles.direction}>
           <div className={styles.direction_select}>
             <PlaceSelect
-              type={placeTypeKeys.depart}
+              type={LOCATION_TYPE_KEY.depart}
               place={depart}
               oppositePlace={arrival}
               setPlace={setDepart}
@@ -59,7 +51,7 @@ export default function DirectionSelect({
           </button>
           <div className={styles.direction_select}>
             <PlaceSelect
-              type={placeTypeKeys.arrival}
+              type={LOCATION_TYPE_KEY.arrival}
               place={arrival}
               oppositePlace={depart}
               setPlace={setArrival}
@@ -70,7 +62,7 @@ export default function DirectionSelect({
         {!isSearching && (
           <button
             className={styles['lookup-button']}
-            onClick={handleLookupClick}
+            onClick={lookUp}
             type="button"
           >
             조회하기

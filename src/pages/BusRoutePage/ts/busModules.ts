@@ -1,4 +1,4 @@
-import { Course } from 'api/bus/entity';
+import { BusTypeResponse, Course } from 'api/bus/entity';
 
 // 시간 반환 함수
 const getHour = (second: number) => Math.floor(second / 60 / 60) % 24;
@@ -64,19 +64,18 @@ export const getCourseName = (course: Course) => {
 };
 
 export const BUS_TYPE_MAP = {
-  all: '전체 차종',
-  express: '대성고속',
-  shuttle: '학교셔틀',
-  city: '시내버스',
+  ALL: '전체 차종',
+  EXPRESS: '대성고속',
+  SHUTTLE: '학교셔틀',
+  CITY: '시내버스',
 } as const;
 
-export const BUS_TYPES_EN = Object.keys(BUS_TYPE_MAP);
-
-export const BUS_TYPES_KR = Object.values(BUS_TYPE_MAP);
-
-export type BusType = keyof typeof BUS_TYPE_MAP;
-
-export const getShortBusType = (busType: BusType) => BUS_TYPE_MAP[busType].slice(0, 2);
+export const SHORT_BUS_TYPE_MAP = {
+  all: '전체',
+  express: '대성',
+  shuttle: '학교',
+  city: '시내',
+} as const;
 
 export const format12Hour = (hour: number, minute: number) => {
   const period = hour >= 12 ? '오후' : '오전';

@@ -1,33 +1,38 @@
 import { cn } from '@bcsdlab/utils';
-import { places, placeType } from 'pages/BusRoutePage/ts/placeModules';
+import { DepartArrivalPlace } from 'api/bus/entity';
+import {
+  locationLabels, locations, LOCATION_MAP, REVERSE_LOCATION_MAP,
+} from 'pages/BusRoutePage/constants/location';
+import { LocationDisplay } from 'pages/BusRoutePage/ts/types';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './PlaceSelect.module.scss';
 
 interface PlaceSelectProps {
-  type: keyof typeof placeType;
-  place: string;
-  setPlace: (value: string) => void;
+  type: keyof typeof locationLabels;
+  place: DepartArrivalPlace | '';
+  setPlace: (value: DepartArrivalPlace) => void;
   exchangePlace: () => void;
-  oppositePlace: string;
+  oppositePlace: DepartArrivalPlace | '';
 }
 
 export default function PlaceSelect({
   type, place, setPlace, exchangePlace, oppositePlace,
 }: PlaceSelectProps) {
-  const typeInfo = placeType[type];
+  const locationLabel = locationLabels[type];
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
 
-  const handleDropdownItemClick = (name: string) => {
-    if (oppositePlace === name) {
+  const handleDropdownItemClick = (locationName: LocationDisplay) => {
+    const currentLocation = REVERSE_LOCATION_MAP[locationName];
+    if (oppositePlace === currentLocation) {
       exchangePlace();
       closeDropdown();
       return;
     }
 
-    setPlace(name);
+    setPlace(currentLocation);
     closeDropdown();
   };
 
@@ -35,7 +40,7 @@ export default function PlaceSelect({
 
   return (
     <div className={styles.box}>
-      <h1 className={styles.title}>{typeInfo.title}</h1>
+      <h1 className={styles.title}>{locationLabel.title}</h1>
       <div ref={containerRef}>
         <button
           className={styles['select-box']}
@@ -48,19 +53,19 @@ export default function PlaceSelect({
               [styles['select-box__text--empty']]: !place,
             })}
           >
-            {place || typeInfo.placeholder}
+            {place ? LOCATION_MAP[place] : locationLabel.placeholder}
           </span>
         </button>
         {dropdownOpen && (
           <div className={styles.dropdown}>
-            {places.map((name) => (
+            {locations.map((location) => (
               <button
                 className={styles.dropdown__item}
-                onClick={() => handleDropdownItemClick(name)}
+                onClick={() => handleDropdownItemClick(location)}
                 type="button"
-                key={name}
+                key={location}
               >
-                <span className={styles.dropdown__text}>{name}</span>
+                <span className={styles.dropdown__text}>{location}</span>
               </button>
             ))}
           </div>

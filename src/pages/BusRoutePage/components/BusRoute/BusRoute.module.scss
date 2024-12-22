@@ -64,3 +64,25 @@
   font-size: 26px;
   font-weight: 700;
 }
+
+.before-arrive {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__route-name {
+    color: #4b4b4b;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: center;
+  }
+
+  &__text {
+    color: #3a70e2;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}

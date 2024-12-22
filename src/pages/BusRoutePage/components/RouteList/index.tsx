@@ -1,23 +1,39 @@
+import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
 import BusRoute from 'pages/BusRoutePage/components/BusRoute';
-import { BusType } from 'pages/BusRoutePage/ts/busModules';
+import useBusRoute from 'pages/BusRoutePage/hooks/useBusRoute';
+import { UseTimeSelectReturn } from 'pages/BusRoutePage/hooks/useTimeSelect';
 import styles from './RouteList.module.scss';
 
-interface RouteType {
-  busType: BusType,
-  routeName: string,
-  departTime: string,
+interface RouteListProps {
+  timeSelect: UseTimeSelectReturn;
+  busType: BusTypeRequest;
+  depart: Depart;
+  arrival: Arrival;
 }
 
-export default function RouteList() {
-  const routes: RouteType[] = [{ busType: 'city', routeName: '400', departTime: '12:56' }];
+export default function RouteList({
+  timeSelect, busType, depart, arrival,
+}: RouteListProps) {
+  const { formattedValues } = timeSelect;
+  const { data: routeInfo } = useBusRoute({
+    date: formattedValues.date,
+    time: formattedValues.time,
+    busType,
+    depart,
+    arrival,
+  });
+
+  if (!routeInfo) return null;
+
+  const { schedule } = routeInfo;
 
   return (
     <div className={styles.container}>
-      {routes.map(({ busType, routeName, departTime }) => (
+      {schedule.map(({ busType: currentBusType, busName, departTime }) => (
         <BusRoute
-          key={routeName}
-          busType={busType}
-          routeName={routeName}
+          key={busName + departTime}
+          busType={currentBusType}
+          busName={busName}
           departTime={departTime}
         />
       ))}

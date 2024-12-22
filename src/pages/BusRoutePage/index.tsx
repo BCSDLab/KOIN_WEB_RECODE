@@ -1,28 +1,26 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import BusNotice from 'pages/BusRoutePage/components/BusNotice';
 import DirectionSelect from 'pages/BusRoutePage/components/DirectionSelect';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
 import BusGuide from 'pages/BusRoutePage/components/BusGuide';
 import RouteList from './components/RouteList';
 import BusSearchOptions from './components/BusSearchOptions';
+import { useTimeSelect } from './hooks/useTimeSelect';
 import styles from './BusRoutePage.module.scss';
 
-// "bus_type": "city",
-// "route_name": "400",
-// "depart_time": "16:56"
-
 export default function BusRoutePage() {
-  const [direction, setDirection] = useState({ depart: '', arrival: '' });
-  const [isSearching, startSearch] = useBooleanState(false);
-  const [departTime, setDepartTime] = useState(0);
-  // console.log(departTime, setDepartTime);
+  const timeSelect = useTimeSelect();
+  const [busType, setBusType] = useState<BusTypeRequest>('ALL');
+  const [depart, setDepart] = useState<Depart | ''>('');
+  const [arrival, setArrival] = useState<Arrival | ''>('');
+  const [isLookingUp, startLookingUp] = useBooleanState(false);
 
-  const getRoute = () => {
-    // mutate 함수
-    startSearch();
+  const lookUp = () => {
+    if (!depart || !arrival) return;
+    startLookingUp();
   };
-  // console.log(direction, isSearching, getRoute);
 
   useScrollToTop();
 
@@ -31,21 +29,35 @@ export default function BusRoutePage() {
       <div className={styles.container}>
         <BusGuide />
         <div className={styles.place}>
-          <BusNotice isSearching={isSearching} />
+          <BusNotice isSearching={isLookingUp} />
           <DirectionSelect
-            onDirectionChange={setDirection}
-            isSearching={isSearching}
-            getRoute={getRoute}
+            depart={depart}
+            setDepart={setDepart}
+            arrival={arrival}
+            setArrival={setArrival}
+            isSearching={isLookingUp}
+            lookUp={lookUp}
           />
         </div>
-        {isSearching && (
+        {isLookingUp && (
           <div className={styles.results}>
             <div className={styles.options}>
-              <BusSearchOptions />
+              <BusSearchOptions
+                busType={busType}
+                setBusType={setBusType}
+                timeSelect={timeSelect}
+              />
             </div>
-            <div className={styles['route-list']}>
-              <RouteList />
-            </div>
+            <Suspense fallback={null}>
+              <div className={styles['route-list']}>
+                <RouteList
+                  timeSelect={timeSelect}
+                  busType={busType}
+                  depart={depart as Depart}
+                  arrival={arrival as Arrival}
+                />
+              </div>
+            </Suspense>
           </div>
         )}
       </div>
