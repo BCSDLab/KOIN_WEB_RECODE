@@ -7,6 +7,14 @@ export const formatTime = (hour: number, minute: number) => (
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
 );
 
+export const formatRelativeDate = (date: number) => {
+  const now = new Date();
+  if (now.getDate() === date) {
+    return '오늘';
+  }
+  return `${(now.getMonth() + 1)}월 ${date}일`;
+};
+
 export const getTimeDifference = (time1: string, time2: string) => { // HH:mm:ss
   const [hours1, minutes1] = time1.split(':').map(Number);
   const [hours2, minutes2] = time2.split(':').map(Number);

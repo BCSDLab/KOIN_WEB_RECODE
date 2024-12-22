@@ -6,6 +6,10 @@ import { BUS_TYPE_MAP, format12Hour } from 'pages/BusRoutePage/ts/busModules';
 import TimeDetail from 'pages/BusRoutePage/components/TimeDetail';
 import { UseTimeSelectReturn } from 'pages/BusRoutePage/hooks/useTimeSelect';
 import { BusTypeRequest } from 'api/bus/entity';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { formatRelativeDate } from 'pages/BusRoutePage/ts/timeModule';
 import styles from './BusSearchOptions.module.scss';
 
 interface BusSearchOptionsProps {
@@ -17,12 +21,15 @@ interface BusSearchOptionsProps {
 export default function BusSearchOptions({
   busType, setBusType, timeSelect,
 }: BusSearchOptionsProps) {
-  const { hour, minute } = timeSelect.timeState;
+  const { date, hour, minute } = timeSelect.timeState;
   const [isTimeDetailOpen, setIsTimeDetailOpen] = useState(false);
-  const [isBusTypeOpen, setIsBusTypeOpen] = useState(false);
+  const [isBusTypeOpen, , closeBusType, toggleBusType] = useBooleanState(false);
+  const { containerRef } = useOutsideClick({ onOutsideClick: closeBusType });
+
+  useEscapeKeyDown({ onEscape: closeBusType });
 
   return (
-    <div className={styles.box}>
+    <div className={styles.box} ref={containerRef}>
       <div className={styles['time-bus']}>
         <button
           type="button"
@@ -30,7 +37,7 @@ export default function BusSearchOptions({
           onClick={() => setIsTimeDetailOpen(!isTimeDetailOpen)}
         >
           <span className={styles['depart-time__text']}>
-            {format12Hour(hour, minute)}
+            {`${formatRelativeDate(date)} ${format12Hour(hour, minute)}`}
           </span>
           <span className={styles['depart-time__description']}>출발</span>
           <span
@@ -46,7 +53,7 @@ export default function BusSearchOptions({
           <button
             type="button"
             className={styles['bus-type__button']}
-            onClick={() => setIsBusTypeOpen(!isBusTypeOpen)}
+            onClick={toggleBusType}
           >
             <span className={styles['bus-type__text']}>
               {BUS_TYPE_MAP[busType]}
@@ -71,7 +78,7 @@ export default function BusSearchOptions({
                   })}
                   onClick={() => {
                     setBusType(type);
-                    setIsBusTypeOpen(false);
+                    closeBusType();
                   }}
                   type="button"
                 >
