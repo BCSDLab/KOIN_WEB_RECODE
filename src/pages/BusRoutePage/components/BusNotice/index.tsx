@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import InformationIcon from 'assets/svg/Bus/information-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
-import { useState } from 'react';
+import useBusNotice from 'pages/BusRoutePage/hooks/useBusNotice';
 import styles from './BusNotice.module.scss';
 
 interface BusNoticeProps {
@@ -9,11 +10,21 @@ interface BusNoticeProps {
 }
 
 export default function BusNotice({ isSearching }: BusNoticeProps) {
-  const [showNotice, setShowNotice] = useState(() => localStorage.getItem('noticeDismissed') !== 'true');
-  const content = '[긴급] 9.27(금) 대학등교방향 천안셔틀버스 터미널 미정차 알림(천안역에서 승차바람)';
+  const res = useBusNotice();
+  const { title } = res.data;
+  const lastBusNotice = localStorage.getItem('lastBusNotice');
+  const busNoticeDismissed = JSON.parse(localStorage.getItem('busNoticeDismissed') || 'false');
+  const isUpdated = lastBusNotice !== title;
+
+  if (isUpdated) {
+    localStorage.setItem('lastBusNotice', title);
+    localStorage.setItem('busNoticeDismissed', 'false');
+  }
+
+  const [showNotice, setShowNotice] = useState(() => !busNoticeDismissed || isUpdated);
 
   const handleDismissNotice = () => {
-    localStorage.setItem('noticeDismissed', 'true');
+    localStorage.setItem('busNoticeDismissed', 'true');
     setShowNotice(false);
   };
 
@@ -29,9 +40,9 @@ export default function BusNotice({ isSearching }: BusNoticeProps) {
       {showNotice && !isSearching && (
         <div className={styles['removable-notice']}>
           <InformationIcon />
-          <p className={styles['removable-notice__description']}>
-            {content}
-          </p>
+          <span className={styles['removable-notice__description']}>
+            {title}
+          </span>
           <button
             type="button"
             className={styles['close-button']}

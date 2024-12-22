@@ -105,3 +105,8 @@ export interface BusRouteParams {
   depart?: Depart;
   arrival?: Arrival;
 }
+
+export interface BusNoticeInfoResponse {
+  id: number;
+  title: string;
+}
