@@ -1,4 +1,8 @@
 import { CityBusParams } from 'api/bus/entity';
+import BusTimetable from 'assets/svg/IndexPage/Bus/bus-timetable.svg';
+import BusRoute from 'assets/svg/IndexPage/Bus/bus-route.svg';
+import BusUnibus from 'assets/svg/IndexPage/Bus/bus-unibus.svg';
+import ROUTES from './routes';
 
 export const BUS_TYPES = [{
   key: 'shuttle',
@@ -148,3 +152,25 @@ export const CITY_COURSES: CityBusParams[] = [
 
 export const DEFAULT_CITY_BUS_NUMBER = 400;
 export const TERMINAL_CITY_BUS = '종합터미널'; // 공통 시내버스 종점
+
+export const BUS_LINKS = [
+  {
+    key: 'timetable',
+    title: '버스 시간표',
+    subtitle: '바로가기',
+    link: '/bus/course',
+    SvgIcon: BusTimetable,
+  }, {
+    key: 'route',
+    title: '가장 빠른 버스',
+    subtitle: '조회하기',
+    link: ROUTES.BusRoute(),
+    SvgIcon: BusRoute,
+  }, {
+    key: 'unibus',
+    title: '유니버스',
+    subtitle: '바로가기',
+    link: 'https://koreatech.unibus.kr/',
+    SvgIcon: BusUnibus,
+  },
+] as const;
