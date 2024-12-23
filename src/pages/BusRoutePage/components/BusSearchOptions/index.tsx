@@ -2,14 +2,14 @@ import { useState } from 'react';
 import ChevronDown from 'assets/svg/Bus/chevron-down.svg';
 import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
 import { cn } from '@bcsdlab/utils';
-import { BUS_TYPE_MAP, format12Hour } from 'pages/BusRoutePage/ts/busModules';
+import { BUS_TYPE_MAP } from 'pages/BusRoutePage/ts/busModules';
 import TimeDetail from 'pages/BusRoutePage/components/TimeDetail';
 import { UseTimeSelectReturn } from 'pages/BusRoutePage/hooks/useTimeSelect';
 import { BusTypeRequest } from 'api/bus/entity';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { formatRelativeDate } from 'pages/BusRoutePage/ts/timeModule';
+import { format12Hour, formatRelativeDate } from 'pages/BusRoutePage/ts/timeModule';
 import styles from './BusSearchOptions.module.scss';
 
 interface BusSearchOptionsProps {
