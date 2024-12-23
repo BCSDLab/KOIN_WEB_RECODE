@@ -1,6 +1,3 @@
-import { Course } from 'api/bus/entity';
-
-// 시간 반환 함수
 const getHour = (second: number) => Math.floor(second / 60 / 60) % 24;
 
 const getMinute = (second: number) => Math.floor(second / 60) % 60;
@@ -48,21 +45,6 @@ export const directionToEnglish = (direction: string) => {
   return '';
 };
 
-export const getBusName = (busType: string) => {
-  if (busType === 'shuttle') return '학교셔틀';
-  if (busType === 'express') return '대성고속';
-  if (busType === 'city') return '시내버스';
-  return '';
-};
-
-export const getCourseName = (course: Course) => {
-  let name = course.region;
-  if (course.bus_type === 'shuttle') name += ' 셔틀';
-  if (course.direction === 'to') name += ' 등교';
-  if (course.direction === 'from') name += ' 하교';
-  return name;
-};
-
 export const BUS_TYPE_MAP = {
   ALL: '전체 차종',
   EXPRESS: '대성고속',
@@ -76,9 +58,3 @@ export const SHORT_BUS_TYPE_MAP = {
   shuttle: '학교',
   city: '시내',
 } as const;
-
-export const format12Hour = (hour: number, minute: number) => {
-  const period = hour >= 12 ? '오후' : '오전';
-  const displayHour = hour > 12 ? hour - 12 : hour;
-  return `${period} ${displayHour}:${String(minute).padStart(2, '0')}`;
-};
