@@ -1,0 +1,89 @@
+.box {
+  width: 720px;
+  height: 106px;
+  padding: 0 32px;
+  box-sizing: border-box;
+  border: 1px solid #eee;
+  background-color: white;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.route-info {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bus-type {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+
+  &__icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__name {
+    width: 48px;
+    height: 29px;
+    background-color: #d7e6fb;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+
+    &--express {
+      background-color: #d7e6fb;
+    }
+
+    &--shuttle {
+      background-color: #fbebd7;
+    }
+
+    &--city {
+      background-color: #d7fbeb;
+    }
+  }
+}
+
+.depart-time {
+  padding-top: 6px;
+  font-family: Pretendard, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.before-arrive {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 4px;
+
+  &__route-name {
+    color: #4b4b4b;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: center;
+  }
+
+  &__text {
+    color: #3a70e2;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
