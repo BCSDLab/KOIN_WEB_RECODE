@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .time-table-wrapper {
   width: 100%;
   border: 1px solid #eee;
@@ -57,6 +59,16 @@ $template-shuttle-colors: (
     color: #727272;
     font-family: Pretendard, sans-serif;
     font-size: 14px;
+  }
+}
+
+.time-table-wrapper {
+  height: auto;
+
+  @include media.media-breakpoint(mobile) {
+    position: relative;
+    overflow-y: auto;
+    border-radius: 0;
   }
 }
 
@@ -132,13 +144,6 @@ $template-shuttle-colors: (
     }
   }
 
-  &__node-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 16px 0 16px 24px;
-  }
-
   &__time-wrapper {
     display: flex;
     flex-direction: column;
@@ -160,6 +165,16 @@ $template-shuttle-colors: (
       max-width: 126px;
     }
   }
+
+  @include media.media-breakpoint(mobile) {
+    
+    &__node-wrapper {
+      display: flex;
+      position: relative;
+      flex-direction: column;
+    }
+  }
+
 }
 
 .detail__button {
@@ -180,6 +195,23 @@ $template-shuttle-colors: (
     color: #fff;
     font-weight: 600;
   }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    border-radius: 0;
+    padding: 12px 16px;
+    background-color: #fff;
+    color: #727272;
+
+    &--selected {
+      border-radius: 0;
+      background: #fff;
+      font-weight: 600;
+      line-height: 160%;
+      color: rgb(23 92 142);
+      border-bottom: 3px solid rgb(23 92 142);
+    }
+  }
 }
 
 .detail__button-wrapper {
@@ -188,4 +220,26 @@ $template-shuttle-colors: (
   gap: 12px;
   bottom: 24px;
   right: 24px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100vw;
+    position: relative;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.info-footer-mobile-detail {
+  display: flex;
+  color: #727272;
+  width: 100%;
+  align-items: center;
+  gap: 4px;
+  font-family: Pretendard, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  margin: 40px 0;
+  padding-left: 16px;
 }
