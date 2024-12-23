@@ -1,8 +1,8 @@
 import BusIcon from 'assets/svg/Bus/bus-icon.svg';
-import { SHORT_BUS_TYPE_MAP } from 'pages/BusRoutePage/ts/busModules';
+import { SHORT_BUS_TYPE_MAP } from 'pages/BusRoutePage/constants/busType';
 import { cn } from '@bcsdlab/utils';
 import { Schedule } from 'pages/BusRoutePage/ts/types';
-import { formatTimeDifference, getTimeDifference } from 'pages/BusRoutePage/ts/timeModule';
+import { formatTimeDifference, getTimeDifference } from 'pages/BusRoutePage/utils/timeModule';
 import styles from './BusRoute.module.scss';
 
 interface BusRouteProps {

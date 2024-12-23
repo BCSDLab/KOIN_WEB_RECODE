@@ -108,39 +108,6 @@ export const EXPRESS_COURSES = [
   },
 ] as const;
 
-export interface BusLink {
-  label: string;
-  link: string;
-  key: string;
-  type: typeof BUS_TYPES[number];
-}
-
-export const busLink: BusLink[] = [
-  {
-    label: '유니버스 바로가기',
-    link: 'https://koreatech.unibus.kr/',
-    key: 'shuttle',
-    type: BUS_TYPES[0],
-  },
-  {
-    label: '시간표 보러가기',
-    link: '/bus',
-    key: 'express',
-    type: BUS_TYPES[1],
-  },
-  {
-    label: '시간표 보러가기',
-    link: '/bus',
-    key: 'city',
-    type: BUS_TYPES[2],
-  },
-];
-
-export const cityBusDirections = [
-  { label: '병천 → 터미널', value: 'from' },
-  { label: '터미널 → 병천', value: 'to' },
-];
-
 export const CITY_COURSES: CityBusParams[] = [
   { bus_number: 400, direction: '병천3리' },
   { bus_number: 402, direction: '황사동' },
