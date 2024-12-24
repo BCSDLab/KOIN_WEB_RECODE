@@ -167,12 +167,8 @@ $template-shuttle-colors: (
   }
 
   @include media.media-breakpoint(mobile) {
+
     
-    &__node-wrapper {
-      display: flex;
-      position: relative;
-      flex-direction: column;
-    }
   }
 
 }

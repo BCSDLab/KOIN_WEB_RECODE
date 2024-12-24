@@ -64,7 +64,7 @@ function TemplateShuttleVersion({
     <div className={styles.templateShuttle}>
       <h2 className={styles.templateShuttle__title}>{region}</h2>
       <div>
-        {filteredRoutes(category).map((route) => (
+        {filteredRoutes(category).map((route, idx) => (
           <button
             type="button"
             className={styles.templateShuttle__list_wrapper}
@@ -85,6 +85,7 @@ function TemplateShuttleVersion({
             <RightArrow />
           </button>
         ))}
+        <div className={styles['main-timetable-mobile__line']} />
       </div>
     </div>
   );
@@ -103,6 +104,7 @@ function ShuttleTimetable() {
     setSelectedRouteId(id);
   };
 
+  console.log(shuttleCourse.route_regions);
   return (
     <div className={styles['timetable-container']}>
       <div className={styles['course-category']}>
@@ -158,20 +160,14 @@ function ShuttleTimetable() {
           </div>
         ) : (
           <div className={styles['main-timetable-mobile']}>
-            {shuttleCourse.route_regions.map((text, index) => (
-              <>
-                <TemplateShuttleVersion
-                  routeIdHandler={changeRouteId}
-                  key={text.region}
-                  region={text.region}
-                  routes={text.routes}
-                  category={category}
-                />
-                {index < shuttleCourse.route_regions.length - 1 && (
-                  <div className={styles['main-timetable-mobile__line']}>ㅤ</div>
-                )}
-              </>
-
+            {shuttleCourse.route_regions.map((text) => (
+              <TemplateShuttleVersion
+                routeIdHandler={changeRouteId}
+                key={text.region}
+                region={text.region}
+                routes={text.routes}
+                category={category}
+              />
             ))}
             <div className={styles['info-footer-mobile']}>
               <div className={styles['info-footer-mobile__text']}>
@@ -241,7 +237,7 @@ function ExpressTimetable() {
   return (
     <div className={styles['timetable-container']}>
       <div className={styles['course-category']}>
-        <div className={styles['course-category__button']}>기점</div>
+        <div className={styles['course-category__button']}>운행</div>
         {EXPRESS_COURSES.map((value, index) => (
           <button
             className={cn({

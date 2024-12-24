@@ -95,6 +95,7 @@
 
   @include media.media-breakpoint(mobile) {
     overflow: auto;
+    gap: 0;
   }
 }
 
@@ -423,6 +424,7 @@ $template-shuttle-colors: (
   float: left;
   gap: 8px;
   padding: 8px 24px;
+  margin-bottom: 20px;
 
   &__text {
     font-family: Pretendard, sans-serif;
