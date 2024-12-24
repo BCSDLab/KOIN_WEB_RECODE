@@ -54,7 +54,10 @@ function BusCoursePage() {
             type="button"
             className={styles['close-button']}
             aria-label="Close Button"
-            onClick={() => setIsTooltipVisible(false)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsTooltipVisible(false);
+            }}
           >
             <Close />
           </button>
