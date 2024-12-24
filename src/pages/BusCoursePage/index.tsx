@@ -3,6 +3,7 @@ import InfoIcon from 'assets/svg/info.svg';
 import Close from 'assets/svg/close.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BusTimetable from './BusTimetable';
 import styles from './BusCoursePage.module.scss';
 
@@ -10,6 +11,7 @@ function BusCoursePage() {
   const { busNoticeInfo } = useBusNoticeInfo();
   const [isTooltipVisible, setIsTooltipVisible] = useState(true);
   const isMobile = useMediaQuery();
+  const navigate = useNavigate();
 
   return (
     <main className={styles.container}>
@@ -32,7 +34,12 @@ function BusCoursePage() {
       )}
 
       {isTooltipVisible ? (
-        <div className={styles['notion-info']}>
+        <button
+          type="button"
+          className={styles['notion-info']}
+          onClick={() => navigate(`/board/notice/${busNoticeInfo?.id ?? ''}`)}
+          aria-label="Info Button"
+        >
           <InfoIcon />
           {busNoticeInfo?.title ? (
             <div className={styles['notion-info__info-title']}>
@@ -51,7 +58,7 @@ function BusCoursePage() {
           >
             <Close />
           </button>
-        </div>
+        </button>
       ) : (
         <div className={styles['notion-info-closed']}>
           <div

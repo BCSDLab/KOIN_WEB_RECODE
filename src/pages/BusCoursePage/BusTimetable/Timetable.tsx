@@ -36,6 +36,7 @@ function TemplateShuttleVersion({
   routes,
   category,
 }: TemplateShuttleVersionProps) {
+  const isMobile = useMediaQuery();
   const filteredRoutes = (route: string) => routes.filter(({ type }) => {
     if (route === '전체') {
       return true;
@@ -64,7 +65,7 @@ function TemplateShuttleVersion({
     <div className={styles.templateShuttle}>
       <h2 className={styles.templateShuttle__title}>{region}</h2>
       <div>
-        {filteredRoutes(category).map((route, idx) => (
+        {filteredRoutes(category).map((route) => (
           <button
             type="button"
             className={styles.templateShuttle__list_wrapper}
@@ -85,7 +86,7 @@ function TemplateShuttleVersion({
             <RightArrow />
           </button>
         ))}
-        <div className={styles['main-timetable-mobile__line']} />
+        {isMobile && <div className={styles['main-timetable-mobile__line']} /> }
       </div>
     </div>
   );
