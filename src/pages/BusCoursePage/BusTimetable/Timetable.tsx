@@ -94,7 +94,7 @@ function TemplateShuttleVersion({
 
 function ShuttleTimetable() {
   const { shuttleCourse } = useShuttleCourse();
-  const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
+  const [selectedCourseId] = useIndexValueSelect();
   const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
   const isMobile = useMediaQuery();
   const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
@@ -105,7 +105,6 @@ function ShuttleTimetable() {
     setSelectedRouteId(id);
   };
 
-  console.log(shuttleCourse.route_regions);
   return (
     <div className={styles['timetable-container']}>
       <div className={styles['course-category']}>
@@ -211,12 +210,12 @@ function ShuttleTimetable() {
   );
 }
 
-function Template({ headers, arrivalList }: { headers: string[], arrivalList: string[][] }) {
+function Template({ arrivalList }: { arrivalList: string[][] }) {
   return (
     <div className={styles.timetable} aria-expanded="true">
       <div className={styles['timetable__label-wrapper']}>
-        <div className={styles.timetable__label}>오전</div>
-        <div className={styles.timetable__label}>오후</div>
+        <div className={styles.timetable__label}>{BUS_TYPES[1].tableHeaders[0]}</div>
+        <div className={styles.timetable__label}>{BUS_TYPES[1].tableHeaders[1]}</div>
       </div>
       {arrivalList.map(([arrival, time], idx) => (
         // eslint-disable-next-line react/no-array-index-key
@@ -263,8 +262,6 @@ function ExpressTimetable() {
       </div>
 
       <Template
-        headers={BUS_TYPES[1].tableHeaders}
-        // arrivalList={timetable.info.bus_timetables.map((info) => [info.departure, info.arrival])}
         arrivalList={(() => {
           const getHours = (time: string) => parseInt(time.split(':')[0], 10);
           const morning = timetable.info.bus_timetables
@@ -383,7 +380,6 @@ function CityTimetable() {
         </div>
       </div>
       <Template
-        headers={BUS_TYPES[2].tableHeaders}
         arrivalList={getTodayTimetable()}
       />
 

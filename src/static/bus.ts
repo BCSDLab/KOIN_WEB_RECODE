@@ -11,7 +11,7 @@ export const BUS_TYPES = [{
 }, {
   key: 'express',
   tabName: '대성',
-  tableHeaders: ['출발시간', '도착시간'],
+  tableHeaders: ['오전', '오후'],
 }, {
   key: 'city',
   tabName: '시내',

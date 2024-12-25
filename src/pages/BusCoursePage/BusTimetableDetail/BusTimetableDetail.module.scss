@@ -4,6 +4,14 @@
   width: 100%;
   border: 1px solid #eee;
   border-radius: 16px;
+  height: auto;
+
+  @include media.media-breakpoint(mobile) {
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 0;
+  }
 }
 
 .time-table-title {
@@ -59,16 +67,6 @@ $template-shuttle-colors: (
     color: #727272;
     font-family: Pretendard, sans-serif;
     font-size: 14px;
-  }
-}
-
-.time-table-wrapper {
-  height: auto;
-
-  @include media.media-breakpoint(mobile) {
-    position: relative;
-    overflow-y: auto;
-    border-radius: 0;
   }
 }
 
@@ -165,12 +163,6 @@ $template-shuttle-colors: (
       max-width: 126px;
     }
   }
-
-  @include media.media-breakpoint(mobile) {
-
-    
-  }
-
 }
 
 .detail__button {
