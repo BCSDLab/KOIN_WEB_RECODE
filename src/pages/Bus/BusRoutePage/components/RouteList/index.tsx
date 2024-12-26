@@ -1,7 +1,7 @@
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
-import BusRoute from 'pages/BusRoutePage/components/BusRoute';
-import useBusRoute from 'pages/BusRoutePage/hooks/useBusRoute';
-import { UseTimeSelectReturn } from 'pages/BusRoutePage/hooks/useTimeSelect';
+import BusRoute from 'pages/Bus/BusRoutePage/components/BusRoute';
+import useBusRoute from 'pages/Bus/BusRoutePage/hooks/useBusRoute';
+import { UseTimeSelectReturn } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import styles from './RouteList.module.scss';
 
 interface RouteListProps {

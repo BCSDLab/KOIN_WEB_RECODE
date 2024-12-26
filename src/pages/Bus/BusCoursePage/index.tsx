@@ -1,6 +1,6 @@
-import useBusNoticeInfo from 'pages/BusCoursePage/hooks/useBusNoticeInfo';
+import useBusNoticeInfo from 'pages/Bus/BusCoursePage/hooks/useBusNoticeInfo';
 import InfoIcon from 'assets/svg/info.svg';
-import Close from 'assets/svg/close.svg';
+// import Close from 'assets/svg/close.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -59,7 +59,7 @@ function BusCoursePage() {
               setIsTooltipVisible(false);
             }}
           >
-            <Close />
+            {/* <Close /> */}
           </button>
         </button>
       ) : (

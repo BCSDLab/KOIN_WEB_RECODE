@@ -2,8 +2,8 @@ import { cn } from '@bcsdlab/utils';
 import { DepartArrivalPlace } from 'api/bus/entity';
 import {
   locationLabels, locations, LOCATION_MAP, REVERSE_LOCATION_MAP,
-} from 'pages/BusRoutePage/constants/location';
-import { LocationDisplay } from 'pages/BusRoutePage/ts/types';
+} from 'pages/Bus/BusRoutePage/constants/location';
+import { LocationDisplay } from 'pages/Bus/BusRoutePage/ts/types';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';

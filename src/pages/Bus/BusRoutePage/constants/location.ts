@@ -1,4 +1,4 @@
-import { LocationDisplay } from 'pages/BusRoutePage/ts/types';
+import { LocationDisplay } from 'pages/Bus/BusRoutePage/ts/types';
 
 export const LOCATION_TYPE_KEY = {
   depart: 'depart',

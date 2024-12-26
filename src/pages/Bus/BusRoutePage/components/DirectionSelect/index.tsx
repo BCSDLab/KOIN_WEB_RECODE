@@ -1,8 +1,8 @@
 import { cn } from '@bcsdlab/utils';
 import { Arrival, Depart } from 'api/bus/entity';
 import ExchangeIcon from 'assets/svg/Bus/exchange-icon.svg';
-import PlaceSelect from 'pages/BusRoutePage/components/PlaceSelect';
-import { LOCATION_TYPE_KEY } from 'pages/BusRoutePage/constants/location';
+import PlaceSelect from 'pages/Bus/BusRoutePage/components/PlaceSelect';
+import { LOCATION_TYPE_KEY } from 'pages/Bus/BusRoutePage/constants/location';
 import styles from './DirectionSelect.module.scss';
 
 interface DirectionSelectProps {

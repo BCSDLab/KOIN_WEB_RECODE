@@ -2,14 +2,10 @@ import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import InformationIcon from 'assets/svg/Bus/information-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
-import useBusNotice from 'pages/BusRoutePage/hooks/useBusNotice';
+import useBusNotice from 'pages/Bus/BusRoutePage/hooks/useBusNotice';
 import styles from './BusNotice.module.scss';
 
-interface BusNoticeProps {
-  isSearching: boolean,
-}
-
-export default function BusNotice({ isSearching }: BusNoticeProps) {
+export default function BusNotice() {
   const res = useBusNotice();
   const { title } = res.data;
   const lastBusNotice = localStorage.getItem('lastBusNotice');
@@ -34,10 +30,10 @@ export default function BusNotice({ isSearching }: BusNoticeProps) {
     <div
       className={cn({
         [styles.container]: true,
-        [styles['container--searching']]: isSearching,
+        // [styles['container--searching']]: isSearching,
       })}
     >
-      {showNotice && !isSearching && (
+      {showNotice && (
         <div className={styles['removable-notice']}>
           <InformationIcon />
           <span className={styles['removable-notice__description']}>

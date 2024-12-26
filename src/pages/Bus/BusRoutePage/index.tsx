@@ -1,10 +1,10 @@
 import { Suspense, useState } from 'react';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import BusNotice from 'pages/BusRoutePage/components/BusNotice';
-import DirectionSelect from 'pages/BusRoutePage/components/DirectionSelect';
+import BusNotice from 'pages/Bus/BusRoutePage/components/BusNotice';
+import DirectionSelect from 'pages/Bus/BusRoutePage/components/DirectionSelect';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
-import BusGuide from 'pages/BusRoutePage/components/BusGuide';
+import BusGuide from 'pages/Bus/BusRoutePage/components/BusGuide';
 import RouteList from './components/RouteList';
 import BusSearchOptions from './components/BusSearchOptions';
 import { useTimeSelect } from './hooks/useTimeSelect';
@@ -29,7 +29,7 @@ export default function BusRoutePage() {
       <div className={styles.container}>
         <BusGuide />
         <div className={styles.place}>
-          <BusNotice isSearching={isLookingUp} />
+          <BusNotice />
           <DirectionSelect
             depart={depart}
             setDepart={setDepart}
