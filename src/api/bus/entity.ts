@@ -98,6 +98,41 @@ export interface CityInfo {
   }[];
 }
 
+export interface ShuttleCourseResponse {
+  route_regions: {
+    region: string;
+    routes: {
+      id: string;
+      type: string;
+      route_name: string;
+      sub_name: string;
+    }[];
+  }[];
+
+  semester_info: {
+    name: string;
+    from: string;
+    to: string;
+  }
+}
+
+export interface ShuttleTimetableDetailInfoResponse {
+  id: string,
+  region: string,
+  route_type: string,
+  route_name: string,
+  sub_name: null,
+  node_info: {
+    name: string,
+    detail: string,
+  }[],
+  route_info: {
+    name: string,
+    detail: string,
+    arrival_time: string[],
+  }[],
+}
+
 export interface BusRouteParams {
   date: string; // yyyy-MM-dd
   time: string; // HH:mm
