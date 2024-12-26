@@ -1,13 +1,14 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
-import InformationIcon from 'assets/svg/Bus/information-icon.svg';
+import InformationIcon from 'assets/svg/common/information/information-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
-import useBusNotice from 'pages/Bus/BusRoutePage/hooks/useBusNotice';
+import useBusNotice from 'pages/Bus/components/BusNotice/hooks/useBusNotice';
 import styles from './BusNotice.module.scss';
 
 export default function BusNotice() {
-  const res = useBusNotice();
-  const { title } = res.data;
+  const navigate = useNavigate();
+  const { id, title } = useBusNotice().data;
   const lastBusNotice = localStorage.getItem('lastBusNotice');
   const busNoticeDismissed = JSON.parse(localStorage.getItem('busNoticeDismissed') || 'false');
   const isUpdated = lastBusNotice !== title;
@@ -19,7 +20,11 @@ export default function BusNotice() {
 
   const [showNotice, setShowNotice] = useState(() => !busNoticeDismissed || isUpdated);
 
-  const handleDismissNotice = () => {
+  const handleClickNavigateNotice = () => {
+    navigate(`/board/notice/${id}`);
+  };
+
+  const handleClickDismissNotice = () => {
     localStorage.setItem('busNoticeDismissed', 'true');
     setShowNotice(false);
   };
@@ -36,13 +41,17 @@ export default function BusNotice() {
       {showNotice && (
         <div className={styles['removable-notice']}>
           <InformationIcon />
-          <span className={styles['removable-notice__description']}>
+          <button
+            type="button"
+            className={styles['removable-notice__description']}
+            onClick={handleClickNavigateNotice}
+          >
             {title}
-          </span>
+          </button>
           <button
             type="button"
             className={styles['close-button']}
-            onClick={handleDismissNotice}
+            onClick={handleClickDismissNotice}
             aria-label="공지 닫기"
           >
             <CloseIcon aria-hidden="true" />

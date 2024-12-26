@@ -1,17 +1,10 @@
-import useBusNoticeInfo from 'pages/Bus/BusCoursePage/hooks/useBusNoticeInfo';
-import InfoIcon from 'assets/svg/info.svg';
-// import Close from 'assets/svg/close.svg';
+import BusNotice from 'pages/Bus/components/BusNotice';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import BusTimetable from './BusTimetable';
 import styles from './BusCoursePage.module.scss';
 
 function BusCoursePage() {
-  const { busNoticeInfo } = useBusNoticeInfo();
-  const [isTooltipVisible, setIsTooltipVisible] = useState(true);
   const isMobile = useMediaQuery();
-  const navigate = useNavigate();
 
   return (
     <main className={styles.container}>
@@ -33,43 +26,7 @@ function BusCoursePage() {
         </header>
       )}
 
-      {isTooltipVisible ? (
-        <button
-          type="button"
-          className={styles['notion-info']}
-          onClick={() => navigate(`/board/notice/${busNoticeInfo?.id ?? ''}`)}
-          aria-label="Info Button"
-        >
-          <InfoIcon />
-          {busNoticeInfo?.title ? (
-            <div className={styles['notion-info__info-title']}>
-              {busNoticeInfo.title.length > 30
-                ? `${busNoticeInfo.title.slice(0, 30)}...`
-                : busNoticeInfo.title}
-            </div>
-          ) : (
-            <div className={styles['notion-info__placeholder']} />
-          )}
-          <button
-            type="button"
-            className={styles['close-button']}
-            aria-label="Close Button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsTooltipVisible(false);
-            }}
-          >
-            {/* <Close /> */}
-          </button>
-        </button>
-      ) : (
-        <div className={styles['notion-info-closed']}>
-          <div
-            className={styles['notion-info-closed__button']}
-          />
-        </div>
-
-      )}
+      <BusNotice />
 
       <BusTimetable />
     </main>

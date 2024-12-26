@@ -1,4 +1,4 @@
-import BusIcon from 'assets/svg/Bus/bus-icon.svg';
+import BusIcon from 'assets/svg/Bus/bus-icon-28x28.svg';
 import { SHORT_BUS_TYPE_MAP } from 'pages/Bus/BusRoutePage/constants/busType';
 import { cn } from '@bcsdlab/utils';
 import { Schedule } from 'pages/Bus/BusRoutePage/ts/types';

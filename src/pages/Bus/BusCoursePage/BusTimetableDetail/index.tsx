@@ -1,6 +1,6 @@
 import useShuttleTimetableDetail from 'pages/Bus/BusCoursePage/hooks/useShuttleTimetableDetail';
 import { useEffect, useState } from 'react';
-import BusIcon from 'assets/svg/bus.svg';
+import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import InfomationIcon from 'assets/svg/Bus/info-gray.svg';

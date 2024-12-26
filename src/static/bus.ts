@@ -158,7 +158,7 @@ export const BUS_LINKS = [
     key: 'timetable',
     title: '버스 시간표',
     subtitle: '바로가기',
-    link: '/bus/course',
+    link: ROUTES.BusCourse(),
     SvgIcon: BusTimetable,
   }, {
     key: 'route',

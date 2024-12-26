@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import BusNotice from 'pages/Bus/BusRoutePage/components/BusNotice';
+import BusNotice from 'pages/Bus/components/BusNotice';
 import DirectionSelect from 'pages/Bus/BusRoutePage/components/DirectionSelect';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
