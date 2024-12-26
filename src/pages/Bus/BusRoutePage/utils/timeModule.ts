@@ -6,14 +6,17 @@ export const formatTime = (hour: number, minute: number) => ( // HH:mm
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
 );
 
-export const formatRelativeDate = (date: number) => { // ex. 오늘 or 7월 9일
+export const formatRelativeDate = (date: Date) => { // ex. 오늘 or 7월 9일
   const now = new Date();
 
-  if (now.getDate() === date) return '오늘';
-  return `${(now.getMonth() + 1)}월 ${date}일`;
+  if (now.getDate() === date.getDate()) return '오늘';
+  return `${(date.getMonth() + 1)}월 ${date.getDate()}일`;
 };
 
-export const format12Hour = (hour: number, minute: number) => { // ex. 오전 01:01
+export const format12Hour = (date: Date) => { // ex. 오전 01:01
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+
   const period = hour >= 12 ? '오후' : '오전';
   const displayHour = hour > 12 ? hour - 12 : hour;
   return `${period} ${String(displayHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;

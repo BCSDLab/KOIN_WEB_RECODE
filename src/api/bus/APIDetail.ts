@@ -96,7 +96,7 @@ export class BusRouteInfo<R extends BusRouteInfoResponseDTO> implements APIReque
   auth = false;
 
   constructor({
-    date, time, busType, depart, arrival,
+    dayOfMonth: date, time, busType, depart, arrival,
   }: BusRouteParams) {
     this.path = `/bus/route?date=${date}&time=${time}&bus_type=${busType}&depart=${depart}&arrival=${arrival}`;
   }

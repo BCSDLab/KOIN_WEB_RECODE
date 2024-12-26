@@ -8,11 +8,11 @@ import styles from './BusRoute.module.scss';
 interface BusRouteProps {
   schedule: Schedule;
   isSameDay: boolean;
-  departTime: string; // HH:mm:ss
+  selectedDepartTime: string; // HH:mm:ss
 }
 
 export default function BusRoute({
-  schedule, isSameDay, departTime: selectedDepartTime,
+  schedule, isSameDay, selectedDepartTime,
 }: BusRouteProps) {
   const { busType, busName, departTime } = schedule;
 
@@ -36,7 +36,7 @@ export default function BusRoute({
           </div>
         </div>
         <div className={styles['depart-time']}>
-          {`${Number(departTime.slice(0, 2)) > 12 ? '오전' : '오후'} ${departTime.slice(0, 5)}`}
+          {`${Number(departTime.slice(0, 2)) > 12 ? '오후' : '오전'} ${departTime.slice(0, 5)}`}
         </div>
       </div>
       <div className={styles['before-arrive']}>

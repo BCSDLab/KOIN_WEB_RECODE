@@ -134,7 +134,7 @@ export interface ShuttleTimetableDetailInfoResponse {
 }
 
 export interface BusRouteParams {
-  date: string; // yyyy-MM-dd
+  dayOfMonth: string; // yyyy-MM-dd
   time: string; // HH:mm
   busType: BusTypeRequest;
   depart?: Depart;

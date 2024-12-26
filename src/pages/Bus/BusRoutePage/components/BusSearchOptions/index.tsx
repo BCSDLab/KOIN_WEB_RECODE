@@ -21,7 +21,7 @@ interface BusSearchOptionsProps {
 export default function BusSearchOptions({
   busType, setBusType, timeSelect,
 }: BusSearchOptionsProps) {
-  const { date, hour, minute } = timeSelect.timeState;
+  const { nowDate } = timeSelect.timeState;
   const [isTimeDetailOpen, setIsTimeDetailOpen] = useState(false);
   const [isBusTypeOpen, , closeBusType, toggleBusType] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeBusType });
@@ -37,7 +37,7 @@ export default function BusSearchOptions({
           onClick={() => setIsTimeDetailOpen(!isTimeDetailOpen)}
         >
           <span className={styles['depart-time__text']}>
-            {`${formatRelativeDate(date)} ${format12Hour(hour, minute)}`}
+            {`${formatRelativeDate(nowDate)} ${format12Hour(nowDate)}`}
           </span>
           <span className={styles['depart-time__description']}>출발</span>
           <span

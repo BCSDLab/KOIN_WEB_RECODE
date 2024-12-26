@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'pages/Bus/BusRoutePage/components/SelectDropdown';
 import styles from './TimeDetail.module.scss';
@@ -8,55 +7,35 @@ interface TimeDetailProps {
 }
 
 export default function TimeDetail({ timeSelect }: TimeDetailProps) {
-  const { date, hour, minute } = timeSelect.timeState;
-  const { setDate, setHour, setMinute } = timeSelect.timeHandler;
-
-  const [selectedDate, setSelectedDate] = useState(date);
-  const [selectedHour, setSelectedHour] = useState(hour);
-  const [selectedMinute, setSelectedMinute] = useState(minute);
+  const { hour, minute } = timeSelect.timeState;
+  const {
+    setNow, setDayOfMonth: setDate, setHour, setMinute,
+  } = timeSelect.timeHandler;
 
   const now = new Date();
-  const last = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const dates = [...Array(90)].map((_, index) => {
+    const currentDate = new Date(now);
+    currentDate.setDate(now.getDate() + index);
 
-  const dates = [...Array(last)].map((_, index) => {
-    const currentDate = index + 1;
-    const enable = currentDate >= now.getDate();
-    let label = '';
-
-    if (currentDate === now.getDate()) {
-      label = '오늘';
-    } else if (currentDate === now.getDate() + 1) {
-      label = '내일';
-    } else {
-      label = `${now.getMonth() + 1}월 ${currentDate}일`;
-    }
+    let label = `${currentDate.getMonth() + 1}월 ${currentDate.getDate()}일`;
+    if (index === 0) label = '오늘';
+    if (index === 1) label = '내일';
 
     return {
-      date: currentDate,
-      enable,
       label,
+      value: index,
     };
   });
 
   const hours = [...Array(24)].map((_, index) => ({
-    hour: index,
-    enable: selectedDate > now.getDate() || index >= now.getHours(),
     label: `${index}시`,
+    value: index,
   }));
 
   const minutes = [...Array(6)].map((_, index) => ({
-    minute: index * 10,
-    enable: selectedDate > now.getDate()
-    || selectedHour > now.getHours()
-    || index * 10 >= now.getMinutes(),
     label: `${index * 10}분`,
+    value: index * 10,
   }));
-
-  const handleTimeDetailButtonClick = () => {
-    setDate(selectedDate);
-    setHour(selectedHour);
-    setMinute(selectedMinute);
-  };
 
   return (
     <div className={styles.box}>
@@ -66,27 +45,27 @@ export default function TimeDetail({ timeSelect }: TimeDetailProps) {
       </div>
       <div className={styles['time-detail']}>
         <SelectDropdown
-          type="left"
-          values={dates}
-          selectedValue={selectedDate}
-          setSelectedValue={setSelectedDate}
+          type="dayOfMonth"
+          options={dates}
+          initialOption={dates[0].label}
+          setValue={setDate}
         />
         <SelectDropdown
-          type="middle"
-          values={hours}
-          selectedValue={selectedHour}
-          setSelectedValue={setSelectedHour}
+          type="hour"
+          options={hours}
+          initialOption={`${hour}시`}
+          setValue={setHour}
         />
         <SelectDropdown
-          type="right"
-          values={minutes}
-          selectedValue={selectedMinute}
-          setSelectedValue={setSelectedMinute}
+          type="minute"
+          options={minutes}
+          initialOption={`${minute}분`}
+          setValue={setMinute}
         />
         <button
           className={styles['time-detail__button']}
           type="button"
-          onClick={handleTimeDetailButtonClick}
+          onClick={() => setNow(new Date())}
         >
           지금 출발
         </button>

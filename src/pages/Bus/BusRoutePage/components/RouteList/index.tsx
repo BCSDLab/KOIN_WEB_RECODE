@@ -16,7 +16,7 @@ export default function RouteList({
 }: RouteListProps) {
   const { formattedValues } = timeSelect;
   const { data: routeInfo } = useBusRoute({
-    date: formattedValues.date,
+    dayOfMonth: formattedValues.date,
     time: formattedValues.time,
     busType,
     depart,
@@ -35,7 +35,7 @@ export default function RouteList({
           key={currentSchedule.busName + currentSchedule.departTime}
           schedule={currentSchedule}
           isSameDay={isSameDay}
-          departTime={departTime}
+          selectedDepartTime={departTime}
         />
       ))}
     </div>
