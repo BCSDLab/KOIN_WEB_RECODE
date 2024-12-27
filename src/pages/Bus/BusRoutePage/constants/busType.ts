@@ -8,6 +8,6 @@ export const BUS_TYPE_MAP = {
 export const SHORT_BUS_TYPE_MAP = {
   all: '전체',
   express: '대성',
-  shuttle: '학교',
+  shuttle: '셔틀',
   city: '시내',
 } as const;

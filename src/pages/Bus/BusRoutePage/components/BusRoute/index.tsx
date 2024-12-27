@@ -21,23 +21,23 @@ export default function BusRoute({ schedule }: BusRouteProps) {
           </div>
           <div
             className={cn({
-              [styles['bus-type__name']]: true,
-              [styles[`bus-type__name--${busType}`]]: true,
+              [styles['bus-type__chip']]: true,
+              [styles[`bus-type__chip--${busType}`]]: true,
             })}
           >
             {SHORT_BUS_TYPE_MAP[busType]}
           </div>
+          {busType === 'city' && (
+            <span className={styles['bus-type__bus-number']}>
+              {`${busName}번`}
+            </span>
+          )}
         </div>
         <div className={styles['depart-time']}>
           {`${Number(departTime.slice(0, 2)) < 12 ? '오전' : '오후'} ${departTime.slice(0, 5)}`}
         </div>
       </div>
       <div className={styles['before-arrive']}>
-        {busType === 'city' && (
-          <span className={styles['before-arrive__route-name']}>
-            {`${busName}번`}
-          </span>
-        )}
         <span className={styles['before-arrive__text']}>
           {formatTimeDifference(departTime, formatTimeWithSeconds(new Date()))}
         </span>

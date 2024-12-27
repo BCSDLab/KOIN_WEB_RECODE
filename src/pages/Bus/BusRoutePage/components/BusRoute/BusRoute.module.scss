@@ -31,7 +31,7 @@
     align-items: center;
   }
 
-  &__name {
+  &__chip {
     width: 48px;
     height: 29px;
     background-color: #d7e6fb;
@@ -39,6 +39,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 2px;
     font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 500;
@@ -56,6 +57,15 @@
       background-color: #d7fbeb;
     }
   }
+
+  &__bus-number {
+    color: #4b4b4b;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: center;
+  }
 }
 
 .depart-time {
@@ -66,20 +76,6 @@
 }
 
 .before-arrive {
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  gap: 4px;
-
-  &__route-name {
-    color: #4b4b4b;
-    font-family: Pretendard, sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 32px;
-    text-align: center;
-  }
-
   &__text {
     color: #3a70e2;
     font-family: Pretendard, sans-serif;
