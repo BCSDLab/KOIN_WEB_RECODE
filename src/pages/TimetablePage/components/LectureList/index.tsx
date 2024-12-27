@@ -95,6 +95,7 @@ function CurrentSemesterLectureList({
             }
             if (!myLectures) {
               addMyLecture(clickedLecture);
+              return;
             }
             const isContainedLecture = myLectures.some(
               (lecture) => lecture.code === clickedLecture.code
