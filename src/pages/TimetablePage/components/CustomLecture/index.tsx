@@ -134,6 +134,8 @@ function CustomLecture({ frameId }: { frameId: number }) {
 
     if (hasOverlapInCurrent) return true;
 
+    if (!existingLectures) return false;
+
     // 기존 강의와 중복 검사
     return existingLectures.some((myLecture) => {
       if (excludeLectureId && myLecture.id === excludeLectureId) {

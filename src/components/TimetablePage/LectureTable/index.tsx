@@ -145,7 +145,7 @@ function LectureTable({
           <div
             className={cn({
               [styles.table__row]: true,
-              [styles['table__row--include']]: version === 'semesterLectureList' ? myLectures.some(
+              [styles['table__row--include']]: (version === 'semesterLectureList' && myLectures) ? myLectures.some(
                 (item) => item.code === lecture.code
                   && item.lecture_class === lecture.lecture_class,
               ) : false,
