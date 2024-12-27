@@ -22,7 +22,7 @@ export const format12Hour = (date: Date) => { // ex. 오전 01:01
   return `${period} ${String(displayHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 };
 
-export const getTimeDifference = (time1: string, time2: string) => { // HH:mm:ss
+export const getTimeDifference = (time1: string, time2: string) => { // time1, time2: HH:mm:ss
   const [hours1, minutes1] = time1.split(':').map(Number);
   const [hours2, minutes2] = time2.split(':').map(Number);
 

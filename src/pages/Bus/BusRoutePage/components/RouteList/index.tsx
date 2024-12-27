@@ -2,6 +2,7 @@ import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
 import BusRoute from 'pages/Bus/BusRoutePage/components/BusRoute';
 import useBusRoute from 'pages/Bus/BusRoutePage/hooks/useBusRoute';
 import { UseTimeSelectReturn } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
+import { formatDate } from 'pages/Bus/BusRoutePage/utils/timeModule';
 import styles from './RouteList.module.scss';
 
 interface RouteListProps {
@@ -26,7 +27,8 @@ export default function RouteList({
   if (!routeInfo) return null;
 
   const { departDate, departTime, schedule } = routeInfo;
-  const isSameDay = departDate === formattedValues.date;
+  const today = new Date();
+  const isToday = departDate === formatDate(today, today.getDate());
 
   return (
     <div className={styles.container}>
@@ -34,7 +36,7 @@ export default function RouteList({
         <BusRoute
           key={currentSchedule.busName + currentSchedule.departTime}
           schedule={currentSchedule}
-          isSameDay={isSameDay}
+          isToday={isToday}
           selectedDepartTime={departTime}
         />
       ))}

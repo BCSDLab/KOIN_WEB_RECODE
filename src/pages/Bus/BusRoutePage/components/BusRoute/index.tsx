@@ -2,22 +2,19 @@ import BusIcon from 'assets/svg/Bus/bus-icon-28x28.svg';
 import { SHORT_BUS_TYPE_MAP } from 'pages/Bus/BusRoutePage/constants/busType';
 import { cn } from '@bcsdlab/utils';
 import { Schedule } from 'pages/Bus/BusRoutePage/ts/types';
-import { formatTimeDifference, getTimeDifference } from 'pages/Bus/BusRoutePage/utils/timeModule';
+import { formatTimeDifference } from 'pages/Bus/BusRoutePage/utils/timeModule';
 import styles from './BusRoute.module.scss';
 
 interface BusRouteProps {
   schedule: Schedule;
-  isSameDay: boolean;
+  isToday: boolean;
   selectedDepartTime: string; // HH:mm:ss
 }
 
 export default function BusRoute({
-  schedule, isSameDay, selectedDepartTime,
+  schedule, isToday, selectedDepartTime,
 }: BusRouteProps) {
   const { busType, busName, departTime } = schedule;
-
-  const timeDiff = getTimeDifference(departTime, selectedDepartTime);
-  const isWithin4Hours = timeDiff.hours < 4;
 
   return (
     <div className={styles.box}>
@@ -46,7 +43,7 @@ export default function BusRoute({
           </span>
         )}
         <span className={styles['before-arrive__text']}>
-          {isSameDay && isWithin4Hours
+          {isToday
             ? formatTimeDifference(departTime, selectedDepartTime)
             : ''}
         </span>
