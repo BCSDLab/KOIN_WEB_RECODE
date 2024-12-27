@@ -12,12 +12,12 @@ export default function ModifyTimetablePage() {
   const navigation = useNavigate();
 
   useEffect(() => {
-    if (frameId === null || Number.isNaN(frameId)) {
+    if (frameId === null) {
       navigation('/timetable');
     }
   }, [frameId, navigation]);
 
-  if (frameId === null || Number.isNaN(frameId)) {
+  if (frameId === null) {
     return null;
   }
 
