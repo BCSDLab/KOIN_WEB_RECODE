@@ -15,23 +15,39 @@ interface Option {
 interface SelectDropdownProps {
   type: 'dayOfMonth' | 'hour' | 'minute';
   options: Option[];
-  initialOption: string;
+  initialLabel: string;
   setValue: (value: number) => void;
 }
 
 export default function SelectDropdown({
-  type, options, initialOption, setValue,
+  type, options, initialLabel, setValue,
 }: SelectDropdownProps) {
   const [isOpen,, setClose, toggleOpen] = useBooleanState(false);
-  const [selectedOption, setSelectedOption] = useState(initialOption);
+  const [selectedLabel, setSelectedLabel] = useState(initialLabel);
   const { containerRef } = useOutsideClick({ onOutsideClick: setClose });
   const selectedItemRef = useRef<HTMLButtonElement>(null);
   useEscapeKeyDown({ onEscape: setClose });
 
-  const handleOptionSelect = (option: string, value: number) => {
+  const handleOptionSelect = (label: string, value: number) => {
     setValue(value);
-    setSelectedOption(option);
+    setSelectedLabel(label);
     setClose();
+  };
+
+  const handleArrowClick = (direction: 'left' | 'right') => {
+    let currentIndex = options.findIndex(({ label }) => label === selectedLabel);
+    if (currentIndex === -1) {
+      const numericPart = parseInt(selectedLabel.replace(/\D/g, ''), 10); // 분 단위의 경우 '분'을 제외한 숫자만 추출
+      currentIndex = Math.floor(numericPart / 10);
+    }
+
+    const nextIndex = direction === 'left'
+      ? Math.max(currentIndex - 1, 0)
+      : Math.min(currentIndex + 1, options.length - 1);
+    const nextOption = options[nextIndex];
+
+    setValue(nextOption.value);
+    setSelectedLabel(nextOption.label);
   };
 
   useEffect(() => {
@@ -53,24 +69,38 @@ export default function SelectDropdown({
       })}
       ref={containerRef}
     >
-      <ChevronLeft />
+      <button
+        type="button"
+        className={styles.arrow}
+        onClick={() => handleArrowClick('left')}
+        aria-label="이전"
+      >
+        <ChevronLeft />
+      </button>
       <button
         type="button"
         className={styles.selector}
         onClick={() => toggleOpen()}
       >
-        <span className={styles.selector__text}>{selectedOption}</span>
+        <span className={styles.selector__text}>{selectedLabel}</span>
       </button>
-      <ChevronRight />
+      <button
+        type="button"
+        className={styles.arrow}
+        onClick={() => handleArrowClick('right')}
+        aria-label="다음"
+      >
+        <ChevronRight />
+      </button>
       {isOpen && (
         <div className={styles.dropdown}>
           {options.map(({ label, value }) => (
             <button
               key={label}
-              ref={label === initialOption ? selectedItemRef : null}
+              ref={label === initialLabel ? selectedItemRef : null}
               className={cn({
                 [styles.option]: true,
-                [styles['option--selected']]: label === selectedOption,
+                [styles['option--selected']]: label === selectedLabel,
               })}
               onClick={() => handleOptionSelect(label, value)}
               type="button"

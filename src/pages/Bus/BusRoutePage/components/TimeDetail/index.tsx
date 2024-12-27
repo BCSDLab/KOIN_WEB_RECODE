@@ -9,7 +9,7 @@ interface TimeDetailProps {
 export default function TimeDetail({ timeSelect }: TimeDetailProps) {
   const { hour, minute } = timeSelect.timeState;
   const {
-    setNow, setDayOfMonth: setDate, setHour, setMinute,
+    setNow, setDayOfMonth, setHour, setMinute,
   } = timeSelect.timeHandler;
 
   const now = new Date();
@@ -47,19 +47,19 @@ export default function TimeDetail({ timeSelect }: TimeDetailProps) {
         <SelectDropdown
           type="dayOfMonth"
           options={dates}
-          initialOption={dates[0].label}
-          setValue={setDate}
+          initialLabel={dates[0].label}
+          setValue={setDayOfMonth}
         />
         <SelectDropdown
           type="hour"
           options={hours}
-          initialOption={`${hour}시`}
+          initialLabel={`${hour}시`}
           setValue={setHour}
         />
         <SelectDropdown
           type="minute"
           options={minutes}
-          initialOption={`${minute}분`}
+          initialLabel={`${minute}분`}
           setValue={setMinute}
         />
         <button
