@@ -6,6 +6,14 @@ export const formatTime = (hour: number, minute: number) => ( // HH:mm
   `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
 );
 
+export const formatTimeWithSeconds = (date: Date) => { // HH:mm:ss
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
+
+  return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')}`;
+};
+
 export const formatRelativeDate = (date: Date) => { // ex. 오늘 or 7월 9일
   const now = new Date();
 
