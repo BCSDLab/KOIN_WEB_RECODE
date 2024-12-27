@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import Listbox from 'components/TimetablePage/Listbox';
 import { AddTimetableFrameRequest, SemesterCheckResponse, TimetableFrameInfo } from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';

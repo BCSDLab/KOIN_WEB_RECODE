@@ -1,4 +1,4 @@
-import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import type { TimetableFrameInfo } from 'api/timetable/entity';
 import useUpdateTimetableFrame from 'pages/TimetablePage/hooks/useUpdateTimetableFrame';
 import useDeleteTimetableFrame from 'pages/TimetablePage/hooks/useDeleteTimetableFrame';

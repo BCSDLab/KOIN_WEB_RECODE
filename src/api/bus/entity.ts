@@ -1,12 +1,6 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
 export type BusType = 'shuttle' | 'express' | 'city';
-export type BusTypeResponse = BusType;
-export type BusTypeRequest = 'CITY' | 'EXPRESS' | 'SHUTTLE' | 'ALL';
-
-export type DepartArrivalPlace = 'KOREATECH' | 'STATION' | 'TERMINAL';
-export type Depart = DepartArrivalPlace;
-export type Arrival = DepartArrivalPlace;
 
 export type Direction = 'from' | 'to';
 
@@ -45,30 +39,16 @@ export interface BusResponse extends APIResponse {
   } | null;
 }
 
-export type BusTimetableResponse = RouteInfo | ExpressInfo;
+export type BusTimetableResponse = BusRouteInfo | ExpressInfo;
 
 export type CityInfoResponse = CityInfo;
 
-export interface RouteInfo {
+export interface BusRouteInfo {
   bus_timetables: {
     route_name: string;
     arrival_info: ArrivalInfo[];
   }[],
   updated_at: string;
-}
-
-export interface ScheduleResponseDTO {
-  bus_type: BusTypeResponse;
-  bus_name: string;
-  depart_time: string; // HH:mm:ss
-}
-
-export interface BusRouteInfoResponseDTO {
-  depart: Depart;
-  arrival: Arrival;
-  depart_date: string; // yyyy-MM-dd
-  depart_time: string; // HH:mm:ss
-  schedule: ScheduleResponseDTO[];
 }
 
 export interface ArrivalInfo {
@@ -96,17 +76,4 @@ export interface CityInfo {
     day_of_week: string;
     depart_info: [];
   }[];
-}
-
-export interface BusRouteParams {
-  date: string; // yyyy-MM-dd
-  time: string; // HH:mm
-  busType: BusTypeRequest;
-  depart?: Depart;
-  arrival?: Arrival;
-}
-
-export interface BusNoticeInfoResponse {
-  id: number;
-  title: string;
 }

@@ -3,7 +3,7 @@
 .template {
   @include media.media-breakpoint(mobile) {
     width: 100%;
-    margin-top: 23px;
+    margin-top: 33px;
   }
 }
 
@@ -21,11 +21,10 @@
     font-weight: bold;
 
     @include media.media-breakpoint(mobile) {
+      font-size: 15px;
       padding-left: 3px;
       margin-left: 16px;
-      font-family: Pretendard, sans-serif;
-      font-size: 18px;
-      font-weight: 700;
+      box-sizing: border-box;
     }
   }
 

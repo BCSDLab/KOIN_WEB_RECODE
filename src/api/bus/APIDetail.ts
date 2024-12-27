@@ -1,10 +1,6 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
-  CourseResponse, BusResponse, BusTimetableResponse,
-  Course, CityBusParams, CityInfoResponse,
-  BusRouteInfoResponseDTO,
-  BusRouteParams,
-  BusNoticeInfoResponse,
+  CourseResponse, BusResponse, BusTimetableResponse, Course, CityBusParams, CityInfoResponse,
 } from './entity';
 
 export class CourseList<R extends CourseResponse> implements APIRequest<R> {
@@ -57,30 +53,4 @@ export class CityBusTimetableInfo<R extends CityInfoResponse> implements APIRequ
   constructor({ bus_number, direction }: CityBusParams) {
     this.path = `/bus/timetable/city?bus_number=${bus_number}&direction=${direction}`;
   }
-}
-
-export class BusRouteInfo<R extends BusRouteInfoResponseDTO> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path: string;
-
-  response!: R;
-
-  auth = false;
-
-  constructor({
-    date, time, busType, depart, arrival,
-  }: BusRouteParams) {
-    this.path = `/bus/route?date=${date}&time=${time}&bus_type=${busType}&depart=${depart}&arrival=${arrival}`;
-  }
-}
-
-export class BusNoticeInfo<R extends BusNoticeInfoResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/bus/notice';
-
-  response!: R;
-
-  auth = false;
 }

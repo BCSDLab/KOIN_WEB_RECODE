@@ -4,7 +4,7 @@ import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import NotServed from 'assets/svg/not-served.svg';
-import Close from 'assets/svg/common/close/close-icon-grey.svg';
+import Close from 'assets/svg/close-icon-grey.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';

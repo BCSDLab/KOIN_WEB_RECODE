@@ -1,115 +1,182 @@
 @use "src/utils/scss/media" as media;
 
 .template {
-  height: 257px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 18px;
 
   @include media.media-breakpoint(mobile) {
     order: 0;
     width: 100%;
-    height: 127px;
-    margin-bottom: 33px;
-    gap: 0;
   }
 
   &__title {
-    height: 53px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 32px;
+    font-family: NanumSquare, serif;
+    font-size: 17px;
+    font-weight: bold;
     color: #175c8e;
-    font-family: Pretendard, sans-serif;
-    font-size: 18px;
-    font-weight: 500;
+    text-decoration: none;
+    margin-top: 24px;
 
     @include media.media-breakpoint(mobile) {
-      margin: 0 0 0 16px;
+      font-size: 15px;
       padding-left: 3px;
-      font-size: 18px;
-      font-weight: 700;
+      margin-left: 16px;
     }
-  }
-}
-
-.unibus {
-  width: 105px;
-  height: 38px;
-  margin-right: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-
-  &__title {
-    padding-top: 2px;
-    color: #175c8e;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 400;
   }
 }
 
 .cards {
-  width: auto;
+  width: 848px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  padding: 0 8px;
 
   @include media.media-breakpoint(mobile) {
-    height: 65px;
-    gap: 16px;
+    overflow-x: auto;
+    width: 100%;
+    white-space: nowrap;
+    display: block;
+    margin-bottom: 24px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   &__card {
-    width: 266px;
-    height: 113px;
-    border-radius: 16px;
-    box-sizing: border-box;
-    background-color: #f5f5f5;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 32px 24px;
+    width: 272px;
 
     @include media.media-breakpoint(mobile) {
-      width: 100%;
-      height: 65px;
+      display: inline-block;
+      height: auto;
+      width: 75%;
+      transition: 0.3s ease 0s;
+
+      &--sm {
+        transform: scale(0.9);
+      }
     }
   }
 
-  &__card-segment {
+  &__head {
+    height: 38px;
+    padding-top: 2px;
     display: flex;
-    gap: 22px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+
+    &--shuttle {
+      background-color: rgb(247 148 30);
+    }
+
+    &--express {
+      background-color: rgb(124 159 174);
+    }
+
+    &--city {
+      background-color: rgb(77 178 151);
+    }
+
+    @include media.media-breakpoint(mobile) {
+      gap: 5px;
+      font-size: 12px;
+      height: 30px;
+    }
   }
 
-  &__card-guide {
+  &__bus-icon {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    top: -1px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__body {
+    height: auto;
+    border: 1px solid;
+    border-color: rgb(228 228 228);
     display: flex;
     flex-direction: column;
-    gap: 8px;
-  }
-
-  &__card-title {
-    font-family: Pretendard, sans-serif;
-    font-size: 20px;
-    font-weight: 500;
+    align-items: center;
+    gap: 15px;
+    border-radius: 0 0 8px 8px;
+    padding-bottom: 16px;
 
     @include media.media-breakpoint(mobile) {
-      font-size: 14px;
-      font-weight: 500;
+      gap: 10px;
     }
   }
 
-  &__card-subtitle {
-    font-family: Pretendard, sans-serif;
+  &__remain-time {
+    font-weight: bold;
+    margin-top: 15px;
+
+    @include media.media-breakpoint(mobile) {
+      margin-top: 27px;
+    }
+  }
+
+  &__detail {
+    font-size: 12px;
+    height: 12px;
+  }
+
+  &__directions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 14px;
+    gap: 26px;
 
     @include media.media-breakpoint(mobile) {
       font-size: 12px;
+      gap: 11px;
     }
+  }
+
+  &__toggle {
+    appearance: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--image {
+      height: 24px;
+      width: 24px;
+    }
+  }
+
+  &__redirect {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #727272;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background-color: #f5f5f5;
+    width: 80%;
+    height: 36px;
+    cursor: pointer;
   }
 }
