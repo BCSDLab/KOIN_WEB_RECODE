@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ChevronLeft from 'assets/svg/Bus/chevron-left.svg';
@@ -15,15 +15,15 @@ interface Option {
 interface SelectDropdownProps {
   type: 'dayOfMonth' | 'hour' | 'minute';
   options: Option[];
-  initialLabel: string;
+  selectedLabel: string;
+  setSelectedLabel: (label: string) => void;
   setValue: (value: number) => void;
 }
 
 export default function SelectDropdown({
-  type, options, initialLabel, setValue,
+  type, options, selectedLabel, setSelectedLabel, setValue,
 }: SelectDropdownProps) {
   const [isOpen,, setClose, toggleOpen] = useBooleanState(false);
-  const [selectedLabel, setSelectedLabel] = useState(initialLabel);
   const { containerRef } = useOutsideClick({ onOutsideClick: setClose });
   const selectedItemRef = useRef<HTMLButtonElement>(null);
   useEscapeKeyDown({ onEscape: setClose });
@@ -97,7 +97,7 @@ export default function SelectDropdown({
           {options.map(({ label, value }) => (
             <button
               key={label}
-              ref={label === initialLabel ? selectedItemRef : null}
+              ref={label === selectedLabel ? selectedItemRef : null}
               className={cn({
                 [styles.option]: true,
                 [styles['option--selected']]: label === selectedLabel,

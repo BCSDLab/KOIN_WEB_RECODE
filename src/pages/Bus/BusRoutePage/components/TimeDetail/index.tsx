@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'pages/Bus/BusRoutePage/components/SelectDropdown';
 import styles from './TimeDetail.module.scss';
@@ -12,12 +13,23 @@ export default function TimeDetail({ timeSelect }: TimeDetailProps) {
     setNow, setDayOfMonth, setHour, setMinute,
   } = timeSelect.timeHandler;
 
-  const now = new Date();
-  const dates = [...Array(90)].map((_, index) => {
-    const currentDate = new Date(now);
-    currentDate.setDate(now.getDate() + index);
+  const [dayOfMonthDisplay, setDayOfMonthDisplay] = useState('오늘');
+  const [hourDisplay, setHourDisplay] = useState(`${hour}시`);
+  const [minuteDisplay, setMinuteDisplay] = useState(`${minute}분`);
 
-    let label = `${currentDate.getMonth() + 1}월 ${currentDate.getDate()}일`;
+  const handleNowDepartClick = () => {
+    const now = new Date();
+    setNow(now);
+    setDayOfMonthDisplay('오늘');
+    setHourDisplay(`${now.getHours()}시`);
+    setMinuteDisplay(`${now.getMinutes()}분`);
+  };
+
+  const dates = [...Array(90)].map((_, index) => {
+    const now = new Date();
+    now.setDate(now.getDate() + index);
+
+    let label = `${now.getMonth() + 1}월 ${now.getDate()}일`;
     if (index === 0) label = '오늘';
     if (index === 1) label = '내일';
 
@@ -47,25 +59,28 @@ export default function TimeDetail({ timeSelect }: TimeDetailProps) {
         <SelectDropdown
           type="dayOfMonth"
           options={dates}
-          initialLabel={dates[0].label}
+          selectedLabel={dayOfMonthDisplay}
+          setSelectedLabel={setDayOfMonthDisplay}
           setValue={setDayOfMonth}
         />
         <SelectDropdown
           type="hour"
           options={hours}
-          initialLabel={`${hour}시`}
+          selectedLabel={hourDisplay}
+          setSelectedLabel={setHourDisplay}
           setValue={setHour}
         />
         <SelectDropdown
           type="minute"
           options={minutes}
-          initialLabel={`${minute}분`}
+          selectedLabel={minuteDisplay}
+          setSelectedLabel={setMinuteDisplay}
           setValue={setMinute}
         />
         <button
           className={styles['time-detail__button']}
           type="button"
-          onClick={() => setNow(new Date())}
+          onClick={handleNowDepartClick}
         >
           지금 출발
         </button>
