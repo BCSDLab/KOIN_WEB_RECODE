@@ -27,6 +27,14 @@ export default function RouteList({
 
   const { departDate, schedule } = data;
 
+  if (!schedule.length) {
+    return (
+      <div className={styles.container}>
+        <span>해당하는 노선이 없습니다.</span>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       {schedule.map((currentSchedule) => (
