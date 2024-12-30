@@ -3,6 +3,7 @@ import { SHORT_BUS_TYPE_MAP } from 'pages/Bus/BusRoutePage/constants/busType';
 import { cn } from '@bcsdlab/utils';
 import { Schedule } from 'pages/Bus/BusRoutePage/ts/types';
 import { formatTimeDifference, formatTimeWithSeconds } from 'pages/Bus/BusRoutePage/utils/timeModule';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './BusRoute.module.scss';
 
 interface BusRouteProps {
@@ -10,15 +11,18 @@ interface BusRouteProps {
 }
 
 export default function BusRoute({ schedule }: BusRouteProps) {
+  const isMobile = useMediaQuery();
   const { busType, busName, departTime } = schedule;
 
   return (
     <div className={styles.box}>
       <div className={styles['route-info']}>
         <div className={styles['bus-type']}>
-          <div className={styles['bus-type__icon']}>
-            <BusIcon />
-          </div>
+          {!isMobile && (
+            <div className={styles['bus-type__icon']}>
+              <BusIcon />
+            </div>
+          )}
           <div
             className={cn({
               [styles['bus-type__chip']]: true,

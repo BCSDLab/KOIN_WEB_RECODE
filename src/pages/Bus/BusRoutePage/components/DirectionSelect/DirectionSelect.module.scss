@@ -1,3 +1,11 @@
+@use "utils/scss/media.scss" as media;
+
+.container {
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+  }
+}
+
 .box {
   width: 708px;
   height: 269px;
@@ -14,10 +22,20 @@
     0 2px 4px rgba(0 0 0 / 4%),
     0 1px 1px rgba(0 0 0 / 2%);
 
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    box-shadow: none;
+  }
+
   &--searching {
     width: 640px;
     height: 140px;
     padding: 24px 42.5px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      padding: 24px 0;
+    }
   }
 }
 
@@ -28,6 +46,12 @@
   justify-content: center;
   align-items: center;
   gap: 56px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    gap: 0;
+    justify-content: space-between;
+  }
 }
 
 .lookup-button {

@@ -1,8 +1,16 @@
+@use "utils/scss/media.scss" as media;
+
 .guide {
   width: 1136px;
   margin-top: 64px;
   display: flex;
   flex-direction: column;
+
+  @include media.media-breakpoint(mobile) {
+    width: calc(100vw - 48px);
+    margin-top: 0;
+    padding: 16px 0;
+  }
 
   &__title {
     height: 38px;
@@ -18,5 +26,11 @@
     justify-content: space-between;
     font-family: Pretendard, sans-serif;
     font-size: 18px;
+
+    @include media.media-breakpoint(mobile) {
+      height: auto;
+      font-size: 16px;
+      font-weight: 500;
+    }
   }
 }

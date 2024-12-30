@@ -2,6 +2,7 @@ import { Suspense, useState } from 'react';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import BusNotice from 'pages/Bus/components/BusNotice';
 import DirectionSelect from 'pages/Bus/BusRoutePage/components/DirectionSelect';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
 import BusGuide from 'pages/Bus/BusRoutePage/components/BusGuide';
@@ -11,6 +12,7 @@ import { useTimeSelect } from './hooks/useTimeSelect';
 import styles from './BusRoutePage.module.scss';
 
 export default function BusRoutePage() {
+  const isMobile = useMediaQuery();
   const timeSelect = useTimeSelect();
   const [busType, setBusType] = useState<BusTypeRequest>('ALL');
   const [depart, setDepart] = useState<Depart | ''>('');
@@ -27,7 +29,7 @@ export default function BusRoutePage() {
   return (
     <main>
       <div className={styles.container}>
-        <BusGuide />
+        {!isMobile && <BusGuide />}
         <div className={styles.place}>
           <BusNotice />
           <DirectionSelect

@@ -1,8 +1,11 @@
+import { useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { Arrival, Depart } from 'api/bus/entity';
 import ExchangeIcon from 'assets/svg/Bus/exchange-icon.svg';
 import PlaceSelect from 'pages/Bus/BusRoutePage/components/PlaceSelect';
 import { LOCATION_TYPE_KEY } from 'pages/Bus/BusRoutePage/constants/location';
+import ExchangeIconMobile from 'assets/svg/Bus/exchange-icon-mobile.svg';
 import styles from './DirectionSelect.module.scss';
 
 interface DirectionSelectProps {
@@ -17,11 +20,18 @@ interface DirectionSelectProps {
 export default function DirectionSelect({
   depart, setDepart, arrival, setArrival, isSearching, lookUp,
 }: DirectionSelectProps) {
+  const isMobile = useMediaQuery();
+
   const exchangePlace = () => {
     const temp = depart;
     setDepart(arrival);
     setArrival(temp);
   };
+
+  useEffect(() => {
+    if (!isMobile) return;
+    if (depart && arrival) lookUp();
+  }, [isMobile, depart, arrival, lookUp]);
 
   return (
     <div className={styles.container}>
@@ -32,34 +42,30 @@ export default function DirectionSelect({
         })}
       >
         <div className={styles.direction}>
-          <div className={styles.direction_select}>
-            <PlaceSelect
-              type={LOCATION_TYPE_KEY.depart}
-              place={depart}
-              oppositePlace={arrival}
-              setPlace={setDepart}
-              exchangePlace={exchangePlace}
-            />
-          </div>
+          <PlaceSelect
+            type={LOCATION_TYPE_KEY.depart}
+            place={depart}
+            oppositePlace={arrival}
+            setPlace={setDepart}
+            exchangePlace={exchangePlace}
+          />
           <button
             className={styles['exchange-button']}
             onClick={() => exchangePlace()}
             type="button"
             aria-label="출발지와 도착지를 바꾸기"
           >
-            <ExchangeIcon aria-hidden="true" />
+            {isMobile ? <ExchangeIconMobile aria-hidden="true" /> : <ExchangeIcon aria-hidden="true" />}
           </button>
-          <div className={styles.direction_select}>
-            <PlaceSelect
-              type={LOCATION_TYPE_KEY.arrival}
-              place={arrival}
-              oppositePlace={depart}
-              setPlace={setArrival}
-              exchangePlace={exchangePlace}
-            />
-          </div>
+          <PlaceSelect
+            type={LOCATION_TYPE_KEY.arrival}
+            place={arrival}
+            oppositePlace={depart}
+            setPlace={setArrival}
+            exchangePlace={exchangePlace}
+          />
         </div>
-        {!isSearching && (
+        {!isMobile && !isSearching && (
           <button
             className={styles['lookup-button']}
             onClick={lookUp}

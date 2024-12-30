@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { cn } from '@bcsdlab/utils';
-import InformationIcon from 'assets/svg/common/information/information-icon.svg';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import InformationIcon from 'assets/svg/Bus/information-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
 import useBusNotice from 'pages/Bus/components/BusNotice/hooks/useBusNotice';
 import styles from './BusNotice.module.scss';
 
 export default function BusNotice() {
+  const isMobile = useMediaQuery();
   const navigate = useNavigate();
-  const { id, title } = useBusNotice().data;
+  const res = useBusNotice();
+  const { id, title } = res.data;
   const lastBusNotice = localStorage.getItem('lastBusNotice');
   const busNoticeDismissed = JSON.parse(localStorage.getItem('busNoticeDismissed') || 'false');
   const isUpdated = lastBusNotice !== title;
@@ -32,18 +34,13 @@ export default function BusNotice() {
   if (!showNotice) return null;
 
   return (
-    <div
-      className={cn({
-        [styles.container]: true,
-        // [styles['container--searching']]: isSearching,
-      })}
-    >
+    <div className={styles.container}>
       {showNotice && (
         <div className={styles['removable-notice']}>
-          <InformationIcon />
+          {!isMobile && (<InformationIcon />)}
           <button
-            type="button"
             className={styles['removable-notice__description']}
+            type="button"
             onClick={handleClickNavigateNotice}
           >
             {title}
