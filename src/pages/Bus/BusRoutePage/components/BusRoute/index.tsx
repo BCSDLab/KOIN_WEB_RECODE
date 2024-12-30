@@ -7,10 +7,11 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './BusRoute.module.scss';
 
 interface BusRouteProps {
+  departDate: string; // yyyy-MM-dd
   schedule: Schedule;
 }
 
-export default function BusRoute({ schedule }: BusRouteProps) {
+export default function BusRoute({ departDate, schedule }: BusRouteProps) {
   const isMobile = useMediaQuery();
   const { busType, busName, departTime } = schedule;
 
@@ -43,7 +44,7 @@ export default function BusRoute({ schedule }: BusRouteProps) {
       </div>
       <div className={styles['before-arrive']}>
         <span className={styles['before-arrive__text']}>
-          {formatTimeDifference(departTime, formatTimeWithSeconds(new Date()))}
+          {isToday(new Date(departDate)) ? formatTimeDifference(departTime, formatTimeWithSeconds(new Date())) : ''}
         </span>
       </div>
     </div>

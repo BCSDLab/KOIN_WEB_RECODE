@@ -30,6 +30,13 @@ export const format12Hour = (date: Date) => { // ex. 오전 01:01
   return `${period} ${String(displayHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 };
 
+export const isToday = (date: Date) => {
+  const today = new Date();
+  return date.getDate() === today.getDate()
+    && date.getMonth() === today.getMonth()
+    && date.getFullYear() === today.getFullYear();
+};
+
 export const getTimeDifference = (time1: string, time2: string) => {
   const [hours1, minutes1] = time1.split(':').map(Number);
   const [hours2, minutes2] = time2.split(':').map(Number);

@@ -25,13 +25,14 @@ export default function RouteList({
 
   if (!data) return null;
 
-  const { schedule } = data;
+  const { departDate, schedule } = data;
 
   return (
     <div className={styles.container}>
       {schedule.map((currentSchedule) => (
         <BusRoute
           key={currentSchedule.busName + currentSchedule.departTime}
+          departDate={departDate}
           schedule={currentSchedule}
         />
       ))}
