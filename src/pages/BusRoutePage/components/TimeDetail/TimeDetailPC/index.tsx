@@ -52,7 +52,7 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
   return (
     <div className={styles.box}>
       <div className={styles.guide}>
-        <span className={styles.guide__text}>출발 시각 설정</span>
+        <span className={styles.guide__title}>출발 시각 설정</span>
         <span className={styles.guide__description}>현재는 정규학기(12월 20일까지)의 시간표를 제공하고 있어요.</span>
       </div>
       <div className={styles['time-detail']}>

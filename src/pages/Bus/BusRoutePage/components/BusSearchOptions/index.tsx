@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import ChevronDown32 from 'assets/svg/Bus/chevron-down-32x32.svg';
 import ChevronDown24 from 'assets/svg/Bus/chevron-down-24x24.svg';
 import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
@@ -25,7 +24,7 @@ export default function BusSearchOptions({
 }: BusSearchOptionsProps) {
   const isMobile = useMediaQuery();
   const { nowDate } = timeSelect.timeState;
-  const [isTimeDetailOpen, setIsTimeDetailOpen] = useState(false);
+  const [isTimeDetailOpen,, closeTimeDetail, toggleTimeDetail] = useBooleanState(false);
   const [isBusTypeOpen, , closeBusType, toggleBusType] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeBusType });
 
@@ -37,7 +36,7 @@ export default function BusSearchOptions({
         <button
           type="button"
           className={styles['depart-time']}
-          onClick={() => setIsTimeDetailOpen(!isTimeDetailOpen)}
+          onClick={toggleTimeDetail}
         >
           <span className={styles['depart-time__text']}>
             {`${formatRelativeDate(nowDate)} ${format12Hour(nowDate)}`}
@@ -92,7 +91,7 @@ export default function BusSearchOptions({
           )}
         </div>
       </div>
-      {isTimeDetailOpen && (<TimeDetail timeSelect={timeSelect} />)}
+      {isTimeDetailOpen && (<TimeDetail timeSelect={timeSelect} close={closeTimeDetail} />)}
     </div>
   );
 }
