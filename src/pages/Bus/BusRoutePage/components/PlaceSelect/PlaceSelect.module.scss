@@ -85,7 +85,7 @@
     width: 143px;
   }
 
-  &__item {
+  &__option {
     width: 178px;
     height: 48px;
     display: flex;
@@ -97,6 +97,15 @@
     font-weight: 400;
     color: #4b4b4b;
     padding-left: 16px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 143px;
+      height: 40px;
+      font-size: 16px;
+      justify-content: center;
+      padding-left: 0;
+      border: none;
+    }
 
     & > * {
       padding-top: 2px;

@@ -30,23 +30,26 @@ export const format12Hour = (date: Date) => { // ex. 오전 01:01
   return `${period} ${String(displayHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 };
 
-export const getTimeDifference = (time1: string, time2: string) => { // time1, time2: HH:mm:ss
+export const getTimeDifference = (time1: string, time2: string) => {
   const [hours1, minutes1] = time1.split(':').map(Number);
   const [hours2, minutes2] = time2.split(':').map(Number);
 
   const totalMinutes1 = hours1 * 60 + minutes1;
   const totalMinutes2 = hours2 * 60 + minutes2;
 
-  const diffMinutes = Math.abs(totalMinutes1 - totalMinutes2);
+  const diffMinutes = totalMinutes1 - totalMinutes2;
 
   return {
-    hours: Math.floor(diffMinutes / 60),
-    minutes: diffMinutes % 60,
+    hours: Math.floor(Math.abs(diffMinutes) / 60),
+    minutes: Math.abs(diffMinutes) % 60,
+    isPast: diffMinutes < 0,
   };
 };
 
 export const formatTimeDifference = (time1: string, time2: string) => {
-  const { hours, minutes } = getTimeDifference(time1, time2);
+  const { hours, minutes, isPast } = getTimeDifference(time1, time2);
+
+  if (isPast) return '';
 
   if (hours === 0) return `${minutes}분 전`;
   return `${hours}시간 ${minutes > 0 ? `${minutes}분` : ''} 전`;
