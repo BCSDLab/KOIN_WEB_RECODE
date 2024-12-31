@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useTimeSelect } from 'pages/BusRoutePage/hooks/useTimeSelect';
+import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import PickerColumn from 'pages/BusRoutePage/components/PickerColumn';
+import PickerColumn from 'pages/Bus/BusRoutePage/components/PickerColumn';
 import styles from './TimeDetailMobile.module.scss';
 
 interface TimeDetailMobileProps {
