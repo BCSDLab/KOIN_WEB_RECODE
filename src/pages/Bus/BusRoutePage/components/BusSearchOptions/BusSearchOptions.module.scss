@@ -1,3 +1,5 @@
+@use "utils/scss/media.scss" as media;
+
 .box {
   width: 100%;
   position: relative;
@@ -10,6 +12,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
 .depart-time {
@@ -22,12 +25,20 @@
     font-family: Pretendard, sans-serif;
     font-size: 20px;
     font-weight: 700;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+    }
   }
 
   &__description {
     font-family: Pretendard, sans-serif;
     font-size: 20px;
     font-weight: 500;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+    }
   }
 
   &__arrow {
@@ -47,15 +58,22 @@
     width: 127px;
     height: 48px;
     padding: 0 16px;
-    background: #fff;
+    background-color: #fff;
     border-radius: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
     box-shadow:
       0 2px 4px rgba(0 0 0 / 10%),
       0 1px 1px rgba(0 0 0 / 5%);
+
+    @include media.media-breakpoint(mobile) {
+      width: 104px;
+      height: 40px;
+      padding: 0 8px 0 16px;
+      background-color: #fafafa;
+      box-shadow: none;
+    }
   }
 
   &__text {
@@ -63,6 +81,12 @@
     font-family: Pretendard, sans-serif;
     font-size: 18px;
     font-weight: 500;
+    line-height: 22.4px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      line-height: 22.4px;
+    }
   }
 
   &__arrow {
@@ -85,6 +109,11 @@
     box-shadow:
       0 4px 10px rgba(0 0 0 / 8%),
       0 1px 4px rgba(0 0 0 / 4%);
+
+    @include media.media-breakpoint(mobile) {
+      width: 104px;
+      box-shadow: none;
+    }
   }
 
   &__option {
@@ -98,6 +127,11 @@
     font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 400;
+
+    @include media.media-breakpoint(mobile) {
+      background-color: #fafafa;
+      font-size: 14px;
+    }
 
     &:hover {
       background-color: #eee;

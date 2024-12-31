@@ -15,27 +15,33 @@ export default function RouteList({
   timeSelect, busType, depart, arrival,
 }: RouteListProps) {
   const { formattedValues } = timeSelect;
-  const { data: routeInfo } = useBusRoute({
-    date: formattedValues.date,
+  const { data } = useBusRoute({
+    dayOfMonth: formattedValues.date,
     time: formattedValues.time,
     busType,
     depart,
     arrival,
   });
 
-  if (!routeInfo) return null;
+  if (!data) return null;
 
-  const { departDate, departTime, schedule } = routeInfo;
-  const isSameDay = departDate === formattedValues.date;
+  const { departDate, schedule } = data;
+
+  if (!schedule.length) {
+    return (
+      <div className={styles.container}>
+        <span>해당하는 노선이 없습니다.</span>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
       {schedule.map((currentSchedule) => (
         <BusRoute
           key={currentSchedule.busName + currentSchedule.departTime}
+          departDate={departDate}
           schedule={currentSchedule}
-          isSameDay={isSameDay}
-          departTime={departTime}
         />
       ))}
     </div>

@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import ChevronDown from 'assets/svg/Bus/chevron-down.svg';
+import ChevronDown32 from 'assets/svg/Bus/chevron-down-32x32.svg';
+import ChevronDown24 from 'assets/svg/Bus/chevron-down-24x24.svg';
 import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
 import { cn } from '@bcsdlab/utils';
 import { BUS_TYPE_MAP } from 'pages/Bus/BusRoutePage/constants/busType';
 import TimeDetail from 'pages/Bus/BusRoutePage/components/TimeDetail';
 import { UseTimeSelectReturn } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { BusTypeRequest } from 'api/bus/entity';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -21,8 +22,9 @@ interface BusSearchOptionsProps {
 export default function BusSearchOptions({
   busType, setBusType, timeSelect,
 }: BusSearchOptionsProps) {
-  const { date, hour, minute } = timeSelect.timeState;
-  const [isTimeDetailOpen, setIsTimeDetailOpen] = useState(false);
+  const isMobile = useMediaQuery();
+  const { nowDate } = timeSelect.timeState;
+  const [isTimeDetailOpen,, closeTimeDetail, toggleTimeDetail] = useBooleanState(false);
   const [isBusTypeOpen, , closeBusType, toggleBusType] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeBusType });
 
@@ -34,10 +36,10 @@ export default function BusSearchOptions({
         <button
           type="button"
           className={styles['depart-time']}
-          onClick={() => setIsTimeDetailOpen(!isTimeDetailOpen)}
+          onClick={toggleTimeDetail}
         >
           <span className={styles['depart-time__text']}>
-            {`${formatRelativeDate(date)} ${format12Hour(hour, minute)}`}
+            {`${formatRelativeDate(nowDate)} ${format12Hour(nowDate)}`}
           </span>
           <span className={styles['depart-time__description']}>출발</span>
           <span
@@ -46,7 +48,7 @@ export default function BusSearchOptions({
               [styles['depart-time__arrow--open']]: isTimeDetailOpen,
             })}
           >
-            <ChevronDown />
+            {isMobile ? <ChevronDown24 /> : <ChevronDown32 />}
           </span>
         </button>
         <div className={styles['bus-type']}>
@@ -64,7 +66,7 @@ export default function BusSearchOptions({
                 [styles['bus-type__arrow--open']]: isBusTypeOpen,
               })}
             >
-              <ChevronDown4b />
+              {isMobile ? <ChevronDown24 /> : <ChevronDown4b />}
             </span>
           </button>
           {isBusTypeOpen && (
@@ -89,7 +91,7 @@ export default function BusSearchOptions({
           )}
         </div>
       </div>
-      {isTimeDetailOpen && (<TimeDetail timeSelect={timeSelect} />)}
+      {isTimeDetailOpen && (<TimeDetail timeSelect={timeSelect} close={closeTimeDetail} />)}
     </div>
   );
 }

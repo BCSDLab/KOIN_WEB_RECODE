@@ -60,7 +60,7 @@ export default function PlaceSelect({
           <div className={styles.dropdown}>
             {locations.map((location) => (
               <button
-                className={styles.dropdown__item}
+                className={styles.dropdown__option}
                 onClick={() => handleDropdownItemClick(location)}
                 type="button"
                 key={location}

@@ -12,16 +12,26 @@
   background: #fff;
   border: 1px solid #e1e1e1;
 
-  &--left {
+  &--dayOfMonth { // styles[`box--${type}`], type: 'dayOfMonth' | 'hour' | 'minute'
     border-radius: 4px 0 0 4px;
   }
 
-  &--middle {
+  &--hour {
     border-radius: 0;
   }
 
-  &--right {
+  &--minute {
     border-radius: 0 4px 4px 0;
+  }
+}
+
+.arrow {
+  width: 24px;
+  height: 24px;
+
+  &:hover {
+    background: #d9d9d9;
+    border-radius: 50%;
   }
 }
 
@@ -79,10 +89,5 @@
   &--selected {
     color: #000;
     background-color: #eee;
-  }
-
-  &--disabled {
-    color: #727272;
-    cursor: default;
   }
 }
