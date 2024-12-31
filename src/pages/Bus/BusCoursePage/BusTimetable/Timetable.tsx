@@ -62,26 +62,26 @@ function TemplateShuttleVersion({
   }
 
   return (
-    <div className={styles.templateShuttle}>
-      <h2 className={styles.templateShuttle__title}>{region}</h2>
+    <div className={styles['template-shuttle']}>
+      <h2 className={styles['template-shuttle__title']}>{region}</h2>
       <div>
         {filteredRoutes(category).map((route) => (
           <button
             type="button"
-            className={styles.templateShuttle__list_wrapper}
+            className={styles['template-shuttle__list_wrapper']}
             key={route.id}
             onClick={() => routeIdHandler(route.id)}
           >
-            <span className={styles.templateShuttle__list}>
-              <div className={styles.templateShuttle__list_header}>
+            <span className={styles['template-shuttle__list']}>
+              <div className={styles['template-shuttle__list_header']}>
                 <span
-                  className={`${styles.templateShuttle__list_type} ${styles[`type-${route.type}`]}`}
+                  className={`${styles['template-shuttle__list_type']} ${styles[`type-${route.type}`]}`}
                 >
                   {route.type}
                 </span>
-                <span className={styles.templateShuttle__list_name}>{route.route_name}</span>
+                <span className={styles['template-shuttle__list_name']}>{route.route_name}</span>
               </div>
-              <div className={styles.templateShuttle__list_sub_name}>{route.sub_name}</div>
+              <div className={styles['template-shuttle__list_sub_name']}>{route.sub_name}</div>
             </span>
             <RightArrow />
           </button>

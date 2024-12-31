@@ -44,7 +44,7 @@ function BusTimetableDetail({ routeId }: ShuttleTimetableDetailProps) {
               시간표
             </div>
             {shuttleTimetableDetail.sub_name && (
-            <div className={styles['header__sub-title']}>
+            <div className={styles.header__subtitle}>
               {shuttleTimetableDetail.sub_name}
             </div>
             )}
@@ -140,7 +140,7 @@ function BusTimetableDetail({ routeId }: ShuttleTimetableDetailProps) {
               시간표
             </div>
             {shuttleTimetableDetail.sub_name && (
-              <div className={styles['header__sub-title']}>
+              <div className={styles.header__subtitle}>
                 {shuttleTimetableDetail.sub_name}
               </div>
             )}

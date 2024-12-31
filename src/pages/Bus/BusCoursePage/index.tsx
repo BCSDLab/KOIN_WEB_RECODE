@@ -3,7 +3,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import BusTimetable from './BusTimetable';
 import styles from './BusCoursePage.module.scss';
 
-function BusCoursePage() {
+export default function BusCoursePage() {
   const isMobile = useMediaQuery();
 
   return (
@@ -13,12 +13,11 @@ function BusCoursePage() {
           <div className={styles['mobile-title__text']}>
             셔틀버스 시간표
           </div>
-
         </header>
       ) : (
         <header className={styles['title-container']}>
           <h1 className={styles.title}>버스 시간표</h1>
-          <div className={styles['sub-title']}>
+          <div className={styles.subtitle}>
             어디를 가시나요?
             <br />
             운행수단별로 간단히 비교해드립니다.
@@ -32,5 +31,3 @@ function BusCoursePage() {
     </main>
   );
 }
-
-export default BusCoursePage;
