@@ -29,8 +29,7 @@ export default function DirectionSelect({
   };
 
   useEffect(() => {
-    if (!isMobile) return;
-    if (depart && arrival) lookUp();
+    if (isMobile && depart && arrival) lookUp();
   }, [isMobile, depart, arrival, lookUp]);
 
   return (
