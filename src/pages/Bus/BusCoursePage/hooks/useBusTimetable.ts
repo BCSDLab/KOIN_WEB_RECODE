@@ -26,8 +26,7 @@ function useBusTimetable(course: ShuttleCourse): ShuttleTimetable;
 
 function useBusTimetable(course: ExpressCourse): ExpressTimetable;
 
-function useBusTimetable(course: Course): ShuttleTimetable |
-ExpressTimetable | undefined {
+function useBusTimetable(course: Course): ShuttleTimetable | ExpressTimetable | undefined {
   const { bus_type: busType, direction: busDirection, region: busRegion } = course;
 
   const { data } = useSuspenseQuery(

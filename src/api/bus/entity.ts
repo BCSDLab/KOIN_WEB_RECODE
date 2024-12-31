@@ -71,6 +71,14 @@ export interface BusRouteInfoResponseDTO {
   schedule: ScheduleResponseDTO[];
 }
 
+export interface BusRouteInfo {
+  bus_timetables: {
+    route_name: string;
+    arrival_info: ArrivalInfo[];
+  }[],
+  updated_at: string;
+}
+
 export interface ArrivalInfo {
   arrival_time: string;
   node_name: string;
