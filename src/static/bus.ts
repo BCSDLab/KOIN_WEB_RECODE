@@ -95,15 +95,15 @@ export const SHUTTLE_COURSES = [
 
 export const EXPRESS_COURSES = [
   {
-    name: '천안방면',
-    bus_type: 'express',
-    direction: 'from',
-    region: '천안',
-  },
-  {
     name: '병천방면',
     bus_type: 'express',
     direction: 'to',
+    region: '천안',
+  },
+  {
+    name: '천안방면',
+    bus_type: 'express',
+    direction: 'from',
     region: '천안',
   },
 ] as const;

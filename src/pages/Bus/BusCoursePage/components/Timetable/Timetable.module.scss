@@ -1,73 +1,10 @@
 @use "src/utils/scss/media" as media;
 
-.template {
-  width: 795px;
-  margin: 23px auto 0;
-
-  @include media.media-breakpoint(mobile) {
-    min-height: 350px;
-    width: 100%;
-    margin: 0;
-    box-sizing: border-box;
-  }
-
-  &__title {
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: -1px;
-    color: #252525;
-    margin-bottom: 22px;
-  }
-
-  &__loading-spinner {
-    margin: 250px auto;
-    background-color: white;
-    width: 100px;
-    height: 100px;
-  }
-}
-
-.tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  height: 56px;
-  list-style: none;
-
-  @include media.media-breakpoint(mobile) {
-    width: 100vw;
-    height: 100%;
-  }
-
-  &__tab {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    letter-spacing: -0.8px;
-    font-weight: 500;
-    line-height: 1.5;
-    color: rgb(133 133 133);
-    background-color: white;
-    appearance: none;
-    border-radius: 12px 0 0;
-    font-family: Pretendard, sans-serif;
-    border-bottom: 2px solid #cacaca;
-    padding: 16px 16px 12px;
-    cursor: pointer;
-
-    &--selected {
-      color: rgb(23 92 142);
-      border-bottom: 3px solid rgb(23 92 142);
-    }
-
-    @include media.media-breakpoint(mobile) {
-      display: flex;
-      font-size: 16px;
-      padding: 12px 16px;
-    }
-  }
-}
+$template-shuttle-colors: (
+  "순환": #4ed92c,
+  "주중": #ffb443,
+  "주말": #34adff
+);
 
 .timetable-container {
   width: 100%;
@@ -185,100 +122,22 @@
   }
 }
 
-.course-category-container {
+.main-timetable {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  background-color: #f5f5f5;
-  border-radius: 0 0 12px 12px;
-}
-
-.course-category-city-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #f5f5f5;
-  border-radius: 0 0 12px 12px;
-
-  @include media.media-breakpoint(mobile) {
-    gap: 8px;
-    padding: 14px 24px;
-  }
-}
-
-.course-category {
-  width: 100%;
-  background-color: #f5f5f5;
-  display: flex;
-  gap: 8px;
   box-sizing: border-box;
-  padding: 8px 24px;
-  border-radius: 0 0 12px 12px;
+  gap: 12px;
 
-  &__button {
+  &__column {
     display: flex;
-    padding: 6px 16px;
-    justify-content: center;
-    align-items: center;
-    color: #727272;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: Pretendard, sans-serif;
-
-    &--selected {
-      border-radius: 50px;
-      background: #175c8e;
-      color: #fff;
-      font-weight: 600;
-      line-height: 160%;
-    }
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
   }
 
   @include media.media-breakpoint(mobile) {
-    width: 100vw;
-    border-radius: 0;
-    padding: 8px 24px;
-  }
-}
-
-$template-shuttle-colors: (
-  "순환": #4ed92c,
-  "주중": #ffb443,
-  "주말": #34adff
-);
-
-.course-category-city {
-  width: 100%;
-  background-color: #f5f5f5;
-  display: flex;
-  gap: 8px;
-  box-sizing: border-box;
-  padding: 8px 24px;
-  border-radius: 0 0 12px 12px;
-
-  &__button {
-    display: flex;
-    padding: 6px 16px;
-    justify-content: center;
-    align-items: center;
-    color: #727272;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: Pretendard, sans-serif;
-
-    &--selected {
-      border-radius: 50px;
-      background: #175c8e;
-      color: #fff;
-      font-weight: 600;
-      line-height: 160%;
-    }
-  }
-
-  @include media.media-breakpoint(mobile) {
-    width: 100vw;
-    border-radius: 0;
-    padding: 0 24px;
+    flex-direction: column;
+    width: 100%;
   }
 }
 
@@ -356,25 +215,6 @@ $template-shuttle-colors: (
   }
 }
 
-.main-timetable {
-  width: 100%;
-  display: flex;
-  box-sizing: border-box;
-  gap: 12px;
-
-  &__column {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-  }
-
-  @include media.media-breakpoint(mobile) {
-    flex-direction: column;
-    width: 100%;
-  }
-}
-
 .main-timetable-mobile {
   width: 100%;
   display: flex;
@@ -388,6 +228,138 @@ $template-shuttle-colors: (
     height: 7px;
     background-color: #fafafa;
     margin: 10px 0 0;
+  }
+}
+
+.course-category-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  border-radius: 0 0 12px 12px;
+}
+
+.course-category-city-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  border-radius: 0 0 12px 12px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 8px;
+    padding: 14px 24px;
+  }
+}
+
+.course-category {
+  width: 100%;
+  background-color: #f5f5f5;
+  display: flex;
+  gap: 8px;
+  box-sizing: border-box;
+  padding: 8px 24px;
+  border-radius: 0 0 12px 12px;
+
+  &__button {
+    display: flex;
+    padding: 6px 16px;
+    justify-content: center;
+    align-items: center;
+    color: #727272;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: Pretendard, sans-serif;
+
+    &--selected {
+      border-radius: 50px;
+      background: #175c8e;
+      color: #fff;
+      font-weight: 600;
+      line-height: 160%;
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100vw;
+    border-radius: 0;
+    padding: 8px 24px;
+  }
+}
+
+.course-category-city {
+  width: 100%;
+  background-color: #f5f5f5;
+  display: flex;
+  gap: 8px;
+  box-sizing: border-box;
+  padding: 8px 24px;
+  border-radius: 0 0 12px 12px;
+
+  &__button {
+    display: flex;
+    padding: 6px 16px;
+    justify-content: center;
+    align-items: center;
+    color: #727272;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: Pretendard, sans-serif;
+
+    &--selected {
+      border-radius: 50px;
+      background: #175c8e;
+      color: #fff;
+      font-weight: 600;
+      line-height: 160%;
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100vw;
+    border-radius: 0;
+    padding: 0 24px;
+  }
+}
+
+.express-footer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 8px;
+  color: #727272;
+  font-family: Pretendard, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+
+  &__date {
+    padding: 8px 24px;
+    font-size: 14px;
+  }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      justify-content: start;
+      padding: 0 24px;
+      margin-bottom: 30px;
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    flex-direction: column;
   }
 }
 
@@ -443,46 +415,5 @@ $template-shuttle-colors: (
     font-style: normal;
     font-weight: 400;
     line-height: 160%;
-  }
-}
-
-.express-footer {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  gap: 8px;
-  color: #727272;
-  font-family: Pretendard, sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 160%;
-
-  &__date {
-    padding: 8px 24px;
-    font-size: 14px;
-  }
-
-  &__icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    font-family: Pretendard, sans-serif;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 160%;
-
-    @include media.media-breakpoint(mobile) {
-      width: 100%;
-      justify-content: start;
-      padding: 0 24px;
-      margin-bottom: 30px;
-    }
-  }
-
-  @include media.media-breakpoint(mobile) {
-    width: 100%;
-    flex-direction: column;
   }
 }

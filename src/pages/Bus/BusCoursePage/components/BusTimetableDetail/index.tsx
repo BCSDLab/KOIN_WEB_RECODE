@@ -10,7 +10,7 @@ interface ShuttleTimetableDetailProps {
   routeId : string;
 }
 
-function BusTimetableDetail({ routeId }: ShuttleTimetableDetailProps) {
+export default function BusTimetableDetail({ routeId }: ShuttleTimetableDetailProps) {
   const { shuttleTimetableDetail } = useShuttleTimetableDetail(routeId);
   const [selectedDetail, setSelectedDetail] = useState<string | null>('');
   const isMobile = useMediaQuery();
@@ -176,5 +176,3 @@ function BusTimetableDetail({ routeId }: ShuttleTimetableDetailProps) {
     </>
   );
 }
-
-export default BusTimetableDetail;

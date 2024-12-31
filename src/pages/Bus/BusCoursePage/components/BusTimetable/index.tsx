@@ -5,10 +5,10 @@ import { BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
 import { useShallow } from 'zustand/react/shallow';
+import * as Timetable from 'pages/Bus/BusCoursePage/components/Timetable';
 import styles from './BusTimetable.module.scss';
-import Timetable from './Timetable';
 
-function BusTimetable() {
+export default function BusTimetable() {
   const [selectedTab, setSelectedTab] = useBusStore(useShallow(
     (state) => [state.selectedTab, state.setSelectedTab],
   ));
@@ -51,5 +51,3 @@ function BusTimetable() {
     </section>
   );
 }
-
-export default BusTimetable;

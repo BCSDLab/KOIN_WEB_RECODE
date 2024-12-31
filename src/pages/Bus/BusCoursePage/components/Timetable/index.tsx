@@ -1,4 +1,4 @@
-import BusTimetableDetail from 'pages/Bus/BusCoursePage/BusTimetableDetail';
+import BusTimetableDetail from 'pages/Bus/BusCoursePage/components/BusTimetableDetail';
 import useIndexValueSelect from 'pages/Bus/BusCoursePage/hooks/useIndexValueSelect';
 import { useState } from 'react';
 import useShuttleCourse from 'pages/Bus/BusCoursePage/hooks/useShuttleCourse';
@@ -16,7 +16,7 @@ import {
 import useLogger from 'utils/hooks/analytics/useLogger';
 import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import styles from './BusTimetable.module.scss';
+import styles from './Timetable.module.scss';
 
 interface TemplateShuttleVersionProps {
   routeIdHandler: (id: string | null) => void,
@@ -399,8 +399,6 @@ function CityTimetable() {
   );
 }
 
-export default {
-  Shuttle: ShuttleTimetable,
-  Express: ExpressTimetable,
-  City: CityTimetable,
-};
+export const Shuttle = ShuttleTimetable;
+export const Express = ExpressTimetable;
+export const City = CityTimetable;
