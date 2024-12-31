@@ -7,7 +7,7 @@ import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { createPortal } from 'react-dom';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
-import WhiteArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
+import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import ROUTES from 'static/routes';
@@ -75,7 +75,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               backInDetailPage();
             }}
           >
-            <WhiteArrowBackIcon />
+            <ArrowBackIcon />
           </button>
         )}
         <span

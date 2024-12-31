@@ -1,0 +1,233 @@
+@use "src/utils/scss/media" as media;
+
+.time-table-wrapper {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  height: auto;
+
+  @include media.media-breakpoint(mobile) {
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 0;
+  }
+}
+
+.time-table-title {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 26px;
+  gap: 8px;
+}
+
+.bus-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Pretendard, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%; /* 17.6px */
+}
+
+$template-shuttle-colors: (
+  "순환": #4ed92c,
+  "주중": #ffb443,
+  "주말": #34adff
+);
+
+.bus-type {
+  padding: 0 4px;
+  color: #fff;
+  border-radius: 4px;
+}
+
+@each $type, $color in $template-shuttle-colors {
+  .type-#{$type} {
+    background-color: $color;
+  }
+}
+
+.time-table-wapper {
+  width: 100%;
+}
+
+.header {
+  &__title {
+    display: flex;
+    font-size: 22px;
+    font-family: Pretendard, sans-serif;
+  }
+
+  &__subtitle {
+    display: flex;
+    color: #727272;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+  }
+}
+
+.time-table {
+  display: grid;
+  grid-auto-flow: column;
+  width: 100%;
+
+  &--short {
+    grid-template-columns: 126px 1fr;
+  }
+
+  &__header {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  &__classification {
+    width: 100%;
+    color: #4b4b4b;
+    text-align: center;
+    background-color: #f5f5f5;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    line-height: 160%; /* 25.6px */
+  }
+
+  &__node {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 24px;
+    height: 54px;
+    gap: 8px;
+    font-family: Pretendard, sans-serif;
+    color: #000;
+
+    &--long {
+      border-right: 2.5px solid #f5f5f5;
+    }
+  }
+
+  &__node-detail {
+    color: #727272;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  &__number {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-width: 64px;
+    width: 100%;
+    padding: 8px;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    font-family: Pretendard, sans-serif;
+    color: #4b4b4b;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%; /* 25.6px */
+    background-color: #f5f5f5;
+
+    &--selected {
+      max-width: 126px;
+    }
+  }
+
+  &__time-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 10px;
+  }
+
+  &__time {
+    display: flex;
+    padding: 8px 0;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+
+    &--selected {
+      max-width: 126px;
+    }
+  }
+}
+
+.detail__button {
+  display: flex;
+  padding: 6px 16px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  background: #f5f5f5;
+  color: #727272;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 160%; /* 25.6px */
+
+  &--selected {
+    background: #175c8e;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    border-radius: 0;
+    padding: 12px 16px;
+    background-color: #fff;
+    color: #727272;
+
+    &--selected {
+      border-radius: 0;
+      background: #fff;
+      font-weight: 600;
+      line-height: 160%;
+      color: rgb(23 92 142);
+      border-bottom: 3px solid rgb(23 92 142);
+    }
+  }
+}
+
+.detail__button-wrapper {
+  position: absolute;
+  display: flex;
+  gap: 12px;
+  bottom: 24px;
+  right: 24px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100vw;
+    position: relative;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.info-footer-mobile-detail {
+  display: flex;
+  color: #727272;
+  width: 100%;
+  align-items: center;
+  gap: 4px;
+  font-family: Pretendard, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  margin: 40px 0 140px;
+  padding-left: 16px;
+}
