@@ -80,6 +80,7 @@
   @include media.media-breakpoint(mobile) {
     width: 100%;
     height: 65px;
+    padding: 0 16px;
   }
 
   &__segment {

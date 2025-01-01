@@ -50,7 +50,7 @@
   &__text {
     color: #000;
     font-family: Pretendard, sans-serif;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 700;
 
     @include media.media-breakpoint(mobile) {
@@ -83,6 +83,18 @@
 
   @include media.media-breakpoint(mobile) {
     width: 143px;
+    top: 90px;
+  }
+
+  &__text {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    line-height: 32px;
+    color: #4b4b4b;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+    }
   }
 
   &__option {
@@ -116,7 +128,7 @@
     }
 
     &:hover {
-      background-color: #f5f5f5;
+      background-color: #eee;
     }
   }
 }
