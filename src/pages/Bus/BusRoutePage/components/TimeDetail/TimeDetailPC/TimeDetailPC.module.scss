@@ -45,6 +45,10 @@
 .time-detail {
   display: flex;
 
+  &__select {
+    display: flex;
+  }
+
   &__button {
     width: 87px;
     height: 42px;

@@ -29,27 +29,31 @@ export default function SelectDropdown({
   const dropdownRef = useRef<HTMLDivElement>(null);
   useEscapeKeyDown({ onEscape: setClose });
 
+  const getCurrentOptionIndex = () => {
+    if (type === 'minute') {
+      const numericPart = parseInt(selectedLabel.replace(/\D/g, ''), 10); // 분 단위의 경우 '분'을 제외한 숫자만 추출
+      return Math.floor(numericPart / 10);
+    }
+    return options.findIndex(({ label }) => label === selectedLabel);
+  };
+
   const handleOptionSelect = (label: string, value: number) => {
     setValue(value);
     setSelectedLabel(label);
     setClose();
   };
 
-  const handleArrowClick = (direction: 'left' | 'right') => {
-    let currentIndex = options.findIndex(({ label }) => label === selectedLabel);
-    if (currentIndex === -1) {
-      const numericPart = parseInt(selectedLabel.replace(/\D/g, ''), 10); // 분 단위의 경우 '분'을 제외한 숫자만 추출
-      currentIndex = Math.floor(numericPart / 10);
-    }
+  const handleNavigationClick = (direction: 'prev' | 'next') => {
+    const currentIndex = getCurrentOptionIndex();
+    const newIndex = direction === 'prev' ? currentIndex - 1 : currentIndex + 1;
 
-    const nextIndex = direction === 'left'
-      ? Math.max(currentIndex - 1, 0)
-      : Math.min(currentIndex + 1, options.length - 1);
-    const nextOption = options[nextIndex];
-
-    setValue(nextOption.value);
-    setSelectedLabel(nextOption.label);
+    const newOption = options[newIndex];
+    setValue(newOption.value);
+    setSelectedLabel(newOption.label);
   };
+
+  const isFirstOption = getCurrentOptionIndex() === 0;
+  const isLastOption = getCurrentOptionIndex() === options.length - 1;
 
   useEffect(() => {
     if (isOpen && selectedItemRef.current && dropdownRef.current) {
@@ -63,17 +67,14 @@ export default function SelectDropdown({
   }, [isOpen]);
 
   return (
-    <div
-      className={cn({
-        [styles.box]: true,
-        [styles[`box--${type}`]]: true,
-      })}
-      ref={containerRef}
-    >
+    <div className={styles.box} ref={containerRef}>
       <button
         type="button"
-        className={styles.arrow}
-        onClick={() => handleArrowClick('left')}
+        className={cn({
+          [styles.arrow]: true,
+          [styles['arrow__left--disabled']]: isFirstOption,
+        })}
+        onClick={() => handleNavigationClick('prev')}
         aria-label="이전"
       >
         <ChevronLeft />
@@ -87,8 +88,11 @@ export default function SelectDropdown({
       </button>
       <button
         type="button"
-        className={styles.arrow}
-        onClick={() => handleArrowClick('right')}
+        className={cn({
+          [styles.arrow]: true,
+          [styles['arrow__right--disabled']]: isLastOption,
+        })}
+        onClick={() => handleNavigationClick('next')}
         aria-label="다음"
       >
         <ChevronRight />

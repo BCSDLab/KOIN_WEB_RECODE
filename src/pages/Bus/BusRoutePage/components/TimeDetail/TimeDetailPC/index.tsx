@@ -13,18 +13,6 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
     setNow, setDayOfMonth, setHour, setMinute,
   } = timeSelect.timeHandler;
 
-  const [dayOfMonthDisplay, setDayOfMonthDisplay] = useState('오늘');
-  const [hourDisplay, setHourDisplay] = useState(`${hour}시`);
-  const [minuteDisplay, setMinuteDisplay] = useState(`${minute}분`);
-
-  const handleNowDepartClick = () => {
-    const now = new Date();
-    setNow(now);
-    setDayOfMonthDisplay('오늘');
-    setHourDisplay(`${now.getHours()}시`);
-    setMinuteDisplay(`${now.getMinutes()}분`);
-  };
-
   const dates = [...Array(90)].map((_, index) => {
     const now = new Date();
     now.setDate(now.getDate() + index);
@@ -49,6 +37,18 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
     value: index * 10,
   }));
 
+  const [dayOfMonthDisplay, setDayOfMonthDisplay] = useState(dates[0].label);
+  const [hourDisplay, setHourDisplay] = useState(`${hour}시`);
+  const [minuteDisplay, setMinuteDisplay] = useState(`${minute}분`);
+
+  const handleNowDepartClick = () => {
+    const now = new Date();
+    setNow(now);
+    setDayOfMonthDisplay(dates[0].label);
+    setHourDisplay(`${now.getHours()}시`);
+    setMinuteDisplay(`${now.getMinutes()}분`);
+  };
+
   return (
     <div className={styles.box}>
       <div className={styles.guide}>
@@ -58,27 +58,29 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
         </span>
       </div>
       <div className={styles['time-detail']}>
-        <SelectDropdown
-          type="dayOfMonth"
-          options={dates}
-          selectedLabel={dayOfMonthDisplay}
-          setSelectedLabel={setDayOfMonthDisplay}
-          setValue={setDayOfMonth}
-        />
-        <SelectDropdown
-          type="hour"
-          options={hours}
-          selectedLabel={hourDisplay}
-          setSelectedLabel={setHourDisplay}
-          setValue={setHour}
-        />
-        <SelectDropdown
-          type="minute"
-          options={minutes}
-          selectedLabel={minuteDisplay}
-          setSelectedLabel={setMinuteDisplay}
-          setValue={setMinute}
-        />
+        <div className={styles['time-detail__select']}>
+          <SelectDropdown
+            type="dayOfMonth"
+            options={dates}
+            selectedLabel={dayOfMonthDisplay}
+            setSelectedLabel={setDayOfMonthDisplay}
+            setValue={setDayOfMonth}
+          />
+          <SelectDropdown
+            type="hour"
+            options={hours}
+            selectedLabel={hourDisplay}
+            setSelectedLabel={setHourDisplay}
+            setValue={setHour}
+          />
+          <SelectDropdown
+            type="minute"
+            options={minutes}
+            selectedLabel={minuteDisplay}
+            setSelectedLabel={setMinuteDisplay}
+            setValue={setMinute}
+          />
+        </div>
         <button
           className={styles['time-detail__button']}
           type="button"

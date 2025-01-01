@@ -46,7 +46,7 @@ export const useTimeSelect = () => {
       }));
     },
     setDayOfMonth: (dateDiff: number) => setTimeState((prev) => {
-      const newDate = new Date(prev.nowDate);
+      const newDate = new Date();
       newDate.setDate(newDate.getDate() + dateDiff);
       return {
         ...prev,
