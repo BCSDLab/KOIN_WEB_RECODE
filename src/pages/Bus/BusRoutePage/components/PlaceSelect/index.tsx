@@ -43,15 +43,16 @@ export default function PlaceSelect({
       <h1 className={styles.title}>{locationLabel.title}</h1>
       <div ref={containerRef}>
         <button
-          className={styles['select-box']}
+          className={cn({
+            [styles['select-box']]: true,
+            [styles['select-box--empty']]: !place,
+
+          })}
           onClick={toggleDropdown}
           type="button"
         >
           <span
-            className={cn({
-              [styles['select-box__text']]: true,
-              [styles['select-box__text--empty']]: !place,
-            })}
+            className={styles['select-box__text']}
           >
             {place ? LOCATION_MAP[place] : locationLabel.placeholder}
           </span>
