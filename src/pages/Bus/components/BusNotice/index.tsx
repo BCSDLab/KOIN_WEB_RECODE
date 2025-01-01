@@ -36,10 +36,10 @@ export default function BusNotice() {
   return (
     <div className={styles.container}>
       {showNotice && (
-        <div className={styles['removable-notice']}>
+        <div className={styles.notice}>
           {!isMobile && (<InformationIcon />)}
           <button
-            className={styles['removable-notice__description']}
+            className={styles.notice__description}
             type="button"
             onClick={handleClickNavigateNotice}
           >
@@ -47,7 +47,6 @@ export default function BusNotice() {
           </button>
           <button
             type="button"
-            className={styles['close-button']}
             onClick={handleClickDismissNotice}
             aria-label="공지 닫기"
           >
