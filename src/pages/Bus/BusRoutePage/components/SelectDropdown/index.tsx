@@ -14,7 +14,7 @@ interface Option {
 
 interface SelectDropdownProps {
   type: 'dayOfMonth' | 'hour' | 'minute';
-  options: Option[];
+  options: Array<Option>;
   selectedLabel: string;
   setSelectedLabel: (label: string) => void;
   setValue: (value: number) => void;
@@ -26,6 +26,7 @@ export default function SelectDropdown({
   const [isOpen,, setClose, toggleOpen] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: setClose });
   const selectedItemRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   useEscapeKeyDown({ onEscape: setClose });
 
   const handleOptionSelect = (label: string, value: number) => {
@@ -51,13 +52,13 @@ export default function SelectDropdown({
   };
 
   useEffect(() => {
-    if (isOpen && selectedItemRef.current) {
+    if (isOpen && selectedItemRef.current && dropdownRef.current) {
+      const dropdownHeight = dropdownRef.current.offsetHeight;
       const selectedElement = selectedItemRef.current;
+      const selectedOffset = selectedElement.offsetTop;
+      const selectedHeight = selectedElement.offsetHeight;
 
-      selectedElement.scrollIntoView({
-        block: 'center',
-        behavior: 'auto',
-      });
+      dropdownRef.current.scrollTop = selectedOffset - (dropdownHeight / 2) + (selectedHeight / 2);
     }
   }, [isOpen]);
 
@@ -93,7 +94,7 @@ export default function SelectDropdown({
         <ChevronRight />
       </button>
       {isOpen && (
-        <div className={styles.dropdown}>
+        <div className={styles.dropdown} ref={dropdownRef}>
           {options.map(({ label, value }) => (
             <button
               key={label}
