@@ -12,12 +12,12 @@ interface PickerColumnProps {
 export default function PickerColumn({
   items, selectedIndex, onChange, flex,
 }: PickerColumnProps) {
-  const itemHeight = 30;
+  const ITEM_HEIGHT = 30;
   const pickerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop } = e.currentTarget;
-    const index = Math.round(scrollTop / itemHeight);
+    const index = Math.round(scrollTop / ITEM_HEIGHT);
     if (index !== selectedIndex) {
       onChange(index);
     }
@@ -25,9 +25,9 @@ export default function PickerColumn({
 
   useEffect(() => {
     if (pickerRef.current) {
-      pickerRef.current.scrollTop = selectedIndex * itemHeight;
+      pickerRef.current.scrollTop = selectedIndex * ITEM_HEIGHT;
     }
-  }, [selectedIndex, itemHeight]);
+  }, [selectedIndex, ITEM_HEIGHT]);
 
   return (
     <div
@@ -38,7 +38,7 @@ export default function PickerColumn({
     >
       <div
         className={styles.items}
-        style={{ height: `${(items.length - 1) * itemHeight}px` }}
+        style={{ height: `${(items.length - 1) * ITEM_HEIGHT}px` }}
       >
         {items.map((item, index) => (
           <div
@@ -47,7 +47,7 @@ export default function PickerColumn({
               [styles.items__item]: true,
               [styles['items__item--selected']]: index === selectedIndex,
             })}
-            style={{ height: `${itemHeight}px` }}
+            style={{ height: `${ITEM_HEIGHT}px` }}
           >
             {item}
           </div>

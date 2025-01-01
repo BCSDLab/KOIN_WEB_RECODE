@@ -1,12 +1,12 @@
 .picker {
   position: relative;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  -webkit-overflow-scrolling: touch; // iOS 모멘텀 스크롤
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none;  // Internet Explorer 10+
 
-  ::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
+  &::-webkit-scrollbar {
+    display: none;  // Safari and Chrome
   }
 
   &::before,

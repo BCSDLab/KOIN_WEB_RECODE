@@ -20,8 +20,8 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
   const [selectedHour, setSelectedHour] = useState(hour % 12);
   const [selectedMinute, setSelectedMinute] = useState(minute);
 
-  useBodyScrollLock();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: close });
+  useBodyScrollLock();
 
   const handleNowDepartClick = () => {
     const now = new Date();
