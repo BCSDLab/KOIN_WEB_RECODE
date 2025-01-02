@@ -37,6 +37,7 @@ function TemplateShuttleVersion({
 }: TemplateShuttleVersionProps) {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
+  const logger = useLogger();
   const filteredRoutes = (route: string) => routes.filter(({ type }) => {
     if (route === '전체') {
       return true;
@@ -70,7 +71,15 @@ function TemplateShuttleVersion({
             type="button"
             className={styles['template-shuttle__list_wrapper']}
             key={route.id}
-            onClick={() => navigate(`/bus/course?routeId=${route.id}`)}
+            onClick={() => {
+              navigate(`/bus/course?routeId=${route.id}`);
+              logger.actionEventClick({
+                actionTitle: 'CAMPUS',
+                title: 'area_specific_route',
+                event_category: 'click',
+                value: `${route.type}_${route.route_name}`,
+              });
+            }}
           >
             <span className={styles['template-shuttle__list']}>
               <div className={styles['template-shuttle__list_header']}>
@@ -94,6 +103,7 @@ function TemplateShuttleVersion({
 
 function ShuttleTimetable() {
   const { shuttleCourse } = useShuttleCourse();
+  const logger = useLogger();
   const [selectedCourseId] = useIndexValueSelect();
   const [searchParams] = useSearchParams();
   const routeId = searchParams.get('routeId');
@@ -117,6 +127,12 @@ function ShuttleTimetable() {
             onClick={() => {
               setCategory(value);
               navigate('/bus/course');
+              logger.actionEventClick({
+                actionTitle: 'CAMPUS',
+                title: 'shuttle_bus_route',
+                event_category: 'click',
+                value,
+              });
             }}
           >
             {value}
@@ -193,12 +209,23 @@ function ShuttleTimetable() {
               {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
             </div>
           </div>
-          <Link className={styles['info-footer__icon']} to="https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY">
+          <button
+            type="button"
+            className={styles['info-footer__icon']}
+            onClick={() => {
+              window.open('https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY');
+              logger.actionEventClick({
+                actionTitle: 'CAMPUS',
+                title: 'error_feedback_button',
+                value: `셔틀_${category}`,
+              });
+            }}
+          >
             <InfomationIcon />
-            <div>
+            <div className={styles['info-footer__text']}>
               정보가 정확하지 않나요?
             </div>
-          </Link>
+          </button>
         </div>
       )}
     </div>
@@ -245,7 +272,7 @@ function ExpressTimetable() {
               handleCourseChange(e);
               logger.actionEventClick({
                 actionTitle: 'CAMPUS',
-                title: 'bus_timetable_express',
+                title: 'ds_bus_direction',
                 value: EXPRESS_COURSES[Number(e.currentTarget.dataset.value)].name,
               });
             }}
@@ -279,12 +306,23 @@ function ExpressTimetable() {
           업데이트 날짜:
           {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
         </div>
-        <div className={styles['express-footer__icon']}>
+        <button
+          type="button"
+          className={styles['info-footer__icon']}
+          onClick={() => {
+            window.open('https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY');
+            logger.actionEventClick({
+              actionTitle: 'CAMPUS',
+              title: 'error_feedback_button',
+              value: `대성_${destinationCategory}`,
+            });
+          }}
+        >
           <InfomationIcon />
-          <div>
+          <div className={styles['info-footer__text']}>
             정보가 정확하지 않나요?
           </div>
-        </div>
+        </button>
       </div>
     </div>
   );
@@ -341,7 +379,7 @@ function CityTimetable() {
                 setSelectedBusNumber(cityCourse.bus_number);
                 logger.actionEventClick({
                   actionTitle: 'CAMPUS',
-                  title: 'bus_timetable_citybus_route',
+                  title: 'city_bus_route',
                   value: `${cityCourse.bus_number}번`,
                 });
               }}
@@ -364,8 +402,8 @@ function CityTimetable() {
                 setSelectedDirection(cityBusDirection.value);
                 logger.actionEventClick({
                   actionTitle: 'CAMPUS',
-                  title: 'bus_timetable_citybus',
-                  value: cityBusDirection.value,
+                  title: 'city_bus_direction',
+                  value: cityBusDirection.label,
                 });
               }}
             >
@@ -383,12 +421,23 @@ function CityTimetable() {
           업데이트 날짜:
           {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
         </div>
-        <div className={styles['express-footer__icon']}>
+        <button
+          type="button"
+          className={styles['info-footer__icon']}
+          onClick={() => {
+            window.open('https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY');
+            logger.actionEventClick({
+              actionTitle: 'CAMPUS',
+              title: 'error_feedback_button',
+              value: `시내_${selectedDirection}_${selectedBusNumber}`,
+            });
+          }}
+        >
           <InfomationIcon />
-          <div>
+          <div className={styles['info-footer__text']}>
             정보가 정확하지 않나요?
           </div>
-        </div>
+        </button>
       </div>
     </div>
   );

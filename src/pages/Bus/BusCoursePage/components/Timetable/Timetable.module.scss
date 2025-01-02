@@ -386,6 +386,16 @@ $template-shuttle-colors: (
   }
 }
 
+.info-footer__text {
+  color: #727272;
+  width: 100%;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+}
+
 .info-footer-mobile {
   display: flex;
   flex-direction: column;
