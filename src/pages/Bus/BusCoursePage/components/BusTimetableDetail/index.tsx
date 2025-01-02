@@ -4,14 +4,13 @@ import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
+import { useSearchParams } from 'react-router-dom';
 import styles from './BusTimetableDetail.module.scss';
 
-interface ShuttleTimetableDetailProps {
-  routeId : string;
-}
-
-export default function BusTimetableDetail({ routeId }: ShuttleTimetableDetailProps) {
-  const { shuttleTimetableDetail } = useShuttleTimetableDetail(routeId);
+export default function BusTimetableDetail() {
+  const [searchParams] = useSearchParams();
+  const routeId = searchParams.get('routeId');
+  const { shuttleTimetableDetail } = useShuttleTimetableDetail(routeId || null);
   const [selectedDetail, setSelectedDetail] = useState<string | null>('');
   const isMobile = useMediaQuery();
 

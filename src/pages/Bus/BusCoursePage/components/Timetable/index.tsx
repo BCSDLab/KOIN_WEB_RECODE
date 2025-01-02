@@ -16,10 +16,10 @@ import {
 import useLogger from 'utils/hooks/analytics/useLogger';
 import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './Timetable.module.scss';
 
 interface TemplateShuttleVersionProps {
-  routeIdHandler: (id: string | null) => void,
   region: string;
   routes: {
     id: string;
@@ -31,12 +31,12 @@ interface TemplateShuttleVersionProps {
 }
 
 function TemplateShuttleVersion({
-  routeIdHandler,
   region,
   routes,
   category,
 }: TemplateShuttleVersionProps) {
   const isMobile = useMediaQuery();
+  const navigate = useNavigate();
   const filteredRoutes = (route: string) => routes.filter(({ type }) => {
     if (route === '전체') {
       return true;
@@ -70,7 +70,7 @@ function TemplateShuttleVersion({
             type="button"
             className={styles['template-shuttle__list_wrapper']}
             key={route.id}
-            onClick={() => routeIdHandler(route.id)}
+            onClick={() => navigate(`/bus/course?routeId=${route.id}`)}
           >
             <span className={styles['template-shuttle__list']}>
               <div className={styles['template-shuttle__list_header']}>
@@ -95,15 +95,13 @@ function TemplateShuttleVersion({
 function ShuttleTimetable() {
   const { shuttleCourse } = useShuttleCourse();
   const [selectedCourseId] = useIndexValueSelect();
+  const [searchParams] = useSearchParams();
+  const routeId = searchParams.get('routeId');
+  const navigate = useNavigate();
   const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
   const isMobile = useMediaQuery();
   const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
   const [category, setCategory] = useState('전체');
-  const [selectedRouteId, setSelectedRouteId] = useState<string | null>(null);
-
-  const changeRouteId = async (id: string | null) => {
-    setSelectedRouteId(id);
-  };
 
   return (
     <div className={styles['timetable-container']}>
@@ -118,7 +116,7 @@ function ShuttleTimetable() {
             type="button"
             onClick={() => {
               setCategory(value);
-              setSelectedRouteId(null);
+              navigate('/bus/course');
             }}
           >
             {value}
@@ -126,7 +124,7 @@ function ShuttleTimetable() {
         ))}
       </div>
 
-      {!selectedRouteId && (
+      {!routeId && (
         !isMobile ? (
           <div className={styles['main-timetable']}>
             <div className={styles['main-timetable__column']}>
@@ -135,7 +133,6 @@ function ShuttleTimetable() {
                 shuttleCourse.route_regions[2], // 서울
               ].map((text) => (
                 <TemplateShuttleVersion
-                  routeIdHandler={changeRouteId}
                   key={text.region}
                   region={text.region}
                   routes={text.routes}
@@ -149,7 +146,6 @@ function ShuttleTimetable() {
                 shuttleCourse.route_regions[3], // 대전, 세종
               ].map((text) => (
                 <TemplateShuttleVersion
-                  routeIdHandler={changeRouteId}
                   key={text.region}
                   region={text.region}
                   routes={text.routes}
@@ -162,7 +158,6 @@ function ShuttleTimetable() {
           <div className={styles['main-timetable-mobile']}>
             {shuttleCourse.route_regions.map((text) => (
               <TemplateShuttleVersion
-                routeIdHandler={changeRouteId}
                 key={text.region}
                 region={text.region}
                 routes={text.routes}
@@ -175,18 +170,18 @@ function ShuttleTimetable() {
                 <br />
                 시간표가 제공됩니다.
               </div>
-              <div className={styles['info-footer-mobile__icon']}>
+              <Link className={styles['info-footer-mobile__icon']} to="https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY">
                 <InfomationIcon />
                 <div>
                   정보가 정확하지 않나요?
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         )
       )}
 
-      {selectedRouteId && <BusTimetableDetail routeId={selectedRouteId} />}
+      {routeId && <BusTimetableDetail />}
 
       {!isMobile && (
         <div className={styles['info-footer']}>
@@ -198,12 +193,12 @@ function ShuttleTimetable() {
               {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
             </div>
           </div>
-          <div className={styles['info-footer__icon']}>
+          <Link className={styles['info-footer__icon']} to="https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY">
             <InfomationIcon />
             <div>
               정보가 정확하지 않나요?
             </div>
-          </div>
+          </Link>
         </div>
       )}
     </div>
