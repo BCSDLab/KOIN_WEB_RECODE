@@ -84,7 +84,7 @@ export default function BusTimetableDetail({ routeId }: ShuttleTimetableDetailPr
           </div>
           )}
 
-          <div className={styles['time-table-wrapper']}>
+          <div className={styles['time-table-main-wrapper']}>
             <div className={`${styles['time-table']} ${styles['time-table--short']}`} style={{ gridTemplateRows: `repeat(${rowLength}, 1fr)` }}>
               {shuttleTimetableDetail.route_info
                 .filter(({ name }) => selectedDetail === name)
@@ -116,12 +116,14 @@ export default function BusTimetableDetail({ routeId }: ShuttleTimetableDetailPr
               ))}
             </div>
 
-            <div className={styles['info-footer-mobile-detail']}>
-              <InfomationIcon />
-              <div>
-                정보가 정확하지 않나요?
+            {isMobile && (
+              <div className={styles['info-footer-mobile-detail']}>
+                <InfomationIcon />
+                <div>
+                  정보가 정확하지 않나요?
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

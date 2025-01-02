@@ -12,11 +12,6 @@ $template-shuttle-colors: (
   flex-direction: column;
   align-items: center;
   gap: 20px;
-
-  @include media.media-breakpoint(mobile) {
-    font-size: 13px;
-    gap: 0;
-  }
 }
 
 .timetable-city-container {
@@ -144,6 +139,7 @@ $template-shuttle-colors: (
   height: "fit-content";
   border-radius: 16px;
   border: 1px solid #eee;
+  padding-bottom: 20px;
 
   &__title {
     font-size: 18px;
@@ -179,7 +175,6 @@ $template-shuttle-colors: (
   &__list_type {
     color: #fff;
     padding: 0 4px;
-    height: 18px;
     border-radius: 4px;
     font-size: 11px;
     line-height: 160%;
@@ -274,12 +269,18 @@ $template-shuttle-colors: (
       font-weight: 600;
       line-height: 160%;
     }
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      font-weight: 600;
+    }
   }
 
   @include media.media-breakpoint(mobile) {
-    width: 100vw;
+    width: 100%;
     border-radius: 0;
     padding: 8px 24px;
+    gap: 0px;
   }
 }
 

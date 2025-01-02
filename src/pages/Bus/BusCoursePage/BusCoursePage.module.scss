@@ -1,5 +1,18 @@
 @use "src/utils/scss/media" as media;
 
+.root-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #fafafa;
+
+  @include media.media-breakpoint(mobile) {
+    background-color: #fff;
+  }
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -55,6 +68,7 @@
 }
 
 .contents {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

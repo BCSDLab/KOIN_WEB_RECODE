@@ -5,8 +5,23 @@
   border: 1px solid #eee;
   border-radius: 16px;
   height: auto;
+  padding-bottom: 16px; 
 
   @include media.media-breakpoint(mobile) {
+    border: none;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 0;
+  }
+}
+
+.time-table-main-wrapper {
+  width: 100%;
+  height: auto;
+
+  @include media.media-breakpoint(mobile) {
+    border: none;
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
@@ -210,7 +225,7 @@ $template-shuttle-colors: (
   right: 24px;
 
   @include media.media-breakpoint(mobile) {
-    width: 100vw;
+    width: 100%;
     position: relative;
     bottom: 0;
     right: 0;
