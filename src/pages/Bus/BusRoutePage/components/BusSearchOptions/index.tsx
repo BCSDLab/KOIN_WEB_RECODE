@@ -11,6 +11,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { format12Hour, formatRelativeDate } from 'pages/Bus/BusRoutePage/utils/timeModule';
+import { loggingBusTypeMap, useBusLogger } from 'pages/Bus/hooks/useBusLogger';
 import styles from './BusSearchOptions.module.scss';
 
 interface BusSearchOptionsProps {
@@ -27,6 +28,18 @@ export default function BusSearchOptions({
   const [isTimeDetailOpen,, closeTimeDetail, toggleTimeDetail] = useBooleanState(false);
   const [isBusTypeOpen, , closeBusType, toggleBusType] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeBusType });
+  const { logSearchResultDepartureTimeClick, logSearchResultBusType } = useBusLogger();
+
+  const handleTimeDetailToggle = () => {
+    toggleTimeDetail();
+    logSearchResultDepartureTimeClick();
+  };
+
+  const handleBusTypeClick = (type: BusTypeRequest) => {
+    setBusType(type);
+    closeBusType();
+    logSearchResultBusType(loggingBusTypeMap[type]);
+  };
 
   useEscapeKeyDown({ onEscape: closeBusType });
 
@@ -36,7 +49,7 @@ export default function BusSearchOptions({
         <button
           type="button"
           className={styles['depart-time']}
-          onClick={toggleTimeDetail}
+          onClick={handleTimeDetailToggle}
         >
           <span className={styles['depart-time__text']}>
             {`${formatRelativeDate(nowDate)} ${format12Hour(nowDate)}`}
@@ -78,10 +91,7 @@ export default function BusSearchOptions({
                     [styles['bus-type__option']]: true,
                     [styles['bus-type__option--selected']]: busType === type,
                   })}
-                  onClick={() => {
-                    setBusType(type);
-                    closeBusType();
-                  }}
+                  onClick={() => handleBusTypeClick(type)}
                   type="button"
                 >
                   {name}
