@@ -7,6 +7,7 @@ import RightArrow from 'assets/svg/right-arrow.svg';
 import dayjs from 'dayjs';
 import { cn } from '@bcsdlab/utils';
 import {
+  BUS_FEEDBACK_FORM,
   BUS_TYPES,
   cityBusDirections,
   CITY_COURSES,
@@ -16,7 +17,8 @@ import {
 import useLogger from 'utils/hooks/analytics/useLogger';
 import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import styles from './Timetable.module.scss';
 
 interface TemplateShuttleVersionProps {
@@ -126,7 +128,7 @@ function ShuttleTimetable() {
             type="button"
             onClick={() => {
               setCategory(value);
-              navigate('/bus/course');
+              navigate(ROUTES.BusCourse());
               logger.actionEventClick({
                 actionTitle: 'CAMPUS',
                 title: 'shuttle_bus_route',
@@ -186,12 +188,23 @@ function ShuttleTimetable() {
                 <br />
                 시간표가 제공됩니다.
               </div>
-              <Link className={styles['info-footer-mobile__icon']} to="https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY">
+              <button
+                type="button"
+                className={styles['info-footer__icon']}
+                onClick={() => {
+                  window.open(BUS_FEEDBACK_FORM);
+                  logger.actionEventClick({
+                    actionTitle: 'CAMPUS',
+                    title: 'error_feedback_button',
+                    value: `셔틀_${category}`,
+                  });
+                }}
+              >
                 <InfomationIcon />
-                <div>
+                <div className={styles['info-footer__text']}>
                   정보가 정확하지 않나요?
                 </div>
-              </Link>
+              </button>
             </div>
           </div>
         )
@@ -213,7 +226,7 @@ function ShuttleTimetable() {
             type="button"
             className={styles['info-footer__icon']}
             onClick={() => {
-              window.open('https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY');
+              window.open(BUS_FEEDBACK_FORM);
               logger.actionEventClick({
                 actionTitle: 'CAMPUS',
                 title: 'error_feedback_button',
@@ -310,7 +323,7 @@ function ExpressTimetable() {
           type="button"
           className={styles['info-footer__icon']}
           onClick={() => {
-            window.open('https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY');
+            window.open(BUS_FEEDBACK_FORM);
             logger.actionEventClick({
               actionTitle: 'CAMPUS',
               title: 'error_feedback_button',
@@ -425,7 +438,7 @@ function CityTimetable() {
           type="button"
           className={styles['info-footer__icon']}
           onClick={() => {
-            window.open('https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY');
+            window.open(BUS_FEEDBACK_FORM);
             logger.actionEventClick({
               actionTitle: 'CAMPUS',
               title: 'error_feedback_button',

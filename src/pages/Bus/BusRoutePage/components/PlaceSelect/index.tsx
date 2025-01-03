@@ -55,7 +55,6 @@ export default function PlaceSelect({
           className={cn({
             [styles['select-box']]: true,
             [styles['select-box--empty']]: !place,
-
           })}
           onClick={handleSelectBoxClick}
           type="button"

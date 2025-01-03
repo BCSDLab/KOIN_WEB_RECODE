@@ -174,3 +174,5 @@ export const BUS_LINKS = [
     SvgIcon: BusUnibus,
   },
 ] as const;
+
+export const BUS_FEEDBACK_FORM = 'https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY';
