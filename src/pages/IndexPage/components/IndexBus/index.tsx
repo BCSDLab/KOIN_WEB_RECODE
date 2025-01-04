@@ -41,14 +41,14 @@ function IndexBus() {
             <Link
               to={link}
               key={key}
-              className={styles.cards__card}
+              className={styles.card}
               onClick={logBus}
             >
-              <div className={styles['cards__card-guide']}>
-                <span className={styles['cards__card-title']}>
+              <div className={styles.card__guide}>
+                <span className={styles.card__title}>
                   {title}
                 </span>
-                <span className={styles['cards__card-subtitle']}>
+                <span className={styles.card__subtitle}>
                   {subtitle}
                 </span>
               </div>
@@ -64,16 +64,16 @@ function IndexBus() {
             <Link
               to={link}
               key={key}
-              className={styles.cards__card}
+              className={styles.card}
               onClick={logBus}
             >
-              <div className={styles['cards__card-segment']}>
+              <div className={styles.card__segment}>
                 <SvgIcon />
-                <div className={styles['cards__card-guide']}>
-                  <span className={styles['cards__card-title']}>
+                <div className={styles.card__guide}>
+                  <span className={styles.card__title}>
                     {title}
                   </span>
-                  <span className={styles['cards__card-subtitle']}>
+                  <span className={styles.card__subtitle}>
                     {subtitle}
                   </span>
                 </div>

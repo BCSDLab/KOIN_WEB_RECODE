@@ -27,7 +27,7 @@ export const format12Hour = (date: Date) => { // ex. 오전 01:01
 
   const period = hour >= 12 ? '오후' : '오전';
   const displayHour = hour > 12 ? hour - 12 : hour;
-  return `${period} ${String(displayHour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+  return `${period} ${String(displayHour)}:${String(minute).padStart(2, '0')}`;
 };
 
 export const isToday = (date: Date) => {

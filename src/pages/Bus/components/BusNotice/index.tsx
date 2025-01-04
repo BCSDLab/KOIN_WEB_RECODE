@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import InformationIcon from 'assets/svg/Bus/info.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
-import useBusNotice from 'pages/Bus/components/BusNotice/hooks/useBusNotice';
+import useBusNotice from 'pages/Bus/hooks/useBusNotice';
 import styles from './BusNotice.module.scss';
 
 export default function BusNotice() {
@@ -36,10 +36,10 @@ export default function BusNotice() {
   return (
     <div className={styles.container}>
       {showNotice && (
-        <div className={styles['removable-notice']}>
+        <div className={styles.notice}>
           {!isMobile && (<InformationIcon />)}
           <button
-            className={styles['removable-notice__description']}
+            className={styles.notice__description}
             type="button"
             onClick={handleClickNavigateNotice}
           >
@@ -47,7 +47,6 @@ export default function BusNotice() {
           </button>
           <button
             type="button"
-            className={styles['close-button']}
             onClick={handleClickDismissNotice}
             aria-label="공지 닫기"
           >

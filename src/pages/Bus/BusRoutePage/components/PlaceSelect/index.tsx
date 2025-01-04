@@ -4,6 +4,7 @@ import {
   locationLabels, locations, LOCATION_MAP, REVERSE_LOCATION_MAP,
 } from 'pages/Bus/BusRoutePage/constants/location';
 import { LocationDisplay } from 'pages/Bus/BusRoutePage/ts/types';
+import { LoggingLocation } from 'pages/Bus/hooks/useBusLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -15,16 +16,24 @@ interface PlaceSelectProps {
   setPlace: (value: DepartArrivalPlace) => void;
   exchangePlace: () => void;
   oppositePlace: DepartArrivalPlace | '';
+  logBoxClick: VoidFunction;
+  logConfirmClick: (location: LoggingLocation) => void;
 }
 
 export default function PlaceSelect({
-  type, place, setPlace, exchangePlace, oppositePlace,
+  type, place, setPlace, exchangePlace, oppositePlace, logBoxClick, logConfirmClick,
 }: PlaceSelectProps) {
   const locationLabel = locationLabels[type];
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
 
+  const handleSelectBoxClick = () => {
+    toggleDropdown();
+    logBoxClick();
+  };
+
   const handleDropdownItemClick = (locationName: LocationDisplay) => {
+    logConfirmClick(locationName);
     const currentLocation = REVERSE_LOCATION_MAP[locationName];
     if (oppositePlace === currentLocation) {
       exchangePlace();
@@ -43,15 +52,15 @@ export default function PlaceSelect({
       <h1 className={styles.title}>{locationLabel.title}</h1>
       <div ref={containerRef}>
         <button
-          className={styles['select-box']}
-          onClick={toggleDropdown}
+          className={cn({
+            [styles['select-box']]: true,
+            [styles['select-box--empty']]: !place,
+          })}
+          onClick={handleSelectBoxClick}
           type="button"
         >
           <span
-            className={cn({
-              [styles['select-box__text']]: true,
-              [styles['select-box__text--empty']]: !place,
-            })}
+            className={styles['select-box__text']}
           >
             {place ? LOCATION_MAP[place] : locationLabel.placeholder}
           </span>

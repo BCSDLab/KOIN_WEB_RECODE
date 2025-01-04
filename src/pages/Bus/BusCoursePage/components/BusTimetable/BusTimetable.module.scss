@@ -1,5 +1,9 @@
 @use "src/utils/scss/media" as media;
 
+.empty {
+  height: 100vh;
+}
+
 .template {
   width: 795px;
   margin: 23px auto 0;

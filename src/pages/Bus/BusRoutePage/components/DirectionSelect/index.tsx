@@ -6,6 +6,7 @@ import ExchangeIcon from 'assets/svg/Bus/exchange-icon.svg';
 import PlaceSelect from 'pages/Bus/BusRoutePage/components/PlaceSelect';
 import { LOCATION_TYPE_KEY } from 'pages/Bus/BusRoutePage/constants/location';
 import ExchangeIconMobile from 'assets/svg/Bus/exchange-icon-mobile.svg';
+import { useBusLogger } from 'pages/Bus/hooks/useBusLogger';
 import styles from './DirectionSelect.module.scss';
 
 interface DirectionSelectProps {
@@ -22,10 +23,19 @@ export default function DirectionSelect({
 }: DirectionSelectProps) {
   const isMobile = useMediaQuery();
 
+  const {
+    logDepartureBoxClick,
+    logDepartureLocationConfirm,
+    logArrivalBoxClick,
+    logArrivalLocationConfirm,
+    logSwapDestinationClick,
+  } = useBusLogger();
+
   const exchangePlace = () => {
     const temp = depart;
     setDepart(arrival);
     setArrival(temp);
+    logSwapDestinationClick();
   };
 
   useEffect(() => {
@@ -47,6 +57,8 @@ export default function DirectionSelect({
             oppositePlace={arrival}
             setPlace={setDepart}
             exchangePlace={exchangePlace}
+            logBoxClick={logDepartureBoxClick}
+            logConfirmClick={logDepartureLocationConfirm}
           />
           <button
             className={styles['exchange-button']}
@@ -62,6 +74,8 @@ export default function DirectionSelect({
             oppositePlace={depart}
             setPlace={setArrival}
             exchangePlace={exchangePlace}
+            logBoxClick={logArrivalBoxClick}
+            logConfirmClick={logArrivalLocationConfirm}
           />
         </div>
         {!isMobile && !isSearching && (

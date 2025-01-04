@@ -9,12 +9,13 @@
   }
 }
 
-.removable-notice {
+.notice {
   height: 58px;
   padding: 0 24px;
   border-radius: 8px;
   background-color: #f1f8ff;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   box-shadow:
     0 2px 4px rgba(0 0 0 / 4%),

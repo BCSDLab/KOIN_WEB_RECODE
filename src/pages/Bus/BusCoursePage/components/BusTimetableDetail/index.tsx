@@ -3,17 +3,18 @@ import { useEffect, useState } from 'react';
 import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
+import { useSearchParams } from 'react-router-dom';
 import styles from './BusTimetableDetail.module.scss';
 
-interface ShuttleTimetableDetailProps {
-  routeId : string;
-}
-
-export default function BusTimetableDetail({ routeId }: ShuttleTimetableDetailProps) {
-  const { shuttleTimetableDetail } = useShuttleTimetableDetail(routeId);
+export default function BusTimetableDetail() {
+  const [searchParams] = useSearchParams();
+  const routeId = searchParams.get('routeId');
+  const { shuttleTimetableDetail } = useShuttleTimetableDetail(routeId || null);
   const [selectedDetail, setSelectedDetail] = useState<string | null>('');
   const isMobile = useMediaQuery();
+  const logger = useLogger();
 
   useEffect(() => {
     if (shuttleTimetableDetail) {
@@ -57,7 +58,15 @@ export default function BusTimetableDetail({ routeId }: ShuttleTimetableDetailPr
                     [styles.detail__button]: true,
                     [styles['detail__button--selected']]: selectedDetail === name,
                   })}
-                  onClick={() => setSelectedDetail(name)}
+                  onClick={() => {
+                    setSelectedDetail(name);
+                    logger.actionEventClick({
+                      actionTitle: 'CAMPUS',
+                      title: name === '등교' ? 'go_to_school' : 'go_home',
+                      event_category: 'click',
+                      value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_type}`,
+                    });
+                  }}
                 >
                   {name}
                 </button>
@@ -84,7 +93,7 @@ export default function BusTimetableDetail({ routeId }: ShuttleTimetableDetailPr
           </div>
           )}
 
-          <div className={styles['time-table-wrapper']}>
+          <div className={styles['time-table-main-wrapper']}>
             <div className={`${styles['time-table']} ${styles['time-table--short']}`} style={{ gridTemplateRows: `repeat(${rowLength}, 1fr)` }}>
               {shuttleTimetableDetail.route_info
                 .filter(({ name }) => selectedDetail === name)
@@ -116,12 +125,14 @@ export default function BusTimetableDetail({ routeId }: ShuttleTimetableDetailPr
               ))}
             </div>
 
-            <div className={styles['info-footer-mobile-detail']}>
-              <InfomationIcon />
-              <div>
-                정보가 정확하지 않나요?
+            {isMobile && (
+              <div className={styles['info-footer-mobile-detail']}>
+                <InfomationIcon />
+                <div>
+                  정보가 정확하지 않나요?
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

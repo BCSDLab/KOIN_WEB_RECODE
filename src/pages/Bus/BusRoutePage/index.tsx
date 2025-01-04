@@ -6,9 +6,10 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
 import BusGuide from 'pages/Bus/BusRoutePage/components/BusGuide';
-import RouteList from './components/RouteList';
-import BusSearchOptions from './components/BusSearchOptions';
-import { useTimeSelect } from './hooks/useTimeSelect';
+import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
+import { useBusLogger } from 'pages/Bus/hooks/useBusLogger';
+import RouteList from 'pages/Bus/BusRoutePage/components/RouteList';
+import BusSearchOptions from 'pages/Bus/BusRoutePage/components/BusSearchOptions';
 import styles from './BusRoutePage.module.scss';
 
 export default function BusRoutePage() {
@@ -18,10 +19,12 @@ export default function BusRoutePage() {
   const [depart, setDepart] = useState<Depart | ''>('');
   const [arrival, setArrival] = useState<Arrival | ''>('');
   const [isLookingUp, startLookingUp] = useBooleanState(false);
+  const { logSearchBusClick } = useBusLogger();
 
   const lookUp = () => {
     if (!depart || !arrival) return;
     startLookingUp();
+    logSearchBusClick();
   };
 
   useScrollToTop();

@@ -1,5 +1,18 @@
 @use "src/utils/scss/media" as media;
 
+.root-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #fafafa;
+
+  @include media.media-breakpoint(mobile) {
+    background-color: #fff;
+  }
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -20,20 +33,27 @@
   gap: 8px;
 }
 
-.title-container {
+.guide {
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  &__title {
+    color: #175c8e;
+    font-family: Pretendard, sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+  }
+
+  &__subtitle {
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    line-height: 160%;
+  }
 }
 
-.title {
-  color: #175c8e;
-  font-family: Pretendard, sans-serif;
-  font-size: 32px;
-  font-weight: 500;
-}
-
-.mobile-title {
+.mobile-guide {
   font-family: Pretendard, sans-serif;
   color: #000;
   font-size: 20px;
@@ -42,14 +62,15 @@
   line-height: 160%;
   width: 100%;
 
-  &__text {
+  &__title {
     padding: 8px 24px 16px;
   }
 }
 
-.subtitle {
-  color: #000;
-  font-family: Pretendard, sans-serif;
-  font-size: 18px;
-  line-height: 160%;
+.contents {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 24px;
 }
