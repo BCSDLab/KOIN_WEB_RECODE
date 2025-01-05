@@ -1,0 +1,12 @@
+@use "utils/scss/media.scss" as media;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 148px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 20px;
+  }
+}

@@ -1,0 +1,142 @@
+@use "src/utils/scss/media" as media;
+
+.box {
+  position: relative;
+  width: 178px;
+  height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  @include media.media-breakpoint(mobile) {
+    width: 143px;
+    height: 50px;
+  }
+}
+
+.title {
+  font-family: Pretendard, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #175c8e;
+
+  @include media.media-breakpoint(mobile) {
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+}
+
+.select-box {
+  width: 178px;
+  height: 50px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow:
+    0 2px 4px rgba(0 0 0 / 4%),
+    0 1px 1px rgba(0 0 0 / 2%);
+
+  @include media.media-breakpoint(mobile) {
+    max-width: 143px;
+    background-color: #fff;
+    box-shadow: none;
+  }
+
+  &--empty {
+    & > span {
+      color: #8e8e8e;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      background-color: #f5f5f5;
+      box-shadow:
+        0 2px 4px rgba(0 0 0 / 4%),
+        0 1px 1px rgba(0 0 0 / 2%);
+    }
+  }
+
+  & > * {
+    padding-top: 2px;
+  }
+
+  &__text {
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 18px;
+    }
+  }
+}
+
+.dropdown {
+  z-index: 10;
+  position: absolute;
+  top: 105px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 2px 4px rgba(0 0 0 / 4%),
+    0 1px 1px rgba(0 0 0 / 2%);
+
+  @include media.media-breakpoint(mobile) {
+    width: 143px;
+    top: 90px;
+  }
+
+  &__text {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    line-height: 32px;
+    color: #4b4b4b;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+    }
+  }
+
+  &__option {
+    width: 178px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    background-color: #fafafa;
+    border-top: 1px solid #eee;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #4b4b4b;
+    padding-left: 16px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 143px;
+      height: 40px;
+      font-size: 16px;
+      justify-content: center;
+      padding-left: 0;
+      border: none;
+    }
+
+    & > * {
+      padding-top: 2px;
+    }
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
+}

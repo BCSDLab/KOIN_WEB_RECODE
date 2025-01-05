@@ -1,16 +1,20 @@
 import { CityBusParams } from 'api/bus/entity';
+import BusTimetable from 'assets/svg/IndexPage/Bus/bus-timetable.svg';
+import BusRoute from 'assets/svg/IndexPage/Bus/bus-route.svg';
+import BusUnibus from 'assets/svg/IndexPage/Bus/bus-unibus.svg';
+import ROUTES from './routes';
 
 export const BUS_TYPES = [{
   key: 'shuttle',
-  tabName: '학교셔틀',
+  tabName: '학교',
   tableHeaders: ['승차장소', '시간'],
 }, {
   key: 'express',
-  tabName: '대성고속',
-  tableHeaders: ['출발시간', '도착시간'],
+  tabName: '대성',
+  tableHeaders: ['오전', '오후'],
 }, {
   key: 'city',
-  tabName: '시내버스',
+  tabName: '시내',
   tableHeaders: ['오전', '오후'],
 }];
 
@@ -91,15 +95,15 @@ export const SHUTTLE_COURSES = [
 
 export const EXPRESS_COURSES = [
   {
-    name: '한기대 → 야우리',
+    name: '병천방면',
     bus_type: 'express',
-    direction: 'from',
+    direction: 'to',
     region: '천안',
   },
   {
-    name: '야우리 → 한기대',
+    name: '천안방면',
     bus_type: 'express',
-    direction: 'to',
+    direction: 'from',
     region: '천안',
   },
 ] as const;
@@ -133,8 +137,8 @@ export const busLink: BusLink[] = [
 ];
 
 export const cityBusDirections = [
-  { label: '병천 → 터미널', value: 'from' },
-  { label: '터미널 → 병천', value: 'to' },
+  { label: '천안방면', value: 'from' },
+  { label: '병천방면', value: 'to' },
 ];
 
 export const CITY_COURSES: CityBusParams[] = [
@@ -148,3 +152,27 @@ export const CITY_COURSES: CityBusParams[] = [
 
 export const DEFAULT_CITY_BUS_NUMBER = 400;
 export const TERMINAL_CITY_BUS = '종합터미널'; // 공통 시내버스 종점
+
+export const BUS_LINKS = [
+  {
+    key: 'timetable',
+    title: '버스 시간표',
+    subtitle: '바로가기',
+    link: ROUTES.BusCourse(),
+    SvgIcon: BusTimetable,
+  }, {
+    key: 'route',
+    title: '가장 빠른 버스',
+    subtitle: '조회하기',
+    link: ROUTES.BusRoute(),
+    SvgIcon: BusRoute,
+  }, {
+    key: 'unibus',
+    title: '유니버스',
+    subtitle: '바로가기',
+    link: 'https://koreatech.unibus.kr/',
+    SvgIcon: BusUnibus,
+  },
+] as const;
+
+export const BUS_FEEDBACK_FORM = 'https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY';

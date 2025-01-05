@@ -8,7 +8,7 @@ import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import InformationIcon from 'assets/svg/information-icon.svg';
+import InformationIcon from 'assets/svg/common/information/information-icon.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';

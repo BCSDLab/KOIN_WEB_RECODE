@@ -1,0 +1,154 @@
+@use "utils/scss/media.scss" as media;
+
+.box {
+  width: 100%;
+  position: relative;
+}
+
+.time-bus {
+  width: 100%;
+  height: 48px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.depart-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &__text {
+    color: #175c8e;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+    }
+  }
+
+  &__description {
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+    }
+  }
+
+  &__arrow {
+    margin-top: 3.5px;
+
+    &--open {
+      margin-top: -3.5px;
+      transform: rotate(-180deg);
+    }
+  }
+}
+
+.bus-type {
+  position: relative;
+
+  &__button {
+    width: 127px;
+    height: 48px;
+    padding: 0 16px;
+    background-color: #fff;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow:
+      0 2px 4px rgba(0 0 0 / 10%),
+      0 1px 1px rgba(0 0 0 / 5%);
+
+    @include media.media-breakpoint(mobile) {
+      width: 104px;
+      height: 40px;
+      padding: 0 8px 0 16px;
+      background-color: #fafafa;
+      box-shadow: none;
+    }
+  }
+
+  &__text {
+    margin-top: 2px;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22.4px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      line-height: 22.4px;
+    }
+  }
+
+  &__arrow {
+    margin-top: 3.5px;
+
+    &--open {
+      margin-top: -3.5px;
+      transform: rotate(-180deg);
+    }
+  }
+
+  &__dropdown {
+    z-index: 8;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 127px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow:
+      0 4px 10px rgba(0 0 0 / 8%),
+      0 1px 4px rgba(0 0 0 / 4%);
+
+    @include media.media-breakpoint(mobile) {
+      width: 104px;
+      box-shadow: none;
+    }
+  }
+
+  &__option {
+    width: 100%;
+    height: 42px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+
+    @include media.media-breakpoint(mobile) {
+      background-color: #fafafa;
+      font-size: 14px;
+    }
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &--selected {
+      color: #cacaca;
+    }
+
+    &:first-child {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+  }
+}
