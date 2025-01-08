@@ -1,17 +1,17 @@
 import React from 'react';
-import { LoginResponse } from 'api/auth/entity';
-import { Link } from 'react-router-dom';
-import { setCookie } from 'utils/ts/cookie';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { auth } from 'api';
-import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTokenStore } from 'utils/zustand/auth';
-import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { auth } from 'api';
+import { LoginResponse } from 'api/auth/entity';
+import { Link } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { setCookie } from 'utils/ts/cookie';
+import showToast from 'utils/ts/showToast';
+import { useTokenStore } from 'utils/zustand/auth';
 import styles from './LoginPage.module.scss';
 
 interface IClassUser {

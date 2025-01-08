@@ -1,11 +1,11 @@
 import React from 'react';
-import { MobilePage } from 'pages/TimetablePage/MainTimetablePage/MobilePage';
-import { useSemester } from 'utils/zustand/semester';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import { MobilePage } from 'pages/TimetablePage/MainTimetablePage/MobilePage';
 import { useLocation } from 'react-router-dom';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { useSemester } from 'utils/zustand/semester';
 import DefaultPage from './DefaultPage';
 import styles from './TimetablePage.module.scss';
 

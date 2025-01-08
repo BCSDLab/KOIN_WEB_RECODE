@@ -1,6 +1,6 @@
 import { cn } from '@bcsdlab/utils';
-import useCampusInfo from './hooks/useCampusInfo';
 import styles from './CampusInfo.module.scss';
+import useCampusInfo from './hooks/useCampusInfo';
 import Book from './svg/book.svg';
 import Cafe from './svg/cafe.svg';
 import Cut from './svg/cut.svg';

@@ -1,15 +1,15 @@
-import { Link } from 'react-router-dom';
+import { getJosaPicker } from '@bcsdlab/utils';
 import { StoreListV2 } from 'api/store/entity';
 import EventIcon from 'assets/svg/event.svg';
-import Star from 'assets/svg/Review/star.svg';
 import EmptyStar from 'assets/svg/Review/empty-star.svg';
-import { getJosaPicker } from '@bcsdlab/utils';
-import getDayOfWeek from 'utils/ts/getDayOfWeek';
+import Star from 'assets/svg/Review/star.svg';
+import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
+import { Link } from 'react-router-dom';
+import ROUTES from 'static/routes';
+import { StorePageType } from 'static/store';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
-import { StorePageType } from 'static/store';
-import ROUTES from 'static/routes';
+import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {

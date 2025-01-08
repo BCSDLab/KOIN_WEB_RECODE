@@ -1,24 +1,24 @@
-import ErrorBoundary from 'components/common/ErrorBoundary';
-import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
-import { useNavigate } from 'react-router-dom';
-import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
-import Curriculum from 'pages/TimetablePage/components/Curriculum';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
+import ErrorBoundary from 'components/common/ErrorBoundary';
+import LoadingSpinner from 'components/common/LoadingSpinner';
+import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
+import Curriculum from 'pages/TimetablePage/components/Curriculum';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
-import { useSemester } from 'utils/zustand/semester';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
-import { toast } from 'react-toastify';
+import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import styles from './MyLectureTimetable.module.scss';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useSemester } from 'utils/zustand/semester';
 import DownloadTimetableModal from './DownloadTimetableModal';
+import styles from './MyLectureTimetable.module.scss';
 
 function MainTimetable({ frameId }: { frameId: number }) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);

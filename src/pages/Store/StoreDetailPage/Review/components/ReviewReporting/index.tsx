@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import { useNavigate, useParams } from 'react-router-dom';
 import CheckBox from 'components/common/CommonCheckBox';
-import { toast } from 'react-toastify';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import ReportingLabel from './components/ReportingLabel';
-import styles from './ReviewReporting.module.scss';
 import useReviewReport from './query/useReviewReport';
+import styles from './ReviewReporting.module.scss';
 
 interface RequestOption {
   title: string;

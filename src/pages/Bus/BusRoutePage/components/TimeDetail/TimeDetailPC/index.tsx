@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'pages/Bus/BusRoutePage/components/SelectDropdown';
+import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import { useBusLogger } from 'pages/Bus/hooks/useBusLogger';
 import styles from './TimeDetailPC.module.scss';
 

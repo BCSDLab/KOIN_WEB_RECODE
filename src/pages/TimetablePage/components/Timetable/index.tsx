@@ -1,20 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
-import { TimetableDayLectureInfo } from 'interfaces/Lecture';
-import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
-import { useLocation, useNavigate } from 'react-router-dom';
-import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
-import { useTempLecture } from 'utils/zustand/myTempLecture';
-import { useTimeString } from 'utils/zustand/myLectures';
+import { TimetableDayLectureInfo } from 'interfaces/Lecture';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
+import { useTimeString } from 'utils/zustand/myLectures';
+import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {

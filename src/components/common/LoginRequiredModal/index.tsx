@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { setRedirectPath } from 'utils/ts/auth';
 import styles from './LoginRequiredModal.module.scss';
 

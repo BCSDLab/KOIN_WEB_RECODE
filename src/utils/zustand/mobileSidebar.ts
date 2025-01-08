@@ -1,7 +1,7 @@
-import { create } from 'zustand';
 import { useEffect } from 'react';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useLocation } from 'react-router-dom';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { create } from 'zustand';
 
 interface SidebarState {
   isSidebarOpen: boolean;

@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
-import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import RelateSearchItem from 'pages/Store/StorePage/components/RelateSearchItem';
-import { useNavigate } from 'react-router-dom';
 import { getRelateSearch } from 'api/store';
 import { RelatedSearchResponse } from 'api/store/entity';
+import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
+import RelateSearchItem from 'pages/Store/StorePage/components/RelateSearchItem';
+import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
+import { useNavigate } from 'react-router-dom';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './SearchBarModal.module.scss';
 
 interface SearchBarModalProps {

@@ -1,18 +1,18 @@
-import { cn, sha256 } from '@bcsdlab/utils';
 import { useEffect, useState } from 'react';
-import CloseIcon from 'assets/svg/close-icon-black.svg';
+import { isKoinError } from '@bcsdlab/koin';
+import { cn, sha256 } from '@bcsdlab/utils';
 import BlindIcon from 'assets/svg/blind-icon.svg';
+import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
 import WarningIcon from 'assets/svg/warning-icon.svg';
 import WarningMobileIcon from 'assets/svg/warning-mobile-icon.svg';
 import useCheckPassword from 'components/common/Header/hooks/useCheckPassword';
 import { useNavigate } from 'react-router-dom';
-import { isKoinError } from '@bcsdlab/koin';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useAuthenticationActions } from 'utils/zustand/authentication';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useAuthenticationActions } from 'utils/zustand/authentication';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {

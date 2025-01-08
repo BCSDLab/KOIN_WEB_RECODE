@@ -1,10 +1,10 @@
 /* eslint-disable no-restricted-globals */
 import React, { Suspense } from 'react';
-import LoadingSpinner from 'components/common/LoadingSpinner';
-import TimetableList from 'pages/TimetablePage/components/TimetableList';
-import MainTimetable from 'pages/TimetablePage/components/MainTimetable';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
+import LoadingSpinner from 'components/common/LoadingSpinner';
+import MainTimetable from 'pages/TimetablePage/components/MainTimetable';
+import TimetableList from 'pages/TimetablePage/components/TimetableList';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {

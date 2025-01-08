@@ -1,24 +1,24 @@
 import React, { Suspense, useImperativeHandle } from 'react';
-import { useNavigate } from 'react-router-dom';
-import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import ChevronUpDown from 'assets/svg/chevron-up-down.svg';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import { useQueryClient } from '@tanstack/react-query';
+import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
+import ChevronUpDown from 'assets/svg/common/chevron/chevron-up-down.svg';
+import LoadingSpinner from 'components/common/LoadingSpinner';
 import { Portal } from 'components/common/Modal/PortalProvider';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import Listbox from 'components/TimetablePage/Listbox';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
-import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
-import { useUser } from 'utils/hooks/state/useUser';
-import { useQueryClient } from '@tanstack/react-query';
-import LoadingSpinner from 'components/common/LoadingSpinner';
-import Listbox from 'components/TimetablePage/Listbox';
+import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
-import useUserInfoUpdate from './hooks/useUserInfoUpdate';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useUser } from 'utils/hooks/state/useUser';
+import showToast from 'utils/ts/showToast';
 import UserDeleteModal from './components/UserDeleteModal';
-import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
+import useUserInfoUpdate from './hooks/useUserInfoUpdate';
+import styles from './ModifyInfoPage.module.scss';
 
 const PASSWORD_REGEX =
   /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;

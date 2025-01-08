@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
-import { BusLinkKey, BUS_LINKS } from 'static/bus';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import ROUTES from 'static/routes';
 import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
 import QRCode from 'assets/svg/IndexPage/Bus/qr-code.svg';
+import { Link } from 'react-router-dom';
+import { BUS_LINKS } from 'static/bus';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './IndexBus.module.scss';
 

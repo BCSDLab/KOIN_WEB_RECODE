@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import SeeInfoArrow from 'assets/svg/see-info-arrow.svg';
-import HiddenInfoArrow from 'assets/svg/hidden-info-arrow.svg';
 import { cn } from '@bcsdlab/utils';
 import { StoreEvent } from 'api/store/entity';
+import HiddenInfoArrow from 'assets/svg/hidden-info-arrow.svg';
+import SeeInfoArrow from 'assets/svg/see-info-arrow.svg';
 import styles from './EventCard.module.scss';
 import EventContent from './EventContent';
 

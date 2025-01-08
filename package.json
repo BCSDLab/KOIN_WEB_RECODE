@@ -32,6 +32,7 @@
     "lint": "yarn lint:eslint && yarn lint:stylelint",
     "lint:eslint": "eslint src/ --ext .tsx,.ts",
     "lint:stylelint": "stylelint \"src/**/*.scss\" --config .stylelint.json",
+    "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\""
   },

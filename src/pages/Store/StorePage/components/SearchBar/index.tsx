@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
+import SearchBarModal from 'pages/Store/StorePage/components/SearchBarModal';
+import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
-import SearchBarModal from 'pages/Store/StorePage/components/SearchBarModal';
 import styles from './SearchBar.module.scss';
 // eslint-disable-next-line no-restricted-imports
 

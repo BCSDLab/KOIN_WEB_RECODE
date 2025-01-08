@@ -1,5 +1,5 @@
-import { timetable } from 'api';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { timetable } from 'api';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useSemesterCheck, { MY_SEMESTER_INFO_KEY } from './useMySemester';
 

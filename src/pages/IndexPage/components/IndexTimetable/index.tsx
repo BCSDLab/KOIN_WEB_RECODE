@@ -1,16 +1,16 @@
 import React, { Suspense, useEffect } from 'react';
-import Timetable from 'pages/TimetablePage/components/Timetable';
-import { Link } from 'react-router-dom';
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
-import { useSemesterAction, useSemester } from 'utils/zustand/semester';
-import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
+import Timetable from 'pages/TimetablePage/components/Timetable';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
-import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
+import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
+import { Link } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable() {

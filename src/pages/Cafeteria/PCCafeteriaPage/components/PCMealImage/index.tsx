@@ -1,7 +1,7 @@
 import { cn } from '@bcsdlab/utils';
-import { Dining } from 'interfaces/Cafeteria';
-import NoPhoto from 'assets/svg/no-photography-pc.svg';
 import NoMeals from 'assets/svg/no-meals-pc.svg';
+import NoPhoto from 'assets/svg/no-photography-pc.svg';
+import { Dining } from 'interfaces/Cafeteria';
 import styles from './PCMealImage.module.scss';
 
 interface PCMealImageProps {

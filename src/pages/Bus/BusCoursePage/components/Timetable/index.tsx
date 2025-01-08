@@ -1,13 +1,15 @@
-import BusTimetableDetail from 'pages/Bus/BusCoursePage/components/BusTimetableDetail';
-import useIndexValueSelect from 'pages/Bus/BusCoursePage/hooks/useIndexValueSelect';
 import { useState } from 'react';
-import useShuttleCourse from 'pages/Bus/BusCoursePage/hooks/useShuttleCourse';
+import { cn } from '@bcsdlab/utils';
+import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
+import RightArrow from 'assets/svg/right-arrow.svg';
+import dayjs from 'dayjs';
+import BusTimetableDetail from 'pages/Bus/BusCoursePage/components/BusTimetableDetail';
 import useBusTimetable, {
   useCityBusTimetable,
 } from 'pages/Bus/BusCoursePage/hooks/useBusTimetable';
-import RightArrow from 'assets/svg/right-arrow.svg';
-import dayjs from 'dayjs';
-import { cn } from '@bcsdlab/utils';
+import useIndexValueSelect from 'pages/Bus/BusCoursePage/hooks/useIndexValueSelect';
+import useShuttleCourse from 'pages/Bus/BusCoursePage/hooks/useShuttleCourse';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   BUS_FEEDBACK_FORM,
   BUS_TYPES,
@@ -16,11 +18,9 @@ import {
   EXPRESS_COURSES,
   TERMINAL_CITY_BUS,
 } from 'static/bus';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Timetable.module.scss';
 
 interface TemplateShuttleVersionProps {

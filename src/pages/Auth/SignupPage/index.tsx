@@ -1,18 +1,18 @@
 import React, { Suspense, useImperativeHandle } from 'react';
-import { useNavigate } from 'react-router-dom';
-import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import ChevronUpDown from 'assets/svg/chevron-up-down.svg';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { koin, privacy } from 'static/terms';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import ChevronUpDown from 'assets/svg/common/chevron/chevron-up-down.svg';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
+import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
-import styles from './SignupPage.module.scss';
-import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
+import { koin, privacy } from 'static/terms';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import showToast from 'utils/ts/showToast';
 import useDeptList from './hooks/useDeptList';
+import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useSignup from './hooks/useSignup';
+import styles from './SignupPage.module.scss';
 
 const PASSWORD_REGEX =
   /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/;

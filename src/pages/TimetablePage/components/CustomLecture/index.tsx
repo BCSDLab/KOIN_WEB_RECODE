@@ -1,21 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { LectureSchedule, MyLectureInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
-import CloseIcon from 'assets/svg/close-icon-black.svg';
-import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
-import Listbox from 'components/TimetablePage/Listbox';
-import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
+import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import WarningIcon from 'assets/svg/warning-icon.svg';
+import Listbox from 'components/TimetablePage/Listbox';
+import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
+import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
+import { useSearchParams } from 'react-router-dom';
+import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
+import uuidv4 from 'utils/ts/uuidGenerater';
 import {
   useCustomTempLecture,
   useCustomTempLectureAction,
 } from 'utils/zustand/myCustomTempLecture';
-import showToast from 'utils/ts/showToast';
-import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
-import { useSearchParams } from 'react-router-dom';
-import { LectureSchedule, MyLectureInfo } from 'api/timetable/entity';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
 
 const initialTimeSpaceComponent = {

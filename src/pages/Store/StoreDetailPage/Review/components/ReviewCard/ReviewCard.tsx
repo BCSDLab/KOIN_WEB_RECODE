@@ -1,17 +1,17 @@
-import { Review } from 'api/store/entity';
-import EmptyStar from 'assets/svg/Review/empty-star.svg';
-import Star from 'assets/svg/Review/star.svg';
-import Kebab from 'assets/svg/Review/kebab.svg';
-import ClickedKebab from 'assets/svg/Review/clicked-kebab.svg';
-import Mine from 'assets/svg/Review/check-mine.svg';
-import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
-import SelectButton from 'pages/Store/StoreDetailPage/Review/components/SelectButton/SelectButton';
-import ImageModal from 'components/common/Modal/ImageModal';
+import { useCallback, useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { Review } from 'api/store/entity';
+import InformationIcon from 'assets/svg/information-icon.svg';
+import Mine from 'assets/svg/Review/check-mine.svg';
+import ClickedKebab from 'assets/svg/Review/clicked-kebab.svg';
+import EmptyStar from 'assets/svg/Review/empty-star.svg';
+import Kebab from 'assets/svg/Review/kebab.svg';
+import Star from 'assets/svg/Review/star.svg';
+import ImageModal from 'components/common/Modal/ImageModal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import { useDropdown } from 'pages/Store/StoreDetailPage/hooks/useDropdown';
-import { useCallback, useEffect } from 'react';
+import SelectButton from 'pages/Store/StoreDetailPage/Review/components/SelectButton/SelectButton';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './ReviewCard.module.scss';
 
 export default function ReviewCard({
@@ -106,8 +106,8 @@ export default function ReviewCard({
           </div>
           <div className={styles['menu-card']}>
             {
-              // eslint-disable-next-line
               menu_names.map((menu, idx) => (
+                // eslint-disable-next-line
                 <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>
                   {menu}
                 </div>

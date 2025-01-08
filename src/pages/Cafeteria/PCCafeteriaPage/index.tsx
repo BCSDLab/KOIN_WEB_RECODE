@@ -1,14 +1,14 @@
 import { Suspense } from 'react';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
-import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
+import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';

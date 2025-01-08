@@ -1,13 +1,13 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
+import { Refresh } from 'api/auth/APIDetail';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
-import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import qsStringify from 'utils/ts/qsStringfy';
-import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
-import { deleteCookie, setCookie } from './cookie';
 import { redirectToLogin } from './auth';
+import { deleteCookie, setCookie } from './cookie';
 
 const API_URL = import.meta.env.VITE_API_PATH;
 

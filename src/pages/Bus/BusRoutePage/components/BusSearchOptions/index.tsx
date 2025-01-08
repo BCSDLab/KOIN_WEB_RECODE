@@ -1,17 +1,17 @@
-import ChevronDown32 from 'assets/svg/Bus/chevron-down-32x32.svg';
-import ChevronDown24 from 'assets/svg/Bus/chevron-down-24x24.svg';
-import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
 import { cn } from '@bcsdlab/utils';
-import { BUS_TYPE_MAP } from 'pages/Bus/BusRoutePage/constants/busType';
-import TimeDetail from 'pages/Bus/BusRoutePage/components/TimeDetail';
-import { UseTimeSelectReturn } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { BusTypeRequest } from 'api/bus/entity';
+import ChevronDown24 from 'assets/svg/Bus/chevron-down-24x24.svg';
+import ChevronDown32 from 'assets/svg/Bus/chevron-down-32x32.svg';
+import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
+import TimeDetail from 'pages/Bus/BusRoutePage/components/TimeDetail';
+import { BUS_TYPE_MAP } from 'pages/Bus/BusRoutePage/constants/busType';
+import { UseTimeSelectReturn } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
+import { format12Hour, formatRelativeDate } from 'pages/Bus/BusRoutePage/utils/timeModule';
+import { loggingBusTypeMap, useBusLogger } from 'pages/Bus/hooks/useBusLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { format12Hour, formatRelativeDate } from 'pages/Bus/BusRoutePage/utils/timeModule';
-import { loggingBusTypeMap, useBusLogger } from 'pages/Bus/hooks/useBusLogger';
 import styles from './BusSearchOptions.module.scss';
 
 interface BusSearchOptionsProps {

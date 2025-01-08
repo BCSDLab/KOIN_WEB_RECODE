@@ -13,7 +13,7 @@ const useArticles = (page = '1') => {
     select: (data) => {
       const {
         // 일관성을 유지하기 위해 변수명을 변경하지 않았습니다.
-        // eslint-disable-next-line @typescript-eslint/naming-convention
+        /* eslint-disable @typescript-eslint/naming-convention */
         articles,
         total_count,
         current_count,

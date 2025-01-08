@@ -1,7 +1,7 @@
 import BusNotice from 'pages/Bus/components/BusNotice';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import BusTimetable from './components/BusTimetable';
 import styles from './BusCoursePage.module.scss';
+import BusTimetable from './components/BusTimetable';
 
 export default function BusCoursePage() {
   const isMobile = useMediaQuery();

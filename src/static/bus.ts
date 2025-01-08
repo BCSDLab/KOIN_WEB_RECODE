@@ -1,6 +1,6 @@
 import { CityBusParams } from 'api/bus/entity';
-import BusTimetable from 'assets/svg/IndexPage/Bus/bus-timetable.svg';
 import BusRoute from 'assets/svg/IndexPage/Bus/bus-route.svg';
+import BusTimetable from 'assets/svg/IndexPage/Bus/bus-timetable.svg';
 import BusUnibus from 'assets/svg/IndexPage/Bus/bus-unibus.svg';
 import ROUTES from './routes';
 

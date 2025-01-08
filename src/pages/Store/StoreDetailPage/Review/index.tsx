@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { DropdownProvider } from 'pages/Store/StoreDetailPage/hooks/useDropdown';
+import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import AverageRating from './components/AverageRating/AverageRating';
 import ReviewButton from './components/ReviewButton';

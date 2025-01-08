@@ -1,17 +1,17 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import StarIcon from 'assets/svg/empty-star.svg';
-import DeleteMenuIcon from 'assets/svg/trash-can-icon.svg';
-import DeleteImageIcon from 'assets/svg/delete-icon.svg';
 import { useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import uuidv4 from 'utils/ts/uuidGenerater';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
-import { StoreDetailResponse } from 'api/store/entity';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { ReviewRequest } from 'api/review/entity';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { StoreDetailResponse } from 'api/store/entity';
+import DeleteImageIcon from 'assets/svg/delete-icon.svg';
+import StarIcon from 'assets/svg/empty-star.svg';
+import DeleteMenuIcon from 'assets/svg/trash-can-icon.svg';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './ReviewForm.module.scss';
 
 interface Props {

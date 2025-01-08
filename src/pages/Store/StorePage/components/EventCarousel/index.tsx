@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
-import { useGetAllEvents } from 'pages/Store/StorePage/components/hooks/useGetAllEvents';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import ROUTES from 'static/routes';
 import LeftBracket from 'assets/svg/left-angle-bracket.svg';
 import RightBracket from 'assets/svg/right-angle-bracket.svg';
+import { useGetAllEvents } from 'pages/Store/StorePage/components/hooks/useGetAllEvents';
+import { Link } from 'react-router-dom';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './EventCarousel.module.scss';
 import useCarouselController from './hooks/useCarouselController';
