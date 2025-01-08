@@ -1,4 +1,3 @@
-import React from 'react';
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import SemesterListbox from 'pages/TimetablePage/components/SemesterList';
@@ -8,6 +7,7 @@ import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import showToast from 'utils/ts/showToast';
+import React from 'react';
 import styles from './MobilePage.module.scss';
 
 function MobilePage({ frameId }: { frameId: number }) {

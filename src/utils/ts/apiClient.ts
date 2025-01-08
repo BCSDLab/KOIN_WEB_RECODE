@@ -1,11 +1,11 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
-import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Refresh } from 'api/auth/APIDetail';
+import qsStringify from 'utils/ts/qsStringfy';
+import { useTokenStore } from 'utils/zustand/auth';
 import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
-import qsStringify from 'utils/ts/qsStringfy';
-import { useTokenStore } from 'utils/zustand/auth';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { redirectToLogin } from './auth';
 import { deleteCookie, setCookie } from './cookie';
 

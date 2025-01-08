@@ -1,10 +1,10 @@
-import { useParams } from 'react-router-dom';
 import RoomDetailImg from 'components/Room/RoomDetailImg';
 import RoomDetailMap from 'components/Room/RoomDetailMap';
 import RoomDetailOption from 'components/Room/RoomDetailOption';
 import RoomDetailTable from 'components/Room/RoomDetailTable';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { useParams } from 'react-router-dom';
 import useRoomDetail from './hooks/useRoomDetail';
 import styles from './RoomDetailPage.module.scss';
 

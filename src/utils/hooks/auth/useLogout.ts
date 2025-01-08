@@ -1,6 +1,6 @@
-import ROUTES from 'static/routes';
 import { deleteCookie } from 'utils/ts/cookie';
 import { useTokenStore } from 'utils/zustand/auth';
+import ROUTES from 'static/routes';
 
 export const useLogout = () => {
   const { setToken, setRefreshToken } = useTokenStore();

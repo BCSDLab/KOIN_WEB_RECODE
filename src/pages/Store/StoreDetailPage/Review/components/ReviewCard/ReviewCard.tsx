@@ -1,5 +1,3 @@
-import { useCallback, useEffect } from 'react';
-import { cn } from '@bcsdlab/utils';
 import { Review } from 'api/store/entity';
 import InformationIcon from 'assets/svg/information-icon.svg';
 import Mine from 'assets/svg/Review/check-mine.svg';
@@ -12,6 +10,8 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import { useDropdown } from 'pages/Store/StoreDetailPage/hooks/useDropdown';
 import SelectButton from 'pages/Store/StoreDetailPage/Review/components/SelectButton/SelectButton';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { cn } from '@bcsdlab/utils';
+import { useCallback, useEffect } from 'react';
 import styles from './ReviewCard.module.scss';
 
 export default function ReviewCard({

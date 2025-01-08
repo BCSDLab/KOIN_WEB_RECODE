@@ -1,7 +1,7 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { getTimetableLectureInfo } from 'api/timetable';
 import { TimetableLectureInfoResponse, MyLectureInfo } from 'api/timetable/entity';
 import { KoinError } from 'interfaces/APIError';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const TIMETABLE_INFO_LIST = 'TIMETABLE_INFO_LIST';
 

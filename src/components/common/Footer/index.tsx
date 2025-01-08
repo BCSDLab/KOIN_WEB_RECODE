@@ -1,8 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { CATEGORY } from 'static/category';
-import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { CATEGORY } from 'static/category';
+import ROUTES from 'static/routes';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './Footer.module.scss';
 
 function Footer(): JSX.Element {

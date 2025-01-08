@@ -1,4 +1,3 @@
-import { Suspense, useState } from 'react';
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
 import BusGuide from 'pages/Bus/BusRoutePage/components/BusGuide';
 import BusSearchOptions from 'pages/Bus/BusRoutePage/components/BusSearchOptions';
@@ -10,6 +9,7 @@ import { useBusLogger } from 'pages/Bus/hooks/useBusLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { Suspense, useState } from 'react';
 import styles from './BusRoutePage.module.scss';
 
 export default function BusRoutePage() {

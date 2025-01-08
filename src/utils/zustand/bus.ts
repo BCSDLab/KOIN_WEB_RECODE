@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import { BUS_TYPES } from 'static/bus';
+import { create } from 'zustand';
 
 interface BusState {
   selectedTab: (typeof BUS_TYPES)[number];

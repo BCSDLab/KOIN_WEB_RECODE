@@ -1,5 +1,5 @@
-import React from 'react';
 import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
+import React from 'react';
 
 type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 

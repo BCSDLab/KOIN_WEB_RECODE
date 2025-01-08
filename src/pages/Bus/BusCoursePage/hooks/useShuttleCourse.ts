@@ -1,5 +1,5 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { getShuttleCourseInfo } from 'api/bus';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 function useShuttleCourse() {
   const { data: shuttleCourse } = useSuspenseQuery({

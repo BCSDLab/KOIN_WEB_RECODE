@@ -1,6 +1,6 @@
+import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 
 export function useResetHeaderButton() {
   const location = useLocation();

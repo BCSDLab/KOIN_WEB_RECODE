@@ -1,10 +1,10 @@
-import { Suspense } from 'react';
-import { Link } from 'react-router-dom';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'pages/Notice/hooks/useArticles';
-import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
+import ROUTES from 'static/routes';
+import { Suspense } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './IndexNotice.module.scss';
 
 const getArticleType = (id: number) => {

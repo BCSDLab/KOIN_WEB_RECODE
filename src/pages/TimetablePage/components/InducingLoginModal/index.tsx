@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useNavigate } from 'react-router-dom';
 import styles from './InducingLoginModal.module.scss';
 
 interface InducingLoginModalProps {

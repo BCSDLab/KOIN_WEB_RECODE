@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import InformationIcon from 'assets/svg/Bus/info.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
 import useBusNotice from 'pages/Bus/hooks/useBusNotice';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './BusNotice.module.scss';
 
 export default function BusNotice() {

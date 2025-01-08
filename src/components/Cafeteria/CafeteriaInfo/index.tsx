@@ -1,10 +1,10 @@
+import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './CafeteriaInfo.module.scss';
-import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
 
 interface ScheduleTableProps {
   title: string;

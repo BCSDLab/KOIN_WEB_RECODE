@@ -1,5 +1,5 @@
-import { Outlet, Link, useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import styles from './Auth.module.scss';
 
 function AuthPage() {

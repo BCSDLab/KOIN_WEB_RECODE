@@ -1,7 +1,7 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { setRedirectPath } from 'utils/ts/auth';
+import ROUTES from 'static/routes';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './LoginRequiredModal.module.scss';
 
 interface Props {

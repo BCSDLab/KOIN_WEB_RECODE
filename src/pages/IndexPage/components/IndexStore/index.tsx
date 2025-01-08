@@ -1,10 +1,10 @@
-import { useNavigate, Link } from 'react-router-dom';
 import BenefitIcon from 'assets/svg/benefit-icon.svg';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 // import useMediaQuery from 'utils/hooks/useMediaQuery';
-import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import ROUTES from 'static/routes';
+import { useNavigate, Link } from 'react-router-dom';
 import styles from './IndexStore.module.scss';
 
 interface Category {

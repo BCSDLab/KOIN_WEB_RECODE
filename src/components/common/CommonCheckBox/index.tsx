@@ -1,6 +1,6 @@
-import React from 'react';
 import Check from 'assets/svg/Review/report-item-checked.svg';
 import NotCheck from 'assets/svg/Review/report-item-circle.svg';
+import React from 'react';
 import styles from './CheckBox.module.scss';
 
 interface CadioBoxProps {

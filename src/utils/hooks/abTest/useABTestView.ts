@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
-import { useSuspenseQuery } from '@tanstack/react-query';
 import * as api from 'api';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useABTestView = (title: string, authorization?: string) => {
   const accessHistoryId = localStorage.getItem('access_history_id');

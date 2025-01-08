@@ -1,5 +1,3 @@
-import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import ChevronUp from 'assets/svg/common/chevron/chevron-up.svg';
 import NoReview from 'assets/svg/Review/no-review.svg';
 import LoginRequiredModal from 'components/common/LoginRequiredModal';
@@ -12,6 +10,8 @@ import ReviewCard from 'pages/Store/StoreDetailPage/Review/components/ReviewCard
 import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/StarList';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
+import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styles from './ReviewList.module.scss';
 
 const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;

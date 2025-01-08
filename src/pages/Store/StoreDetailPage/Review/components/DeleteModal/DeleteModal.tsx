@@ -1,6 +1,6 @@
-import { UseMutateFunction } from '@tanstack/react-query';
 import { StoreDetailResponse } from 'api/store/entity';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { UseMutateFunction } from '@tanstack/react-query';
 import styles from './DeleteModal.module.scss';
 
 interface Props {

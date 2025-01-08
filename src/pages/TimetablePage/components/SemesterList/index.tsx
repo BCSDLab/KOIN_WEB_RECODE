@@ -1,5 +1,3 @@
-import React from 'react';
-import { cn } from '@bcsdlab/utils';
 import AddIcon from 'assets/svg/add-icon.svg';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
@@ -15,6 +13,8 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
+import { cn } from '@bcsdlab/utils';
+import React from 'react';
 import AddSemesterModal from './AddSemesterModal';
 import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';

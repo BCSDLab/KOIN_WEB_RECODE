@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useEffect, useRef, useState } from 'react';
 
 export const useScrollLogging = (loggingFunc: () => void, targetPercent = 0.7) => {
   const [currentHeight, setCurrentHeight] = useState<number>(window.scrollY);

@@ -3,12 +3,7 @@
     "browser": true,
     "es6": true
   },
-  "extends": [
-    "airbnb",
-    "airbnb/hooks",
-    "airbnb-typescript",
-    "prettier"
-  ],
+  "extends": ["airbnb", "airbnb/hooks", "airbnb-typescript", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -17,24 +12,14 @@
     "ecmaVersion": 2018,
     "project": "./tsconfig.json"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "prettier",
-    "unused-imports"
-  ],
+  "plugins": ["react", "@typescript-eslint", "prettier", "unused-imports"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
   "overrides": [
     {
-      "files": [
-        "**/*.test.js",
-        "**/*.test.jsx",
-        "**/*.test.ts",
-        "**/*.test.tsx"
-      ],
+      "files": ["**/*.test.js", "**/*.test.jsx", "**/*.test.ts", "**/*.test.tsx"],
       "plugins": ["jest"],
       "extends": ["plugin:jest/recommended"]
     }
@@ -79,22 +64,14 @@
     "import/order": [
       "error",
       {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          ["parent", "sibling"],
-          "index",
-          "type"
-        ],
+        "groups": ["internal", "builtin", "external", "parent", "sibling", "index", "type"],
         "pathGroups": [
           {
-            "pattern": "react",
-            "group": "external",
+            "pattern": "{api,assets,components,lib,pages,utils}/**",
+            "group": "internal",
             "position": "before"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["react"],
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true

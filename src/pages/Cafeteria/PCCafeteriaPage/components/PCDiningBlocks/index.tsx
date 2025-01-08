@@ -1,15 +1,15 @@
 /* eslint-disable no-param-reassign */
-import { useEffect, useRef } from 'react';
 import { Portal } from 'components/common/Modal/PortalProvider';
-import { Dining, DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import DetailModal from 'pages/Cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
-import { DINING_TYPE_MAP } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { filterDinings } from 'utils/ts/cafeteria';
+import { Dining, DiningType } from 'interfaces/Cafeteria';
+import { DINING_TYPE_MAP } from 'static/cafeteria';
+import { useEffect, useRef } from 'react';
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {

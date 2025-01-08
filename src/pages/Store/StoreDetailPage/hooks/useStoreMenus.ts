@@ -1,5 +1,5 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import * as api from 'api';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 const useStoreMenus = (params: string) => {
   const { data } = useSuspenseQuery({

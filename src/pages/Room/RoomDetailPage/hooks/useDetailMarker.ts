@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import MarkerIcon from 'components/Room/MarkerIcon';
+import { useEffect, useState } from 'react';
 
 interface DetailMarkerProps {
   map: naver.maps.Map | null;

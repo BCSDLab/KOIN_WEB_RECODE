@@ -1,5 +1,5 @@
-import { skipToken, useQuery } from '@tanstack/react-query';
 import { getShuttleTimetableDetailInfo } from 'api/bus';
+import { skipToken, useQuery } from '@tanstack/react-query';
 
 function useShuttleTimetableDetail(id: string | null) {
   const { data: shuttleTimetableDetail } = useQuery({

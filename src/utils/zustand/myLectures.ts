@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
 import { LectureInfo } from 'api/timetable/entity';
 import { TimetableInfoFromLocalStorage } from 'interfaces/Lecture';
+import { create } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 
 const MY_LECTURES_KEY = 'my-lectures';
 

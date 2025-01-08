@@ -1,15 +1,15 @@
-import { cn } from '@bcsdlab/utils';
-import { useLocation, useNavigate } from 'react-router-dom';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import PersonIcon from 'assets/svg/person.svg';
-import { CATEGORY, Submenu } from 'static/category';
-import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
+import { CATEGORY, Submenu } from 'static/category';
+import ROUTES from 'static/routes';
+import { cn } from '@bcsdlab/utils';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Panel.module.scss';
 
 interface PanelProps {

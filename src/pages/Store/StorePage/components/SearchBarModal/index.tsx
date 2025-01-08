@@ -1,5 +1,3 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getRelateSearch } from 'api/store';
 import { RelatedSearchResponse } from 'api/store/entity';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
@@ -10,6 +8,8 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './SearchBarModal.module.scss';
 
 interface SearchBarModalProps {

@@ -1,5 +1,5 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { notice } from 'api';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 const useArticle = (id: string | undefined) => {
   const { data: article } = useSuspenseQuery({

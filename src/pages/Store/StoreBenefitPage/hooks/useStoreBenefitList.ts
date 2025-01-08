@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import * as api from 'api';
+import { useQuery } from '@tanstack/react-query';
 
 const useStoreBenefitList = (id: string) => {
   const { data: storeBenefitList } = useQuery({

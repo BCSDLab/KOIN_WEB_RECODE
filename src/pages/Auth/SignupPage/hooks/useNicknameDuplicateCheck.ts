@@ -1,5 +1,5 @@
-import React from 'react';
 import showToast from 'utils/ts/showToast';
+import React from 'react';
 import useNicknameCheckServer from './useNicknameCheckServer';
 
 const NICKNAME_REGEX = /admin|관리자/;

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
 import { LandList } from 'api/room/entity';
 import ROUTES from 'static/routes';
+import { Link } from 'react-router-dom';
 import styles from './RoomList.module.scss';
 
 interface RoomListProps {

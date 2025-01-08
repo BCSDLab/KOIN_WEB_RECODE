@@ -1,4 +1,3 @@
-import { cn } from '@bcsdlab/utils';
 import InformationIcon from 'assets/svg/information.svg';
 import LeftArrow from 'assets/svg/left-angle-bracket.svg';
 import RightArrow from 'assets/svg/right-angle-bracket.svg';
@@ -6,6 +5,7 @@ import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { cn } from '@bcsdlab/utils';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {

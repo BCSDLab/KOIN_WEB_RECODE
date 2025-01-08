@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
 import { Article } from 'api/notice/entity';
-import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
+import ROUTES from 'static/routes';
+import { Link } from 'react-router-dom';
 import styles from './NoticeList.module.scss';
 
 interface NoticeListProps {

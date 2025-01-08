@@ -1,5 +1,5 @@
-import { cn } from '@bcsdlab/utils';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
+import { cn } from '@bcsdlab/utils';
 import styles from './WeeklyDatePicker.module.scss';
 
 const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
