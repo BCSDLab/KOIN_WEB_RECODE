@@ -1,9 +1,18 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
-export type SemesterInfo = {
-  id: number;
-  semester: string;
+type Term = '1학기' | '여름학기' | '2학기' | '겨울학기';
+
+export type Semester = {
+  year: number;
+  term: Term;
 };
+
+export type SemestersResponse = Semester[];
+
+export interface SemesterCheckResponse extends APIResponse {
+  user_id: number;
+  semesters: Semester[];
+}
 
 export interface LectureInfo {
   id: number;
@@ -69,14 +78,8 @@ export type VersionInfo = {
 };
 
 // V1-시간표
-export type SemesterResponse = SemesterInfo[];
 
 export type LectureInfoResponse = LectureInfo[];
-
-export interface SemesterCheckResponse extends APIResponse {
-  user_id: number;
-  semesters: string[];
-}
 
 // V2-시간표
 // 강의 관련 요청 / 응답

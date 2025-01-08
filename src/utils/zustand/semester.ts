@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { Semester } from 'api/timetable/entity';
 
 type State = {
-  semester: string
+  semester: Semester | null
 };
 
 type Action = {
@@ -14,7 +15,7 @@ type Action = {
 const useSemesterStore = create(
   persist<State & Action>(
     (set) => ({
-      semester: '',
+      semester: null,
       action: {
         updateSemester: (semester) => set(() => ({ semester })),
       },

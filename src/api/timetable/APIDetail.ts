@@ -1,6 +1,6 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
-  SemesterResponse,
+  SemestersResponse,
   LectureInfoResponse,
   SemesterCheckResponse,
   TimetableLectureInfoResponse,
@@ -17,10 +17,10 @@ import {
   VersionInfoResponse,
 } from './entity';
 
-export class SemesterInfoList<R extends SemesterResponse> implements APIRequest<R> {
+export class SemesterInfoList<R extends SemestersResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/semesters';
+  path = '/v3/semesters';
 
   response!: R;
 
@@ -30,7 +30,7 @@ export class SemesterInfoList<R extends SemesterResponse> implements APIRequest<
 export class SemesterCheck<R extends SemesterCheckResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/semesters/check';
+  path = '/v3/semesters/check';
 
   response!: R;
 

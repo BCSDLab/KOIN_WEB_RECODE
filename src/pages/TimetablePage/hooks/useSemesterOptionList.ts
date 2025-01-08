@@ -21,17 +21,17 @@ const useSemester = () => {
 const useSemesterOptionList = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
-  const { data: semesterListFromLocalStorage } = useSemester();
+  const { data: allSemesters } = useSemester();
   const { data: mySemesterList } = useSemesterCheck(token);
   if (mySemesterList === null) {
     queryClient.invalidateQueries({ queryKey: [MY_SEMESTER_INFO_KEY] });
   }
   const semesterList = token
     ? mySemesterList?.semesters
-    : semesterListFromLocalStorage.map((item) => item.semester);
+    : allSemesters;
   const semesterOptionList = (semesterList ?? []).map(
     (semesterInfo) => ({
-      label: `${semesterInfo.slice(0, 4)}년 ${semesterInfo.replace('-', '').slice(4)}학기`,
+      label: `${semesterInfo.year}년 ${semesterInfo.term}`,
       value: semesterInfo,
     }),
   );
