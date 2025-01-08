@@ -1,7 +1,8 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { cn } from '@bcsdlab/utils';
+import * as api from 'api';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import Close from 'assets/svg/common/close/close-icon-20x20.svg';
 import IntroToolTip from 'components/common/IntroToolTip';
@@ -15,7 +16,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import * as api from 'api';
 import ROUTES from 'static/routes';
 import { STORE_PAGE } from 'static/store';
 import EventCarousel from './components/EventCarousel';

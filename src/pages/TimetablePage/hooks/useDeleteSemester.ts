@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import useToast from 'components/common/Toast/useToast';
 import { timetable } from 'api';
+import useToast from 'components/common/Toast/useToast';
 import { MY_SEMESTER_INFO_KEY } from './useMySemester';
 import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
 

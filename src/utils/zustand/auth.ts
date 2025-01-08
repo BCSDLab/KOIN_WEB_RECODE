@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { create } from 'zustand';
 import { getCookie } from 'utils/ts/cookie';
 
 type State = {

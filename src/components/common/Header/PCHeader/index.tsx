@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
+import * as api from 'api';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import * as api from 'api';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import styles from './PCHeader.module.scss';

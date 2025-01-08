@@ -72,43 +72,48 @@
             "position": "before"
           },
           {
-            "pattern": "{api,assets,components,interfaces,lib,pages,utils}/**",
-            "group": "internal",
+            "pattern": "react-*",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "recoil",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "zustand/**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "zustand",
+            "group": "external",
             "position": "before"
           },
           {
             "pattern": "@tanstack/**",
             "group": "external",
-            "position": "after"
-          },
-          {
-            "pattern": "react-*",
-            "group": "external",
-            "position": "after"
+            "position": "before"
           },
           {
             "pattern": "@bcsdlab/**",
             "group": "external",
-            "position": "after"
-          },
-          {
-            "pattern": "axios",
-            "group": "external",
-            "position": "after"
+            "position": "before"
           },
           {
             "pattern": "dayjs",
             "group": "external",
-            "position": "after"
+            "position": "before"
           },
           {
             "pattern": "lodash",
             "group": "external",
-            "position": "after"
+            "position": "before"
           },
           {
-            "pattern": "zustand/**",
-            "group": "external",
+            "pattern": "{api,assets,components,interfaces,lib,pages,utils}/**",
+            "group": "internal",
             "position": "after"
           },
           {

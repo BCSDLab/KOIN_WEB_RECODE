@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
+import { create } from 'zustand';
 import { LectureInfo } from 'api/timetable/entity';
 import { TimetableInfoFromLocalStorage } from 'interfaces/Lecture';
 

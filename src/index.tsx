@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter } from 'react-router-dom';
 import { sendClientError } from '@bcsdlab/koin';
+import ReactDOM from 'react-dom/client';
 import PortalProvider from 'components/common/Modal/PortalProvider';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
