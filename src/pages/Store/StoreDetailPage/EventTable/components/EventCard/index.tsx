@@ -43,7 +43,9 @@ export default function EventCard({ event }: { event: StoreEvent }) {
           src="https://static.koreatech.in/assets/img/shop-event-thumbnail-default-img.png"
           alt="이미지를 준비중 입니다."
         />
-        <div className={styles['default-event-thumbnail-text']}>사장님이 이미지를 준비 중입니다.</div>
+        <div className={styles['default-event-thumbnail-text']}>
+          사장님이 이미지를 준비 중입니다.
+        </div>
       </div>
     );
   };
@@ -63,20 +65,25 @@ export default function EventCard({ event }: { event: StoreEvent }) {
             className={styles['arrow-button']}
             type="button"
             aria-label="더보기 버튼"
-            onClick={() => { toggleHiddenInfo(hiddenInfo); }}
+            onClick={() => {
+              toggleHiddenInfo(hiddenInfo);
+            }}
           >
             전체보기
             {hiddenInfo ? <SeeInfoArrow /> : <HiddenInfoArrow />}
           </button>
         </div>
-        <div className={cn({
-          [styles['event-content']]: true,
-          [styles['event-content--nonHidden']]: hiddenInfo === false,
-        })}
+        <div
+          className={cn({
+            [styles['event-content']]: true,
+            [styles['event-content--nonHidden']]: hiddenInfo === false,
+          })}
         >
           <EventContent html={event.content} />
         </div>
-        <div className={styles.date}>{`${event.start_date.replace(/-/g, '.')} - ${event.end_date.replace(/-/g, '.')}`}</div>
+        <div
+          className={styles.date}
+        >{`${event.start_date.replace(/-/g, '.')} - ${event.end_date.replace(/-/g, '.')}`}</div>
       </div>
     </div>
   );

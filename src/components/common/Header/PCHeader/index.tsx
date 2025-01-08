@@ -9,7 +9,7 @@ import { useLogout } from 'utils/hooks/auth/useLogout';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './PCHeader.module.scss';
 
-const ID: { [key: string]: string; } = {
+const ID: { [key: string]: string } = {
   PANEL: 'megamenu-panel',
   LABEL1: 'megamenu-label-1',
   LABEL2: 'megamenu-label-2',
@@ -20,17 +20,15 @@ const useMegaMenu = (category: Category[]) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const createOnChangeMenu = (title: string) => () => {
-    const selectedSubmenu = category
-      .find((categoryInfo) => categoryInfo.title === title)?.submenu ?? null;
+    const selectedSubmenu =
+      category.find((categoryInfo) => categoryInfo.title === title)?.submenu ?? null;
     setPanelMenuList(selectedSubmenu);
     setIsExpanded(true);
   };
   const onFocusPanel = () => {
     setIsExpanded(true);
   };
-  const hideMegaMenu = (
-    event: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLElement>,
-  ) => {
+  const hideMegaMenu = (event: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLElement>) => {
     if (event.type === 'mouseout') {
       const { currentTarget } = event;
       currentTarget.blur();
@@ -69,19 +67,30 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
   const isLoggedin = !!token;
   const logShortcut = (title: string) => {
-    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '식단' });
-    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '버스/교통' });
-    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '공지사항' });
+    if (title === '식단')
+      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '식단' });
+    if (title === '버스/교통')
+      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '버스/교통' });
+    if (title === '공지사항')
+      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '공지사항' });
     if (title === '주변상점') {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', title: 'header', value: '주변상점', event_category: 'click',
+        actionTitle: 'BUSINESS',
+        title: 'header',
+        value: '주변상점',
+        event_category: 'click',
       });
     }
-    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '복덕방' });
-    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
+    if (title === '복덕방')
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '복덕방' });
+    if (title === '시간표')
+      logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
     if (title === '교내 시설물 정보') {
       logger.actionEventClick({
-        actionTitle: 'CAMPUS', title: 'header', value: '교내 시설물 정보', event_category: 'click',
+        actionTitle: 'CAMPUS',
+        title: 'header',
+        value: '교내 시설물 정보',
+        event_category: 'click',
       });
     }
   };
@@ -94,7 +103,8 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         value: '로고',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time:
+          (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
     if (pathname.includes(ROUTES.Store()) && search.includes('state')) {
@@ -106,7 +116,8 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         value: shopName.name,
         event_category: 'logo',
         current_page: sessionStorage.getItem('cameFrom') || '전체보기',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+        duration_time:
+          (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
       });
     }
     navigate(ROUTES.Main(), { replace: true });
@@ -133,9 +144,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
       >
         <ul className={styles['megamenu__trigger-list']}>
           {CATEGORY.map((category, index) => (
-            <li
-              key={category.title}
-            >
+            <li key={category.title}>
               <button
                 className={styles.megamenu__trigger}
                 tabIndex={0}
@@ -148,9 +157,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 aria-expanded={isMegaMenuExpanded}
                 aria-controls={ID[`LABEL${index + 1}`]}
               >
-                <span>
-                  {category.title}
-                </span>
+                <span>{category.title}</span>
               </button>
             </li>
           ))}
@@ -161,7 +168,9 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           onFocus={onFocusPanel}
           onMouseOver={onFocusPanel}
           aria-hidden={!isMegaMenuExpanded}
-          aria-labelledby={Array.from({ length: 2 }, (_, index) => ID[`LABEL${index + 1}`]).join(' ')}
+          aria-labelledby={Array.from({ length: 2 }, (_, index) => ID[`LABEL${index + 1}`]).join(
+            ' '
+          )}
         >
           <ul className={styles.megamenu__content}>
             {panelMenuList?.slice(0, -4).map((menu) => (

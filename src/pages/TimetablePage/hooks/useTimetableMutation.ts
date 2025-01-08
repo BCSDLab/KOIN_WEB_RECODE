@@ -11,8 +11,8 @@ import useDeleteTimetableLecture from './useDeleteTimetableLecture';
 import useEditTimetableLecture from './useEditTimetableLecture';
 
 type RemoveMyLectureProps = {
-  clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'> | null,
-  id: number
+  clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'> | null;
+  id: number;
 };
 
 export default function useTimetableMutation(frameId: number) {
@@ -20,10 +20,8 @@ export default function useTimetableMutation(frameId: number) {
   const toast = useToast();
   const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
   const { mutate: mutateEditWithServer } = useEditTimetableLecture();
-  const {
-    addLecture: addLectureFromLocalStorage,
-    removeLecture: removeLectureFromLocalStorage,
-  } = useLecturesAction();
+  const { addLecture: addLectureFromLocalStorage, removeLecture: removeLectureFromLocalStorage } =
+    useLecturesAction();
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
   const semester = useSemester();
 
@@ -41,7 +39,8 @@ export default function useTimetableMutation(frameId: number) {
             },
           ],
         });
-      } else { // 정규 강의 추가 시
+      } else {
+        // 정규 강의 추가 시
         mutateAddWithServer({
           timetable_frame_id: frameId,
           timetable_lecture: [
@@ -56,7 +55,8 @@ export default function useTimetableMutation(frameId: number) {
           ],
         });
       }
-    } else if ('code' in clickedLecture) { // (비로그인)정규 강의 추가 시
+    } else if ('code' in clickedLecture) {
+      // (비로그인)정규 강의 추가 시
       addLectureFromLocalStorage(clickedLecture, semester);
     }
   };
@@ -69,9 +69,7 @@ export default function useTimetableMutation(frameId: number) {
     } else {
       mutateAddWithServer({
         timetable_frame_id: frameId,
-        timetable_lecture: [
-          restoredLecture,
-        ],
+        timetable_lecture: [restoredLecture],
       });
     }
   };
@@ -81,7 +79,7 @@ export default function useTimetableMutation(frameId: number) {
   };
 
   const removeMyLecture = useMutation({
-    mutationFn: async ({ clickedLecture, id } : RemoveMyLectureProps) => {
+    mutationFn: async ({ clickedLecture, id }: RemoveMyLectureProps) => {
       sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
       if (clickedLecture && 'name' in clickedLecture) {
         return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, semester));

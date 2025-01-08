@@ -22,21 +22,17 @@ export interface PortalManager {
   close: CloseFunc;
 }
 
-export const PortalContext = React.createContext<PortalManager | undefined>(
-  undefined,
-);
+export const PortalContext = React.createContext<PortalManager | undefined>(undefined);
 
 interface PortalProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const PortalProvider = function PortalProvider({ children }: PortalProviderProps) {
   const [modalPortal, setModalPortal] = React.useState<ReactNode>();
 
   const open: OpenFunc = React.useCallback((element, options = {}) => {
-    const {
-      onClose,
-    } = options;
+    const { onClose } = options;
 
     const close: CloseFunc = () => setModalPortal(undefined);
 
@@ -47,25 +43,25 @@ const PortalProvider = function PortalProvider({ children }: PortalProviderProps
       },
     };
 
-    const portalElement = (
-      typeof element === 'function' ? element(portal) : element);
+    const portalElement = typeof element === 'function' ? element(portal) : element;
 
     const privatePortal: ReactNode = portalElement;
 
     setModalPortal(privatePortal);
   }, []);
 
-  const portalOption = React.useMemo(() => ({
-    open,
-    close: () => setModalPortal(undefined),
-  }), [open]);
+  const portalOption = React.useMemo(
+    () => ({
+      open,
+      close: () => setModalPortal(undefined),
+    }),
+    [open]
+  );
 
   return (
     <PortalContext.Provider value={portalOption}>
-      { children }
-      <>
-        { ReactDOM.createPortal(modalPortal, document.body) }
-      </>
+      {children}
+      <>{ReactDOM.createPortal(modalPortal, document.body)}</>
     </PortalContext.Provider>
   );
 };

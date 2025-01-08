@@ -2,7 +2,11 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import Listbox from 'components/TimetablePage/Listbox';
-import { AddTimetableFrameRequest, SemesterCheckResponse, TimetableFrameInfo } from 'api/timetable/entity';
+import {
+  AddTimetableFrameRequest,
+  SemesterCheckResponse,
+  TimetableFrameInfo,
+} from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -11,8 +15,7 @@ import styles from './AddSemesterModal.module.scss';
 export interface AddSemesterModalProps {
   onClose: () => void;
   setModalOpenFalse: () => void;
-  addSemester:
-  UseMutateFunction<TimetableFrameInfo, unknown, AddTimetableFrameRequest, unknown>;
+  addSemester: UseMutateFunction<TimetableFrameInfo, unknown, AddTimetableFrameRequest, unknown>;
   mySemester: SemesterCheckResponse | null;
 }
 
@@ -23,10 +26,12 @@ const years = Array.from({ length: currentYear - startYear + 1 }, (_, index) => 
   return { label: `${year}년도`, value: `${year}년도` };
 });
 
-const semester = [{ label: '겨울학기', value: '겨울학기' },
+const semester = [
+  { label: '겨울학기', value: '겨울학기' },
   { label: '2학기', value: '2학기' },
   { label: '여름학기', value: '여름학기' },
-  { label: '1학기', value: '1학기' }];
+  { label: '1학기', value: '1학기' },
+];
 
 export default function AddSemesterModal({
   onClose,
@@ -61,7 +66,10 @@ export default function AddSemesterModal({
       }
     }
   };
-  const semesterParam = yearValue.replace('년도', '') + (semesterValue.length === 3 ? '' : '-') + semesterValue.replace('학기', '');
+  const semesterParam =
+    yearValue.replace('년도', '') +
+    (semesterValue.length === 3 ? '' : '-') +
+    semesterValue.replace('학기', '');
 
   return (
     <div className={styles.background} ref={backgroundRef}>
@@ -79,7 +87,12 @@ export default function AddSemesterModal({
         </header>
         <div className={styles.container__semester}>
           <Listbox list={years} value={yearValue} onChange={onChangeYear} version="inModal" />
-          <Listbox list={semester} value={semesterValue} onChange={onChangeSemester} version="inModal" />
+          <Listbox
+            list={semester}
+            value={semesterValue}
+            onChange={onChangeSemester}
+            version="inModal"
+          />
         </div>
         <div className={styles.container__button}>
           <button

@@ -8,11 +8,12 @@ export default function useMyLectures(frameId: number) {
   const token = useTokenState();
   const semester = useSemester();
   const { data: myLecturesFromServer } = useTimetableInfoList({
-    authorization: token, timetableFrameId: frameId,
+    authorization: token,
+    timetableFrameId: frameId,
   });
   const myLecturesFromLocalStorageValue = useLecturesState(semester);
 
-  const myLectures = (!_.isEmpty(myLecturesFromServer))
+  const myLectures = !_.isEmpty(myLecturesFromServer)
     ? myLecturesFromServer
     : myLecturesFromLocalStorageValue;
   return { myLectures };

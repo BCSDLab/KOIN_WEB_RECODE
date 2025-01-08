@@ -14,7 +14,8 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
     { label: '전기ㆍ전자ㆍ통신공학부', value: '전기ㆍ전자ㆍ통신공학부' },
     { label: '컴퓨터공학부', value: '컴퓨터공학부' },
     { label: '에너지신소재화학공학부', value: '에너지신소재화학공학부' },
-    { label: '교양학부', value: '교양학부' }];
+    { label: '교양학부', value: '교양학부' },
+  ];
 
   React.useEffect(() => {
     if (deptOptionList.length !== 0) {
@@ -23,9 +24,7 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
     // onChange와 deptOptionList가 렌더링될 때마다 선언되서 처음 한번만 해야 하는 onChange를 렌더링할 때마다 한다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return (
-    <Listbox list={deptOptionList} value={value} onChange={onChange} version="new" />
-  );
+  return <Listbox list={deptOptionList} value={value} onChange={onChange} version="new" />;
 }
 
 export default DeptListbox;

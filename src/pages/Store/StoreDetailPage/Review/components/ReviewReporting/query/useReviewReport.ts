@@ -12,9 +12,8 @@ export default function useReviewReport(shopId: string, reviewId: string) {
   const openToast = useKoinToast();
 
   const { mutate } = useMutation({
-    mutationFn: (
-      data: ReviewReportRequest,
-    ) => postReviewReport(Number(shopId), Number(reviewId), data, token),
+    mutationFn: (data: ReviewReportRequest) =>
+      postReviewReport(Number(shopId), Number(reviewId), data, token),
     onSuccess: () => {
       openToast({ message: '해당 리뷰의 신고가 완료되었습니다.' });
       queryClient.invalidateQueries({ queryKey: ['review', Number(shopId)] });

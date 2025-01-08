@@ -23,6 +23,6 @@ export const useTokenStore = create(
     {
       name: 'refresh-token-storage',
       partialize: (state) => ({ refreshToken: state.refreshToken }) as State & Actions,
-    },
-  ),
+    }
+  )
 );

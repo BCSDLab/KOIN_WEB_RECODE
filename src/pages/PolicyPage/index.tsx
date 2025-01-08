@@ -13,7 +13,9 @@ function PolicyPage() {
               <h3 className={styles.policy__title}>{policy.title}</h3>
               {Array.isArray(policy.content) ? (
                 policy.content.map((text, index) => (
-                  <div className={styles.policy__content} key={index}>{text}</div>
+                  <div className={styles.policy__content} key={index}>
+                    {text}
+                  </div>
                 ))
               ) : (
                 <div className={styles.policy__content}>{policy.content}</div>
@@ -21,7 +23,9 @@ function PolicyPage() {
               {policy.items && (
                 <ul>
                   {policy.items.map((item, index) => (
-                    <li className={styles.policy__items} key={index}>{item}</li>
+                    <li className={styles.policy__items} key={index}>
+                      {item}
+                    </li>
                   ))}
                 </ul>
               )}
@@ -31,7 +35,9 @@ function PolicyPage() {
               {policy.additionalItems && (
                 <ul>
                   {policy.additionalItems.map((item, index) => (
-                    <li className={styles.policy__items} key={index}>{item}</li>
+                    <li className={styles.policy__items} key={index}>
+                      {item}
+                    </li>
                   ))}
                 </ul>
               )}
@@ -45,7 +51,9 @@ function PolicyPage() {
               <h3 className={styles.policy__title}>{terms.title}</h3>
               {Array.isArray(terms.content) ? (
                 terms.content.map((text, index) => (
-                  <div className={styles.policy__content} key={index}>{text}</div>
+                  <div className={styles.policy__content} key={index}>
+                    {text}
+                  </div>
                 ))
               ) : (
                 <div className={styles.policy__content}>{terms.content}</div>

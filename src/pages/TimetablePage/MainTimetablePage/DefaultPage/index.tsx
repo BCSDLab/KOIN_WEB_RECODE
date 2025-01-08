@@ -8,8 +8,8 @@ import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {
-  frameId: number,
-  setCurrentFrameId: (index: number) => void,
+  frameId: number;
+  setCurrentFrameId: (index: number) => void;
 }
 
 export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageProps) {
@@ -24,7 +24,8 @@ export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageP
         value: 'OS스와이프',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time:
+          (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
       return;
     }
@@ -35,7 +36,8 @@ export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageP
       value: '뒤로가기버튼',
       previous_page: '시간표',
       current_page: '메인',
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+      duration_time:
+        (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
     });
   }, [logger]);
 
@@ -47,9 +49,9 @@ export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageP
 
   React.useEffect(() => {
     window.addEventListener('popstate', handlePopState);
-    return (() => {
+    return () => {
       window.removeEventListener('popstate', handlePopState);
-    });
+    };
   }, [handlePopState]);
 
   React.useEffect(() => {
@@ -73,17 +75,14 @@ export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageP
         <h1 className={styles['timetable-header__title']}>시간표</h1>
       </div>
       <Suspense
-        fallback={(
+        fallback={
           <div className={styles['central-loading-spinner']}>
             <LoadingSpinner size="100" />
           </div>
-        )}
+        }
       >
         <div className={styles.page__content}>
-          <TimetableList
-            currentFrameIndex={frameId}
-            setCurrentFrameIndex={setCurrentFrameId}
-          />
+          <TimetableList currentFrameIndex={frameId} setCurrentFrameIndex={setCurrentFrameId} />
           <MainTimetable frameId={frameId} />
         </div>
       </Suspense>

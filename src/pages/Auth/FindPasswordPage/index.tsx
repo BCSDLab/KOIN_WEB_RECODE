@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import styles from './FindPasswordPage.module.scss';
 
 interface IClassUser {
-  userId: HTMLInputElement | null
+  userId: HTMLInputElement | null;
 }
 
 const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
@@ -54,7 +54,9 @@ function FindPasswordPage() {
     <div className={styles.template}>
       <form className={styles.findpasswordform} onSubmit={onSubmit}>
         <input
-          ref={(inputRef) => { FindIdRef.current.userId = inputRef; }}
+          ref={(inputRef) => {
+            FindIdRef.current.userId = inputRef;
+          }}
           className={styles['form-input']}
           autoComplete="username"
           name="userId"
@@ -64,13 +66,13 @@ function FindPasswordPage() {
           비밀번호 찾기
         </button>
       </form>
-      <span className={styles.findpasswordform__advice}>학교메일로 비밀번호 초기화 메일이 발송됩니다.</span>
+      <span className={styles.findpasswordform__advice}>
+        학교메일로 비밀번호 초기화 메일이 발송됩니다.
+      </span>
       <span className={styles.template__copyright}>
         COPYRIGHT ⓒ&nbsp;
-        {
-            new Date().getFullYear()
-          }
-          &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
+        {new Date().getFullYear()}
+        &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
       </span>
     </div>
   );

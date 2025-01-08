@@ -66,10 +66,20 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
             <div className={styles.header__detail}>
               {!!dining.kcal && `${dining.kcal}kcal`}
               {!!dining.kcal && !!dining.price_card && !!dining.price_cash && '•'}
-              {!!dining.price_card && !!dining.price_cash && `${dining.price_card}원/${dining.price_cash}원`}
+              {!!dining.price_card &&
+                !!dining.price_cash &&
+                `${dining.price_card}원/${dining.price_cash}원`}
             </div>
-            {dining.soldout_at && <span className={`${styles.header__chip} ${styles['header__chip--sold-out']}`}>품절</span>}
-            {!dining.soldout_at && dining.changed_at && <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>변경됨</span>}
+            {dining.soldout_at && (
+              <span className={`${styles.header__chip} ${styles['header__chip--sold-out']}`}>
+                품절
+              </span>
+            )}
+            {!dining.soldout_at && dining.changed_at && (
+              <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>
+                변경됨
+              </span>
+            )}
           </div>
 
           <div className={styles.content}>

@@ -10,11 +10,12 @@ export const useScrollLogging = (loggingFunc: () => void, targetPercent = 0.7) =
   };
   const isMobile = useMediaQuery();
   useEffect(() => {
-    const onScroll = () => debounce(() => {
-      if (document.body.scrollHeight * targetPercent > window.scrollY) {
-        setCurrentHeight(window.scrollY);
-      }
-    });
+    const onScroll = () =>
+      debounce(() => {
+        if (document.body.scrollHeight * targetPercent > window.scrollY) {
+          setCurrentHeight(window.scrollY);
+        }
+      });
     window.addEventListener('scroll', onScroll);
     window.addEventListener('resize', () => setCurrentHeight(window.scrollY));
 

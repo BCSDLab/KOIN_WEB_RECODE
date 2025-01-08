@@ -32,7 +32,7 @@ function LogPage() {
           // eslint-disable-next-line max-len
           gtag.pageView(
             window.location.pathname + window.location.search,
-            userUniqueIdGenerator(userInfo),
+            userUniqueIdGenerator(userInfo)
           );
           prevPathname.current = window.location.pathname;
         }, 1000);

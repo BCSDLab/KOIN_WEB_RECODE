@@ -37,7 +37,7 @@ export default function BusNotice() {
     <div className={styles.container}>
       {showNotice && (
         <div className={styles.notice}>
-          {!isMobile && (<InformationIcon />)}
+          {!isMobile && <InformationIcon />}
           <button
             className={styles.notice__description}
             type="button"
@@ -45,11 +45,7 @@ export default function BusNotice() {
           >
             {title}
           </button>
-          <button
-            type="button"
-            onClick={handleClickDismissNotice}
-            aria-label="공지 닫기"
-          >
+          <button type="button" onClick={handleClickDismissNotice} aria-label="공지 닫기">
             <CloseIcon aria-hidden="true" />
           </button>
         </div>

@@ -19,7 +19,12 @@ interface DirectionSelectProps {
 }
 
 export default function DirectionSelect({
-  depart, setDepart, arrival, setArrival, isSearching, lookUp,
+  depart,
+  setDepart,
+  arrival,
+  setArrival,
+  isSearching,
+  lookUp,
 }: DirectionSelectProps) {
   const isMobile = useMediaQuery();
 
@@ -66,7 +71,11 @@ export default function DirectionSelect({
             type="button"
             aria-label="출발지와 도착지를 바꾸기"
           >
-            {isMobile ? <ExchangeIconMobile aria-hidden="true" /> : <ExchangeIcon aria-hidden="true" />}
+            {isMobile ? (
+              <ExchangeIconMobile aria-hidden="true" />
+            ) : (
+              <ExchangeIcon aria-hidden="true" />
+            )}
           </button>
           <PlaceSelect
             type={LOCATION_TYPE_KEY.arrival}
@@ -79,11 +88,7 @@ export default function DirectionSelect({
           />
         </div>
         {!isMobile && !isSearching && (
-          <button
-            className={styles['lookup-button']}
-            onClick={lookUp}
-            type="button"
-          >
+          <button className={styles['lookup-button']} onClick={lookUp} type="button">
             조회하기
           </button>
         )}

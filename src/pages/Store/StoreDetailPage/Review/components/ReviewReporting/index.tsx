@@ -59,14 +59,14 @@ export default function ReviewReportingPage() {
 
       const updatedRequestOptions = isSelected
         ? requestOptions.filter(
-          (option) => option.title !== REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT].title,
-        )
+            (option) => option.title !== REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT].title
+          )
         : [
-          ...requestOptions,
-          value === 'etc'
-            ? { ...REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT], content: etcDescription }
-            : REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT],
-        ];
+            ...requestOptions,
+            value === 'etc'
+              ? { ...REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT], content: etcDescription }
+              : REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT],
+          ];
 
       setRequestOptions(updatedRequestOptions);
       return updatedOptions;
@@ -79,10 +79,10 @@ export default function ReviewReportingPage() {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 10}px`;
     }
 
-    setRequestOptions(
-      (prevOptions) => prevOptions.map((option) => (option.title === REVIEW_CONTEXT.etc.title
-        ? { ...option, content: etcDescription }
-        : option)),
+    setRequestOptions((prevOptions) =>
+      prevOptions.map((option) =>
+        option.title === REVIEW_CONTEXT.etc.title ? { ...option, content: etcDescription } : option
+      )
     );
   }, [etcDescription]);
 
@@ -104,7 +104,9 @@ export default function ReviewReportingPage() {
     const reportData = { reports: requestOptions };
     mutate(reportData);
     loggingReportDone();
-    navigate(`${ROUTES.StoreDetail({ id: params.shopid!, isLink: true })}?state=리뷰`, { replace: true });
+    navigate(`${ROUTES.StoreDetail({ id: params.shopid!, isLink: true })}?state=리뷰`, {
+      replace: true,
+    });
   };
 
   return (
@@ -122,7 +124,10 @@ export default function ReviewReportingPage() {
       </div>
       <div className={styles['option-container']}>
         {Object.keys(REVIEW_CONTEXT).map((key) => (
-          <div key={key} className={key === 'etc' ? styles['reporting-option--etc'] : styles['reporting-option']}>
+          <div
+            key={key}
+            className={key === 'etc' ? styles['reporting-option--etc'] : styles['reporting-option']}
+          >
             <CheckBox
               value={key}
               name="reason"
@@ -131,7 +136,11 @@ export default function ReviewReportingPage() {
             >
               <ReportingLabel
                 title={REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].title}
-                description={key === 'etc' ? `${etcDescription.length}/150 자` : REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].content}
+                description={
+                  key === 'etc'
+                    ? `${etcDescription.length}/150 자`
+                    : REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].content
+                }
                 disable={etcDescription.length === 150}
               />
             </CheckBox>

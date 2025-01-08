@@ -11,9 +11,7 @@ interface RouteListProps {
   arrival: Arrival;
 }
 
-export default function RouteList({
-  timeSelect, busType, depart, arrival,
-}: RouteListProps) {
+export default function RouteList({ timeSelect, busType, depart, arrival }: RouteListProps) {
   const { formattedValues } = timeSelect;
   const { data } = useBusRoute({
     dayOfMonth: formattedValues.date,

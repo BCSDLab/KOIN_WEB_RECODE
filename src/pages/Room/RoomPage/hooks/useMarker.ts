@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 
 interface MarkerProps {
-  map: naver.maps.Map | null
-  roomList: LandListResponse | undefined
+  map: naver.maps.Map | null;
+  roomList: LandListResponse | undefined;
 }
 
 function useMarker({ map, roomList }: MarkerProps) {

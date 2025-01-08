@@ -7,8 +7,8 @@ import useAddTimetableLecture from './useAddTimetableLecture';
 import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
 
 type DeleteTimetableFrameProps = {
-  id: number,
-  frame: TimetableFrameInfo,
+  id: number;
+  frame: TimetableFrameInfo;
 };
 
 export default function useDeleteTimetableFrame(token: string, semester: string) {
@@ -19,9 +19,10 @@ export default function useDeleteTimetableFrame(token: string, semester: string)
   const recoverFrame = async () => {
     const restoredFrame = JSON.parse(sessionStorage.getItem('restoreFrame')!);
     const restoredLectures = JSON.parse(sessionStorage.getItem('restoreLecturesInFrame')!);
-    const newTimetableFrame = await addTimetableFrame(
-      { semester, timetable_name: restoredFrame.timetable_name },
-    );
+    const newTimetableFrame = await addTimetableFrame({
+      semester,
+      timetable_name: restoredFrame.timetable_name,
+    });
     mutateAddWithServer({
       timetable_frame_id: newTimetableFrame.id!,
       timetable_lecture: restoredLectures.myLectures,

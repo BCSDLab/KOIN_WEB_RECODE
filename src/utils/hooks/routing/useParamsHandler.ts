@@ -7,9 +7,9 @@ const useParamsHandler = () => {
     key: string,
     value: string,
     option: {
-      deleteBeforeParam: boolean,
-      replacePage: boolean,
-    },
+      deleteBeforeParam: boolean;
+      replacePage: boolean;
+    }
   ) => {
     if (option.deleteBeforeParam) {
       const param = searchParams.get(key);

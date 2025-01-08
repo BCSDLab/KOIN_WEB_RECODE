@@ -9,19 +9,21 @@ export default function useEditTimetableLecture() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ frameId, editedLecture, token }: {
+    mutationFn: ({
+      frameId,
+      editedLecture,
+      token,
+    }: {
       frameId: number;
       editedLecture: TimetableLectureInfo;
-      token: string
-    }) => editTimetableLecture(
-      { timetable_frame_id: frameId, timetable_lecture: [editedLecture] },
-      token,
-    ),
+      token: string;
+    }) =>
+      editTimetableLecture(
+        { timetable_frame_id: frameId, timetable_lecture: [editedLecture] },
+        token
+      ),
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        [TIMETABLE_INFO_LIST, variables.frameId],
-        data,
-      );
+      queryClient.setQueryData([TIMETABLE_INFO_LIST, variables.frameId], data);
     },
     onError: (error) => {
       if (isKoinError(error)) {

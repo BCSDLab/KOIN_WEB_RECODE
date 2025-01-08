@@ -20,7 +20,8 @@ interface MobileCafeteriaPageProps {
 }
 
 export default function MobileCafeteriaPage({
-  diningType, setDiningType,
+  diningType,
+  setDiningType,
 }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
@@ -31,19 +32,19 @@ export default function MobileCafeteriaPage({
   useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
-    setButtonContent((
-      <button
-        type="button"
-        aria-label="학생식당 운영 정보 안내"
-        onClick={openCafeteriaInfo}
-      >
+    setButtonContent(
+      <button type="button" aria-label="학생식당 운영 정보 안내" onClick={openCafeteriaInfo}>
         <InformationIcon />
       </button>
-    ));
+    );
   }, [setButtonContent, openCafeteriaInfo]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[dining] });
+    logger.actionEventClick({
+      actionTitle: 'CAMPUS',
+      title: 'menu_time',
+      value: DINING_TYPE_MAP[dining],
+    });
     setDiningType(dining);
   };
 
@@ -55,7 +56,11 @@ export default function MobileCafeteriaPage({
       const scrollPercentage = (scrolled / maxHeight) * 100;
 
       if (scrollPercentage > 70 && !hasLoggedScroll) {
-        logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[diningType] });
+        logger.actionEventClick({
+          actionTitle: 'CAMPUS',
+          title: 'menu_time',
+          value: DINING_TYPE_MAP[diningType],
+        });
         setHasLoggedScroll(true);
       }
     };
@@ -94,7 +99,9 @@ export default function MobileCafeteriaPage({
         <Suspense fallback={<div />}>
           <MobileDiningBlocks diningType={diningType} />
         </Suspense>
-        <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
+        <span className={styles.blocks__caution}>
+          식단 정보는 운영 상황 따라 변동될 수 있습니다.
+        </span>
       </div>
 
       <div

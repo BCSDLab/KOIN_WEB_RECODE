@@ -10,9 +10,7 @@ export default function useDeleteTimetableLecture(authorization: string) {
   return useMutation({
     mutationFn: (id: number) => changeTimetableInfoByRemoveLecture(authorization, id),
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_INFO_LIST] },
-      );
+      queryClient.invalidateQueries({ queryKey: [TIMETABLE_INFO_LIST] });
     },
     onError: (error) => {
       if (isKoinError(error)) {

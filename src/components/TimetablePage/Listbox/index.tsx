@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
+import ChevronUpDown from 'assets/svg/chevron-up-down.svg';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -24,13 +24,7 @@ export interface ListboxProps {
   disabled?: boolean;
 }
 
-function Listbox({
-  list,
-  value,
-  onChange,
-  version = 'default',
-  disabled = false,
-}: ListboxProps) {
+function Listbox({ list, value, onChange, version = 'default', disabled = false }: ListboxProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
 
   const handleToggleListBox = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -49,16 +43,12 @@ function Listbox({
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
 
   const isOverHalf = containerRef.current
-    ? containerRef.current.getBoundingClientRect().bottom
-    > window.innerHeight / 2
+    ? containerRef.current.getBoundingClientRect().bottom > window.innerHeight / 2
     : !!containerRef.current;
   const styleClasses = version !== 'default' ? newStyles : styles;
 
   return (
-    <div
-      className={styleClasses.select}
-      ref={containerRef}
-    >
+    <div className={styleClasses.select} ref={containerRef}>
       <button
         type="button"
         onClick={handleToggleListBox}
@@ -66,23 +56,23 @@ function Listbox({
           [styleClasses.select__trigger]: true,
           [styleClasses['select__trigger--selected']]: isOpenedPopup && version === 'new',
           [styleClasses['select__trigger--selected-in-modal']]: version === 'inModal',
-          [styleClasses['select__trigger--selected-in-modal--opened']]: isOpenedPopup && version === 'inModal',
+          [styleClasses['select__trigger--selected-in-modal--opened']]:
+            isOpenedPopup && version === 'inModal',
           [styleClasses['select__trigger--selected-add-lecture']]: version === 'addLecture',
-          [styleClasses['select__trigger--selected-add-lecture--opened']]: isOpenedPopup && version === 'addLecture',
+          [styleClasses['select__trigger--selected-add-lecture--opened']]:
+            isOpenedPopup && version === 'addLecture',
         })}
         disabled={disabled}
       >
         {value === null ? '학부' : list.find((item) => item.value === value)?.label}
-        {version === 'default' ? <ChervronUpDown /> : <DownArrowIcon />}
+        {version === 'default' ? <ChevronUpDown /> : <DownArrowIcon />}
       </button>
       {isOpenedPopup && (
         <ul
-          className={
-            cn({
-              [styleClasses.select__content]: true,
-              [styleClasses['select__content--up']]: isOverHalf,
-            })
-          }
+          className={cn({
+            [styleClasses.select__content]: true,
+            [styleClasses['select__content--up']]: isOverHalf,
+          })}
           role="listbox"
         >
           {list.map((optionValue) => (

@@ -21,12 +21,13 @@ import { toast } from 'react-toastify';
 import styles from './TimetableList.module.scss';
 
 interface TimetableListProps {
-  currentFrameIndex: number,
-  setCurrentFrameIndex: (index: number) => void
+  currentFrameIndex: number;
+  setCurrentFrameIndex: (index: number) => void;
 }
 
 export default function TimetableList({
-  currentFrameIndex, setCurrentFrameIndex,
+  currentFrameIndex,
+  setCurrentFrameIndex,
 }: TimetableListProps) {
   const portalManager = useModalPortal();
   const semester = useSemester();
@@ -69,7 +70,7 @@ export default function TimetableList({
                 setCurrentFrameIndex(newTimetable.id);
               }
             },
-          },
+          }
         );
       }
     } else {
@@ -97,12 +98,7 @@ export default function TimetableList({
     <div className={styles['timetable-list']}>
       <SemesterList />
       <ul className={styles['timetable-list__list']} role="listbox">
-        <div
-          className={styles['timetable-list__list--scroll']}
-          role="button"
-          tabIndex={0}
-        >
-
+        <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
           {defaultFrame.length === 0 && (
             <div className={styles['timetable-list__empty-list']}>
               {mySemester?.semesters.length === 0
@@ -123,7 +119,9 @@ export default function TimetableList({
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
             >
               <div className={styles['timetable-list__item--title-container']}>
-                <li className={styles['timetable-list__item--main-title']}>{frame.timetable_name}</li>
+                <li className={styles['timetable-list__item--main-title']}>
+                  {frame.timetable_name}
+                </li>
                 <div className={styles['timetable-list__item--bookmark-icon']}>
                   <BookMarkIcon />
                 </div>
@@ -184,12 +182,7 @@ export default function TimetableList({
           <AddIcon />
         </button>
       </ul>
-      {isModalOpen && (
-        <TimetableSettingModal
-          focusFrame={focusFrame!}
-          onClose={closeModal}
-        />
-      )}
+      {isModalOpen && <TimetableSettingModal focusFrame={focusFrame!} onClose={closeModal} />}
     </div>
   );
 }

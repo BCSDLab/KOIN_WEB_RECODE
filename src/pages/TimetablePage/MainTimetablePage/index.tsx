@@ -16,11 +16,9 @@ function TimetablePage() {
   const semester = useSemester();
   const location = useLocation();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
-  const mainFrame = timetableFrameList.find(
-    (frame) => frame.is_main === true,
-  );
+  const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
   const [currentFrameIndex, setCurrentFrameIndex] = React.useState(
-    mainFrame?.id ? mainFrame.id : 0,
+    mainFrame?.id ? mainFrame.id : 0
   );
 
   React.useEffect(() => {

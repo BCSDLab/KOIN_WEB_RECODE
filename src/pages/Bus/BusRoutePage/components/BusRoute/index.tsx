@@ -2,7 +2,11 @@ import BusIcon from 'assets/svg/Bus/bus-icon-28x28.svg';
 import { SHORT_BUS_TYPE_MAP } from 'pages/Bus/BusRoutePage/constants/busType';
 import { cn } from '@bcsdlab/utils';
 import { Schedule } from 'pages/Bus/BusRoutePage/ts/types';
-import { formatTimeDifference, formatTimeWithSeconds, isToday } from 'pages/Bus/BusRoutePage/utils/timeModule';
+import {
+  formatTimeDifference,
+  formatTimeWithSeconds,
+  isToday,
+} from 'pages/Bus/BusRoutePage/utils/timeModule';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './BusRoute.module.scss';
 
@@ -33,9 +37,7 @@ export default function BusRoute({ departDate, schedule }: BusRouteProps) {
             {SHORT_BUS_TYPE_MAP[busType]}
           </div>
           {busType === 'city' && (
-            <span className={styles['bus-type__bus-number']}>
-              {`${busName}번`}
-            </span>
+            <span className={styles['bus-type__bus-number']}>{`${busName}번`}</span>
           )}
         </div>
         <div className={styles['depart-time']}>
@@ -44,7 +46,9 @@ export default function BusRoute({ departDate, schedule }: BusRouteProps) {
       </div>
       <div className={styles['before-arrive']}>
         <span className={styles['before-arrive__text']}>
-          {isToday(new Date(departDate)) ? formatTimeDifference(departTime, formatTimeWithSeconds(new Date())) : ''}
+          {isToday(new Date(departDate))
+            ? formatTimeDifference(departTime, formatTimeWithSeconds(new Date()))
+            : ''}
         </span>
       </div>
     </div>

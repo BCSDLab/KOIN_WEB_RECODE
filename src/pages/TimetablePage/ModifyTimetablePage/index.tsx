@@ -23,11 +23,7 @@ export default function ModifyTimetablePage() {
 
   return (
     <div className={styles.page}>
-      {!isMobile ? (
-        <DefaultPage frameId={frameId} />
-      ) : (
-        <MobilePage frameId={frameId} />
-      )}
+      {!isMobile ? <DefaultPage frameId={frameId} /> : <MobilePage frameId={frameId} />}
     </div>
   );
 }

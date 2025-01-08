@@ -5,9 +5,9 @@ import NoMeals from 'assets/svg/no-meals-pc.svg';
 import styles from './PCMealImage.module.scss';
 
 interface PCMealImageProps {
-  dining: Dining,
-  isThisWeek: boolean,
-  handleImageClick: (dining: Dining) => void,
+  dining: Dining;
+  isThisWeek: boolean;
+  handleImageClick: (dining: Dining) => void;
 }
 
 export default function PCMealImage({ dining, isThisWeek, handleImageClick }: PCMealImageProps) {
@@ -32,9 +32,7 @@ export default function PCMealImage({ dining, isThisWeek, handleImageClick }: PC
           품절된 메뉴입니다.
         </span>
       )}
-      {hasImage
-        ? <img src={dining.image_url!} alt="식단 상세" />
-        : <NoPhoto />}
+      {hasImage ? <img src={dining.image_url!} alt="식단 상세" /> : <NoPhoto />}
     </button>
   );
 }

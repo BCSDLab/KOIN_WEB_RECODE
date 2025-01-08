@@ -2,7 +2,7 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
+import ChevronUpDown from 'assets/svg/chevron-up-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -14,7 +14,8 @@ import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
 import useSignup from './hooks/useSignup';
 
-const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/;
+const PASSWORD_REGEX =
+  /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/;
 
 const PHONENUMBER_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
 
@@ -22,7 +23,7 @@ interface IFormType {
   [key: string]: {
     ref: HTMLInputElement | ICustomFormInput | null;
     validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
-  }
+  };
 }
 
 interface ICustomFormInput {
@@ -42,15 +43,13 @@ interface RegisterReturn {
 }
 
 export interface ISubmitForm {
-  (formValue: {
-    [key: string]: any;
-  }): void;
+  (formValue: { [key: string]: any }): void;
 }
 
 const isRefICustomFormInput = (
-  elementRef: HTMLInputElement | ICustomFormInput | null,
-): elementRef is ICustomFormInput => (elementRef !== null
-  && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+  elementRef: HTMLInputElement | ICustomFormInput | null
+): elementRef is ICustomFormInput =>
+  elementRef !== null && Object.prototype.hasOwnProperty.call(elementRef, 'valid');
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const refCollection = React.useRef<IFormType>({});
@@ -69,16 +68,18 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
   });
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const isCurrentValidEntries = Object.entries(refCollection.current)
-      .map((refValue): [string, string | true] => {
+    const isCurrentValidEntries = Object.entries(refCollection.current).map(
+      (refValue): [string, string | true] => {
         if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
         const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
           ? refValue[1].ref.valid
-          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', refCollection) ?? true;
+          : (refValue[1].validFunction?.(refValue[1].ref?.value ?? '', refCollection) ?? true);
         return [refValue[0], isCurrentNameValid];
-      });
-    const invalidFormEntry = isCurrentValidEntries
-      .find((entry): entry is [string, string] => entry[1] !== true);
+      }
+    );
+    const invalidFormEntry = isCurrentValidEntries.find(
+      (entry): entry is [string, string] => entry[1] !== true
+    );
     if (!invalidFormEntry) {
       const formValue = Object.entries(refCollection?.current).map((nameValue) => {
         if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
@@ -99,123 +100,122 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
 
 type ICustomFormInputProps = Omit<RegisterReturn, 'ref'>;
 
-const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
-  const [password, setPassword] = React.useState('');
-  const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
-  const [isPasswordValid, setIsPasswordValid] = React.useState(false);
+const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(
+  ({ name, required }, ref) => {
+    const [password, setPassword] = React.useState('');
+    const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
+    const [isPasswordValid, setIsPasswordValid] = React.useState(false);
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handlePasswordValidCheck = () => {
-    setIsPasswordValid(PASSWORD_REGEX.test(password));
-  };
-
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    let valid: string | true = true;
-    if (password !== passwordConfirmValue) {
-      valid = '입력하신 비밀번호가 일치하지 않습니다.';
-    } else if (password.length < 6 || password.length > 18) {
-      valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
-    } else if (!isPasswordValid) {
-      valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
-    }
-    return {
-      valid,
-      value: password,
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(e.target.value);
     };
-  }, [password, passwordConfirmValue, isPasswordValid]);
-  return (
-    <>
-      <input
-        className={cn({
-          [styles['form-input']]: true,
-          [styles['form-input--invalid']]: password.trim() !== '' && !isPasswordValid,
-        })}
-        type="password"
-        autoComplete="new-password"
-        placeholder="비밀번호 (필수)"
-        onChange={handlePasswordChange}
-        onBlur={handlePasswordValidCheck}
-        required={required}
-        name={name}
-      />
-      <span className={styles.signup__advice}>
-        비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
-      </span>
-      <input
-        className={cn({
-          [styles['form-input']]: true,
-          [styles['form-input--invalid']]: passwordConfirmValue.trim() !== '' && password !== passwordConfirmValue,
-        })}
-        type="password"
-        onChange={(e) => setPasswordConfirmValue(e.target.value)}
-        autoComplete="new-password"
-        placeholder="비밀번호 확인 (필수)"
-      />
-    </>
-  );
-});
 
-const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((
-  props,
-  ref,
-) => {
-  const nicknameElementRef = React.useRef<HTMLInputElement>(null);
-  const [nicknameInputValue, setNicknameInputValue] = React.useState('');
-  const {
-    changeTargetNickname,
-    status,
-    currentCheckedNickname,
-  } = useNicknameDuplicateCheck();
-  useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
-    ref,
-    () => ({
-      value: currentCheckedNickname,
-      valid: nicknameInputValue === '' || (status === 'success' && nicknameInputValue === currentCheckedNickname) ? true : '닉네임 중복확인을 해주세요.',
-    }),
-    [currentCheckedNickname, status, nicknameInputValue],
-  );
-  const onClickNicknameDuplicateCheckButton = () => {
-    changeTargetNickname(nicknameElementRef.current?.value ?? '');
-  };
-  const onChangeNicknameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { target } = event;
-    setNicknameInputValue(target.value);
-  };
-  return (
-    <div
-      className={cn({
-        [styles.signup__row]: true,
-        [styles['signup__row--nickname']]: true,
-      })}
-    >
-      <input
-        ref={nicknameElementRef}
-        className={styles['form-input']}
-        type="text"
-        onChange={onChangeNicknameInput}
-        autoComplete="nickname"
-        placeholder="닉네임 (선택)"
-        {...props}
-      />
-      <button
-        type="button"
+    const handlePasswordValidCheck = () => {
+      setIsPasswordValid(PASSWORD_REGEX.test(password));
+    };
+
+    React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+      let valid: string | true = true;
+      if (password !== passwordConfirmValue) {
+        valid = '입력하신 비밀번호가 일치하지 않습니다.';
+      } else if (password.length < 6 || password.length > 18) {
+        valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
+      } else if (!isPasswordValid) {
+        valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
+      }
+      return {
+        valid,
+        value: password,
+      };
+    }, [password, passwordConfirmValue, isPasswordValid]);
+    return (
+      <>
+        <input
+          className={cn({
+            [styles['form-input']]: true,
+            [styles['form-input--invalid']]: password.trim() !== '' && !isPasswordValid,
+          })}
+          type="password"
+          autoComplete="new-password"
+          placeholder="비밀번호 (필수)"
+          onChange={handlePasswordChange}
+          onBlur={handlePasswordValidCheck}
+          required={required}
+          name={name}
+        />
+        <span className={styles.signup__advice}>
+          비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
+        </span>
+        <input
+          className={cn({
+            [styles['form-input']]: true,
+            [styles['form-input--invalid']]:
+              passwordConfirmValue.trim() !== '' && password !== passwordConfirmValue,
+          })}
+          type="password"
+          onChange={(e) => setPasswordConfirmValue(e.target.value)}
+          autoComplete="new-password"
+          placeholder="비밀번호 확인 (필수)"
+        />
+      </>
+    );
+  }
+);
+
+const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(
+  (props, ref) => {
+    const nicknameElementRef = React.useRef<HTMLInputElement>(null);
+    const [nicknameInputValue, setNicknameInputValue] = React.useState('');
+    const { changeTargetNickname, status, currentCheckedNickname } = useNicknameDuplicateCheck();
+    useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
+      ref,
+      () => ({
+        value: currentCheckedNickname,
+        valid:
+          nicknameInputValue === '' ||
+          (status === 'success' && nicknameInputValue === currentCheckedNickname)
+            ? true
+            : '닉네임 중복확인을 해주세요.',
+      }),
+      [currentCheckedNickname, status, nicknameInputValue]
+    );
+    const onClickNicknameDuplicateCheckButton = () => {
+      changeTargetNickname(nicknameElementRef.current?.value ?? '');
+    };
+    const onChangeNicknameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { target } = event;
+      setNicknameInputValue(target.value);
+    };
+    return (
+      <div
         className={cn({
-          [styles.signup__button]: true,
-          [styles['signup__button--nickname']]: true,
+          [styles.signup__row]: true,
+          [styles['signup__row--nickname']]: true,
         })}
-        onClick={onClickNicknameDuplicateCheckButton}
       >
-        중복확인
-      </button>
-    </div>
-  );
-});
+        <input
+          ref={nicknameElementRef}
+          className={styles['form-input']}
+          type="text"
+          onChange={onChangeNicknameInput}
+          autoComplete="nickname"
+          placeholder="닉네임 (선택)"
+          {...props}
+        />
+        <button
+          type="button"
+          className={cn({
+            [styles.signup__button]: true,
+            [styles['signup__button--nickname']]: true,
+          })}
+          onClick={onClickNicknameDuplicateCheckButton}
+        >
+          중복확인
+        </button>
+      </div>
+    );
+  }
+);
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
   const [studentNumber, setStudentNumber] = React.useState<string>('');
@@ -279,166 +279,161 @@ const GENDER_TYPE = [
   { label: '여', value: 1 },
 ];
 
-const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
-  const [currentValue, setCurrentValue] = React.useState<number | null>(null);
-  const [isOpenedPopup,, closePopup, triggerPopup] = useBooleanState(false);
-  const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
-    const { currentTarget } = event;
-    const value = currentTarget.getAttribute('data-value');
-    setCurrentValue(value ? parseInt(value, 10) : null);
-    closePopup();
-  };
-  const onBlurSelect = () => {
-    closePopup();
-  };
-  const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
-    const { key, currentTarget } = event;
-    const value = currentTarget.getAttribute('data-value');
-    switch (key) {
-      case 'Enter':
-        setCurrentValue(value ? parseInt(value, 10) : null);
-        break;
-      default:
-        break;
-    }
-  };
-
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    const requiredValidValue = (currentValue !== null ? true : '성별을 선택해주세요.');
-    return {
-      value: currentValue,
-      valid: required ? requiredValidValue : true,
+const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
+  ({ name, required }, ref) => {
+    const [currentValue, setCurrentValue] = React.useState<number | null>(null);
+    const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
+    const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
+      const { currentTarget } = event;
+      const value = currentTarget.getAttribute('data-value');
+      setCurrentValue(value ? parseInt(value, 10) : null);
+      closePopup();
     };
-  }, [currentValue, required]);
-
-  return (
-    <div
-      className={cn({
-        [styles.select]: true,
-        [styles['select--flex-end']]: true,
-      })}
-      onBlur={onBlurSelect}
-    >
-      <button
-        type="button"
-        onClick={triggerPopup}
-        name={name}
-        className={cn({
-          [styles.select__trigger]: true,
-          [styles['select__trigger--active']]: currentValue !== null,
-        })}
-      >
-        {currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'}
-        <ChervronUpDown />
-      </button>
-      {isOpenedPopup && (
-        <ul className={styles.select__content} role="listbox">
-          {GENDER_TYPE.map((optionValue) => (
-            <li
-              className={styles.select__option}
-              key={optionValue.value}
-              role="option"
-              aria-selected={optionValue.value === currentValue}
-              data-value={optionValue.value}
-              onMouseDown={onClickOption}
-              onKeyPress={onKeyPressOption}
-            >
-              {optionValue.label}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-});
-
-const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
-  const [terms, setTerms] = React.useState({
-    privacy: false,
-    usage: false,
-  });
-  const onChangeAllTerms = () => {
-    setTerms((prevValue) => ({
-      privacy: !(prevValue.privacy && prevValue.usage),
-      usage: !(prevValue.privacy && prevValue.usage),
-    }));
-  };
-  const onChangePrivacyTerm = () => {
-    setTerms((prevValue) => ({
-      ...prevValue,
-      privacy: !(prevValue.privacy),
-    }));
-  };
-  const onChangeUsageTerm = () => {
-    setTerms((prevValue) => ({
-      ...prevValue,
-      usage: !(prevValue.usage),
-    }));
-  };
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    const requiredValidValue = (terms.privacy && terms.usage) ? true : '이용 약관에 모두 동의해주세요.';
-    return {
-      value: terms,
-      valid: required ? requiredValidValue : true,
+    const onBlurSelect = () => {
+      closePopup();
     };
-  }, [terms, required]);
+    const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
+      const { key, currentTarget } = event;
+      const value = currentTarget.getAttribute('data-value');
+      switch (key) {
+        case 'Enter':
+          setCurrentValue(value ? parseInt(value, 10) : null);
+          break;
+        default:
+          break;
+      }
+    };
 
-  return (
-    <div
-      className={cn({
-        [styles.signup__section]: true,
-        [styles['signup__section--flex-end']]: true,
-      })}
-    >
-      <label
+    React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+      const requiredValidValue = currentValue !== null ? true : '성별을 선택해주세요.';
+      return {
+        value: currentValue,
+        valid: required ? requiredValidValue : true,
+      };
+    }, [currentValue, required]);
+
+    return (
+      <div
         className={cn({
-          [styles['signup__checkbox-label']]: true,
-          [styles['signup__checkbox-label--large']]: true,
+          [styles.select]: true,
+          [styles['select--flex-end']]: true,
         })}
+        onBlur={onBlurSelect}
       >
-        <input
-          id="terms-all"
-          className={styles.signup__checkbox}
-          type="checkbox"
-          checked={terms.privacy && terms.usage}
-          onChange={onChangeAllTerms}
+        <button
+          type="button"
+          onClick={triggerPopup}
           name={name}
-        />
-        위 이용약관에 모두 동의합니다.
-      </label>
-      <label
-        className={styles['signup__checkbox-label']}
+          className={cn({
+            [styles.select__trigger]: true,
+            [styles['select__trigger--active']]: currentValue !== null,
+          })}
+        >
+          {currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'}
+          <ChevronUpDown />
+        </button>
+        {isOpenedPopup && (
+          <ul className={styles.select__content} role="listbox">
+            {GENDER_TYPE.map((optionValue) => (
+              <li
+                className={styles.select__option}
+                key={optionValue.value}
+                role="option"
+                aria-selected={optionValue.value === currentValue}
+                data-value={optionValue.value}
+                onMouseDown={onClickOption}
+                onKeyPress={onKeyPressOption}
+              >
+                {optionValue.label}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  }
+);
+
+const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(
+  ({ name, required }, ref) => {
+    const [terms, setTerms] = React.useState({
+      privacy: false,
+      usage: false,
+    });
+    const onChangeAllTerms = () => {
+      setTerms((prevValue) => ({
+        privacy: !(prevValue.privacy && prevValue.usage),
+        usage: !(prevValue.privacy && prevValue.usage),
+      }));
+    };
+    const onChangePrivacyTerm = () => {
+      setTerms((prevValue) => ({
+        ...prevValue,
+        privacy: !prevValue.privacy,
+      }));
+    };
+    const onChangeUsageTerm = () => {
+      setTerms((prevValue) => ({
+        ...prevValue,
+        usage: !prevValue.usage,
+      }));
+    };
+    React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+      const requiredValidValue =
+        terms.privacy && terms.usage ? true : '이용 약관에 모두 동의해주세요.';
+      return {
+        value: terms,
+        valid: required ? requiredValidValue : true,
+      };
+    }, [terms, required]);
+
+    return (
+      <div
+        className={cn({
+          [styles.signup__section]: true,
+          [styles['signup__section--flex-end']]: true,
+        })}
       >
-        <input
-          id="terms-privacy"
-          className={styles.signup__checkbox}
-          type="checkbox"
-          checked={terms.privacy}
-          onChange={onChangePrivacyTerm}
-        />
-        개인정보 이용약관에 동의합니다.
-      </label>
-      <label
-        className={styles['signup__checkbox-label']}
-      >
-        <input
-          id="terms-usage"
-          className={styles.signup__checkbox}
-          type="checkbox"
-          checked={terms.usage}
-          onChange={onChangeUsageTerm}
-        />
-        코인 이용약관에 동의합니다.
-      </label>
-    </div>
-  );
-});
+        <label
+          className={cn({
+            [styles['signup__checkbox-label']]: true,
+            [styles['signup__checkbox-label--large']]: true,
+          })}
+        >
+          <input
+            id="terms-all"
+            className={styles.signup__checkbox}
+            type="checkbox"
+            checked={terms.privacy && terms.usage}
+            onChange={onChangeAllTerms}
+            name={name}
+          />
+          위 이용약관에 모두 동의합니다.
+        </label>
+        <label className={styles['signup__checkbox-label']}>
+          <input
+            id="terms-privacy"
+            className={styles.signup__checkbox}
+            type="checkbox"
+            checked={terms.privacy}
+            onChange={onChangePrivacyTerm}
+          />
+          개인정보 이용약관에 동의합니다.
+        </label>
+        <label className={styles['signup__checkbox-label']}>
+          <input
+            id="terms-usage"
+            className={styles.signup__checkbox}
+            type="checkbox"
+            checked={terms.usage}
+            onChange={onChangeUsageTerm}
+          />
+          코인 이용약관에 동의합니다.
+        </label>
+      </div>
+    );
+  }
+);
 
 const useSignupForm = () => {
   const navigate = useNavigate();
@@ -503,9 +498,7 @@ function SignupDefaultPage() {
             },
           })}
         />
-        <span className={styles.signup__advice}>
-          @koreatech.ac.kr은 입력하지 않으셔도 됩니다.
-        </span>
+        <span className={styles.signup__advice}>@koreatech.ac.kr은 입력하지 않으셔도 됩니다.</span>
         <PasswordForm {...register('password')} />
         <input
           className={styles['form-input']}

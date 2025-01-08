@@ -34,14 +34,26 @@ function IndexNotice() {
         <Link
           to={ROUTES.BoardNotice()}
           className={styles['template__title-link']}
-          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice', value: '공지사항' })}
+          onClick={() =>
+            logger.actionEventClick({
+              actionTitle: 'CAMPUS',
+              title: 'main_notice',
+              value: '공지사항',
+            })
+          }
         >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
         <Link
           to={ROUTES.BoardNotice()}
           className={styles.template__link}
-          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice_detail', value: '공지사항' })}
+          onClick={() =>
+            logger.actionEventClick({
+              actionTitle: 'CAMPUS',
+              title: 'main_notice_detail',
+              value: '공지사항',
+            })
+          }
         >
           더보기
           <RightArrow aria-hidden />
@@ -59,9 +71,7 @@ function IndexNotice() {
                 <span className={styles['list__item-type']}>
                   {getArticleType(article.board_id)}
                 </span>
-                <span className={styles['list__item-title']}>
-                  {article.title}
-                </span>
+                <span className={styles['list__item-title']}>{article.title}</span>
                 {setArticleRegisteredDate(article.registered_at) && (
                   <img
                     className={styles['list__item-tag']}

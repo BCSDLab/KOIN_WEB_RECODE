@@ -13,33 +13,27 @@ interface CardProps {
   event_id: number;
   shop_name: string;
   thumbnail_images: string[];
-  onClick: () => void
+  onClick: () => void;
 }
 
 function PCEmptyCard() {
   return (
-    (
-      <div className={styles['swipe-item']}>
-        <div className={styles['swipe-item__empty-image']}>
-          <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
-        </div>
-        <div className={styles['swipe-item__text']}>
-          <div>
-            <span className={styles['swipe-item__name']}>
-              코인
-            </span>
-            {' 에서'}
-          </div>
-          <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>
-        </div>
+    <div className={styles['swipe-item']}>
+      <div className={styles['swipe-item__empty-image']}>
+        <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
       </div>
-    )
+      <div className={styles['swipe-item__text']}>
+        <div>
+          <span className={styles['swipe-item__name']}>코인</span>
+          {' 에서'}
+        </div>
+        <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>
+      </div>
+    </div>
   );
 }
 
-function Card({
-  shop_id, event_id, shop_name, thumbnail_images, onClick,
-}: CardProps) {
+function Card({ shop_id, event_id, shop_name, thumbnail_images, onClick }: CardProps) {
   return (
     <Link
       to={`${ROUTES.StoreDetail({ id: shop_id, isLink: true })}?state=이벤트/공지`}
@@ -58,9 +52,7 @@ function Card({
       )}
       <div className={styles['swipe-item__text']}>
         <div>
-          <span className={styles['swipe-item__name']}>
-            {shop_name}
-          </span>
+          <span className={styles['swipe-item__name']}>{shop_name}</span>
           {' 에서'}
         </div>
         <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>
@@ -72,13 +64,15 @@ function Card({
 function EventCarousel() {
   const carouselList = useGetAllEvents();
   const isMobile = useMediaQuery();
-  const {
-    emblaRef, canNextClick, canPrevClick, currentIndex, scrollTo,
-  } = useCarouselController(isMobile);
+  const { emblaRef, canNextClick, canPrevClick, currentIndex, scrollTo } =
+    useCarouselController(isMobile);
   const logger = useLogger();
   const eventLogging = (shopName: string) => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_categories_event', value: `${shopName}`, event_category: 'click',
+      actionTitle: 'BUSINESS',
+      title: 'shop_categories_event',
+      value: `${shopName}`,
+      event_category: 'click',
     });
   };
 
@@ -101,7 +95,8 @@ function EventCarousel() {
             ))}
           </div>
           <div className={styles.pagination}>
-            { // eslint-disable-next-line
+            {
+              // eslint-disable-next-line
               <button
                 type="button"
                 onClick={() => scrollTo('prev')}
@@ -110,17 +105,16 @@ function EventCarousel() {
                 <LeftBracket />
               </button>
             }
-            {currentIndex + 1}
-            /
-            {carouselList.length > 10 ? 10 : carouselList.length}
-            { // eslint-disable-next-line
-            <button
-              type="button"
-              onClick={() => scrollTo('next')}
-              className={styles['pagination-button--next']}
-            >
-              <RightBracket />
-            </button>
+            {currentIndex + 1}/{carouselList.length > 10 ? 10 : carouselList.length}
+            {
+              // eslint-disable-next-line
+              <button
+                type="button"
+                onClick={() => scrollTo('next')}
+                className={styles['pagination-button--next']}
+              >
+                <RightBracket />
+              </button>
             }
           </div>
         </div>
@@ -130,18 +124,16 @@ function EventCarousel() {
 
   return (
     <div className={styles.carousel}>
-      {
-        canPrevClick && (
-          // eslint-disable-next-line
-          <button
-            type="button"
-            onClick={() => scrollTo('prev')}
-            className={styles['carousel-button--prev']}
-          >
-            <LeftBracket />
-          </button>
-        )
-      }
+      {canPrevClick && (
+        // eslint-disable-next-line
+        <button
+          type="button"
+          onClick={() => scrollTo('prev')}
+          className={styles['carousel-button--prev']}
+        >
+          <LeftBracket />
+        </button>
+      )}
       <div className={styles.container} ref={emblaRef}>
         <div className={styles.swipe}>
           {carouselList.map((item) => (
@@ -156,18 +148,16 @@ function EventCarousel() {
           {carouselList.length % 2 !== 0 && <PCEmptyCard />}
         </div>
       </div>
-      {
-        canNextClick && (
-          // eslint-disable-next-line
-          <button
-            type="button"
-            onClick={() => scrollTo('next')}
-            className={styles['carousel-button--next']}
-          >
-            <RightBracket />
-          </button>
-        )
-      }
+      {canNextClick && (
+        // eslint-disable-next-line
+        <button
+          type="button"
+          onClick={() => scrollTo('next')}
+          className={styles['carousel-button--next']}
+        >
+          <RightBracket />
+        </button>
+      )}
     </div>
   );
 }

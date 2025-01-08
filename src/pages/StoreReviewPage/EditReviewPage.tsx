@@ -12,9 +12,7 @@ function EditReviewPage() {
   const initialData = useGetStoreReview(params.id!, reviewId);
 
   const { mutate } = useEditStoreReview(String(storeDetail.id), reviewId);
-  return (
-    <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={initialData} />
-  );
+  return <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={initialData} />;
 }
 
 export default EditReviewPage;

@@ -100,11 +100,7 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
           >
             지금 출발
           </button>
-          <button
-            className={styles.buttons__complete}
-            type="button"
-            onClick={handleCompleteClick}
-          >
+          <button className={styles.buttons__complete} type="button" onClick={handleCompleteClick}>
             완료
           </button>
         </div>

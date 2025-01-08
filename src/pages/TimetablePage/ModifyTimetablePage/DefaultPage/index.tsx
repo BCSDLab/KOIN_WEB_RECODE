@@ -24,11 +24,11 @@ export default function DefaultPage({ frameId }: { frameId: number }) {
   const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: lectureList } = useLectureList(semester);
   const tempLecture = useTempLecture();
-  const similarSelectedLecture = lectureList
-    ?.filter((lecture) => lecture.code === tempLecture?.code)
-    ?? [];
-  const selectedLectureIndex = similarSelectedLecture
-    .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
+  const similarSelectedLecture =
+    lectureList?.filter((lecture) => lecture.code === tempLecture?.code) ?? [];
+  const selectedLectureIndex = similarSelectedLecture.findIndex(
+    ({ lecture_class }) => lecture_class === tempLecture?.lecture_class
+  );
   const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
@@ -44,11 +44,11 @@ export default function DefaultPage({ frameId }: { frameId: number }) {
         <h1 className={styles.timetable__title}>시간표</h1>
       </div>
       <Suspense
-        fallback={(
+        fallback={
           <div className={styles['central-loading-spinner']}>
             <LoadingSpinner size="100" />
           </div>
-        )}
+        }
       >
         <div className={styles.page__content}>
           <div>
@@ -57,10 +57,8 @@ export default function DefaultPage({ frameId }: { frameId: number }) {
                 type="button"
                 className={cn({
                   [styles['page__regular-course-button']]: true,
-                  [styles['page__regular-course-button--active']]:
-                    pathname.includes('/regular'),
-                  [styles['page__regular-course-button--inactive']]:
-                    pathname.includes('/direct'),
+                  [styles['page__regular-course-button--active']]: pathname.includes('/regular'),
+                  [styles['page__regular-course-button--inactive']]: pathname.includes('/direct'),
                 })}
                 value="regular"
                 onClick={handleCourseClick}
@@ -72,10 +70,8 @@ export default function DefaultPage({ frameId }: { frameId: number }) {
                 type="button"
                 className={cn({
                   [styles['page__directly-add-button']]: true,
-                  [styles['page__directly-add-button--active']]:
-                    pathname.includes('/direct'),
-                  [styles['page__directly-add-button--inactive']]:
-                    pathname.includes('/regular'),
+                  [styles['page__directly-add-button--active']]: pathname.includes('/direct'),
+                  [styles['page__directly-add-button--inactive']]: pathname.includes('/regular'),
                 })}
                 value="direct"
                 onClick={handleCourseClick}

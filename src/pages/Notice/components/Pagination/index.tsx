@@ -26,7 +26,7 @@ const onHandleNextPage = (moveNumber: number, totalPageNum: number) => {
 };
 
 interface PaginationProps {
-  totalPageNum: number
+  totalPageNum: number;
 }
 
 export default function Pagination(props: PaginationProps) {
@@ -55,25 +55,25 @@ export default function Pagination(props: PaginationProps) {
       >
         이전으로
       </button>
-      {
-        LIMIT_COUNT.length - 1 < totalPageNum ? (
-          LIMIT_COUNT.map((limit) => (
+      {LIMIT_COUNT.length - 1 < totalPageNum
+        ? LIMIT_COUNT.map((limit) => (
             <span key={limit}>
               <button
                 type="button"
                 aria-label="페이지 이동"
                 className={cn({
                   [styles.pagination__number]: true,
-                  [styles['pagination__number--selected']]: (!params.page && limit === 0) || params.page === calcIndexPage(limit, totalPageNum, params.page),
+                  [styles['pagination__number--selected']]:
+                    (!params.page && limit === 0) ||
+                    params.page === calcIndexPage(limit, totalPageNum, params.page),
                 })}
                 onClick={() => onClickMove(calcIndexPage(limit, totalPageNum, params.page ?? '1'))}
               >
-                { calcIndexPage(limit, totalPageNum, params.page ?? '1')}
+                {calcIndexPage(limit, totalPageNum, params.page ?? '1')}
               </button>
             </span>
           ))
-        ) : (
-          totalPage.map((limit) => (
+        : totalPage.map((limit) => (
             <span key={limit + 1}>
               <button
                 type="button"
@@ -84,21 +84,20 @@ export default function Pagination(props: PaginationProps) {
                 })}
                 onClick={() => handlePageChange(String(limit + 1))}
               >
-                { limit + 1 }
+                {limit + 1}
               </button>
             </span>
-          ))
-        )
-      }
+          ))}
       <button
         type="button"
         aria-label="다음 페이지로"
         className={styles.pagination__move}
-        onClick={() => setParams(
-          'page',
-          onHandleNextPage(Number(params.page || 1) + 1, Number(totalPageNum)),
-          { deleteBeforeParam: false, replacePage: true },
-        )}
+        onClick={() =>
+          setParams('page', onHandleNextPage(Number(params.page || 1) + 1, Number(totalPageNum)), {
+            deleteBeforeParam: false,
+            replacePage: true,
+          })
+        }
       >
         다음으로
       </button>

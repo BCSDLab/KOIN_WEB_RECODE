@@ -39,14 +39,16 @@ export default function WeeklyDatePicker() {
                 className={cn({
                   [styles.picker__button]: true,
                   [styles['picker__button--before']]: dateFormat(day) < dateFormat(),
-                  [styles['picker__button--selected']]: dateFormat(day) === dateFormat(currentDate()),
+                  [styles['picker__button--selected']]:
+                    dateFormat(day) === dateFormat(currentDate()),
                   [styles['picker__button--today']]: dateFormat(day) === dateFormat(),
                 })}
                 type="button"
                 onClick={() => setDate(day)}
               >
-                {dateFormat(day) === dateFormat()
-                && <div className={styles['picker__button--selector']} />}
+                {dateFormat(day) === dateFormat() && (
+                  <div className={styles['picker__button--selector']} />
+                )}
                 {day.getDate()}
               </button>
             </div>

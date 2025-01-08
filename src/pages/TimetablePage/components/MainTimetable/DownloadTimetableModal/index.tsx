@@ -9,14 +9,14 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DownloadTimetableModal.module.scss';
 
 interface DownloadTimetableModalProps {
-  onClose: () => void,
-  frameId: number
+  onClose: () => void;
+  frameId: number;
 }
 
 interface TimetableDownloadProps {
-  rowNumber: number,
-  forMobile: boolean,
-  frameId: number,
+  rowNumber: number;
+  forMobile: boolean;
+  frameId: number;
 }
 
 function TimetableDownload({ rowNumber, forMobile, frameId }: TimetableDownloadProps) {
@@ -35,10 +35,7 @@ function TimetableDownload({ rowNumber, forMobile, frameId }: TimetableDownloadP
   );
 }
 
-export default function DownloadTimetableModal({
-  onClose,
-  frameId,
-}: DownloadTimetableModalProps) {
+export default function DownloadTimetableModal({ onClose, frameId }: DownloadTimetableModalProps) {
   const { onImageDownload: DownloadForPC, divRef: pcTimetableRef } = useImageDownload();
   const { onImageDownload: DownloadForMobile, divRef: mobileTimetableRef } = useImageDownload();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
@@ -69,8 +66,20 @@ export default function DownloadTimetableModal({
         </div>
         <div className={styles['container__image-option']}>저장할 이미지 형식을 선택해 주세요.</div>
         <div className={styles.container__button}>
-          <button type="button" className={styles['container__button--mobile']} onClick={() => onClickImageDownload('Mobile')}>모바일 이미지 저장</button>
-          <button type="button" className={styles['container__button--pc']} onClick={() => onClickImageDownload('PC')}>PC용 이미지 저장</button>
+          <button
+            type="button"
+            className={styles['container__button--mobile']}
+            onClick={() => onClickImageDownload('Mobile')}
+          >
+            모바일 이미지 저장
+          </button>
+          <button
+            type="button"
+            className={styles['container__button--pc']}
+            onClick={() => onClickImageDownload('PC')}
+          >
+            PC용 이미지 저장
+          </button>
         </div>
       </div>
       <div ref={pcTimetableRef} className={styles['container__timetable-image']}>

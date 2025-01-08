@@ -52,17 +52,22 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
                     {!!dining.price_card && ` ${dining.price_card}원`}
                   </div>
                 </div>
-                {dining.soldout_at && <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>품절</span>}
-                {!dining.soldout_at && dining.changed_at && <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>변경됨</span>}
+                {dining.soldout_at && (
+                  <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>
+                    품절
+                  </span>
+                )}
+                {!dining.soldout_at && dining.changed_at && (
+                  <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>
+                    변경됨
+                  </span>
+                )}
               </div>
             </div>
             <li className={styles['category__menu-list']}>
               <ul>
                 {dining.menu.map((menuItem) => (
-                  <li
-                    className={styles.category__menu}
-                    key={menuItem.id}
-                  >
+                  <li className={styles.category__menu} key={menuItem.id}>
                     {menuItem.name}
                   </li>
                 ))}

@@ -7,9 +7,7 @@ function AddReviewPage() {
   const params = useParams();
   const { storeDetail } = useStoreDetail(params.id!);
   const { mutate } = useAddStoreReview(String(storeDetail.id));
-  return (
-    <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={{}} />
-  );
+  return <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={{}} />;
 }
 
 export default AddReviewPage;

@@ -1,9 +1,5 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import {
-  ArticlesResponse,
-  ArticleResponse,
-  HotArticlesResponse,
-} from './entity';
+import { ArticlesResponse, ArticleResponse, HotArticlesResponse } from './entity';
 
 const BOARD_IDS = {
   자유게시판: 1,

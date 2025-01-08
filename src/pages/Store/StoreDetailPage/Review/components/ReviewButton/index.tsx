@@ -8,12 +8,9 @@ import { useParams } from 'react-router-dom';
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import styles from './index.module.scss';
 
-export const REVEIW_LOGIN = [
-  '리뷰 작성 시 ',
-  '리뷰 작성은 회원만 사용 가능합니다.',
-];
+export const REVEIW_LOGIN = ['리뷰 작성 시 ', '리뷰 작성은 회원만 사용 가능합니다.'];
 
-export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void }) {
+export default function ReviewButton({ goReviewPage }: { goReviewPage: () => void }) {
   const { data: userInfo } = useUser();
   const portalManager = useModalPortal();
   const logger = useLogger();

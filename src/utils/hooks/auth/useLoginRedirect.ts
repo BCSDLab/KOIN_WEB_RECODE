@@ -1,6 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import {
-  setRedirectPath, getRedirectPath, clearRedirectPath, redirectToLogin,
+  setRedirectPath,
+  getRedirectPath,
+  clearRedirectPath,
+  redirectToLogin,
 } from 'utils/ts/auth';
 
 export function useLoginRedirect() {

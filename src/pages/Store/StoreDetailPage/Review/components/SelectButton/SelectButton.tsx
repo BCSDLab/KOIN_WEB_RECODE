@@ -20,10 +20,7 @@ interface Props {
   review_id: number;
   is_reported: boolean | undefined;
 }
-const REVEIW_REPORT_LOGIN = [
-  '리뷰 신고 시 ',
-  '리뷰 신고는 회원만 사용 가능합니다.',
-];
+const REVEIW_REPORT_LOGIN = ['리뷰 신고 시 ', '리뷰 신고는 회원만 사용 가능합니다.'];
 export default function SelectButton({ is_mine, review_id, is_reported }: Props) {
   const params = useParams();
   const navigate = useNavigate();
@@ -79,20 +76,17 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
           <>
             <button
               type="button"
-              onClick={() => navigate(
-                ROUTES.ReviewEdit({ id: params.id!, isLink: true }),
-                { state: { from: review_id } },
-              )}
+              onClick={() =>
+                navigate(ROUTES.ReviewEdit({ id: params.id!, isLink: true }), {
+                  state: { from: review_id },
+                })
+              }
               className={styles.section}
             >
               수정하기
               <Pen />
             </button>
-            <button
-              type="button"
-              onClick={openDeleteModal}
-              className={styles.section}
-            >
+            <button type="button" onClick={openDeleteModal} className={styles.section}>
               삭제하기
               <Trash />
             </button>
@@ -108,24 +102,22 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
               }
               if (userInfo) {
                 loggingReportClick();
-                navigate(ROUTES.ReviewReport({
-                  shopid: params.id!,
-                  reviewid: String(review_id),
-                  isLink: true,
-                }));
+                navigate(
+                  ROUTES.ReviewReport({
+                    shopid: params.id!,
+                    reviewid: String(review_id),
+                    isLink: true,
+                  })
+                );
               } else {
                 openLoginModal();
               }
             }}
           >
-            신고하기
-            {' '}
-            <Complaint />
+            신고하기 <Complaint />
           </button>
         )}
       </div>
-
     </div>
-
   );
 }

@@ -28,16 +28,18 @@ interface PCCafeteriaPageProps {
   setDiningType: (diningType: DiningType) => void;
 }
 
-export default function PCCafeteriaPage({
-  diningType, setDiningType,
-}: PCCafeteriaPageProps) {
+export default function PCCafeteriaPage({ diningType, setDiningType }: PCCafeteriaPageProps) {
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
 
   const handleDiningTypeChange = (value: DiningType) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[value] });
+    logger.actionEventClick({
+      actionTitle: 'CAMPUS',
+      title: 'menu_time',
+      value: DINING_TYPE_MAP[value],
+    });
     setDiningType(value);
     toggleDropdown();
   };
@@ -98,7 +100,9 @@ export default function PCCafeteriaPage({
         <Suspense fallback={<div />}>
           <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />
         </Suspense>
-        <span className={styles['pc-menu-blocks__caution']}>식단 정보는 운영 상황에 따라 변동될 수 있습니다.</span>
+        <span className={styles['pc-menu-blocks__caution']}>
+          식단 정보는 운영 상황에 따라 변동될 수 있습니다.
+        </span>
       </div>
     </div>
   );

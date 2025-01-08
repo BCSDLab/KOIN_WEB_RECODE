@@ -19,7 +19,7 @@ interface LectureTableProps {
   selectedLecture: LectureInfo | undefined;
   onClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
   onDoubleClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
-  version: 'semesterLectureList' | 'myLectureList'
+  version: 'semesterLectureList' | 'myLectureList';
 }
 
 interface RemoveLectureProps {
@@ -80,7 +80,7 @@ function LectureTable({
   const [isMouseOver, setIsMouseOver] = React.useState(-1);
   const handleTableRowClick = (
     value: LectureInfo | MyLectureInfo,
-    e: React.MouseEvent<HTMLButtonElement>,
+    e: React.MouseEvent<HTMLButtonElement>
   ) => {
     if (e.detail === 1 && onClickRow !== undefined) {
       onClickRow(value);
@@ -145,10 +145,13 @@ function LectureTable({
           <div
             className={cn({
               [styles.table__row]: true,
-              [styles['table__row--include']]: (version === 'semesterLectureList' && myLectures) ? myLectures.some(
-                (item) => item.code === lecture.code
-                  && item.lecture_class === lecture.lecture_class,
-              ) : false,
+              [styles['table__row--include']]:
+                version === 'semesterLectureList' && myLectures
+                  ? myLectures.some(
+                      (item) =>
+                        item.code === lecture.code && item.lecture_class === lecture.lecture_class
+                    )
+                  : false,
               [styles['table__row--selected']]: selectedLecture === lecture,
             })}
             aria-selected={selectedLecture === lecture}
@@ -157,11 +160,7 @@ function LectureTable({
           >
             <button
               type="button"
-              aria-label={
-                onClickRow !== undefined
-                  ? '시간표에서 미리 보기'
-                  : undefined
-              }
+              aria-label={onClickRow !== undefined ? '시간표에서 미리 보기' : undefined}
               className={cn({
                 [styles['table__row-button']]: true,
                 [styles['table__row-button--toggled']]: version === 'myLectureList',
@@ -198,39 +197,34 @@ function LectureTable({
                 </>
               )}
               {LECTURE_TABLE_HEADER.map(
-                (headerItem, headerItemIndex) => headerItem.key !== null && (
-                  <div
-                    style={{
-                      width: `${rowWidthList[headerItemIndex]}px`,
-                    }}
-                    className={cn({
-                      [styles.table__col]: true,
-                      [styles['table__col--text-center']]:
-                        headerItem.label === '분반'
-                        || headerItem.label === '학점'
-                        || headerItem.label === '정원'
-                        || headerItem.label === '설계',
-                    })}
-                    role="cell"
-                    key={headerItem.key}
-                  >
-                    {headerItem.key === 'professor'
-                      && (lecture[headerItem.key] === ''
-                        ? '미배정'
-                        : lecture[headerItem.key])}
-                    {headerItem.key === null && '수정'}
-                    {headerItem.key === 'name'
-                      && 'class_time' in lecture
-                      && lecture.name}
-                    {headerItem.key === 'name'
-                      && 'class_infos' in lecture
-                      && lecture.class_title}
-                    {headerItem.key !== null
-                      && headerItem.key !== 'professor'
-                      && headerItem.key !== 'name'
-                      && lecture[headerItem.key]}
-                  </div>
-                ),
+                (headerItem, headerItemIndex) =>
+                  headerItem.key !== null && (
+                    <div
+                      style={{
+                        width: `${rowWidthList[headerItemIndex]}px`,
+                      }}
+                      className={cn({
+                        [styles.table__col]: true,
+                        [styles['table__col--text-center']]:
+                          headerItem.label === '분반' ||
+                          headerItem.label === '학점' ||
+                          headerItem.label === '정원' ||
+                          headerItem.label === '설계',
+                      })}
+                      role="cell"
+                      key={headerItem.key}
+                    >
+                      {headerItem.key === 'professor' &&
+                        (lecture[headerItem.key] === '' ? '미배정' : lecture[headerItem.key])}
+                      {headerItem.key === null && '수정'}
+                      {headerItem.key === 'name' && 'class_time' in lecture && lecture.name}
+                      {headerItem.key === 'name' && 'class_infos' in lecture && lecture.class_title}
+                      {headerItem.key !== null &&
+                        headerItem.key !== 'professor' &&
+                        headerItem.key !== 'name' &&
+                        lecture[headerItem.key]}
+                    </div>
+                  )
               )}
             </button>
           </div>

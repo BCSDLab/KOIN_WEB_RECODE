@@ -1,7 +1,10 @@
 import { cn } from '@bcsdlab/utils';
 import { DepartArrivalPlace } from 'api/bus/entity';
 import {
-  locationLabels, locations, LOCATION_MAP, REVERSE_LOCATION_MAP,
+  locationLabels,
+  locations,
+  LOCATION_MAP,
+  REVERSE_LOCATION_MAP,
 } from 'pages/Bus/BusRoutePage/constants/location';
 import { LocationDisplay } from 'pages/Bus/BusRoutePage/ts/types';
 import { LoggingLocation } from 'pages/Bus/hooks/useBusLogger';
@@ -21,7 +24,13 @@ interface PlaceSelectProps {
 }
 
 export default function PlaceSelect({
-  type, place, setPlace, exchangePlace, oppositePlace, logBoxClick, logConfirmClick,
+  type,
+  place,
+  setPlace,
+  exchangePlace,
+  oppositePlace,
+  logBoxClick,
+  logConfirmClick,
 }: PlaceSelectProps) {
   const locationLabel = locationLabels[type];
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
@@ -59,9 +68,7 @@ export default function PlaceSelect({
           onClick={handleSelectBoxClick}
           type="button"
         >
-          <span
-            className={styles['select-box__text']}
-          >
+          <span className={styles['select-box__text']}>
             {place ? LOCATION_MAP[place] : locationLabel.placeholder}
           </span>
         </button>

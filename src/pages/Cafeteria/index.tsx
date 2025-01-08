@@ -18,18 +18,11 @@ function CafeteriaPage() {
   return (
     <div className={styles.page}>
       <div className={styles.page__content} key={currentDate().toISOString()}>
-        {isMobile
-          ? (
-            <MobileCafeteriaPage
-              diningType={diningType}
-              setDiningType={setDiningType}
-            />
-          ) : (
-            <PCCafeteriaPage
-              diningType={diningType}
-              setDiningType={setDiningType}
-            />
-          )}
+        {isMobile ? (
+          <MobileCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
+        ) : (
+          <PCCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
+        )}
       </div>
     </div>
   );

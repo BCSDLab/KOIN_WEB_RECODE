@@ -30,13 +30,11 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   const [rate, setRate] = useState(initialData.rating || 0);
 
   const [reviewText, setReviewText] = useState(initialData?.content ?? '');
-  const [menuList, setMenuList] = useState<{ id: string, name: string }[]>(
-    initialData.menu_names ? initialData.menu_names.map((name) => ({ id: uuidv4(), name })) : [],
+  const [menuList, setMenuList] = useState<{ id: string; name: string }[]>(
+    initialData.menu_names ? initialData.menu_names.map((name) => ({ id: uuidv4(), name })) : []
   );
 
-  const {
-    imageFile, imgRef, saveImgFile, setImageFile,
-  } = useImageUpload();
+  const { imageFile, imgRef, saveImgFile, setImageFile } = useImageUpload();
 
   useEffect(() => {
     if (initialData?.image_urls) {
@@ -56,8 +54,9 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   };
 
   const handleMenuChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-    const newMenuList = menuList.map((menu) => (
-      menu.id === id ? { ...menu, name: e.target.value } : menu));
+    const newMenuList = menuList.map((menu) =>
+      menu.id === id ? { ...menu, name: e.target.value } : menu
+    );
 
     setMenuList(newMenuList);
   };
@@ -67,7 +66,8 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   };
 
   const reviewSuccessLogging = () => {
-    const getReviewDurationTime = (new Date().getTime() - Number(sessionStorage.getItem('enterReview'))) / 1000;
+    const getReviewDurationTime =
+      (new Date().getTime() - Number(sessionStorage.getItem('enterReview'))) / 1000;
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'shop_detail_view_review_write_done',
@@ -89,16 +89,16 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
     if (rate) {
       mutate(reviewData);
       reviewSuccessLogging();
-      navigate(`${ROUTES.StoreDetail({ id: String(storeDetail.id), isLink: true })}?state=리뷰`, { replace: true });
+      navigate(`${ROUTES.StoreDetail({ id: String(storeDetail.id), isLink: true })}?state=리뷰`, {
+        replace: true,
+      });
     }
   };
 
   return (
     <form className={styles.form} onSubmit={handleSumbit}>
       <div className={styles.form__name}>
-        <div>
-          {storeDetail?.name}
-        </div>
+        <div>{storeDetail?.name}</div>
         <div>
           리뷰를 남겨주시면 사장님과 다른 분들에게 도움이 됩니다.
           <br />
@@ -107,20 +107,14 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
       </div>
       <div className={styles.form__rate}>
         {[1, 2, 3, 4, 5].map((num) => (
-          <button
-            key={num}
-            type="button"
-            onClick={() => setRate(num)}
-            aria-label="별점 주기"
-          >
-            <div className={cn({
-              [styles['star--empty']]: true,
-              [styles['star--fill']]: rate >= num,
-            })}
+          <button key={num} type="button" onClick={() => setRate(num)} aria-label="별점 주기">
+            <div
+              className={cn({
+                [styles['star--empty']]: true,
+                [styles['star--fill']]: rate >= num,
+              })}
             >
-              <StarIcon
-                key={num}
-              />
+              <StarIcon key={num} />
             </div>
           </button>
         ))}
@@ -130,10 +124,11 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
       <div className={styles.template}>
         <div className={styles.template__title}>
           <span>사진</span>
-          <span className={cn({
-            [styles.template__title__count]: true,
-            [styles['template__title__count--active']]: imageFile.length === 3,
-          })}
+          <span
+            className={cn({
+              [styles.template__title__count]: true,
+              [styles['template__title__count--active']]: imageFile.length === 3,
+            })}
           >
             {imageFile.length}
             /3
@@ -144,11 +139,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
           {imageFile.map((url: string) => (
             <li key={url}>
               <img src={url} alt="리뷰 이미지" />
-              <button
-                type="button"
-                aria-label="이미지 삭제"
-                onClick={() => deleteImage(url)}
-              >
+              <button type="button" aria-label="이미지 삭제" onClick={() => deleteImage(url)}>
                 <DeleteImageIcon />
               </button>
             </li>
@@ -169,10 +160,11 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
       <div className={styles.template}>
         <div className={styles.template__title}>
           <span>내용</span>
-          <span className={cn({
-            [styles.template__title__count]: true,
-            [styles['template__title__count--active']]: reviewText.length === 500,
-          })}
+          <span
+            className={cn({
+              [styles.template__title__count]: true,
+              [styles['template__title__count--active']]: reviewText.length === 500,
+            })}
           >
             {reviewText.length}
             /500
@@ -191,7 +183,9 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
       </div>
       <div className={styles.template}>
         <div className={styles.template__title}>메뉴</div>
-        <button type="button" className={styles.template__button} onClick={addMenu}>메뉴 추가하기</button>
+        <button type="button" className={styles.template__button} onClick={addMenu}>
+          메뉴 추가하기
+        </button>
         <ul className={styles.template__list}>
           {menuList.map((menu) => (
             <li key={menu.id}>
@@ -206,11 +200,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
                   }
                 }}
               />
-              <button
-                type="button"
-                aria-label="메뉴 삭제"
-                onClick={() => deleteMenu(menu.id)}
-              >
+              <button type="button" aria-label="메뉴 삭제" onClick={() => deleteMenu(menu.id)}>
                 <DeleteMenuIcon />
               </button>
             </li>

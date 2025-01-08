@@ -10,7 +10,10 @@ function RoomDetailImg({ imgUrl }: RoomDetailImgProps) {
   return (
     <div className={styles['img-slider']}>
       <button className={styles['img-slider__img-arrow']} type="button" onClick={clickLeftArrow}>
-        <img src="https://static.koreatech.in/assets/ic-room/left-arrow.png" alt="이전 이미지 보기" />
+        <img
+          src="https://static.koreatech.in/assets/ic-room/left-arrow.png"
+          alt="이전 이미지 보기"
+        />
       </button>
       <div className={styles['img-slider__img']}>
         <img src={imgUrl[imgIndex]} alt="방 사진" />
@@ -25,9 +28,7 @@ function RoomDetailImg({ imgUrl }: RoomDetailImgProps) {
           alt="이후 이미지 보기"
         />
       </button>
-      <div className={styles['img-slider__index']}>
-        {`${imgIndex + 1} / ${imgUrl.length}`}
-      </div>
+      <div className={styles['img-slider__index']}>{`${imgIndex + 1} / ${imgUrl.length}`}</div>
     </div>
   );
 }

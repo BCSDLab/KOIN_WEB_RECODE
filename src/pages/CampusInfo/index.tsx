@@ -67,8 +67,9 @@ function CampusInfo() {
   };
 
   const getTimeToTypeAndDay = (type: string, day: string) => {
-    const target = cafeteriaInfo?.opens
-      ?.find((open) => open.day_of_week === day && open.type === type);
+    const target = cafeteriaInfo?.opens?.find(
+      (open) => open.day_of_week === day && open.type === type
+    );
 
     return target ? getFormattedShopTime(target.open_time, target.close_time) : '미운영';
   };
@@ -96,7 +97,9 @@ function CampusInfo() {
                   <tr className={styles['table-head__tr']}>
                     <th>시간</th>
                     {CAFETERIA_HEAD_TABLE.row.map((type) => (
-                      <th className={styles['table-head__th']} key={type}>{type}</th>
+                      <th className={styles['table-head__th']} key={type}>
+                        {type}
+                      </th>
                     ))}
                   </tr>
                 </thead>
@@ -108,8 +111,7 @@ function CampusInfo() {
                         <td
                           className={cn({
                             [styles['table-body__td']]: true,
-                            [styles.closed]:
-                              getTimeToTypeAndDay(type, day) === '미운영',
+                            [styles.closed]: getTimeToTypeAndDay(type, day) === '미운영',
                           })}
                           key={`${type}-${day}`}
                         >
@@ -131,7 +133,10 @@ function CampusInfo() {
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
-                  <div className={styles['info-description']} key={`${id}-${day_of_week}`}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
+                  <div
+                    className={styles['info-description']}
+                    key={`${id}-${day_of_week}`}
+                  >{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
                 ))}
               </div>
             </div>
@@ -146,7 +151,10 @@ function CampusInfo() {
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
-                  <div className={styles['info-description']} key={`${id}-${day_of_week}`}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
+                  <div
+                    className={styles['info-description']}
+                    key={`${id}-${day_of_week}`}
+                  >{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
                 ))}
               </div>
             </div>
@@ -161,7 +169,10 @@ function CampusInfo() {
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
-                  <div className={styles['info-description']} key={`${id}-${day_of_week}`}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
+                  <div
+                    className={styles['info-description']}
+                    key={`${id}-${day_of_week}`}
+                  >{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
                 ))}
               </div>
             </div>

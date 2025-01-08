@@ -8,13 +8,13 @@ const useCarouselController = (isMobile: boolean) => {
       loop: true,
       slidesToScroll: isMobile ? 1 : 2,
     },
-    [Autoplay(
-      {
+    [
+      Autoplay({
         stopOnInteraction: false,
         stopOnMouseEnter: true,
         delay: 4000,
-      },
-    )],
+      }),
+    ]
   );
   const [canPrevClick, setCanPrevClick] = useState(false);
   const [canNextClick, setCanNextClick] = useState(false);
@@ -24,12 +24,15 @@ const useCarouselController = (isMobile: boolean) => {
       setCurrentIndex(emblaApi.selectedScrollSnap());
     }
   }, [emblaApi]);
-  const scrollTo = useCallback((direction: 'prev' | 'next') => {
-    if (emblaApi) {
-      if (direction === 'next') emblaApi.scrollNext();
-      if (direction === 'prev')emblaApi.scrollPrev();
-    }
-  }, [emblaApi]);
+  const scrollTo = useCallback(
+    (direction: 'prev' | 'next') => {
+      if (emblaApi) {
+        if (direction === 'next') emblaApi.scrollNext();
+        if (direction === 'prev') emblaApi.scrollPrev();
+      }
+    },
+    [emblaApi]
+  );
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -37,13 +40,18 @@ const useCarouselController = (isMobile: boolean) => {
     setCanNextClick(emblaApi.canScrollNext());
     emblaApi.on('slidesInView', updateIndex);
     // eslint-disable-next-line
-    return () => { // 클린업 함수 사용을 위해 off
+    return () => {
+      // 클린업 함수 사용을 위해 off
       emblaApi.off('slidesInView', updateIndex);
     };
   }, [emblaApi, updateIndex]);
 
   return {
-    emblaRef, canPrevClick, canNextClick, currentIndex, scrollTo,
+    emblaRef,
+    canPrevClick,
+    canNextClick,
+    currentIndex,
+    scrollTo,
   };
 };
 

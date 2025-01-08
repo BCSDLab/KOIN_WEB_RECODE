@@ -2,7 +2,7 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
+import ChevronUpDown from 'assets/svg/chevron-up-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -20,7 +20,8 @@ import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
 
-const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
+const PASSWORD_REGEX =
+  /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
 
 const PHONENUMBER_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
 
@@ -28,7 +29,7 @@ interface IFormType {
   [key: string]: {
     ref: HTMLInputElement | ICustomFormInput | null;
     validFunction?: (value: unknown, fieldRefs: { current: any }) => string | true;
-  }
+  };
 }
 
 interface ICustomFormInput {
@@ -48,9 +49,7 @@ interface RegisterReturn {
 }
 
 export interface ISubmitForm {
-  (formValue: {
-    [key: string]: any;
-  }): void;
+  (formValue: { [key: string]: any }): void;
 }
 
 type UserResponseKeys = Omit<UserResponse, 'anonymous_nickname' | 'major'>;
@@ -60,9 +59,9 @@ interface MappedFields {
 }
 
 const isRefICustomFormInput = (
-  elementRef: HTMLInputElement | ICustomFormInput | null,
-): elementRef is ICustomFormInput => (elementRef !== null
-  && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+  elementRef: HTMLInputElement | ICustomFormInput | null
+): elementRef is ICustomFormInput =>
+  elementRef !== null && Object.prototype.hasOwnProperty.call(elementRef, 'valid');
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const fieldRefs = React.useRef<IFormType>({});
@@ -108,14 +107,22 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       }
       // student-number의 경우 major와 studentNumber로 나뉘어져 있음
       if (field === 'student-number') {
-        studentInfo.studentNumber = inputValue && typeof inputValue === 'object' && 'studentNumber' in inputValue ? inputValue.studentNumber : null;
-        studentInfo.major = inputValue && typeof inputValue === 'object' && 'major' in inputValue ? inputValue.major : null;
+        studentInfo.studentNumber =
+          inputValue && typeof inputValue === 'object' && 'studentNumber' in inputValue
+            ? inputValue.studentNumber
+            : null;
+        studentInfo.major =
+          inputValue && typeof inputValue === 'object' && 'major' in inputValue
+            ? inputValue.major
+            : null;
       }
       const userResponseField = mappedFields[field] || field;
       const originalValue = userInfo ? userInfo[userResponseField] : '';
-      if (inputValue !== originalValue
-        || studentInfo.studentNumber !== originalValue
-        || studentInfo.major !== originalValue) {
+      if (
+        inputValue !== originalValue ||
+        studentInfo.studentNumber !== originalValue ||
+        studentInfo.major !== originalValue
+      ) {
         isAnyFieldChanged = true;
       }
     });
@@ -125,17 +132,19 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       return;
     }
 
-    const isCurrentValidEntries = Object.entries(fieldRefs.current)
-      .map((refValue): [string, string | true] => {
+    const isCurrentValidEntries = Object.entries(fieldRefs.current).map(
+      (refValue): [string, string | true] => {
         if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
         const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
           ? refValue[1].ref.valid
-          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', fieldRefs) ?? true;
+          : (refValue[1].validFunction?.(refValue[1].ref?.value ?? '', fieldRefs) ?? true);
 
         return [refValue[0], isCurrentNameValid];
-      });
-    const invalidFormEntry = isCurrentValidEntries
-      .find((entry): entry is [string, string] => entry[1] !== true);
+      }
+    );
+    const invalidFormEntry = isCurrentValidEntries.find(
+      (entry): entry is [string, string] => entry[1] !== true
+    );
     if (!invalidFormEntry) {
       const formValue = Object.entries(fieldRefs?.current).map((nameValue) => {
         if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
@@ -156,92 +165,86 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
 
 type ICustomFormInputProps = Omit<RegisterReturn, 'ref'>;
 
-const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
-  const [password, setPassword] = React.useState('');
-  const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    let valid: string | true = true;
+const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(
+  ({ name, required }, ref) => {
+    const [password, setPassword] = React.useState('');
+    const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
+    React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+      let valid: string | true = true;
 
-    if (password === '' && passwordConfirmValue === '') {
-      return { valid, value: password };
-    }
+      if (password === '' && passwordConfirmValue === '') {
+        return { valid, value: password };
+      }
 
-    if (password !== passwordConfirmValue) {
-      valid = '입력하신 비밀번호가 일치하지 않습니다.';
-    } else if (password.length < 6 || password.length > 18) {
-      valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
-    } else if (!PASSWORD_REGEX.test(password)) {
-      valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
-    }
-    return {
-      valid,
-      value: password,
+      if (password !== passwordConfirmValue) {
+        valid = '입력하신 비밀번호가 일치하지 않습니다.';
+      } else if (password.length < 6 || password.length > 18) {
+        valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
+      } else if (!PASSWORD_REGEX.test(password)) {
+        valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
+      }
+      return {
+        valid,
+        value: password,
+      };
+    }, [password, passwordConfirmValue]);
+    return (
+      <>
+        <input
+          className={cn({
+            [styles['form-input']]: true,
+            [styles['form-input--invalid']]:
+              password.trim() !== '' && password !== passwordConfirmValue,
+          })}
+          type="password"
+          autoComplete="new-password"
+          placeholder="비밀번호 (선택)"
+          onChange={(e) => setPassword(e.target.value)}
+          required={required}
+          name={name}
+        />
+        <span className={styles.modify__advice}>
+          비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
+        </span>
+        <input
+          className={styles['form-input']}
+          type="password"
+          onChange={(e) => setPasswordConfirmValue(e.target.value)}
+          autoComplete="new-password"
+          placeholder="비밀번호 확인 (선택)"
+        />
+        <span className={styles.modify__advice}>
+          비밀번호를 입력하지 않으면 기존 비밀번호를 유지합니다.
+        </span>
+      </>
+    );
+  }
+);
+
+const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(
+  (props, ref) => {
+    const { data: userInfo } = useUser();
+    const [currentNicknameValue, setCurrentNicknameValue] = React.useState<string>(
+      userInfo?.nickname || ''
+    );
+
+    const { changeTargetNickname, status, currentCheckedNickname } = useNicknameDuplicateCheck();
+
+    const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setCurrentNicknameValue(e.target.value);
     };
-  }, [password, passwordConfirmValue]);
-  return (
-    <>
-      <input
-        className={cn({
-          [styles['form-input']]: true,
-          [styles['form-input--invalid']]: password.trim() !== '' && password !== passwordConfirmValue,
-        })}
-        type="password"
-        autoComplete="new-password"
-        placeholder="비밀번호 (선택)"
-        onChange={(e) => setPassword(e.target.value)}
-        required={required}
-        name={name}
-      />
-      <span className={styles.modify__advice}>
-        비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
-      </span>
-      <input
-        className={styles['form-input']}
-        type="password"
-        onChange={(e) => setPasswordConfirmValue(e.target.value)}
-        autoComplete="new-password"
-        placeholder="비밀번호 확인 (선택)"
-      />
-      <span className={styles.modify__advice}>
-        비밀번호를 입력하지 않으면 기존 비밀번호를 유지합니다.
-      </span>
-    </>
-  );
-});
 
-const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((
-  props,
-  ref,
-) => {
-  const { data: userInfo } = useUser();
-  const [currentNicknameValue, setCurrentNicknameValue] = React.useState<string>(userInfo?.nickname || '');
+    // 닉네임 중복 확인 버튼 클릭 핸들러
+    const onClickNicknameDuplicateCheckButton = () => {
+      // 현재 입력된 닉네임과 기존 닉네임이 같다면 중복 검사를 수행하지 않습니다.
+      if (currentNicknameValue === userInfo?.nickname) {
+        showToast('info', '기존의 닉네임과 동일합니다.');
+        return;
+      }
+      changeTargetNickname(currentNicknameValue);
+    };
 
-  const {
-    changeTargetNickname,
-    status,
-    currentCheckedNickname,
-  } = useNicknameDuplicateCheck();
-
-  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentNicknameValue(e.target.value);
-  };
-
-  // 닉네임 중복 확인 버튼 클릭 핸들러
-  const onClickNicknameDuplicateCheckButton = () => {
-    // 현재 입력된 닉네임과 기존 닉네임이 같다면 중복 검사를 수행하지 않습니다.
-    if (currentNicknameValue === userInfo?.nickname) {
-      showToast('info', '기존의 닉네임과 동일합니다.');
-      return;
-    }
-    changeTargetNickname(currentNicknameValue);
-  };
-
-  useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
-    ref,
-    () => {
+    useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
       // 닉네임 유효성 검사 로직
       const isNicknameVerified = currentNicknameValue === currentCheckedNickname;
       if (currentNicknameValue === '') {
@@ -250,7 +253,10 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           valid: true,
         };
       }
-      if (currentNicknameValue !== (userInfo?.nickname || '') && (status !== 'success' || !isNicknameVerified)) {
+      if (
+        currentNicknameValue !== (userInfo?.nickname || '') &&
+        (status !== 'success' || !isNicknameVerified)
+      ) {
         return {
           value: currentNicknameValue,
           valid: '닉네임 중복확인을 해주세요.',
@@ -260,39 +266,38 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         value: currentNicknameValue,
         valid: true,
       };
-    },
-    [currentCheckedNickname, currentNicknameValue, status, userInfo?.nickname],
-  );
+    }, [currentCheckedNickname, currentNicknameValue, status, userInfo?.nickname]);
 
-  return (
-    <div
-      className={cn({
-        [styles.modify__row]: true,
-        [styles['modify__row--nickname']]: true,
-      })}
-    >
-      <input
-        onChange={handleNicknameChange}
-        className={styles['form-input']}
-        type="text"
-        autoComplete="nickname"
-        placeholder="닉네임 (선택)"
-        defaultValue={userInfo?.nickname || ''}
-        {...props}
-      />
-      <button
-        type="button"
+    return (
+      <div
         className={cn({
-          [styles.modify__button]: true,
-          [styles['modify__button--nickname']]: true,
+          [styles.modify__row]: true,
+          [styles['modify__row--nickname']]: true,
         })}
-        onClick={onClickNicknameDuplicateCheckButton}
       >
-        중복확인
-      </button>
-    </div>
-  );
-});
+        <input
+          onChange={handleNicknameChange}
+          className={styles['form-input']}
+          type="text"
+          autoComplete="nickname"
+          placeholder="닉네임 (선택)"
+          defaultValue={userInfo?.nickname || ''}
+          {...props}
+        />
+        <button
+          type="button"
+          className={cn({
+            [styles.modify__button]: true,
+            [styles['modify__button--nickname']]: true,
+          })}
+          onClick={onClickNicknameDuplicateCheckButton}
+        >
+          중복확인
+        </button>
+      </div>
+    );
+  }
+);
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
@@ -353,86 +358,83 @@ const GENDER_TYPE = [
   { label: '여', value: 1 },
 ];
 
-const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
-  const { data: userInfo } = useUser();
-  const [currentValue, setCurrentValue] = React.useState<number | null>(userInfo?.gender || null);
-  const [isOpenedPopup,, closePopup, triggerPopup] = useBooleanState(false);
-  const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
-    const { currentTarget } = event;
-    const value = currentTarget.getAttribute('data-value');
-    setCurrentValue(value ? parseInt(value, 10) : null);
-    closePopup();
-  };
-
-  const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
-    const { key, currentTarget } = event;
-    const value = currentTarget.getAttribute('data-value');
-    switch (key) {
-      case 'Enter':
-        setCurrentValue(value ? parseInt(value, 10) : null);
-        break;
-      default:
-        break;
-    }
-  };
-
-  React.useEffect(() => {
-    if (userInfo?.gender !== undefined) {
-      setCurrentValue(userInfo.gender);
-    }
-  }, [userInfo?.gender]); // 기존 회원가입 로직에서 가져오는 과정에서 업데이트 문제로 활용
-
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    const requiredValidValue = (currentValue !== null ? true : '성별을 선택해주세요.');
-    return {
-      value: currentValue,
-      valid: required ? requiredValidValue : true,
+const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
+  ({ name, required }, ref) => {
+    const { data: userInfo } = useUser();
+    const [currentValue, setCurrentValue] = React.useState<number | null>(userInfo?.gender || null);
+    const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
+    const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
+      const { currentTarget } = event;
+      const value = currentTarget.getAttribute('data-value');
+      setCurrentValue(value ? parseInt(value, 10) : null);
+      closePopup();
     };
-  }, [currentValue, required]);
 
-  return (
-    <div
-      className={cn({
-        [styles.select]: true,
-        [styles['select--flex-end']]: true,
-      })}
-    >
-      <button
-        type="button"
-        onClick={triggerPopup}
-        name={name}
+    const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
+      const { key, currentTarget } = event;
+      const value = currentTarget.getAttribute('data-value');
+      switch (key) {
+        case 'Enter':
+          setCurrentValue(value ? parseInt(value, 10) : null);
+          break;
+        default:
+          break;
+      }
+    };
+
+    React.useEffect(() => {
+      if (userInfo?.gender !== undefined) {
+        setCurrentValue(userInfo.gender);
+      }
+    }, [userInfo?.gender]); // 기존 회원가입 로직에서 가져오는 과정에서 업데이트 문제로 활용
+
+    React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+      const requiredValidValue = currentValue !== null ? true : '성별을 선택해주세요.';
+      return {
+        value: currentValue,
+        valid: required ? requiredValidValue : true,
+      };
+    }, [currentValue, required]);
+
+    return (
+      <div
         className={cn({
-          [styles.select__trigger]: true,
+          [styles.select]: true,
+          [styles['select--flex-end']]: true,
         })}
       >
-        {
-          currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'
-        }
-        <ChervronUpDown />
-      </button>
-      {isOpenedPopup && (
-        <ul className={styles.select__content} role="listbox">
-          {GENDER_TYPE.map((optionValue) => (
-            <li
-              className={styles.select__option}
-              key={optionValue.value}
-              role="option"
-              aria-selected={optionValue.value === currentValue}
-              data-value={optionValue.value}
-              onClick={onClickOption}
-              onKeyPress={onKeyPressOption}
-            >
-              {optionValue.label}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-});
+        <button
+          type="button"
+          onClick={triggerPopup}
+          name={name}
+          className={cn({
+            [styles.select__trigger]: true,
+          })}
+        >
+          {currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'}
+          <ChevronUpDown />
+        </button>
+        {isOpenedPopup && (
+          <ul className={styles.select__content} role="listbox">
+            {GENDER_TYPE.map((optionValue) => (
+              <li
+                className={styles.select__option}
+                key={optionValue.value}
+                role="option"
+                aria-selected={optionValue.value === currentValue}
+                data-value={optionValue.value}
+                onClick={onClickOption}
+                onKeyPress={onKeyPressOption}
+              >
+                {optionValue.label}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  }
+);
 
 const useModifyInfoForm = () => {
   const queryClient = useQueryClient();
@@ -455,7 +457,7 @@ const useModifyInfoForm = () => {
       phone_number: formValue['phone-number'] || undefined,
       is_graduated: false,
     };
-    if ((formValue.password.trim()).length > 0) {
+    if (formValue.password.trim().length > 0) {
       payload.password = await sha256(formValue.password);
     }
     mutate(payload);
@@ -497,9 +499,7 @@ function ModifyInfoDefaultPage() {
           disabled
           defaultValue={userInfo?.email}
         />
-        <span className={styles.modify__advice}>
-          계정명은 변경하실 수 없습니다.
-        </span>
+        <span className={styles.modify__advice}>계정명은 변경하실 수 없습니다.</span>
         <PasswordForm {...register('password')} />
         <input
           className={styles['form-input']}

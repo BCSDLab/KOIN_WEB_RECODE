@@ -21,17 +21,9 @@ function Header() {
       })}
     >
       <nav className={styles.header__content}>
-        {isMobile ? (
-          <MobileHeader openModal={openModal} />
-        ) : (
-          <PCHeader openModal={openModal} />
-        )}
+        {isMobile ? <MobileHeader openModal={openModal} /> : <PCHeader openModal={openModal} />}
       </nav>
-      {isModalOpen && (
-        <AuthenticateUserModal
-          onClose={closeModal}
-        />
-      )}
+      {isModalOpen && <AuthenticateUserModal onClose={closeModal} />}
     </header>
   );
 }

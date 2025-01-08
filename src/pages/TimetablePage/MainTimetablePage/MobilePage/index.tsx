@@ -31,11 +31,11 @@ function MobilePage({ frameId }: { frameId: number }) {
         <div className={styles.page__header}>
           <div className={styles.page__semester}>
             <React.Suspense
-              fallback={(
+              fallback={
                 <div className={styles['dropdown-loading-spinner']}>
                   <LoadingSpinner />
                 </div>
-              )}
+              }
             >
               <SemesterListbox />
             </React.Suspense>
@@ -45,21 +45,18 @@ function MobilePage({ frameId }: { frameId: number }) {
             className={styles.page__button}
             onClick={(e) => handleImageDownloadClick(e)}
           >
-            <img
-              src="https://static.koreatech.in/assets/img/ic-image.png"
-              alt="이미지"
-            />
+            <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
             이미지로 저장하기
           </button>
         </div>
         <div ref={timetableRef} className={styles.page__timetable}>
           <ErrorBoundary fallbackClassName="loading">
             <React.Suspense
-              fallback={(
+              fallback={
                 <div className={styles['top-loading-spinner']}>
                   <LoadingSpinner />
                 </div>
-              )}
+              }
             >
               <Timetable
                 frameId={frameId}

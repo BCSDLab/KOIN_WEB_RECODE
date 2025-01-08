@@ -31,7 +31,10 @@ const useCheckPassword = () => {
     },
   });
   return {
-    mutate, isSuccess, error, errorMessage,
+    mutate,
+    isSuccess,
+    error,
+    errorMessage,
   };
 };
 

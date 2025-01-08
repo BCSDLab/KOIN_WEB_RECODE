@@ -18,12 +18,7 @@ export default function DetailModal({ url, close }: DetailModalProps): JSX.Eleme
 
   return (
     <div className={styles.photo} ref={backgroundRef}>
-      <button
-        type="button"
-        aria-label="닫기"
-        className={styles.photo__close}
-        onClick={close}
-      >
+      <button type="button" aria-label="닫기" className={styles.photo__close} onClick={close}>
         <CloseIcon />
       </button>
       <img src={url} alt="mealDetail" />

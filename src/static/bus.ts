@@ -4,19 +4,23 @@ import BusRoute from 'assets/svg/IndexPage/Bus/bus-route.svg';
 import BusUnibus from 'assets/svg/IndexPage/Bus/bus-unibus.svg';
 import ROUTES from './routes';
 
-export const BUS_TYPES = [{
-  key: 'shuttle',
-  tabName: '학교',
-  tableHeaders: ['승차장소', '시간'],
-}, {
-  key: 'express',
-  tabName: '대성',
-  tableHeaders: ['오전', '오후'],
-}, {
-  key: 'city',
-  tabName: '시내',
-  tableHeaders: ['오전', '오후'],
-}];
+export const BUS_TYPES = [
+  {
+    key: 'shuttle',
+    tabName: '학교',
+    tableHeaders: ['승차장소', '시간'],
+  },
+  {
+    key: 'express',
+    tabName: '대성',
+    tableHeaders: ['오전', '오후'],
+  },
+  {
+    key: 'city',
+    tabName: '시내',
+    tableHeaders: ['오전', '오후'],
+  },
+];
 
 export const BUS_DIRECTIONS = ['한기대', '야우리', '천안역'];
 
@@ -112,7 +116,7 @@ export interface BusLink {
   label: string;
   link: string;
   key: string;
-  type: typeof BUS_TYPES[number];
+  type: (typeof BUS_TYPES)[number];
 }
 
 export const busLink: BusLink[] = [
@@ -160,13 +164,15 @@ export const BUS_LINKS = [
     subtitle: '바로가기',
     link: ROUTES.BusCourse(),
     SvgIcon: BusTimetable,
-  }, {
+  },
+  {
     key: 'route',
     title: '가장 빠른 버스',
     subtitle: '조회하기',
     link: ROUTES.BusRoute(),
     SvgIcon: BusRoute,
-  }, {
+  },
+  {
     key: 'unibus',
     title: '유니버스',
     subtitle: '바로가기',

@@ -1,0 +1,7 @@
+# Build outputs
+dist
+build
+
+# ESLint disabled files
+src/App.tsx
+src/static/policy.ts

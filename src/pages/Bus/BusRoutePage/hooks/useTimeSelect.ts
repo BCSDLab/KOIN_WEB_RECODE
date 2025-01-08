@@ -45,33 +45,36 @@ export const useTimeSelect = () => {
         minute: date.getMinutes(),
       }));
     },
-    setDayOfMonth: (dateDiff: number) => setTimeState((prev) => {
-      const newDate = new Date();
-      newDate.setDate(newDate.getDate() + dateDiff);
-      return {
-        ...prev,
-        nowDate: newDate,
-        dayOfMonth: newDate.getDate(),
-      };
-    }),
-    setHour: (hour: number) => setTimeState((prev) => {
-      const newDate = new Date(prev.nowDate);
-      newDate.setHours(hour);
-      return {
-        ...prev,
-        nowDate: newDate,
-        hour: newDate.getHours(),
-      };
-    }),
-    setMinute: (minute: number) => setTimeState((prev) => {
-      const newDate = new Date(prev.nowDate);
-      newDate.setMinutes(minute);
-      return {
-        ...prev,
-        nowDate: newDate,
-        minute: newDate.getMinutes(),
-      };
-    }),
+    setDayOfMonth: (dateDiff: number) =>
+      setTimeState((prev) => {
+        const newDate = new Date();
+        newDate.setDate(newDate.getDate() + dateDiff);
+        return {
+          ...prev,
+          nowDate: newDate,
+          dayOfMonth: newDate.getDate(),
+        };
+      }),
+    setHour: (hour: number) =>
+      setTimeState((prev) => {
+        const newDate = new Date(prev.nowDate);
+        newDate.setHours(hour);
+        return {
+          ...prev,
+          nowDate: newDate,
+          hour: newDate.getHours(),
+        };
+      }),
+    setMinute: (minute: number) =>
+      setTimeState((prev) => {
+        const newDate = new Date(prev.nowDate);
+        newDate.setMinutes(minute);
+        return {
+          ...prev,
+          nowDate: newDate,
+          minute: newDate.getMinutes(),
+        };
+      }),
   };
 
   const formattedValues = {

@@ -13,7 +13,7 @@ import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
-  openModal: () => void,
+  openModal: () => void;
 }
 
 export default function Panel({ openModal }: PanelProps) {
@@ -28,13 +28,28 @@ export default function Panel({ openModal }: PanelProps) {
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
   const logShortcut = (title: string) => {
-    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '식단' });
-    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '버스' });
-    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '공지사항' });
-    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: '주변상점' });
-    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger', value: '복덕방' });
-    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger', value: '시간표' });
-    if (title === '교내 시설물 정보') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '교내 시설물 정보' });
+    if (title === '식단')
+      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '식단' });
+    if (title === '버스/교통')
+      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '버스' });
+    if (title === '공지사항')
+      logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '공지사항' });
+    if (title === '주변상점')
+      logger.actionEventClick({
+        actionTitle: 'BUSINESS',
+        title: 'hamburger_shop',
+        value: '주변상점',
+      });
+    if (title === '복덕방')
+      logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger', value: '복덕방' });
+    if (title === '시간표')
+      logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger', value: '시간표' });
+    if (title === '교내 시설물 정보')
+      logger.actionEventClick({
+        actionTitle: 'CAMPUS',
+        title: 'hamburger',
+        value: '교내 시설물 정보',
+      });
   };
 
   // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
@@ -46,7 +61,8 @@ export default function Panel({ openModal }: PanelProps) {
         value: '햄버거',
         previous_page: '시간표',
         current_page: title,
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time:
+          (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
   };
@@ -110,13 +126,8 @@ export default function Panel({ openModal }: PanelProps) {
         )}
       </div>
       <div className={styles.auth}>
-        <button
-          className={styles.auth__font}
-          type="button"
-          onClick={() => handleMyInfoClick()}
-        >
-          <PersonIcon />
-          내 정보
+        <button className={styles.auth__font} type="button" onClick={() => handleMyInfoClick()}>
+          <PersonIcon />내 정보
         </button>
         <button
           className={styles.auth__font}
@@ -124,21 +135,21 @@ export default function Panel({ openModal }: PanelProps) {
           onClick={
             userInfo
               ? () => {
-                logout();
-                logger.actionEventClick({
-                  actionTitle: 'USER',
-                  title: 'hamburger',
-                  value: '로그아웃',
-                });
-              }
+                  logout();
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'hamburger',
+                    value: '로그아웃',
+                  });
+                }
               : () => {
-                navigate(ROUTES.Auth());
-                logger.actionEventClick({
-                  actionTitle: 'USER',
-                  title: 'hamburger',
-                  value: '로그인',
-                });
-              }
+                  navigate(ROUTES.Auth());
+                  logger.actionEventClick({
+                    actionTitle: 'USER',
+                    title: 'hamburger',
+                    value: '로그인',
+                  });
+                }
           }
         >
           {userInfo ? '로그아웃' : '로그인'}
@@ -147,9 +158,7 @@ export default function Panel({ openModal }: PanelProps) {
       <div className={styles.category}>
         {CATEGORY.map((category) => (
           <div key={category.title}>
-            <div className={styles.category__title}>
-              {category.title}
-            </div>
+            <div className={styles.category__title}>{category.title}</div>
             <ul className={styles.category__submenus}>
               {category.submenu.slice(0, -4).map((submenu) => (
                 <li key={submenu.title} className={styles.category__submenu}>

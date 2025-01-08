@@ -9,9 +9,7 @@ interface PickerColumnProps {
   flex: number;
 }
 
-export default function PickerColumn({
-  items, selectedIndex, onChange, flex,
-}: PickerColumnProps) {
+export default function PickerColumn({ items, selectedIndex, onChange, flex }: PickerColumnProps) {
   const ITEM_HEIGHT = 30;
   const pickerRef = useRef<HTMLDivElement>(null);
 
@@ -36,10 +34,7 @@ export default function PickerColumn({
       style={{ flex: `${flex}` }}
       onScroll={handleScroll}
     >
-      <div
-        className={styles.items}
-        style={{ height: `${(items.length - 1) * ITEM_HEIGHT}px` }}
-      >
+      <div className={styles.items} style={{ height: `${(items.length - 1) * ITEM_HEIGHT}px` }}>
         {items.map((item, index) => (
           <div
             key={item}

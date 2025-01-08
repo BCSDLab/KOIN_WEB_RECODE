@@ -15,10 +15,7 @@ export interface TimetableSettingModalProps {
   onClose: () => void;
 }
 
-export default function TimetableSettingModal({
-  focusFrame,
-  onClose,
-}: TimetableSettingModalProps) {
+export default function TimetableSettingModal({ focusFrame, onClose }: TimetableSettingModalProps) {
   const token = useTokenState();
   const semester = useSemester();
   const myLectures = useMyLectures(focusFrame.id!);
@@ -51,10 +48,7 @@ export default function TimetableSettingModal({
     return onClose();
   };
 
-  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(
-    token,
-    semester,
-  );
+  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, semester);
   const onDelete = async () => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
@@ -106,9 +100,7 @@ export default function TimetableSettingModal({
               disabled={focusFrame.is_main}
               checked={focusFrame.is_main ? true : undefined}
             />
-            <span className={styles['container__checkbox-title']}>
-              기본 시간표로 설정하기
-            </span>
+            <span className={styles['container__checkbox-title']}>기본 시간표로 설정하기</span>
           </label>
 
           <div className={styles.container__button}>

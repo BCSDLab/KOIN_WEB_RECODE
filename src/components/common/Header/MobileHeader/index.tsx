@@ -38,7 +38,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         value: response.name,
         event_category: 'click',
         current_page: sessionStorage.getItem('cameFrom') || '',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+        duration_time:
+          (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
       }); // 상점 내 뒤로가기 버튼 로깅
       navigate(-1);
       return;
@@ -50,7 +51,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         value: '뒤로가기버튼',
         previous_page: '시간표',
         current_page: '메인',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time:
+          (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
     navigate(-1);
@@ -87,9 +89,9 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
           {isMain ? (
             <KoinServiceLogo />
           ) : (
-            CATEGORY
-              .flatMap((category) => category.submenu)
-              .find((submenu) => pathname.startsWith(submenu.link))?.title ?? ''
+            (CATEGORY.flatMap((category) => category.submenu).find((submenu) =>
+              pathname.startsWith(submenu.link)
+            )?.title ?? '')
           )}
         </span>
         {isCustomButton ? (
@@ -115,10 +117,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
           </button>
         )}
       </div>
-      {createPortal(
-        <Panel openModal={openModal} />,
-        document.body,
-      )}
+      {createPortal(<Panel openModal={openModal} />, document.body)}
     </>
   );
 }

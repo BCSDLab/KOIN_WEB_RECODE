@@ -7,7 +7,7 @@ import ROUTES from 'static/routes';
 import styles from './NoticeList.module.scss';
 
 interface NoticeListProps {
-  articles: Article[]
+  articles: Article[];
 }
 
 export default function NoticeList({ articles }: NoticeListProps) {
@@ -21,11 +21,11 @@ export default function NoticeList({ articles }: NoticeListProps) {
           to={ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true })}
           key={article.id}
         >
-          <div className={styles.list__id}>{ article.id }</div>
+          <div className={styles.list__id}>{article.id}</div>
           <div className={styles.title}>
-            <div className={styles.title__header}>{ convertNoticeTag(article.board_id) }</div>
-            <div className={styles.title__content}>{ article.title }</div>
-            { setArticleRegisteredDate(article.registered_at)[1] && (
+            <div className={styles.title__header}>{convertNoticeTag(article.board_id)}</div>
+            <div className={styles.title__content}>{article.title}</div>
+            {setArticleRegisteredDate(article.registered_at)[1] && (
               <img
                 className={styles['title__new-tag']}
                 src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
@@ -33,9 +33,11 @@ export default function NoticeList({ articles }: NoticeListProps) {
               />
             )}
           </div>
-          <div className={styles.list__author}>{ isMobile ? `${article.author}` : article.author }</div>
+          <div className={styles.list__author}>
+            {isMobile ? `${article.author}` : article.author}
+          </div>
           <div className={styles['list__registered-at']}>
-            { setArticleRegisteredDate(article.registered_at)[0] }
+            {setArticleRegisteredDate(article.registered_at)[0]}
           </div>
         </Link>
       ))}

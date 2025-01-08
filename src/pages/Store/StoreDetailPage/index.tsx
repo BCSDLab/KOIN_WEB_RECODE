@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
-import {
-  useNavigate, useParams, useSearchParams,
-} from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import { Portal } from 'components/common/Modal/PortalProvider';
@@ -38,20 +36,21 @@ function StoreDetailPage() {
   // waterfall 현상 막기
   const { data: paralleData } = useSuspenseQuery({
     queryKey: ['storeDetail', 'storeDetailMenu', 'review'],
-    queryFn: () => Promise.all([
-      queryClient.fetchQuery({
-        queryKey: ['storeDetail', params.id],
-        queryFn: () => api.store.getStoreDetailInfo(params.id!),
-      }),
-      queryClient.fetchQuery({
-        queryKey: ['storeDetailMenu', params.id],
-        queryFn: () => api.store.getStoreDetailMenu(params.id!),
-      }),
-      queryClient.fetchQuery({
-        queryKey: ['review'],
-        queryFn: () => api.store.getReviewList(Number(params.id!), 1, 'LATEST', token),
-      }),
-    ]),
+    queryFn: () =>
+      Promise.all([
+        queryClient.fetchQuery({
+          queryKey: ['storeDetail', params.id],
+          queryFn: () => api.store.getStoreDetailInfo(params.id!),
+        }),
+        queryClient.fetchQuery({
+          queryKey: ['storeDetailMenu', params.id],
+          queryFn: () => api.store.getStoreDetailMenu(params.id!),
+        }),
+        queryClient.fetchQuery({
+          queryKey: ['review'],
+          queryFn: () => api.store.getReviewList(Number(params.id!), 1, 'LATEST', token),
+        }),
+      ]),
   });
   useEffect(() => {
     if (!sessionStorage.getItem('enter_storeDetail')) {
@@ -88,7 +87,8 @@ function StoreDetailPage() {
         event_category: 'click',
         previous_page: '리뷰',
         current_page: '전화',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+        duration_time:
+          (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
       });
     }
     logger.actionEventClick({
@@ -96,13 +96,17 @@ function StoreDetailPage() {
       title: `${storeType}_call`,
       value: storeDetail!.name,
       event_category: 'click',
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      duration_time:
+        (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
 
   const onClickImage = (img: string[], index: number) => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name, event_category: 'click',
+      actionTitle: 'BUSINESS',
+      title: 'shop_picture',
+      value: storeDetail!.name,
+      event_category: 'click',
     });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -117,21 +121,34 @@ function StoreDetailPage() {
         event_category: 'click',
         previous_page: '리뷰',
         current_page: '전체보기',
-        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+        duration_time:
+          (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
       });
     }
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: sessionStorage.getItem('cameFrom') || '전체보기', duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      actionTitle: 'BUSINESS',
+      title: 'shop_detail_view_back',
+      value: storeDetail!.name,
+      event_category: 'ShopList',
+      current_page: sessionStorage.getItem('cameFrom') || '전체보기',
+      duration_time:
+        (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickEventList = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
+      actionTitle: 'BUSINESS',
+      title: 'shop_detail_view_event',
+      value: `${storeDetail.name}`,
+      event_category: 'click',
     });
   };
   const onClickReviewList = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: `${storeDetail.name}`, event_category: 'click',
+      actionTitle: 'BUSINESS',
+      title: 'shop_detail_view_review',
+      value: `${storeDetail.name}`,
+      event_category: 'click',
     });
   };
   const copyAccount = async (account: string) => {
@@ -140,19 +157,28 @@ function StoreDetailPage() {
   };
 
   const detailScrollLogging = () => {
-    if ((param.get('state') === '메뉴' || !param.get('state'))) {
+    if (param.get('state') === '메뉴' || !param.get('state')) {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view',
+        value: storeDetail.name,
+        event_category: 'scroll',
       });
     }
     if (param.get('state') === '이벤트/공지') {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: storeDetail.name, event_category: 'scroll',
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_event',
+        value: storeDetail.name,
+        event_category: 'scroll',
       });
     }
     if (param.get('state') === '리뷰') {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: storeDetail.name, event_category: 'scroll',
+        actionTitle: 'BUSINESS',
+        title: 'shop_detail_view_review',
+        value: storeDetail.name,
+        event_category: 'scroll',
       });
     }
   };
@@ -172,7 +198,8 @@ function StoreDetailPage() {
           event_category: 'click',
           previous_page: '리뷰',
           current_page: param.get('state') || '메뉴',
-          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
+          duration_time:
+            (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
         });
         sessionStorage.removeItem('enterReviewPage');
       }
@@ -194,7 +221,8 @@ function StoreDetailPage() {
           value: storeDetail.name,
           event_category: 'swipe',
           current_page: sessionStorage.getItem('cameFrom') || '전체보기',
-          duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+          duration_time:
+            (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
         });
         navigate(-1);
       };
@@ -205,7 +233,7 @@ function StoreDetailPage() {
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    []
   );
 
   return (
@@ -221,9 +249,7 @@ function StoreDetailPage() {
             >
               주변 상점
             </button>
-            {storeDetail?.updated_at && (
-              <UpdateInfo date={storeDetail.updated_at} />
-            )}
+            {storeDetail?.updated_at && <UpdateInfo date={storeDetail.updated_at} />}
           </div>
         )}
         <div className={styles['section__store-info']}>
@@ -241,19 +267,21 @@ function StoreDetailPage() {
                     className={styles['store__detail--phone']}
                   >
                     <div className={styles['store__detail--number']}>
-                      {storeDetail?.phone}
-                      {' '}
+                      {storeDetail?.phone}{' '}
                       <div>
                         <Phone />
                       </div>
                     </div>
                   </a>
-                ) : storeDetail?.phone}
+                ) : (
+                  storeDetail?.phone
+                )}
                 <br />
                 <span>운영시간</span>
                 {storeDetail.open[getDayOfWeek()] && storeDetail?.open
-                  ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${storeDetail?.open[getDayOfWeek()].close_time
-                  }`
+                  ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${
+                      storeDetail?.open[getDayOfWeek()].close_time
+                    }`
                   : '-'}
                 <br />
                 <span>주소정보</span>
@@ -268,12 +296,13 @@ function StoreDetailPage() {
                     <span>계좌번호</span>
                     <div className={styles.account}>
                       {`${storeDetail.bank} ${storeDetail.account_number}`}
-                      <button type="button" onClick={() => copyAccount(`${storeDetail.bank} ${storeDetail.account_number}`)}>
-                        <img
-                          src={Copy}
-                          alt="복사하기"
-                          className={styles.copy}
-                        />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          copyAccount(`${storeDetail.bank} ${storeDetail.account_number}`)
+                        }
+                      >
+                        <img src={Copy} alt="복사하기" className={styles.copy} />
                       </button>
                     </div>
                     <br />
@@ -285,24 +314,27 @@ function StoreDetailPage() {
                 </div>
               </div>
               <div>
-                <span className={cn({
-                  [styles.store__tags]: true,
-                  [styles['store__tags--active']]: storeDetail?.delivery,
-                })}
+                <span
+                  className={cn({
+                    [styles.store__tags]: true,
+                    [styles['store__tags--active']]: storeDetail?.delivery,
+                  })}
                 >
                   #배달가능
                 </span>
-                <span className={cn({
-                  [styles.store__tags]: true,
-                  [styles['store__tags--active']]: storeDetail?.pay_card,
-                })}
+                <span
+                  className={cn({
+                    [styles.store__tags]: true,
+                    [styles['store__tags--active']]: storeDetail?.pay_card,
+                  })}
                 >
                   #카드가능
                 </span>
-                <span className={cn({
-                  [styles.store__tags]: true,
-                  [styles['store__tags--active']]: storeDetail?.pay_bank,
-                })}
+                <span
+                  className={cn({
+                    [styles.store__tags]: true,
+                    [styles['store__tags--active']]: storeDetail?.pay_bank,
+                  })}
                 >
                   #계좌이체가능
                 </span>
@@ -323,9 +355,7 @@ function StoreDetailPage() {
                   상점목록
                 </button>
               </div>
-              {isMobile && storeDetail?.updated_at && (
-                <UpdateInfo date={storeDetail.updated_at} />
-              )}
+              {isMobile && storeDetail?.updated_at && <UpdateInfo date={storeDetail.updated_at} />}
             </div>
           )}
           <div
@@ -334,8 +364,8 @@ function StoreDetailPage() {
               [styles['image--none']]: storeDetail?.image_urls.length === 0,
             })}
           >
-            {storeDetail?.image_urls && storeDetail.image_urls.length > 0
-              ? (storeDetail.image_urls.map((img, index) => (
+            {storeDetail?.image_urls && storeDetail.image_urls.length > 0 ? (
+              storeDetail.image_urls.map((img, index) => (
                 <div key={`${img}`} className={styles.image__content}>
                   <button
                     className={styles.image__button}
@@ -346,13 +376,14 @@ function StoreDetailPage() {
                     <img className={styles.image__poster} src={`${img}`} alt="상점이미지" />
                   </button>
                 </div>
-              ))) : (
-                <div className={styles['empty-image']}>
-                  <div>
-                    <EmptyImageIcon />
-                  </div>
+              ))
+            ) : (
+              <div className={styles['empty-image']}>
+                <div>
+                  <EmptyImageIcon />
                 </div>
-              )}
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.tap}>
@@ -366,7 +397,10 @@ function StoreDetailPage() {
               param.set('state', '메뉴');
               setParam(param, { replace: true });
               logger.actionEventClick({
-                actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail!.name, event_category: 'click',
+                actionTitle: 'BUSINESS',
+                title: 'shop_detail_view',
+                value: storeDetail!.name,
+                event_category: 'click',
               });
             }}
           >
@@ -398,9 +432,7 @@ function StoreDetailPage() {
               setParam(param, { replace: true });
             }}
           >
-            리뷰
-            {' '}
-            {`(${reviews.total_count})`}
+            리뷰 {`(${reviews.total_count})`}
           </button>
         </div>
         {tapType === '메뉴' && storeMenuCategories && storeMenuCategories.length > 0 && (
@@ -410,15 +442,15 @@ function StoreDetailPage() {
         {tapType === '리뷰' && <ReviewPage id={params.id!} />}
       </div>
       {testValue === 'call_floating' && (
-      <a
-        role="button"
-        aria-label="상점 전화하기"
-        href={`tel:${storeDetail?.phone}`}
-        onClick={onClickCallNumber}
-        className={styles['phone-button--floating']}
-      >
-        <Phone />
-      </a>
+        <a
+          role="button"
+          aria-label="상점 전화하기"
+          href={`tel:${storeDetail?.phone}`}
+          onClick={onClickCallNumber}
+          className={styles['phone-button--floating']}
+        >
+          <Phone />
+        </a>
       )}
     </div>
   );

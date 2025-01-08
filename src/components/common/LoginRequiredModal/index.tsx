@@ -6,14 +6,18 @@ import styles from './LoginRequiredModal.module.scss';
 
 interface Props {
   title: string;
-  description:string;
-  closeModal:()=>void;
+  description: string;
+  closeModal: () => void;
   type?: string;
   shopName?: string;
 }
 
 export default function LoginRequiredModal({
-  title = '', description = '', closeModal, type, shopName,
+  title = '',
+  description = '',
+  closeModal,
+  type,
+  shopName,
 }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,8 +50,7 @@ export default function LoginRequiredModal({
       <div className={styles.modal}>
         <div className={styles.modal__title}>
           {title}
-          <span>로그인</span>
-          을 해주세요.
+          <span>로그인</span>을 해주세요.
         </div>
         <div className={styles.modal__description}>{description}</div>
         <div className={styles.modal__description}>회원가입 또는 로그인 후 이용해주세요 :-)</div>

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import MarkerIcon from 'components/Room/MarkerIcon';
 
 interface DetailMarkerProps {
-  map: naver.maps.Map | null
-  latitude: number | undefined
-  longitude: number | undefined
+  map: naver.maps.Map | null;
+  latitude: number | undefined;
+  longitude: number | undefined;
 }
 
 function useDetailMarker({ map, latitude, longitude }: DetailMarkerProps) {

@@ -18,8 +18,8 @@ export default function useImageUpload() {
   const saveImgFile = async () => {
     const files = imgRef.current?.files;
     // imageFile.length + files.length을 통해 저장된 이미지 + 새로 추가할 이미지의 개수를 파악함
-    if (files && (imageFile.length + files.length > 3)) {
-      showToast('error', '파일은 3개까지 등록할 수 있습니다.')
+    if (files && imageFile.length + files.length > 3) {
+      showToast('error', '파일은 3개까지 등록할 수 있습니다.');
       return;
     }
 
@@ -71,6 +71,10 @@ export default function useImageUpload() {
   };
 
   return {
-    imageFile, imgRef, saveImgFile, uploadError, setImageFile
+    imageFile,
+    imgRef,
+    saveImgFile,
+    uploadError,
+    setImageFile,
   };
 }

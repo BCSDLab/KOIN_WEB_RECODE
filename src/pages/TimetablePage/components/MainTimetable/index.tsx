@@ -28,9 +28,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
   const navigate = useNavigate();
   const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
   const { myLectures } = useMyLectures(frameId);
-  const myLectureDayValue = useTimetableDayList(
-    timeTableFrameList.length > 0 ? myLectures : [],
-  );
+  const myLectureDayValue = useTimetableDayList(timeTableFrameList.length > 0 ? myLectures : []);
   const { data: deptList } = useDeptList();
   const { data: mySemester } = useSemesterCheck(token);
 
@@ -57,7 +55,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
         title: 'timetable',
         value: '이미지저장',
         duration_time:
-        (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+          (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
       openModal();
     }
@@ -76,19 +74,11 @@ function MainTimetable({ frameId }: { frameId: number }) {
           <TotalGrades myLectureList={myLectures} />
         </div>
         <Curriculum list={deptList} />
-        <button
-          type="button"
-          className={styles.page__button}
-          onClick={onClickDownloadImage}
-        >
+        <button type="button" className={styles.page__button} onClick={onClickDownloadImage}>
           <DownloadIcon />
           이미지 저장
         </button>
-        <button
-          type="button"
-          className={styles.page__button}
-          onClick={onClickEdit}
-        >
+        <button type="button" className={styles.page__button} onClick={onClickEdit}>
           <div className={styles['page__edit-icon']}>
             <EditIcon />
           </div>
@@ -109,11 +99,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
           </React.Suspense>
         </ErrorBoundary>
       </div>
-      <div>
-        {isModalOpen && (
-          <DownloadTimetableModal onClose={closeModal} frameId={frameId} />
-        )}
-      </div>
+      <div>{isModalOpen && <DownloadTimetableModal onClose={closeModal} frameId={frameId} />}</div>
     </div>
   );
 }

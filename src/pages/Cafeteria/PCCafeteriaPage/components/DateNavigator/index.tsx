@@ -39,15 +39,8 @@ const generateWeek = (today: Date) => {
 };
 
 export default function DateNavigator() {
-  const {
-    currentDate,
-    checkToday,
-    checkPast,
-    setPrevWeek,
-    setNextWeek,
-    setToday,
-    setDate,
-  } = useDatePicker();
+  const { currentDate, checkToday, checkPast, setPrevWeek, setNextWeek, setToday, setDate } =
+    useDatePicker();
   const portalManager = useModalPortal();
   const { cafeteriaInfo } = useCoopshopCafeteria();
 
@@ -107,7 +100,8 @@ export default function DateNavigator() {
             key={dayInfo.weekDay}
             className={cn({
               [styles['week__one-day']]: true,
-              [styles['week__one-day--selected']]: dayInfo.date.toDateString() === currentDate().toDateString(),
+              [styles['week__one-day--selected']]:
+                dayInfo.date.toDateString() === currentDate().toDateString(),
             })}
             type="button"
             onClick={() => setDate(dayInfo.date)}

@@ -1,9 +1,9 @@
 import { Helmet } from 'react-helmet';
 
 type MetaHelmetProps = {
-  title: string,
-  description?: string,
-  image?: string,
+  title: string;
+  description?: string;
+  image?: string;
 };
 
 export default function MetaHelmet({
@@ -16,14 +16,8 @@ export default function MetaHelmet({
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="og:title" content={title} />
-      <meta
-        name="og:description"
-        content={description}
-      />
-      <meta
-        property="og:image"
-        content={image}
-      />
+      <meta name="og:description" content={description} />
+      <meta property="og:image" content={image} />
       <meta property="og:image:width" content="1200" />
     </Helmet>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const usePickerCarousel = (setDate:React.Dispatch<React.SetStateAction<Date>>) => {
+const usePickerCarousel = (setDate: React.Dispatch<React.SetStateAction<Date>>) => {
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -10,10 +10,10 @@ const usePickerCarousel = (setDate:React.Dispatch<React.SetStateAction<Date>>) =
     const slider = sliderRef.current;
 
     if (slider) {
-      slider.scrollLeft = (window.innerWidth);
+      slider.scrollLeft = window.innerWidth;
     }
 
-    const slideTouchStart = (e:TouchEvent) => {
+    const slideTouchStart = (e: TouchEvent) => {
       if (slider) {
         startX = e.touches[0].pageX - slider.offsetLeft;
         scrollValue = window.innerWidth;

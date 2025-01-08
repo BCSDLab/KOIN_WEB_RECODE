@@ -24,13 +24,20 @@ function IndexCafeteria() {
   const { dinings } = useDinings(diningTime.generateDiningDate());
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
-  const [isTooltipOpen, , closeTooltip] = useBooleanState(localStorage.getItem('cafeteria-tooltip') === null);
+  const [isTooltipOpen, , closeTooltip] = useBooleanState(
+    localStorage.getItem('cafeteria-tooltip') === null
+  );
 
-  const selectedDining = dinings
-    .find((dining) => dining.place === selectedPlace && dining.type === diningTime.getType());
+  const selectedDining = dinings.find(
+    (dining) => dining.place === selectedPlace && dining.type === diningTime.getType()
+  );
 
   const handleMoreClick = () => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단` });
+    logger.actionEventClick({
+      actionTitle: 'CAMPUS',
+      title: 'main_menu_moveDetailView',
+      value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`,
+    });
     navigate(ROUTES.Cafeteria());
   };
 
@@ -52,30 +59,31 @@ function IndexCafeteria() {
   return (
     <section className={styles.template}>
       <h2 className={styles.header}>
-        <button
-          type="button"
-          className={styles.header__title}
-          onClick={handleMoreClick}
-        >
+        <button type="button" className={styles.header__title} onClick={handleMoreClick}>
           {`${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`}
         </button>
-        <button
-          type="button"
-          className={styles.header__more}
-          onClick={handleMoreClick}
-        >
+        <button type="button" className={styles.header__more} onClick={handleMoreClick}>
           더보기
           <RightArrow />
         </button>
         {isTooltipOpen && (
           <div className={styles.header__tooltip}>
-            <button type="button" className={styles['header__tooltip-content']} onClick={handleTooltipContentButtonClick}>
+            <button
+              type="button"
+              className={styles['header__tooltip-content']}
+              onClick={handleTooltipContentButtonClick}
+            >
               식단 사진 기능이 생겼어요!
               <br />
               오늘의 식단을 확인해보세요.
             </button>
 
-            <button type="button" aria-label="close" className={styles['header__tooltip-close']} onClick={handleTooltipCloseButtonClick}>
+            <button
+              type="button"
+              aria-label="close"
+              className={styles['header__tooltip-close']}
+              onClick={handleTooltipCloseButtonClick}
+            >
               <Close />
             </button>
             <div className={styles['header__tooltip-asset']}>
@@ -101,9 +109,7 @@ function IndexCafeteria() {
             </button>
           ))}
         </div>
-        <div className={styles.type}>
-          {DINING_TYPE_MAP[diningTime.getType()]}
-        </div>
+        <div className={styles.type}>{DINING_TYPE_MAP[diningTime.getType()]}</div>
         <button
           type="button"
           className={cn({
@@ -115,11 +121,7 @@ function IndexCafeteria() {
           {isMobile && (
             <div className={styles.menus__type}>
               {DINING_TYPE_MAP[diningTime.getType()]}
-              {selectedDining?.soldout_at && (
-                <span className={styles.menus__chip}>
-                  품절
-                </span>
-              )}
+              {selectedDining?.soldout_at && <span className={styles.menus__chip}>품절</span>}
             </div>
           )}
           {selectedDining ? (

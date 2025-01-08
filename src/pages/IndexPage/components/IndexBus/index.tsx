@@ -54,12 +54,8 @@ function IndexBus() {
               onClick={() => logMainBusButton(key)}
             >
               <div className={styles.card__guide}>
-                <span className={styles.card__title}>
-                  {title}
-                </span>
-                <span className={styles.card__subtitle}>
-                  {subtitle}
-                </span>
+                <span className={styles.card__title}>{title}</span>
+                <span className={styles.card__subtitle}>{subtitle}</span>
               </div>
               <ChevronRight />
             </Link>
@@ -79,12 +75,8 @@ function IndexBus() {
               <div className={styles.card__segment}>
                 <SvgIcon />
                 <div className={styles.card__guide}>
-                  <span className={styles.card__title}>
-                    {title}
-                  </span>
-                  <span className={styles.card__subtitle}>
-                    {subtitle}
-                  </span>
+                  <span className={styles.card__title}>{title}</span>
+                  <span className={styles.card__subtitle}>{subtitle}</span>
                 </div>
               </div>
               <ChevronRight />

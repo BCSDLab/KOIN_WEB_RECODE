@@ -19,9 +19,7 @@ export interface AuthenticateUserModalProps {
   onClose: () => void;
 }
 
-export default function AuthenticateUserModal({
-  onClose,
-}: AuthenticateUserModalProps) {
+export default function AuthenticateUserModal({ onClose }: AuthenticateUserModalProps) {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
@@ -31,7 +29,10 @@ export default function AuthenticateUserModal({
   const isMobile = useMediaQuery();
   const { updateAuthentication } = useAuthenticationActions();
   const {
-    mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error, errorMessage,
+    mutate: checkPassword,
+    isSuccess: isCheckPasswordSuccess,
+    error,
+    errorMessage,
   } = useCheckPassword();
 
   const handleCheckPassword = async () => {
@@ -106,7 +107,11 @@ export default function AuthenticateUserModal({
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={handleEnterKeyDown}
             />
-            <button type="button" onClick={changeIsBlind} className={styles['container__blind-button']}>
+            <button
+              type="button"
+              onClick={changeIsBlind}
+              className={styles['container__blind-button']}
+            >
               {isBlind ? <BlindIcon /> : <ShowIcon />}
             </button>
             {isMobile && isKoinError(error) && (
@@ -127,13 +132,12 @@ export default function AuthenticateUserModal({
             </button>
           </div>
         </div>
-        {!isMobile && isKoinError(error) && error
-          && (
-            <span className={styles['container__error-message']}>
-              <WarningIcon />
-              {errorMessage}
-            </span>
-          )}
+        {!isMobile && isKoinError(error) && error && (
+          <span className={styles['container__error-message']}>
+            <WarningIcon />
+            {errorMessage}
+          </span>
+        )}
       </div>
     </div>
   );

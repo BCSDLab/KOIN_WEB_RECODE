@@ -31,10 +31,7 @@ function SemesterList() {
   const [selectedSemester, setSelectedSemester] = React.useState('');
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 
-  const { mutate: deleteTimetableFrame } = useDeleteSemester(
-    token,
-    selectedSemester || '20242',
-  );
+  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester || '20242');
 
   const semesterListToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -50,7 +47,11 @@ function SemesterList() {
     const { currentTarget } = event;
     const optionValue = currentTarget.getAttribute('data-value');
     onChangeSelect({ target: { value: optionValue ?? '' } });
-    logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click_semester_${optionValue}` });
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      title: 'timetable',
+      value: `click_semester_${optionValue}`,
+    });
     closePopup();
   };
 
@@ -118,7 +119,7 @@ function SemesterList() {
         updateSemester(semesterOptionList[0].value);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [semesterOptionList]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,15 +147,11 @@ function SemesterList() {
         })}
       >
         {semesterOptionList.length > 0 && semester !== null
-          ? semesterOptionList.find((item) => item.value === semester)
-            ?.label || semesterOptionList[0].label
+          ? semesterOptionList.find((item) => item.value === semester)?.label ||
+            semesterOptionList[0].label
           : '학기 추가하기'}
 
-        {semesterOptionList.length > 0 && semester !== null ? (
-          <DownArrowIcon />
-        ) : (
-          <AddIcon />
-        )}
+        {semesterOptionList.length > 0 && semester !== null ? <DownArrowIcon /> : <AddIcon />}
       </button>
 
       {isOpenSemesterList && (
@@ -165,8 +162,7 @@ function SemesterList() {
                 type="button"
                 className={cn({
                   [styles.select__option]: true,
-                  [styles['select__option--selected']]:
-                    optionValue.value === semester,
+                  [styles['select__option--selected']]: optionValue.value === semester,
                 })}
                 role="option"
                 aria-selected={optionValue.value === semester}
@@ -175,10 +171,7 @@ function SemesterList() {
                 tabIndex={0}
                 key={optionValue.value}
               >
-                <li
-                  className={styles['select__option--item']}
-                  key={optionValue.value}
-                >
+                <li className={styles['select__option--item']} key={optionValue.value}>
                   {optionValue.label}
                 </li>
                 <div>
@@ -194,11 +187,7 @@ function SemesterList() {
               </button>
             ))}
           </ul>
-          <button
-            type="button"
-            className={styles['add-button']}
-            onClick={onClickAddSemester}
-          >
+          <button type="button" className={styles['add-button']} onClick={onClickAddSemester}>
             <div>학기 추가하기</div>
             <AddIcon />
           </button>

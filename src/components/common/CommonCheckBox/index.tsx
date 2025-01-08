@@ -11,9 +11,7 @@ interface CadioBoxProps {
   children?: React.ReactNode;
 }
 
-export default function CheckBox({
-  value, name, checked, onChange, children,
-}: CadioBoxProps) {
+export default function CheckBox({ value, name, checked, onChange, children }: CadioBoxProps) {
   return (
     <div className={styles['check-box']}>
       <label htmlFor={value} className={styles['check-box__label']}>
