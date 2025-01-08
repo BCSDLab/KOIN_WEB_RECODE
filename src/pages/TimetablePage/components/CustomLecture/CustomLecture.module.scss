@@ -1,4 +1,4 @@
-@use "utils/scss/media.scss" as media;
+@use 'utils/scss/media.scss' as media;
 
 @mixin scrollbar($width) {
   /* Firefox 전용 스크롤바 스타일 */
@@ -76,7 +76,9 @@
     background: #fafafa;
     position: relative;
     border-radius: 5px;
-    box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
+    box-shadow:
+      0 1px 1px 0 rgba(0 0 0 / 2%),
+      0 2px 4px 0 rgba(0 0 0 / 4%);
 
     &--require {
       border: 1px solid #f7941e;
@@ -163,7 +165,9 @@
     justify-content: space-between;
     border-radius: 5px;
     background: #fafafa;
-    box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
+    box-shadow:
+      0 1px 1px 0 rgba(0 0 0 / 2%),
+      0 2px 4px 0 rgba(0 0 0 / 4%);
 
     &:hover {
       background: #eee;
@@ -273,7 +277,9 @@
     align-items: center;
     border-radius: 5px;
     background: #fafafa;
-    box-shadow: 0 1px 1px 0 rgba(0 0 0 / 2%), 0 2px 4px 0 rgba(0 0 0 / 4%);
+    box-shadow:
+      0 1px 1px 0 rgba(0 0 0 / 2%),
+      0 2px 4px 0 rgba(0 0 0 / 4%);
     color: #000;
     font-family: Pretendard, sans-serif;
     font-size: 16px;
@@ -347,7 +353,9 @@
 
     & > span {
       color: #000;
-      text-shadow: 0 1px 1px rgba(0 0 0 / 2%), 0 2px 4px rgba(0 0 0 / 4%);
+      text-shadow:
+        0 1px 1px rgba(0 0 0 / 2%),
+        0 2px 4px rgba(0 0 0 / 4%);
       font-family: Pretendard, sans-serif;
       font-size: 20px;
       font-weight: 500;

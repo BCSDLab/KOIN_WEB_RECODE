@@ -1,4 +1,4 @@
-@use "src/utils/scss/media";
+@use 'src/utils/scss/media';
 
 .section {
   width: 1131px;
@@ -231,9 +231,9 @@
     box-sizing: content-box;
 
     &:checked {
-      content: "";
+      content: '';
       border: 1px solid #175c8e;
-      background-image: url("https://static.koreatech.in/assets/img/check.png");
+      background-image: url('https://static.koreatech.in/assets/img/check.png');
       background-size: cover;
     }
   }
@@ -276,7 +276,7 @@
 }
 
 .tooltip::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 6.5%;

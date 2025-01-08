@@ -1,9 +1,9 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 
 $template-shuttle-colors: (
-  "순환": #4ed92c,
-  "주중": #ffb443,
-  "주말": #34adff
+  '순환': #4ed92c,
+  '주중': #ffb443,
+  '주말': #34adff,
 );
 
 .timetable-container {
@@ -136,7 +136,7 @@ $template-shuttle-colors: (
   width: 100%;
   box-sizing: border-box;
   background-color: #fff;
-  height: "fit-content";
+  height: 'fit-content';
   border-radius: 16px;
   border: 1px solid #eee;
   padding-bottom: 20px;

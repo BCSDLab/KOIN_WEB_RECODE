@@ -1,4 +1,4 @@
-@use "src/utils/scss/media";
+@use 'src/utils/scss/media';
 
 .store-list {
   width: 1131px;
@@ -213,7 +213,7 @@
       padding: 0;
       border: 0;
 
-      &[aria-hidden="true"] {
+      &[aria-hidden='true'] {
         color: #d2dae2;
       }
     }
