@@ -55,16 +55,6 @@ export interface MyLectureInfo {
   department: string;
 }
 
-// export interface TimetableLectureInfo {
-//   id: number;
-//   lecture_id?: number;
-//   class_title: string | null;
-//   class_infos: LectureSchedule[] | null;
-//   professor?: string | null;
-//   grades?: string;
-//   memo?: string;
-// }
-
 export type TimetableFrameInfo = {
   id: number | null;
   timetable_name: string;
@@ -93,15 +83,15 @@ export interface TimetableLectureInfoResponse extends APIResponse {
   total_grades: number;
 }
 
-// export interface EditTimetableLectureRequest {
-//   timetable_frame_id: number;
-//   timetable_lecture: TimetableLectureInfo[];
-// }
+export interface EditTimetableLectureRequest {
+  timetable_frame_id: number;
+  timetable_lecture: MyLectureInfo[];
+}
 
-// export interface AddTimetableLectureRequest {
-//   timetable_frame_id: number;
-//   timetable_lecture: Omit<TimetableLectureInfo, 'id'>[];
-// }
+export interface AddTimetableLectureRequest {
+  timetable_frame_id: number;
+  timetable_lecture: Omit<MyLectureInfo, 'id'>[];
+}
 
 export interface DeleteTimetableLectureResponse extends APIResponse { }
 
