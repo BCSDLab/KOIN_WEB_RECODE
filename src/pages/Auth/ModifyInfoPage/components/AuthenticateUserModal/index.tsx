@@ -1,3 +1,7 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { isKoinError } from '@bcsdlab/koin';
+import { cn, sha256 } from '@bcsdlab/utils';
 import BlindIcon from 'assets/svg/blind-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
@@ -9,10 +13,6 @@ import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useAuthenticationActions } from 'utils/zustand/authentication';
 import ROUTES from 'static/routes';
-import { isKoinError } from '@bcsdlab/koin';
-import { cn, sha256 } from '@bcsdlab/utils';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {

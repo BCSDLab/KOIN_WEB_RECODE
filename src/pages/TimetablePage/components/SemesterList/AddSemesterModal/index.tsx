@@ -1,3 +1,6 @@
+import { UseMutateFunction } from '@tanstack/react-query';
+import React from 'react';
+import { cn } from '@bcsdlab/utils';
 import {
   AddTimetableFrameRequest,
   SemesterCheckResponse,
@@ -7,9 +10,6 @@ import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import Listbox from 'components/TimetablePage/Listbox';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
-import { cn } from '@bcsdlab/utils';
-import { UseMutateFunction } from '@tanstack/react-query';
-import React from 'react';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {

@@ -1,8 +1,8 @@
+import { useLocation } from 'react-router-dom';
+import { cn } from '@bcsdlab/utils';
 import AuthenticateUserModal from 'pages/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { cn } from '@bcsdlab/utils';
-import { useLocation } from 'react-router-dom';
 import styles from './Header.module.scss';
 import MobileHeader from './MobileHeader';
 import PCHeader from './PCHeader';

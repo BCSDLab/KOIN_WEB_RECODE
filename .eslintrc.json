@@ -64,14 +64,45 @@
     "import/order": [
       "error",
       {
-        "groups": ["internal", "builtin", "external", "parent", "sibling", "index", "type"],
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "type"],
         "pathGroups": [
           {
-            "pattern": "{api,assets,components,lib,pages,utils}/**",
+            "pattern": "@tanstack/**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "react-*",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@bcsdlab/**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "axios",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "{api,assets,components,interfaces,lib,pages,utils}/**",
             "group": "internal",
             "position": "before"
+          },
+          {
+            "pattern": "static/**",
+            "group": "internal",
+            "position": "after"
           }
         ],
+        "pathGroupsExcludedImportTypes": ["react", "react-*"],
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true

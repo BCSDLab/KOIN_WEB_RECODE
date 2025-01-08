@@ -1,5 +1,5 @@
-import * as gtag from 'lib/gtag';
 import React from 'react';
+import * as gtag from 'lib/gtag';
 
 export type ClickLoggerProps = {
   title: string;

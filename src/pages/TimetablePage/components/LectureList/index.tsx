@@ -1,3 +1,5 @@
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
@@ -13,8 +15,6 @@ import { useUser } from 'utils/hooks/state/useUser';
 import showToast from 'utils/ts/showToast';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import React from 'react';
-import { useParams } from 'react-router-dom';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';
 import styles from './LectureList.module.scss';

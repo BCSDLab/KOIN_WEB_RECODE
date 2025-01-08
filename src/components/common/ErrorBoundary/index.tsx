@@ -1,6 +1,6 @@
-import showToast from 'utils/ts/showToast';
-import { AxiosError } from 'axios';
 import React, { ErrorInfo } from 'react';
+import { AxiosError } from 'axios';
+import showToast from 'utils/ts/showToast';
 
 interface Props {
   fallbackClassName: string;

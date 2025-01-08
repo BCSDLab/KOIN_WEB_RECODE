@@ -1,5 +1,5 @@
-import { TimetableLectureInfo } from 'api/timetable/entity';
 import { create } from 'zustand';
+import { TimetableLectureInfo } from 'api/timetable/entity';
 
 type State = {
   customTempLecture: Omit<TimetableLectureInfo, 'lecture_id' | 'id'> | null;

@@ -1,5 +1,5 @@
-import Error from 'assets/svg/page-not-found-error.svg';
 import { useNavigate } from 'react-router-dom';
+import Error from 'assets/svg/page-not-found-error.svg';
 import styles from './PageNotFound.module.scss';
 
 export default function PageNotFound() {

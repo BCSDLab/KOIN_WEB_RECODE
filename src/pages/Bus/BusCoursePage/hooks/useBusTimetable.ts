@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getBusTimetableInfo, getCityBusTimetableInfo } from 'api/bus';
 import {
   BusRouteInfo as ShuttleInfo,
@@ -8,7 +9,6 @@ import {
   ExpressInfo,
   ShuttleCourse,
 } from 'api/bus/entity';
-import { useSuspenseQuery } from '@tanstack/react-query';
 
 const TIMETABLE_KEY = 'timetable';
 

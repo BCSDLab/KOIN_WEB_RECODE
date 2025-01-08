@@ -1,7 +1,7 @@
-import { changeTimetableInfoByAddLecture } from 'api/timetable';
-import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import { changeTimetableInfoByAddLecture } from 'api/timetable';
 import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 
 export default function useAddTimetableLecture(token: string) {

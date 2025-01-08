@@ -1,8 +1,8 @@
+import { ReactNode } from 'react';
+import { Navigate } from 'react-router-dom';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import ROUTES from 'static/routes';
-import { ReactNode } from 'react';
 // import { useAuthentication } from 'utils/zustand/authentication';
-import { Navigate } from 'react-router-dom';
 
 interface PirvateRouteProps {
   requireAuthentication: boolean;

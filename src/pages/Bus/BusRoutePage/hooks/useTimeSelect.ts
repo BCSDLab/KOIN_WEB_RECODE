@@ -1,5 +1,5 @@
-import { formatDate, formatTime } from 'pages/Bus/BusRoutePage/utils/timeModule';
 import { useState } from 'react';
+import { formatDate, formatTime } from 'pages/Bus/BusRoutePage/utils/timeModule';
 
 interface TimeState {
   nowDate: Date;

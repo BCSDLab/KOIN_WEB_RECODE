@@ -1,8 +1,8 @@
+import { Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import HotArticles from 'pages/Notice/components/HotArticle';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
 import styles from './NoticePage.module.scss';
 
 export default function NoticePage() {

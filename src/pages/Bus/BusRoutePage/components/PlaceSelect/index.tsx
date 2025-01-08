@@ -1,3 +1,4 @@
+import { cn } from '@bcsdlab/utils';
 import { DepartArrivalPlace } from 'api/bus/entity';
 import {
   locationLabels,
@@ -10,7 +11,6 @@ import { LoggingLocation } from 'pages/Bus/hooks/useBusLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { cn } from '@bcsdlab/utils';
 import styles from './PlaceSelect.module.scss';
 
 interface PlaceSelectProps {

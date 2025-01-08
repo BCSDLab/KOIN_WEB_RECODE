@@ -1,5 +1,5 @@
-import { getBusNoticeInfo } from 'api/bus';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { getBusNoticeInfo } from 'api/bus';
 
 const BUS_NOTICE_KEY = 'bus-notice';
 

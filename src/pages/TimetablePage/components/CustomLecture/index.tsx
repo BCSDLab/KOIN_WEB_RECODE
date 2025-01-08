@@ -1,3 +1,6 @@
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { cn } from '@bcsdlab/utils';
 import { LectureSchedule, MyLectureInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
@@ -13,9 +16,6 @@ import {
   useCustomTempLectureAction,
 } from 'utils/zustand/myCustomTempLecture';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
-import { cn } from '@bcsdlab/utils';
-import { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import styles from './CustomLecture.module.scss';
 
 const initialTimeSpaceComponent = {

@@ -1,5 +1,5 @@
-import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import { useEffect } from 'react';
+import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import styles from './AlertModal.module.scss';
 
 interface AlertModalProps {

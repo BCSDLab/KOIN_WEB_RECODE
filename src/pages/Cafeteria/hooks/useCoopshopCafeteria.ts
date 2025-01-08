@@ -1,5 +1,5 @@
-import { coopshop } from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { coopshop } from 'api';
 
 const COOPSHOP_CAFETERIA_KEY = 'COOPSHOP_CAFETERIA_KEY';
 

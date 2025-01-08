@@ -1,3 +1,6 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
@@ -14,9 +17,6 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useSemester } from 'utils/zustand/semester';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import DownloadTimetableModal from './DownloadTimetableModal';
 import styles from './MyLectureTimetable.module.scss';
 

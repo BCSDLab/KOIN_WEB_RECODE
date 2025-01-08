@@ -1,7 +1,7 @@
+import { Link } from 'react-router-dom';
 import useHotArticleList from 'pages/Notice/hooks/useHotArticle';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
-import { Link } from 'react-router-dom';
 import styles from './HotArticles.module.scss';
 
 const LINK_LIST = [

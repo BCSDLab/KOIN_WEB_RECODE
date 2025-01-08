@@ -1,8 +1,8 @@
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import showToast from 'utils/ts/showToast';
 import * as api from 'api';
-import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 
 const useUserDelete = () => {
   const logout = useLogout();

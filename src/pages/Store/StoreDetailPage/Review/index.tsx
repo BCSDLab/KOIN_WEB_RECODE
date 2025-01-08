@@ -1,7 +1,7 @@
-import { DropdownProvider } from 'pages/Store/StoreDetailPage/hooks/useDropdown';
-import ROUTES from 'static/routes';
 import { Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DropdownProvider } from 'pages/Store/StoreDetailPage/hooks/useDropdown';
+import ROUTES from 'static/routes';
 import AverageRating from './components/AverageRating/AverageRating';
 import ReviewButton from './components/ReviewButton';
 import ReviewList from './components/ReviewList/ReviewList';

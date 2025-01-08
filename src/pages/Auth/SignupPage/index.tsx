@@ -1,3 +1,6 @@
+import React, { Suspense, useImperativeHandle } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { cn, sha256 } from '@bcsdlab/utils';
 import ChevronUpDown from 'assets/svg/common/chevron/chevron-up-down.svg';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
@@ -6,9 +9,6 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import ROUTES from 'static/routes';
 import { koin, privacy } from 'static/terms';
-import { cn, sha256 } from '@bcsdlab/utils';
-import React, { Suspense, useImperativeHandle } from 'react';
-import { useNavigate } from 'react-router-dom';
 import useDeptList from './hooks/useDeptList';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useSignup from './hooks/useSignup';

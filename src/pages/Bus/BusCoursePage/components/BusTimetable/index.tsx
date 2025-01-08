@@ -1,10 +1,10 @@
+import { Suspense } from 'react';
+import { cn } from '@bcsdlab/utils';
+import { useShallow } from 'zustand/react/shallow';
 import * as Timetable from 'pages/Bus/BusCoursePage/components/Timetable';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
 import { BUS_TYPES } from 'static/bus';
-import { cn } from '@bcsdlab/utils';
-import { Suspense } from 'react';
-import { useShallow } from 'zustand/react/shallow';
 import styles from './BusTimetable.module.scss';
 
 export default function BusTimetable() {

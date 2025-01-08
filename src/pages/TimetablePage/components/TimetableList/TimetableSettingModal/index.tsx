@@ -1,3 +1,4 @@
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import type { TimetableFrameInfo } from 'api/timetable/entity';
 import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import useDeleteTimetableFrame from 'pages/TimetablePage/hooks/useDeleteTimetableFrame';
@@ -7,7 +8,6 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
-import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {

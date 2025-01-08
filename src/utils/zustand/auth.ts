@@ -1,6 +1,6 @@
-import { getCookie } from 'utils/ts/cookie';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { getCookie } from 'utils/ts/cookie';
 
 type State = {
   token: string;

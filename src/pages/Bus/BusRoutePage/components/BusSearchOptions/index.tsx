@@ -1,3 +1,4 @@
+import { cn } from '@bcsdlab/utils';
 import { BusTypeRequest } from 'api/bus/entity';
 import ChevronDown24 from 'assets/svg/Bus/chevron-down-24x24.svg';
 import ChevronDown32 from 'assets/svg/Bus/chevron-down-32x32.svg';
@@ -11,7 +12,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { cn } from '@bcsdlab/utils';
 import styles from './BusSearchOptions.module.scss';
 
 interface BusSearchOptionsProps {

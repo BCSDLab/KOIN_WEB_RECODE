@@ -1,7 +1,7 @@
+import { useMutation } from '@tanstack/react-query';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { nicknameDuplicateCheck } from 'api/auth';
 import showToast from 'utils/ts/showToast';
-import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import { useMutation } from '@tanstack/react-query';
 
 function useNicknameCheckServer() {
   const { data, status, mutate } = useMutation({

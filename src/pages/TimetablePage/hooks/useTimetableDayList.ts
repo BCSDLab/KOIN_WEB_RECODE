@@ -1,6 +1,6 @@
+import React from 'react';
 import { LectureInfo, MyLectureInfo, TimetableLectureInfo } from 'api/timetable/entity';
 import { TimetableDayLectureInfo } from 'interfaces/Lecture';
-import React from 'react';
 
 export default function useTimetableDayList(
   myLectures:
