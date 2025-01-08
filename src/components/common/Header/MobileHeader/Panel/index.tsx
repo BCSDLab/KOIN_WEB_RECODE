@@ -1,7 +1,7 @@
 import { cn } from '@bcsdlab/utils';
+import { useLocation, useNavigate } from 'react-router-dom';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import PersonIcon from 'assets/svg/person.svg';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { CATEGORY, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';

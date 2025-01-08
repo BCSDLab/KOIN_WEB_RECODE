@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
+import { Link } from 'react-router-dom';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'pages/Notice/hooks/useArticles';
-import { Link } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';

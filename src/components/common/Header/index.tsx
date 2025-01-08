@@ -1,6 +1,6 @@
 import { cn } from '@bcsdlab/utils';
-import AuthenticateUserModal from 'pages/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import { useLocation } from 'react-router-dom';
+import AuthenticateUserModal from 'pages/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './Header.module.scss';

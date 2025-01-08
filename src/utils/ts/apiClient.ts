@@ -1,6 +1,6 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
-import { Refresh } from 'api/auth/APIDetail';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { Refresh } from 'api/auth/APIDetail';
 import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';

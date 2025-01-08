@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-imports */
 import React, { useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { toast } from 'react-toastify';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import BookMarkIcon from 'assets/svg/book-mark.svg';
@@ -13,7 +14,6 @@ import TimetableSettingModal from 'pages/TimetablePage/components/TimetableList/
 import useAddTimetableFrame from 'pages/TimetablePage/hooks/useAddTimetableFrame';
 import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import { toast } from 'react-toastify';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';

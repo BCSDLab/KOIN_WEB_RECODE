@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { useSearchParams } from 'react-router-dom';
 import { LectureSchedule, MyLectureInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
@@ -7,7 +8,6 @@ import WarningIcon from 'assets/svg/warning-icon.svg';
 import Listbox from 'components/TimetablePage/Listbox';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
-import { useSearchParams } from 'react-router-dom';
 import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';

@@ -1,6 +1,7 @@
 import React, { Suspense, useImperativeHandle } from 'react';
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
 import ChevronUpDown from 'assets/svg/common/chevron/chevron-up-down.svg';
 import LoadingSpinner from 'components/common/LoadingSpinner';
@@ -8,7 +9,6 @@ import { Portal } from 'components/common/Modal/PortalProvider';
 import Listbox from 'components/TimetablePage/Listbox';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
-import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';

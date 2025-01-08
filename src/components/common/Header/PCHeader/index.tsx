@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import * as api from 'api';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import * as api from 'api';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';

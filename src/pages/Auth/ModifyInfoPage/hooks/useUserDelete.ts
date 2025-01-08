@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import * as api from 'api';
 import { AxiosError } from 'axios';
+import * as api from 'api';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import showToast from 'utils/ts/showToast';
 

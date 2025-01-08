@@ -1,6 +1,6 @@
+import { Link } from 'react-router-dom';
 import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
 import QRCode from 'assets/svg/IndexPage/Bus/qr-code.svg';
-import { Link } from 'react-router-dom';
 import { BUS_LINKS } from 'static/bus';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';

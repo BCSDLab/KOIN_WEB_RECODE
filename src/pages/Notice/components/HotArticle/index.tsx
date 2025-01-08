@@ -1,5 +1,5 @@
-import useHotArticleList from 'pages/Notice/hooks/useHotArticle';
 import { Link } from 'react-router-dom';
+import useHotArticleList from 'pages/Notice/hooks/useHotArticle';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './HotArticles.module.scss';

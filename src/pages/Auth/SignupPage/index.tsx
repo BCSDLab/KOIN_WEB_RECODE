@@ -1,9 +1,9 @@
 import React, { Suspense, useImperativeHandle } from 'react';
 import { cn, sha256 } from '@bcsdlab/utils';
+import { useNavigate } from 'react-router-dom';
 import ChevronUpDown from 'assets/svg/common/chevron/chevron-up-down.svg';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
-import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/analytics/useLogger';

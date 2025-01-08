@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as api from 'api';
 import Copy from 'assets/png/copy.png';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
@@ -8,7 +9,6 @@ import Phone from 'assets/svg/Review/phone.svg';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';

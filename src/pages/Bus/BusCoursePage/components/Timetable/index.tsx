@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
+import dayjs from 'dayjs';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
-import dayjs from 'dayjs';
 import BusTimetableDetail from 'pages/Bus/BusCoursePage/components/BusTimetableDetail';
 import useBusTimetable, {
   useCityBusTimetable,
 } from 'pages/Bus/BusCoursePage/hooks/useBusTimetable';
 import useIndexValueSelect from 'pages/Bus/BusCoursePage/hooks/useIndexValueSelect';
 import useShuttleCourse from 'pages/Bus/BusCoursePage/hooks/useShuttleCourse';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   BUS_FEEDBACK_FORM,
   BUS_TYPES,

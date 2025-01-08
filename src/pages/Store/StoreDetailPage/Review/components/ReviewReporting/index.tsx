@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import CheckBox from 'components/common/CommonCheckBox';
-import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import CheckBox from 'components/common/CommonCheckBox';
+import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ReportingLabel from './components/ReportingLabel';

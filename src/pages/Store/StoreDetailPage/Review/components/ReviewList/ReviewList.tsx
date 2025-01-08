@@ -1,4 +1,5 @@
 import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import ChevronUp from 'assets/svg/common/chevron/chevron-up.svg';
 import NoReview from 'assets/svg/Review/no-review.svg';
 import LoginRequiredModal from 'components/common/LoginRequiredModal';
@@ -9,7 +10,6 @@ import { useGetReview } from 'pages/Store/StoreDetailPage/hooks/useGetReview';
 import { REVEIW_LOGIN } from 'pages/Store/StoreDetailPage/Review/components/ReviewButton/index';
 import ReviewCard from 'pages/Store/StoreDetailPage/Review/components/ReviewCard/ReviewCard';
 import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/StarList';
-import { useParams } from 'react-router-dom';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
 import styles from './ReviewList.module.scss';

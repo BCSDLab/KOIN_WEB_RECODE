@@ -1,8 +1,8 @@
+import { useParams } from 'react-router-dom';
 import LoginRequiredModal from 'components/common/LoginRequiredModal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
-import { useParams } from 'react-router-dom';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';

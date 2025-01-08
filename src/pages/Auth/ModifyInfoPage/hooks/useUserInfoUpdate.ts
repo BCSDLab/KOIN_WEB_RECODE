@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import * as api from 'api';
 import { UserUpdateRequest } from 'api/auth/entity';
-import { AxiosError } from 'axios';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 

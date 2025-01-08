@@ -1,7 +1,7 @@
+import { useParams } from 'react-router-dom';
 import { useGetReview } from 'pages/Store/StoreDetailPage/hooks/useGetReview';
 import Rating from 'pages/Store/StoreDetailPage/Review/components/Rating/Rating';
 import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/StarList';
-import { useParams } from 'react-router-dom';
 import styles from './AverageRating.module.scss';
 
 export default function AverageRating() {

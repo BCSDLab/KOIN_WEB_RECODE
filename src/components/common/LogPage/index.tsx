@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { UserResponse } from 'api/auth/entity';
 import * as gtag from 'lib/gtag';
-import { useLocation } from 'react-router-dom';
 import { useUser } from 'utils/hooks/state/useUser';
 import uuidv4 from 'utils/ts/uuidGenerater';
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
@@ -9,7 +10,6 @@ import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useSearch from 'pages/TimetablePage/hooks/useSearch';
 import useSelect from 'pages/TimetablePage/hooks/useSelect';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
-import { useParams } from 'react-router-dom';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useUser } from 'utils/hooks/state/useUser';
 import showToast from 'utils/ts/showToast';

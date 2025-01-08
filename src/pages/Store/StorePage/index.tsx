@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import * as api from 'api';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import Close from 'assets/svg/common/close/close-icon-20x20.svg';
@@ -9,7 +10,6 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import SearchBar from 'pages/Store/StorePage/components/SearchBar';
-import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import { STORE_PAGE } from 'static/store';
 import useLogger from 'utils/hooks/analytics/useLogger';

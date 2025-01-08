@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PenIcon from 'assets/svg/pen-icon.svg';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
@@ -11,7 +12,6 @@ import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
 import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useSemester } from 'utils/zustand/semester';
 import styles from './DefaultPage.module.scss';

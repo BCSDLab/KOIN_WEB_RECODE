@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { useNavigate } from 'react-router-dom';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import Close from 'assets/svg/common/close/close-icon-grey.svg';
 import NotServed from 'assets/svg/not-served.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import { DiningPlace } from 'interfaces/Cafeteria';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
-import { useNavigate } from 'react-router-dom';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
