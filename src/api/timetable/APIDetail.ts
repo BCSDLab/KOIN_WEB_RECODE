@@ -1,7 +1,8 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
+  Semester,
   SemestersResponse,
-  LectureInfoResponse,
+  LecturesResponse,
   SemesterCheckResponse,
   TimetableLectureInfoResponse,
   EditTimetableLectureRequest,
@@ -39,21 +40,15 @@ export class SemesterCheck<R extends SemesterCheckResponse> implements APIReques
   constructor(public authorization: string) {}
 }
 
-export class LectureList<R extends LectureInfoResponse> implements APIRequest<R> {
+export class LectureList<R extends LecturesResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/lectures';
+  path: string;
 
   response!: R;
 
-  params: {
-    [index: string]: string;
-  };
-
-  constructor(semester_date: string) {
-    this.params = {
-      semester_date,
-    };
+  constructor(semester: Semester) {
+    this.path = `/v3/lectures?year=${semester.year}&term=${semester.term}`;
   }
 }
 

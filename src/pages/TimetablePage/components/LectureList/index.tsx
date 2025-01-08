@@ -1,6 +1,8 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
+import {
+  Lecture, MyLectureInfo, Semester, LectureInfo,
+} from 'api/timetable/entity';
 import React from 'react';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
@@ -21,12 +23,12 @@ import styles from './LectureList.module.scss';
 
 interface CurrentSemesterLectureListProps {
   rowWidthList: number[];
-  currentSemester: string;
+  currentSemester: Semester;
   filter: {
     department: string;
     search: string;
   };
-  myLectures: Array<MyLectureInfo> | Array<LectureInfo>;
+  myLectures: Array<MyLectureInfo>;
   frameId: number;
 }
 
@@ -57,9 +59,41 @@ function CurrentSemesterLectureList({
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation(frameId);
 
-  const isMyLectureInfo = (
-    lectures: LectureInfo[] | MyLectureInfo[],
-  ): lectures is MyLectureInfo[] => (lectures as MyLectureInfo[])[0]?.class_infos !== undefined;
+  // const isMyLectureInfo = (
+  //   lectures: Lecture[] | MyLectureInfo[],
+  // ): lectures is MyLectureInfo[] => (lectures as MyLectureInfo[])[0]?.class_infos !== undefined;
+
+  const isOverlapping = (selected: LectureInfo, existing: LectureInfo) => {
+    if (selected.day !== existing.day) {
+      return false;
+    }
+    if (
+      (selected.start_time >= existing.start_time && selected.start_time <= existing.end_time)
+      || (selected.end_time >= existing.start_time && selected.end_time <= existing.end_time)
+    ) {
+      return true;
+    }
+    if (
+      selected.start_time <= existing.start_time && selected.end_time >= existing.end_time
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+  const findOverlappingLecture = (
+    myLecturess: MyLectureInfo[],
+    clickedLecture: Lecture,
+  ) => {
+    const overlappingLecture = myLecturess.find(
+      (myLecture) => myLecture.lecture_infos.some(
+        (myLectureInfo) => clickedLecture.lecture_infos.some(
+          (clickedLectureInfo) => isOverlapping(clickedLectureInfo, myLectureInfo),
+        ),
+      ),
+    );
+    return overlappingLecture;
+  };
 
   return (
     lectureList?.length !== 0 ? (
@@ -87,10 +121,10 @@ function CurrentSemesterLectureList({
         })}
         myLectures={myLectures}
         selectedLecture={tempLecture ?? undefined}
-        onClickRow={(clickedLecture) => ('class_time' in clickedLecture ? updateTempLecture(clickedLecture) : undefined)}
+        onClickRow={(clickedLecture) => ('lecture_id' in clickedLecture ? undefined : updateTempLecture(clickedLecture))}
         onDoubleClickRow={
           (clickedLecture) => {
-            if ('class_title' in clickedLecture) {
+            if ('lecture_id' in clickedLecture) {
               return;
             }
             if (!myLectures) {
@@ -105,34 +139,14 @@ function CurrentSemesterLectureList({
               showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
               return;
             }
-            const myLectureTimeValue = isMyLectureInfo(myLectures)
-              ? myLectures.flatMap((item) => (
-                item.class_infos.flatMap((info) => info.class_time)
-              ))
-              : myLectures.flatMap((item) => item.class_time);
-            if (
-              clickedLecture.class_time.some((time: number) => myLectureTimeValue.includes(time))
-            ) {
-              const alreadySelectedLecture = isMyLectureInfo(myLectures)
-                ? myLectures.find(
-                  (lecture) => lecture.class_infos.some((schedule) => (
-                    schedule.class_time.some(
-                      (time) => clickedLecture.class_time.includes(time),
-                    )
-                  )),
-                )
-                : myLectures.find((lecture) => lecture.class_time.some(
-                  (time) => clickedLecture.class_time.includes(time),
-                ));
-              if (!alreadySelectedLecture) {
-                return;
-              }
-              const alreadySelectedLectureName = 'name' in alreadySelectedLecture ? alreadySelectedLecture.name : alreadySelectedLecture.class_title;
+            const overlappingLecture = findOverlappingLecture(myLectures, clickedLecture);
+            if (overlappingLecture) {
+              const alreadySelectedLectureName = 'name' in overlappingLecture ? overlappingLecture.name : overlappingLecture.class_title;
               if (userInfo) {
-                if (alreadySelectedLecture.lecture_class) { // 분반이 존재하는 경우
+                if (overlappingLecture.lecture_class) { // 분반이 존재하는 경우
                   showToast(
                     'error',
-                    `${alreadySelectedLectureName}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                    `${alreadySelectedLectureName}(${overlappingLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
                   );
                   return;
                 }
@@ -144,7 +158,7 @@ function CurrentSemesterLectureList({
               }
               showToast(
                 'error',
-                `${alreadySelectedLectureName}(${alreadySelectedLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+                `${alreadySelectedLectureName}(${overlappingLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
               );
             } else {
               addMyLecture(clickedLecture);

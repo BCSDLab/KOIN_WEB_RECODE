@@ -29,6 +29,7 @@ const useSemesterOptionList = () => {
   const semesterList = token
     ? mySemesterList?.semesters
     : allSemesters;
+  console.log(semesterList);
   const semesterOptionList = (semesterList ?? []).map(
     (semesterInfo) => ({
       label: `${semesterInfo.year}년 ${semesterInfo.term}`,

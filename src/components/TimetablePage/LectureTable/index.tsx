@@ -1,4 +1,4 @@
-import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
+import { Lecture, MyLectureInfo } from 'api/timetable/entity';
 import React from 'react';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
@@ -14,11 +14,11 @@ import styles from './LectureTable.module.scss';
 interface LectureTableProps {
   rowWidthList: number[];
   frameId: number;
-  list: Array<LectureInfo> | Array<MyLectureInfo>;
-  myLectures: Array<LectureInfo> | Array<MyLectureInfo>;
-  selectedLecture: LectureInfo | undefined;
-  onClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
-  onDoubleClickRow: ((value: LectureInfo | MyLectureInfo) => void) | undefined;
+  list: Array<Lecture> | Array<MyLectureInfo>;
+  myLectures: Array<Lecture> | Array<MyLectureInfo>;
+  selectedLecture: Lecture | undefined;
+  onClickRow: ((value: Lecture | MyLectureInfo) => void) | undefined;
+  onDoubleClickRow: ((value: Lecture | MyLectureInfo) => void) | undefined;
   version: 'semesterLectureList' | 'myLectureList'
 }
 
@@ -79,7 +79,7 @@ function LectureTable({
   };
   const [isMouseOver, setIsMouseOver] = React.useState(-1);
   const handleTableRowClick = (
-    value: LectureInfo | MyLectureInfo,
+    value: Lecture | MyLectureInfo,
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     if (e.detail === 1 && onClickRow !== undefined) {
@@ -220,10 +220,10 @@ function LectureTable({
                         : lecture[headerItem.key])}
                     {headerItem.key === null && '수정'}
                     {headerItem.key === 'name'
-                      && 'class_time' in lecture
+                      && 'name' in lecture
                       && lecture.name}
                     {headerItem.key === 'name'
-                      && 'class_infos' in lecture
+                      && 'class_title' in lecture
                       && lecture.class_title}
                     {headerItem.key !== null
                       && headerItem.key !== 'professor'

@@ -14,7 +14,14 @@ export interface SemesterCheckResponse extends APIResponse {
   semesters: Semester[];
 }
 
-export interface LectureInfo {
+export type LectureInfo = {
+  day: number;
+  start_time: number;
+  end_time: number;
+  place?: string;
+};
+
+export interface Lecture {
   id: number;
   code: string;
   name: string;
@@ -27,21 +34,18 @@ export interface LectureInfo {
   is_english?: string;
   design_score: string;
   is_elearning?: string;
-  class_time: Array<number>;
+  lecture_infos: LectureInfo[];
 }
 
-export type LectureSchedule = {
-  class_time: number[],
-  class_place?: string,
-};
+export type LecturesResponse = Lecture[];
 
 export interface MyLectureInfo {
   id: number;
-  code: string;
   lecture_id: number;
   regular_number: string;
+  code: string;
   design_score: string;
-  class_infos: LectureSchedule[];
+  lecture_infos: LectureInfo[];
   memo: string;
   grades: string;
   class_title: string;
@@ -51,15 +55,15 @@ export interface MyLectureInfo {
   department: string;
 }
 
-export interface TimetableLectureInfo {
-  id: number;
-  lecture_id?: number;
-  class_title: string | null;
-  class_infos: LectureSchedule[] | null;
-  professor?: string | null;
-  grades?: string;
-  memo?: string;
-}
+// export interface TimetableLectureInfo {
+//   id: number;
+//   lecture_id?: number;
+//   class_title: string | null;
+//   class_infos: LectureSchedule[] | null;
+//   professor?: string | null;
+//   grades?: string;
+//   memo?: string;
+// }
 
 export type TimetableFrameInfo = {
   id: number | null;
@@ -79,8 +83,6 @@ export type VersionInfo = {
 
 // V1-시간표
 
-export type LectureInfoResponse = LectureInfo[];
-
 // V2-시간표
 // 강의 관련 요청 / 응답
 
@@ -91,15 +93,15 @@ export interface TimetableLectureInfoResponse extends APIResponse {
   total_grades: number;
 }
 
-export interface EditTimetableLectureRequest {
-  timetable_frame_id: number;
-  timetable_lecture: TimetableLectureInfo[];
-}
+// export interface EditTimetableLectureRequest {
+//   timetable_frame_id: number;
+//   timetable_lecture: TimetableLectureInfo[];
+// }
 
-export interface AddTimetableLectureRequest {
-  timetable_frame_id: number;
-  timetable_lecture: Omit<TimetableLectureInfo, 'id'>[];
-}
+// export interface AddTimetableLectureRequest {
+//   timetable_frame_id: number;
+//   timetable_lecture: Omit<TimetableLectureInfo, 'id'>[];
+// }
 
 export interface DeleteTimetableLectureResponse extends APIResponse { }
 
