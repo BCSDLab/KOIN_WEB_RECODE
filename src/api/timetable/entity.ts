@@ -18,7 +18,7 @@ export type LectureInfo = {
   day: number;
   start_time: number;
   end_time: number;
-  place?: string;
+  place: string;
 };
 
 export interface Lecture {
@@ -118,4 +118,40 @@ export interface VersionInfoResponse extends APIResponse {
   type: string;
   created_at: string;
   updated_at: string;
+}
+
+// V3-정규 강의 수정
+interface ClassPlace {
+  class_place: string;
+}
+
+export interface TimetableRegularLecture {
+  id: number;
+  lecture_id: number;
+  class_title: string;
+  class_place: ClassPlace[];
+}
+
+export interface TimetableLectureRegularEditRequest {
+  timetable_frame_id: number;
+  timetable_lecture: TimetableRegularLecture;
+}
+
+// --
+
+export interface LectureCustomInfo {
+  start_time: number;
+  end_time: number;
+  place: string;
+}
+
+export interface TimetableCustomLecture {
+  id: number;
+  class_title: string;
+  lecture_infos: LectureCustomInfo[];
+  professor: string;
+}
+export interface TimetableLectureCustomEditRequest {
+  timetable_frame_id: number;
+  timetable_lecture: TimetableCustomLecture;
 }

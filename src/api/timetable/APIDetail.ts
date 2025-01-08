@@ -16,6 +16,8 @@ import {
   DeleteSemesterResponse,
   VersionType,
   VersionInfoResponse,
+  TimetableLectureRegularEditRequest,
+  TimetableLectureCustomEditRequest,
 } from './entity';
 
 export class SemesterInfoList<R extends SemestersResponse> implements APIRequest<R> {
@@ -84,6 +86,32 @@ export class TimetableLectureEdit
   auth = true;
 
   constructor(public data: EditTimetableLectureRequest, public authorization: string) {}
+}
+
+export class TimetableLectureRegularEdit
+  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/v2/timetables/lecture/regular';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public data: TimetableLectureRegularEditRequest, public authorization: string) {}
+}
+
+export class TimetableLectureCustomEdit
+  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/v2/timetables/lecture/custom';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public data: TimetableLectureCustomEditRequest, public authorization: string) {}
 }
 
 export class TimetableLectureAddition
