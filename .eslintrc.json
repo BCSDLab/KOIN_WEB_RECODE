@@ -72,9 +72,14 @@
             "position": "before"
           },
           {
+            "pattern": "recoil",
+            "group": "external",
+            "position": "after"
+          },
+          {
             "pattern": "react-*",
             "group": "external",
-            "position": "before"
+            "position": "after"
           },
           {
             "pattern": "@tanstack/**",
@@ -98,11 +103,6 @@
           },
           {
             "pattern": "lodash",
-            "group": "external",
-            "position": "after"
-          },
-          {
-            "pattern": "recoil",
             "group": "external",
             "position": "after"
           },
