@@ -87,12 +87,12 @@
             "position": "after"
           },
           {
-            "pattern": "react-router*",
+            "pattern": "react-router-dom",
             "group": "external",
             "position": "after"
           },
           {
-            "pattern": "react-dom*",
+            "pattern": "react-dom/**",
             "group": "external",
             "position": "after"
           },
