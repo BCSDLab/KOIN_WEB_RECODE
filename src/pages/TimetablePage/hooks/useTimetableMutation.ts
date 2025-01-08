@@ -57,7 +57,7 @@ export default function useTimetableMutation(frameId: number) {
         });
       }
     } else if ('code' in clickedLecture) { // (비로그인)정규 강의 추가 시
-      addLectureFromLocalStorage(clickedLecture, semester);
+      addLectureFromLocalStorage(clickedLecture, `${semester?.year}${semester?.term}`);
     }
   };
 
@@ -65,7 +65,7 @@ export default function useTimetableMutation(frameId: number) {
   const restoreLecture = () => {
     const restoredLecture = JSON.parse(sessionStorage.getItem('restoreLecture')!);
     if ('name' in restoredLecture) {
-      addLectureFromLocalStorage(restoredLecture, semester);
+      addLectureFromLocalStorage(restoredLecture, `${semester?.year}${semester?.term}`);
     } else {
       mutateAddWithServer({
         timetable_frame_id: frameId,

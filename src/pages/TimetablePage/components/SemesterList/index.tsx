@@ -15,6 +15,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useAddSemester from 'pages/TimetablePage/hooks/useAddSemester';
 import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { Semester } from 'api/timetable/entity';
 import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';
 import AddSemesterModal from './AddSemesterModal';
@@ -28,7 +29,7 @@ function SemesterList() {
   const { updateSemester } = useSemesterAction();
 
   const [isOpenSemesterList, , closePopup, triggerPopup] = useBooleanState(false);
-  const [selectedSemester, setSelectedSemester] = React.useState('');
+  const [selectedSemester, setSelectedSemester] = React.useState(semesterOptionList[0].label);
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 
   const { mutate: deleteTimetableFrame } = useDeleteSemester(
@@ -41,16 +42,9 @@ function SemesterList() {
     triggerPopup();
   };
 
-  const onChangeSelect = (e: { target: { value: string } }) => {
-    const { target } = e;
-    updateSemester(target?.value);
-  };
-
-  const onClickOption = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { currentTarget } = event;
-    const optionValue = currentTarget.getAttribute('data-value');
-    onChangeSelect({ target: { value: optionValue ?? '' } });
-    logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click_semester_${optionValue}` });
+  const onClickOption = (clickededSemester: Semester) => {
+    updateSemester(clickededSemester);
+    logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click_semester_${clickededSemester.year}${clickededSemester.term}` });
     closePopup();
   };
 
@@ -171,13 +165,12 @@ function SemesterList() {
                 role="option"
                 aria-selected={optionValue.value === semester}
                 data-value={optionValue.value}
-                onClick={onClickOption}
+                onClick={() => onClickOption(optionValue.value)}
                 tabIndex={0}
-                key={optionValue.value}
               >
                 <li
                   className={styles['select__option--item']}
-                  key={optionValue.value}
+                  key={optionValue.label}
                 >
                   {optionValue.label}
                 </li>

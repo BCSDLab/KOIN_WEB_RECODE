@@ -5,13 +5,13 @@ import {
 } from 'api/timetable/entity';
 import React from 'react';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
-import { useSemester, useSemesterAction } from 'utils/zustand/semester';
+import { useSemester } from 'utils/zustand/semester';
 import useSelect from 'pages/TimetablePage/hooks/useSelect';
 import showToast from 'utils/ts/showToast';
 import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
 import useSearch from 'pages/TimetablePage/hooks/useSearch';
 import LectureTable, { LECTURE_TABLE_HEADER } from 'components/TimetablePage/LectureTable';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
@@ -59,10 +59,6 @@ function CurrentSemesterLectureList({
   const { updateTempLecture } = useTempLectureAction();
   const { addMyLecture } = useTimetableMutation(frameId);
 
-  // const isMyLectureInfo = (
-  //   lectures: Lecture[] | MyLectureInfo[],
-  // ): lectures is MyLectureInfo[] => (lectures as MyLectureInfo[])[0]?.class_infos !== undefined;
-
   const isOverlapping = (selected: LectureInfo, existing: LectureInfo) => {
     if (selected.day !== existing.day) {
       return false;
@@ -70,11 +66,7 @@ function CurrentSemesterLectureList({
     if (
       (selected.start_time >= existing.start_time && selected.start_time <= existing.end_time)
       || (selected.end_time >= existing.start_time && selected.end_time <= existing.end_time)
-    ) {
-      return true;
-    }
-    if (
-      selected.start_time <= existing.start_time && selected.end_time >= existing.end_time
+      || (selected.start_time <= existing.start_time && selected.end_time >= existing.end_time)
     ) {
       return true;
     }
@@ -213,15 +205,12 @@ function LectureList({ frameId }: { frameId: number }) {
 
   // 가장 최신연도와 월을 가져옴
   const semester = useSemester();
-  const { updateSemester } = useSemesterAction();
-  const mostRecentSemester = `${new Date().getFullYear()}${new Date().getMonth() > 5 ? 2 : 1}`;
-  const semesterParams = useParams().id;
-  if (semesterParams !== String(frameId)) {
-    // ur에서 학기 정보를 가져오고 그것으로 store저장 만약 params가 없을 때, 가장 최근의 학기로 설정
-    updateSemester(semesterParams || mostRecentSemester);
-  }
 
-  const { myLectures } = useMyLectures(frameId);
+  // 이거 굳이 안 써도 될 수도..?
+  const [searchParam] = useSearchParams();
+  console.log(searchParam.get('year'));
+
+  const { myLectures } = useMyLectures(13089);
 
   const [isToggled, setIsToggled] = React.useState(false);
   const { widthInfo } = useFlexibleWidth(9, [61, 173, 41, 61, 61, 41, 41, 41, 61]);
@@ -296,7 +285,7 @@ function LectureList({ frameId }: { frameId: number }) {
             <CurrentSemesterLectureList
               rowWidthList={widthInfo}
               frameId={frameId}
-              currentSemester={semester}
+              currentSemester={semester!}
               filter={{
                 // 백엔드 수정하면 제거
                 department: departmentFilterValue ?? '전체',

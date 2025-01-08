@@ -7,10 +7,11 @@ import useTimetableInfoList from './useTimetableInfoList';
 export default function useMyLectures(frameId: number) {
   const token = useTokenState();
   const semester = useSemester();
+  console.log(`${semester?.year}${semester?.term}`);
   const { data: myLecturesFromServer } = useTimetableInfoList({
     authorization: token, timetableFrameId: frameId,
   });
-  const myLecturesFromLocalStorageValue = useLecturesState(semester);
+  const myLecturesFromLocalStorageValue = useLecturesState(`${semester?.year}${semester?.term}`);
 
   const myLectures = (!_.isEmpty(myLecturesFromServer))
     ? myLecturesFromServer

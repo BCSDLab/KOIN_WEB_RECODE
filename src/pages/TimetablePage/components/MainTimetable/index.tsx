@@ -17,6 +17,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import { toast } from 'react-toastify';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
+import ROUTES from 'static/routes';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
@@ -65,7 +66,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
 
   const onClickEdit = () => {
     if (isSemesterAndTimetableExist()) {
-      navigate(`/timetable/modify/regular/${token ? frameId : semester}`);
+      navigate(`/${ROUTES.TimetableRegular({ id: String(frameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`);
     }
   };
 

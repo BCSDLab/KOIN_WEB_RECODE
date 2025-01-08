@@ -1,4 +1,4 @@
-import { LectureInfo } from 'api/timetable/entity';
+import { Lecture } from 'api/timetable/entity';
 import { TimetableInfoFromLocalStorage } from 'interfaces/Lecture';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
@@ -11,8 +11,8 @@ type State = {
 
 type Action = {
   action: {
-    addLecture: (lecture: LectureInfo, semester: string) => void;
-    removeLecture: (lecture: LectureInfo, semester: string) => void;
+    addLecture: (lecture: Lecture, semester: string) => void;
+    removeLecture: (lecture: Lecture, semester: string) => void;
   }
 };
 

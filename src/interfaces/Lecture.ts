@@ -1,7 +1,7 @@
-import { LectureInfo } from 'api/timetable/entity';
+import { Lecture } from 'api/timetable/entity';
 
 export interface TimetableInfoFromLocalStorage {
-  [key: string]: LectureInfo[];
+  [key: string]: Lecture[];
 }
 
 export interface TimetableDayLectureInfo {
