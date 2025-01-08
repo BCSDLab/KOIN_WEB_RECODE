@@ -1,6 +1,6 @@
+import { cn } from '@bcsdlab/utils';
 import React, { Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { cn } from '@bcsdlab/utils';
 import PenIcon from 'assets/svg/pen-icon.svg';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';

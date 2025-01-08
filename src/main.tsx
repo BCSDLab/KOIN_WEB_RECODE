@@ -1,8 +1,8 @@
+import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import ReactDOM from 'react-dom/client';
 import PortalProvider from 'components/common/Modal/PortalProvider';
 import App from './App';
 import reportWebVitals from './reportWebVitals';

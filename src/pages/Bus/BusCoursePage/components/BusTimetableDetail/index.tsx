@@ -1,6 +1,6 @@
+import { cn } from '@bcsdlab/utils';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { cn } from '@bcsdlab/utils';
 import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
 import useShuttleTimetableDetail from 'pages/Bus/BusCoursePage/hooks/useShuttleTimetableDetail';

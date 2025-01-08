@@ -67,53 +67,58 @@
         "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "type"],
         "pathGroups": [
           {
-            "pattern": "react",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "react-*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "recoil",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "zustand/**",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "zustand",
-            "group": "external",
+            "pattern": "{api,assets,components,interfaces,lib,pages,utils}/**",
+            "group": "internal",
             "position": "before"
           },
           {
             "pattern": "@tanstack/**",
             "group": "external",
-            "position": "before"
+            "position": "after"
           },
           {
             "pattern": "@bcsdlab/**",
             "group": "external",
-            "position": "before"
+            "position": "after"
+          },
+          {
+            "pattern": "axios",
+            "group": "external",
+            "position": "after"
           },
           {
             "pattern": "dayjs",
             "group": "external",
-            "position": "before"
+            "position": "after"
           },
           {
             "pattern": "lodash",
             "group": "external",
-            "position": "before"
+            "position": "after"
           },
           {
-            "pattern": "{api,assets,components,interfaces,lib,pages,utils}/**",
-            "group": "internal",
+            "pattern": "react",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "react-*",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "recoil",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "zustand/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "zustand",
+            "group": "external",
             "position": "after"
           },
           {

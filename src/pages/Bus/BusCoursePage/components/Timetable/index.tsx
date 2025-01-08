@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
 import dayjs from 'dayjs';
+import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import BusTimetableDetail from 'pages/Bus/BusCoursePage/components/BusTimetableDetail';
