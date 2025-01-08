@@ -87,6 +87,16 @@
             "position": "after"
           },
           {
+            "pattern": "react-router*",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "react-dom*",
+            "group": "external",
+            "position": "after"
+          },
+          {
             "pattern": "react-*",
             "group": "external",
             "position": "after"
