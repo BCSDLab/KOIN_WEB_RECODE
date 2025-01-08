@@ -56,7 +56,7 @@ export class TimetableLectureInfo
   <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/v2/timetables/lecture';
+  path = '/v3/timetables/lecture';
 
   response!: R;
 
