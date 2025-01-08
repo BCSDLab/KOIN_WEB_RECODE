@@ -67,27 +67,7 @@
         "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "type"],
         "pathGroups": [
           {
-            "pattern": "@tanstack/**",
-            "group": "external",
-            "position": "before"
-          },
-          {
             "pattern": "react",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "react-*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@bcsdlab/**",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "axios",
             "group": "external",
             "position": "before"
           },
@@ -97,12 +77,47 @@
             "position": "before"
           },
           {
+            "pattern": "@tanstack/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "react-*",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "@bcsdlab/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "axios",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "dayjs",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "lodash",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "zustand/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
             "pattern": "static/**",
             "group": "internal",
             "position": "after"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["react", "react-*"],
+        "pathGroupsExcludedImportTypes": ["react"],
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true
