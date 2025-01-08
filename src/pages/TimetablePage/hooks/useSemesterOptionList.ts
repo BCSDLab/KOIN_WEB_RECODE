@@ -13,23 +13,21 @@ const useSemester = () => {
     },
   );
 
-  return {
-    data,
-  };
+  return data ?? [];
 };
 
 const useSemesterOptionList = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
-  const { data: allSemesters } = useSemester();
+  const allSemesters = useSemester();
   const { data: mySemesterList } = useSemesterCheck(token);
+
   if (mySemesterList === null) {
     queryClient.invalidateQueries({ queryKey: [MY_SEMESTER_INFO_KEY] });
   }
-  const semesterList = token
-    ? mySemesterList?.semesters
-    : allSemesters;
-  console.log(semesterList);
+
+  const semesterList = token ? mySemesterList?.semesters : allSemesters;
+
   const semesterOptionList = (semesterList ?? []).map(
     (semesterInfo) => ({
       label: `${semesterInfo.year}년 ${semesterInfo.term}`,
