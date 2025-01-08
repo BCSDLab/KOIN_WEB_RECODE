@@ -67,8 +67,13 @@
         "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "type"],
         "pathGroups": [
           {
-            "pattern": "{api,assets,components,interfaces,lib,pages,utils}/**",
-            "group": "internal",
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "react-*",
+            "group": "external",
             "position": "before"
           },
           {
@@ -97,16 +102,6 @@
             "position": "after"
           },
           {
-            "pattern": "react",
-            "group": "external",
-            "position": "after"
-          },
-          {
-            "pattern": "react-*",
-            "group": "external",
-            "position": "after"
-          },
-          {
             "pattern": "recoil",
             "group": "external",
             "position": "after"
@@ -119,6 +114,11 @@
           {
             "pattern": "zustand",
             "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "{api,assets,components,interfaces,lib,pages,utils}/**",
+            "group": "internal",
             "position": "after"
           },
           {

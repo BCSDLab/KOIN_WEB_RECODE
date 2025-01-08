@@ -1,5 +1,5 @@
-import { cn } from '@bcsdlab/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { cn } from '@bcsdlab/utils';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import PersonIcon from 'assets/svg/person.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';

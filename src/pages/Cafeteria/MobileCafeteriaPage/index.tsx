@@ -1,5 +1,5 @@
-import { cn } from '@bcsdlab/utils';
 import { Suspense, useEffect, useState } from 'react';
+import { cn } from '@bcsdlab/utils';
 import InformationIcon from 'assets/svg/common/information/information-icon.svg';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import { DiningType } from 'interfaces/Cafeteria';

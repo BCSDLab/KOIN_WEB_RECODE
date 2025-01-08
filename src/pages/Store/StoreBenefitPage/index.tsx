@@ -1,5 +1,5 @@
-import { cn } from '@bcsdlab/utils';
 import { useEffect } from 'react';
+import { cn } from '@bcsdlab/utils';
 import useBenefitCategory from 'pages/Store/StoreBenefitPage/hooks/useBenefitCategory';
 import useStoreBenefitList from 'pages/Store/StoreBenefitPage/hooks/useStoreBenefitList';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';

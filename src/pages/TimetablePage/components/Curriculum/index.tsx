@@ -1,5 +1,5 @@
-import { cn } from '@bcsdlab/utils';
 import React from 'react';
+import { cn } from '@bcsdlab/utils';
 import { DeptListResponse } from 'api/dept/entity';
 import CurriculumIcon from 'assets/svg/curriculum-icon.svg';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';

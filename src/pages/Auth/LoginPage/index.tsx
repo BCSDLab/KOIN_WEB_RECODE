@@ -1,8 +1,9 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { auth } from 'api';
 import { LoginResponse } from 'api/auth/entity';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
@@ -10,7 +11,6 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { setCookie } from 'utils/ts/cookie';
 import showToast from 'utils/ts/showToast';
 import { useTokenStore } from 'utils/zustand/auth';
-import { auth } from 'api';
 import ROUTES from 'static/routes';
 import styles from './LoginPage.module.scss';
 

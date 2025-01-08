@@ -1,7 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
 import React from 'react';
-import showToast from 'utils/ts/showToast';
+import { useMutation } from '@tanstack/react-query';
 import { auth } from 'api';
+import showToast from 'utils/ts/showToast';
 import styles from './FindPasswordPage.module.scss';
 
 interface IClassUser {

@@ -1,5 +1,5 @@
-import { cn } from '@bcsdlab/utils';
 import { Suspense } from 'react';
+import { cn } from '@bcsdlab/utils';
 import { useShallow } from 'zustand/react/shallow';
 import * as Timetable from 'pages/Bus/BusCoursePage/components/Timetable';
 import useLogger from 'utils/hooks/analytics/useLogger';
