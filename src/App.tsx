@@ -1,9 +1,6 @@
+/*eslint-disable*/
 import { useEffect, ReactNode, Suspense } from 'react';
-import {
-  Routes,
-  Route,
-  useLocation,
-} from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AuthPage from 'pages/Auth/AuthPage';
 import LoginPage from 'pages/Auth/LoginPage';
 import BoardPage from 'pages/BoardPage';

@@ -47,11 +47,7 @@ export default function BusRoutePage() {
         {isLookingUp && (
           <div className={styles.results}>
             <div className={styles.options}>
-              <BusSearchOptions
-                busType={busType}
-                setBusType={setBusType}
-                timeSelect={timeSelect}
-              />
+              <BusSearchOptions busType={busType} setBusType={setBusType} timeSelect={timeSelect} />
             </div>
             <Suspense fallback={<div className={styles.fallback} />}>
               <div className={styles['route-list']}>
