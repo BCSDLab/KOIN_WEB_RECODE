@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
+import { useNavigate } from 'react-router-dom';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import Close from 'assets/svg/common/close/close-icon-grey.svg';
 import NotServed from 'assets/svg/not-served.svg';

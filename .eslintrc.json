@@ -72,22 +72,22 @@
             "position": "before"
           },
           {
-            "pattern": "recoil",
-            "group": "external",
-            "position": "after"
-          },
-          {
-            "pattern": "react-*",
-            "group": "external",
-            "position": "after"
-          },
-          {
             "pattern": "@tanstack/**",
             "group": "external",
             "position": "after"
           },
           {
             "pattern": "@bcsdlab/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "recoil",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "react-*",
             "group": "external",
             "position": "after"
           },

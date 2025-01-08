@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { cn } from '@bcsdlab/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { cn } from '@bcsdlab/utils';
 import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';

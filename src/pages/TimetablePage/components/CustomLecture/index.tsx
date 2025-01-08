@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
+import { useSearchParams } from 'react-router-dom';
 import { LectureSchedule, MyLectureInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';

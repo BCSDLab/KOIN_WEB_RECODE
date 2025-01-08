@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports */
 import React, { useEffect } from 'react';
-import { toast } from 'react-toastify';
 import { cn } from '@bcsdlab/utils';
+import { toast } from 'react-toastify';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import BookMarkIcon from 'assets/svg/book-mark.svg';

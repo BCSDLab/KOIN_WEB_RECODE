@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { cn } from '@bcsdlab/utils';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as api from 'api';
 import Copy from 'assets/png/copy.png';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';

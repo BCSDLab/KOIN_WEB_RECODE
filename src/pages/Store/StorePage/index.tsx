@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { cn } from '@bcsdlab/utils';
+import { useNavigate } from 'react-router-dom';
 import * as api from 'api';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import Close from 'assets/svg/common/close/close-icon-20x20.svg';
