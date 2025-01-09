@@ -4,7 +4,7 @@ import Star from 'assets/svg/Review/star.svg';
 import Kebab from 'assets/svg/Review/kebab.svg';
 import ClickedKebab from 'assets/svg/Review/clicked-kebab.svg';
 import Mine from 'assets/svg/Review/check-mine.svg';
-import InformationIcon from 'assets/svg/information-icon.svg';
+import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import SelectButton from 'pages/Store/StoreDetailPage/Review/components/SelectButton/SelectButton';
 import ImageModal from 'components/common/Modal/ImageModal';
 import { cn } from '@bcsdlab/utils';
