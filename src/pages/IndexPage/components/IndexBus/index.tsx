@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { BUS_LINKS } from 'static/bus';
+import { BusLinkKey, BUS_LINKS } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
 import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
@@ -18,6 +18,7 @@ function IndexBus() {
   const logger = useLogger();
   const logShuttleTicket = () => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'shuttle_ticket', value: '버스' });
   const logMainToBus = () => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_to_bus', value: '버스' });
+  const logMainBusButton = (key: BusLinkKey) => logger.actionEventClick({ actionTitle: 'CAMPUS', title: loggingTitle[key], value: '버스' });
 
   const unibus = BUS_LINKS[2];
 
@@ -50,7 +51,7 @@ function IndexBus() {
               to={link}
               key={key}
               className={styles.card}
-              onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: loggingTitle[key], value: '버스' })}
+              onClick={() => logMainBusButton(key)}
             >
               <div className={styles.card__guide}>
                 <span className={styles.card__title}>
@@ -73,7 +74,7 @@ function IndexBus() {
               to={link}
               key={key}
               className={styles.card}
-              onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: loggingTitle[key], value: '버스' })}
+              onClick={() => logMainBusButton(key)}
             >
               <div className={styles.card__segment}>
                 <SvgIcon />
