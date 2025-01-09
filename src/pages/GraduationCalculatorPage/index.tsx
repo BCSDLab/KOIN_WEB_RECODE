@@ -16,7 +16,7 @@ function GraduationCalculatorPage() {
           <div className={styles['header__cap-icon']}>
             <AcademicCapIcon />
           </div>
-          <h1 className={styles['header-title']}>졸업학점 계산기</h1>
+          <h1 className={styles.header__title}>졸업학점 계산기</h1>
           <div className={styles['header__question-icon']}>
             <QuestionMarkIcon />
           </div>
