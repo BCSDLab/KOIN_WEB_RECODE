@@ -3,25 +3,28 @@ import { useSearchParams } from 'react-router-dom';
 const useParamsHandler = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const params = Object.fromEntries(searchParams);
+
   const setParams = (
     key: string,
     value: string,
     option: {
-      deleteBeforeParam: boolean,
-      replacePage: boolean,
-    },
+      deleteBeforeParam?: boolean;
+      replacePage?: boolean;
+    } = {},
   ) => {
-    if (option.deleteBeforeParam) {
-      const param = searchParams.get(key);
-      if (param) {
-        searchParams.delete(key);
-        setSearchParams(searchParams, { replace: option.replacePage });
-        return;
-      }
+    const { deleteBeforeParam = false, replacePage = false } = option;
+
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    if (deleteBeforeParam) {
+      newSearchParams.delete(key);
     }
-    searchParams.set(key, value);
-    setSearchParams(searchParams, { replace: option.replacePage });
+
+    newSearchParams.set(key, value);
+
+    setSearchParams(newSearchParams, { replace: replacePage });
   };
+
   return {
     params,
     searchParams,
