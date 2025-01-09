@@ -4,6 +4,7 @@ import React from 'react';
 import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
+import GraudationCalculator from 'pages/TimetablePage/components/GraduationCalculator';
 import Curriculum from 'pages/TimetablePage/components/Curriculum';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
@@ -75,6 +76,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
         <div className={styles['page__total-grades']}>
           <TotalGrades myLectureList={myLectures} />
         </div>
+        <GraudationCalculator />
         <Curriculum list={deptList} />
         <button
           type="button"
