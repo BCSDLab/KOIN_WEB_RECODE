@@ -181,6 +181,7 @@ export const BUS_LINKS = [
   },
 ] as const;
 
-export type BusLinkKey = typeof BUS_LINKS[number]['key'];
+export type BusLinkKey = (typeof BUS_LINKS)[number]['key'];
 
-export const BUS_FEEDBACK_FORM = 'https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY';
+export const BUS_FEEDBACK_FORM =
+  'https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY';
