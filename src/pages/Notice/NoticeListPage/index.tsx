@@ -1,9 +1,9 @@
-import Pagination from 'pages/Notice/components/Pagination';
+import { Suspense } from 'react';
 import NoticeHeader from 'pages/Notice/components/NoticeHeader';
 import NoticeList from 'pages/Notice/components/NoticeList';
-import usePageParams from 'pages/Notice/hooks/usePageParams';
+import Pagination from 'pages/Notice/components/Pagination';
 import useArticles from 'pages/Notice/hooks/useArticles';
-import { Suspense } from 'react';
+import usePageParams from 'pages/Notice/hooks/usePageParams';
 
 export default function NoticeListPage() {
   const paramsPage = usePageParams();

@@ -8,9 +8,7 @@ export default function useAddTimetableFrame(token: string) {
   const queryClient = useQueryClient();
   const semester = useSemester();
   return useMutation({
-    mutationFn: (
-      data: AddTimetableFrameRequest,
-    ) => timetable.addTimetableFrame(data, token),
+    mutationFn: (data: AddTimetableFrameRequest) => timetable.addTimetableFrame(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester] });
     },

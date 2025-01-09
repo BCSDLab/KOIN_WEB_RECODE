@@ -1,28 +1,30 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 /* stylelint-disable scss/at-import-no-partial-leading-underscore */
-@import "reset-css/sass/_reset";
+@import 'reset-css/sass/_reset';
 /* stylelint-enable scss/at-import-no-partial-leading-underscore */
 
 @font-face {
   font-family: NanumBarunGothic;
   src:
-    local("NanumBarunGothic"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.eot"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.eot?#iefix") format("embedded-opentype"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.woff") format("woff"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.ttf") format("truetype"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.svg#NanumGothic") format("svg");
+    local('NanumBarunGothic'),
+    url('https://static.koreatech.in/assets/font/NanumBarunGothic.eot'),
+    url('https://static.koreatech.in/assets/font/NanumBarunGothic.eot?#iefix')
+      format('embedded-opentype'),
+    url('https://static.koreatech.in/assets/font/NanumBarunGothic.woff') format('woff'),
+    url('https://static.koreatech.in/assets/font/NanumBarunGothic.ttf') format('truetype'),
+    url('https://static.koreatech.in/assets/font/NanumBarunGothic.svg#NanumGothic') format('svg');
 }
 
 @font-face {
   font-family: NanumSquare;
   src:
-    local("NanumSquareR"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.eot"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.eot?#iefix") format("embedded-opentype"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.woff") format("woff"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.ttf") format("truetype"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.svg#NanumGothic") format("svg");
+    local('NanumSquareR'),
+    url('https://static.koreatech.in/assets/font/NanumSquareR.eot'),
+    url('https://static.koreatech.in/assets/font/NanumSquareR.eot?#iefix')
+      format('embedded-opentype'),
+    url('https://static.koreatech.in/assets/font/NanumSquareR.woff') format('woff'),
+    url('https://static.koreatech.in/assets/font/NanumSquareR.ttf') format('truetype'),
+    url('https://static.koreatech.in/assets/font/NanumSquareR.svg#NanumGothic') format('svg');
 }
 
 #root {
@@ -33,17 +35,8 @@
   -webkit-font-smoothing: antialiased;
 
   /* https://css-tricks.com/snippets/css/system-font-stack/ */
-  font-family:
-    NanumBarunGothic,
-    system-ui,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol";
+  font-family: NanumBarunGothic, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
   @include media.media-breakpoint(mobile) {
     min-width: 360px;

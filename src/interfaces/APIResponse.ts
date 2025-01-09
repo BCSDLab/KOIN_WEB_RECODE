@@ -1,1 +1,1 @@
-export interface APIResponse { }
+export interface APIResponse {}

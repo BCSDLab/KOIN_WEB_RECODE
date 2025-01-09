@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { create } from 'zustand';
 import { getCookie } from 'utils/ts/cookie';
 
 type State = {
@@ -23,6 +23,6 @@ export const useTokenStore = create(
     {
       name: 'refresh-token-storage',
       partialize: (state) => ({ refreshToken: state.refreshToken }) as State & Actions,
-    },
-  ),
+    }
+  )
 );

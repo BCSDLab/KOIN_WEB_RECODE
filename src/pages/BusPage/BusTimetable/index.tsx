@@ -1,19 +1,19 @@
 import { Suspense } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { useShallow } from 'zustand/react/shallow';
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
-import { BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
-import { useShallow } from 'zustand/react/shallow';
+import { BUS_TYPES } from 'static/bus';
 import styles from './BusTimetable.module.scss';
 import Timetable from './Timetable';
 
 function BusTimetable() {
-  const [selectedTab, setSelectedTab] = useBusStore(useShallow(
-    (state) => [state.selectedTab, state.setSelectedTab],
-  ));
+  const [selectedTab, setSelectedTab] = useBusStore(
+    useShallow((state) => [state.selectedTab, state.setSelectedTab])
+  );
   const logger = useLogger();
-  const onClickBusTab = (type: typeof BUS_TYPES[number]) => {
+  const onClickBusTab = (type: (typeof BUS_TYPES)[number]) => {
     logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable', value: type.tabName });
     setSelectedTab(type);
   };
@@ -39,11 +39,12 @@ function BusTimetable() {
         ))}
       </ul>
 
-      <Suspense fallback={(
-        <div className={styles['template__loading-spinner']}>
-          <LoadingSpinner />
-        </div>
-      )}
+      <Suspense
+        fallback={
+          <div className={styles['template__loading-spinner']}>
+            <LoadingSpinner />
+          </div>
+        }
       >
         {selectedTab.key === 'shuttle' && <Timetable.Shuttle />}
         {selectedTab.key === 'express' && <Timetable.Express />}

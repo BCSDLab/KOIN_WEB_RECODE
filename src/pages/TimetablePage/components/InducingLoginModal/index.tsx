@@ -23,9 +23,8 @@ function InducingLoginModal({ actionTitle, detailExplanation, onClose }: Inducin
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <div className={styles.container__title}>
-          {`${actionTitle} 시 ` }
-          <span className={styles['container__title--login-text']}>로그인</span>
-          을 해주세요.
+          {`${actionTitle} 시 `}
+          <span className={styles['container__title--login-text']}>로그인</span>을 해주세요.
         </div>
         <div className={styles.container__detail}>
           {sentences.map((sentence, index) => (
@@ -33,7 +32,6 @@ function InducingLoginModal({ actionTitle, detailExplanation, onClose }: Inducin
               {sentence}
               {index < sentences.length - 1 && '.'}
             </div>
-
           ))}
         </div>
         <div className={styles.container__button}>

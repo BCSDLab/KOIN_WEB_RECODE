@@ -1,7 +1,13 @@
 import APIClient from 'utils/ts/apiClient';
 import {
-  BusInfo, BusTimetableInfo, CityBusTimetableInfo, CourseList, BusRouteInfo,
-  BusNoticeInfo, ShuttleCourseInfo, ShuttleTimetableDetailInfo,
+  BusInfo,
+  BusTimetableInfo,
+  CityBusTimetableInfo,
+  CourseList,
+  BusRouteInfo,
+  BusNoticeInfo,
+  ShuttleCourseInfo,
+  ShuttleTimetableDetailInfo,
 } from './APIDetail';
 
 export const getCourseList = APIClient.of(CourseList);

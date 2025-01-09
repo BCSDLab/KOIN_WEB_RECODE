@@ -1,11 +1,11 @@
 import { cn } from '@bcsdlab/utils';
+import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
 import LeftArrow from 'assets/svg/left-angle-bracket.svg';
 import RightArrow from 'assets/svg/right-angle-bracket.svg';
-import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
-import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
+import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {
@@ -39,15 +39,8 @@ const generateWeek = (today: Date) => {
 };
 
 export default function DateNavigator() {
-  const {
-    currentDate,
-    checkToday,
-    checkPast,
-    setPrevWeek,
-    setNextWeek,
-    setToday,
-    setDate,
-  } = useDatePicker();
+  const { currentDate, checkToday, checkPast, setPrevWeek, setNextWeek, setToday, setDate } =
+    useDatePicker();
   const portalManager = useModalPortal();
   const { cafeteriaInfo } = useCoopshopCafeteria();
 
@@ -107,7 +100,8 @@ export default function DateNavigator() {
             key={dayInfo.weekDay}
             className={cn({
               [styles['week__one-day']]: true,
-              [styles['week__one-day--selected']]: dayInfo.date.toDateString() === currentDate().toDateString(),
+              [styles['week__one-day--selected']]:
+                dayInfo.date.toDateString() === currentDate().toDateString(),
             })}
             type="button"
             onClick={() => setDate(dayInfo.date)}

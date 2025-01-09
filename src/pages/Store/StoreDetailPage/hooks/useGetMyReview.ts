@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { getMyReview } from 'api/store';
+import useTokenState from 'utils/hooks/state/useTokenState';
 
 export const useGetMyReview = (shopId: string, sorter: string) => {
   const token = useTokenState();

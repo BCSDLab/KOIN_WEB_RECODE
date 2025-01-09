@@ -1,14 +1,14 @@
-import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { create } from 'zustand';
 
 type State = {
-  semester: string
+  semester: string;
 };
 
 type Action = {
   action: {
-    updateSemester: (semester: State['semester']) => void
-  }
+    updateSemester: (semester: State['semester']) => void;
+  };
 };
 
 const useSemesterStore = create(
@@ -22,8 +22,8 @@ const useSemesterStore = create(
     {
       name: 'semester',
       partialize: (state) => ({ semester: state.semester }) as State & Action,
-    },
-  ),
+    }
+  )
 );
 
 export const useSemester = () => useSemesterStore((state) => state.semester);

@@ -3,11 +3,11 @@ import '@tanstack/react-query';
 
 declare module '@tanstack/react-query' {
   interface Register {
-    defaultError: unknown
+    defaultError: unknown;
   }
 }
 
 declare module '*.scss' {
   const content: { [className: string]: string };
-  export = content;
+  export default content;
 }

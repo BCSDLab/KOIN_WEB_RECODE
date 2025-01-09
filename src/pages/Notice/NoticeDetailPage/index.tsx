@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
-import ArticleHeader from 'pages/Notice/components/ArticleHeader';
 import ArticleContent from 'pages/Notice/components/ArticleContent';
+import ArticleHeader from 'pages/Notice/components/ArticleHeader';
 import useArticle from 'pages/Notice/hooks/useArticle';
 
 export default function NoticeDetailPage() {
@@ -17,9 +17,7 @@ export default function NoticeDetailPage() {
         author={article.author}
         hit={article.hit}
       />
-      <ArticleContent
-        content={article.content}
-      />
+      <ArticleContent content={article.content} />
     </Suspense>
   );
 }

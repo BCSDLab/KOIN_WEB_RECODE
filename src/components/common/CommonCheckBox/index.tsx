@@ -1,6 +1,6 @@
 import React from 'react';
-import NotCheck from 'assets/svg/Review/report-item-circle.svg';
 import Check from 'assets/svg/Review/report-item-checked.svg';
+import NotCheck from 'assets/svg/Review/report-item-circle.svg';
 import styles from './CheckBox.module.scss';
 
 interface CadioBoxProps {
@@ -11,9 +11,7 @@ interface CadioBoxProps {
   children?: React.ReactNode;
 }
 
-export default function CheckBox({
-  value, name, checked, onChange, children,
-}: CadioBoxProps) {
+export default function CheckBox({ value, name, checked, onChange, children }: CadioBoxProps) {
   return (
     <div className={styles['check-box']}>
       <label htmlFor={value} className={styles['check-box__label']}>

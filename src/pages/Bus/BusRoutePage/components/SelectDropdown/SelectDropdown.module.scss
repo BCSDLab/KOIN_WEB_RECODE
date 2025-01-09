@@ -32,7 +32,7 @@
   }
 
   &__left--disabled::after {
-    content: "";
+    content: '';
     cursor: default;
     position: absolute;
     top: 7px;
@@ -43,7 +43,7 @@
   }
 
   &__right--disabled::after {
-    content: "";
+    content: '';
     cursor: default;
     position: absolute;
     top: 7px;

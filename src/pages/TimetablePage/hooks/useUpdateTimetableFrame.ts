@@ -10,20 +10,16 @@ export default function useUpdateTimetableFrame() {
 
   const queryClient = useQueryClient();
   const semester = useSemester();
-  const mutate = useMutation(
-    {
-      mutationFn: (frameInfo: TimetableFrameInfo) => (
-        editTimetableFrame(
-          token,
-          frameInfo.id!,
-          { timetable_name: frameInfo.timetable_name, is_main: frameInfo.is_main },
-        )
-      ),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester] });
-      },
+  const mutate = useMutation({
+    mutationFn: (frameInfo: TimetableFrameInfo) =>
+      editTimetableFrame(token, frameInfo.id!, {
+        timetable_name: frameInfo.timetable_name,
+        is_main: frameInfo.is_main,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester] });
     },
-  );
+  });
 
   return mutate;
 }

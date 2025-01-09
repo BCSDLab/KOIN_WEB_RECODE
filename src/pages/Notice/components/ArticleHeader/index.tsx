@@ -1,18 +1,22 @@
-import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
-import convertNoticeTag from 'utils/ts/convertNoticeTag';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import convertNoticeTag from 'utils/ts/convertNoticeTag';
+import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
 import styles from './ArticleHeader.module.scss';
 
 interface ArticleHeaderProps {
-  boardId: number
-  title: string
-  registeredAt: string
-  author: string
-  hit: number
+  boardId: number;
+  title: string;
+  registeredAt: string;
+  author: string;
+  hit: number;
 }
 
 export default function ArticleHeader({
-  boardId, title, registeredAt, author, hit,
+  boardId,
+  title,
+  registeredAt,
+  author,
+  hit,
 }: ArticleHeaderProps) {
   const isMobile = useMediaQuery();
 
@@ -30,7 +34,9 @@ export default function ArticleHeader({
         )}
       </div>
       <div className={styles.content}>
-        <div className={styles.content__author}>{isMobile ? `조회 ${hit} · ${author}` : author}</div>
+        <div className={styles.content__author}>
+          {isMobile ? `조회 ${hit} · ${author}` : author}
+        </div>
         <div className={styles['content__registered-at']}>{registeredAt}</div>
       </div>
     </div>

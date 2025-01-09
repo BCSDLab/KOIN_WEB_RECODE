@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import * as gtag from 'lib/gtag';
-import uuidv4 from 'utils/ts/uuidGenerater';
 import { UserResponse } from 'api/auth/entity';
+import * as gtag from 'lib/gtag';
 import { useUser } from 'utils/hooks/state/useUser';
+import uuidv4 from 'utils/ts/uuidGenerater';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
   let uuid = localStorage.getItem('uuid');
@@ -32,7 +32,7 @@ function LogPage() {
           // eslint-disable-next-line max-len
           gtag.pageView(
             window.location.pathname + window.location.search,
-            userUniqueIdGenerator(userInfo),
+            userUniqueIdGenerator(userInfo)
           );
           prevPathname.current = window.location.pathname;
         }, 1000);

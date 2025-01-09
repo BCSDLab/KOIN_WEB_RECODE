@@ -13,8 +13,10 @@ const ROUTES = {
   Main: () => '/',
   NotFound: () => '*',
   Timetable: () => '/timetable',
-  TimetableRegular: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `timetable/modify/regular/${id}` : 'timetable/modify/regular/:id'),
-  TimetableDirect: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `timetable/modify/direct/${id}` : 'timetable/modify/direct/:id'),
+  TimetableRegular: ({ id, isLink }: ROUTESParams<'id'>) =>
+    isLink ? `timetable/modify/regular/${id}` : 'timetable/modify/regular/:id',
+  TimetableDirect: ({ id, isLink }: ROUTESParams<'id'>) =>
+    isLink ? `timetable/modify/direct/${id}` : 'timetable/modify/direct/:id',
   Store: () => '/store',
   BenefitStore: () => '/benefitstore',
   StoreDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/store/${id}` : '/store/:id'),
@@ -22,7 +24,8 @@ const ROUTES = {
   BusCourse: () => '/bus/course',
   Cafeteria: () => '/cafeteria',
   BoardNotice: () => '/board/notice',
-  BoardNoticeDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/board/notice/${id}` : '/board/notice/:id'),
+  BoardNoticeDetail: ({ id, isLink }: ROUTESParams<'id'>) =>
+    isLink ? `/board/notice/${id}` : '/board/notice/:id',
   Room: () => '/room',
   RoomDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/room/${id}` : '/room/:id'),
   CampusInfo: () => '/campusinfo',
@@ -31,13 +34,12 @@ const ROUTES = {
   AuthFindPW: () => '/auth/findpw',
   AuthModifyInfo: () => '/auth/modifyinfo',
   Review: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/review/${id}` : '/review/:id'),
-  ReviewEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/edit/review/${id}` : '/edit/review/:id'),
-  ReviewReport: ({
-    shopid,
-    reviewid,
-    isLink,
-  }: ROUTESParams<'shopid' | 'reviewid'>) => (isLink ? `/report/review/shopid/${shopid}/reviewid/${reviewid}`
-    : '/report/review/shopid/:shopid/reviewid/:reviewid'),
+  ReviewEdit: ({ id, isLink }: ROUTESParams<'id'>) =>
+    isLink ? `/edit/review/${id}` : '/edit/review/:id',
+  ReviewReport: ({ shopid, reviewid, isLink }: ROUTESParams<'shopid' | 'reviewid'>) =>
+    isLink
+      ? `/report/review/shopid/${shopid}/reviewid/${reviewid}`
+      : '/report/review/shopid/:shopid/reviewid/:reviewid',
   Webview: () => '/webview',
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',

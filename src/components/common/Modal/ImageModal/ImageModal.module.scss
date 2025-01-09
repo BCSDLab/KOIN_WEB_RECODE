@@ -1,4 +1,4 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 
 .background {
   position: fixed;
@@ -61,7 +61,7 @@
   }
 
   &--next {
-    background-image: url("https://static.koreatech.in/assets/img/next-arrow.png");
+    background-image: url('https://static.koreatech.in/assets/img/next-arrow.png');
     right: 50px;
 
     @include media.media-breakpoint(mobile) {
@@ -70,7 +70,7 @@
   }
 
   &--prev {
-    background-image: url("https://static.koreatech.in/assets/img/prev-arrow.png");
+    background-image: url('https://static.koreatech.in/assets/img/prev-arrow.png');
     left: 50px;
 
     @include media.media-breakpoint(mobile) {
@@ -89,7 +89,7 @@
   width: 33px;
   height: 41px;
   cursor: pointer;
-  background-image: url("https://static.koreatech.in/assets/img/close.png");
+  background-image: url('https://static.koreatech.in/assets/img/close.png');
 
   @include media.media-breakpoint(mobile) {
     & {

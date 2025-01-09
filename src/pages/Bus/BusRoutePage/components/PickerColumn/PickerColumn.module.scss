@@ -3,15 +3,15 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; // iOS 모멘텀 스크롤
   scrollbar-width: none; // Firefox
-  -ms-overflow-style: none;  // Internet Explorer 10+
+  -ms-overflow-style: none; // Internet Explorer 10+
 
   &::-webkit-scrollbar {
-    display: none;  // Safari and Chrome
+    display: none; // Safari and Chrome
   }
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     right: 0;

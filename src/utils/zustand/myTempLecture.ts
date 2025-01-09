@@ -1,5 +1,5 @@
-import { LectureInfo } from 'api/timetable/entity';
 import { create } from 'zustand';
+import { LectureInfo } from 'api/timetable/entity';
 
 type State = {
   tempLecture: LectureInfo | null;
@@ -7,8 +7,8 @@ type State = {
 
 type Action = {
   action: {
-    updateTempLecture: (tempLecture: State['tempLecture']) => void
-  }
+    updateTempLecture: (tempLecture: State['tempLecture']) => void;
+  };
 };
 
 const useTempLectureStore = create<State & Action>((set, get) => ({

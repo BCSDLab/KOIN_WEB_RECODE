@@ -1,13 +1,13 @@
-import { Dining, DiningType } from 'interfaces/Cafeteria';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { Dining, DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
-import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
-import { DINING_TYPE_MAP } from 'static/cafeteria';
-import { filterDinings } from 'utils/ts/cafeteria';
 import DetailImage from 'pages/Cafeteria/MobileCafeteriaPage/components/DetailImage';
+import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { filterDinings } from 'utils/ts/cafeteria';
+import { DINING_TYPE_MAP } from 'static/cafeteria';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
@@ -52,17 +52,22 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
                     {!!dining.price_card && ` ${dining.price_card}원`}
                   </div>
                 </div>
-                {dining.soldout_at && <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>품절</span>}
-                {!dining.soldout_at && dining.changed_at && <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>변경됨</span>}
+                {dining.soldout_at && (
+                  <span className={`${styles.header__chip} ${styles['category__block--sold-out']}`}>
+                    품절
+                  </span>
+                )}
+                {!dining.soldout_at && dining.changed_at && (
+                  <span className={`${styles.header__chip} ${styles['category__block--changed']}`}>
+                    변경됨
+                  </span>
+                )}
               </div>
             </div>
             <li className={styles['category__menu-list']}>
               <ul>
                 {dining.menu.map((menuItem) => (
-                  <li
-                    className={styles.category__menu}
-                    key={menuItem.id}
-                  >
+                  <li className={styles.category__menu} key={menuItem.id}>
                     {menuItem.name}
                   </li>
                 ))}

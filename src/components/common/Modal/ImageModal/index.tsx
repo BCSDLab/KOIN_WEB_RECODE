@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import useArrowKeyNavigation from 'utils/hooks/ui/useArrowKeyNavigation';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
@@ -12,18 +12,17 @@ export interface ImageModalProps {
   onClose: () => void;
 }
 
-function ImageModal({
-  imageList,
-  imageIndex,
-  onClose,
-}: ImageModalProps) {
+function ImageModal({ imageList, imageIndex, onClose }: ImageModalProps) {
   const [selectedIndex, setSelectedIndex] = useState(imageIndex);
-  const navigateImage = useCallback((move: number) => {
-    setSelectedIndex((prevIndex) => {
-      const newIndex = prevIndex + move;
-      return Math.max(0, Math.min(newIndex, imageList.length - 1));
-    });
-  }, [imageList.length]);
+  const navigateImage = useCallback(
+    (move: number) => {
+      setSelectedIndex((prevIndex) => {
+        const newIndex = prevIndex + move;
+        return Math.max(0, Math.min(newIndex, imageList.length - 1));
+      });
+    },
+    [imageList.length]
+  );
 
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
   useEscapeKeyDown({ onEscape: onClose });
@@ -55,7 +54,12 @@ function ImageModal({
           onClick={() => navigateImage(1)}
         />
       )}
-      <button className={styles.close} type="button" aria-label="이미지 닫기" onClick={() => onClose()} />
+      <button
+        className={styles.close}
+        type="button"
+        aria-label="이미지 닫기"
+        onClick={() => onClose()}
+      />
       <img className={styles.image} src={`${imageList[selectedIndex]}`} alt="상점이미지" />
     </div>
   );

@@ -1,6 +1,6 @@
-import { MobilePage } from 'pages/TimetablePage/MainTimetablePage/MobilePage';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { MobilePage } from 'pages/TimetablePage/MainTimetablePage/MobilePage';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import DefaultPage from './DefaultPage';
 import styles from './ModifyTimetablePage.module.scss';
@@ -23,11 +23,7 @@ export default function ModifyTimetablePage() {
 
   return (
     <div className={styles.page}>
-      {!isMobile ? (
-        <DefaultPage frameId={frameId} />
-      ) : (
-        <MobilePage frameId={frameId} />
-      )}
+      {!isMobile ? <DefaultPage frameId={frameId} /> : <MobilePage frameId={frameId} />}
     </div>
   );
 }

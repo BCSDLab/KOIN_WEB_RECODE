@@ -1,4 +1,4 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 
 .template {
   display: flex;
@@ -135,8 +135,8 @@
   }
 
   &__checkbox:checked {
-    content: "";
-    background-image: url("https://static.koreatech.in/assets/img/check.png");
+    content: '';
+    background-image: url('https://static.koreatech.in/assets/img/check.png');
     background-size: cover;
   }
 }

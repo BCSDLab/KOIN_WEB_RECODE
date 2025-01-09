@@ -53,7 +53,7 @@ export interface RouteInfo {
   bus_timetables: {
     route_name: string;
     arrival_info: ArrivalInfo[];
-  }[],
+  }[];
   updated_at: string;
 }
 
@@ -75,7 +75,7 @@ export interface BusRouteInfo {
   bus_timetables: {
     route_name: string;
     arrival_info: ArrivalInfo[];
-  }[],
+  }[];
   updated_at: string;
 }
 
@@ -121,24 +121,24 @@ export interface ShuttleCourseResponse {
     name: string;
     from: string;
     to: string;
-  }
+  };
 }
 
 export interface ShuttleTimetableDetailInfoResponse {
-  id: string,
-  region: string,
-  route_type: string,
-  route_name: string,
-  sub_name: null,
+  id: string;
+  region: string;
+  route_type: string;
+  route_name: string;
+  sub_name: null;
   node_info: {
-    name: string,
-    detail: string,
-  }[],
+    name: string;
+    detail: string;
+  }[];
   route_info: {
-    name: string,
-    detail: string,
-    arrival_time: string[],
-  }[],
+    name: string;
+    detail: string;
+    arrival_time: string[];
+  }[];
 }
 
 export interface BusRouteParams {

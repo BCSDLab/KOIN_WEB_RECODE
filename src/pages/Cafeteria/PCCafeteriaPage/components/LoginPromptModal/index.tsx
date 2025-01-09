@@ -10,7 +10,8 @@ interface LoginPromptModalProps {
 }
 
 export default function LoginPromptModal({
-  action, closeModal,
+  action,
+  closeModal,
 }: LoginPromptModalProps): JSX.Element {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
@@ -42,18 +43,10 @@ export default function LoginPromptModal({
           </span>
         </div>
         <div className={styles['modal-bottom']}>
-          <button
-            type="button"
-            className={styles['modal-bottom__login']}
-            onClick={action}
-          >
+          <button type="button" className={styles['modal-bottom__login']} onClick={action}>
             로그인하기
           </button>
-          <button
-            type="button"
-            className={styles['modal-bottom__cancel']}
-            onClick={closeModal}
-          >
+          <button type="button" className={styles['modal-bottom__cancel']} onClick={closeModal}>
             다음에 하기
           </button>
         </div>

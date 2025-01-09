@@ -28,10 +28,16 @@ function BenefitRotator({ benefits }: BenefitRotatorProps) {
   return (
     <div className={styles['benefit-content']}>
       {Array.isArray(benefits) ? (
-        <span className={isAnimation ? styles['benefit-content__fade-in'] : styles['benefit-content__fade-out']}>
+        <span
+          className={
+            isAnimation ? styles['benefit-content__fade-in'] : styles['benefit-content__fade-out']
+          }
+        >
           {benefits[currentIndex]}
         </span>
-      ) : benefits}
+      ) : (
+        benefits
+      )}
     </div>
   );
 }

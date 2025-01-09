@@ -7,7 +7,7 @@ type State = {
 type Action = {
   action: {
     updateAuthentication: (isAuthenticated: State['isAuthenticated']) => void;
-  }
+  };
 };
 
 const useAuthenticationStore = create<State & Action>((set) => ({

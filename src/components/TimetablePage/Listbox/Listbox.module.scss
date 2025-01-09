@@ -1,4 +1,4 @@
-@use "utils/scss/media.scss" as media;
+@use 'utils/scss/media.scss' as media;
 
 .select {
   position: relative;
@@ -59,7 +59,7 @@
     color: #252525;
     border: 1px solid #d2dae2;
 
-    &[aria-selected="true"],
+    &[aria-selected='true'],
     &:hover {
       font-weight: bold;
     }

@@ -57,8 +57,7 @@ export class LectureList<R extends LectureInfoResponse> implements APIRequest<R>
   }
 }
 
-export class TimetableLectureInfo
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+export class TimetableLectureInfo<R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/v2/timetables/lecture';
@@ -71,15 +70,17 @@ export class TimetableLectureInfo
     [index: string]: number;
   };
 
-  constructor(public authorization: string, timeTableFrameId: number) {
+  constructor(
+    public authorization: string,
+    timeTableFrameId: number
+  ) {
     this.params = {
       timetable_frame_id: timeTableFrameId,
     };
   }
 }
 
-export class TimetableLectureEdit
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+export class TimetableLectureEdit<R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
   path = '/v2/timetables/lecture';
@@ -88,11 +89,15 @@ export class TimetableLectureEdit
 
   auth = true;
 
-  constructor(public data: EditTimetableLectureRequest, public authorization: string) {}
+  constructor(
+    public data: EditTimetableLectureRequest,
+    public authorization: string
+  ) {}
 }
 
-export class TimetableLectureAddition
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+export class TimetableLectureAddition<R extends TimetableLectureInfoResponse>
+  implements APIRequest<R>
+{
   method = HTTP_METHOD.POST;
 
   path = '/v2/timetables/lecture';
@@ -101,11 +106,15 @@ export class TimetableLectureAddition
 
   auth = true;
 
-  constructor(public data: AddTimetableLectureRequest, public authorization: string) {}
+  constructor(
+    public data: AddTimetableLectureRequest,
+    public authorization: string
+  ) {}
 }
 
-export class TimetableLectureDeletion
-  <R extends DeleteTimetableLectureResponse> implements APIRequest<R> {
+export class TimetableLectureDeletion<R extends DeleteTimetableLectureResponse>
+  implements APIRequest<R>
+{
   method = HTTP_METHOD.DELETE;
 
   path = '/v2/timetables/lecture/:id';
@@ -116,7 +125,7 @@ export class TimetableLectureDeletion
 
   constructor(
     public authorization: string,
-    public id: number | undefined,
+    public id: number | undefined
   ) {
     this.path = `/v2/timetables/lecture/${id}`;
   }
@@ -135,7 +144,10 @@ export class TimetableFrameList<R extends TimetableFrameListResponse> implements
     [index: string]: string;
   };
 
-  constructor(public authorization: string, semester: string) {
+  constructor(
+    public authorization: string,
+    semester: string
+  ) {
     this.params = {
       semester,
     };
@@ -151,7 +163,10 @@ export class TimetableFrameAddition<R extends TimetableFrameInfo> implements API
 
   auth = true;
 
-  constructor(public data: AddTimetableFrameRequest, public authorization: string) {}
+  constructor(
+    public data: AddTimetableFrameRequest,
+    public authorization: string
+  ) {}
 }
 
 export class TimetableFrameEdit<R extends TimetableFrameInfo> implements APIRequest<R> {
@@ -166,7 +181,7 @@ export class TimetableFrameEdit<R extends TimetableFrameInfo> implements APIRequ
   constructor(
     public authorization: string,
     public id: number,
-    public data: EditTimetableFrameRequest,
+    public data: EditTimetableFrameRequest
   ) {
     this.path = `/v2/timetables/frame/${id}`;
     this.data = data;
@@ -186,7 +201,10 @@ export class DeleteTimetableFrame<R extends DeleteTimetableFrameResponse> implem
     [index: string]: number;
   };
 
-  constructor(public authorization: string, public id: number) {
+  constructor(
+    public authorization: string,
+    public id: number
+  ) {
     this.params = {
       id,
     };
@@ -206,7 +224,10 @@ export class DeleteSemester<R extends DeleteSemesterResponse> implements APIRequ
     [index: string]: string;
   };
 
-  constructor(public authorization: string, semester: string) {
+  constructor(
+    public authorization: string,
+    semester: string
+  ) {
     this.params = {
       semester,
     };

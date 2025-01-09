@@ -40,10 +40,16 @@ export default function HotArticles() {
             className={styles['hot-article__content']}
             to={ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true })}
             key={article.id + article.board_id}
-            onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'notice_hot', value: article.title })}
+            onClick={() =>
+              logger.actionEventClick({
+                actionTitle: 'CAMPUS',
+                title: 'notice_hot',
+                value: article.title,
+              })
+            }
           >
-            <span className={styles['hot-article__rank']}>{ index + 1 }</span>
-            <span className={styles['hot-article__item']}>{ article.title }</span>
+            <span className={styles['hot-article__rank']}>{index + 1}</span>
+            <span className={styles['hot-article__item']}>{article.title}</span>
           </Link>
         ))}
       </div>
@@ -54,14 +60,14 @@ export default function HotArticles() {
             key={link.url}
             href={link.url}
             onClick={() => {
-              logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'short_cut', value: link.title.join('_') });
+              logger.actionEventClick({
+                actionTitle: 'CAMPUS',
+                title: 'short_cut',
+                value: link.title.join('_'),
+              });
             }}
           >
-            <img
-              className={styles.link__image}
-              src={link.image}
-              alt="alineImg"
-            />
+            <img className={styles.link__image} src={link.image} alt="alineImg" />
           </a>
         ))}
       </div>

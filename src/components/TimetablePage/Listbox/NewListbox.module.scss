@@ -1,4 +1,4 @@
-@use "utils/scss/media.scss" as media;
+@use 'utils/scss/media.scss' as media;
 
 .semester-list {
   width: 331px;
@@ -74,7 +74,9 @@
     }
 
     &--selected-add-lecture {
-      box-shadow: 0 1px 1px 0 rgb(0 0 0 / 2%), 0 2px 4px 0 rgb(0 0 0 / 4%);
+      box-shadow:
+        0 1px 1px 0 rgb(0 0 0 / 2%),
+        0 2px 4px 0 rgb(0 0 0 / 4%);
       border-radius: 5px;
       background: #fafafa;
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.scss';
-import { BrowserRouter } from 'react-router-dom';
-import PortalProvider from 'components/common/Modal/PortalProvider';
-import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RecoilRoot } from 'recoil';
+import { BrowserRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+import PortalProvider from 'components/common/Modal/PortalProvider';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './index.scss';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,9 +17,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <RecoilRoot>
@@ -31,7 +29,7 @@ root.render(
         </PortalProvider>
       </BrowserRouter>
     </RecoilRoot>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

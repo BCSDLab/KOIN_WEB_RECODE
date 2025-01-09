@@ -25,11 +25,14 @@ export const getLeftTimeString = (second: number | '미운행' | undefined) => {
   return `${getHour(second)}시간 ${getMinute(second)}분 전`;
 };
 
-export const getStartTimeString = (second: number | '미운행' | undefined, isMain: boolean = false) => {
+export const getStartTimeString = (
+  second: number | '미운행' | undefined,
+  isMain: boolean = false
+) => {
   if (!second) return '';
   if (second === '미운행') return '';
 
-  const today = (new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000);
+  const today = new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
   const arrivalTimeSecond = Math.ceil(today / 1000) + second;
 
   const hour = getHour(arrivalTimeSecond);

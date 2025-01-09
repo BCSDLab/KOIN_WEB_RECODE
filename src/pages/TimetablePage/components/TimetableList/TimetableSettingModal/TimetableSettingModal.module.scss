@@ -1,4 +1,4 @@
-@use "src/utils/scss/media";
+@use 'src/utils/scss/media';
 
 .background {
   position: fixed;
@@ -163,7 +163,7 @@
     }
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       display: none;
       left: 6px;

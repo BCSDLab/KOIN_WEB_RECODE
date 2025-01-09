@@ -56,8 +56,9 @@ export const useBusLogger = () => {
   const logger = useLogger();
 
   const logEvent = (eventTitle: string, eventValue?: string) => {
-    const event = CLICK_EVENTS.find(({ title }) => title === eventTitle)
-      || VARIABLE_EVENTS.find(({ title }) => title === eventTitle);
+    const event =
+      CLICK_EVENTS.find(({ title }) => title === eventTitle) ||
+      VARIABLE_EVENTS.find(({ title }) => title === eventTitle);
     if (event) {
       logger.actionEventClick({
         actionTitle: 'CAMPUS',
@@ -74,9 +75,12 @@ export const useBusLogger = () => {
   const logSearchBusClick = () => logEvent('search_bus');
   const logSearchResultDepartureTimeClick = () => logEvent('search_result_departure_time');
   const logDepartureNowClick = () => logEvent('departure_now');
-  const logDepartureLocationConfirm = (location: LoggingLocation) => logEvent('departure_location_confirm', location);
-  const logArrivalLocationConfirm = (location: LoggingLocation) => logEvent('arrival_location_confirm', location);
-  const logSearchResultBusType = (busType: LoggingBusType) => logEvent('search_result_bus_type', busType);
+  const logDepartureLocationConfirm = (location: LoggingLocation) =>
+    logEvent('departure_location_confirm', location);
+  const logArrivalLocationConfirm = (location: LoggingLocation) =>
+    logEvent('arrival_location_confirm', location);
+  const logSearchResultBusType = (busType: LoggingBusType) =>
+    logEvent('search_result_bus_type', busType);
 
   return {
     logDepartureBoxClick,

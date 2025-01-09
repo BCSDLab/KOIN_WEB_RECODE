@@ -3,7 +3,9 @@
   left: 3em;
   top: -35px;
   width: auto;
-  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 4%), 0 4px 10px 0 rgb(0 0 0 / 8%);
+  box-shadow:
+    0 1px 4px 0 rgb(0 0 0 / 4%),
+    0 4px 10px 0 rgb(0 0 0 / 8%);
   border-radius: 8px;
   background: #4b4b4b;
   display: flex;
@@ -17,7 +19,7 @@
 }
 
 .tooltip::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 10px;
   bottom: -6px;

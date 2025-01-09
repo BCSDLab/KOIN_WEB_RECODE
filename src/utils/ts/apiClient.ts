@@ -1,20 +1,20 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { Refresh } from 'api/auth/APIDetail';
+import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
-import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import qsStringify from 'utils/ts/qsStringfy';
-import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
-import { deleteCookie, setCookie } from './cookie';
 import { redirectToLogin } from './auth';
+import { deleteCookie, setCookie } from './cookie';
 
 const API_URL = import.meta.env.VITE_API_PATH;
 
 type Constructor<T> = new (...args: any[]) => T;
 
 // eslint-disable-next-line
-type ResponseType<T> = T extends APIRequest<infer T> ? T : never
+type ResponseType<T> = T extends APIRequest<infer T> ? T : never;
 
 export default class APIClient {
   // API Client Singleton
@@ -50,8 +50,10 @@ export default class APIClient {
           url: request.path,
           method: request.method,
           params: request.params,
-          data: request.data instanceof FormData
-            ? request.data : (request.convertBody || this.convertBody)(request.data),
+          data:
+            request.data instanceof FormData
+              ? request.data
+              : (request.convertBody || this.convertBody)(request.data),
           paramsSerializer: (params) => qsStringify(params),
           timeout: this.timeout,
           baseURL: request.baseURL || this.baseURL,
@@ -59,9 +61,7 @@ export default class APIClient {
           responseType: 'json',
         })
         .then((data: AxiosResponse<U>) => {
-          const response = request.parse
-            ? request.parse(data)
-            : this.parse<U>(data);
+          const response = request.parse ? request.parse(data) : this.parse<U>(data);
           resolve(response);
         })
         .catch((err) => {
@@ -108,15 +108,17 @@ export default class APIClient {
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
     const { response } = error;
-    return response?.status !== undefined
-      && response?.data !== undefined
-      && response.data.code !== undefined
-      && response.data.message !== undefined;
+    return (
+      response?.status !== undefined &&
+      response?.data !== undefined &&
+      response.data.code !== undefined &&
+      response.data.message !== undefined
+    );
   }
 
   // error 를 경우에 따라 KoinError와 AxiosError로 반환
   private createKoinErrorFromAxiosError(
-    error: AxiosError<KoinError>,
+    error: AxiosError<KoinError>
   ): KoinError | CustomAxiosError {
     if (this.isAxiosErrorWithResponseData(error)) {
       const koinError = error.response!;
@@ -142,10 +144,7 @@ export default class APIClient {
     }
 
     // json body 사용
-    if (
-      request.method === HTTP_METHOD.POST
-      || request.method === HTTP_METHOD.PUT
-    ) {
+    if (request.method === HTTP_METHOD.POST || request.method === HTTP_METHOD.PUT) {
       headers['Content-Type'] = 'application/json';
     }
 

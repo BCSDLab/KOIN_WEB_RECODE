@@ -23,13 +23,27 @@ export default function DetailModal({ dining, closeModal }: DetailModalProps): J
         <div className={styles['modal-header']}>
           <div className={styles['modal-header__place-chip']}>
             <div className={styles['modal-header__place']}>{dining.place}</div>
-            {dining.soldout_at && <span className={`${styles['modal-header__chip']} ${styles['modal-header__chip--sold-out']}`}>품절</span>}
-            {!dining.soldout_at && dining.changed_at && <span className={`${styles['modal-header__chip']} ${styles['modal-header__chip--changed']}`}>변경됨</span>}
+            {dining.soldout_at && (
+              <span
+                className={`${styles['modal-header__chip']} ${styles['modal-header__chip--sold-out']}`}
+              >
+                품절
+              </span>
+            )}
+            {!dining.soldout_at && dining.changed_at && (
+              <span
+                className={`${styles['modal-header__chip']} ${styles['modal-header__chip--changed']}`}
+              >
+                변경됨
+              </span>
+            )}
           </div>
           <div className={styles['modal-header__detail']}>
             {!!dining.kcal && `${dining.kcal}kcal`}
             {!!dining.kcal && !!dining.price_card && !!dining.price_cash && '•'}
-            {!!dining.price_card && !!dining.price_cash && `${dining.price_card}원/${dining.price_cash}원`}
+            {!!dining.price_card &&
+              !!dining.price_cash &&
+              `${dining.price_card}원/${dining.price_cash}원`}
           </div>
           <button
             type="button"
@@ -40,11 +54,7 @@ export default function DetailModal({ dining, closeModal }: DetailModalProps): J
             <CloseIcon />
           </button>
         </div>
-        <img
-          className={styles.modal__image}
-          src={dining.image_url!}
-          alt="menu"
-        />
+        <img className={styles.modal__image} src={dining.image_url!} alt="menu" />
       </div>
     </div>
   );

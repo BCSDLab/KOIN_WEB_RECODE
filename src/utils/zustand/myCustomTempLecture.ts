@@ -1,5 +1,5 @@
-import { TimetableLectureInfo } from 'api/timetable/entity';
 import { create } from 'zustand';
+import { TimetableLectureInfo } from 'api/timetable/entity';
 
 type State = {
   customTempLecture: Omit<TimetableLectureInfo, 'lecture_id' | 'id'> | null;
@@ -7,17 +7,19 @@ type State = {
 
 type Action = {
   action: {
-    updateCustomTempLecture: (customTempLecture: State['customTempLecture']) => void
-  }
+    updateCustomTempLecture: (customTempLecture: State['customTempLecture']) => void;
+  };
 };
 
 const useCustomTempLectureStore = create<State & Action>((set, get) => ({
   customTempLecture: {
     class_title: '',
-    class_infos: [{
-      class_time: [],
-      class_place: '',
-    }],
+    class_infos: [
+      {
+        class_time: [],
+        class_place: '',
+      },
+    ],
   },
   action: {
     updateCustomTempLecture: (customTempLecture) => {
@@ -28,8 +30,7 @@ const useCustomTempLectureStore = create<State & Action>((set, get) => ({
   },
 }));
 
-export const useCustomTempLecture = () => useCustomTempLectureStore(
-  (state) => state.customTempLecture,
-);
+export const useCustomTempLecture = () =>
+  useCustomTempLectureStore((state) => state.customTempLecture);
 
 export const useCustomTempLectureAction = () => useCustomTempLectureStore((state) => state.action);

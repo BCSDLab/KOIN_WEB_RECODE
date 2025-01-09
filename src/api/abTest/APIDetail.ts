@@ -8,7 +8,7 @@ export class ABTestAssign<R extends ABTestAssignResponse> implements APIRequest<
 
   response!: R;
 
-  data: { title: string, };
+  data: { title: string };
 
   headers: Record<string, string | number> = {};
 
@@ -17,9 +17,9 @@ export class ABTestAssign<R extends ABTestAssignResponse> implements APIRequest<
   constructor(
     title: string,
     public authorization?: string,
-    public accessHistoryId?: string | number | null,
+    public accessHistoryId?: string | number | null
   ) {
-    this.data = ({ title });
+    this.data = { title };
 
     if (this.accessHistoryId) {
       this.headers.access_history_id = Number(this.accessHistoryId);

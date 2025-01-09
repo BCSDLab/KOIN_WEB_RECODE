@@ -36,7 +36,7 @@ export interface CheckPasswordRequest {
   password: string;
 }
 
-export interface SignupResponse extends APIResponse { }
+export interface SignupResponse extends APIResponse {}
 
 export interface RefreshRequest {
   refresh_token: string;
@@ -70,11 +70,11 @@ export interface UserUpdateRequest {
   student_number: string;
 }
 
-export interface DeleteResponse extends APIResponse { }
+export interface DeleteResponse extends APIResponse {}
 
 export interface FindPasswordResponse extends APIResponse {
   code: number;
   message: string;
 }
 
-export interface CheckPasswordResponse extends APIResponse { }
+export interface CheckPasswordResponse extends APIResponse {}

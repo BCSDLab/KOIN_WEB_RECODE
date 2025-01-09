@@ -1,17 +1,17 @@
-import Trash from 'assets/svg/trash-can-icon.svg';
+import { useParams, useNavigate } from 'react-router-dom';
 import Pen from 'assets/svg/pen-icon.svg';
 import Complaint from 'assets/svg/Review/complaint.svg';
-import { Portal } from 'components/common/Modal/PortalProvider';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import DeleteModal from 'pages/Store/StoreDetailPage/Review/components/DeleteModal/DeleteModal';
-import { useDeleteReview } from 'pages/Store/StoreDetailPage/hooks/useDeleteReview';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useUser } from 'utils/hooks/state/useUser';
+import Trash from 'assets/svg/trash-can-icon.svg';
 import LoginRequiredModal from 'components/common/LoginRequiredModal';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import { useDeleteReview } from 'pages/Store/StoreDetailPage/hooks/useDeleteReview';
+import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
+import DeleteModal from 'pages/Store/StoreDetailPage/Review/components/DeleteModal/DeleteModal';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { useUser } from 'utils/hooks/state/useUser';
 
 import showToast from 'utils/ts/showToast';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import ROUTES from 'static/routes';
 import styles from './SelectButton.module.scss';
 
@@ -20,10 +20,7 @@ interface Props {
   review_id: number;
   is_reported: boolean | undefined;
 }
-const REVEIW_REPORT_LOGIN = [
-  '리뷰 신고 시 ',
-  '리뷰 신고는 회원만 사용 가능합니다.',
-];
+const REVEIW_REPORT_LOGIN = ['리뷰 신고 시 ', '리뷰 신고는 회원만 사용 가능합니다.'];
 export default function SelectButton({ is_mine, review_id, is_reported }: Props) {
   const params = useParams();
   const navigate = useNavigate();
@@ -79,20 +76,17 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
           <>
             <button
               type="button"
-              onClick={() => navigate(
-                ROUTES.ReviewEdit({ id: params.id!, isLink: true }),
-                { state: { from: review_id } },
-              )}
+              onClick={() =>
+                navigate(ROUTES.ReviewEdit({ id: params.id!, isLink: true }), {
+                  state: { from: review_id },
+                })
+              }
               className={styles.section}
             >
               수정하기
               <Pen />
             </button>
-            <button
-              type="button"
-              onClick={openDeleteModal}
-              className={styles.section}
-            >
+            <button type="button" onClick={openDeleteModal} className={styles.section}>
               삭제하기
               <Trash />
             </button>
@@ -108,24 +102,22 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
               }
               if (userInfo) {
                 loggingReportClick();
-                navigate(ROUTES.ReviewReport({
-                  shopid: params.id!,
-                  reviewid: String(review_id),
-                  isLink: true,
-                }));
+                navigate(
+                  ROUTES.ReviewReport({
+                    shopid: params.id!,
+                    reviewid: String(review_id),
+                    isLink: true,
+                  })
+                );
               } else {
                 openLoginModal();
               }
             }}
           >
-            신고하기
-            {' '}
-            <Complaint />
+            신고하기 <Complaint />
           </button>
         )}
       </div>
-
     </div>
-
   );
 }

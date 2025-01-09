@@ -22,8 +22,8 @@ export interface LectureInfo {
 }
 
 export type LectureSchedule = {
-  class_time: number[],
-  class_place?: string,
+  class_time: number[];
+  class_place?: string;
 };
 
 export interface MyLectureInfo {
@@ -58,7 +58,12 @@ export type TimetableFrameInfo = {
   is_main: boolean;
 };
 
-export type VersionType = 'android' | 'timetable' | 'shuttle_bus_timetable' | 'express_bus_timetable' | 'city_bus_timetable';
+export type VersionType =
+  | 'android'
+  | 'timetable'
+  | 'shuttle_bus_timetable'
+  | 'express_bus_timetable'
+  | 'city_bus_timetable';
 
 export type VersionInfo = {
   id: string;
@@ -98,7 +103,7 @@ export interface AddTimetableLectureRequest {
   timetable_lecture: Omit<TimetableLectureInfo, 'id'>[];
 }
 
-export interface DeleteTimetableLectureResponse extends APIResponse { }
+export interface DeleteTimetableLectureResponse extends APIResponse {}
 
 // 시간표 프레임 관련 요청 / 응답
 export type TimetableFrameListResponse = TimetableFrameInfo[];
@@ -113,9 +118,9 @@ export interface AddTimetableFrameRequest {
   timetable_name?: string;
 }
 
-export interface DeleteTimetableFrameResponse extends APIResponse { }
+export interface DeleteTimetableFrameResponse extends APIResponse {}
 
-export interface DeleteSemesterResponse extends APIResponse { }
+export interface DeleteSemesterResponse extends APIResponse {}
 
 export interface VersionInfoResponse extends APIResponse {
   id: number;

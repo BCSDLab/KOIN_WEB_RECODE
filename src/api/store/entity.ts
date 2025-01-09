@@ -4,14 +4,7 @@ interface Open {
   open_time: string;
   close_time: string;
   closed: boolean;
-  day_of_week:
-  | 'MONDAY'
-  | 'TUESDAY'
-  | 'WEDNESDAY'
-  | 'THURSDAY'
-  | 'FRIDAY'
-  | 'SATURDAY'
-  | 'SUNDAY';
+  day_of_week: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
 }
 
 export type StoreSorterType = 'NONE' | 'COUNT' | 'RATING' | '';
@@ -56,11 +49,7 @@ interface MultiPriceMenu extends MenuBase {
 
 export type Menu = SinglePriceMenu | MultiPriceMenu;
 
-export type MenuCategoryName =
-  | '추천 메뉴'
-  | '메인 메뉴'
-  | '세트 메뉴'
-  | '사이드 메뉴';
+export type MenuCategoryName = '추천 메뉴' | '메인 메뉴' | '세트 메뉴' | '사이드 메뉴';
 export interface MenuCategory {
   id: number;
   name: MenuCategoryName;
@@ -99,7 +88,7 @@ export type StoreListV2 = {
   is_open: boolean;
   average_rate: number;
   review_count: number;
-  benefit_detail:string;
+  benefit_detail: string;
   benefit_details: string[];
 };
 
@@ -164,38 +153,34 @@ export interface StoreEventListResponse extends APIResponse {
 }
 
 export interface ReviewListResponse extends APIResponse {
-  total_count: number,
-  current_count: number,
-  total_page: number,
-  current_page: number,
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
   statistics: {
-    average_rating: number,
+    average_rating: number;
     ratings: {
-      1: number,
-      2: number,
-      3: number,
-      4: number,
-      5: number
-    }
-  },
-  reviews: Review[]
+      1: number;
+      2: number;
+      3: number;
+      4: number;
+      5: number;
+    };
+  };
+  reviews: Review[];
 }
 
 export interface Review {
-  review_id: number,
-  rating: number,
-  nick_name: string,
-  content: string,
-  image_urls: [
-    string,
-  ],
-  menu_names: [
-    string,
-  ],
-  is_mine: boolean,
-  is_modified: boolean,
-  is_reported?: boolean,
-  created_at: string
+  review_id: number;
+  rating: number;
+  nick_name: string;
+  content: string;
+  image_urls: [string];
+  menu_names: [string];
+  is_mine: boolean;
+  is_modified: boolean;
+  is_reported?: boolean;
+  created_at: string;
 }
 
 export interface MyReviewResponse {
@@ -210,14 +195,14 @@ export interface ReviewReportRequest {
   }>;
 }
 
-export interface ReviewReportResponse extends APIResponse { }
+export interface ReviewReportResponse extends APIResponse {}
 
 export interface RelatedSearchResponse extends APIResponse {
-  keywords: RelatedSearchItem[]
+  keywords: RelatedSearchItem[];
 }
 
 export interface RelatedSearchItem {
-  keyword: string,
-  shop_ids: string[],
-  shop_id: string
+  keyword: string;
+  shop_ids: string[];
+  shop_id: string;
 }

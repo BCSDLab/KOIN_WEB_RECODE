@@ -1,6 +1,6 @@
 import React, { ErrorInfo } from 'react';
-import showToast from 'utils/ts/showToast';
 import { AxiosError } from 'axios';
+import showToast from 'utils/ts/showToast';
 
 interface Props {
   fallbackClassName: string;
@@ -12,7 +12,7 @@ interface State {
 }
 
 function isAxiosError(error: AxiosError<any, any> | Error): error is AxiosError<any, any> {
-  return ('response' in error);
+  return 'response' in error;
 }
 
 export default class ErrorBoundary extends React.Component<Props, State> {
@@ -39,11 +39,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     const { children, fallbackClassName } = this.props;
     const { hasError } = this.state;
     if (hasError) {
-      return (
-        <div className={fallbackClassName}>
-          Error
-        </div>
-      );
+      return <div className={fallbackClassName}>Error</div>;
     }
     return children;
   }

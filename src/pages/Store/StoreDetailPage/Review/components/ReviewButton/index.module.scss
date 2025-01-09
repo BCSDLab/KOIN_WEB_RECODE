@@ -1,4 +1,4 @@
-@use "src/utils/scss/media";
+@use 'src/utils/scss/media';
 
 .container {
   width: 30%;
@@ -7,7 +7,9 @@
   border: 1px solid #10477a;
   color: #10477a;
   background: white;
-  transition: transform 0.2s, background-color 0.3s;
+  transition:
+    transform 0.2s,
+    background-color 0.3s;
 
   @include media.media-breakpoint(mobile) {
     width: 93%;
@@ -19,6 +21,8 @@
     background-color: #10477a;
     color: white;
     transform: scale(0.985);
-    transition: transform 0.2s, background-color 0.3s;
+    transition:
+      transform 0.2s,
+      background-color 0.3s;
   }
 }

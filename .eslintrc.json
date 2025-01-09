@@ -1,70 +1,156 @@
 {
-    "env": {
-    	"browser": true,
-    	"es6": true
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": ["airbnb", "airbnb/hooks", "airbnb-typescript", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": [
-    	"airbnb",
-    	"airbnb/hooks",
-    	"airbnb-typescript"
-    ],
-    "overrides": [
+    "ecmaVersion": 2018,
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier", "unused-imports"],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.js", "**/*.test.jsx", "**/*.test.ts", "**/*.test.tsx"],
+      "plugins": ["jest"],
+      "extends": ["plugin:jest/recommended"]
+    }
+  ],
+  "rules": {
+    "jsx-a11y/label-has-associated-control": [
+      "error",
       {
-        "files": ["**/*.test.js", "**/*.test.jsx", "**/*.test.ts", "**/*.test.tsx"],
-        "plugins": ["jest"],
-        "extends": ["plugin:jest/recommended"]
-      }
-    ],
-    "globals": {
-    	"Atomics": "readonly",
-    	"SharedArrayBuffer": "readonly"
-    },
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      	"ecmaFeatures": {
-        	"jsx": true
-      	},
-      	"ecmaVersion": 2018,
-      	"project": "./tsconfig.json"
-    },
-    "plugins": [
-      	"react",
-      	"@typescript-eslint"
-    ],
-    "rules": {
-      "no-restricted-imports": [
-        "error",
-        {
-          "patterns": [
-            {
-              "group": ["../*"],
-              "message": "Usage of relative parent imports is not allowed."
-            }
-          ]
-        }
-      ],
-      "import/extensions": "off",
-      "react/react-in-jsx-scope": "off",
-      "react/require-default-props": "off",
-      "max-classes-per-file": "off",
-      "class-methods-use-this": "off",
-      "react/jsx-props-no-spreading": "off",
-      "jsx-a11y/label-has-associated-control": ["error", {
         "required": {
           "some": ["nesting", "id"]
         }
-      }],
-      "jsx-a11y/label-has-for": ["error", {
+      }
+    ],
+    "jsx-a11y/label-has-for": [
+      "error",
+      {
         "required": {
           "some": ["nesting", "id"]
         }
-      }],
-       "linebreak-style":"off",
-       "import/prefer-default-export": "off"
-    },
-    "settings": {
-      "import/resolver": {
-      	"typescript": {}
       }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["../*"],
+            "message": "Usage of relative parent imports is not allowed."
+          }
+        ]
+      }
+    ],
+    "class-methods-use-this": "off",
+    "import/extensions": "off",
+    "import/prefer-default-export": "off",
+    "linebreak-style": "off",
+    "max-classes-per-file": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
+    "prettier/prettier": "error",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "type"],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@tanstack/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "@bcsdlab/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "recoil",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "react-router-dom",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "react-dom/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "react-*",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "axios",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "dayjs",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "lodash",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "zustand/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "zustand",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "{api,assets,components,interfaces,lib,pages,utils}/**",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "static/**",
+            "group": "internal",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "unused-imports/no-unused-imports": "error",
+    "import/first": "error",
+    "import/no-duplicates": "error"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
     }
   }
+}

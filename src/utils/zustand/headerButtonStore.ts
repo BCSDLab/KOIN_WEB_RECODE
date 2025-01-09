@@ -1,5 +1,5 @@
-import create from 'zustand';
 import { ReactNode } from 'react';
+import create from 'zustand';
 
 type CustomButtonState =
   | { type: 'custom'; content: ReactNode }
@@ -13,12 +13,12 @@ type HeaderStore = {
 
 export const useHeaderButtonStore = create<HeaderStore>((set) => ({
   buttonState: { type: 'default', content: null },
-  setButtonContent: (content) => set({
-    buttonState: content
-      ? { type: 'custom', content }
-      : { type: 'default', content: null },
-  }),
-  resetButtonContent: () => set({
-    buttonState: { type: 'default', content: null },
-  }),
+  setButtonContent: (content) =>
+    set({
+      buttonState: content ? { type: 'custom', content } : { type: 'default', content: null },
+    }),
+  resetButtonContent: () =>
+    set({
+      buttonState: { type: 'default', content: null },
+    }),
 }));

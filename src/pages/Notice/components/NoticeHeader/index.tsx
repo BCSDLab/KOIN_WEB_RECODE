@@ -2,7 +2,7 @@ import { cn } from '@bcsdlab/utils';
 import styles from './NoticeHeader.module.scss';
 
 type HeaderRowInfo = {
-  [key: string]: string
+  [key: string]: string;
 };
 
 const HEADER_ROW: HeaderRowInfo = {

@@ -5,7 +5,7 @@
   background: white;
 
   &::before {
-    content: "";
+    content: '';
     align-items: center;
     text-align: center;
     width: inherit;
@@ -19,7 +19,7 @@
   }
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     position: relative;
     width: 33%;

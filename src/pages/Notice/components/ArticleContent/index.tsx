@@ -2,7 +2,7 @@ import styles from './ArticleContent.module.scss';
 import './ToastUIViewer.css';
 
 interface ArticleContentProps {
-  content: string
+  content: string;
 }
 
 export default function ArticleContent({ content }: ArticleContentProps) {

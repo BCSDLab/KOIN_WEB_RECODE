@@ -8,15 +8,14 @@ interface UpdateInfoProps {
 function UpdateInfo({ date }: UpdateInfoProps) {
   return (
     <div className={styles.update}>
-      {date
-        ? (
-          <div className={styles['update--box']}>
-            <UpdateIcon />
-            <div className={styles['update--text']}>{`${date.replace(/-/g, '.')} 업데이트`}</div>
-          </div>
-        )
-
-        : '최근 업데이트 정보 없음'}
+      {date ? (
+        <div className={styles['update--box']}>
+          <UpdateIcon />
+          <div className={styles['update--text']}>{`${date.replace(/-/g, '.')} 업데이트`}</div>
+        </div>
+      ) : (
+        '최근 업데이트 정보 없음'
+      )}
     </div>
   );
 }

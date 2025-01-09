@@ -1,15 +1,15 @@
 /* eslint-disable no-param-reassign */
-import { Dining, DiningType } from 'interfaces/Cafeteria';
 import { useEffect, useRef } from 'react';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import { Dining, DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import DetailModal from 'pages/Cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
-import { DINING_TYPE_MAP } from 'static/cafeteria';
-import { filterDinings } from 'utils/ts/cafeteria';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/common/Modal/PortalProvider';
+import { filterDinings } from 'utils/ts/cafeteria';
+import { DINING_TYPE_MAP } from 'static/cafeteria';
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {
@@ -66,10 +66,20 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
             <div className={styles.header__detail}>
               {!!dining.kcal && `${dining.kcal}kcal`}
               {!!dining.kcal && !!dining.price_card && !!dining.price_cash && '•'}
-              {!!dining.price_card && !!dining.price_cash && `${dining.price_card}원/${dining.price_cash}원`}
+              {!!dining.price_card &&
+                !!dining.price_cash &&
+                `${dining.price_card}원/${dining.price_cash}원`}
             </div>
-            {dining.soldout_at && <span className={`${styles.header__chip} ${styles['header__chip--sold-out']}`}>품절</span>}
-            {!dining.soldout_at && dining.changed_at && <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>변경됨</span>}
+            {dining.soldout_at && (
+              <span className={`${styles.header__chip} ${styles['header__chip--sold-out']}`}>
+                품절
+              </span>
+            )}
+            {!dining.soldout_at && dining.changed_at && (
+              <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>
+                변경됨
+              </span>
+            )}
           </div>
 
           <div className={styles.content}>

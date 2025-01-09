@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'pages/Bus/BusRoutePage/components/SelectDropdown';
+import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import { useBusLogger } from 'pages/Bus/hooks/useBusLogger';
 import styles from './TimeDetailPC.module.scss';
 
@@ -10,9 +10,7 @@ interface TimeDetailPCProps {
 
 export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
   const { hour, minute } = timeSelect.timeState;
-  const {
-    setNow, setDayOfMonth, setHour, setMinute,
-  } = timeSelect.timeHandler;
+  const { setNow, setDayOfMonth, setHour, setMinute } = timeSelect.timeHandler;
   const { logDepartureNowClick } = useBusLogger();
 
   const dates = [...Array(90)].map((_, index) => {

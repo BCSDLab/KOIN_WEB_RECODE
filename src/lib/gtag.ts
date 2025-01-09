@@ -21,7 +21,13 @@ export const pageView = (url: string, userId?: string) => {
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/events
 export const event = ({
-  action, category, label, value, duration_time, previous_page, current_page,
+  action,
+  category,
+  label,
+  value,
+  duration_time,
+  previous_page,
+  current_page,
 }: GTagEvent) => {
   if (typeof window.gtag === 'undefined') return;
   window.gtag('event', action, {

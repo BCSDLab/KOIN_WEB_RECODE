@@ -1,14 +1,14 @@
 import { Suspense } from 'react';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
-import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { DiningType } from 'interfaces/Cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -28,16 +28,18 @@ interface PCCafeteriaPageProps {
   setDiningType: (diningType: DiningType) => void;
 }
 
-export default function PCCafeteriaPage({
-  diningType, setDiningType,
-}: PCCafeteriaPageProps) {
+export default function PCCafeteriaPage({ diningType, setDiningType }: PCCafeteriaPageProps) {
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
 
   const handleDiningTypeChange = (value: DiningType) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[value] });
+    logger.actionEventClick({
+      actionTitle: 'CAMPUS',
+      title: 'menu_time',
+      value: DINING_TYPE_MAP[value],
+    });
     setDiningType(value);
     toggleDropdown();
   };
@@ -98,7 +100,9 @@ export default function PCCafeteriaPage({
         <Suspense fallback={<div />}>
           <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />
         </Suspense>
-        <span className={styles['pc-menu-blocks__caution']}>식단 정보는 운영 상황에 따라 변동될 수 있습니다.</span>
+        <span className={styles['pc-menu-blocks__caution']}>
+          식단 정보는 운영 상황에 따라 변동될 수 있습니다.
+        </span>
       </div>
     </div>
   );

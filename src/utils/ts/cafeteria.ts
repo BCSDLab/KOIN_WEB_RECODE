@@ -10,7 +10,8 @@ const koreanDateStringInstance = new Intl.DateTimeFormat('ko-KR', {
 
 export const formatKoreanDateString = koreanDateStringInstance.format;
 
-export const convertDateToSimpleString = (date: Date) => `${date.getFullYear().toString().slice(2, 4)}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
+export const convertDateToSimpleString = (date: Date) =>
+  `${date.getFullYear().toString().slice(2, 4)}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
 
 export const formatDate = (date: Date) => {
   const month = date.getMonth() + 1;
@@ -69,8 +70,10 @@ export class DiningTime {
 }
 
 export const filterDinings = (dinings: Dining[], type: DiningType) => {
-  const filteredDinings = dinings.filter((dining) => dining.type === type
-    && !dining.menu.some((menuItem) => menuItem.name.includes('미운영')));
+  const filteredDinings = dinings.filter(
+    (dining) =>
+      dining.type === type && !dining.menu.some((menuItem) => menuItem.name.includes('미운영'))
+  );
 
   const sortedDinings = filteredDinings.sort((a, b) => {
     const indexA = PLACE_ORDER.indexOf(a.place);

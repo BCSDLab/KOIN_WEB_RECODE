@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import InformationIcon from 'assets/svg/Bus/info.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
 import useBusNotice from 'pages/Bus/hooks/useBusNotice';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './BusNotice.module.scss';
 
 export default function BusNotice() {
@@ -37,7 +37,7 @@ export default function BusNotice() {
     <div className={styles.container}>
       {showNotice && (
         <div className={styles.notice}>
-          {!isMobile && (<InformationIcon />)}
+          {!isMobile && <InformationIcon />}
           <button
             className={styles.notice__description}
             type="button"
@@ -45,11 +45,7 @@ export default function BusNotice() {
           >
             {title}
           </button>
-          <button
-            type="button"
-            onClick={handleClickDismissNotice}
-            aria-label="공지 닫기"
-          >
+          <button type="button" onClick={handleClickDismissNotice} aria-label="공지 닫기">
             <CloseIcon aria-hidden="true" />
           </button>
         </div>

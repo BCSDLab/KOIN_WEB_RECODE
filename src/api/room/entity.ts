@@ -51,7 +51,6 @@ export interface LandDetailResponse extends APIResponse {
   opt_air_conditioner: boolean;
   opt_bed: boolean;
   opt_microwave: boolean;
-
 }
 export interface LandListResponse extends APIResponse {
   lands: LandList[];

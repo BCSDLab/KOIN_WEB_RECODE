@@ -10,8 +10,9 @@ const TOAST_TYPE = {
 
 type ToastType = keyof typeof TOAST_TYPE;
 
-const showToast = (type: ToastType, message: string) => toast(message, {
-  type: toast.TYPE[TOAST_TYPE[type]],
-});
+const showToast = (type: ToastType, message: string) =>
+  toast(message, {
+    type: toast.TYPE[TOAST_TYPE[type]],
+  });
 
 export default showToast;

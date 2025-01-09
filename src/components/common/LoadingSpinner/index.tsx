@@ -1,7 +1,7 @@
 import styles from './LoadingSpinner.module.scss';
 
 interface LoadingSpinnerProps {
-  size: string
+  size: string;
 }
 
 export default function LoadingSpinner({ size }: LoadingSpinnerProps) {

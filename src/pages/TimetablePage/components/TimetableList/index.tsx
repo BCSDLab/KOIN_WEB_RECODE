@@ -1,32 +1,33 @@
 /* eslint-disable no-restricted-imports */
 import React, { useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
-import { useSemester } from 'utils/zustand/semester';
-import { TimetableFrameInfo } from 'api/timetable/entity';
-import { Portal } from 'components/common/Modal/PortalProvider';
-import AddIcon from 'assets/svg/add-icon.svg';
-import SettingIcon from 'assets/svg/setting-icon.svg';
-import BlueSettingIcon from 'assets/svg/setting-icon-blue.svg';
-import BookMarkIcon from 'assets/svg/book-mark.svg';
-import TimetableSettingModal from 'pages/TimetablePage/components/TimetableList/TimetableSettingModal';
-import InducingLoginModal from 'pages/TimetablePage/components/InducingLoginModal';
-import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import SemesterList from 'pages/TimetablePage/components/SemesterList';
-import useAddTimetableFrame from 'pages/TimetablePage/hooks/useAddTimetableFrame';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import { toast } from 'react-toastify';
+import { TimetableFrameInfo } from 'api/timetable/entity';
+import AddIcon from 'assets/svg/add-icon.svg';
+import BookMarkIcon from 'assets/svg/book-mark.svg';
+import BlueSettingIcon from 'assets/svg/setting-icon-blue.svg';
+import SettingIcon from 'assets/svg/setting-icon.svg';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import InducingLoginModal from 'pages/TimetablePage/components/InducingLoginModal';
+import SemesterList from 'pages/TimetablePage/components/SemesterList';
+import TimetableSettingModal from 'pages/TimetablePage/components/TimetableList/TimetableSettingModal';
+import useAddTimetableFrame from 'pages/TimetablePage/hooks/useAddTimetableFrame';
+import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useSemester } from 'utils/zustand/semester';
 import styles from './TimetableList.module.scss';
 
 interface TimetableListProps {
-  currentFrameIndex: number,
-  setCurrentFrameIndex: (index: number) => void
+  currentFrameIndex: number;
+  setCurrentFrameIndex: (index: number) => void;
 }
 
 export default function TimetableList({
-  currentFrameIndex, setCurrentFrameIndex,
+  currentFrameIndex,
+  setCurrentFrameIndex,
 }: TimetableListProps) {
   const portalManager = useModalPortal();
   const semester = useSemester();
@@ -69,7 +70,7 @@ export default function TimetableList({
                 setCurrentFrameIndex(newTimetable.id);
               }
             },
-          },
+          }
         );
       }
     } else {
@@ -97,12 +98,7 @@ export default function TimetableList({
     <div className={styles['timetable-list']}>
       <SemesterList />
       <ul className={styles['timetable-list__list']} role="listbox">
-        <div
-          className={styles['timetable-list__list--scroll']}
-          role="button"
-          tabIndex={0}
-        >
-
+        <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
           {defaultFrame.length === 0 && (
             <div className={styles['timetable-list__empty-list']}>
               {mySemester?.semesters.length === 0
@@ -123,7 +119,9 @@ export default function TimetableList({
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
             >
               <div className={styles['timetable-list__item--title-container']}>
-                <li className={styles['timetable-list__item--main-title']}>{frame.timetable_name}</li>
+                <li className={styles['timetable-list__item--main-title']}>
+                  {frame.timetable_name}
+                </li>
                 <div className={styles['timetable-list__item--bookmark-icon']}>
                   <BookMarkIcon />
                 </div>
@@ -184,12 +182,7 @@ export default function TimetableList({
           <AddIcon />
         </button>
       </ul>
-      {isModalOpen && (
-        <TimetableSettingModal
-          focusFrame={focusFrame!}
-          onClose={closeModal}
-        />
-      )}
+      {isModalOpen && <TimetableSettingModal focusFrame={focusFrame!} onClose={closeModal} />}
     </div>
   );
 }

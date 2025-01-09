@@ -16,9 +16,7 @@ export default function KoinToast({ close, message, ms = 3000 }: ToastProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.content}>
-        {message}
-      </div>
+      <div className={styles.content}>{message}</div>
     </div>
   );
 }
