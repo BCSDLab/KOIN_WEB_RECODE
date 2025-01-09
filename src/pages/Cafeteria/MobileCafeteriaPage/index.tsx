@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import InformationIcon from 'assets/svg/common/information/information-icon.svg';
+import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
 import { DiningType } from 'interfaces/Cafeteria';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';

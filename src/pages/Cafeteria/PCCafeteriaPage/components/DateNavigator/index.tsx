@@ -1,5 +1,5 @@
 import { cn } from '@bcsdlab/utils';
-import InformationIcon from 'assets/svg/information.svg';
+import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
 import LeftArrow from 'assets/svg/left-angle-bracket.svg';
 import RightArrow from 'assets/svg/right-angle-bracket.svg';
 import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';

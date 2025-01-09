@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { Review } from 'api/store/entity';
-import InformationIcon from 'assets/svg/information-icon.svg';
+import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import Mine from 'assets/svg/Review/check-mine.svg';
 import ClickedKebab from 'assets/svg/Review/clicked-kebab.svg';
 import EmptyStar from 'assets/svg/Review/empty-star.svg';
