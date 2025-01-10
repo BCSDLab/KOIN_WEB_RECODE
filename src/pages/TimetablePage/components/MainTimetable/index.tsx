@@ -7,6 +7,7 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import Curriculum from 'pages/TimetablePage/components/Curriculum';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
+import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
@@ -75,6 +76,14 @@ function MainTimetable({ frameId }: { frameId: number }) {
         <div className={styles['page__total-grades']}>
           <TotalGrades myLectureList={myLectures} />
         </div>
+        <button
+          type="button"
+          className={styles.page__button}
+          onClick={() => { navigate('/graduation'); }}
+        >
+          <GraduationIcon />
+          졸업학점 계산기
+        </button>
         <Curriculum list={deptList} />
         <button
           type="button"

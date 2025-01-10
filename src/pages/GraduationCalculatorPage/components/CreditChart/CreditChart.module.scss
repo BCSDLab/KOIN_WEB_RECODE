@@ -1,0 +1,10 @@
+@use "utils/scss/media.scss" as media;
+
+.credit-chart {
+  display: flex;
+  width: 900px;
+  height: 450px;
+  border: none;
+  border-radius: 16px;
+  background-color: #fff;
+}
