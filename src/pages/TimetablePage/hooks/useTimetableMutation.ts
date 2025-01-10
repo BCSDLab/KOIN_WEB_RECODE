@@ -1,14 +1,19 @@
 import { useMutation } from '@tanstack/react-query';
 import useToast from 'components/common/Toast/useToast';
-import { LectureInfo, TimetableLectureInfo } from 'api/timetable/entity';
+import {
+  AddTimetableLecture,
+  LectureInfo, TimetableCustomLecture, TimetableRegularLecture,
+} from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
 import showToast from 'utils/ts/showToast';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import useAddTimetableLecture from './useAddTimetableLecture';
+import useAddTimetableLectureRegular from './useAddTimetableLectureRegular';
+import useAddTimetableLectureCustom from './useAddTimetableLectureCustom';
 import useDeleteTimetableLecture from './useDeleteTimetableLecture';
-import useEditTimetableLecture from './useEditTimetableLecture';
+import useEditTimetableLectureCustom from './useEditTimetableLectureCustom';
+import useEditTimetableLectureRegular from './useEditTimetableLectureRegular';
 
 type RemoveMyLectureProps = {
   clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'> | null,
@@ -17,43 +22,42 @@ type RemoveMyLectureProps = {
 
 export default function useTimetableMutation(frameId: number) {
   const token = useTokenState();
+  const semester = useSemester();
   const toast = useToast();
-  const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
-  const { mutate: mutateEditWithServer } = useEditTimetableLecture();
+
+  const { mutate: mutateAddWithServerCustom } = useAddTimetableLectureCustom(token);
+  const { mutate: mutateAddWithServerRegular } = useAddTimetableLectureRegular(token);
+
+  const { mutate: mutateEditWithServerCustom } = useEditTimetableLectureCustom();
+  const { mutate: mutateEditWithServerRegular } = useEditTimetableLectureRegular();
+
   const {
     addLecture: addLectureFromLocalStorage,
     removeLecture: removeLectureFromLocalStorage,
   } = useLecturesAction();
-  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
-  const semester = useSemester();
 
-  const addMyLecture = (clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'>) => {
+  const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
+
+  const addMyLecture = (clickedLecture : AddTimetableLecture) => {
     if (token) {
-      // 커스텀 강의 추가 시
-      if ('class_title' in clickedLecture) {
-        mutateAddWithServer({
-          timetable_frame_id: frameId,
-          timetable_lecture: [
-            {
-              class_title: clickedLecture.class_title,
-              class_infos: clickedLecture.class_infos,
-              professor: clickedLecture.professor,
-            },
-          ],
+      if ('lecture_id' in clickedLecture) {
+        mutateAddWithServerRegular({
+          timetable_frame_id: 13256, // frameId 라고 바꾸기 frame 수정하면 v3
+          lecture_id: clickedLecture.lecture_id,
         });
-      } else { // 정규 강의 추가 시
-        mutateAddWithServer({
-          timetable_frame_id: frameId,
-          timetable_lecture: [
+      } else {
+        mutateAddWithServerCustom({
+          timetable_frame_id: 13256, // frameId 라고 바꾸기 frame 수정하면 v3
+          timetable_lecture:
             {
-              ...clickedLecture, // 필요 없을 수도 있음
-              class_title: null,
-              class_infos: null,
-              professor: null,
-              grades: '0',
-              lecture_id: clickedLecture.id,
+              class_title: clickedLecture.timetable_lecture.class_title,
+              lecture_infos: clickedLecture.timetable_lecture.lecture_infos.map((info) => ({
+                start_time: info.start_time,
+                end_time: info.end_time,
+                place: info.place,
+              })),
+              professor: clickedLecture.timetable_lecture.professor,
             },
-          ],
         });
       }
     } else if ('code' in clickedLecture) { // (비로그인)정규 강의 추가 시
@@ -76,8 +80,32 @@ export default function useTimetableMutation(frameId: number) {
     }
   };
 
-  const editMyLecture = (editedLecture: TimetableLectureInfo) => {
-    mutateEditWithServer({ frameId, editedLecture, token });
+  const editMyLecture = (editedLecture: TimetableRegularLecture | TimetableCustomLecture) => {
+    if ('lecture_id' in editedLecture) {
+      mutateEditWithServerRegular({
+        frameId,
+        editedLecture:
+            {
+              id: editedLecture.id,
+              lecture_id: editedLecture.lecture_id,
+              class_title: editedLecture.class_title,
+              class_place: editedLecture.class_place,
+            },
+        token,
+      });
+    } else {
+      mutateEditWithServerCustom({
+        frameId,
+        editedLecture:
+            {
+              id: editedLecture.id,
+              class_title: editedLecture.class_title,
+              lecture_infos: editedLecture.lecture_infos,
+              professor: editedLecture.professor,
+            },
+        token,
+      });
+    }
   };
 
   const removeMyLecture = useMutation({

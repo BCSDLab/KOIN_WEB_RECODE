@@ -10,7 +10,7 @@ import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/
 import showToast from 'utils/ts/showToast';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useSearchParams } from 'react-router-dom';
-import { LectureSchedule, MyLectureInfo } from 'api/timetable/entity';
+import { MyLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
@@ -47,12 +47,14 @@ function CustomLecture({ frameId }: { frameId: number }) {
   const { updateCustomTempLecture } = useCustomTempLectureAction();
   const { myLectures } = useMyLectures(frameId);
   const { addMyLecture, editMyLecture } = useTimetableMutation(frameId);
+
   const [searchParams] = useSearchParams();
   const lectureIndex = searchParams.get('lectureIndex');
   const selectedLecture = lectureIndex ? myLectures[Number(lectureIndex)] : null;
   const selectedEditLecture = selectedLecture as MyLectureInfo | null;
   const isEditStandardLecture = selectedEditLecture?.lecture_id !== null && !!selectedEditLecture;
 
+  // 직접 추가 input 값
   const [lectureName, setLectureName] = useState('');
   const [professorName, setProfessorName] = useState('');
   const [timeSpaceComponents, setTimeSpaceComponents] = useState<TimeSpaceComponents[]>([{
@@ -67,6 +69,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
     place: '',
     id: uuidv4(),
   }]);
+
   const timeSpaceContainerRef = useRef<HTMLDivElement>(null);
   const reverseRef = useRef<HTMLDivElement[] | null[]>([]);
   const [positionValues, setPositionValues] = useState<number[]>([]);
@@ -127,27 +130,28 @@ function CustomLecture({ frameId }: { frameId: number }) {
   ): boolean => {
     const timeSet = new Set<number>();
 
-    // 현재 강의 내에서 중복 검사
-    const hasOverlapInCurrent = currentComponents.some((component) => component.lectureTime.some(
-      (time) => timeSet.has(time) || !timeSet.add(time),
-    ));
+    const hasOverlapInCurrent = currentComponents.some(
+      (component) => component.lectureTime.some((time) => timeSet.has(time) || !timeSet.add(time)),
+    );
 
     if (hasOverlapInCurrent) return true;
 
     if (!existingLectures) return false;
 
-    // 기존 강의와 중복 검사
     return existingLectures.some((myLecture) => {
       if (excludeLectureId && myLecture.id === excludeLectureId) {
-        return false; // 수정 중인 강의 제외
+        return false;
       }
-      return myLecture.class_infos.some((schedule) => (
-        schedule.class_time.some((time) => (
-          currentComponents.some((tempSchedule) => (
-            tempSchedule.lectureTime.includes(time)
-          ))
-        ))
-      ));
+      return myLecture.lecture_infos.some((schedule) => {
+        const { start_time: existingStartTime, end_time: existingEndTime } = schedule;
+
+        return currentComponents.some((tempSchedule) => {
+          const { lectureTime } = tempSchedule;
+          return lectureTime.some(
+            (currentTime) => currentTime >= existingStartTime && currentTime < existingEndTime,
+          );
+        });
+      });
     });
   };
 
@@ -175,15 +179,13 @@ function CustomLecture({ frameId }: { frameId: number }) {
     if (selectedEditLecture) {
       editMyLecture({
         id: selectedEditLecture.id,
-        lecture_id: selectedEditLecture.lecture_id,
         class_title: lectureName,
-        professor: professorName,
-        class_infos: timeSpaceComponents.map((schedule) => ({
-          class_time: schedule.lectureTime,
-          class_place: schedule.place,
+        lecture_infos: timeSpaceComponents.map((schedule) => ({
+          start_time: schedule.lectureTime[0],
+          end_time: schedule.lectureTime[schedule.lectureTime.length - 1] + 1,
+          place: schedule.place,
         })),
-        grades: selectedEditLecture?.grades,
-        memo: selectedEditLecture?.memo,
+        professor: professorName,
       });
     } else {
       addMyLecture(customTempLecture!);
@@ -306,18 +308,36 @@ function CustomLecture({ frameId }: { frameId: number }) {
   };
 
   useEffect(() => {
-    if (customTempLecture) {
+    if (customTempLecture && 'timetable_lecture' in customTempLecture) {
+      const transformedLectureInfos = timeSpaceComponents.flatMap((schedule) => {
+        const dayGroups: { [key: number]: number[] } = {};
+
+        schedule.lectureTime.forEach((time) => {
+          const day = Math.floor(time / 100);
+          if (!dayGroups[day]) {
+            dayGroups[day] = [];
+          }
+          dayGroups[day].push(time);
+        });
+
+        return Object.entries(dayGroups).map(([day, times]) => ({
+          start_time: Math.min(...times),
+          end_time: Math.max(...times) + 1,
+          place: schedule.place,
+        }));
+      });
+
       updateCustomTempLecture({
         ...customTempLecture,
-        class_title: lectureName,
-        professor: professorName,
-        class_infos: timeSpaceComponents.map((schedule) => ({
-          class_time: schedule.lectureTime,
-          class_place: schedule.place,
-        })),
+        timetable_lecture: {
+          ...customTempLecture.timetable_lecture,
+          class_title: lectureName,
+          professor: professorName,
+          lecture_infos: transformedLectureInfos,
+        },
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lectureName, professorName, timeSpaceComponents]);
 
   useEffect(() => {
