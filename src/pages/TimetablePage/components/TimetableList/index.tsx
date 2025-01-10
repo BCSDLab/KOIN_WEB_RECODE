@@ -1,5 +1,4 @@
-/* eslint-disable no-restricted-imports */
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSemester } from 'utils/zustand/semester';
 import { TimetableFrameInfo } from 'api/timetable/entity';
@@ -31,14 +30,14 @@ export default function TimetableList({
   const portalManager = useModalPortal();
   const semester = useSemester();
   const token = useTokenState();
-  const { data } = useTimetableFrameList(token, semester);
+  const { data } = useTimetableFrameList(token, semester!);
   const { data: mySemester } = useSemesterCheck(token);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
 
-  const [focusFrame, setFocusFrame] = React.useState<TimetableFrameInfo | null>(null);
+  const [focusFrame, setFocusFrame] = useState<TimetableFrameInfo | null>(null);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
-  const defaultFrame = data.filter((frame) => frame.is_main);
+  const defaultFrame = data.find((frame) => frame.is_main);
   const timetableFrameList = data.filter((frame) => !frame.is_main);
 
   const handleTimetableSettingClick = (frame: TimetableFrameInfo) => {
@@ -62,11 +61,11 @@ export default function TimetableList({
         toast('학기가 존재하지 않습니다. 학기를 추가해주세요.');
       } else {
         addTimetableFrame(
-          { semester: String(semester) },
+          semester!,
           {
             onSuccess: (newTimetable) => {
-              if (newTimetable && newTimetable.id) {
-                setCurrentFrameIndex(newTimetable.id);
+              if (newTimetable && newTimetable[newTimetable.length - 1].id) {
+                setCurrentFrameIndex(newTimetable[newTimetable.length - 1].id!);
               }
             },
           },
@@ -102,28 +101,18 @@ export default function TimetableList({
           role="button"
           tabIndex={0}
         >
-
-          {defaultFrame.length === 0 && (
-            <div className={styles['timetable-list__empty-list']}>
-              {mySemester?.semesters.length === 0
-                ? '학기를 추가해 시간표 기능을 사용해보세요!'
-                : '시간표를 추가해 시간표 기능을 사용해보세요!'}
-            </div>
-          )}
-
-          {defaultFrame.map((frame) => (
+          {defaultFrame ? (
             <button
               type="button"
               className={cn({
                 [styles['timetable-list__item']]: true,
                 [styles['timetable-list__item--selected']]:
-                  currentFrameIndex === frame.id || !frame.id,
+                  currentFrameIndex === defaultFrame.id || !defaultFrame.id,
               })}
-              key={frame.id}
-              onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
+              onClick={() => defaultFrame.id && setCurrentFrameIndex(defaultFrame.id)}
             >
               <div className={styles['timetable-list__item--title-container']}>
-                <li className={styles['timetable-list__item--main-title']}>{frame.timetable_name}</li>
+                <li className={styles['timetable-list__item--main-title']}>{defaultFrame.name}</li>
                 <div className={styles['timetable-list__item--bookmark-icon']}>
                   <BookMarkIcon />
                 </div>
@@ -133,10 +122,10 @@ export default function TimetableList({
                 className={styles['timetable-list__item--setting']}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleTimetableSettingClick(frame);
+                  handleTimetableSettingClick(defaultFrame);
                 }}
               >
-                {currentFrameIndex === frame.id || !frame.id ? (
+                {currentFrameIndex === defaultFrame.id || !defaultFrame.id ? (
                   <BlueSettingIcon />
                 ) : (
                   <SettingIcon />
@@ -144,7 +133,13 @@ export default function TimetableList({
                 설정
               </button>
             </button>
-          ))}
+          ) : (
+            <div className={styles['timetable-list__empty-list']}>
+              {mySemester?.semesters.length === 0
+                ? '학기를 추가해 시간표 기능을 사용해보세요!'
+                : '시간표를 추가해 시간표 기능을 사용해보세요!'}
+            </div>
+          )}
           {timetableFrameList?.map((frame) => (
             <button
               type="button"
@@ -156,7 +151,7 @@ export default function TimetableList({
               key={frame.id}
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
             >
-              <li className={styles['timetable-list__item--title']}>{frame.timetable_name}</li>
+              <li className={styles['timetable-list__item--title']}>{frame.name}</li>
               <button
                 type="button"
                 className={styles['timetable-list__item--setting']}

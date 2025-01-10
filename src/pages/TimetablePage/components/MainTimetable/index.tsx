@@ -27,7 +27,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
   const semester = useSemester();
   const logger = useLogger();
   const navigate = useNavigate();
-  const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timeTableFrameList } = useTimetableFrameList(token, semester!);
   const { myLectures } = useMyLectures(frameId);
   const myLectureDayValue = useTimetableDayList(
     timeTableFrameList.length > 0 ? myLectures : [],

@@ -11,6 +11,7 @@ import {
   TimetableFrameAddition,
   TimetableFrameEdit,
   DeleteTimetableFrame,
+  RollbackTimetableFrame,
   DeleteSemester,
   VersionInfo,
 } from './APIDetail';
@@ -36,6 +37,8 @@ export const addTimetableFrame = APIClient.of(TimetableFrameAddition);
 export const editTimetableFrame = APIClient.of(TimetableFrameEdit);
 
 export const deleteTimetableFrame = APIClient.of(DeleteTimetableFrame);
+
+export const rollbackTimetableFrame = APIClient.of(RollbackTimetableFrame);
 
 export const deleteSemester = APIClient.of(DeleteSemester);
 

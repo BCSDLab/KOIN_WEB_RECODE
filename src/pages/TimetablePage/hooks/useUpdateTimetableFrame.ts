@@ -16,11 +16,13 @@ export default function useUpdateTimetableFrame() {
         editTimetableFrame(
           token,
           frameInfo.id!,
-          { timetable_name: frameInfo.timetable_name, is_main: frameInfo.is_main },
+          { name: frameInfo.name, is_main: frameInfo.is_main },
         )
       ),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester] });
+        queryClient.invalidateQueries(
+          { queryKey: [TIMETABLE_FRAME_KEY + semester!.year + semester!.term] },
+        );
       },
     },
   );

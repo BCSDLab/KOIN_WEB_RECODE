@@ -1,6 +1,6 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
-type Term = '1학기' | '여름학기' | '2학기' | '겨울학기';
+export type Term = '1학기' | '여름학기' | '2학기' | '겨울학기';
 
 export type Semester = {
   year: number;
@@ -57,7 +57,7 @@ export interface MyLectureInfo {
 
 export type TimetableFrameInfo = {
   id: number | null;
-  timetable_name: string;
+  name: string;
   is_main: boolean;
 };
 
@@ -99,14 +99,11 @@ export interface DeleteTimetableLectureResponse extends APIResponse { }
 export type TimetableFrameListResponse = TimetableFrameInfo[];
 
 export interface EditTimetableFrameRequest {
-  timetable_name: string;
+  name: string;
   is_main: boolean;
 }
 
-export interface AddTimetableFrameRequest {
-  semester: string;
-  timetable_name?: string;
-}
+export type AddTimetableFrameRequest = Semester;
 
 export interface DeleteTimetableFrameResponse extends APIResponse { }
 

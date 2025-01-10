@@ -29,12 +29,12 @@ function SemesterList() {
   const { updateSemester } = useSemesterAction();
 
   const [isOpenSemesterList, , closePopup, triggerPopup] = useBooleanState(false);
-  const [selectedSemester, setSelectedSemester] = React.useState(semesterOptionList[0].label);
+  const [selectedSemester, setSelectedSemester] = React.useState(semester);
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 
   const { mutate: deleteTimetableFrame } = useDeleteSemester(
     token,
-    selectedSemester || '20242',
+    selectedSemester!,
   );
 
   const semesterListToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -83,7 +83,7 @@ function SemesterList() {
     }
   };
 
-  const onClickDeleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: string) => {
+  const onClickDeleteSemester = (e: React.MouseEvent<HTMLButtonElement>, semes: Semester) => {
     e.stopPropagation();
     if (token) {
       setSelectedSemester(semes);

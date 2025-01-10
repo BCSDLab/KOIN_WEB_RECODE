@@ -2,7 +2,9 @@ import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import Listbox from 'components/TimetablePage/Listbox';
-import { AddTimetableFrameRequest, SemesterCheckResponse, TimetableFrameInfo } from 'api/timetable/entity';
+import {
+  AddTimetableFrameRequest, SemesterCheckResponse, Term, TimetableFrameListResponse,
+} from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -12,7 +14,7 @@ export interface AddSemesterModalProps {
   onClose: () => void;
   setModalOpenFalse: () => void;
   addSemester:
-  UseMutateFunction<TimetableFrameInfo, unknown, AddTimetableFrameRequest, unknown>;
+  UseMutateFunction<TimetableFrameListResponse, unknown, AddTimetableFrameRequest, unknown>;
   mySemester: SemesterCheckResponse | null;
 }
 
@@ -23,10 +25,12 @@ const years = Array.from({ length: currentYear - startYear + 1 }, (_, index) => 
   return { label: `${year}년도`, value: `${year}년도` };
 });
 
-const semester = [{ label: '겨울학기', value: '겨울학기' },
+const semester = [
+  { label: '겨울학기', value: '겨울학기' },
   { label: '2학기', value: '2학기' },
   { label: '여름학기', value: '여름학기' },
-  { label: '1학기', value: '1학기' }];
+  { label: '1학기', value: '1학기' },
+];
 
 export default function AddSemesterModal({
   onClose,
@@ -53,7 +57,10 @@ export default function AddSemesterModal({
   };
   const handleAddSemester = (semesters: AddTimetableFrameRequest) => {
     if (mySemester) {
-      if (mySemester.semesters.includes(semesters.semester)) {
+      if (mySemester.semesters.some(
+        (semes) => semes.year === semesters.year && semes.term === semesters.term,
+      )
+      ) {
         showToast('info', '이미 있는 학기입니다.');
       } else {
         addSemester(semesters);
@@ -61,7 +68,6 @@ export default function AddSemesterModal({
       }
     }
   };
-  const semesterParam = yearValue.replace('년도', '') + (semesterValue.length === 3 ? '' : '-') + semesterValue.replace('학기', '');
 
   return (
     <div className={styles.background} ref={backgroundRef}>
@@ -96,7 +102,7 @@ export default function AddSemesterModal({
             className={cn({
               [styles['container__button--save']]: true,
             })}
-            onClick={() => handleAddSemester({ semester: semesterParam })}
+            onClick={() => handleAddSemester({ year: Number(yearValue.replace('년도', '')), term: semesterValue as Term })}
           >
             추가하기
           </button>

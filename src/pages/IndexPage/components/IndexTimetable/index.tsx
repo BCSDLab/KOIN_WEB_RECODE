@@ -17,7 +17,7 @@ function CurrentSemesterTimetable() {
   const semester = useSemester();
   const token = useTokenState();
   const [currentFrameIndex, setCurrentFrameIndex] = React.useState<number>(0);
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(token, semester!);
 
   useEffect(() => {
     if (timetableFrameList) {
