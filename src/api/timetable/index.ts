@@ -4,8 +4,10 @@ import {
   SemesterCheck,
   LectureList,
   TimetableLectureInfo,
-  TimetableLectureEdit,
-  TimetableLectureAddition,
+  TimetableLectureRegularEdit,
+  TimetableLectureCustomEdit,
+  TimetableLectureRegularAddition,
+  TimetableLectureCustomAddition,
   TimetableLectureDeletion,
   TimetableFrameList,
   TimetableFrameAddition,
@@ -23,9 +25,15 @@ export const getLectureList = APIClient.of(LectureList);
 
 export const getTimetableLectureInfo = APIClient.of(TimetableLectureInfo);
 
-export const editTimetableLecture = APIClient.of(TimetableLectureEdit);
+export const editTimetableLectureRegular = APIClient.of(TimetableLectureRegularEdit);
 
-export const changeTimetableInfoByAddLecture = APIClient.of(TimetableLectureAddition);
+export const editTimetableLectureCustom = APIClient.of(TimetableLectureCustomEdit);
+
+// export const changeTimetableInfoByAddLecture = APIClient.of(TimetableLectureAddition);
+
+export const addTimetableLectureRegular = APIClient.of(TimetableLectureRegularAddition);
+
+export const addTimetableLectureCustom = APIClient.of(TimetableLectureCustomAddition);
 
 export const changeTimetableInfoByRemoveLecture = APIClient.of(TimetableLectureDeletion);
 

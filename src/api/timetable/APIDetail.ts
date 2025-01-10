@@ -5,8 +5,7 @@ import {
   LecturesResponse,
   SemesterCheckResponse,
   TimetableLectureInfoResponse,
-  EditTimetableLectureRequest,
-  AddTimetableLectureRequest,
+  // EditTimetableLectureRequest,
   DeleteTimetableLectureResponse,
   TimetableFrameListResponse,
   EditTimetableFrameRequest,
@@ -18,6 +17,8 @@ import {
   VersionInfoResponse,
   TimetableLectureRegularEditRequest,
   TimetableLectureCustomEditRequest,
+  AddTimetableLectureRegularRequest,
+  AddTimetableLectureCustomRequest,
 } from './entity';
 
 export class SemesterInfoList<R extends SemestersResponse> implements APIRequest<R> {
@@ -75,19 +76,7 @@ export class TimetableLectureInfo
   }
 }
 
-export class TimetableLectureEdit
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.PUT;
-
-  path = '/v2/timetables/lecture';
-
-  response!: R;
-
-  auth = true;
-
-  constructor(public data: EditTimetableLectureRequest, public authorization: string) {}
-}
-
+// v3
 export class TimetableLectureRegularEdit
   <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
@@ -114,17 +103,30 @@ export class TimetableLectureCustomEdit
   constructor(public data: TimetableLectureCustomEditRequest, public authorization: string) {}
 }
 
-export class TimetableLectureAddition
+export class TimetableLectureRegularAddition
   <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/v2/timetables/lecture';
+  path = '/v3/timetables/lecture/regular';
 
   response!: R;
 
   auth = true;
 
-  constructor(public data: AddTimetableLectureRequest, public authorization: string) {}
+  constructor(public data: AddTimetableLectureRegularRequest, public authorization: string) {}
+}
+
+export class TimetableLectureCustomAddition
+  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/v3/timetables/lecture/custom';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public data: AddTimetableLectureCustomRequest, public authorization: string) {}
 }
 
 export class TimetableLectureDeletion

@@ -3,7 +3,8 @@ import { timetable } from 'api';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useToast from 'components/common/Toast/useToast';
 import useAddTimetableFrame from './useAddTimetableFrame';
-import useAddTimetableLecture from './useAddTimetableLecture';
+import useAddTimetableLectureCustom from './useAddTimetableLectureCustom';
+import useAddTimetableLectureRegular from './useAddTimetableLectureRegular';
 import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
 
 type DeleteTimetableFrameProps = {
@@ -15,17 +16,25 @@ export default function useDeleteTimetableFrame(token: string, semester: string)
   const queryClient = useQueryClient();
   const toast = useToast();
   const { mutateAsync: addTimetableFrame } = useAddTimetableFrame(token);
-  const { mutate: mutateAddWithServer } = useAddTimetableLecture(token);
+  const { mutate: mutateAddWithServerCustom } = useAddTimetableLectureCustom(token);
+  const { mutate: mutateAddWithServerRegular } = useAddTimetableLectureRegular(token);
   const recoverFrame = async () => {
     const restoredFrame = JSON.parse(sessionStorage.getItem('restoreFrame')!);
     const restoredLectures = JSON.parse(sessionStorage.getItem('restoreLecturesInFrame')!);
     const newTimetableFrame = await addTimetableFrame(
       { semester, timetable_name: restoredFrame.timetable_name },
     );
-    mutateAddWithServer({
-      timetable_frame_id: newTimetableFrame.id!,
-      timetable_lecture: restoredLectures.myLectures,
-    });
+    if ('timetable_lecture' in restoredLectures.myLectures) {
+      mutateAddWithServerCustom({
+        timetable_frame_id: newTimetableFrame.id!,
+        timetable_lecture: restoredLectures.myLectures.timetable_lecture,
+      });
+    } else {
+      mutateAddWithServerRegular({
+        timetable_frame_id: newTimetableFrame.id!,
+        lecture_id: restoredLectures.myLectures.lecture_id,
+      });
+    }
   };
 
   return useMutation({
