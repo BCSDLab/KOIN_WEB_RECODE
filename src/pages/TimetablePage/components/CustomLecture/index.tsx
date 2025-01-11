@@ -4,7 +4,9 @@ import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import Listbox from 'components/TimetablePage/Listbox';
-import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
+import {
+  DAYS_STRING, HOUR, MINUTE, START_TIME, END_TIME,
+} from 'static/timetable';
 import WarningIcon from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';
@@ -15,7 +17,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
 
-const initialTimeSpaceComponent = {
+const initialTimeSpaceComponent: TimeSpaceComponents = {
   time: {
     startHour: '09시',
     startMinute: '00분',
@@ -23,20 +25,26 @@ const initialTimeSpaceComponent = {
     endMinute: '00분',
   },
   week: [],
-  lectureTime: [],
+  startTime: 0,
+  endTime: 1,
   place: '',
   id: uuidv4(),
 };
 
+type Hour = '09시' | '10시' | '11시' | '12시' | '13시' | '14시' | '15시' | '16시' | '17시' | '18시' | '19시' | '20시' | '21시' | '22시' | '23시' | '24시';
+
+type Minute = '00분' | '30분';
+
 type TimeSpaceComponents = {
   time: {
-    startHour: string,
-    startMinute: string,
-    endHour: string,
-    endMinute: string,
+    startHour: Hour,
+    startMinute: Minute,
+    endHour: Hour,
+    endMinute: Minute,
   }
   week: string[],
-  lectureTime: number[],
+  startTime: number,
+  endTime: number,
   place: string,
   id: string,
 };
@@ -57,17 +65,11 @@ function CustomLecture({ frameId }: { frameId: number }) {
   // 직접 추가 input 값
   const [lectureName, setLectureName] = useState('');
   const [professorName, setProfessorName] = useState('');
-  const [timeSpaceComponents, setTimeSpaceComponents] = useState<TimeSpaceComponents[]>([{
-    time: {
-      startHour: '09시',
-      startMinute: '00분',
-      endHour: '10시',
-      endMinute: '00분',
-    },
+  const [
+    timeSpaceComponents, setTimeSpaceComponents,
+  ] = useState<TimeSpaceComponents[]>([{
+    ...initialTimeSpaceComponent,
     week: ['월'],
-    lectureTime: [0, 1],
-    place: '',
-    id: uuidv4(),
   }]);
 
   const timeSpaceContainerRef = useRef<HTMLDivElement>(null);
@@ -76,7 +78,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
   const [isFirstSubmit, setIsFirstSubmit] = useState(true);
 
   const isValid = (lectureName !== ''
-    && !timeSpaceComponents.some((time) => time.lectureTime.length === 0));
+    && !timeSpaceComponents.some((time) => time.endTime - time.startTime >= 0));
   const isOverflow = timeSpaceContainerRef.current
     ? timeSpaceContainerRef.current.getBoundingClientRect().height > 400
     : false;
@@ -88,52 +90,63 @@ function CustomLecture({ frameId }: { frameId: number }) {
   const isSingleTimeSpaceComponent = timeSpaceComponents.length === 1;
 
   const changeToTimetableTime = (timeInfo: {
-    startHour: string;
-    startMinute: string;
-    endHour: string;
-    endMinute: string;
+    startHour: Hour;
+    startMinute: Minute;
+    endHour: Hour;
+    endMinute: Minute;
   }) => {
-    const timetableStart = (Number(timeInfo.startHour.slice(0, 2)) - 9) * 2
-      + Number(timeInfo.startMinute.slice(0, 2)) / 30;
-    const timetableEnd = (Number(timeInfo.endHour.slice(0, 2)) - 9) * 2
-      + Number(timeInfo.endMinute.slice(0, 2)) / 30;
-    return Array.from(
-      { length: timetableEnd - timetableStart },
-      (_, idx) => timetableStart + idx,
-    );
+    const timetableStart = START_TIME[timeInfo.startHour] + (timeInfo.startMinute === '00분' ? 0 : 1);
+    const timetableEnd = END_TIME[timeInfo.endHour] + (timeInfo.endMinute === '00분' ? 0 : 1);
+
+    return {
+      startTime: timetableStart,
+      endTime: timetableEnd,
+    };
   };
   const addWeekTime = (
     weekInfo: string[],
-    timetableTime: number[],
-  ) => weekInfo.reduce((acc: number[], week) => {
-    const mappedTimes = timetableTime.map((time) => {
-      switch (week) {
-        case '월':
-          return time;
-        case '화':
-          return time + 100;
-        case '수':
-          return time + 200;
-        case '목':
-          return time + 300;
-        default:
-          return time + 400;
-      }
-    });
-    return [...acc, ...mappedTimes];
-  }, []);
+    startTime: number,
+    endTime: number,
+  ) => weekInfo.map((week) => {
+    switch (week) {
+      case '월':
+        return {
+          startTime,
+          endTime,
+        };
+      case '화':
+        return {
+          startTime: startTime + 100,
+          endTime: endTime + 100,
+        };
+      case '수':
+        return {
+          startTime: startTime + 200,
+          endTime: endTime + 200,
+        };
+      case '목':
+        return {
+          startTime: startTime + 300,
+          endTime: endTime + 300,
+        };
+      default:
+        return {
+          startTime: startTime + 400,
+          endTime: endTime + 400,
+        };
+    }
+  });
 
   const hasTimeConflict = (
     currentComponents: TimeSpaceComponents[],
     existingLectures: MyLectureInfo[],
     excludeLectureId?: number,
   ): boolean => {
-    const timeSet = new Set<number>();
-
     const hasOverlapInCurrent = currentComponents.some(
-      (component) => component.lectureTime.some((time) => timeSet.has(time) || !timeSet.add(time)),
+      (item, index) => currentComponents.slice(index + 1).some(
+        (other) => item.startTime < other.endTime && other.startTime < item.endTime,
+      ),
     );
-
     if (hasOverlapInCurrent) return true;
 
     if (!existingLectures) return false;
@@ -142,16 +155,11 @@ function CustomLecture({ frameId }: { frameId: number }) {
       if (excludeLectureId && myLecture.id === excludeLectureId) {
         return false;
       }
-      return myLecture.lecture_infos.some((schedule) => {
-        const { start_time: existingStartTime, end_time: existingEndTime } = schedule;
-
-        return currentComponents.some((tempSchedule) => {
-          const { lectureTime } = tempSchedule;
-          return lectureTime.some(
-            (currentTime) => currentTime >= existingStartTime && currentTime < existingEndTime,
-          );
-        });
-      });
+      return myLecture.lecture_infos.some(
+        (info) => currentComponents.some(
+          (times) => info.start_time < times.endTime && times.startTime < info.end_time,
+        ),
+      );
     });
   };
 
@@ -181,29 +189,18 @@ function CustomLecture({ frameId }: { frameId: number }) {
         id: selectedEditLecture.id,
         class_title: lectureName,
         lecture_infos: timeSpaceComponents.map((schedule) => ({
-          start_time: schedule.lectureTime[0],
-          end_time: schedule.lectureTime[schedule.lectureTime.length - 1] + 1,
+          start_time: schedule.startTime,
+          end_time: schedule.endTime,
           place: schedule.place,
         })),
         professor: professorName,
       });
     } else {
-      addMyLecture(customTempLecture!);
+      addMyLecture({ timetable_lecture: customTempLecture! });
     }
     setLectureName('');
     setProfessorName('');
-    setTimeSpaceComponents([{
-      time: {
-        startHour: '09시',
-        startMinute: '00분',
-        endHour: '10시',
-        endMinute: '00분',
-      },
-      week: ['월'],
-      lectureTime: [0, 1],
-      place: '',
-      id: uuidv4(),
-    }]);
+    setTimeSpaceComponents([initialTimeSpaceComponent]);
     setIsFirstSubmit(true);
   };
 
@@ -251,30 +248,34 @@ function CustomLecture({ frameId }: { frameId: number }) {
 
     let newTimetableTime = changeToTimetableTime(newTimeInfo);
     // 올바르지 않은 시간을 선택했을 시
-    if (newTimetableTime.length === 0) {
+    if (newTimetableTime.endTime - newTimetableTime.startTime <= 0) {
       const newStartHour = Number(newTimeInfo.startHour.slice(0, 2));
       const newEndHour = Number(newTimeInfo.endHour.slice(0, 2));
       if (key.slice(0, 5) === 'start') {
         newTimeInfo = {
           ...newTimeInfo,
-          endHour: `${newStartHour + 1}시`,
+          endHour: `${newStartHour + 1}시` as Hour,
           endMinute: newStartHour + 1 === 24 ? '00분' : newTimeInfo.startMinute,
         };
       } else {
         newTimeInfo = {
           ...newTimeInfo,
-          startHour: newEndHour - 1 < 10 ? '09시' : `${newEndHour - 1}시`,
+          startHour: newEndHour - 1 < 10 ? '09시' : `${newEndHour - 1}시` as Hour,
           startMinute: newEndHour - 1 < 9 ? '00분' : newTimeInfo.endMinute,
         };
       }
       newTimetableTime = changeToTimetableTime(newTimeInfo);
     }
-    const updatedTime = addWeekTime(timeSpaceComponents[index].week, newTimetableTime);
+    const updatedTime = addWeekTime(
+      timeSpaceComponents[index].week,
+      newTimetableTime.startTime,
+      newTimetableTime.endTime,
+    );
     const updatedComponents = [...timeSpaceComponents];
     updatedComponents[index] = {
       ...updatedComponents[index],
       time: newTimeInfo,
-      lectureTime: updatedTime,
+      startTime: updatedTime.startTime,
     };
     setTimeSpaceComponents(updatedComponents);
   };
@@ -329,12 +330,9 @@ function CustomLecture({ frameId }: { frameId: number }) {
 
       updateCustomTempLecture({
         ...customTempLecture,
-        timetable_lecture: {
-          ...customTempLecture.timetable_lecture,
-          class_title: lectureName,
-          professor: professorName,
-          lecture_infos: transformedLectureInfos,
-        },
+        class_title: lectureName,
+        professor: professorName,
+        lecture_infos: transformedLectureInfos,
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -348,7 +346,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
 
     const classInfoDefault: LectureSchedule[] = [];
 
-    selectedEditLecture.class_infos.forEach(
+    selectedEditLecture.lecture_infos.forEach(
       (lectureSchedule: LectureSchedule) => {
         if (selectedEditLecture.lecture_id !== null) {
           const groupedTimes: number[][] = [];

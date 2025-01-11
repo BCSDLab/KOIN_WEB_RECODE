@@ -16,6 +16,7 @@ import {
   RollbackTimetableFrame,
   DeleteSemester,
   VersionInfo,
+  TimetableLectureRollback,
 } from './APIDetail';
 
 export const getSemesterInfoList = APIClient.of(SemesterInfoList);
@@ -35,6 +36,8 @@ export const editTimetableLectureCustom = APIClient.of(TimetableLectureCustomEdi
 export const addTimetableLectureRegular = APIClient.of(TimetableLectureRegularAddition);
 
 export const addTimetableLectureCustom = APIClient.of(TimetableLectureCustomAddition);
+
+export const rollbackTimetableLecture = APIClient.of(TimetableLectureRollback);
 
 export const changeTimetableInfoByRemoveLecture = APIClient.of(TimetableLectureDeletion);
 

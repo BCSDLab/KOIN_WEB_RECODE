@@ -19,3 +19,26 @@ export const HOUR = [{ label: '09시', value: '09시' },
   { label: '21시', value: '21시' },
   { label: '22시', value: '22시' },
   { label: '23시', value: '23시' }];
+
+export const START_TIME = {
+  '09시': 0,
+  '10시': 2,
+  '11시': 4,
+  '12시': 6,
+  '13시': 8,
+  '14시': 10,
+  '15시': 12,
+  '16시': 14,
+  '17시': 16,
+  '18시': 18,
+  '19시': 20,
+  '20시': 22,
+  '21시': 24,
+  '22시': 26,
+  '23시': 28,
+  '24시': 30,
+};
+
+export const END_TIME = Object.fromEntries(
+  Object.entries(START_TIME).map(([key, value]) => [key, value - 1]),
+);

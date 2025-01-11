@@ -7,7 +7,6 @@ import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
@@ -31,12 +30,10 @@ function CurrentSemesterTimetable() {
   }, [timetableFrameList]);
 
   const { myLectures } = useMyLectures(currentFrameIndex);
-  const myLectureDayValue = useTimetableDayList(myLectures);
 
-  return myLectureDayValue ? (
+  return myLectures ? (
     <Timetable
       frameId={currentFrameIndex}
-      lectures={myLectureDayValue}
       columnWidth={44}
       firstColumnWidth={29}
       rowHeight={17.3}

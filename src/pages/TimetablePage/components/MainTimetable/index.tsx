@@ -1,7 +1,6 @@
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import React from 'react';
-import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import Curriculum from 'pages/TimetablePage/components/Curriculum';
@@ -29,9 +28,6 @@ function MainTimetable({ frameId }: { frameId: number }) {
   const navigate = useNavigate();
   const { data: timeTableFrameList } = useTimetableFrameList(token, semester!);
   const { myLectures } = useMyLectures(frameId);
-  const myLectureDayValue = useTimetableDayList(
-    timeTableFrameList.length > 0 ? myLectures : [],
-  );
   const { data: deptList } = useDeptList();
   const { data: mySemester } = useSemesterCheck(token);
 
@@ -101,7 +97,6 @@ function MainTimetable({ frameId }: { frameId: number }) {
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <Timetable
               frameId={frameId}
-              lectures={myLectureDayValue}
               columnWidth={140}
               firstColumnWidth={70}
               rowHeight={33}

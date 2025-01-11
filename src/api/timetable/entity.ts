@@ -152,6 +152,10 @@ export interface AddTimetableLectureRegularRequest {
   lecture_id: number;
 }
 
+export interface RollbackTimetableLectureRequest {
+  timetable_lectures_id: number[];
+}
+
 export type LectureInfo = {
   day: number;
   start_time: number;

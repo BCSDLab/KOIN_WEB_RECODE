@@ -18,6 +18,7 @@ import {
   TimetableLectureCustomEditRequest,
   AddTimetableLectureRegularRequest,
   AddTimetableLectureCustomRequest,
+  RollbackTimetableLectureRequest,
 } from './entity';
 
 export class SemesterInfoList<R extends SemestersResponse> implements APIRequest<R> {
@@ -126,6 +127,21 @@ export class TimetableLectureCustomAddition
   auth = true;
 
   constructor(public data: AddTimetableLectureCustomRequest, public authorization: string) {}
+}
+
+export class TimetableLectureRollback
+  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public data: RollbackTimetableLectureRequest, public authorization: string) {
+    this.path = `/v3/timetables/lecture/rollback?timetable_lectures_id=${data.timetable_lectures_id}`;
+  }
 }
 
 export class TimetableLectureDeletion

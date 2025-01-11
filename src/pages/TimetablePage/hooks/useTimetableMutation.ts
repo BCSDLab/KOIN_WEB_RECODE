@@ -2,7 +2,9 @@ import { useMutation } from '@tanstack/react-query';
 import useToast from 'components/common/Toast/useToast';
 import {
   AddTimetableLecture,
-  LectureInfo, TimetableCustomLecture, TimetableRegularLecture,
+  Lecture,
+  MyLectureInfo,
+  TimetableCustomLecture, TimetableRegularLecture,
 } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLectures';
@@ -14,9 +16,10 @@ import useAddTimetableLectureCustom from './useAddTimetableLectureCustom';
 import useDeleteTimetableLecture from './useDeleteTimetableLecture';
 import useEditTimetableLectureCustom from './useEditTimetableLectureCustom';
 import useEditTimetableLectureRegular from './useEditTimetableLectureRegular';
+import useRollbackLecture from './useRollbackLecture';
 
 type RemoveMyLectureProps = {
-  clickedLecture: LectureInfo | Omit<TimetableLectureInfo, 'id'> | null,
+  clickedLecture: Lecture | MyLectureInfo | null,
   id: number
 };
 
@@ -31,6 +34,8 @@ export default function useTimetableMutation(frameId: number) {
   const { mutate: mutateEditWithServerCustom } = useEditTimetableLectureCustom();
   const { mutate: mutateEditWithServerRegular } = useEditTimetableLectureRegular();
 
+  const { mutate: rollbackLecture } = useRollbackLecture(token, frameId);
+
   const {
     addLecture: addLectureFromLocalStorage,
     removeLecture: removeLectureFromLocalStorage,
@@ -38,16 +43,16 @@ export default function useTimetableMutation(frameId: number) {
 
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
 
-  const addMyLecture = (clickedLecture : AddTimetableLecture) => {
+  const addMyLecture = (clickedLecture : AddTimetableLecture | Lecture) => {
     if (token) {
       if ('lecture_id' in clickedLecture) {
         mutateAddWithServerRegular({
-          timetable_frame_id: 13256, // frameId 라고 바꾸기 frame 수정하면 v3
+          timetable_frame_id: frameId,
           lecture_id: clickedLecture.lecture_id,
         });
-      } else {
+      } else if ('timetable_lecture' in clickedLecture) {
         mutateAddWithServerCustom({
-          timetable_frame_id: 13256, // frameId 라고 바꾸기 frame 수정하면 v3
+          timetable_frame_id: frameId,
           timetable_lecture:
             {
               class_title: clickedLecture.timetable_lecture.class_title,
@@ -60,22 +65,19 @@ export default function useTimetableMutation(frameId: number) {
             },
         });
       }
-    } else if ('code' in clickedLecture) { // (비로그인)정규 강의 추가 시
-      addLectureFromLocalStorage(clickedLecture, `${semester?.year}${semester?.term}`);
+    } else { // (비로그인)정규 강의 추가 시
+      addLectureFromLocalStorage(clickedLecture as Lecture, `${semester?.year}${semester?.term}`);
     }
   };
 
   // 강의 복원
-  const restoreLecture = () => {
+  const restoreLecture = (id: number[]) => {
     const restoredLecture = JSON.parse(sessionStorage.getItem('restoreLecture')!);
     if ('name' in restoredLecture) {
       addLectureFromLocalStorage(restoredLecture, `${semester?.year}${semester?.term}`);
     } else {
-      mutateAddWithServer({
-        timetable_frame_id: frameId,
-        timetable_lecture: [
-          restoredLecture,
-        ],
+      rollbackLecture({
+        timetable_lectures_id: id,
       });
     }
   };
@@ -112,15 +114,16 @@ export default function useTimetableMutation(frameId: number) {
     mutationFn: async ({ clickedLecture, id } : RemoveMyLectureProps) => {
       sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
       if (clickedLecture && 'name' in clickedLecture) {
-        return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, semester));
+        return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, `${semester?.year}${semester?.term}`));
       }
       return removeLectureFromServer(id);
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      const { id } = variables;
       toast.open({
         message: '해당 과목이 삭제되었습니다.',
         recoverMessage: '해당 과목이 복구되었습니다.',
-        onRecover: restoreLecture,
+        onRecover: () => restoreLecture([id]),
       });
     },
     onError: (error) => {
