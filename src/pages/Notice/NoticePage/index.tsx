@@ -14,8 +14,6 @@ export default function NoticePage() {
   const [linksOpen, ,, toggleLinksOpen] = useBooleanState(false);
   useScrollToTop();
 
-  // to={ROUTES.LostItemFound()}
-
   return (
     <div className={styles.template}>
       <div className={styles.content}>
