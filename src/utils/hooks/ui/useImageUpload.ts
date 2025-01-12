@@ -8,8 +8,10 @@ export type UploadError = '413' | '415' | '404' | '422' | 'networkError' | '401'
 
 const MAXSIZE = 1024 * 1024 * 10;
 
+const MAZ_IMAGE_COUNT = 3;
+
 /* eslint-disable */
-export default function useImageUpload() {
+export default function useImageUpload(maxImageLength: number = MAZ_IMAGE_COUNT) {
   const token = useTokenState();
   const [imageFile, setImageFile] = useState<string[]>([]);
   const [uploadError, setUploadError] = useState<UploadError>('');
@@ -18,8 +20,8 @@ export default function useImageUpload() {
   const saveImgFile = async () => {
     const files = imgRef.current?.files;
     // imageFile.length + files.length을 통해 저장된 이미지 + 새로 추가할 이미지의 개수를 파악함
-    if (files && (imageFile.length + files.length > 3)) {
-      showToast('error', '파일은 3개까지 등록할 수 있습니다.')
+    if (files && (imageFile.length + files.length > maxImageLength)) {
+      showToast('error', `파일은 ${maxImageLength}개까지 등록할 수 있습니다.`)
       return;
     }
 

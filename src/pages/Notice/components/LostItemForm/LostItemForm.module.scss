@@ -1,0 +1,129 @@
+.container {
+  padding-top: 76px;
+  display: flex;
+  flex-direction: column;
+}
+
+.template {
+  width: 1136px;
+  height: 523px;
+  padding: 31px 96px 41px 80px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  box-shadow:
+    0px 4px 10px rgba(0, 0, 0, 8%),
+    0px 1px 4px rgba(0, 0, 0, 4%);
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas: 
+    'left right'
+    'bottom bottom';
+
+  &__left {
+    grid-area: left;
+  }
+
+  &__right {
+    grid-area: right;
+  }
+
+  &__bottom {
+    grid-area: bottom;
+  }
+}
+
+.tag {
+  width: 106px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 39px;
+  border-radius: 12px;
+  background-color: #e4f2ff;
+  color: #10477a;
+  font-family: Pretendard, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.2
+}
+
+.title {
+  font-family: Pretendard, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.2;
+
+  &__description {
+    color: #727272;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    line-height: 1.6
+  }
+}
+
+.left {
+  height: 254px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.category {
+  display: flex;
+  justify-content: space-between;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.image {
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__list {
+    width: 327px;
+    height: 128px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    display: flex;
+    gap: 8px;
+    box-sizing: border-box;
+    padding: 12px 12px 17px 12px;
+    margin: 16px 0 24px;
+    overflow-x: scroll;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__upload {
+    width: 327px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    background-color: #e4f2ff;
+    color: #10477a;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+
+    input {
+      display: none;
+    }
+  }
+}
