@@ -1,5 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import AddIcon from 'assets/svg/Notice/add.svg';
+import LostItemForm from 'pages/Notice/components/LostItemForm';
+import { useLostItemForm } from 'pages/Notice/hooks/useLostItemForm';
 import styles from './LostItemPage.module.scss';
 
 const titles = {
@@ -19,6 +21,7 @@ export default function LostItemPage() {
   const location = useLocation();
   const type: LostItemType = location.pathname.includes('/found') ? 'found' : 'lost';
   const { title, subtitle } = titles[type];
+  const { lostItems, lostItemHandler } = useLostItemForm();
 
   return (
     <div className={styles.container}>
@@ -26,6 +29,17 @@ export default function LostItemPage() {
         <div className={styles.header}>
           <span className={styles.header__title}>{title}</span>
           <span className={styles.header__subtitle}>{subtitle}</span>
+        </div>
+        <div className={styles.forms}>
+          {lostItems.map((lostItem, index) => (
+            <LostItemForm
+              key={index}
+              type={type}
+              count={index}
+              lostItem={lostItem}
+              lostItemHandler={lostItemHandler(index)}
+            />
+          ))}
         </div>
         <div className={styles.add}>
           <button
