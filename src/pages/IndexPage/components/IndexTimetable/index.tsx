@@ -1,11 +1,9 @@
 import React, { Suspense, useEffect } from 'react';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import { Link } from 'react-router-dom';
-import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
-import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -29,9 +27,7 @@ function CurrentSemesterTimetable() {
     }
   }, [timetableFrameList]);
 
-  const { myLectures } = useMyLectures(currentFrameIndex);
-
-  return myLectures ? (
+  return (
     <Timetable
       frameId={currentFrameIndex}
       columnWidth={44}
@@ -39,10 +35,6 @@ function CurrentSemesterTimetable() {
       rowHeight={17.3}
       totalHeight={369}
     />
-  ) : (
-    <div className={styles['template__loading-spinner']}>
-      <LoadingSpinner />
-    </div>
   );
 }
 

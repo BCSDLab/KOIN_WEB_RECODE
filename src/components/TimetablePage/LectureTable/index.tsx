@@ -8,7 +8,7 @@ import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { toast } from 'react-toastify';
+import showToast from 'utils/ts/showToast';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
@@ -62,7 +62,7 @@ function LectureTable({
 
   const handleEditLectureClick = (lectureIndex: number) => {
     if (!token) {
-      toast.error('강의 수정은 로그인 후 이용할 수 있습니다.');
+      showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
       return;
     }
 

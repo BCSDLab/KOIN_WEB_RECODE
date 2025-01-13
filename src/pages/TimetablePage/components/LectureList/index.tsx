@@ -292,12 +292,12 @@ function LectureList({ frameId }: { frameId: number }) {
                 department: departmentFilterValue ?? '전체',
                 search: searchValue ?? '',
               }}
-              myLectures={myLectures as MyLectureInfo[]}
+              myLectures={(myLectures ?? []) as MyLectureInfo[]}
             />
           ) : (
             <MyLectureListBox
               rowWidthList={widthInfo}
-              myLectures={myLectures as MyLectureInfo[]}
+              myLectures={(myLectures ?? []) as MyLectureInfo[]}
               frameId={frameId}
             />
           )}

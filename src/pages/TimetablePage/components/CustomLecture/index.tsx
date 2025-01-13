@@ -17,20 +17,6 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
 
-const initialTimeSpaceComponent: TimeSpaceComponents = {
-  time: {
-    startHour: '09시',
-    startMinute: '00분',
-    endHour: '10시',
-    endMinute: '00분',
-  },
-  week: [],
-  startTime: 0,
-  endTime: 1,
-  place: '',
-  id: uuidv4(),
-};
-
 type Hour = '09시' | '10시' | '11시' | '12시' | '13시' | '14시' | '15시' | '16시' | '17시' | '18시' | '19시' | '20시' | '21시' | '22시' | '23시' | '24시';
 
 type Minute = '00분' | '30분';
@@ -49,6 +35,20 @@ type TimeSpaceComponents = {
   id: string,
 };
 
+const initialTimeSpaceComponent: TimeSpaceComponents = {
+  time: {
+    startHour: '09시',
+    startMinute: '00분',
+    endHour: '10시',
+    endMinute: '00분',
+  },
+  week: ['월'],
+  startTime: 0,
+  endTime: 1,
+  place: '',
+  id: uuidv4(),
+};
+
 function CustomLecture({ frameId }: { frameId: number }) {
   const token = useTokenState();
   const customTempLecture = useCustomTempLecture();
@@ -65,12 +65,9 @@ function CustomLecture({ frameId }: { frameId: number }) {
   // 직접 추가 input 값
   const [lectureName, setLectureName] = useState('');
   const [professorName, setProfessorName] = useState('');
-  const [
-    timeSpaceComponents, setTimeSpaceComponents,
-  ] = useState<TimeSpaceComponents[]>([{
-    ...initialTimeSpaceComponent,
-    week: ['월'],
-  }]);
+  const [timeSpaceComponents, setTimeSpaceComponents] = useState<TimeSpaceComponents[]>(
+    [initialTimeSpaceComponent],
+  );
 
   const timeSpaceContainerRef = useRef<HTMLDivElement>(null);
   const reverseRef = useRef<HTMLDivElement[] | null[]>([]);
@@ -78,7 +75,10 @@ function CustomLecture({ frameId }: { frameId: number }) {
   const [isFirstSubmit, setIsFirstSubmit] = useState(true);
 
   const isValid = (lectureName !== ''
-    && !timeSpaceComponents.some((time) => time.endTime - time.startTime < 0));
+    && !timeSpaceComponents.some(
+      (time) => time.endTime - time.startTime < 0 || time.week.length === 0,
+    )
+  );
   const isOverflow = timeSpaceContainerRef.current
     ? timeSpaceContainerRef.current.getBoundingClientRect().height > 400
     : false;
@@ -136,6 +136,8 @@ function CustomLecture({ frameId }: { frameId: number }) {
         };
     }
   });
+  console.log(timeSpaceComponents);
+  console.log(customTempLecture);
 
   const hasTimeConflict = (
     excludeLectureId?: number,
@@ -182,13 +184,13 @@ function CustomLecture({ frameId }: { frameId: number }) {
       return;
     }
 
-    if (selectedEditLecture) {
+    if (selectedEditLecture && customTempLecture) {
       editMyLecture({
         id: selectedEditLecture.id,
         class_title: lectureName,
-        lecture_infos: timeSpaceComponents.map((schedule) => ({
-          start_time: schedule.startTime,
-          end_time: schedule.endTime,
+        lecture_infos: customTempLecture.lecture_infos.map((schedule) => ({
+          start_time: schedule.start_time,
+          end_time: schedule.end_time,
           place: schedule.place,
         })),
         professor: professorName,
@@ -218,7 +220,9 @@ function CustomLecture({ frameId }: { frameId: number }) {
       return;
     }
 
-    setTimeSpaceComponents((prevComponents) => [...prevComponents, initialTimeSpaceComponent]);
+    setTimeSpaceComponents(
+      (prevComponents) => [...prevComponents, { ...initialTimeSpaceComponent, id: uuidv4() }],
+    );
 
     setTimeout(() => {
       timeSpaceContainerRef.current!.scrollTo({
@@ -331,8 +335,8 @@ function CustomLecture({ frameId }: { frameId: number }) {
 
     const updatedComponents = selectedEditLecture.lecture_infos.map(
       (info: LectureInfo) => {
-        // eslint-disable-next-line max-len
-        const findKeyByValue = (object: Record<Hour, number>, value: number) => Object.entries(object).find(([, val]) => val === value)?.[0] as Hour;
+        const findKeyByValue = (object: Record<Hour, number>, value: number) => Object
+          .entries(object).find(([, val]) => val === value)?.[0] as Hour;
         const startHour = info.start_time % 2 === 0
           ? findKeyByValue(START_TIME, info.start_time % 100)
           : findKeyByValue(START_TIME, (info.start_time % 100) - 1);
@@ -457,7 +461,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
                   htmlFor="place"
                   className={cn({
                     [styles['form-group-time__title']]: true,
-                    [styles['form-group-time__title--require']]: !isFirstSubmit && endTime - startTime < 0,
+                    [styles['form-group-time__title--require']]: !isFirstSubmit && (endTime - startTime < 0 || week.length === 0),
                     [styles['form-group-time__title--disabled']]: selectedEditLecture?.lecture_id !== null && (!!selectedEditLecture),
                   })}
                 >
@@ -505,7 +509,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
                   </div>
                 </div>
               </div>
-              {!isFirstSubmit && endTime - startTime < 0 && (
+              {!isFirstSubmit && (endTime - startTime < 0 || week.length === 0) && (
                 <div className={cn({
                   [styles.inputbox__warning]: true,
                   [styles['inputbox__warning--time']]: true,

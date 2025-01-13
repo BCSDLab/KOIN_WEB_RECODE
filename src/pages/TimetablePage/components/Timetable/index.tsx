@@ -16,7 +16,7 @@ import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { toast } from 'react-toastify';
+import showToast from 'utils/ts/showToast';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {
@@ -54,7 +54,7 @@ function Timetable({
 
   const handleEditLectureClick = (lectureIndex: number) => {
     if (!token) {
-      toast.error('강의 수정은 로그인 후 이용할 수 있습니다.');
+      showToast('info', '강의 수정은 로그인 후 이용할 수 있습니다.');
       return;
     }
 
@@ -240,11 +240,11 @@ function Timetable({
             }}
             key={`myLectures-${day}`}
           >
-            {myLectures.map((lecture, lectureIndex) => (
+            {(myLectures ?? []).map((lecture, lectureIndex) => (
               lecture.lecture_infos.map((info) => (
                 info.day === index && (
                   <div
-                    key={`${day}-${lecture.id}`}
+                    key={`${lecture.id}-${info.start_time}`}
                     className={styles.timetable__lecture}
                     style={
                       {
@@ -346,7 +346,7 @@ function Timetable({
                       width: isMobile ? undefined : `${columnWidth}px`,
                       height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight}px`,
                     }}
-                    key={`similarSelected-${lecture.id}`}
+                    key={`similarSelected-${lecture.id}-${info.start_time}`}
                   />
                 )))
             ))}
