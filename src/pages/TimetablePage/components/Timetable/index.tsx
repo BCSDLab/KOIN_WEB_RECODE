@@ -238,14 +238,13 @@ function Timetable({
               width: isMobile ? undefined : `${columnWidth}px`,
               height: `${timeString.length * rowHeight}px`,
             }}
-            // eslint-disable-next-line react/no-array-index-key
-            key={`${day}-${index}`}
+            key={`myLectures-${day}`}
           >
             {myLectures.map((lecture, lectureIndex) => (
               lecture.lecture_infos.map((info) => (
                 info.day === index && (
                   <div
-                    key={lecture.id}
+                    key={`${day}-${lecture.id}`}
                     className={styles.timetable__lecture}
                     style={
                       {
@@ -330,8 +329,7 @@ function Timetable({
               [styles.timetable__col]: true,
               [styles['timetable__col--preview']]: true,
             })}
-            // eslint-disable-next-line react/no-array-index-key
-            key={`${day}-${index}`}
+            key={`similarSelected-${day}`}
           >
             {similarSelectedLecture.map((lecture, lectureIndex) => (
               lecture.lecture_infos.map((info) => (
@@ -348,8 +346,7 @@ function Timetable({
                       width: isMobile ? undefined : `${columnWidth}px`,
                       height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight}px`,
                     }}
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={`similar-${lectureIndex}`}
+                    key={`similarSelected-${lecture.id}`}
                   />
                 )))
             ))}
@@ -382,8 +379,7 @@ function Timetable({
                     ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
                     gap: `${rowHeight / 5.5}px`,
                   }}
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={`${index}-${(info.start_time % 100)}-${(info.end_time % 100)}`}
+                  key={`${info.start_time}-${info.end_time}`}
                 >
                   <div
                     className={styles['timetable__lecture-name']}
