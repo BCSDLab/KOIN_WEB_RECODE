@@ -31,15 +31,13 @@ export const editTimetableLectureRegular = APIClient.of(TimetableLectureRegularE
 
 export const editTimetableLectureCustom = APIClient.of(TimetableLectureCustomEdit);
 
-// export const changeTimetableInfoByAddLecture = APIClient.of(TimetableLectureAddition);
-
 export const addTimetableLectureRegular = APIClient.of(TimetableLectureRegularAddition);
 
 export const addTimetableLectureCustom = APIClient.of(TimetableLectureCustomAddition);
 
 export const rollbackTimetableLecture = APIClient.of(TimetableLectureRollback);
 
-export const changeTimetableInfoByRemoveLecture = APIClient.of(TimetableLectureDeletion);
+export const deleteTimetableLecture = APIClient.of(TimetableLectureDeletion);
 
 export const getTimetableFrame = APIClient.of(TimetableFrameList);
 

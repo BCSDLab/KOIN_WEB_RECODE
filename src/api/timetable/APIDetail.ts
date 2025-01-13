@@ -5,7 +5,6 @@ import {
   LecturesResponse,
   SemesterCheckResponse,
   TimetableLectureInfoResponse,
-  // EditTimetableLectureRequest,
   DeleteTimetableLectureResponse,
   TimetableFrameListResponse,
   EditTimetableFrameRequest,
