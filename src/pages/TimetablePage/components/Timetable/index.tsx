@@ -188,7 +188,6 @@ function Timetable({
           </div>
         ))}
       </div>
-
       <div
         className={styles.timetable__content}
         ref={scrollRef}
