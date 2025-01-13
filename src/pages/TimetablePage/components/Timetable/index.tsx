@@ -362,7 +362,7 @@ function Timetable({
                 [styles['timetable__col--preview']]: true,
               })}
             >
-              {customTempLecture.lecture_infos.map((info) => (
+              {customTempLecture.lecture_infos.map((info, idx) => (
                 (info.end_time % 100) !== undefined
                 && Math.floor(info.end_time / 100) === index && (
                 <div
@@ -379,7 +379,8 @@ function Timetable({
                     ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
                     gap: `${rowHeight / 5.5}px`,
                   }}
-                  key={`${info.start_time}-${info.end_time}`}
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`${idx}-${info.start_time}-${info.end_time}`}
                 >
                   <div
                     className={styles['timetable__lecture-name']}

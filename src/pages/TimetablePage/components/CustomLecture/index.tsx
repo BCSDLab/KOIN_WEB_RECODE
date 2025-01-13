@@ -136,8 +136,6 @@ function CustomLecture({ frameId }: { frameId: number }) {
         };
     }
   });
-  console.log(timeSpaceComponents);
-  console.log(customTempLecture);
 
   const hasTimeConflict = (
     excludeLectureId?: number,
@@ -160,7 +158,8 @@ function CustomLecture({ frameId }: { frameId: number }) {
       return myLecture.lecture_infos.some(
         (info) => currentComponents!.some(
           (times) => Math.floor(times.start_time / 100) === info.day
-            && info.start_time % 100 <= times.end_time && times.start_time <= info.end_time % 100,
+            && info.start_time % 100 <= times.end_time % 100
+            && times.start_time % 100 <= info.end_time % 100,
         ),
       );
     });

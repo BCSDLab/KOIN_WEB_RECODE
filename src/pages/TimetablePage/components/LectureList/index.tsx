@@ -11,7 +11,6 @@ import showToast from 'utils/ts/showToast';
 import useLectureList from 'pages/TimetablePage/hooks/useLectureList';
 import useSearch from 'pages/TimetablePage/hooks/useSearch';
 import LectureTable, { LECTURE_TABLE_HEADER } from 'components/TimetablePage/LectureTable';
-import { useSearchParams } from 'react-router-dom';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
@@ -206,11 +205,6 @@ function LectureList({ frameId }: { frameId: number }) {
   // 가장 최신연도와 월을 가져옴
   const semester = useSemester();
 
-  // 이거 굳이 안 써도 될 수도..?
-  const [searchParam] = useSearchParams();
-  console.log(searchParam.get('year'));
-
-  // 추후 frameId로 변경
   const { myLectures } = useMyLectures(frameId);
 
   const [isToggled, setIsToggled] = React.useState(false);
