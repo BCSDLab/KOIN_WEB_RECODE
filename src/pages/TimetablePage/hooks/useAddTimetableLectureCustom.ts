@@ -1,6 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addTimetableLectureCustom } from 'api/timetable';
+import { AddTimetableLectureCustomRequest } from 'api/timetable/entity';
 import { toast } from 'react-toastify';
 import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 
@@ -8,7 +9,7 @@ export default function useAddTimetableLectureCustom(token: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (
-      data: Parameters<typeof addTimetableLectureCustom>[0],
+      data: AddTimetableLectureCustomRequest,
     ) => addTimetableLectureCustom(data, token),
     onSuccess: (data, variables) => {
       queryClient.setQueryData(

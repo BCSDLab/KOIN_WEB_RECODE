@@ -324,7 +324,7 @@ function Timetable({
             ))}
           </div>
         ))}
-        {DAYS_STRING.map((day, index) => (
+        {pathname.includes('regular') && similarSelectedLecture && DAYS_STRING.map((day, index) => (
           <div
             className={cn({
               [styles.timetable__col]: true,
@@ -333,7 +333,7 @@ function Timetable({
             // eslint-disable-next-line react/no-array-index-key
             key={`${day}-${index}`}
           >
-            {similarSelectedLecture?.map((lecture, lectureIndex) => (
+            {similarSelectedLecture.map((lecture, lectureIndex) => (
               lecture.lecture_infos.map((info) => (
                 info.day === index && (
                   <div
@@ -344,6 +344,7 @@ function Timetable({
                     style={{
                       borderWidth: selectedLectureIndex === lectureIndex ? '2px' : '1px',
                       top: `${(info.start_time % 100) * rowHeight}px`,
+                      left: `${firstColumnWidth + index * columnWidth + index + 1}px`,
                       width: isMobile ? undefined : `${columnWidth}px`,
                       height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight}px`,
                     }}
@@ -365,7 +366,8 @@ function Timetable({
               })}
             >
               {customTempLecture.lecture_infos.map((info) => (
-                (info.end_time % 100) !== undefined && (info.end_time % 100) === index && (
+                (info.end_time % 100) !== undefined
+                && Math.floor(info.end_time / 100) === index && (
                 <div
                   className={cn({
                     [styles.timetable__lecture]: true,

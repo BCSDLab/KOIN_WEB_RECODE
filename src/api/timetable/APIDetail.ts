@@ -81,7 +81,7 @@ export class TimetableLectureRegularEdit
   <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
-  path = '/v2/timetables/lecture/regular';
+  path = '/v3/timetables/lecture/regular';
 
   response!: R;
 
@@ -94,7 +94,7 @@ export class TimetableLectureCustomEdit
   <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
-  path = '/v2/timetables/lecture/custom';
+  path = '/v3/timetables/lecture/custom';
 
   response!: R;
 

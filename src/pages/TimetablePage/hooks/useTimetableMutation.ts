@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import useToast from 'components/common/Toast/useToast';
 import {
-  AddTimetableLecture,
+  AddTimetableCustomLecture,
   Lecture,
   MyLectureInfo,
   TimetableCustomLecture, TimetableRegularLecture,
@@ -43,25 +43,24 @@ export default function useTimetableMutation(frameId: number) {
 
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
 
-  const addMyLecture = (clickedLecture : AddTimetableLecture | Lecture) => {
+  const addMyLecture = (
+    clickedLecture : AddTimetableCustomLecture | Lecture,
+  ) => {
     if (token) {
-      if ('lecture_id' in clickedLecture) {
+      if ('name' in clickedLecture) {
         mutateAddWithServerRegular({
           timetable_frame_id: frameId,
-          lecture_id: clickedLecture.lecture_id,
+          lecture_id: clickedLecture.id,
         });
-      } else if ('timetable_lecture' in clickedLecture) {
+      } else {
         mutateAddWithServerCustom({
           timetable_frame_id: frameId,
           timetable_lecture:
             {
-              class_title: clickedLecture.timetable_lecture.class_title,
-              lecture_infos: clickedLecture.timetable_lecture.lecture_infos.map((info) => ({
-                start_time: info.start_time,
-                end_time: info.end_time,
-                place: info.place,
-              })),
-              professor: clickedLecture.timetable_lecture.professor,
+              class_title: clickedLecture.class_title,
+              lecture_infos: clickedLecture.lecture_infos,
+              professor: clickedLecture.professor,
+              grades: '0',
             },
         });
       }

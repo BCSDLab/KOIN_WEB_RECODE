@@ -16,13 +16,13 @@ const useCustomTempLectureStore = create<State & Action>((set, get) => ({
     class_title: '',
     lecture_infos: [
       {
-        day: 0,
         start_time: 0,
         end_time: 0,
         place: '',
       },
     ],
     professor: '',
+    grades: '0',
   },
   action: {
     updateCustomTempLecture: (customTempLecture) => {

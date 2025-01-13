@@ -39,6 +39,25 @@ export const START_TIME = {
   '24시': 30,
 };
 
-export const END_TIME = Object.fromEntries(
-  Object.entries(START_TIME).map(([key, value]) => [key, value - 1]),
-);
+// export const END_TIME = Object.fromEntries(
+//   Object.entries(START_TIME).map(([key, value]) => [key, value - 1]),
+// ) as Record<Hour, number>;
+
+export const END_TIME = {
+  '09시': -1,
+  '10시': 1,
+  '11시': 3,
+  '12시': 5,
+  '13시': 7,
+  '14시': 9,
+  '15시': 11,
+  '16시': 13,
+  '17시': 15,
+  '18시': 17,
+  '19시': 19,
+  '20시': 21,
+  '21시': 23,
+  '22시': 25,
+  '23시': 27,
+  '24시': 39,
+};

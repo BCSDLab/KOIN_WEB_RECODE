@@ -211,7 +211,7 @@ function LectureList({ frameId }: { frameId: number }) {
   console.log(searchParam.get('year'));
 
   // 추후 frameId로 변경
-  const { myLectures } = useMyLectures(13257);
+  const { myLectures } = useMyLectures(frameId);
 
   const [isToggled, setIsToggled] = React.useState(false);
   const { widthInfo } = useFlexibleWidth(9, [61, 173, 41, 61, 61, 41, 41, 41, 61]);

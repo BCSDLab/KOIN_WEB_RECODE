@@ -165,7 +165,7 @@ export type LectureInfo = {
 
 export interface MyLectureInfo {
   id: number;
-  lecture_id: number;
+  lecture_id: number | null;
   regular_number: string;
   code: string;
   design_score: string;
