@@ -12,10 +12,15 @@
   gap: 24px;
 
   @include media.media-breakpoint(mobile) {
-    width: 100%;
     min-width: 100%;
-    padding: 24px 0 0;
+    width: 100%;
+    padding: 40px 0 0;
     gap: 0;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    padding: 40px 0 0;
   }
 }
 
