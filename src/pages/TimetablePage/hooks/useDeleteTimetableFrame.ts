@@ -1,7 +1,9 @@
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { timetable } from 'api';
 import { TimetableFrameInfo } from 'api/timetable/entity';
 import useToast from 'components/common/Toast/useToast';
+import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 import useRollbackTimetableFrame from './useRollbackTimetableFrame';
 import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
@@ -29,6 +31,15 @@ export default function useDeleteTimetableFrame(token: string, frameInfo: Timeta
         recoverMessage: `[${frameInfo.name}]이 복구되었습니다.`,
         onRecover: recoverFrame,
       });
+    },
+
+    onError: (error) => {
+      if (isKoinError(error)) {
+        showToast('error', error.message || '시간표 프레임 삭제에 실패했습니다.');
+      } else {
+        sendClientError(error);
+        showToast('error', '시간표 프레임 삭제에 실패했습니다.');
+      }
     },
   });
 }
