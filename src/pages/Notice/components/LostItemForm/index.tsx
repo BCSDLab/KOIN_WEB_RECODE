@@ -129,7 +129,12 @@ export default function LostItemForm({
           </div>
           <div className={styles.location}>
             <span className={styles.title}>습득 장소</span>
-            {location}
+            <input
+              className={styles.location__input}
+              defaultValue={location}
+              onBlur={(e) => setLocation(e.target.value)}
+              placeholder="습득 일자를 선택해주세요."
+            />
           </div>
         </div>
 
@@ -170,12 +175,15 @@ export default function LostItemForm({
         </div>
 
         <div className={styles.template__bottom}>
-          <span className={styles.title}>내용</span>
-          <textarea
-            placeholder="습득한 물건에 대한 설명을 적어주세요."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+          <div className={styles.content}>
+            <span className={styles.title}>내용</span>
+            <textarea
+              className={styles.content__input}
+              placeholder="습득한 물건에 대한 설명을 적어주세요."
+              defaultValue={content}
+              onBlur={(e) => setContent(e.target.value)}
+            />
+          </div>
         </div>
       </div>
     </div>
