@@ -1,7 +1,13 @@
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
-import RemoveImageIcon from 'assets/svg/Notice/remove-image.svg';
+import { cn } from '@bcsdlab/utils';
+import ChevronDown from 'assets/svg/Notice/chevron-down.svg';
 import PhotoIcon from 'assets/svg/Notice/photo.svg';
+import RemoveImageIcon from 'assets/svg/Notice/remove-image.svg';
+import Calendar from 'pages/Notice/components/Calendar';
 import { LostItem, LostItemHandler } from 'pages/Notice/hooks/useLostItemForm';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_IMAGE_COUNT = 10;
@@ -11,7 +17,16 @@ const MAX_LOST_ITEM_TYPE = {
   lost: '분실물',
 };
 
-interface LostItemFromProps {
+const CATEGORIES = ['카드', '신분증', '지갑', '전자제품', '그 외'];
+
+const getyyyyMMdd = (date: Date) => {
+  const yyyy = date.getFullYear();
+  const MM = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${yyyy}.${MM}.${dd}`;
+};
+
+interface LostItemFormProps {
   type: 'found' | 'lost';
   count: number;
   lostItem: LostItem;
@@ -19,17 +34,32 @@ interface LostItemFromProps {
 }
 
 export default function LostItemForm({
-  type, count, lostItem, lostItemHandler
-}: LostItemFromProps) {
-  const { category, foundDate, location, content, image } = lostItem;
-  const { setCategory, setFoundDate, setLocation, setContent, setImage } = lostItemHandler;
+  type, count, lostItem, lostItemHandler,
+}: LostItemFormProps) {
+  const {
+    category, foundDate, location, content, images, hasBeenSelected,
+  } = lostItem;
+  const {
+    setCategory, setFoundDate, setLocation, setContent, setImage, setHasBeenSelected,
+  } = lostItemHandler;
   const {
     imageFile, imgRef, saveImgFile, setImageFile,
   } = useImageUpload(MAX_LOST_ITEM_IMAGE_COUNT);
 
+  const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
+
+  const handleDateSelect = (date: Date) => {
+    setFoundDate(date);
+    setHasBeenSelected();
+    closeCalendar();
+  };
+
   const deleteImage = (url: string) => {
     setImageFile(imageFile.filter((image: string) => image !== url));
   };
+
+  const { containerRef } = useOutsideClick({ onOutsideClick: closeCalendar });
+  useEscapeKeyDown({ onEscape: closeCalendar });
 
   return (
     <div className={styles.container}>
@@ -45,11 +75,57 @@ export default function LostItemForm({
               <span className={styles.title}>품목</span>
               <span className={styles.title__description}>품목을 선택해주세요.</span>
             </div>
-            {category}
+            <div className={styles.category__buttons}>
+              {CATEGORIES.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={cn({
+                    [styles.category__button]: true,
+                    [styles['category__button--selected']]: category === item,
+                  })}
+                  onClick={() => setCategory(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className={styles.date}>
+          <div
+            className={styles.date}
+          >
             <span className={styles.title}>습득 일자</span>
-            {foundDate}
+            <div ref={containerRef}>
+              <button
+                className={styles.date__toggle}
+                type="button"
+                onClick={() => toggleCalendar()}
+              >
+                <span
+                  className={cn({
+                    [styles.date__description]: true,
+                    [styles['date__description--has-been-selected']]: hasBeenSelected,
+                  })}
+                >
+                  {hasBeenSelected ? getyyyyMMdd(foundDate) : '습득 일자를 선택해주세요.'}
+                </span>
+                <span className={cn({
+                  [styles.icon]: true,
+                  [styles['icon--open']]: calendarOpen,
+                })}
+                >
+                  <ChevronDown />
+                </span>
+              </button>
+              {calendarOpen && (
+                <div className={styles.date__calendar}>
+                  <Calendar
+                    selectedDate={foundDate}
+                    setSelectedDate={handleDateSelect}
+                  />
+                </div>
+              )}
+            </div>
           </div>
           <div className={styles.location}>
             <span className={styles.title}>습득 장소</span>
@@ -87,6 +163,7 @@ export default function LostItemForm({
                 id="image-file"
                 multiple
                 onChange={saveImgFile}
+                aria-label="사진 등록하기"
               />
             </label>
           </div>
