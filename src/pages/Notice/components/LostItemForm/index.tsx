@@ -1,4 +1,5 @@
 import { cn } from '@bcsdlab/utils';
+import { uploadLostItemFile } from 'api/uploadFile';
 import ChevronDown from 'assets/svg/Notice/chevron-down.svg';
 import PhotoIcon from 'assets/svg/Notice/photo.svg';
 import RemoveImageIcon from 'assets/svg/Notice/remove-image.svg';
@@ -9,8 +10,6 @@ import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LostItemForm.module.scss';
-
-const MAX_LOST_ITEM_IMAGE_COUNT = 10;
 
 const MAX_LOST_ITEM_TYPE = {
   found: '습득물',
@@ -40,11 +39,14 @@ export default function LostItemForm({
     category, foundDate, location, content, images, hasBeenSelected,
   } = lostItem;
   const {
-    setCategory, setFoundDate, setLocation, setContent, setImage, setHasBeenSelected,
+    setCategory, setFoundDate, setLocation, setContent, setImages, setHasBeenSelected,
   } = lostItemHandler;
   const {
     imageFile, imgRef, saveImgFile, setImageFile,
-  } = useImageUpload(MAX_LOST_ITEM_IMAGE_COUNT);
+  } = useImageUpload({
+    maxLength: 10,
+    uploadFn: uploadLostItemFile,
+  });
 
   const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
 
@@ -52,6 +54,12 @@ export default function LostItemForm({
     setFoundDate(date);
     setHasBeenSelected();
     closeCalendar();
+  };
+
+  const saveImage = async () => {
+    saveImgFile().then((res) => {
+      setImageFile([...imageFile, ...res!]);
+    });
   };
 
   const deleteImage = (url: string) => {
@@ -139,16 +147,21 @@ export default function LostItemForm({
         </div>
 
         <div className={`${styles.template__right} ${styles.right}`}>
-          <div className={styles.image}>
-            <div className={styles.image__text}>
+          <div className={styles.images}>
+            <div className={styles.images__text}>
               <span className={styles.title}>사진</span>
               <span className={styles.title__description}>습득물 사진을 업로드해주세요.</span>
             </div>
-            <ul className={styles.image__list}>
+            <ul className={styles.images__list}>
               {imageFile.map((url: string) => (
-                <li key={url}>
-                  <img src={url} alt="분실물 이미지" />
+                <li key={url} className={styles.images__item}>
+                  <img
+                    src={url}
+                    className={styles.images__image}
+                    alt="분실물 이미지"
+                  />
                   <button
+                    className={styles.images__delete}
                     type="button"
                     aria-label="이미지 삭제"
                     onClick={() => deleteImage(url)}
@@ -158,7 +171,7 @@ export default function LostItemForm({
                 </li>
               ))}
             </ul>
-            <label htmlFor="image-file" className={styles.image__upload}>
+            <label htmlFor="image-file" className={styles.images__upload}>
               <PhotoIcon />
               사진 등록하기
               <input
@@ -167,7 +180,7 @@ export default function LostItemForm({
                 accept="image/*"
                 id="image-file"
                 multiple
-                onChange={saveImgFile}
+                onChange={() => saveImage()}
                 aria-label="사진 등록하기"
               />
             </label>

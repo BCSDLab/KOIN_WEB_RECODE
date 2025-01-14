@@ -12,7 +12,10 @@ import { ReviewRequest } from 'api/review/entity';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
+import { uploadShopFile } from 'api/uploadFile';
 import styles from './ReviewForm.module.scss';
+
+const MAX_IMAGE_LENGTH = 3;
 
 interface Props {
   storeDetail: StoreDetailResponse;
@@ -36,7 +39,10 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
 
   const {
     imageFile, imgRef, saveImgFile, setImageFile,
-  } = useImageUpload();
+  } = useImageUpload({
+    maxLength: MAX_IMAGE_LENGTH,
+    uploadFn: uploadShopFile,
+  });
 
   useEffect(() => {
     if (initialData?.image_urls) {
@@ -132,11 +138,12 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
           <span>사진</span>
           <span className={cn({
             [styles.template__title__count]: true,
-            [styles['template__title__count--active']]: imageFile.length === 3,
+            [styles['template__title__count--active']]: imageFile.length === MAX_IMAGE_LENGTH,
           })}
           >
             {imageFile.length}
-            /3
+            /
+            {MAX_IMAGE_LENGTH}
           </span>
         </div>
         <div className={styles.template__description}>리뷰와 관련된 사진을 업로드해주세요.</div>
