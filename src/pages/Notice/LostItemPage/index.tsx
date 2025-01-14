@@ -2,6 +2,7 @@ import AddIcon from 'assets/svg/Notice/add.svg';
 import LostItemForm from 'pages/Notice/components/LostItemForm';
 import { useLostItemForm } from 'pages/Notice/hooks/useLostItemForm';
 import { useLocation } from 'react-router-dom';
+import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './LostItemPage.module.scss';
 
 const titles = {
@@ -33,7 +34,7 @@ export default function LostItemPage() {
         <div className={styles.forms}>
           {lostItems.map((lostItem, index) => (
             <LostItemForm
-              key={new Date().getTime()}
+              key={uuidv4()}
               type={type}
               count={index}
               lostItem={lostItem}
