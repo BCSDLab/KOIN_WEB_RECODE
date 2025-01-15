@@ -34,7 +34,7 @@ function SemesterList() {
 
   const { mutate: deleteTimetableFrame } = useDeleteSemester(
     token,
-    selectedSemester!,
+    selectedSemester,
   );
 
   const semesterListToggle = (e: React.MouseEvent<HTMLButtonElement>) => {

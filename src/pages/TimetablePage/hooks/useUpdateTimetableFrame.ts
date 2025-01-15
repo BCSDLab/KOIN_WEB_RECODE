@@ -23,7 +23,7 @@ export default function useUpdateTimetableFrame() {
       ),
       onSuccess: () => {
         queryClient.invalidateQueries(
-          { queryKey: [TIMETABLE_FRAME_KEY + semester!.year + semester!.term] },
+          { queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] },
         );
       },
       onError: (error) => {

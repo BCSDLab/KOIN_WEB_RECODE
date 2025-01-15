@@ -24,7 +24,7 @@ export default function useDeleteTimetableFrame(token: string, frameInfo: Timeta
 
     onSuccess: () => {
       queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_FRAME_KEY + semester!.year + semester!.term] },
+        { queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] },
       );
       toast.open({
         message: `선택하신 [${frameInfo.name}]이 삭제되었습니다.`,

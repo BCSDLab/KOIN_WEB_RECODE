@@ -15,7 +15,7 @@ function TimetablePage() {
   const token = useTokenState();
   const semester = useSemester();
   const location = useLocation();
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester!);
+  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const mainFrame = timetableFrameList.find(
     (frame) => frame.is_main === true,
   );

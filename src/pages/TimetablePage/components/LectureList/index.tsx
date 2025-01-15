@@ -280,7 +280,7 @@ function LectureList({ frameId }: { frameId: number }) {
             <CurrentSemesterLectureList
               rowWidthList={widthInfo}
               frameId={frameId}
-              currentSemester={semester!}
+              currentSemester={semester}
               filter={{
                 // 백엔드 수정하면 제거
                 department: departmentFilterValue ?? '전체',

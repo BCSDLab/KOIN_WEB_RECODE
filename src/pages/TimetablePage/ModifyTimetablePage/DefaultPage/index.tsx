@@ -20,7 +20,7 @@ export default function DefaultPage({ frameId }: { frameId: number }) {
   const semester = useSemester();
   const { pathname } = useLocation();
   const { myLectures } = useMyLectures(Number(frameId));
-  const { data: lectureList } = useLectureList(semester!);
+  const { data: lectureList } = useLectureList(semester);
   const tempLecture = useTempLecture();
   const similarSelectedLecture = lectureList
     ?.filter((lecture) => lecture.code === tempLecture?.code)

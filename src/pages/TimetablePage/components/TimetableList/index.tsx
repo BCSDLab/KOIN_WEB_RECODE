@@ -30,7 +30,7 @@ export default function TimetableList({
   const portalManager = useModalPortal();
   const semester = useSemester();
   const token = useTokenState();
-  const { data } = useTimetableFrameList(token, semester!);
+  const { data } = useTimetableFrameList(token, semester);
   const { data: mySemester } = useSemesterCheck(token);
   const { mutate: addTimetableFrame } = useAddTimetableFrame(token);
 
@@ -61,7 +61,7 @@ export default function TimetableList({
         toast('학기가 존재하지 않습니다. 학기를 추가해주세요.');
       } else {
         addTimetableFrame(
-          semester!,
+          semester,
           {
             onSuccess: (newTimetable) => {
               if (newTimetable && newTimetable[newTimetable.length - 1].id) {

@@ -16,7 +16,7 @@ export default function useDeleteSemester(token: string, semester: Semester) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [MY_SEMESTER_INFO_KEY] });
       queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_FRAME_KEY + semester!.year + semester!.term] },
+        { queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] },
       );
       toast.open({
         message: `선택하신 [${slicedSemester}]가 삭제되었습니다.`,

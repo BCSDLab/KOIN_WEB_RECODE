@@ -17,7 +17,7 @@ export default function useAddSemester(token: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [MY_SEMESTER_INFO_KEY] });
       queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_FRAME_KEY + semester!.year + semester!.term] },
+        { queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] },
       );
     },
     onError: (error) => {
