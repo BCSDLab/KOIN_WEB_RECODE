@@ -68,13 +68,24 @@
 
   &__description {
     display: flex;
-    width: 900px;
+    flex-direction: column;
     height: 68px;
     border: none;
     border-radius: 16px;
     background-color: #fff;
     font-family: Pretendard, sans-serif;
-    font-size: 20px;
-    font-weight: 500;
+    box-sizing: border-box;
+    padding: 10px 0 10px 24px;
+
+    &--title {
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+
+      & > strong {
+        color: #3b82f6;
+      }
+    }
   }
 }
