@@ -75,7 +75,6 @@ export class TimetableLectureInfo
   }
 }
 
-// v3
 export class TimetableLectureRegularEdit
   <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
