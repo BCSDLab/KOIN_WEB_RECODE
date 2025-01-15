@@ -22,10 +22,11 @@ export default function LostItemPage() {
   const location = useLocation();
   const type: LostItemType = location.pathname.includes('/found') ? 'found' : 'lost';
   const { title, subtitle } = titles[type];
-  const { lostItems, lostItemHandler } = useLostItemForm();
+  const { lostItems, lostItemHandler, addLostItem } = useLostItemForm();
 
   const handleCompleteClick = () => {
     console.log('complete');
+    console.log(lostItems);
     lostItems.forEach((lostItem) => {
       console.log(lostItem);
     });
@@ -53,7 +54,7 @@ export default function LostItemPage() {
           <button
             className={styles.add__button}
             type="button"
-            onClick={() => {}}
+            onClick={addLostItem}
           >
             <AddIcon />
             물품 추가
