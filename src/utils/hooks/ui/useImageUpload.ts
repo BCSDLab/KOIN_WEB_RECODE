@@ -9,13 +9,13 @@ export type UploadError = '413' | '415' | '404' | '422' | 'networkError' | '401'
 const MAXSIZE = 1024 * 1024 * 10;
 
 interface UseImageUploadOptions {
-  maxLength: number;
+  maxLength?: number;
   uploadFn: typeof uploadShopFile | typeof uploadLostItemFile;
 }
 
 /* eslint-disable */
 export default function useImageUpload({
-  maxLength,
+  maxLength = 3,
   uploadFn,
 }: UseImageUploadOptions) {
   const token = useTokenState();

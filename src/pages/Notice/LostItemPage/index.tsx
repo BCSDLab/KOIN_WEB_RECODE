@@ -24,6 +24,13 @@ export default function LostItemPage() {
   const { title, subtitle } = titles[type];
   const { lostItems, lostItemHandler } = useLostItemForm();
 
+  const handleCompleteClick = () => {
+    console.log('complete');
+    lostItems.forEach((lostItem) => {
+      console.log(lostItem);
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
@@ -56,7 +63,7 @@ export default function LostItemPage() {
           <button
             className={styles.complete__button}
             type="button"
-            onClick={() => {}}
+            onClick={handleCompleteClick}
           >
             작성 완료
           </button>

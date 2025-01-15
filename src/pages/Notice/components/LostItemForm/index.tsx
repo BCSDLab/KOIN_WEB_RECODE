@@ -9,6 +9,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import showToast from 'utils/ts/showToast';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
@@ -17,6 +18,8 @@ const MAX_LOST_ITEM_TYPE = {
 };
 
 const CATEGORIES = ['카드', '신분증', '지갑', '전자제품', '그 외'];
+
+const MAX_IMAGES_LENGTH = 10;
 
 const getyyyyMMdd = (date: Date) => {
   const yyyy = date.getFullYear();
@@ -42,11 +45,8 @@ export default function LostItemForm({
     setCategory, setFoundDate, setLocation, setContent, setImages, setHasBeenSelected,
   } = lostItemHandler;
   const {
-    imageFile, imgRef, saveImgFile, setImageFile,
-  } = useImageUpload({
-    maxLength: 10,
-    uploadFn: uploadLostItemFile,
-  });
+    imgRef, saveImgFile,
+  } = useImageUpload({ uploadFn: uploadLostItemFile });
 
   const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
 
@@ -57,13 +57,18 @@ export default function LostItemForm({
   };
 
   const saveImage = async () => {
+    if (images.length >= MAX_IMAGES_LENGTH) {
+      showToast('error', `파일은 ${MAX_IMAGES_LENGTH}개까지 등록할 수 있습니다.`);
+      return;
+    }
+
     saveImgFile().then((res) => {
-      setImageFile([...imageFile, ...res!]);
+      setImages([...images, ...res!]);
     });
   };
 
   const deleteImage = (url: string) => {
-    setImageFile(imageFile.filter((image: string) => image !== url));
+    setImages(images.filter((image: string) => image !== url));
   };
 
   const { containerRef } = useOutsideClick({ onOutsideClick: closeCalendar });
@@ -141,7 +146,7 @@ export default function LostItemForm({
               className={styles.location__input}
               defaultValue={location}
               onBlur={(e) => setLocation(e.target.value)}
-              placeholder="습득 일자를 선택해주세요."
+              placeholder="습득 장소를 선택해주세요."
             />
           </div>
         </div>
@@ -153,7 +158,7 @@ export default function LostItemForm({
               <span className={styles.title__description}>습득물 사진을 업로드해주세요.</span>
             </div>
             <ul className={styles.images__list}>
-              {imageFile.map((url: string) => (
+              {images.map((url: string) => (
                 <li key={url} className={styles.images__item}>
                   <img
                     src={url}
