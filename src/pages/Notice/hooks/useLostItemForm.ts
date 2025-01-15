@@ -35,7 +35,7 @@ const initialForm: LostItem = {
 };
 
 export const useLostItemForm = () => {
-  const [lostItems, setLostItems] = useState<Array<LostItem>>([initialForm]);
+  const [lostItems, setLostItems] = useState<Array<LostItem>>([{ ...initialForm }]);
 
   const lostItemHandler = (key: number) => ({
     setCategory: (category: string) => {
@@ -83,7 +83,7 @@ export const useLostItemForm = () => {
   });
 
   const addLostItem = () => {
-    setLostItems((prev) => [...prev, initialForm]);
+    setLostItems((prev) => [...prev, { ...initialForm }]);
   };
 
   return {
