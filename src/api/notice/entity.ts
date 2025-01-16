@@ -47,3 +47,59 @@ export interface ArticleResponse extends Article, APIResponse {
 export interface HotArticle extends Article { }
 
 export type HotArticlesResponse = HotArticle[];
+
+// GET /articles/lost-item (목록 조회용)
+interface LostItemArticleForGetDTO {
+  id: number;
+  board_id: number;
+  category: string;
+  found_place: string;
+  found_date: string;
+  content: string;
+  author: string;
+  registered_at: string;
+  updated_at: string;
+}
+
+export interface LostItemArticlesResponseDTO extends APIResponse {
+  articles: LostItemArticleForGetDTO[];
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
+}
+
+interface ImageDTO {
+  id: number;
+  image_url: string;
+}
+
+export interface SingleLostItemArticleResponseDTO extends APIResponse {
+  id: number;
+  board_id: number;
+  category: string;
+  found_place: string;
+  found_date: string;
+  content: string;
+  author: string;
+  images: ImageDTO[];
+  prev_id: number | null;
+  next_id: number | null;
+  registered_at: string; // yyyy-MM-dd
+  updated_at: string; // yyyy-MM-dd HH:mm:ss
+}
+
+export interface LostItemResponse extends APIResponse {}
+
+// POST /articles/lost-item (목록 조회용)
+interface LostItemArticleForPostDTO {
+  category: string;
+  found_place: string;
+  found_date: string; // yy-MM-dd
+  content: string;
+  images: string[];
+}
+
+export interface LostItemArticlesRequestDTO {
+  articles: Array<LostItemArticleForPostDTO>;
+}

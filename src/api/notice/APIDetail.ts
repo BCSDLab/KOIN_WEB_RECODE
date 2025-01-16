@@ -3,6 +3,10 @@ import {
   ArticlesResponse,
   ArticleResponse,
   HotArticlesResponse,
+  SingleLostItemArticleResponseDTO,
+  LostItemArticlesResponseDTO,
+  LostItemResponse,
+  LostItemArticlesRequestDTO,
 } from './entity';
 
 const BOARD_IDS = {
@@ -51,4 +55,55 @@ export class GetHotArticles<R extends HotArticlesResponse> implements APIRequest
   path = '/articles/hot';
 
   response!: R;
+}
+
+export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/articles/lost-item';
+
+  response!: R;
+
+  auth = false;
+}
+
+export class GetSingleLostItemArticle<R
+extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = false;
+
+  constructor(id: number) {
+    this.path = `/articles/lost-item/${id}`;
+  }
+}
+
+export class PostLostItemArticles<R extends LostItemResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/articles/lost-item';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public data: LostItemArticlesRequestDTO) { }
+}
+
+export class DeleteLostItemArticle<R extends LostItemResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(id: number) {
+    this.path = `/articles/lost-item/${id}`;
+  }
 }
