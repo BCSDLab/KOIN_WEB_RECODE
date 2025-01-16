@@ -1,11 +1,29 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
-export type SemesterInfo = {
-  id: number;
-  semester: string;
+// v3-semester
+export type Term = '1학기' | '여름학기' | '2학기' | '겨울학기';
+
+export type Semester = {
+  year: number;
+  term: Term;
 };
 
-export interface LectureInfo {
+export type SemestersResponse = Semester[];
+
+export interface SemesterCheckResponse extends APIResponse {
+  user_id: number;
+  semesters: Semester[];
+}
+
+// v3-lecture
+export type LectureInfo = {
+  day: number;
+  start_time: number;
+  end_time: number;
+  place: string;
+};
+
+export interface Lecture {
   id: number;
   code: string;
   name: string;
@@ -18,21 +36,19 @@ export interface LectureInfo {
   is_english?: string;
   design_score: string;
   is_elearning?: string;
-  class_time: Array<number>;
+  lecture_infos: LectureInfo[];
 }
 
-export type LectureSchedule = {
-  class_time: number[],
-  class_place?: string,
-};
+export type LecturesResponse = Lecture[];
 
+// v3-timetables-lecture
 export interface MyLectureInfo {
   id: number;
-  code: string;
-  lecture_id: number;
+  lecture_id: number | null;
   regular_number: string;
+  code: string;
   design_score: string;
-  class_infos: LectureSchedule[];
+  lecture_infos: LectureInfo[];
   memo: string;
   grades: string;
   class_title: string;
@@ -42,45 +58,6 @@ export interface MyLectureInfo {
   department: string;
 }
 
-export interface TimetableLectureInfo {
-  id: number;
-  lecture_id?: number;
-  class_title: string | null;
-  class_infos: LectureSchedule[] | null;
-  professor?: string | null;
-  grades?: string;
-  memo?: string;
-}
-
-export type TimetableFrameInfo = {
-  id: number | null;
-  timetable_name: string;
-  is_main: boolean;
-};
-
-export type VersionType = 'android' | 'timetable' | 'shuttle_bus_timetable' | 'express_bus_timetable' | 'city_bus_timetable';
-
-export type VersionInfo = {
-  id: string;
-  version: string;
-  type: string;
-  created_at: string;
-  updated_at: string;
-};
-
-// V1-시간표
-export type SemesterResponse = SemesterInfo[];
-
-export type LectureInfoResponse = LectureInfo[];
-
-export interface SemesterCheckResponse extends APIResponse {
-  user_id: number;
-  semesters: string[];
-}
-
-// V2-시간표
-// 강의 관련 요청 / 응답
-
 export interface TimetableLectureInfoResponse extends APIResponse {
   timetable_frame_id: number;
   timetable: MyLectureInfo[];
@@ -88,34 +65,91 @@ export interface TimetableLectureInfoResponse extends APIResponse {
   total_grades: number;
 }
 
-export interface EditTimetableLectureRequest {
-  timetable_frame_id: number;
-  timetable_lecture: TimetableLectureInfo[];
+interface ClassPlace {
+  class_place: string;
 }
 
-export interface AddTimetableLectureRequest {
-  timetable_frame_id: number;
-  timetable_lecture: Omit<TimetableLectureInfo, 'id'>[];
+export interface TimetableRegularLecture {
+  id: number;
+  lecture_id: number;
+  class_title: string;
+  class_places: ClassPlace[];
 }
+
+export interface TimetableLectureRegularEditRequest {
+  timetable_frame_id: number;
+  timetable_lecture: TimetableRegularLecture;
+}
+
+export interface LectureCustomInfo {
+  start_time: number;
+  end_time: number;
+  place: string;
+}
+
+export interface TimetableCustomLecture {
+  id: number;
+  class_title: string;
+  lecture_infos: LectureCustomInfo[];
+  professor: string;
+}
+
+export interface TimetableLectureCustomEditRequest {
+  timetable_frame_id: number;
+  timetable_lecture: TimetableCustomLecture;
+}
+
+export interface AddLectureInfo {
+  start_time: number;
+  end_time: number;
+  place: string;
+}
+
+export interface AddTimetableCustomLecture {
+  class_title: string;
+  lecture_infos: AddLectureInfo[];
+  professor: string;
+  grades?: string;
+  memo?: string;
+}
+
+export interface AddTimetableLectureCustomRequest {
+  timetable_frame_id: number;
+  timetable_lecture: AddTimetableCustomLecture;
+}
+
+export interface AddTimetableLectureRegularRequest {
+  timetable_frame_id: number;
+  lecture_id: number;
+}
+
+export interface RollbackTimetableLectureRequest {
+  timetable_lectures_id: number[];
+}
+
+// v3-timetables-frame
+export type TimetableFrameInfo = {
+  id: number | null;
+  name: string;
+  is_main: boolean;
+};
 
 export interface DeleteTimetableLectureResponse extends APIResponse { }
 
-// 시간표 프레임 관련 요청 / 응답
 export type TimetableFrameListResponse = TimetableFrameInfo[];
 
 export interface EditTimetableFrameRequest {
-  timetable_name: string;
+  name: string;
   is_main: boolean;
 }
 
-export interface AddTimetableFrameRequest {
-  semester: string;
-  timetable_name?: string;
-}
+export type AddTimetableFrameRequest = Semester;
 
 export interface DeleteTimetableFrameResponse extends APIResponse { }
 
 export interface DeleteSemesterResponse extends APIResponse { }
+
+export type VersionType = 'android' | 'timetable' | 'shuttle_bus_timetable' | 'express_bus_timetable' | 'city_bus_timetable';
 
 export interface VersionInfoResponse extends APIResponse {
   id: number;
