@@ -2,7 +2,6 @@
 import React from 'react';
 import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
@@ -14,8 +13,6 @@ import CalculatorHelpModal from './CalculatorHelpModal';
 
 function GraduationCalculatorPage() {
   const portalManager = useModalPortal();
-  // const [isOpenModal, openModal, closeModal] = useBooleanState(false);
-
   const handleInformationClick = () => {
     portalManager.open(() => (
       <CalculatorHelpModal closeInfo={portalManager.close} />
