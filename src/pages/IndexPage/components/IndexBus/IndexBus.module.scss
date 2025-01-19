@@ -24,11 +24,13 @@
     font-family: Pretendard, sans-serif;
     font-size: 18px;
     font-weight: 500;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
-      margin: 0 0 0 16px;
-      padding-left: 3px;
+      margin-top: 0;
       font-size: 18px;
+      padding-left: 3px;
+      margin-left: 16px;
       font-weight: 700;
     }
   }
