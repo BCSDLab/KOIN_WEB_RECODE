@@ -15,9 +15,7 @@ function CalculatorHelpModal({ closeInfo }: { closeInfo: () => void }) {
             코인 졸업학점 계산기는 전공•학번별
             <strong> 졸업 필요 학점과 이수학점을 비교해줘요.</strong>
           </p>
-          <p
-            className={styles.container__description}
-          >
+          <p className={styles.container__description}>
             아우누리에서 성적이력 엑셀 파일을 받아 넣으면 편리하게 이수한 모든 강의를 가져올 수 있어요!
           </p>
         </div>
