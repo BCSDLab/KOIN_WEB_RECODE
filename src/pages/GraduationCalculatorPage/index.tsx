@@ -42,7 +42,15 @@ function GraduationCalculatorPage() {
             <ExcelUploader />
           </div>
           <div className={styles.content__results}>
-            <div className={styles.content__description}> </div>
+            <div className={styles.content__description}>
+              <p className={styles['content__description-title']}>
+                <strong>아우누리</strong>
+                에서 받은 엑셀을 넣을 수 있어요.
+              </p>
+              <p className={styles['content__description-title']}>
+                이수구분 등 잘못된 정보를 정정하면 아래의 그래프에 바로 적용돼요.
+              </p>
+            </div>
             <GeneralCourse />
             <CreditChart />
           </div>
