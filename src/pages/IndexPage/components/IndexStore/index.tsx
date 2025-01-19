@@ -46,7 +46,7 @@ function IndexStore() {
   };
   return (
     <section className={styles.template}>
-      <Link to={ROUTES.Store()} className={styles.template__title}>주변상점</Link>
+      <Link to={ROUTES.Store()} className={styles.template__title}>주변 상점</Link>
       <div className={styles.category__wrapper}>
         {isMobile
           ? categories?.shop_categories.slice(0, 12).map((category) => (
