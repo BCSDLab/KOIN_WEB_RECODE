@@ -5,9 +5,9 @@ import showToast from 'utils/ts/showToast';
 import { transformLostItemArticlesForPost } from 'pages/Notice/utils/transform';
 import { LostItemArticlesForPost } from 'pages/Notice/ts/types';
 
-const useLostItemArticles = () => {
+const usePostLostItemArticles = () => {
   const queryClient = useQueryClient();
-  const mutation = useMutation({
+  const { status, mutate } = useMutation({
     mutationFn: (data: LostItemArticlesForPost) => (
       postLostItemArticle(transformLostItemArticlesForPost(data))),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['lostItem'] }),
@@ -18,7 +18,7 @@ const useLostItemArticles = () => {
     },
   });
 
-  return mutation;
+  return { status, mutate };
 };
 
-export default useLostItemArticles;
+export default usePostLostItemArticles;

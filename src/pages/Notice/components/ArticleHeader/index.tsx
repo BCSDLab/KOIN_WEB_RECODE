@@ -1,5 +1,5 @@
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
-import convertNoticeTag from 'utils/ts/convertNoticeTag';
+import { convertNoticeTag } from 'utils/ts/convertNoticeTag';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ArticleHeader.module.scss';
 

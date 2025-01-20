@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Article } from 'api/notice/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
-import convertNoticeTag from 'utils/ts/convertNoticeTag';
+import { convertNoticeTag } from 'utils/ts/convertNoticeTag';
 import ROUTES from 'static/routes';
 import styles from './NoticeList.module.scss';
 
