@@ -12,6 +12,7 @@ import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
@@ -41,6 +42,7 @@ interface LostItemFormProps {
 export default function LostItemForm({
   type, count, lostItem, lostItemHandler, removeLostItem,
 }: LostItemFormProps) {
+  const isMobile = useMediaQuery();
   const {
     category,
     foundDate,
@@ -137,7 +139,7 @@ export default function LostItemForm({
             className={styles.date}
           >
             <span className={styles.title}>습득 일자</span>
-            <div ref={containerRef}>
+            <div className={styles.date__wrapper} ref={containerRef}>
               <div className={styles.date__wrapper}>
                 <button
                   className={styles.date__toggle}
@@ -196,31 +198,33 @@ export default function LostItemForm({
           </div>
         </div>
 
-        <div className={`${styles.template__right} ${styles.right}`}>
+        <div className={`${styles.template__right}`}>
           <div className={styles.images}>
             <div className={styles.images__text}>
               <span className={styles.title}>사진</span>
               <span className={styles.title__description}>습득물 사진을 업로드해주세요.</span>
             </div>
-            <ul className={styles.images__list}>
-              {images.map((url: string) => (
-                <li key={url} className={styles.images__item}>
-                  <img
-                    src={url}
-                    className={styles.images__image}
-                    alt="분실물 이미지"
-                  />
-                  <button
-                    className={styles.images__delete}
-                    type="button"
-                    aria-label="이미지 삭제"
-                    onClick={() => deleteImage(url)}
-                  >
-                    <RemoveImageIcon />
-                  </button>
-                </li>
-              ))}
-            </ul>
+            {(!isMobile || images.length !== 0) && (
+              <ul className={styles.images__list}>
+                {images.map((url: string) => (
+                  <li key={url} className={styles.images__item}>
+                    <img
+                      src={url}
+                      className={styles.images__image}
+                      alt="분실물 이미지"
+                    />
+                    <button
+                      className={styles.images__delete}
+                      type="button"
+                      aria-label="이미지 삭제"
+                      onClick={() => deleteImage(url)}
+                    >
+                      <RemoveImageIcon />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
             <label htmlFor="image-file" className={styles.images__upload}>
               <PhotoIcon />
               사진 등록하기

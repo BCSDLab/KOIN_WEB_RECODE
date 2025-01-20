@@ -1,6 +1,9 @@
 import AddIcon from 'assets/svg/Notice/add.svg';
 import LostItemForm from 'pages/Notice/components/LostItemForm';
 import { useLostItemForm } from 'pages/Notice/hooks/useLostItemForm';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import FoundIcon from 'assets/svg/Notice/found.svg';
+import LostIcon from 'assets/svg/Notice/lost.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import usePostLostItemArticles from 'pages/Notice/hooks/usePostLostItemArticles';
@@ -18,11 +21,13 @@ const getyyyyMMdd = (date: Date) => {
 const TITLES = {
   found: {
     title: '습득물 신고',
-    subtitle: '습득한 물건을 자세히 설명해주세요!',
+    subtitle: '주인을 찾아요',
+    description: '습득한 물건을 자세히 설명해주세요!',
   },
   lost: {
     title: '분실물 신고',
-    subtitle: '분실한 물건을 자세히 설명해주세요!',
+    subtitle: '잃어버렸어요',
+    description: '분실한 물건을 자세히 설명해주세요!',
   },
 };
 
@@ -31,8 +36,10 @@ type LostItemType = 'found' | 'lost';
 export default function LostItemPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery();
   const type: LostItemType = location.pathname.includes('/found') ? 'found' : 'lost';
-  const { title, subtitle } = TITLES[type];
+  const isFound = type === 'found';
+  const { title, subtitle, description } = TITLES[type];
   const {
     lostItems, lostItemHandler, addLostItem, removeLostItem, checkArticleFormFull,
   } = useLostItemForm();
@@ -57,8 +64,15 @@ export default function LostItemPage() {
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.header}>
-          <span className={styles.header__title}>{title}</span>
-          <span className={styles.header__subtitle}>{subtitle}</span>
+          <span className={styles.header__title}>
+            {isMobile ? subtitle : title}
+            {isMobile && (
+              <span>
+                {isFound ? <FoundIcon /> : <LostIcon />}
+              </span>
+            )}
+          </span>
+          <span className={styles.header__description}>{description}</span>
         </div>
         <div className={styles.forms}>
           {lostItems.map((lostItem, index) => (
