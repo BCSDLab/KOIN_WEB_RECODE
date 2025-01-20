@@ -2,6 +2,7 @@ import { cn } from '@bcsdlab/utils';
 import { uploadLostItemFile } from 'api/uploadFile';
 import ChevronDown from 'assets/svg/Notice/chevron-down.svg';
 import PhotoIcon from 'assets/svg/Notice/photo.svg';
+import GarbageCanIcon from 'assets/svg/Notice/garbage-can.svg';
 import WarnIcon from 'assets/svg/Notice/warn.svg';
 import RemoveImageIcon from 'assets/svg/Notice/remove-image.svg';
 import Calendar from 'pages/Notice/components/Calendar';
@@ -34,16 +35,25 @@ interface LostItemFormProps {
   count: number;
   lostItem: LostItem;
   lostItemHandler: LostItemHandler;
+  removeLostItem: (index: number) => void;
 }
 
 export default function LostItemForm({
-  type, count, lostItem, lostItemHandler,
+  type, count, lostItem, lostItemHandler, removeLostItem,
 }: LostItemFormProps) {
   const {
-    category, foundDate, foundPlace, content, images, hasBeenSelected,
+    category,
+    foundDate,
+    location,
+    content,
+    images,
+    hasDateBeenSelected,
+    isCategorySelected,
+    isDateSelected,
+    isLocationSelected,
   } = lostItem;
   const {
-    setCategory, setFoundDate, setLocation, setContent, setImages, setHasBeenSelected,
+    setCategory, setFoundDate, setLocation, setContent, setImages, setHasDateBeenSelected,
   } = lostItemHandler;
   const {
     imgRef, saveImgFile,
@@ -53,7 +63,7 @@ export default function LostItemForm({
 
   const handleDateSelect = (date: Date) => {
     setFoundDate(date);
-    setHasBeenSelected();
+    setHasDateBeenSelected();
     closeCalendar();
   };
 
@@ -77,11 +87,21 @@ export default function LostItemForm({
 
   return (
     <div className={styles.container}>
-      <span className={styles.tag}>
-        {MAX_LOST_ITEM_TYPE[type]}
-        &nbsp;
-        {count + 1}
-      </span>
+      <div className={styles.tag}>
+        <span className={styles.tag__chip}>
+          {MAX_LOST_ITEM_TYPE[type]}
+          &nbsp;
+          {count + 1}
+        </span>
+        <button
+          className={styles.tag__delete}
+          type="button"
+          onClick={() => removeLostItem(count)}
+          aria-label="분실물 삭제"
+        >
+          <GarbageCanIcon />
+        </button>
+      </div>
       <div className={styles.template}>
         <div className={`${styles.template__left} ${styles.left}`}>
           <div className={styles.category}>
@@ -89,20 +109,28 @@ export default function LostItemForm({
               <span className={styles.title}>품목</span>
               <span className={styles.title__description}>품목을 선택해주세요.</span>
             </div>
-            <div className={styles.category__buttons}>
-              {CATEGORIES.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  className={cn({
-                    [styles.category__button]: true,
-                    [styles['category__button--selected']]: category === item,
-                  })}
-                  onClick={() => setCategory(item)}
-                >
-                  {item}
-                </button>
-              ))}
+            <div className={styles.category__wrapper}>
+              <div className={styles.category__buttons}>
+                {CATEGORIES.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    className={cn({
+                      [styles.category__button]: true,
+                      [styles['category__button--selected']]: category === item,
+                    })}
+                    onClick={() => setCategory(item)}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+              {!isCategorySelected && (
+                <span className={styles.warning}>
+                  <WarnIcon />
+                  품목이 선택되지 않았습니다.
+                </span>
+              )}
             </div>
           </div>
           <div
@@ -110,45 +138,61 @@ export default function LostItemForm({
           >
             <span className={styles.title}>습득 일자</span>
             <div ref={containerRef}>
-              <button
-                className={styles.date__toggle}
-                type="button"
-                onClick={() => toggleCalendar()}
-              >
-                <span
-                  className={cn({
-                    [styles.date__description]: true,
-                    [styles['date__description--has-been-selected']]: hasBeenSelected,
+              <div className={styles.date__wrapper}>
+                <button
+                  className={styles.date__toggle}
+                  type="button"
+                  onClick={() => toggleCalendar()}
+                >
+                  <span
+                    className={cn({
+                      [styles.date__description]: true,
+                      [styles['date__description--has-been-selected']]: hasDateBeenSelected,
+                    })}
+                  >
+                    {hasDateBeenSelected ? getyyyyMMdd(foundDate) : '습득 일자를 선택해주세요.'}
+                  </span>
+                  <span className={cn({
+                    [styles.icon]: true,
+                    [styles['icon--open']]: calendarOpen,
                   })}
-                >
-                  {hasBeenSelected ? getyyyyMMdd(foundDate) : '습득 일자를 선택해주세요.'}
-                </span>
-                <span className={cn({
-                  [styles.icon]: true,
-                  [styles['icon--open']]: calendarOpen,
-                })}
-                >
-                  <ChevronDown />
-                </span>
-              </button>
-              {calendarOpen && (
-                <div className={styles.date__calendar}>
-                  <Calendar
-                    selectedDate={foundDate}
-                    setSelectedDate={handleDateSelect}
-                  />
-                </div>
-              )}
+                  >
+                    <ChevronDown />
+                  </span>
+                </button>
+                {calendarOpen && (
+                  <div className={styles.date__calendar}>
+                    <Calendar
+                      selectedDate={foundDate}
+                      setSelectedDate={handleDateSelect}
+                    />
+                  </div>
+                )}
+                {!isDateSelected && (
+                  <span className={styles.warning}>
+                    <WarnIcon />
+                    습득 일자가 입력되지 않았습니다.
+                  </span>
+                )}
+              </div>
             </div>
           </div>
           <div className={styles['found-place']}>
             <span className={styles.title}>습득 장소</span>
-            <input
-              className={styles['found-place__input']}
-              defaultValue={foundPlace}
-              onBlur={(e) => setLocation(e.target.value)}
-              placeholder="습득 장소를 선택해주세요."
-            />
+            <div className={styles['found-place__wrapper']}>
+              <input
+                className={styles['found-place__input']}
+                defaultValue={location}
+                onBlur={(e) => setLocation(e.target.value)}
+                placeholder="습득 장소를 선택해주세요."
+              />
+              {!isLocationSelected && (
+                <span className={styles.warning}>
+                  <WarnIcon />
+                  습득 장소가 입력되지 않았습니다.
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

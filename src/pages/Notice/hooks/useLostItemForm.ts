@@ -2,29 +2,38 @@ import { useState } from 'react';
 
 export interface LostItem {
   category: string;
-  foundDate: Date; // 요청에서는 yy-MM-dd
-  foundPlace: string;
+  foundDate: Date;
+  location: string;
   content: string;
   images: Array<string>;
-  hasBeenSelected: boolean;
+  hasDateBeenSelected: boolean;
+  isCategorySelected: boolean;
+  isDateSelected: boolean;
+  isLocationSelected: boolean;
 }
 
 export interface LostItemHandler {
   setCategory: (category: string) => void;
   setFoundDate: (date: Date) => void;
-  setLocation: (foundPlace: string) => void;
+  setLocation: (location: string) => void;
   setContent: (content: string) => void;
   setImages: (image: Array<string>) => void;
-  setHasBeenSelected: () => void;
+  setHasDateBeenSelected: () => void;
+  checkIsCategorySelected: () => void;
+  checkIsDateSelected: () => void;
+  checkIsLocationSelected: () => void;
 }
 
 const initialForm: LostItem = {
   category: '',
   foundDate: new Date(),
-  foundPlace: '',
+  location: '',
   content: '',
   images: [],
-  hasBeenSelected: false,
+  hasDateBeenSelected: false,
+  isCategorySelected: true,
+  isDateSelected: true,
+  isLocationSelected: true,
 };
 
 export const useLostItemForm = () => {
@@ -45,10 +54,10 @@ export const useLostItemForm = () => {
         return newLostItems;
       });
     },
-    setLocation: (foundPlace: string) => {
+    setLocation: (location: string) => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
-        newLostItems[key].foundPlace = foundPlace;
+        newLostItems[key].location = location;
         return newLostItems;
       });
     },
@@ -66,10 +75,31 @@ export const useLostItemForm = () => {
         return newLostItems;
       });
     },
-    setHasBeenSelected: () => {
+    setHasDateBeenSelected: () => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
-        newLostItems[key].hasBeenSelected = true;
+        newLostItems[key].hasDateBeenSelected = true;
+        return newLostItems;
+      });
+    },
+    checkIsCategorySelected: () => {
+      setLostItems((prev) => {
+        const newLostItems = [...prev];
+        newLostItems[key].isCategorySelected = newLostItems[key].category !== '';
+        return newLostItems;
+      });
+    },
+    checkIsDateSelected: () => {
+      setLostItems((prev) => {
+        const newLostItems = [...prev];
+        newLostItems[key].isDateSelected = newLostItems[key].hasDateBeenSelected;
+        return newLostItems;
+      });
+    },
+    checkIsLocationSelected: () => {
+      setLostItems((prev) => {
+        const newLostItems = [...prev];
+        newLostItems[key].isLocationSelected = newLostItems[key].location !== '';
         return newLostItems;
       });
     },
@@ -79,9 +109,29 @@ export const useLostItemForm = () => {
     setLostItems((prev) => [...prev, { ...initialForm }]);
   };
 
+  const removeLostItem = (key: number) => {
+    setLostItems((prev) => prev.filter((_, index) => index !== key));
+  };
+
+  const checkArticleFormFull = (articles: Array<LostItem>) => {
+    articles.forEach((article) => {
+      lostItemHandler(articles.indexOf(article)).checkIsCategorySelected();
+      lostItemHandler(articles.indexOf(article)).checkIsDateSelected();
+      lostItemHandler(articles.indexOf(article)).checkIsLocationSelected();
+    });
+
+    return articles.every((article) => (
+      article.isCategorySelected
+      && article.hasDateBeenSelected
+      && article.isLocationSelected
+    ));
+  };
+
   return {
     lostItems,
     lostItemHandler,
     addLostItem,
+    removeLostItem,
+    checkArticleFormFull,
   };
 };

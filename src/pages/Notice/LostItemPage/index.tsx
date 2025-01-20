@@ -33,13 +33,17 @@ export default function LostItemPage() {
   const navigate = useNavigate();
   const type: LostItemType = location.pathname.includes('/found') ? 'found' : 'lost';
   const { title, subtitle } = TITLES[type];
-  const { lostItems, lostItemHandler, addLostItem } = useLostItemForm();
+  const {
+    lostItems, lostItemHandler, addLostItem, removeLostItem, checkArticleFormFull,
+  } = useLostItemForm();
   const { mutate: postLostItem } = usePostLostItemArticles();
 
   const handleCompleteClick = async () => {
+    if (!checkArticleFormFull(lostItems)) return;
+
     const articles = lostItems.map((article) => ({
       category: article.category,
-      location: article.foundPlace,
+      location: article.location,
       foundDate: getyyyyMMdd(article.foundDate),
       content: article.content,
       images: article.images,
@@ -64,6 +68,7 @@ export default function LostItemPage() {
               count={index}
               lostItem={lostItem}
               lostItemHandler={lostItemHandler(index)}
+              removeLostItem={removeLostItem}
             />
           ))}
         </div>
