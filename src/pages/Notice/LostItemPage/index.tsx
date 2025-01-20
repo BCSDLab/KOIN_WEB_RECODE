@@ -41,12 +41,19 @@ export default function LostItemPage() {
   const isFound = type === 'found';
   const { title, subtitle, description } = TITLES[type];
   const {
-    lostItems, lostItemHandler, addLostItem, removeLostItem, checkArticleFormFull,
+    lostItems,
+    lostItemHandler,
+    addLostItem,
+    removeLostItem,
+    validateAndUpdateItems,
+    checkArticleFormFull,
   } = useLostItemForm();
   const { mutate: postLostItem } = usePostLostItemArticles();
 
   const handleCompleteClick = async () => {
-    if (!checkArticleFormFull(lostItems)) return;
+    validateAndUpdateItems();
+
+    if (!checkArticleFormFull()) return;
 
     const articles = lostItems.map((article) => ({
       category: article.category,

@@ -85,7 +85,7 @@ export const useLostItemForm = () => {
     checkIsCategorySelected: () => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
-        newLostItems[key].isCategorySelected = newLostItems[key].category !== '';
+        newLostItems[key].isCategorySelected = newLostItems[key].category.trim() !== '';
         return newLostItems;
       });
     },
@@ -99,7 +99,7 @@ export const useLostItemForm = () => {
     checkIsLocationSelected: () => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
-        newLostItems[key].isLocationSelected = newLostItems[key].location !== '';
+        newLostItems[key].isLocationSelected = newLostItems[key].location.trim() !== '';
         return newLostItems;
       });
     },
@@ -113,18 +113,21 @@ export const useLostItemForm = () => {
     setLostItems((prev) => prev.filter((_, index) => index !== key));
   };
 
-  const checkArticleFormFull = (articles: Array<LostItem>) => {
-    articles.forEach((article) => {
-      lostItemHandler(articles.indexOf(article)).checkIsCategorySelected();
-      lostItemHandler(articles.indexOf(article)).checkIsDateSelected();
-      lostItemHandler(articles.indexOf(article)).checkIsLocationSelected();
-    });
+  const isItemValid = (item: LostItem) => (
+    item.category.trim() !== ''
+    && item.hasDateBeenSelected
+    && item.location.trim() !== ''
+  );
 
-    return articles.every((article) => (
-      article.isCategorySelected
-      && article.hasDateBeenSelected
-      && article.isLocationSelected
-    ));
+  const checkArticleFormFull = () => lostItems.every(isItemValid);
+
+  const validateAndUpdateItems = () => {
+    setLostItems((prev) => prev.map((item) => ({
+      ...item,
+      isCategorySelected: item.category.trim() !== '',
+      isDateSelected: item.hasDateBeenSelected,
+      isLocationSelected: item.location.trim() !== '',
+    })));
   };
 
   return {
@@ -133,5 +136,6 @@ export const useLostItemForm = () => {
     addLostItem,
     removeLostItem,
     checkArticleFormFull,
+    validateAndUpdateItems,
   };
 };
