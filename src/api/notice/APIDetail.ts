@@ -63,8 +63,6 @@ export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implemen
   path = '/articles/lost-item';
 
   response!: R;
-
-  auth = false;
 }
 
 export class GetSingleLostItemArticle<R
@@ -74,8 +72,6 @@ extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
   path: string;
 
   response!: R;
-
-  auth = false;
 
   constructor(id: number) {
     this.path = `/articles/lost-item/${id}`;
@@ -91,7 +87,7 @@ export class PostLostItemArticles<R extends LostItemResponse> implements APIRequ
 
   auth = true;
 
-  constructor(public data: LostItemArticlesRequestDTO) { }
+  constructor(public authorization: string, public data: LostItemArticlesRequestDTO) { }
 }
 
 export class DeleteLostItemArticle<R extends LostItemResponse> implements APIRequest<R> {
@@ -103,7 +99,7 @@ export class DeleteLostItemArticle<R extends LostItemResponse> implements APIReq
 
   auth = true;
 
-  constructor(id: number) {
+  constructor(public authorization: string, id: number) {
     this.path = `/articles/lost-item/${id}`;
   }
 }

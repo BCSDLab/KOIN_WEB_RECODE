@@ -3,9 +3,17 @@ import LostItemForm from 'pages/Notice/components/LostItemForm';
 import { useLostItemForm } from 'pages/Notice/hooks/useLostItemForm';
 import { useLocation } from 'react-router-dom';
 import uuidv4 from 'utils/ts/uuidGenerater';
+import usePostLostItemArticles from 'pages/Notice/hooks/usePostLostItemArticles';
 import styles from './LostItemPage.module.scss';
 
-const titles = {
+const getyyMMdd = (date: Date) => {
+  const yy = String(date.getFullYear()).slice(2);
+  const MM = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${yy}-${MM}-${dd}`;
+};
+
+const TITLES = {
   found: {
     title: '습득물 신고',
     subtitle: '습득한 물건을 자세히 설명해주세요!',
@@ -21,15 +29,24 @@ type LostItemType = 'found' | 'lost';
 export default function LostItemPage() {
   const location = useLocation();
   const type: LostItemType = location.pathname.includes('/found') ? 'found' : 'lost';
-  const { title, subtitle } = titles[type];
+  const { title, subtitle } = TITLES[type];
   const { lostItems, lostItemHandler, addLostItem } = useLostItemForm();
+  const { status, mutate: postLostItem } = usePostLostItemArticles();
 
-  const handleCompleteClick = () => {
-    console.log('complete');
-    console.log(lostItems);
-    lostItems.forEach((lostItem) => {
-      console.log(lostItem);
-    });
+  const handleCompleteClick = async () => {
+    const articles = lostItems.map((article) => ({
+      category: article.category,
+      foundPlace: article.foundPlace,
+      foundDate: getyyMMdd(article.foundDate),
+      content: article.content,
+      images: article.images,
+    }));
+
+    postLostItem({ articles });
+
+    if (status === 'success') {
+      console.log('success');
+    }
   };
 
   return (

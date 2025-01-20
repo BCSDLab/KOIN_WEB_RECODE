@@ -1,16 +1,9 @@
 import { useState } from 'react';
 
-// const getyyMMdd = (date: Date) => {
-//   const yy = String(date.getFullYear()).slice(2);
-//   const MM = String(date.getMonth() + 1).padStart(2, "0");
-//   const dd = String(date.getDate()).padStart(2, "0");
-//   return `${yy}-${MM}-${dd}`;
-// };
-
 export interface LostItem {
   category: string;
   foundDate: Date; // 요청에서는 yy-MM-dd
-  location: string;
+  foundPlace: string;
   content: string;
   images: Array<string>;
   hasBeenSelected: boolean;
@@ -19,7 +12,7 @@ export interface LostItem {
 export interface LostItemHandler {
   setCategory: (category: string) => void;
   setFoundDate: (date: Date) => void;
-  setLocation: (location: string) => void;
+  setLocation: (foundPlace: string) => void;
   setContent: (content: string) => void;
   setImages: (image: Array<string>) => void;
   setHasBeenSelected: () => void;
@@ -28,7 +21,7 @@ export interface LostItemHandler {
 const initialForm: LostItem = {
   category: '',
   foundDate: new Date(),
-  location: '',
+  foundPlace: '',
   content: '',
   images: [],
   hasBeenSelected: false,
@@ -52,10 +45,10 @@ export const useLostItemForm = () => {
         return newLostItems;
       });
     },
-    setLocation: (location: string) => {
+    setLocation: (foundPlace: string) => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
-        newLostItems[key].location = location;
+        newLostItems[key].foundPlace = foundPlace;
         return newLostItems;
       });
     },

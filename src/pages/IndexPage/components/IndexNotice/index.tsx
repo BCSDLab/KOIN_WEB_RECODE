@@ -5,24 +5,8 @@ import useArticles from 'pages/Notice/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
+import { convertNoticeTag } from 'utils/ts/convertNoticeTag';
 import styles from './IndexNotice.module.scss';
-
-const getArticleType = (id: number) => {
-  switch (id) {
-    case 5:
-      return '[일반공지]';
-    case 6:
-      return '[장학공지]';
-    case 7:
-      return '[학사공지]';
-    case 8:
-      return '[취업공지]';
-    case 9:
-      return '[코인공지]';
-    default:
-      return '[공지]';
-  }
-};
 
 function IndexNotice() {
   const { articles } = useArticles();
@@ -57,7 +41,7 @@ function IndexNotice() {
                 className={styles['list__item-link']}
               >
                 <span className={styles['list__item-type']}>
-                  {getArticleType(article.board_id)}
+                  {convertNoticeTag(article.board_id)}
                 </span>
                 <span className={styles['list__item-title']}>
                   {article.title}

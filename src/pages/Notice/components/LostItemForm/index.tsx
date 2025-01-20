@@ -2,6 +2,7 @@ import { cn } from '@bcsdlab/utils';
 import { uploadLostItemFile } from 'api/uploadFile';
 import ChevronDown from 'assets/svg/Notice/chevron-down.svg';
 import PhotoIcon from 'assets/svg/Notice/photo.svg';
+import WarnIcon from 'assets/svg/Notice/warn.svg';
 import RemoveImageIcon from 'assets/svg/Notice/remove-image.svg';
 import Calendar from 'pages/Notice/components/Calendar';
 import { LostItem, LostItemHandler } from 'pages/Notice/hooks/useLostItemForm';
@@ -39,7 +40,7 @@ export default function LostItemForm({
   type, count, lostItem, lostItemHandler,
 }: LostItemFormProps) {
   const {
-    category, foundDate, location, content, images, hasBeenSelected,
+    category, foundDate, foundPlace, content, images, hasBeenSelected,
   } = lostItem;
   const {
     setCategory, setFoundDate, setLocation, setContent, setImages, setHasBeenSelected,
@@ -140,11 +141,11 @@ export default function LostItemForm({
               )}
             </div>
           </div>
-          <div className={styles.location}>
+          <div className={styles['found-place']}>
             <span className={styles.title}>습득 장소</span>
             <input
-              className={styles.location__input}
-              defaultValue={location}
+              className={styles['found-place__input']}
+              defaultValue={foundPlace}
               onBlur={(e) => setLocation(e.target.value)}
               placeholder="습득 장소를 선택해주세요."
             />
