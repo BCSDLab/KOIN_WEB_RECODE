@@ -57,7 +57,7 @@ export default function LostItemPage() {
 
     const articles = lostItems.map((article) => ({
       category: article.category,
-      location: article.location,
+      foundPlace: article.foundPlace,
       foundDate: getyyyyMMdd(article.foundDate),
       content: article.content,
       images: article.images,

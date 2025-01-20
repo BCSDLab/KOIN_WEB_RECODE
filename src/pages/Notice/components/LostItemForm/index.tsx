@@ -46,16 +46,21 @@ export default function LostItemForm({
   const {
     category,
     foundDate,
-    location,
+    foundPlace,
     content,
     images,
     hasDateBeenSelected,
     isCategorySelected,
     isDateSelected,
-    isLocationSelected,
+    isFoundPlaceSelected: isLocationSelected,
   } = lostItem;
   const {
-    setCategory, setFoundDate, setLocation, setContent, setImages, setHasDateBeenSelected,
+    setCategory,
+    setFoundDate,
+    setFoundPlace,
+    setContent,
+    setImages,
+    setHasDateBeenSelected,
   } = lostItemHandler;
   const {
     imgRef, saveImgFile,
@@ -184,8 +189,8 @@ export default function LostItemForm({
             <div className={styles['found-place__wrapper']}>
               <input
                 className={styles['found-place__input']}
-                defaultValue={location}
-                onBlur={(e) => setLocation(e.target.value)}
+                defaultValue={foundPlace}
+                onBlur={(e) => setFoundPlace(e.target.value)}
                 placeholder="습득 장소를 선택해주세요."
               />
               {!isLocationSelected && (

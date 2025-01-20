@@ -94,7 +94,7 @@ export interface LostItemResponse extends APIResponse {}
 // POST /articles/lost-item
 interface LostItemArticleForPostDTO {
   category: string;
-  location: string;
+  found_place: string;
   found_date: string; // yyyy-MM-dd
   content: string;
   images: string[];

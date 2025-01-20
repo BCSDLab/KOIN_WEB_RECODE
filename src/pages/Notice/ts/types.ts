@@ -31,7 +31,7 @@ export interface SingleLostItemArticle {
   foundDate: string;
   content: string;
   author: string;
-  image: Image[]; // stage 현재 image, 추후 images로 변경
+  images: Image[];
   prevId: number | null;
   nextId: number | null;
   registeredAt: string; // yyyy-MM-dd
@@ -40,7 +40,7 @@ export interface SingleLostItemArticle {
 
 export interface LostItemArticleForPost {
   category: string;
-  location: string;
+  foundPlace: string;
   foundDate: string; // yyyy-MM-dd
   content: string;
   images: string[];

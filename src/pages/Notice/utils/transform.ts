@@ -29,7 +29,7 @@ export const transformSingleLostItemArticle = (dto: SingleLostItemArticleRespons
   foundDate: dto.found_date,
   content: dto.content,
   author: dto.author,
-  image: dto.images.map((image) => ({ // stage 현재 image, 추후 images로 변경
+  images: dto.images.map((image) => ({
     id: image.id,
     imageUrl: image.image_url,
   })),
@@ -43,7 +43,7 @@ export const transformLostItemArticlesForPost = (dto: LostItemArticlesForPost)
 : LostItemArticlesRequestDTO => ({
   articles: dto.articles.map((article) => ({
     category: article.category,
-    location: article.location,
+    found_place: article.foundPlace,
     found_date: article.foundDate,
     content: article.content,
     images: article.images,

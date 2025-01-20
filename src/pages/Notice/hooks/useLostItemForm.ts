@@ -3,37 +3,37 @@ import { useState } from 'react';
 export interface LostItem {
   category: string;
   foundDate: Date;
-  location: string;
+  foundPlace: string;
   content: string;
   images: Array<string>;
   hasDateBeenSelected: boolean;
   isCategorySelected: boolean;
   isDateSelected: boolean;
-  isLocationSelected: boolean;
+  isFoundPlaceSelected: boolean;
 }
 
 export interface LostItemHandler {
   setCategory: (category: string) => void;
   setFoundDate: (date: Date) => void;
-  setLocation: (location: string) => void;
+  setFoundPlace: (foundPlace: string) => void;
   setContent: (content: string) => void;
   setImages: (image: Array<string>) => void;
   setHasDateBeenSelected: () => void;
   checkIsCategorySelected: () => void;
   checkIsDateSelected: () => void;
-  checkIsLocationSelected: () => void;
+  checkIsFoundPlaceSelected: () => void;
 }
 
 const initialForm: LostItem = {
   category: '',
   foundDate: new Date(),
-  location: '',
+  foundPlace: '',
   content: '',
   images: [],
   hasDateBeenSelected: false,
   isCategorySelected: true,
   isDateSelected: true,
-  isLocationSelected: true,
+  isFoundPlaceSelected: true,
 };
 
 export const useLostItemForm = () => {
@@ -54,10 +54,10 @@ export const useLostItemForm = () => {
         return newLostItems;
       });
     },
-    setLocation: (location: string) => {
+    setFoundPlace: (foundPlace: string) => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
-        newLostItems[key].location = location;
+        newLostItems[key].foundPlace = foundPlace;
         return newLostItems;
       });
     },
@@ -96,10 +96,10 @@ export const useLostItemForm = () => {
         return newLostItems;
       });
     },
-    checkIsLocationSelected: () => {
+    checkIsFoundPlaceSelected: () => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
-        newLostItems[key].isLocationSelected = newLostItems[key].location.trim() !== '';
+        newLostItems[key].isFoundPlaceSelected = newLostItems[key].foundPlace.trim() !== '';
         return newLostItems;
       });
     },
@@ -116,7 +116,7 @@ export const useLostItemForm = () => {
   const isItemValid = (item: LostItem) => (
     item.category.trim() !== ''
     && item.hasDateBeenSelected
-    && item.location.trim() !== ''
+    && item.foundPlace.trim() !== ''
   );
 
   const checkArticleFormFull = () => lostItems.every(isItemValid);
@@ -126,7 +126,7 @@ export const useLostItemForm = () => {
       ...item,
       isCategorySelected: item.category.trim() !== '',
       isDateSelected: item.hasDateBeenSelected,
-      isLocationSelected: item.location.trim() !== '',
+      isFoundPlaceSelected: item.foundPlace.trim() !== '',
     })));
   };
 

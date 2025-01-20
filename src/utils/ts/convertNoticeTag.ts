@@ -27,9 +27,10 @@ export const convertNoticeTag = (type: number) => {
     default:
       return '[공지사항]';
   }
-}
+};
 
 export const BOARD_IDS = {
+  // 전체 공지 + 분실물 조회 시 필드를 없앰 ...articles?boardId=${BOARD_IDS.전체공지}&page...
   자유게시판: 1,
   취업게시판: 2,
   익명게시판: 3,
