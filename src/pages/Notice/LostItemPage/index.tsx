@@ -1,16 +1,18 @@
 import AddIcon from 'assets/svg/Notice/add.svg';
 import LostItemForm from 'pages/Notice/components/LostItemForm';
 import { useLostItemForm } from 'pages/Notice/hooks/useLostItemForm';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import usePostLostItemArticles from 'pages/Notice/hooks/usePostLostItemArticles';
+import ROUTES from 'static/routes';
 import styles from './LostItemPage.module.scss';
 
-const getyyMMdd = (date: Date) => {
-  const yy = String(date.getFullYear()).slice(2);
-  const MM = String(date.getMonth() + 1).padStart(2, '0');
-  const dd = String(date.getDate()).padStart(2, '0');
-  return `${yy}-${MM}-${dd}`;
+const getyyyyMMdd = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 };
 
 const TITLES = {
@@ -28,25 +30,23 @@ type LostItemType = 'found' | 'lost';
 
 export default function LostItemPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const type: LostItemType = location.pathname.includes('/found') ? 'found' : 'lost';
   const { title, subtitle } = TITLES[type];
   const { lostItems, lostItemHandler, addLostItem } = useLostItemForm();
-  const { status, mutate: postLostItem } = usePostLostItemArticles();
+  const { mutate: postLostItem } = usePostLostItemArticles();
 
   const handleCompleteClick = async () => {
     const articles = lostItems.map((article) => ({
       category: article.category,
-      foundPlace: article.foundPlace,
-      foundDate: getyyMMdd(article.foundDate),
+      location: article.foundPlace,
+      foundDate: getyyyyMMdd(article.foundDate),
       content: article.content,
       images: article.images,
     }));
 
     postLostItem({ articles });
-
-    if (status === 'success') {
-      console.log('success');
-    }
+    navigate(ROUTES.BoardNotice());
   };
 
   return (

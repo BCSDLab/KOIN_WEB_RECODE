@@ -48,7 +48,7 @@ export interface HotArticle extends Article { }
 
 export type HotArticlesResponse = HotArticle[];
 
-// GET /articles/lost-item (목록 조회용)
+// GET /articles/lost-item
 interface LostItemArticleForGetDTO {
   id: number;
   board_id: number;
@@ -91,11 +91,11 @@ export interface SingleLostItemArticleResponseDTO extends APIResponse {
 
 export interface LostItemResponse extends APIResponse {}
 
-// POST /articles/lost-item (목록 조회용)
+// POST /articles/lost-item
 interface LostItemArticleForPostDTO {
   category: string;
-  found_place: string;
-  found_date: string; // yy-MM-dd
+  location: string;
+  found_date: string; // yyyy-MM-dd
   content: string;
   images: string[];
 }

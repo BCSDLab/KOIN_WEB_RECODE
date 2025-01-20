@@ -43,7 +43,7 @@ export const transformLostItemArticlesForPost = (dto: LostItemArticlesForPost)
 : LostItemArticlesRequestDTO => ({
   articles: dto.articles.map((article) => ({
     category: article.category,
-    found_place: article.foundPlace,
+    location: article.location,
     found_date: article.foundDate,
     content: article.content,
     images: article.images,

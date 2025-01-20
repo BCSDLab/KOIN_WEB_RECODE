@@ -80,8 +80,8 @@ function App() {
             <Route path={ROUTES.BoardNotice()} element={<NoticeListPage />} />
             <Route path={ROUTES.BoardNoticeDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 공지사항 상세" element={<NoticeDetailPage />} />} />
           </Route>
-          <Route path={ROUTES.LostItemFound()} element={<HelmetWrapper title="코인 - 분실물 글쓰기" element={<LostItemPage />} />} />
-          <Route path={ROUTES.LostItemLost()} element={<HelmetWrapper title="코인 - 분실물 글쓰기" element={<LostItemPage />} />} />
+          <Route path={ROUTES.LostItemFound()} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 분실물 글쓰기" element={<LostItemPage />} />} />} />
+          <Route path={ROUTES.LostItemLost()} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 분실물 글쓰기" element={<LostItemPage />} />} />} />
           <Route path={ROUTES.Room()} element={<HelmetWrapper title="코인 - 복덕방" element={<RoomPage />} />} />
           <Route path={ROUTES.RoomDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 복덕방 상세" element={<RoomDetailPage />} />} />
           <Route path={ROUTES.CampusInfo()} element={<HelmetWrapper title="코인 - 교내 시설물 정보" element={<CampusInfo />} />} />

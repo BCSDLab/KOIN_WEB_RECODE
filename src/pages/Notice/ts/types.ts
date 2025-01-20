@@ -40,8 +40,8 @@ export interface SingleLostItemArticle {
 
 export interface LostItemArticleForPost {
   category: string;
-  foundPlace: string;
-  foundDate: string; // yy-MM-dd
+  location: string;
+  foundDate: string; // yyyy-MM-dd
   content: string;
   images: string[];
 }
