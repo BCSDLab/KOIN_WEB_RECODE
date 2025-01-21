@@ -17,8 +17,13 @@
     width: 100%;
     justify-content: right;
 
-    & > svg {
+    &-button {
+      display: flex;
       width: 30px;
+    }
+
+    & > svg {
+      width: 25px;
     }
   }
 
@@ -85,7 +90,7 @@
       width: 100%;
       margin: 0 auto;
       bottom: -13px;
-      right: -125px;
+      right: -124px;
     }
   }
 }

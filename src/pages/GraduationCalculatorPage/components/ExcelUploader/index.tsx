@@ -17,13 +17,15 @@ function ExcelUploader() {
   };
   return (
     <div className={styles['excel-uploader']}>
-      <button
-        type="button"
-        onClick={handleTooltipContent}
-        className={styles['excel-uploader__description']}
-      >
-        <QuestionMarkIcon />
-      </button>
+      <div className={styles['excel-uploader__description']}>
+        <button
+          type="button"
+          onClick={handleTooltipContent}
+          className={styles['excel-uploader__description-botton']}
+        >
+          <QuestionMarkIcon />
+        </button>
+      </div>
       <button type="submit" className={styles['excel-uploader__button']}>
         <UploadIcon />
         <span>엑셀파일 추가하기</span>
