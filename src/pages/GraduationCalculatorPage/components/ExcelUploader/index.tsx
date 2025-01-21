@@ -21,7 +21,7 @@ function ExcelUploader() {
         <button
           type="button"
           onClick={handleTooltipContent}
-          className={styles['excel-uploader__description-botton']}
+          className={styles['excel-uploader__description-button']}
         >
           <QuestionMarkIcon />
         </button>
