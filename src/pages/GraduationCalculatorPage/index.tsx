@@ -5,7 +5,7 @@ import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
-import LectureTable from './components/LectureTable';
+import LectureTable from './components/CourseTable';
 import ExcelUploader from './components/ExcelUploader';
 import GeneralCourse from './components/GeneralCourse';
 import CreditChart from './components/CreditChart';

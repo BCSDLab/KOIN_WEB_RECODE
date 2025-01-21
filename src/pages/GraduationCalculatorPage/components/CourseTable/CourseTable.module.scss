@@ -1,0 +1,150 @@
+@use "utils/scss/media.scss" as media;
+
+.lecture-table {
+  display: flex;
+  flex-direction: column;
+  height: 422px;
+  border: none;
+  border-radius: 16px;
+  background-color: #fff;
+  padding: 12px 17px;
+  gap: 26px;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 324px;
+  // 수정
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22.4px;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 264px;
+    gap: 4px;
+
+    &--header {
+      display: flex;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0 12px;
+      align-items: center;
+      align-self: stretch;
+      background-color: #f1f8ff;
+      color: #4b4b4b;
+
+      &-column:nth-child(1) {
+        width: 138px;
+      }
+
+      &-column:nth-child(2) {
+        width: 37px;
+      }
+
+      &-column:nth-child(3) {
+        width: 48px;
+      }
+
+      &-column:nth-child(4) {
+        width: 106px;
+      }
+
+      &-column:nth-child(5) {
+        width: 16px;
+      }
+    }
+
+    &--body {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0 12px;
+      gap: 4px;
+      align-items: center;
+      align-self: stretch;
+      color: #000;
+      overflow-y: auto;
+
+      // &-row {
+
+      // }
+
+      &-column:nth-child(1) {
+        width: 138px;
+      }
+
+      &-column:nth-child(2) {
+        width: 37px;
+      }
+
+      &-column:nth-child(3) {
+        width: 48px;
+      }
+
+      &-column:nth-child(4) {
+        width: 106px;
+      }
+
+      &-column:nth-child(5) {
+        width: 16px;
+
+        button {
+          border-radius: 4px;
+          width: 16px;
+          height: 16px;
+
+          &:hover {
+            background-color: #eee;
+          }
+      
+          &:active {
+            background-color: #e1e1e1;
+          }
+
+        }
+
+        svg {
+          width: 8px;
+          height: 8px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  &__trigger {
+    display: flex;
+    width: 100%;
+    height: 60px;
+    padding: 0 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    bottom: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 16px;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &:active {
+      background-color: #e1e1e1;
+    }
+  }
+}
