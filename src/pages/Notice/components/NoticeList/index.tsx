@@ -13,12 +13,21 @@ interface NoticeListProps {
 export default function NoticeList({ articles }: NoticeListProps) {
   const isMobile = useMediaQuery();
 
+  const getLink = (article: Article) => {
+    switch (article.board_id) {
+      case 14:
+        return ROUTES.BoardLostItemDetail({ id: String(article.id), isLink: true });
+      default:
+        return ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true });
+    }
+  };
+
   return (
     <div>
       {articles.map((article) => (
         <Link
           className={styles.list}
-          to={ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true })}
+          to={getLink(article)}
           key={article.id}
         >
           <div className={styles.list__id}>{ article.id }</div>

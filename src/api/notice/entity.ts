@@ -89,7 +89,20 @@ export interface SingleLostItemArticleResponseDTO extends APIResponse {
   updated_at: string; // yyyy-MM-dd HH:mm:ss
 }
 
-export interface LostItemResponse extends APIResponse {}
+export interface LostItemResponse extends APIResponse {
+  id: number;
+  board_id: number;
+  category: string;
+  found_place: string;
+  found_date: string;
+  content: string;
+  author: string;
+  images: ImageDTO[];
+  prev_id: number | null;
+  next_id: number | null;
+  registered_at: string;
+  updated_at: string;
+}
 
 // POST /articles/lost-item
 interface LostItemArticleForPostDTO {

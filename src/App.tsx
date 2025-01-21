@@ -36,6 +36,7 @@ import PageNotFound from 'pages/Error/PageNotFound';
 import PolicyPage from 'pages/PolicyPage';
 import ROUTES from 'static/routes';
 import LostItemPage from 'pages/Notice/LostItemPage';
+import LostItemDetailPage from 'pages/Notice/LostItemDetailPage';
 
 interface HelmetWrapperProps {
   title: string;
@@ -78,7 +79,8 @@ function App() {
           <Route path={ROUTES.PrivatePolicy()} element={<HelmetWrapper title="코인 - 개인정보 처리방침" element={<PolicyPage />} />} />
           <Route path={ROUTES.BoardNotice()} element={<HelmetWrapper title="코인 - 공지사항" element={<NoticePage />} />}>
             <Route path={ROUTES.BoardNotice()} element={<NoticeListPage />} />
-            <Route path={ROUTES.BoardNoticeDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 공지사항 상세" element={<NoticeDetailPage />} />} />
+            <Route path={ROUTES.BoardNoticeDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 공시사항 상세" element={<NoticeDetailPage />} />} />
+            <Route path={ROUTES.BoardLostItemDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 분실물 상세" element={<LostItemDetailPage />} />} />
           </Route>
           <Route path={ROUTES.LostItemFound()} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 분실물 글쓰기" element={<LostItemPage />} />} />} />
           <Route path={ROUTES.LostItemLost()} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 분실물 글쓰기" element={<LostItemPage />} />} />} />

@@ -48,7 +48,7 @@ export default function LostItemPage() {
     validateAndUpdateItems,
     checkArticleFormFull,
   } = useLostItemForm();
-  const { mutate: postLostItem } = usePostLostItemArticles();
+  const { mutateAsync: postLostItem } = usePostLostItemArticles();
 
   const handleCompleteClick = async () => {
     validateAndUpdateItems();
@@ -63,8 +63,8 @@ export default function LostItemPage() {
       images: article.images,
     }));
 
-    postLostItem({ articles });
-    navigate(ROUTES.BoardNotice());
+    const id = await postLostItem({ articles });
+    navigate(ROUTES.BoardLostItemDetail({ id: String(id), isLink: true }));
   };
 
   return (

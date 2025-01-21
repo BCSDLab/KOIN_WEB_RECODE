@@ -34,7 +34,7 @@ export default function useImageUpload({
     if (!files || !files.length) return;
 
     const uploadedFile: string[] = [...imageFile];
-    const correctForm = new RegExp('(.*?)\\.(jpg|jpeg|gif|bmp|png)$');
+    const correctForm = new RegExp('(.*?)\\.(jpg|jpeg|gif|bmp|png|JPG|JPEG|GIF|BMP|PNG)$');
 
     for (let i = 0; i < files.length; i += 1) {
       const file = files[i];

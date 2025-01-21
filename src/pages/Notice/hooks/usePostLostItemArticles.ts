@@ -9,9 +9,11 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 const usePostLostItemArticles = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
-  const { status, mutate } = useMutation({
-    mutationFn: (data: LostItemArticlesForPost) => (
-      postLostItemArticle(token, transformLostItemArticlesForPost(data))),
+  const { status, mutateAsync } = useMutation({
+    mutationFn: async (data: LostItemArticlesForPost) => {
+      const response = await postLostItemArticle(token, transformLostItemArticlesForPost(data));
+      return response.id;
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['lostItem'] }),
     onError: (e) => {
       if (isKoinError(e)) {
@@ -20,7 +22,7 @@ const usePostLostItemArticles = () => {
     },
   });
 
-  return { status, mutate };
+  return { status, mutateAsync };
 };
 
 export default usePostLostItemArticles;
