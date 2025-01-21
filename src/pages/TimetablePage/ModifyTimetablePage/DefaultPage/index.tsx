@@ -4,7 +4,6 @@ import LoadingSpinner from 'components/common/LoadingSpinner';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import React, { Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import PenIcon from 'assets/svg/pen-icon.svg';
 import LectureList from 'pages/TimetablePage/components/LectureList';
 import CustomLecture from 'pages/TimetablePage/components/CustomLecture';
@@ -21,7 +20,6 @@ export default function DefaultPage({ frameId }: { frameId: number }) {
   const semester = useSemester();
   const { pathname } = useLocation();
   const { myLectures } = useMyLectures(Number(frameId));
-  const myLectureDayValue = useTimetableDayList(myLectures);
   const { data: lectureList } = useLectureList(semester);
   const tempLecture = useTempLecture();
   const similarSelectedLecture = lectureList
@@ -29,7 +27,6 @@ export default function DefaultPage({ frameId }: { frameId: number }) {
     ?? [];
   const selectedLectureIndex = similarSelectedLecture
     .findIndex(({ lecture_class }) => lecture_class === tempLecture?.lecture_class);
-  const similarSelectedLectureDayList = useTimetableDayList(similarSelectedLecture);
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
     navigate(`/timetable/modify/${courseType}/${frameId}`);
@@ -111,8 +108,7 @@ export default function DefaultPage({ frameId }: { frameId: number }) {
               <React.Suspense fallback={<LoadingSpinner size="50" />}>
                 <Timetable
                   frameId={frameId}
-                  lectures={myLectureDayValue}
-                  similarSelectedLecture={similarSelectedLectureDayList}
+                  similarSelectedLecture={similarSelectedLecture}
                   selectedLectureIndex={selectedLectureIndex}
                   columnWidth={88.73}
                   firstColumnWidth={44.36}

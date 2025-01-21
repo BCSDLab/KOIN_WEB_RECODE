@@ -1,12 +1,10 @@
-import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import type { TimetableFrameInfo } from 'api/timetable/entity';
 import useUpdateTimetableFrame from 'pages/TimetablePage/hooks/useUpdateTimetableFrame';
 import useDeleteTimetableFrame from 'pages/TimetablePage/hooks/useDeleteTimetableFrame';
-import { useSemester } from 'utils/zustand/semester';
 import showToast from 'utils/ts/showToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './TimetableSettingModal.module.scss';
 
@@ -20,8 +18,6 @@ export default function TimetableSettingModal({
   onClose,
 }: TimetableSettingModalProps) {
   const token = useTokenState();
-  const semester = useSemester();
-  const myLectures = useMyLectures(focusFrame.id!);
   const { mutate: updateFrameInfo } = useUpdateTimetableFrame();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
@@ -37,13 +33,13 @@ export default function TimetableSettingModal({
     if (focusFrame.is_main) {
       updateFrameInfo({
         ...focusFrame,
-        timetable_name: target.frame.value,
+        name: target.frame.value,
         is_main: true,
       });
     } else if (target?.checker) {
       updateFrameInfo({
         ...focusFrame,
-        timetable_name: target.frame.value,
+        name: target.frame.value,
         is_main: target.checker.checked,
       });
     }
@@ -51,17 +47,14 @@ export default function TimetableSettingModal({
     return onClose();
   };
 
-  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(
-    token,
-    semester,
-  );
+  const { mutate: deleteTimetableFrame } = useDeleteTimetableFrame(token, focusFrame);
   const onDelete = async () => {
     if (!focusFrame.id) {
       showToast('warning', '로그인 후 이용 가능합니다.');
       return;
     }
     try {
-      await deleteTimetableFrame({ id: focusFrame.id, frame: focusFrame });
+      await deleteTimetableFrame({ id: focusFrame.id });
       onClose();
     } catch (err) {
       if (isKoinError(err)) {
@@ -70,7 +63,6 @@ export default function TimetableSettingModal({
       }
       sendClientError(err);
     }
-    sessionStorage.setItem('restoreLecturesInFrame', JSON.stringify(myLectures));
   };
 
   return (
@@ -92,9 +84,9 @@ export default function TimetableSettingModal({
           <div className={styles.container__input}>
             <input
               name="frame"
-              placeholder={focusFrame.timetable_name}
+              placeholder={focusFrame.name}
               className={styles['container__timetable-name']}
-              defaultValue={focusFrame.timetable_name}
+              defaultValue={focusFrame.name}
             />
           </div>
 

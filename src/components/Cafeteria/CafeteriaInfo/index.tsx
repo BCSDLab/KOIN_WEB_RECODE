@@ -1,4 +1,4 @@
-import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
+import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';

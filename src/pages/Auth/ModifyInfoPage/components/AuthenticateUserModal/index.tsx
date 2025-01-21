@@ -1,6 +1,6 @@
 import { cn, sha256 } from '@bcsdlab/utils';
 import { useEffect, useState } from 'react';
-import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import BlindIcon from 'assets/svg/blind-icon.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
 import WarningIcon from 'assets/svg/warning-icon.svg';

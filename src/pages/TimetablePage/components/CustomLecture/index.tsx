@@ -1,44 +1,52 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
 import AddIcon from 'assets/svg/add-icon.svg';
-import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import Listbox from 'components/TimetablePage/Listbox';
-import { DAYS_STRING, HOUR, MINUTE } from 'static/timetable';
+import {
+  DAYS_STRING, HOUR, MINUTE, START_TIME, END_TIME,
+} from 'static/timetable';
 import WarningIcon from 'assets/svg/warning-icon.svg';
 import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import showToast from 'utils/ts/showToast';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useSearchParams } from 'react-router-dom';
-import { LectureSchedule, MyLectureInfo } from 'api/timetable/entity';
+import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
 
-const initialTimeSpaceComponent = {
+type Hour = '09시' | '10시' | '11시' | '12시' | '13시' | '14시' | '15시' | '16시' | '17시' | '18시' | '19시' | '20시' | '21시' | '22시' | '23시' | '24시';
+
+type Minute = '00분' | '30분';
+
+type TimeSpaceComponents = {
+  time: {
+    startHour: Hour,
+    startMinute: Minute,
+    endHour: Hour,
+    endMinute: Minute,
+  }
+  week: string[],
+  startTime: number,
+  endTime: number,
+  place: string,
+  id: string,
+};
+
+const initialTimeSpaceComponent: TimeSpaceComponents = {
   time: {
     startHour: '09시',
     startMinute: '00분',
     endHour: '10시',
     endMinute: '00분',
   },
-  week: [],
-  lectureTime: [],
+  week: ['월'],
+  startTime: 0,
+  endTime: 1,
   place: '',
   id: uuidv4(),
-};
-
-type TimeSpaceComponents = {
-  time: {
-    startHour: string,
-    startMinute: string,
-    endHour: string,
-    endMinute: string,
-  }
-  week: string[],
-  lectureTime: number[],
-  place: string,
-  id: string,
 };
 
 function CustomLecture({ frameId }: { frameId: number }) {
@@ -47,33 +55,30 @@ function CustomLecture({ frameId }: { frameId: number }) {
   const { updateCustomTempLecture } = useCustomTempLectureAction();
   const { myLectures } = useMyLectures(frameId);
   const { addMyLecture, editMyLecture } = useTimetableMutation(frameId);
+
   const [searchParams] = useSearchParams();
   const lectureIndex = searchParams.get('lectureIndex');
   const selectedLecture = lectureIndex ? myLectures[Number(lectureIndex)] : null;
   const selectedEditLecture = selectedLecture as MyLectureInfo | null;
   const isEditStandardLecture = selectedEditLecture?.lecture_id !== null && !!selectedEditLecture;
 
+  // 직접 추가 input 값
   const [lectureName, setLectureName] = useState('');
   const [professorName, setProfessorName] = useState('');
-  const [timeSpaceComponents, setTimeSpaceComponents] = useState<TimeSpaceComponents[]>([{
-    time: {
-      startHour: '09시',
-      startMinute: '00분',
-      endHour: '10시',
-      endMinute: '00분',
-    },
-    week: ['월'],
-    lectureTime: [0, 1],
-    place: '',
-    id: uuidv4(),
-  }]);
+  const [timeSpaceComponents, setTimeSpaceComponents] = useState<TimeSpaceComponents[]>(
+    [initialTimeSpaceComponent],
+  );
+
   const timeSpaceContainerRef = useRef<HTMLDivElement>(null);
   const reverseRef = useRef<HTMLDivElement[] | null[]>([]);
   const [positionValues, setPositionValues] = useState<number[]>([]);
   const [isFirstSubmit, setIsFirstSubmit] = useState(true);
 
   const isValid = (lectureName !== ''
-    && !timeSpaceComponents.some((time) => time.lectureTime.length === 0));
+    && !timeSpaceComponents.some(
+      (time) => time.endTime - time.startTime < 0 || time.week.length === 0,
+    )
+  );
   const isOverflow = timeSpaceContainerRef.current
     ? timeSpaceContainerRef.current.getBoundingClientRect().height > 400
     : false;
@@ -85,72 +90,80 @@ function CustomLecture({ frameId }: { frameId: number }) {
   const isSingleTimeSpaceComponent = timeSpaceComponents.length === 1;
 
   const changeToTimetableTime = (timeInfo: {
-    startHour: string;
-    startMinute: string;
-    endHour: string;
-    endMinute: string;
+    startHour: Hour;
+    startMinute: Minute;
+    endHour: Hour;
+    endMinute: Minute;
   }) => {
-    const timetableStart = (Number(timeInfo.startHour.slice(0, 2)) - 9) * 2
-      + Number(timeInfo.startMinute.slice(0, 2)) / 30;
-    const timetableEnd = (Number(timeInfo.endHour.slice(0, 2)) - 9) * 2
-      + Number(timeInfo.endMinute.slice(0, 2)) / 30;
-    return Array.from(
-      { length: timetableEnd - timetableStart },
-      (_, idx) => timetableStart + idx,
-    );
+    const timetableStart = START_TIME[timeInfo.startHour] + (timeInfo.startMinute === '00분' ? 0 : 1);
+    const timetableEnd = END_TIME[timeInfo.endHour] + (timeInfo.endMinute === '00분' ? 0 : 1);
+
+    return {
+      startTime: timetableStart,
+      endTime: timetableEnd,
+    };
   };
   const addWeekTime = (
     weekInfo: string[],
-    timetableTime: number[],
-  ) => weekInfo.reduce((acc: number[], week) => {
-    const mappedTimes = timetableTime.map((time) => {
-      switch (week) {
-        case '월':
-          return time;
-        case '화':
-          return time + 100;
-        case '수':
-          return time + 200;
-        case '목':
-          return time + 300;
-        default:
-          return time + 400;
-      }
-    });
-    return [...acc, ...mappedTimes];
-  }, []);
+    startTime: number,
+    endTime: number,
+  ) => weekInfo.map((week) => {
+    switch (week) {
+      case '월':
+        return {
+          startTime,
+          endTime,
+        };
+      case '화':
+        return {
+          startTime: startTime + 100,
+          endTime: endTime + 100,
+        };
+      case '수':
+        return {
+          startTime: startTime + 200,
+          endTime: endTime + 200,
+        };
+      case '목':
+        return {
+          startTime: startTime + 300,
+          endTime: endTime + 300,
+        };
+      default:
+        return {
+          startTime: startTime + 400,
+          endTime: endTime + 400,
+        };
+    }
+  });
 
   const hasTimeConflict = (
-    currentComponents: TimeSpaceComponents[],
-    existingLectures: MyLectureInfo[],
     excludeLectureId?: number,
   ): boolean => {
-    const timeSet = new Set<number>();
-
-    // 현재 강의 내에서 중복 검사
-    const hasOverlapInCurrent = currentComponents.some((component) => component.lectureTime.some(
-      (time) => timeSet.has(time) || !timeSet.add(time),
-    ));
-
+    const currentComponents = customTempLecture?.lecture_infos;
+    const hasOverlapInCurrent = currentComponents!.some(
+      (item, index) => currentComponents!.slice(index + 1).some(
+        (other) => Math.floor(item.start_time / 100) === Math.floor(other.start_time / 100)
+        && item.start_time <= other.end_time && other.start_time <= item.end_time,
+      ),
+    );
     if (hasOverlapInCurrent) return true;
 
-    if (!existingLectures) return false;
+    if (!myLectures) return false;
 
-    // 기존 강의와 중복 검사
-    return existingLectures.some((myLecture) => {
+    return myLectures.some((myLecture) => {
       if (excludeLectureId && myLecture.id === excludeLectureId) {
-        return false; // 수정 중인 강의 제외
+        return false;
       }
-      return myLecture.class_infos.some((schedule) => (
-        schedule.class_time.some((time) => (
-          currentComponents.some((tempSchedule) => (
-            tempSchedule.lectureTime.includes(time)
-          ))
-        ))
-      ));
+      return myLecture.lecture_infos.some(
+        (info) => currentComponents!.some(
+          (times) => Math.floor(times.start_time / 100) === info.day
+            && info.start_time % 100 <= times.end_time % 100
+            && times.start_time % 100 <= info.end_time % 100,
+        ),
+      );
     });
   };
-
   const handleSubmitLecture = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isValid) {
@@ -158,10 +171,8 @@ function CustomLecture({ frameId }: { frameId: number }) {
       return;
     }
 
-    const myLectureList = myLectures as MyLectureInfo[];
-
     // 중복 시간 검사
-    if (hasTimeConflict(timeSpaceComponents, myLectureList, selectedEditLecture?.id)) {
+    if (hasTimeConflict(selectedEditLecture?.id)) {
       showToast('error', '강의가 중복되어 추가할 수 없습니다.');
       return;
     }
@@ -172,36 +183,24 @@ function CustomLecture({ frameId }: { frameId: number }) {
       return;
     }
 
-    if (selectedEditLecture) {
+    if (selectedEditLecture && customTempLecture) {
       editMyLecture({
         id: selectedEditLecture.id,
-        lecture_id: selectedEditLecture.lecture_id,
         class_title: lectureName,
-        professor: professorName,
-        class_infos: timeSpaceComponents.map((schedule) => ({
-          class_time: schedule.lectureTime,
-          class_place: schedule.place,
+        lecture_infos: customTempLecture.lecture_infos.map((schedule) => ({
+          start_time: schedule.start_time,
+          end_time: schedule.end_time,
+          place: schedule.place,
         })),
-        grades: selectedEditLecture?.grades,
-        memo: selectedEditLecture?.memo,
+        professor: professorName,
       });
-    } else {
-      addMyLecture(customTempLecture!);
+      return;
     }
+    addMyLecture(customTempLecture!);
+
     setLectureName('');
     setProfessorName('');
-    setTimeSpaceComponents([{
-      time: {
-        startHour: '09시',
-        startMinute: '00분',
-        endHour: '10시',
-        endMinute: '00분',
-      },
-      week: ['월'],
-      lectureTime: [0, 1],
-      place: '',
-      id: uuidv4(),
-    }]);
+    setTimeSpaceComponents([initialTimeSpaceComponent]);
     setIsFirstSubmit(true);
   };
 
@@ -220,7 +219,9 @@ function CustomLecture({ frameId }: { frameId: number }) {
       return;
     }
 
-    setTimeSpaceComponents((prevComponents) => [...prevComponents, initialTimeSpaceComponent]);
+    setTimeSpaceComponents(
+      (prevComponents) => [...prevComponents, { ...initialTimeSpaceComponent, id: uuidv4() }],
+    );
 
     setTimeout(() => {
       timeSpaceContainerRef.current!.scrollTo({
@@ -249,36 +250,36 @@ function CustomLecture({ frameId }: { frameId: number }) {
 
     let newTimetableTime = changeToTimetableTime(newTimeInfo);
     // 올바르지 않은 시간을 선택했을 시
-    if (newTimetableTime.length === 0) {
+    if (newTimetableTime.endTime - newTimetableTime.startTime < 0) {
       const newStartHour = Number(newTimeInfo.startHour.slice(0, 2));
       const newEndHour = Number(newTimeInfo.endHour.slice(0, 2));
       if (key.slice(0, 5) === 'start') {
         newTimeInfo = {
           ...newTimeInfo,
-          endHour: `${newStartHour + 1}시`,
+          endHour: `${newStartHour + 1}시` as Hour,
           endMinute: newStartHour + 1 === 24 ? '00분' : newTimeInfo.startMinute,
         };
       } else {
         newTimeInfo = {
           ...newTimeInfo,
-          startHour: newEndHour - 1 < 10 ? '09시' : `${newEndHour - 1}시`,
+          startHour: newEndHour - 1 < 10 ? '09시' : `${newEndHour - 1}시` as Hour,
           startMinute: newEndHour - 1 < 9 ? '00분' : newTimeInfo.endMinute,
         };
       }
       newTimetableTime = changeToTimetableTime(newTimeInfo);
     }
-    const updatedTime = addWeekTime(timeSpaceComponents[index].week, newTimetableTime);
+
     const updatedComponents = [...timeSpaceComponents];
     updatedComponents[index] = {
       ...updatedComponents[index],
       time: newTimeInfo,
-      lectureTime: updatedTime,
+      startTime: newTimetableTime.startTime,
+      endTime: newTimetableTime.endTime,
     };
     setTimeSpaceComponents(updatedComponents);
   };
 
   const handleLectureTimeByWeek = (weekday: string, index: number) => {
-    const timetableTime = changeToTimetableTime(timeSpaceComponents[index].time);
     let newWeekInfo = [...timeSpaceComponents[index].week];
     if (newWeekInfo.includes(weekday)) {
       newWeekInfo = newWeekInfo.filter((day) => day !== weekday);
@@ -286,12 +287,10 @@ function CustomLecture({ frameId }: { frameId: number }) {
     } else {
       newWeekInfo = [...newWeekInfo, weekday];
     }
-    const updatedTime = addWeekTime(newWeekInfo, timetableTime);
     const updatedComponents = [...timeSpaceComponents];
     updatedComponents[index] = {
       ...updatedComponents[index],
       week: newWeekInfo,
-      lectureTime: updatedTime,
     };
     setTimeSpaceComponents(updatedComponents);
   };
@@ -307,17 +306,24 @@ function CustomLecture({ frameId }: { frameId: number }) {
 
   useEffect(() => {
     if (customTempLecture) {
+      const transformedLectureInfos = timeSpaceComponents.flatMap((info) => {
+        const totals = addWeekTime(info.week, info.startTime, info.endTime);
+
+        return totals.map((times) => ({
+          start_time: times.startTime,
+          end_time: times.endTime,
+          place: info.place,
+        }));
+      });
+
       updateCustomTempLecture({
         ...customTempLecture,
         class_title: lectureName,
         professor: professorName,
-        class_infos: timeSpaceComponents.map((schedule) => ({
-          class_time: schedule.lectureTime,
-          class_place: schedule.place,
-        })),
+        lecture_infos: transformedLectureInfos,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lectureName, professorName, timeSpaceComponents]);
 
   useEffect(() => {
@@ -326,68 +332,34 @@ function CustomLecture({ frameId }: { frameId: number }) {
     setLectureName(selectedEditLecture.class_title);
     setProfessorName(selectedEditLecture.professor);
 
-    const classInfoDefault: LectureSchedule[] = [];
+    const updatedComponents = selectedEditLecture.lecture_infos.map(
+      (info: LectureInfo) => {
+        const findKeyByValue = (object: Record<Hour, number>, value: number) => Object
+          .entries(object).find(([, val]) => val === value)?.[0] as Hour;
+        const startHour = info.start_time % 2 === 0
+          ? findKeyByValue(START_TIME, info.start_time % 100)
+          : findKeyByValue(START_TIME, (info.start_time % 100) - 1);
+        const startMinute: Minute = info.start_time % 2 === 0 ? '00분' : '30분';
+        const endHour = info.end_time % 2 !== 0
+          ? findKeyByValue(END_TIME, info.end_time % 100)
+          : findKeyByValue(END_TIME, (info.end_time % 100) - 1);
+        const endMinute: Minute = info.end_time % 2 !== 0 ? '00분' : '30분';
 
-    selectedEditLecture.class_infos.forEach(
-      (lectureSchedule: LectureSchedule) => {
-        if (selectedEditLecture.lecture_id !== null) {
-          const groupedTimes: number[][] = [];
-          let currentGroup: number[] = [lectureSchedule.class_time[0]];
-
-          for (let i = 1; i < lectureSchedule.class_time.length; i += 1) {
-            if (lectureSchedule.class_time[i] - lectureSchedule.class_time[i - 1] === 1) {
-              currentGroup.push(lectureSchedule.class_time[i]);
-            } else {
-              groupedTimes.push(currentGroup);
-              currentGroup = [lectureSchedule.class_time[i]];
-            }
-          }
-
-          if (currentGroup.length > 0) {
-            groupedTimes.push(currentGroup);
-          }
-
-          groupedTimes.forEach((timeGroup) => {
-            classInfoDefault.push({
-              class_place: lectureSchedule.class_place || undefined,
-              class_time: timeGroup,
-            });
-          });
-        } else {
-          classInfoDefault.push({
-            class_place: lectureSchedule.class_place || undefined,
-            class_time: lectureSchedule.class_time,
-          });
-        }
+        return {
+          time: {
+            startHour,
+            startMinute,
+            endHour,
+            endMinute,
+          },
+          week: [DAYS_STRING[Math.floor(info.start_time / 100)]],
+          startTime: info.start_time % 100,
+          endTime: info.end_time % 100,
+          place: info.place || '',
+          id: uuidv4(),
+        };
       },
     );
-
-    const updatedComponents = classInfoDefault.map((lectureSchedule: LectureSchedule) => {
-      const startHour = Math.floor((lectureSchedule.class_time[0] % 100) / 2) + 9 === 9
-        ? '09시'
-        : `${Math.floor((lectureSchedule.class_time[0] % 100) / 2) + 9}시`;
-      const startMinute = (lectureSchedule.class_time[0] % 2 === 0) ? '00분' : '30분';
-      const endHour = `${Math.floor(((lectureSchedule.class_time[lectureSchedule.class_time.length - 1] % 100) + 1) / 2) + 9}시`;
-      const endMinute = ((lectureSchedule.class_time[lectureSchedule.class_time.length - 1] + 1) % 2 === 0) ? '00분' : '30분';
-
-      const weekMapping = ['월', '화', '수', '목', '금'];
-      const uniqueDays = Array.from(
-        new Set(lectureSchedule.class_time.map((time) => weekMapping[Math.floor(time / 100)])),
-      );
-
-      return {
-        time: {
-          startHour,
-          startMinute,
-          endHour,
-          endMinute,
-        },
-        week: uniqueDays,
-        lectureTime: lectureSchedule.class_time,
-        place: lectureSchedule.class_place || '',
-        id: uuidv4(),
-      };
-    });
 
     setTimeSpaceComponents(updatedComponents);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -465,7 +437,8 @@ function CustomLecture({ frameId }: { frameId: number }) {
           {timeSpaceComponents.map(({
             time,
             week,
-            lectureTime,
+            startTime,
+            endTime,
             place,
             id,
           }, index) => (
@@ -487,7 +460,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
                   htmlFor="place"
                   className={cn({
                     [styles['form-group-time__title']]: true,
-                    [styles['form-group-time__title--require']]: !isFirstSubmit && lectureTime.length === 0,
+                    [styles['form-group-time__title--require']]: !isFirstSubmit && (endTime - startTime < 0 || week.length === 0),
                     [styles['form-group-time__title--disabled']]: selectedEditLecture?.lecture_id !== null && (!!selectedEditLecture),
                   })}
                 >
@@ -535,7 +508,7 @@ function CustomLecture({ frameId }: { frameId: number }) {
                   </div>
                 </div>
               </div>
-              {!isFirstSubmit && lectureTime.length === 0 && (
+              {!isFirstSubmit && (endTime - startTime < 0 || week.length === 0) && (
                 <div className={cn({
                   [styles.inputbox__warning]: true,
                   [styles['inputbox__warning--time']]: true,

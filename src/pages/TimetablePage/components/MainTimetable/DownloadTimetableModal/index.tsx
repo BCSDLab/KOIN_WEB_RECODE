@@ -1,8 +1,6 @@
 import React from 'react';
 import Timetable from 'pages/TimetablePage/components/Timetable';
-import CloseIcon from 'assets/svg/common/close/close-icon-black.svg';
-import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
-import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import { useTimeString } from 'utils/zustand/myLectures';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -20,12 +18,9 @@ interface TimetableDownloadProps {
 }
 
 function TimetableDownload({ rowNumber, forMobile, frameId }: TimetableDownloadProps) {
-  const { myLectures } = useMyLectures(frameId);
-  const myLectureDayValue = useTimetableDayList(myLectures);
   return (
     <Timetable
       frameId={frameId}
-      lectures={myLectureDayValue}
       columnWidth={forMobile ? 88.73 : 140}
       firstColumnWidth={forMobile ? 44.36 : 70}
       rowHeight={forMobile ? 33.07 : 33}

@@ -35,7 +35,7 @@ function StoreBenefitPage() {
       current_page: value,
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     });
-    setParams('category', `${id}`, { deleteBeforeParam: false, replacePage: false });
+    setParams('category', `${id}`, { deleteBeforeParam: true, replacePage: true });
   };
 
   return (
