@@ -1,8 +1,44 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
+import CourseStatusIcon from 'assets/svg/ellipse-icon.svg';
 import styles from './GeneralCourse.module.scss';
 
 function GeneralCourse() {
+  const tracks = [
+    { id: 1, name: '교양 선택' },
+    { id: 2, name: '예술과 문학' },
+    { id: 3, name: '사회와 심리' },
+    { id: 4, name: '역사와 철학' },
+    { id: 5, name: '자연과 인간' },
+    { id: 6, name: '인성과 소양' },
+  ];
   return (
-    <div className={styles['general-course']}> </div>
+    <div className={styles['general-course']}>
+      <div className={styles.description}>
+        <div className={styles.description__title}>교양영역</div>
+        <div className={styles.description__message}>현재 이수한 교양 강의가 영역별로 나타납니다.</div>
+      </div>
+      <button
+        type="button"
+        className={styles['question-icon']}
+      >
+        <QuestionMarkIcon />
+      </button>
+      <div className={styles.list}>
+        {tracks.map((track) => (
+          <div key={track.id} className={styles.course}>
+            <button
+              type="button"
+              className={styles.course__button}
+            >
+              <CourseStatusIcon />
+              <div className={styles.course__track}>{track.name}</div>
+            </button>
+            <div className={styles.course__enrolled}>과목명</div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
