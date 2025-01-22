@@ -64,7 +64,7 @@ export default function LostItemPage() {
     }));
 
     const id = await postLostItem({ articles });
-    navigate(ROUTES.LostItemDetail({ id: String(id), isLink: true }));
+    navigate(ROUTES.LostItemDetail({ id: String(id), isLink: true }), { replace: true });
   };
 
   return (
