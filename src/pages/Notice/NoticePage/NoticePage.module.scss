@@ -33,39 +33,16 @@
   justify-content: space-between;
   align-items: center;
 
-  @include media.media-breakpoint(mobile) {
-    display: none;
-  }
-
   &__title {
     font-family: Pretendard, sans-serif;
     font-size: 32px;
     font-weight: 500;
     color: #175c8e;
     margin: 0;
-  }
-}
 
-.links {
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-
-  &__button {
-    height: 48px;
-    padding: 12px 16px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    border: 1px solid #e1e1e1;
-    border-radius: 24px;
-    background-color: #fafafa;
-    color: #4b4b4b;
-    font-family: Pretendard, sans-serif;
-    font-size: 20px;
-    font-weight: 500;
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
   }
 }
 

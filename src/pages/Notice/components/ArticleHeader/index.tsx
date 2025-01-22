@@ -17,21 +17,23 @@ export default function ArticleHeader({
   const isMobile = useMediaQuery();
 
   return (
-    <div className={styles.header}>
-      <div className={styles.title}>
-        <span className={styles['title__board-id']}>{convertNoticeTag(boardId)}</span>
-        <span className={styles.title__content}>{title}</span>
-        {setArticleRegisteredDate(registeredAt)[1] && (
-          <img
-            className={styles['title__new-tag']}
-            src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
-            alt="new"
-          />
-        )}
-      </div>
-      <div className={styles.content}>
-        <div className={styles.content__author}>{isMobile ? `조회 ${hit} · ${author}` : author}</div>
-        <div className={styles['content__registered-at']}>{registeredAt}</div>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.title}>
+          <span className={styles['title__board-id']}>{convertNoticeTag(boardId)}</span>
+          <span className={styles.title__content}>{title}</span>
+          {setArticleRegisteredDate(registeredAt)[1] && (
+            <img
+              className={styles['title__new-tag']}
+              src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
+              alt="new"
+            />
+          )}
+        </div>
+        <div className={styles.content}>
+          <div className={styles.content__author}>{isMobile ? `조회 ${hit} · ${author}` : author}</div>
+          <div className={styles['content__registered-at']}>{registeredAt}</div>
+        </div>
       </div>
     </div>
   );

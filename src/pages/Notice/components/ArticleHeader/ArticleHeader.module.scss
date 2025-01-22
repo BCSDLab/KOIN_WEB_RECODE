@@ -1,10 +1,18 @@
 @use "src/utils/scss/media" as media;
 
+.container {
+  @include media.media-breakpoint(mobile) {
+    width: calc(100vw - 24px);
+    margin: 0 auto;
+  }
+}
+
 .header {
   border-top: 2px solid #175c8e;
   border-bottom: 1px solid #175c8e;
   width: 834px;
   height: 100%;
+  box-sizing: border-box;
   text-align: left;
   user-select: text;
 

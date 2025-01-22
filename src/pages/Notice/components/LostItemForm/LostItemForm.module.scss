@@ -406,6 +406,7 @@
     }
 
     @include media.media-breakpoint(mobile) {
+      max-width: calc(100vw - 48px);
       width: 100%;
     }
   }

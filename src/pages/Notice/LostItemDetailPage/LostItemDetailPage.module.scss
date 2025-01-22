@@ -1,5 +1,11 @@
 @use "src/utils/scss/media" as media;
 
+.container {
+  @include media.media-breakpoint(mobile) {
+    width: calc(100vw - 24px);
+  }
+}
+
 .header {
   border-top: 2px solid #175c8e;
   border-bottom: 1px solid #175c8e;
@@ -16,8 +22,9 @@
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
+    box-sizing: border-box;
     border-top: 0;
-    padding: 15px 16px;
+    padding: 15px 24px;
     border-bottom: 1px solid #ececec;
   }
 }
@@ -26,6 +33,7 @@
   width: 794px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
   font-family: Pretendard, sans-serif;
   font-size: 32px;
@@ -33,13 +41,11 @@
   line-height: 1.2;
 
   @include media.media-breakpoint(mobile) {
-    font-size: 16px;
-    color: rgb(0 0 0 / 87%);
-    letter-spacing: -0.8px;
-    line-height: 1.5;
-    word-break: break-all;
-    width: calc(100% - 40px);
+    gap: 2px;
+    width: 100%;
     padding: 0;
+    font-size: 14px;
+    line-height: 1.6;
   }
 
   &__category {
@@ -51,10 +57,22 @@
     border-radius: 23px;
     background-color: #175c8e;
     color: #fff;
+
+    @include media.media-breakpoint(mobile) {
+      height: 22px;
+      padding: 1px 8px 0;
+      margin-right: 6px;
+    }
   }
 
   &__board-id {
     font-weight: 500;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      color: #10477a;
+      font-weight: 600;
+    }
   }
 }
 
@@ -62,40 +80,27 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
 
   @include media.media-breakpoint(mobile) {
-    margin-top: 1px;
-    color: #a1a1a1;
-    font-size: 13px;
-    line-height: 1.54;
-    letter-spacing: -0.7px;
-    width: calc(100% - 40px);
-    display: flex;
-    padding: 0;
-    justify-content: space-between;
+    font-size: 12px;
   }
 
   &__author {
-    font-family: Pretendard, sans-serif;
-    font-size: 18px;
-    line-height: 1.6;
     color: #175c8e;
 
     @include media.media-breakpoint(mobile) {
-      display: inline;
-      color: #a1a1a1;
+      color: #727272;
     }
   }
 
   &__registered-at {
     color: #727272;
-    font-family: Pretendard, sans-serif;
-    font-size: 18px;
-    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
-      display: inline;
-      float: right;
     }
   }
 }
@@ -105,6 +110,12 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 180px;
+  box-sizing: border-box;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    padding: 0 24px;
+  }
 
   &__images {
     margin-top: 40px;
@@ -115,10 +126,19 @@
   }
 
   &__navigation {
+    height: 30px;
     display: flex;
+    align-items: center;
     justify-content: center;
     margin-top: 20px;
+    box-sizing: border-box;
     gap: 8px;
+
+    & button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
     @include media.media-breakpoint(mobile) {
       margin-top: 16px;
@@ -128,9 +148,14 @@
   &__content {
     width: 794px;
     margin-top: 64px;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
+      width: 100%;
       margin-top: 16px;
+      font-size: 14px;
     }
   }
 
@@ -154,23 +179,36 @@
       color: #1f1f1f;
       font-weight: 500;
     }
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      height: 89px;
+      margin-top: 32px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
   }
 
-  &__delete {
+  &__buttons {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: row-reverse;
     margin-top: 64px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      margin-top: 40px;
+      justify-content: space-between;
+    }
   }
 
   &__button {
-    width: 86px;
-    height: 46px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 4px;
     gap: 1px;
+    padding: 10px 16px;
     background-color: #e1e1e1;
     color: #4b4b4b;
     font-family: Pretendard, sans-serif;
@@ -178,13 +216,23 @@
     font-weight: 500;
     line-height: 1.6;
 
+    & path {
+      fill: #4b4b4b;
+    }
+
     & svg {
       width: 24px;
       height: 24px;
     }
 
-    & path {
-      fill: #4b4b4b;
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+      padding: 6px 12px;
+
+      & svg {
+        width: 16px;
+        height: 16px;
+      }
     }
   }
 }
@@ -194,24 +242,36 @@
   width: 586px;
   height: 527px;
 
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    height: auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   &__image {
     width: 586px;
     height: 527px;
     object-fit: cover;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      height: auto;
+    }
   }
 
   &__button-left {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 17px;
   }
 
   &__button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 17px;
 
     &--left {
       left: 17px;
