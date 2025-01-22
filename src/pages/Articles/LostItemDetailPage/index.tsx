@@ -6,9 +6,9 @@ import NotSelectedDotIcon from 'assets/svg/Notice/ellipse-grey.svg';
 import ChevronRight from 'assets/svg/Notice/chevron-right-circle.svg';
 import ChevronLeft from 'assets/svg/Notice/chevron-left-circle.svg';
 import GarbageCanIcon from 'assets/svg/Notice/garbage-can.svg';
-import useSingleLostItemArticle from 'pages/Notice/hooks/useSingleLostItemArticle';
+import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
 import uuidv4 from 'utils/ts/uuidGenerater';
-import DeleteModal from 'pages/Notice/components/DeleteModal/indes';
+import DeleteModal from 'pages/Articles/components/DeleteModal/indes';
 import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -128,7 +128,7 @@ export default function LostItemDetailPage() {
             {isMobile && (
               <button
                 className={styles.contents__button}
-                onClick={() => navigate(ROUTES.BoardNotice())}
+                onClick={() => navigate(ROUTES.Articles())}
                 type="button"
               >
                 목록

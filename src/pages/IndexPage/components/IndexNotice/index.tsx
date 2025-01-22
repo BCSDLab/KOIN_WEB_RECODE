@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import RightArrow from 'assets/svg/right-arrow.svg';
-import useArticles from 'pages/Notice/hooks/useArticles';
+import useArticles from 'pages/Articles/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
@@ -16,14 +16,14 @@ function IndexNotice() {
     <section className={styles.template}>
       <div className={styles.template__header}>
         <Link
-          to={ROUTES.BoardNotice()}
+          to={ROUTES.Articles()}
           className={styles['template__title-link']}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice', value: '공지사항' })}
         >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
         <Link
-          to={ROUTES.BoardNotice()}
+          to={ROUTES.Articles()}
           className={styles.template__link}
           onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_notice_detail', value: '공지사항' })}
         >
@@ -37,7 +37,7 @@ function IndexNotice() {
           {articles.slice(0, 7).map((article) => (
             <li key={article.id} className={styles.list__item}>
               <Link
-                to={ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true })}
+                to={ROUTES.ArticlesDetail({ id: String(article.id), isLink: true })}
                 className={styles['list__item-link']}
               >
                 <span className={styles['list__item-type']}>

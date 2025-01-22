@@ -2,8 +2,8 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postLostItemArticle } from 'api/notice';
 import showToast from 'utils/ts/showToast';
-import { transformLostItemArticlesForPost } from 'pages/Notice/utils/transform';
-import { LostItemArticlesForPost } from 'pages/Notice/ts/types';
+import { transformLostItemArticlesForPost } from 'pages/Articles/utils/transform';
+import { LostItemArticlesForPost } from 'pages/Articles/ts/types';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 const usePostLostItemArticles = () => {

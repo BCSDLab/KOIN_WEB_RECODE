@@ -16,9 +16,9 @@ export default function NoticeList({ articles }: NoticeListProps) {
   const getLink = (article: Article) => {
     switch (article.board_id) {
       case 14:
-        return ROUTES.BoardLostItemDetail({ id: String(article.id), isLink: true });
+        return ROUTES.LostItemDetail({ id: String(article.id), isLink: true });
       default:
-        return ROUTES.BoardNoticeDetail({ id: String(article.id), isLink: true });
+        return ROUTES.ArticlesDetail({ id: String(article.id), isLink: true });
     }
   };
 

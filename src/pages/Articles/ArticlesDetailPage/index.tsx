@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
-import ArticleHeader from 'pages/Notice/components/ArticleHeader';
-import ArticleContent from 'pages/Notice/components/ArticleContent';
-import useArticle from 'pages/Notice/hooks/useArticle';
+import ArticleHeader from 'pages/Articles/components/ArticleHeader';
+import ArticleContent from 'pages/Articles/components/ArticleContent';
+import useArticle from 'pages/Articles/hooks/useArticle';
 
-export default function NoticeDetailPage() {
+export default function ArticlesDetailPage() {
   const params = useParams();
   const { article } = useArticle(params.id!);
 

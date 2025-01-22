@@ -1,5 +1,5 @@
 import { LostItemArticlesRequestDTO, LostItemArticlesResponseDTO, SingleLostItemArticleResponseDTO } from 'api/notice/entity';
-import { LostItemArticlesForGet, LostItemArticlesForPost, SingleLostItemArticle } from 'pages/Notice/ts/types';
+import { LostItemArticlesForGet, LostItemArticlesForPost, SingleLostItemArticle } from 'pages/Articles/ts/types';
 
 export const transformLostItemArticles = (dto: LostItemArticlesResponseDTO)
 : LostItemArticlesForGet => ({

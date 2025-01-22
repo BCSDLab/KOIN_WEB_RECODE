@@ -1,12 +1,12 @@
 import AddIcon from 'assets/svg/Notice/add.svg';
-import LostItemForm from 'pages/Notice/components/LostItemForm';
-import { useLostItemForm } from 'pages/Notice/hooks/useLostItemForm';
+import LostItemForm from 'pages/Articles/components/LostItemForm';
+import { useLostItemForm } from 'pages/Articles/hooks/useLostItemForm';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import FoundIcon from 'assets/svg/Notice/found.svg';
 import LostIcon from 'assets/svg/Notice/lost.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import uuidv4 from 'utils/ts/uuidGenerater';
-import usePostLostItemArticles from 'pages/Notice/hooks/usePostLostItemArticles';
+import usePostLostItemArticles from 'pages/Articles/hooks/usePostLostItemArticles';
 import ROUTES from 'static/routes';
 import styles from './LostItemPage.module.scss';
 
@@ -64,7 +64,7 @@ export default function LostItemPage() {
     }));
 
     const id = await postLostItem({ articles });
-    navigate(ROUTES.BoardLostItemDetail({ id: String(id), isLink: true }));
+    navigate(ROUTES.LostItemDetail({ id: String(id), isLink: true }));
   };
 
   return (

@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notice } from 'api';
-import { transformSingleLostItemArticle } from 'pages/Notice/utils/transform';
+import { transformSingleLostItemArticle } from 'pages/Articles/utils/transform';
 
 const useSingleLostItemArticle = (id: number) => {
   const { data: article } = useSuspenseQuery({

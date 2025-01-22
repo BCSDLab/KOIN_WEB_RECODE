@@ -8,9 +8,9 @@ import AuthPage from 'pages/Auth/AuthPage';
 import LoginPage from 'pages/Auth/LoginPage';
 import BoardPage from 'pages/BoardPage';
 import StorePage from 'pages/Store/StorePage';
-import NoticePage from 'pages/Notice/NoticePage';
-import NoticeListPage from 'pages/Notice/NoticeListPage';
-import NoticeDetailPage from 'pages/Notice/NoticeDetailPage';
+import ArticlesPage from 'pages/Articles/ArticlesPage';
+import ArticleListPage from 'pages/Articles/ArticleListPage';
+import ArticlesDetailPage from 'pages/Articles/ArticlesDetailPage';
 import Toast from 'components/common/Toast';
 import LogPage from 'components/common/LogPage';
 import SignupPage from 'pages/Auth/SignupPage';
@@ -35,8 +35,8 @@ import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
 import PageNotFound from 'pages/Error/PageNotFound';
 import PolicyPage from 'pages/PolicyPage';
 import ROUTES from 'static/routes';
-import LostItemPage from 'pages/Notice/LostItemPage';
-import LostItemDetailPage from 'pages/Notice/LostItemDetailPage';
+import LostItemPage from 'pages/Articles/LostItemPage';
+import LostItemDetailPage from 'pages/Articles/LostItemDetailPage';
 
 interface HelmetWrapperProps {
   title: string;
@@ -77,10 +77,10 @@ function App() {
           <Route path={ROUTES.BusCourse()} element={<HelmetWrapper title="코인 - 버스" element={<BusCoursePage />} />} />
           <Route path={ROUTES.Cafeteria()} element={<HelmetWrapper title="코인 - 식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.PrivatePolicy()} element={<HelmetWrapper title="코인 - 개인정보 처리방침" element={<PolicyPage />} />} />
-          <Route path={ROUTES.BoardNotice()} element={<HelmetWrapper title="코인 - 공지사항" element={<NoticePage />} />}>
-            <Route path={ROUTES.BoardNotice()} element={<NoticeListPage />} />
-            <Route path={ROUTES.BoardNoticeDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 공시사항 상세" element={<NoticeDetailPage />} />} />
-            <Route path={ROUTES.BoardLostItemDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 분실물 상세" element={<LostItemDetailPage />} />} />
+          <Route path={ROUTES.Articles()} element={<HelmetWrapper title="코인 - 공지사항" element={<ArticlesPage />} />}>
+            <Route path={ROUTES.Articles()} element={<ArticleListPage />} />
+            <Route path={ROUTES.ArticlesDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 공시사항 상세" element={<ArticlesDetailPage />} />} />
+            <Route path={ROUTES.LostItemDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 분실물 상세" element={<LostItemDetailPage />} />} />
           </Route>
           <Route path={ROUTES.LostItemFound()} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 분실물 글쓰기" element={<LostItemPage />} />} />} />
           <Route path={ROUTES.LostItemLost()} element={<PrivateRoute requireAuthentication element={<HelmetWrapper title="코인 - 분실물 글쓰기" element={<LostItemPage />} />} />} />

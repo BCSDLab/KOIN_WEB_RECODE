@@ -1,4 +1,4 @@
-import useDeleteLostItemArticle from 'pages/Notice/hooks/useDeleteLostItemArticles';
+import useDeleteLostItemArticle from 'pages/Articles/hooks/useDeleteLostItemArticles';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import GarbageCanIcon from 'assets/svg/Notice/garbage-can.svg';

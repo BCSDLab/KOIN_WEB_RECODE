@@ -1,17 +1,17 @@
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import HotArticles from 'pages/Notice/components/HotArticle';
+import HotArticles from 'pages/Articles/components/HotArticle';
 import { Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useUser } from 'utils/hooks/state/useUser';
-import LostItemRouteButton from 'pages/Notice/components/LostItemRouteButton';
-import styles from './NoticePage.module.scss';
+import LostItemRouteButton from 'pages/Articles/components/LostItemRouteButton';
+import ROUTES from 'static/routes';
+import styles from './ArticlesPage.module.scss';
 
-export default function NoticePage() {
-  // const [linksOpen, ,, toggleLinksOpen] = useBooleanState(false);
+export default function ArticlesPage() {
   useScrollToTop();
   const { pathname } = useLocation();
-  const isBoard = pathname.includes('board');
+  const isBoard = pathname.endsWith(ROUTES.Articles());
   const { data: userInfo } = useUser();
   const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
