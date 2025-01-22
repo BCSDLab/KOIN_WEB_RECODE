@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { articles } from 'api/index';
+import { articles as articlesApi } from 'api/index';
 import { PaginationInfo } from 'api/articles/entity';
 
 const useArticles = (page = '1') => {
@@ -9,7 +9,7 @@ const useArticles = (page = '1') => {
       queryFn: async () => {
         const queryFnParams = page;
 
-        return articles.getArticles(queryFnParams);
+        return articlesApi.getArticles(queryFnParams);
       },
       select: (data) => {
         const {
