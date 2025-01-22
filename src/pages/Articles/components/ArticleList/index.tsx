@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
-import { Article } from 'api/notice/entity';
+import { Article } from 'api/articles/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
-import { convertNoticeTag } from 'utils/ts/convertNoticeTag';
+import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
 import ROUTES from 'static/routes';
-import styles from './NoticeList.module.scss';
+import styles from './ArticleList.module.scss';
 
-interface NoticeListProps {
+interface ArticleListProps {
   articles: Article[]
 }
 
-export default function NoticeList({ articles }: NoticeListProps) {
+export default function ArticleList({ articles }: ArticleListProps) {
   const isMobile = useMediaQuery();
 
   const getLink = (article: Article) => {
@@ -32,7 +32,7 @@ export default function NoticeList({ articles }: NoticeListProps) {
         >
           <div className={styles.list__id}>{ article.id }</div>
           <div className={styles.title}>
-            <div className={styles.title__header}>{ convertNoticeTag(article.board_id) }</div>
+            <div className={styles.title__header}>{ convertArticlesTag(article.board_id) }</div>
             <div className={styles.title__content}>{ article.title }</div>
             { setArticleRegisteredDate(article.registered_at)[1] && (
               <img

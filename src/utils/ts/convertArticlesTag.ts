@@ -1,4 +1,4 @@
-export const convertNoticeTag = (type: number) => {
+export const convertArticlesTag = (type: number) => {
   switch (type) {
     case 1:
       return '[자유게시판]';

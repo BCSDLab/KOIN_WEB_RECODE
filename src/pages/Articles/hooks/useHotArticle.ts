@@ -1,11 +1,11 @@
-import { notice } from 'api';
+import { articles } from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 function useHotArticleList() {
   const { data: hotArticles } = useSuspenseQuery(
     {
       queryKey: ['hotArticles'],
-      queryFn: notice.getHotArticles,
+      queryFn: articles.getHotArticles,
     },
   );
 

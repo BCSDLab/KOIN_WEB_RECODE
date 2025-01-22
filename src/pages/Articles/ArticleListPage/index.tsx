@@ -1,6 +1,6 @@
 import Pagination from 'pages/Articles/components/Pagination';
-import NoticeHeader from 'pages/Articles/components/NoticeHeader';
-import NoticeList from 'pages/Articles/components/NoticeList';
+import ArticlesHeader from 'pages/Articles/components/ArticlesHeader';
+import ArticleList from 'pages/Articles/components/ArticleList';
 import usePageParams from 'pages/Articles/hooks/usePageParams';
 import useArticles from 'pages/Articles/hooks/useArticles';
 import { Suspense } from 'react';
@@ -11,9 +11,9 @@ export default function ArticleListPage() {
 
   return (
     <>
-      <NoticeHeader />
+      <ArticlesHeader />
       <Suspense fallback={<div />}>
-        <NoticeList articles={articles} />
+        <ArticleList articles={articles} />
         <Pagination totalPageNum={articles === null ? 5 : paginationInfo.total_count} />
       </Suspense>
     </>

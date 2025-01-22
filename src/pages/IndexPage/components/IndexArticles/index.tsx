@@ -5,10 +5,10 @@ import useArticles from 'pages/Articles/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
-import { convertNoticeTag } from 'utils/ts/convertNoticeTag';
-import styles from './IndexNotice.module.scss';
+import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
+import styles from './IndexArticles.module.scss';
 
-function IndexNotice() {
+export default function IndexArticles() {
   const { articles } = useArticles();
   const logger = useLogger();
 
@@ -41,7 +41,7 @@ function IndexNotice() {
                 className={styles['list__item-link']}
               >
                 <span className={styles['list__item-type']}>
-                  {convertNoticeTag(article.board_id)}
+                  {convertArticlesTag(article.board_id)}
                 </span>
                 <span className={styles['list__item-title']}>
                   {article.title}
@@ -65,5 +65,3 @@ function IndexNotice() {
     </section>
   );
 }
-
-export default IndexNotice;

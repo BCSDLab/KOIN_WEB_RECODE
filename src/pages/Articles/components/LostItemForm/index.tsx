@@ -1,10 +1,10 @@
 import { cn } from '@bcsdlab/utils';
 import { uploadLostItemFile } from 'api/uploadFile';
-import ChevronDown from 'assets/svg/Notice/chevron-down.svg';
-import PhotoIcon from 'assets/svg/Notice/photo.svg';
-import GarbageCanIcon from 'assets/svg/Notice/garbage-can.svg';
-import WarnIcon from 'assets/svg/Notice/warn.svg';
-import RemoveImageIcon from 'assets/svg/Notice/remove-image.svg';
+import ChevronDown from 'assets/svg/Articles/chevron-down.svg';
+import PhotoIcon from 'assets/svg/Articles/photo.svg';
+import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
+import WarnIcon from 'assets/svg/Articles/warn.svg';
+import RemoveImageIcon from 'assets/svg/Articles/remove-image.svg';
 import Calendar from 'pages/Articles/components/Calendar';
 import { LostItem, LostItemHandler } from 'pages/Articles/hooks/useLostItemForm';
 import useBooleanState from 'utils/hooks/state/useBooleanState';

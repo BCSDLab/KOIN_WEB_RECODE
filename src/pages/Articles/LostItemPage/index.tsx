@@ -1,9 +1,9 @@
-import AddIcon from 'assets/svg/Notice/add.svg';
+import AddIcon from 'assets/svg/Articles/add.svg';
 import LostItemForm from 'pages/Articles/components/LostItemForm';
 import { useLostItemForm } from 'pages/Articles/hooks/useLostItemForm';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import FoundIcon from 'assets/svg/Notice/found.svg';
-import LostIcon from 'assets/svg/Notice/lost.svg';
+import FoundIcon from 'assets/svg/Articles/found.svg';
+import LostIcon from 'assets/svg/Articles/lost.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import usePostLostItemArticles from 'pages/Articles/hooks/usePostLostItemArticles';

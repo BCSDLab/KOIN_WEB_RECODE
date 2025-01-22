@@ -4,7 +4,7 @@ export * as bus from './bus';
 export * as cafeteria from './cafeteria';
 export * as coopshop from './coopshop';
 export * as dept from './dept';
-export * as notice from './notice';
+export * as articles from './articles';
 export * as review from './review';
 export * as room from './room';
 export * as store from './store';

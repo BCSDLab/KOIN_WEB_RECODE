@@ -1,8 +1,8 @@
 import useDeleteLostItemArticle from 'pages/Articles/hooks/useDeleteLostItemArticles';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import GarbageCanIcon from 'assets/svg/Notice/garbage-can.svg';
-import CloseIcon from 'assets/svg/Notice/close.svg';
+import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
+import CloseIcon from 'assets/svg/Articles/close.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './DeleteModal.module.scss';
 

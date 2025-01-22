@@ -1,6 +1,6 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
-export interface GetNoticeRequest {
+export interface GetArticlesRequest {
   boardId: string
   page: string
 }

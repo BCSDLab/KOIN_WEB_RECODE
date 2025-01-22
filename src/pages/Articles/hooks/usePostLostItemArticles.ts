@@ -1,6 +1,6 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postLostItemArticle } from 'api/notice';
+import { postLostItemArticle } from 'api/articles';
 import showToast from 'utils/ts/showToast';
 import { transformLostItemArticlesForPost } from 'pages/Articles/utils/transform';
 import { LostItemArticlesForPost } from 'pages/Articles/ts/types';

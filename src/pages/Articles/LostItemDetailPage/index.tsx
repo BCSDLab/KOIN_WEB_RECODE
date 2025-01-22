@@ -1,11 +1,11 @@
 import { Suspense, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { convertNoticeTag } from 'utils/ts/convertNoticeTag';
-import SelectedDotIcon from 'assets/svg/Notice/ellipse-blue.svg';
-import NotSelectedDotIcon from 'assets/svg/Notice/ellipse-grey.svg';
-import ChevronRight from 'assets/svg/Notice/chevron-right-circle.svg';
-import ChevronLeft from 'assets/svg/Notice/chevron-left-circle.svg';
-import GarbageCanIcon from 'assets/svg/Notice/garbage-can.svg';
+import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
+import SelectedDotIcon from 'assets/svg/Articles/ellipse-blue.svg';
+import NotSelectedDotIcon from 'assets/svg/Articles/ellipse-grey.svg';
+import ChevronRight from 'assets/svg/Articles/chevron-right-circle.svg';
+import ChevronLeft from 'assets/svg/Articles/chevron-left-circle.svg';
+import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import DeleteModal from 'pages/Articles/components/DeleteModal/indes';
@@ -49,7 +49,7 @@ export default function LostItemDetailPage() {
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.title}>
-            <span className={styles['title__board-id']}>{convertNoticeTag(boardId)}</span>
+            <span className={styles['title__board-id']}>{convertArticlesTag(boardId)}</span>
             <span className={styles.title__category}>{category}</span>
             <span className={styles.title__content}>{[foundPlace, foundDate].join(' | ')}</span>
           </div>

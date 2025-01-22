@@ -1,12 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { notice } from 'api';
+import { articles } from 'api';
 import { transformSingleLostItemArticle } from 'pages/Articles/utils/transform';
 
 const useSingleLostItemArticle = (id: number) => {
   const { data: article } = useSuspenseQuery({
     queryKey: ['lostItem', id],
     queryFn: async () => {
-      const response = await notice.getSingleLostItemArticle(id);
+      const response = await articles.getSingleLostItemArticle(id);
       return transformSingleLostItemArticle(response);
     },
   });

@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { notice } from 'api';
+import { articles } from 'api';
 import { transformLostItemArticles } from 'pages/Articles/utils/transform';
 
 const useLostItemArticles = () => {
@@ -7,7 +7,7 @@ const useLostItemArticles = () => {
     {
       queryKey: ['lostItem'],
       queryFn: async () => {
-        const response = await notice.getLostItemArticles();
+        const response = await articles.getLostItemArticles();
         return transformLostItemArticles(response);
       },
     },

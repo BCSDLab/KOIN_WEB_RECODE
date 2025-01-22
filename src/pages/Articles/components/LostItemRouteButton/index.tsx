@@ -1,8 +1,8 @@
-import PencilIcon from 'assets/svg/Notice/pencil.svg';
+import PencilIcon from 'assets/svg/Articles/pencil.svg';
 import { Link } from 'react-router-dom';
-// import FoundIcon from 'assets/svg/Notice/found.svg';
-// import LostIcon from 'assets/svg/Notice/lost.svg';
-// import CloseIcon from 'assets/svg/Notice/close.svg';
+// import FoundIcon from 'assets/svg/Articles/found.svg';
+// import LostIcon from 'assets/svg/Articles/lost.svg';
+// import CloseIcon from 'assets/svg/Articles/close.svg';
 // import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
 import styles from './LostItemRouteButton.module.scss';

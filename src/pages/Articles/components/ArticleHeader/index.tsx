@@ -1,5 +1,5 @@
 import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
-import { convertNoticeTag } from 'utils/ts/convertNoticeTag';
+import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ArticleHeader.module.scss';
 
@@ -20,7 +20,7 @@ export default function ArticleHeader({
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.title}>
-          <span className={styles['title__board-id']}>{convertNoticeTag(boardId)}</span>
+          <span className={styles['title__board-id']}>{convertArticlesTag(boardId)}</span>
           <span className={styles.title__content}>{title}</span>
           {setArticleRegisteredDate(registeredAt)[1] && (
             <img

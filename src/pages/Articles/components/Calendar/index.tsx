@@ -1,6 +1,6 @@
 import { cn } from '@bcsdlab/utils';
-import ChevronLeftIcon from 'assets/svg/Notice/chevron-left.svg';
-import ChevronRightIcon from 'assets/svg/Notice/chevron-right.svg';
+import ChevronLeftIcon from 'assets/svg/Articles/chevron-left.svg';
+import ChevronRightIcon from 'assets/svg/Articles/chevron-right.svg';
 import { useMemo, useState } from 'react';
 import styles from './Calendar.module.scss';
 
