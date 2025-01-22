@@ -22,7 +22,7 @@ export default function ArticlesPage() {
           <h1 className={styles.header__title}>공지사항</h1>
           {isBoard && isCouncil && <LostItemRouteButton />}
         </div>
-        <Suspense fallback={<LoadingSpinner size="200px" />}>
+        <Suspense fallback={<LoadingSpinner size="150px" />}>
           <Outlet />
         </Suspense>
       </div>
