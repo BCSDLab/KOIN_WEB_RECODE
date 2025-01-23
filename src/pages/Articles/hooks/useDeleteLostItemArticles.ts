@@ -4,12 +4,12 @@ import { deleteLostItemArticle } from 'api/articles';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
-const useDeleteLostItemArticle = (id: number) => {
+const useDeleteLostItemArticle = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
-    mutationFn: () => deleteLostItemArticle(token, id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['lostItem'] }),
+    mutationFn: (id: number) => deleteLostItemArticle(token, id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['articles', 'lostitem'] }),
     onError: (e) => {
       if (isKoinError(e)) {
         showToast('error', e.message);

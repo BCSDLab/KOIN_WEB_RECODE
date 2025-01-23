@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import usePostLostItemArticles from 'pages/Articles/hooks/usePostLostItemArticles';
 import ROUTES from 'static/routes';
+import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import styles from './LostItemPage.module.scss';
 
 const getyyyyMMdd = (date: Date) => {
@@ -49,8 +50,15 @@ export default function LostItemPage() {
     checkArticleFormFull,
   } = useLostItemForm();
   const { mutateAsync: postLostItem } = usePostLostItemArticles();
+  const { logFindUserAddItemClick, logFindUserWriteConfirmClick } = useArticlesLogger();
+
+  const handleItemAddClick = () => {
+    logFindUserAddItemClick();
+    addLostItem();
+  };
 
   const handleCompleteClick = async () => {
+    logFindUserWriteConfirmClick();
     validateAndUpdateItems();
 
     if (!checkArticleFormFull()) return;
@@ -97,7 +105,7 @@ export default function LostItemPage() {
           <button
             className={styles.add__button}
             type="button"
-            onClick={addLostItem}
+            onClick={() => handleItemAddClick()}
           >
             <AddIcon />
             물품 추가

@@ -1,4 +1,5 @@
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
+import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import { Link } from 'react-router-dom';
 // import FoundIcon from 'assets/svg/Articles/found.svg';
 // import LostIcon from 'assets/svg/Articles/lost.svg';
@@ -8,6 +9,8 @@ import ROUTES from 'static/routes';
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
+  const { logItemWriteClick } = useArticlesLogger();
+
   return (
     <div className={styles.links}>
       {/* {linksOpen && ( // 2차 스프린트
@@ -37,6 +40,7 @@ export default function LostItemRouteButton() {
         className={styles.links__button}
         type="button"
         to={ROUTES.LostItemFound()}
+        onClick={() => logItemWriteClick()}
       >
         {/* {linksOpen ? <CloseIcon /> : <PencilIcon />} */}
         <PencilIcon />

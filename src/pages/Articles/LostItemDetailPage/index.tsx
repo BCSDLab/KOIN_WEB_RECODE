@@ -14,6 +14,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ROUTES from 'static/routes';
 import { useUser } from 'utils/hooks/state/useUser';
+import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import styles from './LostItemDetailPage.module.scss';
 
 export default function LostItemDetailPage() {
@@ -25,6 +26,7 @@ export default function LostItemDetailPage() {
   const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
   const { article } = useSingleLostItemArticle(Number(params.id));
+  const articleId = Number(params.id);
   const {
     boardId,
     category,
@@ -38,6 +40,7 @@ export default function LostItemDetailPage() {
 
   const [image, setImage] = useState(images[0]);
   const imageIndex = images.findIndex((img) => img.id === image.id);
+  const { logFindUserDeleteClick } = useArticlesLogger();
 
   const handleLeftButtonClick = () => {
     setImage(images[(imageIndex - 1 + images.length) % images.length]);
@@ -45,6 +48,11 @@ export default function LostItemDetailPage() {
 
   const handleRightButtonClick = () => {
     setImage(images[(imageIndex + 1) % images.length]);
+  };
+
+  const handleDeleteButtonClick = () => {
+    logFindUserDeleteClick();
+    openDeleteModal();
   };
 
   return (
@@ -132,7 +140,7 @@ export default function LostItemDetailPage() {
             {isCouncil && (
               <button
                 className={styles.contents__button}
-                onClick={() => openDeleteModal()}
+                onClick={handleDeleteButtonClick}
                 type="button"
               >
                 삭제
@@ -143,7 +151,7 @@ export default function LostItemDetailPage() {
         </div>
         {isDeleteModalOpen && (
           <DeleteModal
-            boardId={boardId}
+            articleId={articleId}
             closeDeleteModal={closeDeleteModal}
           />
         )}

@@ -13,6 +13,7 @@ import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { FindUserCategory, useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
@@ -20,7 +21,7 @@ const MAX_LOST_ITEM_TYPE = {
   lost: '분실물',
 };
 
-const CATEGORIES = ['카드', '신분증', '지갑', '전자제품', '그 외'];
+const CATEGORIES: FindUserCategory[] = ['카드', '신분증', '지갑', '전자제품', '그 외'];
 
 const MAX_IMAGES_LENGTH = 10;
 
@@ -67,6 +68,12 @@ export default function LostItemForm({
   } = useImageUpload({ uploadFn: uploadLostItemFile });
 
   const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
+  const { logFindUserCategory } = useArticlesLogger();
+
+  const handleCategoryClick = (item: FindUserCategory) => {
+    logFindUserCategory(item);
+    setCategory(item);
+  };
 
   const handleDateSelect = (date: Date) => {
     setFoundDate(date);
@@ -126,7 +133,7 @@ export default function LostItemForm({
                       [styles.category__button]: true,
                       [styles['category__button--selected']]: category === item,
                     })}
-                    onClick={() => setCategory(item)}
+                    onClick={() => handleCategoryClick(item as FindUserCategory)}
                   >
                     {item}
                   </button>
@@ -149,7 +156,7 @@ export default function LostItemForm({
                 <button
                   className={styles.date__toggle}
                   type="button"
-                  onClick={() => toggleCalendar()}
+                  onClick={toggleCalendar}
                 >
                   <span
                     className={cn({
@@ -239,7 +246,7 @@ export default function LostItemForm({
                 accept="image/*"
                 id="image-file"
                 multiple
-                onChange={() => saveImage()}
+                onChange={saveImage}
                 aria-label="사진 등록하기"
               />
             </label>

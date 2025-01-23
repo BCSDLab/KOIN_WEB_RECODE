@@ -5,21 +5,33 @@ import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
+import { useNavigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import styles from './DeleteModal.module.scss';
 
 interface DeleteModalProps {
-  boardId: number;
+  articleId: number;
   closeDeleteModal: () => void;
 }
 
 export default function DeleteModal(
-  { boardId, closeDeleteModal }: DeleteModalProps,
+  { articleId, closeDeleteModal }: DeleteModalProps,
 ) {
   const isMobile = useMediaQuery();
-  const { mutate: deleteArticle } = useDeleteLostItemArticle(boardId);
+  const navigate = useNavigate();
+  const { mutate: deleteArticle } = useDeleteLostItemArticle();
+  const { logFindUserDeleteConfirmClick } = useArticlesLogger();
   useEscapeKeyDown({ onEscape: closeDeleteModal });
   useBodyScrollLock();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeDeleteModal });
+
+  const handleConfirmDeleteClick = () => {
+    logFindUserDeleteConfirmClick();
+    deleteArticle(articleId);
+    navigate(ROUTES.Articles(), { replace: true });
+    closeDeleteModal();
+  };
 
   return (
     <div className={styles.background} ref={backgroundRef}>
@@ -40,7 +52,7 @@ export default function DeleteModal(
           <button
             className={styles.buttons__delete}
             type="button"
-            onClick={closeDeleteModal}
+            onClick={handleConfirmDeleteClick}
           >
             {!isMobile && <GarbageCanIcon />}
             {isMobile ? '확인' : '삭제하기'}
@@ -48,7 +60,7 @@ export default function DeleteModal(
           <button
             className={styles.buttons__cancel}
             type="button"
-            onClick={() => deleteArticle()}
+            onClick={closeDeleteModal}
           >
             취소
           </button>
