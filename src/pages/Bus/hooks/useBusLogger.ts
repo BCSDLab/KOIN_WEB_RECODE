@@ -25,9 +25,6 @@ const CLICK_EVENTS = [
     label: 'departure_now',
     value: '지금 출발',
   },
-];
-
-const VARIABLE_EVENTS = [
   {
     label: 'departure_location_confirm',
     value: '', // 코리아텍, 천안역, 천안터미널
@@ -40,7 +37,9 @@ const VARIABLE_EVENTS = [
     label: 'search_result_bus_type',
     value: '', // 전체 차종, 셔틀, 대성, 시내
   },
-];
+] as const;
+
+export type ClickEventLabel = typeof CLICK_EVENTS[number]['label'];
 
 export type LoggingLocation = '코리아텍' | '천안역' | '천안터미널';
 export type LoggingBusType = '전체 차종' | '셔틀' | '대성' | '시내';
@@ -55,9 +54,8 @@ export const loggingBusTypeMap = {
 export const useBusLogger = () => {
   const logger = useLogger();
 
-  const logEvent = (eventLabel: string, eventValue?: string) => {
-    const event = CLICK_EVENTS.find(({ label }) => label === eventLabel)
-      || VARIABLE_EVENTS.find(({ label }) => label === eventLabel);
+  const logEvent = (eventLabel: ClickEventLabel, eventValue?: string) => {
+    const event = CLICK_EVENTS.find(({ label }) => label === eventLabel);
     if (event) {
       logger.actionEventClick({
         actionTitle: 'CAMPUS',
