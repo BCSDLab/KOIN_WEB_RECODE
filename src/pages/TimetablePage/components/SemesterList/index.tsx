@@ -44,7 +44,7 @@ function SemesterList() {
 
   const onClickOption = (clickededSemester: Semester) => {
     updateSemester(clickededSemester);
-    logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click_semester_${clickededSemester.year}${clickededSemester.term}` });
+    logger.actionEventClick({ actionTitle: 'USER', event_label: 'timetable', value: `click_semester_${clickededSemester.year}${clickededSemester.term}` });
     closePopup();
   };
 

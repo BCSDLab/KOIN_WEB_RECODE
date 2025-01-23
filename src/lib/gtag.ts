@@ -1,7 +1,7 @@
 type GTagEvent = {
   action: string;
   category: string;
-  label: string;
+  event_label: string;
   value: string;
   duration_time?: number;
   previous_page?: string;
@@ -21,12 +21,12 @@ export const pageView = (url: string, userId?: string) => {
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/events
 export const event = ({
-  action, category, label, value, duration_time, previous_page, current_page,
+  action, category, event_label, value, duration_time, previous_page, current_page,
 }: GTagEvent) => {
   if (typeof window.gtag === 'undefined') return;
   window.gtag('event', action, {
     event_category: category,
-    event_label: label,
+    event_label,
     value,
     duration_time,
     previous_page,
@@ -38,7 +38,7 @@ export const event = ({
     console.table({
       팀: action,
       '이벤트 Category': category,
-      '이벤트 Title': label,
+      '이벤트 Title': event_label,
       값: value,
       '체류 시간': duration_time,
       '이전 카테고리': previous_page,

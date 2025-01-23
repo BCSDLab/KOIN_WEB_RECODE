@@ -23,7 +23,7 @@ function IndexStore() {
     e.preventDefault();
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: 'main_shop_categories',
+      event_label: 'main_shop_categories',
       value: category.name,
       event_category: 'click',
       previous_page: '메인',
@@ -35,7 +35,7 @@ function IndexStore() {
   const handleStoreClick = () => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: 'main_shop_benefit',
+      event_label: 'main_shop_benefit',
       value: '전화주문혜택',
       event_category: 'click',
       previous_page: '메인',

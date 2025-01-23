@@ -30,12 +30,12 @@ function IndexCafeteria() {
     .find((dining) => dining.place === selectedPlace && dining.type === diningTime.getType());
 
   const handleMoreClick = () => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_moveDetailView', value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단` });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'main_menu_moveDetailView', value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단` });
     navigate(ROUTES.Cafeteria());
   };
 
   const handlePlaceClick = (place: DiningPlace) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_menu_corner', value: place });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'main_menu_corner', value: place });
     setSelectedPlace(place);
   };
 

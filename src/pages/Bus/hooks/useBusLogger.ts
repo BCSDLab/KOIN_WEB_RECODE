@@ -61,7 +61,7 @@ export const useBusLogger = () => {
     if (event) {
       logger.actionEventClick({
         actionTitle: 'CAMPUS',
-        title: event.title,
+        event_label: event.title,
         value: eventValue || event.value,
         event_category: 'click',
       });

@@ -16,9 +16,9 @@ const loggingTitle = {
 function IndexBus() {
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const logShuttleTicket = () => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'shuttle_ticket', value: '버스' });
-  const logMainToBus = () => logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'main_to_bus', value: '버스' });
-  const logMainBusButton = (key: BusLinkKey) => logger.actionEventClick({ actionTitle: 'CAMPUS', title: loggingTitle[key], value: '버스' });
+  const logShuttleTicket = () => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'shuttle_ticket', value: '버스' });
+  const logMainToBus = () => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'main_to_bus', value: '버스' });
+  const logMainBusButton = (key: BusLinkKey) => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: loggingTitle[key], value: '버스' });
 
   const unibus = BUS_LINKS[2];
 

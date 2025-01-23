@@ -130,7 +130,7 @@ function LoginPage() {
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',
-              title: 'login',
+              event_label: 'login',
               value: '로그인완료',
             });
           }}
@@ -157,7 +157,7 @@ function LoginPage() {
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',
-              title: 'login',
+              event_label: 'login',
               value: '아이디찾기',
             });
           }}
@@ -170,7 +170,7 @@ function LoginPage() {
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',
-              title: 'login',
+              event_label: 'login',
               value: '비밀번호찾기',
             });
           }}
@@ -183,7 +183,7 @@ function LoginPage() {
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',
-              title: 'login',
+              event_label: 'login',
               value: '회원가입',
             });
           }}
