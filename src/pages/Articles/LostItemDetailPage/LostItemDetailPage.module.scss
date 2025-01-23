@@ -145,6 +145,8 @@
   &__content {
     width: 794px;
     margin-top: 64px;
+    white-space: pre-wrap;
+    word-break: break-all;
     font-family: Pretendard, sans-serif;
     font-size: 20px;
     line-height: 1.6;

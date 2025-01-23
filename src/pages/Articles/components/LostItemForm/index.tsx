@@ -14,6 +14,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { FindUserCategory, useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
+import { useState } from 'react';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
@@ -24,6 +25,7 @@ const MAX_LOST_ITEM_TYPE = {
 const CATEGORIES: FindUserCategory[] = ['카드', '신분증', '지갑', '전자제품', '그 외'];
 
 const MAX_IMAGES_LENGTH = 10;
+const MAX_CONTENT_LENGTH = 1000;
 
 const getyyyyMMdd = (date: Date) => {
   const yyyy = date.getFullYear();
@@ -69,6 +71,18 @@ export default function LostItemForm({
 
   const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
   const { logFindUserCategory } = useArticlesLogger();
+
+  const [localContent, setLocalContent] = useState(content);
+  const contentCounter = `${localContent.length}/${MAX_CONTENT_LENGTH}`;
+  const imageCounter = `${images.length}/${MAX_IMAGES_LENGTH}`;
+
+  const handleContentChange = (value: string) => {
+    if (value.length <= MAX_CONTENT_LENGTH) {
+      setLocalContent(value);
+    } else {
+      showToast('error', `최대 ${MAX_CONTENT_LENGTH}자까지 입력 가능합니다.`);
+    }
+  };
 
   const handleCategoryClick = (item: FindUserCategory) => {
     logFindUserCategory(item);
@@ -212,9 +226,14 @@ export default function LostItemForm({
 
         <div className={`${styles.template__right}`}>
           <div className={styles.images}>
-            <div className={styles.images__text}>
+            <div className={styles.images__header}>
               <span className={styles.title}>사진</span>
-              <span className={styles.title__description}>습득물 사진을 업로드해주세요.</span>
+              <div className={styles.images__text}>
+                <span className={styles.title__description}>습득물 사진을 업로드해주세요.</span>
+                <span className={styles.images__counter}>
+                  {imageCounter}
+                </span>
+              </div>
             </div>
             {(!isMobile || images.length !== 0) && (
               <ul className={styles.images__list}>
@@ -255,12 +274,17 @@ export default function LostItemForm({
 
         <div className={styles.template__bottom}>
           <div className={styles.content}>
-            <span className={styles.title}>내용</span>
+            <div className={styles.content__header}>
+              <span className={styles.title}>내용</span>
+              <span className={styles.content__counter}>{contentCounter}</span>
+            </div>
             <textarea
               className={styles.content__input}
               placeholder="습득한 물건에 대한 설명을 적어주세요."
-              defaultValue={content}
+              value={localContent}
+              onChange={(e) => handleContentChange(e.target.value)}
               onBlur={(e) => setContent(e.target.value)}
+              maxLength={1000}
             />
           </div>
         </div>
