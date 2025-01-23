@@ -446,6 +446,10 @@
       width: 100%;
     }
 
+    &:hover {
+      cursor: pointer;
+    }
+
     input {
       display: none;
     }

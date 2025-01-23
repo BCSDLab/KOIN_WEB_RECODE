@@ -88,7 +88,7 @@
       justify-content: center;
       align-items: center;
       border-radius: 4px;
-      padding-top: 2px;
+      padding-top: 3px;
       gap: 8px;
       font-family: Pretendard, sans-serif;
       line-height: 1.6;
@@ -112,6 +112,7 @@
     color: #fff;
 
     & svg {
+      padding-bottom: 2px;
       width: 24px;
       height: 24px;
     }

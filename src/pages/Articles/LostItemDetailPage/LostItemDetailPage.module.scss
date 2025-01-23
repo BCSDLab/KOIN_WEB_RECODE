@@ -251,7 +251,7 @@
   &__image {
     width: 586px;
     height: 527px;
-    object-fit: cover;
+    object-fit: contain;
 
     @include media.media-breakpoint(mobile) {
       width: 100%;

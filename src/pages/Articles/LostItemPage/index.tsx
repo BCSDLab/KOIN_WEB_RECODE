@@ -49,7 +49,7 @@ export default function LostItemPage() {
     validateAndUpdateItems,
     checkArticleFormFull,
   } = useLostItemForm();
-  const { mutateAsync: postLostItem } = usePostLostItemArticles();
+  const { status, mutateAsync: postLostItem } = usePostLostItemArticles();
   const { logFindUserAddItemClick, logFindUserWriteConfirmClick } = useArticlesLogger();
 
   const handleItemAddClick = () => {
@@ -105,7 +105,7 @@ export default function LostItemPage() {
           <button
             className={styles.add__button}
             type="button"
-            onClick={() => handleItemAddClick()}
+            onClick={handleItemAddClick}
           >
             <AddIcon />
             물품 추가
@@ -116,6 +116,7 @@ export default function LostItemPage() {
             className={styles.complete__button}
             type="button"
             onClick={handleCompleteClick}
+            disabled={status === 'pending'}
           >
             작성 완료
           </button>
