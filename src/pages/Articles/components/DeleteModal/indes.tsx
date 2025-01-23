@@ -4,6 +4,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './DeleteModal.module.scss';
 
 interface DeleteModalProps {
@@ -14,6 +15,7 @@ interface DeleteModalProps {
 export default function DeleteModal(
   { boardId, closeDeleteModal }: DeleteModalProps,
 ) {
+  const isMobile = useMediaQuery();
   const { mutate: deleteArticle } = useDeleteLostItemArticle(boardId);
   useEscapeKeyDown({ onEscape: closeDeleteModal });
   useBodyScrollLock();
@@ -22,17 +24,17 @@ export default function DeleteModal(
   return (
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.modal}>
-        <div
-          className={styles.modal__close}
-        >
-          <button
-            type="button"
-            onClick={closeDeleteModal}
-            aria-label="닫기"
-          >
-            <CloseIcon />
-          </button>
-        </div>
+        {!isMobile && (
+          <div className={styles.modal__close}>
+            <button
+              type="button"
+              onClick={closeDeleteModal}
+              aria-label="닫기"
+            >
+              <CloseIcon />
+            </button>
+          </div>
+        )}
         <div className={styles.modal__title}>게시글을 삭제하시겠습니까?</div>
         <div className={styles.modal__buttons}>
           <button
@@ -40,8 +42,8 @@ export default function DeleteModal(
             type="button"
             onClick={closeDeleteModal}
           >
-            <GarbageCanIcon />
-            삭제하기
+            {!isMobile && <GarbageCanIcon />}
+            {isMobile ? '확인' : '삭제하기'}
           </button>
           <button
             className={styles.buttons__cancel}

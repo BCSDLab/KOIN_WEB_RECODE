@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .background {
   position: fixed;
   top: 0;
@@ -16,6 +18,18 @@
   margin-bottom: 100px;
   border-radius: 16px;
   background-color: #fff;
+
+  @include media.media-breakpoint(mobile) {
+    width: 301px;
+    height: 140px;
+    padding: 24px 32px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+  }
 
   &__close {
     height: 56px;
@@ -46,6 +60,13 @@
     font-weight: 700;
     line-height: 1.2;
     text-align: center;
+
+    @include media.media-breakpoint(mobile) {
+      height: auto;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.6;
+    }
   }
 
   &__buttons {
@@ -54,6 +75,12 @@
     flex-direction: column;
     align-items: center;
 
+    @include media.media-breakpoint(mobile) {
+      height: auto;
+      flex-direction: row-reverse;
+      gap: 12px;
+    }
+
     & button {
       width: 383px;
       height: 50px;
@@ -61,9 +88,18 @@
       justify-content: center;
       align-items: center;
       border-radius: 4px;
+      padding-top: 2px;
       gap: 8px;
       font-family: Pretendard, sans-serif;
       line-height: 1.6;
+
+      @include media.media-breakpoint(mobile) {
+        width: 105px;
+        height: 46px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+      }
     }
   }
 }
@@ -90,5 +126,10 @@
     font-size: 14px;
     font-weight: 400;
     color: #000;
+
+    @include media.media-breakpoint(mobile) {
+      border: 1px solid #cacaca;
+      color: #4b4b4b;
+    }
   }
 }
