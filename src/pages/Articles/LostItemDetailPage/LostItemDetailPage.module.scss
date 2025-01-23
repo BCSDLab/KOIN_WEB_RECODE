@@ -189,8 +189,8 @@
   &__buttons {
     width: 100%;
     display: flex;
-    flex-direction: row-reverse;
     margin-top: 64px;
+    justify-content: flex-end;
 
     @include media.media-breakpoint(mobile) {
       width: 100%;

@@ -13,6 +13,7 @@ import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ROUTES from 'static/routes';
+import { useUser } from 'utils/hooks/state/useUser';
 import styles from './LostItemDetailPage.module.scss';
 
 export default function LostItemDetailPage() {
@@ -20,6 +21,8 @@ export default function LostItemDetailPage() {
   const navigate = useNavigate();
   const params = useParams();
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
+  const { data: userInfo } = useUser();
+  const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
   const { article } = useSingleLostItemArticle(Number(params.id));
   const {
@@ -117,14 +120,6 @@ export default function LostItemDetailPage() {
             <p>재실 시간은 공지 사항을 참고해 주시기 바랍니다.</p>
           </div>
           <div className={styles.contents__buttons}>
-            <button
-              className={styles.contents__button}
-              onClick={() => openDeleteModal()}
-              type="button"
-            >
-              삭제
-              <GarbageCanIcon />
-            </button>
             {isMobile && (
               <button
                 className={styles.contents__button}
@@ -132,6 +127,16 @@ export default function LostItemDetailPage() {
                 type="button"
               >
                 목록
+              </button>
+            )}
+            {isCouncil && (
+              <button
+                className={styles.contents__button}
+                onClick={() => openDeleteModal()}
+                type="button"
+              >
+                삭제
+                <GarbageCanIcon />
               </button>
             )}
           </div>

@@ -23,10 +23,10 @@ export default function ArticleList({ articles }: ArticleListProps) {
   };
 
   return (
-    <div>
+    <div className={styles.list}>
       {articles.map((article) => (
         <Link
-          className={styles.list}
+          className={styles.list__link}
           to={getLink(article)}
           key={article.id}
         >
