@@ -74,6 +74,10 @@
       font-weight: 600;
     }
   }
+
+  &__content {
+    word-break: break-all;
+  }
 }
 
 .info {

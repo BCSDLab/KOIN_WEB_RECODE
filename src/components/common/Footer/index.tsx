@@ -44,7 +44,7 @@ function Footer(): JSX.Element {
         <div className={styles.sitemap}>
           <Link
             className={styles.sitemap__logo}
-            to="/"
+            to={ROUTES.Main()}
           >
             <img
               src="https://static.koreatech.in/assets/img/logo_white.png"
@@ -99,7 +99,7 @@ function Footer(): JSX.Element {
             >
               <img src="https://static.koreatech.in/upload/fead6221d535ff547d4801081ee8f2e3.png" alt="facebook" />
             </a>
-            <Link className={styles['sitemap__icon-link']} to="/">
+            <Link className={styles['sitemap__icon-link']} to={ROUTES.Main()}>
               <img src="https://static.koreatech.in/upload/1aae9a021f0338527c28e5c3d0518fa1.png" alt="home" />
             </Link>
           </div>

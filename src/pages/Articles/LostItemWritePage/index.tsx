@@ -9,7 +9,7 @@ import uuidv4 from 'utils/ts/uuidGenerater';
 import usePostLostItemArticles from 'pages/Articles/hooks/usePostLostItemArticles';
 import ROUTES from 'static/routes';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
-import styles from './LostItemPage.module.scss';
+import styles from './LostItemWritePage.module.scss';
 
 const getyyyyMMdd = (date: Date) => {
   const year = date.getFullYear();
@@ -34,7 +34,7 @@ const TITLES = {
 
 type LostItemType = 'found' | 'lost';
 
-export default function LostItemPage() {
+export default function LostItemWritePage() {
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
