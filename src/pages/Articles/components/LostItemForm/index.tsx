@@ -1,20 +1,16 @@
 import { cn } from '@bcsdlab/utils';
-import { uploadLostItemFile } from 'api/uploadFile';
 import ChevronDown from 'assets/svg/Articles/chevron-down.svg';
-import PhotoIcon from 'assets/svg/Articles/photo.svg';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import WarnIcon from 'assets/svg/Articles/warn.svg';
-import RemoveImageIcon from 'assets/svg/Articles/remove-image.svg';
 import Calendar from 'pages/Articles/components/Calendar';
 import { LostItem, LostItemHandler } from 'pages/Articles/hooks/useLostItemForm';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { FindUserCategory, useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import { useState } from 'react';
+import FormImage from 'pages/Articles/components/FormImage';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
@@ -24,7 +20,6 @@ const MAX_LOST_ITEM_TYPE = {
 
 const CATEGORIES: FindUserCategory[] = ['카드', '신분증', '지갑', '전자제품', '그 외'];
 
-const MAX_IMAGES_LENGTH = 10;
 const MAX_CONTENT_LENGTH = 1000;
 
 const getyyyyMMdd = (date: Date) => {
@@ -45,7 +40,6 @@ interface LostItemFormProps {
 export default function LostItemForm({
   type, count, lostItem, lostItemHandler, removeLostItem,
 }: LostItemFormProps) {
-  const isMobile = useMediaQuery();
   const {
     category,
     foundDate,
@@ -65,16 +59,12 @@ export default function LostItemForm({
     setImages,
     setHasDateBeenSelected,
   } = lostItemHandler;
-  const {
-    imgRef, saveImgFile,
-  } = useImageUpload({ uploadFn: uploadLostItemFile });
 
   const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
   const { logFindUserCategory } = useArticlesLogger();
 
   const [localContent, setLocalContent] = useState(content);
   const contentCounter = `${localContent.length}/${MAX_CONTENT_LENGTH}`;
-  const imageCounter = `${images.length}/${MAX_IMAGES_LENGTH}`;
 
   const handleContentChange = (value: string) => {
     if (value.length <= MAX_CONTENT_LENGTH) {
@@ -93,21 +83,6 @@ export default function LostItemForm({
     setFoundDate(date);
     setHasDateBeenSelected();
     closeCalendar();
-  };
-
-  const saveImage = async () => {
-    if (images.length >= MAX_IMAGES_LENGTH) {
-      showToast('error', `파일은 ${MAX_IMAGES_LENGTH}개까지 등록할 수 있습니다.`);
-      return;
-    }
-
-    saveImgFile().then((res) => {
-      setImages([...images, ...res!]);
-    });
-  };
-
-  const deleteImage = (url: string) => {
-    setImages(images.filter((image: string) => image !== url));
   };
 
   const { containerRef } = useOutsideClick({ onOutsideClick: closeCalendar });
@@ -223,55 +198,9 @@ export default function LostItemForm({
             </div>
           </div>
         </div>
-
         <div className={`${styles.template__right}`}>
-          <div className={styles.images}>
-            <div className={styles.images__header}>
-              <span className={styles.title}>사진</span>
-              <div className={styles.images__text}>
-                <span className={styles.title__description}>습득물 사진을 업로드해주세요.</span>
-                <span className={styles.images__counter}>
-                  {imageCounter}
-                </span>
-              </div>
-            </div>
-            {(!isMobile || images.length !== 0) && (
-              <ul className={styles.images__list}>
-                {images.map((url: string) => (
-                  <li key={url} className={styles.images__item}>
-                    <img
-                      src={url}
-                      className={styles.images__image}
-                      alt="분실물 이미지"
-                    />
-                    <button
-                      className={styles.images__delete}
-                      type="button"
-                      aria-label="이미지 삭제"
-                      onClick={() => deleteImage(url)}
-                    >
-                      <RemoveImageIcon />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <label htmlFor="image-file" className={styles.images__upload}>
-              <PhotoIcon />
-              사진 등록하기
-              <input
-                type="file"
-                ref={imgRef}
-                accept="image/*"
-                id="image-file"
-                multiple
-                onChange={saveImage}
-                aria-label="사진 등록하기"
-              />
-            </label>
-          </div>
+          <FormImage images={images} setImages={setImages} />
         </div>
-
         <div className={styles.template__bottom}>
           <div className={styles.content}>
             <div className={styles.content__header}>
