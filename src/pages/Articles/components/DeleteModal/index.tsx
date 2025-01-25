@@ -20,8 +20,11 @@ export default function DeleteModal(
 ) {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
-  const { mutate: deleteArticle } = useDeleteLostItemArticle();
   const { logFindUserDeleteConfirmClick } = useArticlesLogger();
+  const { mutate: deleteArticle } = useDeleteLostItemArticle({
+    onSuccess: () => navigate(ROUTES.Articles(), { replace: true }),
+  });
+
   useEscapeKeyDown({ onEscape: closeDeleteModal });
   useBodyScrollLock();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeDeleteModal });
@@ -29,7 +32,6 @@ export default function DeleteModal(
   const handleConfirmDeleteClick = () => {
     logFindUserDeleteConfirmClick();
     deleteArticle(articleId);
-    navigate(ROUTES.Articles(), { replace: true });
     closeDeleteModal();
   };
 
