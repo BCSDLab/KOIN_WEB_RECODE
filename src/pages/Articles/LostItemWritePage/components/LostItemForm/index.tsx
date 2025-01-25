@@ -1,10 +1,10 @@
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import { LostItem, LostItemHandler } from 'pages/Articles/hooks/useLostItemForm';
-import FormImage from 'pages/Articles/components/FormImage';
-import FormContent from 'pages/Articles/components/FormContent';
-import FormFoundPlace from 'pages/Articles/components/FormFoundPlace';
-import FormCategory from 'pages/Articles/components/FormCategory';
-import FormDate from 'pages/Articles/components/FormDate';
+import FormImage from 'pages/Articles/LostItemWritePage/components/FormImage';
+import FormContent from 'pages/Articles/LostItemWritePage/components/FormContent';
+import FormFoundPlace from 'pages/Articles/LostItemWritePage/components/FormFoundPlace';
+import FormCategory from 'pages/Articles/LostItemWritePage/components/FormCategory';
+import FormDate from 'pages/Articles/LostItemWritePage/components/FormDate';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {

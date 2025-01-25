@@ -1,7 +1,7 @@
 import WarnIcon from 'assets/svg/Articles/warn.svg';
 import styles from './FormFoundPlace.module.scss';
 
-const MAX_LENGTH = 22;
+const MAX_LENGTH = 20;
 
 interface FormFoundPlaceProps {
   foundPlace: string;

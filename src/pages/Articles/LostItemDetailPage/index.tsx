@@ -1,19 +1,15 @@
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
-import SelectedDotIcon from 'assets/svg/Articles/ellipse-blue.svg';
-import NotSelectedDotIcon from 'assets/svg/Articles/ellipse-grey.svg';
-import ChevronRight from 'assets/svg/Articles/chevron-right-circle.svg';
-import ChevronLeft from 'assets/svg/Articles/chevron-left-circle.svg';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
-import DeleteModal from 'pages/Articles/components/DeleteModal';
-import { cn } from '@bcsdlab/utils';
+import DeleteModal from 'pages/Articles/LostItemDetailPage/components/DeleteModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ROUTES from 'static/routes';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
+import DisplayImage from 'pages/Articles/LostItemDetailPage/components/DisplayImage';
 import styles from './LostItemDetailPage.module.scss';
 
 export default function LostItemDetailPage() {
@@ -37,13 +33,7 @@ export default function LostItemDetailPage() {
     registeredAt,
   } = article;
 
-  const [image, setImage] = useState(images[0]);
-  const imageIndex = images.findIndex((img) => img.id === image.id);
   const { logFindUserDeleteClick } = useArticlesLogger();
-
-  const handleArrowButtonClick = (diff: 1 | -1) => {
-    setImage(images[(imageIndex + diff) % images.length]);
-  };
 
   const handleDeleteButtonClick = () => {
     logFindUserDeleteClick();
@@ -65,54 +55,9 @@ export default function LostItemDetailPage() {
           </div>
         </div>
         <div className={styles.contents}>
-          {images.length > 0 && (
-            <div className={`${styles.contents__images} ${styles.images}`}>
-              <img
-                className={styles.images__image}
-                src={image.imageUrl}
-                alt="분실물 이미지"
-              />
-              {!isMobile && (
-                <>
-                  <button
-                    className={cn({
-                      [styles.images__button]: true,
-                      [styles['images__button--left']]: true,
-                      [styles['images__button--hidden']]: images.length === 1 || imageIndex === 0,
-                    })}
-                    onClick={() => handleArrowButtonClick(-1)}
-                    type="button"
-                    aria-label="다음 이미지 보기"
-                  >
-                    <ChevronLeft />
-                  </button>
-                  <button
-                    className={cn({
-                      [styles.images__button]: true,
-                      [styles['images__button--right']]: true,
-                      [styles['images__button--hidden']]: images.length === 1 || imageIndex === images.length - 1,
-                    })}
-                    onClick={() => handleArrowButtonClick(1)}
-                    type="button"
-                    aria-label="다음 이미지 보기"
-                  >
-                    <ChevronRight />
-                  </button>
-                </>
-              )}
-            </div>
-          )}
-          <div className={styles.contents__navigation}>
-            {images.length > 1 && images.map((currentImage, index) => (
-              <button
-                key={currentImage.imageUrl}
-                onClick={() => setImage(currentImage)}
-                type="button"
-              >
-                {imageIndex === index ? <SelectedDotIcon /> : <NotSelectedDotIcon />}
-              </button>
-            ))}
-          </div>
+          <DisplayImage
+            images={images}
+          />
           <div className={styles.contents__content}>{content}</div>
           <div className={styles.contents__guide}>
             <p>분실물 수령을 희망하시는 분은 재실 시간 내에</p>

@@ -1,5 +1,5 @@
 import AddIcon from 'assets/svg/Articles/add.svg';
-import LostItemForm from 'pages/Articles/components/LostItemForm';
+import LostItemForm from 'pages/Articles/LostItemWritePage/components/LostItemForm';
 import { useLostItemForm } from 'pages/Articles/hooks/useLostItemForm';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import FoundIcon from 'assets/svg/Articles/found.svg';

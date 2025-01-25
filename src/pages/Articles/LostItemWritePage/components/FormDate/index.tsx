@@ -1,6 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import WarnIcon from 'assets/svg/Articles/warn.svg';
-import Calendar from 'pages/Articles/components/Calendar';
+import Calendar from 'pages/Articles/LostItemWritePage/components/Calendar';
 import ChevronDown from 'assets/svg/Articles/chevron-down.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
