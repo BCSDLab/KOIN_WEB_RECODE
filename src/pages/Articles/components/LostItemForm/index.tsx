@@ -1,28 +1,15 @@
-import { cn } from '@bcsdlab/utils';
-import ChevronDown from 'assets/svg/Articles/chevron-down.svg';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
-import WarnIcon from 'assets/svg/Articles/warn.svg';
-import Calendar from 'pages/Articles/components/Calendar';
 import { LostItem, LostItemHandler } from 'pages/Articles/hooks/useLostItemForm';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import FormImage from 'pages/Articles/components/FormImage';
 import FormContent from 'pages/Articles/components/FormContent';
 import FormFoundPlace from 'pages/Articles/components/FormFoundPlace';
 import FormCategory from 'pages/Articles/components/FormCategory';
+import FormDate from 'pages/Articles/components/FormDate';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
   found: '습득물',
   lost: '분실물',
-};
-
-const getyyyyMMdd = (date: Date) => {
-  const yyyy = date.getFullYear();
-  const MM = String(date.getMonth() + 1).padStart(2, '0');
-  const dd = String(date.getDate()).padStart(2, '0');
-  return `${yyyy}.${MM}.${dd}`;
 };
 
 interface LostItemFormProps {
@@ -45,7 +32,7 @@ export default function LostItemForm({
     hasDateBeenSelected,
     isCategorySelected,
     isDateSelected,
-    isFoundPlaceSelected: isLocationSelected,
+    isFoundPlaceSelected,
   } = lostItem;
   const {
     setCategory,
@@ -56,24 +43,13 @@ export default function LostItemForm({
     setHasDateBeenSelected,
   } = lostItemHandler;
 
-  const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
-
-  const handleDateSelect = (date: Date) => {
-    setFoundDate(date);
-    setHasDateBeenSelected();
-    closeCalendar();
-  };
-
-  const { containerRef } = useOutsideClick({ onOutsideClick: closeCalendar });
-  useEscapeKeyDown({ onEscape: closeCalendar });
+  const itemTag = `${MAX_LOST_ITEM_TYPE[type]} ${count + 1}`;
 
   return (
     <div className={styles.container}>
       <div className={styles.tag}>
         <span className={styles.tag__chip}>
-          {MAX_LOST_ITEM_TYPE[type]}
-          &nbsp;
-          {count + 1}
+          {itemTag}
         </span>
         <button
           className={styles.tag__delete}
@@ -91,52 +67,17 @@ export default function LostItemForm({
             setCategory={setCategory}
             isCategorySelected={isCategorySelected}
           />
-          <div className={styles.date}>
-            <span className={styles.title}>습득 일자</span>
-            <div className={styles.date__wrapper} ref={containerRef}>
-              <div className={styles.date__wrapper}>
-                <button
-                  className={styles.date__toggle}
-                  type="button"
-                  onClick={toggleCalendar}
-                >
-                  <span
-                    className={cn({
-                      [styles.date__description]: true,
-                      [styles['date__description--has-been-selected']]: hasDateBeenSelected,
-                    })}
-                  >
-                    {hasDateBeenSelected ? getyyyyMMdd(foundDate) : '습득 일자를 선택해주세요.'}
-                  </span>
-                  <span className={cn({
-                    [styles.icon]: true,
-                    [styles['icon--open']]: calendarOpen,
-                  })}
-                  >
-                    <ChevronDown />
-                  </span>
-                </button>
-                {calendarOpen && (
-                  <div className={styles.date__calendar}>
-                    <Calendar
-                      selectedDate={foundDate}
-                      setSelectedDate={handleDateSelect}
-                    />
-                  </div>
-                )}
-                {!isDateSelected && (
-                  <span className={styles.warning}>
-                    <WarnIcon />
-                    습득 일자가 입력되지 않았습니다.
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
+          <FormDate
+            foundDate={foundDate}
+            setFoundDate={setFoundDate}
+            isDateSelected={isDateSelected}
+            hasDateBeenSelected={hasDateBeenSelected}
+            setHasDateBeenSelected={setHasDateBeenSelected}
+          />
           <FormFoundPlace
             foundPlace={foundPlace}
             setFoundPlace={setFoundPlace}
-            isLocationSelected={isLocationSelected}
+            isFoundPlaceSelected={isFoundPlaceSelected}
           />
         </div>
         <div className={`${styles.template__right}`}>

@@ -4,11 +4,11 @@ import styles from './FormFoundPlace.module.scss';
 interface FormFoundPlaceProps {
   foundPlace: string;
   setFoundPlace: (foundPlace: string) => void;
-  isLocationSelected: boolean;
+  isFoundPlaceSelected: boolean;
 }
 
 export default function FormFoundPlace({
-  foundPlace, setFoundPlace, isLocationSelected,
+  foundPlace, setFoundPlace, isFoundPlaceSelected,
 }: FormFoundPlaceProps) {
   return (
     <div className={styles['found-place']}>
@@ -20,7 +20,7 @@ export default function FormFoundPlace({
           onBlur={(e) => setFoundPlace(e.target.value)}
           placeholder="습득 장소를 선택해주세요."
         />
-        {!isLocationSelected && (
+        {!isFoundPlaceSelected && (
           <span className={styles.warning}>
             <WarnIcon />
             습득 장소가 입력되지 않았습니다.

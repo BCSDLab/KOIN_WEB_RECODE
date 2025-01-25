@@ -1,8 +1,11 @@
 @use "src/utils/scss/media" as media;
 
-.found-place {
+.date {
+  position: relative;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
@@ -22,7 +25,7 @@
     }
   }
 
-  &__input {
+  &__toggle {
     width: 332px;
     height: 40px;
     display: flex;
@@ -32,16 +35,41 @@
     padding: 7px 16px;
     border-radius: 8px;
     background-color: #f5f5f5;
-    border: none;
+    cursor: pointer;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+    }
+  }
+
+  &__description {
+    padding-top: 2px;
+    color: #727272;
     font-family: Pretendard, sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
-      width: 100%;
       font-size: 12px;
     }
+
+    &--has-been-selected {
+      color: #000;
+      font-size: 16px;
+      font-weight: 500;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 12px;
+      }
+    }
+  }
+
+  &__calendar {
+    position: absolute;
+    top: 48px;
+    right: 0;
+    z-index: 1;
   }
 }
 
@@ -65,6 +93,7 @@
     @include media.media-breakpoint(mobile) {
       margin-bottom: 12px;
       font-size: 12px;
+      line-height: 1.6;
     }
   }
 }
