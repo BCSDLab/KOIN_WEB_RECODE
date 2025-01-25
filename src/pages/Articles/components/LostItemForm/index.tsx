@@ -10,6 +10,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { FindUserCategory, useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import FormImage from 'pages/Articles/components/FormImage';
 import FormContent from 'pages/Articles/components/FormContent';
+import FormFoundPlace from 'pages/Articles/components/FormFoundPlace';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
@@ -166,23 +167,11 @@ export default function LostItemForm({
               </div>
             </div>
           </div>
-          <div className={styles['found-place']}>
-            <span className={styles.title}>습득 장소</span>
-            <div className={styles['found-place__wrapper']}>
-              <input
-                className={styles['found-place__input']}
-                defaultValue={foundPlace}
-                onBlur={(e) => setFoundPlace(e.target.value)}
-                placeholder="습득 장소를 선택해주세요."
-              />
-              {!isLocationSelected && (
-                <span className={styles.warning}>
-                  <WarnIcon />
-                  습득 장소가 입력되지 않았습니다.
-                </span>
-              )}
-            </div>
-          </div>
+          <FormFoundPlace
+            foundPlace={foundPlace}
+            setFoundPlace={setFoundPlace}
+            isLocationSelected={isLocationSelected}
+          />
         </div>
         <div className={`${styles.template__right}`}>
           <FormImage images={images} setImages={setImages} />
