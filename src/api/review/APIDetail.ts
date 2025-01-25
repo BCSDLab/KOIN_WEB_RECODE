@@ -1,5 +1,5 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { ReviewRequest, ReviewResponse, UploadImage } from './entity';
+import { ReviewRequest, ReviewResponse } from './entity';
 
 export class GetStoreReview<R extends ReviewResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
@@ -46,21 +46,5 @@ export class EditStoreReview<R extends ReviewRequest> implements APIRequest<R> {
   constructor(public authorization: string, shopId: string, reviewId: string, data: ReviewRequest) {
     this.path = `shops/${shopId}/reviews/${reviewId}`;
     this.data = data;
-  }
-}
-
-export class UploadFile<R extends UploadImage> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  response!: R;
-
-  path = 'SHOPS/upload/file';
-
-  auth = true;
-
-  data: FormData;
-
-  constructor(public authorization: string, formData: FormData) {
-    this.data = formData;
   }
 }

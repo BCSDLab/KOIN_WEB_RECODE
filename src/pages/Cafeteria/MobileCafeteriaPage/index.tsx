@@ -43,7 +43,7 @@ export default function MobileCafeteriaPage({
   }, [setButtonContent, openCafeteriaInfo]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[dining] });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[dining] });
     setDiningType(dining);
   };
 
@@ -55,7 +55,7 @@ export default function MobileCafeteriaPage({
       const scrollPercentage = (scrolled / maxHeight) * 100;
 
       if (scrollPercentage > 70 && !hasLoggedScroll) {
-        logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[diningType] });
+        logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[diningType] });
         setHasLoggedScroll(true);
       }
     };

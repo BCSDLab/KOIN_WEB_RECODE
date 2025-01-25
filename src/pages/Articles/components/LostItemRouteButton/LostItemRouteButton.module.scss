@@ -1,0 +1,36 @@
+@use "src/utils/scss/media" as media;
+
+.links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+
+  &__button {
+    height: 40px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid #e1e1e1;
+    border-radius: 24px;
+    background-color: #fafafa;
+    color: #4b4b4b;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+
+    @include media.media-breakpoint(mobile) {
+      position: fixed;
+      right: 24px;
+      bottom: 104px;
+      height: 42px;
+      padding: 0 12px;
+      border-radius: 21px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+  }
+}

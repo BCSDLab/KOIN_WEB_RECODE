@@ -55,7 +55,7 @@ export default function IndexTimeTable() {
         onClick={() => {
           logger.actionEventClick({
             actionTitle: 'USER',
-            title: 'main_timetable',
+            event_label: 'main_timetable',
             value: 'text',
           });
         }}
@@ -69,7 +69,7 @@ export default function IndexTimeTable() {
             onClick={() => {
               logger.actionEventClick({
                 actionTitle: 'USER',
-                title: 'main_timetable',
+                event_label: 'main_timetable',
                 value: 'table',
               });
             }}

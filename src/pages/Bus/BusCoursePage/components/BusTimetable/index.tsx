@@ -13,7 +13,7 @@ export default function BusTimetable() {
   ));
   const logger = useLogger();
   const onClickBusTab = (type: typeof BUS_TYPES[number]) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'bus_timetable', value: type.tabName });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'bus_timetable', value: type.tabName });
     setSelectedTab(type);
   };
 

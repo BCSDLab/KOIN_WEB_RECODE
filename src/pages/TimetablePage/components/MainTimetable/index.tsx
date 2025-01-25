@@ -51,7 +51,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
     if (isSemesterAndTimetableExist()) {
       logger.actionEventClick({
         actionTitle: 'USER',
-        title: 'timetable',
+        event_label: 'timetable',
         value: '이미지저장',
         duration_time:
         (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
