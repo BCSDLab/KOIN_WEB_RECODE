@@ -8,7 +8,7 @@ import ChevronLeft from 'assets/svg/Articles/chevron-left-circle.svg';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
 import uuidv4 from 'utils/ts/uuidGenerater';
-import DeleteModal from 'pages/Articles/components/DeleteModal/indes';
+import DeleteModal from 'pages/Articles/components/DeleteModal';
 import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
