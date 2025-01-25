@@ -1,6 +1,8 @@
 import WarnIcon from 'assets/svg/Articles/warn.svg';
 import styles from './FormFoundPlace.module.scss';
 
+const MAX_LENGTH = 22;
+
 interface FormFoundPlaceProps {
   foundPlace: string;
   setFoundPlace: (foundPlace: string) => void;
@@ -10,6 +12,12 @@ interface FormFoundPlaceProps {
 export default function FormFoundPlace({
   foundPlace, setFoundPlace, isFoundPlaceSelected,
 }: FormFoundPlaceProps) {
+  const handleChange = (value: string) => {
+    if (value.length <= MAX_LENGTH) {
+      setFoundPlace(value);
+    }
+  };
+
   return (
     <div className={styles['found-place']}>
       <span className={styles.title}>습득 장소</span>
@@ -17,7 +25,8 @@ export default function FormFoundPlace({
         <input
           className={styles['found-place__input']}
           defaultValue={foundPlace}
-          onBlur={(e) => setFoundPlace(e.target.value)}
+          onBlur={(e) => handleChange(e.target.value)}
+          maxLength={MAX_LENGTH}
           placeholder="습득 장소를 선택해주세요."
         />
         {!isFoundPlaceSelected && (

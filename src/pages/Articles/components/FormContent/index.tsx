@@ -33,7 +33,7 @@ export default function FormContent({ content, setContent }: FormContentProps) {
         value={localContent}
         onChange={(e) => handleContentChange(e.target.value)}
         onBlur={(e) => setContent(e.target.value)}
-        maxLength={1000}
+        maxLength={MAX_CONTENT_LENGTH}
       />
     </div>
   );
