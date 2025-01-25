@@ -169,51 +169,6 @@
   }
 }
 
-.category {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  &__wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 13px;
-  }
-
-  &__text {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__buttons {
-    display: flex;
-    gap: 10px;
-    flex-flow: row wrap;
-  }
-
-  &__button {
-    height: 38px;
-    padding: 8px 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    white-space: nowrap;
-    border-radius: 20px;
-    background-color: #fff;
-    border: 1px solid #175c8e;
-    color: #175c8e;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-
-    &--selected {
-      background-color: #175c8e;
-      color: #fff;
-    }
-  }
-}
-
 .date {
   position: relative;
   display: flex;

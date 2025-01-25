@@ -7,18 +7,16 @@ import { LostItem, LostItemHandler } from 'pages/Articles/hooks/useLostItemForm'
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { FindUserCategory, useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import FormImage from 'pages/Articles/components/FormImage';
 import FormContent from 'pages/Articles/components/FormContent';
 import FormFoundPlace from 'pages/Articles/components/FormFoundPlace';
+import FormCategory from 'pages/Articles/components/FormCategory';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
   found: '습득물',
   lost: '분실물',
 };
-
-const CATEGORIES: FindUserCategory[] = ['카드', '신분증', '지갑', '전자제품', '그 외'];
 
 const getyyyyMMdd = (date: Date) => {
   const yyyy = date.getFullYear();
@@ -59,12 +57,6 @@ export default function LostItemForm({
   } = lostItemHandler;
 
   const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
-  const { logFindUserCategory } = useArticlesLogger();
-
-  const handleCategoryClick = (item: FindUserCategory) => {
-    logFindUserCategory(item);
-    setCategory(item);
-  };
 
   const handleDateSelect = (date: Date) => {
     setFoundDate(date);
@@ -94,38 +86,12 @@ export default function LostItemForm({
       </div>
       <div className={styles.template}>
         <div className={`${styles.template__left} ${styles.left}`}>
-          <div className={styles.category}>
-            <div className={styles.category__text}>
-              <span className={styles.title}>품목</span>
-              <span className={styles.title__description}>품목을 선택해주세요.</span>
-            </div>
-            <div className={styles.category__wrapper}>
-              <div className={styles.category__buttons}>
-                {CATEGORIES.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    className={cn({
-                      [styles.category__button]: true,
-                      [styles['category__button--selected']]: category === item,
-                    })}
-                    onClick={() => handleCategoryClick(item as FindUserCategory)}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-              {!isCategorySelected && (
-                <span className={styles.warning}>
-                  <WarnIcon />
-                  품목이 선택되지 않았습니다.
-                </span>
-              )}
-            </div>
-          </div>
-          <div
-            className={styles.date}
-          >
+          <FormCategory
+            category={category}
+            setCategory={setCategory}
+            isCategorySelected={isCategorySelected}
+          />
+          <div className={styles.date}>
             <span className={styles.title}>습득 일자</span>
             <div className={styles.date__wrapper} ref={containerRef}>
               <div className={styles.date__wrapper}>

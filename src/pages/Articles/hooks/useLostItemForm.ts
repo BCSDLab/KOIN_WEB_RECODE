@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { FindUserCategory } from './useArticlesLogger';
 
 export interface LostItem {
-  category: string;
+  category: FindUserCategory | '';
   foundDate: Date;
   foundPlace: string;
   content: string;
@@ -13,7 +14,7 @@ export interface LostItem {
 }
 
 export interface LostItemHandler {
-  setCategory: (category: string) => void;
+  setCategory: (category: FindUserCategory) => void;
   setFoundDate: (date: Date) => void;
   setFoundPlace: (foundPlace: string) => void;
   setContent: (content: string) => void;
@@ -40,7 +41,7 @@ export const useLostItemForm = () => {
   const [lostItems, setLostItems] = useState<Array<LostItem>>([{ ...initialForm }]);
 
   const lostItemHandler = (key: number) => ({
-    setCategory: (category: string) => {
+    setCategory: (category: FindUserCategory) => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
         newLostItems[key].category = category;
