@@ -1,0 +1,75 @@
+@use "src/utils/scss/media" as media;
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+  }
+
+  &__input {
+    width: 960px;
+    height: 115px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 8px 16px;
+    border-radius: 8px;
+    resize: none;
+    background-color: #f5f5f5;
+    border: none;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      font-size: 12px;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__counter {
+    color: #727272;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: center;
+  }
+}
+
+.title {
+  font-family: Pretendard, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.2;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  &__description {
+    color: #727272;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+
+    @include media.media-breakpoint(mobile) {
+      margin-bottom: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+  }
+}

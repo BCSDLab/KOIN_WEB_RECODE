@@ -7,10 +7,9 @@ import { LostItem, LostItemHandler } from 'pages/Articles/hooks/useLostItemForm'
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import showToast from 'utils/ts/showToast';
 import { FindUserCategory, useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
-import { useState } from 'react';
 import FormImage from 'pages/Articles/components/FormImage';
+import FormContent from 'pages/Articles/components/FormContent';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
@@ -19,8 +18,6 @@ const MAX_LOST_ITEM_TYPE = {
 };
 
 const CATEGORIES: FindUserCategory[] = ['카드', '신분증', '지갑', '전자제품', '그 외'];
-
-const MAX_CONTENT_LENGTH = 1000;
 
 const getyyyyMMdd = (date: Date) => {
   const yyyy = date.getFullYear();
@@ -62,17 +59,6 @@ export default function LostItemForm({
 
   const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
   const { logFindUserCategory } = useArticlesLogger();
-
-  const [localContent, setLocalContent] = useState(content);
-  const contentCounter = `${localContent.length}/${MAX_CONTENT_LENGTH}`;
-
-  const handleContentChange = (value: string) => {
-    if (value.length <= MAX_CONTENT_LENGTH) {
-      setLocalContent(value);
-    } else {
-      showToast('error', `최대 ${MAX_CONTENT_LENGTH}자까지 입력 가능합니다.`);
-    }
-  };
 
   const handleCategoryClick = (item: FindUserCategory) => {
     logFindUserCategory(item);
@@ -202,20 +188,7 @@ export default function LostItemForm({
           <FormImage images={images} setImages={setImages} />
         </div>
         <div className={styles.template__bottom}>
-          <div className={styles.content}>
-            <div className={styles.content__header}>
-              <span className={styles.title}>내용</span>
-              <span className={styles.content__counter}>{contentCounter}</span>
-            </div>
-            <textarea
-              className={styles.content__input}
-              placeholder="습득한 물건에 대한 설명을 적어주세요."
-              value={localContent}
-              onChange={(e) => handleContentChange(e.target.value)}
-              onBlur={(e) => setContent(e.target.value)}
-              maxLength={1000}
-            />
-          </div>
+          <FormContent content={content} setContent={setContent} />
         </div>
       </div>
     </div>

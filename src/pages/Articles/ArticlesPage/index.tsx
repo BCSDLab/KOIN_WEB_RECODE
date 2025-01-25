@@ -1,7 +1,7 @@
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import HotArticles from 'pages/Articles/components/HotArticle';
 import { Suspense } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useUser } from 'utils/hooks/state/useUser';
 import LostItemRouteButton from 'pages/Articles/components/LostItemRouteButton';
@@ -19,7 +19,9 @@ export default function ArticlesPage() {
     <div className={styles.template}>
       <div className={styles.content}>
         <div className={styles.header}>
-          <h1 className={styles.header__title}>공지사항</h1>
+          <Link to={ROUTES.Articles()}>
+            <h1 className={styles.header__title}>공지사항</h1>
+          </Link>
           {isBoard && isCouncil && <LostItemRouteButton />}
         </div>
         <Suspense fallback={<LoadingSpinner size="150px" />}>
