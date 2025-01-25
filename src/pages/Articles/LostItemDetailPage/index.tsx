@@ -7,7 +7,6 @@ import ChevronRight from 'assets/svg/Articles/chevron-right-circle.svg';
 import ChevronLeft from 'assets/svg/Articles/chevron-left-circle.svg';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
-import uuidv4 from 'utils/ts/uuidGenerater';
 import DeleteModal from 'pages/Articles/components/DeleteModal';
 import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -42,12 +41,8 @@ export default function LostItemDetailPage() {
   const imageIndex = images.findIndex((img) => img.id === image.id);
   const { logFindUserDeleteClick } = useArticlesLogger();
 
-  const handleLeftButtonClick = () => {
-    setImage(images[(imageIndex - 1 + images.length) % images.length]);
-  };
-
-  const handleRightButtonClick = () => {
-    setImage(images[(imageIndex + 1) % images.length]);
+  const handleArrowButtonClick = (diff: 1 | -1) => {
+    setImage(images[(imageIndex + diff) % images.length]);
   };
 
   const handleDeleteButtonClick = () => {
@@ -85,7 +80,7 @@ export default function LostItemDetailPage() {
                       [styles['images__button--left']]: true,
                       [styles['images__button--hidden']]: images.length === 1 || imageIndex === 0,
                     })}
-                    onClick={handleLeftButtonClick}
+                    onClick={() => handleArrowButtonClick(-1)}
                     type="button"
                     aria-label="다음 이미지 보기"
                   >
@@ -97,7 +92,7 @@ export default function LostItemDetailPage() {
                       [styles['images__button--right']]: true,
                       [styles['images__button--hidden']]: images.length === 1 || imageIndex === images.length - 1,
                     })}
-                    onClick={handleRightButtonClick}
+                    onClick={() => handleArrowButtonClick(1)}
                     type="button"
                     aria-label="다음 이미지 보기"
                   >
@@ -108,10 +103,10 @@ export default function LostItemDetailPage() {
             </div>
           )}
           <div className={styles.contents__navigation}>
-            {images.length > 1 && Array.from({ length: images.length }).map((_, index) => (
+            {images.length > 1 && images.map((currentImage, index) => (
               <button
-                key={uuidv4()}
-                onClick={() => setImage(images[index])}
+                key={currentImage.imageUrl}
+                onClick={() => setImage(currentImage)}
                 type="button"
               >
                 {imageIndex === index ? <SelectedDotIcon /> : <NotSelectedDotIcon />}
