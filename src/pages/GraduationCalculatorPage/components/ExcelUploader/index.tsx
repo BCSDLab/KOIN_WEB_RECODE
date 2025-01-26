@@ -32,25 +32,29 @@ function ExcelUploader() {
       </button>
 
       {isTooltipOpen && (
-      <div className={styles['excel-uploader__tooltip']}>
-        <div className={styles['excel-uploader__tooltip-content']}>
-          아우누리에서 받은 엑셀 파일을
-          <br />
-          <strong>드래그&드랍</strong>
-          하거나 이곳을
-          <strong> 클릭해서</strong>
-          <br />
-          경로를 지정해 주세요.
+        <div className={styles['excel-uploader__tooltip']}>
+          <div className={styles['excel-uploader__tooltip-content']}>
+            아우누리에서 받은 엑셀 파일을
+            <br />
+            <strong>드래그&드랍</strong>
+            하거나 이곳을
+            <strong> 클릭해서</strong>
+            <br />
+            경로를 지정해 주세요.
+          </div>
+          <button
+            type="button"
+            aria-label="close"
+            className={styles['excel-uploader__tooltip-close']}
+            onClick={handleTooltipCloseButtonClick}
+          >
+            <CloseIcon />
+          </button>
+          <div className={styles['excel-uploader__tooltip-asset']}>
+            <BubbleTailBottom />
+          </div>
         </div>
-        <button type="button" aria-label="close" className={styles['excel-uploader__tooltip-close']} onClick={handleTooltipCloseButtonClick}>
-          <CloseIcon />
-        </button>
-        <div className={styles['excel-uploader__tooltip-asset']}>
-          <BubbleTailBottom />
-        </div>
-      </div>
       )}
-
     </div>
   );
 }
