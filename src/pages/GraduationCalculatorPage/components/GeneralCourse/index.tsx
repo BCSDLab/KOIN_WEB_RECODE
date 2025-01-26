@@ -8,12 +8,7 @@ import styles from './GeneralCourse.module.scss';
 
 function GeneralCourse() {
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
-  const handleTooltipContent = () => {
-    openTooltip();
-  };
-  const handleTooltipCloseButtonClick = () => {
-    closeTooltip();
-  };
+
   const tracks = [
     { id: 1, name: '교양 선택' },
     { id: 2, name: '예술과 문학' },
@@ -22,6 +17,7 @@ function GeneralCourse() {
     { id: 5, name: '자연과 인간' },
     { id: 6, name: '인성과 소양' },
   ];
+
   return (
     <div className={styles['general-course']}>
       <div className={styles.description}>
@@ -31,7 +27,7 @@ function GeneralCourse() {
       <button
         type="button"
         className={styles['question-icon']}
-        onClick={handleTooltipContent}
+        onClick={openTooltip}
       >
         <QuestionMarkIcon />
       </button>
@@ -61,7 +57,7 @@ function GeneralCourse() {
             type="button"
             aria-label="close"
             className={styles['tooltip-close']}
-            onClick={handleTooltipCloseButtonClick}
+            onClick={closeTooltip}
           >
             <CloseIcon />
           </button>

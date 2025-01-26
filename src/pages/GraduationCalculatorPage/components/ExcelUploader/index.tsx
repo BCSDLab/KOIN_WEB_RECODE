@@ -15,6 +15,7 @@ function ExcelUploader() {
   const handleTooltipCloseButtonClick = () => {
     closeTooltip();
   };
+
   return (
     <div className={styles['excel-uploader']}>
       <div className={styles['excel-uploader__description']}>
