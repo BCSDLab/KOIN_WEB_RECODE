@@ -149,7 +149,7 @@ function StorePage() {
     if (isChecked) {
       logger.actionEventClick({
         actionTitle: 'BUSINESS',
-        title: 'shop_can',
+        event_label: 'shop_can',
         value: `check_${id}_${koreanCategory}`,
       });
     }
@@ -166,7 +166,7 @@ function StorePage() {
       if (storeMobileFilterState.sorter !== item) {
         logger.actionEventClick({
           actionTitle: 'BUSINESS',
-          title: 'shop_can',
+          event_label: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
             categories.shop_categories[selectedCategory]?.name,
@@ -188,7 +188,7 @@ function StorePage() {
       if (!storeMobileFilterState.filter.includes(item)) {
         logger.actionEventClick({
           actionTitle: 'BUSINESS',
-          title: 'shop_can',
+          event_label: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
             categories.shop_categories[selectedCategory]?.name,
@@ -206,7 +206,7 @@ function StorePage() {
       : Number(searchParams.get('category')) - 1;
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: 'shop_categories',
+      event_label: 'shop_categories',
       value: `scroll in ${
         categories.shop_categories[currentCategoryId]?.name || '전체보기'
       }`,
@@ -254,7 +254,7 @@ function StorePage() {
               onClick={() => {
                 logger.actionEventClick({
                   actionTitle: 'BUSINESS',
-                  title: 'shop_categories',
+                  event_label: 'shop_categories',
                   value: category.name,
                   event_category: 'click',
                   previous_page:

@@ -1,0 +1,113 @@
+.box {
+  width: 332px;
+  height: 302px;
+  padding: 16px 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow:
+    0 4px 10px rgba(0 0 0 / 8%),
+    0 1px 4px rgba(0 0 0 / 4%);
+}
+
+.year {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  & > button {
+    height: 24px;
+  }
+
+  &__text {
+    padding-top: 4px;
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__week {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__day-of-week {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #4b4b4b;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  &__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    column-gap: 16px;
+    row-gap: 10px;
+  }
+
+  &__day-of-month {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2px;
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.6;
+    text-align: center;
+    cursor: pointer;
+
+    &--other-month {
+      color: #8e8e8e;
+    }
+
+    &--future {
+      color: #e1e1e1;
+      cursor: default;
+    }
+
+    &--today {
+      &::before {
+        position: absolute;
+        bottom: -5.5px;
+        content: "";
+        width: 11.5px;
+        height: 0;
+        border-bottom: 2px solid #175c8e;
+        border-radius: 1px;
+      }
+    }
+
+    &--selected {
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background-color: #175c8e;
+    }
+  }
+}

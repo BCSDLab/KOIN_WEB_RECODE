@@ -77,7 +77,7 @@ function TemplateShuttleVersion({
               navigate(`/bus/course?routeId=${route.id}`);
               logger.actionEventClick({
                 actionTitle: 'CAMPUS',
-                title: 'area_specific_route',
+                event_label: 'area_specific_route',
                 event_category: 'click',
                 value: `${route.type}_${route.route_name}`,
               });
@@ -131,7 +131,7 @@ function ShuttleTimetable() {
               navigate(ROUTES.BusCourse());
               logger.actionEventClick({
                 actionTitle: 'CAMPUS',
-                title: 'shuttle_bus_route',
+                event_label: 'shuttle_bus_route',
                 event_category: 'click',
                 value,
               });
@@ -195,7 +195,7 @@ function ShuttleTimetable() {
                   window.open(BUS_FEEDBACK_FORM);
                   logger.actionEventClick({
                     actionTitle: 'CAMPUS',
-                    title: 'error_feedback_button',
+                    event_label: 'error_feedback_button',
                     value: `셔틀_${category}`,
                   });
                 }}
@@ -229,7 +229,7 @@ function ShuttleTimetable() {
               window.open(BUS_FEEDBACK_FORM);
               logger.actionEventClick({
                 actionTitle: 'CAMPUS',
-                title: 'error_feedback_button',
+                event_label: 'error_feedback_button',
                 value: `셔틀_${category}`,
               });
             }}
@@ -285,7 +285,7 @@ function ExpressTimetable() {
               handleCourseChange(e);
               logger.actionEventClick({
                 actionTitle: 'CAMPUS',
-                title: 'ds_bus_direction',
+                event_label: 'ds_bus_direction',
                 value: EXPRESS_COURSES[Number(e.currentTarget.dataset.value)].name,
               });
             }}
@@ -326,7 +326,7 @@ function ExpressTimetable() {
             window.open(BUS_FEEDBACK_FORM);
             logger.actionEventClick({
               actionTitle: 'CAMPUS',
-              title: 'error_feedback_button',
+              event_label: 'error_feedback_button',
               value: `대성_${destinationCategory}`,
             });
           }}
@@ -392,7 +392,7 @@ function CityTimetable() {
                 setSelectedBusNumber(cityCourse.bus_number);
                 logger.actionEventClick({
                   actionTitle: 'CAMPUS',
-                  title: 'city_bus_route',
+                  event_label: 'city_bus_route',
                   value: `${cityCourse.bus_number}번`,
                 });
               }}
@@ -415,7 +415,7 @@ function CityTimetable() {
                 setSelectedDirection(cityBusDirection.value);
                 logger.actionEventClick({
                   actionTitle: 'CAMPUS',
-                  title: 'city_bus_direction',
+                  event_label: 'city_bus_direction',
                   value: cityBusDirection.label,
                 });
               }}
@@ -441,7 +441,7 @@ function CityTimetable() {
             window.open(BUS_FEEDBACK_FORM);
             logger.actionEventClick({
               actionTitle: 'CAMPUS',
-              title: 'error_feedback_button',
+              event_label: 'error_feedback_button',
               value: `시내_${selectedDirection}_${selectedBusNumber}`,
             });
           }}

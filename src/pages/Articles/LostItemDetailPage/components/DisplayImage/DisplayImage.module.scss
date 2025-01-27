@@ -1,0 +1,79 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  margin-top: 40px;
+
+  @include media.media-breakpoint(mobile) {
+    margin-top: 20px;
+  }
+}
+
+.images {
+  position: relative;
+  width: 586px;
+  height: 527px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__image {
+    width: 586px;
+    height: 527px;
+    object-fit: contain;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &--left {
+      left: 17px;
+    }
+
+    &--right {
+      right: 17px;
+    }
+
+    &--hidden {
+      display: none;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      & svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+}
+
+.navigation {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  box-sizing: border-box;
+  gap: 8px;
+
+  & button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    margin-top: 16px;
+  }
+}

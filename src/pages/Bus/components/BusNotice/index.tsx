@@ -4,6 +4,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import InformationIcon from 'assets/svg/Bus/info.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
 import useBusNotice from 'pages/Bus/hooks/useBusNotice';
+import ROUTES from 'static/routes';
 import styles from './BusNotice.module.scss';
 
 export default function BusNotice() {
@@ -23,7 +24,7 @@ export default function BusNotice() {
   const [showNotice, setShowNotice] = useState(() => !busNoticeDismissed || isUpdated);
 
   const handleClickNavigateNotice = () => {
-    navigate(`/board/notice/${id}`);
+    navigate(ROUTES.ArticlesDetail({ id: String(id), isLink: true }));
   };
 
   const handleClickDismissNotice = () => {

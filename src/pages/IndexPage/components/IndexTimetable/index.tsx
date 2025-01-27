@@ -1,13 +1,10 @@
 import React, { Suspense, useEffect } from 'react';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import { Link } from 'react-router-dom';
-import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/common/ErrorBoundary';
 import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
-import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
-import useTimetableDayList from 'pages/TimetablePage/hooks/useTimetableDayList';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
@@ -30,22 +27,14 @@ function CurrentSemesterTimetable() {
     }
   }, [timetableFrameList]);
 
-  const { myLectures } = useMyLectures(currentFrameIndex);
-  const myLectureDayValue = useTimetableDayList(myLectures);
-
-  return myLectureDayValue ? (
+  return (
     <Timetable
       frameId={currentFrameIndex}
-      lectures={myLectureDayValue}
       columnWidth={44}
       firstColumnWidth={29}
       rowHeight={17.3}
       totalHeight={369}
     />
-  ) : (
-    <div className={styles['template__loading-spinner']}>
-      <LoadingSpinner />
-    </div>
   );
 }
 
@@ -66,7 +55,7 @@ export default function IndexTimeTable() {
         onClick={() => {
           logger.actionEventClick({
             actionTitle: 'USER',
-            title: 'main_timetable',
+            event_label: 'main_timetable',
             value: 'text',
           });
         }}
@@ -80,7 +69,7 @@ export default function IndexTimeTable() {
             onClick={() => {
               logger.actionEventClick({
                 actionTitle: 'USER',
-                title: 'main_timetable',
+                event_label: 'main_timetable',
                 value: 'table',
               });
             }}

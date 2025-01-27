@@ -35,7 +35,7 @@ export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void
   const goReviewPageLogging = () => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: 'shop_detail_view_review_write',
+      event_label: 'shop_detail_view_review_write',
       event_category: 'click',
       value: storeDetail.name,
     });

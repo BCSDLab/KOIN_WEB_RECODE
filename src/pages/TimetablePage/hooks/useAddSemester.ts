@@ -1,3 +1,4 @@
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { timetable } from 'api';
 import { AddTimetableFrameRequest } from 'api/timetable/entity';
@@ -15,10 +16,17 @@ export default function useAddSemester(token: string) {
     ) => timetable.addTimetableFrame(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [MY_SEMESTER_INFO_KEY] });
-      queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester] });
+      queryClient.invalidateQueries(
+        { queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] },
+      );
     },
-    onError: () => {
-      showToast('error', '아직 존재하지 않는 학기입니다.');
+    onError: (error) => {
+      if (isKoinError(error)) {
+        showToast('error', error.message || '학기 추가에 실패했습니다.');
+      } else {
+        sendClientError(error);
+        showToast('error', '학기 추가에 실패했습니다.');
+      }
     },
   });
 }

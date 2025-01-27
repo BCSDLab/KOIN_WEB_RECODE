@@ -1,0 +1,147 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  min-height: calc(100vh - 60px);
+  padding-top: 64px;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    padding-top: 0;
+    background-color: #fff;
+  }
+}
+
+.wrapper {
+  width: 1136px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+  }
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 76px;
+  gap: 8px;
+
+  @include media.media-breakpoint(mobile) {
+    width: calc(100% - 48px);
+    padding: 32px 24px 12px;
+    margin-bottom: 0;
+    gap: 0;
+  }
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: #175c8e;
+    line-height: 1.2;
+
+    @include media.media-breakpoint(mobile) {
+      color: #000;
+      font-size: 18px;
+      line-height: 1.6;
+      display: flex;
+      gap: 8px;
+    }
+  }
+
+  &__description {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #666;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #727272;
+    }
+  }
+}
+
+.forms {
+  display: flex;
+  flex-direction: column;
+  gap: 53px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 24px;
+  }
+}
+
+.add {
+  width: 100%;
+  margin: 32px 0 20px;
+  display: flex;
+  justify-content: flex-end;
+  box-sizing: border-box;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 0;
+    padding: 16px 24px;
+  }
+
+  &__button {
+    width: 127px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 8px;
+    background-color: #e4f2ff;
+    color: #10477a;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+    box-shadow:
+      0 2px 4px rgba(0 0 0 / 4%),
+      0 1px 1px rgba(0 0 0 / 2%);
+
+    @include media.media-breakpoint(mobile) {
+      height: 40px;
+      font-size: 14px;
+    }
+  }
+}
+
+.complete {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 100px;
+
+  @include media.media-breakpoint(mobile) {
+    margin-top: 24px;
+  }
+
+  &__button {
+    width: 240px;
+    height: 53px;
+    border: none;
+    border-radius: 8px;
+    background-color: #175c8e;
+    color: white;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.6;
+    box-shadow:
+      0 2px 4px rgba(0 0 0 / 10%),
+      0 1px 1px rgba(0 0 0 / 5%);
+
+    @include media.media-breakpoint(mobile) {
+      height: 44px;
+      font-size: 14px;
+    }
+  }
+}

@@ -550,7 +550,7 @@ function SignupDefaultPage() {
           onClick={() => {
             logger.actionEventClick({
               actionTitle: 'USER',
-              title: 'complete_sign_up',
+              event_label: 'complete_sign_up',
               value: '회원가입 완료',
             });
           }}

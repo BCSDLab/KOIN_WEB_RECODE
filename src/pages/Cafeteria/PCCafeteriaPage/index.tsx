@@ -37,7 +37,7 @@ export default function PCCafeteriaPage({
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
 
   const handleDiningTypeChange = (value: DiningType) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'menu_time', value: DINING_TYPE_MAP[value] });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[value] });
     setDiningType(value);
     toggleDropdown();
   };
