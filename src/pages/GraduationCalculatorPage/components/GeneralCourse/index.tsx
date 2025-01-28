@@ -1,9 +1,14 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import CourseStatusIcon from 'assets/svg/ellipse-icon.svg';
+import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
+import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './GeneralCourse.module.scss';
 
 function GeneralCourse() {
+  const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
+
   const tracks = [
     { id: 1, name: '교양 선택' },
     { id: 2, name: '예술과 문학' },
@@ -12,6 +17,7 @@ function GeneralCourse() {
     { id: 5, name: '자연과 인간' },
     { id: 6, name: '인성과 소양' },
   ];
+
   return (
     <div className={styles['general-course']}>
       <div className={styles.description}>
@@ -21,6 +27,7 @@ function GeneralCourse() {
       <button
         type="button"
         className={styles['question-icon']}
+        onClick={openTooltip}
       >
         <QuestionMarkIcon />
       </button>
@@ -38,6 +45,27 @@ function GeneralCourse() {
           </div>
         ))}
       </div>
+      {isTooltipOpen && (
+        <div className={styles.tooltip}>
+          <div className={styles['tooltip-content']}>
+            교양 영역을 클릭해서
+            <strong> 학기 교양 개설 목록</strong>
+            <br />
+            을 확인할 수 있어요.
+          </div>
+          <button
+            type="button"
+            aria-label="close"
+            className={styles['tooltip-close']}
+            onClick={closeTooltip}
+          >
+            <CloseIcon />
+          </button>
+          <div className={styles['tooltip-asset']}>
+            <BubbleTailBottom />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
