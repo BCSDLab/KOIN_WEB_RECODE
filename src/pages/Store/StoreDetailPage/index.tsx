@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
 import {
@@ -21,6 +21,8 @@ import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import * as api from 'api';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+// eslint-disable-next-line
+import StoreDetailBoundary from '../components/StoreDetailBoundary/StoreDetailBoundary';
 import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
@@ -37,7 +39,7 @@ function StoreDetailPage() {
   const logger = useLogger();
   // waterfall 현상 막기
   const { data: paralleData } = useSuspenseQuery({
-    queryKey: ['storeDetail', 'storeDetailMenu', 'review'],
+    queryKey: ['storeDetail', 'storeDetailMenu', 'review', params.id],
     queryFn: () => Promise.all([
       queryClient.fetchQuery({
         queryKey: ['storeDetail', params.id],
@@ -410,18 +412,29 @@ function StoreDetailPage() {
         {tapType === '리뷰' && <ReviewPage id={params.id!} />}
       </div>
       {testValue === 'call_floating' && (
-      <a
-        role="button"
-        aria-label="상점 전화하기"
-        href={`tel:${storeDetail?.phone}`}
-        onClick={onClickCallNumber}
-        className={styles['phone-button--floating']}
-      >
-        <Phone />
-      </a>
+        <a
+          role="button"
+          aria-label="상점 전화하기"
+          href={`tel:${storeDetail?.phone}`}
+          onClick={onClickCallNumber}
+          className={styles['phone-button--floating']}
+        >
+          <Phone />
+        </a>
       )}
     </div>
   );
 }
 
-export default StoreDetailPage;
+function StoreDetail() {
+  const navigate = useNavigate();
+  return (
+    <StoreDetailBoundary onErrorClick={() => navigate('/store')}>
+      <Suspense fallback={<div />}>
+        <StoreDetailPage />
+      </Suspense>
+    </StoreDetailBoundary>
+  );
+}
+
+export default StoreDetail;

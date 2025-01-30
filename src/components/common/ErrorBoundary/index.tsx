@@ -1,6 +1,7 @@
 import React, { ErrorInfo } from 'react';
 import showToast from 'utils/ts/showToast';
 import { AxiosError } from 'axios';
+import { sendClientError } from '@bcsdlab/koin';
 
 interface Props {
   fallbackClassName: string;
@@ -33,6 +34,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   componentDidCatch(error: AxiosError<any, any> | Error, __: ErrorInfo) {
     showToast('error', isAxiosError(error) ? error.response?.data.error.message : error.message);
+    sendClientError(error);
   }
 
   render() {
