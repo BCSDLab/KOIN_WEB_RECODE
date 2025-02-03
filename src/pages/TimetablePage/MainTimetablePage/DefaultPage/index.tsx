@@ -50,7 +50,8 @@ export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageP
     return (() => {
       window.removeEventListener('popstate', handlePopState);
     });
-  }, [handlePopState]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     sessionStorage.setItem('swipeToBack', 'false');
