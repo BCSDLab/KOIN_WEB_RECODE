@@ -29,10 +29,9 @@ function TimetablePage() {
     } else {
       setCurrentFrameIndex(mainFrame?.id ? mainFrame.id : 0);
     }
+    sessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  sessionStorage.setItem('enterTimetablePage', new Date().getTime().toString());
 
   return (
     <div className={styles.page}>
