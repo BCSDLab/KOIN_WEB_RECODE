@@ -1,10 +1,91 @@
 @use "utils/scss/media.scss" as media;
 
 .excel-uploader {
+  position: relative;
   display: flex;
-  width: 403px;
+  flex-direction: column;
+  align-items: center;
   height: 192px;
   border: none;
   border-radius: 16px;
   background-color: #eee;
+  padding: 0 12px;
+
+  &__description {
+    display: flex;
+    margin-top: 12px;
+    width: 100%;
+    justify-content: right;
+
+    & > svg {
+      width: 30px;
+    }
+  }
+
+  &__button {
+    display: flex;
+    flex-direction: column;
+    width: 180px;
+    justify-content: center;
+    align-items: center;
+    padding: 9px 0;
+    gap: 5px;
+
+    & > svg {
+      width: 40px;
+    }
+
+    & > span {
+      color:  #727272;
+      font-family: Pretendard, sans-serif;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 500;
+    }
+  }
+
+  &__tooltip {
+    z-index: 10;
+    position: absolute;
+    top: -85.5px;
+    right: -101px;
+    display: flex;
+    width: fit-content;
+    gap: 8px;
+    border-radius: 8px;
+    background: #fafafa;
+    padding: 16px;
+    box-shadow: 0 1px 4px 0 rgba(0 0 0 / 4%), 0 4px 10px 0 rgba(0 0 0 / 8%);
+
+    &-content {
+      text-align: left;
+      color: #1F1F1F;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 160%;
+
+      & > strong {
+        font-weight: 600;
+      }
+    }
+
+    &-close {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+
+      & > svg > path {
+        fill: #cacaca;
+      }
+    }
+
+    &-asset {
+      position: absolute;
+      width: 100%;
+      margin: 0 auto;
+      bottom: -13px;
+      right: -125px;
+    }
+  }
 }
