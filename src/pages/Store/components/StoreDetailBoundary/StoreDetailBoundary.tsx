@@ -1,7 +1,7 @@
 import React, { ErrorInfo } from 'react';
 import { AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
-import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import { isKoinError } from '@bcsdlab/koin';
 import styles from './StoreDetailBoundary.module.scss';
 
 interface Props {
@@ -37,7 +37,6 @@ export default class StoreDetailBoundary extends React.Component<Props, State> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   componentDidCatch(error: Error, __: ErrorInfo) {
     showToast('error', error.message);
-    sendClientError(error);
   }
 
   render() {
@@ -60,7 +59,7 @@ export default class StoreDetailBoundary extends React.Component<Props, State> {
     }
 
     if (hasError) {
-      return <div className={styles.container}>오류가 발생했습니다</div>;
+      return <div className={styles.container}>오류가 발생했습니다.</div>;
     }
 
     return children;
