@@ -79,6 +79,7 @@ function App() {
     <>
       <Routes>
         <Route path={ROUTES.Main()} element={<BoardPage />}>
+<<<<<<< HEAD
           <Route index element={<Wrapper title="한기대 커뮤니티" element={<IndexPage />} />} />
           <Route path={ROUTES.PrivatePolicy()} element={<Wrapper title="개인정보 처리방침" element={<PolicyPage />} />} />
 
@@ -103,6 +104,23 @@ function App() {
             <Route index element={<ArticleListPage />} />
             <Route path={ROUTES.ArticlesDetail({ isLink: false })} element={<Wrapper title="공시사항 상세" element={<ArticlesDetailPage />} />} />
             <Route path={ROUTES.LostItemDetail({ isLink: false })} element={<Wrapper title="분실물 상세" element={<LostItemDetailPage />} />} />
+=======
+          <Route path={ROUTES.Timetable()} element={<HelmetWrapper title="코인 - 시간표" element={<TimetablePage />} />} />
+          <Route path={ROUTES.TimetableRegular({ isLink: false })} element={<HelmetWrapper title="코인 - 시간표 수정" element={<ModifyTimetablePage />} />} />
+          <Route path={ROUTES.TimetableDirect({ isLink: false })} element={<HelmetWrapper title="코인 - 시간표 수정" element={<ModifyTimetablePage />} />} />
+          <Route path={ROUTES.GraduationCalculator()} element={<HelmetWrapper title="코인 - 졸업학점 계산기" element={<GraduationCalculatorPage />} />} />
+          <Route path={ROUTES.Main()} element={<HelmetWrapper title="코인 - 한기대 커뮤니티" element={<IndexPage />} />} />
+          <Route path={ROUTES.Store()} element={<HelmetWrapper title="코인 - 상점" element={<StorePage />} />} />
+          <Route path={ROUTES.BenefitStore()} element={<HelmetWrapper title="코인 - 전화 혜택" element={<StoreBenefitPage />} />} />
+          <Route path={ROUTES.StoreDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 상점 상세" element={<StoreDetailPage />} />} />
+          <Route path={ROUTES.BusRoute()} element={<HelmetWrapper title="코인 - 버스" element={<BusRoutePage />} />} />
+          <Route path={ROUTES.BusCourse()} element={<HelmetWrapper title="코인 - 버스" element={<BusCoursePage />} />} />
+          <Route path={ROUTES.Cafeteria()} element={<HelmetWrapper title="코인 - 식단" element={<CafeteriaPage />} />} />
+          <Route path={ROUTES.PrivatePolicy()} element={<HelmetWrapper title="코인 - 개인정보 처리방침" element={<PolicyPage />} />} />
+          <Route path={ROUTES.BoardNotice()} element={<HelmetWrapper title="코인 - 공지사항" element={<NoticePage />} />}>
+            <Route path={ROUTES.BoardNotice()} element={<NoticeListPage />} />
+            <Route path={ROUTES.BoardNoticeDetail({ isLink: false })} element={<HelmetWrapper title="코인 - 공지사항 상세" element={<NoticeDetailPage />} />} />
+>>>>>>> 6bb9dd2ea5179f6ab1fb07ed9cf16959f75191b3
           </Route>
           <Route path={ROUTES.LostItemFound()} element={<Wrapper needAuth title="분실물 글쓰기" element={<LostItemWritePage />} />} />
           <Route path={ROUTES.LostItemLost()} element={<Wrapper needAuth title="분실물 글쓰기" element={<LostItemWritePage />} />} />
