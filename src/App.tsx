@@ -33,6 +33,7 @@ import AddReviewPage from 'pages/StoreReviewPage/AddReviewPage';
 import EditReviewPage from 'pages/StoreReviewPage/EditReviewPage';
 import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/ReviewReporting';
 import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
+import GraduationCalculatorPage from 'pages/GraduationCalculatorPage';
 import PageNotFound from 'pages/Error/PageNotFound';
 import PolicyPage from 'pages/PolicyPage';
 import ROUTES from 'static/routes';
@@ -84,6 +85,7 @@ function App() {
           <Route path={ROUTES.Timetable()} element={<Wrapper title="시간표" element={<TimetablePage />} />} />
           <Route path={ROUTES.TimetableRegular({ isLink: false })} element={<Wrapper title="시간표 수정" element={<ModifyTimetablePage />} />} />
           <Route path={ROUTES.TimetableDirect({ isLink: false })} element={<Wrapper title="시간표 수정" element={<ModifyTimetablePage />} />} />
+          <Route path={ROUTES.GraduationCalculator()} element={<Wrapper title="졸업학점 계산기" element={<GraduationCalculatorPage />} />} />
 
           <Route path={ROUTES.Store()} element={<Wrapper title="상점" element={<StorePage />} />} />
           <Route path={ROUTES.BenefitStore()} element={<Wrapper title="전화 혜택" element={<StoreBenefitPage />} />} />
