@@ -28,8 +28,13 @@ import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
 import ReviewPage from './Review';
 
-function StoreDetailPage() {
-  const params = useParams();
+interface Props {
+  id: string | undefined;
+}
+
+function StoreDetailPage({ id }: Props) {
+  if (!id || Number.isNaN(Number(id))) throw new Error('잘못된 가게 id 입니다.');
+
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const enterCategoryTimeRef = useRef<number | null>(null);
@@ -39,19 +44,19 @@ function StoreDetailPage() {
   const logger = useLogger();
   // waterfall 현상 막기
   const { data: paralleData } = useSuspenseQuery({
-    queryKey: ['storeDetail', 'storeDetailMenu', 'review', params.id],
+    queryKey: ['storeDetail', 'storeDetailMenu', 'review', id],
     queryFn: () => Promise.all([
       queryClient.fetchQuery({
-        queryKey: ['storeDetail', params.id],
-        queryFn: () => api.store.getStoreDetailInfo(params.id!),
+        queryKey: ['storeDetail', id],
+        queryFn: () => api.store.getStoreDetailInfo(id),
       }),
       queryClient.fetchQuery({
-        queryKey: ['storeDetailMenu', params.id],
-        queryFn: () => api.store.getStoreDetailMenu(params.id!),
+        queryKey: ['storeDetailMenu', id],
+        queryFn: () => api.store.getStoreDetailMenu(id),
       }),
       queryClient.fetchQuery({
         queryKey: ['review'],
-        queryFn: () => api.store.getReviewList(Number(params.id!), 1, 'LATEST', token),
+        queryFn: () => api.store.getReviewList(Number(id), 1, 'LATEST', token),
       }),
     ]),
   });
@@ -401,7 +406,7 @@ function StoreDetailPage() {
           <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
         )}
         {tapType === '이벤트/공지' && <EventTable />}
-        {tapType === '리뷰' && <ReviewPage id={params.id!} />}
+        {tapType === '리뷰' && <ReviewPage id={id!} />}
       </div>
       {testValue === 'call_floating' && (
         <a
@@ -420,10 +425,12 @@ function StoreDetailPage() {
 
 function StoreDetail() {
   const navigate = useNavigate();
+  const { id } = useParams();
+
   return (
     <StoreDetailBoundary onErrorClick={() => navigate('/store')}>
       <Suspense fallback={<div />}>
-        <StoreDetailPage />
+        <StoreDetailPage id={id} />
       </Suspense>
     </StoreDetailBoundary>
   );
