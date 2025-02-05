@@ -114,6 +114,9 @@ function App() {
           <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />
         </Route>
 
+        <Route path={ROUTES.Webview()}>
+          <Route path={ROUTES.WebviewCampusInfo()} element={<Wrapper title="코인 - 교내 시설물 정보" element={<CampusInfo />} />} />
+        </Route>
         <Route path={ROUTES.NotFound()} element={<Wrapper title="404 Not Found" element={<PageNotFound />} />} />
       </Routes>
       <Toast />
