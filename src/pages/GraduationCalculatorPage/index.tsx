@@ -1,17 +1,27 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
+import { useSemester } from 'utils/zustand/semester';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
-import LectureTable from './components/CourseTable';
+import CourseTable from './components/CourseTable';
 import ExcelUploader from './components/ExcelUploader';
 import GeneralCourse from './components/GeneralCourse';
 import CreditChart from './components/CreditChart';
 import CalculatorHelpModal from './CalculatorHelpModal';
 
 function GraduationCalculatorPage() {
+  const token = useTokenState();
+  const semester = useSemester();
+  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const mainFrame = timetableFrameList.find(
+    (frame) => frame.is_main === true,
+  );
+  const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const portalManager = useModalPortal();
   const handleInformationClick = () => {
     portalManager.open(() => (
@@ -38,7 +48,7 @@ function GraduationCalculatorPage() {
         <div className={styles.content}>
           <div className={styles.content__inputs}>
             <StudentForm />
-            <LectureTable />
+            <CourseTable frameId={currentFrameIndex} />
             <ExcelUploader />
           </div>
           <div className={styles.content__results}>
