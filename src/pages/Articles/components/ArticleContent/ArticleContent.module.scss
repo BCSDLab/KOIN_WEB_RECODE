@@ -10,10 +10,10 @@
   letter-spacing: -0.8px;
   color: rgb(85 85 85);
   height: 100%;
+  max-width: 834px;
   min-height: 230px;
   overflow: scroll;
   user-select: text;
-
   &::-webkit-scrollbar {
     display: none;
   }
