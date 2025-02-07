@@ -1,6 +1,5 @@
 @use "utils/scss/media.scss" as media;
 
-
 .table {
   display: flex;
   flex-direction: column;
@@ -21,11 +20,11 @@
     background-color: #f1f8ff;
     color: #4b4b4b;
   
-    & > tr > th:nth-child(1) { width: 138px; }
+    & > tr > th:nth-child(1) { width: 128px; }
   
-    & > tr > th:nth-child(2) { width: 48px; }
+    & > tr > th:nth-child(2) { width: 60px; }
   
-    & > tr > th:nth-child(3) { width: 37px; }
+    & > tr > th:nth-child(3) { width: 36px; }
   
     & > tr > th:nth-child(4) { width: 106px; }
   
@@ -43,12 +42,23 @@
     align-self: stretch;
     color: #000;
     overflow-y: auto;
+
+    span {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      overflow: hidden;
+      white-space: normal;
+      text-overflow: ellipsis;
+      background-color: pink;
+    }
   
-    & > tr > td:nth-child(1) { width: 138px; }
+    & > tr > td:nth-child(1) { width: 128px; }
   
-    & > tr > td:nth-child(2) { width: 48px; }
+    & > tr > td:nth-child(2) { width: 60px; }
   
-    & > tr > td:nth-child(3) { width: 37px; }
+    & > tr > td:nth-child(3) { width: 36px; }
   
     & > tr > td:nth-child(4) { width: 106px; }
   

@@ -38,8 +38,12 @@ function SemesterCourseTable({ frameId }: { frameId: number }) {
       <tbody className={styles.table__body}>
         {filteredMyLectures.map((lecture: MyLectureInfo) => (
           <tr key={lecture.id}>
-            <td align="center">{lecture.class_title}</td>
-            <td align="center">{lecture.professor}</td>
+            <td align="center">
+              <span>{lecture.class_title}</span>
+            </td>
+            <td align="center">
+              <span>{lecture.professor}</span>
+            </td>
             <td align="center">{lecture.grades}</td>
             <td align="center">{}</td>
             <td align="center">

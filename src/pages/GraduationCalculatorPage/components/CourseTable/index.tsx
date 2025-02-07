@@ -5,8 +5,8 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
-import styles from './CourseTable.module.scss';
 import SemesterCourseTable from './SemesterCourseTable';
+import styles from './CourseTable.module.scss';
 
 function CourseTable({ frameId }: { frameId: number }) {
   const token = useTokenState();
