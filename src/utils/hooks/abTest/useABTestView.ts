@@ -18,7 +18,7 @@ export const useABTestView = (title: string, authorization?: string) => {
   });
 
   if (abTestView.access_history_id) {
-    localStorage.setItem('access_history_id', abTestView.access_history_id.toString());
+    localStorage.setItem('access_history_id', String(abTestView.access_history_id));
   }
 
   return abTestView.variable_name || 'default';

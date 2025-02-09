@@ -10,19 +10,19 @@ export class ABTestAssign<R extends ABTestAssignResponse> implements APIRequest<
 
   data: { title: string, };
 
-  headers: Record<string, string | number> = {};
+  headers: Record<string, string> = {};
 
   auth = true;
 
   constructor(
     title: string,
     public authorization?: string,
-    public accessHistoryId?: string | number | null,
+    public accessHistoryId?: string | null,
   ) {
     this.data = ({ title });
 
     if (this.accessHistoryId) {
-      this.headers.access_history_id = Number(this.accessHistoryId);
+      this.headers.access_history_id = this.accessHistoryId;
     }
   }
 }
