@@ -32,7 +32,7 @@ function IndexStore() {
     });
     navigate(`${ROUTES.Store()}?category=${category.id}&COUNT=1`);
   };
-  const handleStoreClick = () => {
+  const hadleStoreClick = () => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       title: 'main_shop_benefit',
