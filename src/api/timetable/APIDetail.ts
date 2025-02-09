@@ -234,8 +234,8 @@ implements APIRequest<R> {
 
   auth = true;
 
-  constructor(public authorization: string, frameId: number) {
-    this.path = `/v3/timetables/frame/rollback?timetable_frame_id=${frameId}`;
+  constructor(public authorization: string, timetableFrameId: number) {
+    this.path = `/v3/timetables/frame/rollback?timetable_frame_id=${timetableFrameId}`;
   }
 }
 

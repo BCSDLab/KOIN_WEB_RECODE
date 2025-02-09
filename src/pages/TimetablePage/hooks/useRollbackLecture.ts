@@ -5,7 +5,7 @@ import { RollbackTimetableLectureRequest } from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';
 import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 
-export default function useRollbackLecture(token: string, frameId: number) {
+export default function useRollbackLecture(token: string, timetableFrameId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -15,7 +15,7 @@ export default function useRollbackLecture(token: string, frameId: number) {
 
     onSuccess: () => {
       queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_INFO_LIST, frameId] },
+        { queryKey: [TIMETABLE_INFO_LIST, timetableFrameId] },
       );
     },
 
