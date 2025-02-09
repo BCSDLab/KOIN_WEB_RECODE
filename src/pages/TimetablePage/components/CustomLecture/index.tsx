@@ -17,9 +17,9 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
 import styles from './CustomLecture.module.scss';
 
-type Hour = '09시' | '10시' | '11시' | '12시' | '13시' | '14시' | '15시' | '16시' | '17시' | '18시' | '19시' | '20시' | '21시' | '22시' | '23시' | '24시';
+type Hour = (typeof HOUR)[number]['value'] | '24시';
 
-type Minute = '00분' | '30분';
+type Minute = (typeof MINUTE)[number]['value'];
 
 type TimeSpaceComponents = {
   time: {
