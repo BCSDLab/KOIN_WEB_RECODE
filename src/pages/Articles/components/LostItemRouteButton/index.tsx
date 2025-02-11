@@ -1,51 +1,56 @@
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-// import FoundIcon from 'assets/svg/Articles/found.svg';
-// import LostIcon from 'assets/svg/Articles/lost.svg';
-// import CloseIcon from 'assets/svg/Articles/close.svg';
-// import useBooleanState from 'utils/hooks/state/useBooleanState';
+import FoundIcon from 'assets/svg/Articles/found.svg';
+import LostIcon from 'assets/svg/Articles/lost.svg';
+import CloseIcon from 'assets/svg/Articles/close.svg';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
   const { logItemWriteClick } = useArticlesLogger();
+  const [isWriting, setIsWriting] = useState(false);
 
   return (
     <div className={styles.links}>
-      {/* {linksOpen && ( // 2차 스프린트
-        <>
-          <Link
-            to={ROUTES.LostItemFound()}
-            className={styles.links__button}
-          >
-            <FoundIcon />
+      {isWriting && (
+      <div className={styles['links__writing-options']}>
+        <Link
+          className={styles['links__option-button']}
+          type="button"
+          to={ROUTES.LostItemFound()}
+          onClick={() => logItemWriteClick()}
+        >
+          <FoundIcon />
+          <div className={styles['links__option-text']}>
             주인을 찾아요
-          </Link>
-          <Link
-            to={ROUTES.LostItemLost()}
-            className={styles.links__button}
-          >
-            <LostIcon />
+          </div>
+        </Link>
+
+        <Link
+          className={styles['links__option-button']}
+          type="button"
+          to={ROUTES.LostItemFound()} // 이 링크 아님 이거 임시임.
+          onClick={() => logItemWriteClick()}
+        >
+          <LostIcon />
+          <div className={styles['links__option-text']}>
             잃어버렸어요
-          </Link>
-        </>
+          </div>
+        </Link>
+      </div>
       )}
       <button
-        className={styles.links__button}
+        className={styles.links__write}
         type="button"
-        onClick={() => toggleLinksOpen()}
-      > */}
-      <Link
-        className={styles.links__button}
-        type="button"
-        to={ROUTES.LostItemFound()}
-        onClick={() => logItemWriteClick()}
+        onClick={() => setIsWriting((prev) => !prev)}
       >
         {/* {linksOpen ? <CloseIcon /> : <PencilIcon />} */}
-        <PencilIcon />
+        {isWriting ? <CloseIcon /> : <PencilIcon />}
         글쓰기
-      </Link>
+      </button>
     </div>
   );
 }

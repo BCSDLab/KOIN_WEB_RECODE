@@ -10,6 +10,7 @@ import WriteIcon from 'assets/svg/Articles/write.svg';
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import Found from 'assets/svg/Articles/found.svg';
 import Lost from 'assets/svg/Articles/lost.svg';
+import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import styles from './ArticlesPage.module.scss';
 
 export default function ArticlesPage() {
@@ -20,6 +21,7 @@ export default function ArticlesPage() {
   const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
   const [isWriting, setIsWriting] = useState(false);
+  const { logItemWriteClick } = useArticlesLogger();
 
   return (
     <div className={styles.template}>
@@ -30,44 +32,8 @@ export default function ArticlesPage() {
           </Link>
           <div />
 
-          <div className={styles.header__container}>
-            {isWriting && (
-              <div className={styles['header__writing-options']}>
-                <button
-                  className={styles['header__option-button']}
-                  type="button"
-                  aria-label="주인을 찾아요 버튼"
-                  onClick={() => alert('주인을 찾아요 페이지로 이동')}
-                >
-                  <Found />
-                  <div className={styles['header__option-text']}>주인을 찾아요</div>
-                </button>
-                <button
-                  className={styles['header__option-button']}
-                  type="button"
-                  aria-label="잃어버렸어요 버튼"
-                  onClick={() => alert('잃어버렸어요 페이지로 이동')}
-                >
-                  <Lost />
-                  <div className={styles['header__option-text']}>
-                    잃어버렸어요
-                  </div>
-                </button>
-              </div>
-            )}
-
-            <button
-              className={styles['header__button-container']}
-              type="button"
-              aria-label="글쓰기 버튼"
-              onClick={() => setIsWriting((prev) => !prev)}
-            >
-              {isWriting ? <CloseIcon /> : <WriteIcon />}
-              <div className={styles['header__button-context']}>글쓰기</div>
-            </button>
-          </div>
-
-          {isBoard && isCouncil && <LostItemRouteButton />}
+          <LostItemRouteButton />
+          {/* isBoard && isCouncil && <LostItemRouteButton /> */}
         </div>
         <Suspense fallback={<LoadingSpinner size="150px" />}>
           <Outlet />
