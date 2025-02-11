@@ -6,6 +6,7 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useUser } from 'utils/hooks/state/useUser';
 import LostItemRouteButton from 'pages/Articles/components/LostItemRouteButton';
 import ROUTES from 'static/routes';
+import WriteIcon from 'assets/svg/Articles/write.svg';
 import styles from './ArticlesPage.module.scss';
 
 export default function ArticlesPage() {
@@ -22,6 +23,10 @@ export default function ArticlesPage() {
           <Link to={ROUTES.Articles()}>
             <h1 className={styles.header__title}>공지사항</h1>
           </Link>
+          <div className={styles['header__button-container']}>
+            <WriteIcon />
+            <div className={styles['header__button-context']}>글쓰기</div>
+          </div>
           {isBoard && isCouncil && <LostItemRouteButton />}
         </div>
         <Suspense fallback={<LoadingSpinner size="150px" />}>

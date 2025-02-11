@@ -45,6 +45,24 @@
       display: none;
     }
   }
+
+  &__button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #4b4b4b;
+    border: 1px solid #e1e1e1;
+    padding: 8px 12px;
+    border-radius: 999px;
+  }
+
+  &__button-context {
+    color: #4b4b4b;
+    align-items: center;
+    line-height: normal;
+    font-family: Pretendard, sans-serif;
+  }
 }
 
 .aside {
