@@ -116,3 +116,16 @@ interface LostItemArticleForPostDTO {
 export interface LostItemArticlesRequestDTO {
   articles: Array<LostItemArticleForPostDTO>;
 }
+
+// POST /articles/lost-item/{id}/reports)
+export interface ReportItemArticleRequestDTO {
+  reports: Array<{
+    title: string;
+    content: string;
+  }>;
+}
+
+// 신고 API 응답 타입 (200 OK)
+export interface ReportItemArticleResponseDTO {
+  message: string;
+}

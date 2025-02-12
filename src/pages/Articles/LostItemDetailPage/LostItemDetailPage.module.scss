@@ -211,3 +211,70 @@
     }
   }
 }
+
+.button-container {
+  display: flex;
+  gap: 12px;
+  margin-top: 64px;
+
+  &__message,
+  &__report {
+    display: flex;
+    padding: 6px 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 4px;
+    color: #4b4b4b;
+    background-color: #e1e1e1;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+      padding: 6px 12px;
+
+      & svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  &__delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    gap: 1px;
+    padding: 10px 16px;
+    background-color: #e1e1e1;
+    color: #4b4b4b;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.6;
+
+    & path {
+      fill: #4b4b4b;
+    }
+
+    & svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+      padding: 6px 12px;
+
+      & svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}

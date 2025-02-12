@@ -6,10 +6,6 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useUser } from 'utils/hooks/state/useUser';
 import LostItemRouteButton from 'pages/Articles/components/LostItemRouteButton';
 import ROUTES from 'static/routes';
-import WriteIcon from 'assets/svg/Articles/write.svg';
-import CloseIcon from 'assets/svg/Articles/close.svg';
-import Found from 'assets/svg/Articles/found.svg';
-import Lost from 'assets/svg/Articles/lost.svg';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import styles from './ArticlesPage.module.scss';
 
@@ -20,7 +16,6 @@ export default function ArticlesPage() {
   const { data: userInfo } = useUser();
   const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
-  const [isWriting, setIsWriting] = useState(false);
   const { logItemWriteClick } = useArticlesLogger();
 
   return (

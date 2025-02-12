@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import CloseIcon from 'assets/svg/Articles/close.svg';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
+// import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
 import styles from './LostItemRouteButton.module.scss';
 

@@ -7,6 +7,8 @@ import {
   LostItemArticlesResponseDTO,
   LostItemResponse,
   LostItemArticlesRequestDTO,
+  ReportItemArticleRequestDTO,
+  ReportItemArticleResponseDTO,
 } from './entity';
 
 export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
@@ -50,7 +52,7 @@ export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implemen
 }
 
 export class GetSingleLostItemArticle<R
-extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
+  extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -85,5 +87,19 @@ export class DeleteLostItemArticle<R extends LostItemResponse> implements APIReq
 
   constructor(public authorization: string, id: number) {
     this.path = `/articles/lost-item/${id}`;
+  }
+}
+
+export class ReportLostItemArticle<R extends ReportItemArticleResponseDTO> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true; // 인증 필요
+
+  constructor(public authorization: string, id: number, public data: ReportItemArticleRequestDTO) {
+    this.path = `/articles/lost-item/${id}/reports`;
   }
 }
