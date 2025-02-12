@@ -51,14 +51,14 @@ export default function DeleteModal(
             type="button"
             onClick={handleConfirmDeleteClick}
           >
-            {isMobile ? '확인' : '삭제하기'}
+            {isMobile ? '확인' : '차단하기'}
           </button>
           <button
             className={styles.buttons__cancel}
             type="button"
             onClick={closeDeleteModal}
           >
-            취소
+            닫기
           </button>
         </div>
       </div>
