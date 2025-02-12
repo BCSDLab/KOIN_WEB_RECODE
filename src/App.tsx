@@ -38,8 +38,8 @@ import PolicyPage from 'pages/PolicyPage';
 import ROUTES from 'static/routes';
 import LostItemWritePage from 'pages/Articles/LostItemWritePage';
 import LostItemDetailPage from 'pages/Articles/LostItemDetailPage';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import LostItemChatPage from 'pages/Articles/LostItemChatPage';
+import useTokenState from 'utils/hooks/state/useTokenState';
 
 interface WrapperProps {
   title: string;
