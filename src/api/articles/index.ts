@@ -8,6 +8,7 @@ import {
   DeleteLostItemArticle,
   PostLostItemArticles,
   PostLostItemChatroom,
+  PostBlockLostItemChatroom,
   GetLostItemChatroomList,
   GetLostItemChatroomDetail,
   GetLostItemChatroomDetailMessages,
@@ -34,3 +35,5 @@ export const getLostItemChatroomList = APIClient.of(GetLostItemChatroomList);
 export const getLostItemChatroomDetail = APIClient.of(GetLostItemChatroomDetail);
 
 export const getLostItemChatroomDetailMessages = APIClient.of(GetLostItemChatroomDetailMessages);
+
+export const postBlockLostItemChatroom = APIClient.of(PostBlockLostItemChatroom);

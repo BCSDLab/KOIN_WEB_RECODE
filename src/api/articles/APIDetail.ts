@@ -149,3 +149,17 @@ implements APIRequest<R> {
     this.path = `/chatroom/lost-item/${articleId}/${chatroomId}/messages`;
   }
 }
+
+export class PostBlockLostItemChatroom<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string, articleId: number, chatroomId: number) {
+    this.path = `/chatroom/lost-item/${articleId}/${chatroomId}/block`;
+  }
+}
