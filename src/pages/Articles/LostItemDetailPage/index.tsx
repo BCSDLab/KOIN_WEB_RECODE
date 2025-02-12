@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
+import ChatIcon from 'assets/svg/Articles/chat.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
 import DeleteModal from 'pages/Articles/LostItemDetailPage/components/DeleteModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -99,7 +100,8 @@ export default function LostItemDetailPage() {
                   navigate(`${ROUTES.LostItemChat({ articleId: String(articleId), isLink: true })}?chatroomId=${res.chat_room_id}`);
                 }}
               >
-                챗하기
+                <ChatIcon />
+                <div>쪽지 보내기</div>
               </button>
             )}
           </div>
