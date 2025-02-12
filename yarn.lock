@@ -2042,13 +2042,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sockjs-client@npm:^1.5.4":
-  version: 1.5.4
-  resolution: "@types/sockjs-client@npm:1.5.4"
-  checksum: 197ff99955d6e08442b27871811294c1348c51904a4f6d2c1d337cd4bfd0ffed0d00bf8ac000d8c275c9934c65e6cc4ce25c58974939921deb817a4b30fbb859
-  languageName: node
-  linkType: hard
-
 "@types/stack-utils@npm:^2.0.0":
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
@@ -5957,7 +5950,6 @@ __metadata:
     "@types/react-helmet": ^6.1.11
     "@types/react-query": ^1.2.9
     "@types/react-window": ^1.8.5
-    "@types/sockjs-client": ^1.5.4
     "@typescript-eslint/eslint-plugin": ^5.30.0
     "@typescript-eslint/parser": ^5.30.0
     "@vitejs/plugin-react": ^4.3.1
