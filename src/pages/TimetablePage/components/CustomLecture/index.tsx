@@ -83,14 +83,16 @@ function TimeSpaceInput({
       (info) => {
         const findKeyByValue = (object: Record<Hour, number>, value: number) => Object
           .entries(object).find(([, val]) => val === value)?.[0] as Hour;
-        const startHour = info.start_time % 2 === 0
-          ? findKeyByValue(START_TIME, info.start_time % 100)
-          : findKeyByValue(START_TIME, (info.start_time % 100) - 1);
-        const startMinute: Minute = info.start_time % 2 === 0 ? '00분' : '30분';
-        const endHour = info.end_time % 2 !== 0
-          ? findKeyByValue(END_TIME, info.end_time % 100)
-          : findKeyByValue(END_TIME, (info.end_time % 100) - 1);
-        const endMinute: Minute = info.end_time % 2 !== 0 ? '00분' : '30분';
+        const getHour = (time: number, key: Record<Hour, number>, isStart: boolean) => {
+          const adjustedTime = time % 2 === (isStart ? 0 : 1) ? time : time - 1;
+          return findKeyByValue(key, adjustedTime);
+        };
+        const getMinute = (time: number, isStart: boolean): Minute => (time % 2 === (isStart ? 0 : 1) ? '00분' : '30분');
+
+        const startHour = getHour(info.start_time, START_TIME, true);
+        const startMinute: Minute = getMinute(info.start_time, true);
+        const endHour = getHour(info.end_time, END_TIME, false);
+        const endMinute: Minute = getMinute(info.end_time, false);
 
         return {
           time: {
