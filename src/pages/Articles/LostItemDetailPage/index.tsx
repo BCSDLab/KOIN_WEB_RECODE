@@ -16,6 +16,7 @@ import { useMutation } from '@tanstack/react-query';
 import showToast from 'utils/ts/showToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { reportLostItemArticle } from 'api/articles';
+import ReportModal from 'pages/Articles/LostItemDetailPage/components/ReportModal';
 import styles from './LostItemDetailPage.module.scss';
 
 export default function LostItemDetailPage() {
@@ -25,6 +26,7 @@ export default function LostItemDetailPage() {
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const { data: userInfo } = useUser();
   const token = useTokenState();
+  const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
   // const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
   const { article } = useSingleLostItemArticle(Number(params.id));
@@ -135,11 +137,12 @@ export default function LostItemDetailPage() {
                 <button
                   className={styles['button-container__report']}
                   type="button"
-                  onClick={handleReportClick}
+                  onClick={openReportModal}
                 >
                   <ReportIcon />
                   신고
                 </button>
+                {isReportModalOpen && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
               </>
             )}
           </div>
