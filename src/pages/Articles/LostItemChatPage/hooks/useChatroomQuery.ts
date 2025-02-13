@@ -12,6 +12,7 @@ const useChatroomQuery = (
   });
 
   const defaultChatroomId = chatroomId || chatroomList[0].chat_room_id;
+  const defaultArticleId = articleId || chatroomList[0].article_id;
 
   const { data: chatroomDetail } = useQuery({
     queryKey: ['chatroom', 'lost-item', articleId, chatroomId],
@@ -31,6 +32,7 @@ const useChatroomQuery = (
     chatroomDetail,
     messages,
     defaultChatroomId,
+    defaultArticleId,
   };
 };
 

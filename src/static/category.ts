@@ -1,6 +1,6 @@
 import ROUTES from './routes';
 
-export type SubmenuTitle = '공지사항' | '버스 교통편' | '버스 시간표' | '식단' | '시간표' | '복덕방' | '주변상점' | '교내 시설물 정보' | '코인 사장님' | '리뷰 작성하기' | '리뷰 수정하기' | '리뷰 신고하기' | '전화 주문 혜택';
+export type SubmenuTitle = '공지사항' | '버스 교통편' | '버스 시간표' | '식단' | '시간표' | '복덕방' | '주변상점' | '교내 시설물 정보' | '코인 사장님' | '리뷰 작성하기' | '리뷰 수정하기' | '리뷰 신고하기' | '전화 주문 혜택' | '쪽지';
 
 export interface Submenu {
   title: SubmenuTitle;
@@ -89,6 +89,13 @@ export const CATEGORY: Category[] = [
         tag: null,
         openInNewTab: true,
         stageLink: 'https://owner.stage.koreatech.in',
+      },
+      {
+        title: '쪽지',
+        link: ROUTES.LostItemChat(),
+        newFlag: false,
+        planFlag: false,
+        tag: null,
       },
       {
         title: '리뷰 작성하기',

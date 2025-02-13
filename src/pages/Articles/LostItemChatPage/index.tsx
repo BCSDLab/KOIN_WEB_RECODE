@@ -1,7 +1,7 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Client } from '@stomp/stompjs';
 
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -34,7 +34,6 @@ const COUNCIL_ID = 5805;
 const COUNCIL_STUDENT_NUMBER = '2022136000';
 
 function LostItemChatPage() {
-  const { articleId } = useParams<{ articleId: string }>();
   const [searchParams] = useSearchParams();
 
   const token = useTokenState();
@@ -53,7 +52,8 @@ function LostItemChatPage() {
     chatroomList,
     messages,
     defaultChatroomId: chatroomId,
-  } = useChatroomQuery(token, articleId || null, searchParams.get('chatroomId'));
+    defaultArticleId: articleId,
+  } = useChatroomQuery(token, searchParams.get('articleId'), searchParams.get('chatroomId'));
 
   const isCouncil = user && user.student_number === COUNCIL_STUDENT_NUMBER;
 
@@ -61,6 +61,8 @@ function LostItemChatPage() {
     if (client) {
       client.deactivate();
     }
+
+    setCurrentMessageList([]);
 
     const stompClient = new Client({
       brokerURL: `${import.meta.env.VITE_API_PATH}/ws-stomp`,
@@ -167,7 +169,7 @@ function LostItemChatPage() {
       disconnectChatroom();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatroomId]);
+  }, [chatroomId, articleId]);
 
   /**
    * @description
@@ -197,6 +199,7 @@ function LostItemChatPage() {
 
       <section className={styles['chat-container']}>
         <div className={styles['chat-list']}>
+          {chatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
           {chatroomList?.map(({
             article_id,
             chat_room_id,
@@ -208,7 +211,7 @@ function LostItemChatPage() {
           }) => (
             <Link
               key={`${chat_room_id}${article_id}`}
-              to={`${ROUTES.LostItemChat({ articleId: String(article_id), isLink: true })}?chatroomId=${chat_room_id}`}
+              to={`${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`}
               className={styles['chat-list--item']}
             >
               {lost_item_image_url
@@ -229,6 +232,13 @@ function LostItemChatPage() {
         </div>
 
         <div className={styles['chat-view']}>
+          {!(chatroomDetail && messages) && (
+            <div className={styles.chat__empty}>
+              선택된 채팅방이 없습니다.
+              <br />
+              오른쪽 리스트에서 채팅방을 선택해주세요.🙇‍♂️
+            </div>
+          )}
           {chatroomDetail && messages && (
             <>
               <div className={styles['chat-view--header']}>

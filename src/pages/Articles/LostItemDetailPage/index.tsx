@@ -10,20 +10,19 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ROUTES from 'static/routes';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
-import { postLostItemChatroom } from 'api/articles';
 import DisplayImage from 'pages/Articles/LostItemDetailPage/components/DisplayImage';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './LostItemDetailPage.module.scss';
+import usePostLostItemChatroom from './hooks/usePostLostItemChatroom';
 
 export default function LostItemDetailPage() {
   const isMobile = useMediaQuery();
-  const token = useTokenState();
   const navigate = useNavigate();
   const params = useParams();
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const { data: userInfo } = useUser();
   const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
+  const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
   const { article } = useSingleLostItemArticle(Number(params.id));
   const articleId = Number(params.id);
   const {
@@ -96,8 +95,8 @@ export default function LostItemDetailPage() {
                 type="button"
                 className={styles.contents__button}
                 onClick={async () => {
-                  const res = await postLostItemChatroom(token, articleId);
-                  navigate(`${ROUTES.LostItemChat({ articleId: String(articleId), isLink: true })}?chatroomId=${res.chat_room_id}`);
+                  const chatroomInfo = await searchChatroom(articleId);
+                  navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
                 }}
               >
                 <ChatIcon />

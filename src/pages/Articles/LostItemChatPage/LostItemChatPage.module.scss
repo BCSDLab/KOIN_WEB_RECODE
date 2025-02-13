@@ -40,6 +40,16 @@
   border-left: 1px solid #eee;
 }
 
+.chat__empty {
+  margin-top: 48px;
+  width: 100%;
+  text-align: center;
+  color: #727272;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 160%;
+}
+
 .chat-view {
   box-sizing: border-box;
   display: flex;
