@@ -127,6 +127,34 @@ function TimeSpaceInput({
     (info) => info.id === id,
   );
 
+  const updateTimeSpaceInfo = ({
+    startTime,
+    endTime,
+    updatedWeeks,
+    updatedPlace,
+  }: {
+    startTime?: number,
+    endTime?: number,
+    updatedWeeks?: string[],
+    updatedPlace?: string,
+  }) => {
+    if (customTempLecture) {
+      updateCustomTempLecture({
+        ...customTempLecture,
+        lecture_infos: customTempLecture.lecture_infos.map(
+          (info) => (info.id === id
+            ? {
+              ...info,
+              days: updatedWeeks ?? info.days,
+              start_time: startTime ?? info.start_time,
+              end_time: endTime ?? info.end_time,
+              place: updatedPlace ?? info.place,
+            } : info),
+        ),
+      });
+    }
+  };
+
   // 시간표용 시간으로 바꾸는 함수 ex) 09시 30분 -> 시작 시간은 1, 종료 시간은 0
   const changeToTimetableTime = (timeInfo: {
     startHour: Hour;
@@ -147,32 +175,36 @@ function TimeSpaceInput({
     e: { target: { value: string } },
   ) => {
     const { target } = e;
-    const newTimeInfo = ({
+    let newTimeInfo = ({
       ...time,
       [key]: target?.value,
     });
 
-    const newTimetableTime = changeToTimetableTime(newTimeInfo);
+    let newTimetableTime = changeToTimetableTime(newTimeInfo);
     // 올바르지 않은 시간을 선택했을 시
     if (newTimetableTime.endTime - newTimetableTime.startTime < 0) {
       const newStartHour = Number(newTimeInfo.startHour.slice(0, 2));
       const newEndHour = Number(newTimeInfo.endHour.slice(0, 2));
       if (key.slice(0, 5) === 'start') {
-        setTime({
+        newTimeInfo = {
           ...newTimeInfo,
           endHour: `${newStartHour + 1}시` as Hour,
           endMinute: newStartHour + 1 === 24 ? '00분' : newTimeInfo.startMinute,
-        });
+        };
       } else {
-        setTime({
+        newTimeInfo = {
           ...newTimeInfo,
           startHour: newEndHour - 1 < 10 ? '09시' : `${newEndHour - 1}시` as Hour,
           startMinute: newEndHour - 1 < 9 ? '00분' : newTimeInfo.endMinute,
-        });
+        };
       }
-    } else {
-      setTime(newTimeInfo);
+      newTimetableTime = changeToTimetableTime(newTimeInfo);
     }
+    setTime(newTimeInfo);
+    updateTimeSpaceInfo({
+      startTime: newTimetableTime.startTime,
+      endTime: newTimetableTime.endTime,
+    });
   };
 
   const handleLectureTimeByWeek = (weekday: string) => {
@@ -181,34 +213,16 @@ function TimeSpaceInput({
     } else {
       setWeeks((week) => [...week, weekday]);
     }
+    updateTimeSpaceInfo({ updatedWeeks: weeks });
   };
 
   const handlePlaceName = (placeName: string) => {
     setPlace(placeName);
+    updateTimeSpaceInfo({ updatedPlace: placeName });
   };
 
   const isWrongTime = customTempLecture!.lecture_infos[timeSpaceComponentIndex].end_time
   - customTempLecture!.lecture_infos[timeSpaceComponentIndex].start_time < 0 || weeks.length === 0;
-
-  useEffect(() => {
-    const timetableTime = changeToTimetableTime(time);
-    if (customTempLecture) {
-      updateCustomTempLecture({
-        ...customTempLecture,
-        lecture_infos: customTempLecture.lecture_infos.map(
-          (info) => (info.id === id
-            ? {
-              ...info,
-              days: weeks,
-              start_time: timetableTime.startTime,
-              end_time: timetableTime.endTime,
-              place,
-            } : info),
-        ),
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [place, time, weeks]);
 
   return (
     <div className={styles['time-space-container__component']}>
