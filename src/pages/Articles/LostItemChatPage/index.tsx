@@ -58,6 +58,15 @@ function LostItemChatPage() {
   const isCouncil = user && user.student_number === COUNCIL_STUDENT_NUMBER;
 
   const connectChatroom = () => {
+    if (!chatroomList || chatroomList.length === 0) {
+      return;
+    }
+
+    if (!articleId || !chatroomId) {
+      showToast('error', '채팅방 정보를 불러오는데 실패했습니다.');
+      return;
+    }
+
     if (client) {
       client.deactivate();
     }
