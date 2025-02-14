@@ -2,14 +2,10 @@ import { createPortal } from 'react-dom';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
-import { useMutation } from '@tanstack/react-query';
-import showToast from 'utils/ts/showToast';
-import { useUser } from 'utils/hooks/state/useUser';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { reportLostItemArticle } from 'api/articles';
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import RadioGroup from 'pages/Articles/LostItemDetailPage/components/RadioGroup';
 import { useState } from 'react';
+import useReportLostItemArticle from 'pages/Articles/hooks/useReportLostItemArticle';
 import styles from './ReportModal.module.scss';
 
 interface ReportModalProps {
@@ -26,47 +22,17 @@ const options = [
 ];
 
 export default function ReportModal({ articleId, closeReportModal }: ReportModalProps) {
-  const { data: userInfo } = useUser();
-  const token = useTokenState();
-
   useEscapeKeyDown({ onEscape: closeReportModal });
   useBodyScrollLock();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeReportModal });
 
-  // 🚀 신고 API 요청
-  const { mutate: reportArticle } = useMutation({
-    mutationFn: (reports: { title: string; content: string }[]) => {
-      if (!token) {
-        showToast('error', '로그인이 필요합니다.');
-        return Promise.reject(new Error('Unauthorized'));
-      }
-      return reportLostItemArticle(token, articleId, { reports });
-    },
-    onSuccess: () => {
-      showToast('success', '게시글이 신고되었습니다.');
-      closeReportModal();
-    },
-    onError: () => {
-      showToast('error', '신고 접수에 실패했습니다.');
-    },
-  });
+  const [selectedReason, setSelectedReason] = useState('');
+  const { mutate: reportArticle } = useReportLostItemArticle();
 
   const handleReportClick = () => {
-    if (!userInfo) {
-      showToast('error', '로그인이 필요합니다.');
-      return;
-    }
-
-    const reports = [
-      {
-        title: '기타',
-        content: '운영진 확인이 필요한 게시글입니다.',
-      },
-    ];
-    reportArticle(reports);
+    reportArticle({ articleId, reports: [{ title: '기타', content: selectedReason }] });
+    closeReportModal();
   };
-
-  const [selectedReason, setSelectedReason] = useState('');
 
   return createPortal(
     <div className={styles.background} ref={backgroundRef}>
