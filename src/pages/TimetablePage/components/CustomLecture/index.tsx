@@ -326,6 +326,8 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
   const [positionValues, setPositionValues] = useState<number[]>([]);
   const [isFirstSubmit, setIsFirstSubmit] = useState(true);
 
+  const prevLengthRef = useRef(timeSpaceComponents.length);
+
   const isValid = (lectureName !== ''
     && !customTempLecture?.lecture_infos.some(
       (time) => time.end_time < time.start_time,
@@ -336,7 +338,7 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
     : false;
   const isReverseDropdown = positionValues.map(
     (value) => (timeSpaceContainerRef.current
-      ? timeSpaceContainerRef.current.getBoundingClientRect().bottom - value < 20
+      ? timeSpaceContainerRef.current.getBoundingClientRect().bottom - value < 130
       : false),
   );
 
@@ -500,14 +502,6 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
         ],
       });
     }
-
-    setTimeout(() => {
-      timeSpaceContainerRef.current!.scrollTo({
-        behavior: 'smooth',
-        top: 999,
-      });
-      handleScroll();
-    }, 0);
   };
 
   // 직접 추가 페이지 진입 시 form컴포넌트 초기화
@@ -527,6 +521,18 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (timeSpaceComponents.length > prevLengthRef.current) {
+      timeSpaceContainerRef.current!.scrollTo({
+        behavior: 'smooth',
+        top: 999,
+      });
+      handleScroll();
+    }
+
+    prevLengthRef.current = timeSpaceComponents.length;
+  }, [timeSpaceComponents]);
 
   useEffect(() => {
     if (!selectedEditLecture) return;
@@ -627,17 +633,23 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
           onScroll={handleScroll}
         >
           {timeSpaceComponents.map((component, index) => (
-            <TimeSpaceInput
+            <div
+              ref={(element) => {
+                timeSpaceComponentRef.current[index] = element;
+              }}
               key={component.id}
-              id={component.id}
-              isEditStandardLecture={isEditStandardLecture}
-              isSingleTimeSpaceComponent={timeSpaceComponents.length === 1}
-              handleDeleteTimeSpaceComponent={
+            >
+              <TimeSpaceInput
+                id={component.id}
+                isEditStandardLecture={isEditStandardLecture}
+                isSingleTimeSpaceComponent={timeSpaceComponents.length === 1}
+                handleDeleteTimeSpaceComponent={
                 () => handleDeleteTimeSpaceComponent(component.id)
               }
-              isFirstSubmit={isFirstSubmit}
-              isReverseDropdown={isReverseDropdown[index]}
-            />
+                isFirstSubmit={isFirstSubmit}
+                isReverseDropdown={isReverseDropdown[index]}
+              />
+            </div>
           ))}
         </div>
         <button
