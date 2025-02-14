@@ -13,6 +13,7 @@ export interface Article {
   hit: number
   registered_at: string // yyyy-MM-dd 아우누리에 게시판에 등록된 날짜
   updated_at: string // yyyy-MM-dd HH:mm:ss 이하 형식 동일
+  is_reported: boolean
 }
 
 export interface Attachment {
