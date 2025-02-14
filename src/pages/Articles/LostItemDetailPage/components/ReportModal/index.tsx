@@ -71,15 +71,19 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
   return createPortal(
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.modal}>
-        <div className={styles.modal__close}>
+        <div className={styles['modal__close-Modal']}>
           <button type="button" onClick={closeReportModal} aria-label="닫기">
             <CloseIcon />
           </button>
         </div>
 
-        <div className={styles.modal__title}>신고 이유를 선택해주세요.</div>
-        <div>접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.</div>
-        <div>블라인드 처리까지 시간이 소요될 수 있습니다.</div>
+        <div className={styles.modal__header}>
+          <div className={styles.modal__title}>신고 이유를 선택해주세요.</div>
+          <div>
+            <div className={styles.modal__subtitle}>접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.</div>
+            <div className={styles.modal__subtitle}>블라인드 처리까지 시간이 소요될 수 있습니다.</div>
+          </div>
+        </div>
 
         <RadioGroup
           name="reportReason"

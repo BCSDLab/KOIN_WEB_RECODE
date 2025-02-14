@@ -1,4 +1,5 @@
 import Radio from 'pages/Articles/LostItemDetailPage/components/Radio';
+import styles from './RadioGroup.module.scss';
 
 interface RadioOption {
   value: string;
@@ -8,7 +9,7 @@ interface RadioOption {
 
 interface RadioGroupProps {
   name: string;
-  options: RadioOption[]; // ✅ 배열 타입
+  options: RadioOption[];
   selectedValue: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -17,7 +18,7 @@ export default function RadioGroup({
   name, options, selectedValue, onChange,
 }: RadioGroupProps) {
   return (
-    <div>
+    <div className={styles['radio-group']}>
       {options.map((option) => (
         <Radio
           key={option.value}
