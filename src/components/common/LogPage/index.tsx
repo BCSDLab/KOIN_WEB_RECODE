@@ -7,7 +7,7 @@ import { useUser } from 'utils/hooks/state/useUser';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
   if (userInfo?.anonymous_nickname) {
-    localStorage.setItem('uuid', userInfo.anonymous_nickname); // anonymous_nickname을 직접 저장
+    localStorage.setItem('uuid', userInfo.anonymous_nickname);
     return userInfo.anonymous_nickname;
   }
 
