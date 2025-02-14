@@ -29,7 +29,7 @@ function CurrentSemesterTimetable() {
 
   return (
     <Timetable
-      frameId={currentFrameIndex}
+      timetableFrameId={currentFrameIndex}
       columnWidth={44}
       firstColumnWidth={29}
       rowHeight={17.3}

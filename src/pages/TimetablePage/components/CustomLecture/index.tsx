@@ -49,12 +49,12 @@ const initialTimeSpaceComponent: TimeSpaceComponents = {
   id: uuidv4(),
 };
 
-function CustomLecture({ frameId }: { frameId: number }) {
+function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
   const token = useTokenState();
   const customTempLecture = useCustomTempLecture();
   const { updateCustomTempLecture } = useCustomTempLectureAction();
-  const { myLectures } = useMyLectures(frameId);
-  const { addMyLecture, editMyLecture } = useTimetableMutation(frameId);
+  const { myLectures } = useMyLectures(timetableFrameId);
+  const { addMyLecture, editMyLecture } = useTimetableMutation(timetableFrameId);
 
   const [searchParams] = useSearchParams();
   const lectureIndex = searchParams.get('lectureIndex');

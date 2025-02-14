@@ -20,14 +20,14 @@ import ROUTES from 'static/routes';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
-function MainTimetable({ frameId }: { frameId: number }) {
+function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const token = useTokenState();
   const semester = useSemester();
   const logger = useLogger();
   const navigate = useNavigate();
   const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
-  const { myLectures } = useMyLectures(frameId);
+  const { myLectures } = useMyLectures(timetableFrameId);
   const { data: deptList } = useDeptList();
   const { data: mySemester } = useSemesterCheck(token);
 
@@ -62,7 +62,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
 
   const onClickEdit = () => {
     if (isSemesterAndTimetableExist()) {
-      navigate(`/${ROUTES.TimetableRegular({ id: String(frameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`);
+      navigate(`/${ROUTES.TimetableRegular({ id: String(timetableFrameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`);
     }
   };
 
@@ -96,7 +96,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
         <ErrorBoundary fallbackClassName="loading">
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <Timetable
-              frameId={frameId}
+              timetableFrameId={timetableFrameId}
               columnWidth={140}
               firstColumnWidth={70}
               rowHeight={33}
@@ -107,7 +107,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
       </div>
       <div>
         {isModalOpen && (
-          <DownloadTimetableModal onClose={closeModal} frameId={frameId} />
+          <DownloadTimetableModal onClose={closeModal} timetableFrameId={timetableFrameId} />
         )}
       </div>
     </div>

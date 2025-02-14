@@ -27,11 +27,11 @@ interface TimetableProps {
   rowHeight: number;
   totalHeight: number;
   forDownload?: boolean;
-  frameId: number;
+  timetableFrameId: number;
 }
 
 function Timetable({
-  frameId,
+  timetableFrameId,
   selectedLectureIndex,
   similarSelectedLecture,
   firstColumnWidth,
@@ -45,8 +45,8 @@ function Timetable({
   const { pathname } = useLocation();
   const [isMouseOver, setIsMouseOver] = useState('');
   const isEditable = pathname.includes('/timetable/modify');
-  const { removeMyLecture } = useTimetableMutation(frameId);
-  const { myLectures } = useMyLectures(frameId);
+  const { removeMyLecture } = useTimetableMutation(timetableFrameId);
+  const { myLectures } = useMyLectures(timetableFrameId);
   const tempLecture = useTempLecture();
   const customTempLecture = useCustomTempLecture();
   const { timeString, setTimeString } = useTimeString();
@@ -58,7 +58,7 @@ function Timetable({
       return;
     }
 
-    navigate(`/timetable/modify/direct/${frameId}?lectureIndex=${lectureIndex}`);
+    navigate(`/timetable/modify/direct/${timetableFrameId}?lectureIndex=${lectureIndex}`);
   };
 
   const handleRemoveLectureClick = (id: number) => {
