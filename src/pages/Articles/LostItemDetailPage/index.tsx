@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
+import ChatIcon from 'assets/svg/Articles/chat.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
 import DeleteModal from 'pages/Articles/LostItemDetailPage/components/DeleteModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -11,6 +12,7 @@ import { useUser } from 'utils/hooks/state/useUser';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import DisplayImage from 'pages/Articles/LostItemDetailPage/components/DisplayImage';
 import styles from './LostItemDetailPage.module.scss';
+import usePostLostItemChatroom from './hooks/usePostLostItemChatroom';
 
 export default function LostItemDetailPage() {
   const isMobile = useMediaQuery();
@@ -20,6 +22,7 @@ export default function LostItemDetailPage() {
   const { data: userInfo } = useUser();
   const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
+  const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
   const { article } = useSingleLostItemArticle(Number(params.id));
   const articleId = Number(params.id);
   const {
@@ -85,6 +88,19 @@ export default function LostItemDetailPage() {
               >
                 삭제
                 <GarbageCanIcon />
+              </button>
+            )}
+            {!isCouncil && (
+              <button
+                type="button"
+                className={styles.contents__button}
+                onClick={async () => {
+                  const chatroomInfo = await searchChatroom(articleId);
+                  navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
+                }}
+              >
+                <ChatIcon />
+                <div>쪽지 보내기</div>
               </button>
             )}
           </div>

@@ -116,3 +116,35 @@ interface LostItemArticleForPostDTO {
 export interface LostItemArticlesRequestDTO {
   articles: Array<LostItemArticleForPostDTO>;
 }
+
+export interface LostItemChatroomDetailResponse {
+  article_id: number;
+  chat_room_id: number;
+  user_id: number;
+  article_title: string;
+  chat_partner_profile_image?: string;
+}
+
+export type LostItemChatroomPostResponse = LostItemChatroomDetailResponse;
+
+interface LostItemChatroomResponse {
+  article_title: string;
+  recent_message_content: string;
+  lost_item_image_url: string;
+  unread_message_count: number;
+  last_message_at: string;
+  article_id: number;
+  chat_room_id: number;
+}
+
+export type LostItemChatroomListResponse = LostItemChatroomResponse[];
+
+export interface LostItemChatroomDetailMessage {
+  user_id: number;
+  user_nickname: string;
+  content: string;
+  timestamp: string;
+  is_image: boolean;
+}
+
+export type LostItemChatroomDetailMessagesResponse = LostItemChatroomDetailMessage[];

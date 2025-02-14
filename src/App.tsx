@@ -39,6 +39,7 @@ import PolicyPage from 'pages/PolicyPage';
 import ROUTES from 'static/routes';
 import LostItemWritePage from 'pages/Articles/LostItemWritePage';
 import LostItemDetailPage from 'pages/Articles/LostItemDetailPage';
+import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 interface WrapperProps {
@@ -101,11 +102,12 @@ function App() {
           <Route path={ROUTES.Cafeteria()} element={<Wrapper title="식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.Articles()} element={<Wrapper title="공지사항" element={<ArticlesPage />} />}>
             <Route index element={<ArticleListPage />} />
-            <Route path={ROUTES.ArticlesDetail({ isLink: false })} element={<Wrapper title="공시사항 상세" element={<ArticlesDetailPage />} />} />
+            <Route path={ROUTES.ArticlesDetail({ isLink: false })} element={<Wrapper title="공지사항 상세" element={<ArticlesDetailPage />} />} />
             <Route path={ROUTES.LostItemDetail({ isLink: false })} element={<Wrapper title="분실물 상세" element={<LostItemDetailPage />} />} />
           </Route>
           <Route path={ROUTES.LostItemFound()} element={<Wrapper needAuth title="분실물 글쓰기" element={<LostItemWritePage />} />} />
           <Route path={ROUTES.LostItemLost()} element={<Wrapper needAuth title="분실물 글쓰기" element={<LostItemWritePage />} />} />
+          <Route path={ROUTES.LostItemChat()} element={<Wrapper needAuth title="분실물 쪽지" element={<LostItemChatPage />} />} />
           <Route path={ROUTES.CampusInfo()} element={<Wrapper title="교내 시설물 정보" element={<CampusInfo />} />} />
         </Route>
 
@@ -116,6 +118,9 @@ function App() {
           <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />
         </Route>
 
+        <Route path={ROUTES.Webview()}>
+          <Route path={ROUTES.WebviewCampusInfo()} element={<Wrapper title="코인 - 교내 시설물 정보" element={<CampusInfo />} />} />
+        </Route>
         <Route path={ROUTES.NotFound()} element={<Wrapper title="404 Not Found" element={<PageNotFound />} />} />
       </Routes>
       <Toast />
