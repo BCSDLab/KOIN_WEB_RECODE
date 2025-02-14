@@ -7,16 +7,15 @@ import { useUser } from 'utils/hooks/state/useUser';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
   if (userInfo?.anonymous_nickname) {
-    localStorage.setItem('uuid', userInfo.anonymous_nickname);
-
+    localStorage.setItem('uuid_logged_in', userInfo.anonymous_nickname);
     return userInfo.anonymous_nickname;
   }
 
-  let uuid = localStorage.getItem('uuid');
+  let uuid = localStorage.getItem('uuid_guest');
 
-  if (!uuid || uuid.includes('-')) {
+  if (!uuid) {
     uuid = uuidv4();
-    localStorage.setItem('uuid', uuid);
+    localStorage.setItem('uuid_guest', uuid);
   }
 
   return uuid;
