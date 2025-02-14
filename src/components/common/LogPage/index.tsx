@@ -8,15 +8,17 @@ import { useUser } from 'utils/hooks/state/useUser';
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
   if (userInfo?.anonymous_nickname) {
     localStorage.setItem('uuid', userInfo.anonymous_nickname);
+
     return userInfo.anonymous_nickname;
   }
 
-  // anonymous_nickname이 없을 경우 기존 UUID 사용
   let uuid = localStorage.getItem('uuid');
-  if (!uuid) {
+
+  if (!uuid || uuid.includes('-')) {
     uuid = uuidv4();
     localStorage.setItem('uuid', uuid);
   }
+
   return uuid;
 };
 
