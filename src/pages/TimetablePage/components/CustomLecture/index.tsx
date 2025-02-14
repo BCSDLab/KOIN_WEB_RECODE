@@ -57,6 +57,14 @@ const timeOffsets: Record<string, number> = {
   금: 4,
 };
 
+const findKeyByValue = (object: Record<Hour, number>, value: number) => Object
+  .entries(object).find(([, val]) => val === value)?.[0] as Hour;
+const getHour = (time: number, key: Record<Hour, number>, isStart: boolean) => {
+  const adjustedTime = time % 2 === (isStart ? 0 : 1) ? time : time - 1;
+  return findKeyByValue(key, adjustedTime);
+};
+const getMinute = (time: number, isStart: boolean): Minute => (time % 2 === (isStart ? 0 : 1) ? '00분' : '30분');
+
 function TimeSpaceInput({
   id,
   isEditStandardLecture,
@@ -81,14 +89,6 @@ function TimeSpaceInput({
   const updatedTimeSpaceComponent = lectureIndex
     ? customTempLecture!.lecture_infos.filter((info) => info.id === id).map(
       (info) => {
-        const findKeyByValue = (object: Record<Hour, number>, value: number) => Object
-          .entries(object).find(([, val]) => val === value)?.[0] as Hour;
-        const getHour = (time: number, key: Record<Hour, number>, isStart: boolean) => {
-          const adjustedTime = time % 2 === (isStart ? 0 : 1) ? time : time - 1;
-          return findKeyByValue(key, adjustedTime);
-        };
-        const getMinute = (time: number, isStart: boolean): Minute => (time % 2 === (isStart ? 0 : 1) ? '00분' : '30분');
-
         const startHour = getHour(info.start_time, START_TIME, true);
         const startMinute: Minute = getMinute(info.start_time, true);
         const endHour = getHour(info.end_time, END_TIME, false);
