@@ -51,6 +51,7 @@ function Timetable({
   const customTempLecture = useCustomTempLecture();
   const { timeString, setTimeString } = useTimeString();
   const token = useTokenState();
+  const location = useLocation();
 
   const handleEditLectureClick = (lectureIndex: number) => {
     if (!token) {
@@ -122,6 +123,8 @@ function Timetable({
 
     return 2;
   };
+
+  const isEditing = location.search.includes('lectureIndex');
 
   useEffect(() => {
     const fixedMaxTime = findMaxTime(myLectures);
@@ -368,7 +371,7 @@ function Timetable({
                   <div
                     className={cn({
                       [styles.timetable__lecture]: true,
-                      [styles['timetable__lecture--preview']]: true,
+                      [styles[`timetable__lecture${isEditing ? '--fixing-preview' : '--preview'}`]]: true,
                     })}
                     style={{
                       top: `${(info.start_time % 100) * rowHeight + 1}px`,
