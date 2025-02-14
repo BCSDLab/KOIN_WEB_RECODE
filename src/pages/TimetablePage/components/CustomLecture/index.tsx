@@ -338,8 +338,8 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
       : false),
   );
 
-  const hasTimeConflict = (
-    excludeLectureId?: number,
+  const checkTimeOverlap = (
+    editingLectureId?: number,
   ): boolean => {
     const customLectureInfos = customTempLecture?.lecture_infos.flat();
     const hasOverlapInCurrent = customLectureInfos!.some(
@@ -353,7 +353,7 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
     if (!myLectures) return false;
 
     return myLectures.some((myLecture) => {
-      if (excludeLectureId && myLecture.id === excludeLectureId) {
+      if (editingLectureId && myLecture.id === editingLectureId) {
         return false;
       }
       return myLecture.lecture_infos.some(
@@ -390,7 +390,7 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
     }
 
     // 중복 시간 검사
-    if (hasTimeConflict(selectedEditLecture?.id)) {
+    if (checkTimeOverlap(selectedEditLecture?.id)) {
       showToast('error', '강의가 중복되어 추가할 수 없습니다.');
       return;
     }
