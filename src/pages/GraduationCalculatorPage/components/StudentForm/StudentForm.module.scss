@@ -2,9 +2,58 @@
 
 .student-form {
   display: flex;
-  width: 403px;
-  height: 134px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
   border: none;
   border-radius: 16px;
   background-color: #fff;
+  padding: 12px 26.5px;
+
+  &__button {
+    font-family: Pretendard, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    padding: 8px 14px;
+    border: 1px solid #e1e1e1;
+    border-radius: 16px;
+  }
+
+  &__input {
+    display: flex;
+    width: 100%;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 26.25px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  &__department, &__student-number, &__major {
+    flex: 1;
+    padding: 12px 20px 12px 16px;
+    border: 1px solid #E1E1E1;
+    border-radius: 16px;
+  }
+
+  &__student-number {
+    padding: 12px 16px;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25.6px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
 }
