@@ -137,7 +137,32 @@ function StorePage() {
     localStorage.setItem('store-review-tooltip', 'used');
     closeTooltip();
   };
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (categoryId: number) => {
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS',
+      event_label: 'shop_categories',
+      value: categoryId.toString(),
+      event_category: 'click',
+      previous_page:
+        categories.shop_categories.find(
+          (item) => item.id === Number(searchParams.get('category')),
+        )?.name || '전체보기',
+      duration_time:
+        (new Date().getTime()
+          - Number(sessionStorage.getItem('enter_category')))
+        / 1000,
+      current_page: categoryId.toString(),
+    });
+
+    sessionStorage.setItem('enter_category', new Date().getTime().toString());
+
+    setParams('category', `${categoryId}`, {
+      deleteBeforeParam: false,
+      replacePage: false,
+    });
+  };
 
   const koreanCategory = selectedCategory === -1
     ? '전체보기'
@@ -149,7 +174,7 @@ function StorePage() {
     if (isChecked) {
       logger.actionEventClick({
         actionTitle: 'BUSINESS',
-        title: 'shop_can',
+        event_label: 'shop_can',
         value: `check_${id}_${koreanCategory}`,
       });
     }
@@ -166,7 +191,7 @@ function StorePage() {
       if (storeMobileFilterState.sorter !== item) {
         logger.actionEventClick({
           actionTitle: 'BUSINESS',
-          title: 'shop_can',
+          event_label: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
             categories.shop_categories[selectedCategory]?.name,
@@ -188,7 +213,7 @@ function StorePage() {
       if (!storeMobileFilterState.filter.includes(item)) {
         logger.actionEventClick({
           actionTitle: 'BUSINESS',
-          title: 'shop_can',
+          event_label: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
             categories.shop_categories[selectedCategory]?.name,
@@ -206,7 +231,7 @@ function StorePage() {
       : Number(searchParams.get('category')) - 1;
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: 'shop_categories',
+      event_label: 'shop_categories',
       value: `scroll in ${
         categories.shop_categories[currentCategoryId]?.name || '전체보기'
       }`,
@@ -251,40 +276,7 @@ function StorePage() {
               role="radio"
               aria-checked={category.id === selectedCategory}
               type="button"
-              onClick={() => {
-                logger.actionEventClick({
-                  actionTitle: 'BUSINESS',
-                  title: 'shop_categories',
-                  value: category.name,
-                  event_category: 'click',
-                  previous_page:
-                    categories.shop_categories.find(
-                      (item) => item.id === Number(searchParams.get('category')),
-                    )?.name || '전체보기',
-                  duration_time:
-                    (new Date().getTime()
-                      - Number(sessionStorage.getItem('enter_category')))
-                    / 1000,
-                  current_page: category.name,
-                });
-                sessionStorage.setItem(
-                  'enter_category',
-                  new Date().getTime().toString(),
-                );
-
-                setParams('category', `${category.id} `, {
-                  deleteBeforeParam: false,
-                  replacePage: true,
-                });
-                setParams('shopIds', '', {
-                  deleteBeforeParam: true,
-                  replacePage: true,
-                });
-                setParams('searchWord', '', {
-                  deleteBeforeParam: true,
-                  replacePage: true,
-                });
-              }}
+              onClick={() => handleCategoryClick(category.id)}
               key={category.id}
             >
               <img
@@ -298,7 +290,7 @@ function StorePage() {
         </div>
         <button
           type="button"
-          onClick={() => navigation(`${ROUTES.BenefitStore()}?category=1`)}
+          onClick={() => navigate(`${ROUTES.BenefitStore()}?category=1`)}
           className={styles.category__benefit}
         >
           혜택이 있는 상점 모아보기

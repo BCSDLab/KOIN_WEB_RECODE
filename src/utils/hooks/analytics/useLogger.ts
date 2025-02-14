@@ -12,7 +12,7 @@ type ScrollLoggerProps = {
 
 type ActionLoggerProps = {
   actionTitle: string,
-  title: string,
+  event_label: string,
   value: string,
   event_category?: string,
   previous_page?: string,
@@ -23,7 +23,7 @@ type ActionLoggerProps = {
 type LoggerEventProps = {
   action: string,
   category: string,
-  label: string,
+  event_label: string,
   value: string,
   duration_time?: number,
   previous_page?: string,
@@ -36,14 +36,14 @@ const useLogger = () => {
   const logEvent = ({
     action,
     category,
-    label,
+    event_label,
     value,
     duration_time,
     previous_page,
     current_page,
   }: LoggerEventProps) => {
     const event = {
-      action, category, label, value, duration_time, previous_page, current_page,
+      action, category, event_label, value, duration_time, previous_page, current_page,
     };
     gtag.event(event);
     prevEvent.current = event;
@@ -54,21 +54,21 @@ const useLogger = () => {
     value,
   } : ClickLoggerProps) => {
     logEvent({
-      action: 'click', category: 'click', label: title, value,
+      action: 'click', category: 'click', event_label: title, value,
     });
   };
 
   const scroll = ({
-    title,
+    title: event_label,
   }: ScrollLoggerProps) => {
     logEvent({
-      action: 'scroll', category: 'BUSINESS', label: title, value: title,
+      action: 'scroll', category: 'BUSINESS', event_label, value: event_label,
     });
   };
 
   const actionEventClick = ({
     actionTitle,
-    title,
+    event_label,
     value,
     duration_time,
     previous_page,
@@ -76,20 +76,20 @@ const useLogger = () => {
     event_category,
   }: ActionLoggerProps) => {
     logEvent({
-      action: actionTitle, category: event_category || 'click', label: title, value, duration_time, previous_page, current_page,
+      action: actionTitle, category: event_category || 'click', event_label, value, duration_time, previous_page, current_page,
     });
   };
 
   const actionEventSwipe = ({
     actionTitle,
-    title,
+    event_label,
     value,
     duration_time,
     previous_page,
     current_page,
   }: ActionLoggerProps) => {
     logEvent({
-      action: actionTitle, category: 'swipe', label: title, value, duration_time, previous_page, current_page,
+      action: actionTitle, category: 'swipe', event_label, value, duration_time, previous_page, current_page,
     });
   };
 

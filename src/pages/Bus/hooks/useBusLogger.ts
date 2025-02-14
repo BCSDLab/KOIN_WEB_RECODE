@@ -2,45 +2,44 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 
 const CLICK_EVENTS = [
   {
-    title: 'departure_box',
+    label: 'departure_box',
     value: '출발지 선택',
   },
   {
-    title: 'arrival_box',
+    label: 'arrival_box',
     value: '목적지 선택',
   },
   {
-    title: 'swap_destination',
+    label: 'swap_destination',
     value: '스왑 버튼',
   },
   {
-    title: 'search_bus',
+    label: 'search_bus',
     value: '조회하기',
   },
   {
-    title: 'search_result_departure_time',
+    label: 'search_result_departure_time',
     value: '출발 시각 설정',
   },
   {
-    title: 'departure_now',
+    label: 'departure_now',
     value: '지금 출발',
   },
-];
-
-const VARIABLE_EVENTS = [
   {
-    title: 'departure_location_confirm',
+    label: 'departure_location_confirm',
     value: '', // 코리아텍, 천안역, 천안터미널
   },
   {
-    title: 'arrival_location_confirm',
+    label: 'arrival_location_confirm',
     value: '', // 코리아텍, 천안역, 천안터미널
   },
   {
-    title: 'search_result_bus_type',
+    label: 'search_result_bus_type',
     value: '', // 전체 차종, 셔틀, 대성, 시내
   },
-];
+] as const;
+
+export type ClickEventLabel = typeof CLICK_EVENTS[number]['label'];
 
 export type LoggingLocation = '코리아텍' | '천안역' | '천안터미널';
 export type LoggingBusType = '전체 차종' | '셔틀' | '대성' | '시내';
@@ -55,13 +54,12 @@ export const loggingBusTypeMap = {
 export const useBusLogger = () => {
   const logger = useLogger();
 
-  const logEvent = (eventTitle: string, eventValue?: string) => {
-    const event = CLICK_EVENTS.find(({ title }) => title === eventTitle)
-      || VARIABLE_EVENTS.find(({ title }) => title === eventTitle);
+  const logEvent = (eventLabel: ClickEventLabel, eventValue?: string) => {
+    const event = CLICK_EVENTS.find(({ label }) => label === eventLabel);
     if (event) {
       logger.actionEventClick({
         actionTitle: 'CAMPUS',
-        title: event.title,
+        event_label: event.label,
         value: eventValue || event.value,
         event_category: 'click',
       });

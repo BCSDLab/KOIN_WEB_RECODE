@@ -69,19 +69,19 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
   const isLoggedin = !!token;
   const logShortcut = (title: string) => {
-    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '식단' });
-    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '버스/교통' });
-    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'header', value: '공지사항' });
+    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'header', value: '식단' });
+    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'header', value: '버스/교통' });
+    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'header', value: '공지사항' });
     if (title === '주변상점') {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', title: 'header', value: '주변상점', event_category: 'click',
+        actionTitle: 'BUSINESS', event_label: 'header', value: '주변상점', event_category: 'click',
       });
     }
-    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'header', value: '복덕방' });
-    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'header', value: '시간표' });
+    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'header', value: '복덕방' });
+    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', event_label: 'header', value: '시간표' });
     if (title === '교내 시설물 정보') {
       logger.actionEventClick({
-        actionTitle: 'CAMPUS', title: 'header', value: '교내 시설물 정보', event_category: 'click',
+        actionTitle: 'CAMPUS', event_label: 'header', value: '교내 시설물 정보', event_category: 'click',
       });
     }
   };
@@ -90,7 +90,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     if (pathname === ROUTES.Timetable()) {
       logger.actionEventClick({
         actionTitle: 'USER',
-        title: 'timetable_back',
+        event_label: 'timetable_back',
         value: '로고',
         previous_page: '시간표',
         current_page: '메인',
@@ -102,7 +102,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
       const shopName = await api.store.getStoreDetailInfo(shopId);
       logger.actionEventClick({
         actionTitle: 'BUSINESS',
-        title: 'shop_detail_view_back',
+        event_label: 'shop_detail_view_back',
         value: shopName.name,
         event_category: 'logo',
         current_page: sessionStorage.getItem('cameFrom') || '전체보기',
@@ -188,7 +188,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 onClick={() => {
                   logger.actionEventClick({
                     actionTitle: 'USER',
-                    title: 'header',
+                    event_label: 'header',
                     value: '회원가입',
                   });
                 }}
@@ -202,7 +202,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 onClick={() => {
                   logger.actionEventClick({
                     actionTitle: 'USER',
-                    title: 'header',
+                    event_label: 'header',
                     value: '로그인',
                   });
                 }}
@@ -221,7 +221,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                   openModal();
                   logger.actionEventClick({
                     actionTitle: 'USER',
-                    title: 'header',
+                    event_label: 'header',
                     value: '정보수정',
                   });
                 }}
@@ -235,7 +235,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                   logout();
                   logger.actionEventClick({
                     actionTitle: 'USER',
-                    title: 'header',
+                    event_label: 'header',
                     value: '로그아웃',
                   });
                 }}

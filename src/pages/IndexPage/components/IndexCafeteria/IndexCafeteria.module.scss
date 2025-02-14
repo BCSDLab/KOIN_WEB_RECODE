@@ -16,20 +16,22 @@
 
   &__title {
     color: #175c8e;
-    font-family: NanumSquare, serif;
-    font-size: 17px;
-    font-weight: bold;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
-      font-size: 15px;
+      box-sizing: border-box;
+      font-size: 18px;
       padding-left: 3px;
       margin-left: 16px;
-      box-sizing: border-box;
+      font-weight: 700;
     }
   }
 
   &__more {
-    font-family: NanumBarunGothic, sans-serif;
+    font-family: Pretendard, sans-serif;
     font-size: 12px;
     color: #252525;
     font-weight: 400;
@@ -160,7 +162,7 @@
 .type {
   grid-column: 2 / 6;
   grid-row: 1 / 2;
-  font-family: NanumSquare, sans-serif;
+  font-family: Pretendard, sans-serif;
   font-size: 14px;
   font-weight: bold;
   line-height: 26px;
@@ -249,7 +251,7 @@
   }
 
   &__name {
-    font-family: NanumBarunGothic, sans-serif;
+    font-family: Pretendard, sans-serif;
     font-size: 12px;
     font-weight: 400;
     line-height: 13.79px;
@@ -281,7 +283,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: NanumBarunGothic, serif;
+    font-family: Pretendard, sans-serif;
     font-size: 12px;
     color: #252525;
     text-align: center;

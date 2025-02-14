@@ -231,7 +231,7 @@ function LectureList({ frameId }: { frameId: number }) {
               onClickSearchButton();
               logger.actionEventClick({
                 actionTitle: 'USER',
-                title: 'timetable',
+                event_label: 'timetable',
                 value: 'search',
               });
             }}

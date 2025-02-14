@@ -16,6 +16,7 @@ import useAddSemester from 'pages/TimetablePage/hooks/useAddSemester';
 import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { Semester } from 'api/timetable/entity';
+import { useLocation } from 'react-router-dom';
 import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';
 import AddSemesterModal from './AddSemesterModal';
@@ -27,6 +28,8 @@ function SemesterList() {
   const portalManager = useModalPortal();
   const semesterOptionList = useSemesterOptionList();
   const { updateSemester } = useSemesterAction();
+  const { pathname } = useLocation();
+  const isGraduationCalculatorMode = pathname.includes('/graduation');
 
   const [isOpenSemesterList, , closePopup, triggerPopup] = useBooleanState(false);
   const [selectedSemester, setSelectedSemester] = React.useState(semester);
@@ -44,7 +47,7 @@ function SemesterList() {
 
   const onClickOption = (clickededSemester: Semester) => {
     updateSemester(clickededSemester);
-    logger.actionEventClick({ actionTitle: 'USER', title: 'timetable', value: `click_semester_${clickededSemester.year}${clickededSemester.term}` });
+    logger.actionEventClick({ actionTitle: 'USER', event_label: 'timetable', value: `click_semester_${clickededSemester.year}${clickededSemester.term}` });
     closePopup();
   };
 
@@ -137,6 +140,7 @@ function SemesterList() {
           [styles.select__trigger]: true,
           [styles['select__trigger--selected']]: isOpenSemesterList,
           [styles['select__trigger--no-option']]: semesterOptionList.length === 0,
+          [styles['select__trigger--graduation']]: isGraduationCalculatorMode,
         })}
       >
         {semesterOptionList.length > 0 && semester !== null
