@@ -603,7 +603,6 @@ function SignupDefaultPage() {
             [styles['signup__button--block']]: true,
             [styles['signup__button--large-font']]: true,
           })}
-          // onClick={onClickSignupButton}
         >
           회원가입
         </button>
