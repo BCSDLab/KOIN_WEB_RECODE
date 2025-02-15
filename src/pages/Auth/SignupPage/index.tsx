@@ -480,8 +480,9 @@ const useSignupForm = () => {
 
 function SignupDefaultPage() {
   const { status, submitForm } = useSignupForm();
-  const { register, onSubmit: onSubmitSignupForm } = useLightweightForm(submitForm);
+  const { register, onSubmit: onSubmitSignupForm, watch } = useLightweightForm(submitForm);
   const logger = useLogger();
+  const genderValue = watch('gender');
 
   return (
     <>
@@ -566,6 +567,13 @@ function SignupDefaultPage() {
               actionTitle: 'USER',
               event_label: 'complete_sign_up',
               value: '회원가입 완료',
+            });
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              event_label: 'gender',
+              value: genderValue !== undefined && genderValue !== null
+                ? GENDER_TYPE.find((item) => item.value === Number(genderValue))?.label || ''
+                : '',
             });
           }}
         >
