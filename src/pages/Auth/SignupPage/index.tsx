@@ -484,6 +484,9 @@ function SignupDefaultPage() {
   const logger = useLogger();
   const genderValue = watch('gender');
 
+  const studentNumberData: { major?: string; studentNumber?: string } = watch('student-number') || {};
+  const majorValue = studentNumberData.major ?? '';
+
   return (
     <>
       <div>
@@ -573,6 +576,13 @@ function SignupDefaultPage() {
               event_label: 'gender',
               value: genderValue !== undefined && genderValue !== null
                 ? GENDER_TYPE.find((item) => item.value === Number(genderValue))?.label || ''
+                : '',
+            });
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              event_label: 'major',
+              value: majorValue !== undefined && majorValue !== null
+                ? majorValue || ''
                 : '',
             });
           }}
