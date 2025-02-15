@@ -67,6 +67,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       }
     },
   });
+
   const watch = (name?: string) => {
     if (name) {
       return refCollection.current[name]?.ref?.value ?? undefined;
@@ -455,6 +456,7 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
 
 const useSignupForm = () => {
   const navigate = useNavigate();
+
   const onSuccess = () => {
     navigate(ROUTES.Main());
   };
@@ -482,10 +484,36 @@ function SignupDefaultPage() {
   const { status, submitForm } = useSignupForm();
   const { register, onSubmit: onSubmitSignupForm, watch } = useLightweightForm(submitForm);
   const logger = useLogger();
-  const genderValue = watch('gender');
 
-  const studentNumberData: { major?: string; studentNumber?: string } = watch('student-number') || {};
-  const majorValue = studentNumberData.major ?? '';
+  const onClickSignupButton = () => {
+    const genderValue = watch('gender') ?? '';
+    const studentNumberData: { major?: string; studentNumber?: string } = watch('student-number') || {};
+    const majorValue = studentNumberData.major ?? '';
+
+    const genderLabel = genderValue !== undefined && genderValue !== null
+      ? GENDER_TYPE.find((item) => item.value === Number(genderValue))?.label || ''
+      : '';
+
+    const finalMajorValue = majorValue || '';
+
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'complete_sign_up',
+      value: '회원가입 완료',
+    });
+
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'gender',
+      value: genderLabel as string,
+    });
+
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'major',
+      value: finalMajorValue,
+    });
+  };
 
   return (
     <>
@@ -565,27 +593,7 @@ function SignupDefaultPage() {
             [styles['signup__button--block']]: true,
             [styles['signup__button--large-font']]: true,
           })}
-          onClick={() => {
-            logger.actionEventClick({
-              actionTitle: 'USER',
-              event_label: 'complete_sign_up',
-              value: '회원가입 완료',
-            });
-            logger.actionEventClick({
-              actionTitle: 'USER',
-              event_label: 'gender',
-              value: genderValue !== undefined && genderValue !== null
-                ? GENDER_TYPE.find((item) => item.value === Number(genderValue))?.label || ''
-                : '',
-            });
-            logger.actionEventClick({
-              actionTitle: 'USER',
-              event_label: 'major',
-              value: majorValue !== undefined && majorValue !== null
-                ? majorValue || ''
-                : '',
-            });
-          }}
+          onClick={onClickSignupButton}
         >
           회원가입
         </button>
