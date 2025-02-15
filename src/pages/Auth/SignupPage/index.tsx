@@ -68,18 +68,6 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
     },
   });
 
-  const watch = (name?: string) => {
-    if (name) {
-      return refCollection.current[name]?.ref?.value ?? undefined;
-    }
-    return Object.fromEntries(
-      Object.entries(refCollection.current).map(([key, refObj]) => [
-        key,
-        refObj.ref?.value ?? undefined,
-      ]),
-    );
-  };
-
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const isCurrentValidEntries = Object.entries(refCollection.current)
@@ -107,7 +95,6 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
   return {
     register,
     onSubmit,
-    watch,
   };
 };
 
