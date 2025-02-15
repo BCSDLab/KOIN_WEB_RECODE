@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Listbox from 'components/TimetablePage/Listbox';
 import ROUTES from 'static/routes';
-import useUserInfoUpdate from './hooks/useUserInfoUpdate';
+import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
@@ -440,6 +440,7 @@ const useModifyInfoForm = () => {
   const token = useTokenState();
   const onSuccess = () => {
     navigate(ROUTES.Main());
+    showToast('success', '성공적으로 정보를 수정하였습니다.');
     queryClient.invalidateQueries({ queryKey: ['userInfo', token] });
   };
   const { status, mutate } = useUserInfoUpdate({ onSuccess });
