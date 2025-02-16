@@ -1,4 +1,4 @@
-import React, { Suspense, useImperativeHandle } from 'react';
+import React, { Suspense, useImperativeHandle, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
@@ -67,6 +67,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       }
     },
   });
+
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const isCurrentValidEntries = Object.entries(refCollection.current)
@@ -440,13 +441,55 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
   );
 });
 
+interface FormValue {
+  id?: string;
+  password?: string;
+  name?: string;
+  nickname?: string;
+  gender?: number | null;
+  'student-number'?: {
+    major?: string;
+    studentNumber?: string;
+  };
+  'phone-number'?: string;
+}
+
 const useSignupForm = () => {
   const navigate = useNavigate();
+  const logger = useLogger();
+  const lastSubmittedForm = useRef<FormValue | null>(null);
+
   const onSuccess = () => {
+    const formValue = lastSubmittedForm.current;
+    if (formValue) {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'signup_success',
+        value: '회원가입 완료',
+      });
+
+      const genderLabel = formValue.gender !== undefined && formValue.gender !== null
+        ? GENDER_TYPE.find((item) => item.value === Number(formValue.gender))?.label || ''
+        : '';
+
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'gender',
+        value: genderLabel,
+      });
+
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'major',
+        value: formValue['student-number']?.major || '',
+      });
+    }
     navigate(ROUTES.Main());
   };
+
   const { status, mutate } = useSignup({ onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
+    lastSubmittedForm.current = formValue;
     const payload = {
       // 필수정보
       email: `${formValue.id?.trim()}@koreatech.ac.kr`,
@@ -468,7 +511,7 @@ const useSignupForm = () => {
 function SignupDefaultPage() {
   const { status, submitForm } = useSignupForm();
   const { register, onSubmit: onSubmitSignupForm } = useLightweightForm(submitForm);
-  const logger = useLogger();
+
   return (
     <>
       <div>
@@ -547,13 +590,6 @@ function SignupDefaultPage() {
             [styles['signup__button--block']]: true,
             [styles['signup__button--large-font']]: true,
           })}
-          onClick={() => {
-            logger.actionEventClick({
-              actionTitle: 'USER',
-              event_label: 'complete_sign_up',
-              value: '회원가입 완료',
-            });
-          }}
         >
           회원가입
         </button>
