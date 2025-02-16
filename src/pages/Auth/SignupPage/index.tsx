@@ -464,8 +464,9 @@ const useSignupForm = () => {
     if (formValue) {
       logger.actionEventClick({
         actionTitle: 'USER',
-        event_label: 'signup_success',
-        value: '회원가입 완료',
+        event_label: 'complete_sign_up',
+        event_category: 'signup',
+        value: '회원가입 완료 성공',
       });
 
       const genderLabel = formValue.gender !== undefined && formValue.gender !== null
@@ -509,6 +510,7 @@ const useSignupForm = () => {
 };
 
 function SignupDefaultPage() {
+  const logger = useLogger();
   const { status, submitForm } = useSignupForm();
   const { register, onSubmit: onSubmitSignupForm } = useLightweightForm(submitForm);
 
@@ -590,6 +592,16 @@ function SignupDefaultPage() {
             [styles['signup__button--block']]: true,
             [styles['signup__button--large-font']]: true,
           })}
+          onClick={
+            () => {
+              logger.actionEventClick({
+                actionTitle: 'USER',
+                event_label: 'complete_sign_up',
+                event_category: 'click',
+                value: '회원가입 완료',
+              });
+            }
+          }
         >
           회원가입
         </button>
