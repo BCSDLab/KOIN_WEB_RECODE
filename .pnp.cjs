@@ -30,6 +30,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
             ["@bcsdlab/utils", "npm:0.0.15"],\
+            ["@stomp/stompjs", "npm:7.0.0"],\
             ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.28.6"],\
             ["@testing-library/jest-dom", "npm:5.17.0"],\
             ["@testing-library/react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.4.0"],\
@@ -2337,6 +2338,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@sinonjs/fake-timers", "npm:10.3.0"],\
             ["@sinonjs/commons", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@stomp/stompjs", [\
+        ["npm:7.0.0", {\
+          "packageLocation": "./.yarn/cache/@stomp-stompjs-npm-7.0.0-c66e011389-94618b5a39.zip/node_modules/@stomp/stompjs/",\
+          "packageDependencies": [\
+            ["@stomp/stompjs", "npm:7.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -7806,6 +7816,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["koin_web_recode", "workspace:."],\
             ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
             ["@bcsdlab/utils", "npm:0.0.15"],\
+            ["@stomp/stompjs", "npm:7.0.0"],\
             ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.28.6"],\
             ["@testing-library/jest-dom", "npm:5.17.0"],\
             ["@testing-library/react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:13.4.0"],\
