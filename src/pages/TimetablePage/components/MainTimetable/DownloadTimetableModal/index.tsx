@@ -8,19 +8,19 @@ import styles from './DownloadTimetableModal.module.scss';
 
 interface DownloadTimetableModalProps {
   onClose: () => void,
-  frameId: number
+  timetableFrameId: number
 }
 
 interface TimetableDownloadProps {
   rowNumber: number,
   forMobile: boolean,
-  frameId: number,
+  timetableFrameId: number,
 }
 
-function TimetableDownload({ rowNumber, forMobile, frameId }: TimetableDownloadProps) {
+function TimetableDownload({ rowNumber, forMobile, timetableFrameId }: TimetableDownloadProps) {
   return (
     <Timetable
-      frameId={frameId}
+      timetableFrameId={timetableFrameId}
       columnWidth={forMobile ? 88.73 : 140}
       firstColumnWidth={forMobile ? 44.36 : 70}
       rowHeight={forMobile ? 33.07 : 33}
@@ -32,7 +32,7 @@ function TimetableDownload({ rowNumber, forMobile, frameId }: TimetableDownloadP
 
 export default function DownloadTimetableModal({
   onClose,
-  frameId,
+  timetableFrameId,
 }: DownloadTimetableModalProps) {
   const { onImageDownload: DownloadForPC, divRef: pcTimetableRef } = useImageDownload();
   const { onImageDownload: DownloadForMobile, divRef: mobileTimetableRef } = useImageDownload();
@@ -69,10 +69,18 @@ export default function DownloadTimetableModal({
         </div>
       </div>
       <div ref={pcTimetableRef} className={styles['container__timetable-image']}>
-        <TimetableDownload rowNumber={timeString.length} forMobile={false} frameId={frameId} />
+        <TimetableDownload
+          rowNumber={timeString.length}
+          forMobile={false}
+          timetableFrameId={timetableFrameId}
+        />
       </div>
       <div ref={mobileTimetableRef} className={styles['container__timetable-image']}>
-        <TimetableDownload rowNumber={timeString.length} forMobile frameId={frameId} />
+        <TimetableDownload
+          rowNumber={timeString.length}
+          forMobile
+          timetableFrameId={timetableFrameId}
+        />
       </div>
     </div>
   );

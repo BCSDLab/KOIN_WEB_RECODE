@@ -8,7 +8,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
 import styles from './MobilePage.module.scss';
 
-function MobilePage({ frameId }: { frameId: number }) {
+function MobilePage({ timetableFrameId }: { timetableFrameId: number }) {
   const logger = useLogger();
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -57,7 +57,7 @@ function MobilePage({ frameId }: { frameId: number }) {
               )}
             >
               <Timetable
-                frameId={frameId}
+                timetableFrameId={timetableFrameId}
                 columnWidth={55}
                 firstColumnWidth={52}
                 rowHeight={21}
