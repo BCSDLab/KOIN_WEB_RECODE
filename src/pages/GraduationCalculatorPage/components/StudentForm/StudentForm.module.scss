@@ -35,7 +35,9 @@
     letter-spacing: 0%;
   }
 
-  &__department, &__student-number, &__major {
+  &__department,
+  &__student-number,
+  &__major {
     flex: 1;
     padding: 10px 20px 10px 16px;
     border: 1px solid #e1e1e1;
