@@ -1,49 +1,85 @@
-import Listbox from 'components/TimetablePage/Listbox';
-import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
-import { useState } from 'react';
+import Listbox, { ListboxRef } from 'components/TimetablePage/Listbox';
+import { useEffect, useState } from 'react';
 import { useUser } from 'utils/hooks/state/useUser';
+import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
+import useDepartmentMajorList from 'pages/GraduationCalculatorPage/hooks/useDepartmentMajorList';
+import useRemainingCredits from 'pages/GraduationCalculatorPage/hooks/useRemainingCredits';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {
-  const user = useUser();
-  const { data: deptList } = useDeptList();
-  const deptOptionList = deptList.map((dept) => ({
-    label: dept.name,
-    value: dept.name,
-  }));
-  // 학과에 따른 전공을 불러오는 api 필요
-  // cosnt { data: deptInfo } = useDeptInfo(department);
-
-  // request로 '메카트로닉스공학부' 입력해서 얻은 응답값
-  const deptInfo = {
-    dept_num: '40',
-    name: '메카트로닉스공학부',
-    major: ['생산시스템전공', '제어시스템전공', '디지털시스템전공'],
-  };
-
-  const majorOptionList = deptInfo.major.map((major) => ({ label: major, value: major }));
+  const token = useTokenState();
+  const { data: userInfo } = useUser();
+  const { data: deptMajorList } = useDepartmentMajorList();
+  const { mutate: calculateRemainingCredits } = useRemainingCredits(token);
 
   const [
     studentNumber, setStudentNumber,
-  ] = useState<string | null>(user.data?.student_number ?? null);
+  ] = useState<string>(userInfo?.student_number ?? '');
   const [
     department, setDepartment,
-  ] = useState<string | null>(user.data?.major ?? null);
+  ] = useState<string>(userInfo?.major ?? '');
   const [major, setMajor] = useState<string | null>(null);
+  const [majorOptionList, setMajorOptionList] = useState<{ label: string, value: string }[]>([{ label: '', value: '' }]);
+
+  const departmentOptionList = deptMajorList.map(
+    (deptMajor) => ({ label: deptMajor.department, value: deptMajor.department }),
+  );
 
   const handleStudentNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStudentNumber(e.target.value);
   };
 
+  const handleMajor = (dept: string) => {
+    const selectedDeptMajor = deptMajorList.find(
+      (deptMajor) => deptMajor.department === dept,
+    );
+    const majorsOption = selectedDeptMajor!.majors.map(
+      (majors) => ({ label: majors, value: majors }),
+    );
+    setMajorOptionList(majorsOption);
+  };
+
+  const handleDepartment = ({ target }: { target: ListboxRef }) => {
+    setDepartment(target.value);
+    handleMajor(target.value);
+  };
+
+  const onSuccess = () => {
+    calculateRemainingCredits();
+    // 그래프 학점 이수 구분 변경
+    // 이수 교양 영역 변경
+  };
+
+  const { mutate: updateUserInfo } = useUserInfoUpdate({ onSuccess });
+
+  const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    updateUserInfo({
+      ...userInfo,
+      major: department,
+      student_number: studentNumber,
+    });
+  };
+
+  useEffect(() => {
+    if (department) {
+      handleMajor(department);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className={styles['student-form']}>
+    <form onSubmit={onSubmitForm} className={styles['student-form']}>
       <div className={styles['student-form__input']}>
         <div>내 정보</div>
-        <button type="button" className={styles['student-form__button']}>저장하기</button>
+        <button type="submit" className={styles['student-form__button']}>저장하기</button>
       </div>
       <div className={styles['student-form__input']}>
         <div>학번</div>
         <input
+          name="student-number"
           className={styles['student-form__student-number']}
           value={studentNumber ?? ''}
           onChange={handleStudentNumber}
@@ -53,9 +89,9 @@ function StudentForm() {
         <div>학과</div>
         <div className={styles['student-form__department']}>
           <Listbox
-            list={deptOptionList}
+            list={departmentOptionList}
             value={department}
-            onChange={({ target }) => setDepartment(target.value)}
+            onChange={handleDepartment}
             version="new"
           />
         </div>
@@ -71,7 +107,7 @@ function StudentForm() {
           />
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
