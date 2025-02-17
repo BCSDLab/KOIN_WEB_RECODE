@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import ImageModal from 'components/common/Modal/ImageModal';
 import {
@@ -21,13 +21,20 @@ import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import * as api from 'api';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+// eslint-disable-next-line
+import StoreDetailBoundary from '../components/StoreDetailBoundary/StoreDetailBoundary';
 import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
 import ReviewPage from './Review';
 
-function StoreDetailPage() {
-  const params = useParams();
+interface Props {
+  id: string | undefined;
+}
+
+function StoreDetailPage({ id }: Props) {
+  if (!id || Number.isNaN(Number(id))) throw new Error('잘못된 가게 id 입니다.');
+
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const enterCategoryTimeRef = useRef<number | null>(null);
@@ -37,31 +44,23 @@ function StoreDetailPage() {
   const logger = useLogger();
   // waterfall 현상 막기
   const { data: paralleData } = useSuspenseQuery({
-    queryKey: ['storeDetail', 'storeDetailMenu', 'review'],
+    queryKey: ['storeDetail', 'storeDetailMenu', 'review', id],
     queryFn: () => Promise.all([
       queryClient.fetchQuery({
-        queryKey: ['storeDetail', params.id],
-        queryFn: () => api.store.getStoreDetailInfo(params.id!),
+        queryKey: ['storeDetail', id],
+        queryFn: () => api.store.getStoreDetailInfo(id),
       }),
       queryClient.fetchQuery({
-        queryKey: ['storeDetailMenu', params.id],
-        queryFn: () => api.store.getStoreDetailMenu(params.id!),
+        queryKey: ['storeDetailMenu', id],
+        queryFn: () => api.store.getStoreDetailMenu(id),
       }),
       queryClient.fetchQuery({
         queryKey: ['review'],
-        queryFn: () => api.store.getReviewList(Number(params.id!), 1, 'LATEST', token),
+        queryFn: () => api.store.getReviewList(Number(id), 1, 'LATEST', token),
       }),
     ]),
   });
   useEffect(() => {
-    if (!sessionStorage.getItem('enter_storeDetail')) {
-      logger.actionEventClick({
-        actionTitle: 'AB_TEST',
-        title: 'BUSINESS_call_1',
-        value: testValue === 'call_number' ? 'number' : 'floating',
-        event_category: 'a/b test 로깅(전화하기)',
-      });
-    }
     if (enterCategoryTimeRef.current === null) {
       const currentTime = new Date().getTime();
       sessionStorage.setItem('enter_storeDetail', currentTime.toString());
@@ -83,7 +82,7 @@ function StoreDetailPage() {
     if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
         actionTitle: 'BUSINESS',
-        title: 'shop_detail_view_review_back',
+        event_label: 'shop_detail_view_review_back',
         value: '',
         event_category: 'click',
         previous_page: '리뷰',
@@ -93,7 +92,7 @@ function StoreDetailPage() {
     }
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
-      title: `${storeType}_call`,
+      event_label: `${storeType}_call`,
       value: storeDetail!.name,
       event_category: 'click',
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
@@ -102,7 +101,7 @@ function StoreDetailPage() {
 
   const onClickImage = (img: string[], index: number) => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_picture', value: storeDetail!.name, event_category: 'click',
+      actionTitle: 'BUSINESS', event_label: 'shop_picture', value: storeDetail!.name, event_category: 'click',
     });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -112,7 +111,7 @@ function StoreDetailPage() {
     if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
         actionTitle: 'BUSINESS',
-        title: 'shop_detail_view_review_back',
+        event_label: 'shop_detail_view_review_back',
         value: storeDetail.name,
         event_category: 'click',
         previous_page: '리뷰',
@@ -121,17 +120,17 @@ function StoreDetailPage() {
       });
     }
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: sessionStorage.getItem('cameFrom') || '전체보기', duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      actionTitle: 'BUSINESS', event_label: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: sessionStorage.getItem('cameFrom') || '전체보기', duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickEventList = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
+      actionTitle: 'BUSINESS', event_label: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
     });
   };
   const onClickReviewList = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: `${storeDetail.name}`, event_category: 'click',
+      actionTitle: 'BUSINESS', event_label: 'shop_detail_view_review', value: `${storeDetail.name}`, event_category: 'click',
     });
   };
   const copyAccount = async (account: string) => {
@@ -142,17 +141,17 @@ function StoreDetailPage() {
   const detailScrollLogging = () => {
     if ((param.get('state') === '메뉴' || !param.get('state'))) {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
+        actionTitle: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
       });
     }
     if (param.get('state') === '이벤트/공지') {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', title: 'shop_detail_view_event', value: storeDetail.name, event_category: 'scroll',
+        actionTitle: 'BUSINESS', event_label: 'shop_detail_view_event', value: storeDetail.name, event_category: 'scroll',
       });
     }
     if (param.get('state') === '리뷰') {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', title: 'shop_detail_view_review', value: storeDetail.name, event_category: 'scroll',
+        actionTitle: 'BUSINESS', event_label: 'shop_detail_view_review', value: storeDetail.name, event_category: 'scroll',
       });
     }
   };
@@ -167,7 +166,7 @@ function StoreDetailPage() {
       if (sessionStorage.getItem('enterReviewPage')) {
         logger.actionEventClick({
           actionTitle: 'BUSINESS',
-          title: 'shop_detail_view_review_back',
+          event_label: 'shop_detail_view_review_back',
           value: storeDetail.name,
           event_category: 'click',
           previous_page: '리뷰',
@@ -190,7 +189,7 @@ function StoreDetailPage() {
       const handlePopState = () => {
         logger.actionEventClick({
           actionTitle: 'BUSINESS',
-          title: 'shop_detail_view_back',
+          event_label: 'shop_detail_view_back',
           value: storeDetail.name,
           event_category: 'swipe',
           current_page: sessionStorage.getItem('cameFrom') || '전체보기',
@@ -366,7 +365,7 @@ function StoreDetailPage() {
               param.set('state', '메뉴');
               setParam(param, { replace: true });
               logger.actionEventClick({
-                actionTitle: 'BUSINESS', title: 'shop_detail_view', value: storeDetail!.name, event_category: 'click',
+                actionTitle: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail!.name, event_category: 'click',
               });
             }}
           >
@@ -407,21 +406,34 @@ function StoreDetailPage() {
           <MenuTable storeMenuCategories={storeMenuCategories} onClickImage={onClickImage} />
         )}
         {tapType === '이벤트/공지' && <EventTable />}
-        {tapType === '리뷰' && <ReviewPage id={params.id!} />}
+        {tapType === '리뷰' && <ReviewPage id={id!} />}
       </div>
       {testValue === 'call_floating' && (
-      <a
-        role="button"
-        aria-label="상점 전화하기"
-        href={`tel:${storeDetail?.phone}`}
-        onClick={onClickCallNumber}
-        className={styles['phone-button--floating']}
-      >
-        <Phone />
-      </a>
+        <a
+          role="button"
+          aria-label="상점 전화하기"
+          href={`tel:${storeDetail?.phone}`}
+          onClick={onClickCallNumber}
+          className={styles['phone-button--floating']}
+        >
+          <Phone />
+        </a>
       )}
     </div>
   );
 }
 
-export default StoreDetailPage;
+function StoreDetail() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  return (
+    <StoreDetailBoundary onErrorClick={() => navigate('/store')}>
+      <Suspense fallback={<div />}>
+        <StoreDetailPage id={id} />
+      </Suspense>
+    </StoreDetailBoundary>
+  );
+}
+
+export default StoreDetail;

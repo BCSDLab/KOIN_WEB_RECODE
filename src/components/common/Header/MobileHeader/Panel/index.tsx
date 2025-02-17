@@ -28,13 +28,13 @@ export default function Panel({ openModal }: PanelProps) {
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
   const logShortcut = (title: string) => {
-    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '식단' });
-    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '버스' });
-    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '공지사항' });
-    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger_shop', value: '주변상점' });
-    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', title: 'hamburger', value: '복덕방' });
-    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', title: 'hamburger', value: '시간표' });
-    if (title === '교내 시설물 정보') logger.actionEventClick({ actionTitle: 'CAMPUS', title: 'hamburger', value: '교내 시설물 정보' });
+    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '식단' });
+    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '버스' });
+    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '공지사항' });
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'hamburger_shop', value: '주변상점' });
+    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'hamburger', value: '복덕방' });
+    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', event_label: 'hamburger', value: '시간표' });
+    if (title === '교내 시설물 정보') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '교내 시설물 정보' });
   };
 
   // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
@@ -42,7 +42,7 @@ export default function Panel({ openModal }: PanelProps) {
     if (pathname === '/timetable') {
       logger.actionEventClick({
         actionTitle: 'USER',
-        title: 'timetable_back',
+        event_label: 'timetable_back',
         value: '햄버거',
         previous_page: '시간표',
         current_page: title,
@@ -55,7 +55,7 @@ export default function Panel({ openModal }: PanelProps) {
     if (userInfo) {
       logger.actionEventClick({
         actionTitle: 'USER',
-        title: 'hamburger',
+        event_label: 'hamburger',
         value: '내정보',
       });
       closeSidebar();
@@ -127,7 +127,7 @@ export default function Panel({ openModal }: PanelProps) {
                 logout();
                 logger.actionEventClick({
                   actionTitle: 'USER',
-                  title: 'hamburger',
+                  event_label: 'hamburger',
                   value: '로그아웃',
                 });
               }
@@ -135,7 +135,7 @@ export default function Panel({ openModal }: PanelProps) {
                 navigate(ROUTES.Auth());
                 logger.actionEventClick({
                   actionTitle: 'USER',
-                  title: 'hamburger',
+                  event_label: 'hamburger',
                   value: '로그인',
                 });
               }

@@ -1,0 +1,98 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  width: 862px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #175c8e;
+    text-decoration: none;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 18px;
+      padding-left: 3px;
+      margin-left: 16px;
+      font-weight: 700;
+    }
+  }
+
+  &__title-link {
+    text-decoration: none;
+  }
+
+  &__link {
+    font-size: 12px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: #252525;
+    position: relative;
+    left: 8px;
+
+    svg {
+      position: relative;
+      top: -1px;
+      right: 3px;
+    }
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    height: 18px;
+  }
+
+  &__item-link {
+    font-size: 14px;
+    color: #252525;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  &__item-title {
+    max-width: 680px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__item-type {
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  &__item-tag {
+    width: 14px;
+    height: 14px;
+    margin-left: 10px;
+  }
+
+  &__item-registered {
+    color: #999;
+    text-align: right;
+    font-size: 12px;
+  }
+}

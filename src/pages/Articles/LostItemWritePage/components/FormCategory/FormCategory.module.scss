@@ -1,0 +1,96 @@
+@use "src/utils/scss/media" as media;
+
+.category {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  @include media.media-breakpoint(mobile) {
+    flex-direction: column;
+  }
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
+    flex-flow: row wrap;
+  }
+
+  &__button {
+    height: 38px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 20px;
+    background-color: #fff;
+    border: 1px solid #175c8e;
+    color: #175c8e;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    &--selected {
+      background-color: #175c8e;
+      color: #fff;
+    }
+  }
+}
+
+.title {
+  font-family: Pretendard, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.2;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  &__description {
+    color: #727272;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+
+    @include media.media-breakpoint(mobile) {
+      margin-bottom: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+  }
+}
+
+.warning {
+  position: absolute;
+  left: 0;
+  bottom: -32px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #f7941e;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+
+  @include media.media-breakpoint(mobile) {
+    left: initial;
+    bottom: initial;
+    right: 0;
+    top: -53px;
+  }
+}

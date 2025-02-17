@@ -11,7 +11,3 @@ export interface ReviewRequest extends APIResponse {
   image_urls: string[];
   menu_names: string[];
 }
-
-export interface UploadImage extends APIResponse {
-  file_url: string;
-}

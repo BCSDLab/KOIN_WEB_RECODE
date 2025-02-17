@@ -1,7 +1,7 @@
 import { Suspense, useEffect } from 'react';
 import IndexBus from './components/IndexBus';
 import IndexCafeteria from './components/IndexCafeteria';
-import IndexNotice from './components/IndexNotice';
+import IndexArticles from './components/IndexArticles';
 import IndexStore from './components/IndexStore';
 import IndexTimetable from './components/IndexTimetable';
 import styles from './IndexPage.module.scss';
@@ -21,7 +21,7 @@ function IndexPage() {
           <IndexTimetable />
         </Suspense>
         <Suspense fallback={null}>
-          <IndexNotice />
+          <IndexArticles />
         </Suspense>
         <Suspense fallback={null}>
           <IndexCafeteria />
