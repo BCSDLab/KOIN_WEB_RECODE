@@ -7,7 +7,7 @@ import RadioGroup from 'pages/Articles/LostItemDetailPage/components/RadioGroup'
 import { useState } from 'react';
 import useReportLostItemArticle from 'pages/Articles/hooks/useReportLostItemArticle';
 import showToast from 'utils/ts/showToast';
-import useArticles from 'pages/Articles/hooks/useArticles';
+import { useNavigate } from 'react-router-dom';
 import styles from './ReportModal.module.scss';
 
 interface ReportModalProps {
@@ -26,6 +26,7 @@ const options = [
 export default function ReportModal({ articleId, closeReportModal }: ReportModalProps) {
   useEscapeKeyDown({ onEscape: closeReportModal });
   useBodyScrollLock();
+  const navigate = useNavigate();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeReportModal });
 
   const [selectedReason, setSelectedReason] = useState('');
@@ -39,17 +40,13 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
       return;
     }
 
-    console.log('신고 요청 데이터:', {
-      articleId,
-      reports: [{ title: selectedOption.label, content: selectedOption.subtitle }],
-    });
-
     reportArticle({
       articleId,
       reports: [{ title: selectedOption.label, content: selectedOption.subtitle }],
     });
 
     closeReportModal();
+    navigate(-1);
   };
 
   return createPortal(
