@@ -19,7 +19,6 @@ const useUserInfoUpdate = (options: UserUpdateOption) => {
       ),
       onSuccess: () => {
         options.onSuccess?.();
-        showToast('success', '성공적으로 정보를 수정하였습니다.');
       },
       onError: (error: AxiosError<{ message?: string }>) => {
         if (error.message) {

@@ -5,7 +5,7 @@ const useDeptList = () => {
   const { data } = useSuspenseQuery(
     {
       queryKey: ['dept'],
-      queryFn: dept.default,
+      queryFn: dept.getDeptList,
     },
   );
 
