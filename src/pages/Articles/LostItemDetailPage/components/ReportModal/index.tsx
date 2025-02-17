@@ -6,6 +6,8 @@ import CloseIcon from 'assets/svg/Articles/close.svg';
 import RadioGroup from 'pages/Articles/LostItemDetailPage/components/RadioGroup';
 import { useState } from 'react';
 import useReportLostItemArticle from 'pages/Articles/hooks/useReportLostItemArticle';
+import showToast from 'utils/ts/showToast';
+import useArticles from 'pages/Articles/hooks/useArticles';
 import styles from './ReportModal.module.scss';
 
 interface ReportModalProps {
@@ -30,7 +32,23 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
   const { mutate: reportArticle } = useReportLostItemArticle();
 
   const handleReportClick = () => {
-    reportArticle({ articleId, reports: [{ title: '기타', content: selectedReason }] });
+    const selectedOption = options.find((option) => option.value === selectedReason);
+
+    if (!selectedOption) {
+      showToast('error', '신고 사유를 선택해주세요.');
+      return;
+    }
+
+    console.log('🚀 신고 요청 데이터:', {
+      articleId,
+      reports: [{ title: selectedOption.label, content: selectedOption.subtitle }],
+    });
+
+    reportArticle({
+      articleId,
+      reports: [{ title: selectedOption.label, content: selectedOption.subtitle }],
+    });
+
     closeReportModal();
   };
 

@@ -31,6 +31,8 @@ export default function ArticleList({ articles }: ArticleListProps) {
     }
   };
 
+  console.log(articles);
+
   return (
     <div className={styles.list}>
       {articles.map((article) => {

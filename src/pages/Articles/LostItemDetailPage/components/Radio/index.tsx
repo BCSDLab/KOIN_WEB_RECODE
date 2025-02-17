@@ -16,7 +16,9 @@ export default function Radio({
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleFocus = () => onChange({ target: { value, name } } as React.ChangeEvent<HTMLInputElement>);
+  const handleFocus = () => onChange(
+    { target: { value, name } } as React.ChangeEvent<HTMLInputElement>,
+  );
 
   const id = `${name}-${value}`;
 
