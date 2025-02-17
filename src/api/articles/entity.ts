@@ -60,6 +60,7 @@ interface LostItemArticleForGetDTO {
   author: string;
   registered_at: string;
   updated_at: string;
+  is_reported: boolean;
 }
 
 export interface LostItemArticlesResponseDTO extends APIResponse {
@@ -127,6 +128,10 @@ export interface ReportItemArticleRequestDTO {
 }
 
 // 신고 API 응답 타입 (200 OK)
-export interface ReportItemArticleResponseDTO {
-  message: string;
+export interface ReportItemArticleResponseDTO extends APIResponse { }
+
+export interface ItemArticleRequestDTO {
+  boardId: number;
+  page: number;
+  limit: number;
 }

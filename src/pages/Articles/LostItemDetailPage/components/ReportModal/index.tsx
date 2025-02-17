@@ -39,7 +39,7 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
       return;
     }
 
-    console.log('🚀 신고 요청 데이터:', {
+    console.log('신고 요청 데이터:', {
       articleId,
       reports: [{ title: selectedOption.label, content: selectedOption.subtitle }],
     });

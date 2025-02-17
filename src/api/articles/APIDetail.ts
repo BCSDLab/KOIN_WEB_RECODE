@@ -9,6 +9,7 @@ import {
   LostItemArticlesRequestDTO,
   ReportItemArticleRequestDTO,
   ReportItemArticleResponseDTO,
+  ItemArticleRequestDTO,
 } from './entity';
 
 export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
@@ -18,7 +19,9 @@ export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(page: string | undefined) {
+  auth = true;
+
+  constructor(public authorization: string, page: string | undefined) {
     this.path = `/articles?page=${page}&limit=10`;
   }
 }
@@ -46,9 +49,15 @@ export class GetHotArticles<R extends HotArticlesResponse> implements APIRequest
 export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/articles/lost-item';
+  path: string;
 
   response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string, public data: ItemArticleRequestDTO) {
+    this.path = '/articles/lost-item';
+  }
 }
 
 export class GetSingleLostItemArticle<R

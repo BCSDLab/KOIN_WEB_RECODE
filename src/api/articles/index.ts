@@ -10,7 +10,7 @@ import {
   ReportLostItemArticle,
 } from './APIDetail';
 
-export const getArticles = APIClient.of(GetArticles);
+export const getArticles = (token: string, page: string) => APIClient.of(GetArticles)(token, page);
 
 export const getArticle = APIClient.of(GetArticle);
 
