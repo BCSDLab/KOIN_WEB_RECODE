@@ -5,15 +5,17 @@ import FormContent from 'pages/Articles/LostItemWritePage/components/FormContent
 import FormFoundPlace from 'pages/Articles/LostItemWritePage/components/FormFoundPlace';
 import FormCategory from 'pages/Articles/LostItemWritePage/components/FormCategory';
 import FormDate from 'pages/Articles/LostItemWritePage/components/FormDate';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
-  found: '습득물',
-  lost: '분실물',
+  FOUND: '습득물',
+  LOST: '분실물',
 };
 
 interface LostItemFormProps {
-  type: 'found' | 'lost';
+  type: 'FOUND' | 'LOST';
   count: number;
   lostItem: LostItem;
   lostItemHandler: LostItemHandler;
@@ -23,12 +25,17 @@ interface LostItemFormProps {
 export default function LostItemForm({
   type, count, lostItem, lostItemHandler, removeLostItem,
 }: LostItemFormProps) {
+  const location = useLocation();
   const {
+    // type,
     category,
     foundDate,
     foundPlace,
     content,
+    author,
     images,
+    registered_at,
+    updated_at,
     hasDateBeenSelected,
     isCategorySelected,
     isDateSelected,
@@ -43,6 +50,7 @@ export default function LostItemForm({
     setHasDateBeenSelected,
   } = lostItemHandler;
 
+  // const itemTag = `${MAX_LOST_ITEM_TYPE[type]} ${count + 1}`;
   const itemTag = `${MAX_LOST_ITEM_TYPE[type]} ${count + 1}`;
 
   return (

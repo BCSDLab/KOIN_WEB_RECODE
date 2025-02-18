@@ -32,7 +32,7 @@ export default function LostItemRouteButton() {
         <Link
           className={styles['links__option-button']}
           type="button"
-          to={ROUTES.LostItemFound()} // 이 링크 아님 이거 임시임.
+          to={ROUTES.LostItemLost()} // 이 링크 아님 이거 임시임.
           onClick={() => logItemWriteClick()}
         >
           <LostIcon />
