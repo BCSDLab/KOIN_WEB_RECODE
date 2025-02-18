@@ -7,7 +7,7 @@ import {
   GetSingleLostItemArticle,
   DeleteLostItemArticle,
   PostLostItemArticles,
-  ReportLostItemArticle,
+  PostReportLostItemArticle,
 } from './APIDetail';
 
 export const getArticles = (token: string, page: string) => APIClient.of(GetArticles)(token, page);
@@ -24,4 +24,4 @@ export const postLostItemArticle = APIClient.of(PostLostItemArticles);
 
 export const deleteLostItemArticle = APIClient.of(DeleteLostItemArticle);
 
-export const reportLostItemArticle = APIClient.of(ReportLostItemArticle);
+export const postReportLostItemArticle = APIClient.of(PostReportLostItemArticle);

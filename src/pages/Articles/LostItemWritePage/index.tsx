@@ -64,6 +64,7 @@ export default function LostItemWritePage() {
     if (!checkArticleFormFull()) return;
 
     const articles = lostItems.map((article) => ({
+      type: 'LOST',
       category: article.category,
       foundPlace: article.foundPlace,
       foundDate: getyyyyMMdd(article.foundDate),
@@ -71,6 +72,7 @@ export default function LostItemWritePage() {
       images: article.images,
     }));
 
+    console.log(articles);
     const id = await postLostItem({ articles });
     navigate(ROUTES.LostItemDetail({ id: String(id), isLink: true }), { replace: true });
   };

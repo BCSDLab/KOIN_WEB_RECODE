@@ -10,7 +10,7 @@ const useArticles = (page = '1') => {
     {
       queryKey: ['articles', page],
       queryFn: async () => {
-        if (!token) throw new Error('🚨 로그인 토큰이 필요합니다.');
+        // if (!token) throw new Error('🚨 로그인 토큰이 필요합니다.');
 
         const queryFnParams = page;
 

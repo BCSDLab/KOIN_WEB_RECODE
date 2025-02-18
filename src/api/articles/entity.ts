@@ -53,6 +53,7 @@ export type HotArticlesResponse = HotArticle[];
 interface LostItemArticleForGetDTO {
   id: number;
   board_id: number;
+  type: string;
   category: string;
   found_place: string;
   found_date: string;
@@ -79,11 +80,14 @@ interface ImageDTO {
 export interface SingleLostItemArticleResponseDTO extends APIResponse {
   id: number;
   board_id: number;
+  type: string;
   category: string;
   found_place: string;
   found_date: string;
   content: string;
   author: string;
+  is_council: boolean;
+  is_mine: boolean
   images: ImageDTO[];
   prev_id: number | null;
   next_id: number | null;
@@ -108,15 +112,45 @@ export interface LostItemResponse extends APIResponse {
 
 // POST /articles/lost-item
 interface LostItemArticleForPostDTO {
+  type: string;
   category: string;
   found_place: string;
   found_date: string; // yyyy-MM-dd
   content: string;
   images: string[];
+  registered_at: string;
+  updated_at: string;
 }
 
 export interface LostItemArticlesRequestDTO {
   articles: Array<LostItemArticleForPostDTO>;
+}
+
+export interface LostItemArticlesPostResponseDTO {
+  id: number;
+  board_id: number;
+  type: string;
+  category: string;
+  found_place: string;
+  found_date: string; // yyyy-MM-dd
+  content: string;
+  author: string;
+  is_council: boolean;
+  is_mine: boolean;
+  images: LostItemImageDTO[];
+  prev_id: number | null;
+  next_id: number | null;
+  registered_at: string;
+  updated_at: string;
+}
+
+interface LostItemImageDTO {
+  id: number;
+  image_url: string;
+}
+
+export interface LostItemArticleResponse {
+  article: LostItemArticlesPostResponseDTO;
 }
 
 // POST /articles/lost-item/{id}/reports)
@@ -127,7 +161,6 @@ export interface ReportItemArticleRequestDTO {
   }>;
 }
 
-// 신고 API 응답 타입 (200 OK)
 export interface ReportItemArticleResponseDTO extends APIResponse { }
 
 export interface ItemArticleRequestDTO {

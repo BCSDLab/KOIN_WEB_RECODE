@@ -7,6 +7,7 @@ import {
   LostItemArticlesResponseDTO,
   LostItemResponse,
   LostItemArticlesRequestDTO,
+  LostItemArticlesPostResponseDTO,
   ReportItemArticleRequestDTO,
   ReportItemArticleResponseDTO,
   ItemArticleRequestDTO,
@@ -73,7 +74,7 @@ export class GetSingleLostItemArticle<R
   }
 }
 
-export class PostLostItemArticles<R extends LostItemResponse> implements APIRequest<R> {
+export class PostLostItemArticles<R extends LostItemArticlesPostResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/articles/lost-item';
@@ -99,7 +100,7 @@ export class DeleteLostItemArticle<R extends LostItemResponse> implements APIReq
   }
 }
 
-export class ReportLostItemArticle<R extends ReportItemArticleResponseDTO> implements APIRequest<R> {
+export class PostReportLostItemArticle<R extends ReportItemArticleResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;
