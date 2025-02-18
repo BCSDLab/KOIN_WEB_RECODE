@@ -1,3 +1,4 @@
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postReportLostItemArticle } from 'api/articles';
 import showToast from 'utils/ts/showToast';
@@ -16,11 +17,10 @@ export default function useReportLostItemArticle() {
       queryClient.invalidateQueries({ queryKey: ['articles', 'lostitem'] });
       queryClient.refetchQueries({ queryKey: ['articles', 'lostitem'] });
     },
-    onError: (error) => {
-      const err = error as Error;
-      if (err.message !== 'Unauthorized') {
-        showToast('error', '신고 접수에 실패했습니다.');
-      }
+    onError: (e) => {
+      if (isKoinError(e)) {
+        showToast('error', e.message);
+      } else sendClientError(e);
     },
   });
 }

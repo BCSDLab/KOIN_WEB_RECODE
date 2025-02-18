@@ -23,13 +23,13 @@ const CLICK_EVENTS = [
   },
   {
     label: 'find_user_category',
-    value: '', // {”카드”, ”신분증”, ”지갑”, ”전자제품”, ”그 외”}
+    value: '', // {”카드”, ”신분증”, ”지갑”, ”전자제품”, ”기타”}
   },
 ] as const;
 
 export type ClickEventLabel = typeof CLICK_EVENTS[number]['label'];
 
-export type FindUserCategory = '카드' | '신분증' | '지갑' | '전자제품' | '그 외';
+export type FindUserCategory = '카드' | '신분증' | '지갑' | '전자제품' | '기타';
 
 export const useArticlesLogger = () => {
   const logger = useLogger();
