@@ -28,8 +28,7 @@ export default function LostItemDetailPage() {
   const { article } = useSingleLostItemArticle(Number(params.id));
   const articleId = Number(params.id);
 
-  // const isMyArticle = true; // 내가 쓴 게시글 테스트 용도
-  const isMyArticle = userInfo?.student_number === article?.author;
+  const isMyArticle = userInfo?.nickname === article?.author;
 
   const {
     boardId,

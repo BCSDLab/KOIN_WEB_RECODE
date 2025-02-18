@@ -40,13 +40,15 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
       return;
     }
 
-    reportArticle({
-      articleId,
-      reports: [{ title: selectedOption.label, content: selectedOption.subtitle }],
-    });
+    reportArticle(
+      {
+        articleId,
+        reports: [{ title: selectedOption.label, content: selectedOption.subtitle }],
+      },
+    );
 
     closeReportModal();
-    navigate(-1);
+    navigate('/articles');
   };
 
   return createPortal(

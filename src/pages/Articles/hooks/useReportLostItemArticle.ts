@@ -14,6 +14,7 @@ export default function useReportLostItemArticle() {
     onSuccess: () => {
       showToast('success', '게시글이 신고되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['articles', 'lostitem'] });
+      queryClient.refetchQueries({ queryKey: ['articles', 'lostitem'] });
     },
     onError: (error) => {
       const err = error as Error;
