@@ -66,9 +66,12 @@
   gap: 12px;
 
   &__label {
-    display: flex;
-    width: 369px;
     padding: 0px 12px;
     align-items: flex-start;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%; /* 25.6px */
   }
 }

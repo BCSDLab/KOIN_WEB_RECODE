@@ -1,7 +1,17 @@
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
+import SemesterList from 'pages/TimetablePage/components/SemesterList';
+import SemesterCourseTable from 'pages/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
 import styles from './GeneralCourseListModal.module.scss';
 
-function GeneralCourseListModal({ closeInfo }: { closeInfo: () => void }) {
+export interface GeneralCourseListModalProps {
+  frameId: number;
+  onClose: () => void;
+}
+
+function GeneralCourseListModal({
+  frameId,
+  onClose,
+}: GeneralCourseListModalProps) {
   return (
     <div className={styles.background}>
       <div className={styles.container}>
@@ -10,16 +20,16 @@ function GeneralCourseListModal({ closeInfo }: { closeInfo: () => void }) {
           {/* eslint-disable jsx-a11y/control-has-associated-label */}
           <button
             type="button"
-            onClick={closeInfo}
+            onClick={onClose}
             className={styles['header__close-button']}
           >
             <CloseIcon />
           </button>
         </div>
-        <p>SemesterList</p>
+        <SemesterList />
         <div className={styles.content}>
           <p className={styles.content__label}>강의 영역 이름</p>
-          <p>SemesterCourseTable</p>
+          <SemesterCourseTable frameId={frameId} />
         </div>
       </div>
     </div>

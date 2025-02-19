@@ -61,7 +61,7 @@ function GraduationCalculatorPage() {
                 이수구분 등 잘못된 정보를 정정하면 아래의 그래프에 바로 적용돼요.
               </p>
             </div>
-            <GeneralCourse />
+            <GeneralCourse frameId={currentFrameIndex} />
             <CreditChart />
           </div>
         </div>

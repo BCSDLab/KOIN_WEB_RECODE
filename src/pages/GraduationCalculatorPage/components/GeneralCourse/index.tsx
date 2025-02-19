@@ -4,13 +4,12 @@ import CourseStatusIcon from 'assets/svg/ellipse-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import styles from './GeneralCourse.module.scss';
 import GeneralCourseListModal from './GeneralCourseListModal';
-// { frameId }: { frameId: number }
-function GeneralCourse() {
+import styles from './GeneralCourse.module.scss';
+
+function GeneralCourse({ frameId }: { frameId: number }) {
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
-  const portalManager = useModalPortal();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const tracks = [
     { id: 1, name: '교양 선택' },
@@ -20,15 +19,6 @@ function GeneralCourse() {
     { id: 5, name: '자연과 인간' },
     { id: 6, name: '인성과 소양' },
   ];
-
-  const handleGeneralCourseClick = () => {
-    portalManager.open(() => (
-      <GeneralCourseListModal
-        closeInfo={portalManager.close}
-        // frameId={frameId}
-      />
-    ));
-  };
 
   return (
     <div className={styles['general-course']}>
@@ -48,7 +38,7 @@ function GeneralCourse() {
           <div key={track.id} className={styles.course}>
             <button
               type="button"
-              onClick={() => handleGeneralCourseClick()}
+              onClick={openModal}
               className={styles.course__button}
             >
               <CourseStatusIcon />
@@ -78,6 +68,12 @@ function GeneralCourse() {
             <BubbleTailBottom />
           </div>
         </div>
+      )}
+      {isModalOpen && (
+        <GeneralCourseListModal
+          frameId={frameId}
+          onClose={closeModal}
+        />
       )}
     </div>
   );
