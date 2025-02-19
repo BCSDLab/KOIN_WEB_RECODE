@@ -11,7 +11,7 @@ function GeneralCourse({ frameId }: { frameId: number }) {
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
-  const tracks = [
+  const TRACKS = [
     { id: 1, name: '교양 선택' },
     { id: 2, name: '예술과 문학' },
     { id: 3, name: '사회와 심리' },
@@ -34,7 +34,7 @@ function GeneralCourse({ frameId }: { frameId: number }) {
         <QuestionMarkIcon />
       </button>
       <div className={styles.list}>
-        {tracks.map((track) => (
+        {TRACKS.map((track) => (
           <div key={track.id} className={styles.course}>
             <button
               type="button"
