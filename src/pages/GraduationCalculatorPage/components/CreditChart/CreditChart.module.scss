@@ -72,6 +72,10 @@
     position: absolute;
     background: rgba(122, 186, 120, 0.70);
     bottom: 0;
+
+    &--full {
+      border-radius: 12px 12px 0px 0px;
+    }
   }
 
   &__credit-status {
