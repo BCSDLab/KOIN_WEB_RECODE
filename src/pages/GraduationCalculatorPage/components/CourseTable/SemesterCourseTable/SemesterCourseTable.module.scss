@@ -6,6 +6,10 @@
   align-items: center;
   height: 264px;
   gap: 4px;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22.4px;
 
   ::-webkit-scrollbar {
     display: none;
@@ -19,11 +23,6 @@
     align-items: center;
     background-color: #f1f8ff;
     color: #4b4b4b;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 160%; /* 22.4px */
 
     & > tr > th:nth-child(1) { width: 128px; }
 
@@ -45,11 +44,6 @@
     align-items: center;
     align-self: stretch;
     color: #000;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 160%; /* 22.4px */
     overflow-y: auto;
 
     span {

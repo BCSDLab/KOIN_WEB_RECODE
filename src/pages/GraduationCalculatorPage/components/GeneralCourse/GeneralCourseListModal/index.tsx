@@ -17,11 +17,11 @@ function GeneralCourseListModal({
       <div className={styles.container}>
         <div className={styles.header}>
           <p className={styles.header__title}>학기 교양 개설 목록</p>
-          {/* eslint-disable jsx-a11y/control-has-associated-label */}
           <button
             type="button"
             onClick={onClose}
             className={styles['header__close-button']}
+            aria-label="닫기 버튼"
           >
             <CloseIcon />
           </button>
