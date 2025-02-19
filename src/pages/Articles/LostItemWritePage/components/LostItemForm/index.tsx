@@ -81,18 +81,20 @@ export default function LostItemForm({
             isDateSelected={isDateSelected}
             hasDateBeenSelected={hasDateBeenSelected}
             setHasDateBeenSelected={setHasDateBeenSelected}
+            type={type}
           />
           <FormFoundPlace
             foundPlace={foundPlace}
             setFoundPlace={setFoundPlace}
             isFoundPlaceSelected={isFoundPlaceSelected}
+            type={type}
           />
         </div>
         <div className={`${styles.template__right}`}>
-          <FormImage images={images} setImages={setImages} />
+          <FormImage images={images} setImages={setImages} type={type} />
         </div>
         <div className={styles.template__bottom}>
-          <FormContent content={content} setContent={setContent} />
+          <FormContent content={content} setContent={setContent} type={type} />
         </div>
       </div>
     </div>

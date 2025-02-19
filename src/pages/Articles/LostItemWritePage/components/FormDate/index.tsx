@@ -20,10 +20,11 @@ interface FormDateProps {
   isDateSelected: boolean;
   hasDateBeenSelected: boolean;
   setHasDateBeenSelected: () => void;
+  type: 'FOUND' | 'LOST';
 }
 
 export default function FormDate({
-  foundDate, setFoundDate, isDateSelected, hasDateBeenSelected, setHasDateBeenSelected,
+  foundDate, setFoundDate, isDateSelected, hasDateBeenSelected, setHasDateBeenSelected, type,
 }: FormDateProps) {
   const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
 
@@ -36,9 +37,12 @@ export default function FormDate({
   const { containerRef } = useOutsideClick({ onOutsideClick: closeCalendar });
   useEscapeKeyDown({ onEscape: closeCalendar });
 
+  const getDate = type === 'FOUND' ? '습득 일자' : '분실 일자';
+  const warningText = type === 'FOUND' ? '습득 일자가 입력되지 않았습니다.' : '분실 일자가 입력되지 않았습니다.';
+
   return (
     <div className={styles.date}>
-      <span className={styles.title}>습득 일자</span>
+      <span className={styles.title}>{getDate}</span>
       <div className={styles.date__wrapper} ref={containerRef}>
         <div className={styles.date__wrapper}>
           <button
@@ -52,7 +56,7 @@ export default function FormDate({
                 [styles['date__description--has-been-selected']]: hasDateBeenSelected,
               })}
             >
-              {hasDateBeenSelected ? getyyyyMMdd(foundDate) : '습득 일자를 선택해주세요.'}
+              {hasDateBeenSelected ? getyyyyMMdd(foundDate) : '분실 일자를 선택해주세요.'}
             </span>
             <span className={cn({
               [styles.icon]: true,
@@ -73,7 +77,7 @@ export default function FormDate({
           {!isDateSelected && (
             <span className={styles.warning}>
               <WarnIcon />
-              습득 일자가 입력되지 않았습니다.
+              {warningText}
             </span>
           )}
         </div>
