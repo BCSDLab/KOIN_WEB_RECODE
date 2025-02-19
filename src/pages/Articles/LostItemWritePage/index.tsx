@@ -51,7 +51,7 @@ export default function LostItemWritePage() {
     removeLostItem,
     validateAndUpdateItems,
     checkArticleFormFull,
-  } = useLostItemForm();
+  } = useLostItemForm(type);
 
   useEffect(() => {
     if (user?.name) {
@@ -78,18 +78,19 @@ export default function LostItemWritePage() {
     if (!checkArticleFormFull()) return;
 
     const articles = lostItems.map((article) => ({
-      type: article.type,
+      type,
       category: article.category,
-      foundPlace: article.foundPlace,
+      foundPlace:
+        type === 'LOST' && (!article.foundPlace || article.foundPlace.trim() === '')
+          ? '장소 미상'
+          : article.foundPlace,
       foundDate: getyyyyMMdd(article.foundDate),
       content: article.content,
-      // author: article.author,
       images: article.images,
       registered_at: article.registered_at,
       updated_at: article.updated_at,
     }));
 
-    console.log(articles);
     const id = await postLostItem({ articles });
     navigate(ROUTES.LostItemDetail({ id: String(id), isLink: true }), { replace: true });
   };

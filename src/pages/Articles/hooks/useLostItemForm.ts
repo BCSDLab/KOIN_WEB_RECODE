@@ -47,8 +47,10 @@ const initialForm: LostItem = {
   isFoundPlaceSelected: true,
 };
 
-export const useLostItemForm = () => {
-  const [lostItems, setLostItems] = useState<Array<LostItem>>([{ ...initialForm }]);
+export const useLostItemForm = (defaultType: 'FOUND' | 'LOST') => {
+  const [lostItems, setLostItems] = useState<Array<LostItem>>(
+    [{ ...initialForm, type: defaultType }],
+  );
 
   const lostItemHandler = (key: number) => ({
     setType: (type: 'FOUND' | 'LOST') => {
@@ -143,10 +145,13 @@ export const useLostItemForm = () => {
   const isItemValid = (item: LostItem) => (
     item.category.trim() !== ''
     && item.hasDateBeenSelected
-    && item.foundPlace.trim() !== ''
+    && (item.type === 'LOST' || item.foundPlace.trim() !== '')
   );
 
-  const checkArticleFormFull = () => lostItems.every(isItemValid);
+  const checkArticleFormFull = () => {
+    const isValid = lostItems.every(isItemValid);
+    return isValid;
+  };
 
   const validateAndUpdateItems = () => {
     setLostItems((prev) => prev.map((item) => ({

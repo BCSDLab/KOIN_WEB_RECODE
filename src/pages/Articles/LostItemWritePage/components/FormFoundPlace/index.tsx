@@ -34,7 +34,7 @@ export default function FormFoundPlace({
           maxLength={MAX_LENGTH}
           placeholder={placeholderText}
         />
-        {!isFoundPlaceSelected && (
+        {type === 'FOUND' && !isFoundPlaceSelected && (
           <span className={styles.warning}>
             <WarnIcon />
             {warningText}
