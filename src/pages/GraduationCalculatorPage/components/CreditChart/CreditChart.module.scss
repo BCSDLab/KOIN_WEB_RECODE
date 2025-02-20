@@ -1,10 +1,96 @@
 @use "utils/scss/media.scss" as media;
 
 .credit-chart {
+  position: relative;
   display: flex;
-  width: 900px;
-  height: 450px;
   border: none;
   border-radius: 16px;
   background-color: #fff;
+  padding: 62px 15px 72px;
+
+  &__y-axis {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+
+    &--value {
+      display: flex;
+      align-items: center;
+      font-family: Pretendard, sans-serif;
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 16px;
+      letter-spacing: 0%;
+      text-align: center;
+    }
+  }
+
+  &__contour {
+    &::after {
+      content: "";
+      position: absolute;
+      width: 843px;
+      height: 1px; /* 기본 선 두께 */
+      background: #000; /* 배경색으로 선 표현 */
+      transform: scaleY(0.3); /* Y축을 0.3배로 축소 */
+      transform-origin: top; /* 상단을 기준으로 축소 */
+      right: 15px;
+    }
+  }
+
+  &__x-axis {
+    position: absolute;
+    display: flex;
+    bottom: 42px;
+    left: 66px;
+    align-items: end;
+
+    &--name {
+      width: 100%;
+      color: #000;
+      text-align: center;
+      font-family: Pretendard, sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 160%;
+    }
+  }
+
+  &__course {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__total-credit {
+    position: relative;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    border-radius: 12px 12px 0 0;
+    background: rgba(122 186 120 / 30%);
+  }
+
+  &__earned-credit {
+    position: absolute;
+    background: rgba(122 186 120 / 70%);
+    bottom: 0;
+
+    &--full {
+      border-radius: 6px 6px 0 0;
+    }
+  }
+
+  &__credit-status {
+    color: #000;
+    text-align: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+    z-index: 2;
+  }
 }
