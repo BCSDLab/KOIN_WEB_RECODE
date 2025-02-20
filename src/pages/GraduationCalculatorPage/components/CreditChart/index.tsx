@@ -40,11 +40,25 @@ const initialCredits = [
     requireGrades: '25',
     grades: '15',
   },
+  {
+    courseType: '다전공',
+    requireGrades: '5',
+    grades: '0',
+  },
 ];
+
+const barStyles = (barsNumber: number) => {
+  if (barsNumber === 7) return { width: '75px', gap: '45px' };
+  if (barsNumber === 8) return { width: '70px', gap: '33.57px' };
+  if (barsNumber === 9) return { width: '65px', gap: '26.25px' };
+  if (barsNumber === 10) return { width: '60px', gap: '21.67px' };
+  return { width: '70px', gap: '33.57px' };
+};
 
 function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
   const myLectures = useMyLectures(currentFrameIndex);
   const [creditState, setCreditState] = useState(initialCredits);
+  const barsNumber = creditState.length;
 
   const updateValues = (newValues: typeof initialCredits) => {
     setCreditState(newValues);
@@ -84,23 +98,26 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
 
   return (
     <div className={styles['credit-chart']}>
-      <div className={styles['credit-chart__axis']}>
+      <div className={styles['credit-chart__y-axis']}>
         {Array.from({ length: 13 }, (_, index) => 60 - index * 5).map(
           (credit, idx) => (
             // eslint-disable-next-line react/no-array-index-key
-            <div key={idx} className={styles['credit-chart__row']}>
+            <div key={`y-axis-${idx}`} className={styles['credit-chart__y-axis--value']}>
               <div>{credit}</div>
               <div className={styles['credit-chart__contour']} />
             </div>
           ),
         )}
       </div>
-      <motion.div layout className={styles['credit-chart__x-axis']}>
+      <motion.div
+        layout
+        className={styles['credit-chart__x-axis']}
+        style={{ gap: barStyles(barsNumber).gap }}
+      >
         <AnimatePresence>
-          {creditState.map((credit, index) => (
+          {creditState.map((credit) => (
             <motion.div
-              // eslint-disable-next-line react/no-array-index-key
-              key={index}
+              key={credit.courseType}
               className={styles['credit-chart__course']}
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -109,32 +126,27 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
             >
               <div
                 style={{
-                  width: '75px',
+                  width: barStyles(barsNumber).width,
                   height: `${Number(credit.requireGrades) * 5}px`,
                 }}
                 className={styles['credit-chart__total-credit']}
               >
                 <motion.div
                   style={{
-                    width: '75px',
+                    width: barStyles(barsNumber).width,
                     height: `${Number(credit.grades) * 5}px`,
                   }}
+                  className={cn({
+                    [styles['credit-chart__earned-credit']]: true,
+                    [styles['credit-chart__earned-credit--full']]: Number(credit.requireGrades) - Number(credit.grades) < 2,
+                  })}
                   initial={{ height: '0%' }}
                   animate={{ height: `${Number(credit.grades) * 5}px` }}
                   transition={{ duration: 0.5 }}
-                  className={
-                  cn({
-                    [styles['credit-chart__earned-credit']]: true,
-                    [styles['credit-chart__earned-credit--full']]: Number(credit.requireGrades) - Number(credit.grades) < 2,
-                  })
-                }
                   layout
                 />
                 <div className={styles['credit-chart__credit-status']}>
-                  {credit.grades}
-                  {' '}
-                  /
-                  {credit.requireGrades}
+                  {`${credit.grades} / ${credit.requireGrades}`}
                 </div>
               </div>
               <div className={styles['credit-chart__x-axis--name']}>
