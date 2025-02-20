@@ -68,7 +68,7 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
   const handleUpdate = () => {
     let newValues = [...creditState];
 
-    // 10% 확률로 막대 하나 삭제 및 추가(최소 1개 유지) -> api 정상화 되면 삭제 예정
+    // 10% 확률로 막대 하나 삭제 및 추가(최소 1개 유지)
     if (Math.random() < 0.5 && newValues.length > 1) {
       newValues.splice(newValues.length - 1, 1);
     } else if (Math.random() > 0.6) {
@@ -79,7 +79,7 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
       });
     }
 
-    // 기존 막대 일부 값 변경 -> api 정상화 되면 삭제 예정
+    // 기존 막대 일부 값 변경
     newValues = newValues.map((credit) => ({
       ...credit,
       grades:
@@ -160,7 +160,11 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
       {/* 테스트용 */}
       <button
         type="button"
-        style={{ border: '1px solid black' }}
+        style={{
+          border: '1px solid black',
+          position: 'absolute',
+          bottom: '0',
+        }}
         onClick={handleUpdate}
       >
         값 변경 (추가/삭제 포함)

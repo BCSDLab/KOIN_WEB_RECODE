@@ -50,7 +50,7 @@
       width: 100%;
       color: #000;
       text-align: center;
-      font-family: Pretendard;
+      font-family: Pretendard, sans-serif;
       font-size: 16px;
       font-style: normal;
       font-weight: 400;
@@ -69,17 +69,17 @@
     display: flex;
     align-items: end;
     justify-content: center;
-    border-radius: 12px 12px 0px 0px;
-    background: rgba(122, 186, 120, 0.30);
+    border-radius: 12px 12px 0 0;
+    background: rgba(122 186 120 / 30%);
   }
 
   &__earned-credit {
     position: absolute;
-    background: rgba(122, 186, 120, 0.70);
+    background: rgba(122 186 120 / 70%);
     bottom: 0;
 
     &--full {
-      border-radius: 6px 6px 0px 0px;
+      border-radius: 6px 6px 0 0;
     }
   }
 
