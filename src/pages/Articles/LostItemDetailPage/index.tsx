@@ -96,48 +96,49 @@ export default function LostItemDetailPage() {
           </div>
 
           <div className={styles['button-container']}>
-            {isMyArticle ? (
-              <button
-                className={styles['button-container__delete']}
-                type="button"
-                onClick={handleDeleteButtonClick}
-              >
-                삭제
-                <GarbageCanIcon />
-              </button>
-            ) : (
-              <>
-                <button
-                  className={styles['button-container__message']}
-                  type="button"
-                >
-                  <MessageIcon />
-                  쪽지 보내기
-                </button>
-                <button
-                  className={styles['button-container__report']}
-                  type="button"
-                  onClick={handleReportClick}
-                >
-                  <ReportIcon />
-                  신고
-                </button>
-                {isReportModalOpen
-                && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
-              </>
-            )}
-          </div>
-
-          <div className={styles.contents__buttons}>
             {isMobile && (
-            <button
-              className={styles.contents__button}
-              onClick={() => navigate(ROUTES.Articles())}
-              type="button"
-            >
-              목록
-            </button>
+            <div className={styles['button-container__left']}>
+              <button
+                className={styles.contents__button}
+                onClick={() => navigate(ROUTES.Articles())}
+                type="button"
+              >
+                목록
+              </button>
+            </div>
             )}
+            <div className={styles['button-container__right']}>
+              {isMyArticle ? (
+                <button
+                  className={styles['button-container__delete']}
+                  type="button"
+                  onClick={handleDeleteButtonClick}
+                >
+                  삭제
+                  <GarbageCanIcon />
+                </button>
+              ) : (
+                <>
+                  <button
+                    className={styles['button-container__message']}
+                    type="button"
+                  >
+                    <MessageIcon />
+                    쪽지 보내기
+                  </button>
+                  <button
+                    className={styles['button-container__report']}
+                    type="button"
+                    onClick={handleReportClick}
+                  >
+                    <ReportIcon />
+                    {!isMobile && '신고'}
+                  </button>
+                  {isReportModalOpen
+                && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
+                </>
+              )}
+            </div>
           </div>
         </div>
 

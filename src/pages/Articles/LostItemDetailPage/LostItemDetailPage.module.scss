@@ -213,9 +213,29 @@
 }
 
 .button-container {
-  display: flex;
   gap: 12px;
   margin-top: 64px;
+  width: 100%;
+  justify-content: space-between;
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+  }
+
+  &__left {
+    display: flex;
+  }
+
+  &__right {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      gap: 8px;
+    }
+  }
 
   &__message,
   &__report {

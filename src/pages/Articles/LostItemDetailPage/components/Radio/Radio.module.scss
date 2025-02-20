@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .radio {
   display: flex;
   align-items: center;
@@ -17,6 +19,10 @@
   font-style: normal;
   font-weight: 500;
   line-height: 160%;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 14px;
+  }
   }
 
   &__subtitle {
@@ -26,6 +32,10 @@
     font-style: normal;
     font-weight: 400;
     line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+    }
   }
 
   &__content-etc {
@@ -66,6 +76,11 @@
     font-weight: 400;
     line-height: 160%;
     overflow-y: hidden;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+      width: 230px;
+    }
   }
 
   &__textarea-etc:focus {
@@ -78,6 +93,10 @@
     width: 335px;
     border-bottom: 1px solid #eee;
     padding: 14px 0;
+
+    @include media.media-breakpoint(mobile) {
+      width: 265px;
+    }
   }
 
   &:last-child {

@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .background {
   position: fixed;
   top: 0;
@@ -20,6 +22,10 @@
   align-items: center;
   justify-content: center;
 
+  @include media.media-breakpoint(mobile) {
+    width: 300px;
+  }
+
   &__header {
     display: flex;
     padding: 32px 60px;
@@ -28,6 +34,10 @@
     align-items: center;
     gap: 8px;
     align-self: stretch;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 0px;
+    }
   }
 
   &__radio {
@@ -43,6 +53,10 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+    }
   }
 
   &__subtitle {
@@ -52,6 +66,10 @@
     font-style: normal;
     font-weight: 400;
     line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+    }
   }
 
   &__close-Modal {
@@ -61,6 +79,10 @@
     align-items: center;
     gap: 8px;
     align-self: stretch;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 12px;
+    }
   }
 }
 
@@ -72,6 +94,11 @@
   align-items: center;
   gap: 14px;
   align-self: stretch;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 4px;
+    padding: 0px 24px 4px 24px;
+  }
 }
 
 .buttons__report {
@@ -85,6 +112,12 @@
   background:#175C8E;
   color: #fff;
   font-family: Pretendard, sans-serif;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 12px;
+    width: 100%;
+    padding: 12px 8px;
+  }
 }
 
 .buttons__close {
@@ -94,4 +127,10 @@
   cursor: pointer;
   border-radius: 5px;
   font-family: Pretendard, sans-serif;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 12px;
+    width: 100%;
+    padding: 12px 8px;
+  }
 }
