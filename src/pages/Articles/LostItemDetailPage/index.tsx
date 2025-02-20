@@ -13,15 +13,20 @@ import DisplayImage from 'pages/Articles/LostItemDetailPage/components/DisplayIm
 import ReportIcon from 'assets/svg/Articles/report.svg';
 import MessageIcon from 'assets/svg/Articles/message.svg';
 import ReportModal from 'pages/Articles/LostItemDetailPage/components/ReportModal';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './LostItemDetailPage.module.scss';
+import LoginRequireLostItemdModal from './components/LoginRequireLostItemModal';
 
 export default function LostItemDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const params = useParams();
+  const token = useTokenState();
+  const portalManager = useModalPortal();
+
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const { data: userInfo } = useUser();
-
   const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
   // const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
@@ -46,6 +51,20 @@ export default function LostItemDetailPage() {
   const handleDeleteButtonClick = () => {
     logFindUserDeleteClick();
     openDeleteModal();
+  };
+
+  const handleReportClick = () => {
+    if (token) {
+      openReportModal();
+    } else {
+      portalManager.open((portalOption) => (
+        <LoginRequireLostItemdModal
+          actionTitle="게시글을 작성하려면"
+          detailExplanation="로그인 후 분실물 주인을 찾아주세요!"
+          onClose={portalOption.close}
+        />
+      ));
+    }
   };
 
   return (
@@ -98,7 +117,7 @@ export default function LostItemDetailPage() {
                 <button
                   className={styles['button-container__report']}
                   type="button"
-                  onClick={openReportModal}
+                  onClick={handleReportClick}
                 >
                   <ReportIcon />
                   신고
