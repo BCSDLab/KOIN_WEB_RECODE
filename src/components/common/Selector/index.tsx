@@ -1,59 +1,66 @@
-import { useState, useRef, useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
 import SettingIcon from 'assets/svg/setting-icon.svg';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './Selector.module.scss';
 
-type SelectorType = 'delete' | 'settings' | 'default';
+type SelectorType = 'delete' | 'setting' | 'default';
+// type SelectorVersion = 'default' | 'inSignup' | 'inTimetable';
 
-type SelectorProps<T> = {
-  options: { label: string; value: T }[];
-  value: number | null;
-  onChange: (value: T) => void;
-  placeholder?: string;
+interface OptionList {
+  label: string;
+  value: string;
+}
+interface SelectorProps {
+  options: OptionList[];
+  value: string | null;
   type: SelectorType;
-  onDelete?: (value: T) => void;
-  onSettingsClick?: (value: T) => void;
-};
+  // version?: SelectorVersion;
+  placeholder?: string;
+  disabled?: boolean;
+  onChange: (value: string) => void;
+  onDelete?: (value: string) => void;
+  onSettingsClick?: (value: string) => void;
+}
 
-export function Selector<T>({
+export function Selector({
   options,
   value,
-  onChange,
-  placeholder = 'Select an option',
   type = 'default',
+  // version = 'default',
+  placeholder = '선택해주세요.',
+  disabled = false,
+  onChange,
   onDelete,
   onSettingsClick,
-}: SelectorProps<T>) {
-  const [isOpen, setIsOpen] = useState(false);
-  const selectorRef = useRef<HTMLDivElement>(null);
+}: SelectorProps) {
+  const [isOpen, , setFalse, triggerOpen] = useBooleanState(false);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (selectorRef.current && !selectorRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  const onClickSelector = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    triggerOpen();
+  };
 
-  const handleOptionClick = (optionValue: T) => {
+  const handleOptionClick = (optionValue: string) => {
     onChange(optionValue);
-    setIsOpen(false);
+    setFalse();
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      setIsOpen((prev) => !prev);
-      event.preventDefault();
-    }
-  };
+  const { containerRef } = useOutsideClick({ onOutsideClick: setFalse });
+
+  const selectedOption = options.find((option) => option.value === value);
+  const showLabel = selectedOption?.label ?? placeholder;
+
+  const isOverHalf = containerRef.current
+    ? containerRef.current.getBoundingClientRect().bottom
+        > window.innerHeight / 2
+    : !!containerRef.current;
 
   return (
     <div
-      ref={selectorRef}
+      ref={containerRef}
       className={cn({
         [styles.select]: true,
         [styles['select--opened']]: isOpen,
@@ -61,29 +68,34 @@ export function Selector<T>({
     >
       <button
         type="button"
-        tabIndex={0}
-        onClick={() => setIsOpen((prev) => !prev)}
-        onKeyDown={handleKeyDown}
+        // tabIndex={0}
+        onClick={onClickSelector}
         className={cn({
           [styles.select__trigger]: true,
           [styles['select__trigger--opened']]: isOpen,
         })}
+        disabled={disabled}
       >
-        {value
-          ? options.find((option) => option.value === value)?.label
-          : placeholder}
+        {showLabel}
         <DownArrowIcon />
       </button>
 
       {isOpen && (
-        <ul className={styles['select__contents-list']} role="listbox">
+        <ul
+          className={cn({
+            [styles['select__contents-list']]: true,
+            [styles['select__contents-list--up']]: isOverHalf,
+            [styles['select__contents-list--visible']]: isOpen,
+          })}
+          role="listbox"
+        >
           {options.map((option) => (
             <li
-              key={String(option.value)}
               className={styles.select__content}
+              key={option.value}
               role="option"
-              tabIndex={0}
               aria-selected={option.value === value}
+              tabIndex={0}
               onClick={() => handleOptionClick(option.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -106,7 +118,7 @@ export function Selector<T>({
                   <div>삭제</div>
                 </button>
               )}
-              {type === 'settings' && (
+              {type === 'setting' && (
                 <button
                   type="button"
                   className={styles.select__button}
