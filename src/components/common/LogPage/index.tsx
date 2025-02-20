@@ -6,15 +6,15 @@ import { UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/state/useUser';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
-  if (userInfo?.anonymous_nickname) {
-    const modifiedAnonymous = userInfo.anonymous_nickname.replace(/^익명_/, 'anonymous_');
-    localStorage.setItem('uuid', modifiedAnonymous);
-    return modifiedAnonymous;
+  if (userInfo?.id) {
+    const userId = String(userInfo.id);
+    localStorage.setItem('uuid', userId);
+    return userId;
   }
 
   let uuid = localStorage.getItem('uuid');
 
-  if (!uuid || uuid.startsWith('anonymous_')) {
+  if (!uuid) {
     uuid = uuidv4();
     localStorage.setItem('uuid', uuid);
   }
