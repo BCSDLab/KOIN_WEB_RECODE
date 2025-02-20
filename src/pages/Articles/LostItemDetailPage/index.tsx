@@ -12,7 +12,6 @@ import { useUser } from 'utils/hooks/state/useUser';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import DisplayImage from 'pages/Articles/LostItemDetailPage/components/DisplayImage';
 import ReportIcon from 'assets/svg/Articles/report.svg';
-// import MessageIcon from 'assets/svg/Articles/message.svg';
 import ReportModal from 'pages/Articles/LostItemDetailPage/components/ReportModal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -109,39 +108,6 @@ export default function LostItemDetailPage() {
               </button>
             </div>
             )}
-
-            {/* <div className={styles['button-container__right']}>
-              {isMyArticle ? (
-                <button
-                  className={styles['button-container__delete']}
-                  type="button"
-                  onClick={handleDeleteButtonClick}
-                >
-                  삭제
-                  <GarbageCanIcon />
-                </button>
-              ) : (
-                <>
-                  <button
-                    className={styles['button-container__message']}
-                    type="button"
-                  >
-                    <MessageIcon />
-                    쪽지 보내기
-                  </button>
-                  <button
-                    className={styles['button-container__report']}
-                    type="button"
-                    onClick={handleReportClick}
-                  >
-                    <ReportIcon />
-                    {!isMobile && '신고'}
-                  </button>
-                  {isReportModalOpen
-                && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
-                </>
-              )}
-            </div> */}
             {isMyArticle && (
               <button
                 className={styles.contents__button}
@@ -175,14 +141,6 @@ export default function LostItemDetailPage() {
                 </button>
               </div>
             )}
-            {/* <button
-              className={styles['button-container__report']}
-              type="button"
-              onClick={handleReportClick}
-            >
-              <ReportIcon />
-              {!isMobile && '신고'}
-            </button> */}
             {isReportModalOpen
                 && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
           </div>
