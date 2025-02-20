@@ -36,7 +36,7 @@ export default function LostItemDetailPage() {
   const { article } = useSingleLostItemArticle(Number(params.id));
   const articleId = Number(params.id);
 
-  // const isMyArticle = userInfo?.nickname === article?.author;
+  const isMyArticle = userInfo?.nickname === article?.author;
 
   const {
     boardId,
@@ -143,7 +143,7 @@ export default function LostItemDetailPage() {
                 </>
               )}
             </div> */}
-            {isCouncil && (
+            {isMyArticle && (
               <button
                 className={styles.contents__button}
                 onClick={handleDeleteButtonClick}
@@ -153,7 +153,8 @@ export default function LostItemDetailPage() {
                 <GarbageCanIcon />
               </button>
             )}
-            {!isCouncil && (
+            {!isMyArticle && (
+              <div className={styles['button-container__right']}>
               <button
                 type="button"
                 className={styles.contents__button}
@@ -165,8 +166,7 @@ export default function LostItemDetailPage() {
                 <ChatIcon />
                 <div>쪽지 보내기</div>
               </button>
-            )}
-            <button
+              <button
               className={styles['button-container__report']}
               type="button"
               onClick={handleReportClick}
@@ -174,6 +174,16 @@ export default function LostItemDetailPage() {
               <ReportIcon />
               {!isMobile && '신고'}
             </button>
+            </div>
+            )}
+            {/* <button
+              className={styles['button-container__report']}
+              type="button"
+              onClick={handleReportClick}
+            >
+              <ReportIcon />
+              {!isMobile && '신고'}
+            </button> */}
             {isReportModalOpen
                 && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
           </div>

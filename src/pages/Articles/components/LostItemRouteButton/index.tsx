@@ -1,7 +1,7 @@
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import CloseIcon from 'assets/svg/Articles/close.svg';
@@ -11,6 +11,7 @@ import styles from './LostItemRouteButton.module.scss';
 export default function LostItemRouteButton() {
   const { logItemWriteClick } = useArticlesLogger();
   const [isWriting, setIsWriting] = useState(false);
+  const { pathname } = useLocation();
 
   return (
     <>
@@ -53,14 +54,16 @@ export default function LostItemRouteButton() {
           </div>
         )}
 
-        <button
-          className={styles.links__write}
-          type="button"
-          onClick={() => setIsWriting((prev) => !prev)}
-        >
-          {isWriting ? <CloseIcon /> : <PencilIcon />}
-          글쓰기
-        </button>
+        {pathname.endsWith('articles') && (
+          <button
+            className={styles.links__write}
+            type="button"
+            onClick={() => setIsWriting((prev) => !prev)}
+          >
+            {isWriting ? <CloseIcon /> : <PencilIcon />}
+            글쓰기
+          </button>
+        ) }
       </div>
     </>
   );

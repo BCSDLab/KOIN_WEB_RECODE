@@ -126,6 +126,7 @@
     font-family: Pretendard, sans-serif;
     font-size: 20px;
     line-height: 1.6;
+    align-items: center;
 
     @include media.media-breakpoint(mobile) {
       width: 100%;
