@@ -30,7 +30,6 @@ export default function LostItemDetailPage() {
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const { data: userInfo } = useUser();
   const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
-  const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
   const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
   const { article } = useSingleLostItemArticle(Number(params.id));
@@ -155,26 +154,26 @@ export default function LostItemDetailPage() {
             )}
             {!isMyArticle && (
               <div className={styles['button-container__right']}>
-              <button
-                type="button"
-                className={styles.contents__button}
-                onClick={async () => {
-                  const chatroomInfo = await searchChatroom(articleId);
-                  navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
-                }}
-              >
-                <ChatIcon />
-                <div>쪽지 보내기</div>
-              </button>
-              <button
-              className={styles['button-container__report']}
-              type="button"
-              onClick={handleReportClick}
-            >
-              <ReportIcon />
-              {!isMobile && '신고'}
-            </button>
-            </div>
+                <button
+                  type="button"
+                  className={styles.contents__button}
+                  onClick={async () => {
+                    const chatroomInfo = await searchChatroom(articleId);
+                    navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
+                  }}
+                >
+                  <ChatIcon />
+                  <div>쪽지 보내기</div>
+                </button>
+                <button
+                  className={styles['button-container__report']}
+                  type="button"
+                  onClick={handleReportClick}
+                >
+                  <ReportIcon />
+                  {!isMobile && '신고'}
+                </button>
+              </div>
             )}
             {/* <button
               className={styles['button-container__report']}
