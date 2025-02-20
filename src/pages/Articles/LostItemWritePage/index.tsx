@@ -9,6 +9,8 @@ import uuidv4 from 'utils/ts/uuidGenerater';
 import usePostLostItemArticles from 'pages/Articles/hooks/usePostLostItemArticles';
 import ROUTES from 'static/routes';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
+import { useUser } from 'utils/hooks/state/useUser';
+import { useEffect } from 'react';
 import styles from './LostItemWritePage.module.scss';
 
 const getyyyyMMdd = (date: Date) => {
@@ -20,26 +22,27 @@ const getyyyyMMdd = (date: Date) => {
 };
 
 const TITLES = {
-  found: {
+  FOUND: {
     title: '습득물 신고',
     subtitle: '주인을 찾아요',
     description: '습득한 물건을 자세히 설명해주세요!',
   },
-  lost: {
+  LOST: {
     title: '분실물 신고',
     subtitle: '잃어버렸어요',
     description: '분실한 물건을 자세히 설명해주세요!',
   },
 };
 
-type LostItemType = 'found' | 'lost';
+type LostItemType = 'FOUND' | 'LOST';
 
 export default function LostItemWritePage() {
+  const { data: user } = useUser();
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
-  const type: LostItemType = location.pathname.includes('/found') ? 'found' : 'lost';
-  const isFound = type === 'found';
+  const type: LostItemType = location.pathname.includes('/found') ? 'FOUND' : 'LOST';
+  const isFound = type === 'FOUND';
   const { title, subtitle, description } = TITLES[type];
   const {
     lostItems,
@@ -48,7 +51,18 @@ export default function LostItemWritePage() {
     removeLostItem,
     validateAndUpdateItems,
     checkArticleFormFull,
-  } = useLostItemForm();
+  } = useLostItemForm(type);
+
+  useEffect(() => {
+    if (user?.name) {
+      lostItems.forEach((lostItem, index) => {
+        if (lostItem.author === '') {
+          lostItemHandler(index).setAuthor(user.name);
+        }
+      });
+    }
+  }, [user?.name, lostItems, lostItemHandler]);
+
   const { status, mutateAsync: postLostItem } = usePostLostItemArticles();
   const { logFindUserAddItemClick, logFindUserWriteConfirmClick } = useArticlesLogger();
 
@@ -64,11 +78,17 @@ export default function LostItemWritePage() {
     if (!checkArticleFormFull()) return;
 
     const articles = lostItems.map((article) => ({
+      type,
       category: article.category,
-      foundPlace: article.foundPlace,
+      foundPlace:
+        type === 'LOST' && (!article.foundPlace || article.foundPlace.trim() === '')
+          ? '장소 미상'
+          : article.foundPlace,
       foundDate: getyyyyMMdd(article.foundDate),
       content: article.content,
       images: article.images,
+      registered_at: article.registered_at,
+      updated_at: article.updated_at,
     }));
 
     const id = await postLostItem({ articles });

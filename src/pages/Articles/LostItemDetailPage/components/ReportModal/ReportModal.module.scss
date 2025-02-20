@@ -1,0 +1,136 @@
+@use "src/utils/scss/media" as media;
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0 0 0 / 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: #fff;
+  width: 451px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0 0 0 / 20%);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+
+  @include media.media-breakpoint(mobile) {
+    width: 300px;
+  }
+
+  &__header {
+    display: flex;
+    padding: 32px 60px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 0;
+    }
+  }
+
+  &__radio {
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title {
+    color: #000;
+    text-align: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+    }
+  }
+
+  &__subtitle {
+    color: #828282;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+    }
+  }
+
+  &__close-Modal {
+    display: flex;
+    padding: 16px 24px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 12px;
+    }
+  }
+}
+
+.modal__buttons {
+  display: flex;
+  padding: 0 24px 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  align-self: stretch;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 4px;
+    padding: 0 24px 4px;
+  }
+}
+
+.buttons__report {
+  display: flex;
+  padding: 12px 128px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  background: #175c8e;
+  color: #fff;
+  font-family: Pretendard, sans-serif;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 12px;
+    width: 100%;
+    padding: 12px 8px;
+  }
+}
+
+.buttons__close {
+  color: black;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: Pretendard, sans-serif;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 12px;
+    width: 100%;
+    padding: 12px 8px;
+  }
+}

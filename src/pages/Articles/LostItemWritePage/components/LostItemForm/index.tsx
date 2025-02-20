@@ -8,12 +8,12 @@ import FormDate from 'pages/Articles/LostItemWritePage/components/FormDate';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
-  found: '습득물',
-  lost: '분실물',
+  FOUND: '습득물',
+  LOST: '분실물',
 };
 
 interface LostItemFormProps {
-  type: 'found' | 'lost';
+  type: 'FOUND' | 'LOST';
   count: number;
   lostItem: LostItem;
   lostItemHandler: LostItemHandler;
@@ -43,6 +43,7 @@ export default function LostItemForm({
     setHasDateBeenSelected,
   } = lostItemHandler;
 
+  // const itemTag = `${MAX_LOST_ITEM_TYPE[type]} ${count + 1}`;
   const itemTag = `${MAX_LOST_ITEM_TYPE[type]} ${count + 1}`;
 
   return (
@@ -73,18 +74,20 @@ export default function LostItemForm({
             isDateSelected={isDateSelected}
             hasDateBeenSelected={hasDateBeenSelected}
             setHasDateBeenSelected={setHasDateBeenSelected}
+            type={type}
           />
           <FormFoundPlace
             foundPlace={foundPlace}
             setFoundPlace={setFoundPlace}
             isFoundPlaceSelected={isFoundPlaceSelected}
+            type={type}
           />
         </div>
         <div className={`${styles.template__right}`}>
-          <FormImage images={images} setImages={setImages} />
+          <FormImage images={images} setImages={setImages} type={type} />
         </div>
         <div className={styles.template__bottom}>
-          <FormContent content={content} setContent={setContent} />
+          <FormContent content={content} setContent={setContent} type={type} />
         </div>
       </div>
     </div>
