@@ -68,7 +68,6 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
   const handleUpdate = () => {
     let newValues = [...creditState];
 
-    // 10% 확률로 막대 하나 삭제 및 추가(최소 1개 유지)
     if (Math.random() < 0.5 && newValues.length > 1) {
       newValues.splice(newValues.length - 1, 1);
     } else if (Math.random() > 0.6) {
