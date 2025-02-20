@@ -62,7 +62,7 @@ function GraduationCalculatorPage() {
               </p>
             </div>
             <GeneralCourse />
-            <CreditChart />
+            <CreditChart currentFrameIndex={currentFrameIndex} />
           </div>
         </div>
       </div>
