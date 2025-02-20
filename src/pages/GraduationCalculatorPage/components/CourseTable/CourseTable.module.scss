@@ -3,19 +3,18 @@
 .course-table {
   display: flex;
   flex-direction: column;
-  height: 422px;
   border: none;
   border-radius: 16px;
   background-color: #fff;
   padding: 12px 17px;
-  gap: 26px;
+  gap: 24px;
 }
 
 .content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 324px;
+  height: 300px;
   font-family: Pretendard, sans-serif;
   font-size: 14px;
   font-weight: 400;

@@ -5,40 +5,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 192px;
+  height: 106px;
   border: none;
   border-radius: 16px;
   background-color: #eee;
-  padding: 0 12px;
 
-  &__description {
+  &__description-button {
+    position: absolute;
+    right: 12px;
+    top: 12px;
     display: flex;
-    margin-top: 12px;
-    width: 100%;
-    justify-content: right;
-
-    &-button {
-      display: flex;
-      width: 30px;
-      height: 30px;
-      justify-content: center;
-      align-items: center;
-
-      & > svg {
-        width: 25px;
-        height: 25px;
-      }
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    
+    & > svg {
+      width: 25px;
+      height: 25px;
     }
   }
 
   &__button {
     display: flex;
     flex-direction: column;
-    width: 180px;
-    justify-content: center;
     align-items: center;
-    padding: 9px 0;
-    gap: 5px;
+    padding-top: 27px;
 
     & > svg {
       width: 40px;
@@ -56,8 +48,8 @@
   &__tooltip {
     z-index: 10;
     position: absolute;
-    top: -85.5px;
-    right: -101px;
+    top: -90.5px;
+    right: -102px;
     display: flex;
     width: fit-content;
     gap: 8px;

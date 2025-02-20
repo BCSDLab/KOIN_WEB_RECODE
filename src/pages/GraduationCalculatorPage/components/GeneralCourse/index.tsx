@@ -4,12 +4,14 @@ import CourseStatusIcon from 'assets/svg/ellipse-icon.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import GeneralCourseListModal from './GeneralCourseListModal';
 import styles from './GeneralCourse.module.scss';
 
-function GeneralCourse() {
+function GeneralCourse({ frameId }: { frameId: number }) {
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
-  const tracks = [
+  const TRACKS = [
     { id: 1, name: '교양 선택' },
     { id: 2, name: '예술과 문학' },
     { id: 3, name: '사회와 심리' },
@@ -32,10 +34,11 @@ function GeneralCourse() {
         <QuestionMarkIcon />
       </button>
       <div className={styles.list}>
-        {tracks.map((track) => (
+        {TRACKS.map((track) => (
           <div key={track.id} className={styles.course}>
             <button
               type="button"
+              onClick={openModal}
               className={styles.course__button}
             >
               <CourseStatusIcon />
@@ -65,6 +68,12 @@ function GeneralCourse() {
             <BubbleTailBottom />
           </div>
         </div>
+      )}
+      {isModalOpen && (
+        <GeneralCourseListModal
+          frameId={frameId}
+          onClose={closeModal}
+        />
       )}
     </div>
   );
