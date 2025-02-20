@@ -1544,6 +1544,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stomp/stompjs@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "@stomp/stompjs@npm:7.0.0"
+  checksum: 94618b5a394339ed3098dae213eef27c462f504ba050208598c9ef396abb527b57e6333b2e78af4715693d6ba04fffb23df4b1bf7041bc0f1b3bc6e92138f1dc
+  languageName: node
+  linkType: hard
+
 "@svgr/babel-plugin-add-jsx-attribute@npm:8.0.0":
   version: 8.0.0
   resolution: "@svgr/babel-plugin-add-jsx-attribute@npm:8.0.0"
@@ -5927,6 +5934,7 @@ __metadata:
   dependencies:
     "@bcsdlab/koin": ^0.0.15
     "@bcsdlab/utils": ^0.0.15
+    "@stomp/stompjs": ^7.0.0
     "@tanstack/react-query": ^5.28.6
     "@testing-library/jest-dom": ^5.14.1
     "@testing-library/react": ^13.0.0

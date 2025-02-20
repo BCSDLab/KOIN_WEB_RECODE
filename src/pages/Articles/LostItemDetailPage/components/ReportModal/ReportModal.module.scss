@@ -6,7 +6,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0 0 0 / 50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,9 +15,9 @@
 
 .modal {
   background: #fff;
-  width: 451x;
+  width: 451px;
   border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0 0 0 / 20%);
   z-index: 10000;
   align-items: center;
   justify-content: center;
@@ -36,7 +36,7 @@
     align-self: stretch;
 
     @include media.media-breakpoint(mobile) {
-      padding: 0px;
+      padding: 0;
     }
   }
 
@@ -88,7 +88,7 @@
 
 .modal__buttons {
   display: flex;
-  padding: 0px 24px 24px 24px;
+  padding: 0 24px 24px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -97,7 +97,7 @@
 
   @include media.media-breakpoint(mobile) {
     gap: 4px;
-    padding: 0px 24px 4px 24px;
+    padding: 0 24px 4px;
   }
 }
 
@@ -109,7 +109,7 @@
   gap: 8px;
   cursor: pointer;
   border-radius: 4px;
-  background:#175C8E;
+  background: #175c8e;
   color: #fff;
   font-family: Pretendard, sans-serif;
 

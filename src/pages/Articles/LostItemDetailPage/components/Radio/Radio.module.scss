@@ -13,16 +13,16 @@
 
   &__label,
   &__label-etc {
-  color: #000;
-  font-family: Pretendard, sans-serif;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 160%;
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
 
-  @include media.media-breakpoint(mobile) {
-    font-size: 14px;
-  }
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+    }
   }
 
   &__subtitle {
@@ -75,7 +75,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: 160%;
-    overflow-y: hidden;
 
     @include media.media-breakpoint(mobile) {
       font-size: 12px;
@@ -85,7 +84,7 @@
 
   &__textarea-etc:focus {
     outline: none;
-    color: #828282;;
+    color: #828282;
     border: 1px solid #e1e1e1;
   }
 

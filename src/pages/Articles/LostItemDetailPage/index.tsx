@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
+import ChatIcon from 'assets/svg/Articles/chat.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
 import DeleteModal from 'pages/Articles/LostItemDetailPage/components/DeleteModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -11,12 +12,13 @@ import { useUser } from 'utils/hooks/state/useUser';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import DisplayImage from 'pages/Articles/LostItemDetailPage/components/DisplayImage';
 import ReportIcon from 'assets/svg/Articles/report.svg';
-import MessageIcon from 'assets/svg/Articles/message.svg';
+// import MessageIcon from 'assets/svg/Articles/message.svg';
 import ReportModal from 'pages/Articles/LostItemDetailPage/components/ReportModal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './LostItemDetailPage.module.scss';
 import LoginRequireLostItemdModal from './components/LoginRequireLostItemModal';
+import usePostLostItemChatroom from './hooks/usePostLostItemChatroom';
 
 export default function LostItemDetailPage() {
   const isMobile = useMediaQuery();
@@ -28,12 +30,13 @@ export default function LostItemDetailPage() {
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const { data: userInfo } = useUser();
   const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
-  // const isCouncil = userInfo && userInfo.student_number === '2022136000';
+  const isCouncil = userInfo && userInfo.student_number === '2022136000';
 
+  const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
   const { article } = useSingleLostItemArticle(Number(params.id));
   const articleId = Number(params.id);
 
-  const isMyArticle = userInfo?.nickname === article?.author;
+  // const isMyArticle = userInfo?.nickname === article?.author;
 
   const {
     boardId,
@@ -107,7 +110,8 @@ export default function LostItemDetailPage() {
               </button>
             </div>
             )}
-            <div className={styles['button-container__right']}>
+
+            {/* <div className={styles['button-container__right']}>
               {isMyArticle ? (
                 <button
                   className={styles['button-container__delete']}
@@ -138,7 +142,40 @@ export default function LostItemDetailPage() {
                 && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
                 </>
               )}
-            </div>
+            </div> */}
+            {isCouncil && (
+              <button
+                className={styles.contents__button}
+                onClick={handleDeleteButtonClick}
+                type="button"
+              >
+                삭제
+                <GarbageCanIcon />
+              </button>
+            )}
+            {!isCouncil && (
+              <button
+                type="button"
+                className={styles.contents__button}
+                onClick={async () => {
+                  const chatroomInfo = await searchChatroom(articleId);
+                  navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
+                }}
+              >
+                <ChatIcon />
+                <div>쪽지 보내기</div>
+              </button>
+            )}
+            <button
+              className={styles['button-container__report']}
+              type="button"
+              onClick={handleReportClick}
+            >
+              <ReportIcon />
+              {!isMobile && '신고'}
+            </button>
+            {isReportModalOpen
+                && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
           </div>
         </div>
 

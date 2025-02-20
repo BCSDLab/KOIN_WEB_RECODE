@@ -11,6 +11,10 @@ import {
   ReportItemArticleRequestDTO,
   ReportItemArticleResponseDTO,
   ItemArticleRequestDTO,
+  LostItemChatroomPostResponse,
+  LostItemChatroomListResponse,
+  LostItemChatroomDetailResponse,
+  LostItemChatroomDetailMessagesResponse,
 } from './entity';
 
 export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
@@ -61,8 +65,8 @@ export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implemen
   }
 }
 
-export class GetSingleLostItemArticle<R
-  extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
+export class GetSingleLostItemArticle<
+  R extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -74,7 +78,8 @@ export class GetSingleLostItemArticle<R
   }
 }
 
-export class PostLostItemArticles<R extends LostItemArticlesPostResponseDTO> implements APIRequest<R> {
+export class PostLostItemArticles<
+  R extends LostItemArticlesPostResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/articles/lost-item';
@@ -100,7 +105,8 @@ export class DeleteLostItemArticle<R extends LostItemResponse> implements APIReq
   }
 }
 
-export class PostReportLostItemArticle<R extends ReportItemArticleResponseDTO> implements APIRequest<R> {
+export class PostReportLostItemArticle<
+  R extends ReportItemArticleResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;
@@ -111,5 +117,76 @@ export class PostReportLostItemArticle<R extends ReportItemArticleResponseDTO> i
 
   constructor(public authorization: string, id: number, public data: ReportItemArticleRequestDTO) {
     this.path = `/articles/lost-item/${id}/reports`;
+  }
+}
+export class PostLostItemChatroom<
+  R extends LostItemChatroomPostResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string, articleId: number) {
+    this.path = `/chatroom/lost-item/${articleId}`;
+  }
+}
+
+export class GetLostItemChatroomList<
+  R extends LostItemChatroomListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/chatroom/lost-item';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) { }
+}
+
+export class GetLostItemChatroomDetail<
+  R extends LostItemChatroomDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string, articleId: number, chatroomId: number) {
+    this.path = `/chatroom/lost-item/${articleId}/${chatroomId}`;
+  }
+}
+
+export class GetLostItemChatroomDetailMessages<
+  R extends LostItemChatroomDetailMessagesResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string, articleId: number, chatroomId: number) {
+    this.path = `/chatroom/lost-item/${articleId}/${chatroomId}/messages`;
+  }
+}
+
+export class PostBlockLostItemChatroom<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string, articleId: number, chatroomId: number) {
+    this.path = `/chatroom/lost-item/${articleId}/${chatroomId}/block`;
   }
 }

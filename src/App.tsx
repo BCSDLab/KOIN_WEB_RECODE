@@ -38,6 +38,7 @@ import PolicyPage from 'pages/PolicyPage';
 import ROUTES from 'static/routes';
 import LostItemWritePage from 'pages/Articles/LostItemWritePage';
 import LostItemDetailPage from 'pages/Articles/LostItemDetailPage';
+import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 interface WrapperProps {
@@ -104,6 +105,7 @@ function App() {
           </Route>
           <Route path={ROUTES.LostItemFound()} element={<Wrapper title="습득물 글쓰기" element={<LostItemWritePage />} />} />
           <Route path={ROUTES.LostItemLost()} element={<Wrapper title="분실물 글쓰기" element={<LostItemWritePage />} />} />
+          <Route path={ROUTES.LostItemChat()} element={<Wrapper needAuth title="분실물 쪽지" element={<LostItemChatPage />} />} />
           <Route path={ROUTES.CampusInfo()} element={<Wrapper title="교내 시설물 정보" element={<CampusInfo />} />} />
         </Route>
 
