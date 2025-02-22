@@ -2,12 +2,14 @@
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { Lecture, MyLectureInfo } from 'api/timetable/entity';
+import CourseTypeList from 'pages/GraduationCalculatorPage/components/CourseTable/CourseTypeList';
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import styles from './SemesterCourseTable.module.scss';
 
 function SemesterCourseTable({ frameId }: { frameId: number }) {
   const { removeMyLecture } = useTimetableMutation(frameId);
   const { myLectures } = useMyLectures(frameId);
+  const { editMyLecture } = useTimetableMutation(frameId);
 
   const filteredMyLectures = (myLectures as MyLectureInfo[])
     .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null);
@@ -22,6 +24,19 @@ function SemesterCourseTable({ frameId }: { frameId: number }) {
       }
     });
     removeMyLecture.mutate({ clickedLecture: lectureToRemove, id: lectureId });
+  };
+
+  const handleCourseTypeChange = (id: number, newCourseType: string) => {
+    const targetLecture = filteredMyLectures.find((lecture) => lecture.id === id);
+    if (!targetLecture) return;
+
+    editMyLecture({
+      ...targetLecture,
+      class_places: [
+        { class_place: '' },
+      ],
+      course_type: newCourseType,
+    });
   };
 
   return (
@@ -45,7 +60,14 @@ function SemesterCourseTable({ frameId }: { frameId: number }) {
               <span>{lecture.professor}</span>
             </td>
             <td align="center">{lecture.grades}</td>
-            <td align="center">{}</td>
+            <td align="center">
+              {/* 모달에서 호출할 경우, props(이수구분)로 값 넘겨주기 */}
+              <CourseTypeList
+                courseTypeDefault={lecture.course_type}
+                id={lecture.id}
+                onCourseTypeChange={handleCourseTypeChange}
+              />
+            </td>
             <td align="center">
               <button
                 type="button"
