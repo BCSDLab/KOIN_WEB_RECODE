@@ -29,7 +29,7 @@ function GeneralCourseListModal({
         <SemesterList />
         <div className={styles.content}>
           <p className={styles.content__label}>강의 영역 이름</p>
-          <SemesterCourseTable frameId={frameId} />
+          <SemesterCourseTable frameId={frameId} isViewMode />
         </div>
       </div>
     </div>

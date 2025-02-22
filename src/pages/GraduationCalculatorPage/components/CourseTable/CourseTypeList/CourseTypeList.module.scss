@@ -1,8 +1,8 @@
 @use "utils/scss/media.scss" as media;
 
 .select {
+  position: relative;
   &__trigger {
-    position: relative;
     display: flex;
     width: 105px;
     height: 22px;

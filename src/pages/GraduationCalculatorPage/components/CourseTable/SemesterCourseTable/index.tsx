@@ -6,7 +6,15 @@ import CourseTypeList from 'pages/GraduationCalculatorPage/components/CourseTabl
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import styles from './SemesterCourseTable.module.scss';
 
-function SemesterCourseTable({ frameId }: { frameId: number }) {
+export interface SemesterCourseTableProps {
+  frameId: number;
+  isViewMode?: boolean;
+}
+
+function SemesterCourseTable({
+  frameId,
+  isViewMode,
+}: SemesterCourseTableProps) {
   const { removeMyLecture } = useTimetableMutation(frameId);
   const { myLectures } = useMyLectures(frameId);
   const { editMyLecture } = useTimetableMutation(frameId);
@@ -61,20 +69,27 @@ function SemesterCourseTable({ frameId }: { frameId: number }) {
             </td>
             <td align="center">{lecture.grades}</td>
             <td align="center">
-              {/* 모달에서 호출할 경우, props(이수구분)로 값 넘겨주기 */}
-              <CourseTypeList
-                courseTypeDefault={lecture.course_type}
-                id={lecture.id}
-                onCourseTypeChange={handleCourseTypeChange}
-              />
+              {isViewMode ? (
+                <span>{lecture.course_type}</span>
+              ) : (
+                <CourseTypeList
+                  courseTypeDefault={lecture.course_type}
+                  id={lecture.id}
+                  onCourseTypeChange={handleCourseTypeChange}
+                />
+              )}
             </td>
             <td align="center">
-              <button
-                type="button"
-                onClick={() => onClickDeleteLecture(lecture.id)}
-              >
-                <CloseIcon />
-              </button>
+              {isViewMode ? (
+                <span>{ }</span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => onClickDeleteLecture(lecture.id)}
+                >
+                  <CloseIcon />
+                </button>
+              )}
             </td>
           </tr>
         ))}
