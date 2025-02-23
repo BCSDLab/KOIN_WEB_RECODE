@@ -43,7 +43,6 @@ export default function LostItemForm({
     setHasDateBeenSelected,
   } = lostItemHandler;
 
-  // const itemTag = `${MAX_LOST_ITEM_TYPE[type]} ${count + 1}`;
   const itemTag = `${MAX_LOST_ITEM_TYPE[type]} ${count + 1}`;
 
   return (
