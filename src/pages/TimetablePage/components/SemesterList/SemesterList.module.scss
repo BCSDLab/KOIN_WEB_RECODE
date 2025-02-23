@@ -113,6 +113,10 @@
         display: none;
       }
     }
+
+    &--graduation {
+      max-height: 200px;
+    }
   }
 
   &__option {
