@@ -8,11 +8,14 @@ import { GraduationExcelUploadForPost } from 'pages/GraduationCalculatorPage/ts/
 const usePostGraduationExcel = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
+
   const { mutate, error } = useMutation({
     mutationFn: async (
       data: GraduationExcelUploadForPost,
     ) => uploadGraduationExcel(data, token),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['graduation'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['graduation'] });
+    },
     onError: (e) => {
       if (isKoinError(e)) {
         showToast('error', e.message);

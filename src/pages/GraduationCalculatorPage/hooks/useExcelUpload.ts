@@ -1,6 +1,7 @@
 import { GraduationExcelUploadForPost } from 'pages/GraduationCalculatorPage/ts/types';
 import { DragEvent } from 'react';
 import usePostGraduationExcel from 'pages/GraduationCalculatorPage/hooks/usePostGraduationExcel';
+import showToast from 'utils/ts/showToast';
 
 export function useExcelUpload() {
   const { mutate } = usePostGraduationExcel();
@@ -9,7 +10,14 @@ export function useExcelUpload() {
     const formData = new FormData();
     formData.append('file', file);
 
-    mutate(formData as unknown as GraduationExcelUploadForPost);
+    mutate(formData as unknown as GraduationExcelUploadForPost, {
+      onSuccess: () => {
+        showToast('success', '엑셀 파일이 성공적으로 업로드되었습니다.');
+      },
+      onError: () => {
+        showToast('error', '엑셀 파일 업로드에 실패했습니다. 다시 시도해주세요.');
+      },
+    });
   };
 
   const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
