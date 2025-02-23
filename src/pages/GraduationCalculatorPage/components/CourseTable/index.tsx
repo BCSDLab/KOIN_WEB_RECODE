@@ -24,9 +24,7 @@ function CourseTable({ frameId }: { frameId: number }) {
 
   return (
     <div className={styles['course-table']}>
-      <div className={styles.semester}>
-        <SemesterList />
-      </div>
+      <SemesterList />
       <div className={styles.content}>
         <SemesterCourseTable frameId={frameId} />
         <button
