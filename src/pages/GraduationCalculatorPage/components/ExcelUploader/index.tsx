@@ -4,27 +4,18 @@ import UploadIcon from 'assets/svg/upload-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
-// import usePostGraduationExcel from 'pages/GraduationCalculatorPage/hooks/usePostGraduationExcel';
 import { useExcelUpload } from 'pages/GraduationCalculatorPage/hooks/useExcelUpload';
 import styles from './ExcelUploader.module.scss';
 
 function ExcelUploader() {
-  const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
-  const handleTooltipContent = () => {
-    openTooltip();
-  };
-
-  const handleTooltipCloseButtonClick = () => {
-    closeTooltip();
-  };
-
   const { handleFileUpload } = useExcelUpload();
+  const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
 
   return (
     <div className={styles['excel-uploader']}>
       <button
         type="button"
-        onClick={handleTooltipContent}
+        onClick={openTooltip}
         className={styles['excel-uploader__description-button']}
       >
         <QuestionMarkIcon />
@@ -52,7 +43,7 @@ function ExcelUploader() {
           <br />
           경로를 지정해 주세요.
         </div>
-        <button type="button" aria-label="close" className={styles['excel-uploader__tooltip-close']} onClick={handleTooltipCloseButtonClick}>
+        <button type="button" aria-label="close" className={styles['excel-uploader__tooltip-close']} onClick={closeTooltip}>
           <CloseIcon />
         </button>
         <div className={styles['excel-uploader__tooltip-asset']}>
