@@ -109,17 +109,18 @@ export default function LostItemDetailPage() {
               </button>
             </div>
             )}
-            {isMyArticle && (
-              <button
-                className={styles.contents__button}
-                onClick={handleDeleteButtonClick}
-                type="button"
-              >
-                삭제
-                <GarbageCanIcon />
-              </button>
-            )}
-            {!isMyArticle && (
+            {isMyArticle ? (
+              <div className={styles['button-container__right']}>
+                <button
+                  className={styles['button-container__delete']}
+                  onClick={handleDeleteButtonClick}
+                  type="button"
+                >
+                  삭제
+                  <GarbageCanIcon />
+                </button>
+              </div>
+            ) : (
               <div className={styles['button-container__right']}>
                 <button
                   type="button"
@@ -142,6 +143,7 @@ export default function LostItemDetailPage() {
                 </button>
               </div>
             )}
+
             {isReportModalOpen
                 && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
           </div>
