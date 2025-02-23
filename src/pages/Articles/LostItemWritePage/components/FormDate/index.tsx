@@ -38,6 +38,7 @@ export default function FormDate({
   useEscapeKeyDown({ onEscape: closeCalendar });
 
   const getDate = type === 'FOUND' ? '습득 일자' : '분실 일자';
+  const placeholderText = type === 'FOUND' ? '습득 일자를 선택해주세요.' : '분실 일자를 선택해주세요.';
   const warningText = type === 'FOUND' ? '습득 일자가 입력되지 않았습니다.' : '분실 일자가 입력되지 않았습니다.';
 
   return (
@@ -56,7 +57,7 @@ export default function FormDate({
                 [styles['date__description--has-been-selected']]: hasDateBeenSelected,
               })}
             >
-              {hasDateBeenSelected ? getyyyyMMdd(foundDate) : `${getDate}를 선택해주세요.`}
+              {hasDateBeenSelected ? getyyyyMMdd(foundDate) : placeholderText}
             </span>
             <span className={cn({
               [styles.icon]: true,
