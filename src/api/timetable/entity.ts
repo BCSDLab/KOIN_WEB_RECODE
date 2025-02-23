@@ -56,8 +56,8 @@ export interface MyLectureInfo {
   target: string;
   professor: string;
   department: string;
-  course_type: string,
-  general_education_area: string,
+  course_type?: string,
+  general_education_area?: string,
 }
 
 export interface TimetableLectureInfoResponse extends APIResponse {

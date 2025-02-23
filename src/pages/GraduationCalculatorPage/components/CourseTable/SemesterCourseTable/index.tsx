@@ -16,7 +16,7 @@ function SemesterCourseTable({
   isViewMode,
 }: SemesterCourseTableProps) {
   const { removeMyLecture } = useTimetableMutation(frameId);
-  const { myLectures } = useMyLectures(frameId);
+  const { myLectures }: { myLectures: (MyLectureInfo | Lecture)[] } = useMyLectures(frameId);
   const { editMyLecture } = useTimetableMutation(frameId);
 
   const filteredMyLectures = (myLectures as MyLectureInfo[])
@@ -36,15 +36,13 @@ function SemesterCourseTable({
   };
 
   const onClickDeleteLecture = (id: number) => {
-    let lectureToRemove: Lecture | MyLectureInfo | null = null;
-    let lectureId = id;
-    myLectures.forEach((lecture: Lecture | MyLectureInfo) => {
-      if (lecture.id === id) {
-        lectureToRemove = lecture;
-        lectureId = lecture.id;
-      }
-    });
-    removeMyLecture.mutate({ clickedLecture: lectureToRemove, id: lectureId });
+    const lectureToRemove = myLectures.find(
+      (lecture: MyLectureInfo | Lecture) => lecture.id === id,
+    );
+
+    if (!lectureToRemove) return;
+
+    removeMyLecture.mutate({ clickedLecture: lectureToRemove, id });
   };
 
   return (
@@ -61,14 +59,14 @@ function SemesterCourseTable({
       <tbody className={styles.table__body}>
         {filteredMyLectures.map((lecture: MyLectureInfo) => (
           <tr key={lecture.id}>
-            <td align="center">
+            <td>
               <span>{lecture.class_title}</span>
             </td>
-            <td align="center">
+            <td>
               <span>{lecture.professor}</span>
             </td>
-            <td align="center">{lecture.grades}</td>
-            <td align="center">
+            <td>{lecture.grades}</td>
+            <td>
               {isViewMode ? (
                 <span>{lecture.course_type}</span>
               ) : (
@@ -79,7 +77,7 @@ function SemesterCourseTable({
                 />
               )}
             </td>
-            <td align="center">
+            <td>
               {isViewMode ? (
                 <span>{ }</span>
               ) : (

@@ -6,13 +6,13 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './CourseTypeList.module.scss';
 
 export interface CourseTypeListProps {
-  courseTypeDefault: string;
+  courseTypeDefault?: string;
   id: number;
   onCourseTypeChange: (id: number, newCourseType: string) => void;
 }
 
 function CourseTypeList({
-  courseTypeDefault,
+  courseTypeDefault = '이수구분선택',
   id,
   onCourseTypeChange,
 }: CourseTypeListProps) {

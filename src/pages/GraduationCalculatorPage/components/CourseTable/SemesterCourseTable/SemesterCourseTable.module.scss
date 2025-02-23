@@ -59,6 +59,8 @@
 
     & > tr { padding: 4px 12px; }
 
+    & > tr > td { text-align: center; }
+
     & > tr > td:nth-child(1) { width: 128px; }
 
     & > tr > td:nth-child(2) { width: 60px; }
