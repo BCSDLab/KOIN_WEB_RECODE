@@ -1,3 +1,3 @@
 export interface GraduationExcelUploadForPost {
-  file: string;
+  file: File;
 }

@@ -4,6 +4,8 @@ import UploadIcon from 'assets/svg/upload-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
+// import usePostGraduationExcel from 'pages/GraduationCalculatorPage/hooks/usePostGraduationExcel';
+import { useExcelUpload } from 'pages/GraduationCalculatorPage/hooks/useExcelUpload';
 import styles from './ExcelUploader.module.scss';
 
 function ExcelUploader() {
@@ -16,6 +18,8 @@ function ExcelUploader() {
     closeTooltip();
   };
 
+  const { handleFileUpload } = useExcelUpload();
+
   return (
     <div className={styles['excel-uploader']}>
       <button
@@ -25,10 +29,17 @@ function ExcelUploader() {
       >
         <QuestionMarkIcon />
       </button>
-      <button type="submit" className={styles['excel-uploader__button']}>
+      <label className={styles['excel-uploader__button']}>
         <UploadIcon />
         <span>엑셀파일 추가하기</span>
-      </button>
+        <input
+          type="file"
+          accept=".xlsx, .xls, .csv"
+          className={styles['excel-uploader__input']}
+          onChange={handleFileUpload}
+          style={{ display: 'none' }}
+        />
+      </label>
 
       {isTooltipOpen && (
       <div className={styles['excel-uploader__tooltip']}>
