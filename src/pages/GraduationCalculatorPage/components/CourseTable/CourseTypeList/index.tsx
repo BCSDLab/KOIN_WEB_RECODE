@@ -43,7 +43,6 @@ function CourseTypeList({
     e.stopPropagation();
     const { currentTarget } = e;
     const newCourseType = currentTarget.getAttribute('data-value') ?? '';
-    setSelectedValue(newCourseType);
 
     if (newCourseType !== selectedValue) {
       setSelectedValue(newCourseType);
@@ -77,10 +76,7 @@ function CourseTypeList({
           {courseType.map((type) => (
             <button
               type="button"
-              className={cn({
-                [styles.select__option]: true,
-                // [styles['select__option--selected']]: type.value === value,
-              })}
+              className={styles.select__option}
               key={type.value}
               role="option"
               aria-selected={type.value === selectedValue}

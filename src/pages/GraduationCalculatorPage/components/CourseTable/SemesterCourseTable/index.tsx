@@ -22,6 +22,19 @@ function SemesterCourseTable({
   const filteredMyLectures = (myLectures as MyLectureInfo[])
     .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null);
 
+  const handleCourseTypeChange = (id: number, newCourseType: string) => {
+    const targetLecture = filteredMyLectures.find((lecture) => lecture.id === id) as MyLectureInfo;
+
+    if (!targetLecture) return;
+    editMyLecture({
+      ...targetLecture,
+      class_places: [
+        { class_place: '' },
+      ],
+      course_type: newCourseType,
+    });
+  };
+
   const onClickDeleteLecture = (id: number) => {
     let lectureToRemove: Lecture | MyLectureInfo | null = null;
     let lectureId = id;
@@ -32,19 +45,6 @@ function SemesterCourseTable({
       }
     });
     removeMyLecture.mutate({ clickedLecture: lectureToRemove, id: lectureId });
-  };
-
-  const handleCourseTypeChange = (id: number, newCourseType: string) => {
-    const targetLecture = filteredMyLectures.find((lecture) => lecture.id === id);
-    if (!targetLecture) return;
-
-    editMyLecture({
-      ...targetLecture,
-      class_places: [
-        { class_place: '' },
-      ],
-      course_type: newCourseType,
-    });
   };
 
   return (
