@@ -8,9 +8,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 
 .container {
+  position: relative;
   box-sizing: border-box;
   width: 954px;
   height: auto;
@@ -20,6 +22,7 @@
   flex-direction: column;
   gap: 36px;
   background-color: #fff;
+  z-index: 2;
 
   &__title {
     display: flex;
