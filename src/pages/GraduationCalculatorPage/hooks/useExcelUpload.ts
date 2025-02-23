@@ -28,7 +28,5 @@ export function useExcelUpload() {
     if (file) handleFile(file);
   };
 
-  return {
-    handleFileUpload, handleDrop, handleDragOver,
-  };
+  return { handleFileUpload, handleDrop, handleDragOver };
 }
