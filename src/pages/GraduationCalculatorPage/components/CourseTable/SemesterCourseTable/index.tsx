@@ -2,26 +2,47 @@
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { Lecture, MyLectureInfo } from 'api/timetable/entity';
+import CourseTypeList from 'pages/GraduationCalculatorPage/components/CourseTable/CourseTypeList';
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import styles from './SemesterCourseTable.module.scss';
 
-function SemesterCourseTable({ frameId }: { frameId: number }) {
+export interface SemesterCourseTableProps {
+  frameId: number;
+  isViewMode?: boolean;
+}
+
+function SemesterCourseTable({
+  frameId,
+  isViewMode,
+}: SemesterCourseTableProps) {
   const { removeMyLecture } = useTimetableMutation(frameId);
-  const { myLectures } = useMyLectures(frameId);
+  const { myLectures }: { myLectures: (MyLectureInfo | Lecture)[] } = useMyLectures(frameId);
+  const { editMyLecture } = useTimetableMutation(frameId);
 
   const filteredMyLectures = (myLectures as MyLectureInfo[])
     .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null);
 
-  const onClickDeleteLecture = (id: number) => {
-    let lectureToRemove: Lecture | MyLectureInfo | null = null;
-    let lectureId = id;
-    myLectures.forEach((lecture: Lecture | MyLectureInfo) => {
-      if (lecture.id === id) {
-        lectureToRemove = lecture;
-        lectureId = lecture.id;
-      }
+  const handleCourseTypeChange = (id: number, newCourseType: string) => {
+    const targetLecture = filteredMyLectures.find((lecture) => lecture.id === id) as MyLectureInfo;
+
+    if (!targetLecture) return;
+    editMyLecture({
+      ...targetLecture,
+      class_places: [
+        { class_place: '' },
+      ],
+      course_type: newCourseType,
     });
-    removeMyLecture.mutate({ clickedLecture: lectureToRemove, id: lectureId });
+  };
+
+  const onClickDeleteLecture = (id: number) => {
+    const lectureToRemove = myLectures.find(
+      (lecture: MyLectureInfo | Lecture) => lecture.id === id,
+    );
+
+    if (!lectureToRemove) return;
+
+    removeMyLecture.mutate({ clickedLecture: lectureToRemove, id });
   };
 
   return (
@@ -38,21 +59,35 @@ function SemesterCourseTable({ frameId }: { frameId: number }) {
       <tbody className={styles.table__body}>
         {filteredMyLectures.map((lecture: MyLectureInfo) => (
           <tr key={lecture.id}>
-            <td align="center">
+            <td>
               <span>{lecture.class_title}</span>
             </td>
-            <td align="center">
+            <td>
               <span>{lecture.professor}</span>
             </td>
-            <td align="center">{lecture.grades}</td>
-            <td align="center">{}</td>
-            <td align="center">
-              <button
-                type="button"
-                onClick={() => onClickDeleteLecture(lecture.id)}
-              >
-                <CloseIcon />
-              </button>
+            <td>{lecture.grades}</td>
+            <td>
+              {isViewMode ? (
+                <span>{lecture.course_type}</span>
+              ) : (
+                <CourseTypeList
+                  courseTypeDefault={lecture.course_type}
+                  id={lecture.id}
+                  onCourseTypeChange={handleCourseTypeChange}
+                />
+              )}
+            </td>
+            <td>
+              {isViewMode ? (
+                <span>{ }</span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => onClickDeleteLecture(lecture.id)}
+                >
+                  <CloseIcon />
+                </button>
+              )}
             </td>
           </tr>
         ))}

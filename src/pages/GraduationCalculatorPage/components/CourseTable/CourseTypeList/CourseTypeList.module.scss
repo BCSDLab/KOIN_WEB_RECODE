@@ -1,0 +1,78 @@
+@use "utils/scss/media.scss" as media;
+
+.select {
+  position: relative;
+
+  &__trigger {
+    display: flex;
+    width: 105px;
+    height: 22px;
+    padding: 0 8px;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    border: 0.5px solid #e1e1e1;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+
+    &:active {
+      background-color: #e1e1e1;
+    }
+
+    &--selected {
+      border-radius: 8px 8px 0 0;
+
+      svg {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+      }
+    }
+  }
+
+  &__label {
+    display: flex;
+    width: 76px;
+    height: 22px;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #000;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19.2px;
+  }
+
+  &__content {
+    position: absolute;
+    z-index: 10;
+    background-color: #fff;
+    border-radius: 0 0 8px 8px;
+    border: 0.5px solid #e1e1e1;
+  }
+
+  &__option {
+    width: 105px;
+    display: flex;
+    padding: 0 8px;
+    align-items: center;
+    gap: 4px;
+    align-self: stretch;
+    color: #727272;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22.4px;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+
+    &:active {
+      background-color: #e1e1e1;
+    }
+  }
+}

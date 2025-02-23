@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 264px;
+  height: 228px;
   gap: 4px;
   font-family: Pretendard, sans-serif;
   font-size: 14px;
@@ -58,6 +58,8 @@
     }
 
     & > tr { padding: 4px 12px; }
+
+    & > tr > td { text-align: center; }
 
     & > tr > td:nth-child(1) { width: 128px; }
 
