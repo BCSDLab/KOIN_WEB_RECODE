@@ -87,15 +87,16 @@ export default function LostItemDetailPage() {
             images={images}
           />
           <div className={styles.contents__content}>{content}</div>
-          <div className={styles.contents__guide}>
-            <p>분실물 수령을 희망하시는 분은 재실 시간 내에</p>
-            <p>
-              <strong>학생회관 320호 총학생회 사무실</strong>
-              로 방문해 주시기 바랍니다.
-            </p>
-            <p>재실 시간은 공지 사항을 참고해 주시기 바랍니다.</p>
-          </div>
-
+          {article?.author === '총학생회' && (
+            <div className={styles.contents__guide}>
+              <p>분실물 수령을 희망하시는 분은 재실 시간 내에</p>
+              <p>
+                <strong>학생회관 320호 총학생회 사무실</strong>
+                로 방문해 주시기 바랍니다.
+              </p>
+              <p>재실 시간은 공지 사항을 참고해 주시기 바랍니다.</p>
+            </div>
+          )}
           <div className={styles['button-container']}>
             {isMobile && (
             <div className={styles['button-container__left']}>
