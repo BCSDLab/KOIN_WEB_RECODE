@@ -8,8 +8,10 @@ import { useExcelUpload } from 'pages/GraduationCalculatorPage/hooks/useExcelUpl
 import styles from './ExcelUploader.module.scss';
 
 function ExcelUploader() {
-  const { handleFileUpload } = useExcelUpload();
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
+  const {
+    handleFileUpload, handleDrop, handleDragOver,
+  } = useExcelUpload();
 
   return (
     <div className={styles['excel-uploader']}>
@@ -20,7 +22,11 @@ function ExcelUploader() {
       >
         <QuestionMarkIcon />
       </button>
-      <label className={styles['excel-uploader__button']}>
+      <label
+        className={styles['excel-uploader__button']}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+      >
         <UploadIcon />
         <span>엑셀파일 추가하기</span>
         <input
