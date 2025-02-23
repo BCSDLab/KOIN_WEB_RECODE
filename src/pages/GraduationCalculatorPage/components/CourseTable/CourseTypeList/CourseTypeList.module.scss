@@ -2,6 +2,7 @@
 
 .select {
   position: relative;
+
   &__trigger {
     display: flex;
     width: 105px;
@@ -57,7 +58,7 @@
   &__option {
     width: 105px;
     display: flex;
-    padding: 0px 8px;
+    padding: 0 8px;
     align-items: center;
     gap: 4px;
     align-self: stretch;
