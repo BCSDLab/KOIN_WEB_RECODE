@@ -99,32 +99,28 @@ export default function LostItemDetailPage() {
           )}
           <div className={styles['button-container']}>
             {isMobile && (
-            <div className={styles['button-container__left']}>
               <button
-                className={styles.contents__button}
+                className={styles['button-container__list-button']}
                 onClick={() => navigate(ROUTES.Articles())}
                 type="button"
               >
                 목록
               </button>
-            </div>
             )}
             {isMyArticle ? (
-              <div className={styles['button-container__right']}>
-                <button
-                  className={styles['button-container__delete']}
-                  onClick={handleDeleteButtonClick}
-                  type="button"
-                >
-                  삭제
-                  <GarbageCanIcon />
-                </button>
-              </div>
+              <button
+                className={styles['button-container__delete-button']}
+                onClick={handleDeleteButtonClick}
+                type="button"
+              >
+                삭제
+                <GarbageCanIcon />
+              </button>
             ) : (
-              <div className={styles['button-container__right']}>
+              <div className={styles['button-container__buttons']}>
                 <button
                   type="button"
-                  className={styles.contents__button}
+                  className={styles['button-container__message-button']}
                   onClick={async () => {
                     const chatroomInfo = await searchChatroom(articleId);
                     navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
@@ -134,7 +130,7 @@ export default function LostItemDetailPage() {
                   <div>쪽지 보내기</div>
                 </button>
                 <button
-                  className={styles['button-container__report']}
+                  className={styles['button-container__report-button']}
                   type="button"
                   onClick={handleReportClick}
                 >
