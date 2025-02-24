@@ -4,6 +4,6 @@ import {
   GraduationExcelUpload,
 } from './APIDetail';
 
-export const calculateGraduationCredits = APIClient.of(GraduationAgreement);
+export const agreegraduationCredits = APIClient.of(GraduationAgreement);
 
 export const uploadGraduationExcel = APIClient.of(GraduationExcelUpload);
