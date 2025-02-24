@@ -7,7 +7,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './Selector.module.scss';
 
 type SelectorType = 'delete' | 'setting' | 'default';
-// type SelectorVersion = 'default' | 'inSignup' | 'inTimetable';
+type SelectorVersion = 'default' | 'inSignup' | 'inTimetable';
 
 interface OptionList {
   label: string;
@@ -17,7 +17,7 @@ interface SelectorProps {
   options: OptionList[];
   value: string | null;
   type: SelectorType;
-  // version?: SelectorVersion;
+  version?: SelectorVersion;
   placeholder?: string;
   disabled?: boolean;
   onChange: (value: string) => void;
@@ -29,7 +29,7 @@ export function Selector({
   options,
   value,
   type = 'default',
-  // version = 'default',
+  version = 'inSignup',
   placeholder = '선택해주세요.',
   disabled = false,
   onChange,
@@ -73,6 +73,7 @@ export function Selector({
         className={cn({
           [styles.select__trigger]: true,
           [styles['select__trigger--opened']]: isOpen,
+          [styles['select__trigger--in-signup']]: version === 'inSignup',
         })}
         disabled={disabled}
       >
@@ -86,16 +87,20 @@ export function Selector({
             [styles['select__contents-list']]: true,
             [styles['select__contents-list--up']]: isOverHalf,
             [styles['select__contents-list--visible']]: isOpen,
+            // [styles['select__contents-list--in-signup']]: version === 'inSignup',
           })}
           role="listbox"
         >
           {options.map((option) => (
             <li
-              className={styles.select__content}
-              key={option.value}
+              // tabIndex={0}
               role="option"
+              key={option.value}
+              className={cn({
+                [styles.select__content]: true,
+                [styles['select__content--in-signup']]: version === 'inSignup',
+              })}
               aria-selected={option.value === value}
-              tabIndex={0}
               onClick={() => handleOptionClick(option.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -104,7 +109,7 @@ export function Selector({
                 }
               }}
             >
-              <span>{option.label}</span>
+              {option.label}
               {type === 'delete' && (
                 <button
                   type="button"
