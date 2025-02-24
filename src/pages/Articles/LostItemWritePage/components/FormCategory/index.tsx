@@ -14,10 +14,10 @@ interface FormCategoryProps {
 export default function FormCategory({
   category, setCategory, isCategorySelected,
 }: FormCategoryProps) {
-  const { logFindUserCategory } = useArticlesLogger();
+  const { logLostItemCategory } = useArticlesLogger();
 
   const handleCategoryClick = (item: FindUserCategory) => {
-    logFindUserCategory(item);
+    logLostItemCategory(item);
     setCategory(item);
   };
 

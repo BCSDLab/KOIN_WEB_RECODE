@@ -11,6 +11,7 @@ import ROUTES from 'static/routes';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useEffect } from 'react';
+import showToast from 'utils/ts/showToast';
 import styles from './LostItemWritePage.module.scss';
 
 const getyyyyMMdd = (date: Date) => {
@@ -64,16 +65,21 @@ export default function LostItemWritePage() {
   }, [user?.name, lostItems, lostItemHandler]);
 
   const { status, mutateAsync: postLostItem } = usePostLostItemArticles();
-  const { logFindUserAddItemClick, logFindUserWriteConfirmClick } = useArticlesLogger();
+  const { logLostItemAddItemClick, logLostItemWriteConfirmClick } = useArticlesLogger();
 
   const handleItemAddClick = () => {
-    logFindUserAddItemClick();
+    logLostItemAddItemClick();
     addLostItem();
   };
 
   const handleCompleteClick = async () => {
-    logFindUserWriteConfirmClick();
+    logLostItemWriteConfirmClick();
     validateAndUpdateItems();
+
+    if (lostItems.length === 0) {
+      showToast('error', '물품을 추가해주세요.');
+      return;
+    }
 
     if (!checkArticleFormFull()) return;
 
