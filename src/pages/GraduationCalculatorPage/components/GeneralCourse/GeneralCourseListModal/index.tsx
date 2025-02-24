@@ -5,11 +5,13 @@ import styles from './GeneralCourseListModal.module.scss';
 
 export interface GeneralCourseListModalProps {
   frameId: number;
+  courseType: string | null;
   onClose: () => void;
 }
 
 function GeneralCourseListModal({
   frameId,
+  courseType,
   onClose,
 }: GeneralCourseListModalProps) {
   return (
@@ -26,10 +28,13 @@ function GeneralCourseListModal({
             <CloseIcon />
           </button>
         </div>
-        <SemesterList />
+        <SemesterList isViewMode />
         <div className={styles.content}>
-          <p className={styles.content__label}>강의 영역 이름</p>
-          <SemesterCourseTable frameId={frameId} isViewMode />
+          <p className={styles.content__label}>{courseType}</p>
+          <SemesterCourseTable
+            frameId={frameId}
+            isViewMode
+          />
         </div>
       </div>
     </div>

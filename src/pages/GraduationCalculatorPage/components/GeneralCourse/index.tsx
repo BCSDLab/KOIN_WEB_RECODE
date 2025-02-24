@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import { useState } from 'react';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useGeneralEducation from 'pages/GraduationCalculatorPage/hooks/useGeneralEducation';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
@@ -16,6 +17,12 @@ function GeneralCourse({ frameId }: { frameId: number }) {
   const token = useTokenState();
   const { generalEducation } = useGeneralEducation(token);
   const requiredEducationArea = generalEducation.required_education_area;
+  const [selectedCourseType, setSelectedCourseType] = useState<string | null>(null);
+
+  const handleOpenModal = (courseType: string) => {
+    setSelectedCourseType(courseType);
+    openModal();
+  };
 
   return (
     <div className={styles['general-course']}>
@@ -35,7 +42,7 @@ function GeneralCourse({ frameId }: { frameId: number }) {
           <div key={track.courseType} className={styles.course}>
             <button
               type="button"
-              onClick={openModal}
+              onClick={() => handleOpenModal(track.courseType)}
               className={styles.course__button}
             >
               { track.isCompleted ? <CompletedIcon /> : <NotCompletedIcon /> }
@@ -69,6 +76,7 @@ function GeneralCourse({ frameId }: { frameId: number }) {
       {isModalOpen && (
         <GeneralCourseListModal
           frameId={frameId}
+          courseType={selectedCourseType}
           onClose={closeModal}
         />
       )}
