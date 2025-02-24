@@ -1,17 +1,15 @@
 import Listbox, { ListboxRef } from 'components/TimetablePage/Listbox';
 import { useEffect, useState } from 'react';
 import { useUser } from 'utils/hooks/state/useUser';
-import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
 import useDepartmentMajorList from 'pages/GraduationCalculatorPage/hooks/useDepartmentMajorList';
-import useRemainingCredits from 'pages/GraduationCalculatorPage/hooks/useRemainingCredits';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useUpdateAcademicInfo from 'pages/GraduationCalculatorPage/hooks/useUpdateAcademicInfo';
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {
   const token = useTokenState();
   const { data: userInfo } = useUser();
   const { data: deptMajorList } = useDepartmentMajorList();
-  const { mutate: calculateRemainingCredits } = useRemainingCredits(token);
 
   const [
     studentNumber, setStudentNumber,
@@ -19,7 +17,7 @@ function StudentForm() {
   const [
     department, setDepartment,
   ] = useState<string>(userInfo?.major ?? '');
-  const [major, setMajor] = useState<string | null>(null);
+  const [major, setMajor] = useState<string>();
   const [majorOptionList, setMajorOptionList] = useState<{ label: string, value: string }[]>([{ label: '', value: '' }]);
 
   const departmentOptionList = deptMajorList.map(
@@ -45,21 +43,15 @@ function StudentForm() {
     handleMajor(target.value);
   };
 
-  const onSuccess = () => {
-    calculateRemainingCredits();
-    // 그래프 학점 이수 구분 변경
-    // 이수 교양 영역 변경
-  };
-
-  const { mutate: updateUserInfo } = useUserInfoUpdate({ onSuccess });
+  const { mutate: updateAcademicInfo } = useUpdateAcademicInfo(token);
 
   const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    updateUserInfo({
-      ...userInfo,
-      major: department,
+    updateAcademicInfo({
       student_number: studentNumber,
+      department,
+      major,
     });
   };
 
@@ -101,7 +93,7 @@ function StudentForm() {
         <div className={styles['student-form__major']}>
           <Listbox
             list={majorOptionList}
-            value={major}
+            value={major ?? null}
             onChange={({ target }) => setMajor(target.value)}
             version="new"
           />

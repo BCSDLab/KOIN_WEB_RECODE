@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { useUser } from 'utils/hooks/state/useUser';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
 import CourseTable from './components/CourseTable';
@@ -13,14 +14,17 @@ import ExcelUploader from './components/ExcelUploader';
 import GeneralCourse from './components/GeneralCourse';
 import CreditChart from './components/CreditChart';
 import CalculatorHelpModal from './CalculatorHelpModal';
+import useAgreeGraduationCreidts from './hooks/useAgreeGraduationCreidts';
 
 function GraduationCalculatorPage() {
   const token = useTokenState();
+  const { data: userInfo } = useUser();
   const semester = useSemester();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const mainFrame = timetableFrameList.find(
     (frame) => frame.is_main === true,
   );
+  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token, String(userInfo?.id));
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const portalManager = useModalPortal();
   const handleInformationClick = () => {
@@ -28,6 +32,15 @@ function GraduationCalculatorPage() {
       <CalculatorHelpModal closeInfo={portalManager.close} />
     ));
   };
+
+  useEffect(() => {
+    const isFirstAgree = localStorage.getItem('agreeGraduationCredits');
+
+    if (Number(isFirstAgree) === userInfo?.id) return;
+
+    agreeGraduationCreidts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.page}>
