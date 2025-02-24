@@ -22,6 +22,7 @@ export default function useEditTimetableLectureRegular() {
         [TIMETABLE_INFO_LIST, variables.frameId],
         data,
       );
+      queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
       showToast('success', '강의 수정이 되었습니다.');
     },
     onError: (error) => {
