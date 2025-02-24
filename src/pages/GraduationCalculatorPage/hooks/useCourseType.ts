@@ -1,10 +1,21 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-// import { graduationCalculator } from 'api';
+import { graduationCalculator } from 'api';
+import { Semester } from 'api/graduationCalculator/entity';
 
-const useCourseType = () => {
+const useCourseType = (
+  token: string,
+  semester: Semester,
+  name: string,
+  generalEducationArea: string | undefined,
+) => {
   const { data } = useSuspenseQuery({
-    queryKey: ['courseType'],
-    // queryFn: graduationCalculator.getCourseType,
+    queryKey: ['courseType', semester, name, generalEducationArea],
+    queryFn: () => graduationCalculator.getCourseType(
+      token,
+      semester,
+      name,
+      generalEducationArea,
+    ),
   });
 
   return { data };

@@ -3,7 +3,7 @@ import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
   GraduationAgree,
   GeneralEducationResponse,
-  CourseTypeRequest,
+  Semester,
   CourseTypeResponse,
 } from './entity';
 
@@ -42,8 +42,11 @@ export class CourseType<R extends CourseTypeResponse> implements APIRequest<R> {
 
   constructor(
     public authorization: string,
-    public data: CourseTypeRequest,
+    public semester: Semester,
+    public name: string,
+    public general_education_area: string | undefined,
   ) {
-    this.path = `/graduation/course-type?year=${data.year}&term=${data.term}&name=${data.name}`;
+    this.path = `/graduation/course-type?year=${semester.year}&term=${semester.term}&name=${name}`
+    + `${general_education_area ? `&general_education_area=${general_education_area}` : ''}`;
   }
 }

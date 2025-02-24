@@ -33,6 +33,7 @@ function GeneralCourseListModal({
           <p className={styles.content__label}>{courseType}</p>
           <SemesterCourseTable
             frameId={frameId}
+            courseType={courseType}
             isViewMode
           />
         </div>

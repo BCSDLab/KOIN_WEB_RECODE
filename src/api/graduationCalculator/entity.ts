@@ -12,21 +12,20 @@ export interface GeneralEducationResponse extends APIResponse {
   required_education_area: RequiredEducationArea[];
 }
 
-export interface CourseTypeRequest {
+export interface Semester {
   year: number;
   term: string;
-  name: string;
-  generalAreaName?: string;
 }
 
-export interface Lecture {
+export interface LectureInfo {
   id: number;
   code: string;
   name: string;
   grades: string;
   department: string;
 }
+
 export interface CourseTypeResponse extends APIResponse {
   semester: string;
-  lectures: Lecture[];
+  lectures: LectureInfo[];
 }
