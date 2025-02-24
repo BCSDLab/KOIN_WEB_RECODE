@@ -157,7 +157,13 @@ function SemesterList() {
 
       {isOpenSemesterList && (
         <div className={styles.select__content}>
-          <ul className={styles['select__content--list']} role="listbox">
+          <ul
+            className={cn({
+              [styles['select__content--list']]: true,
+              [styles['select__content--graduation']]: isGraduationCalculatorMode,
+            })}
+            role="listbox"
+          >
             {semesterOptionList.map((optionValue) => (
               <button
                 type="button"
