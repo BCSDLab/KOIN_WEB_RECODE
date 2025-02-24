@@ -7,7 +7,10 @@ export default function useAgreeGraduationCreidts(token: string) {
   return useMutation({
     mutationFn: () => graduationCalculator.agreegraduationCredits(token),
 
-    onSuccess: () => {},
+    onSuccess: () => {
+      // 이수 교양 강의 조회 api 추가
+      // 이수구분별 학점 조회 api 추가
+    },
 
     onError: (error) => {
       if (isKoinError(error)) {
