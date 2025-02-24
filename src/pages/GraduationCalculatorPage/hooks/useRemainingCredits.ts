@@ -5,7 +5,7 @@ import showToast from 'utils/ts/showToast';
 
 export default function useRemainingCredits(token: string) {
   return useMutation({
-    mutationFn: () => graduationCalculator.calculateGraduationCredits(token),
+    mutationFn: () => graduationCalculator.agreeGraduationCredits(token),
 
     onSuccess: () => {},
 
