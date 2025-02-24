@@ -6,7 +6,7 @@ import showToast from 'utils/ts/showToast';
 export default function useAgreeGraduationCreidts(token: string, userId: string) {
   const agreeGraduationCredits = localStorage.getItem('agreeGraduationCredits');
   return useMutation({
-    mutationFn: () => graduationCalculator.agreegraduationCredits(token),
+    mutationFn: () => graduationCalculator.agreeGraduationCredits(token),
 
     onSuccess: () => {
       localStorage.setItem('agreeGraduationCredits', userId);

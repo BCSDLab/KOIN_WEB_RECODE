@@ -2,8 +2,10 @@ import { GraduationExcelUploadForPost } from 'pages/GraduationCalculatorPage/ts/
 import { DragEvent } from 'react';
 import usePostGraduationExcel from 'pages/GraduationCalculatorPage/hooks/usePostGraduationExcel';
 import showToast from 'utils/ts/showToast';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function useExcelUpload() {
+  const queryClient = useQueryClient();
   const { mutate } = usePostGraduationExcel();
 
   const handleFile = (file: File) => {
@@ -12,6 +14,7 @@ export function useExcelUpload() {
 
     mutate(formData as unknown as GraduationExcelUploadForPost, {
       onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
         showToast('success', '엑셀 파일이 성공적으로 업로드되었습니다.');
       },
       onError: () => {
