@@ -7,7 +7,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './Selector.module.scss';
 
 type SelectorType = 'delete' | 'setting' | 'default';
-type SelectorVersion = 'default' | 'inSignup' | 'inTimetable' | 'inModify';
+type SelectorVersion = 'default' | 'inSignup' | 'inModal' | 'inModify';
 
 interface OptionList {
   label: string;
@@ -45,7 +45,6 @@ export function Selector({
   };
 
   const handleOptionClick = (optionValue: string) => {
-    // onChange(optionValue);
     onChange({ target: { value: optionValue } });
     setFalse();
   };
@@ -77,6 +76,7 @@ export function Selector({
           [styles['select__trigger--opened']]: isOpen,
           [styles['select__trigger--in-signup']]: version === 'inSignup',
           [styles['select__trigger--in-modify']]: version === 'inModify',
+          [styles['select__trigger--in-modal']]: version === 'inModal',
         })}
         disabled={disabled}
       >

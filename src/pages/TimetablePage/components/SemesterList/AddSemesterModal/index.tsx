@@ -1,13 +1,13 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
-import Listbox from 'components/TimetablePage/Listbox';
 import {
   AddTimetableFrameRequest, SemesterCheckResponse, Term, TimetableFrameListResponse,
 } from 'api/timetable/entity';
 import showToast from 'utils/ts/showToast';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { Selector } from 'components/common/Selector';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {
@@ -84,8 +84,18 @@ export default function AddSemesterModal({
           </div>
         </header>
         <div className={styles.container__semester}>
-          <Listbox list={years} value={yearValue} onChange={onChangeYear} version="inModal" />
-          <Listbox list={semester} value={semesterValue} onChange={onChangeSemester} version="inModal" />
+          <Selector
+            options={years}
+            value={yearValue}
+            onChange={onChangeYear}
+            version="inModal"
+          />
+          <Selector
+            options={semester}
+            value={semesterValue}
+            onChange={onChangeSemester}
+            version="inModal"
+          />
         </div>
         <div className={styles.container__button}>
           <button

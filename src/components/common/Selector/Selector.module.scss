@@ -27,18 +27,15 @@
     }
   }
 
-  &:hover {
-    background-color: #eee;
-  }
-
-  &:active {
-    background-color: #e1e1e1;
-  }
+  // &:active {
+  //   background-color: #e1e1e1;
+  // }
 
   &__trigger {
     position: relative;
     width: 100%;
     height: 48px;
+    justify-items: center;
     padding: 12px 20px;
     border-radius: 5px;
     border: none;
@@ -63,10 +60,8 @@
     }
 
     &--in-signup {
-      height: 44px;
       border: 1px solid #d8d8d8;
       border-radius: 0px;
-
       font-size: 16px;
       color: #858585;
     }
@@ -76,6 +71,16 @@
       border: none;
       background-color: #fafafa;
       box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.04);;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 21.48px;
+      color: #000;
+    }
+
+    &--in-modal {
+      height: 48px;
+      border: 1px solid #eee;
+      background-color: #fff;
       font-size: 16px;
       font-weight: 400;
       line-height: 21.48px;
@@ -99,7 +104,6 @@
     
     &--up {
       top: auto;
-      bottom: 100%;
       transform: translateY(-100px);
       opacity: 0;
     }
