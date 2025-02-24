@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
@@ -13,6 +13,7 @@ import ExcelUploader from './components/ExcelUploader';
 import GeneralCourse from './components/GeneralCourse';
 import CreditChart from './components/CreditChart';
 import CalculatorHelpModal from './CalculatorHelpModal';
+import useAgreeGraduationCreidts from './hooks/useAgreeGraduationCreidts';
 
 function GraduationCalculatorPage() {
   const token = useTokenState();
@@ -21,6 +22,7 @@ function GraduationCalculatorPage() {
   const mainFrame = timetableFrameList.find(
     (frame) => frame.is_main === true,
   );
+  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token);
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const portalManager = useModalPortal();
   const handleInformationClick = () => {
@@ -28,6 +30,16 @@ function GraduationCalculatorPage() {
       <CalculatorHelpModal closeInfo={portalManager.close} />
     ));
   };
+
+  useEffect(() => {
+    const isFirstAgree = localStorage.getItem('agreeGraduationCredits');
+
+    if (isFirstAgree) return;
+
+    localStorage.setItem('agreeGraduationCredits', 'true');
+    agreeGraduationCreidts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.page}>
