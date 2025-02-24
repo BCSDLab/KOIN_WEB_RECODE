@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 21;
 }
 
 .container {
@@ -22,7 +22,6 @@
   flex-direction: column;
   gap: 36px;
   background-color: #fff;
-  z-index: 2;
 
   &__title {
     display: flex;
