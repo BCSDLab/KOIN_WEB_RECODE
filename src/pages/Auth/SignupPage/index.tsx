@@ -5,12 +5,9 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-// import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
-// import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import Listbox from 'components/TimetablePage/Listbox';
 import ROUTES from 'static/routes';
 import { Selector } from 'components/common/Selector';
 import styles from './SignupPage.module.scss';
@@ -387,7 +384,8 @@ const useSignupForm = () => {
   return { submitForm, status };
 };
 
-const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
+const MajorInput = React.forwardRef<
+ICustomFormInput, ICustomFormInputProps>((props, ref) => {
   const [studentNumber, setStudentNumber] = React.useState<string>('');
   const { data: deptList } = useDeptList();
   const deptOptionList = deptList.map((dept) => ({
@@ -428,11 +426,14 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
         onChange={onChangeMajorInput}
         {...props}
       />
-      <div className={styles['form-input__select']}>
-        <Listbox
-          list={deptOptionList}
+      <div className={styles['form-input__select']} style={{ marginLeft: 6 }}>
+        <Selector
+          options={deptOptionList}
           value={major}
-          onChange={({ target }) => setMajor(target.value)}
+          // onChange={setMajor}
+          onChange={(event) => setMajor(event.target.value)}
+          placeholder="학과 (선택)"
+          type="default"
         />
       </div>
     </>
@@ -440,10 +441,10 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
 });
 
 const GenderSelectorWithRef = forwardRef((
-  { options }: { options: { label: string; value: number }[] },
+  { options }: { options: { label: string; value:string }[] },
   ref,
 ) => {
-  const [selectedValue, setSelectedValue] = useState<number | null>(null);
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
   useImperativeHandle(ref, () => ({
     value: selectedValue,
@@ -453,8 +454,9 @@ const GenderSelectorWithRef = forwardRef((
   return (
     <Selector
       options={options}
-      value={selectedValue}
-      onChange={setSelectedValue}
+      value={String(selectedValue)}
+      // onChange={setSelectedValue}
+      onChange={(event) => setSelectedValue(event.target.value)}
       placeholder="성별 (선택)"
       type="default"
     />
@@ -534,8 +536,8 @@ function SignupDefaultPage() {
             },
           })}
         />
-        <div style={{ width: 192, fontSize: 16 }}>
-          <GenderSelectorWithRef {...register('gender')} options={[{ label: '남', value: 0 }, { label: '여', value: 1 }]} />
+        <div className={styles['signup__gender-container']}>
+          <GenderSelectorWithRef {...register('gender')} options={[{ label: '남', value: '0' }, { label: '여', value: '1' }]} />
         </div>
         <button
           type="submit"

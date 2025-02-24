@@ -379,7 +379,6 @@
 
     ul {
       width: 98.5%;
-      top: 50px;
       border: 1px solid #cacaca;
       border-radius: 5px;
       max-height: 288px;
@@ -395,7 +394,7 @@
 
     &--reverse {
       ul {
-        top: inherit;
+        top: inherit; 
         bottom: 50px;
       }
     }
