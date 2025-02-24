@@ -6,6 +6,7 @@ import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameLi
 import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { useUser } from 'utils/hooks/state/useUser';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
 import CourseTable from './components/CourseTable';
@@ -17,12 +18,13 @@ import useAgreeGraduationCreidts from './hooks/useAgreeGraduationCreidts';
 
 function GraduationCalculatorPage() {
   const token = useTokenState();
+  const { data: userInfo } = useUser();
   const semester = useSemester();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const mainFrame = timetableFrameList.find(
     (frame) => frame.is_main === true,
   );
-  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token);
+  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token, String(userInfo?.id));
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const portalManager = useModalPortal();
   const handleInformationClick = () => {
@@ -34,9 +36,8 @@ function GraduationCalculatorPage() {
   useEffect(() => {
     const isFirstAgree = localStorage.getItem('agreeGraduationCredits');
 
-    if (isFirstAgree) return;
+    if (Number(isFirstAgree) === userInfo?.id) return;
 
-    localStorage.setItem('agreeGraduationCredits', 'true');
     agreeGraduationCreidts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
