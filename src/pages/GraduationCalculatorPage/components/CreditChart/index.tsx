@@ -5,6 +5,7 @@ import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useCalculateCredits from 'pages/GraduationCalculatorPage/hooks/useCalculateCredits';
+import { GradesByCourseType } from 'api/graduationCalculator/entity';
 import styles from './CreditChart.module.scss';
 import SemesterLectureListModal from './SemesterLectureListModal';
 
@@ -20,11 +21,11 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
   const myLectures = useMyLectures(currentFrameIndex);
   const token = useTokenState();
   const { data: calculateCredits } = useCalculateCredits(token);
-  const [creditState, setCreditState] = useState<typeof calculateCredits.course_types>([]);
+  const [creditState, setCreditState] = useState<GradesByCourseType[]>([]);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const barsNumber = creditState.length;
 
-  const updateValues = (newValues: typeof calculateCredits.course_types) => {
+  const updateValues = (newValues: GradesByCourseType[]) => {
     setCreditState(newValues);
   };
 
@@ -34,8 +35,10 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
   };
 
   useEffect(() => {
-    const result = calculateCredits.course_types;
-    updateValues(result);
+    if (calculateCredits) {
+      const result = calculateCredits.course_types;
+      updateValues(result);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myLectures]);
 
