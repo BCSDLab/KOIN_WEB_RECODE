@@ -13,6 +13,8 @@ import {
   DeleteResponse,
   CheckPasswordResponse,
   CheckPasswordRequest,
+  UpdateAcademicInfoResponse,
+  UpdateAcademicInfoRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -132,4 +134,16 @@ export class CheckPassword<R extends CheckPasswordResponse> implements APIReques
   constructor(public authorization: string, data: CheckPasswordRequest) {
     this.data = data;
   }
+}
+
+export class UpdateAcademicInfo<R extends UpdateAcademicInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = 'user/student/academic-info';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string, public data: UpdateAcademicInfoRequest) { }
 }

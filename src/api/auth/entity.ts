@@ -78,3 +78,15 @@ export interface FindPasswordResponse extends APIResponse {
 }
 
 export interface CheckPasswordResponse extends APIResponse { }
+
+export interface UpdateAcademicInfoRequest extends APIResponse {
+  student_number: string;
+  department: string;
+  major?: string;
+}
+
+export interface UpdateAcademicInfoResponse extends APIResponse {
+  student_number: string;
+  department: string;
+  major: string | null;
+}
