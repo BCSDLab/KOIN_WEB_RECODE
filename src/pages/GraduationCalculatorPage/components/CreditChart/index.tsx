@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@bcsdlab/utils';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useCalculateCredits from 'pages/GraduationCalculatorPage/hooks/useCalculateCredits';
 import { GradesByCourseType } from 'api/graduationCalculator/entity';
 import styles from './CreditChart.module.scss';
-import SemesterLectureListModal from './SemesterLectureListModal';
 
 const barStyles = (barsNumber: number) => {
   if (barsNumber === 7) return { width: '75px', gap: '45px' };
@@ -22,16 +20,10 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
   const token = useTokenState();
   const { data: calculateCredits } = useCalculateCredits(token);
   const [creditState, setCreditState] = useState<GradesByCourseType[]>([]);
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const barsNumber = creditState.length;
 
   const updateValues = (newValues: GradesByCourseType[]) => {
     setCreditState(newValues);
-  };
-
-  const openSemesterLectureListModal = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    openModal();
   };
 
   useEffect(() => {
@@ -69,7 +61,6 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               layout
-              onClick={openSemesterLectureListModal}
             >
               <div
                 style={{
@@ -103,13 +94,6 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
           ))}
         </AnimatePresence>
       </motion.div>
-      {
-        isModalOpen && (
-          <SemesterLectureListModal
-            onClose={closeModal}
-          />
-        )
-      }
     </div>
   );
 }
