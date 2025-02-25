@@ -7,7 +7,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './Selector.module.scss';
 
 type SelectorType = 'delete' | 'setting' | 'default';
-type SelectorVersion = 'default' | 'inSignup' | 'inModal' | 'inModify';
+type SelectorVersion = 'default' | 'inSignup' | 'inModal' | 'inModify' | 'inTimeTable';
 
 interface OptionList {
   label: string;
@@ -20,7 +20,6 @@ interface SelectorProps {
   version?: SelectorVersion;
   placeholder?: string;
   disabled?: boolean;
-  // onChange: React.Dispatch<React.SetStateAction<string | null>>;
   onChange: (event: { target: { value: string } }) => void;
   onDelete?: (value: string) => void;
   onSettingsClick?: (value: string) => void;
@@ -69,7 +68,6 @@ export function Selector({
     >
       <button
         type="button"
-        // tabIndex={0}
         onClick={onClickSelector}
         className={cn({
           [styles.select__trigger]: true,
@@ -77,6 +75,8 @@ export function Selector({
           [styles['select__trigger--in-signup']]: version === 'inSignup',
           [styles['select__trigger--in-modify']]: version === 'inModify',
           [styles['select__trigger--in-modal']]: version === 'inModal',
+          [styles['select__trigger--in-time-table-open']]: isOpen && version === 'inTimeTable',
+          [styles['select__trigger--in-time-table']]: version === 'inTimeTable',
         })}
         disabled={disabled}
       >
@@ -90,18 +90,18 @@ export function Selector({
             [styles['select__contents-list']]: true,
             [styles['select__contents-list--up']]: isOverHalf,
             [styles['select__contents-list--visible']]: isOpen,
-            // [styles['select__contents-list--in-signup']]: version === 'inSignup',
+            [styles['select__content-list--in-time-table']]: version === 'inTimeTable',
           })}
           role="listbox"
         >
           {options.map((option) => (
             <li
-              // tabIndex={0}
               role="option"
               key={option.value}
               className={cn({
                 [styles.select__content]: true,
                 [styles['select__content--in-signup']]: version === 'inSignup',
+                [styles['select__content--in-time-table']]: version === 'inTimeTable',
               })}
               aria-selected={option.value === value}
               onClick={() => handleOptionClick(option.value)}

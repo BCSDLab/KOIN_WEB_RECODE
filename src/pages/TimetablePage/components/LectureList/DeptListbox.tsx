@@ -1,5 +1,6 @@
 import React from 'react';
-import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
+import { ListboxProps } from 'components/TimetablePage/Listbox';
+import { Selector } from 'components/common/Selector';
 
 type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 
@@ -24,7 +25,13 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Listbox list={deptOptionList} value={value} onChange={onChange} version="new" />
+    <Selector
+      options={deptOptionList}
+      value={value}
+      onChange={onChange}
+      placeholder="전체"
+      version="inTimeTable"
+    />
   );
 }
 
