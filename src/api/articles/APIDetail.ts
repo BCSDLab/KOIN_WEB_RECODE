@@ -7,6 +7,10 @@ import {
   LostItemArticlesResponseDTO,
   LostItemResponse,
   LostItemArticlesRequestDTO,
+  LostItemArticlesPostResponseDTO,
+  ReportItemArticleRequestDTO,
+  ReportItemArticleResponseDTO,
+  ItemArticleRequestDTO,
   LostItemChatroomPostResponse,
   LostItemChatroomListResponse,
   LostItemChatroomDetailResponse,
@@ -20,7 +24,9 @@ export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(page: string | undefined) {
+  auth = true;
+
+  constructor(public authorization: string, page: string | undefined) {
     this.path = `/articles?page=${page}&limit=10`;
   }
 }
@@ -48,13 +54,19 @@ export class GetHotArticles<R extends HotArticlesResponse> implements APIRequest
 export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path = '/articles/lost-item';
+  path: string;
 
   response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string, public data: ItemArticleRequestDTO) {
+    this.path = '/articles/lost-item';
+  }
 }
 
-export class GetSingleLostItemArticle<R
-extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
+export class GetSingleLostItemArticle<
+  R extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -66,7 +78,8 @@ extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
   }
 }
 
-export class PostLostItemArticles<R extends LostItemResponse> implements APIRequest<R> {
+export class PostLostItemArticles<
+  R extends LostItemArticlesPostResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/articles/lost-item';
@@ -92,8 +105,22 @@ export class DeleteLostItemArticle<R extends LostItemResponse> implements APIReq
   }
 }
 
-export class PostLostItemChatroom<R extends LostItemChatroomPostResponse>
-implements APIRequest<R> {
+export class PostReportLostItemArticle<
+  R extends ReportItemArticleResponseDTO> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true; // 인증 필요
+
+  constructor(public authorization: string, id: number, public data: ReportItemArticleRequestDTO) {
+    this.path = `/articles/lost-item/${id}/reports`;
+  }
+}
+export class PostLostItemChatroom<
+  R extends LostItemChatroomPostResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;
@@ -107,8 +134,8 @@ implements APIRequest<R> {
   }
 }
 
-export class GetLostItemChatroomList<R extends LostItemChatroomListResponse>
-implements APIRequest<R> {
+export class GetLostItemChatroomList<
+  R extends LostItemChatroomListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/chatroom/lost-item';
@@ -120,8 +147,8 @@ implements APIRequest<R> {
   constructor(public authorization: string) { }
 }
 
-export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse>
-implements APIRequest<R> {
+export class GetLostItemChatroomDetail<
+  R extends LostItemChatroomDetailResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -135,8 +162,8 @@ implements APIRequest<R> {
   }
 }
 
-export class GetLostItemChatroomDetailMessages<R extends LostItemChatroomDetailMessagesResponse>
-implements APIRequest<R> {
+export class GetLostItemChatroomDetailMessages<
+  R extends LostItemChatroomDetailMessagesResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;

@@ -2,11 +2,15 @@ import { useState } from 'react';
 import { FindUserCategory } from './useArticlesLogger';
 
 export interface LostItem {
+  type: 'FOUND' | 'LOST';
   category: FindUserCategory | '';
   foundDate: Date;
   foundPlace: string;
   content: string;
+  author: string;
   images: Array<string>;
+  registered_at: string;
+  updated_at: string;
   hasDateBeenSelected: boolean;
   isCategorySelected: boolean;
   isDateSelected: boolean;
@@ -14,10 +18,12 @@ export interface LostItem {
 }
 
 export interface LostItemHandler {
+  setType: (type: 'FOUND' | 'LOST') => void;
   setCategory: (category: FindUserCategory) => void;
   setFoundDate: (date: Date) => void;
   setFoundPlace: (foundPlace: string) => void;
   setContent: (content: string) => void;
+  setAuthor: (author: string) => void;
   setImages: (image: Array<string>) => void;
   setHasDateBeenSelected: () => void;
   checkIsCategorySelected: () => void;
@@ -26,21 +32,34 @@ export interface LostItemHandler {
 }
 
 const initialForm: LostItem = {
+  type: 'FOUND',
   category: '',
   foundDate: new Date(),
   foundPlace: '',
   content: '',
+  author: '',
   images: [],
+  registered_at: '',
+  updated_at: '',
   hasDateBeenSelected: false,
   isCategorySelected: true,
   isDateSelected: true,
   isFoundPlaceSelected: true,
 };
 
-export const useLostItemForm = () => {
-  const [lostItems, setLostItems] = useState<Array<LostItem>>([{ ...initialForm }]);
+export const useLostItemForm = (defaultType: 'FOUND' | 'LOST') => {
+  const [lostItems, setLostItems] = useState<Array<LostItem>>(
+    [{ ...initialForm, type: defaultType }],
+  );
 
   const lostItemHandler = (key: number) => ({
+    setType: (type: 'FOUND' | 'LOST') => {
+      setLostItems((prev) => {
+        const newLostItems = [...prev];
+        newLostItems[key].type = type;
+        return newLostItems;
+      });
+    },
     setCategory: (category: FindUserCategory) => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
@@ -66,6 +85,15 @@ export const useLostItemForm = () => {
       setLostItems((prev) => {
         const newLostItems = [...prev];
         newLostItems[key].content = content;
+        return newLostItems;
+      });
+    },
+    setAuthor: (author: string) => {
+      setLostItems((prev) => {
+        const newLostItems = [...prev];
+        if (newLostItems[key].author !== author) {
+          newLostItems[key].author = author;
+        }
         return newLostItems;
       });
     },
@@ -117,10 +145,13 @@ export const useLostItemForm = () => {
   const isItemValid = (item: LostItem) => (
     item.category.trim() !== ''
     && item.hasDateBeenSelected
-    && item.foundPlace.trim() !== ''
+    && (item.type === 'LOST' || item.foundPlace.trim() !== '')
   );
 
-  const checkArticleFormFull = () => lostItems.every(isItemValid);
+  const checkArticleFormFull = () => {
+    const isValid = lostItems.every(isItemValid);
+    return isValid;
+  };
 
   const validateAndUpdateItems = () => {
     setLostItems((prev) => prev.map((item) => ({

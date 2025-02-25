@@ -1,15 +1,20 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { articles as articlesApi } from 'api/index';
 import { PaginationInfo } from 'api/articles/entity';
+import useTokenState from 'utils/hooks/state/useTokenState';
 
 const useArticles = (page = '1') => {
+  const token = useTokenState();
+
   const { data: articleData } = useSuspenseQuery(
     {
       queryKey: ['articles', page],
       queryFn: async () => {
+        // if (!token) throw new Error('🚨 로그인 토큰이 필요합니다.');
+
         const queryFnParams = page;
 
-        return articlesApi.getArticles(queryFnParams);
+        return articlesApi.getArticles(token, queryFnParams);
       },
       select: (data) => {
         const {

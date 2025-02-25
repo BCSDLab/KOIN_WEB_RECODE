@@ -1,13 +1,17 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { articles } from 'api';
+import { ItemArticleRequestDTO } from 'api/articles/entity';
 import { transformLostItemArticles } from 'pages/Articles/utils/transform';
+import useTokenState from 'utils/hooks/state/useTokenState';
 
-const useLostItemArticles = () => {
+const useLostItemArticles = (data: ItemArticleRequestDTO) => {
+  const token = useTokenState();
+
   const { data: lostItemArticles } = useSuspenseQuery(
     {
-      queryKey: ['lostItem'],
+      queryKey: ['lostItem', data],
       queryFn: async () => {
-        const response = await articles.getLostItemArticles();
+        const response = await articles.getLostItemArticles(token, data);
         return transformLostItemArticles(response);
       },
     },

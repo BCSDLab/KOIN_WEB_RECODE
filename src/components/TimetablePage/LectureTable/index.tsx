@@ -13,7 +13,7 @@ import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {
   rowWidthList: number[];
-  frameId: number;
+  timetableFrameId: number;
   list: Array<Lecture> | Array<MyLectureInfo>;
   myLectures: Array<Lecture> | Array<MyLectureInfo>;
   selectedLecture: Lecture | undefined;
@@ -40,7 +40,7 @@ export const LECTURE_TABLE_HEADER = [
 
 function LectureTable({
   rowWidthList,
-  frameId,
+  timetableFrameId,
   list,
   myLectures,
   selectedLecture,
@@ -66,10 +66,10 @@ function LectureTable({
       return;
     }
 
-    navigate(`/timetable/modify/direct/${frameId}?lectureIndex=${lectureIndex}`);
+    navigate(`/timetable/modify/direct/${timetableFrameId}?lectureIndex=${lectureIndex}`);
   };
 
-  const { removeMyLecture } = useTimetableMutation(frameId);
+  const { removeMyLecture } = useTimetableMutation(timetableFrameId);
   const handleRemoveLectureClick = ({ id }: RemoveLectureProps) => {
     myLectures.forEach((lecture) => {
       if (lecture.id === id) {
