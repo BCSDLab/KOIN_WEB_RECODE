@@ -1,0 +1,12 @@
+@use "src/utils/scss/media" as media;
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 58px 32px;
+
+  @include media.media-breakpoint(mobile) {
+    padding: 14px;
+  }
+}

@@ -8,25 +8,25 @@ import styles from './ModifyTimetablePage.module.scss';
 export default function ModifyTimetablePage() {
   const isMobile = useMediaQuery();
   const { id } = useParams();
-  const frameId = id ? Number(id) : null;
+  const timetableFrameId = id ? Number(id) : null;
   const navigation = useNavigate();
 
   useEffect(() => {
-    if (frameId === null) {
+    if (timetableFrameId === null) {
       navigation('/timetable');
     }
-  }, [frameId, navigation]);
+  }, [timetableFrameId, navigation]);
 
-  if (frameId === null) {
+  if (timetableFrameId === null) {
     return null;
   }
 
   return (
     <div className={styles.page}>
       {!isMobile ? (
-        <DefaultPage frameId={frameId} />
+        <DefaultPage timetableFrameId={timetableFrameId} />
       ) : (
-        <MobilePage frameId={frameId} />
+        <MobilePage timetableFrameId={timetableFrameId} />
       )}
     </div>
   );

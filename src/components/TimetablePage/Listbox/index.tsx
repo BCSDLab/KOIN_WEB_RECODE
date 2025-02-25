@@ -17,7 +17,7 @@ export interface ListItem {
 }
 
 export interface ListboxProps {
-  list: ListItem[];
+  list: readonly ListItem[];
   value: string | null;
   onChange: (event: { target: ListboxRef }) => void;
   version?: 'default' | 'new' | 'inModal' | 'addLecture';

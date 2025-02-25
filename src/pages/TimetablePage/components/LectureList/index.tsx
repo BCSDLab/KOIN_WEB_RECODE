@@ -28,13 +28,13 @@ interface CurrentSemesterLectureListProps {
     search: string;
   };
   myLectures: Array<MyLectureInfo>;
-  frameId: number;
+  timetableFrameId: number;
 }
 
 interface MyLectureListBoxProps {
   rowWidthList: number[];
   myLectures: Array<MyLectureInfo>;
-  frameId: number;
+  timetableFrameId: number;
 }
 
 const useFlexibleWidth = (length: number, initialValue: number[]) => {
@@ -50,13 +50,13 @@ function CurrentSemesterLectureList({
   currentSemester,
   filter,
   myLectures,
-  frameId,
+  timetableFrameId,
 }: CurrentSemesterLectureListProps) {
   const tempLecture = useTempLecture();
   const { data: userInfo } = useUser();
   const { data: lectureList } = useLectureList(currentSemester);
   const { updateTempLecture } = useTempLectureAction();
-  const { addMyLecture } = useTimetableMutation(frameId);
+  const { addMyLecture } = useTimetableMutation(timetableFrameId);
 
   const isOverlapping = (selected: LectureInfo, existing: LectureInfo) => {
     if (selected.day !== existing.day) {
@@ -90,7 +90,7 @@ function CurrentSemesterLectureList({
     lectureList?.length !== 0 ? (
       <LectureTable
         rowWidthList={rowWidthList}
-        frameId={frameId}
+        timetableFrameId={timetableFrameId}
         list={(lectureList ?? []).filter((lecture) => {
           const searchFilter = filter.search.toUpperCase();
           const departmentFilter = filter.department;
@@ -167,12 +167,12 @@ function CurrentSemesterLectureList({
   );
 }
 
-function MyLectureListBox({ rowWidthList, myLectures, frameId }: MyLectureListBoxProps) {
+function MyLectureListBox({ rowWidthList, myLectures, timetableFrameId }: MyLectureListBoxProps) {
   return (
     myLectures.length !== 0 ? (
       <LectureTable
         rowWidthList={rowWidthList}
-        frameId={frameId}
+        timetableFrameId={timetableFrameId}
         list={myLectures}
         myLectures={myLectures}
         selectedLecture={undefined}
@@ -188,7 +188,7 @@ function MyLectureListBox({ rowWidthList, myLectures, frameId }: MyLectureListBo
   );
 }
 
-function LectureList({ frameId }: { frameId: number }) {
+function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
   const logger = useLogger();
 
   const {
@@ -205,7 +205,7 @@ function LectureList({ frameId }: { frameId: number }) {
   // 가장 최신연도와 월을 가져옴
   const semester = useSemester();
 
-  const { myLectures } = useMyLectures(frameId);
+  const { myLectures } = useMyLectures(timetableFrameId);
 
   const [isToggled, setIsToggled] = React.useState(false);
   const { widthInfo } = useFlexibleWidth(9, [61, 173, 41, 61, 61, 41, 41, 41, 61]);
@@ -279,7 +279,7 @@ function LectureList({ frameId }: { frameId: number }) {
           {!isToggled ? (
             <CurrentSemesterLectureList
               rowWidthList={widthInfo}
-              frameId={frameId}
+              timetableFrameId={timetableFrameId}
               currentSemester={semester}
               filter={{
                 // 백엔드 수정하면 제거
@@ -292,7 +292,7 @@ function LectureList({ frameId }: { frameId: number }) {
             <MyLectureListBox
               rowWidthList={widthInfo}
               myLectures={(myLectures ?? []) as MyLectureInfo[]}
-              frameId={frameId}
+              timetableFrameId={timetableFrameId}
             />
           )}
         </React.Suspense>

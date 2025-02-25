@@ -6,7 +6,7 @@
   border: none;
   border-radius: 16px;
   background-color: #fff;
-  padding: 62px 15px 72px;
+  padding: 62px 15px 42px;
 
   &__y-axis {
     display: flex;
@@ -42,7 +42,7 @@
   &__x-axis {
     position: absolute;
     display: flex;
-    bottom: 42px;
+    bottom: 12px;
     left: 66px;
     align-items: end;
 

@@ -1,17 +1,33 @@
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterList from 'pages/TimetablePage/components/SemesterList';
 import SemesterCourseTable from 'pages/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useSemester } from 'utils/zustand/semester';
+import useCourseType from 'pages/GraduationCalculatorPage/hooks/useCourseType';
 import styles from './GeneralCourseListModal.module.scss';
 
 export interface GeneralCourseListModalProps {
-  frameId: number;
+  courseType: string | null;
   onClose: () => void;
 }
 
 function GeneralCourseListModal({
-  frameId,
+  courseType,
   onClose,
 }: GeneralCourseListModalProps) {
+  const token = useTokenState();
+  const semester = useSemester();
+
+  const { data: generalCourses } = useCourseType(token, semester, '교양선택', courseType ?? undefined);
+  const generalCourseLectures = generalCourses?.lectures ?? [];
+
+  const tableData = generalCourseLectures.map((lecture) => [
+    <span key={`name-${lecture.id}`}>{lecture.name}</span>,
+    <span key={`professor-${lecture.id}`}>{ }</span>,
+    <span key={`grades-${lecture.id}`}>{lecture.grades}</span>,
+    <span key={`courseType-${lecture.id}`}>교양선택</span>,
+  ]);
+
   return (
     <div className={styles.background}>
       <div className={styles.container}>
@@ -26,10 +42,10 @@ function GeneralCourseListModal({
             <CloseIcon />
           </button>
         </div>
-        <SemesterList />
+        <SemesterList isViewMode />
         <div className={styles.content}>
-          <p className={styles.content__label}>강의 영역 이름</p>
-          <SemesterCourseTable frameId={frameId} isViewMode />
+          <p className={styles.content__label}>{courseType}</p>
+          <SemesterCourseTable tableData={tableData} />
         </div>
       </div>
     </div>

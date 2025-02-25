@@ -1,24 +1,28 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import { useState } from 'react';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useGeneralEducation from 'pages/GraduationCalculatorPage/hooks/useGeneralEducation';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
-import CourseStatusIcon from 'assets/svg/ellipse-icon.svg';
+import CompletedIcon from 'assets/svg/ellipse-icon-green.svg';
+import NotCompletedIcon from 'assets/svg/ellipse-icon-red.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import GeneralCourseListModal from './GeneralCourseListModal';
 import styles from './GeneralCourse.module.scss';
 
-function GeneralCourse({ frameId }: { frameId: number }) {
+function GeneralCourse() {
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const token = useTokenState();
+  const { generalEducation } = useGeneralEducation(token);
+  const requiredEducationArea = generalEducation.required_education_area;
+  const [selectedCourseType, setSelectedCourseType] = useState<string | null>(null);
 
-  const TRACKS = [
-    { id: 1, name: '교양 선택' },
-    { id: 2, name: '예술과 문학' },
-    { id: 3, name: '사회와 심리' },
-    { id: 4, name: '역사와 철학' },
-    { id: 5, name: '자연과 인간' },
-    { id: 6, name: '인성과 소양' },
-  ];
+  const handleOpenModal = (courseType: string) => {
+    setSelectedCourseType(courseType);
+    openModal();
+  };
 
   return (
     <div className={styles['general-course']}>
@@ -34,17 +38,17 @@ function GeneralCourse({ frameId }: { frameId: number }) {
         <QuestionMarkIcon />
       </button>
       <div className={styles.list}>
-        {TRACKS.map((track) => (
-          <div key={track.id} className={styles.course}>
+        {requiredEducationArea.map((track) => (
+          <div key={track.courseType} className={styles.course}>
             <button
               type="button"
-              onClick={openModal}
+              onClick={() => handleOpenModal(track.courseType)}
               className={styles.course__button}
             >
-              <CourseStatusIcon />
-              <div className={styles.course__track}>{track.name}</div>
+              { track.isCompleted ? <CompletedIcon /> : <NotCompletedIcon /> }
+              <div className={styles.course__track}>{track.courseType}</div>
             </button>
-            <div className={styles.course__enrolled}>과목명</div>
+            <div className={styles.course__enrolled}>{track.courseName}</div>
           </div>
         ))}
       </div>
@@ -71,7 +75,7 @@ function GeneralCourse({ frameId }: { frameId: number }) {
       )}
       {isModalOpen && (
         <GeneralCourseListModal
-          frameId={frameId}
+          courseType={selectedCourseType}
           onClose={closeModal}
         />
       )}

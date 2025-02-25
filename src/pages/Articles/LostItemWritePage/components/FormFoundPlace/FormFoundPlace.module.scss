@@ -3,6 +3,7 @@
 .found-place {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
