@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import { cn } from '@bcsdlab/utils';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
 import { Lecture, MyLectureInfo } from 'api/timetable/entity';
@@ -57,7 +58,12 @@ function SemesterCourseTable({
   };
 
   return (
-    <table className={styles.table}>
+    <table
+      className={cn({
+        [styles.table]: true,
+        [styles['table--view']]: !!isViewMode,
+      })}
+    >
       <thead className={styles.table__header}>
         <tr>
           <th>과목명</th>
