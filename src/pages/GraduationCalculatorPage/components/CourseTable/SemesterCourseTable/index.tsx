@@ -38,11 +38,7 @@ function SemesterCourseTable({
             </tr>
           ))
         ) : (
-          <tr>
-            <td colSpan={5} className={styles['no-data']}>
-              등록된 강의가 없습니다.
-            </td>
-          </tr>
+          <tr>등록된 강의가 없습니다.</tr>
         )}
       </tbody>
     </table>
