@@ -1,7 +1,6 @@
 .select {
   position: relative;
   display: inline-block;
-  width: 151px;
   background-color: #fff;
   border-radius: 5px;
 
@@ -24,13 +23,12 @@
 
   &__trigger {
     display: flex;
-    gap: 8px;
+    width: 179px;
+    gap: 36px;
     align-items: center;
     border: none;
     border-radius: 5px;
-    padding: 12px;
-    width: 151px;
-    height: 48px;
+    padding: 9.5px 12px;
     background-color: #fff;
     font-family: Pretendard, sans-serif;
     cursor: pointer;
@@ -51,12 +49,22 @@
 
   &__curriculum-title {
     display: flex;
+    align-items: center;
     gap: 8px;
     color: #4b4b4b;
-    font-size: 18px;
     font-family: Pretendard, sans-serif;
     font-weight: 500;
-    line-height: 21.48px;
+    font-size: 18px;
+    line-height: 28.8px;
+    letter-spacing: 0%;
+  }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
   }
 
   &__curriculum-list {
@@ -70,18 +78,17 @@
   }
 
   &__curriculum {
-    width: 260px;
-    height: 48px;
-    box-sizing: border-box;
-    background-color: #fafafa;
+    width: 155px;
+    background-color: #fff;
     cursor: pointer;
     font-family: Pretendard, sans-serif;
-    font-size: 18px;
     font-weight: 500;
-    line-height: 21.48px;
-    color: #8e8e8e;
+    font-size: 16px;
+    line-height: 25.6px;
+    letter-spacing: 0%;
+    color: #727272;
     display: block;
-    padding: 14px 24px;
+    padding: 11px 12px;
 
     &:last-child {
       border-bottom-left-radius: 5px;
