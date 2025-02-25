@@ -2,50 +2,10 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@bcsdlab/utils';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useCalculateCredits from 'pages/GraduationCalculatorPage/hooks/useCalculateCredits';
+import { GradesByCourseType } from 'api/graduationCalculator/entity';
 import styles from './CreditChart.module.scss';
-
-const initialCredits = [
-  {
-    courseType: '자유선택',
-    requireGrades: '10',
-    grades: '5',
-  },
-  {
-    courseType: 'HRD필수',
-    requireGrades: '30',
-    grades: '15',
-  },
-  {
-    courseType: 'HRD선택',
-    requireGrades: '10',
-    grades: '3',
-  },
-  {
-    courseType: 'MSC선택',
-    requireGrades: '10',
-    grades: '4',
-  },
-  {
-    courseType: '전공선택',
-    requireGrades: '20',
-    grades: '20',
-  },
-  {
-    courseType: '전공필수',
-    requireGrades: '45',
-    grades: '30',
-  },
-  {
-    courseType: 'MSC필수',
-    requireGrades: '25',
-    grades: '15',
-  },
-  {
-    courseType: '다전공',
-    requireGrades: '5',
-    grades: '0',
-  },
-];
 
 const barStyles = (barsNumber: number) => {
   if (barsNumber === 7) return { width: '75px', gap: '45px' };
@@ -57,42 +17,21 @@ const barStyles = (barsNumber: number) => {
 
 function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
   const myLectures = useMyLectures(currentFrameIndex);
-  const [creditState, setCreditState] = useState(initialCredits);
+  const token = useTokenState();
+  const { data: calculateCredits } = useCalculateCredits(token);
+  const [creditState, setCreditState] = useState<GradesByCourseType[]>([]);
   const barsNumber = creditState.length;
 
-  const updateValues = (newValues: typeof initialCredits) => {
+  const updateValues = (newValues: GradesByCourseType[]) => {
     setCreditState(newValues);
   };
 
-  // api 정상화되면 삭제 예정
-  const handleUpdate = () => {
-    let newValues = [...creditState];
-
-    if (Math.random() < 0.5 && newValues.length > 1) {
-      newValues.splice(newValues.length - 1, 1);
-    } else if (Math.random() > 0.6) {
-      newValues.push({
-        courseType: `추가과목${newValues.length + 1}`,
-        requireGrades: String(Math.floor(Math.random() * 30) + 10),
-        grades: '0',
-      });
-    }
-
-    // 기존 막대 일부 값 변경
-    newValues = newValues.map((credit) => ({
-      ...credit,
-      grades:
-        Math.random() > 0.5
-          ? String(Math.floor(Math.random() * Number(credit.requireGrades)))
-          : credit.grades,
-    }));
-
-    updateValues(newValues);
-  };
-
   useEffect(() => {
-    // result = 이수 구분 별 학점 계산 함수 추가
-    // updateValues(result)
+    if (calculateCredits) {
+      const result = calculateCredits.course_types;
+      updateValues(result);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myLectures]);
 
   return (
@@ -126,7 +65,7 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
               <div
                 style={{
                   width: barStyles(barsNumber).width,
-                  height: `${Number(credit.requireGrades) * 5}px`,
+                  height: `${Number(credit.requiredGrades) * 5}px`,
                 }}
                 className={styles['credit-chart__total-credit']}
               >
@@ -137,15 +76,15 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
                   }}
                   className={cn({
                     [styles['credit-chart__earned-credit']]: true,
-                    [styles['credit-chart__earned-credit--full']]: Number(credit.requireGrades) - Number(credit.grades) < 2,
+                    [styles['credit-chart__earned-credit--full']]: credit.requiredGrades - credit.grades < 2,
                   })}
                   initial={{ height: '0%' }}
-                  animate={{ height: `${Number(credit.grades) * 5}px` }}
+                  animate={{ height: `${credit.grades * 5}px` }}
                   transition={{ duration: 0.5 }}
                   layout
                 />
                 <div className={styles['credit-chart__credit-status']}>
-                  {`${credit.grades} / ${credit.requireGrades}`}
+                  {`${credit.grades} / ${credit.requiredGrades}`}
                 </div>
               </div>
               <div className={styles['credit-chart__x-axis--name']}>
@@ -155,19 +94,6 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
           ))}
         </AnimatePresence>
       </motion.div>
-
-      {/* 테스트용 */}
-      <button
-        type="button"
-        style={{
-          border: '1px solid black',
-          position: 'absolute',
-          bottom: '0',
-        }}
-        onClick={handleUpdate}
-      >
-        값 변경 (추가/삭제 포함)
-      </button>
     </div>
   );
 }

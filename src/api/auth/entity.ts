@@ -48,6 +48,7 @@ export interface RefreshResponse extends APIResponse {
 }
 
 export interface UserResponse extends APIResponse {
+  id: number;
   anonymous_nickname: string;
   email: string;
   gender: 0 | 1;
@@ -78,3 +79,15 @@ export interface FindPasswordResponse extends APIResponse {
 }
 
 export interface CheckPasswordResponse extends APIResponse { }
+
+export interface UpdateAcademicInfoRequest extends APIResponse {
+  student_number: string;
+  department: string;
+  major?: string;
+}
+
+export interface UpdateAcademicInfoResponse extends APIResponse {
+  student_number: string;
+  department: string;
+  major: string | null;
+}

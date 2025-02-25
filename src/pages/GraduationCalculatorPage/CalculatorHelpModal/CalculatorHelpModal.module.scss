@@ -8,9 +8,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 21;
 }
 
 .container {
+  position: relative;
   box-sizing: border-box;
   width: 954px;
   height: auto;

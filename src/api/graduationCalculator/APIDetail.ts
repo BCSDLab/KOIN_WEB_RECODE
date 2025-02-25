@@ -5,6 +5,9 @@ import {
   GeneralEducationResponse,
   Semester,
   CourseTypeResponse,
+  GraduationExcelUploadResponse,
+  GraduationExelUploadRequest,
+  GradesByCourseTypeResponse,
 } from './entity';
 
 export class GraduationAgreement<R extends GraduationAgree> implements APIRequest<R> {
@@ -49,4 +52,29 @@ export class CourseType<R extends CourseTypeResponse> implements APIRequest<R> {
     this.path = `/graduation/course-type?year=${semester.year}&term=${semester.term}&name=${name}`
     + `${general_education_area ? `&general_education_area=${general_education_area}` : ''}`;
   }
+}
+
+export class GraduationExcelUpload<
+  R extends GraduationExcelUploadResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/graduation/excel/upload';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public data: GraduationExelUploadRequest, public authorization: string) {}
+}
+
+export class GradesByCourseType<R extends GradesByCourseTypeResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'graduation/course/calculation';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) {}
 }
