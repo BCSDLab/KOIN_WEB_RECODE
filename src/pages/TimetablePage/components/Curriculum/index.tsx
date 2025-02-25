@@ -52,7 +52,9 @@ function Curriculum({ list }: CurriculumListBoxProps) {
           <CurriculumIcon />
           커리큘럼
         </div>
-        <DownArrowIcon />
+        <div className={styles.select__icon}>
+          <DownArrowIcon />
+        </div>
       </button>
       {isOpenedPopup && (
         <div className={styles['select__curriculum-list']} role="listbox">
