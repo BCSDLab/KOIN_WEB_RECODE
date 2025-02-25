@@ -66,6 +66,7 @@ export default function LostItemForm({
             category={category}
             setCategory={setCategory}
             isCategorySelected={isCategorySelected}
+            type={type}
           />
           <FormDate
             foundDate={foundDate}

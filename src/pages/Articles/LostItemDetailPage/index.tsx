@@ -47,7 +47,7 @@ export default function LostItemDetailPage() {
     registeredAt,
   } = article;
 
-  const { logFindUserDeleteClick } = useArticlesLogger();
+  const { logFindUserDeleteClick, logItemPostReportClick } = useArticlesLogger();
 
   const handleDeleteButtonClick = () => {
     logFindUserDeleteClick();
@@ -56,6 +56,7 @@ export default function LostItemDetailPage() {
 
   const handleReportClick = () => {
     if (token) {
+      logItemPostReportClick();
       openReportModal();
     } else {
       portalManager.open((portalOption) => (

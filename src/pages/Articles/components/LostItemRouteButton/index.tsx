@@ -9,9 +9,16 @@ import ROUTES from 'static/routes';
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
-  const { logItemWriteClick } = useArticlesLogger();
+  const { logItemWriteClick, logFindUserWriteClick, logLostItemWriteClick } = useArticlesLogger();
   const [isWriting, setIsWriting] = useState(false);
   const { pathname } = useLocation();
+
+  const handleWritingButtonClick = () => {
+    setIsWriting((prev) => !prev);
+    if (!isWriting) {
+      logItemWriteClick();
+    }
+  };
 
   return (
     <>
@@ -35,8 +42,7 @@ export default function LostItemRouteButton() {
             <Link
               className={styles['links__option-button']}
               to={ROUTES.LostItemFound()}
-              onClick={() => logItemWriteClick()}
-
+              onClick={() => logFindUserWriteClick()}
             >
               <FoundIcon />
               <div className={styles['links__option-text']}>주인을 찾아요</div>
@@ -45,8 +51,7 @@ export default function LostItemRouteButton() {
             <Link
               className={styles['links__option-button']}
               to={ROUTES.LostItemLost()}
-              onClick={() => logItemWriteClick()}
-
+              onClick={() => logLostItemWriteClick()}
             >
               <LostIcon />
               <div className={styles['links__option-text']}>잃어버렸어요</div>
@@ -58,7 +63,7 @@ export default function LostItemRouteButton() {
           <button
             className={styles.links__write}
             type="button"
-            onClick={() => setIsWriting((prev) => !prev)}
+            onClick={handleWritingButtonClick}
           >
             {isWriting ? <CloseIcon /> : <PencilIcon />}
             글쓰기
