@@ -75,6 +75,7 @@ function CourseTypeList({
         className={cn({
           [styles.select__trigger]: true,
           [styles['select__trigger--selected']]: isOpenedPopup,
+          [styles['select__trigger--selected-up']]: isOverHalf,
         })}
       >
         <p className={styles.select__label}>{selectedValue}</p>

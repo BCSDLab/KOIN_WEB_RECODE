@@ -54,6 +54,7 @@
     border: 0.5px solid #e1e1e1;
 
     &-up {
+      bottom: calc(100% - 113px);
       transform: translateY(-100%);
     }
   }
