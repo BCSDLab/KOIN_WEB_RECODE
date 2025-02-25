@@ -78,17 +78,15 @@ function CourseTable({ frameId }: { frameId: number }) {
   };
 
   const tableData = filteredMyLectures.map((lecture: MyLectureInfo) => [
-    <span key={`name-${lecture.id}`}>{lecture.class_title}</span>,
-    <span key={`professor-${lecture.id}`}>{lecture.professor}</span>,
-    <span key={`grades-${lecture.id}`}>{lecture.grades}</span>,
+    <span>{lecture.class_title}</span>,
+    <span>{lecture.professor}</span>,
+    <span>{lecture.grades}</span>,
     <CourseTypeList
-      key={`courseType-${lecture.id}`}
       courseTypeDefault={lecture.course_type}
       id={lecture.id}
       onCourseTypeChange={handleCourseTypeChange}
     />,
     <button
-      key={`delete-${lecture.id}`}
       type="button"
       onClick={(e) => onClickDeleteLecture(e, lecture.id)}
       aria-label="삭제 버튼"

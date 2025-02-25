@@ -22,10 +22,11 @@ function GeneralCourseListModal({
   const generalCourseLectures = generalCourses?.lectures ?? [];
 
   const tableData = generalCourseLectures.map((lecture) => [
-    <span key={`name-${lecture.id}`}>{lecture.name}</span>,
-    <span key={`professor-${lecture.id}`}>{ }</span>,
-    <span key={`grades-${lecture.id}`}>{lecture.grades}</span>,
-    <span key={`courseType-${lecture.id}`}>교양선택</span>,
+    <span>{lecture.name}</span>,
+    <span>{ }</span>,
+    <span>{lecture.grades}</span>,
+    <span>교양선택</span>,
+    <span>{ }</span>,
   ]);
 
   return (
