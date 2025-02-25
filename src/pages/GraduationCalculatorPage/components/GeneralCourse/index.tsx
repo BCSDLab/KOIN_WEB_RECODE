@@ -11,7 +11,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import GeneralCourseListModal from './GeneralCourseListModal';
 import styles from './GeneralCourse.module.scss';
 
-function GeneralCourse({ frameId }: { frameId: number }) {
+function GeneralCourse() {
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const token = useTokenState();
@@ -75,7 +75,6 @@ function GeneralCourse({ frameId }: { frameId: number }) {
       )}
       {isModalOpen && (
         <GeneralCourseListModal
-          frameId={frameId}
           courseType={selectedCourseType}
           onClose={closeModal}
         />
