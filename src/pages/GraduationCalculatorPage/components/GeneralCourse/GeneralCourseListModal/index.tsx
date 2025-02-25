@@ -45,10 +45,7 @@ function GeneralCourseListModal({
         <SemesterList isViewMode />
         <div className={styles.content}>
           <p className={styles.content__label}>{courseType}</p>
-          <SemesterCourseTable
-            tableData={tableData}
-            isViewMode
-          />
+          <SemesterCourseTable tableData={tableData} />
         </div>
       </div>
     </div>

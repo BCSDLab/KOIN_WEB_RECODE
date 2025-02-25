@@ -1,24 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { cn } from '@bcsdlab/utils';
 import styles from './SemesterCourseTable.module.scss';
 
 export interface SemesterCourseTableProps {
   tableData: React.ReactNode[][];
-  isViewMode?: boolean;
 }
 
 function SemesterCourseTable({
   tableData,
-  isViewMode,
 }: SemesterCourseTableProps) {
   return (
-    <table
-      className={cn({
-        [styles.table]: true,
-        [styles['table--view']]: !!isViewMode,
-      })}
-    >
+    <table className={styles.table}>
       <thead className={styles.table__header}>
         <tr>
           <th>과목명</th>
