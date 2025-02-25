@@ -15,6 +15,7 @@ import GeneralCourse from './components/GeneralCourse';
 import CreditChart from './components/CreditChart';
 import CalculatorHelpModal from './CalculatorHelpModal';
 import useAgreeGraduationCreidts from './hooks/useAgreeGraduationCreidts';
+import GraduationCalculatorAuthModal from './components/GraduationCalculatorAuthModal';
 
 function GraduationCalculatorPage() {
   const token = useTokenState();
@@ -36,7 +37,7 @@ function GraduationCalculatorPage() {
   useEffect(() => {
     const isFirstAgree = localStorage.getItem('agreeGraduationCredits');
 
-    if (Number(isFirstAgree) === userInfo?.id) return;
+    if (Number(isFirstAgree) === userInfo?.id || !token) return;
 
     agreeGraduationCreidts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,6 +80,9 @@ function GraduationCalculatorPage() {
           </div>
         </div>
       </div>
+      {!token && (
+        <GraduationCalculatorAuthModal />
+      )}
     </div>
   );
 }
