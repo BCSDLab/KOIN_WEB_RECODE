@@ -68,7 +68,14 @@ function GraduationCalculatorPage() {
           <div className={styles.content__results}>
             <div className={styles.content__description}>
               <p className={styles['content__description-title']}>
-                <strong>아우누리</strong>
+                <a
+                  href="https://portal.koreatech.ac.kr"
+                  className={styles['content__description-title--link']}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  아우누리
+                </a>
                 에서 받은 엑셀을 넣을 수 있어요.
               </p>
               <p className={styles['content__description-title']}>
