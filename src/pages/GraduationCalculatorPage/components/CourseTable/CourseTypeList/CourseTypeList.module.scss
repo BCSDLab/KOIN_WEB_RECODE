@@ -5,7 +5,7 @@
 
   &__trigger {
     display: flex;
-    width: 105px;
+    width: 106px;
     height: 22px;
     padding: 0 8px;
     justify-content: space-between;
@@ -22,7 +22,7 @@
     }
 
     &--selected {
-      border-radius: 8px 8px 0 0;
+      border-radius: 8px;
 
       svg {
         transform: rotate(180deg);
@@ -33,7 +33,6 @@
 
   &__label {
     display: flex;
-    width: 76px;
     height: 22px;
     flex-direction: column;
     justify-content: center;
@@ -48,9 +47,15 @@
   &__content {
     position: absolute;
     z-index: 10;
+    max-height: 112px;
+    overflow-y: scroll;
     background-color: #fff;
-    border-radius: 0 0 8px 8px;
+    border-radius: 8px;
     border: 0.5px solid #e1e1e1;
+
+    &-up {
+      transform: translateY(-100%);
+    }
   }
 
   &__option {

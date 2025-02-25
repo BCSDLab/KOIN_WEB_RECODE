@@ -18,8 +18,8 @@ function CourseTypeList({
 }: CourseTypeListProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
-
   const [selectedValue, setSelectedValue] = useState<string>(courseTypeDefault);
+  const [isOverHalf, setIsOverHalf] = useState<boolean>(false);
 
   const courseType = [
     { id: 1, value: '교양필수' },
@@ -37,6 +37,18 @@ function CourseTypeList({
   const handleToggleList = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     triggerPopup();
+
+    if (containerRef.current) {
+      const dropdownRect = containerRef.current.getBoundingClientRect();
+      const tableBody = containerRef.current.closest('tbody');
+
+      if (tableBody) {
+        const tableBodyRect = tableBody.getBoundingClientRect();
+        const tableCenter = tableBodyRect.top + tableBodyRect.height / 2;
+
+        setIsOverHalf(dropdownRect.bottom > tableCenter);
+      }
+    }
   };
 
   const onClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -70,7 +82,12 @@ function CourseTypeList({
       </button>
       {isOpenedPopup && (
         <ul
-          className={styles.select__content}
+          className={
+            cn({
+              [styles.select__content]: true,
+              [styles['select__content-up']]: isOverHalf,
+            })
+          }
           role="listbox"
         >
           {courseType.map((type) => (
