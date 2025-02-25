@@ -31,9 +31,9 @@ function CourseTable({ frameId }: { frameId: number }) {
     if (!targetLecture) return;
     editMyLecture({
       ...targetLecture,
-      class_places: [
-        { class_place: '' },
-      ],
+      class_places: targetLecture.lecture_infos.map((info) => ({
+        class_place: info.place,
+      })),
       course_type: newCourseType,
     });
   };
