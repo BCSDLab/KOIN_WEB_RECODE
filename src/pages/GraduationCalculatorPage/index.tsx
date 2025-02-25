@@ -15,6 +15,7 @@ import GeneralCourse from './components/GeneralCourse';
 import CreditChart from './components/CreditChart';
 import CalculatorHelpModal from './CalculatorHelpModal';
 import useAgreeGraduationCreidts from './hooks/useAgreeGraduationCreidts';
+import GraduationCalculatorAuthModal from './components/GraduationCalculatorAuthModal';
 
 function GraduationCalculatorPage() {
   const token = useTokenState();
@@ -36,7 +37,7 @@ function GraduationCalculatorPage() {
   useEffect(() => {
     const isFirstAgree = localStorage.getItem('agreeGraduationCredits');
 
-    if (Number(isFirstAgree) === userInfo?.id) return;
+    if (Number(isFirstAgree) === userInfo?.id || !token) return;
 
     agreeGraduationCreidts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,18 +68,28 @@ function GraduationCalculatorPage() {
           <div className={styles.content__results}>
             <div className={styles.content__description}>
               <p className={styles['content__description-title']}>
-                <strong>아우누리</strong>
+                <a
+                  href="https://portal.koreatech.ac.kr"
+                  className={styles['content__description-title--link']}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  아우누리
+                </a>
                 에서 받은 엑셀을 넣을 수 있어요.
               </p>
               <p className={styles['content__description-title']}>
                 이수구분 등 잘못된 정보를 정정하면 아래의 그래프에 바로 적용돼요.
               </p>
             </div>
-            <GeneralCourse frameId={currentFrameIndex} />
+            <GeneralCourse />
             <CreditChart currentFrameIndex={currentFrameIndex} />
           </div>
         </div>
       </div>
+      {!token && (
+        <GraduationCalculatorAuthModal />
+      )}
     </div>
   );
 }

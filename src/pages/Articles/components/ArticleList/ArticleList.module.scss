@@ -65,7 +65,7 @@
   &__registered-at {
     width: 70px;
     height: 100%;
-    color: #252525;
+    color: #727272;
     font-size: 15px;
     display: flex;
     justify-content: center;
@@ -116,7 +116,14 @@
     display: block !important;
   }
 
-  &__header {
+  &__container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  &__header,
+  &__container-header {
     font-weight: 600;
 
     @include media.media-breakpoint(mobile) {
@@ -124,7 +131,19 @@
     }
   }
 
-  &__content {
+  &__container-type {
+    padding: 4px 12px;
+    background-color: #175c8e;
+    color: #fff;
+    border-radius: 999px;
+    font-family: Pretendard, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  &__content,
+  &__container-container {
     max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
