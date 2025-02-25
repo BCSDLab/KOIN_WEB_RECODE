@@ -5,6 +5,10 @@ import SemesterList from 'pages/TimetablePage/components/SemesterList';
 import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
@@ -12,15 +16,20 @@ import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import CourseTypeList from './CourseTypeList';
 import SemesterCourseTable from './SemesterCourseTable';
 import styles from './CourseTable.module.scss';
+import DeleteLectureModal from './DeleteLectureModal';
 
 function CourseTable({ frameId }: { frameId: number }) {
   const token = useTokenState();
+  const portalManager = useModalPortal();
   const { removeMyLecture } = useTimetableMutation(frameId);
   const { myLectures }: { myLectures: (MyLectureInfo | Lecture) [] } = useMyLectures(frameId);
   const { editMyLecture } = useTimetableMutation(frameId);
   const semester = useSemester();
   const { data: mySemester } = useSemesterCheck(token);
   const navigate = useNavigate();
+
+  const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
+  const { containerRef } = useOutsideClick({ onOutsideClick: setModalOpenFalse });
 
   const filteredMyLectures = (myLectures as MyLectureInfo[])
     .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null);
@@ -46,7 +55,7 @@ function CourseTable({ frameId }: { frameId: number }) {
     }
   };
 
-  const onClickDeleteLecture = (id: number) => {
+  const handleDeleteLecture = (id: number) => {
     const lectureToRemove = myLectures.find(
       (lecture: MyLectureInfo | Lecture) => lecture.id === id,
     );
@@ -54,6 +63,18 @@ function CourseTable({ frameId }: { frameId: number }) {
     if (!lectureToRemove) return;
 
     removeMyLecture.mutate({ clickedLecture: lectureToRemove, id });
+  };
+
+  const onClickDeleteLecture = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
+    e.stopPropagation();
+    setModalOpenTrue();
+    portalManager.open((portalOption: Portal) => (
+      <DeleteLectureModal
+        onClose={portalOption.close}
+        handleDeleteLecture={() => handleDeleteLecture(id)}
+        setModalOpenFalse={setModalOpenFalse}
+      />
+    ));
   };
 
   const tableData = filteredMyLectures.map((lecture: MyLectureInfo) => [
@@ -69,7 +90,7 @@ function CourseTable({ frameId }: { frameId: number }) {
     <button
       key={`delete-${lecture.id}`}
       type="button"
-      onClick={() => onClickDeleteLecture(lecture.id)}
+      onClick={(e) => onClickDeleteLecture(e, lecture.id)}
       aria-label="삭제 버튼"
     >
       <CloseIcon />
@@ -77,7 +98,10 @@ function CourseTable({ frameId }: { frameId: number }) {
   ]);
 
   return (
-    <div className={styles['course-table']}>
+    <div
+      className={styles['course-table']}
+      ref={isModalOpen ? null : containerRef}
+    >
       <SemesterList />
       <div className={styles.content}>
         <SemesterCourseTable
