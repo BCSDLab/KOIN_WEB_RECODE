@@ -65,15 +65,28 @@ export default function LostItemWritePage() {
   }, [user?.name, lostItems, lostItemHandler]);
 
   const { status, mutateAsync: postLostItem } = usePostLostItemArticles();
-  const { logLostItemAddItemClick, logLostItemWriteConfirmClick } = useArticlesLogger();
+  const {
+    logFindUserAddItemClick,
+    logLostItemAddItemClick,
+    logFindUserWriteConfirmClick,
+    logLostItemWriteConfirmClick,
+  } = useArticlesLogger();
 
   const handleItemAddClick = () => {
-    logLostItemAddItemClick();
+    if (type === 'FOUND') {
+      logFindUserAddItemClick();
+    } else {
+      logLostItemAddItemClick();
+    }
     addLostItem();
   };
 
   const handleCompleteClick = async () => {
-    logLostItemWriteConfirmClick();
+    if (type === 'FOUND') {
+      logFindUserWriteConfirmClick();
+    } else {
+      logLostItemWriteConfirmClick();
+    }
     validateAndUpdateItems();
 
     if (lostItems.length === 0) {

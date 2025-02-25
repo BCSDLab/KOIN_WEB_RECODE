@@ -8,6 +8,7 @@ import { useState } from 'react';
 import useReportLostItemArticle from 'pages/Articles/hooks/useReportLostItemArticle';
 import showToast from 'utils/ts/showToast';
 import { useNavigate } from 'react-router-dom';
+import { ReportCategory, useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import styles from './ReportModal.module.scss';
 
 interface ReportModalProps {
@@ -32,6 +33,8 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
   const [selectedReason, setSelectedReason] = useState('');
   const { mutate: reportArticle } = useReportLostItemArticle();
 
+  const { logItemPostReportConfirm } = useArticlesLogger();
+
   const handleReportClick = () => {
     const selectedOption = options.find((option) => option.value === selectedReason);
 
@@ -47,6 +50,7 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
       },
     );
 
+    logItemPostReportConfirm(selectedOption.label as ReportCategory);
     closeReportModal();
     navigate('/articles');
   };
@@ -76,7 +80,11 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
         />
 
         <div className={styles.modal__buttons}>
-          <button className={styles.buttons__report} type="button" onClick={handleReportClick}>
+          <button
+            className={styles.buttons__report}
+            type="button"
+            onClick={() => handleReportClick()}
+          >
             신고하기
           </button>
           <button className={styles.buttons__close} type="button" onClick={closeReportModal}>
