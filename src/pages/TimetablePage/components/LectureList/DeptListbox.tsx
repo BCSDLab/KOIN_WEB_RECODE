@@ -1,10 +1,11 @@
 import React from 'react';
 import { Selector, SelectorProps } from 'components/common/Selector';
-import styles from './LectureList.module.scss';
 
 type DeptListboxProps = Omit<SelectorProps, 'options'>;
 
-function DeptListbox({ value, onChange }: DeptListboxProps) {
+function DeptListbox({
+  value, onChange, dropDownMaxHeight, isWhiteBackground,
+}: DeptListboxProps) {
   const deptOptionList = [
     { label: '전체', value: '전체' },
     { label: '디자인ㆍ건축공학부', value: '디자인ㆍ건축공학부' },
@@ -25,15 +26,14 @@ function DeptListbox({ value, onChange }: DeptListboxProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className={styles.selector}>
-      <Selector
-        options={deptOptionList}
-        value={value}
-        isWhiteBackground={false}
-        onChange={onChange}
-        placeholder="전체"
-      />
-    </div>
+    <Selector
+      options={deptOptionList}
+      value={value}
+      isWhiteBackground={isWhiteBackground}
+      onChange={onChange}
+      placeholder="전체"
+      dropDownMaxHeight={dropDownMaxHeight}
+    />
   );
 }
 
