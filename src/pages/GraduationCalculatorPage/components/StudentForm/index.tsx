@@ -41,6 +41,7 @@ function StudentForm() {
   const handleDepartment = ({ target }: { target: ListboxRef }) => {
     setDepartment(target.value);
     handleMajor(target.value);
+    setMajor(undefined);
   };
 
   const { mutate: updateAcademicInfo } = useUpdateAcademicInfo(token);
