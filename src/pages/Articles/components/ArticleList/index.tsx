@@ -79,21 +79,29 @@ export default function ArticleList({ articles }: ArticleListProps) {
                     <div className={styles['title__container-container']}>{content}</div>
                     <div className={styles['title__container-container']}>|</div>
                     <div className={styles['title__container-container']}>{date}</div>
+                    {setArticleRegisteredDate(article.registered_at)[1] && (
+                    <img
+                      className={styles['title__new-tag']}
+                      src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
+                      alt="new"
+                    />
+                    )}
                   </>
                 ) : (
                   <>
                     {/* 일반 공지사항 */}
                     <div className={styles.title__content}>{article.title}</div>
+                    {setArticleRegisteredDate(article.registered_at)[1] && (
+                    <img
+                      className={styles['title__new-tag']}
+                      src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
+                      alt="new"
+                    />
+                    )}
                   </>
                 )}
               </div>
-              {setArticleRegisteredDate(article.registered_at)[1] && (
-                <img
-                  className={styles['title__new-tag']}
-                  src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
-                  alt="new"
-                />
-              )}
+
             </div>
             <div className={styles.list__author}>{isMobile ? `${article.author}` : article.author}</div>
             <div className={styles['list__registered-at']}>{setArticleRegisteredDate(article.registered_at)[0]}</div>
