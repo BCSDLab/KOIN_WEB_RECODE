@@ -35,9 +35,7 @@ function GraduationCalculatorPage() {
   };
 
   useEffect(() => {
-    const isFirstAgree = localStorage.getItem('agreeGraduationCredits');
-
-    if (Number(isFirstAgree) === userInfo?.id || !token) return;
+    if (!token) return;
 
     agreeGraduationCreidts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
