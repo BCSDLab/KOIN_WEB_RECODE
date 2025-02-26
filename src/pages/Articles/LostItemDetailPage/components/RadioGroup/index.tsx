@@ -10,13 +10,21 @@ interface RadioOption {
 interface RadioGroupProps {
   name: string;
   options: RadioOption[];
-  selectedValue: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  selectedValues?: string[];
+  onChange: (selected: string[]) => void;
 }
 
 export default function RadioGroup({
-  name, options, selectedValue, onChange,
+  name, options, selectedValues = [], onChange,
 }: RadioGroupProps) {
+  const handleChange = (value: string) => {
+    const newSelectedValues = selectedValues.includes(value)
+      ? selectedValues.filter((v) => v !== value)
+      : [...selectedValues, value];
+
+    onChange(newSelectedValues);
+  };
+
   return (
     <div className={styles['radio-group']}>
       {options.map((option) => (
@@ -26,8 +34,8 @@ export default function RadioGroup({
           label={option.label}
           subtitle={option.subtitle}
           name={name}
-          checked={selectedValue === option.value}
-          onChange={onChange}
+          checked={selectedValues.includes(option.value)}
+          onChange={() => handleChange(option.value)}
         />
       ))}
     </div>

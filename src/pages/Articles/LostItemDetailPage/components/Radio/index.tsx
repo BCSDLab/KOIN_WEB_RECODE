@@ -7,7 +7,7 @@ interface RadioProps {
   subtitle:string;
   name:string;
   checked: boolean;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: () => void;
 }
 
 export default function Radio({
@@ -15,10 +15,6 @@ export default function Radio({
 }: RadioProps) {
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleFocus = () => onChange(
-    { target: { value, name } } as React.ChangeEvent<HTMLInputElement>,
-  );
 
   const id = `${name}-${value}`;
 
@@ -44,7 +40,7 @@ export default function Radio({
             <div className={styles['radio__content-etc']}>
               <input
                 className={styles['radio__input-etc']}
-                type="radio"
+                type="checkbox"
                 name={name}
                 value={value}
                 checked={checked}
@@ -64,14 +60,13 @@ export default function Radio({
             placeholder="신고 사유를 입력해주세요."
             value={text}
             onChange={handleChange}
-            onFocus={handleFocus}
           />
         </div>
       ) : (
         <>
           <input
             className={styles.radio__input}
-            type="radio"
+            type="checkbox"
             name={name}
             value={value}
             checked={checked}

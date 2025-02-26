@@ -30,27 +30,29 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
   const navigate = useNavigate();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeReportModal });
 
-  const [selectedReason, setSelectedReason] = useState('');
+  const [selectedReason, setSelectedReason] = useState<string[]>([]);
   const { mutate: reportArticle } = useReportLostItemArticle();
 
   const { logItemPostReportConfirm } = useArticlesLogger();
 
   const handleReportClick = () => {
-    const selectedOption = options.find((option) => option.value === selectedReason);
-
-    if (!selectedOption) {
+    if (selectedReason.length === 0) {
       showToast('error', '신고 사유를 선택해주세요.');
       return;
     }
 
+    const selectedOptions = options.filter((option) => selectedReason.includes(option.value));
+
     reportArticle(
       {
         articleId,
-        reports: [{ title: selectedOption.label, content: selectedOption.subtitle }],
+        reports: selectedOptions.map((option) => ({
+          title: option.label,
+          content: option.subtitle,
+        })),
       },
     );
 
-    logItemPostReportConfirm(selectedOption.label as ReportCategory);
     closeReportModal();
     navigate('/articles');
   };
@@ -75,8 +77,8 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
         <RadioGroup
           name="reportReason"
           options={options}
-          selectedValue={selectedReason}
-          onChange={(e: any) => setSelectedReason(e.target.value)}
+          selectedValues={selectedReason}
+          onChange={(newSelectedValues) => setSelectedReason(newSelectedValues)}
         />
 
         <div className={styles.modal__buttons}>
