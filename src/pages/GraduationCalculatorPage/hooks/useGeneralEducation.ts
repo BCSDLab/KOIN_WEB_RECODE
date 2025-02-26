@@ -1,11 +1,12 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { graduationCalculator } from 'api';
 
 const useGeneralEducation = (token: string) => {
-  const { data } = useSuspenseQuery(
+  const { data } = useQuery(
     {
       queryKey: ['generalEducation'],
       queryFn: () => (graduationCalculator.getGeneralEducation(token)),
+      enabled: !!token,
     },
   );
 
