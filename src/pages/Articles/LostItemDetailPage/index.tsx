@@ -61,8 +61,8 @@ export default function LostItemDetailPage() {
     } else {
       portalManager.open((portalOption) => (
         <LoginRequireLostItemdModal
-          actionTitle="게시글을 작성하려면"
-          detailExplanation="로그인 후 분실물 주인을 찾아주세요!"
+          actionTitle="게시글을 신고 하려면"
+          detailExplanation="로그인 후 이용해주세요."
           onClose={portalOption.close}
         />
       ));
