@@ -275,7 +275,7 @@ function TimeSpaceInput({
           <div
             className={cn({
               [styles['form-group-time__time']]: true,
-              [styles['form-group-time__time--reverse']]: isReverseDropdown,
+              [styles['form-group-time__time--reverse']]: isReverseDropdown && !isSingleTimeSpaceComponent,
             })}
           >
             <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour')} version="addLecture" disabled={isEditStandardLecture} />
@@ -542,8 +542,8 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
         behavior: 'smooth',
         top: 999,
       });
-      handleScroll();
     }
+    handleScroll();
 
     prevLengthRef.current = timeSpaceComponents.length;
   }, [timeSpaceComponents]);
