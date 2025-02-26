@@ -425,14 +425,12 @@ ICustomFormInput, ICustomFormInputProps>((props, ref) => {
         onChange={onChangeMajorInput}
         {...props}
       />
-      <div className={styles['form-input__select']} style={{ marginLeft: 6 }}>
+      <div className={styles['form-input__select']}>
         <Selector
           options={deptOptionList}
           value={major}
-          // onChange={setMajor}
           onChange={(event) => setMajor(event.target.value)}
-          placeholder="학과 (선택)"
-          type="default"
+          placeholder="학부 (선택)"
         />
       </div>
     </>
@@ -451,14 +449,20 @@ const GenderSelectorWithRef = forwardRef((
   }));
 
   return (
-    <Selector
-      options={options}
-      value={String(selectedValue)}
-      // onChange={setSelectedValue}
-      onChange={(event) => setSelectedValue(event.target.value)}
-      placeholder="성별 (선택)"
-      type="default"
-    />
+    <div
+      className={cn({
+        [styles['form-input__select']]: true,
+        [styles['form-input__select--flex-end']]: true,
+      })}
+      style={{ marginLeft: '6px' }}
+    >
+      <Selector
+        options={options}
+        value={String(selectedValue)}
+        onChange={(event) => setSelectedValue(event.target.value)}
+        placeholder="성별 (선택)"
+      />
+    </div>
   );
 });
 
@@ -535,9 +539,7 @@ function SignupDefaultPage() {
             },
           })}
         />
-        <div className={styles['signup__gender-container']}>
-          <GenderSelectorWithRef {...register('gender')} options={[{ label: '남', value: '0' }, { label: '여', value: '1' }]} />
-        </div>
+        <GenderSelectorWithRef {...register('gender')} options={[{ label: '남', value: '0' }, { label: '여', value: '1' }]} />
         <button
           type="submit"
           disabled={status === 'pending'}

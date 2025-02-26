@@ -180,14 +180,6 @@
     }
   }
 
-  &__gender-container {
-    width: 192px;
-
-    @include media.media-breakpoint(mobile) {
-      width: 155px;
-    }
-  }
-
   &__button {
     height: 45px;
     background-color: #175c8e;
