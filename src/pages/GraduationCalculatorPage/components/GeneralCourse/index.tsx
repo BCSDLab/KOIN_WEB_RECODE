@@ -16,7 +16,7 @@ function GeneralCourse() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const token = useTokenState();
   const { generalEducation } = useGeneralEducation(token);
-  const requiredEducationArea = generalEducation.general_education_area;
+  const requiredEducationArea = generalEducation?.general_education_area || [];
   const [selectedCourseType, setSelectedCourseType] = useState<string | null>(null);
 
   const handleOpenModal = (courseType: string) => {
