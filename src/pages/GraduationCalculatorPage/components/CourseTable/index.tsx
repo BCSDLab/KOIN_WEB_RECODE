@@ -102,12 +102,14 @@ function CourseTable({ frameId }: { frameId: number }) {
     >
       <SemesterList />
       <div className={styles.content}>
-        <SemesterCourseTable
-          tableData={tableData}
-        />
+        <div className={styles.content__table}>
+          <SemesterCourseTable
+            tableData={tableData}
+          />
+        </div>
         <button
           type="button"
-          className={styles.trigger}
+          className={styles.content__trigger}
           onClick={onClickAddLecture}
         >
           시간표 수정하기
