@@ -1,9 +1,9 @@
-import Listbox, { ListboxRef } from 'components/TimetablePage/Listbox';
 import { useEffect, useState } from 'react';
 import { useUser } from 'utils/hooks/state/useUser';
 import useDepartmentMajorList from 'pages/GraduationCalculatorPage/hooks/useDepartmentMajorList';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useUpdateAcademicInfo from 'pages/GraduationCalculatorPage/hooks/useUpdateAcademicInfo';
+import { Selector } from 'components/common/Selector';
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {
@@ -38,7 +38,7 @@ function StudentForm() {
     setMajorOptionList(majorsOption);
   };
 
-  const handleDepartment = ({ target }: { target: ListboxRef }) => {
+  const handleDepartment = ({ target }: { target: { value: string } }) => {
     setDepartment(target.value);
     handleMajor(target.value);
     setMajor(undefined);
@@ -81,22 +81,23 @@ function StudentForm() {
       <div className={styles['student-form__input']}>
         <div>학과</div>
         <div className={styles['student-form__department']}>
-          <Listbox
-            list={departmentOptionList}
+          <Selector
+            options={departmentOptionList}
             value={department}
             onChange={handleDepartment}
-            version="new"
+            dropDownMaxHeight={450}
           />
         </div>
       </div>
       <div className={styles['student-form__input']}>
         <div>전공</div>
         <div className={styles['student-form__major']}>
-          <Listbox
-            list={majorOptionList}
+          <Selector
+            options={majorOptionList}
             value={major ?? null}
             onChange={({ target }) => setMajor(target.value)}
-            version="new"
+            placeholder={majorOptionList.length === 0 ? '-' : '전공'}
+            disabled={majorOptionList.length === 0}
           />
         </div>
       </div>
