@@ -14,7 +14,11 @@ export interface Toast {
 }
 
 export default function TimetableToast({
-  message, recoverMessage, onClose, onRecover, duration = 5000,
+  message,
+  recoverMessage,
+  onClose,
+  onRecover,
+  duration = 5000,
 }: Toast) {
   const [isClicked, setIsClicked] = useState(false);
   const toastRef = useRef<HTMLDivElement | null>(null);

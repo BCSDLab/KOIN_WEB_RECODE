@@ -2,14 +2,15 @@ import { APIResponse } from 'interfaces/APIResponse';
 
 export interface GraduationAgree extends APIResponse { }
 
-export interface RequiredEducationArea {
-  courseType: string;
-  isCompleted: boolean;
-  courseName: string | null;
+export interface GeneralEducationArea {
+  course_type: string;
+  required_credit: number;
+  completed_credit: number;
+  course_names: string[];
 }
 
 export interface GeneralEducationResponse extends APIResponse {
-  required_education_area: RequiredEducationArea[];
+  general_education_area: GeneralEducationArea[];
 }
 
 export interface Semester {
@@ -32,7 +33,7 @@ export interface CourseTypeResponse extends APIResponse {
 
 export interface GraduationExcelUploadResponse extends APIResponse { }
 
-export interface GraduationExelUploadRequest {
+export interface GraduationExcelUploadRequest {
   file: File;
 }
 
