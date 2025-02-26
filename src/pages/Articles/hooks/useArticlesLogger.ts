@@ -51,7 +51,7 @@ const CLICK_EVENTS = [
   },
   {
     label: 'item_post_report_confirm',
-    value: '', // {"주제에 맞지 않음", "스팸", "욕설", "개인정보", "기타"}
+    value: '신고하기',
   },
 ] as const;
 
@@ -59,6 +59,7 @@ export type ClickEventLabel = typeof CLICK_EVENTS[number]['label'];
 
 export type FindUserCategory = '카드' | '신분증' | '지갑' | '전자제품' | '기타';
 
+// 추후 로깅 수정 가능성을 염두해두고 남겨둡니다.
 export type ReportCategory = '주제에 맞지 않음' | '스팸' | '욕설' | '개인정보' | '기타';
 
 export const useArticlesLogger = () => {
@@ -88,7 +89,7 @@ export const useArticlesLogger = () => {
   const logFindUserCategory = (category: FindUserCategory) => logEvent('find_user_category', category);
   const logLostItemCategory = (category: FindUserCategory) => logEvent('lost_item_category', category);
   const logItemPostReportClick = () => logEvent('item_post_report');
-  const logItemPostReportConfirm = (category: ReportCategory) => logEvent('item_post_report_confirm', category);
+  const logItemPostReportConfirm = () => logEvent('item_post_report_confirm');
 
   return {
     logItemWriteClick,

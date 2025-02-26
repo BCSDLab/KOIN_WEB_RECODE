@@ -8,7 +8,7 @@ import { useState } from 'react';
 import useReportLostItemArticle from 'pages/Articles/hooks/useReportLostItemArticle';
 import showToast from 'utils/ts/showToast';
 import { useNavigate } from 'react-router-dom';
-import { ReportCategory, useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
+import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import styles from './ReportModal.module.scss';
 
 interface ReportModalProps {
@@ -53,6 +53,7 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
       },
     );
 
+    logItemPostReportConfirm();
     closeReportModal();
     navigate('/articles');
   };
