@@ -23,6 +23,7 @@ export default function useEditTimetableLectureRegular() {
         data,
       );
       queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
+      queryClient.invalidateQueries({ queryKey: ['generalEducation'] });
       showToast('success', '강의 수정이 되었습니다.');
     },
     onError: (error) => {
