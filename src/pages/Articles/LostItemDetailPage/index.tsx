@@ -130,14 +130,16 @@ export default function LostItemDetailPage() {
                   <ChatIcon />
                   <div>쪽지 보내기</div>
                 </button>
-                <button
-                  className={styles['button-container__report-button']}
-                  type="button"
-                  onClick={handleReportClick}
-                >
-                  <ReportIcon />
-                  {!isMobile && '신고'}
-                </button>
+                {article.author !== '총학생회' && (
+                  <button
+                    className={styles['button-container__report-button']}
+                    type="button"
+                    onClick={handleReportClick}
+                  >
+                    <ReportIcon />
+                    {!isMobile && '신고'}
+                  </button>
+                )}
               </div>
             )}
 
