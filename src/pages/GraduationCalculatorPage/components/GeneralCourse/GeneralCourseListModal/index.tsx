@@ -22,10 +22,11 @@ function GeneralCourseListModal({
   const generalCourseLectures = generalCourses?.lectures ?? [];
 
   const tableData = generalCourseLectures.map((lecture) => [
-    <span key={`name-${lecture.id}`}>{lecture.name}</span>,
-    <span key={`professor-${lecture.id}`}>{ }</span>,
-    <span key={`grades-${lecture.id}`}>{lecture.grades}</span>,
-    <span key={`courseType-${lecture.id}`}>교양선택</span>,
+    <span>{lecture.name}</span>,
+    <span>{ }</span>, // 개설 목록 테이블에서는 '교수명' 비활성화
+    <span>{lecture.grades}</span>,
+    <span>교양선택</span>,
+    <span>{ }</span>, // 개설 목록 테이블에서는 '삭제 버튼' 비활성화
   ]);
 
   return (
@@ -45,7 +46,9 @@ function GeneralCourseListModal({
         <SemesterList isViewMode />
         <div className={styles.content}>
           <p className={styles.content__label}>{courseType}</p>
-          <SemesterCourseTable tableData={tableData} />
+          <div className={styles.content__table}>
+            <SemesterCourseTable tableData={tableData} />
+          </div>
         </div>
       </div>
     </div>

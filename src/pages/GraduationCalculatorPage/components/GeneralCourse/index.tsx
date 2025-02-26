@@ -16,7 +16,7 @@ function GeneralCourse() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const token = useTokenState();
   const { generalEducation } = useGeneralEducation(token);
-  const requiredEducationArea = generalEducation.required_education_area;
+  const requiredEducationArea = generalEducation.general_education_area;
   const [selectedCourseType, setSelectedCourseType] = useState<string | null>(null);
 
   const handleOpenModal = (courseType: string) => {
@@ -39,16 +39,24 @@ function GeneralCourse() {
       </button>
       <div className={styles.list}>
         {requiredEducationArea.map((track) => (
-          <div key={track.courseType} className={styles.course}>
+          <div key={track.course_type} className={styles.course}>
             <button
               type="button"
-              onClick={() => handleOpenModal(track.courseType)}
+              onClick={() => handleOpenModal(track.course_type)}
               className={styles.course__button}
             >
-              { track.isCompleted ? <CompletedIcon /> : <NotCompletedIcon /> }
-              <div className={styles.course__track}>{track.courseType}</div>
+              { track.required_credit <= track.completed_credit
+                ? <CompletedIcon /> : <NotCompletedIcon /> }
+              <div className={styles.course__track}>{track.course_type}</div>
             </button>
-            <div className={styles.course__enrolled}>{track.courseName}</div>
+            <div className={styles.course__enrolled}>
+              {/* eslint-disable-next-line no-nested-ternary */}
+              {track.course_type === '교양선택' || track.course_type === '인성과소양'
+                ? `${track.completed_credit ?? 0} / ${track.required_credit ?? 0}`
+                : Array.isArray(track.course_names) && track.course_names.length > 0
+                  ? track.course_names[0]
+                  : ''}
+            </div>
           </div>
         ))}
       </div>

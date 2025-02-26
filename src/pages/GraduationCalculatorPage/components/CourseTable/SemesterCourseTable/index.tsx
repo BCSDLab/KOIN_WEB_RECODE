@@ -22,10 +22,12 @@ function SemesterCourseTable({
       </thead>
       <tbody className={styles.table__body}>
         {tableData.length > 0 ? (
-          tableData.map((row) => (
-            <tr>
-              {row.map((cell) => (
-                <td>{cell}</td>
+          tableData.map((row, rowIndex) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <tr key={`row-${rowIndex}`}>
+              {row.map((cell, cellIndex) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <td key={`cell-${rowIndex}-${cellIndex}`}>{cell}</td>
               ))}
             </tr>
           ))
