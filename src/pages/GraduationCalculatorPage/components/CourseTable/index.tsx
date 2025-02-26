@@ -55,14 +55,14 @@ function CourseTable({ frameId }: { frameId: number }) {
     }
   };
 
-  const handleDeleteLecture = (id: number) => {
+  const handleDeleteLecture = (id: number, disableRecoverButton: boolean) => {
     const lectureToRemove = myLectures.find(
       (lecture: MyLectureInfo | Lecture) => lecture.id === id,
     );
 
     if (!lectureToRemove) return;
 
-    removeMyLecture.mutate({ clickedLecture: lectureToRemove, id });
+    removeMyLecture.mutate({ clickedLecture: lectureToRemove, id, disableRecoverButton });
   };
 
   const onClickDeleteLecture = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
@@ -71,7 +71,7 @@ function CourseTable({ frameId }: { frameId: number }) {
     portalManager.open((portalOption: Portal) => (
       <DeleteLectureModal
         onClose={portalOption.close}
-        handleDeleteLecture={() => handleDeleteLecture(id)}
+        handleDeleteLecture={() => handleDeleteLecture(id, true)}
         setModalOpenFalse={setModalOpenFalse}
       />
     ));
