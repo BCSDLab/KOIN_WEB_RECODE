@@ -14,6 +14,8 @@ export function useExcelUpload() {
 
     mutate(formData as unknown as GraduationExcelUploadForPost, {
       onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['generalEducation'] });
+        queryClient.invalidateQueries({ queryKey: ['my_semester'] });
         queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
         showToast('success', '엑셀 파일이 성공적으로 업로드되었습니다.');
       },
