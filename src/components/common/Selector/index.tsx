@@ -1,7 +1,7 @@
 import { cn } from '@bcsdlab/utils';
-import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
-import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
 import SettingIcon from 'assets/svg/setting-icon.svg';
+import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
+import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './Selector.module.scss';
@@ -20,9 +20,9 @@ interface SelectorProps {
   version?: SelectorVersion;
   placeholder?: string;
   disabled?: boolean;
-  onChange: (event: { target: { value: string } }) => void;
   onDelete?: (value: string) => void;
   onSettingsClick?: (value: string) => void;
+  onChange: (event: { target: { value: string } }) => void;
 }
 
 export function Selector({
@@ -32,9 +32,9 @@ export function Selector({
   version = 'inSignup',
   placeholder = '선택해주세요.',
   disabled = false,
-  onChange,
   onDelete,
   onSettingsClick,
+  onChange,
 }: SelectorProps) {
   const [isOpen, , setFalse, triggerOpen] = useBooleanState(false);
 
@@ -88,7 +88,7 @@ export function Selector({
         <ul
           className={cn({
             [styles['select__contents-list']]: true,
-            [styles['select__contents-list--up']]: isOverHalf,
+            [styles['select__contents-list--up']]: isOverHalf && isOpen,
             [styles['select__contents-list--visible']]: isOpen,
             [styles['select__content-list--in-time-table']]: version === 'inTimeTable',
           })}

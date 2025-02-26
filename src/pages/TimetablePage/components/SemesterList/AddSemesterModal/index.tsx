@@ -7,7 +7,7 @@ import {
 import showToast from 'utils/ts/showToast';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { Selector } from 'components/common/Selector';
+import Listbox from 'components/TimetablePage/Listbox';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {
@@ -84,17 +84,17 @@ export default function AddSemesterModal({
           </div>
         </header>
         <div className={styles.container__semester}>
-          <Selector
-            options={years}
+          <Listbox
+            list={years}
             value={yearValue}
             onChange={onChangeYear}
-            version="inModal"
+            version="new"
           />
-          <Selector
-            options={semester}
+          <Listbox
+            list={semester}
             value={semesterValue}
             onChange={onChangeSemester}
-            version="inModal"
+            version="new"
           />
         </div>
         <div className={styles.container__button}>

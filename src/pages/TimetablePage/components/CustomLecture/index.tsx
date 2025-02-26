@@ -14,7 +14,7 @@ import { useSearchParams } from 'react-router-dom';
 import { LectureInfo, MyLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
-import { Selector } from 'components/common/Selector';
+import Listbox from 'components/TimetablePage/Listbox';
 import styles from './CustomLecture.module.scss';
 
 type Hour = '09시' | '10시' | '11시' | '12시' | '13시' | '14시' | '15시' | '16시' | '17시' | '18시' | '19시' | '20시' | '21시' | '22시' | '23시' | '24시';
@@ -500,37 +500,33 @@ function CustomLecture({ frameId }: { frameId: number }) {
                       reverseRef.current[index] = element;
                     }}
                   >
-                    <Selector
-                      options={HOUR}
+                    <Listbox
+                      list={HOUR}
                       value={time.startHour}
-                      type="default"
                       onChange={handleLectureTimeByTime('startHour', index)}
-                      version="inModify"
+                      version="addLecture"
                       disabled={isEditStandardLecture}
                     />
-                    <Selector
-                      options={MINUTE}
+                    <Listbox
+                      list={MINUTE}
                       value={time.startMinute}
-                      type="default"
                       onChange={handleLectureTimeByTime('startMinute', index)}
-                      version="inModify"
+                      version="addLecture"
                       disabled={isEditStandardLecture}
                     />
                     <span>-</span>
-                    <Selector
-                      options={time.endHour === '24시' ? [{ label: '24시', value: '24시' }] : HOUR}
+                    <Listbox
+                      list={time.endHour === '24시' ? [{ label: '24시', value: '24시' }] : HOUR}
                       value={time.endHour}
-                      type="default"
                       onChange={handleLectureTimeByTime('endHour', index)}
-                      version="inModify"
+                      version="addLecture"
                       disabled={isEditStandardLecture}
                     />
-                    <Selector
-                      options={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE}
+                    <Listbox
+                      list={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE}
                       value={time.endMinute}
-                      type="default"
                       onChange={handleLectureTimeByTime('endMinute', index)}
-                      version="inModify"
+                      version="addLecture"
                       disabled={isEditStandardLecture}
                     />
                   </div>
