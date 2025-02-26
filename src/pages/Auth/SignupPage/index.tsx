@@ -1,6 +1,5 @@
 import React, {
-  forwardRef,
-  Suspense, useImperativeHandle, useRef, useState,
+  forwardRef, Suspense, useImperativeHandle, useRef, useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';

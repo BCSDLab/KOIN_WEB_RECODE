@@ -11,10 +11,11 @@ const MAX_IMAGES_LENGTH = 10;
 interface FormImageProps {
   images: Array<string>;
   setImages: (images: Array<string>) => void;
+  type: 'FOUND' | 'LOST';
 }
 
 export default function FormImage({
-  images, setImages,
+  images, setImages, type,
 }: FormImageProps) {
   const isMobile = useMediaQuery();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadLostItemFile });
@@ -36,12 +37,14 @@ export default function FormImage({
     setImages(images.filter((image: string) => image !== url));
   };
 
+  const uploadImage = type === 'FOUND' ? '습득물 사진을 업로드해주세요.' : '분실물 사진을 업로드해주세요.';
+
   return (
     <div className={styles.images}>
       <div className={styles.images__header}>
         <span className={styles.title}>사진</span>
         <div className={styles.images__text}>
-          <span className={styles.title__description}>습득물 사진을 업로드해주세요.</span>
+          <span className={styles.title__description}>{uploadImage}</span>
           <span className={styles.images__counter}>
             {imageCounter}
           </span>

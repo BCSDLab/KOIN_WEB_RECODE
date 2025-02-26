@@ -7,6 +7,7 @@ import {
   GetSingleLostItemArticle,
   DeleteLostItemArticle,
   PostLostItemArticles,
+  PostReportLostItemArticle,
   PostLostItemChatroom,
   PostBlockLostItemChatroom,
   GetLostItemChatroomList,
@@ -14,7 +15,7 @@ import {
   GetLostItemChatroomDetailMessages,
 } from './APIDetail';
 
-export const getArticles = APIClient.of(GetArticles);
+export const getArticles = (token: string, page: string) => APIClient.of(GetArticles)(token, page);
 
 export const getArticle = APIClient.of(GetArticle);
 
@@ -27,6 +28,8 @@ export const getSingleLostItemArticle = APIClient.of(GetSingleLostItemArticle);
 export const postLostItemArticle = APIClient.of(PostLostItemArticles);
 
 export const deleteLostItemArticle = APIClient.of(DeleteLostItemArticle);
+
+export const postReportLostItemArticle = APIClient.of(PostReportLostItemArticle);
 
 export const postLostItemChatroom = APIClient.of(PostLostItemChatroom);
 

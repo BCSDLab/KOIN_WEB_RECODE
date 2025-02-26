@@ -33,6 +33,7 @@ import AddReviewPage from 'pages/StoreReviewPage/AddReviewPage';
 import EditReviewPage from 'pages/StoreReviewPage/EditReviewPage';
 import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/ReviewReporting';
 import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
+import GraduationCalculatorPage from 'pages/GraduationCalculatorPage';
 import PageNotFound from 'pages/Error/PageNotFound';
 import PolicyPage from 'pages/PolicyPage';
 import ROUTES from 'static/routes';
@@ -85,6 +86,7 @@ function App() {
           <Route path={ROUTES.Timetable()} element={<Wrapper title="시간표" element={<TimetablePage />} />} />
           <Route path={ROUTES.TimetableRegular({ isLink: false })} element={<Wrapper title="시간표 수정" element={<ModifyTimetablePage />} />} />
           <Route path={ROUTES.TimetableDirect({ isLink: false })} element={<Wrapper title="시간표 수정" element={<ModifyTimetablePage />} />} />
+          <Route path={ROUTES.GraduationCalculator()} element={<Wrapper title="졸업학점 계산기" element={<GraduationCalculatorPage />} />} />
 
           <Route path={ROUTES.Store()} element={<Wrapper title="상점" element={<StorePage />} />} />
           <Route path={ROUTES.BenefitStore()} element={<Wrapper title="전화 혜택" element={<StoreBenefitPage />} />} />
@@ -103,8 +105,8 @@ function App() {
             <Route path={ROUTES.ArticlesDetail({ isLink: false })} element={<Wrapper title="공지사항 상세" element={<ArticlesDetailPage />} />} />
             <Route path={ROUTES.LostItemDetail({ isLink: false })} element={<Wrapper title="분실물 상세" element={<LostItemDetailPage />} />} />
           </Route>
-          <Route path={ROUTES.LostItemFound()} element={<Wrapper needAuth title="분실물 글쓰기" element={<LostItemWritePage />} />} />
-          <Route path={ROUTES.LostItemLost()} element={<Wrapper needAuth title="분실물 글쓰기" element={<LostItemWritePage />} />} />
+          <Route path={ROUTES.LostItemFound()} element={<Wrapper title="습득물 글쓰기" element={<LostItemWritePage />} />} />
+          <Route path={ROUTES.LostItemLost()} element={<Wrapper title="분실물 글쓰기" element={<LostItemWritePage />} />} />
           <Route path={ROUTES.LostItemChat()} element={<Wrapper needAuth title="분실물 쪽지" element={<LostItemChatPage />} />} />
           <Route path={ROUTES.CampusInfo()} element={<Wrapper title="교내 시설물 정보" element={<CampusInfo />} />} />
         </Route>

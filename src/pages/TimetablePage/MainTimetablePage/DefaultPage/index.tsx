@@ -8,11 +8,11 @@ import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {
-  frameId: number,
+  timetableFrameId: number,
   setCurrentFrameId: (index: number) => void,
 }
 
-export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageProps) {
+export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: DefaultPageProps) {
   const logger = useLogger();
   const handlePopState = React.useCallback(() => {
     history.back();
@@ -82,10 +82,10 @@ export default function DefaultPage({ frameId, setCurrentFrameId }: DefaultPageP
       >
         <div className={styles.page__content}>
           <TimetableList
-            currentFrameIndex={frameId}
+            currentFrameIndex={timetableFrameId}
             setCurrentFrameIndex={setCurrentFrameId}
           />
-          <MainTimetable frameId={frameId} />
+          <MainTimetable timetableFrameId={timetableFrameId} />
         </div>
       </Suspense>
     </div>

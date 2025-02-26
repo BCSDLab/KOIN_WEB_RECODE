@@ -9,19 +9,20 @@ export default function useEditTimetableLectureRegular() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ frameId, editedLecture, token }: {
-      frameId: number;
+    mutationFn: ({ timetableFrameId, editedLecture, token }: {
+      timetableFrameId: number;
       editedLecture: TimetableRegularLecture;
       token: string
     }) => editTimetableLectureRegular(
-      { timetable_frame_id: frameId, timetable_lecture: editedLecture },
+      { timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture },
       token,
     ),
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
-        [TIMETABLE_INFO_LIST, variables.frameId],
+        [TIMETABLE_INFO_LIST, variables.timetableFrameId],
         data,
       );
+      queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
       showToast('success', '강의 수정이 되었습니다.');
     },
     onError: (error) => {

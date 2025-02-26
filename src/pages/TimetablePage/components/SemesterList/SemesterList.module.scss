@@ -81,6 +81,12 @@
     &--no-option {
       color: #175c8e;
     }
+
+    &--graduation {
+      width: 331px;
+      border: 1px solid #e1e1e1;
+      border-radius: 16px;
+    }
   }
 
   &__content {
@@ -106,6 +112,10 @@
       ::-webkit-scrollbar {
         display: none;
       }
+    }
+
+    &--graduation {
+      max-height: 208px;
     }
   }
 

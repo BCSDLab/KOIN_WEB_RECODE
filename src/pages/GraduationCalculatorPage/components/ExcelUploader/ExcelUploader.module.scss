@@ -1,0 +1,100 @@
+@use "utils/scss/media.scss" as media;
+
+.excel-uploader {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 106px;
+  border: none;
+  border-radius: 16px;
+  background-color: #eee;
+
+  &__description-button {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+
+    & > svg {
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  &__button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 27px;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+
+    & > svg {
+      width: 40px;
+    }
+
+    & > span {
+      color: #727272;
+      font-family: Pretendard, sans-serif;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 500;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__tooltip {
+    z-index: 10;
+    position: absolute;
+    top: -90.5px;
+    right: -102px;
+    display: flex;
+    width: fit-content;
+    gap: 8px;
+    border-radius: 8px;
+    background: #fafafa;
+    padding: 16px;
+    box-shadow: 0 1px 4px 0 rgba(0 0 0 / 4%), 0 4px 10px 0 rgba(0 0 0 / 8%);
+
+    &-content {
+      text-align: left;
+      color: #1f1f1f;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 160%;
+
+      & > strong {
+        font-weight: 600;
+      }
+    }
+
+    &-close {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+
+      & > svg > path {
+        fill: #cacaca;
+      }
+    }
+
+    &-asset {
+      position: absolute;
+      bottom: -13px;
+      right: -124px;
+      width: 100%;
+      margin: 0 auto;
+    }
+  }
+}
