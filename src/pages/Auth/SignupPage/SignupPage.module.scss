@@ -29,8 +29,8 @@
     order: 99;
 
     ul {
-        top: inherit;
-        bottom: 50px;
+      top: inherit;
+      bottom: 50px;
     }
 
     @include media.media-breakpoint(mobile) {
