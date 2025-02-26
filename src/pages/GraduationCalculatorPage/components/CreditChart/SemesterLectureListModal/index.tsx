@@ -6,7 +6,7 @@ import DeptListbox from 'pages/TimetablePage/components/LectureList/DeptListbox'
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useCourseType from 'pages/GraduationCalculatorPage/hooks/useCourseType';
-import { useState } from 'react';
+import { startTransition, useState } from 'react';
 import { useUser } from 'utils/hooks/state/useUser';
 import styles from './SemesterLectureListModal.module.scss';
 
@@ -88,26 +88,40 @@ export default function SemesterLectureListModal({
           <Listbox
             list={semesterOptionList}
             value={`${semester.year}년 ${semester.term}`}
-            onChange={({ target }) => setSemester({
-              year: Number(target.value.slice(0, 4)),
-              term: target.value.slice(6),
+            onChange={({ target }) => startTransition(() => {
+              setSemester({
+                year: Number(target.value.slice(0, 4)),
+                term: target.value.slice(6),
+              });
             })}
             version="new"
           />
           <Listbox
             list={lectureStatusOptions}
             value={lectureStatus}
-            onChange={onChangeLectureStatus}
+            onChange={(e) => {
+              startTransition(() => {
+                onChangeLectureStatus(e);
+              });
+            }}
             version="new"
           />
           <DeptListbox
             value={department}
-            onChange={onChangeDepartment}
+            onChange={(e) => {
+              startTransition(() => {
+                onChangeDepartment(e);
+              });
+            }}
           />
           <Listbox
             list={courseType}
             value={course}
-            onChange={onChangeCourse}
+            onChange={(e) => {
+              startTransition(() => {
+                onChangeCourse(e);
+              });
+            }}
             version="new"
           />
         </div>
