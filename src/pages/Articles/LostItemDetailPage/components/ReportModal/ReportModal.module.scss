@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 999;
 }
 
 .modal {
@@ -18,7 +18,7 @@
   width: 451px;
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0 0 0 / 20%);
-  z-index: 10000;
+  z-index: 1000;
   align-items: center;
   justify-content: center;
 
