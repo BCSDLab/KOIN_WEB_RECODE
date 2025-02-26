@@ -13,7 +13,6 @@ const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
   }
 
   let uuid = localStorage.getItem('uuid');
-
   if (!uuid) {
     uuid = uuidv4();
     localStorage.setItem('uuid', uuid);
@@ -42,7 +41,6 @@ function LogPage() {
     };
     handlePageView();
   }, [location, userInfo]);
-
   return null;
 }
 export default LogPage;

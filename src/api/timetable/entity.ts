@@ -56,6 +56,8 @@ export interface MyLectureInfo {
   target: string;
   professor: string;
   department: string;
+  course_type?: string,
+  general_education_area?: string,
 }
 
 export interface TimetableLectureInfoResponse extends APIResponse {
@@ -63,6 +65,10 @@ export interface TimetableLectureInfoResponse extends APIResponse {
   timetable: MyLectureInfo[];
   grades: number;
   total_grades: number;
+}
+
+export interface TimetableAllLectureResponse extends APIResponse {
+  timetable: MyLectureInfo[];
 }
 
 interface ClassPlace {
@@ -74,6 +80,7 @@ export interface TimetableRegularLecture {
   lecture_id: number;
   class_title: string;
   class_places: ClassPlace[];
+  course_type?: string;
 }
 
 export interface TimetableLectureRegularEditRequest {

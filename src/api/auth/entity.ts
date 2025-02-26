@@ -61,14 +61,14 @@ export interface UserResponse extends APIResponse {
 
 export interface UserUpdateRequest {
   password?: string;
-  identity: number;
-  is_graduated: boolean;
-  gender: 0 | 1;
-  major: string;
-  name: string;
-  nickname: string;
-  phone_number: string;
-  student_number: string;
+  identity?: number;
+  is_graduated?: boolean;
+  gender?: 0 | 1;
+  major?: string;
+  name?: string;
+  nickname?: string;
+  phone_number?: string;
+  student_number?: string;
 }
 
 export interface DeleteResponse extends APIResponse { }
@@ -79,3 +79,15 @@ export interface FindPasswordResponse extends APIResponse {
 }
 
 export interface CheckPasswordResponse extends APIResponse { }
+
+export interface UpdateAcademicInfoRequest extends APIResponse {
+  student_number: string;
+  department: string;
+  major?: string;
+}
+
+export interface UpdateAcademicInfoResponse extends APIResponse {
+  student_number: string;
+  department: string;
+  major: string | null;
+}

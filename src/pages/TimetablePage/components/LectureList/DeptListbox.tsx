@@ -1,9 +1,11 @@
 import React from 'react';
-import Listbox, { ListboxProps } from 'components/TimetablePage/Listbox';
+import { Selector, SelectorProps } from 'components/common/Selector';
 
-type DecidedListboxProps = Omit<ListboxProps, 'list'>;
+type DeptListboxProps = Omit<SelectorProps, 'options'>;
 
-function DeptListbox({ value, onChange }: DecidedListboxProps) {
+function DeptListbox({
+  value, onChange, dropDownMaxHeight, isWhiteBackground,
+}: DeptListboxProps) {
   const deptOptionList = [
     { label: '전체', value: '전체' },
     { label: '디자인ㆍ건축공학부', value: '디자인ㆍ건축공학부' },
@@ -24,7 +26,14 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Listbox list={deptOptionList} value={value} onChange={onChange} version="new" />
+    <Selector
+      options={deptOptionList}
+      value={value}
+      isWhiteBackground={isWhiteBackground}
+      onChange={onChange}
+      placeholder="전체"
+      dropDownMaxHeight={dropDownMaxHeight}
+    />
   );
 }
 
