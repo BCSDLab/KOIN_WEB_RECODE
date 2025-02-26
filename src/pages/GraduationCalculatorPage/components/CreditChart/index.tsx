@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@bcsdlab/utils';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useCalculateCredits from 'pages/GraduationCalculatorPage/hooks/useCalculateCredits';
 import { GradesByCourseType } from 'api/graduationCalculator/entity';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
 import styles from './CreditChart.module.scss';
+import SemesterLectureListModal from './SemesterLectureListModal';
 
 const barStyles = (barsNumber: number) => {
   if (barsNumber === 7) return { width: '75px', gap: '45px' };
@@ -17,10 +20,19 @@ const barStyles = (barsNumber: number) => {
 
 function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
   const myLectures = useMyLectures(currentFrameIndex);
+  const portalManger = useModalPortal();
   const token = useTokenState();
   const { data: calculateCredits } = useCalculateCredits(token);
   const [creditState, setCreditState] = useState<GradesByCourseType[]>([]);
   const barsNumber = creditState.length;
+  const onClickBar = (courseType: string) => {
+    startTransition(() => portalManger.open((portalOption: Portal) => (
+      <SemesterLectureListModal
+        onClose={portalOption.close}
+        initialCourse={courseType}
+      />
+    )));
+  };
 
   const updateValues = (newValues: GradesByCourseType[]) => {
     setCreditState(newValues);
@@ -61,6 +73,7 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               layout
+              onClick={() => onClickBar(credit.courseType)}
             >
               <div
                 style={{

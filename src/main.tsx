@@ -24,11 +24,11 @@ root.render(
   <React.StrictMode>
     <RecoilRoot>
       <BrowserRouter>
-        <PortalProvider>
-          <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <PortalProvider>
             <App />
-          </QueryClientProvider>
-        </PortalProvider>
+          </PortalProvider>
+        </QueryClientProvider>
       </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>,

@@ -5,7 +5,7 @@ import useSemesterCheck, { MY_SEMESTER_INFO_KEY } from './useMySemester';
 
 const SEMESTER_INFO_KEY = 'semester';
 
-const useSemester = () => {
+export const useSemester = () => {
   const { data } = useSuspenseQuery(
     {
       queryKey: [SEMESTER_INFO_KEY],

@@ -18,6 +18,7 @@ import {
   AddTimetableLectureRegularRequest,
   AddTimetableLectureCustomRequest,
   RollbackTimetableLectureRequest,
+  TimetableAllLectureResponse,
 } from './entity';
 
 export class SemesterInfoList<R extends SemestersResponse> implements APIRequest<R> {
@@ -73,6 +74,19 @@ export class TimetableLectureInfo
       timetable_frame_id: timeTableFrameId,
     };
   }
+}
+
+export class TimetableAllLectureInfo<
+R extends TimetableAllLectureResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/v3/timetables/main/lectures';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) { }
 }
 
 export class TimetableLectureRegularEdit
