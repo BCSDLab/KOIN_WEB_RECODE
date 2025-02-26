@@ -344,6 +344,9 @@
     gap: 8px;
     align-items: center;
     justify-content: space-between;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
 
     & > span {
       color: #000;
@@ -352,45 +355,6 @@
       font-size: 20px;
       font-weight: 500;
       margin: 0 20px;
-    }
-
-    button {
-      display: flex;
-      padding: 16px 24px;
-      justify-content: space-between;
-      font-family: Pretendard, sans-serif;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 21.48px;
-      text-align: left;
-    }
-
-    li {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      font-family: Pretendard, sans-serif;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 21.48px;
-      text-align: left;
-      align-items: center;
-    }
-
-    ul {
-      width: 98.5%;
-      top: 50px;
-      border: 1px solid #cacaca;
-      border-radius: 5px;
-      max-height: 288px;
-      overflow-y: scroll;
-
-      @include scrollbar(8px);
-
-      &::-webkit-scrollbar-thumb {
-        border: 3px solid #fff;
-        background-clip: padding-box;
-      }
     }
 
     &--reverse {
