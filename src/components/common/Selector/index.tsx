@@ -1,13 +1,10 @@
 import { cn } from '@bcsdlab/utils';
-import SettingIcon from 'assets/svg/setting-icon.svg';
-import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
+// import SettingIcon from 'assets/svg/setting-icon.svg';
+// import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './Selector.module.scss';
-
-type SelectorType = 'delete' | 'setting' | 'default';
-type SelectorVersion = 'default' | 'inSignup' | 'inModal' | 'inModify' | 'inTimeTable';
 
 interface OptionList {
   label: string;
@@ -16,27 +13,29 @@ interface OptionList {
 interface SelectorProps {
   options: OptionList[];
   value: string | null;
-  type?: SelectorType;
-  version?: SelectorVersion;
+  isWhiteBackground?: boolean;
+  // type?: SelectorType;
   placeholder?: string;
-  disabled?: boolean;
-  onDelete?: (value: string) => void;
-  onSettingsClick?: (value: string) => void;
+  // disabled?: boolean;
+  DetailIcon?: React.ComponentType;
+  // onDelete?: (value: string) => void;
+  // onSettingsClick?: (value: string) => void;
   onChange: (event: { target: { value: string } }) => void;
 }
 
 export function Selector({
   options,
   value,
-  type = 'default',
-  version = 'inSignup',
+  isWhiteBackground = true,
+  // type = 'default',
   placeholder = '선택해주세요.',
-  disabled = false,
-  onDelete,
-  onSettingsClick,
+  // disabled = false,
+  DetailIcon,
+  // onDelete,
+  // onSettingsClick,
   onChange,
 }: SelectorProps) {
-  const [isOpen, , setFalse, triggerOpen] = useBooleanState(false);
+  const [isOpen, , closeMenu, triggerOpen] = useBooleanState(false);
 
   const onClickSelector = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -45,10 +44,10 @@ export function Selector({
 
   const handleOptionClick = (optionValue: string) => {
     onChange({ target: { value: optionValue } });
-    setFalse();
+    closeMenu();
   };
 
-  const { containerRef } = useOutsideClick({ onOutsideClick: setFalse });
+  const { containerRef } = useOutsideClick({ onOutsideClick: closeMenu });
 
   const selectedOption = options.find((option) => option.value === value);
   const showLabel = selectedOption?.label ?? placeholder;
@@ -72,13 +71,8 @@ export function Selector({
         className={cn({
           [styles.select__trigger]: true,
           [styles['select__trigger--opened']]: isOpen,
-          [styles['select__trigger--in-signup']]: version === 'inSignup',
-          [styles['select__trigger--in-modify']]: version === 'inModify',
-          [styles['select__trigger--in-modal']]: version === 'inModal',
-          [styles['select__trigger--in-time-table-open']]: isOpen && version === 'inTimeTable',
-          [styles['select__trigger--in-time-table']]: version === 'inTimeTable',
+          [styles['select__trigger--white-background']]: isWhiteBackground,
         })}
-        disabled={disabled}
       >
         {showLabel}
         <DownArrowIcon />
@@ -88,9 +82,7 @@ export function Selector({
         <ul
           className={cn({
             [styles['select__contents-list']]: true,
-            [styles['select__contents-list--up']]: isOverHalf && isOpen,
-            [styles['select__contents-list--visible']]: isOpen,
-            [styles['select__content-list--in-time-table']]: version === 'inTimeTable',
+            [styles['select__contents-list--up']]: isOverHalf,
           })}
           role="listbox"
         >
@@ -100,8 +92,6 @@ export function Selector({
               key={option.value}
               className={cn({
                 [styles.select__content]: true,
-                [styles['select__content--in-signup']]: version === 'inSignup',
-                [styles['select__content--in-time-table']]: version === 'inTimeTable',
               })}
               aria-selected={option.value === value}
               onClick={() => handleOptionClick(option.value)}
@@ -113,6 +103,10 @@ export function Selector({
               }}
             >
               {option.label}
+              {DetailIcon && (
+                <DetailIcon />
+              )}
+              {/*
               {type === 'delete' && (
                 <button
                   type="button"
@@ -139,6 +133,7 @@ export function Selector({
                   <div>설정</div>
                 </button>
               )}
+                */}
             </li>
           ))}
         </ul>

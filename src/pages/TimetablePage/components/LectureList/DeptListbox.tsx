@@ -1,6 +1,7 @@
 import React from 'react';
 import { ListboxProps } from 'components/TimetablePage/Listbox';
 import { Selector } from 'components/common/Selector';
+import styles from './LectureList.module.scss';
 
 type DecidedListboxProps = Omit<ListboxProps, 'list'>;
 
@@ -25,13 +26,15 @@ function DeptListbox({ value, onChange }: DecidedListboxProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Selector
-      options={deptOptionList}
-      value={value}
-      onChange={onChange}
-      placeholder="전체"
-      version="inTimeTable"
-    />
+    <div className={styles.selector}>
+      <Selector
+        options={deptOptionList}
+        value={value}
+        isWhiteBackground={false}
+        onChange={onChange}
+        placeholder="전체"
+      />
+    </div>
   );
 }
 
