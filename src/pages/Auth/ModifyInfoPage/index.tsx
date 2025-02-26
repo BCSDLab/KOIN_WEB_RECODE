@@ -2,8 +2,6 @@ import React, { Suspense, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -13,9 +11,9 @@ import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import Listbox from 'components/TimetablePage/Listbox';
 import ROUTES from 'static/routes';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
+import { Selector } from 'components/common/Selector';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
@@ -333,103 +331,49 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
         className={styles['form-input']}
         placeholder="학번 (선택)"
         value={studentNumber}
-        defaultValue={userInfo?.student_number}
         onChange={onChangeMajorInput}
         {...props}
       />
       <div className={styles['form-input__select']}>
-        <Listbox
-          list={deptOptionList}
+        <Selector
+          options={deptOptionList}
           value={major}
-          onChange={({ target }) => setMajor(target.value)}
+          onChange={(event) => setMajor(event.target.value)}
+          placeholder="학부 (선택)"
         />
       </div>
     </>
   );
 });
 
-const GENDER_TYPE = [
-  { label: '남', value: 0 },
-  { label: '여', value: 1 },
-];
-
-const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
+const GenderSelectorWithRef = React.forwardRef((
+  { options }: { options: { label: string; value:string }[] },
+  ref,
+) => {
   const { data: userInfo } = useUser();
-  const [currentValue, setCurrentValue] = React.useState<number | null>(userInfo?.gender || null);
-  const [isOpenedPopup,, closePopup, triggerPopup] = useBooleanState(false);
-  const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
-    const { currentTarget } = event;
-    const value = currentTarget.getAttribute('data-value');
-    setCurrentValue(value ? parseInt(value, 10) : null);
-    closePopup();
-  };
+  const [
+    selectedValue, setSelectedValue,
+  ] = React.useState<string | null>(String(userInfo?.gender) || null);
 
-  const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
-    const { key, currentTarget } = event;
-    const value = currentTarget.getAttribute('data-value');
-    switch (key) {
-      case 'Enter':
-        setCurrentValue(value ? parseInt(value, 10) : null);
-        break;
-      default:
-        break;
-    }
-  };
-
-  React.useEffect(() => {
-    if (userInfo?.gender !== undefined) {
-      setCurrentValue(userInfo.gender);
-    }
-  }, [userInfo?.gender]); // 기존 회원가입 로직에서 가져오는 과정에서 업데이트 문제로 활용
-
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    const requiredValidValue = (currentValue !== null ? true : '성별을 선택해주세요.');
-    return {
-      value: currentValue,
-      valid: required ? requiredValidValue : true,
-    };
-  }, [currentValue, required]);
+  useImperativeHandle(ref, () => ({
+    value: selectedValue,
+    valid: selectedValue !== null ? true : '성별을 선택해주세요.',
+  }));
 
   return (
     <div
       className={cn({
-        [styles.select]: true,
-        [styles['select--flex-end']]: true,
+        [styles['form-input__select']]: true,
+        [styles['form-input__select--flex-end']]: true,
       })}
+      style={{ marginLeft: '6px' }}
     >
-      <button
-        type="button"
-        onClick={triggerPopup}
-        name={name}
-        className={cn({
-          [styles.select__trigger]: true,
-        })}
-      >
-        {
-          currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'
-        }
-        <ChervronUpDown />
-      </button>
-      {isOpenedPopup && (
-        <ul className={styles.select__content} role="listbox">
-          {GENDER_TYPE.map((optionValue) => (
-            <li
-              className={styles.select__option}
-              key={optionValue.value}
-              role="option"
-              aria-selected={optionValue.value === currentValue}
-              data-value={optionValue.value}
-              onClick={onClickOption}
-              onKeyPress={onKeyPressOption}
-            >
-              {optionValue.label}
-            </li>
-          ))}
-        </ul>
-      )}
+      <Selector
+        options={options}
+        value={String(selectedValue)}
+        onChange={(event) => setSelectedValue(event.target.value)}
+        placeholder="성별 (선택)"
+      />
     </div>
   );
 });
@@ -534,7 +478,7 @@ function ModifyInfoDefaultPage() {
             },
           })}
         />
-        <GenderListbox {...register('gender')} />
+        <GenderSelectorWithRef {...register('gender')} options={[{ label: '남', value: '0' }, { label: '여', value: '1' }]} />
         <button
           type="submit"
           disabled={status === 'pending'}

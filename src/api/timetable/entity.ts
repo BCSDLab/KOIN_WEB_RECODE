@@ -67,6 +67,10 @@ export interface TimetableLectureInfoResponse extends APIResponse {
   total_grades: number;
 }
 
+export interface TimetableAllLectureResponse extends APIResponse {
+  timetable: MyLectureInfo[];
+}
+
 interface ClassPlace {
   class_place: string;
 }

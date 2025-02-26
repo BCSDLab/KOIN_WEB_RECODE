@@ -6,7 +6,7 @@ const useCourseType = (
   token: string,
   semester: Semester,
   name: string,
-  generalEducationArea: string | undefined,
+  generalEducationArea?: string,
 ) => {
   const { data } = useSuspenseQuery({
     queryKey: ['courseType', semester, name, generalEducationArea],
