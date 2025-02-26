@@ -6,7 +6,7 @@ import {
   Semester,
   CourseTypeResponse,
   GraduationExcelUploadResponse,
-  GraduationExelUploadRequest,
+  GraduationExcelUploadRequest,
   GradesByCourseTypeResponse,
 } from './entity';
 
@@ -64,7 +64,7 @@ export class GraduationExcelUpload<
 
   auth = true;
 
-  constructor(public data: GraduationExelUploadRequest, public authorization: string) {}
+  constructor(public data: GraduationExcelUploadRequest, public authorization: string) {}
 }
 
 export class GradesByCourseType<R extends GradesByCourseTypeResponse> implements APIRequest<R> {
