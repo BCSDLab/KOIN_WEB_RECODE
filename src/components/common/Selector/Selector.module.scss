@@ -34,6 +34,7 @@
   display: inline-block;
   width: 100%;
   border-radius: 4px;
+
   @include inherit-text-style;
 
   svg:not(.select__delete svg) {
@@ -57,7 +58,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     @include inherit-text-style;
+
     background-color: #fff;
     color: inherit;
     cursor: pointer;
@@ -115,7 +118,9 @@
     box-sizing: border-box;
     background-color: #fafafa;
     color: #8e8e8e;
+
     @include inherit-text-style;
+
     cursor: pointer;
 
     &[aria-selected="true"] {
