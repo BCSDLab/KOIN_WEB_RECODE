@@ -124,9 +124,8 @@ export default function useTimetableMutation(timetableFrameId: number) {
       const { id, disableRecoverButton } = variables;
       toast.open({
         message: '해당 과목이 삭제되었습니다.',
-        recoverMessage: '해당 과목이 복구되었습니다.',
+        recoverMessage: disableRecoverButton ? undefined : '해당 과목이 복구되었습니다.',
         onRecover: () => restoreLecture([id]),
-        showRecoverButton: !disableRecoverButton,
       });
     },
     onError: (error) => {

@@ -10,7 +10,6 @@ export interface Toast {
   recoverMessage?: string;
   onClose: () => void;
   onRecover?: () => void;
-  showRecoverButton?: boolean;
   duration?: number;
 }
 
@@ -19,7 +18,6 @@ export default function TimetableToast({
   recoverMessage,
   onClose,
   onRecover,
-  showRecoverButton = true,
   duration = 5000,
 }: Toast) {
   const [isClicked, setIsClicked] = useState(false);
@@ -51,9 +49,8 @@ export default function TimetableToast({
         <>
           <div className={styles.toast__message}>{message}</div>
           {
-            recoverMessage && showRecoverButton && (
-              <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>취소하기</button>
-            )
+            recoverMessage
+              && <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>취소하기</button>
           }
         </>
       ) : (
