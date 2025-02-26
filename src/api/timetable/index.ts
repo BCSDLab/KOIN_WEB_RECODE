@@ -4,6 +4,7 @@ import {
   SemesterCheck,
   LectureList,
   TimetableLectureInfo,
+  TimetableAllLectureInfo,
   TimetableLectureRegularEdit,
   TimetableLectureCustomEdit,
   TimetableLectureRegularAddition,
@@ -26,6 +27,8 @@ export const getMySemester = APIClient.of(SemesterCheck);
 export const getLectureList = APIClient.of(LectureList);
 
 export const getTimetableLectureInfo = APIClient.of(TimetableLectureInfo);
+
+export const getTimetableAllLectureInfo = APIClient.of(TimetableAllLectureInfo);
 
 export const editTimetableLectureRegular = APIClient.of(TimetableLectureRegularEdit);
 
