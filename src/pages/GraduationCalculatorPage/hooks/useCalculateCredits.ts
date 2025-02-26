@@ -6,7 +6,7 @@ export default function useCalculateCredits(token: string) {
 
   return useQuery({
     queryKey: ['creditsByCourseType'],
-    queryFn: () => graduationCalculator.calculateGraduationCredits(token),
+    queryFn: () => (token ? graduationCalculator.calculateGraduationCredits(token) : null),
     enabled: !!agreeGraduationCredits,
   });
 }
