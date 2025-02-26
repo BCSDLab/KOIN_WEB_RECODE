@@ -1,4 +1,3 @@
-import Listbox from 'components/TimetablePage/Listbox';
 import SemesterCourseTable from 'pages/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
 import { useSemester } from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useSelect from 'pages/TimetablePage/hooks/useSelect';
@@ -10,6 +9,7 @@ import { startTransition, useState } from 'react';
 import { useUser } from 'utils/hooks/state/useUser';
 import useTakenLectureCode from 'pages/TimetablePage/hooks/useTakenLectureCode';
 import { LectureInfo } from 'api/graduationCalculator/entity';
+import { Selector } from 'components/common/Selector';
 import styles from './SemesterLectureListModal.module.scss';
 
 const lectureStatusOptions = [
@@ -106,45 +106,54 @@ export default function SemesterLectureListModal({
           </button>
         </div>
         <div className={styles.dropdowns}>
-          <Listbox
-            list={semesterOptionList}
-            value={`${semester.year}년 ${semester.term}`}
-            onChange={({ target }) => startTransition(() => {
-              setSemester({
-                year: Number(target.value.slice(0, 4)),
-                term: target.value.slice(6),
-              });
-            })}
-            version="new"
-          />
-          <Listbox
-            list={lectureStatusOptions}
-            value={lectureStatus}
-            onChange={(e) => {
-              startTransition(() => {
-                onChangeLectureStatus(e);
-              });
-            }}
-            version="new"
-          />
-          <DeptListbox
-            value={department}
-            onChange={(e) => {
-              startTransition(() => {
-                onChangeDepartment(e);
-              });
-            }}
-          />
-          <Listbox
-            list={courseType}
-            value={course}
-            onChange={(e) => {
-              startTransition(() => {
-                onChangeCourse(e);
-              });
-            }}
-            version="new"
-          />
+          <div className={styles['dropdowns__first-row']}>
+            <Selector
+              options={semesterOptionList}
+              value={`${semester.year}년 ${semester.term}`}
+              onChange={({ target }) => startTransition(() => {
+                setSemester({
+                  year: Number(target.value.slice(0, 4)),
+                  term: target.value.slice(6),
+                });
+              })}
+              dropDownMaxHeight={384}
+            />
+          </div>
+          <div className={styles['dropdowns__first-row']}>
+            <Selector
+              options={lectureStatusOptions}
+              value={lectureStatus}
+              onChange={(e) => {
+                startTransition(() => {
+                  onChangeLectureStatus(e);
+                });
+              }}
+            />
+          </div>
+          <div className={styles['dropdowns__second-row']}>
+            <DeptListbox
+              value={department}
+              onChange={(e) => {
+                startTransition(() => {
+                  onChangeDepartment(e);
+                });
+              }}
+              dropDownMaxHeight={368}
+              isWhiteBackground
+            />
+          </div>
+          <div className={styles['dropdowns__second-row']}>
+            <Selector
+              options={courseType}
+              value={course}
+              onChange={(e) => {
+                startTransition(() => {
+                  onChangeCourse(e);
+                });
+              }}
+              dropDownMaxHeight={368}
+            />
+          </div>
         </div>
         <div className={styles['container__lecture-table']}>
           <SemesterCourseTable
