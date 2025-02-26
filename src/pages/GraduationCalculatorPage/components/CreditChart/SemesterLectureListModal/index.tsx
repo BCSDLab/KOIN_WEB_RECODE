@@ -8,6 +8,8 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useCourseType from 'pages/GraduationCalculatorPage/hooks/useCourseType';
 import { startTransition, useState } from 'react';
 import { useUser } from 'utils/hooks/state/useUser';
+import useTakenLectureCode from 'pages/TimetablePage/hooks/useTakenLectureCode';
+import { LectureInfo } from 'api/graduationCalculator/entity';
 import styles from './SemesterLectureListModal.module.scss';
 
 const lectureStatusOptions = [
@@ -43,6 +45,7 @@ export default function SemesterLectureListModal({
 }) {
   const semesters = useSemester();
   const token = useTokenState();
+  const { data: takenLectureCode } = useTakenLectureCode(token);
   const { data: userInfo } = useUser();
   const semesterOptionList = (semesters ?? []).map(
     (semesterInfo) => ({
@@ -68,11 +71,29 @@ export default function SemesterLectureListModal({
       (lecture) => lecture.department === department,
     );
 
-  const tableData = filteredLecturesByDept.map((lecture) => [
-    <span key={`name-${lecture.id}`}>{lecture.name}</span>,
-    <span key={`professor-${lecture.id}`}>{}</span>,
-    <span key={`grades-${lecture.id}`}>{lecture.grades}</span>,
-    <span key={`grades-${lecture.id}`}>{course}</span>,
+  function separateByMatchingCodes(lectureInfo: LectureInfo[], takenCode: string[]) {
+    const codesSet2 = new Set(takenCode);
+
+    const matched = [
+      ...lectureInfo.filter((item) => codesSet2.has(item.code)),
+    ];
+    const unmatched = [
+      ...lectureInfo.filter((item) => !codesSet2.has(item.code)),
+    ];
+
+    return { matched, unmatched };
+  }
+
+  const filteredLectureByLectureStatus = lectureStatus === '수강한 강의'
+    ? separateByMatchingCodes(filteredLecturesByDept, takenLectureCode).matched
+    : separateByMatchingCodes(filteredLecturesByDept, takenLectureCode).unmatched;
+
+  const tableData = filteredLectureByLectureStatus.map((lecture) => [
+    <span>{lecture.name}</span>,
+    <span>{ }</span>,
+    <span>{lecture.grades}</span>,
+    <span>{course}</span>,
+    <span>{ }</span>,
   ]);
 
   return (
@@ -125,9 +146,11 @@ export default function SemesterLectureListModal({
             version="new"
           />
         </div>
-        <SemesterCourseTable
-          tableData={tableData}
-        />
+        <div className={styles['container__lecture-table']}>
+          <SemesterCourseTable
+            tableData={tableData}
+          />
+        </div>
       </div>
     </div>
   );

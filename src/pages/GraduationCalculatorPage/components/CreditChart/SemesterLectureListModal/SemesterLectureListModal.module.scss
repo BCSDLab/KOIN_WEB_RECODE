@@ -12,7 +12,6 @@
 }
 
 .container {
-  height: 552px;
   padding: 24px;
   background-color: #fff;
   border-radius: 24px;
@@ -32,6 +31,10 @@
       line-height: 32px;
       letter-spacing: 0%;
     }
+  }
+
+  &__lecture-table {
+    height: 324px;
   }
 }
 
