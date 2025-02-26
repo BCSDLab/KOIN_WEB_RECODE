@@ -12,6 +12,7 @@ export default function useUpdateAcademicInfo(token: string) {
     onSuccess: () => {
       // 이수 교양 강의 조회 api 추가
       queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
+      queryClient.invalidateQueries({ queryKey: ['generalEducation'] });
     },
 
     onError: (error) => {
