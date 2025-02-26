@@ -50,7 +50,12 @@ function GeneralCourse() {
               <div className={styles.course__track}>{track.course_type}</div>
             </button>
             <div className={styles.course__enrolled}>
-              {track.course_names?.length > 0 ? track.course_names[0] : ''}
+              {/* eslint-disable-next-line no-nested-ternary */}
+              {track.course_type === '교양선택' || track.course_type === '인성과소양'
+                ? `${track.completed_credit ?? 0} / ${track.required_credit ?? 0}`
+                : Array.isArray(track.course_names) && track.course_names.length > 0
+                  ? track.course_names[0]
+                  : ''}
             </div>
           </div>
         ))}
