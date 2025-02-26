@@ -1,11 +1,10 @@
 import React from 'react';
-import { ListboxProps } from 'components/TimetablePage/Listbox';
-import { Selector } from 'components/common/Selector';
+import { Selector, SelectorProps } from 'components/common/Selector';
 import styles from './LectureList.module.scss';
 
-type DecidedListboxProps = Omit<ListboxProps, 'list'>;
+type DeptListboxProps = Omit<SelectorProps, 'options'>;
 
-function DeptListbox({ value, onChange }: DecidedListboxProps) {
+function DeptListbox({ value, onChange }: DeptListboxProps) {
   const deptOptionList = [
     { label: '전체', value: '전체' },
     { label: '디자인ㆍ건축공학부', value: '디자인ㆍ건축공학부' },

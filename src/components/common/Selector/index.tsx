@@ -8,7 +8,7 @@ interface OptionList {
   label: string;
   value: string;
 }
-interface SelectorProps {
+export interface SelectorProps {
   options: readonly OptionList[];
   value: string | null;
   isWhiteBackground?: boolean;
