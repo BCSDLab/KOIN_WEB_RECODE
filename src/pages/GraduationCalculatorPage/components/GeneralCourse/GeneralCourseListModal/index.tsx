@@ -1,9 +1,10 @@
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
-import SemesterList from 'pages/TimetablePage/components/SemesterList';
 import SemesterCourseTable from 'pages/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { useSemester } from 'utils/zustand/semester';
+import { useSemester } from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useCourseType from 'pages/GraduationCalculatorPage/hooks/useCourseType';
+import { startTransition, useState } from 'react';
+import { Selector } from 'components/common/Selector';
 import styles from './GeneralCourseListModal.module.scss';
 
 export interface GeneralCourseListModalProps {
@@ -16,7 +17,18 @@ function GeneralCourseListModal({
   onClose,
 }: GeneralCourseListModalProps) {
   const token = useTokenState();
-  const semester = useSemester();
+  const semesters = useSemester();
+  const semesterOptionList = (semesters ?? []).map(
+    (semesterInfo) => ({
+      label: `${semesterInfo.year}년 ${semesterInfo.term}`,
+      value: `${semesterInfo.year}년 ${semesterInfo.term}`,
+    }),
+  );
+
+  const [semester, setSemester] = useState<{
+    year: number,
+    term: string
+  }>({ year: semesters[0].year, term: semesters[0].term });
 
   const { data: generalCourses } = useCourseType(token, semester, '교양선택', courseType ?? undefined);
   const generalCourseLectures = generalCourses?.lectures ?? [];
@@ -43,7 +55,19 @@ function GeneralCourseListModal({
             <CloseIcon />
           </button>
         </div>
-        <SemesterList isViewMode />
+        <div className={styles.header__semester}>
+          <Selector
+            options={semesterOptionList}
+            value={`${semester.year}년 ${semester.term}`}
+            onChange={({ target }) => startTransition(() => {
+              setSemester({
+                year: Number(target.value.slice(0, 4)),
+                term: target.value.slice(6),
+              });
+            })}
+            dropDownMaxHeight={384}
+          />
+        </div>
         <div className={styles.content}>
           <p className={styles.content__label}>{courseType}</p>
           <div className={styles.content__table}>
