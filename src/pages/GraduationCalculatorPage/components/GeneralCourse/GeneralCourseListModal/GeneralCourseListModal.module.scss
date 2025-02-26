@@ -63,9 +63,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: 362px;
   gap: 12px;
-  overflow: hidden;
 
   &__label {
     padding: 0 12px;
@@ -75,5 +73,9 @@
     font-style: normal;
     font-weight: 500;
     line-height: 25.6px;
+  }
+
+  &__table {
+    height: 324px;
   }
 }
