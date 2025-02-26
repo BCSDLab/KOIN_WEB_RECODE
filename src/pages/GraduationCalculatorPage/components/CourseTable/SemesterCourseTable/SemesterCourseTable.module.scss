@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 228px;
+  height: 100%;
   gap: 4px;
   font-family: Pretendard, sans-serif;
   font-size: 14px;
@@ -39,10 +39,10 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    min-height: 208px;
     box-sizing: border-box;
     gap: 4px;
     align-items: center;
-    align-self: stretch;
     color: #000;
     overflow-y: auto;
 

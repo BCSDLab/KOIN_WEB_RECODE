@@ -16,7 +16,6 @@
 .container {
   box-sizing: border-box;
   width: 417px;
-  height: auto;
   padding: 24px;
   border-radius: 16px;
   display: flex;
@@ -74,5 +73,9 @@
     font-style: normal;
     font-weight: 500;
     line-height: 25.6px;
+  }
+
+  &__table {
+    height: 324px;
   }
 }

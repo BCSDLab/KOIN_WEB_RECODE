@@ -5,6 +5,10 @@ import SemesterList from 'pages/TimetablePage/components/SemesterList';
 import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
@@ -12,15 +16,20 @@ import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import CourseTypeList from './CourseTypeList';
 import SemesterCourseTable from './SemesterCourseTable';
 import styles from './CourseTable.module.scss';
+import DeleteLectureModal from './DeleteLectureModal';
 
 function CourseTable({ frameId }: { frameId: number }) {
   const token = useTokenState();
+  const portalManager = useModalPortal();
   const { removeMyLecture } = useTimetableMutation(frameId);
   const { myLectures }: { myLectures: (MyLectureInfo | Lecture) [] } = useMyLectures(frameId);
   const { editMyLecture } = useTimetableMutation(frameId);
   const semester = useSemester();
   const { data: mySemester } = useSemesterCheck(token);
   const navigate = useNavigate();
+
+  const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
+  const { containerRef } = useOutsideClick({ onOutsideClick: setModalOpenFalse });
 
   const filteredMyLectures = (myLectures as MyLectureInfo[])
     .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null);
@@ -46,30 +55,40 @@ function CourseTable({ frameId }: { frameId: number }) {
     }
   };
 
-  const onClickDeleteLecture = (id: number) => {
+  const handleDeleteLecture = (id: number, disableRecoverButton: boolean) => {
     const lectureToRemove = myLectures.find(
       (lecture: MyLectureInfo | Lecture) => lecture.id === id,
     );
 
     if (!lectureToRemove) return;
 
-    removeMyLecture.mutate({ clickedLecture: lectureToRemove, id });
+    removeMyLecture.mutate({ clickedLecture: lectureToRemove, id, disableRecoverButton });
+  };
+
+  const onClickDeleteLecture = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
+    e.stopPropagation();
+    setModalOpenTrue();
+    portalManager.open((portalOption: Portal) => (
+      <DeleteLectureModal
+        onClose={portalOption.close}
+        handleDeleteLecture={() => handleDeleteLecture(id, true)}
+        setModalOpenFalse={setModalOpenFalse}
+      />
+    ));
   };
 
   const tableData = filteredMyLectures.map((lecture: MyLectureInfo) => [
-    <span key={`name-${lecture.id}`}>{lecture.class_title}</span>,
-    <span key={`professor-${lecture.id}`}>{lecture.professor}</span>,
-    <span key={`grades-${lecture.id}`}>{lecture.grades}</span>,
+    <span>{lecture.class_title}</span>,
+    <span>{lecture.professor}</span>,
+    <span>{lecture.grades}</span>,
     <CourseTypeList
-      key={`courseType-${lecture.id}`}
       courseTypeDefault={lecture.course_type}
       id={lecture.id}
       onCourseTypeChange={handleCourseTypeChange}
     />,
     <button
-      key={`delete-${lecture.id}`}
       type="button"
-      onClick={() => onClickDeleteLecture(lecture.id)}
+      onClick={(e) => onClickDeleteLecture(e, lecture.id)}
       aria-label="삭제 버튼"
     >
       <CloseIcon />
@@ -77,15 +96,20 @@ function CourseTable({ frameId }: { frameId: number }) {
   ]);
 
   return (
-    <div className={styles['course-table']}>
+    <div
+      className={styles['course-table']}
+      ref={isModalOpen ? null : containerRef}
+    >
       <SemesterList />
       <div className={styles.content}>
-        <SemesterCourseTable
-          tableData={tableData}
-        />
+        <div className={styles.content__table}>
+          <SemesterCourseTable
+            tableData={tableData}
+          />
+        </div>
         <button
           type="button"
-          className={styles.trigger}
+          className={styles.content__trigger}
           onClick={onClickAddLecture}
         >
           시간표 수정하기
