@@ -23,10 +23,10 @@ function GeneralCourseListModal({
 
   const tableData = generalCourseLectures.map((lecture) => [
     <span>{lecture.name}</span>,
-    <span>{ }</span>,
+    <span>{ }</span>, // 개설 목록 테이블에서는 '교수명' 비활성화
     <span>{lecture.grades}</span>,
     <span>교양선택</span>,
-    <span>{ }</span>,
+    <span>{ }</span>, // 개설 목록 테이블에서는 '삭제 버튼' 비활성화
   ]);
 
   return (

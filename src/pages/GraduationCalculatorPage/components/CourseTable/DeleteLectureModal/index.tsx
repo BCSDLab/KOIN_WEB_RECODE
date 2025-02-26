@@ -20,6 +20,11 @@ function DeleteLectureModal({
     onClose();
   };
 
+  const handleConfirmDeleteLecture = () => {
+    handleDeleteLecture();
+    setModalOpenFalse();
+  };
+
   return (
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
@@ -46,10 +51,7 @@ function DeleteLectureModal({
           <button
             type="button"
             className={styles['container__button--delete']}
-            onClick={() => {
-              handleDeleteLecture();
-              setModalOpenFalse();
-            }}
+            onClick={handleConfirmDeleteLecture}
           >
             삭제하기
           </button>
