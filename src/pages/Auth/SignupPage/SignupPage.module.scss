@@ -28,6 +28,11 @@
     margin-bottom: 12px;
     order: 99;
 
+    ul {
+        top: inherit;
+        bottom: 50px;
+    }
+
     @include media.media-breakpoint(mobile) {
       width: 155px;
       height: 36px;
