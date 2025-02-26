@@ -1,6 +1,4 @@
 import { cn } from '@bcsdlab/utils';
-// import SettingIcon from 'assets/svg/setting-icon.svg';
-// import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
 import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -11,15 +9,12 @@ interface OptionList {
   value: string;
 }
 interface SelectorProps {
-  options: OptionList[];
+  options: readonly OptionList[];
   value: string | null;
   isWhiteBackground?: boolean;
-  // type?: SelectorType;
+  dropDownMaxHeight?: number;
   placeholder?: string;
-  // disabled?: boolean;
-  DetailIcon?: React.ComponentType;
-  // onDelete?: (value: string) => void;
-  // onSettingsClick?: (value: string) => void;
+  disabled?: boolean;
   onChange: (event: { target: { value: string } }) => void;
 }
 
@@ -27,12 +22,9 @@ export function Selector({
   options,
   value,
   isWhiteBackground = true,
-  // type = 'default',
+  dropDownMaxHeight,
   placeholder = '선택해주세요.',
-  // disabled = false,
-  DetailIcon,
-  // onDelete,
-  // onSettingsClick,
+  disabled = false,
   onChange,
 }: SelectorProps) {
   const [isOpen, , closeMenu, triggerOpen] = useBooleanState(false);
@@ -52,11 +44,6 @@ export function Selector({
   const selectedOption = options.find((option) => option.value === value);
   const showLabel = selectedOption?.label ?? placeholder;
 
-  const isOverHalf = containerRef.current
-    ? containerRef.current.getBoundingClientRect().bottom
-        > window.innerHeight / 2
-    : !!containerRef.current;
-
   return (
     <div
       ref={containerRef}
@@ -73,6 +60,7 @@ export function Selector({
           [styles['select__trigger--opened']]: isOpen,
           [styles['select__trigger--white-background']]: isWhiteBackground,
         })}
+        disabled={disabled}
       >
         {showLabel}
         <DownArrowIcon />
@@ -82,9 +70,10 @@ export function Selector({
         <ul
           className={cn({
             [styles['select__contents-list']]: true,
-            [styles['select__contents-list--up']]: isOverHalf,
+            [styles['select__contents-list--white-background']]: isWhiteBackground,
           })}
           role="listbox"
+          style={{ maxHeight: `${dropDownMaxHeight}px` }}
         >
           {options.map((option) => (
             <li
@@ -103,37 +92,6 @@ export function Selector({
               }}
             >
               {option.label}
-              {DetailIcon && (
-                <DetailIcon />
-              )}
-              {/*
-              {type === 'delete' && (
-                <button
-                  type="button"
-                  className={styles.select__button}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDelete?.(option.value);
-                  }}
-                >
-                  <TrashCanIcon />
-                  <div>삭제</div>
-                </button>
-              )}
-              {type === 'setting' && (
-                <button
-                  type="button"
-                  className={styles.select__button}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSettingsClick?.(option.value);
-                  }}
-                >
-                  <SettingIcon />
-                  <div>설정</div>
-                </button>
-              )}
-                */}
             </li>
           ))}
         </ul>
