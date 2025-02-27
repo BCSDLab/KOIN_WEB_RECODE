@@ -35,6 +35,7 @@ export default function Panel({ openModal }: PanelProps) {
     if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'hamburger', value: '복덕방' });
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', event_label: 'hamburger', value: '시간표' });
     if (title === '교내 시설물 정보') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '교내 시설물 정보' });
+    if (title === '쪽지') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '쪽지' });
   };
 
   // 기존 페이지에서 햄버거를 통해 다른 페이지로 이동할 때의 로그입니다.
