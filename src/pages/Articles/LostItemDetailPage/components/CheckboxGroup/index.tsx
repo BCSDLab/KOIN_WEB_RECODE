@@ -1,22 +1,22 @@
-import Radio from 'pages/Articles/LostItemDetailPage/components/Radio';
-import styles from './RadioGroup.module.scss';
+import Checkbox from 'pages/Articles/LostItemDetailPage/components/Checkbox';
+import styles from './CheckboxGroup.module.scss';
 
-interface RadioOption {
+interface CheckboxOption {
   value: string;
   label: string;
   subtitle: string;
 }
 
-interface RadioGroupProps {
+interface CheckboxGroupProps {
   name: string;
-  options: RadioOption[];
+  options: CheckboxOption[];
   selectedValues?: string[];
   onChange: (selected: string[]) => void;
 }
 
-export default function RadioGroup({
+export default function CheckboxGroup({
   name, options, selectedValues = [], onChange,
-}: RadioGroupProps) {
+}: CheckboxGroupProps) {
   const handleChange = (value: string) => {
     const newSelectedValues = selectedValues.includes(value)
       ? selectedValues.filter((v) => v !== value)
@@ -26,9 +26,9 @@ export default function RadioGroup({
   };
 
   return (
-    <div className={styles['radio-group']}>
+    <div className={styles['checkbox-group']}>
       {options.map((option) => (
-        <Radio
+        <Checkbox
           key={option.value}
           value={option.value}
           label={option.label}

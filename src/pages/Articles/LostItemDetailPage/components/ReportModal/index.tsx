@@ -3,7 +3,7 @@ import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import CloseIcon from 'assets/svg/Articles/close.svg';
-import RadioGroup from 'pages/Articles/LostItemDetailPage/components/RadioGroup';
+import CheckboxGroup from 'pages/Articles/LostItemDetailPage/components/CheckboxGroup';
 import { useState } from 'react';
 import useReportLostItemArticle from 'pages/Articles/hooks/useReportLostItemArticle';
 import showToast from 'utils/ts/showToast';
@@ -75,7 +75,7 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
           </div>
         </div>
 
-        <RadioGroup
+        <CheckboxGroup
           name="reportReason"
           options={options}
           selectedValues={selectedReason}
