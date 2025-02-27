@@ -15,16 +15,11 @@
 
 .modal {
   background: #fff;
-  width: 451px;
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0 0 0 / 20%);
   z-index: 1000;
   align-items: center;
   justify-content: center;
-
-  @include media.media-breakpoint(mobile) {
-    width: 300px;
-  }
 
   &__header {
     display: flex;
