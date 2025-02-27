@@ -36,6 +36,8 @@ export default function ArticleList({ articles }: ArticleListProps) {
     <div className={styles.list}>
       {articles.map((article) => {
         const { type, content, date } = parseLostItemTitle(article.title);
+        const registeredDate = setArticleRegisteredDate(article.registered_at)[0];
+        const isNewArticle = setArticleRegisteredDate(article.registered_at)[1];
 
         // 1. 신고된 게시글 (클릭 X, 토스트메시지, 내용 표시 다르게)
         if (article.board_id === 14 && article.is_reported) {
@@ -60,7 +62,7 @@ export default function ArticleList({ articles }: ArticleListProps) {
                 </div>
               </div>
               <div className={styles.list__author}>{isMobile ? `${article.author}` : article.author}</div>
-              <div className={styles['list__registered-at']}>{setArticleRegisteredDate(article.registered_at)[0]}</div>
+              <div className={styles['list__registered-at']}>{registeredDate}</div>
             </div>
           );
         }
@@ -79,7 +81,7 @@ export default function ArticleList({ articles }: ArticleListProps) {
                     <div className={styles['title__container-container']}>{content}</div>
                     <div className={styles['title__container-container']}>|</div>
                     <div className={styles['title__container-container']}>{date}</div>
-                    {setArticleRegisteredDate(article.registered_at)[1] && (
+                    {isNewArticle && (
                     <img
                       className={styles['title__new-tag']}
                       src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
@@ -91,7 +93,7 @@ export default function ArticleList({ articles }: ArticleListProps) {
                   <>
                     {/* 일반 공지사항 */}
                     <div className={styles.title__content}>{article.title}</div>
-                    {setArticleRegisteredDate(article.registered_at)[1] && (
+                    {isNewArticle && (
                     <img
                       className={styles['title__new-tag']}
                       src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
