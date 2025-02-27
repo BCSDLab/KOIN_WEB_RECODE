@@ -3,11 +3,12 @@ import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import CloseIcon from 'assets/svg/Articles/close.svg';
-import RadioGroup from 'pages/Articles/LostItemDetailPage/components/RadioGroup';
+import CheckboxGroup from 'pages/Articles/LostItemDetailPage/components/CheckboxGroup';
 import { useState } from 'react';
 import useReportLostItemArticle from 'pages/Articles/hooks/useReportLostItemArticle';
 import showToast from 'utils/ts/showToast';
 import { useNavigate } from 'react-router-dom';
+import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import styles from './ReportModal.module.scss';
 
 interface ReportModalProps {
@@ -29,24 +30,30 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
   const navigate = useNavigate();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeReportModal });
 
-  const [selectedReason, setSelectedReason] = useState('');
+  const [selectedReason, setSelectedReason] = useState<string[]>([]);
   const { mutate: reportArticle } = useReportLostItemArticle();
 
-  const handleReportClick = () => {
-    const selectedOption = options.find((option) => option.value === selectedReason);
+  const { logItemPostReportConfirm } = useArticlesLogger();
 
-    if (!selectedOption) {
+  const handleReportClick = () => {
+    if (selectedReason.length === 0) {
       showToast('error', '신고 사유를 선택해주세요.');
       return;
     }
 
+    const selectedOptions = options.filter((option) => selectedReason.includes(option.value));
+
     reportArticle(
       {
         articleId,
-        reports: [{ title: selectedOption.label, content: selectedOption.subtitle }],
+        reports: selectedOptions.map((option) => ({
+          title: option.label,
+          content: option.subtitle,
+        })),
       },
     );
 
+    logItemPostReportConfirm();
     closeReportModal();
     navigate('/articles');
   };
@@ -68,15 +75,19 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
           </div>
         </div>
 
-        <RadioGroup
+        <CheckboxGroup
           name="reportReason"
           options={options}
-          selectedValue={selectedReason}
-          onChange={(e: any) => setSelectedReason(e.target.value)}
+          selectedValues={selectedReason}
+          onChange={(newSelectedValues) => setSelectedReason(newSelectedValues)}
         />
 
         <div className={styles.modal__buttons}>
-          <button className={styles.buttons__report} type="button" onClick={handleReportClick}>
+          <button
+            className={styles.buttons__report}
+            type="button"
+            onClick={() => handleReportClick()}
+          >
             신고하기
           </button>
           <button className={styles.buttons__close} type="button" onClick={closeReportModal}>

@@ -84,6 +84,11 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         actionTitle: 'CAMPUS', event_label: 'header', value: '교내 시설물 정보', event_category: 'click',
       });
     }
+    if (title === '쪽지') {
+      logger.actionEventClick({
+        actionTitle: 'CAMPUS', event_label: 'header', value: '쪽지', event_category: 'click',
+      });
+    }
   };
 
   const escapeByLogo = async () => {

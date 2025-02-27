@@ -5,7 +5,6 @@ import { cn } from '@bcsdlab/utils';
 import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
 import useTimetableMutation from 'pages/TimetablePage/hooks/useTimetableMutation';
-import Listbox from 'components/TimetablePage/Listbox';
 import {
   DAYS_STRING, HOUR, MINUTE, START_TIME, END_TIME,
 } from 'static/timetable';
@@ -17,6 +16,7 @@ import { useSearchParams } from 'react-router-dom';
 import { MyLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
+import { Selector } from 'components/common/Selector';
 import styles from './CustomLecture.module.scss';
 
 type Hour = (typeof HOUR)[number]['value'] | '24시';
@@ -275,14 +275,14 @@ function TimeSpaceInput({
           <div
             className={cn({
               [styles['form-group-time__time']]: true,
-              [styles['form-group-time__time--reverse']]: isReverseDropdown,
+              [styles['form-group-time__time--reverse']]: isReverseDropdown && !isSingleTimeSpaceComponent,
             })}
           >
-            <Listbox list={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour')} version="addLecture" disabled={isEditStandardLecture} />
-            <Listbox list={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute')} version="addLecture" disabled={isEditStandardLecture} />
+            <Selector options={HOUR} value={time.startHour} onChange={handleLectureTimeByTime('startHour')} dropDownMaxHeight={279} disabled={isEditStandardLecture} />
+            <Selector options={MINUTE} value={time.startMinute} onChange={handleLectureTimeByTime('startMinute')} disabled={isEditStandardLecture} />
             <span>-</span>
-            <Listbox list={time.endMinute === '30분' ? HOUR : [...HOUR, { label: '24시', value: '24시' }]} value={time.endHour} onChange={handleLectureTimeByTime('endHour')} version="addLecture" disabled={isEditStandardLecture} />
-            <Listbox list={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute')} version="addLecture" disabled={isEditStandardLecture} />
+            <Selector options={time.endMinute === '30분' ? HOUR : [...HOUR, { label: '24시', value: '24시' }]} value={time.endHour} onChange={handleLectureTimeByTime('endHour')} dropDownMaxHeight={279} disabled={isEditStandardLecture} />
+            <Selector options={time.endHour === '24시' ? [{ label: '00분', value: '00분' }] : MINUTE} value={time.endMinute} onChange={handleLectureTimeByTime('endMinute')} disabled={isEditStandardLecture} />
           </div>
         </div>
       </div>
@@ -542,8 +542,8 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
         behavior: 'smooth',
         top: 999,
       });
-      handleScroll();
     }
+    handleScroll();
 
     prevLengthRef.current = timeSpaceComponents.length;
   }, [timeSpaceComponents]);

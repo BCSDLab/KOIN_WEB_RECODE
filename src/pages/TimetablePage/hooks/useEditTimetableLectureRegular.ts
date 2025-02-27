@@ -22,6 +22,8 @@ export default function useEditTimetableLectureRegular() {
         [TIMETABLE_INFO_LIST, variables.timetableFrameId],
         data,
       );
+      queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
+      queryClient.invalidateQueries({ queryKey: ['generalEducation'] });
       showToast('success', '강의 수정이 되었습니다.');
     },
     onError: (error) => {

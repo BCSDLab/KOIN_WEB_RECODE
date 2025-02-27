@@ -20,6 +20,7 @@ import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
 import BlockIcon from 'assets/svg/Articles/block.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
 
+import { useChatLogger } from 'pages/Articles/hooks/useChatLogger';
 import DeleteModal from './components/DeleteModal';
 import useChatroomQuery from './hooks/useChatroomQuery';
 import {
@@ -43,9 +44,9 @@ function LostItemChatPage() {
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   const [chatroomListState, setChatroomListState] = useState<
   LostItemChatroomListResponse | null>(null);
+  const { logMessageListSelcetClick } = useChatLogger();
 
   const {
     chatroomDetail,
@@ -229,6 +230,7 @@ function LostItemChatPage() {
               key={`${chat_room_id}${article_id}`}
               to={`${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`}
               className={styles['chat-list--item']}
+              onClick={() => logMessageListSelcetClick()}
             >
               {lost_item_image_url
                 ? <div className={styles['chat-list--item--profile']}><img src={lost_item_image_url} alt="분실물 이미지" className={styles['chat-list--item--image']} onError={addErrorImage} /></div>

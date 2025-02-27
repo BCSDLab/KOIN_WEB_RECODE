@@ -1,4 +1,6 @@
 import APIClient from 'utils/ts/apiClient';
-import DeptList from './APIDetail';
+import { DeptList, DeptMajorList } from './APIDetail';
 
-export default APIClient.of(DeptList);
+export const getDeptList = APIClient.of(DeptList);
+
+export const getDeptMajorList = APIClient.of(DeptMajorList);

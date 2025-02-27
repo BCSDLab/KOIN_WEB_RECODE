@@ -9,15 +9,20 @@ interface FormCategoryProps {
   category: FindUserCategory | '';
   setCategory: (category: FindUserCategory) => void;
   isCategorySelected: boolean;
+  type: 'FOUND' | 'LOST';
 }
 
 export default function FormCategory({
-  category, setCategory, isCategorySelected,
+  category, setCategory, isCategorySelected, type,
 }: FormCategoryProps) {
-  const { logLostItemCategory } = useArticlesLogger();
+  const { logFindUserCategory, logLostItemCategory } = useArticlesLogger();
 
   const handleCategoryClick = (item: FindUserCategory) => {
-    logLostItemCategory(item);
+    if (type === 'FOUND') {
+      logFindUserCategory(item);
+    } else {
+      logLostItemCategory(item);
+    }
     setCategory(item);
   };
 

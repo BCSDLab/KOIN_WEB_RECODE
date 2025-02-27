@@ -6,6 +6,14 @@ const CLICK_EVENTS = [
     value: '글쓰기',
   },
   {
+    label: 'find_user_write',
+    value: '주인을 찾아요',
+  },
+  {
+    label: 'lost_item_write',
+    value: '잃어버렸어요',
+  },
+  {
     label: 'find_user_add_item',
     value: '물품 추가',
   },
@@ -37,11 +45,22 @@ const CLICK_EVENTS = [
     label: 'find_user_category',
     value: '', // {”카드”, ”신분증”, ”지갑”, ”전자제품”, ”기타”}
   },
+  {
+    label: 'item_post_report',
+    value: '신고하기',
+  },
+  {
+    label: 'item_post_report_confirm',
+    value: '신고하기',
+  },
 ] as const;
 
 export type ClickEventLabel = typeof CLICK_EVENTS[number]['label'];
 
 export type FindUserCategory = '카드' | '신분증' | '지갑' | '전자제품' | '기타';
+
+// 추후 로깅 수정 가능성을 염두해두고 남겨둡니다.
+export type ReportCategory = '주제에 맞지 않음' | '스팸' | '욕설' | '개인정보' | '기타';
 
 export const useArticlesLogger = () => {
   const logger = useLogger();
@@ -59,6 +78,8 @@ export const useArticlesLogger = () => {
   };
 
   const logItemWriteClick = () => logEvent('item_write');
+  const logFindUserWriteClick = () => logEvent('find_user_write');
+  const logLostItemWriteClick = () => logEvent('lost_item_write');
   const logFindUserAddItemClick = () => logEvent('find_user_add_item');
   const logLostItemAddItemClick = () => logEvent('lost_item_add_item');
   const logFindUserWriteConfirmClick = () => logEvent('find_user_write_confirm');
@@ -67,9 +88,13 @@ export const useArticlesLogger = () => {
   const logFindUserDeleteConfirmClick = () => logEvent('find_user_delete_confirm');
   const logFindUserCategory = (category: FindUserCategory) => logEvent('find_user_category', category);
   const logLostItemCategory = (category: FindUserCategory) => logEvent('lost_item_category', category);
+  const logItemPostReportClick = () => logEvent('item_post_report');
+  const logItemPostReportConfirm = () => logEvent('item_post_report_confirm');
 
   return {
     logItemWriteClick,
+    logFindUserWriteClick,
+    logLostItemWriteClick,
     logFindUserAddItemClick,
     logLostItemAddItemClick,
     logLostItemCategory,
@@ -78,5 +103,7 @@ export const useArticlesLogger = () => {
     logFindUserDeleteClick,
     logFindUserDeleteConfirmClick,
     logFindUserCategory,
+    logItemPostReportClick,
+    logItemPostReportConfirm,
   };
 };
