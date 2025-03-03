@@ -3,6 +3,8 @@ import { useState } from 'react';
 import DownArrowIcon from 'assets/svg/chervron-up-grey.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useGeneralEducation from 'pages/GraduationCalculatorPage/hooks/useGeneralEducation';
 import styles from './CourseTypeList.module.scss';
 
 export interface CourseTypeListProps {
@@ -20,6 +22,13 @@ function CourseTypeList({
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
   const [selectedValue, setSelectedValue] = useState<string>(courseTypeDefault);
   const [isOverHalf, setIsOverHalf] = useState<boolean>(false);
+
+  const token = useTokenState();
+  const { generalEducation } = useGeneralEducation(token);
+  // '교양선택'은 교양 세부 영역 리스트에서 제외
+  const generalCourseType = generalEducation
+    ?.general_education_area.map((area) => area.course_type)?.slice(1) || [];
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const courseType = [
     { id: 1, value: '교양필수' },
@@ -63,12 +72,10 @@ function CourseTypeList({
 
     closePopup();
   };
+  console.log(hoveredItem);
 
   return (
-    <div
-      className={styles.select}
-      ref={containerRef}
-    >
+    <div className={styles.select} ref={containerRef}>
       <button
         type="button"
         onClick={handleToggleList}
@@ -81,30 +88,43 @@ function CourseTypeList({
         <p className={styles.select__label}>{selectedValue}</p>
         <DownArrowIcon />
       </button>
+
       {isOpenedPopup && (
         <ul
-          className={
-            cn({
-              [styles.select__content]: true,
-              [styles['select__content-up']]: isOverHalf,
-            })
-          }
+          className={cn({
+            [styles.select__content]: true,
+            [styles['select__content-up']]: isOverHalf,
+          })}
           role="listbox"
         >
           {courseType.map((type) => (
-            <button
-              type="button"
-              className={styles.select__option}
+            <div
               key={type.value}
-              role="option"
-              aria-selected={type.value === selectedValue}
-              data-value={type.value}
-              onClick={onClickOption}
-              tabIndex={0}
+              onMouseEnter={() => setHoveredItem(type.value)}
+              onMouseLeave={() => setHoveredItem(null)}
             >
-              {type.value}
-            </button>
+              <button
+                type="button"
+                className={styles.select__option}
+                role="option"
+                aria-selected={type.value === selectedValue}
+                data-value={type.value}
+                onClick={onClickOption}
+                tabIndex={0}
+              >
+                {type.value}
+              </button>
+            </div>
           ))}
+          {hoveredItem === '교양선택' && (
+            <ul className={styles.select__sub}>
+              {generalCourseType.map((subItem) => (
+                <li className={styles.select__sub2}>
+                  {subItem}
+                </li>
+              ))}
+            </ul>
+          )}
         </ul>
       )}
     </div>
