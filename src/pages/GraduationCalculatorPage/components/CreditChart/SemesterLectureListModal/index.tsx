@@ -33,7 +33,6 @@ const courseType = [
   { label: 'HRD필수', value: 'HRD필수' },
   { label: 'HRD선택', value: 'HRD선택' },
   { label: '자유선택', value: '자유선택' },
-  { label: '다전공', value: '다전공' },
 ];
 
 export default function SemesterLectureListModal({
