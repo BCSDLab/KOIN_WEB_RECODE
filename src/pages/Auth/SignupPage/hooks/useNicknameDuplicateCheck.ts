@@ -2,15 +2,21 @@ import React from 'react';
 import showToast from 'utils/ts/showToast';
 import useNicknameCheckServer from './useNicknameCheckServer';
 
-const NICKNAME_REGEX = /admin|관리자/;
+const ADMIN_NICKNAME_REGEX = /admin|관리자/;
+
+const INVALID_NICKNAME_REGEX = /^[A-Za-z가-힣\d]+$/;
 
 const useNicknameDuplicateCheck = () => {
   const [nickname, setNickname] = React.useState('');
   const { data, mutate, status } = useNicknameCheckServer();
 
   const changeTargetNickname = (targetNickname: string) => {
-    if (NICKNAME_REGEX.test(targetNickname)) {
+    if (ADMIN_NICKNAME_REGEX.test(targetNickname)) {
       showToast('warning', '사용할 수 없는 닉네임입니다.');
+      return;
+    }
+    if (!INVALID_NICKNAME_REGEX.test(targetNickname)) {
+      showToast('warning', '닉네임은 한글, 영문 및 숫자만 사용할 수 있습니다.');
       return;
     }
     if (!targetNickname) {
