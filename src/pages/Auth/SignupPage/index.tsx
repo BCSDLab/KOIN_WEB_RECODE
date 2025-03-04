@@ -458,7 +458,6 @@ const GenderSelectorWithRef = forwardRef((
 
   useImperativeHandle(ref, () => ({
     value: selectedValue,
-    valid: selectedValue !== null ? true : '성별을 선택해주세요.',
   }));
 
   return (
