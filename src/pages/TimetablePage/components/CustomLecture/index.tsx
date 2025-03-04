@@ -208,12 +208,12 @@ function TimeSpaceInput({
   };
 
   const handleLectureTimeByWeek = (weekday: string) => {
-    if (weeks.includes(weekday)) {
-      setWeeks((week) => week.filter((day) => day !== weekday));
-    } else {
-      setWeeks((week) => [...week, weekday]);
-    }
-    updateTimeSpaceInfo({ updatedWeeks: weeks });
+    const newWeeks = weeks.includes(weekday)
+      ? weeks.filter((day) => day !== weekday)
+      : [...weeks, weekday];
+
+    setWeeks(newWeeks);
+    updateTimeSpaceInfo({ updatedWeeks: newWeeks });
   };
 
   const handlePlaceName = (placeName: string) => {
