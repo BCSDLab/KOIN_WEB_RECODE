@@ -7,6 +7,9 @@ export default function useTakenLectureCode(token: string) {
 
     queryFn: () => timetable.getTimetableAllLectureInfo(token),
 
-    select: (data) => data.timetable.map((item) => item.code),
+    select: (data) => ({
+      code: data.timetable.map((item) => item.code),
+      multiMajor: data.timetable.filter((item) => item.course_type === '다전공'),
+    }),
   });
 }

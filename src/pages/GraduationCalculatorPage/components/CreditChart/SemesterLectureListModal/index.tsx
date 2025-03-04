@@ -84,8 +84,8 @@ export default function SemesterLectureListModal({
   }
 
   const filteredLectureByLectureStatus = lectureStatus === '수강한 강의'
-    ? separateByMatchingCodes(filteredLecturesByDept, takenLectureCode).matched
-    : separateByMatchingCodes(filteredLecturesByDept, takenLectureCode).unmatched;
+    ? separateByMatchingCodes(filteredLecturesByDept, takenLectureCode.code).matched
+    : separateByMatchingCodes(filteredLecturesByDept, takenLectureCode.code).unmatched;
 
   const tableData = filteredLectureByLectureStatus.map((lecture) => [
     <span>{lecture.name}</span>,
