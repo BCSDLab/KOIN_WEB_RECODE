@@ -1,16 +1,17 @@
 import { cn } from '@bcsdlab/utils';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import DownArrowIcon from 'assets/svg/chervron-up-grey.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useGeneralEducation from 'pages/GraduationCalculatorPage/hooks/useGeneralEducation';
+import { createPortal } from 'react-dom';
 import styles from './CourseTypeList.module.scss';
 
 export interface CourseTypeListProps {
   courseTypeDefault?: string;
   id: number;
-  onCourseTypeChange: (id: number, newCourseType: string) => void;
+  onCourseTypeChange: (id: number, newCourseType: string, newGeneralEducationArea?: string) => void;
 }
 
 function CourseTypeList({
@@ -20,7 +21,6 @@ function CourseTypeList({
 }: CourseTypeListProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
-  const [selectedValue, setSelectedValue] = useState<string>(courseTypeDefault);
   const [isOverHalf, setIsOverHalf] = useState<boolean>(false);
 
   const token = useTokenState();
@@ -29,6 +29,8 @@ function CourseTypeList({
   const generalCourseType = generalEducation
     ?.general_education_area.map((area) => area.course_type)?.slice(1) || [];
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ left: 0, top: 0 });
+  const selectedRef = useRef<HTMLButtonElement | null>(null);
 
   const courseType = [
     { id: 1, value: '교양필수' },
@@ -65,14 +67,34 @@ function CourseTypeList({
     const { currentTarget } = e;
     const newCourseType = currentTarget.getAttribute('data-value') ?? '';
 
-    if (newCourseType !== selectedValue) {
-      setSelectedValue(newCourseType);
+    if (newCourseType !== courseTypeDefault) {
       onCourseTypeChange(id, newCourseType);
     }
 
     closePopup();
   };
-  console.log(hoveredItem);
+
+  const onClickGeneralOption = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    generalEducationArea: string,
+  ) => {
+    e.stopPropagation();
+    onCourseTypeChange(id, '교양선택', generalEducationArea);
+
+    closePopup();
+  };
+
+  const onHoverCourseSelect = () => {
+    setHoveredItem('교양선택');
+
+    if (selectedRef.current) {
+      const rect = selectedRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        left: rect.right,
+        top: rect.top,
+      });
+    }
+  };
 
   return (
     <div className={styles.select} ref={containerRef}>
@@ -85,7 +107,7 @@ function CourseTypeList({
           [styles['select__trigger--selected-up']]: isOverHalf,
         })}
       >
-        <p className={styles.select__label}>{selectedValue}</p>
+        <p className={styles.select__label}>{courseTypeDefault}</p>
         <DownArrowIcon />
       </button>
 
@@ -100,30 +122,44 @@ function CourseTypeList({
           {courseType.map((type) => (
             <div
               key={type.value}
-              onMouseEnter={() => setHoveredItem(type.value)}
+              onMouseEnter={type.value === '교양선택' ? onHoverCourseSelect : () => setHoveredItem(null)}
               onMouseLeave={() => setHoveredItem(null)}
             >
               <button
+                ref={type.value === '교양선택' ? selectedRef : null}
                 type="button"
                 className={styles.select__option}
                 role="option"
-                aria-selected={type.value === selectedValue}
+                aria-selected={type.value === courseTypeDefault}
                 data-value={type.value}
                 onClick={onClickOption}
-                tabIndex={0}
               >
                 {type.value}
               </button>
             </div>
           ))}
-          {hoveredItem === '교양선택' && (
-            <ul className={styles.select__sub}>
-              {generalCourseType.map((subItem) => (
-                <li className={styles.select__sub2}>
-                  {subItem}
-                </li>
+          {hoveredItem === '교양선택'
+          && createPortal(
+            <ul
+              className={styles['select__general-list']}
+              onMouseEnter={() => setHoveredItem('교양선택')}
+              onMouseLeave={() => setHoveredItem(null)}
+              style={{
+                left: dropdownPosition.left,
+                top: dropdownPosition.top,
+              }}
+            >
+              {generalCourseType.map((type) => (
+                <button
+                  type="button"
+                  className={styles['select__general-item']}
+                  onClick={(e) => onClickGeneralOption(e, type)}
+                >
+                  {type}
+                </button>
               ))}
-            </ul>
+            </ul>,
+            document.body,
           )}
         </ul>
       )}

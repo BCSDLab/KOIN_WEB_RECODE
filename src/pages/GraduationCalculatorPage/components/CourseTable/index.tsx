@@ -34,16 +34,22 @@ function CourseTable({ frameId }: { frameId: number }) {
   const filteredMyLectures = (myLectures as MyLectureInfo[])
     .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null);
 
-  const handleCourseTypeChange = (id: number, newCourseType: string) => {
+  const handleCourseTypeChange = (
+    id: number,
+    newCourseType: string,
+    newGeneralEducationArea?: string,
+  ) => {
     const targetLecture = filteredMyLectures.find((lecture) => lecture.id === id) as MyLectureInfo;
 
     if (!targetLecture) return;
+
     editMyLecture({
       ...targetLecture,
       class_places: targetLecture.lecture_infos.map((info) => ({
         class_place: info.place,
       })),
       course_type: newCourseType,
+      ...(newGeneralEducationArea ? { general_education_area: newGeneralEducationArea } : {}),
     });
   };
 
