@@ -247,6 +247,7 @@ function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
             <DeptListbox
               value={departmentFilterValue}
               onChange={onChangeDeptSelect}
+              isWhiteBackground={false}
             />
           </React.Suspense>
         </div>

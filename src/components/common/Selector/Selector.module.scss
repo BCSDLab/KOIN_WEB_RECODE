@@ -33,7 +33,7 @@
   position: relative;
   display: inline-block;
   width: 100%;
-  border-radius: 4px;
+  border-radius: 5px;
 
   @include inherit-text-style;
 
@@ -70,7 +70,7 @@
     }
 
     &--white-background {
-      background-color: #fafafa;
+      border: 1px solid #e1e1e1;
     }
 
     &:hover {
