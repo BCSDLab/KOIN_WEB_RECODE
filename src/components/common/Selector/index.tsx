@@ -70,6 +70,7 @@ export function Selector({
         <ul
           className={cn({
             [styles['select__contents-list']]: true,
+            [styles['select__contents-list--opened']]: isOpen,
             [styles['select__contents-list--white-background']]: isWhiteBackground,
           })}
           role="listbox"

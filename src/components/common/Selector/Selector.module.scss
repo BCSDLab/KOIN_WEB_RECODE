@@ -66,7 +66,8 @@
     cursor: pointer;
 
     &--opened {
-      border-radius: 5px 5px 0 0;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
     }
 
     &--white-background {
@@ -106,6 +107,11 @@
       min-width: calc(100% - 2px);
       border: 1px solid #cacaca;
       border-radius: 5px;
+    }
+
+    &--opened {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
     }
   }
 
