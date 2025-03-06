@@ -18,7 +18,6 @@ function CourseTypeList({
 }: CourseTypeListProps) {
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
-  const [selectedValue, setSelectedValue] = useState<string>(courseTypeDefault);
   const [isOverHalf, setIsOverHalf] = useState<boolean>(false);
 
   const courseType = [
@@ -56,8 +55,7 @@ function CourseTypeList({
     const { currentTarget } = e;
     const newCourseType = currentTarget.getAttribute('data-value') ?? '';
 
-    if (newCourseType !== selectedValue) {
-      setSelectedValue(newCourseType);
+    if (newCourseType !== courseTypeDefault) {
       onCourseTypeChange(id, newCourseType);
     }
 
@@ -78,7 +76,7 @@ function CourseTypeList({
           [styles['select__trigger--selected-up']]: isOverHalf,
         })}
       >
-        <p className={styles.select__label}>{selectedValue}</p>
+        <p className={styles.select__label}>{courseTypeDefault}</p>
         <DownArrowIcon />
       </button>
       {isOpenedPopup && (
@@ -97,7 +95,7 @@ function CourseTypeList({
               className={styles.select__option}
               key={type.value}
               role="option"
-              aria-selected={type.value === selectedValue}
+              aria-selected={type.value === courseTypeDefault}
               data-value={type.value}
               onClick={onClickOption}
               tabIndex={0}
