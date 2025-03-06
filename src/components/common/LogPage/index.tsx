@@ -4,22 +4,28 @@ import * as gtag from 'lib/gtag';
 import { UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/state/useUser';
 
-const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
-  if (userInfo?.id && userInfo?.student_number) {
-    const id = String(userInfo.id);
-    const studentNumber = userInfo?.student_number?.slice(0, 6);
-    const userId = `${studentNumber}-${id}`;
-    localStorage.setItem('uuid', userId);
-
-    return userId;
+const userUniqueIdGenerator = (userInfo: UserResponse | null) => {
+  if (!userInfo) {
+    localStorage.removeItem('uuid');
+    return '';
   }
 
-  if (userInfo?.id && !userInfo?.student_number) {
-    const id = String(userInfo.id);
-    const userId = `'anonymous_'${id}`;
-    localStorage.setItem('uuid', userId);
+  const { id, student_number: studentNumber } = userInfo;
+  const idString = String(id);
 
-    return userId;
+  if (id && studentNumber) {
+    const newStudentNumber = studentNumber.slice(0, 6);
+    const newUserId = `${newStudentNumber}-${idString}`;
+    localStorage.setItem('uuid', newUserId);
+
+    return newUserId;
+  }
+
+  if (id && !studentNumber) {
+    const newUserId = `anonymous_${idString}`;
+    localStorage.setItem('uuid', newUserId);
+
+    return newUserId;
   }
 
   localStorage.removeItem('uuid');
@@ -38,7 +44,7 @@ function LogPage() {
           // eslint-disable-next-line max-len
           gtag.pageView(
             window.location.pathname + window.location.search,
-            userUniqueIdGenerator(userInfo),
+            userUniqueIdGenerator(userInfo) || '',
           );
           prevPathname.current = window.location.pathname;
         }, 1000);
