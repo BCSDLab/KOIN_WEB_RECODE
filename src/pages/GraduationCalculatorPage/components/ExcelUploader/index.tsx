@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import UploadIcon from 'assets/svg/upload-icon.svg';
@@ -5,6 +6,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import { useExcelUpload } from 'pages/GraduationCalculatorPage/hooks/useExcelUpload';
+import { useEffect } from 'react';
 import styles from './ExcelUploader.module.scss';
 
 function ExcelUploader() {
@@ -12,6 +14,10 @@ function ExcelUploader() {
   const {
     handleFileUpload, handleDrop, handleDragOver,
   } = useExcelUpload();
+
+  useEffect(() => {
+    openTooltip();
+  }, []);
 
   return (
     <div className={styles['excel-uploader']}>

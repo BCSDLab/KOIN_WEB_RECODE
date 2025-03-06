@@ -1,24 +1,35 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as gtag from 'lib/gtag';
-import uuidv4 from 'utils/ts/uuidGenerater';
 import { UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/state/useUser';
 
-const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
-  if (userInfo?.id) {
-    const userId = String(userInfo.id);
-    localStorage.setItem('uuid', userId);
-    return userId;
+const userUniqueIdGenerator = (userInfo: UserResponse | null) => {
+  if (!userInfo) {
+    localStorage.removeItem('uuid');
+    return '';
   }
 
-  let uuid = localStorage.getItem('uuid');
-  if (!uuid) {
-    uuid = uuidv4();
-    localStorage.setItem('uuid', uuid);
+  const { id, student_number: studentNumber } = userInfo;
+  const idString = String(id);
+
+  if (id && studentNumber) {
+    const newStudentNumber = studentNumber.slice(0, 6);
+    const newUserId = `${newStudentNumber}-${idString}`;
+    localStorage.setItem('uuid', newUserId);
+
+    return newUserId;
   }
 
-  return uuid;
+  if (id && !studentNumber) {
+    const newUserId = `anonymous_${idString}`;
+    localStorage.setItem('uuid', newUserId);
+
+    return newUserId;
+  }
+
+  localStorage.removeItem('uuid');
+  return '';
 };
 
 function LogPage() {
@@ -33,7 +44,7 @@ function LogPage() {
           // eslint-disable-next-line max-len
           gtag.pageView(
             window.location.pathname + window.location.search,
-            userUniqueIdGenerator(userInfo),
+            userUniqueIdGenerator(userInfo) || '',
           );
           prevPathname.current = window.location.pathname;
         }, 1000);
