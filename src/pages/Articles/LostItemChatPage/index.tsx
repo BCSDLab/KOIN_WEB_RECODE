@@ -11,7 +11,7 @@ import { useUser } from 'utils/hooks/state/useUser';
 import showToast from 'utils/ts/showToast';
 import ROUTES from 'static/routes';
 import { uploadLostItemFile } from 'api/uploadFile';
-import type { LostItemChatroomDetailMessage } from 'api/articles/entity';
+import type { LostItemChatroomDetailMessage, LostItemChatroomListResponse } from 'api/articles/entity';
 
 import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg?url';
 import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
@@ -20,6 +20,7 @@ import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
 import BlockIcon from 'assets/svg/Articles/block.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
 
+import { useChatLogger } from 'pages/Articles/hooks/useChatLogger';
 import DeleteModal from './components/DeleteModal';
 import useChatroomQuery from './hooks/useChatroomQuery';
 import {
@@ -30,9 +31,6 @@ import {
 } from './utils/date';
 import styles from './LostItemChatPage.module.scss';
 
-const COUNCIL_ID = 5805;
-const COUNCIL_STUDENT_NUMBER = '2022136000';
-
 function LostItemChatPage() {
   const [searchParams] = useSearchParams();
 
@@ -40,12 +38,15 @@ function LostItemChatPage() {
   const { data: user } = useUser();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadLostItemFile });
 
-  const [client, setClient] = useState<Client | null>(null);
+  const clientRef = useRef<Client | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [currentMessageList, setCurrentMessageList] = useState<LostItemChatroomDetailMessage[]>([]);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [chatroomListState, setChatroomListState] = useState<
+  LostItemChatroomListResponse | null>(null);
+  const { logMessageListSelcetClick } = useChatLogger();
 
   const {
     chatroomDetail,
@@ -55,20 +56,18 @@ function LostItemChatPage() {
     defaultArticleId: articleId,
   } = useChatroomQuery(token, searchParams.get('articleId'), searchParams.get('chatroomId'));
 
-  const isCouncil = user && user.student_number === COUNCIL_STUDENT_NUMBER;
-
   const connectChatroom = () => {
     if (!chatroomList || chatroomList.length === 0) {
       return;
     }
 
-    if (!articleId || !chatroomId) {
+    if (!articleId || !chatroomId || !user) {
       showToast('error', '채팅방 정보를 불러오는데 실패했습니다.');
       return;
     }
 
-    if (client) {
-      client.deactivate();
+    if (clientRef.current) {
+      clientRef.current.deactivate();
     }
 
     setCurrentMessageList([]);
@@ -81,8 +80,16 @@ function LostItemChatPage() {
       heartbeatOutgoing: 4000,
       onConnect: () => {
         stompClient.subscribe(
-          `/topic/chat/${articleId}/${chatroomId}`,
+          `/topic/chatroom/list/${user.id}`,
           (message) => {
+            const receivedMessage = JSON.parse(message.body);
+            setChatroomListState(receivedMessage);
+          },
+        );
+
+        stompClient.subscribe(
+          `/topic/chat/${articleId}/${chatroomId}`,
+          async (message) => {
             const receivedMessage = JSON.parse(message.body);
             setCurrentMessageList((prev) => [...prev, receivedMessage]);
           },
@@ -94,15 +101,14 @@ function LostItemChatPage() {
     });
 
     stompClient.activate();
-    setClient(stompClient);
+    clientRef.current = stompClient;
   };
 
   const disconnectChatroom = () => {
-    if (client) {
-      client.deactivate();
+    if (clientRef.current) {
+      clientRef.current.deactivate();
+      clientRef.current = null;
     }
-
-    setClient(null);
   };
 
   const uploadImage = async () => {
@@ -123,7 +129,7 @@ function LostItemChatPage() {
           isSentByMe: true,
         };
 
-        client?.publish({
+        clientRef.current?.publish({
           destination: `/app/chat/${articleId}/${chatroomId}`,
           body: JSON.stringify(newMessage),
         });
@@ -133,7 +139,7 @@ function LostItemChatPage() {
     }
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     try {
       if (!inputValue.trim() || user === null || !chatroomDetail) {
         return;
@@ -148,7 +154,7 @@ function LostItemChatPage() {
         isSentByMe: true,
       };
 
-      client?.publish({
+      clientRef.current?.publish({
         destination: `/app/chat/${articleId}/${chatroomId}`,
         body: JSON.stringify(newMessage),
       });
@@ -159,11 +165,11 @@ function LostItemChatPage() {
     }
   };
 
-  const sendMessageToEnterKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const sendMessageToEnterKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       if (e.nativeEvent.isComposing) return;
       e.preventDefault();
-      sendMessage();
+      await sendMessage();
     }
   };
 
@@ -202,14 +208,16 @@ function LostItemChatPage() {
     }
   }, [inputValue]);
 
+  const realChatroomList = chatroomListState ?? chatroomList;
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>쪽지</h1>
 
       <section className={styles['chat-container']}>
         <div className={styles['chat-list']}>
-          {chatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
-          {chatroomList?.map(({
+          {realChatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
+          {realChatroomList?.map(({
             article_id,
             chat_room_id,
             article_title,
@@ -222,6 +230,7 @@ function LostItemChatPage() {
               key={`${chat_room_id}${article_id}`}
               to={`${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`}
               className={styles['chat-list--item']}
+              onClick={() => logMessageListSelcetClick()}
             >
               {lost_item_image_url
                 ? <div className={styles['chat-list--item--profile']}><img src={lost_item_image_url} alt="분실물 이미지" className={styles['chat-list--item--image']} onError={addErrorImage} /></div>
@@ -274,8 +283,7 @@ function LostItemChatPage() {
                   const messageTime = formatISODateToTime(message.timestamp);
                   const prevTime = formatISODateToTime(messages[index - 1]?.timestamp);
                   const isSenderChanged = message.user_id !== messages[index - 1]?.user_id;
-                  const isMe = (message.user_id === COUNCIL_ID && isCouncil)
-                  || (message.user_id !== COUNCIL_ID && !isCouncil);
+                  const isMe = message.user_id === user?.id;
 
                   return acc.concat(
                     (index === 0 || messageDate !== prevDate) && <div key={`date-${index}`} className={styles['message-date-header']}>{messageDate}</div>,
@@ -323,8 +331,7 @@ function LostItemChatPage() {
                   const isSenderChanged = index === 0
                     ? message.user_id !== messages[messages.length - 1]?.user_id
                     : message.user_id !== currentMessageList[index - 1]?.user_id;
-                  const isMe = (message.user_id === COUNCIL_ID && isCouncil)
-                    || (message.user_id !== COUNCIL_ID && !isCouncil);
+                  const isMe = (message.user_id === user?.id);
 
                   return acc.concat(
                     (messageDate !== prevDate) && <div key={`date-${index}`} className={styles['message-date-header']}>{messageDate}</div>,
@@ -382,7 +389,7 @@ function LostItemChatPage() {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={sendMessageToEnterKeyDown}
-                    placeholder="검색어 입력"
+                    placeholder="메세지 보내기"
                   />
                   <button type="button" onClick={sendMessage} className={styles['message-button']} aria-label="문자 전송">
                     <SendIcon />

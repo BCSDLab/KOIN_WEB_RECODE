@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useGeneralEducation from 'pages/GraduationCalculatorPage/hooks/useGeneralEducation';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
@@ -23,6 +24,10 @@ function GeneralCourse() {
     setSelectedCourseType(courseType);
     openModal();
   };
+
+  useEffect(() => {
+    openTooltip();
+  }, []);
 
   return (
     <div className={styles['general-course']}>

@@ -31,8 +31,8 @@ function CourseTable({ frameId }: { frameId: number }) {
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: setModalOpenFalse });
 
-  const filteredMyLectures = (myLectures as MyLectureInfo[])
-    .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null);
+  const filteredMyLectures = (myLectures as MyLectureInfo[] ?? [])
+    .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null || Number(lecture.grades) > 0);
 
   const handleCourseTypeChange = (
     id: number,

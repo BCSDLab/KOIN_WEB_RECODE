@@ -61,8 +61,8 @@ export default function LostItemDetailPage() {
     } else {
       portalManager.open((portalOption) => (
         <LoginRequireLostItemdModal
-          actionTitle="게시글을 작성하려면"
-          detailExplanation="로그인 후 분실물 주인을 찾아주세요!"
+          actionTitle="게시글을 신고 하려면"
+          detailExplanation="로그인 후 이용해주세요."
           onClose={portalOption.close}
         />
       ));
@@ -130,14 +130,16 @@ export default function LostItemDetailPage() {
                   <ChatIcon />
                   <div>쪽지 보내기</div>
                 </button>
-                <button
-                  className={styles['button-container__report-button']}
-                  type="button"
-                  onClick={handleReportClick}
-                >
-                  <ReportIcon />
-                  {!isMobile && '신고'}
-                </button>
+                {article.author !== '총학생회' && (
+                  <button
+                    className={styles['button-container__report-button']}
+                    type="button"
+                    onClick={handleReportClick}
+                  >
+                    <ReportIcon />
+                    {!isMobile && '신고'}
+                  </button>
+                )}
               </div>
             )}
 

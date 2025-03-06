@@ -1,24 +1,20 @@
 import { useState, useRef } from 'react';
-import styles from './Radio.module.scss';
+import styles from './Checkbox.module.scss';
 
-interface RadioProps {
+interface CheckboxProps {
   value: string;
   label: string;
   subtitle:string;
   name:string;
   checked: boolean;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: () => void;
 }
 
-export default function Radio({
+export default function Checkbox({
   value, label, subtitle, name, checked, onChange,
-}: RadioProps) {
+}: CheckboxProps) {
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleFocus = () => onChange(
-    { target: { value, name } } as React.ChangeEvent<HTMLInputElement>,
-  );
 
   const id = `${name}-${value}`;
 
@@ -34,24 +30,24 @@ export default function Radio({
 
   return (
     <label
-      className={styles.radio}
+      className={styles.checkbox}
       aria-label="button"
       htmlFor={id}
     >
       {value === '5' ? (
-        <div className={styles['radio__container-etc']}>
-          <div className={styles['radio__labelheader-etc']}>
-            <div className={styles['radio__content-etc']}>
+        <div className={styles['checkbox__container-etc']}>
+          <div className={styles['checkbox__labelheader-etc']}>
+            <div className={styles['checkbox__content-etc']}>
               <input
-                className={styles['radio__input-etc']}
-                type="radio"
+                className={styles['checkbox__input-etc']}
+                type="checkbox"
                 name={name}
                 value={value}
                 checked={checked}
                 onChange={onChange}
                 id={id}
               />
-              <div className={styles['radio__label-etc']}>{label}</div>
+              <div className={styles['checkbox__label-etc']}>{label}</div>
             </div>
             <div>
               {text.length}
@@ -60,27 +56,26 @@ export default function Radio({
           </div>
           <textarea
             ref={textareaRef}
-            className={styles['radio__textarea-etc']}
+            className={styles['checkbox__textarea-etc']}
             placeholder="신고 사유를 입력해주세요."
             value={text}
             onChange={handleChange}
-            onFocus={handleFocus}
           />
         </div>
       ) : (
         <>
           <input
-            className={styles.radio__input}
-            type="radio"
+            className={styles.checkbox__input}
+            type="checkbox"
             name={name}
             value={value}
             checked={checked}
             onChange={onChange}
             id={id}
           />
-          <div className={styles.radio__content}>
-            <div className={styles.radio__label}>{label}</div>
-            <div className={styles.radio__subtitle}>{subtitle}</div>
+          <div className={styles.checkbox__content}>
+            <div className={styles.checkbox__label}>{label}</div>
+            <div className={styles.checkbox__subtitle}>{subtitle}</div>
           </div>
         </>
       )}

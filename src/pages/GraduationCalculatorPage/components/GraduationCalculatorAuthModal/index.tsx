@@ -1,8 +1,15 @@
 import { useNavigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
+import { setRedirectPath } from 'utils/ts/auth';
 import styles from './GraduationCalculatorAuthModal.module.scss';
 
 export default function GraduationCalculatorAuthModal() {
   const navigate = useNavigate();
+
+  const onClickLogin = () => {
+    navigate(ROUTES.Auth());
+    setRedirectPath(ROUTES.GraduationCalculator());
+  };
 
   return (
     <div className={styles.background}>
@@ -19,7 +26,7 @@ export default function GraduationCalculatorAuthModal() {
           <button
             type="button"
             className={styles['container__button--login']}
-            onClick={() => navigate('/auth')}
+            onClick={onClickLogin}
           >
             로그인하기
           </button>

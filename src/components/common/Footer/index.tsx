@@ -20,6 +20,7 @@ function Footer(): JSX.Element {
     if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'footer', value: '복덕방' });
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', event_label: 'footer', value: '시간표' });
     if (title === '교내 시설물 정보') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'footer', value: '교내 시설물 정보' });
+    if (title === '쪽지') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'footer', value: '쪽지' });
   };
 
   return (

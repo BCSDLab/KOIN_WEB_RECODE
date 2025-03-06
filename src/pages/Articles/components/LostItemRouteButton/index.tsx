@@ -2,21 +2,36 @@ import PencilIcon from 'assets/svg/Articles/pencil.svg';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useUser } from 'utils/hooks/state/useUser';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import ROUTES from 'static/routes';
+import LoginRequireLostItemdModal from 'pages/Articles/LostItemDetailPage/components/LoginRequireLostItemModal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
   const { logItemWriteClick, logFindUserWriteClick, logLostItemWriteClick } = useArticlesLogger();
   const [isWriting, setIsWriting] = useState(false);
   const { pathname } = useLocation();
+  const portalManager = useModalPortal();
+  const { data: userInfo } = useUser();
 
   const handleWritingButtonClick = () => {
-    setIsWriting((prev) => !prev);
-    if (!isWriting) {
-      logItemWriteClick();
+    if (userInfo) {
+      setIsWriting((prev) => !prev);
+      if (!isWriting) {
+        logItemWriteClick();
+      }
+    } else {
+      portalManager.open((portalOption) => (
+        <LoginRequireLostItemdModal
+          actionTitle="게시글을 작성하려면"
+          detailExplanation="로그인 후 분실물 주인을 찾아주세요!"
+          onClose={portalOption.close}
+        />
+      ));
     }
   };
 

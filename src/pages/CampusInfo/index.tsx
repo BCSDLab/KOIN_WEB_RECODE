@@ -8,6 +8,7 @@ import Flatware from './svg/flatware.svg';
 import Laundry from './svg/laundry.svg';
 import PostOffice from './svg/post-office.svg';
 import Print from './svg/print.svg';
+import Glasses from './svg/glasses.svg';
 
 const CAFETERIA_HEAD_TABLE = {
   row: ['평일', '주말'],
@@ -25,6 +26,8 @@ const SHOP_ICON = {
   학생식당: <Flatware />,
   복지관식당: <Flatware />,
   오락실: <Cafe />,
+  안경원: <Glasses />,
+  우편취급국: <PostOffice />,
 };
 
 const formatDateRange = (fromDate: string, toDate: string) => {
@@ -138,7 +141,7 @@ function CampusInfo() {
           ))}
         </div>
         <div className={styles['info-column']}>
-          {filteredCampusInfo.slice(2, 5).map(({ id, name, opens }) => (
+          {filteredCampusInfo.slice(2, 6).map(({ id, name, opens }) => (
             <div className={styles['info-block']} key={id}>
               <div className={styles['icon-wrapper']}>
                 {SHOP_ICON[name as keyof typeof SHOP_ICON]}
@@ -153,7 +156,7 @@ function CampusInfo() {
           ))}
         </div>
         <div className={styles['info-column']}>
-          {filteredCampusInfo.slice(5).map(({ id, name, opens }) => (
+          {filteredCampusInfo.slice(6).map(({ id, name, opens }) => (
             <div className={styles['info-block']} key={id}>
               <div className={styles['icon-wrapper']}>
                 {SHOP_ICON[name as keyof typeof SHOP_ICON]}
