@@ -5,7 +5,7 @@ import { UpdateAcademicInfoRequest } from 'api/auth/entity';
 import showToast from 'utils/ts/showToast';
 import useAgreeGraduationCreidts from './useAgreeGraduationCreidts';
 
-export default function useUpdateAcademicInfo(token: string) {
+export default function useUpdateAcademicInfo(token: string, userId: string) {
   const queryClient = useQueryClient();
   const { mutate: agreeGraduationCredits } = useAgreeGraduationCreidts(token);
 

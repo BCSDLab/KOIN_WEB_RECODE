@@ -44,7 +44,7 @@ function StudentForm() {
     setMajor(undefined);
   };
 
-  const { mutate: updateAcademicInfo } = useUpdateAcademicInfo(token);
+  const { mutate: updateAcademicInfo } = useUpdateAcademicInfo(token, String(userInfo?.id));
 
   const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

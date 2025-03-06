@@ -19,6 +19,7 @@ import GraduationCalculatorAuthModal from './components/GraduationCalculatorAuth
 function GraduationCalculatorPage() {
   const token = useTokenState();
   const semester = useSemester();
+  const { data: userInfo } = useUser();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const mainFrame = timetableFrameList.find(
     (frame) => frame.is_main === true,
@@ -31,10 +32,13 @@ function GraduationCalculatorPage() {
       <CalculatorHelpModal closeInfo={portalManager.close} />
     ));
   };
+  const agreeGraduation = localStorage.getItem('agreeGraduationCredits');
 
   useEffect(() => {
     if (!token) return;
 
+    if (agreeGraduation === String(userInfo?.id)) return;
+    localStorage.setItem('agreeGraduationCredits', String(userInfo?.id));
     agreeGraduationCreidts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
