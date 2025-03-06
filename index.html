@@ -81,7 +81,8 @@
     ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      const userId = localStorage.getItem('uuid') || '';
+      const guest = ''
+      const userId = localStorage.getItem('uuid') || guest;
       window.dataLayer.push({
         user_id: userId,
         event: 'userIdAvailable',
