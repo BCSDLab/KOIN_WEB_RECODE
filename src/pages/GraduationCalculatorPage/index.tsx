@@ -55,7 +55,6 @@ function GraduationCalculatorPage() {
     if (!isFirstVisit) {
       sessionStorage.setItem('visitedGraduationPage', 'true');
 
-      agreeGraduationCreidts();
       portalManager.open(() => (
         <CalculatorHelpModal closeInfo={portalManager.close} />
       ));
