@@ -3,16 +3,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { auth } from 'api';
 import { UpdateAcademicInfoRequest } from 'api/auth/entity';
 import showToast from 'utils/ts/showToast';
+import useAgreeGraduationCreidts from './useAgreeGraduationCreidts';
 
 export default function useUpdateAcademicInfo(token: string) {
   const queryClient = useQueryClient();
+  const { mutate: agreeGraduationCredits } = useAgreeGraduationCreidts(token);
+
   return useMutation({
     mutationFn: (data: UpdateAcademicInfoRequest) => auth.updateAcademicInfo(token, data),
 
     onSuccess: () => {
-      // 이수 교양 강의 조회 api 추가
-      queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
+      agreeGraduationCredits();
       queryClient.invalidateQueries({ queryKey: ['generalEducation'] });
+      queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
 
       showToast('success', '수정하신 정보가 적용되었습니다.');
     },

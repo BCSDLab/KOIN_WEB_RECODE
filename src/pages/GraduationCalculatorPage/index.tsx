@@ -6,7 +6,6 @@ import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameLi
 import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { useUser } from 'utils/hooks/state/useUser';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
 import CourseTable from './components/CourseTable';
@@ -19,13 +18,12 @@ import GraduationCalculatorAuthModal from './components/GraduationCalculatorAuth
 
 function GraduationCalculatorPage() {
   const token = useTokenState();
-  const { data: userInfo } = useUser();
   const semester = useSemester();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const mainFrame = timetableFrameList.find(
     (frame) => frame.is_main === true,
   );
-  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token, String(userInfo?.id));
+  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token);
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const portalManager = useModalPortal();
   const handleInformationClick = () => {
@@ -81,7 +79,7 @@ function GraduationCalculatorPage() {
               </p>
             </div>
             <GeneralCourse />
-            <CreditChart currentFrameIndex={currentFrameIndex} />
+            <CreditChart />
           </div>
         </div>
       </div>
