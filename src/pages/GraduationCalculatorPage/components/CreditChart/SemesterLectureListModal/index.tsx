@@ -139,7 +139,6 @@ export default function SemesterLectureListModal({
                 });
               }}
               dropDownMaxHeight={368}
-              isWhiteBackground
             />
           </div>
           <div className={styles['dropdowns__second-row']}>
