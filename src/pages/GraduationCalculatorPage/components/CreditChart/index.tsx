@@ -1,12 +1,12 @@
 import { startTransition, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@bcsdlab/utils';
-import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useCalculateCredits from 'pages/GraduationCalculatorPage/hooks/useCalculateCredits';
 import { GradesByCourseType } from 'api/graduationCalculator/entity';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
+import useGetMultiMajorLecture from 'pages/TimetablePage/hooks/useGetMultiMajorLecture';
 import styles from './CreditChart.module.scss';
 import SemesterLectureListModal from './SemesterLectureListModal';
 
@@ -18,11 +18,11 @@ const barStyles = (barsNumber: number) => {
   return { width: '70px', gap: '33.57px' };
 };
 
-function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
-  const myLectures = useMyLectures(currentFrameIndex);
+function CreditChart() {
   const portalManger = useModalPortal();
   const token = useTokenState();
   const { data: calculateCredits } = useCalculateCredits(token);
+  const { data: multiMajorLecture } = useGetMultiMajorLecture(token);
   const [creditState, setCreditState] = useState<GradesByCourseType[]>([]);
   const barsNumber = creditState.length;
   const onClickBar = (courseType: string) => {
@@ -37,14 +37,22 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
   const updateValues = (newValues: GradesByCourseType[]) => {
     setCreditState(newValues);
   };
+  const multiMajorGrades = multiMajorLecture
+    .reduce((acc, curr) => acc + Number(curr.grades), 0);
 
   useEffect(() => {
     if (calculateCredits) {
-      const result = calculateCredits.course_types;
-      updateValues(result);
+      updateValues(
+        [...calculateCredits.course_types,
+          ...(multiMajorGrades ? [{
+            courseType: '다전공',
+            requiredGrades: 0,
+            grades: multiMajorGrades,
+          }] : []),
+        ],
+      );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myLectures]);
+  }, [calculateCredits, multiMajorGrades]);
 
   return (
     <div className={styles['credit-chart']}>
@@ -97,7 +105,7 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
                   layout
                 />
                 <div className={styles['credit-chart__credit-status']}>
-                  {`${credit.grades} / ${credit.requiredGrades}`}
+                  {`${credit.grades} ${credit.requiredGrades ? `/ ${credit.requiredGrades}` : ''}`}
                 </div>
               </div>
               <div className={styles['credit-chart__x-axis--name']}>
@@ -107,6 +115,7 @@ function CreditChart({ currentFrameIndex }: { currentFrameIndex: number }) {
           ))}
         </AnimatePresence>
       </motion.div>
+      <div className={styles['credit-chart__description']}>다전공은 학점계산에 적용되지 않아요.</div>
     </div>
   );
 }

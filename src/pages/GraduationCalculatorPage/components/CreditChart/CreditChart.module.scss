@@ -6,7 +6,7 @@
   border: none;
   border-radius: 16px;
   background-color: #fff;
-  padding: 62px 15px 42px;
+  padding: 32px 15px 72px;
 
   &__y-axis {
     display: flex;
@@ -42,7 +42,7 @@
   &__x-axis {
     position: absolute;
     display: flex;
-    bottom: 12px;
+    bottom: 42px;
     left: 66px;
     align-items: end;
 
@@ -92,5 +92,17 @@
     font-weight: 500;
     line-height: 160%;
     z-index: 1;
+  }
+
+  &__description {
+    position: absolute;
+    bottom: 12px;
+    right: 39px;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22.4px;
+    letter-spacing: 0%;
+    color: #727272;
   }
 }

@@ -9,7 +9,6 @@ import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { useUser } from 'utils/hooks/state/useUser';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
@@ -23,14 +22,13 @@ import GraduationCalculatorAuthModal from './components/GraduationCalculatorAuth
 
 function GraduationCalculatorPage() {
   const token = useTokenState();
-  const { data: userInfo } = useUser();
   const semester = useSemester();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const mainFrame = timetableFrameList.find(
     (frame) => frame.is_main === true,
   );
-  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token, String(userInfo?.id));
+  const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token);
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const portalManager = useModalPortal();
 
@@ -121,7 +119,7 @@ function GraduationCalculatorPage() {
               </p>
             </div>
             <GeneralCourse />
-            <CreditChart currentFrameIndex={currentFrameIndex} />
+            <CreditChart />
           </div>
         </div>
 

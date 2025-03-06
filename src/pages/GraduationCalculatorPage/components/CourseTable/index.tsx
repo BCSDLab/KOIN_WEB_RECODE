@@ -32,7 +32,7 @@ function CourseTable({ frameId }: { frameId: number }) {
   const { containerRef } = useOutsideClick({ onOutsideClick: setModalOpenFalse });
 
   const filteredMyLectures = (myLectures as MyLectureInfo[] ?? [])
-    .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null);
+    .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null || Number(lecture.grades) > 0);
 
   const handleCourseTypeChange = (id: number, newCourseType: string) => {
     const targetLecture = filteredMyLectures.find((lecture) => lecture.id === id) as MyLectureInfo;
