@@ -81,15 +81,16 @@
     ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
+      const userId = localStorage.getItem('uuid') || '';
       window.dataLayer.push({
-        user_id: localStorage.getItem('uuid') || 'USER_ID',
+        user_id: userId,
         event: 'userIdAvailable',
       });
+      console.log(userId);
       function gtag() {
         dataLayer.push(arguments);
       }
       gtag('js', new Date());
-      const userId = localStorage.getItem('uuid') || 'USER_ID';
       gtag('config', '%VITE_GOOGLE_ANALYTICS_ID%', {
         user_id: userId,
       });

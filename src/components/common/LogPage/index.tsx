@@ -1,24 +1,29 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as gtag from 'lib/gtag';
-import uuidv4 from 'utils/ts/uuidGenerater';
 import { UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/state/useUser';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null | undefined) => {
-  if (userInfo?.id) {
-    const userId = String(userInfo.id);
+  if (userInfo?.id && userInfo?.student_number) {
+    const id = String(userInfo.id);
+    const studentNumber = userInfo?.student_number?.slice(0, 6);
+    const userId = `${studentNumber}-${id}`;
     localStorage.setItem('uuid', userId);
+
     return userId;
   }
 
-  let uuid = localStorage.getItem('uuid');
-  if (!uuid) {
-    uuid = uuidv4();
-    localStorage.setItem('uuid', uuid);
+  if (userInfo?.id && !userInfo?.student_number) {
+    const id = String(userInfo.id);
+    const userId = `'anonymous_'${id}`;
+    localStorage.setItem('uuid', userId);
+
+    return userId;
   }
 
-  return uuid;
+  localStorage.removeItem('uuid');
+  return '';
 };
 
 function LogPage() {
