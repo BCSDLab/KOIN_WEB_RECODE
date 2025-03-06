@@ -122,7 +122,6 @@ function GraduationCalculatorPage() {
             <CreditChart />
           </div>
         </div>
-
       </div>
       {!token && (
         <GraduationCalculatorAuthModal />

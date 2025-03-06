@@ -37,8 +37,8 @@ function CreditChart() {
   const updateValues = (newValues: GradesByCourseType[]) => {
     setCreditState(newValues);
   };
-  const multiMajorGrades = multiMajorLecture
-    .reduce((acc, curr) => acc + Number(curr.grades), 0);
+  const multiMajorGrades = multiMajorLecture ? multiMajorLecture
+    .reduce((acc, curr) => acc + Number(curr.grades), 0) : null;
 
   useEffect(() => {
     if (calculateCredits) {
