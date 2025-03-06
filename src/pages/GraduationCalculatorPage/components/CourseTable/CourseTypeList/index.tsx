@@ -6,6 +6,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useGeneralEducation from 'pages/GraduationCalculatorPage/hooks/useGeneralEducation';
 import { createPortal } from 'react-dom';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './CourseTypeList.module.scss';
 
 export interface CourseTypeListProps {
@@ -96,6 +97,8 @@ function CourseTypeList({
     }
   };
 
+  useBodyScrollLock(hoveredItem === '교양선택');
+
   return (
     <div className={styles.select} ref={containerRef}>
       <button
@@ -128,7 +131,10 @@ function CourseTypeList({
               <button
                 ref={type.value === '교양선택' ? selectedRef : null}
                 type="button"
-                className={styles.select__option}
+                className={cn({
+                  [styles.select__option]: true,
+                  [styles['select__option--selected']]: type.value === courseTypeDefault,
+                })}
                 role="option"
                 aria-selected={type.value === courseTypeDefault}
                 data-value={type.value}

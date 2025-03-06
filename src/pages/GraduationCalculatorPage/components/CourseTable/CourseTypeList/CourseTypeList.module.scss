@@ -80,12 +80,14 @@
     &:active {
       background-color: #e1e1e1;
     }
+
+    &--selected {
+      color: #175c8e;
+    }
   }
 
   &__general-list {
-    position: absolute;
-    max-height: 112px;
-    overflow-y: scroll;
+    position: fixed;
     background-color: #fff;
     border-radius: 8px;
     border: 0.5px solid #e1e1e1;
