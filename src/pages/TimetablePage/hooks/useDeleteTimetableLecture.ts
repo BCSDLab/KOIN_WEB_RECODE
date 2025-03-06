@@ -16,6 +16,7 @@ export default function useDeleteTimetableLecture(authorization: string) {
       queryClient.invalidateQueries(
         { queryKey: ['generalEducation'] },
       );
+      queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
     },
     onError: (error) => {
       if (isKoinError(error)) {

@@ -1,15 +1,17 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { graduationCalculator } from 'api';
 import showToast from 'utils/ts/showToast';
 
 export default function useAgreeGraduationCreidts(token: string, userId: string) {
   const agreeGraduationCredits = localStorage.getItem('agreeGraduationCredits');
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => graduationCalculator.agreeGraduationCredits(token),
 
     onSuccess: () => {
       localStorage.setItem('agreeGraduationCredits', userId);
+      queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
     },
 
     onError: (error) => {
