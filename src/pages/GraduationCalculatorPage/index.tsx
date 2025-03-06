@@ -9,7 +9,6 @@ import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { useUser } from 'utils/hooks/state/useUser';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
