@@ -353,11 +353,10 @@ const GenderSelectorWithRef = React.forwardRef((
   const { data: userInfo } = useUser();
   const [
     selectedValue, setSelectedValue,
-  ] = React.useState<string | null>(String(userInfo?.gender) || null);
+  ] = React.useState<string | null>(userInfo ? String(userInfo?.gender) : null);
 
   useImperativeHandle(ref, () => ({
     value: selectedValue,
-    valid: selectedValue !== null ? true : '성별을 선택해주세요.',
   }));
 
   return (
