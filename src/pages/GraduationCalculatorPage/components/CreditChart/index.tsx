@@ -10,13 +10,13 @@ import useGetMultiMajorLecture from 'pages/TimetablePage/hooks/useGetMultiMajorL
 import styles from './CreditChart.module.scss';
 import SemesterLectureListModal from './SemesterLectureListModal';
 
-const barStyles = (barsNumber: number) => {
-  if (barsNumber === 7) return { width: '75px', gap: '45px' };
-  if (barsNumber === 8) return { width: '70px', gap: '33.57px' };
-  if (barsNumber === 9) return { width: '65px', gap: '26.25px' };
-  if (barsNumber === 10) return { width: '60px', gap: '21.67px' };
-  return { width: '70px', gap: '33.57px' };
-};
+// const barStyles = (barsNumber: number) => {
+//   if (barsNumber === 7) return { width: '75px', gap: '45px' };
+//   if (barsNumber === 8) return { width: '70px', gap: '33.57px' };
+//   if (barsNumber === 9) return { width: '65px', gap: '26.25px' };
+//   if (barsNumber === 10) return { width: '60px', gap: '21.67px' };
+//   return { width: '70px', gap: '33.57px' };
+// };
 
 function CreditChart() {
   const portalManger = useModalPortal();
@@ -70,7 +70,7 @@ function CreditChart() {
       <motion.div
         layout
         className={styles['credit-chart__x-axis']}
-        style={{ gap: barStyles(barsNumber).gap }}
+        style={{ gridTemplateColumns: `repeat(${barsNumber}, 1fr)` }}
       >
         <AnimatePresence>
           {creditState.map((credit) => (
@@ -85,14 +85,12 @@ function CreditChart() {
             >
               <div
                 style={{
-                  width: barStyles(barsNumber).width,
                   height: `${Number(credit.requiredGrades) * 5}px`,
                 }}
                 className={styles['credit-chart__total-credit']}
               >
                 <motion.div
                   style={{
-                    width: barStyles(barsNumber).width,
                     height: `${Number(credit.grades) * 5}px`,
                   }}
                   className={cn({
