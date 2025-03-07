@@ -5,8 +5,8 @@ export default function useGetMultiMajorLecture(token: string) {
   return useSuspenseQuery({
     queryKey: ['allLectures'],
 
-    queryFn: () => timetable.getTimetableAllLectureInfo(token),
+    queryFn: () => (token ? timetable.getTimetableAllLectureInfo(token) : null),
 
-    select: (data) => data.timetable.filter((item) => item.course_type === '다전공'),
+    select: (data) => (data ? data.timetable.filter((item) => item.course_type === '다전공') : null),
   });
 }
