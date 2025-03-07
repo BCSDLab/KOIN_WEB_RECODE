@@ -5,6 +5,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useGeneralEducation from 'pages/GraduationCalculatorPage/hooks/useGeneralEducation';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import styles from './CourseTypeList.module.scss';
 
 export interface CourseTypeListProps {
@@ -80,7 +81,10 @@ function CourseTypeList({
     generalEducationArea: string,
   ) => {
     e.stopPropagation();
-    onCourseTypeChange(id, '교양선택', generalEducationArea);
+
+    if (selectedGeneralEducationArea !== generalEducationArea) {
+      onCourseTypeChange(id, '교양선택', generalEducationArea);
+    }
 
     closePopup();
   };
@@ -96,6 +100,8 @@ function CourseTypeList({
       });
     }
   };
+
+  useBodyScrollLock(hoveredItem === '교양선택');
 
   return (
     <div className={styles.select} ref={containerRef}>

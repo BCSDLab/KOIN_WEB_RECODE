@@ -1,3 +1,4 @@
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import SemesterCourseTable from 'pages/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
 import { useSemester } from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useSelect from 'pages/TimetablePage/hooks/useSelect';
@@ -42,6 +43,7 @@ export default function SemesterLectureListModal({
   onClose: () => void,
   initialCourse: string,
 }) {
+  useBodyScrollLock();
   const semesters = useSemester();
   const token = useTokenState();
   const { data: takenLectureCode } = useTakenLectureCode(token);
