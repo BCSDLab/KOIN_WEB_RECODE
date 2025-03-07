@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useUser } from 'utils/hooks/state/useUser';
+import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import useDepartmentMajorList from 'pages/GraduationCalculatorPage/hooks/useDepartmentMajorList';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useUpdateAcademicInfo from 'pages/GraduationCalculatorPage/hooks/useUpdateAcademicInfo';
@@ -8,16 +8,16 @@ import styles from './StudentForm.module.scss';
 
 function StudentForm() {
   const token = useTokenState();
-  const { data: userInfo } = useUser();
+  const { data: academicInfo } = useUserAcademicInfo();
   const { data: deptMajorList } = useDepartmentMajorList();
 
   const [
     studentNumber, setStudentNumber,
-  ] = useState<string>(userInfo?.student_number ?? '');
+  ] = useState<string>(academicInfo?.student_number ?? '');
   const [
     department, setDepartment,
-  ] = useState<string>(userInfo?.major ?? '');
-  const [major, setMajor] = useState<string>();
+  ] = useState<string>(academicInfo?.department ?? '');
+  const [major, setMajor] = useState<string>(academicInfo?.major ?? '');
   const [majorOptionList, setMajorOptionList] = useState<{ label: string, value: string }[]>([{ label: '', value: '' }]);
 
   const departmentOptionList = deptMajorList.map(
@@ -41,7 +41,7 @@ function StudentForm() {
   const handleDepartment = ({ target }: { target: { value: string } }) => {
     setDepartment(target.value);
     handleMajor(target.value);
-    setMajor(undefined);
+    setMajor('');
   };
 
   const { mutate: updateAcademicInfo } = useUpdateAcademicInfo(token);
@@ -52,7 +52,7 @@ function StudentForm() {
     updateAcademicInfo({
       student_number: studentNumber,
       department,
-      major,
+      major: major || undefined,
     });
   };
 

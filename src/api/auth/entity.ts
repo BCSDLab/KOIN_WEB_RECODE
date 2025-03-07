@@ -59,6 +59,19 @@ export interface UserResponse extends APIResponse {
   student_number: string;
 }
 
+export interface UserAcademicInfoResponse extends APIResponse {
+  id: number;
+  anonymous_nickname: string;
+  email: string;
+  gender: 0 | 1;
+  department: string;
+  major: string;
+  name: string;
+  nickname: string;
+  phone_number: string;
+  student_number: string;
+}
+
 export interface UserUpdateRequest {
   password?: string;
   identity?: number;

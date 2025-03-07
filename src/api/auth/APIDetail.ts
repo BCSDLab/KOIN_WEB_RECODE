@@ -7,6 +7,7 @@ import {
   RefreshResponse,
   SignupResponse,
   UserResponse,
+  UserAcademicInfoResponse,
   FindPasswordRequest,
   FindPasswordResponse,
   UserUpdateRequest,
@@ -76,6 +77,19 @@ export class User<R extends UserResponse> implements APIRequest<R> {
   response!: R;
 
   auth = false;
+
+  constructor(public authorization: string) { }
+}
+
+// 추후 User 클래스명으로 아래 API로 통일할 것
+export class UserAcademicInfo<R extends UserAcademicInfoResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/user/student/me/academic-info';
+
+  response! : R;
+
+  auth = true;
 
   constructor(public authorization: string) { }
 }
