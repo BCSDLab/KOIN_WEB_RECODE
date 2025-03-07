@@ -57,9 +57,10 @@
     z-index: 10;
     position: absolute;
     top: -90.5px;
-    right: -102px;
+    right: -112px;
     display: flex;
-    width: fit-content;
+    justify-content: space-between;
+    width: 264px;
     gap: 8px;
     border-radius: 8px;
     background: #fafafa;
@@ -92,7 +93,7 @@
     &-asset {
       position: absolute;
       bottom: -13px;
-      right: -124px;
+      right: -148px;
       width: 100%;
       margin: 0 auto;
     }

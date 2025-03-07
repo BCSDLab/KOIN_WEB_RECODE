@@ -66,11 +66,11 @@ function StudentForm() {
   return (
     <form onSubmit={onSubmitForm} className={styles['student-form']}>
       <div className={styles['student-form__input']}>
-        <div>내 정보</div>
+        <div className={styles['student-form__input--text']}>내 정보</div>
         <button type="submit" className={styles['student-form__button']}>저장하기</button>
       </div>
       <div className={styles['student-form__input']}>
-        <div>학번</div>
+        <div className={styles['student-form__input--text']}>학번</div>
         <input
           name="student-number"
           className={styles['student-form__student-number']}
@@ -79,7 +79,7 @@ function StudentForm() {
         />
       </div>
       <div className={styles['student-form__input']}>
-        <div>학과</div>
+        <div className={styles['student-form__input--text']}>학과</div>
         <div className={styles['student-form__department']}>
           <Selector
             options={departmentOptionList}
@@ -90,7 +90,7 @@ function StudentForm() {
         </div>
       </div>
       <div className={styles['student-form__input']}>
-        <div>전공</div>
+        <div className={styles['student-form__input--text']}>전공</div>
         <div className={styles['student-form__major']}>
           <Selector
             options={majorOptionList}
