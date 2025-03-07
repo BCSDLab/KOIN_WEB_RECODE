@@ -49,7 +49,7 @@ function CourseTable({ frameId }: { frameId: number }) {
         class_place: info.place,
       })),
       course_type: newCourseType,
-      ...(newGeneralEducationArea ? { general_education_area: newGeneralEducationArea } : {}),
+      general_education_area: newGeneralEducationArea ?? undefined,
     });
   };
 
@@ -89,6 +89,7 @@ function CourseTable({ frameId }: { frameId: number }) {
     <span>{lecture.grades}</span>,
     <CourseTypeList
       courseTypeDefault={lecture.course_type}
+      selectedGeneralEducationArea={lecture.general_education_area}
       id={lecture.id}
       onCourseTypeChange={handleCourseTypeChange}
     />,
