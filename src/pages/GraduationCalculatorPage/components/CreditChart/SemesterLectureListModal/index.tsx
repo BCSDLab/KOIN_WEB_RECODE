@@ -10,6 +10,7 @@ import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import useAllMyLectures from 'pages/TimetablePage/hooks/useAllMyLectures';
 import { LectureInfo } from 'api/graduationCalculator/entity';
 import { Selector } from 'components/common/Selector';
+import _ from 'lodash';
 import styles from './SemesterLectureListModal.module.scss';
 
 const lectureStatusOptions = [
@@ -70,12 +71,8 @@ export default function SemesterLectureListModal({
   const allMyLecturesInfo = allMyLectures
     .filter((myLecture) => myLecture.course_type === course)
     .map((lecture) => ({
-      id: lecture.id,
-      code: lecture.code,
+      ..._.pick(lecture, ['id', 'code', 'professor', 'grades', 'department']),
       name: lecture.class_title,
-      professor: lecture.professor,
-      grades: lecture.grades,
-      department: lecture.department,
     }));
 
   const lecturesInfo = lectureStatus === '수강한 강의'
