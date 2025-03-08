@@ -4,23 +4,12 @@ import styles from './CalculatorHelpModal.module.scss';
 
 interface CalculatorHelpModalProps {
   closeInfo: () => void;
-  unlock: () => void;
 }
 
-function CalculatorHelpModal({ closeInfo, unlock }: CalculatorHelpModalProps) {
-  const { backgroundRef } = useOutsideClick({
-    onOutsideClick: () => {
-      closeInfo();
-      unlock();
-    },
-  });
+function CalculatorHelpModal({ closeInfo }: CalculatorHelpModalProps) {
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });
 
-  useEscapeKeyDown({
-    onEscape: () => {
-      closeInfo();
-      unlock();
-    },
-  });
+  useEscapeKeyDown({ onEscape: closeInfo });
 
   return (
     <div className={styles.background} ref={backgroundRef}>
@@ -70,7 +59,6 @@ function CalculatorHelpModal({ closeInfo, unlock }: CalculatorHelpModalProps) {
             className={styles['container__button-container--button']}
             onClick={() => {
               closeInfo();
-              unlock();
             }}
           >
             확인

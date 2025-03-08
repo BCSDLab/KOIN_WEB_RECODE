@@ -34,9 +34,14 @@ function GraduationCalculatorPage() {
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const portalManager = useModalPortal();
 
+  const closeInfo = () => {
+    portalManager.close();
+    unlock();
+  };
+
   const handleInformationClick = () => {
     portalManager.open(() => (
-      <CalculatorHelpModal closeInfo={portalManager.close} unlock={unlock} />
+      <CalculatorHelpModal closeInfo={closeInfo} />
     ));
   };
 
@@ -56,7 +61,7 @@ function GraduationCalculatorPage() {
       sessionStorage.setItem('visitedGraduationPage', 'true');
 
       portalManager.open(() => (
-        <CalculatorHelpModal closeInfo={portalManager.close} unlock={unlock} />
+        <CalculatorHelpModal closeInfo={closeInfo} />
       ));
     }
   }, [token]);
