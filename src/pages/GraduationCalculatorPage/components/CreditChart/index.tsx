@@ -7,6 +7,7 @@ import { GradesByCourseType } from 'api/graduationCalculator/entity';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useGetMultiMajorLecture from 'pages/TimetablePage/hooks/useGetMultiMajorLecture';
+import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import styles from './CreditChart.module.scss';
 import SemesterLectureListModal from './SemesterLectureListModal';
 
@@ -19,6 +20,7 @@ const barStyles = (barsNumber: number) => {
 };
 
 function CreditChart() {
+  const { lock, unlock } = useScrollLock(false);
   const portalManger = useModalPortal();
   const token = useTokenState();
   const { data: calculateCredits } = useCalculateCredits(token);
@@ -26,9 +28,13 @@ function CreditChart() {
   const [creditState, setCreditState] = useState<GradesByCourseType[]>([]);
   const barsNumber = creditState.length;
   const onClickBar = (courseType: string) => {
+    lock();
     startTransition(() => portalManger.open((portalOption: Portal) => (
       <SemesterLectureListModal
-        onClose={portalOption.close}
+        onClose={() => {
+          portalOption.close();
+          unlock();
+        }}
         initialCourse={courseType}
       />
     )));
