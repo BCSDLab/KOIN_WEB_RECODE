@@ -84,6 +84,8 @@ function CourseTypeList({
 
     if (selectedGeneralEducationArea !== generalEducationArea) {
       onCourseTypeChange(id, '교양선택', generalEducationArea);
+    } else {
+      onCourseTypeChange(id, '교양선택');
     }
 
     closePopup();
