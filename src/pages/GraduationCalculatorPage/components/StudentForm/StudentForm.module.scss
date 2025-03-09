@@ -36,11 +36,15 @@
     gap: 16px;
     justify-content: space-between;
     align-items: center;
-    font-family: Pretendard, sans-serif;
-    font-weight: 500;
-    font-size: 22px;
-    line-height: 26.25px;
-    letter-spacing: 0%;
+
+    &--text {
+      font-family: Pretendard, sans-serif;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 26.25px;
+      letter-spacing: 0%;
+      white-space: nowrap;
+    }
   }
 
   &__department,
@@ -56,7 +60,7 @@
   }
 
   &__student-number {
-    width: 261px;
+    flex: 1;
     border: 1px solid #e1e1e1;
     border-radius: 5px;
     padding: 11px 16px;
