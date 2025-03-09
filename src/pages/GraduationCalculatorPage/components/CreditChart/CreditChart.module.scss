@@ -3,6 +3,7 @@
 .credit-chart {
   position: relative;
   display: flex;
+  gap: 36px;
   border: none;
   border-radius: 16px;
   background-color: #fff;
@@ -40,10 +41,11 @@
   }
 
   &__x-axis {
-    position: absolute;
-    display: flex;
-    bottom: 42px;
-    left: 66px;
+    display: grid;
+    width: 800px;
+    gap: 20px;
+    position: relative;
+    bottom: -30px;
     align-items: end;
 
     &--name {
@@ -55,6 +57,7 @@
       font-style: normal;
       font-weight: 400;
       line-height: 160%;
+      white-space: nowrap;
     }
   }
 
@@ -75,6 +78,7 @@
 
   &__earned-credit {
     position: absolute;
+    width: 100%;
     background: rgba(122 186 120 / 70%);
     bottom: 0;
 

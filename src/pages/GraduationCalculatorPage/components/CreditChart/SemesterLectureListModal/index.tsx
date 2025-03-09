@@ -7,10 +7,11 @@ import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useCourseType from 'pages/GraduationCalculatorPage/hooks/useCourseType';
 import { startTransition, useState } from 'react';
-import { useUser } from 'utils/hooks/state/useUser';
-import useTakenLectureCode from 'pages/TimetablePage/hooks/useTakenLectureCode';
+import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
+import useAllMyLectures from 'pages/TimetablePage/hooks/useAllMyLectures';
 import { LectureInfo } from 'api/graduationCalculator/entity';
 import { Selector } from 'components/common/Selector';
+import _ from 'lodash';
 import styles from './SemesterLectureListModal.module.scss';
 
 const lectureStatusOptions = [
@@ -46,8 +47,8 @@ export default function SemesterLectureListModal({
   useBodyScrollLock();
   const semesters = useSemester();
   const token = useTokenState();
-  const { data: takenLectureCode } = useTakenLectureCode(token);
-  const { data: userInfo } = useUser();
+  const allMyLectures = useAllMyLectures(token);
+  const { data: academicInfo } = useUserAcademicInfo();
   const semesterOptionList = (semesters ?? []).map(
     (semesterInfo) => ({
       label: `${semesterInfo.year}년 ${semesterInfo.term}`,
@@ -62,13 +63,27 @@ export default function SemesterLectureListModal({
   const {
     value: lectureStatus, onChangeSelect: onChangeLectureStatus,
   } = useSelect(lectureStatusOptions[0].value);
-  const { value: department, onChangeSelect: onChangeDepartment } = useSelect(userInfo?.major);
+  const {
+    value: department,
+    onChangeSelect: onChangeDepartment,
+  } = useSelect(academicInfo?.department);
   const { value: course, onChangeSelect: onChangeCourse } = useSelect(initialCourse);
   const { data: generalCourses } = useCourseType(token, semester, course!);
 
+  const allMyLecturesInfo = allMyLectures
+    .filter((myLecture) => myLecture.course_type === course)
+    .map((lecture) => ({
+      ..._.pick(lecture, ['id', 'code', 'professor', 'grades', 'department']),
+      name: lecture.class_title,
+    }));
+
+  const lecturesInfo = lectureStatus === '수강한 강의'
+    ? allMyLecturesInfo
+    : generalCourses.lectures;
+
   const filteredLecturesByDept = department === '전체'
-    ? generalCourses.lectures
-    : generalCourses.lectures.filter(
+    ? lecturesInfo
+    : lecturesInfo.filter(
       (lecture) => lecture.department === department,
     );
 
@@ -86,12 +101,18 @@ export default function SemesterLectureListModal({
   }
 
   const filteredLectureByLectureStatus = lectureStatus === '수강한 강의'
-    ? separateByMatchingCodes(filteredLecturesByDept, takenLectureCode).matched
-    : separateByMatchingCodes(filteredLecturesByDept, takenLectureCode).unmatched;
+    ? separateByMatchingCodes(
+      filteredLecturesByDept,
+      allMyLectures.map((item) => item.code),
+    ).matched
+    : separateByMatchingCodes(
+      filteredLecturesByDept,
+      allMyLectures.map((item) => item.code),
+    ).unmatched;
 
   const tableData = filteredLectureByLectureStatus.map((lecture) => [
     <span>{lecture.name}</span>,
-    <span>{ }</span>,
+    <span>{lecture.professor ? lecture.professor : ''}</span>,
     <span>{lecture.grades}</span>,
     <span>{course}</span>,
     <span>{ }</span>,
@@ -110,7 +131,7 @@ export default function SemesterLectureListModal({
           <div className={styles['dropdowns__first-row']}>
             <Selector
               options={semesterOptionList}
-              value={`${semester.year}년 ${semester.term}`}
+              value={lectureStatus === '수강한 강의' ? '' : `${semester.year}년 ${semester.term}`}
               onChange={({ target }) => startTransition(() => {
                 setSemester({
                   year: Number(target.value.slice(0, 4)),
@@ -118,6 +139,8 @@ export default function SemesterLectureListModal({
                 });
               })}
               dropDownMaxHeight={384}
+              placeholder="-"
+              disabled={lectureStatus === '수강한 강의'}
             />
           </div>
           <div className={styles['dropdowns__first-row']}>

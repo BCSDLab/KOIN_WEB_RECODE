@@ -105,10 +105,10 @@
 .tooltip {
   z-index: 10;
   position: absolute;
-  top: -58px;
-  right: -120px;
+  top: -60px;
+  right: -80px;
   display: flex;
-  width: fit-content;
+  width: 264px;
   gap: 8px;
   border-radius: 8px;
   background: #fafafa;
@@ -142,7 +142,7 @@
   &-asset {
     position: absolute;
     bottom: -13px;
-    right: -124px;
+    right: -168px;
     width: 100%;
     margin: 0 auto;
   }

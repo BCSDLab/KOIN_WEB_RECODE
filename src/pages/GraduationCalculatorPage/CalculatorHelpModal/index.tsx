@@ -2,8 +2,13 @@ import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './CalculatorHelpModal.module.scss';
 
-function CalculatorHelpModal({ closeInfo }: { closeInfo: () => void }) {
+interface CalculatorHelpModalProps {
+  closeInfo: () => void;
+}
+
+function CalculatorHelpModal({ closeInfo }: CalculatorHelpModalProps) {
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeInfo });
+
   useEscapeKeyDown({ onEscape: closeInfo });
 
   return (
@@ -52,7 +57,9 @@ function CalculatorHelpModal({ closeInfo }: { closeInfo: () => void }) {
             type="button"
             aria-label="닫기 버튼"
             className={styles['container__button-container--button']}
-            onClick={closeInfo}
+            onClick={() => {
+              closeInfo();
+            }}
           >
             확인
           </button>
