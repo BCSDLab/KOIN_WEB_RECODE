@@ -92,6 +92,7 @@ export default function useTimetableMutation(timetableFrameId: number) {
               class_title: editedLecture.class_title,
               class_places: editedLecture.class_places,
               course_type: editedLecture.course_type,
+              general_education_area: editedLecture.general_education_area,
             },
         token,
       });

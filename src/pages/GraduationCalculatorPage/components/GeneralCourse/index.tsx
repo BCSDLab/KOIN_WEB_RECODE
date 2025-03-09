@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
+import { Portal } from 'components/common/Modal/PortalProvider';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useGeneralEducation from 'pages/GraduationCalculatorPage/hooks/useGeneralEducation';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
@@ -15,8 +17,8 @@ import styles from './GeneralCourse.module.scss';
 
 function GeneralCourse() {
   const { lock, unlock } = useScrollLock(false);
+  const portalManager = useModalPortal();
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const token = useTokenState();
   const { generalEducation } = useGeneralEducation(token);
   const requiredEducationArea = generalEducation?.general_education_area || [];
@@ -24,7 +26,15 @@ function GeneralCourse() {
 
   const handleOpenModal = (courseType: string) => {
     setSelectedCourseType(courseType);
-    openModal();
+    startTransition(() => portalManager.open((portalOption: Portal) => (
+      <GeneralCourseListModal
+        courseType={selectedCourseType}
+        onClose={() => {
+          portalOption.close();
+          unlock();
+        }}
+      />
+    )));
     lock();
   };
 
@@ -87,15 +97,6 @@ function GeneralCourse() {
             <BubbleTailBottom />
           </div>
         </div>
-      )}
-      {isModalOpen && (
-        <GeneralCourseListModal
-          courseType={selectedCourseType}
-          onClose={() => {
-            closeModal();
-            unlock();
-          }}
-        />
       )}
     </div>
   );

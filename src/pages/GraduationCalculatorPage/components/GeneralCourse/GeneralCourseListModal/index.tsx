@@ -1,3 +1,4 @@
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterCourseTable from 'pages/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -16,6 +17,7 @@ function GeneralCourseListModal({
   courseType,
   onClose,
 }: GeneralCourseListModalProps) {
+  useBodyScrollLock();
   const token = useTokenState();
   const semesters = useSemester();
   const semesterOptionList = (semesters ?? []).map(

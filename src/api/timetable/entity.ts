@@ -81,6 +81,7 @@ export interface TimetableRegularLecture {
   class_title: string;
   class_places: ClassPlace[];
   course_type?: string;
+  general_education_area?: string;
 }
 
 export interface TimetableLectureRegularEditRequest {
