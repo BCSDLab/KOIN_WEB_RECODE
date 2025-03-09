@@ -1,11 +1,11 @@
 import { cn } from '@bcsdlab/utils';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import DownArrowIcon from 'assets/svg/chervron-up-grey.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useGeneralEducation from 'pages/GraduationCalculatorPage/hooks/useGeneralEducation';
-import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import styles from './CourseTypeList.module.scss';
 
 export interface CourseTypeListProps {
@@ -21,6 +21,7 @@ function CourseTypeList({
   id,
   onCourseTypeChange,
 }: CourseTypeListProps) {
+  const { lock, unlock } = useScrollLock(false);
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
   const [isOverHalf, setIsOverHalf] = useState<boolean>(false);
@@ -103,7 +104,14 @@ function CourseTypeList({
     }
   };
 
-  useBodyScrollLock(hoveredItem === '교양선택');
+  useEffect(() => {
+    if (hoveredItem === '교양선택') {
+      lock();
+    } else {
+      unlock();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hoveredItem]);
 
   return (
     <div className={styles.select} ref={containerRef}>

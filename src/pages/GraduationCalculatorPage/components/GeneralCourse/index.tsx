@@ -17,6 +17,7 @@ import styles from './GeneralCourse.module.scss';
 
 function GeneralCourse() {
   const { lock, unlock } = useScrollLock(false);
+  const portalManager = useModalPortal();
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const token = useTokenState();
   const { generalEducation } = useGeneralEducation(token);
@@ -25,7 +26,15 @@ function GeneralCourse() {
 
   const handleOpenModal = (courseType: string) => {
     setSelectedCourseType(courseType);
-    openModal();
+    startTransition(() => portalManager.open((portalOption: Portal) => (
+      <GeneralCourseListModal
+        courseType={selectedCourseType}
+        onClose={() => {
+          portalOption.close();
+          unlock();
+        }}
+      />
+    )));
     lock();
   };
 
@@ -88,15 +97,6 @@ function GeneralCourse() {
             <BubbleTailBottom />
           </div>
         </div>
-      )}
-      {isModalOpen && (
-        <GeneralCourseListModal
-          courseType={selectedCourseType}
-          onClose={() => {
-            closeModal();
-            unlock();
-          }}
-        />
       )}
     </div>
   );
