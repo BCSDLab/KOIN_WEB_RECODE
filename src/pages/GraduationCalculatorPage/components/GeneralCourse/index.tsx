@@ -70,7 +70,6 @@ function GeneralCourse() {
           <div className={styles['tooltip-content']}>
             교양 영역을 클릭해서
             <strong> 학기 교양 개설 목록</strong>
-            <br />
             을 확인할 수 있어요.
           </div>
           <button

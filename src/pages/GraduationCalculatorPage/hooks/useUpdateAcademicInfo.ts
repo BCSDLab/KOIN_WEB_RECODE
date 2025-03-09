@@ -16,6 +16,7 @@ export default function useUpdateAcademicInfo(token: string) {
       agreeGraduationCredits();
       queryClient.invalidateQueries({ queryKey: ['generalEducation'] });
       queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
+      queryClient.invalidateQueries({ queryKey: ['userAcademicinfo'] });
 
       showToast('success', '수정하신 정보가 적용되었습니다.');
     },
