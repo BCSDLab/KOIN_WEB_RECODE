@@ -52,6 +52,11 @@
     background-color: #fff;
     border-radius: 8px;
     border: 0.5px solid #e1e1e1;
+    scrollbar-width: none; // Firefox 스크롤바 숨김
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
     &-up {
       bottom: 22px;

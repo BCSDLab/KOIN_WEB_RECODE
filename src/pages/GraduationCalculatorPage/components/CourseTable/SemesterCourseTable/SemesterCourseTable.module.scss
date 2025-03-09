@@ -3,17 +3,13 @@
 .table {
   display: flex;
   flex-direction: column;
+  vertical-align: middle;
   height: 100%;
   gap: 4px;
   font-family: Pretendard, sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 22.4px;
-  scrollbar-width: none; // Firefox 스크롤바 숨김
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
 
   &__header {
     display: flex;
@@ -45,6 +41,11 @@
     gap: 4px;
     color: #000;
     overflow-y: auto;
+    scrollbar-width: none; // Firefox 스크롤바 숨김
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
     span {
       /* stylelint-disable value-no-vendor-prefix */
@@ -57,14 +58,14 @@
       text-overflow: ellipsis;
     }
 
-    & > tr { padding: 4px 12px; }
+    & > tr { 
+      padding: 4px 12px;
+      vertical-align: middle;
+    }
 
     & > tr > td { text-align: center; }
 
-    & > tr > td:nth-child(1) {
-      text-align: left;
-      width: 128px;
-    }
+    & > tr > td:nth-child(1) { width: 128px; }
 
     & > tr > td:nth-child(2) { width: 60px; }
 
