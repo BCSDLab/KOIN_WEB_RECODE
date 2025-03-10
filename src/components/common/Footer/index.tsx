@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -9,18 +9,39 @@ function Footer(): JSX.Element {
   const isMobile = useMediaQuery();
   const logger = useLogger();
   const navigate = useNavigate();
-  // const pathname = useParams();
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
-  const logShortcut = (title: string) => {
-    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'footer', value: '식단' });
-    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'footer', value: '버스/교통' });
-    if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'footer', value: '공지사항' });
-    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'footer', value: '주변상점' });
-    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'footer', value: '복덕방' });
-    if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', event_label: 'footer', value: '시간표' });
-    if (title === '교내 시설물 정보') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'footer', value: '교내 시설물 정보' });
-    if (title === '쪽지') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'footer', value: '쪽지' });
+  const location = useLocation();
+  const { pathname } = location; // 현재 URL의 경로
+
+  const logShortcut = async (title: string) => {
+    const loggingMap: Record<
+    string,
+    { actionTitle: string; event_label: string; value: string; event_category?: string }> = {
+      공지사항: { actionTitle: 'CAMPUS', event_label: 'footer', value: '공지사항' },
+      '버스 교통편': { actionTitle: 'CAMPUS', event_label: 'footer', value: '버스 교통편' },
+      '버스 시간표': { actionTitle: 'CAMPUS', event_label: 'footer', value: '버스 시간표' },
+      식단: { actionTitle: 'CAMPUS', event_label: 'footer', value: '식단' },
+      시간표: { actionTitle: 'USER', event_label: 'footer', value: '시간표' },
+      복덕방: { actionTitle: 'BUSINESS', event_label: 'footer', value: '복덕방' },
+      주변상점: { actionTitle: 'BUSINESS', event_label: 'footer', value: '주변상점' },
+      '교내 시설물 정보': { actionTitle: 'CAMPUS', event_label: 'footer', value: '교내 시설물 정보' },
+      '코인 사장님': { actionTitle: 'BUSINESS', event_label: 'footer', value: '코인 사장님' },
+      쪽지: { actionTitle: 'CAMPUS', event_label: 'footer', value: '쪽지' },
+    };
+
+    if (loggingMap[title]) {
+      logger.actionEventClick(loggingMap[title]);
+
+      if (String(pathname) === ROUTES.GraduationCalculator()) {
+        logger.actionEventClick({
+          actionTitle: 'USER',
+          event_label: 'graduation_calculator_back',
+          value: `탈출_푸터_${title}`,
+          event_category: 'click',
+        });
+      }
+    }
   };
 
   return (

@@ -76,7 +76,15 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
         <button
           type="button"
           className={styles.page__button}
-          onClick={() => { navigate('/graduation'); }}
+          onClick={() => {
+            navigate('/graduation');
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              event_label: 'graduation_calculator',
+              value: '졸업학점 계산기',
+              event_category: 'click',
+            });
+          }}
         >
           <GraduationIcon />
           졸업학점 계산기

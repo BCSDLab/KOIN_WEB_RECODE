@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
@@ -11,6 +12,7 @@ import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
 import CourseTable from './components/CourseTable';
@@ -65,6 +67,40 @@ function GraduationCalculatorPage() {
       ));
     }
   }, [token]);
+
+  const logger = useLogger();
+  const handlePopState = React.useCallback(() => {
+    history.back();
+    if (sessionStorage.getItem('swipeToBack') === 'true') {
+      logger.actionEventSwipe({
+        actionTitle: 'USER',
+        event_label: 'graduation_calculator_back',
+        value: '탈출_OS 스와이프',
+        event_category: 'click',
+      });
+      return;
+    }
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_back',
+      value: '탈출_뒤로가기',
+      event_category: 'click',
+    });
+  }, [logger]);
+
+  React.useEffect(() => {
+    if (history.state.state !== 'graduation') {
+      history.pushState({ state: 'graduation' }, '');
+    }
+  }, []);
+
+  React.useEffect(() => {
+    window.addEventListener('popstate', handlePopState);
+    return (() => {
+      window.removeEventListener('popstate', handlePopState);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles.page}>
