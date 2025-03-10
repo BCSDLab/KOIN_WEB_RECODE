@@ -3,7 +3,7 @@
 .table {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  vertical-align: middle;
   height: 100%;
   gap: 4px;
   font-family: Pretendard, sans-serif;
@@ -11,21 +11,18 @@
   font-weight: 400;
   line-height: 22.4px;
 
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
   &__header {
     display: flex;
     width: 100%;
     box-sizing: border-box;
     padding: 0 12px;
-    align-items: center;
     background-color: #f1f8ff;
     color: #4b4b4b;
 
-    & > tr > th:nth-child(1) { width: 128px; }
-
+    & > tr > th:nth-child(1) {
+      text-align: left;
+      width: 128px;
+    }
     & > tr > th:nth-child(2) { width: 60px; }
 
     & > tr > th:nth-child(3) { width: 36px; }
@@ -42,9 +39,13 @@
     min-height: 208px;
     box-sizing: border-box;
     gap: 4px;
-    align-items: center;
     color: #000;
     overflow-y: auto;
+    scrollbar-width: none; // Firefox 스크롤바 숨김
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
     span {
       /* stylelint-disable value-no-vendor-prefix */
@@ -57,11 +58,16 @@
       text-overflow: ellipsis;
     }
 
-    & > tr { padding: 4px 12px; }
+    & > tr {
+      padding: 4px 12px;
+      vertical-align: middle;
+      text-align: center;
+    }
 
-    & > tr > td { text-align: center; }
-
-    & > tr > td:nth-child(1) { width: 128px; }
+    & > tr > td:nth-child(1) {
+      width: 128px;
+      text-align: left;
+    }
 
     & > tr > td:nth-child(2) { width: 60px; }
 
