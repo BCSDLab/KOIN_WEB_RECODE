@@ -2,7 +2,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
-import BenefitIcon from 'assets/svg/benefit-icon.svg';
 import { Suspense } from 'react';
 import styles from './IndexStore.module.scss';
 
@@ -12,14 +11,26 @@ interface Category {
   image_url: string;
 }
 
+interface CategoryWithEvent extends Category {
+  event: {
+    actionTitle: string;
+    event_label: string;
+    value: string;
+    event_category: string;
+    previous_page: string;
+    current_page: string;
+    duration_time: number;
+  };
+}
+
 function IndexStore() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
 
-  const handleStoreCategoryClick = (e: React.MouseEvent<HTMLDivElement>, category: Category) => {
-    e.preventDefault();
-    logger.actionEventClick({
+  const categoriesWithEvent = categories.shop_categories.map((category: Category) => ({
+    ...category,
+    event: {
       actionTitle: 'BUSINESS',
       event_label: 'main_shop_categories',
       value: category.name,
@@ -27,21 +38,32 @@ function IndexStore() {
       previous_page: '메인',
       current_page: category.name,
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
-    });
-    navigate(`${ROUTES.Store()}?category=${category.id}&COUNT=1`);
-  };
+    },
+  }));
 
-  const handleStoreClick = () => {
-    logger.actionEventClick({
-      actionTitle: 'BUSINESS',
-      event_label: 'main_shop_benefit',
-      value: '전화주문혜택',
-      event_category: 'click',
-      previous_page: '메인',
-      current_page: 'benefit',
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
-    });
-    navigate('/benefitstore?category=1');
+  const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map(
+    (category) => (
+      category.name === '전체보기' ? ({
+        ...category,
+        name: '혜택',
+        image_url: 'https://static.koreatech.in/assets/img/icon/benefit_icon.png',
+        event: {
+          ...category.event,
+          event_label: 'main_shop_benefit',
+          value: '전화주문혜택',
+          current_page: 'benefit',
+        },
+      }) : category
+    ),
+  );
+
+  const handleCategoryClick = (
+    e: React.MouseEvent<HTMLDivElement>,
+    category: CategoryWithEvent,
+  ) => {
+    e.preventDefault();
+    logger.actionEventClick(category.event);
+    navigate(`${ROUTES.Store()}?category=${category.id}&COUNT=1`);
   };
 
   return (
@@ -49,33 +71,20 @@ function IndexStore() {
       <Link to={ROUTES.Store()} className={styles.template__title}>주변 상점</Link>
       <Suspense fallback={null}>
         <div className={styles.category__wrapper}>
-          {categories.shop_categories.map((category) => (
-            category.name === '전체보기' ? (
-              <div
-                key={category.id}
-                className={styles.category__benefit}
-                onClick={() => handleStoreClick()}
-                aria-hidden
-              >
-                <BenefitIcon />
-                혜택
-              </div>
-            )
-              : (
-                <div
-                  key={category.id}
-                  className={styles.category__item}
-                  onClick={(e) => handleStoreCategoryClick(e, category)}
-                  aria-hidden
-                >
-                  <img
-                    src={category.image_url}
-                    alt={category.name}
-                    className={styles.category__image}
-                  />
-                  {category.name}
-                </div>
-              )
+          {categoriesWithBenefit.map((category) => (
+            <div
+              key={category.id}
+              className={styles.category__item}
+              onClick={(e) => handleCategoryClick(e, category)}
+              aria-hidden
+            >
+              <img
+                src={category.image_url}
+                alt={category.name}
+                className={styles.category__image}
+              />
+              {category.name}
+            </div>
           ))}
         </div>
       </Suspense>
