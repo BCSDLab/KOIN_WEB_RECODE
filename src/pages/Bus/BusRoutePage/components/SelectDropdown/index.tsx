@@ -72,7 +72,7 @@ export default function SelectDropdown({
         type="button"
         className={cn({
           [styles.arrow]: true,
-          [styles['arrow__left--disabled']]: isFirstOption,
+          [styles['arrow--hidden']]: isFirstOption,
         })}
         onClick={() => handleNavigationClick('prev')}
         aria-label="이전"
@@ -90,7 +90,7 @@ export default function SelectDropdown({
         type="button"
         className={cn({
           [styles.arrow]: true,
-          [styles['arrow__right--disabled']]: isLastOption,
+          [styles['arrow--hidden']]: isLastOption,
         })}
         onClick={() => handleNavigationClick('next')}
         aria-label="다음"
