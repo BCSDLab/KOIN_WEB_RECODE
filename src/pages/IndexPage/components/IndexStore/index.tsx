@@ -3,6 +3,7 @@ import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList'
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
 import BenefitIcon from 'assets/svg/benefit-icon.svg';
+import { Suspense } from 'react';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -46,36 +47,38 @@ function IndexStore() {
   return (
     <section className={styles.template}>
       <Link to={ROUTES.Store()} className={styles.template__title}>주변 상점</Link>
-      <div className={styles.category__wrapper}>
-        {categories?.shop_categories.slice(0, 12).map((category) => (
-          category.name === '전체보기' ? (
-            <div
-              key={category.id}
-              className={styles.category__benefit}
-              onClick={() => handleStoreClick()}
-              aria-hidden
-            >
-              <BenefitIcon />
-              혜택
-            </div>
-          )
-            : (
+      <Suspense fallback={null}>
+        <div className={styles.category__wrapper}>
+          {categories.shop_categories.map((category) => (
+            category.name === '전체보기' ? (
               <div
                 key={category.id}
-                className={styles.category__item}
-                onClick={(e) => handleStoreCategoryClick(e, category)}
+                className={styles.category__benefit}
+                onClick={() => handleStoreClick()}
                 aria-hidden
               >
-                <img
-                  src={category.image_url}
-                  alt={category.name}
-                  className={styles.category__image}
-                />
-                {category.name}
+                <BenefitIcon />
+                혜택
               </div>
             )
-        ))}
-      </div>
+              : (
+                <div
+                  key={category.id}
+                  className={styles.category__item}
+                  onClick={(e) => handleStoreCategoryClick(e, category)}
+                  aria-hidden
+                >
+                  <img
+                    src={category.image_url}
+                    alt={category.name}
+                    className={styles.category__image}
+                  />
+                  {category.name}
+                </div>
+              )
+          ))}
+        </div>
+      </Suspense>
     </section>
   );
 }
