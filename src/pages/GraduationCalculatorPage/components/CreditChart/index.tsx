@@ -11,7 +11,7 @@ import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import styles from './CreditChart.module.scss';
 import SemesterLectureListModal from './SemesterLectureListModal';
 
-function CreditChart() {
+function CreditChart({ totalGrades } : { totalGrades: number }) {
   const { lock, unlock } = useScrollLock(false);
   const portalManger = useModalPortal();
   const token = useTokenState();
@@ -54,6 +54,7 @@ function CreditChart() {
 
   return (
     <div className={styles['credit-chart']}>
+      <div className={styles['credit-chart__total-grades']}>{`총 학점: ${totalGrades}`}</div>
       <div className={styles['credit-chart__y-axis']}>
         {Array.from({ length: 13 }, (_, index) => 60 - index * 5).map(
           (credit, idx) => (

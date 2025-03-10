@@ -11,6 +11,7 @@ import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
+import useTotalGrades from 'pages/TimetablePage/hooks/useTotalGrades';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
 import CourseTable from './components/CourseTable';
@@ -32,6 +33,7 @@ function GraduationCalculatorPage() {
   );
   const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token);
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
+  const { data: totalGrades } = useTotalGrades(currentFrameIndex);
   const portalManager = useModalPortal();
 
   const closeInfo = () => {
@@ -131,7 +133,7 @@ function GraduationCalculatorPage() {
               </p>
             </div>
             <GeneralCourse />
-            <CreditChart />
+            <CreditChart totalGrades={totalGrades} />
           </div>
         </div>
       </div>

@@ -109,4 +109,14 @@
     letter-spacing: 0%;
     color: #727272;
   }
+
+  &__total-grades {
+    position: absolute;
+    top: 5px;
+    right: 39px;
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 160%;
+  }
 }
