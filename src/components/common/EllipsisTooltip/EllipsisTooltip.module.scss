@@ -1,6 +1,5 @@
 .ellipsisContainer {
   position: relative;
-  width: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,9 +8,8 @@
 .tooltip {
   position: absolute;
   width: fit-content;
-  left: 50px;
+  left: 0;
   bottom: -24px;
-  transform: translateX(-50%);
   box-shadow: 0 1px 4px 0 rgba(0 0 0 / 4%), 0 4px 10px 0 rgba(0 0 0 / 8%);
   background-color: white;
   color: gray;
