@@ -21,6 +21,7 @@ interface CategoryWithEvent extends Category {
     current_page: string;
     duration_time: number;
   };
+  route: string;
 }
 
 function IndexStore() {
@@ -39,6 +40,7 @@ function IndexStore() {
       current_page: category.name,
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     },
+    route: `${ROUTES.Store()}?category=${category.id}&COUNT=1`,
   }));
 
   const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map(
@@ -53,6 +55,7 @@ function IndexStore() {
           value: '전화주문혜택',
           current_page: 'benefit',
         },
+        route: `${ROUTES.BenefitStore()}?category=1`,
       }) : category
     ),
   );
@@ -63,7 +66,7 @@ function IndexStore() {
   ) => {
     e.preventDefault();
     logger.actionEventClick(category.event);
-    navigate(`${ROUTES.Store()}?category=${category.id}&COUNT=1`);
+    navigate(category.route);
   };
 
   return (
