@@ -31,9 +31,8 @@
     border-radius: 50%;
   }
 
-  &__space {
-    width: 24px;
-    height: 24px;
+  &--hidden {
+    z-index: -1;
   }
 }
 

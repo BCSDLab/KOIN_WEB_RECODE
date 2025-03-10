@@ -68,18 +68,17 @@ export default function SelectDropdown({
 
   return (
     <div className={styles.box} ref={containerRef}>
-      {isFirstOption ? (
-        <span className={styles.arrow__space} />
-      ) : (
-        <button
-          type="button"
-          className={styles.arrow}
-          onClick={() => handleNavigationClick('prev')}
-          aria-label="이전"
-        >
-          <ChevronLeft />
-        </button>
-      )}
+      <button
+        type="button"
+        className={cn({
+          [styles.arrow]: true,
+          [styles['arrow--hidden']]: isFirstOption,
+        })}
+        onClick={() => handleNavigationClick('prev')}
+        aria-label="이전"
+      >
+        <ChevronLeft />
+      </button>
       <button
         type="button"
         className={styles.selector}
@@ -87,18 +86,17 @@ export default function SelectDropdown({
       >
         <span className={styles.selector__text}>{selectedLabel}</span>
       </button>
-      {isLastOption ? (
-        <span className={styles.arrow__space} />
-      ) : (
-        <button
-          type="button"
-          className={styles.arrow}
-          onClick={() => handleNavigationClick('next')}
-          aria-label="다음"
-        >
-          <ChevronRight />
-        </button>
-      )}
+      <button
+        type="button"
+        className={cn({
+          [styles.arrow]: true,
+          [styles['arrow--hidden']]: isLastOption,
+        })}
+        onClick={() => handleNavigationClick('next')}
+        aria-label="다음"
+      >
+        <ChevronRight />
+      </button>
       {isOpen && (
         <div className={styles.dropdown} ref={dropdownRef}>
           {options.map(({ label, value }) => (
