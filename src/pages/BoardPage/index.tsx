@@ -9,9 +9,7 @@ function BoardPage() {
       <Suspense fallback={null}>
         <Header />
       </Suspense>
-      <Suspense fallback={null}>
-        <Outlet />
-      </Suspense>
+      <Outlet />
       <Footer />
     </>
   );

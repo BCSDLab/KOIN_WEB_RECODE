@@ -1,9 +1,8 @@
 /* eslint-disable */
-import { useEffect, ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import {
   Routes,
   Route,
-  useLocation,
   Navigate,
 } from 'react-router-dom';
 import AuthPage from 'pages/Auth/AuthPage';
@@ -53,12 +52,7 @@ function Wrapper({
   element,
   needAuth = false, // 로그인이 필요한 라우트
 }: WrapperProps) {
-  const location = useLocation();
   const token = useTokenState();
-
-  useEffect(() => {
-    document.title = `코인 - ${title}`;
-  }, [title, location]);
 
   if (needAuth && !token) {
     return <Navigate replace to={ROUTES.Main()} />;
@@ -66,9 +60,9 @@ function Wrapper({
 
   return (
     <>
-      <MetaHelmet title={title} />
-      {element}
+      <MetaHelmet title={`코인 - ${title}`} />
       <Suspense fallback={null}>
+        {element}
         <LogPage />
       </Suspense>
     </>
