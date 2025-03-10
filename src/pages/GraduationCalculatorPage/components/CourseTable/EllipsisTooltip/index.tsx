@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { useEllipsisTooltip } from 'components/common/EllipsisTooltip/useEllipsis';
+import { useEllipsisTooltip } from 'utils/hooks/ui/useEllipsisTooltip';
 import styles from './EllipsisTooltip.module.scss';
 
 interface EllipsisTooltipProps {
