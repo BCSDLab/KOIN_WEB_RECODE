@@ -1,9 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom';
-// import useMediaQuery from 'utils/hooks/useMediaQuery';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import BenefitIcon from 'assets/svg/benefit-icon.svg';
 import styles from './IndexStore.module.scss';
 
@@ -14,7 +12,6 @@ interface Category {
 }
 
 function IndexStore() {
-  const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
@@ -32,6 +29,7 @@ function IndexStore() {
     });
     navigate(`${ROUTES.Store()}?category=${category.id}&COUNT=1`);
   };
+
   const handleStoreClick = () => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
@@ -44,71 +42,39 @@ function IndexStore() {
     });
     navigate('/benefitstore?category=1');
   };
+
   return (
     <section className={styles.template}>
       <Link to={ROUTES.Store()} className={styles.template__title}>주변 상점</Link>
       <div className={styles.category__wrapper}>
-        {isMobile
-          ? categories?.shop_categories.slice(0, 12).map((category) => (
-            category.name === '전체보기' ? (
+        {categories?.shop_categories.slice(0, 12).map((category) => (
+          category.name === '전체보기' ? (
+            <div
+              key={category.id}
+              className={styles.category__benefit}
+              onClick={() => handleStoreClick()}
+              aria-hidden
+            >
+              <BenefitIcon />
+              혜택
+            </div>
+          )
+            : (
               <div
                 key={category.id}
-                className={styles.category__benefit}
-                onClick={() => handleStoreClick()}
-                aria-hidden
-              >
-                <BenefitIcon />
-                혜택
-              </div>
-            )
-              : (
-                <div
-                  key={category.id}
-                  className={styles.category__item}
-                  onClick={(e) => handleStoreCategoryClick(e, category)}
-                  aria-hidden
-                >
-                  <img
-                    src={category.image_url}
-                    alt={category.name}
-                    className={styles.category__image}
-                  />
-                  {category.name}
-                </div>
-              )
-          ))
-          : categories?.shop_categories.slice(0, 12).map((category) => (
-            category.name === '전체보기' ? (
-              <div
-                key={category.id}
-                className={styles.category__benefit}
-                onClick={() => handleStoreClick()}
+                className={styles.category__item}
+                onClick={(e) => handleStoreCategoryClick(e, category)}
                 aria-hidden
               >
                 <img
-                  src="https://static.koreatech.in/assets/img/icon/call_icon_2.png"
+                  src={category.image_url}
                   alt={category.name}
                   className={styles.category__image}
                 />
-                전화 주문 혜택
+                {category.name}
               </div>
             )
-              : (
-                <div
-                  key={category.id}
-                  className={styles.category__item}
-                  onClick={(e) => handleStoreCategoryClick(e, category)}
-                  aria-hidden
-                >
-                  <img
-                    src={category.image_url}
-                    alt={category.name}
-                    className={styles.category__image}
-                  />
-                  {category.name}
-                </div>
-              )
-          ))}
+        ))}
       </div>
     </section>
   );
