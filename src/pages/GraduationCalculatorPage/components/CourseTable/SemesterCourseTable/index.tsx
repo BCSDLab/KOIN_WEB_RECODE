@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import EllipsisTooltip from 'pages/GraduationCalculatorPage/components/CourseTable/EllipsisTooltip';
+import EllipsisTooltip from 'components/common/EllipsisTooltip';
 import styles from './SemesterCourseTable.module.scss';
 
 export interface SemesterCourseTableProps {
