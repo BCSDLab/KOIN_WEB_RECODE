@@ -1,0 +1,27 @@
+.ellipsisContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tooltip {
+  position: absolute;
+  width: fit-content;
+  left: 0;
+  bottom: -24px;
+  box-shadow: 0 1px 4px 0 rgba(0 0 0 / 4%), 0 4px 10px 0 rgba(0 0 0 / 8%);
+  background-color: white;
+  color: gray;
+  padding: 2px 4px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 10;
+}
+
+.ellipsisContainer:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
