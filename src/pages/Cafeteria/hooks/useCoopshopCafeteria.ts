@@ -7,7 +7,7 @@ function useCoopshopCafeteria() {
   const { data: cafeteriaInfo } = useSuspenseQuery(
     {
       queryKey: [COOPSHOP_CAFETERIA_KEY],
-      queryFn: async () => coopshop.getCafeteriaInfo(),
+      queryFn: () => coopshop.getCafeteriaInfo(),
     },
   );
   return { cafeteriaInfo };
