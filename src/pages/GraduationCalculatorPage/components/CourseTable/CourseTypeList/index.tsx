@@ -1,5 +1,5 @@
 import { cn } from '@bcsdlab/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import DownArrowIcon from 'assets/svg/chervron-up-grey.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -102,16 +102,13 @@ function CourseTypeList({
         top: rect.top,
       });
     }
+    lock();
   };
 
-  useEffect(() => {
-    if (hoveredItem === '교양선택') {
-      lock();
-    } else {
-      unlock();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hoveredItem]);
+  const handleMouseLeave = () => {
+    setHoveredItem(null);
+    unlock();
+  };
 
   return (
     <div className={styles.select} ref={containerRef}>
@@ -140,7 +137,7 @@ function CourseTypeList({
             <div
               key={type.value}
               onMouseEnter={type.value === '교양선택' ? onHoverCourseSelect : () => setHoveredItem(null)}
-              onMouseLeave={() => setHoveredItem(null)}
+              onMouseLeave={handleMouseLeave}
             >
               <button
                 ref={type.value === '교양선택' ? selectedRef : null}
