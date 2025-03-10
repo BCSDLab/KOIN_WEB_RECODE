@@ -22,6 +22,7 @@ export interface LectureInfo {
   id: number;
   code: string;
   name: string;
+  professor?: string;
   grades: string;
   department: string;
 }

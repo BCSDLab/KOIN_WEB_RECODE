@@ -20,6 +20,7 @@
   border-radius: 16px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 36px;
   background-color: #fff;
 
@@ -39,7 +40,6 @@
     font-size: 20px;
     font-weight: 500;
     line-height: normal;
-    margin-left: 63px;
 
     & > strong {
       font-weight: 700;

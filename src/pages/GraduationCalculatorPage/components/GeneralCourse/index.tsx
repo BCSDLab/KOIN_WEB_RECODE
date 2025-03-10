@@ -9,10 +9,12 @@ import NotCompletedIcon from 'assets/svg/ellipse-icon-red.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import GeneralCourseListModal from './GeneralCourseListModal';
 import styles from './GeneralCourse.module.scss';
 
 function GeneralCourse() {
+  const { lock, unlock } = useScrollLock(false);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const token = useTokenState();
@@ -23,6 +25,7 @@ function GeneralCourse() {
   const handleOpenModal = (courseType: string) => {
     setSelectedCourseType(courseType);
     openModal();
+    lock();
   };
 
   useEffect(() => {
@@ -70,7 +73,6 @@ function GeneralCourse() {
           <div className={styles['tooltip-content']}>
             교양 영역을 클릭해서
             <strong> 학기 교양 개설 목록</strong>
-            <br />
             을 확인할 수 있어요.
           </div>
           <button
@@ -89,7 +91,10 @@ function GeneralCourse() {
       {isModalOpen && (
         <GeneralCourseListModal
           courseType={selectedCourseType}
-          onClose={closeModal}
+          onClose={() => {
+            closeModal();
+            unlock();
+          }}
         />
       )}
     </div>

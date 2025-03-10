@@ -5,6 +5,7 @@ import {
   Refresh,
   Signup,
   User,
+  UserAcademicInfo,
   UpdateUser,
   FindPassword,
   DeleteUser,
@@ -21,6 +22,8 @@ export const signup = APIClient.of(Signup);
 export const refresh = APIClient.of(Refresh);
 
 export const getUser = APIClient.of(User);
+
+export const getUserAcademicInfo = APIClient.of(UserAcademicInfo);
 
 export const updateUser = APIClient.of(UpdateUser);
 

@@ -10,6 +10,7 @@ import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import styles from './GraduationCalculatorPage.module.scss';
 import StudentForm from './components/StudentForm';
 import CourseTable from './components/CourseTable';
@@ -23,6 +24,7 @@ import GraduationCalculatorAuthModal from './components/GraduationCalculatorAuth
 function GraduationCalculatorPage() {
   const token = useTokenState();
   const semester = useSemester();
+  const { lock, unlock } = useScrollLock(false);
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
   const mainFrame = timetableFrameList.find(
@@ -32,9 +34,14 @@ function GraduationCalculatorPage() {
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const portalManager = useModalPortal();
 
+  const closeInfo = () => {
+    portalManager.close();
+    unlock();
+  };
+
   const handleInformationClick = () => {
     portalManager.open(() => (
-      <CalculatorHelpModal closeInfo={portalManager.close} />
+      <CalculatorHelpModal closeInfo={closeInfo} />
     ));
   };
 
@@ -54,7 +61,7 @@ function GraduationCalculatorPage() {
       sessionStorage.setItem('visitedGraduationPage', 'true');
 
       portalManager.open(() => (
-        <CalculatorHelpModal closeInfo={portalManager.close} />
+        <CalculatorHelpModal closeInfo={closeInfo} />
       ));
     }
   }, [token]);
@@ -69,7 +76,10 @@ function GraduationCalculatorPage() {
           <h1 className={styles.header__title}>졸업학점 계산기</h1>
           <button
             type="button"
-            onClick={() => handleInformationClick()}
+            onClick={() => {
+              handleInformationClick();
+              lock();
+            }}
             className={styles['header__question-icon']}
           >
             <QuestionMarkIcon />
@@ -85,7 +95,9 @@ function GraduationCalculatorPage() {
                 type="button"
                 aria-label="close"
                 className={styles['tooltip-close']}
-                onClick={closeTooltip}
+                onClick={() => {
+                  closeTooltip();
+                }}
               >
                 <CloseIcon />
               </button>
