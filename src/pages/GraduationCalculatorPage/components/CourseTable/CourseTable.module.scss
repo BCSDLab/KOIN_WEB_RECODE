@@ -12,6 +12,7 @@
 
 .content {
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: space-between;
   height: 308px;
@@ -48,5 +49,33 @@
     &:active {
       background-color: #e1e1e1;
     }
+  }
+}
+
+.tooltip {
+  position: absolute;
+  top: -74px;
+  right: -17px;
+  background-color: #FAFAFA;
+  width: 160px;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.04), 0px 4px 10px 0px rgba(0, 0, 0, 0.08);
+  z-index: 22;
+
+  &__content {
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 160%;
+    color: #4B4B4B;
+    white-space: nowrap;
+  }
+
+  &__asset {
+    position: absolute;
+    bottom: -14px;
+    right: 88px;
+    margin: 0 auto;
   }
 }
