@@ -23,7 +23,6 @@ function CourseTypeList({
 }: CourseTypeListProps) {
   const { lock, unlock } = useScrollLock(false);
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
-  const { containerRef } = useOutsideClick({ onOutsideClick: closePopup });
   const [isOverHalf, setIsOverHalf] = useState<boolean>(false);
 
   const token = useTokenState();
@@ -48,9 +47,22 @@ function CourseTypeList({
     { id: 10, value: '다전공' },
   ];
 
+  const handleClosePopup = () => {
+    closePopup();
+    unlock();
+  };
+
+  const { containerRef } = useOutsideClick({ onOutsideClick: handleClosePopup });
+
   const handleToggleList = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    triggerPopup();
+
+    if (isOpenedPopup) {
+      handleClosePopup();
+    } else {
+      triggerPopup();
+      lock();
+    }
 
     if (containerRef.current) {
       const dropdownRect = containerRef.current.getBoundingClientRect();
@@ -74,7 +86,7 @@ function CourseTypeList({
       onCourseTypeChange(id, newCourseType);
     }
 
-    closePopup();
+    handleClosePopup();
   };
 
   const onClickGeneralOption = (
@@ -89,7 +101,7 @@ function CourseTypeList({
       onCourseTypeChange(id, '교양선택');
     }
 
-    closePopup();
+    handleClosePopup();
   };
 
   const onHoverCourseSelect = () => {
@@ -102,12 +114,6 @@ function CourseTypeList({
         top: rect.top,
       });
     }
-    lock();
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredItem(null);
-    unlock();
   };
 
   return (
@@ -137,7 +143,7 @@ function CourseTypeList({
             <div
               key={type.value}
               onMouseEnter={type.value === '교양선택' ? onHoverCourseSelect : () => setHoveredItem(null)}
-              onMouseLeave={handleMouseLeave}
+              onMouseLeave={() => setHoveredItem(null)}
             >
               <button
                 ref={type.value === '교양선택' ? selectedRef : null}
