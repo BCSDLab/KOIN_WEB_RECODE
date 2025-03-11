@@ -7,14 +7,14 @@
   border-radius: 16px;
   background-color: #fff;
   padding: 12px 17px;
-  gap: 24px;
+  gap: 16px;
 }
 
 .content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 300px;
+  height: 308px;
   font-family: Pretendard, sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -22,7 +22,7 @@
 
   &__table {
     display: flex;
-    height: 236px;
+    height: 244px;
   }
 
   &__trigger {

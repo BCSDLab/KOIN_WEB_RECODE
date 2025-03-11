@@ -136,7 +136,7 @@ export default function SemesterLectureListModal({
                   term: target.value.slice(6),
                 });
               })}
-              dropDownMaxHeight={384}
+              dropDownMaxHeight={406}
               placeholder="-"
               disabled={lectureStatus === '수강한 강의'}
             />
@@ -160,7 +160,7 @@ export default function SemesterLectureListModal({
                   onChangeDepartment(e);
                 });
               }}
-              dropDownMaxHeight={368}
+              dropDownMaxHeight={345}
             />
           </div>
           <div className={styles['dropdowns__second-row']}>
@@ -172,7 +172,7 @@ export default function SemesterLectureListModal({
                   onChangeCourse(e);
                 });
               }}
-              dropDownMaxHeight={368}
+              dropDownMaxHeight={345}
             />
           </div>
         </div>

@@ -8,6 +8,10 @@
   background-color: #fff;
   border-radius: 5px;
 
+  &--graduation {
+    width: 270px;
+  }
+
   @include media.media-breakpoint(mobile) {
     height: 45px;
     width: 170px;
@@ -83,7 +87,6 @@
     }
 
     &--graduation {
-      width: 331px;
       border: 1px solid #e1e1e1;
       border-radius: 16px;
     }
@@ -115,7 +118,7 @@
     }
 
     &--graduation {
-      max-height: 208px;
+      max-height: 234px;
     }
   }
 
