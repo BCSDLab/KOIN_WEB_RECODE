@@ -8,6 +8,7 @@ import { STORE_PAGE } from 'static/store';
 import { useEffect } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import EventCarousel from 'pages/Store/StorePage/components/EventCarousel';
+import { getDurationTime } from 'pages/Store/utils/durationTime';
 import styles from './StoreBenefitPage.module.scss';
 // eslint-disable-next-line no-restricted-imports
 import MobileStoreList from '../StorePage/components/MobileStoreList';
@@ -33,7 +34,7 @@ function StoreBenefitPage() {
       event_category: 'click',
       previous_page: (benefitCategory?.find((category) => String(category.id) === params.category)?.title || 'Unknown'),
       current_page: value,
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
+      duration_time: getDurationTime(),
     });
     setParams('category', `${id}`, { deleteBeforeParam: true, replacePage: true });
   };

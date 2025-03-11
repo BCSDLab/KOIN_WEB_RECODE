@@ -3,6 +3,7 @@ import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList'
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
 import { Suspense } from 'react';
+import { getDurationTime } from 'pages/Store/utils/durationTime';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -38,7 +39,7 @@ export default function IndexStore() {
       event_category: 'click',
       previous_page: '메인',
       current_page: category.name,
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
+      duration_time: getDurationTime(),
     },
     route: `${ROUTES.Store()}?category=${category.id}&COUNT=1`,
   }));
@@ -60,11 +61,7 @@ export default function IndexStore() {
     ),
   );
 
-  const handleCategoryClick = (
-    e: React.MouseEvent<HTMLDivElement>,
-    category: CategoryWithEvent,
-  ) => {
-    e.preventDefault();
+  const handleCategoryClick = (category: CategoryWithEvent) => {
     logger.actionEventClick(category.event);
     navigate(category.route);
   };
@@ -75,11 +72,11 @@ export default function IndexStore() {
       <Suspense fallback={null}>
         <div className={styles.category__wrapper}>
           {categoriesWithBenefit.map((category) => (
-            <div
+            <button
               key={category.id}
               className={styles.category__item}
-              onClick={(e) => handleCategoryClick(e, category)}
-              aria-hidden
+              onClick={() => handleCategoryClick(category)}
+              type="button"
             >
               <img
                 src={category.image_url}
@@ -87,7 +84,7 @@ export default function IndexStore() {
                 className={styles.category__image}
               />
               {category.name}
-            </div>
+            </button>
           ))}
         </div>
       </Suspense>
