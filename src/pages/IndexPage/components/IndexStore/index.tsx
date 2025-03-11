@@ -24,7 +24,7 @@ interface CategoryWithEvent extends Category {
   route: string;
 }
 
-function IndexStore() {
+export default function IndexStore() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
@@ -94,5 +94,3 @@ function IndexStore() {
     </section>
   );
 }
-
-export default IndexStore;
