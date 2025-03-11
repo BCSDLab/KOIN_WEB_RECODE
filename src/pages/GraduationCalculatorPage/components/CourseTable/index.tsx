@@ -5,6 +5,7 @@ import SemesterList from 'pages/TimetablePage/components/SemesterList';
 import useSemesterCheck from 'pages/TimetablePage/hooks/useMySemester';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -19,6 +20,7 @@ import styles from './CourseTable.module.scss';
 import DeleteLectureModal from './DeleteLectureModal';
 
 function CourseTable({ frameId }: { frameId: number }) {
+  const logger = useLogger();
   const token = useTokenState();
   const portalManager = useModalPortal();
   const { removeMyLecture } = useTimetableMutation(frameId);
@@ -53,7 +55,8 @@ function CourseTable({ frameId }: { frameId: number }) {
     });
   };
 
-  const onClickAddLecture = () => {
+  const onClickEditTimetable = () => {
+    logger.actionEventClick({ actionTitle: 'USER', event_label: 'graduation_calculator_edit_timetable', value: '시간표 수정' });
     if (mySemester?.semesters.length === 0) {
       toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
     } else {
@@ -117,7 +120,7 @@ function CourseTable({ frameId }: { frameId: number }) {
         <button
           type="button"
           className={styles.content__trigger}
-          onClick={onClickAddLecture}
+          onClick={onClickEditTimetable}
         >
           시간표 수정하기
         </button>

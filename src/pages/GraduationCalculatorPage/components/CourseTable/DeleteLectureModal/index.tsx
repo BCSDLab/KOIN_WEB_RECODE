@@ -1,4 +1,5 @@
 import CloseIcon from 'assets/svg/close-icon-black.svg';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './DeleteLectureModal.module.scss';
 
@@ -13,6 +14,7 @@ function DeleteLectureModal({
   handleDeleteLecture,
   setModalOpenFalse,
 }: DeleteLectureModalProps) {
+  const logger = useLogger();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
   const closeModal = () => {
@@ -21,6 +23,7 @@ function DeleteLectureModal({
   };
 
   const handleConfirmDeleteLecture = () => {
+    logger.actionEventClick({ actionTitle: 'USER', event_label: 'graduation_calculator_delete_lecture', value: '강의 삭제' });
     handleDeleteLecture();
     setModalOpenFalse();
   };
