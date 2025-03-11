@@ -11,6 +11,7 @@ import useAllMyLectures from 'pages/TimetablePage/hooks/useAllMyLectures';
 import { LectureInfo } from 'api/graduationCalculator/entity';
 import { Selector } from 'components/common/Selector';
 import _ from 'lodash';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './SemesterLectureListModal.module.scss';
 
 const lectureStatusOptions = [
@@ -46,6 +47,7 @@ export default function SemesterLectureListModal({
   const semesters = useSemester();
   const token = useTokenState();
   const allMyLectures = useAllMyLectures(token);
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
   const { data: academicInfo } = useUserAcademicInfo();
   const semesterOptionList = (semesters ?? []).map(
     (semesterInfo) => ({
@@ -117,7 +119,7 @@ export default function SemesterLectureListModal({
   ]);
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <div className={styles.container__header}>
           <div className={styles['container__header--title']}>학기 강의 개설 목록</div>
