@@ -34,9 +34,9 @@ function StudentForm() {
     const selectedDeptMajor = deptMajorList.find(
       (deptMajor) => deptMajor.department === dept,
     );
-    const majorsOption = selectedDeptMajor!.majors.map(
+    const majorsOption = selectedDeptMajor ? selectedDeptMajor.majors.map(
       (majors) => ({ label: majors, value: majors }),
-    );
+    ) : [];
     setMajorOptionList(majorsOption);
   };
 
