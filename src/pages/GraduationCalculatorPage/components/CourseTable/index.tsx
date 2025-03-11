@@ -56,7 +56,12 @@ function CourseTable({ frameId }: { frameId: number }) {
   };
 
   const onClickEditTimetable = () => {
-    logger.actionEventClick({ actionTitle: 'USER', event_label: 'graduation_calculator_edit_timetable', value: '시간표 수정' });
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_edit_timetable',
+      value: '시간표 수정',
+      event_category: 'click',
+    });
     if (mySemester?.semesters.length === 0) {
       toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
     } else {

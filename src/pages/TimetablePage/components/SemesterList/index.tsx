@@ -48,9 +48,19 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const onClickOption = (clickededSemester: Semester) => {
     updateSemester(clickededSemester);
     if (isGraduationCalculatorMode) {
-      logger.actionEventClick({ actionTitle: 'USER', event_label: 'graduation_calculator_semester', value: `학기 드롭다운_${clickededSemester.year}${clickededSemester.term}` });
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'graduation_calculator_semester',
+        value: `학기 드롭다운_${clickededSemester.year}${clickededSemester.term}`,
+        event_category: 'click',
+      });
     } else {
-      logger.actionEventClick({ actionTitle: 'USER', event_label: 'timetable', value: `click_semester_${clickededSemester.year}${clickededSemester.term}` });
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'timetable',
+        value: `click_semester_${clickededSemester.year}${clickededSemester.term}`,
+        event_category: 'click',
+      });
     }
     closePopup();
   };

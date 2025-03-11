@@ -61,7 +61,12 @@ function CourseTypeList({
     if (isOpenedPopup) {
       handleClosePopup();
     } else {
-      logger.actionEventClick({ actionTitle: 'USER', event_label: 'graduation_calculator_completion_category', value: `이수 구분_${courseTypeDefault}` });
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'graduation_calculator_completion_category',
+        value: `이수 구분_${courseTypeDefault}`,
+        event_category: 'click',
+      });
       triggerPopup();
       lock();
     }

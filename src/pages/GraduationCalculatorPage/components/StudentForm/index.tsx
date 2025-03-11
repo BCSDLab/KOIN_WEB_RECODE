@@ -41,7 +41,12 @@ function StudentForm() {
   };
 
   const handleDepartment = ({ target }: { target: { value: string } }) => {
-    logger.actionEventClick({ actionTitle: 'USER', event_label: 'graduation_calculator_department', value: `학과 드롭다운_${target.value}` });
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_department',
+      value: `학과 드롭다운_${target.value}`,
+      event_category: 'click',
+    });
     setDepartment(target.value);
     handleMajor(target.value);
     setMajor('');

@@ -9,7 +9,12 @@ export default function GraduationCalculatorAuthModal() {
   const navigate = useNavigate();
 
   const onClickLogin = () => {
-    logger.actionEventClick({ actionTitle: 'USER', event_label: 'graduation_calculator_login', value: '로그인' });
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_login',
+      value: '로그인',
+      event_category: 'click',
+    });
     navigate(ROUTES.Auth());
     setRedirectPath(ROUTES.GraduationCalculator());
   };

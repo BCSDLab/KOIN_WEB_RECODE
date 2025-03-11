@@ -27,7 +27,12 @@ function GeneralCourse() {
   const [selectedCourseType, setSelectedCourseType] = useState<string | null>(null);
 
   const handleOpenModal = (courseType: string) => {
-    logger.actionEventClick({ actionTitle: 'USER', event_label: 'graduation_calculator_liberal_arts_list', value: `교양 개설 목록_${courseType}` });
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_liberal_arts_list',
+      value: `교양 개설 목록_${courseType}`,
+      event_category: 'click',
+    });
     setSelectedCourseType(courseType);
     startTransition(() => portalManager.open((portalOption: Portal) => (
       <GeneralCourseListModal
