@@ -7,14 +7,15 @@
   border-radius: 16px;
   background-color: #fff;
   padding: 12px 17px;
-  gap: 24px;
+  gap: 16px;
 }
 
 .content {
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: space-between;
-  height: 300px;
+  height: 308px;
   font-family: Pretendard, sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -22,7 +23,7 @@
 
   &__table {
     display: flex;
-    height: 236px;
+    height: 244px;
   }
 
   &__trigger {
@@ -48,5 +49,33 @@
     &:active {
       background-color: #e1e1e1;
     }
+  }
+}
+
+.tooltip {
+  position: absolute;
+  top: -74px;
+  right: -8px;
+  background-color: #fafafa;
+  width: 144px;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 4px 0 rgba(0 0 0 / 4%), 0 4px 10px 0 rgba(0 0 0 / 8%);
+  z-index: 21;
+
+  &__content {
+    font-family: Pretendard, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 160%;
+    color: #4b4b4b;
+    white-space: nowrap;
+  }
+
+  &__asset {
+    position: absolute;
+    bottom: -14px;
+    right: 80px;
+    margin: 0 auto;
   }
 }

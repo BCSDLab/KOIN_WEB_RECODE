@@ -12,7 +12,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CreditChart.module.scss';
 import SemesterLectureListModal from './SemesterLectureListModal';
 
-function CreditChart() {
+function CreditChart({ totalGrades } : { totalGrades: number }) {
   const logger = useLogger();
   const { lock, unlock } = useScrollLock(false);
   const portalManger = useModalPortal();
@@ -62,6 +62,7 @@ function CreditChart() {
 
   return (
     <div className={styles['credit-chart']}>
+      <div className={styles['credit-chart__total-grades']}>{`총 학점: ${totalGrades}`}</div>
       <div className={styles['credit-chart__y-axis']}>
         {Array.from({ length: 13 }, (_, index) => 60 - index * 5).map(
           (credit, idx) => (

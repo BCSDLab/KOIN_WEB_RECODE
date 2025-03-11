@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { startTransition, useEffect, useState } from 'react';
+import { startTransition, useEffect } from 'react';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -24,7 +24,6 @@ function GeneralCourse() {
   const token = useTokenState();
   const { generalEducation } = useGeneralEducation(token);
   const requiredEducationArea = generalEducation?.general_education_area || [];
-  const [selectedCourseType, setSelectedCourseType] = useState<string | null>(null);
 
   const handleOpenModal = (courseType: string) => {
     logger.actionEventClick({
@@ -33,10 +32,9 @@ function GeneralCourse() {
       value: `교양 개설 목록_${courseType}`,
       event_category: 'click',
     });
-    setSelectedCourseType(courseType);
     startTransition(() => portalManager.open((portalOption: Portal) => (
       <GeneralCourseListModal
-        courseType={selectedCourseType}
+        courseType={courseType}
         onClose={() => {
           portalOption.close();
           unlock();

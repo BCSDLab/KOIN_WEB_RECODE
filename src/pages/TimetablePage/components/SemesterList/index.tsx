@@ -139,6 +139,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     <div
       className={cn({
         [styles.select]: true,
+        [styles['select--graduation']]: isGraduationCalculatorMode,
         [styles['select--opened']]: isOpenSemesterList,
       })}
       ref={isModalOpen ? null : containerRef}

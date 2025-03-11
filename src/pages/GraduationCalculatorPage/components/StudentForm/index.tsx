@@ -93,7 +93,7 @@ function StudentForm() {
             options={departmentOptionList}
             value={department}
             onChange={handleDepartment}
-            dropDownMaxHeight={450}
+            dropDownMaxHeight={475}
           />
         </div>
       </div>

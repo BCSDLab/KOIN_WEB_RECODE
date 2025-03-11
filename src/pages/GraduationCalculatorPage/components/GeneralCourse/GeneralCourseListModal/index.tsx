@@ -5,6 +5,7 @@ import { useSemester } from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useCourseType from 'pages/GraduationCalculatorPage/hooks/useCourseType';
 import { startTransition, useState } from 'react';
 import { Selector } from 'components/common/Selector';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './GeneralCourseListModal.module.scss';
 
 export interface GeneralCourseListModalProps {
@@ -24,6 +25,7 @@ function GeneralCourseListModal({
       value: `${semesterInfo.year}년 ${semesterInfo.term}`,
     }),
   );
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
   const [semester, setSemester] = useState<{
     year: number,
@@ -42,7 +44,7 @@ function GeneralCourseListModal({
   ]);
 
   return (
-    <div className={styles.background}>
+    <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
         <div className={styles.header}>
           <p className={styles.header__title}>학기 교양 개설 목록</p>
@@ -71,7 +73,7 @@ function GeneralCourseListModal({
         <div className={styles.content}>
           <p className={styles.content__label}>{courseType}</p>
           <div className={styles.content__table}>
-            <SemesterCourseTable tableData={tableData} />
+            <SemesterCourseTable tableData={tableData} hasProfessor={false} />
           </div>
         </div>
       </div>
