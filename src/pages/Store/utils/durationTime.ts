@@ -1,10 +1,24 @@
-export const setDurationTime = () => {
+const MAIN_ENTRY_TIME = 'main-entry-time';
+const CATEGORY_ENTRY_TIME = 'category-entry-time';
+
+export const initializeMainEntryTime = () => {
   const currentTime = new Date().getTime();
-  sessionStorage.setItem('enterMain', currentTime.toString());
+  sessionStorage.setItem(MAIN_ENTRY_TIME, currentTime.toString());
 };
 
-export const getDurationTime = () => {
+export const initializeCategoryEntryTime = () => {
   const currentTime = new Date().getTime();
-  const enterMainTime = Number(sessionStorage.getItem('enterMain')) || currentTime;
-  return (currentTime - enterMainTime) / 1000;
+  sessionStorage.setItem(CATEGORY_ENTRY_TIME, currentTime.toString());
+};
+
+export const getMainDurationTime = () => {
+  const currentTime = new Date().getTime();
+  const mainEntryTime = Number(sessionStorage.getItem(MAIN_ENTRY_TIME)) || currentTime;
+  return (currentTime - mainEntryTime) / 1000;
+};
+
+export const getCategoryDurationTime = () => {
+  const currentTime = new Date().getTime();
+  const categoryEntryTime = Number(sessionStorage.getItem(CATEGORY_ENTRY_TIME)) || currentTime;
+  return (currentTime - categoryEntryTime) / 1000;
 };

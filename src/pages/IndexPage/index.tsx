@@ -1,5 +1,4 @@
-import { Suspense, useEffect } from 'react';
-import { setDurationTime } from 'pages/Store/utils/durationTime';
+import { Suspense } from 'react';
 import IndexBus from './components/IndexBus';
 import IndexCafeteria from './components/IndexCafeteria';
 import IndexArticles from './components/IndexArticles';
@@ -8,10 +7,6 @@ import IndexTimetable from './components/IndexTimetable';
 import styles from './IndexPage.module.scss';
 
 function IndexPage() {
-  useEffect(() => {
-    setDurationTime();
-  }, []);
-
   return (
     <Suspense fallback={null}>
       <main className={styles.template}>

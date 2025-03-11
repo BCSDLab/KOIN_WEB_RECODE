@@ -2,8 +2,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
-import { Suspense } from 'react';
-import { getDurationTime } from 'pages/Store/utils/durationTime';
+import { Suspense, useEffect } from 'react';
+import { getMainDurationTime, initializeMainEntryTime } from 'pages/Store/utils/durationTime';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -39,7 +39,7 @@ export default function IndexStore() {
       event_category: 'click',
       previous_page: '메인',
       current_page: category.name,
-      duration_time: getDurationTime(),
+      duration_time: getMainDurationTime(),
     },
     route: `${ROUTES.Store()}?category=${category.id}&COUNT=1`,
   }));
@@ -65,6 +65,10 @@ export default function IndexStore() {
     logger.actionEventClick(category.event);
     navigate(category.route);
   };
+
+  useEffect(() => {
+    initializeMainEntryTime();
+  }, []);
 
   return (
     <section className={styles.template}>
