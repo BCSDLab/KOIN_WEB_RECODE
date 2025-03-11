@@ -181,6 +181,7 @@ export default function SemesterLectureListModal({
         <div className={styles['container__lecture-table']}>
           <SemesterCourseTable
             tableData={tableData}
+            hasProfessor={lectureStatus === '수강한 강의'}
           />
         </div>
       </div>

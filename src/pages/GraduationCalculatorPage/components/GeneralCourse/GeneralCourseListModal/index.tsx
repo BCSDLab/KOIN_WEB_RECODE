@@ -73,7 +73,7 @@ function GeneralCourseListModal({
         <div className={styles.content}>
           <p className={styles.content__label}>{courseType}</p>
           <div className={styles.content__table}>
-            <SemesterCourseTable tableData={tableData} />
+            <SemesterCourseTable tableData={tableData} hasProfessor={false} />
           </div>
         </div>
       </div>

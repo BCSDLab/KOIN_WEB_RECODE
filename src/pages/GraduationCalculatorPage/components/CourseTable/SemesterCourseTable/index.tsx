@@ -5,17 +5,19 @@ import styles from './SemesterCourseTable.module.scss';
 
 export interface SemesterCourseTableProps {
   tableData: React.ReactNode[][];
+  hasProfessor?: boolean
 }
 
 function SemesterCourseTable({
   tableData,
+  hasProfessor = true,
 }: SemesterCourseTableProps) {
   return (
     <table className={styles.table}>
       <thead className={styles.table__header}>
         <tr>
           <th>과목명</th>
-          <th>교수명</th>
+          <th>{hasProfessor ? '교수명' : ''}</th>
           <th>학점</th>
           <th>이수구분</th>
           <th>{' '}</th>
