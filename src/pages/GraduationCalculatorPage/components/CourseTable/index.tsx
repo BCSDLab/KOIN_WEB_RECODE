@@ -13,6 +13,8 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
+import useAllMyLectures from 'pages/TimetablePage/hooks/useAllMyLectures';
+import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import CourseTypeList from './CourseTypeList';
 import SemesterCourseTable from './SemesterCourseTable';
 import styles from './CourseTable.module.scss';
@@ -23,6 +25,8 @@ function CourseTable({ frameId }: { frameId: number }) {
   const portalManager = useModalPortal();
   const { removeMyLecture } = useTimetableMutation(frameId);
   const { myLectures }: { myLectures: (MyLectureInfo | Lecture) [] } = useMyLectures(frameId);
+  const allMyLectures = useAllMyLectures(token);
+  const isUnSelectedCourseType = allMyLectures.find((item) => item.course_type === '이수구분선택');
   const { editMyLecture } = useTimetableMutation(frameId);
   const semester = useSemester();
   const { data: mySemester } = useSemesterCheck(token);
@@ -121,6 +125,18 @@ function CourseTable({ frameId }: { frameId: number }) {
         >
           시간표 수정하기
         </button>
+        {isUnSelectedCourseType && (
+          <div className={styles.tooltip}>
+            <div className={styles.tooltip__content}>
+              이수구분선택 상태인 시간표가
+              <br />
+              남아있으니 선택해주세요.
+            </div>
+            <div className={styles.tooltip__asset}>
+              <BubbleTailBottom />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
