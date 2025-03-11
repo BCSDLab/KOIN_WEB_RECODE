@@ -56,11 +56,11 @@
   position: absolute;
   top: -74px;
   right: -8px;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
   width: 144px;
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.04), 0px 4px 10px 0px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px 0 rgba(0 0 0 / 4%), 0 4px 10px 0 rgba(0 0 0 / 8%);
   z-index: 21;
 
   &__content {
@@ -68,7 +68,7 @@
     font-weight: 400;
     font-size: 12px;
     line-height: 160%;
-    color: #4B4B4B;
+    color: #4b4b4b;
     white-space: nowrap;
   }
 
