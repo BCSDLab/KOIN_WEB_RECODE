@@ -55,9 +55,9 @@
 .tooltip {
   position: absolute;
   top: -74px;
-  right: -17px;
+  right: -8px;
   background-color: #FAFAFA;
-  width: 160px;
+  width: 144px;
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.04), 0px 4px 10px 0px rgba(0, 0, 0, 0.08);
@@ -75,7 +75,7 @@
   &__asset {
     position: absolute;
     bottom: -14px;
-    right: 88px;
+    right: 80px;
     margin: 0 auto;
   }
 }

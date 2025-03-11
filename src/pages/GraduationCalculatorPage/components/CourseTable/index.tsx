@@ -128,7 +128,7 @@ function CourseTable({ frameId }: { frameId: number }) {
         {isUnSelectedCourseType && (
           <div className={styles.tooltip}>
             <div className={styles.tooltip__content}>
-              이수구분선택 상태인 시간표가
+              이수구분선택 상태인 강의가
               <br />
               남아있으니 선택해주세요.
             </div>
