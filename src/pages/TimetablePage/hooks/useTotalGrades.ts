@@ -9,7 +9,7 @@ export default function useTotalGrades(timetableFrameId: number) {
   return useSuspenseQuery({
     queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
 
-    queryFn: () => getTimetableLectureInfo(token, timetableFrameId),
+    queryFn: () => (token ? getTimetableLectureInfo(token, timetableFrameId) : null),
 
     select: (data) => data?.total_grades,
   });

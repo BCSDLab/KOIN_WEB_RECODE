@@ -28,7 +28,7 @@ function CourseTable({ frameId }: { frameId: number }) {
   const { removeMyLecture } = useTimetableMutation(frameId);
   const { myLectures }: { myLectures: (MyLectureInfo | Lecture) [] } = useMyLectures(frameId);
   const allMyLectures = useAllMyLectures(token);
-  const isUnSelectedCourseType = allMyLectures.find((item) => item.course_type === '이수구분선택');
+  const isUnSelectedCourseType = (allMyLectures ?? []).find((item) => item.course_type === '이수구분선택');
   const { editMyLecture } = useTimetableMutation(frameId);
   const semester = useSemester();
   const { data: mySemester } = useSemesterCheck(token);

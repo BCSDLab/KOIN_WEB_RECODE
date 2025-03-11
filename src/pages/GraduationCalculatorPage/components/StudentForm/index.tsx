@@ -34,9 +34,9 @@ function StudentForm() {
     const selectedDeptMajor = deptMajorList.find(
       (deptMajor) => deptMajor.department === dept,
     );
-    const majorsOption = selectedDeptMajor!.majors.map(
+    const majorsOption = selectedDeptMajor ? selectedDeptMajor.majors.map(
       (majors) => ({ label: majors, value: majors }),
-    );
+    ) : [];
     setMajorOptionList(majorsOption);
   };
 
@@ -65,11 +65,14 @@ function StudentForm() {
   };
 
   useEffect(() => {
-    if (department) {
-      handleMajor(department);
+    if (academicInfo) {
+      setStudentNumber(academicInfo.student_number);
+      setDepartment(academicInfo.department);
+      handleMajor(academicInfo.department);
+      setMajor(academicInfo.major);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [academicInfo]);
 
   return (
     <form onSubmit={onSubmitForm} className={styles['student-form']}>
@@ -102,7 +105,7 @@ function StudentForm() {
         <div className={styles['student-form__major']}>
           <Selector
             options={majorOptionList}
-            value={major ?? null}
+            value={major}
             onChange={({ target }) => setMajor(target.value)}
             placeholder={majorOptionList.length === 0 ? '-' : '전공'}
             disabled={majorOptionList.length === 0}

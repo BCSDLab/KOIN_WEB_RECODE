@@ -5,8 +5,8 @@ export default function useAllMyLectures(token: string) {
   const { data } = useSuspenseQuery({
     queryKey: ['allLectures'],
 
-    queryFn: () => timetable.getTimetableAllLectureInfo(token),
+    queryFn: () => (token ? timetable.getTimetableAllLectureInfo(token) : null),
   });
 
-  return data.timetable;
+  return data ? data.timetable : null;
 }
