@@ -71,7 +71,7 @@ export default function IndexStore() {
 
   return (
     <section className={styles.template}>
-      <Link to={ROUTES.Store()} className={styles.template__title}>주변 상점</Link>
+      <Link to={`${ROUTES.Store()}?category=1&COUNT=1`} className={styles.template__title}>주변 상점</Link>
       <Suspense fallback={null}>
         <div className={styles.category__wrapper}>
           {categoriesWithBenefit.map((category) => (
