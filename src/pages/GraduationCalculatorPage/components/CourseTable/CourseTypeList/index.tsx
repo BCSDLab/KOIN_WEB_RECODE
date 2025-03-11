@@ -1,5 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import { useRef, useState } from 'react';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import DownArrowIcon from 'assets/svg/chervron-up-grey.svg';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -21,6 +22,7 @@ function CourseTypeList({
   id,
   onCourseTypeChange,
 }: CourseTypeListProps) {
+  const logger = useLogger();
   const { lock, unlock } = useScrollLock(false);
   const [isOpenedPopup, , closePopup, triggerPopup] = useBooleanState(false);
   const [isOverHalf, setIsOverHalf] = useState<boolean>(false);
@@ -56,10 +58,15 @@ function CourseTypeList({
 
   const handleToggleList = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-
     if (isOpenedPopup) {
       handleClosePopup();
     } else {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'graduation_calculator_completion_category',
+        value: `이수 구분_${courseTypeDefault}`,
+        event_category: 'click',
+      });
       triggerPopup();
       lock();
     }

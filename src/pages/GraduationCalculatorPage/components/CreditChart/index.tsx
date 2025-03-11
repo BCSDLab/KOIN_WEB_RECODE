@@ -8,10 +8,12 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useGetMultiMajorLecture from 'pages/TimetablePage/hooks/useGetMultiMajorLecture';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CreditChart.module.scss';
 import SemesterLectureListModal from './SemesterLectureListModal';
 
 function CreditChart({ totalGrades } : { totalGrades: number }) {
+  const logger = useLogger();
   const { lock, unlock } = useScrollLock(false);
   const portalManger = useModalPortal();
   const token = useTokenState();
@@ -20,6 +22,12 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
   const [creditState, setCreditState] = useState<GradesByCourseType[]>([]);
   const barsNumber = creditState.length;
   const onClickBar = (courseType: string) => {
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_lectures_list',
+      value: `강의 개설 목록_${courseType}`,
+      event_category: 'click',
+    });
     lock();
     startTransition(() => portalManger.open((portalOption: Portal) => (
       <SemesterLectureListModal
