@@ -1,12 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { setRedirectPath } from 'utils/ts/auth';
 import styles from './GraduationCalculatorAuthModal.module.scss';
 
 export default function GraduationCalculatorAuthModal() {
+  const logger = useLogger();
   const navigate = useNavigate();
 
   const onClickLogin = () => {
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_login',
+      value: '로그인',
+      event_category: 'click',
+    });
     navigate(ROUTES.Auth());
     setRedirectPath(ROUTES.GraduationCalculator());
   };

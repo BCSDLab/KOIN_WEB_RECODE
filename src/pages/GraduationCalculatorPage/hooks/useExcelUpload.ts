@@ -3,10 +3,12 @@ import { DragEvent } from 'react';
 import usePostGraduationExcel from 'pages/GraduationCalculatorPage/hooks/usePostGraduationExcel';
 import showToast from 'utils/ts/showToast';
 import { useQueryClient } from '@tanstack/react-query';
+import useLogger from 'utils/hooks/analytics/useLogger';
 
 export function useExcelUpload() {
   const queryClient = useQueryClient();
   const { mutate } = usePostGraduationExcel();
+  const logger = useLogger();
 
   const handleFile = (file: File) => {
     const formData = new FormData();
@@ -37,6 +39,12 @@ export function useExcelUpload() {
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_add_excel',
+      value: '엑셀파일 추가_경로 지정',
+      event_category: 'file_upload',
+    });
     const file = event.target.files?.[0];
     if (file) handleFile(file);
   };

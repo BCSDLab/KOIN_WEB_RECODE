@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { startTransition, useEffect, useState } from 'react';
 import { Portal } from 'components/common/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -16,6 +17,7 @@ import GeneralCourseListModal from './GeneralCourseListModal';
 import styles from './GeneralCourse.module.scss';
 
 function GeneralCourse() {
+  const logger = useLogger();
   const { lock, unlock } = useScrollLock(false);
   const portalManager = useModalPortal();
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
@@ -25,6 +27,12 @@ function GeneralCourse() {
   const [selectedCourseType, setSelectedCourseType] = useState<string | null>(null);
 
   const handleOpenModal = (courseType: string) => {
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_liberal_arts_list',
+      value: `교양 개설 목록_${courseType}`,
+      event_category: 'click',
+    });
     setSelectedCourseType(courseType);
     startTransition(() => portalManager.open((portalOption: Portal) => (
       <GeneralCourseListModal
