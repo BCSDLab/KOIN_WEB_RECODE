@@ -169,7 +169,7 @@ function GraduationCalculatorPage() {
               </p>
             </div>
             <GeneralCourse />
-            <CreditChart totalGrades={totalGrades} />
+            <CreditChart totalGrades={totalGrades ?? 0} />
           </div>
         </div>
       </div>

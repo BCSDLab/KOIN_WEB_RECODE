@@ -62,7 +62,7 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
 
   return (
     <div className={styles['credit-chart']}>
-      <div className={styles['credit-chart__total-grades']}>{`총 학점: ${totalGrades ?? 0}`}</div>
+      <div className={styles['credit-chart__total-grades']}>{`총 학점: ${totalGrades}`}</div>
       <div className={styles['credit-chart__y-axis']}>
         {Array.from({ length: 13 }, (_, index) => 60 - index * 5).map(
           (credit, idx) => (

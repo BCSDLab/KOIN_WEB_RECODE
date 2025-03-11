@@ -70,7 +70,7 @@ export default function SemesterLectureListModal({
   const { value: course, onChangeSelect: onChangeCourse } = useSelect(initialCourse);
   const { data: generalCourses } = useCourseType(token, semester, course!);
 
-  const allMyLecturesInfo = allMyLectures
+  const allMyLecturesInfo = (allMyLectures ?? [])
     .filter((myLecture) => myLecture.course_type === course)
     .map((lecture) => ({
       ..._.pick(lecture, ['id', 'code', 'professor', 'grades', 'department']),
@@ -103,11 +103,11 @@ export default function SemesterLectureListModal({
   const filteredLectureByLectureStatus = lectureStatus === '수강한 강의'
     ? separateByMatchingCodes(
       filteredLecturesByDept,
-      allMyLectures.map((item) => item.code),
+      (allMyLectures ?? []).map((item) => item.code),
     ).matched
     : separateByMatchingCodes(
       filteredLecturesByDept,
-      allMyLectures.map((item) => item.code),
+      (allMyLectures ?? []).map((item) => item.code),
     ).unmatched;
 
   const tableData = filteredLectureByLectureStatus.map((lecture) => [
