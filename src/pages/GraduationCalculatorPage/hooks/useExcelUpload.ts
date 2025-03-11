@@ -32,6 +32,12 @@ export function useExcelUpload() {
 
     const file = event.dataTransfer.files[0];
     if (file) handleFile(file);
+    logger.actionEventClick({
+      actionTitle: 'USER',
+      event_label: 'graduation_calculator_add_excel',
+      value: '엑셀파일 추가_드래그&드롭',
+      event_category: 'file_upload',
+    });
   };
 
   const handleDragOver = (event: DragEvent<HTMLLabelElement>) => {
