@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import useDepartmentMajorList from 'pages/GraduationCalculatorPage/hooks/useDepartmentMajorList';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -7,6 +8,7 @@ import { Selector } from 'components/common/Selector';
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {
+  const logger = useLogger();
   const token = useTokenState();
   const { data: academicInfo } = useUserAcademicInfo();
   const { data: deptMajorList } = useDepartmentMajorList();
@@ -39,6 +41,7 @@ function StudentForm() {
   };
 
   const handleDepartment = ({ target }: { target: { value: string } }) => {
+    logger.actionEventClick({ actionTitle: 'USER', event_label: 'graduation_calculator_department', value: `학과 드롭다운_${target.value}` });
     setDepartment(target.value);
     handleMajor(target.value);
     setMajor('');
