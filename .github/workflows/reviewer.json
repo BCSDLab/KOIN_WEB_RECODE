@@ -1,23 +1,23 @@
 {
   "reviewers": [
     {
-      "name": "채승윤",
-      "githubName": "chaeseungyun",
+      "name": "정해성",
+      "githubName": "junghaesung79",
       "team" : "business"
     },
     {
-      "name": "최정훈",
-      "githubName": "hoooooony",
+      "name": "곽승주",
+      "githubName": "Gwak-Seungju",
       "team" : "business"
     },
     {
-      "name": "김대의",
-      "githubName": "kimeodml",
+      "name": "강성훈",
+      "githubName": "kang-s-h",
       "team" : "business"
     },
     {
-      "name": "김대관",
-      "githubName": "daepan",
+      "name": "김도훈",
+      "githubName": "dooohun",
       "team" : "business"
     },
     {
@@ -26,23 +26,28 @@
       "team" : "user"
     },
     {
+      "name": "조정원",
+      "githubName": "JeongWon-CHO",
+      "team" : "user"
+    },
+    {
+      "name": "김도훈",
+      "githubName": "dooohun",
+      "team" : "user"
+    },
+    {
+      "name": "최정훈",
+      "githubName": "hoooooony",
+      "team" : "user"
+    },
+    {
       "name": "서예진",
       "githubName": "Yejin0070",
-      "team" : "user"
-    },
-    {
-      "name": "곽승주",
-      "githubName": "Gwak-Seungju",
-      "team" : "user"
-    },
-    {
-      "name": "정해성",
-      "githubName": "junghaesung79",
       "team" : "campus"
     },
     {
-      "name": "조정원",
-      "githubName": "JeongWon-CHO",
+      "name": "이준영",
+      "githubName": "ff1451",
       "team" : "campus"
     },
     {
