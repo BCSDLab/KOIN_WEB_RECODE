@@ -87,7 +87,7 @@
 
     @include media.media-breakpoint(mobile) {
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: center;
       width: 100%;
     }
   }
@@ -126,25 +126,19 @@
       align-items: flex-start;
       padding: 0 0 10px;
       border: 0;
-      width: calc(50% - 8px);
+      width: calc(33% - 8px);
       height: auto;
       font-family: NanumSquare, sans-serif;
       font-size: 10px;
       font-weight: normal;
       line-height: 1.2;
 
-      &:nth-child(2n + 1) {
-        justify-content: right;
-
+      &:not(:nth-child(3n), :last-child) {
         &::after {
           position: absolute;
-          margin-right: -9px;
+          margin-right: -104px;
           content: "|";
         }
-      }
-
-      &:nth-child(2n) {
-        justify-content: left;
       }
     }
   }
