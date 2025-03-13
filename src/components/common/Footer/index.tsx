@@ -76,6 +76,9 @@ function Footer(): JSX.Element {
           {!isMobile ? (
             <ul className={styles.sitemap__content}>
               <li className={styles.sitemap__link}>
+                <a href="https://forms.gle/qYw17r2kihThiJvj7" target="_blank" rel="noreferrer">문의하기</a>
+              </li>
+              <li className={styles.sitemap__link}>
                 <a href="https://bcsdlab.com" target="_blank" rel="noreferrer">BCSD Lab 바로가기</a>
               </li>
               <li className={styles.sitemap__link}>
@@ -94,6 +97,9 @@ function Footer(): JSX.Element {
             </ul>
           ) : (
             <ul className={styles.sitemap__content}>
+              <li className={styles.sitemap__link}>
+                <a href="https://forms.gle/qYw17r2kihThiJvj7" target="_blank" rel="noreferrer">문의하기</a>
+              </li>
               <li className={styles.sitemap__link}>
                 <a href="https://koreatech.ac.kr" target="_blank" rel="noreferrer">코리아텍 바로가기</a>
               </li>
