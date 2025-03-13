@@ -134,14 +134,13 @@
       line-height: 1.2;
 
       &:not(:nth-child(3n), :last-child) {
-
         &::after {
           position: absolute;
           margin-right: -104px;
           content: "|";
         }
       }
-    } 
+    }
   }
 
   &__icon-links {
