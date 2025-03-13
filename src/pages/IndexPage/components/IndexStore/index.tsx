@@ -20,7 +20,6 @@ interface CategoryWithEvent extends Category {
     event_category: string;
     previous_page: string;
     current_page: string;
-    duration_time: number;
   };
   route: string;
 }
@@ -39,7 +38,6 @@ export default function IndexStore() {
       event_category: 'click',
       previous_page: '메인',
       current_page: category.name,
-      duration_time: getMainDurationTime(),
     },
     route: `${ROUTES.Store()}?category=${category.id}&COUNT=1`,
   }));
@@ -61,9 +59,12 @@ export default function IndexStore() {
     ),
   );
 
-  const handleCategoryClick = (category: CategoryWithEvent) => {
-    logger.actionEventClick(category.event);
-    navigate(category.route);
+  const handleCategoryClick = ({ event, route }: CategoryWithEvent) => {
+    logger.actionEventClick({
+      ...event,
+      duration_time: getMainDurationTime(),
+    });
+    navigate(route);
   };
 
   useEffect(() => {
