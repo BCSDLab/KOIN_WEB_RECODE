@@ -254,7 +254,7 @@ function LostItemChatPage() {
             <div className={styles.chat__empty}>
               선택된 채팅방이 없습니다.
               <br />
-              오른쪽 리스트에서 채팅방을 선택해주세요.🙇‍♂️
+              왼쪽 리스트에서 채팅방을 선택해주세요.🙇‍♂️
             </div>
           )}
           {chatroomDetail && messages && (
