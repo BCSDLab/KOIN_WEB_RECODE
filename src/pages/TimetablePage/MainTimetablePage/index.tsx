@@ -24,8 +24,8 @@ function TimetablePage() {
   );
 
   React.useEffect(() => {
-    if (location.state?.frameId) {
-      setCurrentFrameIndex(Number(location.state?.frameId));
+    if (location.state?.timetableFrameId) {
+      setCurrentFrameIndex(Number(location.state?.timetableFrameId));
     } else {
       setCurrentFrameIndex(mainFrame?.id ? mainFrame.id : 0);
     }
@@ -36,9 +36,12 @@ function TimetablePage() {
   return (
     <div className={styles.page}>
       {!isMobile ? (
-        <DefaultPage frameId={currentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
+        <DefaultPage
+          timetableFrameId={currentFrameIndex}
+          setCurrentFrameId={setCurrentFrameIndex}
+        />
       ) : (
-        <MobilePage frameId={currentFrameIndex} />
+        <MobilePage timetableFrameId={currentFrameIndex} />
       )}
     </div>
   );

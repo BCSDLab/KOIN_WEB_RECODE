@@ -1,0 +1,59 @@
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #00000026;
+  z-index: 21;
+}
+
+.container {
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &--title {
+      font-family: Pretendard, sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 32px;
+      letter-spacing: 0%;
+    }
+  }
+
+  &__lecture-table {
+    height: 316px;
+  }
+}
+
+.dropdowns {
+  width: 369px;
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  row-gap: 12px;
+  column-gap: 9px;
+
+  &__first-row {
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  &__second-row {
+    font-family: Pretendard, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+  }
+}

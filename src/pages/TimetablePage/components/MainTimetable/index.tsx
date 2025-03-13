@@ -6,6 +6,7 @@ import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import Curriculum from 'pages/TimetablePage/components/Curriculum';
 import DownloadIcon from 'assets/svg/download-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
+import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import TotalGrades from 'pages/TimetablePage/components/TotalGrades';
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
@@ -20,14 +21,14 @@ import ROUTES from 'static/routes';
 import styles from './MyLectureTimetable.module.scss';
 import DownloadTimetableModal from './DownloadTimetableModal';
 
-function MainTimetable({ frameId }: { frameId: number }) {
+function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const token = useTokenState();
   const semester = useSemester();
   const logger = useLogger();
   const navigate = useNavigate();
   const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
-  const { myLectures } = useMyLectures(frameId);
+  const { myLectures } = useMyLectures(timetableFrameId);
   const { data: deptList } = useDeptList();
   const { data: mySemester } = useSemesterCheck(token);
 
@@ -62,7 +63,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
 
   const onClickEdit = () => {
     if (isSemesterAndTimetableExist()) {
-      navigate(`/${ROUTES.TimetableRegular({ id: String(frameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`);
+      navigate(`/${ROUTES.TimetableRegular({ id: String(timetableFrameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`);
     }
   };
 
@@ -72,6 +73,22 @@ function MainTimetable({ frameId }: { frameId: number }) {
         <div className={styles['page__total-grades']}>
           <TotalGrades myLectureList={myLectures} />
         </div>
+        <button
+          type="button"
+          className={styles.page__button}
+          onClick={() => {
+            navigate('/graduation');
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              event_label: 'graduation_calculator',
+              value: '졸업학점 계산기',
+              event_category: 'click',
+            });
+          }}
+        >
+          <GraduationIcon />
+          졸업학점 계산기
+        </button>
         <Curriculum list={deptList} />
         <button
           type="button"
@@ -96,7 +113,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
         <ErrorBoundary fallbackClassName="loading">
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
             <Timetable
-              frameId={frameId}
+              timetableFrameId={timetableFrameId}
               columnWidth={140}
               firstColumnWidth={70}
               rowHeight={33}
@@ -107,7 +124,7 @@ function MainTimetable({ frameId }: { frameId: number }) {
       </div>
       <div>
         {isModalOpen && (
-          <DownloadTimetableModal onClose={closeModal} frameId={frameId} />
+          <DownloadTimetableModal onClose={closeModal} timetableFrameId={timetableFrameId} />
         )}
       </div>
     </div>

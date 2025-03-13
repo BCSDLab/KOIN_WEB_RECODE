@@ -18,6 +18,7 @@ import {
   AddTimetableLectureRegularRequest,
   AddTimetableLectureCustomRequest,
   RollbackTimetableLectureRequest,
+  TimetableAllLectureResponse,
 } from './entity';
 
 export class SemesterInfoList<R extends SemestersResponse> implements APIRequest<R> {
@@ -73,6 +74,19 @@ export class TimetableLectureInfo
       timetable_frame_id: timeTableFrameId,
     };
   }
+}
+
+export class TimetableAllLectureInfo<
+R extends TimetableAllLectureResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/v3/timetables/main/lectures';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string) { }
 }
 
 export class TimetableLectureRegularEdit
@@ -234,8 +248,8 @@ implements APIRequest<R> {
 
   auth = true;
 
-  constructor(public authorization: string, frameId: number) {
-    this.path = `/v3/timetables/frame/rollback?timetable_frame_id=${frameId}`;
+  constructor(public authorization: string, timetableFrameId: number) {
+    this.path = `/v3/timetables/frame/rollback?timetable_frame_id=${timetableFrameId}`;
   }
 }
 

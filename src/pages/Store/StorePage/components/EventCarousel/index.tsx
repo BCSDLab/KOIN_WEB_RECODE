@@ -146,6 +146,7 @@ function EventCarousel() {
         <div className={styles.swipe}>
           {carouselList.map((item) => (
             <Card
+              key={item.event_id}
               shop_id={String(item.shop_id)}
               event_id={item.event_id}
               shop_name={item.shop_name}

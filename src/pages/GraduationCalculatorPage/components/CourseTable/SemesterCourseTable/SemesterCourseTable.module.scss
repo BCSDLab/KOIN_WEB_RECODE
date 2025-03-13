@@ -1,0 +1,106 @@
+@use "utils/scss/media.scss" as media;
+
+.table {
+  display: flex;
+  flex-direction: column;
+  vertical-align: middle;
+  height: 100%;
+  gap: 4px;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22.4px;
+
+  &__header {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 12px;
+    background-color: #f1f8ff;
+    color: #4b4b4b;
+
+    & > tr > th:nth-child(1) {
+      text-align: left;
+      width: 128px;
+    }
+    & > tr > th:nth-child(2) { width: 60px; }
+
+    & > tr > th:nth-child(3) { width: 36px; }
+
+    & > tr > th:nth-child(4) { width: 106px; }
+
+    & > tr > th:nth-child(5) { width: 16px; }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 218px;
+    box-sizing: border-box;
+    gap: 4px;
+    color: #000;
+    overflow-y: auto;
+    scrollbar-width: none; // Firefox 스크롤바 숨김
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    span {
+      /* stylelint-disable value-no-vendor-prefix */
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      overflow: hidden;
+      white-space: normal;
+      text-overflow: ellipsis;
+    }
+
+    & > tr {
+      padding: 4px 12px;
+      height: 22px;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    & > tr > td:nth-child(1) {
+      width: 128px;
+
+      & div {
+        justify-content: flex-start;
+      }
+    }
+
+    & > tr > td:nth-child(2) { width: 60px; }
+
+    & > tr > td:nth-child(3) { width: 36px; }
+
+    & > tr > td:nth-child(4) { width: 106px; }
+
+    & > tr > td:nth-child(5) {
+      width: 16px;
+
+      button {
+        border-radius: 4px;
+        width: 16px;
+        height: 16px;
+
+        &:hover {
+          background-color: #eee;
+        }
+
+        &:active {
+          background-color: #e1e1e1;
+        }
+      }
+
+      svg {
+        width: 8px;
+        height: 8px;
+        vertical-align: middle;
+      }
+    }
+  }
+}

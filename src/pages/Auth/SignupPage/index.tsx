@@ -1,14 +1,14 @@
-import React, { Suspense, useImperativeHandle } from 'react';
+import React, {
+  forwardRef, Suspense, useImperativeHandle, useRef, useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
-import ChervronUpDown from 'assets/svg/chervron-up-down.svg';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { koin, privacy } from 'static/terms';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import Listbox from 'components/TimetablePage/Listbox';
 import ROUTES from 'static/routes';
+import { Selector } from 'components/common/Selector';
 import styles from './SignupPage.module.scss';
 import useNicknameDuplicateCheck from './hooks/useNicknameDuplicateCheck';
 import useDeptList from './hooks/useDeptList';
@@ -67,6 +67,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       }
     },
   });
+
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const isCurrentValidEntries = Object.entries(refCollection.current)
@@ -91,6 +92,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
     }
     showToast('error', invalidFormEntry[1]);
   };
+
   return {
     register,
     onSubmit,
@@ -217,143 +219,11 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   );
 });
 
-const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
-  const [studentNumber, setStudentNumber] = React.useState<string>('');
-  const { data: deptList } = useDeptList();
-  const deptOptionList = deptList.map((dept) => ({
-    label: dept.name,
-    value: dept.name,
-  }));
-  const [major, setMajor] = React.useState<string | null>(null);
-
-  const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { target } = event;
-    setStudentNumber(target?.value ?? '');
-  };
-
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    let valid: string | true = '오류가 발생했습니다';
-    const year = parseInt(studentNumber.slice(0, 4), 10);
-    if (year < 1992 || year > new Date().getFullYear()) {
-      valid = '올바른 입학년도가 아닙니다.';
-    } else if (studentNumber && studentNumber.length !== 10) {
-      valid = '학번은 10자리여야 합니다.';
-    } else {
-      valid = true;
-    }
-    return {
-      value: {
-        studentNumber,
-        major,
-      },
-      valid,
-    };
-  }, [studentNumber, major]);
-  return (
-    <>
-      <input
-        className={styles['form-input']}
-        placeholder="학번 (선택)"
-        value={studentNumber}
-        onChange={onChangeMajorInput}
-        {...props}
-      />
-      <div className={styles['form-input__select']}>
-        <Listbox
-          list={deptOptionList}
-          value={major}
-          onChange={({ target }) => setMajor(target.value)}
-        />
-      </div>
-    </>
-  );
-});
 /* TODO: 코인 디자인 시스템 중 Listbox(Select)에 해당되므로 만든다면 다음을 참고하세요.
  * https://headlessui.com/react/listbox
  * https://react-spectrum.adobe.com/react-aria/useSelect.html
  * 2022.09.05 현재 디자인 시스템 없음, Listbox 재사용하는 곳이 많지 않음을 이유로 만들지 않았습니다.
  */
-
-const GENDER_TYPE = [
-  { label: '남', value: 0 },
-  { label: '여', value: 1 },
-];
-
-const GenderListbox = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
-  const [currentValue, setCurrentValue] = React.useState<number | null>(null);
-  const [isOpenedPopup,, closePopup, triggerPopup] = useBooleanState(false);
-  const onClickOption = (event: React.MouseEvent<HTMLLIElement>) => {
-    const { currentTarget } = event;
-    const value = currentTarget.getAttribute('data-value');
-    setCurrentValue(value ? parseInt(value, 10) : null);
-    closePopup();
-  };
-  const onBlurSelect = () => {
-    closePopup();
-  };
-  const onKeyPressOption = (event: React.KeyboardEvent<HTMLLIElement>) => {
-    const { key, currentTarget } = event;
-    const value = currentTarget.getAttribute('data-value');
-    switch (key) {
-      case 'Enter':
-        setCurrentValue(value ? parseInt(value, 10) : null);
-        break;
-      default:
-        break;
-    }
-  };
-
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    const requiredValidValue = (currentValue !== null ? true : '성별을 선택해주세요.');
-    return {
-      value: currentValue,
-      valid: required ? requiredValidValue : true,
-    };
-  }, [currentValue, required]);
-
-  return (
-    <div
-      className={cn({
-        [styles.select]: true,
-        [styles['select--flex-end']]: true,
-      })}
-      onBlur={onBlurSelect}
-    >
-      <button
-        type="button"
-        onClick={triggerPopup}
-        name={name}
-        className={cn({
-          [styles.select__trigger]: true,
-          [styles['select__trigger--active']]: currentValue !== null,
-        })}
-      >
-        {currentValue !== null ? GENDER_TYPE[currentValue].label : '성별'}
-        <ChervronUpDown />
-      </button>
-      {isOpenedPopup && (
-        <ul className={styles.select__content} role="listbox">
-          {GENDER_TYPE.map((optionValue) => (
-            <li
-              className={styles.select__option}
-              key={optionValue.value}
-              role="option"
-              aria-selected={optionValue.value === currentValue}
-              data-value={optionValue.value}
-              onMouseDown={onClickOption}
-              onKeyPress={onKeyPressOption}
-            >
-              {optionValue.label}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-});
 
 const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
   name,
@@ -440,13 +310,74 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
   );
 });
 
+interface FormValue {
+  id?: string;
+  password?: string;
+  name?: string;
+  nickname?: string;
+  gender?: number | null;
+  'student-number'?: {
+    major?: string;
+    studentNumber?: string;
+  };
+  'phone-number'?: string;
+}
+
+interface FormValue {
+  id?: string;
+  password?: string;
+  name?: string;
+  nickname?: string;
+  gender?: number | null;
+  'student-number'?: {
+    major?: string;
+    studentNumber?: string;
+  };
+  'phone-number'?: string;
+}
+
+const GENDER_TYPE = [
+  { label: '남', value: 0 },
+  { label: '여', value: 1 },
+];
+
 const useSignupForm = () => {
   const navigate = useNavigate();
+  const logger = useLogger();
+  const lastSubmittedForm = useRef<FormValue | null>(null);
+
   const onSuccess = () => {
+    const formValue = lastSubmittedForm.current;
+    if (formValue) {
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'complete_sign_up',
+        event_category: 'signup',
+        value: '회원가입 완료 성공',
+      });
+
+      const genderLabel = formValue.gender !== undefined && formValue.gender !== null
+        ? GENDER_TYPE.find((item) => item.value === Number(formValue.gender))?.label || ''
+        : '';
+
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'gender',
+        value: genderLabel,
+      });
+
+      logger.actionEventClick({
+        actionTitle: 'USER',
+        event_label: 'major',
+        value: formValue['student-number']?.major || '',
+      });
+    }
     navigate(ROUTES.Main());
   };
+
   const { status, mutate } = useSignup({ onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
+    lastSubmittedForm.current = formValue;
     const payload = {
       // 필수정보
       email: `${formValue.id?.trim()}@koreatech.ac.kr`,
@@ -465,10 +396,93 @@ const useSignupForm = () => {
   return { submitForm, status };
 };
 
+const MajorInput = React.forwardRef<
+ICustomFormInput, ICustomFormInputProps>((props, ref) => {
+  const [studentNumber, setStudentNumber] = React.useState<string>('');
+  const { data: deptList } = useDeptList();
+  const deptOptionList = deptList.map((dept) => ({
+    label: dept.name,
+    value: dept.name,
+  }));
+  const [major, setMajor] = React.useState<string | null>(null);
+
+  const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { target } = event;
+    setStudentNumber(target?.value ?? '');
+  };
+
+  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+    let valid: string | true = '오류가 발생했습니다';
+    const year = parseInt(studentNumber.slice(0, 4), 10);
+    if (year < 1992 || year > new Date().getFullYear()) {
+      valid = '올바른 입학년도가 아닙니다.';
+    } else if (studentNumber && studentNumber.length !== 10) {
+      valid = '학번은 10자리여야 합니다.';
+    } else {
+      valid = true;
+    }
+    return {
+      value: {
+        studentNumber,
+        major,
+      },
+      valid,
+    };
+  }, [studentNumber, major]);
+  return (
+    <>
+      <input
+        className={styles['form-input']}
+        placeholder="학번 (선택)"
+        value={studentNumber}
+        onChange={onChangeMajorInput}
+        {...props}
+      />
+      <div className={styles['form-input__select']}>
+        <Selector
+          options={deptOptionList}
+          value={major}
+          onChange={(event) => setMajor(event.target.value)}
+          placeholder="학부 (선택)"
+        />
+      </div>
+    </>
+  );
+});
+
+const GenderSelectorWithRef = forwardRef((
+  { options }: { options: { label: string; value:string }[] },
+  ref,
+) => {
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    value: selectedValue,
+  }));
+
+  return (
+    <div
+      className={cn({
+        [styles['form-input__select']]: true,
+        [styles['form-input__select--flex-end']]: true,
+      })}
+      style={{ marginLeft: '6px' }}
+    >
+      <Selector
+        options={options}
+        value={String(selectedValue)}
+        onChange={(event) => setSelectedValue(event.target.value)}
+        placeholder="성별 (선택)"
+      />
+    </div>
+  );
+});
+
 function SignupDefaultPage() {
+  const logger = useLogger();
   const { status, submitForm } = useSignupForm();
   const { register, onSubmit: onSubmitSignupForm } = useLightweightForm(submitForm);
-  const logger = useLogger();
+
   return (
     <>
       <div>
@@ -537,7 +551,7 @@ function SignupDefaultPage() {
             },
           })}
         />
-        <GenderListbox {...register('gender')} />
+        <GenderSelectorWithRef {...register('gender')} options={[{ label: '남', value: '0' }, { label: '여', value: '1' }]} />
         <button
           type="submit"
           disabled={status === 'pending'}
@@ -547,13 +561,16 @@ function SignupDefaultPage() {
             [styles['signup__button--block']]: true,
             [styles['signup__button--large-font']]: true,
           })}
-          onClick={() => {
-            logger.actionEventClick({
-              actionTitle: 'USER',
-              event_label: 'complete_sign_up',
-              value: '회원가입 완료',
-            });
-          }}
+          onClick={
+            () => {
+              logger.actionEventClick({
+                actionTitle: 'USER',
+                event_label: 'complete_sign_up',
+                event_category: 'click',
+                value: '회원가입 완료',
+              });
+            }
+          }
         >
           회원가입
         </button>

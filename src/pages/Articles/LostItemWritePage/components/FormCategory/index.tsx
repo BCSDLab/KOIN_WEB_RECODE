@@ -3,21 +3,26 @@ import WarnIcon from 'assets/svg/Articles/warn.svg';
 import { FindUserCategory, useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import styles from './FormCategory.module.scss';
 
-const CATEGORIES: FindUserCategory[] = ['카드', '신분증', '지갑', '전자제품', '그 외'];
+const CATEGORIES: FindUserCategory[] = ['카드', '신분증', '지갑', '전자제품', '기타'];
 
 interface FormCategoryProps {
   category: FindUserCategory | '';
   setCategory: (category: FindUserCategory) => void;
   isCategorySelected: boolean;
+  type: 'FOUND' | 'LOST';
 }
 
 export default function FormCategory({
-  category, setCategory, isCategorySelected,
+  category, setCategory, isCategorySelected, type,
 }: FormCategoryProps) {
-  const { logFindUserCategory } = useArticlesLogger();
+  const { logFindUserCategory, logLostItemCategory } = useArticlesLogger();
 
   const handleCategoryClick = (item: FindUserCategory) => {
-    logFindUserCategory(item);
+    if (type === 'FOUND') {
+      logFindUserCategory(item);
+    } else {
+      logLostItemCategory(item);
+    }
     setCategory(item);
   };
 

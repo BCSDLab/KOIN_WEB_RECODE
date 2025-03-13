@@ -4,4 +4,11 @@ export type Dept = {
   'name': string;
 };
 
+export type DeptMajor = {
+  department: string;
+  majors: string[];
+};
+
 export type DeptListResponse = Dept[];
+
+export type DeptMajorResponse = DeptMajor[];

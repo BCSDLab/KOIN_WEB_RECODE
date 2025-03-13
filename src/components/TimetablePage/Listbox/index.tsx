@@ -17,10 +17,10 @@ export interface ListItem {
 }
 
 export interface ListboxProps {
-  list: ListItem[];
+  list: readonly ListItem[];
   value: string | null;
   onChange: (event: { target: ListboxRef }) => void;
-  version?: 'default' | 'new' | 'inModal' | 'addLecture';
+  version?: 'default' | 'new' | 'addLecture';
   disabled?: boolean;
 }
 
@@ -65,8 +65,6 @@ function Listbox({
         className={cn({
           [styleClasses.select__trigger]: true,
           [styleClasses['select__trigger--selected']]: isOpenedPopup && version === 'new',
-          [styleClasses['select__trigger--selected-in-modal']]: version === 'inModal',
-          [styleClasses['select__trigger--selected-in-modal--opened']]: isOpenedPopup && version === 'inModal',
           [styleClasses['select__trigger--selected-add-lecture']]: version === 'addLecture',
           [styleClasses['select__trigger--selected-add-lecture--opened']]: isOpenedPopup && version === 'addLecture',
         })}

@@ -23,7 +23,7 @@ type RemoveMyLectureProps = {
   id: number
 };
 
-export default function useTimetableMutation(frameId: number) {
+export default function useTimetableMutation(timetableFrameId: number) {
   const token = useTokenState();
   const semester = useSemester();
   const toast = useToast();
@@ -34,7 +34,7 @@ export default function useTimetableMutation(frameId: number) {
   const { mutate: mutateEditWithServerCustom } = useEditTimetableLectureCustom();
   const { mutate: mutateEditWithServerRegular } = useEditTimetableLectureRegular();
 
-  const { mutate: rollbackLecture } = useRollbackLecture(token, frameId);
+  const { mutate: rollbackLecture } = useRollbackLecture(token, timetableFrameId);
 
   const {
     addLecture: addLectureFromLocalStorage,
@@ -49,12 +49,12 @@ export default function useTimetableMutation(frameId: number) {
     if (token) {
       if ('name' in clickedLecture) {
         mutateAddWithServerRegular({
-          timetable_frame_id: frameId,
+          timetable_frame_id: timetableFrameId,
           lecture_id: clickedLecture.id,
         });
       } else {
         mutateAddWithServerCustom({
-          timetable_frame_id: frameId,
+          timetable_frame_id: timetableFrameId,
           timetable_lecture:
             {
               class_title: clickedLecture.class_title,
@@ -84,19 +84,21 @@ export default function useTimetableMutation(frameId: number) {
   const editMyLecture = (editedLecture: TimetableRegularLecture | TimetableCustomLecture) => {
     if ('lecture_id' in editedLecture) {
       mutateEditWithServerRegular({
-        frameId,
+        timetableFrameId,
         editedLecture:
             {
               id: editedLecture.id,
               lecture_id: editedLecture.lecture_id,
               class_title: editedLecture.class_title,
               class_places: editedLecture.class_places,
+              course_type: editedLecture.course_type,
+              general_education_area: editedLecture.general_education_area,
             },
         token,
       });
     } else {
       mutateEditWithServerCustom({
-        frameId,
+        timetableFrameId,
         editedLecture:
             {
               id: editedLecture.id,
@@ -110,7 +112,9 @@ export default function useTimetableMutation(frameId: number) {
   };
 
   const removeMyLecture = useMutation({
-    mutationFn: async ({ clickedLecture, id } : RemoveMyLectureProps) => {
+    mutationFn: async ({
+      clickedLecture, id,
+    } : RemoveMyLectureProps & { disableRecoverButton?: boolean }) => {
       sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
       if (clickedLecture && 'name' in clickedLecture) {
         return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, `${semester?.year}${semester?.term}`));
@@ -118,10 +122,10 @@ export default function useTimetableMutation(frameId: number) {
       return removeLectureFromServer(id);
     },
     onSuccess: (_data, variables) => {
-      const { id } = variables;
+      const { id, disableRecoverButton } = variables;
       toast.open({
         message: '해당 과목이 삭제되었습니다.',
-        recoverMessage: '해당 과목이 복구되었습니다.',
+        recoverMessage: disableRecoverButton ? undefined : '해당 과목이 복구되었습니다.',
         onRecover: () => restoreLecture([id]),
       });
     },

@@ -10,3 +10,4 @@ export * as room from './room';
 export * as store from './store';
 export * as timetable from './timetable';
 export * as uploadFile from './uploadFile';
+export * as graduationCalculator from './graduationCalculator';

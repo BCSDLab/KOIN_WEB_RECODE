@@ -3,7 +3,7 @@ export const BACKGROUND_COLOR = ['#E7CCCC', '#FFDADA', '#FFEBD8', '#FAF7D4', '#F
 export const BORDER_TOP_COLOR = ['#890000', '#FF4444', '#FF993B', '#E8D52A', '#D0AE00', '#513A00', '#0C9D61', '#7ABA78', '#366718', '#80C4E9', '#1679AB', '#074173', '#523AE2', '#6F6F6F', '#CBCBCB'];
 export const MINUTE = [{ label: '00분', value: '00분' },
   { label: '30분', value: '30분' },
-];
+] as const;
 export const HOUR = [{ label: '09시', value: '09시' },
   { label: '10시', value: '10시' },
   { label: '11시', value: '11시' },
@@ -18,7 +18,7 @@ export const HOUR = [{ label: '09시', value: '09시' },
   { label: '20시', value: '20시' },
   { label: '21시', value: '21시' },
   { label: '22시', value: '22시' },
-  { label: '23시', value: '23시' }];
+  { label: '23시', value: '23시' }] as const;
 
 export const START_TIME = {
   '09시': 0,

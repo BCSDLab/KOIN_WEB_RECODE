@@ -1,51 +1,90 @@
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
-import { Link } from 'react-router-dom';
-// import FoundIcon from 'assets/svg/Articles/found.svg';
-// import LostIcon from 'assets/svg/Articles/lost.svg';
-// import CloseIcon from 'assets/svg/Articles/close.svg';
-// import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useUser } from 'utils/hooks/state/useUser';
+import FoundIcon from 'assets/svg/Articles/found.svg';
+import LostIcon from 'assets/svg/Articles/lost.svg';
+import CloseIcon from 'assets/svg/Articles/close.svg';
 import ROUTES from 'static/routes';
+import LoginRequireLostItemdModal from 'pages/Articles/LostItemDetailPage/components/LoginRequireLostItemModal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
-  const { logItemWriteClick } = useArticlesLogger();
+  const { logItemWriteClick, logFindUserWriteClick, logLostItemWriteClick } = useArticlesLogger();
+  const [isWriting, setIsWriting] = useState(false);
+  const { pathname } = useLocation();
+  const portalManager = useModalPortal();
+  const { data: userInfo } = useUser();
+
+  const handleWritingButtonClick = () => {
+    if (userInfo) {
+      setIsWriting((prev) => !prev);
+      if (!isWriting) {
+        logItemWriteClick();
+      }
+    } else {
+      portalManager.open((portalOption) => (
+        <LoginRequireLostItemdModal
+          actionTitle="게시글을 작성하려면"
+          detailExplanation="로그인 후 분실물 주인을 찾아주세요!"
+          onClose={portalOption.close}
+        />
+      ));
+    }
+  };
 
   return (
-    <div className={styles.links}>
-      {/* {linksOpen && ( // 2차 스프린트
-        <>
-          <Link
-            to={ROUTES.LostItemFound()}
-            className={styles.links__button}
-          >
-            <FoundIcon />
-            주인을 찾아요
-          </Link>
-          <Link
-            to={ROUTES.LostItemLost()}
-            className={styles.links__button}
-          >
-            <LostIcon />
-            잃어버렸어요
-          </Link>
-        </>
+    <>
+      {isWriting && (
+      <div
+        className={styles.overlay}
+        role="button"
+        tabIndex={0}
+        aria-label="오버레이"
+        onClick={() => setIsWriting(false)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            setIsWriting(false);
+          }
+        }}
+      />
       )}
-      <button
-        className={styles.links__button}
-        type="button"
-        onClick={() => toggleLinksOpen()}
-      > */}
-      <Link
-        className={styles.links__button}
-        type="button"
-        to={ROUTES.LostItemFound()}
-        onClick={() => logItemWriteClick()}
-      >
-        {/* {linksOpen ? <CloseIcon /> : <PencilIcon />} */}
-        <PencilIcon />
-        글쓰기
-      </Link>
-    </div>
+      <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
+        {isWriting && (
+          <div className={styles['links__writing-options']}>
+            <Link
+              className={styles['links__option-button']}
+              to={ROUTES.LostItemFound()}
+              onClick={() => logFindUserWriteClick()}
+            >
+              <FoundIcon />
+              <div className={styles['links__option-text']}>주인을 찾아요</div>
+            </Link>
+
+            <Link
+              className={styles['links__option-button']}
+              to={ROUTES.LostItemLost()}
+              onClick={() => logLostItemWriteClick()}
+            >
+              <LostIcon />
+              <div className={styles['links__option-text']}>잃어버렸어요</div>
+            </Link>
+          </div>
+        )}
+
+        {pathname.endsWith('articles') && (
+          <button
+            className={styles.links__write}
+            type="button"
+            onClick={handleWritingButtonClick}
+          >
+            {isWriting ? <CloseIcon /> : <PencilIcon />}
+            글쓰기
+          </button>
+        ) }
+      </div>
+    </>
   );
 }
