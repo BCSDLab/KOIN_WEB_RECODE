@@ -10,6 +10,7 @@ import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import { StorePageType } from 'static/store';
 import ROUTES from 'static/routes';
+import { getCategoryDurationTime } from 'pages/Store/utils/durationTime';
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {
@@ -43,7 +44,13 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
           className={styles['store-list__item']}
           key={store.id}
           onClick={() => logger.actionEventClick({
-            actionTitle: 'BUSINESS', event_label: `${storeType}_click`, value: store.name, event_category: 'click', previous_page: `${koreanCategory || '전체보기'}`, current_page: `${store.name}`, duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_category'))) / 1000,
+            actionTitle: 'BUSINESS',
+            event_label: `${storeType}_click`,
+            value: store.name,
+            event_category: 'click',
+            previous_page: `${koreanCategory || '전체보기'}`,
+            current_page: `${store.name}`,
+            duration_time: getCategoryDurationTime(),
           })}
         >
           {store.is_event

@@ -2,7 +2,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
+import { getMainDurationTime, initializeMainEntryTime } from 'pages/Store/utils/durationTime';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -19,12 +20,11 @@ interface CategoryWithEvent extends Category {
     event_category: string;
     previous_page: string;
     current_page: string;
-    duration_time: number;
   };
   route: string;
 }
 
-function IndexStore() {
+export default function IndexStore() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
@@ -38,7 +38,6 @@ function IndexStore() {
       event_category: 'click',
       previous_page: '메인',
       current_page: category.name,
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
     },
     route: `${ROUTES.Store()}?category=${category.id}&COUNT=1`,
   }));
@@ -60,26 +59,29 @@ function IndexStore() {
     ),
   );
 
-  const handleCategoryClick = (
-    e: React.MouseEvent<HTMLDivElement>,
-    category: CategoryWithEvent,
-  ) => {
-    e.preventDefault();
-    logger.actionEventClick(category.event);
-    navigate(category.route);
+  const handleCategoryClick = ({ event, route }: CategoryWithEvent) => {
+    logger.actionEventClick({
+      ...event,
+      duration_time: getMainDurationTime(),
+    });
+    navigate(route);
   };
+
+  useEffect(() => {
+    initializeMainEntryTime();
+  }, []);
 
   return (
     <section className={styles.template}>
-      <Link to={ROUTES.Store()} className={styles.template__title}>주변 상점</Link>
+      <Link to={`${ROUTES.Store()}?category=1&COUNT=1`} className={styles.template__title}>주변 상점</Link>
       <Suspense fallback={null}>
         <div className={styles.category__wrapper}>
           {categoriesWithBenefit.map((category) => (
-            <div
+            <button
               key={category.id}
               className={styles.category__item}
-              onClick={(e) => handleCategoryClick(e, category)}
-              aria-hidden
+              onClick={() => handleCategoryClick(category)}
+              type="button"
             >
               <img
                 src={category.image_url}
@@ -87,12 +89,10 @@ function IndexStore() {
                 className={styles.category__image}
               />
               {category.name}
-            </div>
+            </button>
           ))}
         </div>
       </Suspense>
     </section>
   );
 }
-
-export default IndexStore;
