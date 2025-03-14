@@ -1,5 +1,5 @@
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import RoomList from 'components/Room/RoomList';
+import RoomList from 'pages/Room/components/RoomList';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useRoomList from './hooks/useRoomList';
 import styles from './RoomPage.module.scss';

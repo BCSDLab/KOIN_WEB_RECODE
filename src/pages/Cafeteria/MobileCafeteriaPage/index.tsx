@@ -2,7 +2,7 @@ import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { Suspense, useEffect, useState } from 'react';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
-import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
+import CafeteriaInfo from 'pages/Cafeteria/components/CafeteriaInfo';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';

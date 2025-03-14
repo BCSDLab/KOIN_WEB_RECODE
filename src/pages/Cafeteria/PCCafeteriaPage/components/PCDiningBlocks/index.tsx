@@ -9,7 +9,7 @@ import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage'
 import { DINING_TYPE_MAP } from 'static/cafeteria';
 import { filterDinings } from 'utils/ts/cafeteria';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/common/Modal/PortalProvider';
+import { Portal } from 'components/Modal/PortalProvider';
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {

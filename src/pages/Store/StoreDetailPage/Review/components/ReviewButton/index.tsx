@@ -1,5 +1,5 @@
-import { Portal } from 'components/common/Modal/PortalProvider';
-import LoginRequiredModal from 'components/common/LoginRequiredModal';
+import { Portal } from 'components/Modal/PortalProvider';
+import LoginRequiredModal from 'components/LoginRequiredModal';
 
 import { useUser } from 'utils/hooks/state/useUser';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';

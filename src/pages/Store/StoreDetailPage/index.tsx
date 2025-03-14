@@ -1,13 +1,13 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
-import ImageModal from 'components/common/Modal/ImageModal';
+import ImageModal from 'components/Modal/ImageModal';
 import {
   useNavigate, useParams, useSearchParams,
 } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
-import { Portal } from 'components/common/Modal/PortalProvider';
-import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
+import { Portal } from 'components/Modal/PortalProvider';
+import UpdateInfo from 'components/UpdateInfo/UpdateInfo';
 import showToast from 'utils/ts/showToast';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -21,8 +21,7 @@ import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import * as api from 'api';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
-// eslint-disable-next-line
-import StoreDetailBoundary from '../components/StoreDetailBoundary/StoreDetailBoundary';
+import StoreErrorBoundary from 'components/StoreErrorBoundary';
 import MenuTable from './MenuTable';
 import EventTable from './EventTable';
 import styles from './StoreDetailPage.module.scss';
@@ -428,11 +427,11 @@ function StoreDetail() {
   const { id } = useParams();
 
   return (
-    <StoreDetailBoundary onErrorClick={() => navigate('/store')}>
+    <StoreErrorBoundary onErrorClick={() => navigate('/store')}>
       <Suspense fallback={<div />}>
         <StoreDetailPage id={id} />
       </Suspense>
-    </StoreDetailBoundary>
+    </StoreErrorBoundary>
   );
 }
 

@@ -6,8 +6,8 @@ import {
 } from 'react';
 import NoReview from 'assets/svg/Review/no-review.svg';
 import ChervronUp from 'assets/svg/chervron-up.svg';
-import { Portal } from 'components/common/Modal/PortalProvider';
-import LoginRequiredModal from 'components/common/LoginRequiredModal';
+import { Portal } from 'components/Modal/PortalProvider';
+import LoginRequiredModal from 'components/LoginRequiredModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/StarList';
 import { REVEIW_LOGIN } from 'pages/Store/StoreDetailPage/Review/components/ReviewButton/index';

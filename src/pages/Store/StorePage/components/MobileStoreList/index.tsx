@@ -9,7 +9,7 @@ import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList'
 import { StorePageType } from 'static/store';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import ROUTES from 'static/routes';
-import BenefitRotator from 'components/Store/BenefitRotator';
+import BenefitRotator from 'pages/Store/StorePage/components/BenefitRotator';
 import { getCategoryDurationTime } from 'pages/Store/utils/durationTime';
 import styles from './MobileStoreList.module.scss';
 

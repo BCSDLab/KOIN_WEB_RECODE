@@ -1,4 +1,4 @@
-import LoadingSpinner from 'components/common/LoadingSpinner';
+import LoadingSpinner from 'components/LoadingSpinner';
 import HotArticles from 'pages/Articles/components/HotArticle';
 import { Suspense } from 'react';
 import { Link, Outlet } from 'react-router-dom';

@@ -5,7 +5,7 @@ interface BenefitRotatorProps {
   benefits: string[] | string;
 }
 
-function BenefitRotator({ benefits }: BenefitRotatorProps) {
+export default function BenefitRotator({ benefits }: BenefitRotatorProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimation, setIsAnimation] = useState(false);
 
@@ -35,5 +35,3 @@ function BenefitRotator({ benefits }: BenefitRotatorProps) {
     </div>
   );
 }
-
-export default BenefitRotator;

@@ -5,7 +5,7 @@ import BlindIcon from 'assets/svg/blind-icon.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
 import WarningIcon from 'assets/svg/warning-icon.svg';
 import WarningMobileIcon from 'assets/svg/warning-mobile-icon.svg';
-import useCheckPassword from 'components/common/Header/hooks/useCheckPassword';
+import useCheckPassword from 'components/Header/hooks/useCheckPassword';
 import { useNavigate } from 'react-router-dom';
 import { isKoinError } from '@bcsdlab/koin';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';

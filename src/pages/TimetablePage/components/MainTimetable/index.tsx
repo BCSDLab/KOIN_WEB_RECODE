@@ -1,5 +1,5 @@
-import ErrorBoundary from 'components/common/ErrorBoundary';
-import LoadingSpinner from 'components/common/LoadingSpinner';
+import ErrorBoundary from 'components/ErrorBoundary';
+import LoadingSpinner from 'components/LoadingSpinner';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';

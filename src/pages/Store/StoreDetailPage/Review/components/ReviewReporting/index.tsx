@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useNavigate, useParams } from 'react-router-dom';
-import CheckBox from 'components/common/CommonCheckBox';
+import CheckBox from 'components/CommonCheckBox';
 import { toast } from 'react-toastify';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';

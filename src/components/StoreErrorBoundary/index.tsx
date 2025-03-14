@@ -2,7 +2,7 @@ import React, { ErrorInfo } from 'react';
 import { AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
 import { isKoinError } from '@bcsdlab/koin';
-import styles from './StoreDetailBoundary.module.scss';
+import styles from './StoreErrorBoundary.module.scss';
 
 interface Props {
   onErrorClick: () => void;
@@ -18,7 +18,7 @@ function isAxiosError(error: AxiosError<any, any> | Error): error is AxiosError<
   return ('response' in error);
 }
 
-export default class StoreDetailBoundary extends React.Component<Props, State> {
+export default class StoreErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { hasError: false };
