@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { cafeteria } from 'api';
-import { Dining, OriginalDining } from 'interfaces/Cafeteria';
+import { Dining, OriginalDining } from 'static/cafeteria';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { convertDateToSimpleString } from 'utils/ts/cafeteria';
 

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Dining, DiningType } from 'interfaces/Cafeteria';
+import { Dining, DiningType } from 'static/cafeteria';
 import { useEffect, useRef } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';

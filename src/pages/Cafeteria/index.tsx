@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { DiningType } from 'interfaces/Cafeteria';
+import { DiningType } from 'static/cafeteria';
 import MobileCafeteriaPage from 'pages/Cafeteria/MobileCafeteriaPage';
 import { DiningTime } from 'utils/ts/cafeteria';
 import PCCafeteriaPage from './PCCafeteriaPage';

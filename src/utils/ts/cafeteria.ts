@@ -1,4 +1,4 @@
-import type { Dining, DiningType } from 'interfaces/Cafeteria';
+import type { Dining, DiningType } from 'static/cafeteria';
 import { PLACE_ORDER } from 'static/cafeteria';
 
 const koreanDateStringInstance = new Intl.DateTimeFormat('ko-KR', {

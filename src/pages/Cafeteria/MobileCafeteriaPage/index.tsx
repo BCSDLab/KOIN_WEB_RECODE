@@ -6,7 +6,7 @@ import CafeteriaInfo from 'pages/Cafeteria/components/CafeteriaInfo';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { DiningType } from 'interfaces/Cafeteria';
+import { DiningType } from 'static/cafeteria';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';

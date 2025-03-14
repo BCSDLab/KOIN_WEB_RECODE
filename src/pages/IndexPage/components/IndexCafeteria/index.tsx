@@ -10,7 +10,7 @@ import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { DiningTime } from 'utils/ts/cafeteria';
-import { DiningPlace } from 'interfaces/Cafeteria';
+import { DiningPlace } from 'static/cafeteria';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
 import styles from './IndexCafeteria.module.scss';

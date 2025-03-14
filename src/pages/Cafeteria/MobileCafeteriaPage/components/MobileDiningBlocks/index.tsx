@@ -1,4 +1,4 @@
-import { Dining, DiningType } from 'interfaces/Cafeteria';
+import { Dining, DiningType } from 'static/cafeteria';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/Modal/PortalProvider';
 import useLogger from 'utils/hooks/analytics/useLogger';

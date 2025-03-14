@@ -4,7 +4,7 @@ import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { DiningType } from 'interfaces/Cafeteria';
+import { DiningType } from 'static/cafeteria';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
