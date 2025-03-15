@@ -14,7 +14,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
-import Copy from 'assets/png/copy.png';
+import Copy from 'assets/svg/copy.svg';
 import Phone from 'assets/svg/Review/phone.svg';
 import ROUTES from 'static/routes';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
@@ -266,12 +266,12 @@ function StoreDetailPage({ id }: Props) {
                     <span>계좌번호</span>
                     <div className={styles.account}>
                       {`${storeDetail.bank} ${storeDetail.account_number}`}
-                      <button type="button" onClick={() => copyAccount(`${storeDetail.bank} ${storeDetail.account_number}`)}>
-                        <img
-                          src={Copy}
-                          alt="복사하기"
-                          className={styles.copy}
-                        />
+                      <button
+                        type="button"
+                        onClick={() => copyAccount(`${storeDetail.bank} ${storeDetail.account_number}`)}
+                        aria-label="계좌번호 복사"
+                      >
+                        <Copy />
                       </button>
                     </div>
                     <br />
