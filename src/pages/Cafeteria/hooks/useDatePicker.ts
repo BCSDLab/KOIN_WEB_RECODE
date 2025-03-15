@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import { DiningTime } from 'utils/ts/cafeteria';
+import { DiningTime } from 'pages/Cafeteria/utils/time';
 
 const DATE_KEY = 'date';
 

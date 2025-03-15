@@ -2,7 +2,7 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { timetable } from 'api';
 import { Semester } from 'api/timetable/entity';
-import useToast from 'components/common/Toast/useToast';
+import useToast from 'components/Toast/useToast';
 import showToast from 'utils/ts/showToast';
 import { MY_SEMESTER_INFO_KEY } from './useMySemester';
 import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';

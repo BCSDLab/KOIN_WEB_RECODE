@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LandListResponse } from 'api/room/entity';
-import MarkerIcon from 'components/Room/MarkerIcon';
+import MarkerIcon from 'pages/Room/components/MarkerIcon';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 

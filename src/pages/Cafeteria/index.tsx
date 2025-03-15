@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { DiningType } from 'interfaces/Cafeteria';
+import { DiningType } from 'static/cafeteria';
 import MobileCafeteriaPage from 'pages/Cafeteria/MobileCafeteriaPage';
-import { DiningTime } from 'utils/ts/cafeteria';
+import { DiningTime } from 'pages/Cafeteria/utils/time';
 import PCCafeteriaPage from './PCCafeteriaPage';
 import { useDatePicker } from './hooks/useDatePicker';
 import styles from './Cafeteria.module.scss';

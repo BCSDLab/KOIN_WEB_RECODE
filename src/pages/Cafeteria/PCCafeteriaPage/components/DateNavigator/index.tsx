@@ -4,7 +4,7 @@ import RightArrow from 'assets/svg/right-angle-bracket.svg';
 import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import CafeteriaInfo from 'components/Cafeteria/CafeteriaInfo';
+import CafeteriaInfo from 'pages/Cafeteria/components/CafeteriaInfo';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import styles from './DateNavigator.module.scss';
 

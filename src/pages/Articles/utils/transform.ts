@@ -9,7 +9,7 @@ import {
   LostItemArticlesForPost,
   SingleLostItemArticle,
   LostItemArticlesReportForPost,
-} from 'pages/Articles/ts/types';
+} from 'static/articles';
 
 export const transformLostItemArticles = (
   dto: LostItemArticlesResponseDTO,

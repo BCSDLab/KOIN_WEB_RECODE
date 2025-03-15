@@ -6,7 +6,7 @@ import AddIcon from 'assets/svg/add-icon.svg';
 import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useDeleteSemester from 'pages/TimetablePage/hooks/useDeleteSemester';
-import { Portal } from 'components/common/Modal/PortalProvider';
+import { Portal } from 'components/Modal/PortalProvider';
 import InducingLoginModal from 'pages/TimetablePage/components/InducingLoginModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useLogger from 'utils/hooks/analytics/useLogger';
