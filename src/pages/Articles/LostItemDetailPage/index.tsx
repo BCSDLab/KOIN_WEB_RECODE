@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
+import { convertArticlesTag } from 'pages/Articles/utils/convertArticlesTag';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
