@@ -1,4 +1,4 @@
-import type { DiningType } from 'static/cafeteria';
+import { DiningType } from 'api/dinings/entity';
 
 export const convertDateToSimpleString = (date: Date) => `${date.getFullYear().toString().slice(2, 4)}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
 
