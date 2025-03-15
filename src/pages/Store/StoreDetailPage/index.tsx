@@ -14,7 +14,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
-import Copy from 'assets/svg/copy.svg';
+import Copy from 'assets/svg/Store/copy.svg';
 import Phone from 'assets/svg/Review/phone.svg';
 import ROUTES from 'static/routes';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';

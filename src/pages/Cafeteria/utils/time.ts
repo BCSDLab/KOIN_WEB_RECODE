@@ -1,22 +1,6 @@
-import type { Dining, DiningType } from 'static/cafeteria';
-import { PLACE_ORDER } from 'static/cafeteria';
-
-const koreanDateStringInstance = new Intl.DateTimeFormat('ko-KR', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  weekday: 'short',
-});
-
-export const formatKoreanDateString = koreanDateStringInstance.format;
+import type { DiningType } from 'static/cafeteria';
 
 export const convertDateToSimpleString = (date: Date) => `${date.getFullYear().toString().slice(2, 4)}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
-
-export const formatDate = (date: Date) => {
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return `${month}/${day}`;
-};
 
 export class DiningTime {
   private now: Date;
@@ -67,16 +51,3 @@ export class DiningTime {
     return tomorrow;
   }
 }
-
-export const filterDinings = (dinings: Dining[], type: DiningType) => {
-  const filteredDinings = dinings.filter((dining) => dining.type === type
-    && !dining.menu.some((menuItem) => menuItem.name.includes('미운영')));
-
-  const sortedDinings = filteredDinings.sort((a, b) => {
-    const indexA = PLACE_ORDER.indexOf(a.place);
-    const indexB = PLACE_ORDER.indexOf(b.place);
-    return indexA - indexB;
-  });
-
-  return sortedDinings;
-};

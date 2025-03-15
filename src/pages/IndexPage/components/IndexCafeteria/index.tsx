@@ -9,7 +9,7 @@ import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { DiningTime } from 'utils/ts/cafeteria';
+import { DiningTime } from 'pages/Cafeteria/utils/time';
 import { DiningPlace } from 'static/cafeteria';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
