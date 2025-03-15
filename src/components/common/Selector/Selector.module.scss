@@ -1,3 +1,5 @@
+@use "utils/scss/media.scss" as media;
+
 @mixin inherit-text-style {
   font-family: inherit;
   font-size: inherit;
@@ -35,6 +37,10 @@
   width: 100%;
   border-radius: 5px;
 
+  @include media.media-breakpoint(mobile) {
+    font-size: 13px;
+  }
+
   @include inherit-text-style;
 
   svg:not(.select__delete svg) {
@@ -65,11 +71,6 @@
     color: inherit;
     cursor: pointer;
 
-    &--opened {
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-
     &--white-background {
       border: 1px solid #e1e1e1;
     }
@@ -80,6 +81,10 @@
 
     &:active {
       background-color: #e1e1e1;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      padding: 16px 16px;
     }
   }
 
@@ -109,10 +114,6 @@
       border-radius: 5px;
     }
 
-    &--opened {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
   }
 
   &__content {

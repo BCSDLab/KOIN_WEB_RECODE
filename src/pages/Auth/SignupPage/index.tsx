@@ -1,5 +1,9 @@
 import React, {
-  forwardRef, Suspense, useImperativeHandle, useRef, useState,
+  forwardRef,
+  Suspense,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
@@ -21,8 +25,11 @@ const PHONENUMBER_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
 interface IFormType {
   [key: string]: {
     ref: HTMLInputElement | ICustomFormInput | null;
-    validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
-  }
+    validFunction?: (
+      value: unknown,
+      refCollection: { current: any }
+    ) => string | true;
+  };
 }
 
 interface ICustomFormInput {
@@ -31,7 +38,10 @@ interface ICustomFormInput {
 }
 
 interface IRegisterOption {
-  validFunction?: (value: unknown, refCollection: { current: any }) => string | true;
+  validFunction?: (
+    value: unknown,
+    refCollection: { current: any }
+  ) => string | true;
   required?: boolean;
 }
 
@@ -42,20 +52,21 @@ interface RegisterReturn {
 }
 
 export interface ISubmitForm {
-  (formValue: {
-    [key: string]: any;
-  }): void;
+  (formValue: { [key: string]: any }): void;
 }
 
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
-): elementRef is ICustomFormInput => (elementRef !== null
-  && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+): elementRef is ICustomFormInput => elementRef !== null
+  && Object.prototype.hasOwnProperty.call(elementRef, 'valid');
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const refCollection = React.useRef<IFormType>({});
 
-  const register = (name: string, options: IRegisterOption = {}): RegisterReturn => ({
+  const register = (
+    name: string,
+    options: IRegisterOption = {},
+  ): RegisterReturn => ({
     required: options.required,
     name,
     ref: (elementRef: HTMLInputElement | ICustomFormInput | null) => {
@@ -70,23 +81,33 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
 
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const isCurrentValidEntries = Object.entries(refCollection.current)
-      .map((refValue): [string, string | true] => {
+    const isCurrentValidEntries = Object.entries(refCollection.current).map(
+      (refValue): [string, string | true] => {
         if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
         const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
           ? refValue[1].ref.valid
-          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', refCollection) ?? true;
+          : refValue[1].validFunction?.(
+            refValue[1].ref?.value ?? '',
+            refCollection,
+          ) ?? true;
         return [refValue[0], isCurrentNameValid];
-      });
-    const invalidFormEntry = isCurrentValidEntries
-      .find((entry): entry is [string, string] => entry[1] !== true);
+      },
+    );
+    const invalidFormEntry = isCurrentValidEntries.find(
+      (entry): entry is [string, string] => entry[1] !== true,
+    );
     if (!invalidFormEntry) {
-      const formValue = Object.entries(refCollection?.current).map((nameValue) => {
-        if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
-          return [nameValue[0], nameValue[1].ref.value];
-        }
-        return [nameValue[0], undefined];
-      });
+      const formValue = Object.entries(refCollection?.current).map(
+        (nameValue) => {
+          if (
+            isRefICustomFormInput(nameValue[1].ref)
+            || nameValue[1].ref !== null
+          ) {
+            return [nameValue[0], nameValue[1].ref.value];
+          }
+          return [nameValue[0], undefined];
+        },
+      );
       submitForm(Object.fromEntries(formValue));
       return;
     }
@@ -101,10 +122,10 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
 
 type ICustomFormInputProps = Omit<RegisterReturn, 'ref'>;
 
-const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
+const PasswordForm = React.forwardRef<
+ICustomFormInput | null,
+ICustomFormInputProps
+>(({ name, required }, ref) => {
   const [password, setPassword] = React.useState('');
   const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
   const [isPasswordValid, setIsPasswordValid] = React.useState(false);
@@ -117,26 +138,31 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     setIsPasswordValid(PASSWORD_REGEX.test(password));
   };
 
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    let valid: string | true = true;
-    if (password !== passwordConfirmValue) {
-      valid = '입력하신 비밀번호가 일치하지 않습니다.';
-    } else if (password.length < 6 || password.length > 18) {
-      valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
-    } else if (!isPasswordValid) {
-      valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
-    }
-    return {
-      valid,
-      value: password,
-    };
-  }, [password, passwordConfirmValue, isPasswordValid]);
+  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
+    ref,
+    () => {
+      let valid: string | true = true;
+      if (password !== passwordConfirmValue) {
+        valid = '입력하신 비밀번호가 일치하지 않습니다.';
+      } else if (password.length < 6 || password.length > 18) {
+        valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
+      } else if (!isPasswordValid) {
+        valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
+      }
+      return {
+        valid,
+        value: password,
+      };
+    },
+    [password, passwordConfirmValue, isPasswordValid],
+  );
   return (
     <>
       <input
         className={cn({
           [styles['form-input']]: true,
-          [styles['form-input--invalid']]: password.trim() !== '' && !isPasswordValid,
+          [styles['form-input--invalid']]:
+            password.trim() !== '' && !isPasswordValid,
         })}
         type="password"
         autoComplete="new-password"
@@ -152,7 +178,9 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       <input
         className={cn({
           [styles['form-input']]: true,
-          [styles['form-input--invalid']]: passwordConfirmValue.trim() !== '' && password !== passwordConfirmValue,
+          [styles['form-input--invalid']]:
+            passwordConfirmValue.trim() !== ''
+            && password !== passwordConfirmValue,
         })}
         type="password"
         onChange={(e) => setPasswordConfirmValue(e.target.value)}
@@ -163,29 +191,31 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   );
 });
 
-const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((
-  props,
-  ref,
-) => {
+const NicknameForm = React.forwardRef<
+ICustomFormInput | null,
+ICustomFormInputProps
+>((props, ref) => {
   const nicknameElementRef = React.useRef<HTMLInputElement>(null);
   const [nicknameInputValue, setNicknameInputValue] = React.useState('');
-  const {
-    changeTargetNickname,
-    status,
-    currentCheckedNickname,
-  } = useNicknameDuplicateCheck();
+  const { changeTargetNickname, status, currentCheckedNickname } = useNicknameDuplicateCheck();
   useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
     ref,
     () => ({
       value: currentCheckedNickname,
-      valid: nicknameInputValue === '' || (status === 'success' && nicknameInputValue === currentCheckedNickname) ? true : '닉네임 중복확인을 해주세요.',
+      valid:
+        nicknameInputValue === ''
+        || (status === 'success' && nicknameInputValue === currentCheckedNickname)
+          ? true
+          : '닉네임 중복확인을 해주세요.',
     }),
     [currentCheckedNickname, status, nicknameInputValue],
   );
   const onClickNicknameDuplicateCheckButton = () => {
     changeTargetNickname(nicknameElementRef.current?.value ?? '');
   };
-  const onChangeNicknameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeNicknameInput = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const { target } = event;
     setNicknameInputValue(target.value);
   };
@@ -225,10 +255,10 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
  * 2022.09.05 현재 디자인 시스템 없음, Listbox 재사용하는 곳이 많지 않음을 이유로 만들지 않았습니다.
  */
 
-const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
+const TermsCheckboxes = React.forwardRef<
+ICustomFormInput | null,
+ICustomFormInputProps
+>(({ name, required }, ref) => {
   const [terms, setTerms] = React.useState({
     privacy: false,
     usage: false,
@@ -242,22 +272,26 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
   const onChangePrivacyTerm = () => {
     setTerms((prevValue) => ({
       ...prevValue,
-      privacy: !(prevValue.privacy),
+      privacy: !prevValue.privacy,
     }));
   };
   const onChangeUsageTerm = () => {
     setTerms((prevValue) => ({
       ...prevValue,
-      usage: !(prevValue.usage),
+      usage: !prevValue.usage,
     }));
   };
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    const requiredValidValue = (terms.privacy && terms.usage) ? true : '이용 약관에 모두 동의해주세요.';
-    return {
-      value: terms,
-      valid: required ? requiredValidValue : true,
-    };
-  }, [terms, required]);
+  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
+    ref,
+    () => {
+      const requiredValidValue = terms.privacy && terms.usage ? true : '이용 약관에 모두 동의해주세요.';
+      return {
+        value: terms,
+        valid: required ? requiredValidValue : true,
+      };
+    },
+    [terms, required],
+  );
 
   return (
     <div
@@ -282,9 +316,7 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
         />
         위 이용약관에 모두 동의합니다.
       </label>
-      <label
-        className={styles['signup__checkbox-label']}
-      >
+      <label className={styles['signup__checkbox-label']}>
         <input
           id="terms-privacy"
           className={styles.signup__checkbox}
@@ -294,9 +326,7 @@ const TermsCheckboxes = React.forwardRef<ICustomFormInput | null, ICustomFormInp
         />
         개인정보 이용약관에 동의합니다.
       </label>
-      <label
-        className={styles['signup__checkbox-label']}
-      >
+      <label className={styles['signup__checkbox-label']}>
         <input
           id="terms-usage"
           className={styles.signup__checkbox}
@@ -357,7 +387,8 @@ const useSignupForm = () => {
       });
 
       const genderLabel = formValue.gender !== undefined && formValue.gender !== null
-        ? GENDER_TYPE.find((item) => item.value === Number(formValue.gender))?.label || ''
+        ? GENDER_TYPE.find((item) => item.value === Number(formValue.gender))
+          ?.label || ''
         : '';
 
       logger.actionEventClick({
@@ -396,87 +427,91 @@ const useSignupForm = () => {
   return { submitForm, status };
 };
 
-const MajorInput = React.forwardRef<
-ICustomFormInput, ICustomFormInputProps>((props, ref) => {
-  const [studentNumber, setStudentNumber] = React.useState<string>('');
-  const { data: deptList } = useDeptList();
-  const deptOptionList = deptList.map((dept) => ({
-    label: dept.name,
-    value: dept.name,
-  }));
-  const [major, setMajor] = React.useState<string | null>(null);
+const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>(
+  (props, ref) => {
+    const [studentNumber, setStudentNumber] = React.useState<string>('');
+    const { data: deptList } = useDeptList();
+    const deptOptionList = deptList.map((dept) => ({
+      label: dept.name,
+      value: dept.name,
+    }));
+    const [major, setMajor] = React.useState<string | null>(null);
 
-  const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { target } = event;
-    setStudentNumber(target?.value ?? '');
-  };
-
-  React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
-    let valid: string | true = '오류가 발생했습니다';
-    const year = parseInt(studentNumber.slice(0, 4), 10);
-    if (year < 1992 || year > new Date().getFullYear()) {
-      valid = '올바른 입학년도가 아닙니다.';
-    } else if (studentNumber && studentNumber.length !== 10) {
-      valid = '학번은 10자리여야 합니다.';
-    } else {
-      valid = true;
-    }
-    return {
-      value: {
-        studentNumber,
-        major,
-      },
-      valid,
+    const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { target } = event;
+      setStudentNumber(target?.value ?? '');
     };
-  }, [studentNumber, major]);
-  return (
-    <>
-      <input
-        className={styles['form-input']}
-        placeholder="학번 (선택)"
-        value={studentNumber}
-        onChange={onChangeMajorInput}
-        {...props}
-      />
-      <div className={styles['form-input__select']}>
+
+    React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
+      ref,
+      () => {
+        let valid: string | true = '오류가 발생했습니다';
+        const year = parseInt(studentNumber.slice(0, 4), 10);
+        if (year < 1992 || year > new Date().getFullYear()) {
+          valid = '올바른 입학년도가 아닙니다.';
+        } else if (studentNumber && studentNumber.length !== 10) {
+          valid = '학번은 10자리여야 합니다.';
+        } else {
+          valid = true;
+        }
+        return {
+          value: {
+            studentNumber,
+            major,
+          },
+          valid,
+        };
+      },
+      [studentNumber, major],
+    );
+    return (
+      <>
+        <input
+          className={styles['form-input']}
+          placeholder="학번 (선택)"
+          value={studentNumber}
+          onChange={onChangeMajorInput}
+          {...props}
+        />
+        <div className={styles['form-input__select']}>
+          <Selector
+            options={deptOptionList}
+            value={major}
+            onChange={(event) => setMajor(event.target.value)}
+            placeholder="학부 (선택)"
+          />
+        </div>
+      </>
+    );
+  },
+);
+
+const GenderSelectorWithRef = forwardRef(
+  ({ options }: { options: { label: string; value: string }[] }, ref) => {
+    const [selectedValue, setSelectedValue] = useState<string | null>(null);
+
+    useImperativeHandle(ref, () => ({
+      value: selectedValue,
+    }));
+
+    return (
+      <div
+        className={cn({
+          [styles['form-input__select']]: true,
+          [styles['form-input__select--flex-end']]: true,
+        })}
+        style={{ marginLeft: '6px' }}
+      >
         <Selector
-          options={deptOptionList}
-          value={major}
-          onChange={(event) => setMajor(event.target.value)}
-          placeholder="학부 (선택)"
+          options={options}
+          value={String(selectedValue)}
+          onChange={(event) => setSelectedValue(event.target.value)}
+          placeholder="성별 (선택)"
         />
       </div>
-    </>
-  );
-});
-
-const GenderSelectorWithRef = forwardRef((
-  { options }: { options: { label: string; value:string }[] },
-  ref,
-) => {
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
-
-  useImperativeHandle(ref, () => ({
-    value: selectedValue,
-  }));
-
-  return (
-    <div
-      className={cn({
-        [styles['form-input__select']]: true,
-        [styles['form-input__select--flex-end']]: true,
-      })}
-      style={{ marginLeft: '6px' }}
-    >
-      <Selector
-        options={options}
-        value={String(selectedValue)}
-        onChange={(event) => setSelectedValue(event.target.value)}
-        placeholder="성별 (선택)"
-      />
-    </div>
-  );
-});
+    );
+  },
+);
 
 function SignupDefaultPage() {
   const logger = useLogger();
@@ -487,9 +522,17 @@ function SignupDefaultPage() {
     <>
       <div>
         <div className={styles.term__title}>개인정보 이용약관</div>
-        <textarea className={styles.term__content} defaultValue={privacy} readOnly />
+        <textarea
+          className={styles.term__content}
+          defaultValue={privacy}
+          readOnly
+        />
         <div className={styles.term__title}>코인 이용약관</div>
-        <textarea className={styles.term__content} defaultValue={koin} readOnly />
+        <textarea
+          className={styles.term__content}
+          defaultValue={koin}
+          readOnly
+        />
         <TermsCheckboxes {...register('terms', { required: true })} />
       </div>
       <form className={styles.signup} onSubmit={onSubmitSignupForm}>
@@ -551,7 +594,13 @@ function SignupDefaultPage() {
             },
           })}
         />
-        <GenderSelectorWithRef {...register('gender')} options={[{ label: '남', value: '0' }, { label: '여', value: '1' }]} />
+        <GenderSelectorWithRef
+          {...register('gender')}
+          options={[
+            { label: '남', value: '0' },
+            { label: '여', value: '1' },
+          ]}
+        />
         <button
           type="submit"
           disabled={status === 'pending'}
@@ -561,16 +610,14 @@ function SignupDefaultPage() {
             [styles['signup__button--block']]: true,
             [styles['signup__button--large-font']]: true,
           })}
-          onClick={
-            () => {
-              logger.actionEventClick({
-                actionTitle: 'USER',
-                event_label: 'complete_sign_up',
-                event_category: 'click',
-                value: '회원가입 완료',
-              });
-            }
-          }
+          onClick={() => {
+            logger.actionEventClick({
+              actionTitle: 'USER',
+              event_label: 'complete_sign_up',
+              event_category: 'click',
+              value: '회원가입 완료',
+            });
+          }}
         >
           회원가입
         </button>
