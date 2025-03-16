@@ -1,6 +1,6 @@
 import { cn } from '@bcsdlab/utils';
-import ErrorBoundary from 'components/ErrorBoundary';
-import LoadingSpinner from 'components/LoadingSpinner';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
+import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import React, { Suspense } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';

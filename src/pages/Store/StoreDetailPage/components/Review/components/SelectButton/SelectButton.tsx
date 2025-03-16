@@ -1,13 +1,13 @@
 import Trash from 'assets/svg/trash-can-icon.svg';
 import Pen from 'assets/svg/pen-icon.svg';
 import Complaint from 'assets/svg/Review/complaint.svg';
-import { Portal } from 'components/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import DeleteModal from 'pages/Store/StoreDetailPage/Review/components/DeleteModal/DeleteModal';
+import DeleteModal from 'pages/Store/StoreDetailPage/components/Review/components/DeleteModal/DeleteModal';
 import { useDeleteReview } from 'pages/Store/StoreDetailPage/hooks/useDeleteReview';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from 'utils/hooks/state/useUser';
-import LoginRequiredModal from 'components/LoginRequiredModal';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 
 import showToast from 'utils/ts/showToast';
 import useLogger from 'utils/hooks/analytics/useLogger';

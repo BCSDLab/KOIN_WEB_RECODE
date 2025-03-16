@@ -3,8 +3,8 @@ import SeeInfoArrow from 'assets/svg/see-info-arrow.svg';
 import HiddenInfoArrow from 'assets/svg/hidden-info-arrow.svg';
 import { cn } from '@bcsdlab/utils';
 import { StoreEvent } from 'api/store/entity';
+import EventContent from 'pages/Store/StoreDetailPage/components/EventContent';
 import styles from './EventCard.module.scss';
-import EventContent from './EventContent';
 
 export default function EventCard({ event }: { event: StoreEvent }) {
   const [hiddenInfo, setHiddenInfo] = useState<boolean>(true);

@@ -4,7 +4,7 @@ import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import useDepartmentMajorList from 'pages/GraduationCalculatorPage/hooks/useDepartmentMajorList';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useUpdateAcademicInfo from 'pages/GraduationCalculatorPage/hooks/useUpdateAcademicInfo';
-import { Selector } from 'components/Selector';
+import { Selector } from 'components/ui/Selector';
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {

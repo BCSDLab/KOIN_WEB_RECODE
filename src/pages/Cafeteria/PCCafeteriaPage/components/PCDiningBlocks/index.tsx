@@ -7,7 +7,7 @@ import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import DetailModal from 'pages/Cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import { filterDinings } from 'pages/Cafeteria/utils/filter';
 import styles from './PCDiningBlocks.module.scss';
 

@@ -1,5 +1,5 @@
-import KoinToast from 'components/KoinToast';
-import { Portal } from 'components/Modal/PortalProvider';
+import KoinToast from 'components/feedback/KoinToast';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 
 interface Props {

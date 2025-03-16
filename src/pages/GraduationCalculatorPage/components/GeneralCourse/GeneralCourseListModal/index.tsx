@@ -4,7 +4,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useSemester } from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useCourseType from 'pages/GraduationCalculatorPage/hooks/useCourseType';
 import { startTransition, useState } from 'react';
-import { Selector } from 'components/Selector';
+import { Selector } from 'components/ui/Selector';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './GeneralCourseListModal.module.scss';
 

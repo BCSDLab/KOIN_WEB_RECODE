@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { StoreEvent } from 'api/store/entity';
-import EventCard from './components/EventCard';
+import EventCard from '../EventCard';
 import useStoreMenus from './hooks/useStoreEventList';
 import styles from './EventTable.module.scss';
 

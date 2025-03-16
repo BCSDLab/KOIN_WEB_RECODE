@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as gtag from 'lib/gtag';
 import { UserResponse } from 'api/auth/entity';
@@ -32,16 +32,15 @@ const userUniqueIdGenerator = (userInfo: UserResponse | null) => {
   return '';
 };
 
-function LogPage() {
+export default function PageViewTracker() {
   const location = useLocation();
   const { data: userInfo } = useUser();
-  const prevPathname = React.useRef('');
+  const prevPathname = useRef('');
 
   useEffect(() => {
     const handlePageView = () => {
       if (prevPathname.current !== window.location.pathname) {
         setTimeout(() => {
-          // eslint-disable-next-line max-len
           gtag.pageView(
             window.location.pathname + window.location.search,
             userUniqueIdGenerator(userInfo) || '',
@@ -54,4 +53,3 @@ function LogPage() {
   }, [location, userInfo]);
   return null;
 }
-export default LogPage;

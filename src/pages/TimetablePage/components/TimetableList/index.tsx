@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useSemester } from 'utils/zustand/semester';
 import { TimetableFrameInfo } from 'api/timetable/entity';
-import { Portal } from 'components/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import AddIcon from 'assets/svg/add-icon.svg';
 import SettingIcon from 'assets/svg/setting-icon.svg';
 import BlueSettingIcon from 'assets/svg/setting-icon-blue.svg';

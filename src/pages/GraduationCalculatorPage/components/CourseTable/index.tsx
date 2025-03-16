@@ -7,7 +7,7 @@ import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { toast } from 'react-toastify';

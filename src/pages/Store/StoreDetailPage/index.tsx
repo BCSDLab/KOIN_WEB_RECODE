@@ -1,13 +1,13 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
-import ImageModal from 'components/Modal/ImageModal';
+import ImageModal from 'components/modal/Modal/ImageModal';
 import {
   useNavigate, useParams, useSearchParams,
 } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
-import { Portal } from 'components/Modal/PortalProvider';
-import UpdateInfo from 'components/UpdateInfo/UpdateInfo';
+import { Portal } from 'components/modal/Modal/PortalProvider';
+import UpdateInfo from 'pages/Store/StoreDetailPage/components/UpdateInfo/UpdateInfo';
 import showToast from 'utils/ts/showToast';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -21,11 +21,11 @@ import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import * as api from 'api';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
-import StoreErrorBoundary from 'components/StoreErrorBoundary';
-import MenuTable from './MenuTable';
-import EventTable from './EventTable';
+import StoreErrorBoundary from 'components/boundary/StoreErrorBoundary';
+import MenuTable from './components/MenuTable';
+import EventTable from './components/EventTable';
 import styles from './StoreDetailPage.module.scss';
-import ReviewPage from './Review';
+import ReviewPage from './components/Review';
 
 interface Props {
   id: string | undefined;

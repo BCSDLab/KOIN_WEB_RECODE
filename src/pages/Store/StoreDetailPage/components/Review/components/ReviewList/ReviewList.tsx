@@ -1,16 +1,16 @@
 import { useGetReview } from 'pages/Store/StoreDetailPage/hooks/useGetReview';
 import { useParams } from 'react-router-dom';
-import ReviewCard from 'pages/Store/StoreDetailPage/Review/components/ReviewCard/ReviewCard';
+import ReviewCard from 'pages/Store/StoreDetailPage/components/Review/components/ReviewCard/ReviewCard';
 import {
   useCallback, useDeferredValue, useEffect, useRef, useState,
 } from 'react';
 import NoReview from 'assets/svg/Review/no-review.svg';
 import ChervronUp from 'assets/svg/chervron-up.svg';
-import { Portal } from 'components/Modal/PortalProvider';
-import LoginRequiredModal from 'components/LoginRequiredModal';
+import { Portal } from 'components/modal/Modal/PortalProvider';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import StarList from 'pages/Store/StoreDetailPage/Review/components/StarList/StarList';
-import { REVEIW_LOGIN } from 'pages/Store/StoreDetailPage/Review/components/ReviewButton/index';
+import StarList from 'pages/Store/StoreDetailPage/components/Review/components/StarList/StarList';
+import { REVEIW_LOGIN } from 'pages/Store/StoreDetailPage/components/Review/components/ReviewButton/index';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useGetMyReview } from 'pages/Store/StoreDetailPage/hooks/useGetMyReview';
 import { useDropdown } from 'pages/Store/StoreDetailPage/hooks/useDropdown';

@@ -1,5 +1,5 @@
-import ErrorBoundary from 'components/ErrorBoundary';
-import LoadingSpinner from 'components/LoadingSpinner';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
+import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import {
   Lecture, MyLectureInfo, Semester, LectureInfo,
 } from 'api/timetable/entity';
@@ -14,7 +14,7 @@ import LectureTable, { LECTURE_TABLE_HEADER } from 'pages/TimetablePage/componen
 import useMyLectures from 'pages/TimetablePage/hooks/useMyLectures';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
-import ToggleButton from 'components/ToggleButton';
+import ToggleButton from 'pages/TimetablePage/components/ToggleButton';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import DeptListbox from './DeptListbox';
 import LastUpdatedDate from './LastUpdatedDate';

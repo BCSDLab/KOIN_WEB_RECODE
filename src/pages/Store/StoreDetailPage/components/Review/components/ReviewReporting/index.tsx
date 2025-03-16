@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useNavigate, useParams } from 'react-router-dom';
-import CheckBox from 'components/CommonCheckBox';
+import CheckBox from 'pages/Store/StoreDetailPage/components/Review/components/CheckBox';
 import { toast } from 'react-toastify';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
 import ROUTES from 'static/routes';
-import ReportingLabel from './components/ReportingLabel';
+import ReportingLabel from 'pages/Store/StoreDetailPage/components/Review/components/ReportingLabel';
 import styles from './ReviewReporting.module.scss';
 import useReviewReport from './query/useReviewReport';
 

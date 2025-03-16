@@ -1,5 +1,5 @@
 import React from 'react';
-import { Selector, SelectorProps } from 'components/Selector';
+import { Selector, SelectorProps } from 'components/ui/Selector';
 
 type DeptListboxProps = Omit<SelectorProps, 'options'>;
 
