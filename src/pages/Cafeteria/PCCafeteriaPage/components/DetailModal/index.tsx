@@ -1,5 +1,5 @@
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
-import { Dining } from 'interfaces/Cafeteria';
+import { Dining } from 'static/cafeteria';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';

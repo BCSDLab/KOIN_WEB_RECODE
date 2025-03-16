@@ -1,5 +1,5 @@
 import { cn } from '@bcsdlab/utils';
-import { Dining } from 'interfaces/Cafeteria';
+import { Dining } from 'static/cafeteria';
 import NoPhoto from 'assets/svg/no-photography-mobile.svg';
 import NoMeals from 'assets/svg/no-meals-mobile.svg';
 import styles from './MobileMealImage.module.scss';

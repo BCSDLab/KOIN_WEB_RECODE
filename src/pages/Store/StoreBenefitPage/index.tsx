@@ -9,11 +9,10 @@ import { useEffect } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import EventCarousel from 'pages/Store/StorePage/components/EventCarousel';
 import { getCategoryDurationTime, initializeCategoryEntryTime } from 'pages/Store/utils/durationTime';
+import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import styles from './StoreBenefitPage.module.scss';
-// eslint-disable-next-line no-restricted-imports
-import MobileStoreList from '../StorePage/components/MobileStoreList';
 
-function StoreBenefitPage() {
+export default function StoreBenefitPage() {
   const { params, searchParams, setParams } = useParamsHandler();
   const isMobile = useMediaQuery();
   const logger = useLogger();
@@ -109,5 +108,3 @@ function StoreBenefitPage() {
     </div>
   );
 }
-
-export default StoreBenefitPage;

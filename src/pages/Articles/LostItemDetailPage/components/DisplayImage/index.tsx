@@ -4,7 +4,7 @@ import SelectedDotIcon from 'assets/svg/Articles/ellipse-blue.svg';
 import NotSelectedDotIcon from 'assets/svg/Articles/ellipse-grey.svg';
 import ChevronRight from 'assets/svg/Articles/chevron-right-circle.svg';
 import ChevronLeft from 'assets/svg/Articles/chevron-left-circle.svg';
-import { Image } from 'pages/Articles/ts/types';
+import { Image } from 'static/articles';
 import styles from './DisplayImage.module.scss';
 
 interface DisplayImageProps {

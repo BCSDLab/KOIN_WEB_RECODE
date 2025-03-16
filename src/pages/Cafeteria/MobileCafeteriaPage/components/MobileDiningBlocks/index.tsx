@@ -1,13 +1,12 @@
-import { Dining, DiningType } from 'interfaces/Cafeteria';
+import { Dining, DiningType, DINING_TYPE_MAP } from 'static/cafeteria';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/common/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
-import { DINING_TYPE_MAP } from 'static/cafeteria';
-import { filterDinings } from 'utils/ts/cafeteria';
 import DetailImage from 'pages/Cafeteria/MobileCafeteriaPage/components/DetailImage';
+import { filterDinings } from 'pages/Cafeteria/utils/filter';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {

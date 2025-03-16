@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect } from 'react';
 import Timetable from 'pages/TimetablePage/components/Timetable';
 import { Link } from 'react-router-dom';
-import ErrorBoundary from 'components/common/ErrorBoundary';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import useSemesterOptionList from 'pages/TimetablePage/hooks/useSemesterOptionList';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';

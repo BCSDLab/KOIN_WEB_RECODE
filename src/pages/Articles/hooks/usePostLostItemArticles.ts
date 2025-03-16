@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postLostItemArticle } from 'api/articles';
 import showToast from 'utils/ts/showToast';
 import { transformLostItemArticlesForPost } from 'pages/Articles/utils/transform';
-import { LostItemArticlesForPost } from 'pages/Articles/ts/types';
+import { LostItemArticlesForPost } from 'static/articles';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 const usePostLostItemArticles = () => {

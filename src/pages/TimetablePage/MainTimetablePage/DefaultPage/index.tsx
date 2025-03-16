@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 import React, { Suspense } from 'react';
-import LoadingSpinner from 'components/common/LoadingSpinner';
+import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import TimetableList from 'pages/TimetablePage/components/TimetableList';
 import MainTimetable from 'pages/TimetablePage/components/MainTimetable';
 import useLogger from 'utils/hooks/analytics/useLogger';
