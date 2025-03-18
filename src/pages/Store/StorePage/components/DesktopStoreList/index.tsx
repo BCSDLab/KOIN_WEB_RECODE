@@ -10,7 +10,6 @@ import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import { StorePageType } from 'static/store';
 import ROUTES from 'static/routes';
-import { getCategoryDurationTime } from 'pages/Store/utils/durationTime';
 import { useState, useEffect } from 'react';
 import styles from './DesktopStoreList.module.scss';
 
