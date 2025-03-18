@@ -118,7 +118,9 @@ const useStoreList = (
 };
 
 function StorePage() {
-  const { params, searchParams, setParams } = useParamsHandler();
+  const {
+    params, searchParams, setParams, setSearchParams,
+  } = useParamsHandler();
   const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
     sorter: searchParams.get('COUNT') ? 'COUNT' : '',
     filter: [],
@@ -257,6 +259,27 @@ function StorePage() {
     );
   }, [categories, selectedCategory]);
 
+  const filteringQuery = (itemId : string, itemValue : number) => {
+    const sortParams = ['COUNT', 'RATING'];
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    if (!searchParams.get(itemId)) {
+      if (sortParams.includes(itemId)) {
+        sortParams.forEach((sort) => {
+          if (sort !== itemId && newSearchParams.has(sort)) {
+            newSearchParams.delete(sort);
+          }
+        });
+      }
+
+      newSearchParams.set(itemId, String(itemValue));
+      setSearchParams(newSearchParams, { replace: true });
+    } else {
+      newSearchParams.delete(itemId);
+      setSearchParams(newSearchParams, { replace: true });
+    }
+  };
+
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
@@ -338,10 +361,7 @@ function StorePage() {
                   className={styles['option-checkbox__input']}
                   onChange={() => {
                     loggingCheckbox(item.id, !searchParams.get(item.id));
-                    setParams(item.id, String(item.value), {
-                      deleteBeforeParam: true,
-                      replacePage: true,
-                    });
+                    filteringQuery(item.id, item.value);
                   }}
                 />
                 {item.content}
