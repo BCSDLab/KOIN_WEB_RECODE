@@ -10,6 +10,8 @@ import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import { useStoreCategories } from 'pages/Store/StorePage/hooks/useCategoryList';
 import { StorePageType } from 'static/store';
 import ROUTES from 'static/routes';
+import { getCategoryDurationTime } from 'pages/Store/utils/durationTime';
+import { useState, useEffect } from 'react';
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {
@@ -34,10 +36,34 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
   const koreanCategory = categories?.shop_categories.find(
     (category) => category.id === selectedCategory,
   )?.name;
+  const [filteredStoreList, setFilteredStoreList] = useState<StoreListV2[]>([]);
+
+  useEffect(() => {
+    let sortedList: StoreListV2[] | undefined = [...(storeListData || [])];
+    const nowParams = Object.fromEntries(searchParams.entries());
+    const nowParamsKeys = Object.keys(nowParams);
+
+    if (nowParamsKeys.includes('COUNT')) {
+      sortedList.sort((a, b) => b.review_count - a.review_count);
+    } else if (nowParamsKeys.includes('RATING')) {
+      sortedList.sort((a, b) => b.average_rate - a.average_rate);
+    } else {
+      sortedList = storeListData || [];
+    }
+
+    if (nowParamsKeys.includes('OPEN')) {
+      sortedList = sortedList.filter((store) => store.is_open);
+    }
+    if (nowParamsKeys.includes('DELIVERY')) {
+      sortedList = sortedList.filter((store) => store.delivery);
+    }
+
+    setFilteredStoreList(sortedList);
+  }, [searchParams, storeListData]);
 
   return (
     <div className={styles['store-list']}>
-      {storeListData?.map((store: StoreListV2) => (
+      {filteredStoreList?.map((store: StoreListV2) => (
         <Link
           to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴&type=${storeType}`}
           className={styles['store-list__item']}
