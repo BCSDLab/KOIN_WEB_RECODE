@@ -1,4 +1,4 @@
-import { type Dining, DiningType } from 'static/cafeteria';
+import { Dining, DiningType } from 'api/dinings/entity';
 import { PLACE_ORDER } from 'static/cafeteria';
 
 export const filterDinings = (dinings: Dining[], type: DiningType) => {

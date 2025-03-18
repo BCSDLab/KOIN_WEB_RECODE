@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import { Dining, DiningType, DINING_TYPE_MAP } from 'static/cafeteria';
 import { useEffect, useRef } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
@@ -9,6 +8,8 @@ import PCMealImage from 'pages/Cafeteria/PCCafeteriaPage/components/PCMealImage'
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import { filterDinings } from 'pages/Cafeteria/utils/filter';
+import { Dining, DiningType } from 'api/dinings/entity';
+import { DINING_TYPE_MAP } from 'static/cafeteria';
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {
