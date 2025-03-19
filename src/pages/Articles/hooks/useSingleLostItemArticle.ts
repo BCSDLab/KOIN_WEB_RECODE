@@ -2,11 +2,11 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { articles } from 'api';
 import { transformSingleLostItemArticle } from 'pages/Articles/utils/transform';
 
-const useSingleLostItemArticle = (id: number) => {
+const useSingleLostItemArticle = (token: string, id: number) => {
   const { data: article } = useSuspenseQuery({
     queryKey: ['lostItem', id],
     queryFn: async () => {
-      const response = await articles.getSingleLostItemArticle(id);
+      const response = await articles.getSingleLostItemArticle(token, id);
       return transformSingleLostItemArticle(response);
     },
   });
