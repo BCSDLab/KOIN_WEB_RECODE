@@ -9,7 +9,12 @@
   padding-top: 64px;
 
   @include media.media-breakpoint(mobile) {
-    width: calc(100vw - 24px);
+    align-items: center;
+    width: 100vw;
+    height: calc(100vh - 100px);
+    gap: 24px;
+    margin: 0;
+    padding-top: 24px;
   }
 }
 
@@ -17,6 +22,10 @@
   color: #175c8e;
   font-size: 32px;
   font-weight: 500;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 24px;
+  }
 }
 
 .chat-container {
@@ -24,6 +33,10 @@
   grid-template-columns: 375px 2fr;
   width: 100%;
   height: calc(100vh - 540px);
+
+  @include media.media-breakpoint(mobile) {
+    height: 100vh;
+  }
 }
 
 .chat-list {
@@ -59,6 +72,10 @@
   max-height: calc(100vh - 540px);
   border: 1px solid #eee;
   background: #fafafa;
+
+  @include media.media-breakpoint(mobile) {
+    max-height: 100%;
+  }
 }
 
 .chat-list--item {
@@ -177,6 +194,10 @@
   border: 1px solid #eee;
   background: #fff;
 
+  @include media.media-breakpoint(mobile) {
+    padding: 8px 12px;
+  }
+
   & > div:first-child {
     display: flex;
     gap: 12px;
@@ -201,6 +222,10 @@
   text-overflow: ellipsis;
   display: block;
   white-space: nowrap;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 16px;
+  }
 }
 
 .chat-block {
