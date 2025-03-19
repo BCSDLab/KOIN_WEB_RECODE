@@ -14,7 +14,10 @@ const usePostLostItemArticles = () => {
       const response = await postLostItemArticle(token, transformLostItemArticlesForPost(data));
       return response.id;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['lostItem'] }),
+    onSuccess: () => {
+      showToast('success', '게시글 작성이 완료되었습니다.');
+      queryClient.invalidateQueries({ queryKey: ['lostItem'] });
+    },
     onError: (e) => {
       if (isKoinError(e)) {
         showToast('error', e.message);
