@@ -1,3 +1,4 @@
+import { cn } from '@bcsdlab/utils';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import { LostItem, LostItemHandler } from 'pages/Articles/hooks/useLostItemForm';
 import FormImage from 'pages/Articles/LostItemWritePage/components/FormImage';
@@ -52,7 +53,10 @@ export default function LostItemForm({
           {itemTag}
         </span>
         <button
-          className={styles.tag__delete}
+          className={cn({
+            [styles.tag__delete]: true,
+            [styles['tag__delete--visible']]: count > 0,
+          })}
           type="button"
           onClick={() => removeLostItem(count)}
           aria-label="분실물 삭제"
