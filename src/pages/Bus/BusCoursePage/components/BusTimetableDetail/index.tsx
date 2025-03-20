@@ -172,6 +172,7 @@ export default function BusTimetableDetail() {
               <>
                 <div className={styles['time-table__number']}>
                   {name}
+                  <br />
                   {detail}
                 </div>
                 {arrival_time.map((time) => (
