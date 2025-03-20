@@ -51,12 +51,14 @@
     border-radius: 5px;
     cursor: pointer;
 
-    &:hover {
-      background-color: #eee;
-    }
-
     &:active {
       background-color: #e1e1e1;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: #eee;
+      }
     }
 
     @include media.media-breakpoint(mobile) {
