@@ -45,7 +45,8 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
                 <div className={styles['category__type--title']}>
                   {dining.place}
                   <div className={styles.category__calorie}>
-                    {!!dining.kcal && `${dining.kcal}Kcal •`}
+                    {!!dining.kcal && `${dining.kcal}Kcal`}
+                    {!!dining.kcal && !!dining.price_card && !!dining.price_cash && ' • '}
                   </div>
                   <div className={styles.category__price}>
                     {!!dining.price_cash && `${dining.price_cash}원/`}
