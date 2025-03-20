@@ -49,7 +49,6 @@ const useLogin = (state: IsAutoLogin) => {
     },
     onError: (error) => {
       if (isKoinError(error)) {
-        // 추후에 코드별 에러 분기처리 진행
         showToast('error', error.message || '로그인에 실패했습니다.');
       } else {
         sendClientError(error);
@@ -68,7 +67,7 @@ const useLogin = (state: IsAutoLogin) => {
       return;
     }
     if (userInfo.userId.indexOf('@koreatech.ac.kr') !== -1) {
-      showToast('error', '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.'); // 모든 alert는 Toast로 교체 예정
+      showToast('error', '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.');
       return;
     }
     if (!emailLocalPartRegex.test(userInfo.userId)) {
