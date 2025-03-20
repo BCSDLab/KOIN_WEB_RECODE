@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
+import { convertArticlesTag } from 'pages/Articles/utils/convertArticlesTag';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
@@ -8,7 +8,6 @@ import DeleteModal from 'pages/Articles/LostItemDetailPage/components/DeleteModa
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ROUTES from 'static/routes';
-import { useUser } from 'utils/hooks/state/useUser';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import DisplayImage from 'pages/Articles/LostItemDetailPage/components/DisplayImage';
 import ReportIcon from 'assets/svg/Articles/report.svg';
@@ -27,14 +26,11 @@ export default function LostItemDetailPage() {
   const portalManager = useModalPortal();
 
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
-  const { data: userInfo } = useUser();
   const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
 
   const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
-  const { article } = useSingleLostItemArticle(Number(params.id));
+  const { article } = useSingleLostItemArticle(token, Number(params.id));
   const articleId = Number(params.id);
-
-  const isMyArticle = userInfo?.nickname === article?.author;
 
   const {
     boardId,
@@ -108,7 +104,7 @@ export default function LostItemDetailPage() {
                 목록
               </button>
             )}
-            {isMyArticle ? (
+            {article.is_mine ? (
               <button
                 className={styles['button-container__delete-button']}
                 onClick={handleDeleteButtonClick}

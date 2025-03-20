@@ -1,5 +1,5 @@
 import React from 'react';
-import ErrorBoundary from 'components/common/ErrorBoundary';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import showToast from 'utils/ts/showToast';
 import Timetable from 'pages/TimetablePage/components/Timetable';

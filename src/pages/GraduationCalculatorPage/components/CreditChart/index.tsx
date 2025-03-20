@@ -5,7 +5,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useCalculateCredits from 'pages/GraduationCalculatorPage/hooks/useCalculateCredits';
 import { GradesByCourseType } from 'api/graduationCalculator/entity';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/common/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import useGetMultiMajorLecture from 'pages/TimetablePage/hooks/useGetMultiMajorLecture';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import useLogger from 'utils/hooks/analytics/useLogger';

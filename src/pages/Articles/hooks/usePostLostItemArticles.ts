@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postLostItemArticle } from 'api/articles';
 import showToast from 'utils/ts/showToast';
 import { transformLostItemArticlesForPost } from 'pages/Articles/utils/transform';
-import { LostItemArticlesForPost } from 'pages/Articles/ts/types';
+import { LostItemArticlesForPost } from 'static/articles';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 const usePostLostItemArticles = () => {
@@ -14,7 +14,10 @@ const usePostLostItemArticles = () => {
       const response = await postLostItemArticle(token, transformLostItemArticlesForPost(data));
       return response.id;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['lostItem'] }),
+    onSuccess: () => {
+      showToast('success', '게시글 작성이 완료되었습니다.');
+      queryClient.invalidateQueries({ queryKey: ['lostItem'] });
+    },
     onError: (e) => {
       if (isKoinError(e)) {
         showToast('error', e.message);
