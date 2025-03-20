@@ -29,6 +29,7 @@ const useParamsHandler = () => {
     params,
     searchParams,
     setParams,
+    setSearchParams,
   };
 };
 
