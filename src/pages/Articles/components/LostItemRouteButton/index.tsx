@@ -7,7 +7,7 @@ import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import ROUTES from 'static/routes';
-import LoginRequireLostItemdModal from 'pages/Articles/LostItemDetailPage/components/LoginRequireLostItemModal';
+import LoginRequireLostItemModal from 'pages/Articles/LostItemDetailPage/components/LoginRequireLostItemModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './LostItemRouteButton.module.scss';
 
@@ -26,7 +26,7 @@ export default function LostItemRouteButton() {
       }
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequireLostItemdModal
+        <LoginRequireLostItemModal
           actionTitle="게시글을 작성하려면"
           detailExplanation="로그인 후 분실물 주인을 찾아주세요!"
           onClose={portalOption.close}

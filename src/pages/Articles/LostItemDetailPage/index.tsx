@@ -15,7 +15,7 @@ import ReportModal from 'pages/Articles/LostItemDetailPage/components/ReportModa
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './LostItemDetailPage.module.scss';
-import LoginRequireLostItemdModal from './components/LoginRequireLostItemModal';
+import LoginRequireLostItemModal from './components/LoginRequireLostItemModal';
 import usePostLostItemChatroom from './hooks/usePostLostItemChatroom';
 
 export default function LostItemDetailPage() {
@@ -56,8 +56,23 @@ export default function LostItemDetailPage() {
       openReportModal();
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequireLostItemdModal
+        <LoginRequireLostItemModal
           actionTitle="게시글을 신고 하려면"
+          detailExplanation="로그인 후 이용해주세요."
+          onClose={portalOption.close}
+        />
+      ));
+    }
+  };
+
+  const handleChatroomButtonClick = async () => {
+    if (token) {
+      const chatroomInfo = await searchChatroom(articleId);
+      navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
+    } else {
+      portalManager.open((portalOption) => (
+        <LoginRequireLostItemModal
+          actionTitle="쪽지를 보내려면"
           detailExplanation="로그인 후 이용해주세요."
           onClose={portalOption.close}
         />
@@ -118,10 +133,7 @@ export default function LostItemDetailPage() {
                 <button
                   type="button"
                   className={styles['button-container__message-button']}
-                  onClick={async () => {
-                    const chatroomInfo = await searchChatroom(articleId);
-                    navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
-                  }}
+                  onClick={handleChatroomButtonClick}
                 >
                   <ChatIcon />
                   <div>쪽지 보내기</div>
