@@ -1,4 +1,3 @@
-import BusNotice from 'pages/Bus/components/BusNotice';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import BusTimetable from './components/BusTimetable';
 import styles from './BusCoursePage.module.scss';
@@ -26,7 +25,6 @@ export default function BusCoursePage() {
           </header>
         )}
         <div className={styles.contents}>
-          <BusNotice />
           <BusTimetable />
         </div>
       </div>

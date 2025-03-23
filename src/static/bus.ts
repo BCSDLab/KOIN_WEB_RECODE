@@ -7,14 +7,17 @@ import ROUTES from './routes';
 export const BUS_TYPES = [{
   key: 'shuttle',
   tabName: '학교',
+  tabValue: '셔틀',
   tableHeaders: ['승차장소', '시간'],
 }, {
   key: 'express',
   tabName: '대성',
+  tabValue: '대성',
   tableHeaders: ['오전', '오후'],
 }, {
   key: 'city',
   tabName: '시내',
+  tabValue: '시내',
   tableHeaders: ['오전', '오후'],
 }];
 

@@ -64,7 +64,7 @@ export default function BusTimetableDetail() {
                       actionTitle: 'CAMPUS',
                       event_label: name === '등교' ? 'go_to_school' : 'go_home',
                       event_category: 'click',
-                      value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_type}`,
+                      value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
                     });
                   }}
                 >
@@ -85,7 +85,15 @@ export default function BusTimetableDetail() {
                   [styles.detail__button]: true,
                   [styles['detail__button--selected']]: selectedDetail === name,
                 })}
-                onClick={() => setSelectedDetail(name)}
+                onClick={() => {
+                  setSelectedDetail(name);
+                  logger.actionEventClick({
+                    actionTitle: 'CAMPUS',
+                    event_label: name === '등교' ? 'go_to_school' : 'go_home',
+                    event_category: 'click',
+                    value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
+                  });
+                }}
               >
                 {name}
               </button>

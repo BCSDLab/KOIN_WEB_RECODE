@@ -13,12 +13,18 @@ const loggingTitle = {
   unibus: 'shuttle_ticket',
 };
 
+const loggingValue = {
+  timetable: '버스 시간표 바로가기',
+  route: '가장 빠른 버스 조회하기',
+  unibus: '셔틀 탑승권',
+};
+
 function IndexBus() {
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const logShuttleTicket = () => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'shuttle_ticket', value: '버스' });
+  const logShuttleTicket = () => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'shuttle_ticket', value: '셔틀 탑승권' });
   const logMainToBus = () => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'main_to_bus', value: '버스' });
-  const logMainBusButton = (key: BusLinkKey) => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: loggingTitle[key], value: '버스' });
+  const logMainBusButton = (key: BusLinkKey) => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: loggingTitle[key], value: loggingValue[key] });
 
   const unibus = BUS_LINKS[2];
 
