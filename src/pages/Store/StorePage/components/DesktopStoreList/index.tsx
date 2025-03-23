@@ -38,26 +38,30 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
   const [filteredStoreList, setFilteredStoreList] = useState<StoreListV2[]>([]);
 
   useEffect(() => {
-    let sortedList: StoreListV2[] | undefined = [...(storeListData || [])];
-    const nowParams = Object.fromEntries(searchParams.entries());
-    const nowParamsKeys = Object.keys(nowParams);
-
-    if (nowParamsKeys.includes('COUNT')) {
-      sortedList.sort((a, b) => b.review_count - a.review_count);
-    } else if (nowParamsKeys.includes('RATING')) {
-      sortedList.sort((a, b) => b.average_rate - a.average_rate);
-    } else {
-      sortedList = storeListData || [];
+    if (!storeListData || storeListData.length === 0) {
+      setFilteredStoreList([]);
+      return;
     }
 
-    if (nowParamsKeys.includes('OPEN')) {
-      sortedList = sortedList.filter((store) => store.is_open);
-    }
-    if (nowParamsKeys.includes('DELIVERY')) {
-      sortedList = sortedList.filter((store) => store.delivery);
+    const currentParamsList = Array.from(searchParams.keys());
+    let processedList = [...storeListData];
+
+    if (currentParamsList.includes('COUNT')) {
+      processedList = processedList
+        .sort((storeA, storeB) => storeB.review_count - storeA.review_count);
+    } else if (currentParamsList.includes('RATING')) {
+      processedList = processedList
+        .sort((storeA, storeB) => storeB.average_rate - storeA.average_rate);
     }
 
-    setFilteredStoreList(sortedList);
+    if (currentParamsList.includes('OPEN')) {
+      processedList = processedList.filter((store) => store.is_open);
+    }
+    if (currentParamsList.includes('DELIVERY')) {
+      processedList = processedList.filter((store) => store.delivery);
+    }
+
+    setFilteredStoreList(processedList);
   }, [searchParams, storeListData]);
 
   return (

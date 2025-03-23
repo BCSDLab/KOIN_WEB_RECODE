@@ -69,6 +69,8 @@ const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
   },
 ];
 
+const sortParams = ['COUNT', 'RATING'];
+
 const toggleNameLabel = {
   COUNT: 'review',
   RATING: 'star',
@@ -130,6 +132,7 @@ function StorePage() {
     storeMobileFilterState.filter,
     params,
   );
+
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
@@ -140,6 +143,7 @@ function StorePage() {
     closeTooltip();
   };
   const navigate = useNavigate();
+  const newSearchParams = new URLSearchParams(searchParams);
 
   const handleCategoryClick = (categoryId: number) => {
     logger.actionEventClick({
@@ -181,6 +185,7 @@ function StorePage() {
       });
     }
   };
+
   const onClickMobileStoreListFilter = (
     item: StoreSorterType | StoreFilterType,
   ) => {
@@ -260,24 +265,23 @@ function StorePage() {
   }, [categories, selectedCategory]);
 
   const filteringQuery = (itemId : string, itemValue : number) => {
-    const sortParams = ['COUNT', 'RATING'];
-    const newSearchParams = new URLSearchParams(searchParams);
-
-    if (!searchParams.get(itemId)) {
-      if (sortParams.includes(itemId)) {
-        sortParams.forEach((sort) => {
-          if (sort !== itemId && newSearchParams.has(sort)) {
-            newSearchParams.delete(sort);
-          }
-        });
-      }
-
-      newSearchParams.set(itemId, String(itemValue));
-      setSearchParams(newSearchParams, { replace: true });
-    } else {
+    if (searchParams.get(itemId)) {
       newSearchParams.delete(itemId);
-      setSearchParams(newSearchParams, { replace: true });
+      return setSearchParams(newSearchParams, { replace: true });
     }
+
+    if (!sortParams.includes(itemId)) {
+      newSearchParams.set(itemId, String(itemValue));
+      return setSearchParams(newSearchParams, { replace: true });
+    }
+
+    sortParams.forEach((sort) => {
+      if (sort !== itemId) {
+        newSearchParams.delete(sort);
+      }
+    });
+    newSearchParams.set(itemId, String(itemValue));
+    return setSearchParams(newSearchParams, { replace: true });
   };
 
   return (
