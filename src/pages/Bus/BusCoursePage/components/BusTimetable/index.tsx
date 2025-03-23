@@ -20,7 +20,7 @@ export default function BusTimetable() {
 
   return (
     <section className={styles.template}>
-      <BusNotice clickLocation={selectedTab.key} />
+      <BusNotice loggingLocation={selectedTab.key} />
       <ul className={styles.tabs} role="tablist">
         {BUS_TYPES.map((type) => (
           <li key={type.key} role="tab" aria-selected={selectedTab.key === type.key}>

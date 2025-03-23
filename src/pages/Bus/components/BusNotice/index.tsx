@@ -8,9 +8,9 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './BusNotice.module.scss';
 
-type BusNoticeProps = {
-  clickLocation?: string;
-};
+export interface BusNoticeProps {
+  loggingLocation?: string;
+}
 
 const LOCATION = [
   {
@@ -31,7 +31,7 @@ const LOCATION = [
   },
 ];
 
-export default function BusNotice({ clickLocation }: BusNoticeProps) {
+export default function BusNotice({ loggingLocation }: BusNoticeProps) {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const res = useBusNotice();
@@ -40,7 +40,7 @@ export default function BusNotice({ clickLocation }: BusNoticeProps) {
   const busNoticeDismissed = JSON.parse(localStorage.getItem('busNoticeDismissed') || 'false');
   const isUpdated = lastBusNotice !== title;
   const logger = useLogger();
-  const matched = LOCATION.find((item) => item.location === clickLocation);
+  const matched = LOCATION.find((item) => item.location === loggingLocation);
   const logValue = matched?.value || '';
 
   if (isUpdated) {
