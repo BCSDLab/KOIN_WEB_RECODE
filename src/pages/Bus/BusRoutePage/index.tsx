@@ -34,7 +34,7 @@ export default function BusRoutePage() {
       <div className={styles.container}>
         {!isMobile && <BusGuide />}
         <div className={styles.place}>
-          <BusNotice />
+          <BusNotice clickLocation="bus_search" />
           <DirectionSelect
             depart={depart}
             setDepart={setDepart}

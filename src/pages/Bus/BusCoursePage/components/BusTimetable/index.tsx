@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { cn } from '@bcsdlab/utils';
+import BusNotice from 'pages/Bus/components/BusNotice';
 import { BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
@@ -13,13 +14,13 @@ export default function BusTimetable() {
   ));
   const logger = useLogger();
   const onClickBusTab = (type: typeof BUS_TYPES[number]) => {
-    logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'bus_timetable', value: type.tabName });
+    logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'timetable_bus_type_tab', value: type.tabValue });
     setSelectedTab(type);
   };
 
   return (
     <section className={styles.template}>
-
+      <BusNotice clickLocation={selectedTab.key} />
       <ul className={styles.tabs} role="tablist">
         {BUS_TYPES.map((type) => (
           <li key={type.key} role="tab" aria-selected={selectedTab.key === type.key}>

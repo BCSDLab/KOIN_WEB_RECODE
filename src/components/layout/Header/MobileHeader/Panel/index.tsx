@@ -28,12 +28,13 @@ export default function Panel({ openModal }: PanelProps) {
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
   const logShortcut = (title: string) => {
-    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '식단' });
-    if (title === '버스/교통') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '버스' });
     if (title === '공지사항') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '공지사항' });
-    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'hamburger_shop', value: '주변상점' });
-    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'hamburger', value: '복덕방' });
+    if (title === '버스 교통편') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '교통편 조회하기' });
+    if (title === '버스 시간표') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '버스 시간표' });
+    if (title === '식단') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '식단' });
     if (title === '시간표') logger.actionEventClick({ actionTitle: 'USER', event_label: 'hamburger', value: '시간표' });
+    if (title === '복덕방') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'hamburger', value: '복덕방' });
+    if (title === '주변상점') logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'hamburger_shop', value: '주변상점' });
     if (title === '교내 시설물 정보') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '교내 시설물 정보' });
     if (title === '쪽지') logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'hamburger', value: '쪽지' });
   };
