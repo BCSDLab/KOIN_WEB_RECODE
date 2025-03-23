@@ -184,7 +184,7 @@ function ShuttleTimetable() {
             ))}
             <div className={styles['info-footer-mobile']}>
               <div className={styles['info-footer-mobile__text']}>
-                정규학기(2024년 9월 2일 ~ 12월 20일)의
+                정규학기(2025년 3월 4일 ~ 6월 20일)의
                 <br />
                 시간표가 제공됩니다.
               </div>
@@ -377,7 +377,7 @@ function CityTimetable() {
   };
 
   return (
-    <div className={styles['timetable-city-container']}>
+    <div className={styles['timetable-container']}>
       <div className={styles['course-category-city-container']}>
         <div className={styles['course-category-city']}>
           <div className={styles['course-category__button']}>노선</div>
