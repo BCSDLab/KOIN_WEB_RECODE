@@ -72,13 +72,14 @@
     border-radius: 5px;
     border: 1px solid #e1e1e1;
     resize: none;
-    overflow-y: hidden;
+    overflow-y: auto;
     font-family: Pretendard, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 160%;
     color: black;
+    max-height: 300px;
 
     @include media.media-breakpoint(mobile) {
       font-size: 12px;
