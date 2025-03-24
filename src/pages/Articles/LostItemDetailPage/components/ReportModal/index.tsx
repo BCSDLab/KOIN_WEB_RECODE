@@ -28,6 +28,7 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
         <ReportForm
           articleId={articleId}
           onClose={closeReportModal}
+          isModal
         />
       </div>
     </div>,

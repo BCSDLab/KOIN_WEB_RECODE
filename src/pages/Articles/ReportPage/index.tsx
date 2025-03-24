@@ -15,6 +15,7 @@ export default function ReportPage() {
       <ReportForm
         articleId={Number(id)}
         onClose={handleClose}
+        isModal={false}
       />
     </div>
   );

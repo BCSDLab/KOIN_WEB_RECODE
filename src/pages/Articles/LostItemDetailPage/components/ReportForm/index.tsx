@@ -3,6 +3,9 @@ import CheckboxGroup from 'pages/Articles/LostItemDetailPage/components/Checkbox
 import useReportLostItemArticle from 'pages/Articles/hooks/useReportLostItemArticle';
 import showToast from 'utils/ts/showToast';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
+import { useNavigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
+import { toast } from 'react-toastify';
 import styles from './ReportForm.module.scss';
 
 const options = [
@@ -16,31 +19,40 @@ const options = [
 interface ReportFormProps {
   articleId: number;
   onClose: () => void;
+  isModal: boolean;
 }
 
-export default function ReportForm({ articleId, onClose }: ReportFormProps) {
-  const { mutate: reportArticle } = useReportLostItemArticle();
+export default function ReportForm({ articleId, onClose, isModal }: ReportFormProps) {
+  const { mutateAsync: reportArticle } = useReportLostItemArticle(); // 쿼리 변경 줄이고 프로미스로 처리하고 싶어서 변경
   const { logItemPostReportConfirm } = useArticlesLogger();
   const [selectedReason, setSelectedReason] = useState<string[]>([]);
+  const navigate = useNavigate();
 
-  const handleReportClick = () => {
+  const handleReportClick = async () => {
     if (selectedReason.length === 0) {
       showToast('error', '신고 사유를 선택해주세요.');
       return;
     }
 
     const selectedOptions = options.filter((option) => selectedReason.includes(option.value));
-
-    reportArticle({
-      articleId,
-      reports: selectedOptions.map((option) => ({
-        title: option.label,
-        content: option.subtitle,
-      })),
-    });
-
+    try {
+      await reportArticle({
+        articleId,
+        reports: selectedOptions.map((option) => ({
+          title: option.label,
+          content: option.subtitle,
+        })),
+      });
+      if (isModal) {
+        onClose();
+      } else {
+        navigate(ROUTES.Articles());
+      }
+    } catch (e) {
+      toast.error('신고 중 오류가 발생했습니다. 다시 시도해주세요.');
+      return;
+    }
     logItemPostReportConfirm();
-    onClose();
   };
 
   return (
