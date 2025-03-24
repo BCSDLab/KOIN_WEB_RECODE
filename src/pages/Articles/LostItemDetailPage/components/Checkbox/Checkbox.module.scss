@@ -60,7 +60,6 @@
     height: auto !important;
     width: 295px;
     min-height: 22px;
-    color: #8e8e8e;
     display: flex;
     padding: 12px 16px;
     align-items: center;
@@ -75,10 +74,12 @@
     font-style: normal;
     font-weight: 400;
     line-height: 160%;
+    color: black;
 
     @include media.media-breakpoint(mobile) {
       font-size: 12px;
-      width: 230px;
+      width: 100%;
+      box-sizing: border-box;
     }
   }
 
@@ -94,11 +95,15 @@
     padding: 14px 0;
 
     @include media.media-breakpoint(mobile) {
-      width: 265px;
+      width: 100%;
     }
   }
 
   &:last-child {
     padding: 14px 0 0;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+    }
   }
 }

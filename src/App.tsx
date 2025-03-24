@@ -41,6 +41,7 @@ import LostItemWritePage from 'pages/Articles/LostItemWritePage';
 import LostItemDetailPage from 'pages/Articles/LostItemDetailPage';
 import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import ReportPage from 'pages/Articles/ReportPage';
 
 interface WrapperProps {
   title: string;
@@ -105,6 +106,7 @@ function App() {
             <Route path={ROUTES.ArticlesDetail({ isLink: false })} element={<Wrapper title="공지사항 상세" element={<ArticlesDetailPage />} />} />
             <Route path={ROUTES.LostItemDetail({ isLink: false })} element={<Wrapper title="분실물 상세" element={<LostItemDetailPage />} />} />
             <Route path={ROUTES.LostItemRedirect()} element={<Navigate replace to={ROUTES.Articles()} />} />
+            <Route path="/articles/report/:id" element={<ReportPage />} />
           </Route>
           <Route path={ROUTES.LostItemFound()} element={<Wrapper title="습득물 글쓰기" element={<LostItemWritePage />} />} />
           <Route path={ROUTES.LostItemLost()} element={<Wrapper title="분실물 글쓰기" element={<LostItemWritePage />} />} />
