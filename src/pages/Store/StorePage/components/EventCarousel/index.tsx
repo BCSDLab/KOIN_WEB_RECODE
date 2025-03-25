@@ -69,7 +69,7 @@ function Card({
   );
 }
 
-function EventCarousel() {
+export default function EventCarousel() {
   const carouselList = useGetAllEvents();
   const isMobile = useMediaQuery();
   const {
@@ -101,27 +101,25 @@ function EventCarousel() {
             ))}
           </div>
           <div className={styles.pagination}>
-            { // eslint-disable-next-line
-              <button
-                type="button"
-                onClick={() => scrollTo('prev')}
-                className={styles['pagination-button--prev']}
-              >
-                <LeftBracket />
-              </button>
-            }
+            <button
+              type="button"
+              onClick={() => scrollTo('prev')}
+              className={styles['pagination-button--prev']}
+              aria-label="이전"
+            >
+              <LeftBracket />
+            </button>
             {currentIndex + 1}
             /
             {carouselList.length > 10 ? 10 : carouselList.length}
-            { // eslint-disable-next-line
             <button
               type="button"
               onClick={() => scrollTo('next')}
               className={styles['pagination-button--next']}
+              aria-label="다음"
             >
               <RightBracket />
             </button>
-            }
           </div>
         </div>
       </div>
@@ -132,11 +130,11 @@ function EventCarousel() {
     <div className={styles.carousel}>
       {
         canPrevClick && (
-          // eslint-disable-next-line
           <button
             type="button"
             onClick={() => scrollTo('prev')}
             className={styles['carousel-button--prev']}
+            aria-label="이전"
           >
             <LeftBracket />
           </button>
@@ -157,20 +155,16 @@ function EventCarousel() {
           {carouselList.length % 2 !== 0 && <PCEmptyCard />}
         </div>
       </div>
-      {
-        canNextClick && (
-          // eslint-disable-next-line
-          <button
-            type="button"
-            onClick={() => scrollTo('next')}
-            className={styles['carousel-button--next']}
-          >
-            <RightBracket />
-          </button>
-        )
-      }
+      {canNextClick && (
+        <button
+          type="button"
+          onClick={() => scrollTo('next')}
+          className={styles['carousel-button--next']}
+          aria-label="다음"
+        >
+          <RightBracket />
+        </button>
+      )}
     </div>
   );
 }
-
-export default EventCarousel;
