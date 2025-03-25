@@ -5,8 +5,9 @@ import ROUTES from 'static/routes';
 import LeftBracket from 'assets/svg/left-angle-bracket.svg';
 import RightBracket from 'assets/svg/right-angle-bracket.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import styles from './EventCarousel.module.scss';
+import { Suspense } from 'react';
 import useCarouselController from './hooks/useCarouselController';
+import styles from './EventCarousel.module.scss';
 
 interface CardProps {
   shop_id: string;
@@ -70,7 +71,7 @@ function Card({
 }
 
 export default function EventCarousel() {
-  const carouselList = useGetAllEvents();
+  const { events } = useGetAllEvents();
   const isMobile = useMediaQuery();
   const {
     emblaRef, canNextClick, canPrevClick, currentIndex, scrollTo,
@@ -82,16 +83,71 @@ export default function EventCarousel() {
     });
   };
 
-  if (!carouselList) return null;
-  if (carouselList.length < 1) return null;
+  if (events.length < 1) return null;
 
   if (isMobile) {
     return (
+      <Suspense fallback={null}>
+        <div className={styles.carousel}>
+          <div className={styles.container} ref={emblaRef}>
+            <div className={styles.swipe}>
+              {events.slice(0, 10).map((item) => (
+                <Card
+                  shop_id={String(item.shop_id)}
+                  event_id={item.event_id}
+                  shop_name={item.shop_name}
+                  thumbnail_images={item.thumbnail_images}
+                  onClick={() => eventLogging(item.shop_name)}
+                />
+              ))}
+            </div>
+            <div className={styles.pagination}>
+              <button
+                type="button"
+                onClick={() => scrollTo('prev')}
+                className={styles['pagination-button--prev']}
+                aria-label="이전"
+              >
+                <LeftBracket />
+              </button>
+              {currentIndex + 1}
+              /
+              {events.length > 10 ? 10 : events.length}
+              <button
+                type="button"
+                onClick={() => scrollTo('next')}
+                className={styles['pagination-button--next']}
+                aria-label="다음"
+              >
+                <RightBracket />
+              </button>
+            </div>
+          </div>
+        </div>
+      </Suspense>
+    );
+  }
+
+  return (
+    <Suspense fallback={null}>
       <div className={styles.carousel}>
+        {
+          canPrevClick && (
+            <button
+              type="button"
+              onClick={() => scrollTo('prev')}
+              className={styles['carousel-button--prev']}
+              aria-label="이전"
+            >
+              <LeftBracket />
+            </button>
+          )
+        }
         <div className={styles.container} ref={emblaRef}>
           <div className={styles.swipe}>
-            {carouselList.slice(0, 10).map((item) => (
+            {events.map((item) => (
               <Card
+                key={item.event_id}
                 shop_id={String(item.shop_id)}
                 event_id={item.event_id}
                 shop_name={item.shop_name}
@@ -99,72 +155,20 @@ export default function EventCarousel() {
                 onClick={() => eventLogging(item.shop_name)}
               />
             ))}
-          </div>
-          <div className={styles.pagination}>
-            <button
-              type="button"
-              onClick={() => scrollTo('prev')}
-              className={styles['pagination-button--prev']}
-              aria-label="이전"
-            >
-              <LeftBracket />
-            </button>
-            {currentIndex + 1}
-            /
-            {carouselList.length > 10 ? 10 : carouselList.length}
-            <button
-              type="button"
-              onClick={() => scrollTo('next')}
-              className={styles['pagination-button--next']}
-              aria-label="다음"
-            >
-              <RightBracket />
-            </button>
+            {events.length % 2 !== 0 && <PCEmptyCard />}
           </div>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.carousel}>
-      {
-        canPrevClick && (
+        {canNextClick && (
           <button
             type="button"
-            onClick={() => scrollTo('prev')}
-            className={styles['carousel-button--prev']}
-            aria-label="이전"
+            onClick={() => scrollTo('next')}
+            className={styles['carousel-button--next']}
+            aria-label="다음"
           >
-            <LeftBracket />
+            <RightBracket />
           </button>
-        )
-      }
-      <div className={styles.container} ref={emblaRef}>
-        <div className={styles.swipe}>
-          {carouselList.map((item) => (
-            <Card
-              key={item.event_id}
-              shop_id={String(item.shop_id)}
-              event_id={item.event_id}
-              shop_name={item.shop_name}
-              thumbnail_images={item.thumbnail_images}
-              onClick={() => eventLogging(item.shop_name)}
-            />
-          ))}
-          {carouselList.length % 2 !== 0 && <PCEmptyCard />}
-        </div>
+        )}
       </div>
-      {canNextClick && (
-        <button
-          type="button"
-          onClick={() => scrollTo('next')}
-          className={styles['carousel-button--next']}
-          aria-label="다음"
-        >
-          <RightBracket />
-        </button>
-      )}
-    </div>
+    </Suspense>
   );
 }

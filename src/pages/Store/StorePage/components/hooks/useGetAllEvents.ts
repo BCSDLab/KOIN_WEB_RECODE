@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getAllEvent } from 'api/store';
 
 export const useGetAllEvents = () => {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['all-event'],
     queryFn: () => getAllEvent(),
   });
 
-  return data?.events;
+  return { events: data.events };
 };
