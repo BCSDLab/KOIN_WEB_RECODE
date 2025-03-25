@@ -6,7 +6,7 @@ import LeftBracket from 'assets/svg/left-angle-bracket.svg';
 import RightBracket from 'assets/svg/right-angle-bracket.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { Suspense } from 'react';
-import useCarouselController from './hooks/useCarouselController';
+import { useCarouselController } from './hooks/useCarouselController';
 import styles from './EventCarousel.module.scss';
 
 interface CardProps {
@@ -74,9 +74,7 @@ export default function EventCarousel() {
   const isMobile = useMediaQuery();
   const logger = useLogger();
   const { events } = useGetAllEvents();
-  const {
-    emblaRef, canNextClick, canPrevClick, currentIndex, scrollTo,
-  } = useCarouselController(isMobile);
+  const { emblaRef, currentIndex, scrollTo } = useCarouselController(isMobile);
 
   const eventLogging = (shopName: string) => {
     logger.actionEventClick({
@@ -136,16 +134,14 @@ export default function EventCarousel() {
   return (
     <Suspense fallback={null}>
       <div className={styles.carousel}>
-        {canPrevClick && (
-          <button
-            type="button"
-            onClick={() => scrollTo('prev')}
-            className={styles['carousel-button--prev']}
-            aria-label="이전"
-          >
-            <LeftBracket />
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => scrollTo('prev')}
+          className={styles['carousel-button--prev']}
+          aria-label="이전"
+        >
+          <LeftBracket />
+        </button>
         <div className={styles.container} ref={emblaRef}>
           <div className={styles.swipe}>
             {events.map((item) => (
@@ -161,16 +157,14 @@ export default function EventCarousel() {
             {events.length % 2 !== 0 && <PCEmptyCard />}
           </div>
         </div>
-        {canNextClick && (
-          <button
-            type="button"
-            onClick={() => scrollTo('next')}
-            className={styles['carousel-button--next']}
-            aria-label="다음"
-          >
-            <RightBracket />
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => scrollTo('next')}
+          className={styles['carousel-button--next']}
+          aria-label="다음"
+        >
+          <RightBracket />
+        </button>
       </div>
     </Suspense>
   );
