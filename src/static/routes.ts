@@ -24,6 +24,7 @@ const ROUTES = {
   Cafeteria: () => '/cafeteria',
   Articles: () => '/articles',
   ArticlesDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/${id}` : '/articles/:id'),
+  ArtilesReport: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/report/${id}` : '/articles/report/:id'),
   LostItemRedirect: () => '/articles/lost-item',
   LostItemDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/lost-item/${id}` : '/articles/lost-item/:id'),
   LostItemFound: () => '/lost-item/found',

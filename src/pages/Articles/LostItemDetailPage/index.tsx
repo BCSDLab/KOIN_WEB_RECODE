@@ -50,10 +50,18 @@ export default function LostItemDetailPage() {
     openDeleteModal();
   };
 
+  const reportBranch = () => {
+    if (isMobile) {
+      navigate(ROUTES.ArtilesReport({ id: String(articleId), isLink: true }));
+    } else {
+      openReportModal();
+    }
+  };
+
   const handleReportClick = () => {
     if (token) {
       logItemPostReportClick();
-      openReportModal();
+      reportBranch();
     } else {
       portalManager.open((portalOption) => (
         <LoginRequireLostItemModal
