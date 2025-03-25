@@ -69,6 +69,8 @@ const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
   },
 ];
 
+const sortParams = ['COUNT', 'RATING'];
+
 const toggleNameLabel = {
   COUNT: 'review',
   RATING: 'star',
@@ -118,7 +120,9 @@ const useStoreList = (
 };
 
 function StorePage() {
-  const { params, searchParams, setParams } = useParamsHandler();
+  const {
+    params, searchParams, setParams, setSearchParams,
+  } = useParamsHandler();
   const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
     sorter: searchParams.get('COUNT') ? 'COUNT' : '',
     filter: [],
@@ -128,6 +132,7 @@ function StorePage() {
     storeMobileFilterState.filter,
     params,
   );
+
   const isMobile = useMediaQuery();
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
@@ -138,6 +143,7 @@ function StorePage() {
     closeTooltip();
   };
   const navigate = useNavigate();
+  const newSearchParams = new URLSearchParams(searchParams);
 
   const handleCategoryClick = (categoryId: number) => {
     logger.actionEventClick({
@@ -179,6 +185,7 @@ function StorePage() {
       });
     }
   };
+
   const onClickMobileStoreListFilter = (
     item: StoreSorterType | StoreFilterType,
   ) => {
@@ -256,6 +263,26 @@ function StorePage() {
       categories.shop_categories[selectedCategory]?.name || '전체보기',
     );
   }, [categories, selectedCategory]);
+
+  const filteringQuery = (itemId : string, itemValue : number) => {
+    if (searchParams.get(itemId)) {
+      newSearchParams.delete(itemId);
+      return setSearchParams(newSearchParams, { replace: true });
+    }
+
+    if (!sortParams.includes(itemId)) {
+      newSearchParams.set(itemId, String(itemValue));
+      return setSearchParams(newSearchParams, { replace: true });
+    }
+
+    sortParams.forEach((sort) => {
+      if (sort !== itemId) {
+        newSearchParams.delete(sort);
+      }
+    });
+    newSearchParams.set(itemId, String(itemValue));
+    return setSearchParams(newSearchParams, { replace: true });
+  };
 
   return (
     <div className={styles.section}>
@@ -338,10 +365,7 @@ function StorePage() {
                   className={styles['option-checkbox__input']}
                   onChange={() => {
                     loggingCheckbox(item.id, !searchParams.get(item.id));
-                    setParams(item.id, String(item.value), {
-                      deleteBeforeParam: true,
-                      replacePage: true,
-                    });
+                    filteringQuery(item.id, item.value);
                   }}
                 />
                 {item.content}
