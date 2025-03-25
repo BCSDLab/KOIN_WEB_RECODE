@@ -7,6 +7,9 @@
   "eslint.nodePath": ".yarn/sdks",
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
+  "workbench.editorAssociations": {
+    "*.svg": "default"
+  },
   "cSpell.words": [
     "bcsdlab",
     "Koin",
