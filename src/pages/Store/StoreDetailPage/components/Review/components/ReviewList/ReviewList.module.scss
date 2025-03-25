@@ -36,7 +36,14 @@
 .dropdown {
   position: relative;
   color: #727272;
+  display: flex;
+  width: 70px;
 
+  & div:first-child {
+    line-height: 20px;
+    margin-left: 0.5vw;
+    z-index: -1;
+  }
   &__list {
     background-color: #fafafa;
     width: 120px;
