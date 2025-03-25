@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'pages/Articles/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
+import setArticleRegisteredDate from 'pages/Articles/utils/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
-import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
+import { convertArticlesTag } from 'pages/Articles/utils/convertArticlesTag';
 import styles from './IndexArticles.module.scss';
 
 export default function IndexArticles() {

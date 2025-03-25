@@ -16,7 +16,7 @@ import { useSearchParams } from 'react-router-dom';
 import { MyLectureInfo } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import uuidv4 from 'utils/ts/uuidGenerater';
-import { Selector } from 'components/common/Selector';
+import { Selector } from 'components/ui/Selector';
 import styles from './CustomLecture.module.scss';
 
 type Hour = (typeof HOUR)[number]['value'] | '24시';

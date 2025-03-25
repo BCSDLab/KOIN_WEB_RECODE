@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import { useState } from 'react';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import NotServed from 'assets/svg/not-served.svg';
@@ -9,10 +8,11 @@ import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import { cn } from '@bcsdlab/utils';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { DiningTime } from 'utils/ts/cafeteria';
-import { DiningPlace } from 'interfaces/Cafeteria';
+import { DiningTime } from 'pages/Cafeteria/utils/time';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
+import { DiningPlace } from 'api/dinings/entity';
+import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {

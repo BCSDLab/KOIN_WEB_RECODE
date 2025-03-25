@@ -270,10 +270,11 @@
   }
 
   &__poster {
-    width: 330px;
-    height: 330px;
-    object-fit: fill;
+    width: 320px;
+    height: 360px;
+    object-fit: scale-down;
     image-orientation: from-image;
+    background-color: #eee;
 
     &:nth-child(n + 2) {
       display: none;

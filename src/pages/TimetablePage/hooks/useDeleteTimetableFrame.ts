@@ -2,7 +2,7 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { timetable } from 'api';
 import { TimetableFrameInfo } from 'api/timetable/entity';
-import useToast from 'components/common/Toast/useToast';
+import useToast from 'components/feedback/Toast/useToast';
 import showToast from 'utils/ts/showToast';
 import { useSemester } from 'utils/zustand/semester';
 import useRollbackTimetableFrame from './useRollbackTimetableFrame';

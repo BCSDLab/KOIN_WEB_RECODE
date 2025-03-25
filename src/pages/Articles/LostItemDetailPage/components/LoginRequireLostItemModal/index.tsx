@@ -1,27 +1,34 @@
 import { useNavigate } from 'react-router-dom';
+import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
-import styles from './LoginRequireLostItemdModal.module.scss';
+import styles from './LoginRequireLostItemModal.module.scss';
 
-interface LoginRequireLostItemdModalProps {
+interface LoginRequireLostItemModalProps {
   actionTitle: string;
   detailExplanation: string;
   onClose: () => void;
 }
 
-function LoginRequireLostItemdModal(
+function LoginRequireLostItemModal(
   {
     actionTitle,
     detailExplanation,
     onClose,
-  }: LoginRequireLostItemdModalProps,
+  }: LoginRequireLostItemModalProps,
 ) {
+  const { logLoginRequire } = useArticlesLogger();
   const navigate = useNavigate();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
   const sentences = detailExplanation.split('.');
 
   const goLogin = () => {
+    if (actionTitle === '게시글을 작성하려면') {
+      logLoginRequire('게시글 작성 팝업');
+    } else if (actionTitle === '쪽지를 보내려면') {
+      logLoginRequire('쪽지 보내기 팝업');
+    }
     onClose();
     navigate('/auth');
   };
@@ -66,4 +73,4 @@ function LoginRequireLostItemdModal(
   );
 }
 
-export default LoginRequireLostItemdModal;
+export default LoginRequireLostItemModal;

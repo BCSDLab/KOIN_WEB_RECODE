@@ -8,32 +8,31 @@ import { STORE_PAGE } from 'static/store';
 import { useEffect } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import EventCarousel from 'pages/Store/StorePage/components/EventCarousel';
+import { getCategoryDurationTime, initializeCategoryEntryTime } from 'pages/Store/utils/durationTime';
+import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import styles from './StoreBenefitPage.module.scss';
-// eslint-disable-next-line no-restricted-imports
-import MobileStoreList from '../StorePage/components/MobileStoreList';
 
-function StoreBenefitPage() {
+export default function StoreBenefitPage() {
   const { params, searchParams, setParams } = useParamsHandler();
   const isMobile = useMediaQuery();
   const logger = useLogger();
   const { count, storeBenefitList } = useStoreBenefitList(params?.category ?? '1');
   const selectedCategory = Number(searchParams.get('category')) ?? 1;
   const { benefitCategory } = useBenefitCategory();
+
   useEffect(() => {
-    const currentCount = new Date().getTime();
-    sessionStorage.setItem('enterMain', currentCount.toString());
-    sessionStorage.setItem('enter_category', currentCount.toString());
+    initializeCategoryEntryTime();
   }, [selectedCategory]);
+
   const onClickBenefitTab = (id: number, value :string) => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       event_label: 'benefit_shop_categories',
       value,
-      // eslint-disable-next-line max-len
       event_category: 'click',
       previous_page: (benefitCategory?.find((category) => String(category.id) === params.category)?.title || 'Unknown'),
       current_page: value,
-      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterMain'))) / 1000,
+      duration_time: getCategoryDurationTime(),
     });
     setParams('category', `${id}`, { deleteBeforeParam: true, replacePage: true });
   };
@@ -109,5 +108,3 @@ function StoreBenefitPage() {
     </div>
   );
 }
-
-export default StoreBenefitPage;
