@@ -14,8 +14,11 @@ export default function useReportLostItemArticle() {
     }) => postReportLostItemArticle(token, articleId, { reports }),
     onSuccess: () => {
       showToast('success', '게시글이 신고되었습니다.');
-      queryClient.invalidateQueries({ queryKey: ['articles', 'lostitem'] });
-      queryClient.refetchQueries({ queryKey: ['articles', 'lostitem'] });
+      queryClient.invalidateQueries({ queryKey: ['articles'] });
+      queryClient.invalidateQueries({ queryKey: ['lostitem'] });
+
+      // 다시 패치할 필요가 있는지?
+      // queryClient.refetchQueries({ queryKey: ['articles', 'lostitem'] });
     },
     onError: (e) => {
       if (isKoinError(e)) {

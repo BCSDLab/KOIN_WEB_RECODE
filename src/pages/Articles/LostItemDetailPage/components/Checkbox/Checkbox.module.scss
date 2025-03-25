@@ -44,6 +44,10 @@
     margin-bottom: 8px;
   }
 
+  &__container-etc {
+    width: 100%;
+  }
+
   &__labelheader-etc {
     display: flex;
     justify-content: space-between;
@@ -60,7 +64,6 @@
     height: auto !important;
     width: 295px;
     min-height: 22px;
-    color: #8e8e8e;
     display: flex;
     padding: 12px 16px;
     align-items: center;
@@ -69,16 +72,19 @@
     border-radius: 5px;
     border: 1px solid #e1e1e1;
     resize: none;
-    overflow-y: hidden;
+    overflow-y: auto;
     font-family: Pretendard, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 160%;
+    color: black;
+    max-height: 300px;
 
     @include media.media-breakpoint(mobile) {
       font-size: 12px;
-      width: 230px;
+      width: 100%;
+      box-sizing: border-box;
     }
   }
 
@@ -94,11 +100,15 @@
     padding: 14px 0;
 
     @include media.media-breakpoint(mobile) {
-      width: 265px;
+      width: 100%;
     }
   }
 
   &:last-child {
     padding: 14px 0 0;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+    }
   }
 }

@@ -24,7 +24,7 @@ export default function Checkbox({
 
     if (textareaRef.current) {
       textareaRef.current.style.height = '22px';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 내용 길이에 따라 높이 조절
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`; // 내용 길이에 따라 높이 조절
     }
   };
 
