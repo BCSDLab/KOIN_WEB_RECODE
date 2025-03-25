@@ -71,12 +71,13 @@ function Card({
 }
 
 export default function EventCarousel() {
-  const { events } = useGetAllEvents();
   const isMobile = useMediaQuery();
+  const logger = useLogger();
+  const { events } = useGetAllEvents();
   const {
     emblaRef, canNextClick, canPrevClick, currentIndex, scrollTo,
   } = useCarouselController(isMobile);
-  const logger = useLogger();
+
   const eventLogging = (shopName: string) => {
     logger.actionEventClick({
       actionTitle: 'BUSINESS', event_label: 'shop_categories_event', value: `${shopName}`, event_category: 'click',
@@ -84,6 +85,12 @@ export default function EventCarousel() {
   };
 
   if (events.length < 1) return null;
+
+  const getCurrentIndex = () => {
+    const currentPage = currentIndex + 1;
+    const denominator = Math.min(10, events.length);
+    return `${currentPage}/${denominator}`;
+  };
 
   if (isMobile) {
     return (
@@ -110,9 +117,7 @@ export default function EventCarousel() {
               >
                 <LeftBracket />
               </button>
-              {currentIndex + 1}
-              /
-              {events.length > 10 ? 10 : events.length}
+              {getCurrentIndex()}
               <button
                 type="button"
                 onClick={() => scrollTo('next')}
@@ -131,18 +136,16 @@ export default function EventCarousel() {
   return (
     <Suspense fallback={null}>
       <div className={styles.carousel}>
-        {
-          canPrevClick && (
-            <button
-              type="button"
-              onClick={() => scrollTo('prev')}
-              className={styles['carousel-button--prev']}
-              aria-label="이전"
-            >
-              <LeftBracket />
-            </button>
-          )
-        }
+        {canPrevClick && (
+          <button
+            type="button"
+            onClick={() => scrollTo('prev')}
+            className={styles['carousel-button--prev']}
+            aria-label="이전"
+          >
+            <LeftBracket />
+          </button>
+        )}
         <div className={styles.container} ref={emblaRef}>
           <div className={styles.swipe}>
             {events.map((item) => (
