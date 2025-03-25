@@ -11,6 +11,7 @@ export const useAddStoreReview = (id: string) => {
   const { mutate, error } = useMutation({
     mutationFn: (reviewData: ReviewRequest) => api.review.postStoreReview(token, id, reviewData),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['storeDetail', 'storeDetailMenu', 'review', id] });
       queryClient.invalidateQueries({ queryKey: ['review'] });
     },
     onError: (err) => {
