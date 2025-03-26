@@ -1,6 +1,3 @@
-import Trash from 'assets/svg/trash-can-icon.svg';
-import Pen from 'assets/svg/pen-icon.svg';
-import Complaint from 'assets/svg/Review/complaint.svg';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import DeleteModal from 'pages/Store/StoreDetailPage/components/Review/components/DeleteModal/DeleteModal';
@@ -86,7 +83,6 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
               className={styles.section}
             >
               수정하기
-              <Pen />
             </button>
             <button
               type="button"
@@ -94,7 +90,6 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
               className={styles.section}
             >
               삭제하기
-              <Trash />
             </button>
           </>
         ) : (
@@ -119,8 +114,6 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
             }}
           >
             신고하기
-            {' '}
-            <Complaint />
           </button>
         )}
       </div>
