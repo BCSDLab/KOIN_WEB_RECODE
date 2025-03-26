@@ -37,10 +37,10 @@
   position: relative;
   color: #727272;
   display: flex;
+  gap: 5px;
 
   & div:first-child {
     line-height: 20px;
-    margin-left: 0.5vw;
     z-index: -1;
   }
 
