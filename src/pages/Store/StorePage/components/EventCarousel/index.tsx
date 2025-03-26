@@ -14,17 +14,18 @@ interface CardProps {
   event_id: number;
   shop_name: string;
   thumbnail_images: string[] | null;
-  onClick: () => void
 }
 
 function Card({
-  shop_id, event_id, shop_name, thumbnail_images, onClick,
+  shop_id, event_id, shop_name, thumbnail_images,
 }: CardProps) {
   const navigate = useNavigate();
+  const logger = useLogger();
 
   const handleClick = () => {
-    if (shop_id === 0) return;
-    onClick();
+    logger.actionEventClick({
+      actionTitle: 'BUSINESS', event_label: 'shop_categories_event', value: `${shop_name}`, event_category: 'click',
+    });
     navigate(`${ROUTES.StoreDetail({ id: String(shop_id), isLink: true })}?state=이벤트/공지`);
   };
 
@@ -34,6 +35,7 @@ function Card({
       key={event_id}
       className={styles['swipe-item']}
       onClick={() => handleClick()}
+      disabled={shop_id === 0}
     >
       {thumbnail_images && thumbnail_images.length > 0 ? (
         <div className={styles['swipe-item__image']}>
@@ -59,17 +61,8 @@ function Card({
 
 export default function EventCarousel() {
   const isMobile = useMediaQuery();
-  const logger = useLogger();
   const { events } = useGetAllEvents();
   const { emblaRef, currentIndex, scrollTo } = useCarouselController(isMobile);
-
-  const eventLogging = (shopId: number, shopName: string) => {
-    if (shopId === 0) return;
-
-    logger.actionEventClick({
-      actionTitle: 'BUSINESS', event_label: 'shop_categories_event', value: `${shopName}`, event_category: 'click',
-    });
-  };
 
   if (events.length < 1) return null;
 
@@ -103,7 +96,6 @@ export default function EventCarousel() {
                   event_id={item.event_id}
                   shop_name={item.shop_name}
                   thumbnail_images={item.thumbnail_images}
-                  onClick={() => eventLogging(item.shop_id, item.shop_name)}
                 />
               ))}
             </div>
@@ -152,7 +144,6 @@ export default function EventCarousel() {
                 event_id={item.event_id}
                 shop_name={item.shop_name}
                 thumbnail_images={item.thumbnail_images}
-                onClick={() => eventLogging(item.shop_id, item.shop_name)}
               />
             ))}
           </div>
