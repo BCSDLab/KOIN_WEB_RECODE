@@ -66,16 +66,18 @@ export default function EventCarousel() {
 
   if (events.length < 1) return null;
 
-  const getEditedEvents = () => {
+  const DUMMY_EVENT = {
+    shop_id: 0,
+    event_id: 0,
+    shop_name: '코인',
+    thumbnail_images: ['http://static.koreatech.in/assets/img/rectangle_icon.png'],
+  };
+
+  const editedEvents = (() => {
     if (isMobile) return events.slice(0, 10);
     if (events.length % 2 === 0) return events;
-    return ([...events, {
-      shop_id: 0,
-      event_id: 0,
-      shop_name: '코인',
-      thumbnail_images: ['http://static.koreatech.in/assets/img/rectangle_icon.png'],
-    }]);
-  };
+    return [...events, DUMMY_EVENT];
+  })();
 
   const getCurrentIndex = () => {
     const currentPage = currentIndex + 1;
@@ -89,7 +91,7 @@ export default function EventCarousel() {
         <div className={styles.carousel}>
           <div className={styles.container} ref={emblaRef}>
             <div className={styles.swipe}>
-              {getEditedEvents().map((item) => (
+              {editedEvents.map((item) => (
                 <Card
                   key={item.event_id}
                   shop_id={item.shop_id}
@@ -137,7 +139,7 @@ export default function EventCarousel() {
         </button>
         <div className={styles.container} ref={emblaRef}>
           <div className={styles.swipe}>
-            {getEditedEvents().map((item) => (
+            {editedEvents.map((item) => (
               <Card
                 key={item.event_id}
                 shop_id={item.shop_id}
