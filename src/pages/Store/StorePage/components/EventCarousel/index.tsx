@@ -79,11 +79,7 @@ export default function EventCarousel() {
     return [...events, DUMMY_EVENT];
   })();
 
-  const getCurrentIndex = () => {
-    const currentPage = currentIndex + 1;
-    const denominator = Math.min(10, events.length);
-    return `${currentPage}/${denominator}`;
-  };
+  const pageIndicator = `${currentIndex + 1}/${Math.min(10, events.length)}`;
 
   if (isMobile) {
     return (
@@ -110,7 +106,7 @@ export default function EventCarousel() {
               >
                 <LeftBracket />
               </button>
-              {getCurrentIndex()}
+              {pageIndicator}
               <button
                 type="button"
                 onClick={() => scrollTo('next')}
