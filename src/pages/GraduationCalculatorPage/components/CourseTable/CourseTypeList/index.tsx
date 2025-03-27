@@ -62,7 +62,7 @@ function CourseTypeList({
       handleClosePopup();
     } else {
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'graduation_calculator_completion_category',
         value: `이수 구분_${courseTypeDefault}`,
         event_category: 'click',

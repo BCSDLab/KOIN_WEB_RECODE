@@ -230,7 +230,7 @@ function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
             onClick={() => {
               onClickSearchButton();
               logger.actionEventClick({
-                actionTitle: 'USER',
+                team: 'USER',
                 event_label: 'timetable',
                 value: 'search',
               });

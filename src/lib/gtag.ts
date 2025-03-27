@@ -1,6 +1,6 @@
 type GTagEvent = {
-  action: string;
-  category: string;
+  team: string;
+  event_category: string;
   event_label: string;
   value: string;
   duration_time?: number;
@@ -21,11 +21,11 @@ export const pageView = (url: string, userId?: string) => {
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/events
 export const event = ({
-  action, category, event_label, value, duration_time, previous_page, current_page,
+  team, event_category, event_label, value, duration_time, previous_page, current_page,
 }: GTagEvent) => {
   if (typeof window.gtag === 'undefined') return;
-  window.gtag('event', action, {
-    event_category: category,
+  window.gtag('event', team, {
+    event_category,
     event_label,
     value,
     duration_time,
@@ -36,8 +36,8 @@ export const event = ({
   if (import.meta.env.VITE_API_PATH?.includes('stage')) {
     // eslint-disable-next-line no-console
     console.table({
-      팀: action,
-      '이벤트 Category': category,
+      팀: team,
+      '이벤트 Category': event_category,
       '이벤트 Title': event_label,
       값: value,
       '체류 시간': duration_time,

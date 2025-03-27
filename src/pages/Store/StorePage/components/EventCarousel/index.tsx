@@ -24,7 +24,7 @@ function Card({
 
   const handleClick = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', event_label: 'shop_categories_event', value: `${shop_name}`, event_category: 'click',
+      team: 'BUSINESS', event_label: 'shop_categories_event', value: `${shop_name}`, event_category: 'click',
     });
     navigate(`${ROUTES.StoreDetail({ id: String(shop_id), isLink: true })}?state=이벤트/공지`);
   };

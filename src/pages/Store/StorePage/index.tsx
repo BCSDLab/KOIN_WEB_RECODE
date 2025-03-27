@@ -142,7 +142,7 @@ function StorePage() {
 
   const handleCategoryClick = (categoryId: number) => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'shop_categories',
       value: categoryId.toString(),
       event_category: 'click',
@@ -171,7 +171,7 @@ function StorePage() {
   const loggingCheckbox = (id: string, isChecked: boolean) => {
     if (isChecked) {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS',
+        team: 'BUSINESS',
         event_label: 'shop_can',
         value: `check_${id}_${koreanCategory}`,
       });
@@ -188,7 +188,7 @@ function StorePage() {
 
       if (storeMobileFilterState.sorter !== item) {
         logger.actionEventClick({
-          actionTitle: 'BUSINESS',
+          team: 'BUSINESS',
           event_label: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
@@ -210,7 +210,7 @@ function StorePage() {
       // 현재상태와 바뀔 상태를 비교해서 토글이 on 되는지 판단함
       if (!storeMobileFilterState.filter.includes(item)) {
         logger.actionEventClick({
-          actionTitle: 'BUSINESS',
+          team: 'BUSINESS',
           event_label: 'shop_can',
           value: loggingCategoryToggleValue(
             item,
@@ -228,7 +228,7 @@ function StorePage() {
       ? 0
       : Number(searchParams.get('category')) - 1;
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'shop_categories',
       value: `scroll in ${
         categories.shop_categories[currentCategoryId]?.name || '전체보기'

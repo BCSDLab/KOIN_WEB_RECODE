@@ -13,8 +13,9 @@ function MobilePage({ timetableFrameId }: { timetableFrameId: number }) {
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    logger.click({
-      title: 'timetable_imageDownload_click',
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'timetable_imageDownload_click',
       value: '시간표 저장',
     });
     onTimetableImageDownload('my-timetable');

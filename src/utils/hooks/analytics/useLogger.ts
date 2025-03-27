@@ -1,17 +1,8 @@
-import React from 'react';
+import { useRef } from 'react';
 import * as gtag from 'lib/gtag';
 
-export type ClickLoggerProps = {
-  title: string,
-  value: string,
-};
-
-type ScrollLoggerProps = {
-  title: string,
-};
-
 type ActionLoggerProps = {
-  actionTitle: string,
+  team: string,
   event_label: string,
   value: string,
   event_category?: string,
@@ -21,8 +12,8 @@ type ActionLoggerProps = {
 };
 
 type LoggerEventProps = {
-  action: string,
-  category: string,
+  team: string,
+  event_category: string,
   event_label: string,
   value: string,
   duration_time?: number,
@@ -31,11 +22,11 @@ type LoggerEventProps = {
 };
 
 const useLogger = () => {
-  const prevEvent = React.useRef<LoggerEventProps | null>(null);
+  const prevEvent = useRef<LoggerEventProps | null>(null);
 
   const logEvent = ({
-    action,
-    category,
+    team,
+    event_category,
     event_label,
     value,
     duration_time,
@@ -43,31 +34,14 @@ const useLogger = () => {
     current_page,
   }: LoggerEventProps) => {
     const event = {
-      action, category, event_label, value, duration_time, previous_page, current_page,
+      team, event_category, event_label, value, duration_time, previous_page, current_page,
     };
     gtag.event(event);
     prevEvent.current = event;
   };
 
-  const click = ({
-    title,
-    value,
-  } : ClickLoggerProps) => {
-    logEvent({
-      action: 'click', category: 'click', event_label: title, value,
-    });
-  };
-
-  const scroll = ({
-    title: event_label,
-  }: ScrollLoggerProps) => {
-    logEvent({
-      action: 'scroll', category: 'BUSINESS', event_label, value: event_label,
-    });
-  };
-
   const actionEventClick = ({
-    actionTitle,
+    team,
     event_label,
     value,
     duration_time,
@@ -76,12 +50,12 @@ const useLogger = () => {
     event_category,
   }: ActionLoggerProps) => {
     logEvent({
-      action: actionTitle, category: event_category || 'click', event_label, value, duration_time, previous_page, current_page,
+      team, event_category: event_category || 'click', event_label, value, duration_time, previous_page, current_page,
     });
   };
 
   const actionEventSwipe = ({
-    actionTitle,
+    team,
     event_label,
     value,
     duration_time,
@@ -89,13 +63,11 @@ const useLogger = () => {
     current_page,
   }: ActionLoggerProps) => {
     logEvent({
-      action: actionTitle, category: 'swipe', event_label, value, duration_time, previous_page, current_page,
+      team, event_category: 'swipe', event_label, value, duration_time, previous_page, current_page,
     });
   };
 
   return {
-    click,
-    scroll,
     actionEventClick,
     actionEventSwipe,
   };

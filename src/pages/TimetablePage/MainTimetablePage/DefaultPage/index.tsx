@@ -19,7 +19,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
     // swipe로 뒤로가기 시
     if (sessionStorage.getItem('swipeToBack') === 'true') {
       logger.actionEventSwipe({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'timetable_back',
         value: 'OS스와이프',
         previous_page: '시간표',
@@ -30,7 +30,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
     }
     // 브라우저의 뒤로가기 버튼 클릭 시 / 마우스 사이드 버튼 누를 시
     logger.actionEventClick({
-      actionTitle: 'USER',
+      team: 'USER',
       event_label: 'timetable_back',
       value: '뒤로가기버튼',
       previous_page: '시간표',

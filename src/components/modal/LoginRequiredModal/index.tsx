@@ -22,7 +22,7 @@ export default function LoginRequiredModal({
   const loggingLoginClick = () => {
     if (shopName) {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS',
+        team: 'BUSINESS',
         event_label: `shop_detail_view_review_${type}_login`,
         value: shopName,
         event_category: 'click',
@@ -33,7 +33,7 @@ export default function LoginRequiredModal({
   const loggingCancelClick = () => {
     if (shopName) {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS',
+        team: 'BUSINESS',
         event_label: `shop_detail_view_review_${type}_cancel`,
         value: shopName,
         event_category: 'click',

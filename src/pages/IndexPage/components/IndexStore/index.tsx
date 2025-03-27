@@ -14,7 +14,7 @@ interface Category {
 
 interface CategoryWithEvent extends Category {
   event: {
-    actionTitle: string;
+    team: string;
     event_label: string;
     value: string;
     event_category: string;
@@ -32,7 +32,7 @@ export default function IndexStore() {
   const categoriesWithEvent = categories.shop_categories.map((category: Category) => ({
     ...category,
     event: {
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'main_shop_categories',
       value: category.name,
       event_category: 'click',

@@ -72,21 +72,21 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const logShortcut = (title: string) => {
     const loggingMap: Record<
     string,
-    { actionTitle: string; event_label: string; value: string; event_category?: string }> = {
-      공지사항: { actionTitle: 'CAMPUS', event_label: 'header', value: '공지사항' },
-      '버스 교통편': { actionTitle: 'CAMPUS', event_label: 'header', value: '버스 교통편' },
-      '버스 시간표': { actionTitle: 'CAMPUS', event_label: 'header', value: '버스 시간표' },
-      식단: { actionTitle: 'CAMPUS', event_label: 'header', value: '식단' },
-      시간표: { actionTitle: 'USER', event_label: 'header', value: '시간표' },
-      복덕방: { actionTitle: 'BUSINESS', event_label: 'header', value: '복덕방' },
+    { team: string; event_label: string; value: string; event_category?: string }> = {
+      공지사항: { team: 'CAMPUS', event_label: 'header', value: '공지사항' },
+      '버스 교통편': { team: 'CAMPUS', event_label: 'header', value: '버스 교통편' },
+      '버스 시간표': { team: 'CAMPUS', event_label: 'header', value: '버스 시간표' },
+      식단: { team: 'CAMPUS', event_label: 'header', value: '식단' },
+      시간표: { team: 'USER', event_label: 'header', value: '시간표' },
+      복덕방: { team: 'BUSINESS', event_label: 'header', value: '복덕방' },
       주변상점: {
-        actionTitle: 'BUSINESS', event_label: 'header', value: '주변상점', event_category: 'click',
+        team: 'BUSINESS', event_label: 'header', value: '주변상점', event_category: 'click',
       },
       '교내 시설물 정보': {
-        actionTitle: 'CAMPUS', event_label: 'header', value: '교내 시설물 정보', event_category: 'click',
+        team: 'CAMPUS', event_label: 'header', value: '교내 시설물 정보', event_category: 'click',
       },
       쪽지: {
-        actionTitle: 'CAMPUS', event_label: 'header', value: '쪽지', event_category: 'click',
+        team: 'CAMPUS', event_label: 'header', value: '쪽지', event_category: 'click',
       },
     };
 
@@ -95,7 +95,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
       if (pathname === ROUTES.GraduationCalculator()) {
         logger.actionEventClick({
-          actionTitle: 'USER',
+          team: 'USER',
           event_label: 'graduation_calculator_back',
           value: `탈출_헤더_${title}`,
           event_category: 'click',
@@ -107,7 +107,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const escapeByLogo = async () => {
     if (pathname === ROUTES.Timetable()) {
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'timetable_back',
         value: '로고',
         previous_page: '시간표',
@@ -119,7 +119,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
       const shopId = pathname.split('/')[2];
       const shopName = await api.store.getStoreDetailInfo(shopId);
       logger.actionEventClick({
-        actionTitle: 'BUSINESS',
+        team: 'BUSINESS',
         event_label: 'shop_detail_view_back',
         value: shopName.name,
         event_category: 'logo',
@@ -129,7 +129,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     }
     if (pathname.includes(ROUTES.GraduationCalculator())) {
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'graduation_calculator_back',
         value: '탈출_로고',
         event_category: 'click',
@@ -141,7 +141,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const escapeByheader = async (title: string) => {
     if (pathname === ROUTES.GraduationCalculator()) {
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'graduation_calculator_back',
         value: `탈출_헤더_${title}`,
         event_category: 'click',
@@ -224,7 +224,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 to={ROUTES.AuthSignup()}
                 onClick={() => {
                   logger.actionEventClick({
-                    actionTitle: 'USER',
+                    team: 'USER',
                     event_label: 'header',
                     value: '회원가입',
                   });
@@ -238,7 +238,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 to={ROUTES.Auth()}
                 onClick={() => {
                   logger.actionEventClick({
-                    actionTitle: 'USER',
+                    team: 'USER',
                     event_label: 'header',
                     value: '로그인',
                   });
@@ -258,7 +258,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                   openModal();
                   escapeByheader('정보수정');
                   logger.actionEventClick({
-                    actionTitle: 'USER',
+                    team: 'USER',
                     event_label: 'header',
                     value: '정보수정',
                   });
@@ -273,7 +273,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                   logout();
                   escapeByheader('로그아웃');
                   logger.actionEventClick({
-                    actionTitle: 'USER',
+                    team: 'USER',
                     event_label: 'header',
                     value: '로그아웃',
                   });
