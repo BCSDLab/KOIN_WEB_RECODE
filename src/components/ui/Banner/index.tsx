@@ -9,10 +9,10 @@ function Banner() {
         <img src="" alt="banner" className={styles.slider__image} />
         <div className={styles.slider__pagination}>0/0</div>
         <div className={styles.slider__arrow}>
-          <button type="button" className={styles['slider__arrow--Previous']} aria-label="이전 슬라이드">
+          <button type="button" className={styles['slider__arrow--previous']} aria-label="이전 슬라이드">
             <ArrowIcon />
           </button>
-          <button type="button" className={styles['slider__arrow--Next']} aria-label="다음 슬라이드">
+          <button type="button" className={styles['slider__arrow--next']} aria-label="다음 슬라이드">
             <ArrowIcon />
           </button>
         </div>

@@ -11,9 +11,7 @@ function IndexPage() {
   return (
     <Suspense fallback={null}>
       <main className={styles.template}>
-        <div className={styles.banner}>
-          <Banner />
-        </div>
+        <Banner />
         <div className={styles['mobile-wrapper']}>
           <IndexStore />
           <IndexBus />
