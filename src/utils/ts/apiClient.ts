@@ -7,7 +7,7 @@ import qsStringify from 'utils/ts/qsStringfy';
 import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
 import { deleteCookie, setCookie } from './cookie';
-import { redirectToLogin } from './auth';
+import { redirectToLogin, redirectToMain } from './auth';
 
 const API_URL = import.meta.env.VITE_API_PATH;
 
@@ -74,10 +74,29 @@ export default class APIClient {
 
   static refresh = this.of(Refresh);
 
+  private refreshPromise: Promise<void> | null = null;
+
   private async refreshAccessToken(refreshToken: string) {
-    const result = await APIClient.refresh({ refresh_token: refreshToken });
-    setCookie('AUTH_TOKEN_KEY', result.token);
-    useTokenStore.getState().setToken(result.token);
+    // 기존에 진행 중인 refresh 요청이 있다면, 그 요청이 완료될 때까지 기다림
+    if (this.refreshPromise) {
+      await this.refreshPromise;
+      return;
+    }
+
+    // 새 refresh 요청을 진행
+    this.refreshPromise = APIClient.refresh({ refresh_token: refreshToken })
+      .then((result) => {
+        setCookie('AUTH_TOKEN_KEY', result.token);
+        useTokenStore.getState().setToken(result.token);
+      })
+      .catch(() => {
+        redirectToLogin();
+      })
+      .finally(() => {
+        this.refreshPromise = null; // 요청이 끝나면 초기화
+      });
+
+    await this.refreshPromise;
   }
 
   private convertBody(data: any) {
@@ -89,7 +108,7 @@ export default class APIClient {
     return data.data;
   }
 
-  private errorMiddleware(error: KoinError | CustomAxiosError) {
+  private async errorMiddleware(error: KoinError | CustomAxiosError) {
     if (error.status === 401) {
       deleteCookie('AUTH_TOKEN_KEY');
       const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
@@ -97,7 +116,8 @@ export default class APIClient {
         const refreshToken = JSON.parse(refreshTokenStorage);
         // refreshToken이 존재할 시 accessToken 재발급 요청
         if (refreshToken.state.refreshToken !== '') {
-          this.refreshAccessToken(refreshToken.state.refreshToken);
+          await this.refreshAccessToken(refreshToken.state.refreshToken);
+          redirectToMain();
           return;
         }
         // refreshToken이 존재하지 않을 시 로그인 페이지로 이동
