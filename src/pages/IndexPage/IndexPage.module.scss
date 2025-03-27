@@ -24,6 +24,13 @@
   }
 }
 
+.banner {
+  position: absolute;
+  top: 100px;
+  right: 24px;
+  z-index: 10;
+}
+
 .mobile-wrapper {
   @include media.media-breakpoint(mobile) {
     width: 100%;

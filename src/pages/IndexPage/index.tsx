@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import Banner from 'components/ui/Banner';
 import IndexBus from './components/IndexBus';
 import IndexCafeteria from './components/IndexCafeteria';
 import IndexArticles from './components/IndexArticles';
@@ -10,6 +11,9 @@ function IndexPage() {
   return (
     <Suspense fallback={null}>
       <main className={styles.template}>
+        <div className={styles.banner}>
+          <Banner />
+        </div>
         <div className={styles['mobile-wrapper']}>
           <IndexStore />
           <IndexBus />
