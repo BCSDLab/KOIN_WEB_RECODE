@@ -7,7 +7,9 @@ function Banner() {
     <div className={styles.container}>
       <div className={styles.slider}>
         <img src="" alt="banner" className={styles.slider__image} />
-        <div className={styles.slider__pagination}>0/0</div>
+        <div className={styles.slider__pagination}>
+          <p className={styles.slider__pagination__label}>0/0</p>
+        </div>
         <div className={styles.slider__arrow}>
           <button type="button" className={styles['slider__arrow--previous']} aria-label="이전 슬라이드">
             <ArrowIcon />
