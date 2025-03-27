@@ -255,6 +255,22 @@ function StorePage() {
     );
   }, [categories, selectedCategory]);
 
+  const handleBenefitClick = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_categories_benefit',
+      value: 'benefit',
+      event_category: 'click',
+      previous_page: categories.shop_categories.find(
+        (item) => item.id === Number(searchParams.get('category')),
+      )?.name || '전체보기',
+      duration_time: getCategoryDurationTime(),
+      current_page: 'benefit',
+    });
+
+    navigate(`${ROUTES.BenefitStore()}?category=1`);
+  };
+
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
@@ -288,7 +304,7 @@ function StorePage() {
         </div>
         <button
           type="button"
-          onClick={() => navigate(`${ROUTES.BenefitStore()}?category=1`)}
+          onClick={handleBenefitClick}
           className={styles.category__benefit}
         >
           혜택이 있는 상점 모아보기
