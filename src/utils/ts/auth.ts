@@ -19,3 +19,9 @@ export function redirectToLogin(currentPath?: string) {
   setRedirectPath(pathToSave);
   window.location.href = ROUTES.Auth();
 }
+
+export function redirectToMain(currentPath?: string) {
+  const pathToSave = currentPath || window.location.pathname;
+  setRedirectPath(pathToSave);
+  window.location.href = ROUTES.Main();
+}
