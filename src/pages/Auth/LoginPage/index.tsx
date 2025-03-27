@@ -128,7 +128,7 @@ function LoginPage() {
           className={styles.loginform__button}
           onClick={() => {
             logger.actionEventClick({
-              actionTitle: 'USER',
+              team: 'USER',
               event_label: 'login',
               value: '로그인완료',
             });
@@ -155,7 +155,7 @@ function LoginPage() {
           href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp"
           onClick={() => {
             logger.actionEventClick({
-              actionTitle: 'USER',
+              team: 'USER',
               event_label: 'login',
               value: '아이디찾기',
             });
@@ -168,7 +168,7 @@ function LoginPage() {
           to={ROUTES.AuthFindPW()}
           onClick={() => {
             logger.actionEventClick({
-              actionTitle: 'USER',
+              team: 'USER',
               event_label: 'login',
               value: '비밀번호찾기',
             });
@@ -181,7 +181,7 @@ function LoginPage() {
           to={ROUTES.AuthSignup()}
           onClick={() => {
             logger.actionEventClick({
-              actionTitle: 'USER',
+              team: 'USER',
               event_label: 'login',
               value: '회원가입',
             });

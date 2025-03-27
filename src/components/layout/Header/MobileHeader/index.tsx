@@ -33,7 +33,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
     if (pathname.includes(ROUTES.Store()) && id) {
       const response = await api.store.getStoreDetailInfo(id!);
       logger.actionEventClick({
-        actionTitle: 'BUSINESS',
+        team: 'BUSINESS',
         event_label: 'shop_detail_view_back',
         value: response.name,
         event_category: 'click',
@@ -45,7 +45,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
     }
     if (pathname === '/timetable') {
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'timetable_back',
         value: '뒤로가기버튼',
         previous_page: '시간표',

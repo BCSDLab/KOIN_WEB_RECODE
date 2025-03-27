@@ -24,7 +24,7 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
   const handleImageClick = (dining: Dining) => {
     if (dining.image_url) {
       logger.actionEventClick({
-        actionTitle: 'CAMPUS',
+        team: 'CAMPUS',
         event_label: 'menu_image',
         value: `${DINING_TYPE_MAP[dining.type]}_${dining.place}`,
       });
