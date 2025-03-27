@@ -7,7 +7,7 @@
   flex-shrink: 0;
   border-radius: 32px;
   background: #fff;
-  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 20px 0 rgba(0 0 0 / 25%);
 }
 
 .slider {
@@ -20,6 +20,7 @@
 
   &__image {
     flex-shrink: 0;
+
     // border-radius: 32px 32px 0 0;
     // aspect-ratio: 40/37;
   }
@@ -35,7 +36,7 @@
     right: 16px;
     top: 24px;
     border-radius: 8px;
-    background: rgba(0, 0, 0, 0.50);
+    background: rgba(0 0 0 / 50%);
     color: #fff;
     text-align: center;
     font-family: Pretendard, sans-serif;
