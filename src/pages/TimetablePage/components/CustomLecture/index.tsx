@@ -109,34 +109,23 @@ function TimeSpaceInput({
       },
     ) : null;
 
-  const [weeks, setWeeks] = useState<string[]>(() => {
-    if (lectureIndex) return updatedTimeSpaceComponent?.[0]?.week ?? [];
-
-    return initialTimeSpaceComponent?.week ?? [];
-  });
-
+  const [
+    weeks, setWeeks,
+  ] = useState<string[]>(lectureIndex
+    ? updatedTimeSpaceComponent![0].week : initialTimeSpaceComponent.week);
   const [time, setTime] = useState<{
     startHour: Hour,
     startMinute: Minute,
     endHour: Hour,
     endMinute: Minute,
-  }>(() => {
-    if (lectureIndex) {
-      return updatedTimeSpaceComponent?.[0]?.time ?? initialTimeSpaceComponent.time;
-    }
-    return initialTimeSpaceComponent?.time ?? initialTimeSpaceComponent.time;
-  });
+  }>(lectureIndex
+    ? updatedTimeSpaceComponent![0].time : initialTimeSpaceComponent.time);
+  const [place, setPlace] = useState(lectureIndex
+    ? updatedTimeSpaceComponent![0].place : initialTimeSpaceComponent.place);
 
   const timeSpaceComponentIndex = customTempLecture!.lecture_infos.findIndex(
     (info) => info.id === id,
   );
-
-  const [place, setPlace] = useState(() => {
-    if (lectureIndex) {
-      return updatedTimeSpaceComponent?.[0]?.place ?? '';
-    }
-    return initialTimeSpaceComponent?.place ?? '';
-  });
 
   const updateTimeSpaceInfo = ({
     startTime,
@@ -232,10 +221,8 @@ function TimeSpaceInput({
     updateTimeSpaceInfo({ updatedPlace: placeName });
   };
 
-  const timeInfo = customTempLecture?.lecture_infos?.[timeSpaceComponentIndex];
-
-  const isWrongTime = (timeInfo?.end_time ?? 0) - (timeInfo?.start_time ?? 0) < 0
-    || weeks.length === 0;
+  const isWrongTime = customTempLecture!.lecture_infos[timeSpaceComponentIndex].end_time
+  - customTempLecture!.lecture_infos[timeSpaceComponentIndex].start_time < 0 || weeks.length === 0;
 
   return (
     <div className={styles['time-space-container__component']}>
