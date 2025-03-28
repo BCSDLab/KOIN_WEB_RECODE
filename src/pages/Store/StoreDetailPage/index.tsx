@@ -80,7 +80,7 @@ function StoreDetailPage({ id }: Props) {
   const onClickCallNumber = () => {
     if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS',
+        team: 'BUSINESS',
         event_label: 'shop_detail_view_review_back',
         value: '',
         event_category: 'click',
@@ -90,7 +90,7 @@ function StoreDetailPage({ id }: Props) {
       });
     }
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: `${storeType}_call`,
       value: storeDetail!.name,
       event_category: 'click',
@@ -100,7 +100,7 @@ function StoreDetailPage({ id }: Props) {
 
   const onClickImage = (img: string[], index: number) => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', event_label: 'shop_picture', value: storeDetail!.name, event_category: 'click',
+      team: 'BUSINESS', event_label: 'shop_picture', value: storeDetail!.name, event_category: 'click',
     });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -109,7 +109,7 @@ function StoreDetailPage({ id }: Props) {
   const onClickList = () => {
     if (param.get('state') === '리뷰' && sessionStorage.getItem('enterReviewPage')) {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS',
+        team: 'BUSINESS',
         event_label: 'shop_detail_view_review_back',
         value: storeDetail.name,
         event_category: 'click',
@@ -119,17 +119,17 @@ function StoreDetailPage({ id }: Props) {
       });
     }
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', event_label: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: sessionStorage.getItem('cameFrom') || '전체보기', duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      team: 'BUSINESS', event_label: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: sessionStorage.getItem('cameFrom') || '전체보기', duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickEventList = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', event_label: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
+      team: 'BUSINESS', event_label: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
     });
   };
   const onClickReviewList = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS', event_label: 'shop_detail_view_review', value: `${storeDetail.name}`, event_category: 'click',
+      team: 'BUSINESS', event_label: 'shop_detail_view_review', value: `${storeDetail.name}`, event_category: 'click',
     });
   };
   const copyAccount = async (account: string) => {
@@ -140,17 +140,17 @@ function StoreDetailPage({ id }: Props) {
   const detailScrollLogging = () => {
     if ((param.get('state') === '메뉴' || !param.get('state'))) {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
+        team: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
       });
     }
     if (param.get('state') === '이벤트/공지') {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', event_label: 'shop_detail_view_event', value: storeDetail.name, event_category: 'scroll',
+        team: 'BUSINESS', event_label: 'shop_detail_view_event', value: storeDetail.name, event_category: 'scroll',
       });
     }
     if (param.get('state') === '리뷰') {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS', event_label: 'shop_detail_view_review', value: storeDetail.name, event_category: 'scroll',
+        team: 'BUSINESS', event_label: 'shop_detail_view_review', value: storeDetail.name, event_category: 'scroll',
       });
     }
   };
@@ -164,7 +164,7 @@ function StoreDetailPage({ id }: Props) {
     if (param.get('state') !== '리뷰') {
       if (sessionStorage.getItem('enterReviewPage')) {
         logger.actionEventClick({
-          actionTitle: 'BUSINESS',
+          team: 'BUSINESS',
           event_label: 'shop_detail_view_review_back',
           value: storeDetail.name,
           event_category: 'click',
@@ -187,7 +187,7 @@ function StoreDetailPage({ id }: Props) {
       }
       const handlePopState = () => {
         logger.actionEventClick({
-          actionTitle: 'BUSINESS',
+          team: 'BUSINESS',
           event_label: 'shop_detail_view_back',
           value: storeDetail.name,
           event_category: 'swipe',
@@ -364,7 +364,7 @@ function StoreDetailPage({ id }: Props) {
               param.set('state', '메뉴');
               setParam(param, { replace: true });
               logger.actionEventClick({
-                actionTitle: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail!.name, event_category: 'click',
+                team: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail!.name, event_category: 'click',
               });
             }}
           >

@@ -27,7 +27,7 @@ function GeneralCourse() {
 
   const handleOpenModal = (courseType: string) => {
     logger.actionEventClick({
-      actionTitle: 'USER',
+      team: 'USER',
       event_label: 'graduation_calculator_liberal_arts_list',
       value: `교양 개설 목록_${courseType}`,
       event_category: 'click',

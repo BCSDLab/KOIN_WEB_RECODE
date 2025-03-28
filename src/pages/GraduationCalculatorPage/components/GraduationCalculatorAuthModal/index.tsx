@@ -10,7 +10,7 @@ export default function GraduationCalculatorAuthModal() {
 
   const onClickLogin = () => {
     logger.actionEventClick({
-      actionTitle: 'USER',
+      team: 'USER',
       event_label: 'graduation_calculator_login',
       value: '로그인',
       event_category: 'click',

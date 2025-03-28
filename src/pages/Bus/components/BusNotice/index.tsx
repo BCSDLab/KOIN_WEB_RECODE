@@ -52,7 +52,7 @@ export default function BusNotice({ loggingLocation }: BusNoticeProps) {
 
   const handleClickNavigateNotice = () => {
     logger.actionEventClick({
-      actionTitle: 'CAMPUS',
+      team: 'CAMPUS',
       event_label: 'bus_announcement',
       value: logValue,
     });
@@ -61,7 +61,7 @@ export default function BusNotice({ loggingLocation }: BusNoticeProps) {
 
   const handleClickDismissNotice = () => {
     logger.actionEventClick({
-      actionTitle: 'CAMPUS',
+      team: 'CAMPUS',
       event_label: 'bus_announcement_close',
       value: logValue,
     });

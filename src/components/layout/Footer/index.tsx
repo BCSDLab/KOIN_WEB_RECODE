@@ -17,17 +17,17 @@ function Footer(): JSX.Element {
   const logShortcut = async (title: string) => {
     const loggingMap: Record<
     string,
-    { actionTitle: string; event_label: string; value: string; event_category?: string }> = {
-      공지사항: { actionTitle: 'CAMPUS', event_label: 'footer', value: '공지사항' },
-      '버스 교통편': { actionTitle: 'CAMPUS', event_label: 'footer', value: '버스 교통편' },
-      '버스 시간표': { actionTitle: 'CAMPUS', event_label: 'footer', value: '버스 시간표' },
-      식단: { actionTitle: 'CAMPUS', event_label: 'footer', value: '식단' },
-      시간표: { actionTitle: 'USER', event_label: 'footer', value: '시간표' },
-      복덕방: { actionTitle: 'BUSINESS', event_label: 'footer', value: '복덕방' },
-      주변상점: { actionTitle: 'BUSINESS', event_label: 'footer', value: '주변상점' },
-      '교내 시설물 정보': { actionTitle: 'CAMPUS', event_label: 'footer', value: '교내 시설물 정보' },
-      '코인 사장님': { actionTitle: 'BUSINESS', event_label: 'footer', value: '코인 사장님' },
-      쪽지: { actionTitle: 'CAMPUS', event_label: 'footer', value: '쪽지' },
+    { team: string; event_label: string; value: string; event_category?: string }> = {
+      공지사항: { team: 'CAMPUS', event_label: 'footer', value: '공지사항' },
+      '버스 교통편': { team: 'CAMPUS', event_label: 'footer', value: '버스 교통편' },
+      '버스 시간표': { team: 'CAMPUS', event_label: 'footer', value: '버스 시간표' },
+      식단: { team: 'CAMPUS', event_label: 'footer', value: '식단' },
+      시간표: { team: 'USER', event_label: 'footer', value: '시간표' },
+      복덕방: { team: 'BUSINESS', event_label: 'footer', value: '복덕방' },
+      주변상점: { team: 'BUSINESS', event_label: 'footer', value: '주변상점' },
+      '교내 시설물 정보': { team: 'CAMPUS', event_label: 'footer', value: '교내 시설물 정보' },
+      '코인 사장님': { team: 'BUSINESS', event_label: 'footer', value: '코인 사장님' },
+      쪽지: { team: 'CAMPUS', event_label: 'footer', value: '쪽지' },
     };
 
     if (loggingMap[title]) {
@@ -35,7 +35,7 @@ function Footer(): JSX.Element {
 
       if (String(pathname) === ROUTES.GraduationCalculator()) {
         logger.actionEventClick({
-          actionTitle: 'USER',
+          team: 'USER',
           event_label: 'graduation_calculator_back',
           value: `탈출_푸터_${title}`,
           event_category: 'click',

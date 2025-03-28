@@ -27,14 +27,14 @@ export default function IndexArticles() {
         <Link
           to={ROUTES.Articles()}
           className={styles['template__title-link']}
-          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'main_notice', value: '공지사항' })}
+          onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_notice', value: '공지사항' })}
         >
           <h1 className={styles.template__title}>공지사항</h1>
         </Link>
         <Link
           to={ROUTES.Articles()}
           className={styles.template__link}
-          onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'main_notice_detail', value: '공지사항' })}
+          onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_notice_detail', value: '공지사항' })}
         >
           더보기
           <RightArrow aria-hidden />
