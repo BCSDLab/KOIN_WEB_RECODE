@@ -93,6 +93,18 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     };
   }, [handelPrevButtonClick, handelNextButtonClick]);
 
+  useEffect(() => {
+    if (isModalOpen && !isBannerHidden) {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_label: `${logBannerCategory}_modal_entry`,
+        value: 'design_A',
+        event_category: 'a/b test 로깅(메인 모달)',
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (isBannerHidden) return null;
 
   return (
