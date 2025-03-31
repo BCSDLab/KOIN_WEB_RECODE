@@ -22,12 +22,12 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   const logger = useLogger();
   const logBannerCategory = categoryName === '메인 모달' ? 'main' : '';
   const [isModalOpen, , closeModal] = useBooleanState(true);
-  const { banners } = useBanners(categoryId);
+  const { bannersInfos } = useBanners(categoryId);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const currentBanner = banners.banners[currentPageIndex];
+  const currentBanner = bannersInfos.banners[currentPageIndex];
 
-  const isBannerHidden = getCookie('HIDE_BANNER') === categoryName; // 일주일 동안 그만 보기
-  const isBannerClose = sessionStorage.getItem('CLOSE_BANNER') === categoryName; // 닫기
+  const isBannerHidden = getCookie('HIDE_BANNER') === categoryName // 일주일 동안 보지 않기
+    || sessionStorage.getItem('CLOSE_BANNER') === categoryName; // 닫기
 
   const handelPrevButtonClick = useCallback(() => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.title}` });
@@ -37,9 +37,9 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
-    setCurrentPageIndex((prev) => (prev === 0 ? banners.count - 1 : prev - 1));
+    setCurrentPageIndex((prev) => (prev === 0 ? bannersInfos.count - 1 : prev - 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [banners.count, currentBanner.title]);
+  }, [bannersInfos.count, currentBanner.title]);
 
   const handelNextButtonClick = useCallback(() => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.title}` });
@@ -49,9 +49,9 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
-    setCurrentPageIndex((prev) => (prev === banners.count - 1 ? 0 : prev + 1));
+    setCurrentPageIndex((prev) => (prev === bannersInfos.count - 1 ? 0 : prev + 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [banners.count, currentBanner.title]);
+  }, [bannersInfos.count, currentBanner.title]);
 
   const handleCloseBanner = () => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal_close`, value: `${currentBanner.title}` });
@@ -93,7 +93,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     };
   }, [handelPrevButtonClick, handelNextButtonClick]);
 
-  if (isBannerHidden || isBannerClose) return null;
+  if (isBannerHidden) return null;
 
   return (
     <Suspense fallback={null}>
@@ -125,7 +125,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
               <p className={styles['slider__pagination-label']}>
                 {currentPageIndex + 1}
                 /
-                {banners.count}
+                {bannersInfos.count}
               </p>
             </div>
             <button
