@@ -4,6 +4,7 @@ import {
   useEffect,
   useCallback,
 } from 'react';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import { setCookie, getCookie } from 'utils/ts/cookie';
@@ -16,20 +17,36 @@ interface BannerProps {
 }
 
 function Banner({ categoryName, categoryId }: BannerProps) {
+  const logger = useLogger();
+  const logBannerCategory = categoryName === '메인 모달' ? 'main' : '';
   const [isModalOpen, , closeModal] = useBooleanState(true);
   const { banners } = useBanners(categoryId);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const isBannerHidden = getCookie('HIDE_BANNER') === categoryName;
+  const currentBanner = banners.banners[currentPageIndex];
+
+  const isBannerHidden = getCookie('HIDE_BANNER') === categoryName; // 일주일 동안 그만 보기
+  const isBannerClose = sessionStorage.getItem('CLOSE_BANNER') === categoryName; // 닫기
 
   const handelPrevButtonClick = useCallback(() => {
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.id}` });
     setCurrentPageIndex((prev) => (prev === 0 ? banners.count - 1 : prev - 1));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [banners.count]);
 
   const handelNextButtonClick = useCallback(() => {
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.id}` });
     setCurrentPageIndex((prev) => (prev === banners.count - 1 ? 0 : prev + 1));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [banners.count]);
 
+  const handleCloseBanner = () => {
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal_close`, value: `${currentBanner.id}` });
+    sessionStorage.setItem('CLOSE_BANNER', categoryName);
+    closeModal();
+  };
+
   const handleHideForWeek = () => {
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal_hide_7d`, value: `${currentBanner.id}` });
     setCookie('HIDE_BANNER', categoryName, 7);
     closeModal();
   };
@@ -50,18 +67,26 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     };
   }, [handelPrevButtonClick, handelNextButtonClick]);
 
-  if (isBannerHidden) return null;
+  if (isBannerHidden || isBannerClose) return null;
 
   return (
     <Suspense fallback={null}>
       {isModalOpen && (
         <div className={styles.container}>
           <div className={styles.slider}>
-            <img
-              src={banners.banners[currentPageIndex].image_url}
-              alt="banner"
-              className={styles.slider__image}
-            />
+            <a
+              href={currentBanner.redirect_link ?? undefined}
+              onClick={() => (logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal`, value: `${currentBanner.id}` }))}
+            >
+              <img
+                src={currentBanner.image_url}
+                alt="banner"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
+                }}
+                className={styles.slider__image}
+              />
+            </a>
             <div className={styles.slider__pagination}>
               <p className={styles['slider__pagination-label']}>
                 {currentPageIndex + 1}
@@ -69,24 +94,22 @@ function Banner({ categoryName, categoryId }: BannerProps) {
                 {banners.count}
               </p>
             </div>
-            <div className={styles.slider__arrow}>
-              <button
-                type="button"
-                className={styles['slider__arrow--previous']}
-                aria-label="이전 슬라이드"
-                onClick={handelPrevButtonClick}
-              >
-                <ArrowIcon />
-              </button>
-              <button
-                type="button"
-                className={styles['slider__arrow--next']}
-                aria-label="다음 슬라이드"
-                onClick={handelNextButtonClick}
-              >
-                <ArrowIcon />
-              </button>
-            </div>
+            <button
+              type="button"
+              className={styles['slider__arrow--previous']}
+              aria-label="이전 슬라이드"
+              onClick={handelPrevButtonClick}
+            >
+              <ArrowIcon />
+            </button>
+            <button
+              type="button"
+              className={styles['slider__arrow--next']}
+              aria-label="다음 슬라이드"
+              onClick={handelNextButtonClick}
+            >
+              <ArrowIcon />
+            </button>
           </div>
           <div className={styles.footer}>
             <button
@@ -99,7 +122,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
             <button
               type="button"
               className={styles['footer__button--close']}
-              onClick={closeModal}
+              onClick={handleCloseBanner}
             >
               닫기
             </button>
