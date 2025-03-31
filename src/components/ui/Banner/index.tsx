@@ -76,7 +76,10 @@ function Banner({ categoryName, categoryId }: BannerProps) {
           <div className={styles.slider}>
             <a
               href={currentBanner.redirect_link ?? undefined}
-              onClick={() => (logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal`, value: `${currentBanner.title}` }))}
+              onClick={() => {
+                logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal`, value: `${currentBanner.title}` });
+                logger.actionEventClick({ team: 'CAMPUS', event_label: 'a/b test 로깅(메인 모달)', value: 'design_A' });
+              }}
             >
               <img
                 src={currentBanner.image_url}
