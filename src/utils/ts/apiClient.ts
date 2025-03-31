@@ -7,7 +7,7 @@ import qsStringify from 'utils/ts/qsStringfy';
 import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
 import { deleteCookie, setCookie } from './cookie';
-import { redirectToLogin, redirectToMain } from './auth';
+import { redirectToLogin } from './auth';
 
 const API_URL = import.meta.env.VITE_API_PATH;
 
@@ -64,10 +64,26 @@ export default class APIClient {
             : this.parse<U>(data);
           resolve(response);
         })
-        .catch((err) => {
-          const apiError = this.createKoinErrorFromAxiosError(err);
-          this.errorMiddleware(apiError);
-          reject(apiError);
+        .catch(async (err) => {
+          try {
+            if (axios.isAxiosError(err)) {
+              const handledResponse = await this.errorMiddleware(err);
+
+              if (handledResponse) {
+                const response = request.parse
+                  ? request.parse(handledResponse)
+                  : this.parse<U>(handledResponse);
+                resolve(response);
+                return;
+              }
+            }
+
+            const apiError = this.createKoinErrorFromAxiosError(err);
+            reject(apiError);
+          } catch (middlewareError) {
+            const apiError = this.createKoinErrorFromAxiosError(err);
+            reject(apiError);
+          }
         });
     });
   }
@@ -93,7 +109,7 @@ export default class APIClient {
         redirectToLogin();
       })
       .finally(() => {
-        this.refreshPromise = null; // 요청이 끝나면 초기화
+        this.refreshPromise = null;
       });
 
     await this.refreshPromise;
@@ -108,22 +124,44 @@ export default class APIClient {
     return data.data;
   }
 
-  private async errorMiddleware(error: KoinError | CustomAxiosError) {
-    if (error.status === 401) {
+  private async retryRequest(error: AxiosError) {
+    if (!axios.isAxiosError(error)) return Promise.reject(error);
+    try {
+      const originalRequest = error.config;
+      const newToken = useTokenStore.getState().token;
+
+      if (originalRequest.headers) {
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+      }
+
+      // 재요청 실행 및 결과 반환
+      return await axios(originalRequest);
+    } catch (retryError) {
+      return Promise.reject(retryError);
+    }
+  }
+
+  private async errorMiddleware(error: AxiosError): Promise<AxiosResponse | null> {
+    if (error.response?.status === 401) {
       deleteCookie('AUTH_TOKEN_KEY');
       const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
       if (refreshTokenStorage) {
         const refreshToken = JSON.parse(refreshTokenStorage);
         // refreshToken이 존재할 시 accessToken 재발급 요청
         if (refreshToken.state.refreshToken !== '') {
-          await this.refreshAccessToken(refreshToken.state.refreshToken);
-          redirectToMain();
-          return;
+          try {
+            await this.refreshAccessToken(refreshToken.state.refreshToken);
+            const retryResponse = await this.retryRequest(error);
+            return retryResponse;
+          } catch (retryError) {
+            redirectToLogin();
+            return null;
+          }
         }
-        // refreshToken이 존재하지 않을 시 로그인 페이지로 이동
         redirectToLogin();
       }
     }
+    return null;
   }
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
