@@ -1,32 +1,31 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import getDayOfWeek from 'utils/ts/getDayOfWeek';
-import ImageModal from 'components/common/Modal/ImageModal';
+import ImageModal from 'components/modal/Modal/ImageModal';
 import {
   useNavigate, useParams, useSearchParams,
 } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
-import { Portal } from 'components/common/Modal/PortalProvider';
-import UpdateInfo from 'components/common/UpdateInfo/UpdateInfo';
+import { Portal } from 'components/modal/Modal/PortalProvider';
+import UpdateInfo from 'pages/Store/StoreDetailPage/components/UpdateInfo/UpdateInfo';
 import showToast from 'utils/ts/showToast';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
-import Copy from 'assets/png/copy.png';
+import Copy from 'assets/svg/Store/copy.svg';
 import Phone from 'assets/svg/Review/phone.svg';
 import ROUTES from 'static/routes';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import * as api from 'api';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
-// eslint-disable-next-line
-import StoreDetailBoundary from '../components/StoreDetailBoundary/StoreDetailBoundary';
-import MenuTable from './MenuTable';
-import EventTable from './EventTable';
+import StoreErrorBoundary from 'components/boundary/StoreErrorBoundary';
+import MenuTable from './components/MenuTable';
+import EventTable from './components/EventTable';
 import styles from './StoreDetailPage.module.scss';
-import ReviewPage from './Review';
+import ReviewPage from './components/Review';
 
 interface Props {
   id: string | undefined;
@@ -267,12 +266,12 @@ function StoreDetailPage({ id }: Props) {
                     <span>계좌번호</span>
                     <div className={styles.account}>
                       {`${storeDetail.bank} ${storeDetail.account_number}`}
-                      <button type="button" onClick={() => copyAccount(`${storeDetail.bank} ${storeDetail.account_number}`)}>
-                        <img
-                          src={Copy}
-                          alt="복사하기"
-                          className={styles.copy}
-                        />
+                      <button
+                        type="button"
+                        onClick={() => copyAccount(`${storeDetail.bank} ${storeDetail.account_number}`)}
+                        aria-label="계좌번호 복사"
+                      >
+                        <Copy />
                       </button>
                     </div>
                     <br />
@@ -428,11 +427,11 @@ function StoreDetail() {
   const { id } = useParams();
 
   return (
-    <StoreDetailBoundary onErrorClick={() => navigate('/store')}>
+    <StoreErrorBoundary onErrorClick={() => navigate('/store')}>
       <Suspense fallback={<div />}>
         <StoreDetailPage id={id} />
       </Suspense>
-    </StoreDetailBoundary>
+    </StoreErrorBoundary>
   );
 }
 

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import useToast from 'components/common/Toast/useToast';
+import useToast from 'components/feedback/Toast/useToast';
 import {
   AddTimetableCustomLecture,
   Lecture,

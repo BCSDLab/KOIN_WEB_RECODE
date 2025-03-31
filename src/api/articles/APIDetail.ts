@@ -73,7 +73,7 @@ export class GetSingleLostItemArticle<
 
   response!: R;
 
-  constructor(id: number) {
+  constructor(public authorization: string, id: number) {
     this.path = `/articles/lost-item/${id}`;
   }
 }

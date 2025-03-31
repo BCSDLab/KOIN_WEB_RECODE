@@ -13,8 +13,8 @@ import StorePage from 'pages/Store/StorePage';
 import ArticlesPage from 'pages/Articles/ArticlesPage';
 import ArticleListPage from 'pages/Articles/ArticleListPage';
 import ArticlesDetailPage from 'pages/Articles/ArticlesDetailPage';
-import Toast from 'components/common/Toast';
-import LogPage from 'components/common/LogPage';
+import Toast from 'components/feedback/Toast';
+import PageViewTracker from 'components/analytics/PageViewTracker';
 import SignupPage from 'pages/Auth/SignupPage';
 import FindPasswordPage from 'pages/Auth/FindPasswordPage';
 import StoreDetailPage from 'pages/Store/StoreDetailPage';
@@ -27,11 +27,11 @@ import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
 import TimetablePage from 'pages/TimetablePage/MainTimetablePage';
 import CafeteriaPage from 'pages/Cafeteria';
-import MetaHelmet from 'components/common/MetaHelmet';
+import MetaHelmet from 'components/layout/MetaHelmet';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
-import AddReviewPage from 'pages/StoreReviewPage/AddReviewPage';
-import EditReviewPage from 'pages/StoreReviewPage/EditReviewPage';
-import ReviewReportingPage from 'pages/Store/StoreDetailPage/Review/components/ReviewReporting';
+import AddReviewPage from 'pages/Store/StoreReviewPage/AddReviewPage';
+import EditReviewPage from 'pages/Store/StoreReviewPage/EditReviewPage';
+import ReviewReportingPage from 'pages/Store/StoreDetailPage/components/Review/components/ReviewReporting';
 import ModifyTimetablePage from 'pages/TimetablePage/ModifyTimetablePage';
 import GraduationCalculatorPage from 'pages/GraduationCalculatorPage';
 import PageNotFound from 'pages/Error/PageNotFound';
@@ -41,6 +41,7 @@ import LostItemWritePage from 'pages/Articles/LostItemWritePage';
 import LostItemDetailPage from 'pages/Articles/LostItemDetailPage';
 import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import ReportPage from 'pages/Articles/ReportPage';
 
 interface WrapperProps {
   title: string;
@@ -69,7 +70,7 @@ function Wrapper({
       <MetaHelmet title={title} />
       {element}
       <Suspense fallback={null}>
-        <LogPage />
+        <PageViewTracker />
       </Suspense>
     </>
   );
@@ -105,6 +106,7 @@ function App() {
             <Route path={ROUTES.ArticlesDetail({ isLink: false })} element={<Wrapper title="공지사항 상세" element={<ArticlesDetailPage />} />} />
             <Route path={ROUTES.LostItemDetail({ isLink: false })} element={<Wrapper title="분실물 상세" element={<LostItemDetailPage />} />} />
             <Route path={ROUTES.LostItemRedirect()} element={<Navigate replace to={ROUTES.Articles()} />} />
+            <Route path="/articles/report/:id" element={<ReportPage />} />
           </Route>
           <Route path={ROUTES.LostItemFound()} element={<Wrapper title="습득물 글쓰기" element={<LostItemWritePage />} />} />
           <Route path={ROUTES.LostItemLost()} element={<Wrapper title="분실물 글쓰기" element={<LostItemWritePage />} />} />

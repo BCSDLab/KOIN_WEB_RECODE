@@ -7,7 +7,7 @@ import {
 import showToast from 'utils/ts/showToast';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { Selector } from 'components/common/Selector';
+import { Selector } from 'components/ui/Selector';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {

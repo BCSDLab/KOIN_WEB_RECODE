@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Article } from 'api/articles/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import setArticleRegisteredDate from 'utils/ts/setArticleRegisteredDate';
-import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
+import setArticleRegisteredDate from 'pages/Articles/utils/setArticleRegisteredDate';
+import { convertArticlesTag } from 'pages/Articles/utils/convertArticlesTag';
 import ROUTES from 'static/routes';
 import showToast from 'utils/ts/showToast';
 import styles from './ArticleList.module.scss';

@@ -16,6 +16,7 @@ import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import { STORE_PAGE } from 'static/store';
 import IntroToolTip from 'components/common/IntroToolTip';
 import ROUTES from 'static/routes';
+import { getCategoryDurationTime, initializeCategoryEntryTime } from 'pages/Store/utils/durationTime';
 import { useNavigate } from 'react-router-dom';
 import styles from './StorePage.module.scss';
 import { useStoreCategories } from './hooks/useCategoryList';
@@ -154,14 +155,11 @@ function StorePage() {
         categories.shop_categories.find(
           (item) => item.id === Number(searchParams.get('category')),
         )?.name || '전체보기',
-      duration_time:
-        (new Date().getTime()
-          - Number(sessionStorage.getItem('enter_category')))
-        / 1000,
+      duration_time: getCategoryDurationTime(),
       current_page: categoryId.toString(),
     });
 
-    sessionStorage.setItem('enter_category', new Date().getTime().toString());
+    initializeCategoryEntryTime();
 
     setParams('category', `${categoryId}`, {
       deleteBeforeParam: false,
@@ -235,7 +233,7 @@ function StorePage() {
   useEffect(() => {
     if (enterCategoryTimeRef.current === null) {
       const currentTime = new Date().getTime();
-      sessionStorage.setItem('enter_category', currentTime.toString());
+      initializeCategoryEntryTime();
       enterCategoryTimeRef.current = currentTime;
     }
     if (sessionStorage.getItem('pushStateCalled')) {

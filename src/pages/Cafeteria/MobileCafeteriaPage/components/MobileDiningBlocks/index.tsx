@@ -1,13 +1,13 @@
-import { Dining, DiningType } from 'interfaces/Cafeteria';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/common/Modal/PortalProvider';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useDinings from 'pages/Cafeteria/hooks/useDinings';
 import MobileMealImage from 'pages/Cafeteria/MobileCafeteriaPage/components/MobileMealImage';
-import { DINING_TYPE_MAP } from 'static/cafeteria';
-import { filterDinings } from 'utils/ts/cafeteria';
 import DetailImage from 'pages/Cafeteria/MobileCafeteriaPage/components/DetailImage';
+import { filterDinings } from 'pages/Cafeteria/utils/filter';
+import { Dining, DiningType } from 'api/dinings/entity';
+import { DINING_TYPE_MAP } from 'static/cafeteria';
 import styles from './MobileDiningBlocks.module.scss';
 
 interface MobileDiningBlocksProps {
@@ -45,7 +45,8 @@ export default function MobileDiningBlocks({ diningType }: MobileDiningBlocksPro
                 <div className={styles['category__type--title']}>
                   {dining.place}
                   <div className={styles.category__calorie}>
-                    {!!dining.kcal && `${dining.kcal}Kcal •`}
+                    {!!dining.kcal && `${dining.kcal}Kcal`}
+                    {!!dining.kcal && !!dining.price_card && !!dining.price_cash && ' • '}
                   </div>
                   <div className={styles.category__price}>
                     {!!dining.price_cash && `${dining.price_cash}원/`}

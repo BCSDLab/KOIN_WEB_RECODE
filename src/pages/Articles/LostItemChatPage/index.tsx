@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Client } from '@stomp/stompjs';
 
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
@@ -32,6 +33,7 @@ import {
 import styles from './LostItemChatPage.module.scss';
 
 function LostItemChatPage() {
+  const isMobile = useMediaQuery();
   const [searchParams] = useSearchParams();
 
   const token = useTokenState();
@@ -215,6 +217,7 @@ function LostItemChatPage() {
       <h1 className={styles.title}>쪽지</h1>
 
       <section className={styles['chat-container']}>
+        {!isMobile && (
         <div className={styles['chat-list']}>
           {realChatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
           {realChatroomList?.map(({
@@ -248,6 +251,7 @@ function LostItemChatPage() {
             </Link>
           ))}
         </div>
+        )}
 
         <div className={styles['chat-view']}>
           {!(chatroomDetail && messages) && (

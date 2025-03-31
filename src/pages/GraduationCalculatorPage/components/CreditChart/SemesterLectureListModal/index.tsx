@@ -9,7 +9,7 @@ import { startTransition, useState } from 'react';
 import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import useAllMyLectures from 'pages/TimetablePage/hooks/useAllMyLectures';
 import { LectureInfo } from 'api/graduationCalculator/entity';
-import { Selector } from 'components/common/Selector';
+import { Selector } from 'components/ui/Selector';
 import _ from 'lodash';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './SemesterLectureListModal.module.scss';

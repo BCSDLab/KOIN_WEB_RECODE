@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { convertArticlesTag } from 'utils/ts/convertArticlesTag';
+import { convertArticlesTag } from 'pages/Articles/utils/convertArticlesTag';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
 import useSingleLostItemArticle from 'pages/Articles/hooks/useSingleLostItemArticle';
@@ -8,7 +8,6 @@ import DeleteModal from 'pages/Articles/LostItemDetailPage/components/DeleteModa
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ROUTES from 'static/routes';
-import { useUser } from 'utils/hooks/state/useUser';
 import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
 import DisplayImage from 'pages/Articles/LostItemDetailPage/components/DisplayImage';
 import ReportIcon from 'assets/svg/Articles/report.svg';
@@ -16,7 +15,7 @@ import ReportModal from 'pages/Articles/LostItemDetailPage/components/ReportModa
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './LostItemDetailPage.module.scss';
-import LoginRequireLostItemdModal from './components/LoginRequireLostItemModal';
+import LoginRequireLostItemModal from './components/LoginRequireLostItemModal';
 import usePostLostItemChatroom from './hooks/usePostLostItemChatroom';
 
 export default function LostItemDetailPage() {
@@ -27,14 +26,11 @@ export default function LostItemDetailPage() {
   const portalManager = useModalPortal();
 
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
-  const { data: userInfo } = useUser();
   const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
 
   const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
-  const { article } = useSingleLostItemArticle(Number(params.id));
+  const { article } = useSingleLostItemArticle(token, Number(params.id));
   const articleId = Number(params.id);
-
-  const isMyArticle = userInfo?.nickname === article?.author;
 
   const {
     boardId,
@@ -54,14 +50,37 @@ export default function LostItemDetailPage() {
     openDeleteModal();
   };
 
+  const reportBranch = () => {
+    if (isMobile) {
+      navigate(ROUTES.ArtilesReport({ id: String(articleId), isLink: true }));
+    } else {
+      openReportModal();
+    }
+  };
+
   const handleReportClick = () => {
     if (token) {
       logItemPostReportClick();
-      openReportModal();
+      reportBranch();
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequireLostItemdModal
+        <LoginRequireLostItemModal
           actionTitle="게시글을 신고 하려면"
+          detailExplanation="로그인 후 이용해주세요."
+          onClose={portalOption.close}
+        />
+      ));
+    }
+  };
+
+  const handleChatroomButtonClick = async () => {
+    if (token) {
+      const chatroomInfo = await searchChatroom(articleId);
+      navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
+    } else {
+      portalManager.open((portalOption) => (
+        <LoginRequireLostItemModal
+          actionTitle="쪽지를 보내려면"
           detailExplanation="로그인 후 이용해주세요."
           onClose={portalOption.close}
         />
@@ -108,7 +127,7 @@ export default function LostItemDetailPage() {
                 목록
               </button>
             )}
-            {isMyArticle ? (
+            {article.is_mine ? (
               <button
                 className={styles['button-container__delete-button']}
                 onClick={handleDeleteButtonClick}
@@ -119,17 +138,16 @@ export default function LostItemDetailPage() {
               </button>
             ) : (
               <div className={styles['button-container__buttons']}>
-                <button
-                  type="button"
-                  className={styles['button-container__message-button']}
-                  onClick={async () => {
-                    const chatroomInfo = await searchChatroom(articleId);
-                    navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
-                  }}
-                >
-                  <ChatIcon />
-                  <div>쪽지 보내기</div>
-                </button>
+                {article.author !== '탈퇴한 사용자' && (
+                  <button
+                    type="button"
+                    className={styles['button-container__message-button']}
+                    onClick={handleChatroomButtonClick}
+                  >
+                    <ChatIcon />
+                    <div>쪽지 보내기</div>
+                  </button>
+                )}
                 {article.author !== '총학생회' && (
                   <button
                     className={styles['button-container__report-button']}
