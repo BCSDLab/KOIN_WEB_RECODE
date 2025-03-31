@@ -52,20 +52,17 @@
   }
 
   &__arrow {
+    width: 80px;
+    height: 150px;
+    position: absolute;
+    top: 50%;
+
     &--previous {
-      width: 80px;
-      height: 150px;
-      position: absolute;
-      top: 50%;
       left: 0;
       transform: translate(0, -50%);
     }
 
     &--next {
-      width: 80px;
-      height: 150px;
-      position: absolute;
-      top: 50%;
       right: 0;
       transform: translate(0, -50%) rotate(180deg);
     }

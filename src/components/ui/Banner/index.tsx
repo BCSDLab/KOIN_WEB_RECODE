@@ -1,3 +1,4 @@
+import { cn } from '@bcsdlab/utils';
 import {
   Suspense,
   useState,
@@ -129,7 +130,10 @@ function Banner({ categoryName, categoryId }: BannerProps) {
             </div>
             <button
               type="button"
-              className={styles['slider__arrow--previous']}
+              className={cn({
+                [styles.slider__arrow]: true,
+                [styles['slider__arrow--previous']]: true,
+              })}
               aria-label="이전 슬라이드"
               onClick={handelPrevButtonClick}
             >
@@ -137,7 +141,10 @@ function Banner({ categoryName, categoryId }: BannerProps) {
             </button>
             <button
               type="button"
-              className={styles['slider__arrow--next']}
+              className={cn({
+                [styles.slider__arrow]: true,
+                [styles['slider__arrow--next']]: true,
+              })}
               aria-label="다음 슬라이드"
               onClick={handelNextButtonClick}
             >
