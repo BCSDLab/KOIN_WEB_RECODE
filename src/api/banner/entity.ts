@@ -5,8 +5,9 @@ export type BannerCategories = {
   name: string;
 };
 
-export type Banners = {
+export type Banner = {
   id: number;
+  title: string;
   image_url: string;
   redirect_link: string | null;
   version: string | null;
@@ -18,5 +19,5 @@ export interface BannerCategoriesResponse extends APIResponse {
 
 export interface BannersResponse extends APIResponse {
   count: number;
-  banners: Banners[];
+  banners: Banner[];
 }

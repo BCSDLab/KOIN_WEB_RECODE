@@ -52,24 +52,19 @@
   }
 
   &__arrow {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+    width: 80px;
+    height: 150px;
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
-    button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 80px;
-      height: 150px;
+    &--previous {
+      left: 0;
+      transform: translate(0, -50%) rotate(180deg);
     }
 
     &--next {
-      transform: rotate(180deg);
+      right: 0;
+      transform: translate(0, -50%);
     }
   }
 }

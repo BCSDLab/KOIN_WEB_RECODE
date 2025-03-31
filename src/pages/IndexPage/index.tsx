@@ -14,7 +14,9 @@ function IndexPage() {
   return (
     <Suspense fallback={null}>
       <main className={styles.template}>
-        <Banner categoryName={bannerCategory.name} categoryId={bannerCategory.id} />
+        <Suspense fallback={null}>
+          <Banner categoryName={bannerCategory.name} categoryId={bannerCategory.id} />
+        </Suspense>
         <div className={styles['mobile-wrapper']}>
           <IndexStore />
           <IndexBus />
