@@ -12,12 +12,12 @@ interface ProgressBarProps {
 /**
  * 사용자에게 여러 단계로 이루어진 프로세스에서 현재 어느 단계에 있는지 시각적으로 보여주는 컴포넌트
  * @param steps Steps[]
- * @param currentStep number
+ * @param currentIndex number
  */
 export default function ProgressBar({ steps, currentIndex }: ProgressBarProps) {
   const stepLength = steps.length;
   const progressBarWidthRate = currentIndex < stepLength
-  && Number((currentIndex + 1) / stepLength) * 100;
+    ? Number((currentIndex + 1) / stepLength) * 100 : 0;
 
   return (
     <div className={styles.container}>
