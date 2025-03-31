@@ -4,6 +4,7 @@ import {
   useEffect,
   useCallback,
 } from 'react';
+import { Link } from 'react-router-dom';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
@@ -78,8 +79,8 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       {isModalOpen && (
         <div className={styles.container}>
           <div className={styles.slider}>
-            <a
-              href={currentBanner.redirect_link ?? undefined}
+            <Link
+              to={currentBanner.redirect_link ?? ''}
               onClick={() => {
                 logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal`, value: `${currentBanner.title}` });
                 logger.actionEventClick({ team: 'CAMPUS', event_label: 'a/b test 로깅(메인 모달)', value: 'design_A' }); // AB test용 로깅 (추후 삭제)
@@ -93,7 +94,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
                 }}
                 className={styles.slider__image}
               />
-            </a>
+            </Link>
             <div className={styles.slider__pagination}>
               <p className={styles['slider__pagination-label']}>
                 {currentPageIndex + 1}
