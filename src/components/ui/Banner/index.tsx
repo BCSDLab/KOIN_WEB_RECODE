@@ -28,25 +28,25 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   const isBannerClose = sessionStorage.getItem('CLOSE_BANNER') === categoryName; // 닫기
 
   const handelPrevButtonClick = useCallback(() => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.id}` });
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.title}` });
     setCurrentPageIndex((prev) => (prev === 0 ? banners.count - 1 : prev - 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [banners.count]);
+  }, [banners.count, currentBanner.title]);
 
   const handelNextButtonClick = useCallback(() => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.id}` });
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.title}` });
     setCurrentPageIndex((prev) => (prev === banners.count - 1 ? 0 : prev + 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [banners.count]);
+  }, [banners.count, currentBanner.title]);
 
   const handleCloseBanner = () => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal_close`, value: `${currentBanner.id}` });
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal_close`, value: `${currentBanner.title}` });
     sessionStorage.setItem('CLOSE_BANNER', categoryName);
     closeModal();
   };
 
   const handleHideForWeek = () => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal_hide_7d`, value: `${currentBanner.id}` });
+    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal_hide_7d`, value: `${currentBanner.title}` });
     setCookie('HIDE_BANNER', categoryName, 7);
     closeModal();
   };
@@ -76,7 +76,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
           <div className={styles.slider}>
             <a
               href={currentBanner.redirect_link ?? undefined}
-              onClick={() => (logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal`, value: `${currentBanner.id}` }))}
+              onClick={() => (logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal`, value: `${currentBanner.title}` }))}
             >
               <img
                 src={currentBanner.image_url}

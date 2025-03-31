@@ -7,6 +7,7 @@ export type BannerCategories = {
 
 export type Banners = {
   id: number;
+  title: string;
   image_url: string;
   redirect_link: string | null;
   version: string | null;
