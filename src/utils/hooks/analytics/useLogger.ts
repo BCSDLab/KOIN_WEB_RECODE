@@ -67,9 +67,24 @@ const useLogger = () => {
     });
   };
 
+  const actionEventLoad = ({
+    team,
+    event_label,
+    value,
+    duration_time,
+    previous_page,
+    current_page,
+    event_category,
+  }: ActionLoggerProps) => {
+    logEvent({
+      team, event_category: event_category || 'entry', event_label, value, duration_time, previous_page, current_page,
+    });
+  };
+
   return {
     actionEventClick,
     actionEventSwipe,
+    actionEventLoad,
   };
 };
 

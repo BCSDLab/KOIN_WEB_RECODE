@@ -1,10 +1,4 @@
-import { cn } from '@bcsdlab/utils';
-import {
-  Suspense,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -18,43 +12,71 @@ interface BannerProps {
   categoryId: number;
 }
 
+const HIDE_BANNER_DURATION_DAYS = 7;
+
 function Banner({ categoryName, categoryId }: BannerProps) {
   const logger = useLogger();
   const logBannerCategory = categoryName === '메인 모달' ? 'main' : '';
-  const [isModalOpen, , closeModal] = useBooleanState(true);
-  const { bannersInfos } = useBanners(categoryId);
+  const [isModalOpen, , closeModal] = useBooleanState((
+    getCookie('HIDE_BANNER') !== categoryName
+    && sessionStorage.getItem('CLOSE_BANNER') !== categoryName
+  ));
+  const { data: bannersData } = useBanners(categoryId);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const currentBanner = bannersInfos.banners[currentPageIndex];
+  const currentBanner = bannersData.banners[currentPageIndex];
 
-  const isBannerHidden = getCookie('HIDE_BANNER') === categoryName // 일주일 동안 보지 않기
-    || sessionStorage.getItem('CLOSE_BANNER') === categoryName; // 닫기
+  const handleImageLinkClick = () => {
+    logger.actionEventLoad({
+      team: 'CAMPUS',
+      event_label: `${logBannerCategory}_entry`,
+      value: `${currentBanner.title}`,
+    });
+    logger.actionEventLoad({
+      team: 'CAMPUS',
+      event_label: `${logBannerCategory}_entry`,
+      value: 'design_A',
+      event_category: 'a/b test 로깅(메인 모달)',
+    }); // AB test용 로깅 (추후 삭제)
+  };
 
-  const handelPrevButtonClick = useCallback(() => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.title}` });
+  const handelPrevButtonClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: `${logBannerCategory}_next_modal`,
+      value: `${currentBanner.title}`,
+    });
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: `${logBannerCategory}_next_modal`,
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
-    setCurrentPageIndex((prev) => (prev === 0 ? bannersInfos.count - 1 : prev - 1));
+    setCurrentPageIndex((prev) => (prev === 0 ? bannersData.count - 1 : prev - 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bannersInfos.count, currentBanner.title]);
+  };
 
-  const handelNextButtonClick = useCallback(() => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_next_modal`, value: `${currentBanner.title}` });
+  const handelNextButtonClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: `${logBannerCategory}_next_modal`,
+      value: `${currentBanner.title}`,
+    });
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: `${logBannerCategory}_next_modal`,
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
-    setCurrentPageIndex((prev) => (prev === bannersInfos.count - 1 ? 0 : prev + 1));
+    setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bannersInfos.count, currentBanner.title]);
+  };
 
   const handleCloseBanner = () => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal_close`, value: `${currentBanner.title}` });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: `${logBannerCategory}_modal_close`,
+      value: `${currentBanner.title}`,
+    });
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: `${logBannerCategory}_modal_close`,
@@ -66,35 +88,43 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   };
 
   const handleHideForWeek = () => {
-    logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal_hide_7d`, value: `${currentBanner.title}` });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: `${logBannerCategory}_modal_hide_7d`,
+      value: `${currentBanner.title}`,
+    });
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: `${logBannerCategory}_modal_hide_7d`,
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
-    setCookie('HIDE_BANNER', categoryName, 7);
+    setCookie('HIDE_BANNER', categoryName, HIDE_BANNER_DURATION_DAYS);
     closeModal();
   };
 
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.code === 'ArrowLeft') {
-        event.preventDefault();
-        handelPrevButtonClick();
-      } else if (event.code === 'ArrowRight') {
-        event.preventDefault();
-        handelNextButtonClick();
-      }
-    };
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [handelPrevButtonClick, handelNextButtonClick]);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.code === 'ArrowLeft') {
+      event.preventDefault();
+      setCurrentPageIndex((prev) => (prev === 0 ? bannersData.count - 1 : prev - 1));
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_label: `${logBannerCategory}_next_modal`,
+        value: `${currentBanner.title}`,
+      });
+    } else if (event.code === 'ArrowRight') {
+      event.preventDefault();
+      setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_label: `${logBannerCategory}_next_modal`,
+        value: `${currentBanner.title}`,
+      });
+    }
+  };
 
   useEffect(() => {
-    if (isModalOpen && !isBannerHidden) {
+    if (isModalOpen) {
       logger.actionEventClick({
         team: 'CAMPUS',
         event_label: `${logBannerCategory}_modal_entry`,
@@ -102,86 +132,72 @@ function Banner({ categoryName, categoryId }: BannerProps) {
         event_category: 'a/b test 로깅(메인 모달)',
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isModalOpen, logger, logBannerCategory]);
 
-  if (isBannerHidden) return null;
+  if (!isModalOpen) return null;
 
   return (
-    <Suspense fallback={null}>
-      {isModalOpen && (
-        <div className={styles.container}>
-          <div className={styles.slider}>
-            <Link
-              to={currentBanner.redirect_link ?? ''}
-              onClick={() => {
-                logger.actionEventClick({ team: 'CAMPUS', event_label: `${logBannerCategory}_modal`, value: `${currentBanner.title}` });
-                logger.actionEventClick({
-                  team: 'CAMPUS',
-                  event_label: `${logBannerCategory}_modal`,
-                  value: 'design_A',
-                  event_category: 'a/b test 로깅(메인 모달)',
-                }); // AB test용 로깅 (추후 삭제)
-              }}
-            >
-              <img
-                src={currentBanner.image_url}
-                alt="banner"
-                onError={(e) => {
-                  e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
-                }}
-                className={styles.slider__image}
-              />
-            </Link>
-            <div className={styles.slider__pagination}>
-              <p className={styles['slider__pagination-label']}>
-                {currentPageIndex + 1}
-                /
-                {bannersInfos.count}
-              </p>
-            </div>
-            <button
-              type="button"
-              className={cn({
-                [styles.slider__arrow]: true,
-                [styles['slider__arrow--previous']]: true,
-              })}
-              aria-label="이전 슬라이드"
-              onClick={handelPrevButtonClick}
-            >
-              <ArrowIcon />
-            </button>
-            <button
-              type="button"
-              className={cn({
-                [styles.slider__arrow]: true,
-                [styles['slider__arrow--next']]: true,
-              })}
-              aria-label="다음 슬라이드"
-              onClick={handelNextButtonClick}
-            >
-              <ArrowIcon />
-            </button>
-          </div>
-          <div className={styles.footer}>
-            <button
-              type="button"
-              className={styles['footer__button--hide']}
-              onClick={handleHideForWeek}
-            >
-              일주일 동안 그만 보기
-            </button>
-            <button
-              type="button"
-              className={styles['footer__button--close']}
-              onClick={handleCloseBanner}
-            >
-              닫기
-            </button>
-          </div>
+    <div className={styles.container}>
+      <div
+        role="button"
+        className={styles.slider}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+      >
+        <Link
+          to={currentBanner.redirect_link ?? ''}
+          onClick={handleImageLinkClick}
+        >
+          <img
+            src={currentBanner.image_url}
+            alt="banner"
+            onError={(e) => {
+              e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
+            }}
+            className={styles.slider__image}
+          />
+        </Link>
+        <div className={styles.slider__pagination}>
+          <p className={styles['slider__pagination-label']}>
+            {currentPageIndex + 1}
+            /
+            {bannersData.count}
+          </p>
         </div>
-      )}
-    </Suspense>
+        <button
+          type="button"
+          className={`${styles.slider__arrow} ${styles['slider__arrow--previous']}`}
+          aria-label="이전 슬라이드"
+          onClick={handelPrevButtonClick}
+        >
+          <ArrowIcon />
+        </button>
+        <button
+          type="button"
+          className={`${styles.slider__arrow} ${styles['slider__arrow--next']}`}
+          aria-label="다음 슬라이드"
+          onClick={handelNextButtonClick}
+        >
+          <ArrowIcon />
+        </button>
+      </div>
+      <div className={styles.footer}>
+        <button
+          type="button"
+          className={styles['footer__button--hide']}
+          onClick={handleHideForWeek}
+        >
+          일주일 동안 그만 보기
+        </button>
+        <button
+          type="button"
+          className={styles['footer__button--close']}
+          onClick={handleCloseBanner}
+        >
+          닫기
+        </button>
+      </div>
+    </div>
   );
 }
 
