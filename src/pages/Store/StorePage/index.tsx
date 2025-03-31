@@ -1,6 +1,4 @@
-import React, {
-  Suspense, useEffect, useRef,
-} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import * as api from 'api';
 import { cn } from '@bcsdlab/utils';
@@ -8,7 +6,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import Close from 'assets/svg/close-icon-20x20.svg';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -17,7 +15,6 @@ import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList'
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import { STORE_PAGE } from 'static/store';
 import IntroToolTip from 'components/common/IntroToolTip';
-import LoadingSpinner from 'components/common/LoadingSpinner';
 import ROUTES from 'static/routes';
 import { useNavigate } from 'react-router-dom';
 import styles from './StorePage.module.scss';
@@ -34,7 +31,7 @@ type StoreSearchQueryType = {
   shopIds?: string;
 };
 
-interface StoreMobileState {
+interface StoreState {
   sorter: StoreSorterType | '';
   filter: StoreFilterType[];
   storeName?: string;
@@ -69,8 +66,6 @@ const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
   },
 ];
 
-const sortParams = ['COUNT', 'RATING'];
-
 const toggleNameLabel = {
   COUNT: 'review',
   RATING: 'star',
@@ -88,7 +83,7 @@ const useStoreList = (
   filter: StoreFilterType[],
   params: StoreSearchQueryType,
 ) => {
-  const { data: storeList } = useSuspenseQuery(
+  const { data: storeList } = useQuery(
     {
       queryKey: ['storeListV2', sorter, filter],
       queryFn: () => api.store.getStoreListV2(
@@ -97,10 +92,15 @@ const useStoreList = (
         params.storeName,
       ),
       retry: 0,
+      placeholderData: (previousData) => previousData,
     },
   );
 
   const selectedCategory = Number(params.category);
+
+  if (!storeList) {
+    return [];
+  }
 
   return storeList.shops.filter((store) => {
     const matchCategory = params.category === undefined
@@ -121,15 +121,15 @@ const useStoreList = (
 
 function StorePage() {
   const {
-    params, searchParams, setParams, setSearchParams,
+    params, searchParams, setParams,
   } = useParamsHandler();
-  const [storeMobileFilterState, setStoreMobileFilterState] = React.useState<StoreMobileState>({
-    sorter: searchParams.get('COUNT') ? 'COUNT' : '',
+  const [storeFilterState, setStoreFilterState] = useState<StoreState>({
+    sorter: '',
     filter: [],
   });
   const storeList = useStoreList(
-    storeMobileFilterState.sorter,
-    storeMobileFilterState.filter,
+    storeFilterState.sorter,
+    storeFilterState.filter,
     params,
   );
 
@@ -143,7 +143,6 @@ function StorePage() {
     closeTooltip();
   };
   const navigate = useNavigate();
-  const newSearchParams = new URLSearchParams(searchParams);
 
   const handleCategoryClick = (categoryId: number) => {
     logger.actionEventClick({
@@ -170,32 +169,16 @@ function StorePage() {
     });
   };
 
-  const koreanCategory = selectedCategory === -1
-    ? '전체보기'
-    : categories.shop_categories.find(
-      (category) => category.id === selectedCategory,
-    )?.name || '전체보기';
-
-  const loggingCheckbox = (id: string, isChecked: boolean) => {
-    if (isChecked) {
-      logger.actionEventClick({
-        actionTitle: 'BUSINESS',
-        event_label: 'shop_can',
-        value: `check_${id}_${koreanCategory}`,
-      });
-    }
-  };
-
-  const onClickMobileStoreListFilter = (
+  const onClickStoreListFilter = (
     item: StoreSorterType | StoreFilterType,
   ) => {
     if (item === 'COUNT' || item === 'RATING') {
-      setStoreMobileFilterState((prevState) => ({
+      setStoreFilterState((prevState) => ({
         ...prevState,
-        sorter: item,
+        sorter: prevState.sorter === item ? '' : item,
       }));
 
-      if (storeMobileFilterState.sorter !== item) {
+      if (storeFilterState.sorter !== item) {
         logger.actionEventClick({
           actionTitle: 'BUSINESS',
           event_label: 'shop_can',
@@ -207,7 +190,7 @@ function StorePage() {
         });
       }
     } else if (item === 'DELIVERY' || item === 'OPEN') {
-      setStoreMobileFilterState((prevState) => {
+      setStoreFilterState((prevState) => {
         const newFilter = prevState.filter.includes(item)
           ? prevState.filter.filter((filterItem) => filterItem !== item)
           : [...prevState.filter, item];
@@ -217,7 +200,7 @@ function StorePage() {
         };
       });
       // 현재상태와 바뀔 상태를 비교해서 토글이 on 되는지 판단함
-      if (!storeMobileFilterState.filter.includes(item)) {
+      if (!storeFilterState.filter.includes(item)) {
         logger.actionEventClick({
           actionTitle: 'BUSINESS',
           event_label: 'shop_can',
@@ -263,26 +246,6 @@ function StorePage() {
       categories.shop_categories[selectedCategory]?.name || '전체보기',
     );
   }, [categories, selectedCategory]);
-
-  const filteringQuery = (itemId : string, itemValue : number) => {
-    if (searchParams.get(itemId)) {
-      newSearchParams.delete(itemId);
-      return setSearchParams(newSearchParams, { replace: true });
-    }
-
-    if (!sortParams.includes(itemId)) {
-      newSearchParams.set(itemId, String(itemValue));
-      return setSearchParams(newSearchParams, { replace: true });
-    }
-
-    sortParams.forEach((sort) => {
-      if (sort !== itemId) {
-        newSearchParams.delete(sort);
-      }
-    });
-    newSearchParams.set(itemId, String(itemValue));
-    return setSearchParams(newSearchParams, { replace: true });
-  };
 
   return (
     <div className={styles.section}>
@@ -361,12 +324,12 @@ function StorePage() {
                 <input
                   id={item.id}
                   type="checkbox"
-                  checked={!!searchParams.get(item.id)}
+                  checked={storeFilterState.sorter.includes(item.id)
+                            || storeFilterState.filter.includes(
+                              item.id as StoreFilterType,
+                            )}
                   className={styles['option-checkbox__input']}
-                  onChange={() => {
-                    loggingCheckbox(item.id, !searchParams.get(item.id));
-                    filteringQuery(item.id, item.value);
-                  }}
+                  onChange={() => onClickStoreListFilter(item.id)}
                 />
                 {item.content}
               </label>
@@ -396,14 +359,14 @@ function StorePage() {
             className={cn({
               [styles.filter__box]: true,
               [styles['filter__box--activate']]:
-                storeMobileFilterState.sorter.includes(item.id)
-                || storeMobileFilterState.filter.includes(
+                storeFilterState.sorter.includes(item.id)
+                || storeFilterState.filter.includes(
                   item.id as StoreFilterType,
                 ),
             })}
             key={item.value}
             type="button"
-            onClick={() => onClickMobileStoreListFilter(item.id)}
+            onClick={() => onClickStoreListFilter(item.id)}
           >
             {item.content}
           </button>
@@ -415,19 +378,17 @@ function StorePage() {
           />
         )}
       </div>
-      <Suspense fallback={<LoadingSpinner size="100" />}>
-        {!isMobile ? (
-          <DesktopStoreList
-            storeListData={storeList}
-            storeType={STORE_PAGE.MAIN}
-          />
-        ) : (
-          <MobileStoreList
-            storeListData={storeList}
-            storeType={STORE_PAGE.MAIN}
-          />
-        )}
-      </Suspense>
+      {!isMobile ? (
+        <DesktopStoreList
+          storeListData={storeList}
+          storeType={STORE_PAGE.MAIN}
+        />
+      ) : (
+        <MobileStoreList
+          storeListData={storeList}
+          storeType={STORE_PAGE.MAIN}
+        />
+      )}
     </div>
   );
 }
