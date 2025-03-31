@@ -16,7 +16,6 @@ const HIDE_BANNER_DURATION_DAYS = 7;
 
 function Banner({ categoryName, categoryId }: BannerProps) {
   const logger = useLogger();
-  const logBannerCategory = categoryName === '메인 모달' ? 'main' : '';
   const [isModalOpen, , closeModal] = useBooleanState((
     getCookie('HIDE_BANNER') !== categoryName
     && sessionStorage.getItem('CLOSE_BANNER') !== categoryName
@@ -26,14 +25,14 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   const currentBanner = bannersData.banners[currentPageIndex];
 
   const handleImageLinkClick = () => {
-    logger.actionEventLoad({
+    logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_entry`,
+      event_label: 'main_modal',
       value: `${currentBanner.title}`,
     });
-    logger.actionEventLoad({
+    logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_entry`,
+      event_label: 'main_modal',
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
@@ -42,12 +41,12 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   const handelPrevButtonClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_next_modal`,
+      event_label: 'main_modal_next_modal',
       value: `${currentBanner.title}`,
     });
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_next_modal`,
+      event_label: 'main_modal_next_modal',
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
@@ -58,12 +57,12 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   const handelNextButtonClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_next_modal`,
+      event_label: 'main_next_modal',
       value: `${currentBanner.title}`,
     });
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_next_modal`,
+      event_label: 'main_next_modal',
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
@@ -74,12 +73,12 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   const handleCloseBanner = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_modal_close`,
+      event_label: 'main_modal_close',
       value: `${currentBanner.title}`,
     });
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_modal_close`,
+      event_label: 'main_modal_close',
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
@@ -90,12 +89,12 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   const handleHideForWeek = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_modal_hide_7d`,
+      event_label: 'main_modal_hide_7d',
       value: `${currentBanner.title}`,
     });
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: `${logBannerCategory}_modal_hide_7d`,
+      event_label: 'main_modal_hide_7d',
       value: 'design_A',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
@@ -103,47 +102,29 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     closeModal();
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.code === 'ArrowLeft') {
-      event.preventDefault();
-      setCurrentPageIndex((prev) => (prev === 0 ? bannersData.count - 1 : prev - 1));
-      logger.actionEventClick({
-        team: 'CAMPUS',
-        event_label: `${logBannerCategory}_next_modal`,
-        value: `${currentBanner.title}`,
-      });
-    } else if (event.code === 'ArrowRight') {
-      event.preventDefault();
-      setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
-      logger.actionEventClick({
-        team: 'CAMPUS',
-        event_label: `${logBannerCategory}_next_modal`,
-        value: `${currentBanner.title}`,
-      });
-    }
-  };
-
   useEffect(() => {
     if (isModalOpen) {
-      logger.actionEventClick({
+      logger.actionEventLoad({
         team: 'CAMPUS',
-        event_label: `${logBannerCategory}_modal_entry`,
+        event_label: 'main_modal_entry',
+        value: `${currentBanner.title}`,
+        event_category: 'entry',
+      });
+      logger.actionEventLoad({
+        team: 'CAMPUS',
+        event_label: 'main_modal_entry',
         value: 'design_A',
         event_category: 'a/b test 로깅(메인 모달)',
       });
     }
-  }, [isModalOpen, logger, logBannerCategory]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen]);
 
   if (!isModalOpen) return null;
 
   return (
     <div className={styles.container}>
-      <div
-        role="button"
-        className={styles.slider}
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
-      >
+      <div className={styles.slider}>
         <Link
           to={currentBanner.redirect_link ?? ''}
           onClick={handleImageLinkClick}

@@ -4,7 +4,7 @@ import { banner } from 'api';
 const useBanners = (categoryId: number) => {
   const { data } = useSuspenseQuery(
     {
-      queryKey: ['banners', `banner-${categoryId}`],
+      queryKey: ['banners', categoryId],
       queryFn: () => banner.getBanners((categoryId)),
     },
   );
