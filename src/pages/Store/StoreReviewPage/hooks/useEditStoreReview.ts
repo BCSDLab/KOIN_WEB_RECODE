@@ -14,7 +14,7 @@ export const useEditStoreReview = (shopId: string, reviewId: string) => {
     mutationFn: (reviewData: ReviewRequest) => api.review
       .putStoreReview(token, shopId, reviewId, reviewData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['review'] });
+      queryClient.refetchQueries({ queryKey: ['review'] });
       openToast({ message: '리뷰 수정이 완료되었습니다.' });
     },
     onError: (err) => {
