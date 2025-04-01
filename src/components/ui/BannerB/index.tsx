@@ -16,13 +16,14 @@ const HIDE_BANNER_DURATION_DAYS = 7;
 
 function BannerB({ categoryName, categoryId }: BannerProps) {
   const logger = useLogger();
-  const [isModalOpen, , closeModal] = useBooleanState((
-    getCookie('HIDE_BANNER') !== categoryName
-    && sessionStorage.getItem('CLOSE_BANNER') !== categoryName
-  ));
   const { data: bannersData } = useBanners(categoryId);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentBanner = bannersData.banners[currentPageIndex];
+  const [isModalOpen, , closeModal] = useBooleanState((
+    getCookie('HIDE_BANNER') !== categoryName
+    && sessionStorage.getItem('CLOSE_BANNER') !== categoryName
+    && bannersData.count !== 0
+  ));
 
   const handleImageLinkClick = () => {
     logger.actionEventClick({
