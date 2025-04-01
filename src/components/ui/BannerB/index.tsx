@@ -4,8 +4,8 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import { setCookie, getCookie } from 'utils/ts/cookie';
-import useBanners from './hooks/useBanners';
-import styles from './Banner.module.scss';
+import useBanners from 'components/ui/Banner/hooks/useBanners';
+import styles from './BannerB.module.scss';
 
 interface BannerProps {
   categoryName: string;
@@ -14,7 +14,7 @@ interface BannerProps {
 
 const HIDE_BANNER_DURATION_DAYS = 7;
 
-function Banner({ categoryName, categoryId }: BannerProps) {
+function BannerB({ categoryName, categoryId }: BannerProps) {
   const logger = useLogger();
   const { data: bannersData } = useBanners(categoryId);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -34,7 +34,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'main_modal',
-      value: 'design_A',
+      value: 'design_B',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
   };
@@ -48,7 +48,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'main_modal_next_modal',
-      value: 'design_A',
+      value: 'design_B',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
     setCurrentPageIndex((prev) => (prev === 0 ? bannersData.count - 1 : prev - 1));
@@ -64,7 +64,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'main_next_modal',
-      value: 'design_A',
+      value: 'design_B',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
     setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
@@ -80,7 +80,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'main_modal_close',
-      value: 'design_A',
+      value: 'design_B',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
     sessionStorage.setItem('CLOSE_BANNER', categoryName);
@@ -96,7 +96,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'main_modal_hide_7d',
-      value: 'design_A',
+      value: 'design_B',
       event_category: 'a/b test 로깅(메인 모달)',
     }); // AB test용 로깅 (추후 삭제)
     setCookie('HIDE_BANNER', categoryName, HIDE_BANNER_DURATION_DAYS);
@@ -114,7 +114,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       logger.actionEventLoad({
         team: 'CAMPUS',
         event_label: 'main_modal_entry',
-        value: 'design_A',
+        value: 'design_B',
         event_category: 'a/b test 로깅(메인 모달)',
       });
     }
@@ -139,13 +139,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
             className={styles.slider__image}
           />
         </Link>
-        <div className={styles.slider__pagination}>
-          <p className={styles['slider__pagination-label']}>
-            {currentPageIndex + 1}
-            /
-            {bannersData.count}
-          </p>
-        </div>
         <button
           type="button"
           className={`${styles.slider__arrow} ${styles['slider__arrow--previous']}`}
@@ -162,6 +155,15 @@ function Banner({ categoryName, categoryId }: BannerProps) {
         >
           <ArrowIcon />
         </button>
+        <div className={styles['slider__counter-bar']}>
+          <div
+            className={styles['slider__counter-bar--fill']}
+            style={{
+              left: `${(100 / bannersData.count) * currentPageIndex}%`,
+              width: `${100 / bannersData.count}%`,
+            }}
+          />
+        </div>
       </div>
       <div className={styles.footer}>
         <button
@@ -183,4 +185,4 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   );
 }
 
-export default Banner;
+export default BannerB;
