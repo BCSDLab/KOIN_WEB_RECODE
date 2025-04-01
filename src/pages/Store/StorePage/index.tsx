@@ -14,7 +14,7 @@ import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import { STORE_PAGE } from 'static/store';
-import IntroToolTip from 'components/common/IntroToolTip';
+import IntroToolTip from 'components/ui/IntroToolTip';
 import ROUTES from 'static/routes';
 import { getCategoryDurationTime, initializeCategoryEntryTime } from 'pages/Store/utils/durationTime';
 import { useNavigate } from 'react-router-dom';

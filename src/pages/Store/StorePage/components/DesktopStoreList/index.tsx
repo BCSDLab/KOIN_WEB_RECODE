@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreListV2 } from 'api/store/entity';
 import EventIcon from 'assets/svg/event.svg';
@@ -36,38 +35,10 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
   const koreanCategory = categories?.shop_categories.find(
     (category) => category.id === selectedCategory,
   )?.name;
-  const [filteredStoreList, setFilteredStoreList] = useState<StoreListV2[]>([]);
-
-  useEffect(() => {
-    if (!storeListData || storeListData.length === 0) {
-      setFilteredStoreList([]);
-      return;
-    }
-
-    const currentParamsList = Array.from(searchParams.keys());
-    let processedList = [...storeListData];
-
-    if (currentParamsList.includes('COUNT')) {
-      processedList = processedList
-        .sort((storeA, storeB) => storeB.review_count - storeA.review_count);
-    } else if (currentParamsList.includes('RATING')) {
-      processedList = processedList
-        .sort((storeA, storeB) => storeB.average_rate - storeA.average_rate);
-    }
-
-    if (currentParamsList.includes('OPEN')) {
-      processedList = processedList.filter((store) => store.is_open);
-    }
-    if (currentParamsList.includes('DELIVERY')) {
-      processedList = processedList.filter((store) => store.delivery);
-    }
-
-    setFilteredStoreList(processedList);
-  }, [searchParams, storeListData]);
 
   return (
     <div className={styles['store-list']}>
-      {filteredStoreList?.map((store: StoreListV2) => (
+      {storeListData?.map((store: StoreListV2) => (
         <Link
           to={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴&type=${storeType}`}
           className={styles['store-list__item']}
