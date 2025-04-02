@@ -1,0 +1,137 @@
+@use "src/utils/scss/media" as media;
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 21;
+
+  @include media.media-breakpoint(mobile) {
+    background: rgba(0 0 0 / 70%);
+  }
+}
+
+.container {
+  display: flex;
+  padding: 0;
+  width: 400px;
+  height: 450px;
+  flex-direction: column;
+  border-radius: 32px;
+  background: #fff;
+  box-shadow: 0 4px 20px 0 rgba(0 0 0 / 25%);
+  position: absolute;
+  top: 100px;
+  right: 24px;
+
+  @include media.media-breakpoint(mobile) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    width: 342px;
+    height: 336px;
+    border-radius: 16px;
+  }
+}
+
+.slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 370px;
+
+  @include media.media-breakpoint(mobile) {
+    height: 256px;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    border-radius: 32px 32px 0 0;
+    aspect-ratio: 40/37;
+
+    @include media.media-breakpoint(mobile) {
+      border-radius: 16px 16px 0 0;
+      aspect-ratio: 171/128;
+    }
+  }
+
+  &__arrow {
+    width: 80px;
+    height: 150px;
+    position: absolute;
+    top: 50%;
+
+    &--previous {
+      left: 0;
+      transform: translate(0, -50%) rotate(180deg);
+    }
+
+    &--next {
+      right: 0;
+      transform: translate(0, -50%);
+    }
+  }
+
+  &__counter-bar {
+    display: flex;
+    width: 208px;
+    height: 4px;
+    position: absolute;
+    left: 50%;
+    bottom: 6%;
+    transform: translate(-50%);
+    border-radius: 4px;
+    background: rgba(0 0 0 / 30%);
+
+    &--fill {
+      position: absolute;
+      height: 100%;
+      border-radius: 4px;
+      background: #eee;
+      transition: left 0.3s ease;
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  height: 80px;
+  margin: 0 auto;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 160%;
+
+  &__button--hide {
+    display: flex;
+    width: 232px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid #4590bb;
+    color: #175c8e;
+  }
+
+  &__button--close {
+    display: flex;
+    width: 96px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    background: #175c8e;
+    color: #fff;
+  }
+}
