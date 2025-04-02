@@ -94,62 +94,64 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
   if (!isModalOpen) return null;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.slider}>
-        <Link
-          to={currentBanner.redirect_link ?? ''}
-          onClick={handleImageLinkClick}
-        >
-          <img
-            src={currentBanner.image_url}
-            alt="banner"
-            onError={(e) => {
-              e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
-            }}
-            className={styles.slider__image}
-          />
-        </Link>
-        <button
-          type="button"
-          className={`${styles.slider__arrow} ${styles['slider__arrow--previous']}`}
-          aria-label="이전 슬라이드"
-          onClick={handelPrevButtonClick}
-        >
-          <ArrowIcon />
-        </button>
-        <button
-          type="button"
-          className={`${styles.slider__arrow} ${styles['slider__arrow--next']}`}
-          aria-label="다음 슬라이드"
-          onClick={handelNextButtonClick}
-        >
-          <ArrowIcon />
-        </button>
-        <div className={styles['slider__counter-bar']}>
-          <div
-            className={styles['slider__counter-bar--fill']}
-            style={{
-              left: `${(100 / bannersData.count) * currentPageIndex}%`,
-              width: `${100 / bannersData.count}%`,
-            }}
-          />
+    <div className={styles.background}>
+      <div className={styles.container}>
+        <div className={styles.slider}>
+          <Link
+            to={currentBanner.redirect_link ?? ''}
+            onClick={handleImageLinkClick}
+          >
+            <img
+              src={currentBanner.image_url}
+              alt="banner"
+              onError={(e) => {
+                e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
+              }}
+              className={styles.slider__image}
+            />
+          </Link>
+          <button
+            type="button"
+            className={`${styles.slider__arrow} ${styles['slider__arrow--previous']}`}
+            aria-label="이전 슬라이드"
+            onClick={handelPrevButtonClick}
+          >
+            <ArrowIcon />
+          </button>
+          <button
+            type="button"
+            className={`${styles.slider__arrow} ${styles['slider__arrow--next']}`}
+            aria-label="다음 슬라이드"
+            onClick={handelNextButtonClick}
+          >
+            <ArrowIcon />
+          </button>
+          <div className={styles['slider__counter-bar']}>
+            <div
+              className={styles['slider__counter-bar--fill']}
+              style={{
+                left: `${(100 / bannersData.count) * currentPageIndex}%`,
+                width: `${100 / bannersData.count}%`,
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <div className={styles.footer}>
-        <button
-          type="button"
-          className={styles['footer__button--hide']}
-          onClick={handleHideForWeek}
-        >
-          일주일 동안 그만 보기
-        </button>
-        <button
-          type="button"
-          className={styles['footer__button--close']}
-          onClick={handleCloseBanner}
-        >
-          닫기
-        </button>
+        <div className={styles.footer}>
+          <button
+            type="button"
+            className={styles['footer__button--hide']}
+            onClick={handleHideForWeek}
+          >
+            일주일 동안 그만 보기
+          </button>
+          <button
+            type="button"
+            className={styles['footer__button--close']}
+            onClick={handleCloseBanner}
+          >
+            닫기
+          </button>
+        </div>
       </div>
     </div>
   );

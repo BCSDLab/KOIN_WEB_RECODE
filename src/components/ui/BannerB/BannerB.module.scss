@@ -1,3 +1,18 @@
+@use "src/utils/scss/media" as media;
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 21;
+
+  @include media.media-breakpoint(mobile) {
+    background: rgba(0 0 0 / 70%);
+  }
+}
+
 .container {
   display: flex;
   padding: 0;
@@ -10,7 +25,17 @@
   position: absolute;
   top: 100px;
   right: 24px;
-  z-index: 10;
+
+  @include media.media-breakpoint(mobile) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    width: 342px;
+    height: 336px;
+    border-radius: 16px;
+  }
 }
 
 .slider {
@@ -21,11 +46,20 @@
   width: 100%;
   height: 370px;
 
+  @include media.media-breakpoint(mobile) {
+    height: 256px;
+  }
+
   &__image {
     width: 100%;
     height: 100%;
     border-radius: 32px 32px 0 0;
     aspect-ratio: 40/37;
+
+    @include media.media-breakpoint(mobile) {
+      border-radius: 16px 16px 0 0;
+      aspect-ratio: 171/128;
+    }
   }
 
   &__arrow {
