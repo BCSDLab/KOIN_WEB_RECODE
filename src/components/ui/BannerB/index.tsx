@@ -87,7 +87,7 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isModalOpen, logger]);
+  }, [isModalOpen]);
 
   if (!isModalOpen) return null;
 
