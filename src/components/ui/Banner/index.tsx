@@ -40,7 +40,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       value: `${currentBanner.title}`,
     });
     setCurrentPageIndex((prev) => (prev === 0 ? bannersData.count - 1 : prev - 1));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
   const handelNextButtonClick = () => {
@@ -50,7 +49,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       value: `${currentBanner.title}`,
     });
     setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
   const handleCloseBanner = () => {
@@ -89,7 +87,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isModalOpen]);
+  }, [isModalOpen, logger]);
 
   if (!isModalOpen) return null;
 

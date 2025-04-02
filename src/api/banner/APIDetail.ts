@@ -1,5 +1,5 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import {
+import type {
   BannerCategoriesResponse,
   BannersResponse,
 } from './entity';

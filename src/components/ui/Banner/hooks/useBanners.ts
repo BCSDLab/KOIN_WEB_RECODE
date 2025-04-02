@@ -5,7 +5,7 @@ const useBanners = (categoryId: number) => {
   const { data } = useSuspenseQuery(
     {
       queryKey: ['banners', categoryId],
-      queryFn: () => banner.getBanners((categoryId)),
+      queryFn: () => banner.getBanners(categoryId),
     },
   );
   return { data };
