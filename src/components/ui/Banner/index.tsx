@@ -21,7 +21,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   const currentBanner = bannersData.banners[currentPageIndex];
   const [isModalOpen, , closeModal] = useBooleanState((
     getCookie('HIDE_BANNER') !== categoryName
-    && sessionStorage.getItem('CLOSE_BANNER') !== categoryName
     && bannersData.count !== 0
   ));
 
@@ -57,7 +56,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       event_label: 'main_modal_close',
       value: `${currentBanner.title}`,
     });
-    sessionStorage.setItem('CLOSE_BANNER', categoryName);
     closeModal();
   };
 
@@ -95,19 +93,41 @@ function Banner({ categoryName, categoryId }: BannerProps) {
     <div className={styles.background}>
       <div className={styles.container}>
         <div className={styles.slider}>
-          <Link
-            to={currentBanner.redirect_link ?? ''}
-            onClick={handleImageLinkClick}
-          >
-            <img
-              src={currentBanner.image_url}
-              alt="banner"
-              onError={(e) => {
-                e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
+          {currentBanner.redirect_link ? (
+            <Link
+              to={currentBanner.redirect_link}
+              onClick={handleImageLinkClick}
+            >
+              <img
+                src={currentBanner.image_url}
+                alt="banner"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
+                }}
+                className={styles.slider__image}
+              />
+            </Link>
+          ) : (
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={handleImageLinkClick}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleImageLinkClick();
+                }
               }}
-              className={styles.slider__image}
-            />
-          </Link>
+            >
+              <img
+                src={currentBanner.image_url}
+                alt="banner"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
+                }}
+                className={styles.slider__image}
+              />
+            </div>
+          )}
           <div className={styles.slider__pagination}>
             <p className={styles['slider__pagination-label']}>
               {currentPageIndex + 1}
