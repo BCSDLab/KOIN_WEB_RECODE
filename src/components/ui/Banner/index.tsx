@@ -31,12 +31,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       event_label: 'main_modal',
       value: `${currentBanner.title}`,
     });
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'main_modal',
-      value: 'design_A',
-      event_category: 'a/b test 로깅(메인 모달)',
-    }); // AB test용 로깅 (추후 삭제)
   };
 
   const handelPrevButtonClick = () => {
@@ -45,12 +39,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       event_label: 'main_modal_next_modal',
       value: `${currentBanner.title}`,
     });
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'main_modal_next_modal',
-      value: 'design_A',
-      event_category: 'a/b test 로깅(메인 모달)',
-    }); // AB test용 로깅 (추후 삭제)
     setCurrentPageIndex((prev) => (prev === 0 ? bannersData.count - 1 : prev - 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   };
@@ -61,12 +49,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       event_label: 'main_next_modal',
       value: `${currentBanner.title}`,
     });
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'main_next_modal',
-      value: 'design_A',
-      event_category: 'a/b test 로깅(메인 모달)',
-    }); // AB test용 로깅 (추후 삭제)
     setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   };
@@ -77,12 +59,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       event_label: 'main_modal_close',
       value: `${currentBanner.title}`,
     });
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'main_modal_close',
-      value: 'design_A',
-      event_category: 'a/b test 로깅(메인 모달)',
-    }); // AB test용 로깅 (추후 삭제)
     sessionStorage.setItem('CLOSE_BANNER', categoryName);
     closeModal();
   };
@@ -93,12 +69,6 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       event_label: 'main_modal_hide_7d',
       value: `${currentBanner.title}`,
     });
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'main_modal_hide_7d',
-      value: 'design_A',
-      event_category: 'a/b test 로깅(메인 모달)',
-    }); // AB test용 로깅 (추후 삭제)
     setCookie('HIDE_BANNER', categoryName, HIDE_BANNER_DURATION_DAYS);
     closeModal();
   };
@@ -113,7 +83,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
       });
       logger.actionEventLoad({
         team: 'CAMPUS',
-        event_label: 'main_modal_entry',
+        event_label: 'CAMPUS_modal_1',
         value: 'design_A',
         event_category: 'a/b test 로깅(메인 모달)',
       });
