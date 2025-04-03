@@ -12,15 +12,17 @@ interface FormImageProps {
   images: Array<string>;
   setImages: (images: Array<string>) => void;
   type: 'FOUND' | 'LOST';
+  formIndex: number;
 }
 
 export default function FormImage({
-  images, setImages, type,
+  images, setImages, type, formIndex,
 }: FormImageProps) {
   const isMobile = useMediaQuery();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadLostItemFile });
 
   const imageCounter = `${images.length}/${MAX_IMAGES_LENGTH}`;
+  const inputId = `image-file-${formIndex}`;
 
   const saveImage = async () => {
     if (images.length >= MAX_IMAGES_LENGTH) {
@@ -71,14 +73,14 @@ export default function FormImage({
           ))}
         </ul>
       )}
-      <label htmlFor="image-file" className={styles.images__upload}>
+      <label htmlFor={inputId} className={styles.images__upload}>
         <PhotoIcon />
         사진 등록하기
         <input
           type="file"
           ref={imgRef}
           accept="image/*"
-          id="image-file"
+          id={inputId}
           multiple
           onChange={saveImage}
           aria-label="사진 등록하기"
