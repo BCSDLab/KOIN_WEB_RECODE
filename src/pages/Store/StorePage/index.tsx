@@ -39,15 +39,19 @@ type StoreSearchQueryType = {
 // }
 
 type StoreSorter = StoreSorterType | '';
-type StoreFilter = StoreFilterType[];
 
-interface MobileCheckBoxItem {
-  id: StoreSorterType | StoreFilterType;
+type StoreFilter = {
+  OPEN: boolean;
+  DELIVERY: boolean;
+};
+
+interface MobileCheckBoxItem<T> {
+  id: T;
   content: string;
   value: number;
 }
 
-const MOBILE_SORT_CHECK_BOX: MobileCheckBoxItem[] = [
+const MOBILE_SORT_CHECK_BOX: MobileCheckBoxItem<'COUNT' | 'RATING'>[] = [
   {
     id: 'COUNT',
     content: '리뷰순',
@@ -60,7 +64,7 @@ const MOBILE_SORT_CHECK_BOX: MobileCheckBoxItem[] = [
   },
 ];
 
-const MOBILE_FILTER_CHECK_BOX: MobileCheckBoxItem[] = [
+const MOBILE_FILTER_CHECK_BOX: MobileCheckBoxItem<'OPEN' | 'DELIVERY'>[] = [
   {
     id: 'OPEN',
     content: '영업중',
@@ -130,17 +134,19 @@ function StorePage() {
   const {
     params, searchParams, setParams,
   } = useParamsHandler();
-  // const [storeFilterState, setStoreFilterState] = useState<StoreState>({
-  //   sorter: '',
-  //   filter: [],
-  // });
 
   const [storeSorter, setStoreSorter] = useState<StoreSorter>('');
-  const [storeFilterList, setStoreFilterList] = useState<StoreFilter>([]);
+  const [storeFilterList, setStoreFilterList] = useState<StoreFilter>({
+    OPEN: false,
+    DELIVERY: false,
+  });
+
+  const filteredTypeList = Object.entries(storeFilterList).filter(([, value]) => value)
+    .map(([key]) => key as StoreFilterType);
 
   const storeList = useStoreList(
     storeSorter,
-    storeFilterList,
+    filteredTypeList,
     params,
   );
 
@@ -177,57 +183,65 @@ function StorePage() {
     });
   };
 
-  const onClickStoreListFilter = (
-    item: StoreSorterType | StoreFilterType,
-  ) => {
-    if (item === 'COUNT' || item === 'RATING') {
-      // setStoreFilterState((prevState) => ({
-      //   ...prevState,
-      //   sorter: prevState.sorter === item ? '' : item,
-      // }));
-
-      setStoreSorter((prevSorter) => (prevSorter === item ? '' : item));
-
-      // if (storeFilterState.sorter !== item) {
-      //   logger.actionEventClick({
-      //     actionTitle: 'BUSINESS',
-      //     event_label: 'shop_can',
-      //     value: loggingCategoryToggleValue(
-      //       item,
-      //       categories.shop_categories[selectedCategory]?.name,
-      //     ),
-      //     event_category: 'click',
-      //   });
-      // }
-    } else if (item === 'DELIVERY' || item === 'OPEN') {
-      // setStoreFilterState((prevState) => {
-      //   const newFilter = prevState.filter.includes(item)
-      //     ? prevState.filter.filter((filterItem) => filterItem !== item)
-      //     : [...prevState.filter, item];
-      //   return {
-      //     ...prevState,
-      //     filter: newFilter,
-      //   };
-      // });
-
-      setStoreFilterList((prevFilter) => (prevFilter.includes(item)
-        ? prevFilter.filter((filterItem) => filterItem !== item)
-        : [...prevFilter, item]));
-
-      // 현재상태와 바뀔 상태를 비교해서 토글이 on 되는지 판단함
-      // if (!storeFilterState.filter.includes(item)) {
-      //   logger.actionEventClick({
-      //     actionTitle: 'BUSINESS',
-      //     event_label: 'shop_can',
-      //     value: loggingCategoryToggleValue(
-      //       item,
-      //       categories.shop_categories[selectedCategory]?.name,
-      //     ),
-      //     event_category: 'click',
-      //   });
-      // }
-    }
+  const handleSortState = (type: StoreSorterType) => () => {
+    setStoreSorter((prevSorter) => (prevSorter === type ? '' : type));
   };
+
+  const handleFilterState = (type: 'OPEN' | 'DELIVERY') => () => {
+    setStoreFilterList((p) => ({ ...p, [type]: !p[type] }));
+  };
+
+  // const onClickStoreListFilter = (
+  //   item: StoreSorterType | StoreFilterType,
+  // ) => {
+  //   if (item === 'COUNT' || item === 'RATING') {
+  //     // setStoreFilterState((prevState) => ({
+  //     //   ...prevState,
+  //     //   sorter: prevState.sorter === item ? '' : item,
+  //     // }));
+
+  //     setStoreSorter((prevSorter) => (prevSorter === item ? '' : item));
+
+  //     // if (storeFilterState.sorter !== item) {
+  //     //   logger.actionEventClick({
+  //     //     actionTitle: 'BUSINESS',
+  //     //     event_label: 'shop_can',
+  //     //     value: loggingCategoryToggleValue(
+  //     //       item,
+  //     //       categories.shop_categories[selectedCategory]?.name,
+  //     //     ),
+  //     //     event_category: 'click',
+  //     //   });
+  //     // }
+  //   } else if (item === 'DELIVERY' || item === 'OPEN') {
+  //     // setStoreFilterState((prevState) => {
+  //     //   const newFilter = prevState.filter.includes(item)
+  //     //     ? prevState.filter.filter((filterItem) => filterItem !== item)
+  //     //     : [...prevState.filter, item];
+  //     //   return {
+  //     //     ...prevState,
+  //     //     filter: newFilter,
+  //     //   };
+  //     // });
+
+  //     setStoreFilterList((prevFilter) => (prevFilter.includes(item)
+  //       ? prevFilter.filter((filterItem) => filterItem !== item)
+  //       : [...prevFilter, item]));
+
+  //     // 현재상태와 바뀔 상태를 비교해서 토글이 on 되는지 판단함
+  //     // if (!storeFilterState.filter.includes(item)) {
+  //     //   logger.actionEventClick({
+  //     //     actionTitle: 'BUSINESS',
+  //     //     event_label: 'shop_can',
+  //     //     value: loggingCategoryToggleValue(
+  //     //       item,
+  //     //       categories.shop_categories[selectedCategory]?.name,
+  //     //     ),
+  //     //     event_category: 'click',
+  //     //   });
+  //     // }
+  //   }
+  // };
 
   useScrollToTop();
   const storeScrollLogging = () => {
@@ -327,45 +341,37 @@ function StorePage() {
         )}
 
         <div className={styles.option__checkbox}>
-          {MOBILE_SORT_CHECK_BOX.map((item) => (
+          {MOBILE_SORT_CHECK_BOX.map(({ id, content }) => (
             <div
-              key={item.id}
-              className={cn({
-                [styles['option-checkbox']]: true,
-                // [styles['option-checkbox--last']]: index === MOBILE_SORT_CHECK_BOX.length - 1,
-              })}
+              key={id}
+              className={styles['option-checkbox']}
             >
-              <label htmlFor={item.id} className={styles['option-checkbox__label']}>
+              <label htmlFor={id} className={styles['option-checkbox__label']}>
                 <input
-                  id={item.id}
+                  id={id}
                   type="checkbox"
-                  checked={storeSorter === item.id
-                    || storeFilterList.includes(item.id as StoreFilterType)}
+                  checked={storeSorter === id}
                   className={styles['option-checkbox__input']}
-                  onChange={() => onClickStoreListFilter(item.id)}
+                  onChange={handleSortState(id)}
                 />
-                {item.content}
+                {content}
               </label>
             </div>
           ))}
-          {MOBILE_FILTER_CHECK_BOX.map((item) => (
+          {MOBILE_FILTER_CHECK_BOX.map(({ id, content }) => (
             <div
-              key={item.id}
-              className={cn({
-                [styles['option-checkbox']]: true,
-                // [styles['option-checkbox--last']]: index === MOBILE_FILTER_CHECK_BOX.length - 1,
-              })}
+              key={id}
+              className={styles['option-checkbox']}
             >
-              <label htmlFor={item.id} className={styles['option-checkbox__label']}>
+              <label htmlFor={id} className={styles['option-checkbox__label']}>
                 <input
-                  id={item.id}
+                  id={id}
                   type="checkbox"
-                  checked={storeSorter === item.id
-                    || storeFilterList.includes(item.id as StoreFilterType)}
+                  checked={storeFilterList[id]}
                   className={styles['option-checkbox__input']}
-                  onChange={() => onClickStoreListFilter(item.id)}
+                  onChange={handleFilterState(id)}
                 />
-                {item.content}
+                {content}
               </label>
             </div>
           ))}

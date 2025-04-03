@@ -154,6 +154,7 @@
   display: flex;
   height: 24px;
   margin-top: 20px;
+  justify-content: space-between;
   font-family: NanumBarunGothic, serif;
 
   @include media.media-breakpoint(mobile) {
@@ -181,10 +182,10 @@
   }
 
   &__checkbox {
-    margin-left: auto;
     display: flex;
     position: relative;
     width: auto;
+    gap: 24px;
 
     @include media.media-breakpoint(mobile) {
       width: 100%;
@@ -199,7 +200,6 @@
   width: fit-content;
   color: #175c8e;
   letter-spacing: -0.6px;
-  margin-right: 25px;
 
   &--last {
     margin-right: 0;
