@@ -39,7 +39,7 @@ export default function IndexStore() {
       previous_page: '메인',
       current_page: category.name,
     },
-    route: `${ROUTES.Store()}?category=${category.id}&COUNT=1`,
+    route: `${ROUTES.Store()}?category=${category.id}`,
   }));
 
   const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map(
@@ -73,7 +73,7 @@ export default function IndexStore() {
 
   return (
     <section className={styles.template}>
-      <Link to={`${ROUTES.Store()}?category=1&COUNT=1`} className={styles.template__title}>주변 상점</Link>
+      <Link to={`${ROUTES.Store()}?category=1`} className={styles.template__title}>주변 상점</Link>
       <Suspense fallback={null}>
         <div className={styles.category__wrapper}>
           {categoriesWithBenefit.map((category) => (
