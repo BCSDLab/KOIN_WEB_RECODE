@@ -193,7 +193,7 @@ function StorePage() {
   };
 
   const handleFilterState = (type:StoreFilterType) => () => {
-    setStoreFilterList((p) => ({ ...p, [type]: !p[type] }));
+    setStoreFilterList((prevFilterList) => ({ ...prevFilterList, [type]: !prevFilterList[type] }));
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       event_label: 'shop_can',
