@@ -32,11 +32,14 @@ type StoreSearchQueryType = {
   shopIds?: string;
 };
 
-interface StoreState {
-  sorter: StoreSorterType | '';
-  filter: StoreFilterType[];
-  storeName?: string;
-}
+// interface StoreState {
+//   sorter: StoreSorterType | '';
+//   filter: StoreFilterType[];
+//   storeName?: string;
+// }
+
+type StoreSorter = StoreSorterType | '';
+type StoreFilter = StoreFilterType[];
 
 interface MobileCheckBoxItem {
   id: StoreSorterType | StoreFilterType;
@@ -44,7 +47,7 @@ interface MobileCheckBoxItem {
   value: number;
 }
 
-const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
+const MOBILE_SORT_CHECK_BOX: MobileCheckBoxItem[] = [
   {
     id: 'COUNT',
     content: '리뷰순',
@@ -55,6 +58,9 @@ const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
     content: '별점순',
     value: 2,
   },
+];
+
+const MOBILE_FILTER_CHECK_BOX: MobileCheckBoxItem[] = [
   {
     id: 'OPEN',
     content: '영업중',
@@ -67,17 +73,17 @@ const MOBILE_CHECK_BOX: MobileCheckBoxItem[] = [
   },
 ];
 
-const toggleNameLabel = {
-  COUNT: 'review',
-  RATING: 'star',
-  OPEN: 'open',
-  DELIVERY: 'delivery',
-} as const;
+// const toggleNameLabel = {
+//   COUNT: 'review',
+//   RATING: 'star',
+//   OPEN: 'open',
+//   DELIVERY: 'delivery',
+// } as const;
 
-const loggingCategoryToggleValue = (
-  toggleName: 'COUNT' | 'RATING' | 'OPEN' | 'DELIVERY',
-  category: string | undefined,
-) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
+// const loggingCategoryToggleValue = (
+//   toggleName: 'COUNT' | 'RATING' | 'OPEN' | 'DELIVERY',
+//   category: string | undefined,
+// ) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
 
 const useStoreList = (
   sorter: StoreSorterType,
@@ -124,13 +130,17 @@ function StorePage() {
   const {
     params, searchParams, setParams,
   } = useParamsHandler();
-  const [storeFilterState, setStoreFilterState] = useState<StoreState>({
-    sorter: '',
-    filter: [],
-  });
+  // const [storeFilterState, setStoreFilterState] = useState<StoreState>({
+  //   sorter: '',
+  //   filter: [],
+  // });
+
+  const [storeSorter, setStoreSorter] = useState<StoreSorter>('');
+  const [storeFilterList, setStoreFilterList] = useState<StoreFilter>([]);
+
   const storeList = useStoreList(
-    storeFilterState.sorter,
-    storeFilterState.filter,
+    storeSorter,
+    storeFilterList,
     params,
   );
 
@@ -171,44 +181,51 @@ function StorePage() {
     item: StoreSorterType | StoreFilterType,
   ) => {
     if (item === 'COUNT' || item === 'RATING') {
-      setStoreFilterState((prevState) => ({
-        ...prevState,
-        sorter: prevState.sorter === item ? '' : item,
-      }));
+      // setStoreFilterState((prevState) => ({
+      //   ...prevState,
+      //   sorter: prevState.sorter === item ? '' : item,
+      // }));
 
-      if (storeFilterState.sorter !== item) {
-        logger.actionEventClick({
-          actionTitle: 'BUSINESS',
-          event_label: 'shop_can',
-          value: loggingCategoryToggleValue(
-            item,
-            categories.shop_categories[selectedCategory]?.name,
-          ),
-          event_category: 'click',
-        });
-      }
+      setStoreSorter((prevSorter) => (prevSorter === item ? '' : item));
+
+      // if (storeFilterState.sorter !== item) {
+      //   logger.actionEventClick({
+      //     actionTitle: 'BUSINESS',
+      //     event_label: 'shop_can',
+      //     value: loggingCategoryToggleValue(
+      //       item,
+      //       categories.shop_categories[selectedCategory]?.name,
+      //     ),
+      //     event_category: 'click',
+      //   });
+      // }
     } else if (item === 'DELIVERY' || item === 'OPEN') {
-      setStoreFilterState((prevState) => {
-        const newFilter = prevState.filter.includes(item)
-          ? prevState.filter.filter((filterItem) => filterItem !== item)
-          : [...prevState.filter, item];
-        return {
-          ...prevState,
-          filter: newFilter,
-        };
-      });
+      // setStoreFilterState((prevState) => {
+      //   const newFilter = prevState.filter.includes(item)
+      //     ? prevState.filter.filter((filterItem) => filterItem !== item)
+      //     : [...prevState.filter, item];
+      //   return {
+      //     ...prevState,
+      //     filter: newFilter,
+      //   };
+      // });
+
+      setStoreFilterList((prevFilter) => (prevFilter.includes(item)
+        ? prevFilter.filter((filterItem) => filterItem !== item)
+        : [...prevFilter, item]));
+
       // 현재상태와 바뀔 상태를 비교해서 토글이 on 되는지 판단함
-      if (!storeFilterState.filter.includes(item)) {
-        logger.actionEventClick({
-          actionTitle: 'BUSINESS',
-          event_label: 'shop_can',
-          value: loggingCategoryToggleValue(
-            item,
-            categories.shop_categories[selectedCategory]?.name,
-          ),
-          event_category: 'click',
-        });
-      }
+      // if (!storeFilterState.filter.includes(item)) {
+      //   logger.actionEventClick({
+      //     actionTitle: 'BUSINESS',
+      //     event_label: 'shop_can',
+      //     value: loggingCategoryToggleValue(
+      //       item,
+      //       categories.shop_categories[selectedCategory]?.name,
+      //     ),
+      //     event_category: 'click',
+      //   });
+      // }
     }
   };
 
@@ -310,22 +327,41 @@ function StorePage() {
         )}
 
         <div className={styles.option__checkbox}>
-          {MOBILE_CHECK_BOX.map((item, index) => (
+          {MOBILE_SORT_CHECK_BOX.map((item) => (
             <div
               key={item.id}
               className={cn({
                 [styles['option-checkbox']]: true,
-                [styles['option-checkbox--last']]: index === MOBILE_CHECK_BOX.length - 1,
+                // [styles['option-checkbox--last']]: index === MOBILE_SORT_CHECK_BOX.length - 1,
               })}
             >
               <label htmlFor={item.id} className={styles['option-checkbox__label']}>
                 <input
                   id={item.id}
                   type="checkbox"
-                  checked={storeFilterState.sorter.includes(item.id)
-                            || storeFilterState.filter.includes(
-                              item.id as StoreFilterType,
-                            )}
+                  checked={storeSorter === item.id
+                    || storeFilterList.includes(item.id as StoreFilterType)}
+                  className={styles['option-checkbox__input']}
+                  onChange={() => onClickStoreListFilter(item.id)}
+                />
+                {item.content}
+              </label>
+            </div>
+          ))}
+          {MOBILE_FILTER_CHECK_BOX.map((item) => (
+            <div
+              key={item.id}
+              className={cn({
+                [styles['option-checkbox']]: true,
+                // [styles['option-checkbox--last']]: index === MOBILE_FILTER_CHECK_BOX.length - 1,
+              })}
+            >
+              <label htmlFor={item.id} className={styles['option-checkbox__label']}>
+                <input
+                  id={item.id}
+                  type="checkbox"
+                  checked={storeSorter === item.id
+                    || storeFilterList.includes(item.id as StoreFilterType)}
                   className={styles['option-checkbox__input']}
                   onChange={() => onClickStoreListFilter(item.id)}
                 />
@@ -352,15 +388,12 @@ function StorePage() {
       )}
       <EventCarousel />
       <div className={styles.filter}>
-        {MOBILE_CHECK_BOX.map((item) => (
+        {/* {MOBILE_CHECK_BOX.map((item) => (
           <button
             className={cn({
               [styles.filter__box]: true,
               [styles['filter__box--activate']]:
-                storeFilterState.sorter.includes(item.id)
-                || storeFilterState.filter.includes(
-                  item.id as StoreFilterType,
-                ),
+                storeSorter === item.id || storeFilterList.includes(item.id as StoreFilterType),
             })}
             key={item.value}
             type="button"
@@ -368,7 +401,7 @@ function StorePage() {
           >
             {item.content}
           </button>
-        ))}
+        ))} */}
         {isTooltipOpen && (
           <IntroToolTip
             content="지금 리뷰가 가장 많은 상점을 확인해보세요!"
