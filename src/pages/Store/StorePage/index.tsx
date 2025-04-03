@@ -69,6 +69,8 @@ const toggleNameLabel = {
   DELIVERY: 'delivery',
 } as const;
 
+const CATEGORY_IS_UNDEFINED = -1;
+
 const loggingCategoryToggleSorterValue = (
   toggleName: 'COUNT' | 'RATING',
   category: string | undefined,
@@ -143,7 +145,7 @@ function StorePage() {
     params,
   );
 
-  const selectedCategory = Number(searchParams.get('category')) ?? -1;
+  const selectedCategory = Number(searchParams.get('category')) ?? CATEGORY_IS_UNDEFINED;
 
   const handleTooltipCloseButtonClick = () => {
     localStorage.setItem('store-review-tooltip', 'used');
@@ -172,7 +174,7 @@ function StorePage() {
     });
   };
 
-  const handleSortState = (type: StoreSorterType) => () => {
+  const handleSortCheckBox = (type: StoreSorterType) => () => {
     setStoreSorter((prevSorter) => (prevSorter === type ? 'NONE' : type));
 
     if (type === 'COUNT' || type === 'RATING') {
@@ -188,7 +190,7 @@ function StorePage() {
     }
   };
 
-  const handleFilterState = (type: StoreFilterType) => () => {
+  const handleFilterCheckBox = (type:StoreFilterType) => () => {
     setStoreFilterList((prevFilterList) => ({ ...prevFilterList, [type]: !prevFilterList[type] }));
 
     logger.actionEventClick({
@@ -310,7 +312,7 @@ function StorePage() {
                   type="checkbox"
                   checked={storeSorter === id}
                   className={styles['option-checkbox__input']}
-                  onChange={handleSortState(id)}
+                  onChange={handleSortCheckBox(id)}
                 />
                 {content}
               </label>
@@ -327,7 +329,7 @@ function StorePage() {
                   type="checkbox"
                   checked={storeFilterList[id]}
                   className={styles['option-checkbox__input']}
-                  onChange={handleFilterState(id)}
+                  onChange={handleFilterCheckBox(id)}
                 />
                 {content}
               </label>
@@ -362,7 +364,7 @@ function StorePage() {
             })}
             key={value}
             type="button"
-            onClick={handleSortState(id)}
+            onClick={handleSortCheckBox(id)}
           >
             {content}
           </button>
@@ -377,7 +379,7 @@ function StorePage() {
             })}
             key={value}
             type="button"
-            onClick={handleFilterState(id)}
+            onClick={handleFilterCheckBox(id)}
           >
             {content}
           </button>
