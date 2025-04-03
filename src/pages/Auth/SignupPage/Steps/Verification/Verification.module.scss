@@ -23,6 +23,10 @@
       font-size: 12px;
       font-weight: 400;
       line-height: 160%;
+
+      .required {
+        color: #EC2D30;
+      }
     }
   }
 }
@@ -40,42 +44,12 @@
   }
 }
 
-
-.field {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-
-  label {
-    font-weight: bold;
-
-    .required {
-      color: #EC2D30;
-    }
-  }
-
-  input[type="text"] {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 0.75rem;
-    font-size: 1rem;
-    color: #000;
-
-    &::placeholder {
-      color: #ccc;
-    }
-  }
-}
-
-
-
 .form {
   display: flex;
   flex-direction: column;
-  align-items: center;
   font-family: Pretendard, sans-serif;
   background-color: pink;
-
+  gap: 24px;
 
   &__inputWrapper {
     display: flex;
@@ -84,24 +58,45 @@
     padding: 0 24px;
     width: 100%;
     // gap: 104px ;
+    justify-content: space-between;
   }
 
   &__label {
-    color: #000;
     font-size: 18px;
+    font-style: normal;
     font-weight: 400;
     line-height: 160%;
+
+    .required {
+      color: #EC2D30;
+    }
+  }
+
+  &__inputContainer {
+    display: flex;
+    gap: 16px;
   }
 
   &__input {
+    box-sizing: border-box;
+    outline: none;
     width: 320px;
-    padding: 11px 12px;
+    height: 48px;
+    padding: 8px 12px;
     border-radius: 12px;
-    border: 1px solid #e1e1e1;
-    color: #cacaca;
+    border: 1px solid #ececec;
     font-size: 16px;
     font-weight: 400;
     line-height: 160%;
+
+    &::placeholder {
+      color: #cacaca;
+      font-family: Pretendard;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 160%;
+    }
   }
 
   &__verifyButton {
@@ -114,16 +109,88 @@
     gap: 10px;
     border-radius: 12px;
     border: 1px solid #e1e1e1;
-
+    background-color: #fff;
     color: #cacaca;
+    font-family: Pretendard;
     font-size: 13px;
     font-weight: 500;
     line-height: 160%;
   }
 }
 
+.field {
+  display: flex;
+  gap: 100px;
+  padding: 0 24px;
+
+  label {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+
+    .required {
+      color: #ec2d30;
+    }
+  }
+
+  input[type="text"] {
+    box-sizing: border-box;
+    width: 320px;
+    height: 48px;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.75rem;
+    outline: none;
+    font-size: 1rem;
+    color: #000;
+
+    &::placeholder {
+      color: #cacaca;
+      font-family: Pretendard;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 160%;
+    }
+  }
+
+  &__genderWrapper {
+    display: flex;
+    gap: 32px;
+  }
+
+  &__gender-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  input[type='radio'] {
+    -webkit-appearance: none; // 웹킷 브라우저에서 기본 스타일 제거
+    -moz-appearance: none; // 모질라 브라우저에서 기본 스타일 제거 
+    appearance: none; // 기본 브라우저에서 기본 스타일 제거
+    width: 18px;
+    height: 18px;
+    border-radius: 50px;
+    border: 2px solid #175C8E;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  input[type='radio']:checked {
+    background-color: #175C8E; // 체크 시 내부 원으로 표시될 색상
+    border: 3px solid white; // 테두리가 아닌, 테두리와 원 사이의 색상
+    box-shadow: 0 0 0 2px #175C8E; // 얘가 테두리가 됨
+    // 그림자로 테두리를 직접 만들어야 함 (퍼지는 정도를 0으로 주면 테두리처럼 보입니다.)
+    // 그림자가 없으면 그냥 설정한 색상이 꽉 찬 원으로만 나온다.
+  }
+}
+
 .buttonWrapper {
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 32px;
 
   &__button {

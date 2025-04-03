@@ -26,14 +26,14 @@ function SignUp() {
       setIsVerified(true);
       showToast('success', '인증이 완료되었습니다.');
     } else {
-      showToast('success', '인증번호가 일치하지 않습니다.');
+      showToast('error', '인증번호가 일치하지 않습니다.');
     }
   };
 
   // 폼 제출 시 호출되는 함수
   const onSubmit = (data: any) => {
     if (!isVerified) {
-      showToast('success', '휴대전화 인증이 완료되지 않았습니다.');
+      showToast('error', '휴대전화 인증이 완료되지 않았습니다.');
       return;
     }
     // 첫 번째 페이지에서 입력받은 데이터를 두 번째 페이지로 전달
@@ -46,7 +46,10 @@ function SignUp() {
     <div className={styles.component}>
       <h1 className={styles.component__title}>회원가입</h1>
       <div className={styles.component__subTitleWrapper}>
-        <span className={styles['component__subTitleWrapper-subTitle']}>*필수 입력사항</span>
+        <span className={styles['component__subTitleWrapper-subTitle']}>
+          <span className={styles.required}>*</span>
+          필수 입력사항
+        </span>
       </div>
       <div className={`${styles.divider} ${styles['divider--top']}`} />
       <div className={styles.component__form}>
@@ -68,6 +71,7 @@ function SignUp() {
           <div className={styles.field}>
             <label
               htmlFor="name"
+              className={styles.field__label}
             >
               이름
               <span className={styles.required}>*</span>
@@ -75,29 +79,34 @@ function SignUp() {
             <input type="text" placeholder="이름을 입력해 주세요." />
           </div>
 
-          <div className={styles.form__inputWrapper}>
+          <div className={styles.field}>
             <label
               htmlFor="gender"
-              className={styles.form__label}
+              className={styles.field__label}
             >
-              성별*
+              성별
+              <span className={styles.required}>*</span>
             </label>
-            <label>
-              <input
-                type="checkbox"
-                value="male"
-                {...register('gender')}
-              />
-              남성
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                value="female"
-                {...register('gender')}
-              />
-              여성
-            </label>
+
+            <div className={styles.field__genderWrapper}>
+              <label className={styles['field__gender-input']}>
+                <input
+                  type="radio"
+                  value="male"
+                  {...register('gender')}
+                />
+                남성
+              </label>
+
+              <label className={styles['field__gender-input']}>
+                <input
+                  type="radio"
+                  value="female"
+                  {...register('gender')}
+                />
+                여성
+              </label>
+            </div>
           </div>
 
           <div className={styles.form__inputWrapper}>
@@ -105,23 +114,27 @@ function SignUp() {
               htmlFor="number"
               className={styles.form__label}
             >
-              휴대전화*
+              휴대전화
+              <span className={styles.required}>*</span>
             </label>
-            <input
-              type="number"
-              placeholder="숫자만 입력해 주세요."
-              className={styles.form__input}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              {...register('phone', { required: '휴대전화 번호를 입력해주세요.' })}
-            />
-            <button
-              type="button"
-              onClick={sendVerificationMessage}
-              className={styles.form__verifyButton}
-            >
-              인증번호 발송
-            </button>
+
+            <div className={styles.form__inputContainer}>
+              <input
+                type="number"
+                placeholder="숫자만 입력해 주세요."
+                className={styles.form__input}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                {...register('phone', { required: '휴대전화 번호를 입력해주세요.' })}
+              />
+              <button
+                type="button"
+                onClick={sendVerificationMessage}
+                className={styles.form__verifyButton}
+              >
+                인증번호 발송
+              </button>
+            </div>
           </div>
 
           <div className={styles.form__inputWrapper}>
@@ -129,22 +142,27 @@ function SignUp() {
               htmlFor="numberCheck"
               className={styles.form__label}
             >
-              휴대전화 인증*
+              휴대전화 인증
+              <span className={styles.required}>*</span>
             </label>
-            <input
-              type="text"
-              placeholder="인증번호를 입력해 주세요."
-              className={styles.form__input}
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
-            />
-            <button
-              type="button"
-              onClick={verifyCode}
-              className={styles.form__verifyButton}
-            >
-              인증번호 확인
-            </button>
+
+            <div className={styles.form__inputContainer}>
+              <input
+                type="text"
+                placeholder="인증번호를 입력해 주세요."
+                className={styles.form__input}
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={verifyCode}
+                className={styles.form__verifyButton}
+              >
+                인증번호 확인
+              </button>
+            </div>
+
           </div>
           <div className={`${styles.divider} ${styles['divider--bottom']}`} />
           <div className={styles.buttonWrapper}>
