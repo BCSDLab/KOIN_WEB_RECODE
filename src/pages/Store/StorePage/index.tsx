@@ -1,27 +1,31 @@
 import { useState, useEffect, useRef } from 'react';
-import { StoreSorterType, StoreFilterType } from 'api/store/entity';
-import * as api from 'api';
-import { cn } from '@bcsdlab/utils';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import Close from 'assets/svg/close-icon-20x20.svg';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { cn } from '@bcsdlab/utils';
+
+import * as api from 'api';
+import type { StoreSorterType, StoreFilterType } from 'api/store/entity';
+
+import Close from 'assets/svg/close-icon-20x20.svg';
+import ROUTES from 'static/routes';
+import { STORE_PAGE } from 'static/store';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
-import { STORE_PAGE } from 'static/store';
-import IntroToolTip from 'components/ui/IntroToolTip';
-import ROUTES from 'static/routes';
 import { getCategoryDurationTime, initializeCategoryEntryTime } from 'pages/Store/utils/durationTime';
-import { useNavigate } from 'react-router-dom';
-import styles from './StorePage.module.scss';
+import IntroToolTip from 'components/ui/IntroToolTip';
+
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
 import SearchBarModal from './components/SearchBarModal';
+
+import styles from './StorePage.module.scss';
 
 type StoreSearchQueryType = {
   storeName?: string;
@@ -30,13 +34,6 @@ type StoreSearchQueryType = {
   bank?: string;
   card?: string;
   shopIds?: string;
-};
-
-type StoreSorter = StoreSorterType | '';
-
-type StoreFilter = {
-  OPEN: boolean;
-  DELIVERY: boolean;
 };
 
 const MOBILE_SORT_CHECK_BOX = [
@@ -124,35 +121,34 @@ const useStoreList = (
 };
 
 function StorePage() {
-  const {
-    params, searchParams, setParams,
-  } = useParamsHandler();
-
-  const [storeSorter, setStoreSorter] = useState<StoreSorter>('');
-  const [storeFilterList, setStoreFilterList] = useState<StoreFilter>({
+  const navigate = useNavigate();
+  const { params, searchParams, setParams } = useParamsHandler();
+  const enterCategoryTimeRef = useRef<number | null>(null);
+  const [storeSorter, setStoreSorter] = useState<StoreSorterType>('NONE');
+  const [storeFilterList, setStoreFilterList] = useState<{ [key in StoreFilterType]: boolean }>({
     OPEN: false,
     DELIVERY: false,
   });
 
+  const logger = useLogger();
+  const isMobile = useMediaQuery();
+  const [isTooltipOpen, , closeTooltip] = useBooleanState(localStorage.getItem('store-review-tooltip') === null);
+
   const filteredTypeList = Object.entries(storeFilterList).filter(([, value]) => value)
     .map(([key]) => key as StoreFilterType);
-
+  const { data: categories } = useStoreCategories();
   const storeList = useStoreList(
-    storeSorter === '' ? 'NONE' : storeSorter,
+    storeSorter,
     filteredTypeList,
     params,
   );
 
-  const isMobile = useMediaQuery();
-  const { data: categories } = useStoreCategories();
-  const logger = useLogger();
   const selectedCategory = Number(searchParams.get('category')) ?? -1;
-  const [isTooltipOpen, , closeTooltip] = useBooleanState(localStorage.getItem('store-review-tooltip') === null);
+
   const handleTooltipCloseButtonClick = () => {
     localStorage.setItem('store-review-tooltip', 'used');
     closeTooltip();
   };
-  const navigate = useNavigate();
 
   const handleCategoryClick = (categoryId: number) => {
     logger.actionEventClick({
@@ -177,7 +173,7 @@ function StorePage() {
   };
 
   const handleSortState = (type: StoreSorterType) => () => {
-    setStoreSorter((prevSorter) => (prevSorter === type ? '' : type));
+    setStoreSorter((prevSorter) => (prevSorter === type ? 'NONE' : type));
 
     if (type === 'COUNT' || type === 'RATING') {
       logger.actionEventClick({
@@ -192,8 +188,9 @@ function StorePage() {
     }
   };
 
-  const handleFilterState = (type:StoreFilterType) => () => {
+  const handleFilterState = (type: StoreFilterType) => () => {
     setStoreFilterList((prevFilterList) => ({ ...prevFilterList, [type]: !prevFilterList[type] }));
+
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       event_label: 'shop_can',
@@ -205,11 +202,11 @@ function StorePage() {
     });
   };
 
-  useScrollToTop();
   const storeScrollLogging = () => {
     const currentCategoryId = searchParams.get('category') === undefined
       ? 0
       : Number(searchParams.get('category')) - 1;
+
     logger.actionEventClick({
       actionTitle: 'BUSINESS',
       event_label: 'shop_categories',
@@ -220,9 +217,8 @@ function StorePage() {
     });
   };
 
+  useScrollToTop();
   useScrollLogging(storeScrollLogging);
-
-  const enterCategoryTimeRef = useRef<number | null>(null);
   useEffect(() => {
     if (enterCategoryTimeRef.current === null) {
       const currentTime = new Date().getTime();
