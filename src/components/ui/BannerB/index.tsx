@@ -97,7 +97,7 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
     });
   };
 
-  const handelPrevButtonClick = () => {
+  const handlePrevButtonClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'main_modal_next_modal',
@@ -107,7 +107,7 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
     resetAutoSlide();
   };
 
-  const handelNextButtonClick = () => {
+  const handleNextButtonClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'main_next_modal',
@@ -137,8 +137,8 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
   };
 
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: handelNextButtonClick,
-    onSwipedRight: handelPrevButtonClick,
+    onSwipedLeft: handleNextButtonClick,
+    onSwipedRight: handlePrevButtonClick,
     trackMouse: true,
   });
 
@@ -188,7 +188,7 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
             type="button"
             className={`${styles.slider__arrow} ${styles['slider__arrow--previous']}`}
             aria-label="이전 슬라이드"
-            onClick={handelPrevButtonClick}
+            onClick={handlePrevButtonClick}
           >
             <ArrowIcon />
           </button>
@@ -196,7 +196,7 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
             type="button"
             className={`${styles.slider__arrow} ${styles['slider__arrow--next']}`}
             aria-label="다음 슬라이드"
-            onClick={handelNextButtonClick}
+            onClick={handleNextButtonClick}
           >
             <ArrowIcon />
           </button>
