@@ -1,11 +1,65 @@
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { useSwipeable } from 'react-swipeable';
 import { Link } from 'react-router-dom';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import { setCookie, getCookie } from 'utils/ts/cookie';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBanners from 'components/ui/Banner/hooks/useBanners';
 import styles from './BannerB.module.scss';
+
+interface BannerCardProps {
+  handleImageLinkClick: () => void;
+  image_url: string;
+  redirect_link: string | null;
+}
+
+function BannerCard({
+  handleImageLinkClick,
+  image_url,
+  redirect_link,
+}: BannerCardProps) {
+  return (
+    <div>
+      {redirect_link ? (
+        <Link
+          to={redirect_link}
+          onClick={handleImageLinkClick}
+        >
+          <img
+            src={image_url}
+            alt="banner"
+            onError={(e) => {
+              e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
+            }}
+            className={styles.slider__image}
+          />
+        </Link>
+      ) : (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={handleImageLinkClick}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleImageLinkClick();
+            }
+          }}
+        >
+          <img
+            src={image_url}
+            alt="banner"
+            onError={(e) => {
+              e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
+            }}
+            className={styles.slider__image}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface BannerProps {
   categoryName: string;
@@ -15,6 +69,8 @@ interface BannerProps {
 const HIDE_BANNER_DURATION_DAYS = 7;
 
 function BannerB({ categoryName, categoryId }: BannerProps) {
+  const isMobile = useMediaQuery();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const logger = useLogger();
   const { data: bannersData } = useBanners(categoryId);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -23,6 +79,15 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
     getCookie('HIDE_BANNER') !== categoryName
     && bannersData.count !== 0
   ));
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const resetAutoSlide = () => {
+    if (intervalRef.current) clearTimeout(intervalRef.current);
+
+    intervalRef.current = setTimeout(() => {
+      setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
+    }, 3000);
+  };
 
   const handleImageLinkClick = () => {
     logger.actionEventClick({
@@ -39,6 +104,7 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
       value: `${currentBanner.title}`,
     });
     setCurrentPageIndex((prev) => (prev === 0 ? bannersData.count - 1 : prev - 1));
+    resetAutoSlide();
   };
 
   const handelNextButtonClick = () => {
@@ -48,6 +114,7 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
       value: `${currentBanner.title}`,
     });
     setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
+    resetAutoSlide();
   };
 
   const handleCloseBanner = () => {
@@ -68,6 +135,22 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
     setCookie('HIDE_BANNER', categoryName, HIDE_BANNER_DURATION_DAYS);
     closeModal();
   };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: handelNextButtonClick,
+    onSwipedRight: handelPrevButtonClick,
+    trackMouse: true,
+  });
+
+  useEffect(() => {
+    if (!isModalOpen || bannersData.count <= 1) return undefined;
+
+    resetAutoSlide();
+
+    return () => {
+      if (intervalRef.current) clearTimeout(intervalRef.current);
+    };
+  }, [isModalOpen, bannersData.count, resetAutoSlide]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -92,42 +175,15 @@ function BannerB({ categoryName, categoryId }: BannerProps) {
   return (
     <div className={styles.background}>
       <div className={styles.container}>
-        <div className={styles.slider}>
-          {currentBanner.redirect_link ? (
-            <Link
-              to={currentBanner.redirect_link}
-              onClick={handleImageLinkClick}
-            >
-              <img
-                src={currentBanner.image_url}
-                alt="banner"
-                onError={(e) => {
-                  e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
-                }}
-                className={styles.slider__image}
-              />
-            </Link>
-          ) : (
-            <div
-              role="button"
-              tabIndex={0}
-              onClick={handleImageLinkClick}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleImageLinkClick();
-                }
-              }}
-            >
-              <img
-                src={currentBanner.image_url}
-                alt="banner"
-                onError={(e) => {
-                  e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
-                }}
-                className={styles.slider__image}
-              />
-            </div>
-          )}
+        <div
+          {...(isMobile ? swipeHandlers : {})}
+          className={styles.slider}
+        >
+          <BannerCard
+            handleImageLinkClick={handleImageLinkClick}
+            image_url={currentBanner.image_url}
+            redirect_link={currentBanner.redirect_link}
+          />
           <button
             type="button"
             className={`${styles.slider__arrow} ${styles['slider__arrow--previous']}`}
