@@ -13,6 +13,23 @@
 
   @include media.media-breakpoint(mobile) {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      padding: 8px 0;
+      width: 100%;
+    }
+  }
+
+  &__button {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      margin-left: 16px;
+    }
   }
 
   &__content {
@@ -24,8 +41,10 @@
     justify-content: center;
 
     @include media.media-breakpoint(mobile) {
+      width: 100%;
+      margin: 0;
       min-width: 360px;
-      margin: 80px auto;
+      height: 100vh;
     }
   }
 
@@ -59,7 +78,7 @@
 
     @include media.media-breakpoint(mobile) {
       top: 15px;
-      left: 10px;
+      left: 10px;;
     }
   }
 

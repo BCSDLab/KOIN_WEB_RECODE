@@ -1,0 +1,71 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  @include media.media-breakpoint(mobile) {
+    width: calc(100% - 48px);
+    height: 100%;
+    padding: 64px 0;
+    gap: 64px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.inputContainer {
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    padding: 0 8px;
+    text-align: start;
+    gap: 16px;
+  }
+
+  &__header {
+    @include media.media-breakpoint(mobile) {
+      font-family: Pretendard, sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 160%;
+    }
+  }
+
+  &__wrapper {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      gap: 16px;
+    }
+
+    &--button {
+      @include media.media-breakpoint(mobile) {
+        display: flex;
+        // height: 32px;
+        // width: 86px;
+        padding: 6px 12px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        background: #e1e1e1;
+        white-space: nowrap;
+        color: #4b4b4b;
+        font-family: Pretendard, sans-serif;
+        font-size: 10px;
+        font-weight: 400;
+        line-height: 160%; 
+      }
+    }
+  }
+
+  &__input {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      width: 100%;
+      padding: 8px 4px;
+      align-items: center;
+      border: none;
+      border-bottom: 1px solid #cacaca;
+
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 160%;
+    }
+  }
+}

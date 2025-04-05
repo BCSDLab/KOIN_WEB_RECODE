@@ -3,7 +3,11 @@ import CustomCheckbox from 'pages/Auth/SignupPage/components/CustomCheckbox';
 import { privacy, koin, marketing } from 'static/terms';
 import styles from './Terms.module.scss';
 
-export default function Terms() {
+interface TermsProps {
+  onNext: () => void;
+}
+
+export default function Terms({ onNext }: TermsProps) {
   return (
     <div className={styles.container}>
       <span className={styles.title}>회원가입</span>
@@ -39,7 +43,14 @@ export default function Terms() {
         <textarea className={styles.term__content} readOnly defaultValue={marketing} />
       </div>
       <div className={styles.divider} />
-      <button type="button" className={styles['term-button']} disabled>다음</button>
+      <button
+        type="button"
+        className={styles['term-button']}
+        // disabled
+        onClick={onNext}
+      >
+        다음
+      </button>
       <span className={styles.copyright}>COPYRIGHT © 2023 BCSD LAB ALL RIGHTS RESERVED.</span>
     </div>
   );
