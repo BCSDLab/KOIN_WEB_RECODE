@@ -1,0 +1,67 @@
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  font-family: Pretendard, sans-serif;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__input {
+    width: 100%;
+    padding: 8px 24px 8px 4px;
+    border: none;
+    border-bottom: 1px solid #e1e1e1;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 160%;
+  }
+
+  &__optionButton {
+    position: absolute;
+    right: 4px;
+    display: flex;
+    background: none;
+    cursor: pointer;
+  }
+}
+
+.messageWrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  
+  & > svg {
+    display: flex;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+  }
+
+  &__message {
+    display: flex;
+    margin-top: 1px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+
+
+    &--error {
+      color: #f64c4c;
+    }
+
+    &--correct {
+      color: #0c9d61;
+    }
+
+    &--warning {
+      color: #f7941e;
+    }
+
+
+  }
+
+}
