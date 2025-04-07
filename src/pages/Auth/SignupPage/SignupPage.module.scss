@@ -341,13 +341,12 @@
 //   }
 // }
 
-
 .container {
   @include media.media-breakpoint(mobile) {
     width: 100%;
     height: 100vh;
     box-sizing: border-box;
-    padding: 32px 24px 40px 24px;
+    padding: 32px 24px 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
