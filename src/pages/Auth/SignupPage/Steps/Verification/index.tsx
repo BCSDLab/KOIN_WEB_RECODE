@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import Exclamation from 'assets/svg/exclamation.svg';
+import Exclamation from 'assets/svg/exclamation-orenge.svg';
+import ErrorIcon from 'assets/svg/exclamation-red.svg';
 import showToast from 'utils/ts/showToast';
 import { cn } from '@bcsdlab/utils';
+import { round } from 'lodash';
+import CheckIcon from 'assets/svg/check-circle.svg';
 import styles from './Verification.module.scss';
 
 interface IForm {
@@ -32,17 +35,48 @@ function SignUp() {
     },
   });
 
-  // const [phone, setPhone] = useState('');
   const [sentCode, setSentCode] = useState<string | null>(null); // 발급된 인증번호
   const [expireTime, setExpireTime] = useState<number | null>(null); // 만료시간
   const [isVerified, setIsVerified] = useState<boolean>(false); // 인증성공 여부
   const [verificationError, setVerificationError] = useState<string | null>(null); // 메시지 출력용
+  const [verifiedCount, setVerifiedCount] = useState<number>(0); // 인증 횟수 카운트
+  const [remainTime, setRemainTime] = useState<number>(0); // 남은 시간 (초 단위위)
 
   const phone = watch('phone');
   const authNumber = watch('authNumber');
 
+  useEffect(() => {
+    if (!expireTime) return;
+
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const diff = Math.max(0, Math.floor((expireTime - now) / 1000)); // 초 단위
+
+      setRemainTime(diff);
+
+      // 시간 다 되면 타이머 종료
+      if (diff <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    // 컴포넌트 언마운트 or expireTime 변경 시 clear
+    return () => clearInterval(interval);
+  }, [expireTime]);
+
+  const formatTime = (seconds: number) => {
+    const min = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const sec = String(seconds % 60).padStart(2, '0');
+    return `${min}:${sec}`;
+  };
+
   // 인증번호 발송 함수 (예시로 고정된 코드 사용)
   const sendVerificationMessage = () => {
+    if (verifiedCount >= 5) {
+      setVerificationError('1일 발송 한도를 초과했습니다. 24시간 이후 재시도 바랍니다.');
+      return;
+    }
+
     const code = '1234'; // 해당 부분에 api로 가져온 값 넣기. 현재는 임시로 생성
     const expireInMinutes = 3;
 
@@ -50,6 +84,8 @@ function SignUp() {
     setExpireTime(Date.now() + expireInMinutes * 60 * 1000); // 유효시간 저장
     setIsVerified(false); // 이전 인증 결과 초기화
     setVerificationError(null); // 메시지 초기화
+    setRemainTime(expireInMinutes * 60); // 남은 시간 초기화
+    setVerifiedCount(verifiedCount + 1);
 
     showToast('success', '인증번호가 발송되었습니다.');
   };
@@ -123,13 +159,19 @@ function SignUp() {
               <span className={styles.required}>*</span>
             </label>
 
-            <div>
+            <div className={styles.field__inputWrapper}>
               <input
                 type="text"
                 placeholder="이름을 입력해 주세요."
                 minLength={2}
                 maxLength={5}
-                {...register('name', { required: '이름을 입력해주세요.' })}
+                {...register('name', {
+                  required: '이름을 입력해주세요.',
+                  minLength: {
+                    value: 2,
+                    message: '이름은 두 글자 이상 입력해주세요.',
+                  },
+                })}
               />
               {errors.name && (
               <div className={styles.errorWrapper}>
@@ -203,7 +245,7 @@ function SignUp() {
             </label>
 
             <div className={styles.form__inputContainer}>
-              <div>
+              <div className={styles.form__inputField}>
                 <input
                   type="text"
                   placeholder="숫자만 입력해 주세요."
@@ -217,13 +259,32 @@ function SignUp() {
                     },
                   })}
                 />
-                {errors.phone && (
-                <div className={styles.errorWrapper}>
-                  <Exclamation />
-                  <div className={styles.errorWrapper__message}>
-                    {errors.phone.message as string}
+                {errors.phone ? (
+                  <div className={styles.errorWrapper}>
+                    <Exclamation />
+                    <div className={styles.errorWrapper__message}>
+                      {errors.phone.message as string}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  sentCode && (
+                    <div className={styles.successWrapper}>
+                      {verifiedCount < 5 ? <CheckIcon /> : <ErrorIcon />}
+                      <div
+                        className={cn({
+                          [styles.successWrapper__success]: true,
+                          [styles.successWrapper__over]: verifiedCount >= 5,
+                        })}
+                      />
+                      {(verifiedCount < 5) && (
+                        <div className={styles.successWrapper__remaining}>
+                          남은 횟수
+                          {5 - verifiedCount}
+                          /5
+                        </div>
+                      )}
+                    </div>
+                  )
                 )}
               </div>
 
@@ -233,9 +294,9 @@ function SignUp() {
                   onClick={sendVerificationMessage}
                   className={cn({
                     [styles.form__verifyButton]: true,
-                    [styles['form__verifyButton--alive']]: phone.length > 0,
+                    [styles['form__verifyButton--alive']]: phone.length > 0 && verifiedCount < 5,
                   })}
-                  disabled={phone.length <= 0}
+                  disabled={phone.length <= 0 || verifiedCount >= 5}
                 >
                   인증번호 재발송
                 </button>
@@ -265,7 +326,7 @@ function SignUp() {
             </label>
 
             <div className={styles.form__inputContainer}>
-              <div>
+              <div className={styles.form__inputField}>
                 <input
                   type="text"
                   placeholder="인증번호를 입력해 주세요."
@@ -275,6 +336,11 @@ function SignUp() {
                     required: '인증번호를 입력해주세요.',
                   })}
                 />
+                {expireTime && (
+                  <div className={styles.timerWrapper}>
+                      {formatTime(remainTime)}
+                  </div>
+                )}
                 {verificationError && (
                 <div className={styles.errorWrapper}>
                   <Exclamation />

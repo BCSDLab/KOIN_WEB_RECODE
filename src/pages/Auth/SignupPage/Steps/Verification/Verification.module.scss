@@ -98,6 +98,10 @@
     }
   }
 
+  &__inputField {
+    position: relative;
+  }
+
   &__verifyButton {
     display: flex;
     width: 120px;
@@ -136,6 +140,10 @@
     .required {
       color: #ec2d30;
     }
+  }
+
+  &__inputWrapper {
+    position: relative;
   }
 
   input[type="text"] {
@@ -191,16 +199,81 @@
   }
 }
 
+.timerWrapper {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  color: #727272;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%;
+}
+
 .errorWrapper {
   display: flex;
-  position: relative;
+  position: absolute;
   align-items: center;
   gap: 4px;
-  background-color: red;
   height: 19px;
 
   &__message {
     color: #fe9B0e;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+  }
+}
+
+.successWrapper {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  gap: 4px;
+
+  &__success {
+    display: flex;
+    color: #0c9d61;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+  }
+
+  &__success::after {
+    content: '인증번호가 발송되었습니다.'
+  }
+
+  &__over {
+    color: #ec2d30;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+  }
+
+  &__over::after {
+    content: '1일 발송 한도를 초과했습니다. 24시간 이후 재시도 바랍니다.';
+  }
+
+  &__message {
+    color: #0c9d61;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 160%;
+  }
+
+  &__remaining {
+    color: #727272;
     font-family: Pretendard, sans-serif;
     font-size: 12px;
     font-style: normal;
