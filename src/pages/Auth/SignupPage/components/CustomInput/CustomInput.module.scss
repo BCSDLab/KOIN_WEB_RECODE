@@ -1,5 +1,6 @@
 .inputContainer {
   display: flex;
+  width: 100%;
   flex-direction: column;
   font-family: Pretendard, sans-serif;
 }
@@ -11,7 +12,7 @@
 
   &__input {
     width: 100%;
-    padding: 8px 24px 8px 4px;
+    padding: 8px 64px 8px 4px;
     border: none;
     border-bottom: 1px solid #e1e1e1;
 
@@ -26,6 +27,19 @@
     display: flex;
     background: none;
     cursor: pointer;
+  }
+
+  &__timer {
+    position: absolute;
+    right: 26px;
+    display: flex;
+    background: none;
+    margin-top: 2px;
+
+    color: #727272;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 160%;
   }
 }
 
@@ -53,7 +67,7 @@
       color: #f64c4c;
     }
 
-    &--correct {
+    &--success {
       color: #0c9d61;
     }
 
