@@ -21,6 +21,7 @@
 
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import { Suspense, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import ProgressBar from './components/ProgressBar';
 import MobileVerification from './Steps/MobileVerificationStep';
 import styles from './SignupPage.module.scss';
@@ -653,32 +654,35 @@ function SignupPage() {
   const { Step, nextStep, currentStep } = useStep<StepTitle>('약관 동의');
   const currentIndex = stepTitles.indexOf(currentStep);
   const [userType, setUserType] = useState<UserType | null>(null);
+  const methods = useForm();
 
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
       <div className={styles.container}>
-        <ProgressBar
-          steps={stepTitles.map((title) => ({ title }))}
-          currentIndex={currentIndex}
-        />
-        <Step name="약관 동의">
-          <Terms onNext={() => nextStep('본인 인증')} />
-        </Step>
-        <Step name="본인 인증">
-          <MobileVerification onNext={() => nextStep('회원 유형 선택')} />
-        </Step>
-        <Step name="회원 유형 선택">
-          <MobileUserTypeStep
-            onSelectType={(type: UserType) => {
-              setUserType(type);
-              nextStep('정보 입력');
-            }}
+        <FormProvider {...methods}>
+          <ProgressBar
+            steps={stepTitles.map((title) => ({ title }))}
+            currentIndex={currentIndex}
           />
-        </Step>
-        <Step name="정보 입력">
-          {userType === '학생' && <MobileStudentDetailStep />}
-          {userType === '외부인' && <MobileGuestDetailStep />}
-        </Step>
+          <Step name="약관 동의">
+            <Terms onNext={() => nextStep('본인 인증')} />
+          </Step>
+          <Step name="본인 인증">
+            <MobileVerification onNext={() => nextStep('회원 유형 선택')} />
+          </Step>
+          <Step name="회원 유형 선택">
+            <MobileUserTypeStep
+              onSelectType={(type: UserType) => {
+                setUserType(type);
+                nextStep('정보 입력');
+              }}
+            />
+          </Step>
+          <Step name="정보 입력">
+            {userType === '학생' && <MobileStudentDetailStep />}
+            {userType === '외부인' && <MobileGuestDetailStep />}
+          </Step>
+        </FormProvider>
       </div>
     </Suspense>
   );
