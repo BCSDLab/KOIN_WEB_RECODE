@@ -3,6 +3,7 @@ import CustomCheckbox from 'pages/Auth/SignupPage/components/CustomCheckbox';
 import { privacy, koin, marketing } from 'static/terms';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Terms.module.scss';
 
 interface TermsProps {
@@ -11,18 +12,19 @@ interface TermsProps {
 
 export default function Terms({ onNext }: TermsProps) {
   const { register, setValue } = useFormContext();
+  const isMobile = useMediaQuery();
   const [agreeState, setAgreeState] = useState({
-    privacy: false,
-    koinUsage: false,
-    marketing: false,
+    agreeToPrivacyPolicy: false,
+    agreeToKoinTerms: false,
+    agreeToMarketing: false,
   });
 
   const handleAllAgreeToggle = () => {
     const isAllChecked = !Object.values(agreeState).every(Boolean);
     setAgreeState(() => ({
-      privacy: isAllChecked,
-      koinUsage: isAllChecked,
-      marketing: isAllChecked,
+      agreeToPrivacyPolicy: isAllChecked,
+      agreeToKoinTerms: isAllChecked,
+      agreeToMarketing: isAllChecked,
     }));
     Object.keys(agreeState).forEach((field) => setValue(field, isAllChecked));
   };
@@ -37,8 +39,12 @@ export default function Terms({ onNext }: TermsProps) {
 
   return (
     <div className={styles.container}>
-      <span className={styles.title}>회원가입</span>
-      <div className={styles.divider} />
+      {!isMobile && (
+        <>
+          <span className={styles.title}>회원가입</span>
+          <div className={styles.divider} />
+        </>
+      )}
       <div className={styles['container-terms']}>
         <label
           htmlFor="terms-agree"
@@ -50,18 +56,18 @@ export default function Terms({ onNext }: TermsProps) {
             checked={Object.values(agreeState).every(Boolean)}
           />
           <span className={styles['all-terms-agree__title']}>
-            아래 이용약관에 모두 동의합니다.
+            {isMobile ? '모두 동의합니다.' : '아래 이용약관에 모두 동의합니다.'}
           </span>
         </label>
-        <div className={styles['small-divider']} />
+        {!isMobile && <div className={styles['small-divider']} /> }
         <label className={styles.term} htmlFor="agreeToPrivacyPolicy">
           <CustomCheckbox
             id="agreeToPrivacyPolicy"
-            checked={agreeState.privacy}
+            checked={agreeState.agreeToPrivacyPolicy}
             onClick={handleSingleAgreeToggle}
             {...register('agreeToPrivacyPolicy')}
           />
-          <span className={styles.term__title}>[필수] 개인정보 이용약관</span>
+          <span className={styles.term__title}>{isMobile ? '개인정보 이용약관(필수)' : '[필수] 개인정보 이용약관'}</span>
         </label>
         <textarea
           className={styles.term__content}
@@ -77,11 +83,13 @@ export default function Terms({ onNext }: TermsProps) {
         >
           <CustomCheckbox
             id="agreeToKoinTerms"
-            checked={agreeState.koinUsage}
+            checked={agreeState.agreeToKoinTerms}
             onClick={handleSingleAgreeToggle}
             {...register('agreeToKoinTerms')}
           />
-          <span className={styles.term__title}>[필수] 코인 이용약관</span>
+          <span className={styles.term__title}>
+            {isMobile ? '코인 이용약관(필수)' : '[필수] 코인 이용약관'}
+          </span>
         </label>
         <textarea
           className={styles.term__content}
@@ -97,11 +105,13 @@ export default function Terms({ onNext }: TermsProps) {
         >
           <CustomCheckbox
             id="agreeToMarketing"
-            checked={agreeState.marketing}
+            checked={agreeState.agreeToMarketing}
             onClick={handleSingleAgreeToggle}
             {...register('agreeToMarketing', { required: false })}
           />
-          <span className={styles.term__title}>[선택] 마케팅 수신 동의</span>
+          <span className={styles.term__title}>
+            {isMobile ? '마케팅 수신 동의(선택)' : '[선택] 마케팅 수신 동의'}
+          </span>
         </label>
         <textarea
           className={styles.term__content}
@@ -109,18 +119,21 @@ export default function Terms({ onNext }: TermsProps) {
           defaultValue={marketing}
         />
       </div>
-      <div className={styles.divider} />
+      {!isMobile && <div className={styles.divider} />}
       <button
         type="submit"
         className={styles['term-button']}
         onClick={onNext}
-        disabled={!(agreeState.privacy && agreeState.koinUsage)}
+        disabled={!(agreeState.agreeToPrivacyPolicy && agreeState.agreeToKoinTerms)}
       >
         다음
       </button>
+      {!isMobile && (
       <span className={styles.copyright}>
         COPYRIGHT © 2023 BCSD LAB ALL RIGHTS RESERVED.
       </span>
+      )}
+
     </div>
   );
 }

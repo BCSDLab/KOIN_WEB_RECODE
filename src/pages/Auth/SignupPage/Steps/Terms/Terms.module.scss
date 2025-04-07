@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .container {
   display: flex;
   flex-direction: column;
@@ -6,6 +8,12 @@
   font-family: Pretendard, sans-serif;
   overflow-y: scroll;
   height: 1100px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    overflow-y: visible;
+    justify-content: flex-start;
+  }
 }
 
 .title {
@@ -24,6 +32,11 @@
   flex-direction: column;
   justify-content: flex-start;
   width: 560px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    margin-top: 16px;
+  }
 }
 
 .all-terms-agree {
@@ -34,11 +47,27 @@
     cursor: pointer;
     margin-left: 24px;
     width: fit-content;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      box-sizing: border-box;
+      height: 40px;
+      background-color: #f5f5f5;
+      padding: 9px 8px;
+      gap: 10px;
+      border-radius: 5px;
+      margin: 0;
+    }
   }
 
   &__title {
     font-size: 1.125rem;
     font-weight: 500;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 0.875rem;
+      color: #175c8e;
+    }
   }
 }
 
@@ -57,9 +86,20 @@
   width: fit-content;
   cursor: pointer;
 
+  @include media.media-breakpoint(mobile) {
+    margin-top: 16px;
+  }
+
   &__title {
     font-size: 1.125rem;
     font-weight: 600;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 0.875rem;
+      color: #8e8e8e;
+      font-weight: 500;
+      line-height: 1.6;
+    }
   }
 
   &__content {
@@ -73,6 +113,13 @@
     border: 1px solid #d2dae2;
     line-height: 1.6;
     font-family: Pretendard, sans-serif;
+    box-sizing: border-box;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 12px 12px 10px;
+      border: 1px dashed #d2dae2;
+      font-size: 0.75rem;
+    }
   }
 
   &__koin-use {
@@ -97,6 +144,13 @@
   &:disabled {
     background-color: #e1e1e1;
     color: #4b4b4b;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    margin-top: 32px;
+    padding: 12px 0;
+    height: 50px;
+    border-radius: 8px;
   }
 }
 
