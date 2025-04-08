@@ -1,67 +1,209 @@
-import { useForm } from 'react-hook-form';
+/* eslint-disable no-restricted-imports */
+import { useState } from 'react';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { checkPhone, smsSend, smsVerify } from 'api/auth';
+import { useMutation } from '@tanstack/react-query';
+import { isKoinError } from '@bcsdlab/koin';
+import ROUTES from 'static/routes';
+import { useNavigate } from 'react-router-dom';
+import useCountdownTimer from '../../hooks/useCountdownTimer';
+import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './MobileVerification.module.scss';
 
-// const ERROR_MESSAGES = {
-//   INVALID_PHONE: '올바른 전화번호 양식이  아닙니다. 다시 입력해 주세요.',
-//   ALREADY_REGISTERED: '이미 가입된 전화 번호입니다.',
-//   CORRECT_VERIFICATION_CODE: '인증번호가 일치합니다.',
-//   TIMEOUT_VERIFICATION_CODE: '유효시간이 지났습니다. 인증번호를 재발송 해주세요.',
-//   INVALID_VERIFICATION_CODE: '인증번호가 일치하지 않습니다. 다시 입력해 주세요.',
+const MESSAGES = {
+  // 전화번호 입력
+  INVALID_PHONE: '올바른 전화번호 양식이  아닙니다. 다시 입력해 주세요.',
+  ALREADY_REGISTERED: '이미 가입된 전화 번호입니다.',
+  CODE_SENT: '인증번호가 발송되었습니다.',
 
-// };
+  // 인증번호 입력
+  DEFAULT: '인증번호 발송이 안 되시나요?',
+  CODE_TIMEOUT: '유효시간이 지났습니다. 인증번호를 재발송 해주세요.',
+  CODE_INCORRECT: '인증번호가 일치하지 않습니다. 다시 입력해 주세요.',
+  CODE_CORRECT: '인증번호가 일치합니다.',
+  CODE_STOP: '1일 발송 한도를 초과했습니다. 24시간 이후 재시도 바랍니다.',
+};
+
+const GENDER_OPTIONS = [
+  { label: '남성', value: 'male' },
+  { label: '여성', value: 'female' },
+];
 
 interface MobileVerificationProps {
   onNext: () => void;
 }
 
 function MobileVerification({ onNext }: MobileVerificationProps) {
-  const { register } = useForm();
-  const handleNext = () => {
-    onNext();
+  const navigate = useNavigate();
+  const { control, register } = useFormContext();
+  const name = useWatch({ control, name: 'name' });
+  const gender = useWatch({ control, name: 'gender' });
+  const phoneNumber = useWatch({ control, name: 'phone_number' });
+  const verificationCode = useWatch({ control, name: 'verification_code' });
+
+  const [showVerificationField, setShowVerificationField] = useState(false);
+  const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
+  const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
+  const [isCodeCorrect, setIsCodeCorrect] = useState(false);
+
+  const { isRunning: isTimer, secondsLeft: timerValue, start: runTimer } = useCountdownTimer({
+    duration: 20,
+    onExpire: () => {
+      if (!isCodeCorrect) {
+        setVerificationMessage({ type: 'warning', content: MESSAGES.CODE_TIMEOUT });
+      }
+    },
+  });
+
+  const { mutate: sendSMSToUser } = useMutation({
+    mutationFn: smsSend,
+    onSuccess: () => {
+      setPhoneMessage({ type: 'success', content: MESSAGES.CODE_SENT });
+      runTimer();
+      setShowVerificationField(true);
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.CODE_STOP });
+        }
+      }
+    },
+  });
+
+  const { mutate: checkVerificationCode } = useMutation({
+    mutationFn: smsVerify,
+    onSuccess: () => {
+      setVerificationMessage({ type: 'success', content: MESSAGES.CODE_CORRECT });
+      setIsCodeCorrect(true);
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          setVerificationMessage({ type: 'warning', content: MESSAGES.CODE_INCORRECT });
+        }
+      }
+    },
+  });
+
+  const { mutate: checkPhoneNumber } = useMutation({
+    mutationFn: checkPhone,
+    onSuccess: () => {
+      sendSMSToUser({ phone_number: phoneNumber });
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.INVALID_PHONE });
+        }
+
+        if (err.status === 409) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.ALREADY_REGISTERED });
+        }
+      }
+    },
+  });
+
+  const isNameAndGenderFilled = name?.trim() && gender?.length > 0;
+  const isFormFilled = name && gender && phoneNumber && verificationCode;
+
+  const goToLogin = () => {
+    navigate(ROUTES.Auth());
   };
+
   return (
     <div className={styles.container}>
-      <div className={styles.inputContainer}>
-        <h1 className={styles.inputContainer__header}>성별과 성별을 알려주세요.</h1>
-        <input className={styles.inputContainer__input} type="text" placeholder="실명을 입력해 주세요." />
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              value="male"
-              {...register('gender')}
-            />
-            남성
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              value="female"
-              {...register('gender')}
-            />
-            여성
-          </label>
-        </div>
-      </div>
-
-      <div className={styles.inputContainer}>
-        <h1 className={styles.inputContainer__header}>휴대전화 번호를 입력해 주세요.</h1>
-        <div className={styles.inputContainer__wrapper}>
-          <input className={styles.inputContainer__input} type="text" placeholder="- 없이 번호를 입력해 주세요." />
-          <button className={styles['inputContainer__wrapper--button']} type="button">인증번호 발송</button>
+      <div className={styles['form-container']}>
+        <div className={styles['name-gender-wrapper']}>
+          <h1 className={styles['name-gender-wrapper__header']}>성함과 성별을 알려주세요.</h1>
+          <Controller
+            name="name"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <CustomInput {...field} placeholder="실명을 입력해 주세요." isDelete />
+            )}
+          />
+          <div className={styles['checkbox-wrapper']}>
+            {GENDER_OPTIONS.map(({ label, value }) => (
+              <label key={value} className={styles['checkbox-wrapper__checkbox']}>
+                <input type="radio" value={value} {...register('gender')} />
+                <div>{label}</div>
+              </label>
+            ))}
+          </div>
         </div>
 
-        <div className={styles.inputContainer__wrapper}>
-          <input className={styles.inputContainer__input} type="text" placeholder="인증번호를 입력해주세요." />
-          <button className={styles['inputContainer__wrapper--button']} type="button">인증번호 확인</button>
+        {isNameAndGenderFilled && (
+        <div className={styles['number-wrapper']}>
+          <h1 className={styles['number-wrapper__header']}>휴대전화 번호를 입력해 주세요.</h1>
+          <div className={styles['input-wrapper']}>
+            <Controller
+              name="phone_number"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="- 없이 번호를 입력해 주세요."
+                  isDelete
+                  message={phoneMessage}
+                  isButton
+                  buttonText="인증번호 발송"
+                  buttonDisabled={!field.value}
+                  buttonOnClick={() => checkPhoneNumber(phoneNumber)}
+                >
+                  {
+                    phoneMessage?.type === 'error' && (
+                    <button onClick={() => goToLogin()} type="button" className={styles['label-link-button']}>
+                      로그인하기
+                    </button>
+                    )
+                  }
+                </CustomInput>
+              )}
+            />
+          </div>
+
+          {showVerificationField && (
+          <div className={styles['input-wrapper']}>
+            <Controller
+              name="verification_code"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="인증번호를 입력해주세요."
+                  isDelete
+                  isTimer={isTimer}
+                  timerValue={timerValue}
+                  message={verificationMessage}
+                  isButton
+                  buttonText="인증번호 확인"
+                  buttonDisabled={!field.value}
+                  buttonOnClick={() => {
+                    checkVerificationCode({
+                      phone_number: phoneNumber,
+                      certification_code: verificationCode,
+                    });
+                  }}
+                />
+              )}
+            />
+          </div>
+          )}
         </div>
+        )}
       </div>
 
       <button
         type="button"
-        onClick={handleNext}
+        onClick={onNext}
+        className={styles['next-button']}
+        disabled={!isFormFilled}
       >
-        다음으로
+        다음
       </button>
 
     </div>
