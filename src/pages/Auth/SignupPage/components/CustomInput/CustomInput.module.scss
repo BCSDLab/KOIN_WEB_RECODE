@@ -1,14 +1,43 @@
-.inputContainer {
+.container {
   display: flex;
   width: 100%;
   flex-direction: column;
   font-family: Pretendard, sans-serif;
 }
 
-.inputWrapper {
+.wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.button {
+  display: flex;
+  min-width: 86px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: #175c8e;
+
+  color: #fff;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 160%;
+
+  &:disabled {
+    background-color: #e1e1e1;
+    color: #000;
+    cursor: not-allowed;
+  }
+}
+
+.input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 
   &__input {
     width: 100%;
@@ -19,6 +48,11 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 160%;
+
+    &::placeholder {
+      color: #cacaca;
+      font-size: 14px;
+    }
   }
 
   &__optionButton {

@@ -11,10 +11,9 @@
   }
 }
 
-.box {
+.logo {
   @include media.media-breakpoint(mobile) {
     display: flex;
-    background-color: yellowgreen;
     width: 96px;
     height: 56px;
     margin: 100px auto 80px auto;
