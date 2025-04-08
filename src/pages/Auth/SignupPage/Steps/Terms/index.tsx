@@ -18,9 +18,9 @@ export default function Terms({ onNext }: TermsProps) {
     agreeToKoinTerms: false,
     agreeToMarketing: false,
   });
+  const isAllChecked = !Object.values(agreeState).every(Boolean);
 
   const handleAllAgreeToggle = () => {
-    const isAllChecked = !Object.values(agreeState).every(Boolean);
     setAgreeState(() => ({
       agreeToPrivacyPolicy: isAllChecked,
       agreeToKoinTerms: isAllChecked,
@@ -35,6 +35,7 @@ export default function Terms({ onNext }: TermsProps) {
       ...prev,
       [id]: !prev[id as keyof typeof prev],
     }));
+    setValue('agreeToAll', isAllChecked);
   };
 
   return (
@@ -52,8 +53,9 @@ export default function Terms({ onNext }: TermsProps) {
         >
           <CustomCheckbox
             id="terms-agree"
-            onChange={handleAllAgreeToggle}
+            onClick={handleAllAgreeToggle}
             checked={Object.values(agreeState).every(Boolean)}
+            {...register('agreeToAll', { required: false })}
           />
           <span className={styles['all-terms-agree__title']}>
             {isMobile ? '모두 동의합니다.' : '아래 이용약관에 모두 동의합니다.'}
