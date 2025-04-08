@@ -1,6 +1,8 @@
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import { Suspense, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ProgressBar from './components/ProgressBar';
 import MobileVerification from './Steps/MobileVerificationStep';
 import Terms from './Steps/Terms';
@@ -16,10 +18,12 @@ type UserType = '학생' | '외부인';
 const stepTitles: StepTitle[] = ['약관 동의', '본인 인증', '회원 유형 선택', '정보 입력'];
 
 function SignupPage() {
-  const { Step, nextStep, currentStep } = useStep<StepTitle>('약관 동의');
+  const {
+    Step, nextStep, goBack, currentStep,
+  } = useStep<StepTitle>('약관 동의');
   const currentIndex = stepTitles.indexOf(currentStep);
   const [userType, setUserType] = useState<UserType | null>(null);
-  // const methods = useForm();
+  const isMobile = useMediaQuery();
 
   const methods = useForm({
     mode: 'onBlur',
@@ -41,6 +45,19 @@ function SignupPage() {
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
       <div className={styles.container}>
+        {isMobile && (
+        <div className={styles.container__header}>
+          <button
+            type="button"
+            className={styles.container__button}
+            onClick={goBack}
+            aria-label="ddd"
+          >
+            <ChevronLeftIcon />
+          </button>
+          <span className={styles.container__title}>회원가입</span>
+        </div>
+        )}
         <ProgressBar
           steps={stepTitles.map((title) => ({ title }))}
           currentIndex={currentIndex}

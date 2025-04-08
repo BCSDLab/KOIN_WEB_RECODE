@@ -10,4 +10,26 @@
     flex-direction: column;
     align-items: center;
   }
+
+  &__header {
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      position: relative;
+    }
+  }
+
+  &__button {
+    @include media.media-breakpoint(mobile) {
+      position: absolute;
+      left: 0;
+    }
+  }
+
+  &__title {
+    @include media.media-breakpoint(mobile) {
+      font-size: 1.125rem;
+      font-weight: 500;
+      line-height: 1.6;
+    }
+  }
 }
