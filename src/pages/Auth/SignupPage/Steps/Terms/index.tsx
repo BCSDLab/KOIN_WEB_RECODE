@@ -121,7 +121,7 @@ export default function Terms({ onNext }: TermsProps) {
       </div>
       {!isMobile && <div className={styles.divider} />}
       <button
-        type="submit"
+        type="button"
         className={styles['term-button']}
         onClick={onNext}
         disabled={!(agreeState.agreeToPrivacyPolicy && agreeState.agreeToKoinTerms)}
@@ -133,7 +133,6 @@ export default function Terms({ onNext }: TermsProps) {
         COPYRIGHT © 2023 BCSD LAB ALL RIGHTS RESERVED.
       </span>
       )}
-
     </div>
   );
 }
