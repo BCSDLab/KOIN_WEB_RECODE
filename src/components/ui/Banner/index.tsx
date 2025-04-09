@@ -100,7 +100,7 @@ function Banner({ categoryName, categoryId }: BannerProps) {
   const handlePrevButtonClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_label: 'main_modal_next_modal',
+      event_label: 'main_next_modal',
       value: `${currentBanner.title}`,
     });
     setCurrentPageIndex((prev) => (prev === 0 ? bannersData.count - 1 : prev - 1));
