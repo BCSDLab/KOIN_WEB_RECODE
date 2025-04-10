@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { Outlet } from 'react-router-dom';
 import styles from './Auth.module.scss';
 
