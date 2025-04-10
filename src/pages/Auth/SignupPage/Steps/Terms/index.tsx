@@ -132,7 +132,7 @@ export default function Terms({ onNext }: TermsProps) {
       </button>
       {!isMobile && (
       <span className={styles.copyright}>
-        COPYRIGHT © 2023 BCSD LAB ALL RIGHTS RESERVED.
+        COPYRIGHT &copy; 2023 BCSD LAB ALL RIGHTS RESERVED.
       </span>
       )}
     </div>
