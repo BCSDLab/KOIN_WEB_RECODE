@@ -88,10 +88,19 @@ export default function LostItemForm({
           />
         </div>
         <div className={`${styles.template__right}`}>
-          <FormImage images={images} setImages={setImages} type={type} />
+          <FormImage
+            images={images}
+            setImages={setImages}
+            type={type}
+            formIndex={count}
+          />
         </div>
         <div className={styles.template__bottom}>
-          <FormContent content={content} setContent={setContent} type={type} />
+          <FormContent
+            content={content}
+            setContent={setContent}
+            type={type}
+          />
         </div>
       </div>
     </div>
