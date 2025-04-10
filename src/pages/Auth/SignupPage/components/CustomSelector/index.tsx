@@ -42,7 +42,7 @@ function CustomSelector({
   const { containerRef } = useOutsideClick({ onOutsideClick: closeMenu });
 
   const selectedOption = options.find((option) => option.value === value);
-  const showLabel = selectedOption?.label ?? placeholder;
+  const showedLabel = selectedOption?.label ?? placeholder;
 
   return (
     <div
@@ -62,7 +62,7 @@ function CustomSelector({
         })}
         disabled={disabled}
       >
-        {showLabel}
+        {showedLabel}
         <DownArrowIcon />
       </button>
 
