@@ -9,8 +9,8 @@ import CorrectIcon from 'assets/svg/Login/correct.svg';
 import WarningIcon from 'assets/svg/Login/warning.svg';
 import { useFormContext } from 'react-hook-form';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import FormatTime from 'pages/Auth/SignupPage/hooks/useFormatTime';
 import styles from './CustomInput.module.scss';
-import FormatTime from '../../hooks/useFormatTime';
 
 export type InputMessage = {
   type: 'error' | 'warning' | 'success' | 'info';
@@ -46,7 +46,7 @@ function CustomInput({
   buttonOnClick,
   buttonDisabled,
   children,
-  ...etc
+  ...args
 }: CustomInputProps) {
   const { setValue } = useFormContext();
   const [isPasswordVisible, , , togglePasswordVisible] = useBooleanState(false);
@@ -70,7 +70,7 @@ function CustomInput({
             type={inputType}
             placeholder={placeholder}
             value={value}
-            {...etc}
+            {...args}
           />
 
           {isTimer && (
@@ -82,7 +82,7 @@ function CustomInput({
           {isDelete && value && (
           <button
             type="button"
-            onClick={() => setValue(etc.name!, '')}
+            onClick={() => setValue(args.name!, '')}
             className={styles['input-wrapper__optionButton']}
           >
             <CloseIcon />

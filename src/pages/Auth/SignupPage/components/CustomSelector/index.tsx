@@ -22,7 +22,7 @@ function CustomSelector({
   options,
   value,
   isWhiteBackground = true,
-  dropDownMaxHeight,
+  dropDownMaxHeight = 200,
   placeholder = '선택해주세요.',
   disabled = false,
   onChange,
@@ -80,9 +80,7 @@ function CustomSelector({
             <li
               role="option"
               key={option.value}
-              className={cn({
-                [styles.select__content]: true,
-              })}
+              className={styles.select__content}
               aria-selected={option.value === value}
               onClick={() => handleOptionClick(option.value)}
               onKeyDown={(e) => {
