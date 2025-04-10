@@ -1,7 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import CustomCheckbox from 'pages/Auth/SignupPage/components/CustomCheckbox';
 import { privacy, koin, marketing } from 'static/terms';
-import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Terms.module.scss';
@@ -10,32 +9,15 @@ interface TermsProps {
   onNext: () => void;
 }
 
+const TERMS_NAMES = ['agreeToPrivacyPolicy', 'agreeToKoinTerms', 'agreeToMarketing'];
+
 export default function Terms({ onNext }: TermsProps) {
-  const { register, setValue } = useFormContext();
+  const { register, setValue, watch } = useFormContext();
   const isMobile = useMediaQuery();
-  const [agreeState, setAgreeState] = useState({
-    agreeToPrivacyPolicy: false,
-    agreeToKoinTerms: false,
-    agreeToMarketing: false,
-  });
-  const isAllChecked = !Object.values(agreeState).every(Boolean);
+  const watchAllTerms = watch(TERMS_NAMES);
 
   const handleAllAgreeToggle = () => {
-    setAgreeState(() => ({
-      agreeToPrivacyPolicy: isAllChecked,
-      agreeToKoinTerms: isAllChecked,
-      agreeToMarketing: isAllChecked,
-    }));
-    Object.keys(agreeState).forEach((field) => setValue(field, isAllChecked));
-  };
-
-  const handleSingleAgreeToggle = (e: React.MouseEvent<HTMLElement>) => {
-    const { id } = e.currentTarget;
-    setAgreeState((prev) => ({
-      ...prev,
-      [id]: !prev[id as keyof typeof prev],
-    }));
-    setValue('agreeToAll', isAllChecked);
+    TERMS_NAMES.forEach((field) => setValue(field, !watchAllTerms.every(Boolean)));
   };
 
   return (
@@ -53,9 +35,8 @@ export default function Terms({ onNext }: TermsProps) {
         >
           <CustomCheckbox
             id="terms-agree"
-            onClick={handleAllAgreeToggle}
-            checked={Object.values(agreeState).every(Boolean)}
-            {...register('agreeToAll', { required: false })}
+            onChange={handleAllAgreeToggle}
+            checked={watchAllTerms.every(Boolean)}
           />
           <span className={styles['all-terms-agree__title']}>
             {isMobile ? '모두 동의합니다.' : '아래 이용약관에 모두 동의합니다.'}
@@ -65,8 +46,7 @@ export default function Terms({ onNext }: TermsProps) {
         <label className={styles.term} htmlFor="agreeToPrivacyPolicy">
           <CustomCheckbox
             id="agreeToPrivacyPolicy"
-            checked={agreeState.agreeToPrivacyPolicy}
-            onClick={handleSingleAgreeToggle}
+            checked={watch('agreeToPrivacyPolicy')}
             {...register('agreeToPrivacyPolicy')}
           />
           <span className={styles.term__title}>{isMobile ? '개인정보 이용약관(필수)' : '[필수] 개인정보 이용약관'}</span>
@@ -85,8 +65,7 @@ export default function Terms({ onNext }: TermsProps) {
         >
           <CustomCheckbox
             id="agreeToKoinTerms"
-            checked={agreeState.agreeToKoinTerms}
-            onClick={handleSingleAgreeToggle}
+            checked={watch('agreeToKoinTerms')}
             {...register('agreeToKoinTerms')}
           />
           <span className={styles.term__title}>
@@ -107,8 +86,7 @@ export default function Terms({ onNext }: TermsProps) {
         >
           <CustomCheckbox
             id="agreeToMarketing"
-            checked={agreeState.agreeToMarketing}
-            onClick={handleSingleAgreeToggle}
+            checked={watch('agreeToMarketing')}
             {...register('agreeToMarketing', { required: false })}
           />
           <span className={styles.term__title}>
@@ -126,7 +104,7 @@ export default function Terms({ onNext }: TermsProps) {
         type="button"
         className={styles['term-button']}
         onClick={onNext}
-        disabled={!(agreeState.agreeToPrivacyPolicy && agreeState.agreeToKoinTerms)}
+        disabled={!(watch(TERMS_NAMES.slice(0, 2)).every(Boolean))}
       >
         다음
       </button>
