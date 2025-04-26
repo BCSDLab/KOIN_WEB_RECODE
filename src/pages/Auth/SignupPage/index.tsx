@@ -51,7 +51,7 @@ function SignupPage() {
             type="button"
             className={styles.container__button}
             onClick={goBack}
-            aria-label="ddd"
+            aria-label="button"
           >
             <ChevronLeftIcon />
           </button>

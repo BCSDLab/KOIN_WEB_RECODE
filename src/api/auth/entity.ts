@@ -1,8 +1,15 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
 export type LoginRequest = {
-  email: string;
+  name: string;
+  phone_number: string;
+  user_id: string;
   password: string;
+  department: string;
+  student_number: string;
+  gender: string;
+  email?: string;
+  nickname: string;
 };
 
 export interface LoginResponse extends APIResponse {

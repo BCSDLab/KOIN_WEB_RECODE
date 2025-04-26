@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports */
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import { nicknameDuplicateCheck } from 'api/auth';
+import { nicknameDuplicateCheck, signupStudent } from 'api/auth';
 import { useState } from 'react';
 import {
   Controller, useFormContext, useFormState, useWatch,
@@ -31,7 +31,7 @@ interface MobileVerificationProps {
 }
 
 function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
-  const { control, getValues } = useFormContext();
+  const { control, getValues, handleSubmit } = useFormContext();
   const phoneNumber = getValues('phone_number');
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
 
@@ -71,8 +71,29 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     },
   });
 
+  const { mutate: signup } = useMutation({
+    mutationFn: (variables: {
+      name: string;
+      phone_number: string;
+      user_id: string;
+      password: string;
+      department: string;
+      student_number: string;
+      gender: string;
+      email: string;
+      nickname: string;
+    }) => signupStudent(variables),
+    onSuccess: () => {
+      onNext();
+    },
+  });
+
+  const onSubmit = (formData: any) => {
+    signup(formData);
+  };
+
   return (
-    <div className={styles.container}>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
       <div className={styles['form-container']}>
         <div className={styles.wrapper}>
           <h1 className={styles.wrapper__header}>아이디 (전화번호)</h1>
@@ -135,57 +156,77 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
           </div>
         </div>
         {isPasswordAllValid && (
-        <div className={styles.wrapper}>
-          <h1 className={styles.wrapper__header}>학부와 학번을 알려주세요.</h1>
-          <CustomSelector
-            options={deptOptionList}
-            value={major}
-            onChange={(event) => setMajor(event.target.value)}
-            placeholder="학부를 선택해주세요."
-          />
-          <Controller
-            name="student_number"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <CustomInput {...field} placeholder="학번을 입력해주세요." isDelete />
-            )}
-          />
-          <div className={styles['input-wrapper']}>
+          <div className={styles.wrapper}>
+            <h1 className={styles.wrapper__header}>학부와 학번을 알려주세요.</h1>
             <Controller
-              name="nickname"
+              name="department"
               control={control}
               defaultValue=""
-              rules={{
-                required: true,
-                value: REGEX.NICKNAME,
-              }}
               render={({ field }) => (
-                <CustomInput
+                <CustomSelector
                   {...field}
-                  placeholder="닉네임을 입력해 주세요. (선택)"
-                  isDelete
-                  isButton
-                  message={phoneMessage}
-                  buttonText="중복 확인"
-                  buttonOnClick={() => checkNickname(nickname)}
+                  options={deptOptionList}
+                  value={major}
+                  onChange={(event) => {
+                    setMajor(event.target.value);
+                    field.onChange(event.target.value);
+                  }}
+                  placeholder="학부를 선택해주세요."
                 />
               )}
             />
+            {/* <CustomSelector
+              options={deptOptionList}
+              value={major}
+              onChange={(event) => setMajor(event.target.value)}
+              placeholder="학부를 선택해주세요."
+            /> */}
+            <Controller
+              name="student_number"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <CustomInput {...field} placeholder="학번을 입력해주세요." isDelete />
+              )}
+            />
+            <div className={styles['input-wrapper']}>
+              <Controller
+                name="nickname"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: true,
+                  value: REGEX.NICKNAME,
+                }}
+                render={({ field }) => (
+                  <CustomInput
+                    {...field}
+                    placeholder="닉네임을 입력해 주세요. (선택)"
+                    isDelete
+                    isButton
+                    message={phoneMessage}
+                    buttonText="중복 확인"
+                    buttonOnClick={() => checkNickname(nickname)}
+                  />
+                )}
+              />
+            </div>
           </div>
-        </div>
         )}
       </div>
 
       <button
-        type="button"
-        onClick={onNext}
+        type="submit"
+        onClick={() => {
+          onSubmit(getValues());
+        }}
         className={styles['next-button']}
         disabled={!isFormFilled}
       >
         다음
       </button>
-    </div>
+    </form>
+
   );
 }
 

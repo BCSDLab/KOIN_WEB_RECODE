@@ -50,10 +50,10 @@ export class NicknameDuplicateCheck<R extends NicknameDuplicateCheckResponse> im
   }
 }
 
-export class Signup<R extends SignupResponse> implements APIRequest<R> {
+export class SignupStudent<R extends SignupResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/student/register';
+  path = 'v2/user/student/register';
 
   response!: R;
 
