@@ -266,17 +266,11 @@ function StorePage() {
       </div>
       {!isMobile && <SearchBarModal onClose={() => {}} />}
       <div className={styles.option}>
-        {params.searchWord ? (
+        {params.storeName ? (
           <div className={styles.option__count}>
             <strong>
-              {params.searchWord}
+              {`"${params.storeName}" 관련 가게가 총 ${storeList.length}개 있습니다.`}
             </strong>
-            메뉴를 가진 가게가
-            <strong>
-              {storeList.length}
-              개
-            </strong>
-            있습니다.
           </div>
         ) : (
           <div className={styles.option__count}>
