@@ -11,6 +11,7 @@ import MobileUserTypeStep from './Steps/MobileUserTypeStep';
 import MobileStudentDetailStep from './Steps/MobileStudentDetailStep';
 import MobileGuestDetailStep from './Steps/MobileExternalDetailStep';
 import styles from './SignupPage.module.scss';
+import Verification from './Steps/VerificationStep';
 
 type StepTitle = '약관 동의' | '본인 인증' | '회원 유형 선택' | '정보 입력';
 type UserType = '학생' | '외부인';
@@ -67,7 +68,11 @@ function SignupPage() {
             <Terms onNext={() => nextStep('본인 인증')} />
           </Step>
           <Step name="본인 인증">
-            <MobileVerification onNext={() => nextStep('회원 유형 선택')} />
+            {isMobile ? (
+              <MobileVerification onNext={() => nextStep('회원 유형 선택')} />
+            ) : (
+              <Verification onNext={() => nextStep('회원 유형 선택')} />
+            )}
           </Step>
           <Step name="회원 유형 선택">
             <MobileUserTypeStep

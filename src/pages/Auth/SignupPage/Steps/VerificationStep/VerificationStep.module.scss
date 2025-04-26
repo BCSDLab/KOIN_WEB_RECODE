@@ -1,0 +1,129 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 640px;
+  justify-content: center;
+  align-items: center;
+  font-family: Pretendard, sans-serif;
+  // overflow-y: scroll;
+  
+  margin-top: 120px;
+
+  &__title {
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  &__subTitleWrapper {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row-reverse;
+    width: 100%;
+    padding: 8px;
+
+    &-subTitle {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 160%;
+
+      .required {
+        color: #EC2D30;
+      }
+    }
+  }
+}
+
+.divider {
+  width: 640px;
+  border: 2px solid #175c8e;
+
+  &--top {
+    margin: 0 0 48px 0;
+  }
+
+  &--bottom {
+    margin: 40px 0;
+  }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.name-wrapper,
+.gender-wrapper,
+.number-wrapper,
+.verification-wrapper {
+  display: grid;
+  grid-template-columns: 160px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 160%;
+
+  label {
+    justify-self: start;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+
+    .required {
+      color: #ec2d30;
+    }
+  }
+}
+
+.checkbox-wrapper {
+  display: flex;
+  gap: 32px;
+  
+  &__checkbox {
+    display: flex;
+  }
+}
+
+.button-wrapper {
+  display: flex;
+  gap: 32px;
+
+  &__next-button-student {
+    display: flex;
+    width: 240px;
+    height: 64px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    background: #cacaca;
+    color: #FFF;
+
+    text-align: center;
+    font-family: Pretendard ,sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 160%;
+  }
+
+  &__next-button-external {
+    display: flex;
+    width: 240px;
+    height: 64px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    background: #cacaca;
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 160%;
+  }
+}
