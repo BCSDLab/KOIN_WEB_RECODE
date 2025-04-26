@@ -1,6 +1,11 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
 export type LoginRequest = {
+  email: string;
+  password: string;
+};
+
+export type LoginStudentRequest = {
   name: string;
   phone_number: string;
   user_id: string;
@@ -9,6 +14,16 @@ export type LoginRequest = {
   student_number: string;
   gender: string;
   email?: string;
+  nickname: string;
+};
+
+export type LoginGeneralRequest = {
+  name: string;
+  phone_number: string;
+  user_id: string;
+  password: string;
+  gender: string;
+  email: string;
   nickname: string;
 };
 
@@ -43,7 +58,9 @@ export interface CheckPasswordRequest {
   password: string;
 }
 
-export interface SignupResponse extends APIResponse { }
+export interface SignupStudentResponse extends APIResponse { }
+
+export interface SignupGeneralResponse extends APIResponse { }
 
 export interface RefreshRequest {
   refresh_token: string;

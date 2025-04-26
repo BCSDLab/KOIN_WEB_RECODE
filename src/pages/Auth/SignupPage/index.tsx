@@ -83,7 +83,7 @@ function SignupPage() {
           </Step>
           <Step name="정보 입력">
             {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('완료')} />}
-            {userType === '외부인' && <MobileGuestDetailStep />}
+            {userType === '외부인' && <MobileGuestDetailStep onNext={() => nextStep('완료')} />}
           </Step>
           <Step name="완료">
             <CompleteStep />

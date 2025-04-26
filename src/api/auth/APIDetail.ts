@@ -5,7 +5,6 @@ import {
   NicknameDuplicateCheckResponse,
   RefreshRequest,
   RefreshResponse,
-  SignupResponse,
   UserResponse,
   UserAcademicInfoResponse,
   FindPasswordRequest,
@@ -21,6 +20,10 @@ import {
   SmsSendResponse,
   SmsVerifyResponse,
   SmsVerifyRequest,
+  SignupGeneralResponse,
+  LoginGeneralRequest,
+  SignupStudentResponse,
+  LoginStudentRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -50,7 +53,7 @@ export class NicknameDuplicateCheck<R extends NicknameDuplicateCheckResponse> im
   }
 }
 
-export class SignupStudent<R extends SignupResponse> implements APIRequest<R> {
+export class SignupStudent<R extends SignupStudentResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = 'v2/user/student/register';
@@ -59,7 +62,19 @@ export class SignupStudent<R extends SignupResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: LoginRequest) { }
+  constructor(public data: LoginStudentRequest) { }
+}
+
+export class SignupGeneral<R extends SignupGeneralResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'v2/user/general/register';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: LoginGeneralRequest) { }
 }
 
 export class Refresh<R extends RefreshResponse> implements APIRequest<R> {

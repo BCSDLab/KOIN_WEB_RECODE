@@ -4,6 +4,7 @@ import {
   NicknameDuplicateCheck,
   Refresh,
   SignupStudent,
+  SignupGeneral,
   User,
   UserAcademicInfo,
   UpdateUser,
@@ -21,6 +22,8 @@ export const login = APIClient.of(Login);
 export const nicknameDuplicateCheck = APIClient.of(NicknameDuplicateCheck);
 
 export const signupStudent = APIClient.of(SignupStudent);
+
+export const signupGeneral = APIClient.of(SignupGeneral);
 
 export const refresh = APIClient.of(Refresh);
 
