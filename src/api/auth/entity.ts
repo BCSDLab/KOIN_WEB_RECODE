@@ -106,7 +106,12 @@ export interface UpdateAcademicInfoResponse extends APIResponse {
 }
 
 export interface CheckPhoneResponse extends APIResponse { }
-export interface SmsSendResponse extends APIResponse { }
+export interface SmsSendResponse extends APIResponse {
+  target: string;
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
 export interface SmsVerifyResponse extends APIResponse { }
 
 export interface SmsSendRequest {
@@ -115,5 +120,5 @@ export interface SmsSendRequest {
 
 export interface SmsVerifyRequest {
   phone_number: string;
-  certification_code: string;
+  verification_code: string;
 }

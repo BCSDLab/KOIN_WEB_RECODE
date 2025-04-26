@@ -6,7 +6,7 @@
     flex-direction: column;
     width: 100%;
     height: calc(100% - 40px);
-    margin: 64px auto 40px auto;
+    margin: 64px auto 0 auto;
     font-family: Pretendard, sans-serif;
     justify-content: space-between;
   }
@@ -129,6 +129,15 @@
   font-size: 12px;
   font-weight: 400;
   line-height: 160%;
+}
+
+.label-count-number {
+  color:  #727272;
+
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 160%;
+  margin-left: 8px;
 }
 
 .next-button {

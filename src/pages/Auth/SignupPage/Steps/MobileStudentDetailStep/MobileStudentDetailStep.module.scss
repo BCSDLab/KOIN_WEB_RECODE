@@ -6,7 +6,7 @@
     flex-direction: column;
     width: 100%;
     height: calc(100% - 40px);
-    margin: 32px auto 40px auto;
+    margin: 32px auto 0 auto;
     font-family: Pretendard, sans-serif;
     justify-content: space-between;
   }
@@ -28,7 +28,7 @@
     width: 100%;
     text-align: start;
     gap: 16px;
-    margin-bottom: 32px;
+    // margin-bottom: 32px;
   }
 
   &__header {

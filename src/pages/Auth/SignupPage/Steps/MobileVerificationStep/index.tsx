@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
 import ROUTES from 'static/routes';
 import { useNavigate } from 'react-router-dom';
+import type { SmsSendResponse } from 'api/auth/entity';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './MobileVerification.module.scss';
@@ -45,9 +46,10 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [isCodeCorrect, setIsCodeCorrect] = useState(false);
+  const [smsSendCount, setSmsSendCount] = useState(0);
 
   const { isRunning: isTimer, secondsLeft: timerValue, start: runTimer } = useCountdownTimer({
-    duration: 20,
+    duration: 200,
     onExpire: () => {
       if (!isCodeCorrect) {
         setVerificationMessage({ type: 'warning', content: MESSAGES.CODE_TIMEOUT });
@@ -57,14 +59,18 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
 
   const { mutate: sendSMSToUser } = useMutation({
     mutationFn: smsSend,
-    onSuccess: () => {
+    onSuccess: (data : SmsSendResponse) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.CODE_SENT });
       runTimer();
       setShowVerificationField(true);
+      setSmsSendCount(data.remaining_count);
     },
     onError: (err) => {
       if (isKoinError(err)) {
         if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.INVALID_PHONE });
+        }
+        if (err.status === 429) {
           setPhoneMessage({ type: 'error', content: MESSAGES.CODE_STOP });
         }
       }
@@ -81,6 +87,9 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       if (isKoinError(err)) {
         if (err.status === 400) {
           setVerificationMessage({ type: 'warning', content: MESSAGES.CODE_INCORRECT });
+        }
+        if (err.status === 404) {
+          setVerificationMessage({ type: 'error', content: MESSAGES.CODE_TIMEOUT });
         }
       }
     },
@@ -153,6 +162,14 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                   buttonDisabled={!field.value}
                   buttonOnClick={() => checkPhoneNumber(phoneNumber)}
                 >
+                  {phoneMessage?.type === 'success' && (
+                    <div className={styles['label-count-number']}>
+                      {' '}
+                      남은 횟수 (
+                      {smsSendCount}
+                      /5)
+                    </div>
+                  )}
                   {
                     phoneMessage?.type === 'error' && (
                     <button onClick={() => goToLogin()} type="button" className={styles['label-link-button']}>
@@ -176,7 +193,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                   {...field}
                   placeholder="인증번호를 입력해주세요."
                   isDelete
-                  isTimer={isTimer}
+                  isTimer={isCodeCorrect ? false : isTimer}
                   timerValue={timerValue}
                   message={verificationMessage}
                   isButton
@@ -185,7 +202,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                   buttonOnClick={() => {
                     checkVerificationCode({
                       phone_number: phoneNumber,
-                      certification_code: verificationCode,
+                      verification_code: verificationCode,
                     });
                   }}
                 />
