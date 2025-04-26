@@ -88,7 +88,7 @@ const useStoreList = (
 ) => {
   const { data: storeList } = useQuery(
     {
-      queryKey: ['storeListV2', sorter, filter],
+      queryKey: ['storeListV2', sorter, filter, params.storeName],
       queryFn: () => api.store.getStoreListV2(
         sorter,
         filter,
@@ -105,21 +105,10 @@ const useStoreList = (
     return [];
   }
 
-  return storeList.shops.filter((store) => {
-    const matchCategory = params.category === undefined
-      || store.category_ids.some((id) => id === selectedCategory);
-
-    if (!params.shopIds && params.storeName) return store.name.includes(params.storeName ? params.storeName : '');
-    // 메뉴검색시 메뉴를 가진 가게를 반환
-    if (params.shopIds) {
-      const shopIdsArr = params.shopIds.split(',').map(Number);
-      return shopIdsArr.includes(store.id);
-    }
-    return (
-      matchCategory
-      && store.name.includes(params.storeName ? params.storeName : '')
-    );
-  });
+  return storeList.shops.filter(
+    (store) => params.category === undefined
+    || store.category_ids.some((id) => id === selectedCategory),
+  );
 };
 
 function StorePage() {
