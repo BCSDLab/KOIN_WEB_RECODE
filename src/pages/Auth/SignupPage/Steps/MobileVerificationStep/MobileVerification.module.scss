@@ -6,7 +6,7 @@
     flex-direction: column;
     width: 100%;
     height: calc(100% - 40px);
-    margin: 64px auto 0 auto;
+    margin: 64px auto 0;
     font-family: Pretendard, sans-serif;
     justify-content: space-between;
   }
@@ -45,38 +45,35 @@
     gap: 32px;
     height: fit-content;
     align-items: center;
+  }
 
-    &__checkbox {
+  &__checkbox {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    input[type="radio"] {
+      box-sizing: border-box;
       display: flex;
-      gap: 8px;
-      align-items: center;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      margin: 0 0 2px;
+      border-radius: 50px;
+      border: 2px solid #175c8e;
+      cursor: pointer;
+    }
 
-      input[type='radio'] {
-        box-sizing: border-box;
-        display: flex;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
+    input[type="radio"]:checked {
+      background-color: #175c8e;
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px #175c8e;
+    }
 
-        width: 16px;
-        height: 16px;
-        margin: 0 0 2px;
-        border-radius: 50px;
-        border: 2px solid #175C8E;
-        cursor: pointer;
-      }
-
-      input[type='radio']:checked {
-        background-color: #175C8E;
-        border: 2px solid white;
-        box-shadow: 0 0 0 2px #175C8E;
-      }
-
-      & > div {
-        display: flex;
-        font-size: 16px;
-        line-height: 160%;
-      }
+    & > div {
+      display: flex;
+      font-size: 16px;
+      line-height: 160%;
     }
   }
 }
@@ -107,7 +104,6 @@
       align-items: center;
       border: none;
       border-bottom: 1px solid #cacaca;
-
       font-size: 14px;
       font-weight: 400;
       line-height: 160%;
@@ -132,8 +128,7 @@
 }
 
 .label-count-number {
-  color:  #727272;
-
+  color: #727272;
   font-size: 12px;
   font-weight: 400;
   line-height: 160%;
@@ -149,7 +144,6 @@
     align-items: center;
     border-radius: 8px;
     background: #175c8e;
-
     color: #fff;
     font-size: 16px;
     font-weight: 500;

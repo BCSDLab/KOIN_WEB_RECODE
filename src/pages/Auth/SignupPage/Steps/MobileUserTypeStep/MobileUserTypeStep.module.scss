@@ -16,7 +16,7 @@
     display: flex;
     width: 96px;
     height: 56px;
-    margin: 100px auto 80px auto;
+    margin: 100px auto 80px;
   }
 }
 
@@ -38,20 +38,19 @@
       justify-content: center;
       align-items: center;
       border-radius: 8px;
-      
-      color: #FFF;
+      color: #fff;
       font-size: 16px;
       font-weight: 500;
       line-height: 160%;
     }
 
-    &--orange{
+    &--orange {
       @include media.media-breakpoint(mobile) {
         background-color: #f7941e;
       }
     }
 
-    &--blue{
+    &--blue {
       @include media.media-breakpoint(mobile) {
         background-color: #175c8e;
       }
