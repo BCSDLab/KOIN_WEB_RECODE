@@ -11,11 +11,12 @@ import MobileUserTypeStep from './Steps/MobileUserTypeStep';
 import MobileStudentDetailStep from './Steps/MobileStudentDetailStep';
 import MobileGuestDetailStep from './Steps/MobileExternalDetailStep';
 import styles from './SignupPage.module.scss';
+import CompleteStep from './Steps/CompleteStep';
 
-type StepTitle = '약관 동의' | '본인 인증' | '회원 유형 선택' | '정보 입력';
+type StepTitle = '약관 동의' | '본인 인증' | '회원 유형 선택' | '정보 입력' | '완료';
 type UserType = '학생' | '외부인';
 
-const stepTitles: StepTitle[] = ['약관 동의', '본인 인증', '회원 유형 선택', '정보 입력'];
+const stepTitles: StepTitle[] = ['약관 동의', '본인 인증', '회원 유형 선택', '정보 입력', '완료'];
 
 function SignupPage() {
   const {
@@ -58,10 +59,13 @@ function SignupPage() {
           <span className={styles.container__title}>회원가입</span>
         </div>
         )}
-        <ProgressBar
-          steps={stepTitles.map((title) => ({ title }))}
-          currentIndex={currentIndex}
-        />
+
+        {currentStep !== '완료' && (
+          <ProgressBar
+            steps={stepTitles.map((title) => ({ title }))}
+            currentIndex={currentIndex}
+          />
+        )}
         <FormProvider {...methods}>
           <Step name="약관 동의">
             <Terms onNext={() => nextStep('본인 인증')} />
@@ -78,8 +82,11 @@ function SignupPage() {
             />
           </Step>
           <Step name="정보 입력">
-            {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('회원 유형 선택')} />}
+            {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('완료')} />}
             {userType === '외부인' && <MobileGuestDetailStep />}
+          </Step>
+          <Step name="완료">
+            <CompleteStep />
           </Step>
         </FormProvider>
       </div>

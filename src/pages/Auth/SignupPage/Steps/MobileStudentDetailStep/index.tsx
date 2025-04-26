@@ -218,7 +218,8 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
       <button
         type="submit"
         onClick={() => {
-          onSubmit(getValues());
+          // onSubmit(getValues());
+          onNext();
         }}
         className={styles['next-button']}
         disabled={!isFormFilled}
