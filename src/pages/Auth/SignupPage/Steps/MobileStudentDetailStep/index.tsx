@@ -3,7 +3,9 @@ import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { nicknameDuplicateCheck } from 'api/auth';
 import { useState } from 'react';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import {
+  Controller, useFormContext, useFormState, useWatch,
+} from 'react-hook-form';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import CustomSelector from '../../components/CustomSelector';
 import useDeptList from '../../hooks/useDeptList';
@@ -16,6 +18,7 @@ const MESSAGES = {
 
   NICKNAME_DUPLICATED: '중복된 닉네임입니다. 다시 입력해 주세요.',
   NICKNAME_AVAILABLE: '사용 가능한 닉네임입니다.',
+  NICKNAME_FORMAT: '한글, 영문 및 숫자 포함하여 10자 내로 입력해 주세요.',
 };
 
 const REGEX = {
@@ -32,8 +35,17 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   const phoneNumber = getValues('phone_number');
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
 
+  const password = useWatch({ control, name: 'password' });
+  const passwordCheck = useWatch({ control, name: 'password_check' });
+  const { errors } = useFormState({ control });
+
+  const isPasswordValid = password && !errors.password;
+  const isPasswordCheckValid = passwordCheck && !errors.password_check;
+  const isPasswordAllValid = isPasswordValid && isPasswordCheckValid;
+
   const [major, setMajor] = useState<string | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
+  const isFormFilled = isPasswordAllValid && major && nickname;
 
   const { data: deptList } = useDeptList();
   const deptOptionList = deptList.map((dept) => ({
@@ -49,8 +61,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     onError: (err) => {
       if (isKoinError(err)) {
         if (err.status === 400) {
-          // 형식 아직 안나옴 (이후추가)
-          // setPhoneMessage({ type: 'warning', content: MESSAGES });
+          setPhoneMessage({ type: 'warning', content: MESSAGES.NICKNAME_FORMAT });
         }
 
         if (err.status === 409) {
@@ -83,7 +94,10 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
               defaultValue=""
               rules={{
                 required: true,
-                value: REGEX.PASSWORD,
+                pattern: {
+                  value: REGEX.PASSWORD,
+                  message: MESSAGES.PASSWORD_FORMAT,
+                },
               }}
               render={({ field, fieldState }) => (
                 <CustomInput
@@ -91,33 +105,36 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                   placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해주세요."
                   type="password"
                   isVisibleButton
-                  message={fieldState.error ? { type: 'error', content: MESSAGES.PASSWORD_FORMAT } : null}
+                  message={fieldState.error ? { type: 'warning', content: MESSAGES.PASSWORD_FORMAT } : null}
                 />
               )}
             />
-            <Controller
-              name="password_check"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                validate: (value) => value === getValues('password'),
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="비밀번호를 다시 입력해 주세요."
-                  type="password"
-                  isVisibleButton
-                  message={fieldState.error
-                    ? { type: 'error', content: MESSAGES.PASSWORD_MISMATCH }
-                    : { type: 'success', content: MESSAGES.PASSWORD_MATCH }}
-                />
-              )}
-            />
+            {isPasswordValid && (
+              <Controller
+                name="password_check"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: true,
+                  validate: (value) => value === getValues('password'),
+                }}
+                render={({ field, fieldState }) => (
+                  <CustomInput
+                    {...field}
+                    placeholder="비밀번호를 다시 입력해 주세요."
+                    type="password"
+                    isVisibleButton
+                    message={fieldState.error
+                      ? { type: 'warning', content: MESSAGES.PASSWORD_MISMATCH }
+                      : { type: 'success', content: MESSAGES.PASSWORD_MATCH }}
+                  />
+                )}
+              />
+            )}
 
           </div>
         </div>
+        {isPasswordAllValid && (
         <div className={styles.wrapper}>
           <h1 className={styles.wrapper__header}>학부와 학번을 알려주세요.</h1>
           <CustomSelector
@@ -157,12 +174,14 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
             />
           </div>
         </div>
+        )}
       </div>
 
       <button
         type="button"
         onClick={onNext}
         className={styles['next-button']}
+        disabled={!isFormFilled}
       >
         다음
       </button>
