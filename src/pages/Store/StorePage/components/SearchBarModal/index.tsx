@@ -41,10 +41,8 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
     }, 200);
   }, []);
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     const value = storeRef.current?.value ?? '';
-    const data = await getRelateSearch(value);
-    setRelateSearchItems(data);
     setParams('storeName', value, {
       deleteBeforeParam: searchParams.get('storeName') === undefined,
       replacePage: true,
@@ -66,7 +64,7 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
             placeholder="검색어를 입력하세요"
             autoComplete="off"
             onChange={handleInputChange}
-            onKeyUp={(async (e) => {
+            onKeyUp={((e) => {
               if (e.key === 'Enter') {
                 handleSearch();
               }
@@ -79,7 +77,7 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
           <button
             className={styles['search-bar-modal__icon']}
             type="button"
-            onClick={async () => handleSearch()}
+            onClick={handleSearch}
           >
             {
           isMobile ? (
