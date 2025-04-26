@@ -40,6 +40,17 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
       setRelateSearchItems(data);
     }, 200);
   }, []);
+
+  const handleSearch = async () => {
+    const value = storeRef.current?.value ?? '';
+    const data = await getRelateSearch(value);
+    setRelateSearchItems(data);
+    setParams('storeName', value, {
+      deleteBeforeParam: searchParams.get('storeName') === undefined,
+      replacePage: true,
+    });
+  };
+
   return (
     <div className={styles['search-bar-modal__background']} ref={backgroundRef}>
       <div className={styles['search-bar-modal__container']}>
@@ -55,14 +66,9 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
             placeholder="검색어를 입력하세요"
             autoComplete="off"
             onChange={handleInputChange}
-            onKeyDown={(async (e) => {
+            onKeyUp={(async (e) => {
               if (e.key === 'Enter') {
-                const data = await getRelateSearch(e.currentTarget.value) || '';
-                setRelateSearchItems(data);
-              // setParams('storeName', e.currentTarget.value, {
-              //   deleteBeforeParam: searchParams.get('storeName') === undefined,
-              //   replacePage: true,
-              // });
+                handleSearch();
               }
             })}
             onFocus={() => {
@@ -73,15 +79,7 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
           <button
             className={styles['search-bar-modal__icon']}
             type="button"
-            onClick={async () => {
-              const value = storeRef.current?.value ?? '';
-              const data = await getRelateSearch(value);
-              setRelateSearchItems(data);
-              // setParams('storeName', storeRef.current?.value ?? '', {
-              //   deleteBeforeParam: searchParams.get('storeName') === undefined,
-              //   replacePage: true,
-              // });
-            }}
+            onClick={async () => handleSearch()}
           >
             {
           isMobile ? (
