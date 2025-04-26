@@ -47,6 +47,7 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
       deleteBeforeParam: searchParams.get('storeName') === undefined,
       replacePage: true,
     });
+    onClose();
   };
 
   return (
@@ -57,8 +58,8 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
             ref={storeRef}
             className={styles['search-bar-modal__input']}
             defaultValue={
-          searchParams.get('storeName') === undefined ? '' : searchParams.get('storeName') ?? ''
-        }
+              searchParams.get('storeName') === undefined ? '' : searchParams.get('storeName') ?? ''
+            }
             type="text"
             name="search"
             placeholder="검색어를 입력하세요"
