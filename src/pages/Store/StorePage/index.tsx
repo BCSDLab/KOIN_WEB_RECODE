@@ -194,7 +194,7 @@ function StorePage() {
     setStoreFilterList((prevFilterList) => ({ ...prevFilterList, [type]: !prevFilterList[type] }));
 
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'shop_can',
       value: loggingCategoryToggleFilterValue(
         type,
