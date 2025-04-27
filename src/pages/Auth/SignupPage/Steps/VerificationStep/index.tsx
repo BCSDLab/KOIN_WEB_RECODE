@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
 import ROUTES from 'static/routes';
 import { useNavigate } from 'react-router-dom';
+import type { SmsSendResponse } from 'api/auth/entity';
 import { cn } from '@bcsdlab/utils';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
@@ -30,11 +31,14 @@ const GENDER_OPTIONS = [
   { label: '여성', value: 'female' },
 ];
 
-interface MobileVerificationProps {
+type UserType = '학생' | '외부인';
+
+interface VerificationProps {
   onNext: () => void;
+  setUserType: (type: UserType) => void;
 }
 
-function Verification({ onNext }: MobileVerificationProps) {
+function Verification({ onNext, setUserType }: VerificationProps) {
   const navigate = useNavigate();
   const { control, register } = useFormContext();
   const name = useWatch({ control, name: 'name' });
@@ -46,8 +50,7 @@ function Verification({ onNext }: MobileVerificationProps) {
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [isCodeCorrect, setIsCodeCorrect] = useState(false);
-  // 인증번호 보낸 횟수
-  const [sentCodeCount, setSentCodeCount] = useState(0);
+  const [smsSendCount, setSmsSendCount] = useState(0);
 
   const { isRunning: isTimer, secondsLeft: timerValue, start: runTimer } = useCountdownTimer({
     duration: 20,
@@ -60,14 +63,18 @@ function Verification({ onNext }: MobileVerificationProps) {
 
   const { mutate: sendSMSToUser } = useMutation({
     mutationFn: smsSend,
-    onSuccess: () => {
+    onSuccess: (data : SmsSendResponse) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.CODE_SENT });
       runTimer();
       setShowVerificationField(true);
+      setSmsSendCount(data.remaining_count);
     },
     onError: (err) => {
       if (isKoinError(err)) {
         if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.INVALID_PHONE });
+        }
+        if (err.status === 429) {
           setPhoneMessage({ type: 'error', content: MESSAGES.CODE_STOP });
         }
       }
@@ -84,6 +91,9 @@ function Verification({ onNext }: MobileVerificationProps) {
       if (isKoinError(err)) {
         if (err.status === 400) {
           setVerificationMessage({ type: 'warning', content: MESSAGES.CODE_INCORRECT });
+        }
+        if (err.status === 404) {
+          setVerificationMessage({ type: 'error', content: MESSAGES.CODE_TIMEOUT });
         }
       }
     },
@@ -107,24 +117,36 @@ function Verification({ onNext }: MobileVerificationProps) {
     },
   });
 
-  const isNameAndGenderFilled = name?.trim() && gender?.length > 0;
-  const isFormFilled = name && gender && phoneNumber && verificationCode;
+  // const isNameAndGenderFilled = name?.trim() && gender?.length > 0;
+  const isFormFilled = name && gender && phoneNumber && verificationCode && isCodeCorrect;
 
   const goToLogin = () => {
     navigate(ROUTES.Auth());
   };
 
+  const handleStudentClick = () => {
+    setUserType('학생');
+    onNext();
+  };
+
+  const handleExternalClick = () => {
+    setUserType('외부인');
+    onNext();
+  };
+
   return (
     <div className={styles.container}>
 
-      <h1 className={styles.container__title}>회원가입</h1>
-      <div className={styles.container__subTitleWrapper}>
-        <span className={styles['container__subTitleWrapper-subTitle']}>
-          <span className={styles.required}>*</span>
-          필수 입력사항
-        </span>
+      <div className={styles.container__wrapper}>
+        <h1 className={styles.container__title}>회원가입</h1>
+        <div className={styles.container__subTitleWrapper}>
+          <span className={styles['container__subTitleWrapper-subTitle']}>
+            <span className={styles.required}>*</span>
+            필수 입력사항
+          </span>
+        </div>
+        <div className={`${styles.divider} ${styles['divider--top']}`} />
       </div>
-      <div className={`${styles.divider} ${styles['divider--top']}`} />
 
       <div className={styles['form-container']}>
         <div className={styles['name-wrapper']}>
@@ -186,8 +208,18 @@ function Verification({ onNext }: MobileVerificationProps) {
                   isButton
                   buttonText="인증번호 발송"
                   buttonDisabled={!field.value}
-                  buttonOnClick={() => checkPhoneNumber(phoneNumber)}
+                  buttonOnClick={() => {
+                    checkPhoneNumber(phoneNumber);
+                  }}
                 >
+                  {phoneMessage?.type === 'success' && (
+                    <div className={styles['label-count-number']}>
+                      {' '}
+                      남은 횟수 (
+                      {smsSendCount}
+                      /5)
+                    </div>
+                  )}
                   {
                     phoneMessage?.type === 'error' && (
                     <button onClick={() => goToLogin()} type="button" className={styles['label-link-button']}>
@@ -218,7 +250,7 @@ function Verification({ onNext }: MobileVerificationProps) {
                 {...field}
                 placeholder="인증번호를 입력해주세요."
                 isDelete
-                isTimer={isTimer}
+                isTimer={isCodeCorrect ? false : isTimer}
                 timerValue={timerValue}
                 message={verificationMessage}
                 isButton
@@ -227,7 +259,7 @@ function Verification({ onNext }: MobileVerificationProps) {
                 buttonOnClick={() => {
                   checkVerificationCode({
                     phone_number: phoneNumber,
-                    certification_code: verificationCode,
+                    verification_code: verificationCode,
                   });
                 }}
               />
@@ -236,11 +268,16 @@ function Verification({ onNext }: MobileVerificationProps) {
         </div>
       </div>
 
+      <div className={`${styles.divider} ${styles['divider--bottom']}`} />
+
       <div className={styles['button-wrapper']}>
         <button
           type="button"
-          onClick={onNext}
-          className={styles['button-wrapper__next-button-student']}
+          onClick={handleStudentClick}
+          className={cn({
+            [styles['button-wrapper__next-button-student']]: true,
+            [styles['button-wrapper__next-button-student--active']]: isFormFilled,
+          })}
           disabled={!isFormFilled}
         >
           한국기술교육대학교 학생
@@ -248,8 +285,11 @@ function Verification({ onNext }: MobileVerificationProps) {
 
         <button
           type="button"
-          onClick={onNext}
-          className={styles['button-wrapper__next-button-external']}
+          onClick={handleExternalClick}
+          className={cn({
+            [styles['button-wrapper__next-button-external']]: true,
+            [styles['button-wrapper__next-button-external--active']]: isFormFilled,
+          })}
           disabled={!isFormFilled}
         >
           기타/외부인
