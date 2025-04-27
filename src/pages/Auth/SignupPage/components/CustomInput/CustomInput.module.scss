@@ -20,7 +20,6 @@
   align-items: center;
   border-radius: 4px;
   background-color: #175c8e;
-
   color: #fff;
   font-size: 10px;
   font-weight: 400;
@@ -44,14 +43,13 @@
     padding: 8px 64px 8px 4px;
     border: none;
     border-bottom: 1px solid #e1e1e1;
-
     font-size: 14px;
     font-weight: 400;
     line-height: 160%;
 
     &::placeholder {
       color: #cacaca;
-      font-size: 14px;
+      font-size: 13px;
     }
   }
 
@@ -69,7 +67,6 @@
     display: flex;
     background: none;
     margin-top: 2px;
-
     color: #727272;
     font-size: 14px;
     font-weight: 500;
@@ -81,7 +78,7 @@
   display: flex;
   align-items: center;
   margin-top: 8px;
-  
+
   & > svg {
     display: flex;
     width: 16px;
@@ -96,7 +93,6 @@
     font-weight: 400;
     line-height: 160%;
 
-
     &--error {
       color: #f64c4c;
     }
@@ -108,8 +104,5 @@
     &--warning {
       color: #f7941e;
     }
-
-
   }
-
 }
