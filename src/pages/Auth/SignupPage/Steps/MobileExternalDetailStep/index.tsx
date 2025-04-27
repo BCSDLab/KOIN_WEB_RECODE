@@ -27,7 +27,9 @@ interface GeneralFormValues {
 }
 
 function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
-  const { control, getValues, handleSubmit } = useFormContext<GeneralFormValues>();
+  const {
+    control, getValues, handleSubmit, trigger,
+  } = useFormContext<GeneralFormValues>();
   const phoneNumber = getValues('phone_number');
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
 
@@ -35,7 +37,8 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   const passwordCheck = useWatch({ control, name: 'password_check' });
   const { errors } = useFormState({ control });
 
-  const isPasswordValid = password && !errors.password;
+  const isPasswordPatternValid = REGEX.PASSWORD.test(password || '');
+  const isPasswordValid = isPasswordPatternValid && !errors.password;
   const isPasswordCheckValid = passwordCheck && !errors.password_check;
   const isPasswordAllValid = isPasswordValid && isPasswordCheckValid;
 
@@ -131,6 +134,10 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                   {...field}
                   placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해주세요."
                   type="password"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    trigger('password_check');
+                  }}
                   isVisibleButton
                   message={fieldState.error ? { type: 'warning', content: MESSAGES.PASSWORD.FORMAT } : null}
                 />

@@ -27,7 +27,7 @@ function SignupPage() {
   const isMobile = useMediaQuery();
 
   const methods = useForm({
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       name: '',
       phone_number: '',

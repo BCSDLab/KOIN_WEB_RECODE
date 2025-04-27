@@ -31,7 +31,9 @@ interface StudentFormValues {
 }
 
 function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
-  const { control, getValues, handleSubmit } = useFormContext<StudentFormValues>();
+  const {
+    control, getValues, handleSubmit, trigger,
+  } = useFormContext<StudentFormValues>();
   const phoneNumber = getValues('phone_number');
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
 
@@ -39,7 +41,8 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   const passwordCheck = useWatch({ control, name: 'password_check' });
   const { errors } = useFormState({ control });
 
-  const isPasswordValid = password && !errors.password;
+  const isPasswordPatternValid = REGEX.PASSWORD.test(password || '');
+  const isPasswordValid = isPasswordPatternValid && !errors.password;
   const isPasswordCheckValid = passwordCheck && !errors.password_check;
   const isPasswordAllValid = isPasswordValid && isPasswordCheckValid;
 
@@ -116,6 +119,10 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                   {...field}
                   placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해주세요."
                   type="password"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    trigger('password_check');
+                  }}
                   isVisibleButton
                   message={fieldState.error ? { type: 'warning', content: MESSAGES.PASSWORD.FORMAT } : null}
                 />
@@ -166,12 +173,6 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 />
               )}
             />
-            {/* <CustomSelector
-              options={deptOptionList}
-              value={major}
-              onChange={(event) => setMajor(event.target.value)}
-              placeholder="학부를 선택해주세요."
-            /> */}
             <Controller
               name="student_number"
               control={control}
