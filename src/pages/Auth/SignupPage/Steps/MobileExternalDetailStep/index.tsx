@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-restricted-imports */
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
@@ -28,8 +29,19 @@ interface MobileExternalDetailStepProps {
   onNext: () => void;
 }
 
+interface GeneralFormValues {
+  name: string;
+  phone_number: string;
+  user_id: string;
+  password: string;
+  gender: string;
+  email: string;
+  nickname: string;
+  password_check?: string;
+}
+
 function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
-  const { control, getValues, handleSubmit } = useFormContext();
+  const { control, getValues, handleSubmit } = useFormContext<GeneralFormValues>();
   const phoneNumber = getValues('phone_number');
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
 
@@ -63,22 +75,15 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   });
 
   const { mutate: signup } = useMutation({
-    mutationFn: (variables: {
-      name: string;
-      phone_number: string;
-      user_id: string;
-      password: string;
-      gender: string;
-      email: string;
-      nickname: string;
-    }) => signupGeneral(variables),
+    mutationFn: (variables: GeneralFormValues) => signupGeneral(variables),
     onSuccess: () => {
       onNext();
     },
   });
 
-  const onSubmit = (formData: any) => {
-    signup(formData);
+  const onSubmit = (formData: GeneralFormValues) => {
+    const { password_check, ...signupData } = formData;
+    signup(signupData);
   };
 
   return (
@@ -87,7 +92,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
         <div className={styles.wrapper}>
           <h1 className={styles.wrapper__header}>아이디 (전화번호)</h1>
           <Controller
-            name="number"
+            name="phone_number"
             control={control}
             defaultValue={phoneNumber}
             render={({ field }) => (
@@ -101,7 +106,10 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
               defaultValue=""
               rules={{
                 required: true,
-                value: REGEX.NICKNAME,
+                pattern: {
+                  value: REGEX.NICKNAME,
+                  message: '',
+                },
               }}
               render={({ field }) => (
                 <CustomInput

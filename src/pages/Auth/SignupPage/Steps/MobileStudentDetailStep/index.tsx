@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-restricted-imports */
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
@@ -30,8 +31,21 @@ interface MobileVerificationProps {
   onNext: () => void;
 }
 
+interface StudentFormValues {
+  name: string,
+  phone_number: string,
+  user_id: string,
+  password: string,
+  password_check?: string,
+  department: string,
+  student_number: string,
+  gender: string,
+  email: string,
+  nickname: string,
+}
+
 function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
-  const { control, getValues, handleSubmit } = useFormContext();
+  const { control, getValues, handleSubmit } = useFormContext<StudentFormValues>();
   const phoneNumber = getValues('phone_number');
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
 
@@ -72,24 +86,15 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   });
 
   const { mutate: signup } = useMutation({
-    mutationFn: (variables: {
-      name: string;
-      phone_number: string;
-      user_id: string;
-      password: string;
-      department: string;
-      student_number: string;
-      gender: string;
-      email: string;
-      nickname: string;
-    }) => signupStudent(variables),
+    mutationFn: (variables: StudentFormValues) => signupStudent(variables),
     onSuccess: () => {
       onNext();
     },
   });
 
-  const onSubmit = (formData: any) => {
-    signup(formData);
+  const onSubmit = (formData: StudentFormValues) => {
+    const { password_check, ...signupData } = formData;
+    signup(signupData);
   };
 
   return (
@@ -98,7 +103,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
         <div className={styles.wrapper}>
           <h1 className={styles.wrapper__header}>아이디 (전화번호)</h1>
           <Controller
-            name="number"
+            name="phone_number"
             control={control}
             defaultValue={phoneNumber}
             render={({ field }) => (
@@ -196,7 +201,10 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 defaultValue=""
                 rules={{
                   required: true,
-                  value: REGEX.NICKNAME,
+                  pattern: {
+                    value: REGEX.NICKNAME,
+                    message: '',
+                  },
                 }}
                 render={({ field }) => (
                   <CustomInput
