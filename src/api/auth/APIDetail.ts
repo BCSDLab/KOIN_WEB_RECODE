@@ -5,7 +5,6 @@ import {
   NicknameDuplicateCheckResponse,
   RefreshRequest,
   RefreshResponse,
-  SignupResponse,
   UserResponse,
   UserAcademicInfoResponse,
   FindPasswordRequest,
@@ -21,6 +20,10 @@ import {
   SmsSendResponse,
   SmsVerifyResponse,
   SmsVerifyRequest,
+  SignupGeneralResponse,
+  LoginGeneralRequest,
+  SignupStudentResponse,
+  LoginStudentRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -50,16 +53,28 @@ export class NicknameDuplicateCheck<R extends NicknameDuplicateCheckResponse> im
   }
 }
 
-export class Signup<R extends SignupResponse> implements APIRequest<R> {
+export class SignupStudent<R extends SignupStudentResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/student/register';
+  path = 'v2/user/student/register';
 
   response!: R;
 
   auth = false;
 
-  constructor(public data: LoginRequest) { }
+  constructor(public data: LoginStudentRequest) { }
+}
+
+export class SignupGeneral<R extends SignupGeneralResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = 'v2/user/general/register';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: LoginGeneralRequest) { }
 }
 
 export class Refresh<R extends RefreshResponse> implements APIRequest<R> {
@@ -92,7 +107,7 @@ export class UserAcademicInfo<R extends UserAcademicInfoResponse> implements API
 
   path = '/user/student/me/academic-info';
 
-  response! : R;
+  response!: R;
 
   auth = true;
 
@@ -172,7 +187,7 @@ export class CheckPhone<R extends CheckPhoneResponse> implements APIRequest<R> {
 
   path: string;
 
-  response! : R;
+  response!: R;
 
   auth = false;
 
@@ -184,23 +199,23 @@ export class CheckPhone<R extends CheckPhoneResponse> implements APIRequest<R> {
 export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/sms/send';
+  path = '/user/verification/sms/send';
 
   response!: R;
 
   auth = false;
 
-  constructor(public data: SmsSendRequest) {}
+  constructor(public data: SmsSendRequest) { }
 }
 
 export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/sms/verify';
+  path = '/user/verification/sms/verify';
 
   response!: R;
 
   auth = false;
 
-  constructor(public data: SmsVerifyRequest) {}
+  constructor(public data: SmsVerifyRequest) { }
 }
