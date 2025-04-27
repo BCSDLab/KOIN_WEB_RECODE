@@ -12,6 +12,8 @@ import MobileStudentDetailStep from './Steps/MobileStudentDetailStep';
 import MobileGuestDetailStep from './Steps/MobileExternalDetailStep';
 import styles from './SignupPage.module.scss';
 import Verification from './Steps/VerificationStep';
+import StudentDetail from './Steps/StudentDetailStep';
+import ExternalDetail from './Steps/ExternalDetailStep';
 
 type StepTitle = '약관 동의' | '본인 인증' | '회원 유형 선택' | '정보 입력';
 type UserType = '학생' | '외부인';
@@ -43,6 +45,22 @@ function SignupPage() {
     },
   });
 
+  function renderDetailStep() {
+    if (userType === '학생') {
+      return isMobile
+        ? <MobileStudentDetailStep onNext={() => nextStep('회원 유형 선택')} />
+        : <StudentDetail />;
+    }
+
+    if (userType === '외부인') {
+      return isMobile
+        ? <MobileGuestDetailStep />
+        : <ExternalDetail />;
+    }
+
+    return null;
+  }
+
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
       <div className={styles.container}>
@@ -71,7 +89,10 @@ function SignupPage() {
             {isMobile ? (
               <MobileVerification onNext={() => nextStep('회원 유형 선택')} />
             ) : (
-              <Verification onNext={() => nextStep('회원 유형 선택')} />
+              <Verification
+                onNext={() => nextStep('정보 입력')}
+                setUserType={setUserType}
+              />
             )}
           </Step>
           <Step name="회원 유형 선택">
@@ -83,8 +104,7 @@ function SignupPage() {
             />
           </Step>
           <Step name="정보 입력">
-            {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('회원 유형 선택')} />}
-            {userType === '외부인' && <MobileGuestDetailStep />}
+            {renderDetailStep()}
           </Step>
         </FormProvider>
       </div>
