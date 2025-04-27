@@ -6,7 +6,7 @@
     flex-direction: column;
     width: 100%;
     height: calc(100% - 40px);
-    margin: 64px auto 0;
+    margin: 24px auto 0;
     font-family: Pretendard, sans-serif;
     justify-content: space-between;
   }
@@ -16,7 +16,7 @@
   @include media.media-breakpoint(mobile) {
     display: flex;
     flex-direction: column;
-    gap: 48px;
+    gap: 32px;
   }
 }
 
@@ -26,7 +26,7 @@
     flex-direction: column;
     width: 100%;
     text-align: start;
-    gap: 16px;
+    gap: 8px;
   }
 
   &__header {

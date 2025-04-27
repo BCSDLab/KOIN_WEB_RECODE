@@ -100,32 +100,6 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
               />
             )}
           />
-          <div className={styles['input-wrapper']}>
-            <Controller
-              name="nickname"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                pattern: {
-                  value: REGEX.NICKNAME,
-                  message: '',
-                },
-              }}
-              render={({ field }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="닉네임을 입력해 주세요. (선택)"
-                  isDelete
-                  isButton
-                  message={phoneMessage}
-                  buttonText="중복 확인"
-                  buttonOnClick={() => checkNickname(nickname)}
-                  buttonDisabled={!nickname}
-                />
-              )}
-            />
-          </div>
         </div>
         <div className={styles['form-container']}>
           <div className={styles.wrapper}>
@@ -177,7 +151,40 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                 )}
               />
             )}
-
+            <div className={styles['input-wrapper']}>
+              <Controller
+                name="nickname"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: true,
+                  pattern: {
+                    value: REGEX.NICKNAME,
+                    message: '',
+                  },
+                }}
+                render={({ field }) => (
+                  <CustomInput
+                    {...field}
+                    placeholder="닉네임을 입력해 주세요. (선택)"
+                    isDelete
+                    isButton
+                    message={phoneMessage}
+                    buttonText="중복 확인"
+                    buttonOnClick={() => checkNickname(nickname)}
+                    buttonDisabled={!nickname}
+                  />
+                )}
+              />
+            </div>
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <CustomInput {...field} placeholder="이메일을 입력해 주세요. (선택)" />
+              )}
+            />
           </div>
         </div>
       </div>
