@@ -7,28 +7,10 @@ import { isKoinError } from '@bcsdlab/koin';
 import ROUTES from 'static/routes';
 import { useNavigate } from 'react-router-dom';
 import type { SmsSendResponse } from 'api/auth/entity';
+import { GENDER_OPTIONS, MESSAGES } from 'static/auth';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './MobileVerification.module.scss';
-
-const MESSAGES = {
-  // 전화번호 입력
-  INVALID_PHONE: '올바른 전화번호 양식이  아닙니다. 다시 입력해 주세요.',
-  ALREADY_REGISTERED: '이미 가입된 전화 번호입니다.',
-  CODE_SENT: '인증번호가 발송되었습니다.',
-
-  // 인증번호 입력
-  DEFAULT: '인증번호 발송이 안 되시나요?',
-  CODE_TIMEOUT: '유효시간이 지났습니다. 인증번호를 재발송 해주세요.',
-  CODE_INCORRECT: '인증번호가 일치하지 않습니다. 다시 입력해 주세요.',
-  CODE_CORRECT: '인증번호가 일치합니다.',
-  CODE_STOP: '1일 발송 한도를 초과했습니다. 24시간 이후 재시도 바랍니다.',
-};
-
-const GENDER_OPTIONS = [
-  { label: '남성', value: 'male' },
-  { label: '여성', value: 'female' },
-];
 
 interface MobileVerificationProps {
   onNext: () => void;
@@ -52,7 +34,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     duration: 200,
     onExpire: () => {
       if (!isCodeCorrect) {
-        setVerificationMessage({ type: 'warning', content: MESSAGES.CODE_TIMEOUT });
+        setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
       }
     },
   });
@@ -60,7 +42,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
   const { mutate: sendSMSToUser } = useMutation({
     mutationFn: smsSend,
     onSuccess: (data : SmsSendResponse) => {
-      setPhoneMessage({ type: 'success', content: MESSAGES.CODE_SENT });
+      setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
       setShowVerificationField(true);
       setSmsSendCount(data.remaining_count);
@@ -68,10 +50,10 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     onError: (err) => {
       if (isKoinError(err)) {
         if (err.status === 400) {
-          setPhoneMessage({ type: 'warning', content: MESSAGES.INVALID_PHONE });
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
         }
         if (err.status === 429) {
-          setPhoneMessage({ type: 'error', content: MESSAGES.CODE_STOP });
+          setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
         }
       }
     },
@@ -80,16 +62,16 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
   const { mutate: checkVerificationCode } = useMutation({
     mutationFn: smsVerify,
     onSuccess: () => {
-      setVerificationMessage({ type: 'success', content: MESSAGES.CODE_CORRECT });
+      setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
       setIsCodeCorrect(true);
     },
     onError: (err) => {
       if (isKoinError(err)) {
         if (err.status === 400) {
-          setVerificationMessage({ type: 'warning', content: MESSAGES.CODE_INCORRECT });
+          setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
         }
         if (err.status === 404) {
-          setVerificationMessage({ type: 'error', content: MESSAGES.CODE_TIMEOUT });
+          setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
         }
       }
     },
@@ -103,11 +85,11 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     onError: (err) => {
       if (isKoinError(err)) {
         if (err.status === 400) {
-          setPhoneMessage({ type: 'warning', content: MESSAGES.INVALID_PHONE });
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
         }
 
         if (err.status === 409) {
-          setPhoneMessage({ type: 'error', content: MESSAGES.ALREADY_REGISTERED });
+          setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED });
         }
       }
     },

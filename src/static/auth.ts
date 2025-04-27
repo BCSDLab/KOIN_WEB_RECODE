@@ -1,0 +1,36 @@
+export const REGEX = {
+  PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/]{6,18}$/,
+  NICKNAME: /^[가-힣a-zA-Z0-9]{1,10}$/,
+};
+
+export const MESSAGES = {
+  PASSWORD: {
+    FORMAT: '올바른 비밀번호 양식이 아닙니다. 다시 입력해 주세요.',
+    MISMATCH: '비밀번호가 일치하지 않습니다.',
+    MATCH: '비밀번호가 일치합니다.',
+  },
+  NICKNAME: {
+    DUPLICATED: '중복된 닉네임입니다. 다시 입력해 주세요.',
+    AVAILABLE: '사용 가능한 닉네임입니다.',
+    FORMAT: '한글, 영문 및 숫자 포함하여 10자 내로 입력해 주세요.',
+  },
+  PHONE: {
+    INVALID: '올바른 전화번호 양식이 아닙니다. 다시 입력해 주세요.',
+    ALREADY_REGISTERED: '이미 가입된 전화 번호입니다.',
+    CODE_SENT: '인증번호가 발송되었습니다.',
+  },
+  VERIFICATION: {
+    DEFAULT: '인증번호 발송이 안 되시나요?',
+    TIMEOUT: '유효시간이 지났습니다. 인증번호를 재발송 해주세요.',
+    INCORRECT: '인증번호가 일치하지 않습니다. 다시 입력해 주세요.',
+    CORRECT: '인증번호가 일치합니다.',
+    STOP: '1일 발송 한도를 초과했습니다. 24시간 이후 재시도 바랍니다.',
+  },
+};
+
+export type UserType = '학생' | '외부인';
+
+export const GENDER_OPTIONS = [
+  { label: '남성', value: 'male' },
+  { label: '여성', value: 'female' },
+];

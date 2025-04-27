@@ -7,23 +7,9 @@ import { useState } from 'react';
 import {
   Controller, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
+import { REGEX, MESSAGES } from 'static/auth';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './MobileExternalDetailStep.module.scss';
-
-const MESSAGES = {
-  PASSWORD_FORMAT: '올바른 비밀번호 양식이 아닙니다. 다시 입력해 주세요.',
-  PASSWORD_MISMATCH: '비밀번호가 일치하지 않습니다.',
-  PASSWORD_MATCH: '비밀번호가 일치합니다.',
-
-  NICKNAME_DUPLICATED: '중복된 닉네임입니다. 다시 입력해 주세요.',
-  NICKNAME_AVAILABLE: '사용 가능한 닉네임입니다.',
-  NICKNAME_FORMAT: '한글, 영문 및 숫자 포함하여 10자 내로 입력해 주세요.',
-};
-
-const REGEX = {
-  PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/]{6,18}$/,
-  NICKNAME: /^[가-힣a-zA-Z0-9]{1,10}$/,
-};
 
 interface MobileExternalDetailStepProps {
   onNext: () => void;
@@ -59,16 +45,16 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   const { mutate: checkNickname } = useMutation({
     mutationFn: nicknameDuplicateCheck,
     onSuccess: () => {
-      setPhoneMessage({ type: 'success', content: MESSAGES.NICKNAME_AVAILABLE });
+      setPhoneMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
     },
     onError: (err) => {
       if (isKoinError(err)) {
         if (err.status === 400) {
-          setPhoneMessage({ type: 'warning', content: MESSAGES.NICKNAME_FORMAT });
+          setPhoneMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
         }
 
         if (err.status === 409) {
-          setPhoneMessage({ type: 'error', content: MESSAGES.NICKNAME_DUPLICATED });
+          setPhoneMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
         }
       }
     },
@@ -137,7 +123,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                 required: true,
                 pattern: {
                   value: REGEX.PASSWORD,
-                  message: MESSAGES.PASSWORD_FORMAT,
+                  message: MESSAGES.PASSWORD.FORMAT,
                 },
               }}
               render={({ field, fieldState }) => (
@@ -146,7 +132,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                   placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해주세요."
                   type="password"
                   isVisibleButton
-                  message={fieldState.error ? { type: 'warning', content: MESSAGES.PASSWORD_FORMAT } : null}
+                  message={fieldState.error ? { type: 'warning', content: MESSAGES.PASSWORD.FORMAT } : null}
                 />
               )}
             />
@@ -166,8 +152,8 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                     type="password"
                     isVisibleButton
                     message={fieldState.error
-                      ? { type: 'warning', content: MESSAGES.PASSWORD_MISMATCH }
-                      : { type: 'success', content: MESSAGES.PASSWORD_MATCH }}
+                      ? { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH }
+                      : { type: 'success', content: MESSAGES.PASSWORD.MATCH }}
                   />
                 )}
               />
