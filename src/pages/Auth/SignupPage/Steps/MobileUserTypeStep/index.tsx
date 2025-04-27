@@ -1,7 +1,6 @@
 import LogoIcon from 'assets/svg/Login/logo.svg';
+import type { UserType } from 'static/auth';
 import styles from './MobileUserTypeStep.module.scss';
-
-type UserType = '학생' | '외부인';
 
 interface MobileUserTypeStepProps {
   onSelectType: (type: UserType) => void;
