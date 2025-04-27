@@ -34,7 +34,6 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   const {
     control, getValues, handleSubmit, trigger,
   } = useFormContext<StudentFormValues>();
-  const phoneNumber = getValues('phone_number');
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
 
   const password = useWatch({ control, name: 'password' });
@@ -90,13 +89,26 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
       <div className={styles['form-container']}>
         <div className={styles.wrapper}>
-          <h1 className={styles.wrapper__header}>아이디 (전화번호)</h1>
+          <h1 className={styles.wrapper__header}>사용하실 아이디를 입력해 주세요.</h1>
           <Controller
-            name="phone_number"
+            name="user_id"
             control={control}
-            defaultValue={phoneNumber}
+            rules={{
+              required: true,
+              pattern: {
+                value: REGEX.USERID,
+                message: '',
+              },
+            }}
             render={({ field }) => (
-              <CustomInput {...field} disabled />
+              <CustomInput
+                {...field}
+                placeholder="최대 13자리까지 입력 가능합니다."
+                isButton
+                buttonText="중복 확인"
+                // buttonOnClick={}
+                // USERID 여기서 메세지 가져와서 쓰기
+              />
             )}
           />
         </div>
@@ -205,6 +217,17 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                   />
                 )}
               />
+            </div>
+            <div className={styles['email-wrapper']}>
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <CustomInput {...field} placeholder="koreatech 이메일(선택)" />
+                )}
+              />
+              <div className={styles['email-wrapper__title']}>@koreatech.ac.kr</div>
             </div>
           </div>
         )}

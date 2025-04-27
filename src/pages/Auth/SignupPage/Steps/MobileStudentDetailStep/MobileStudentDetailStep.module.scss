@@ -86,3 +86,20 @@
     }
   }
 }
+
+.email-wrapper {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__title {
+    @include media.media-breakpoint(mobile) {
+      color: #cacaca;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 160%;
+    }
+  }
+}
