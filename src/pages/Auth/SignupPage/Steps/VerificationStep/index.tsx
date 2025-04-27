@@ -51,6 +51,7 @@ function Verification({ onNext, setUserType }: VerificationProps) {
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [isCodeCorrect, setIsCodeCorrect] = useState(false);
   const [smsSendCount, setSmsSendCount] = useState(0);
+  const [buttonText, setButtonText] = useState('인증번호 발송');
 
   const { isRunning: isTimer, secondsLeft: timerValue, start: runTimer } = useCountdownTimer({
     duration: 20,
@@ -68,6 +69,14 @@ function Verification({ onNext, setUserType }: VerificationProps) {
       runTimer();
       setShowVerificationField(true);
       setSmsSendCount(data.remaining_count);
+
+      setSmsSendCount(data.remaining_count);
+
+      if (data.remaining_count < 5) {
+        setButtonText('인증번호 재발송');
+      } else {
+        setButtonText('인증번호 발송');
+      }
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -206,7 +215,7 @@ function Verification({ onNext, setUserType }: VerificationProps) {
                   isDelete
                   message={phoneMessage}
                   isButton
-                  buttonText="인증번호 발송"
+                  buttonText={buttonText}
                   buttonDisabled={!field.value}
                   buttonOnClick={() => {
                     checkPhoneNumber(phoneNumber);
