@@ -110,6 +110,8 @@ export interface UserUpdateRequest {
 
 export interface DeleteResponse extends APIResponse { }
 
+export interface CheckIdResponse extends APIResponse { }
+
 export interface FindPasswordResponse extends APIResponse {
   code: number;
   message: string;

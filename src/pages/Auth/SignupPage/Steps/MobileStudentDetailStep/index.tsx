@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-imports */
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import { nicknameDuplicateCheck, signupStudent } from 'api/auth';
+import { checkId, nicknameDuplicateCheck, signupStudent } from 'api/auth';
 import { useState } from 'react';
 import {
   Controller, useFormContext, useFormState, useWatch,
@@ -34,11 +34,12 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   const {
     control, getValues, handleSubmit, trigger,
   } = useFormContext<StudentFormValues>();
+  const { errors } = useFormState({ control });
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
+  const userId = (useWatch({ control, name: 'user_id' }) ?? '') as string;
 
   const password = useWatch({ control, name: 'password' });
   const passwordCheck = useWatch({ control, name: 'password_check' });
-  const { errors } = useFormState({ control });
 
   const isPasswordPatternValid = REGEX.PASSWORD.test(password || '');
   const isPasswordValid = isPasswordPatternValid && !errors.password;
@@ -47,6 +48,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
 
   const [major, setMajor] = useState<string | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
+  const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const isFormFilled = isPasswordAllValid && major && nickname;
 
   const { data: deptList } = useDeptList();
@@ -73,6 +75,24 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     },
   });
 
+  const { mutate: checkUserId } = useMutation({
+    mutationFn: checkId,
+    onSuccess: () => {
+      setIdMessage({ type: 'success', content: MESSAGES.USERID.AVAILABLE });
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
+        }
+
+        if (err.status === 409) {
+          setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED });
+        }
+      }
+    },
+  });
+
   const { mutate: signup } = useMutation({
     mutationFn: (variables: StudentFormValues) => signupStudent(variables),
     onSuccess: () => {
@@ -93,6 +113,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
           <Controller
             name="user_id"
             control={control}
+            defaultValue=""
             rules={{
               required: true,
               pattern: {
@@ -105,9 +126,10 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 {...field}
                 placeholder="최대 13자리까지 입력 가능합니다."
                 isButton
+                message={idMessage}
                 buttonText="중복 확인"
-                // buttonOnClick={}
-                // USERID 여기서 메세지 가져와서 쓰기
+                buttonDisabled={!field.value}
+                buttonOnClick={() => checkUserId(userId)}
               />
             )}
           />

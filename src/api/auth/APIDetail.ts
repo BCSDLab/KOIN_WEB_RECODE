@@ -24,6 +24,7 @@ import {
   LoginGeneralRequest,
   SignupStudentResponse,
   LoginStudentRequest,
+  CheckIdResponse,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -140,6 +141,20 @@ export class DeleteUser<R extends DeleteResponse> implements APIRequest<R> {
   auth = true;
 
   constructor(public authorization: string) { }
+}
+
+export class CheckId<R extends CheckIdResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path: string;
+
+  response!: R;
+
+  auth = false;
+
+  constructor(loginId: string) {
+    this.path = `/user/check/id?loginId=${loginId}`;
+  }
 }
 
 export class FindPassword<R extends FindPasswordResponse> implements APIRequest<R> {
