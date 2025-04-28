@@ -29,7 +29,7 @@ export default function AdditionalLink() {
         </Link>
         <Link
           className={styles.help__link}
-          to={ROUTES.AuthFindPW()}
+          to={ROUTES.Main()}
           onClick={() => {
             logger.actionEventClick({
               team: 'USER',
