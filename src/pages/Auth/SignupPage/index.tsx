@@ -50,7 +50,7 @@ function SignupPage() {
     if (userType === '학생') {
       return isMobile
         ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
-        : <StudentDetail />;
+        : <StudentDetail onNext={() => nextStep('완료')} />;
     }
 
     if (userType === '외부인') {
@@ -109,6 +109,7 @@ function SignupPage() {
           </Step>
           <Step name="정보 입력">
             {renderDetailStep()}
+            {/* 다음 pr 때 수정될 부분입니다. */}
             {/* {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('완료')} />}
             {userType === '외부인' && <MobileGuestDetailStep onNext={() => nextStep('완료')} />} */}
           </Step>
