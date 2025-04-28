@@ -1,7 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { cn } from '@bcsdlab/utils';
+
+import * as api from 'api';
+import type { StoreSorterType, StoreFilterType } from 'api/store/entity';
+
+import Close from 'assets/svg/close-icon-20x20.svg';
+import ROUTES from 'static/routes';
+import { STORE_PAGE } from 'static/store';
+import useLogger from 'utils/hooks/analytics/useLogger';
 
 import * as api from 'api';
 import type { StoreSorterType, StoreFilterType } from 'api/store/entity';
@@ -14,6 +25,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import SearchBar from 'pages/Store/StorePage/components/SearchBar';
 import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList';
@@ -21,9 +33,13 @@ import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import { getCategoryDurationTime, initializeCategoryEntryTime } from 'pages/Store/utils/durationTime';
 import IntroToolTip from 'components/ui/IntroToolTip';
 
+import IntroToolTip from 'components/ui/IntroToolTip';
+
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
 import SearchBarModal from './components/SearchBarModal';
+
+import styles from './StorePage.module.scss';
 
 import styles from './StorePage.module.scss';
 
@@ -36,6 +52,7 @@ type StoreSearchQueryType = {
   shopIds?: string;
 };
 
+const MOBILE_SORT_CHECK_BOX = [
 const MOBILE_SORT_CHECK_BOX = [
   {
     id: 'COUNT',
@@ -50,6 +67,9 @@ const MOBILE_SORT_CHECK_BOX = [
 ] as const;
 
 const MOBILE_FILTER_CHECK_BOX = [
+] as const;
+
+const MOBILE_FILTER_CHECK_BOX = [
   {
     id: 'OPEN',
     content: '영업중',
@@ -60,6 +80,7 @@ const MOBILE_FILTER_CHECK_BOX = [
     content: '배달 가능',
     value: 4,
   },
+] as const;
 ] as const;
 
 const toggleNameLabel = {
@@ -78,6 +99,15 @@ const loggingCategoryToggleSorterValue = (
 
 const loggingCategoryToggleFilterValue = (
   toggleName: 'OPEN' | 'DELIVERY',
+const CATEGORY_IS_UNDEFINED = -1;
+
+const loggingCategoryToggleSorterValue = (
+  toggleName: 'COUNT' | 'RATING',
+  category: string | undefined,
+) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
+
+const loggingCategoryToggleFilterValue = (
+  toggleName: 'OPEN' | 'DELIVERY',
   category: string | undefined,
 ) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
 
@@ -86,6 +116,7 @@ const useStoreList = (
   filter: StoreFilterType[],
   params: StoreSearchQueryType,
 ) => {
+  const { data: storeList } = useQuery(
   const { data: storeList } = useQuery(
     {
       queryKey: ['storeListV2', sorter, filter, params.storeName],
@@ -96,10 +127,15 @@ const useStoreList = (
       ),
       retry: 0,
       placeholderData: (previousData) => previousData,
+      placeholderData: (previousData) => previousData,
     },
   );
 
   const selectedCategory = Number(params.category);
+
+  if (!storeList) {
+    return [];
+  }
 
   if (!storeList) {
     return [];
@@ -124,7 +160,22 @@ const useStoreList = (
 
 function StorePage() {
   const navigate = useNavigate();
+  const navigate = useNavigate();
   const { params, searchParams, setParams } = useParamsHandler();
+  const enterCategoryTimeRef = useRef<number | null>(null);
+  const [storeSorter, setStoreSorter] = useState<StoreSorterType>('NONE');
+  const [storeFilterList, setStoreFilterList] = useState<{ [key in StoreFilterType]: boolean }>({
+    OPEN: false,
+    DELIVERY: false,
+  });
+
+  const logger = useLogger();
+  const isMobile = useMediaQuery();
+  const [isTooltipOpen, , closeTooltip] = useBooleanState(localStorage.getItem('store-review-tooltip') === null);
+
+  const filteredTypeList = Object.entries(storeFilterList).filter(([, value]) => value)
+    .map(([key]) => key as StoreFilterType);
+  const { data: categories } = useStoreCategories();
   const enterCategoryTimeRef = useRef<number | null>(null);
   const [storeSorter, setStoreSorter] = useState<StoreSorterType>('NONE');
   const [storeFilterList, setStoreFilterList] = useState<{ [key in StoreFilterType]: boolean }>({
@@ -142,8 +193,13 @@ function StorePage() {
   const storeList = useStoreList(
     storeSorter,
     filteredTypeList,
+    storeSorter,
+    filteredTypeList,
     params,
   );
+
+  const selectedCategory = Number(searchParams.get('category')) ?? CATEGORY_IS_UNDEFINED;
+
 
   const selectedCategory = Number(searchParams.get('category')) ?? CATEGORY_IS_UNDEFINED;
 
@@ -174,6 +230,10 @@ function StorePage() {
     });
   };
 
+  const handleSortCheckBox = (type: StoreSorterType) => () => {
+    setStoreSorter((prevSorter) => (prevSorter === type ? 'NONE' : type));
+
+    if (type === 'COUNT' || type === 'RATING') {
   const handleSortCheckBox = (type: StoreSorterType) => () => {
     setStoreSorter((prevSorter) => (prevSorter === type ? 'NONE' : type));
 
@@ -209,6 +269,7 @@ function StorePage() {
       ? 0
       : Number(searchParams.get('category')) - 1;
 
+
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_categories',
@@ -219,6 +280,7 @@ function StorePage() {
     });
   };
 
+  useScrollToTop();
   useScrollToTop();
   useScrollLogging(storeScrollLogging);
   useEffect(() => {
@@ -312,7 +374,27 @@ function StorePage() {
 
         <div className={styles.option__checkbox}>
           {MOBILE_SORT_CHECK_BOX.map(({ id, content }) => (
+          {MOBILE_SORT_CHECK_BOX.map(({ id, content }) => (
             <div
+              key={id}
+              className={styles['option-checkbox']}
+            >
+              <label htmlFor={id} className={styles['option-checkbox__label']}>
+                <input
+                  id={id}
+                  type="checkbox"
+                  checked={storeSorter === id}
+                  className={styles['option-checkbox__input']}
+                  onChange={handleSortCheckBox(id)}
+                />
+                {content}
+              </label>
+            </div>
+          ))}
+          {MOBILE_FILTER_CHECK_BOX.map(({ id, content }) => (
+            <div
+              key={id}
+              className={styles['option-checkbox']}
               key={id}
               className={styles['option-checkbox']}
             >
@@ -334,13 +416,18 @@ function StorePage() {
               className={styles['option-checkbox']}
             >
               <label htmlFor={id} className={styles['option-checkbox__label']}>
+              <label htmlFor={id} className={styles['option-checkbox__label']}>
                 <input
+                  id={id}
                   id={id}
                   type="checkbox"
                   checked={storeFilterList[id]}
+                  checked={storeFilterList[id]}
                   className={styles['option-checkbox__input']}
                   onChange={handleFilterCheckBox(id)}
+                  onChange={handleFilterCheckBox(id)}
                 />
+                {content}
                 {content}
               </label>
             </div>
@@ -381,19 +468,41 @@ function StorePage() {
         ))}
 
         {MOBILE_FILTER_CHECK_BOX.map(({ id, content, value }) => (
+
+        {MOBILE_SORT_CHECK_BOX.map(({ id, content, value }) => (
+          <button
+            className={cn({
+              [styles.filter__box]: true,
+              [styles['filter__box--activate']]:
+                storeSorter === id,
+            })}
+            key={value}
+            type="button"
+            onClick={handleSortCheckBox(id)}
+          >
+            {content}
+          </button>
+        ))}
+
+        {MOBILE_FILTER_CHECK_BOX.map(({ id, content, value }) => (
           <button
             className={cn({
               [styles.filter__box]: true,
               [styles['filter__box--activate']]:
                 storeFilterList[id],
+                storeFilterList[id],
             })}
+            key={value}
             key={value}
             type="button"
             onClick={handleFilterCheckBox(id)}
+            onClick={handleFilterCheckBox(id)}
           >
+            {content}
             {content}
           </button>
         ))}
+
 
         {isTooltipOpen && (
           <IntroToolTip
@@ -402,6 +511,17 @@ function StorePage() {
           />
         )}
       </div>
+      {!isMobile ? (
+        <DesktopStoreList
+          storeListData={storeList}
+          storeType={STORE_PAGE.MAIN}
+        />
+      ) : (
+        <MobileStoreList
+          storeListData={storeList}
+          storeType={STORE_PAGE.MAIN}
+        />
+      )}
       {!isMobile ? (
         <DesktopStoreList
           storeListData={storeList}
