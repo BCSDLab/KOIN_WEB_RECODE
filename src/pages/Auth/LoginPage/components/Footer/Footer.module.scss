@@ -1,0 +1,32 @@
+@use "src/utils/scss/media" as media;
+
+.copyright {
+  font-family: NanumBarunGothic, sans-serif;
+  margin-top: 28px;
+  color: gray;
+  letter-spacing: -0.7px;
+  font-size: 13px;
+  text-align: center;
+
+  @include media.media-breakpoint(mobile) {
+    position: absolute;
+    bottom: 48px;
+    width: auto;
+    margin-top: 0;
+    font-family: NanumBarunGothic, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #252525;
+  }
+}
+
+.owner {
+  position: absolute;
+  bottom: 80px;
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0;
+  color: #f7941e;
+}
