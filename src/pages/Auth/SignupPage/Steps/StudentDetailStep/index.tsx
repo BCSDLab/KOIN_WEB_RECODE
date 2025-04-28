@@ -9,6 +9,7 @@ import { REGEX, MESSAGES } from 'static/auth';
 import CustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/CustomInput';
 import CustomSelector from 'pages/Auth/SignupPage/components/CustomSelector';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
+import { cn } from '@bcsdlab/utils';
 import styles from './StudentDetailStep.module.scss';
 
 interface VerificationProps {
@@ -34,20 +35,37 @@ function StudentDetail({ onNext }: VerificationProps) {
   } = useFormContext<StudentFormValues>();
   const phoneNumber = getValues('phone_number');
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
-  const id = (useWatch({ control, name: 'user_id' }) ?? '') as string;
+  const userId = (useWatch({ control, name: 'user_id' }) ?? '') as string;
 
   const password = useWatch({ control, name: 'password' });
   const passwordCheck = useWatch({ control, name: 'password_check' });
   const { errors } = useFormState({ control });
+
+  const isPasswordEntered = Boolean(password);
+  const isPasswordCheckEntered = Boolean(passwordCheck);
 
   const isPasswordPatternValid = REGEX.PASSWORD.test(password || '');
   const isPasswordValid = isPasswordPatternValid && !errors.password;
   const isPasswordCheckValid = passwordCheck && !errors.password_check;
   const isPasswordAllValid = isPasswordValid && isPasswordCheckValid;
 
+  const isPasswordSame = password === passwordCheck;
+
+  let passwordMessage: InputMessage | null = null;
+
+  if (isPasswordEntered && isPasswordCheckEntered) {
+    if (!isPasswordPatternValid) {
+      passwordMessage = { type: 'warning', content: '올바른 비밀번호 양식이 아닙니다. 다시 입력해 주세요.' };
+    } else if (!isPasswordSame) {
+      passwordMessage = { type: 'warning', content: '비밀번호가 일치하지 않습니다.' };
+    } else {
+      passwordMessage = { type: 'success', content: '비밀번호가 일치합니다.' };
+    }
+  }
+
   const [major, setMajor] = useState<string | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
-  const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
+  const [userIdMessage, setUserIdMessage] = useState<InputMessage | null>(null);
   const isFormFilled = isPasswordAllValid && major && nickname;
 
   const { data: deptList } = useDeptList();
@@ -118,9 +136,10 @@ function StudentDetail({ onNext }: VerificationProps) {
                   {...field}
                   placeholder="최대 13자리까지 입력 가능합니다."
                   isButton
-                  message={idMessage}
+                  message={userIdMessage}
                   buttonText="중복 확인"
-                  buttonOnClick={() => checkNickname(nickname)} // 중복 api는 다음 pr에서 연결할 예정입니다.
+                  buttonDisabled={!field.value}
+                  buttonOnClick={() => checkNickname(userId)} // 중복 api는 다음 pr에서 연결할 예정입니다.
                 />
               )}
             />
@@ -181,15 +200,13 @@ function StudentDetail({ onNext }: VerificationProps) {
                 required: true,
                 validate: (value) => value === getValues('password'),
               }}
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <CustomInput
                   {...field}
                   placeholder="비밀번호를 한번 더 입력해 주세요."
                   type="password"
                   isVisibleButton
-                  message={fieldState.error
-                    ? { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH }
-                    : { type: 'success', content: MESSAGES.PASSWORD.MATCH }}
+                  message={passwordMessage}
                 />
               )}
             />
@@ -223,6 +240,7 @@ function StudentDetail({ onNext }: VerificationProps) {
                   isButton
                   message={phoneMessage}
                   buttonText="중복 확인"
+                  buttonDisabled={!field.value}
                   buttonOnClick={() => checkNickname(nickname)}
                 />
               )}
@@ -237,16 +255,22 @@ function StudentDetail({ onNext }: VerificationProps) {
               className={styles.wrapper__label}
             >
               이메일(선택)
-              <span className={styles.required}>*</span>
             </label>
-            <Controller
-              name="phone_number"
-              control={control}
-              defaultValue={phoneNumber}
-              render={({ field }) => (
-                <CustomInput {...field} disabled />
-              )}
-            />
+
+            <div className={styles['email-input-wrapper']}>
+              <Controller
+                name="email"
+                control={control}
+                defaultValue={phoneNumber}
+                render={({ field }) => (
+                  <CustomInput
+                    {...field}
+                    placeholder="이메일을 입력해 주세요."
+                  />
+                )}
+              />
+              <span className={styles.email}>@koreatech.ac.kr</span>
+            </div>
           </div>
         </div>
 
@@ -298,21 +322,25 @@ function StudentDetail({ onNext }: VerificationProps) {
             />
           </div>
         </div>
+      </form>
 
+      <div className={styles.container__wrapper}>
         <div className={`${styles.divider} ${styles['divider--bottom']}`} />
-
         <button
           type="submit"
           onClick={() => {
-          // onSubmit(getValues());
+            // onSubmit(getValues());
             onNext();
           }}
-          className={styles['next-button']}
+          className={cn({
+            [styles['next-button']]: true,
+            [styles['next-button--active']]: isFormFilled,
+          })}
           disabled={!isFormFilled}
         >
           회원가입 완료
         </button>
-      </form>
+      </div>
     </div>
   );
 }

@@ -8,8 +8,10 @@
   // overflow-y: scroll;
   height: 1100px;
 
-  &__wrappe {
-    max-width: 640px;
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   &__title {
@@ -67,7 +69,7 @@
 .number-wrapper,
 .verification-wrapper {
   display: grid;
-  grid-template-columns: 160px 1fr auto;
+  grid-template-columns: 110px 1fr auto;
   align-items: center;
   gap: 16px;
   padding: 0 24px;
@@ -107,54 +109,39 @@
   line-height: 160%;
 }
 
-.button-wrapper {
+.next-button {
   display: flex;
-  gap: 32px;
-
-  &__next-button-student {
-    display: flex;
-    width: 240px;
-    height: 64px;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 16px;
-    background: #cacaca;
-    color: #FFF;
-
-    text-align: center;
-    font-family: Pretendard ,sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 160%;
+  width: 320px;
+  height: 64px;
+  padding: 12px;
+  border-radius: 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #4b4b4b;
+  background-color: #e1e1e1;
+  font-family: Pretendard,sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%;
 
     &--active {
-      background-color: #f7941e;
-    }
-  }
-
-  &__next-button-external {
-    display: flex;
-    width: 240px;
-    height: 64px;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 16px;
-    background: #cacaca;
-    color: #FFF;
-    text-align: center;
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 160%;
-
-    &--active {
+      color: #fff;
       background-color: #175c8e;
     }
-  }
+}
 
-  &--active {
-    background-color: #f7941e;
-  }
+.email-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.email {
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  line-height: 160%;
+  white-space: nowrap;
 }
