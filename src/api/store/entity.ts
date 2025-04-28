@@ -14,8 +14,8 @@ interface Open {
   | 'SUNDAY';
 }
 
-export type StoreSorterType = 'NONE' | 'COUNT' | 'RATING';
-export type StoreFilterType = 'OPEN' | 'DELIVERY';
+export type StoreSorterType = 'NONE' | 'COUNT' | 'RATING' | '';
+export type StoreFilterType = 'OPEN' | 'DELIVERY' | '';
 export interface StoreDetailResponse extends APIResponse {
   address: string;
   delivery: boolean;
