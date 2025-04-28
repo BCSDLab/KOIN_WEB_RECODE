@@ -14,11 +14,12 @@ import styles from './SignupPage.module.scss';
 import Verification from './Steps/VerificationStep';
 import StudentDetail from './Steps/StudentDetailStep';
 import ExternalDetail from './Steps/ExternalDetailStep';
+import CompleteStep from './Steps/CompleteStep';
 
-type StepTitle = '약관 동의' | '본인 인증' | '회원 유형 선택' | '정보 입력';
+type StepTitle = '약관 동의' | '본인 인증' | '회원 유형 선택' | '정보 입력' | '완료';
 type UserType = '학생' | '외부인';
 
-const stepTitles: StepTitle[] = ['약관 동의', '본인 인증', '회원 유형 선택', '정보 입력'];
+const stepTitles: StepTitle[] = ['약관 동의', '본인 인증', '회원 유형 선택', '정보 입력', '완료'];
 
 function SignupPage() {
   const {
@@ -29,7 +30,7 @@ function SignupPage() {
   const isMobile = useMediaQuery();
 
   const methods = useForm({
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       name: '',
       phone_number: '',
@@ -48,13 +49,13 @@ function SignupPage() {
   function renderDetailStep() {
     if (userType === '학생') {
       return isMobile
-        ? <MobileStudentDetailStep onNext={() => nextStep('회원 유형 선택')} />
+        ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
         : <StudentDetail />;
     }
 
     if (userType === '외부인') {
       return isMobile
-        ? <MobileGuestDetailStep />
+        ? <MobileGuestDetailStep onNext={() => nextStep('완료')} />
         : <ExternalDetail />;
     }
 
@@ -70,17 +71,20 @@ function SignupPage() {
             type="button"
             className={styles.container__button}
             onClick={goBack}
-            aria-label="ddd"
+            aria-label="button"
           >
             <ChevronLeftIcon />
           </button>
           <span className={styles.container__title}>회원가입</span>
         </div>
         )}
-        <ProgressBar
-          steps={stepTitles.map((title) => ({ title }))}
-          currentIndex={currentIndex}
-        />
+
+        {currentStep !== '완료' && (
+          <ProgressBar
+            steps={stepTitles.map((title) => ({ title }))}
+            currentIndex={currentIndex}
+          />
+        )}
         <FormProvider {...methods}>
           <Step name="약관 동의">
             <Terms onNext={() => nextStep('본인 인증')} />
@@ -105,6 +109,11 @@ function SignupPage() {
           </Step>
           <Step name="정보 입력">
             {renderDetailStep()}
+            {/* {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('완료')} />}
+            {userType === '외부인' && <MobileGuestDetailStep onNext={() => nextStep('완료')} />} */}
+          </Step>
+          <Step name="완료">
+            <CompleteStep />
           </Step>
         </FormProvider>
       </div>
