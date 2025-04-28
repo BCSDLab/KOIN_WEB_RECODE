@@ -15,9 +15,7 @@ export default function Footer() {
       </a>
       )}
       <span className={styles.copyright}>
-        COPYRIGHT ⓒ&nbsp;
-        {new Date().getFullYear()}
-        &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
+        Copyright @ BCSD Lab All rights reserved.
       </span>
     </>
   );
