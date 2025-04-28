@@ -100,43 +100,28 @@
   }
 
   @include media.media-breakpoint(mobile) { 
-    position: relative;
-    display: flex;
-    align-items: center;
     width: 100%;
-  
+
     &__input {
       width: 100%;
-      padding: 8px 64px 8px 4px;
+      min-width: 224px;
+      padding: 8px 0px;
       border: none;
       border-bottom: 1px solid #e1e1e1;
-  
+      border-radius: 0px;
       font-size: 13px;
-      font-weight: 400;
-      line-height: 160%;
   
       &::placeholder {
-        color: #cacaca;
         font-size: 14px;
       }
     }
   
     &__optionButton {
-      position: absolute;
       right: 4px;
-      display: flex;
-      background: none;
-      cursor: pointer;
     }
   
     &__timer {
-      position: absolute;
       right: 26px;
-      display: flex;
-      background: none;
-      margin-top: 2px;
-  
-      color: #727272;
       font-size: 14px;
       font-weight: 500;
       line-height: 160%;
