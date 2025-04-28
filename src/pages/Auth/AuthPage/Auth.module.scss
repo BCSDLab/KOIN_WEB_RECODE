@@ -52,7 +52,6 @@
     margin: 80px auto 50px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
 
     @include media.media-breakpoint(mobile) {
@@ -60,6 +59,7 @@
       margin: 0;
       min-width: 360px;
       height: 100vh;
+      align-items: flex-start;
     }
   }
 
@@ -68,8 +68,7 @@
     margin-bottom: 40px;
 
     @include media.media-breakpoint(mobile) {
-      margin-bottom: 60px;
-      margin-right: 17px;
+      margin-bottom: 32px;
     }
   }
 
