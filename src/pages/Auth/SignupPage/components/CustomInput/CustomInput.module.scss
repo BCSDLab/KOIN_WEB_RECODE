@@ -86,10 +86,9 @@
     cursor: pointer;
   }
   
-  &__timer {  // 타이머랑 x 버튼 위치 고려 필요
+  &__timer {
     position: absolute;
-    right: 40px;
-    // right: 12px;
+    right: 12px;
     display: flex;
     background: none;
     margin-top: 2px;
@@ -97,6 +96,10 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 160%;
+
+    &--active {
+      right: 40px;
+    }
   }
 
   @include media.media-breakpoint(mobile) { 
@@ -121,10 +124,14 @@
     }
   
     &__timer {
-      right: 26px;
+      right: 0px;
       font-size: 14px;
       font-weight: 500;
       line-height: 160%;
+
+      &--active {
+        right: 26px;
+      }
     }
   }
 }

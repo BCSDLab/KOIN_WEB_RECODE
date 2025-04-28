@@ -10,6 +10,7 @@ import WarningIcon from 'assets/svg/Login/warning.svg';
 import { useFormContext } from 'react-hook-form';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import FormatTime from 'pages/Auth/SignupPage/hooks/useFormatTime';
+import { cn } from '@bcsdlab/utils';
 import styles from './CustomInput.module.scss';
 
 export type InputMessage = {
@@ -74,7 +75,12 @@ function CustomInput({
           />
 
           {isTimer && (
-          <span className={styles['input-wrapper__timer']}>
+          <span
+            className={cn({
+              [styles['input-wrapper__timer']]: true,
+              [styles['input-wrapper__timer--active']]: isDelete && Boolean(value),
+            })}
+          >
             {FormatTime(timerValue)}
           </span>
           )}
