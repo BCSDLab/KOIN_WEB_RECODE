@@ -32,13 +32,14 @@
   border: 2px solid #175c8e;
 
   &--top {
-    margin: 0 0 48px;
+    margin: 0 0 48px 0;
   }
 
   &--bottom {
     margin: 40px 0;
   }
 }
+
 
 .field {
   display: flex;
@@ -49,7 +50,7 @@
     font-weight: bold;
 
     .required {
-      color: #ec2d30;
+      color: #EC2D30;
     }
   }
 
@@ -66,11 +67,14 @@
   }
 }
 
+
+
 .form {
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: Pretendard, sans-serif;
+
 
   &__inputWrapper {
     display: flex;
@@ -108,6 +112,7 @@
     gap: 10px;
     border-radius: 12px;
     border: 1px solid #e1e1e1;
+
     color: #cacaca;
     font-size: 13px;
     font-weight: 500;
@@ -127,9 +132,10 @@
     align-items: center;
     border-radius: 16px;
     background-color: #cacaca;
-    color: #fff;
+
+    color: #FFF;
     font-size: 16px;
     font-weight: 500;
     line-height: 160%;
-  }
+  };
 }
