@@ -16,11 +16,6 @@ import {
   CheckPasswordRequest,
   UpdateAcademicInfoResponse,
   UpdateAcademicInfoRequest,
-  CheckPhoneResponse,
-  SmsSendRequest,
-  SmsSendResponse,
-  SmsVerifyResponse,
-  SmsVerifyRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -165,42 +160,4 @@ export class UpdateAcademicInfo<R extends UpdateAcademicInfoResponse> implements
   auth = true;
 
   constructor(public authorization: string, public data: UpdateAcademicInfoRequest) { }
-}
-
-export class CheckPhone<R extends CheckPhoneResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path: string;
-
-  response! : R;
-
-  auth = false;
-
-  constructor(phone: string) {
-    this.path = `/user/check/phone?phone=${phone}`;
-  }
-}
-
-export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path = '/user/sms/send';
-
-  response!: R;
-
-  auth = false;
-
-  constructor(public data: SmsSendRequest) {}
-}
-
-export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path = '/user/sms/verify';
-
-  response!: R;
-
-  auth = false;
-
-  constructor(public data: SmsVerifyRequest) {}
 }

@@ -5999,7 +5999,6 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-helmet: ^6.1.0
-    react-hook-form: ^7.55.0
     react-router-dom: ^6.3.0
     react-swipeable: ^7.0.2
     react-toastify: ^9.0.8
@@ -7142,15 +7141,6 @@ __metadata:
   peerDependencies:
     react: ">=16.3.0"
   checksum: a4998479dab7fc1c2799eddefb1870a9d881b5f71cfdf97979a9882e42f4bb50402d55335f308f461e735e01a06f46b16cc7b4e6bcb22c7a4a6f85a753c5c106
-  languageName: node
-  linkType: hard
-
-"react-hook-form@npm:^7.55.0":
-  version: 7.55.0
-  resolution: "react-hook-form@npm:7.55.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: ff37fba242c0e94911bf8515bfe1b0670f93bf0ed0c44c923108859244f41da3f0f6dffcf70d570b152ef6b1d56936d943b45fba11c63f21b913fba8f0da862b
   languageName: node
   linkType: hard
 

@@ -104,16 +104,3 @@ export interface UpdateAcademicInfoResponse extends APIResponse {
   department: string;
   major: string | null;
 }
-
-export interface CheckPhoneResponse extends APIResponse { }
-export interface SmsSendResponse extends APIResponse { }
-export interface SmsVerifyResponse extends APIResponse { }
-
-export interface SmsSendRequest {
-  phone_number: string;
-}
-
-export interface SmsVerifyRequest {
-  phone_number: string;
-  certification_code: string;
-}

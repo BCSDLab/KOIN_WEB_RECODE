@@ -13,38 +13,6 @@
 
   @include media.media-breakpoint(mobile) {
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-
-  &__header {
-    @include media.media-breakpoint(mobile) {
-      position: absolute;
-      top: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
-  }
-
-  &__title {
-    @include media.media-breakpoint(mobile) {
-      font-size: 1.125rem;
-      font-weight: 500;
-      line-height: 1.6;
-      height: fit-content;
-    }
-  }
-
-  &__button {
-    @include media.media-breakpoint(mobile) {
-      position: absolute;
-      left: 0;
-      display: flex;
-      margin-left: 16px;
-    }
   }
 
   &__content {
@@ -55,10 +23,8 @@
     justify-content: center;
 
     @include media.media-breakpoint(mobile) {
-      width: 100%;
-      margin: 0;
-      min-width: 360px;
-      height: 100vh;
+      margin: 80px 48px;
+      align-items: flex-start;
     }
   }
 

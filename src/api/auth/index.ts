@@ -11,9 +11,6 @@ import {
   DeleteUser,
   CheckPassword,
   UpdateAcademicInfo,
-  CheckPhone,
-  SmsSend,
-  SmsVerify,
 } from './APIDetail';
 
 export const login = APIClient.of(Login);
@@ -37,9 +34,3 @@ export const findPassword = APIClient.of(FindPassword);
 export const checkPassword = APIClient.of(CheckPassword);
 
 export const updateAcademicInfo = APIClient.of(UpdateAcademicInfo);
-
-export const checkPhone = APIClient.of(CheckPhone);
-
-export const smsSend = APIClient.of(SmsSend);
-
-export const smsVerify = APIClient.of(SmsVerify);
