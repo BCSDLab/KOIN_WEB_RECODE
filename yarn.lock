@@ -1519,6 +1519,64 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry-internal/browser-utils@npm:9.14.0":
+  version: 9.14.0
+  resolution: "@sentry-internal/browser-utils@npm:9.14.0"
+  dependencies:
+    "@sentry/core": 9.14.0
+  checksum: 7fafbea6f1d95da7aedc6a49cc5f4de07ccd73884ac74e4bca6f643bb9605b3cb470f777f24004aee2f607e97055388f61e1ee5d93803bb69fae8f23643011b7
+  languageName: node
+  linkType: hard
+
+"@sentry-internal/feedback@npm:9.14.0":
+  version: 9.14.0
+  resolution: "@sentry-internal/feedback@npm:9.14.0"
+  dependencies:
+    "@sentry/core": 9.14.0
+  checksum: f8ea2753d6ae551163a7173a8582c787faa18327aab4f26b7544e8d2f26cc679e7a09202f3d458b23a52eea0b7b00f96a3059fa229d879990e757f383d227590
+  languageName: node
+  linkType: hard
+
+"@sentry-internal/replay-canvas@npm:9.14.0":
+  version: 9.14.0
+  resolution: "@sentry-internal/replay-canvas@npm:9.14.0"
+  dependencies:
+    "@sentry-internal/replay": 9.14.0
+    "@sentry/core": 9.14.0
+  checksum: 37dd3c3a2b390ddc9eaffadea13385a41e76dc2dff25c15bd3890cb285b580fda8cfceeecdbde3a6f69ec37c7f2e2ad55bbf2eb9f7206e6ee1880905f2b19db9
+  languageName: node
+  linkType: hard
+
+"@sentry-internal/replay@npm:9.14.0":
+  version: 9.14.0
+  resolution: "@sentry-internal/replay@npm:9.14.0"
+  dependencies:
+    "@sentry-internal/browser-utils": 9.14.0
+    "@sentry/core": 9.14.0
+  checksum: bfded05a5be14a2ca89e490681fa0330caa28293ffd0748b3d84dc891fbd678413feae63a128253c3873c374175b560992cf46a25cd012a842eaa4bf593ace4e
+  languageName: node
+  linkType: hard
+
+"@sentry/browser@npm:^9.14.0":
+  version: 9.14.0
+  resolution: "@sentry/browser@npm:9.14.0"
+  dependencies:
+    "@sentry-internal/browser-utils": 9.14.0
+    "@sentry-internal/feedback": 9.14.0
+    "@sentry-internal/replay": 9.14.0
+    "@sentry-internal/replay-canvas": 9.14.0
+    "@sentry/core": 9.14.0
+  checksum: 9392d17352a93077e01a95d43938b56c5fa6814e7f92e1084bdf9bbc6fa4215a4c0a60ca8ebff98a4f1ac41d9b497bc963551d3ebf729150d86128279da49660
+  languageName: node
+  linkType: hard
+
+"@sentry/core@npm:9.14.0":
+  version: 9.14.0
+  resolution: "@sentry/core@npm:9.14.0"
+  checksum: 7fc4f48236af8c6ad41d31457df5e5504f7f640c8f30d4ca63957cb3d1e1f3ec8daca9cb8e00432d925348aa03c2b88a244e72eeb20c7fe6ed4463a10d087ed9
+  languageName: node
+  linkType: hard
+
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
@@ -5956,6 +6014,7 @@ __metadata:
   dependencies:
     "@bcsdlab/koin": ^0.0.15
     "@bcsdlab/utils": ^0.0.15
+    "@sentry/browser": ^9.14.0
     "@stomp/stompjs": ^7.0.0
     "@tanstack/react-query": ^5.28.6
     "@testing-library/jest-dom": ^5.14.1
