@@ -65,18 +65,23 @@
   }
 
   &__arrow {
-    width: 80px;
-    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(225 225 225 / 30%);
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
     position: absolute;
     top: 50%;
 
     &--previous {
-      left: 0;
+      left: 8px;
       transform: translate(0, -50%) rotate(180deg);
     }
 
     &--next {
-      right: 0;
+      right: 8px;
       transform: translate(0, -50%);
     }
   }
@@ -90,6 +95,7 @@
     bottom: 6%;
     transform: translate(-50%);
     border-radius: 4px;
+    border: 1px solid #b1b2b2;
     background: rgba(0 0 0 / 30%);
 
     &--fill {
