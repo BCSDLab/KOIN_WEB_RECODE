@@ -3,8 +3,7 @@ import {
   Login,
   NicknameDuplicateCheck,
   Refresh,
-  SignupStudent,
-  SignupGeneral,
+  Signup,
   User,
   UserAcademicInfo,
   UpdateUser,
@@ -12,18 +11,13 @@ import {
   DeleteUser,
   CheckPassword,
   UpdateAcademicInfo,
-  CheckPhone,
-  SmsSend,
-  SmsVerify,
 } from './APIDetail';
 
 export const login = APIClient.of(Login);
 
 export const nicknameDuplicateCheck = APIClient.of(NicknameDuplicateCheck);
 
-export const signupStudent = APIClient.of(SignupStudent);
-
-export const signupGeneral = APIClient.of(SignupGeneral);
+export const signup = APIClient.of(Signup);
 
 export const refresh = APIClient.of(Refresh);
 
@@ -40,9 +34,3 @@ export const findPassword = APIClient.of(FindPassword);
 export const checkPassword = APIClient.of(CheckPassword);
 
 export const updateAcademicInfo = APIClient.of(UpdateAcademicInfo);
-
-export const checkPhone = APIClient.of(CheckPhone);
-
-export const smsSend = APIClient.of(SmsSend);
-
-export const smsVerify = APIClient.of(SmsVerify);

@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@bcsdlab/utils';
+
 import * as api from 'api';
 import type { StoreSorterType, StoreFilterType } from 'api/store/entity';
+
 import Close from 'assets/svg/close-icon-20x20.svg';
 import ROUTES from 'static/routes';
 import { STORE_PAGE } from 'static/store';
@@ -18,9 +20,11 @@ import DesktopStoreList from 'pages/Store/StorePage/components/DesktopStoreList'
 import MobileStoreList from 'pages/Store/StorePage/components/MobileStoreList';
 import { getCategoryDurationTime, initializeCategoryEntryTime } from 'pages/Store/utils/durationTime';
 import IntroToolTip from 'components/ui/IntroToolTip';
+
 import { useStoreCategories } from './hooks/useCategoryList';
 import EventCarousel from './components/EventCarousel';
 import SearchBarModal from './components/SearchBarModal';
+
 import styles from './StorePage.module.scss';
 
 type StoreSearchQueryType = {
@@ -84,7 +88,7 @@ const useStoreList = (
 ) => {
   const { data: storeList } = useQuery(
     {
-      queryKey: ['storeListV2', sorter, filter],
+      queryKey: ['storeListV2', sorter, filter, params.storeName],
       queryFn: () => api.store.getStoreListV2(
         sorter,
         filter,
@@ -101,21 +105,10 @@ const useStoreList = (
     return [];
   }
 
-  return storeList.shops.filter((store) => {
-    const matchCategory = params.category === undefined
-      || store.category_ids.some((id) => id === selectedCategory);
-
-    if (!params.shopIds && params.storeName) return store.name.includes(params.storeName ? params.storeName : '');
-    // 메뉴검색시 메뉴를 가진 가게를 반환
-    if (params.shopIds) {
-      const shopIdsArr = params.shopIds.split(',').map(Number);
-      return shopIdsArr.includes(store.id);
-    }
-    return (
-      matchCategory
-      && store.name.includes(params.storeName ? params.storeName : '')
-    );
-  });
+  return storeList.shops.filter(
+    (store) => params.category === undefined
+    || store.category_ids.some((id) => id === selectedCategory),
+  );
 };
 
 function StorePage() {
@@ -232,6 +225,22 @@ function StorePage() {
     );
   }, [categories, selectedCategory]);
 
+  const handleBenefitClick = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_categories_benefit',
+      value: '혜택이 있는 상점 모아보기',
+      event_category: 'click',
+      previous_page: categories.shop_categories.find(
+        (item) => item.id === Number(searchParams.get('category')),
+      )?.name || '전체보기',
+      duration_time: getCategoryDurationTime(),
+      current_page: 'benefit',
+    });
+
+    navigate(`${ROUTES.BenefitStore()}?category=1`);
+  };
+
   return (
     <div className={styles.section}>
       <div className={styles.header}>주변 상점</div>
@@ -265,7 +274,7 @@ function StorePage() {
         </div>
         <button
           type="button"
-          onClick={() => navigate(`${ROUTES.BenefitStore()}?category=1`)}
+          onClick={handleBenefitClick}
           className={styles.category__benefit}
         >
           혜택이 있는 상점 모아보기
@@ -273,17 +282,11 @@ function StorePage() {
       </div>
       {!isMobile && <SearchBarModal onClose={() => {}} />}
       <div className={styles.option}>
-        {params.searchWord ? (
+        {params.storeName ? (
           <div className={styles.option__count}>
             <strong>
-              {params.searchWord}
+              {`"${params.storeName}" 관련 가게가 총 ${storeList.length}개 있습니다.`}
             </strong>
-            메뉴를 가진 가게가
-            <strong>
-              {storeList.length}
-              개
-            </strong>
-            있습니다.
           </div>
         ) : (
           <div className={styles.option__count}>
