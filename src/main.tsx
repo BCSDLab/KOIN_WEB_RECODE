@@ -5,8 +5,15 @@ import { BrowserRouter } from 'react-router-dom';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
 import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import * as Sentry from '@sentry/browser';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+if (import.meta.env.MODE === 'production' && import.meta.env.VITE_BUGSINK_DSN) {
+  Sentry.init({
+    dsn: import.meta.env.VITE_BUGSINK_DSN,
+  });
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -30,6 +30,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
             ["@bcsdlab/utils", "npm:0.0.15"],\
+            ["@sentry/browser", "npm:9.14.0"],\
             ["@stomp/stompjs", "npm:7.0.0"],\
             ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.28.6"],\
             ["@testing-library/jest-dom", "npm:5.17.0"],\
@@ -2311,6 +2312,71 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/@rollup-rollup-win32-x64-msvc-npm-4.22.4-f32030f087/node_modules/@rollup/rollup-win32-x64-msvc/",\
           "packageDependencies": [\
             ["@rollup/rollup-win32-x64-msvc", "npm:4.22.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@sentry-internal/browser-utils", [\
+        ["npm:9.14.0", {\
+          "packageLocation": "./.yarn/cache/@sentry-internal-browser-utils-npm-9.14.0-cb7c00e1d8-7fafbea6f1.zip/node_modules/@sentry-internal/browser-utils/",\
+          "packageDependencies": [\
+            ["@sentry-internal/browser-utils", "npm:9.14.0"],\
+            ["@sentry/core", "npm:9.14.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@sentry-internal/feedback", [\
+        ["npm:9.14.0", {\
+          "packageLocation": "./.yarn/cache/@sentry-internal-feedback-npm-9.14.0-2cf0ca7c6d-f8ea2753d6.zip/node_modules/@sentry-internal/feedback/",\
+          "packageDependencies": [\
+            ["@sentry-internal/feedback", "npm:9.14.0"],\
+            ["@sentry/core", "npm:9.14.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@sentry-internal/replay", [\
+        ["npm:9.14.0", {\
+          "packageLocation": "./.yarn/cache/@sentry-internal-replay-npm-9.14.0-d6681f4f5f-bfded05a5b.zip/node_modules/@sentry-internal/replay/",\
+          "packageDependencies": [\
+            ["@sentry-internal/replay", "npm:9.14.0"],\
+            ["@sentry-internal/browser-utils", "npm:9.14.0"],\
+            ["@sentry/core", "npm:9.14.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@sentry-internal/replay-canvas", [\
+        ["npm:9.14.0", {\
+          "packageLocation": "./.yarn/cache/@sentry-internal-replay-canvas-npm-9.14.0-2a39a7c942-37dd3c3a2b.zip/node_modules/@sentry-internal/replay-canvas/",\
+          "packageDependencies": [\
+            ["@sentry-internal/replay-canvas", "npm:9.14.0"],\
+            ["@sentry-internal/replay", "npm:9.14.0"],\
+            ["@sentry/core", "npm:9.14.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@sentry/browser", [\
+        ["npm:9.14.0", {\
+          "packageLocation": "./.yarn/cache/@sentry-browser-npm-9.14.0-0e2464dc6d-9392d17352.zip/node_modules/@sentry/browser/",\
+          "packageDependencies": [\
+            ["@sentry/browser", "npm:9.14.0"],\
+            ["@sentry-internal/browser-utils", "npm:9.14.0"],\
+            ["@sentry-internal/feedback", "npm:9.14.0"],\
+            ["@sentry-internal/replay", "npm:9.14.0"],\
+            ["@sentry-internal/replay-canvas", "npm:9.14.0"],\
+            ["@sentry/core", "npm:9.14.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@sentry/core", [\
+        ["npm:9.14.0", {\
+          "packageLocation": "./.yarn/cache/@sentry-core-npm-9.14.0-6df7ce92b3-7fc4f48236.zip/node_modules/@sentry/core/",\
+          "packageDependencies": [\
+            ["@sentry/core", "npm:9.14.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -7851,6 +7917,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["koin_web_recode", "workspace:."],\
             ["@bcsdlab/koin", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.0.15"],\
             ["@bcsdlab/utils", "npm:0.0.15"],\
+            ["@sentry/browser", "npm:9.14.0"],\
             ["@stomp/stompjs", "npm:7.0.0"],\
             ["@tanstack/react-query", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:5.28.6"],\
             ["@testing-library/jest-dom", "npm:5.17.0"],\
