@@ -3,6 +3,7 @@ import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { auth } from 'api';
 import { LoginResponse } from 'api/auth/entity';
+import { REGEX } from 'static/auth';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import { setCookie } from 'utils/ts/cookie';
 import showToast from 'utils/ts/showToast';
@@ -16,8 +17,6 @@ interface UserInfo {
   userId: string;
   password: string;
 }
-
-const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
 
 export const useLogin = (state: IsAutoLogin) => {
   const { setToken, setRefreshToken } = useTokenStore();
@@ -59,7 +58,7 @@ export const useLogin = (state: IsAutoLogin) => {
       showToast('error', '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.');
       return;
     }
-    if (!emailLocalPartRegex.test(userInfo.userId)) {
+    if (!REGEX.EMAIL.test(userInfo.userId)) {
       showToast('error', '아우누리 계정 형식이 아닙니다.');
       return;
     }
