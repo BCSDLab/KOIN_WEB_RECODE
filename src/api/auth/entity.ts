@@ -5,6 +5,28 @@ export type LoginRequest = {
   password: string;
 };
 
+export type LoginStudentRequest = {
+  name: string;
+  phone_number: string;
+  user_id: string;
+  password: string;
+  department: string;
+  student_number: string;
+  gender: string;
+  email?: string;
+  nickname: string;
+};
+
+export type LoginGeneralRequest = {
+  name: string;
+  phone_number: string;
+  user_id: string;
+  password: string;
+  gender: string;
+  email: string;
+  nickname: string;
+};
+
 export interface LoginResponse extends APIResponse {
   token: string;
   refresh_token: string;
@@ -36,7 +58,9 @@ export interface CheckPasswordRequest {
   password: string;
 }
 
-export interface SignupResponse extends APIResponse { }
+export interface SignupStudentResponse extends APIResponse { }
+
+export interface SignupGeneralResponse extends APIResponse { }
 
 export interface RefreshRequest {
   refresh_token: string;
@@ -103,4 +127,22 @@ export interface UpdateAcademicInfoResponse extends APIResponse {
   student_number: string;
   department: string;
   major: string | null;
+}
+
+export interface CheckPhoneResponse extends APIResponse { }
+export interface SmsSendResponse extends APIResponse {
+  target: string;
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
+export interface SmsVerifyResponse extends APIResponse { }
+
+export interface SmsSendRequest {
+  phone_number: string;
+}
+
+export interface SmsVerifyRequest {
+  phone_number: string;
+  verification_code: string;
 }

@@ -1,0 +1,88 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 40px);
+    margin: 32px auto 0;
+    font-family: Pretendard, sans-serif;
+    justify-content: space-between;
+  }
+}
+
+.form-container {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+}
+
+.wrapper {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: start;
+    gap: 16px;
+  }
+
+  &__header {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 160%;
+    }
+  }
+}
+
+.next-button {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    width: 100%;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: #175c8e;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 160%;
+
+    &:disabled {
+      background: #e1e1e1;
+      color: #4b4b4b;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.input-wrapper {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__button {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      height: 32px;
+      width: 86px;
+      padding: 6px 12px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      background: #e1e1e1;
+      white-space: nowrap;
+      color: #4b4b4b;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 160%;
+      margin-top: 4px;
+    }
+  }
+}
