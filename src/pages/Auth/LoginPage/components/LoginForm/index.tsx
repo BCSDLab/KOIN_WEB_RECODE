@@ -98,7 +98,6 @@ export default function LoginForm() {
         </button>
         )}
       </form>
-      {!isMobile && (
       <div aria-hidden="true" className={styles['auto-login']}>
         <label className={styles['auto-login__label']} htmlFor="autoLoginCheckBox">
           <input
@@ -111,7 +110,6 @@ export default function LoginForm() {
           자동 로그인
         </label>
       </div>
-      )}
     </>
   );
 }

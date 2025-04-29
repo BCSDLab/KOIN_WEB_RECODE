@@ -104,9 +104,9 @@
   text-align: left;
 
   @include media.media-breakpoint(mobile) {
-    width: 320px;
-    height: 52px;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    text-align: right;
   }
 
   &__label {
@@ -119,10 +119,10 @@
     position: relative;
     line-height: 16px;
     user-select: none;
-  }
 
-  @include media.media-breakpoint(mobile) {
-    margin-top: 18px;
+    @include media.media-breakpoint(mobile) {
+      margin-top: 24px;
+    }
   }
 
   &__checkbox {
@@ -143,5 +143,6 @@
     content: "";
     background-image: url("https://static.koreatech.in/assets/img/check.png");
     background-size: cover;
+    margin: 0;
   }
 }
