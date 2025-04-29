@@ -55,8 +55,10 @@
     justify-content: center;
 
     @include media.media-breakpoint(mobile) {
-      margin: 80px 48px;
-      align-items: flex-start;
+      width: 100%;
+      margin: 0;
+      min-width: 360px;
+      height: 100vh;
     }
   }
 
