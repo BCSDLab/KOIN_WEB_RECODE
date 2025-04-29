@@ -88,7 +88,7 @@ export default function ReviewReportingPage() {
 
   const loggingReportDone = () => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'shop_detail_view_review_report_done',
       value: storeDetail.name,
       event_category: 'click',

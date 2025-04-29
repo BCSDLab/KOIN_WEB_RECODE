@@ -26,7 +26,7 @@ export default function StoreBenefitPage() {
 
   const onClickBenefitTab = (id: number, value :string) => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'benefit_shop_categories',
       value,
       event_category: 'click',

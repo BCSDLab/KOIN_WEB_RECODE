@@ -61,7 +61,7 @@ function CourseTable({ frameId }: { frameId: number }) {
 
   const onClickEditTimetable = () => {
     logger.actionEventClick({
-      actionTitle: 'USER',
+      team: 'USER',
       event_label: 'graduation_calculator_edit_timetable',
       value: '시간표 수정',
       event_category: 'click',

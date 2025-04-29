@@ -143,7 +143,7 @@ function StorePage() {
 
   const handleCategoryClick = (categoryId: number) => {
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'shop_categories',
       value: categoryId.toString(),
       event_category: 'click',
@@ -168,7 +168,7 @@ function StorePage() {
 
     if (type === 'COUNT' || type === 'RATING') {
       logger.actionEventClick({
-        actionTitle: 'BUSINESS',
+        team: 'BUSINESS',
         event_label: 'shop_can',
         value: loggingCategoryToggleSorterValue(
           type,
@@ -183,7 +183,7 @@ function StorePage() {
     setStoreFilterList((prevFilterList) => ({ ...prevFilterList, [type]: !prevFilterList[type] }));
 
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'shop_can',
       value: loggingCategoryToggleFilterValue(
         type,
@@ -199,7 +199,7 @@ function StorePage() {
       : Number(searchParams.get('category')) - 1;
 
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'shop_categories',
       value: `scroll in ${
         categories.shop_categories[currentCategoryId]?.name || '전체보기'
@@ -224,6 +224,22 @@ function StorePage() {
       categories.shop_categories[selectedCategory]?.name || '전체보기',
     );
   }, [categories, selectedCategory]);
+
+  const handleBenefitClick = () => {
+    logger.actionEventClick({
+      team: 'BUSINESS',
+      event_label: 'shop_categories_benefit',
+      value: '혜택이 있는 상점 모아보기',
+      event_category: 'click',
+      previous_page: categories.shop_categories.find(
+        (item) => item.id === Number(searchParams.get('category')),
+      )?.name || '전체보기',
+      duration_time: getCategoryDurationTime(),
+      current_page: 'benefit',
+    });
+
+    navigate(`${ROUTES.BenefitStore()}?category=1`);
+  };
 
   return (
     <div className={styles.section}>
@@ -258,7 +274,7 @@ function StorePage() {
         </div>
         <button
           type="button"
-          onClick={() => navigate(`${ROUTES.BenefitStore()}?category=1`)}
+          onClick={handleBenefitClick}
           className={styles.category__benefit}
         >
           혜택이 있는 상점 모아보기

@@ -54,7 +54,7 @@ export default function IndexTimeTable() {
         className={styles.title}
         onClick={() => {
           logger.actionEventClick({
-            actionTitle: 'USER',
+            team: 'USER',
             event_label: 'main_timetable',
             value: 'text',
           });
@@ -68,7 +68,7 @@ export default function IndexTimeTable() {
             to={ROUTES.Timetable()}
             onClick={() => {
               logger.actionEventClick({
-                actionTitle: 'USER',
+                team: 'USER',
                 event_label: 'main_timetable',
                 value: 'table',
               });

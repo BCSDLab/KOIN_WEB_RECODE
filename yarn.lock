@@ -6000,6 +6000,7 @@ __metadata:
     react-dom: ^18.2.0
     react-helmet: ^6.1.0
     react-router-dom: ^6.3.0
+    react-swipeable: ^7.0.2
     react-toastify: ^9.0.8
     react-window: ^1.8.7
     recoil: ^0.7.4
@@ -7226,6 +7227,15 @@ __metadata:
   peerDependencies:
     react: ^16.3.0 || ^17.0.0 || ^18.0.0
   checksum: c5eb1f42b464fb093bca59aaae0f1b2060373a2aaff95275b8781493628cdbbb6acdd6014e7883782c65c361f35a30f28cc515d68a1263ddb39cbbc47110be53
+  languageName: node
+  linkType: hard
+
+"react-swipeable@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "react-swipeable@npm:7.0.2"
+  peerDependencies:
+    react: ^16.8.3 || ^17 || ^18 || ^19.0.0 || ^19.0.0-rc
+  checksum: 3bcc470427049c676d47e8b5fefc852f2fef8875ac78b91da0b025170f5161c422bc1cf78506e97e7b2bf705c4e3687b72bb5c1344f29d3890083a874bc6366c
   languageName: node
   linkType: hard
 

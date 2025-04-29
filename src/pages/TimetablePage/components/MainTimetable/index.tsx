@@ -51,7 +51,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
 
     if (isSemesterAndTimetableExist()) {
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'timetable',
         value: '이미지저장',
         duration_time:
@@ -79,7 +79,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           onClick={() => {
             navigate('/graduation');
             logger.actionEventClick({
-              actionTitle: 'USER',
+              team: 'USER',
               event_label: 'graduation_calculator',
               value: '졸업학점 계산기',
               event_category: 'click',

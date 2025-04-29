@@ -49,14 +49,14 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     updateSemester(clickededSemester);
     if (isGraduationCalculatorMode) {
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'graduation_calculator_semester',
         value: `학기 드롭다운_${clickededSemester.year}${clickededSemester.term}`,
         event_category: 'click',
       });
     } else {
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'timetable',
         value: `click_semester_${clickededSemester.year}${clickededSemester.term}`,
         event_category: 'click',

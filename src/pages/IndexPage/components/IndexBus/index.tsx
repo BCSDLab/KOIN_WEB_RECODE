@@ -22,9 +22,9 @@ const loggingValue = {
 function IndexBus() {
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const logShuttleTicket = () => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'shuttle_ticket', value: '셔틀 탑승권' });
-  const logMainToBus = () => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'main_to_bus', value: '버스' });
-  const logMainBusButton = (key: BusLinkKey) => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: loggingTitle[key], value: loggingValue[key] });
+  const logShuttleTicket = () => logger.actionEventClick({ team: 'CAMPUS', event_label: 'shuttle_ticket', value: '셔틀 탑승권' });
+  const logMainToBus = () => logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_to_bus', value: '버스' });
+  const logMainBusButton = (key: BusLinkKey) => logger.actionEventClick({ team: 'CAMPUS', event_label: loggingTitle[key], value: loggingValue[key] });
 
   const unibus = BUS_LINKS[2];
 

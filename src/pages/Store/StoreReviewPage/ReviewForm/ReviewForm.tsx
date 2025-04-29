@@ -75,7 +75,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   const reviewSuccessLogging = () => {
     const getReviewDurationTime = (new Date().getTime() - Number(sessionStorage.getItem('enterReview'))) / 1000;
     logger.actionEventClick({
-      actionTitle: 'BUSINESS',
+      team: 'BUSINESS',
       event_label: 'shop_detail_view_review_write_done',
       value: storeDetail.name,
       event_category: 'click',

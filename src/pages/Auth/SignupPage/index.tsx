@@ -380,7 +380,7 @@ const useSignupForm = () => {
     const formValue = lastSubmittedForm.current;
     if (formValue) {
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'complete_sign_up',
         event_category: 'signup',
         value: '회원가입 완료 성공',
@@ -392,13 +392,13 @@ const useSignupForm = () => {
         : '';
 
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'gender',
         value: genderLabel,
       });
 
       logger.actionEventClick({
-        actionTitle: 'USER',
+        team: 'USER',
         event_label: 'major',
         value: formValue['student-number']?.major || '',
       });
@@ -612,7 +612,7 @@ function SignupDefaultPage() {
           })}
           onClick={() => {
             logger.actionEventClick({
-              actionTitle: 'USER',
+              team: 'USER',
               event_label: 'complete_sign_up',
               event_category: 'click',
               value: '회원가입 완료',

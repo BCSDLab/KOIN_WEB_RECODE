@@ -72,7 +72,7 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
             })}
             onFocus={() => {
               const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
-              if (categories) logger.actionEventClick({ actionTitle: 'BUSINESS', event_label: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId]?.name || '전체보기'}` });
+              if (categories) logger.actionEventClick({ team: 'BUSINESS', event_label: 'shop_categories_search', value: `search in ${categories.shop_categories[currentCategoryId]?.name || '전체보기'}` });
             }}
           />
           <button

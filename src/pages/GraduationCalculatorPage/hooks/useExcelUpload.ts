@@ -33,7 +33,7 @@ export function useExcelUpload() {
     const file = event.dataTransfer.files[0];
     if (file) handleFile(file);
     logger.actionEventClick({
-      actionTitle: 'USER',
+      team: 'USER',
       event_label: 'graduation_calculator_add_excel',
       value: '엑셀파일 추가_드래그&드롭',
       event_category: 'file_upload',
@@ -46,7 +46,7 @@ export function useExcelUpload() {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     logger.actionEventClick({
-      actionTitle: 'USER',
+      team: 'USER',
       event_label: 'graduation_calculator_add_excel',
       value: '엑셀파일 추가_경로 지정',
       event_category: 'file_upload',

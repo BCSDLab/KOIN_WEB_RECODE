@@ -23,7 +23,7 @@ function Curriculum({ list }: CurriculumListBoxProps) {
 
   const onClickOption = (dept: string) => {
     logger.actionEventClick({
-      actionTitle: 'USER',
+      team: 'USER',
       event_label: 'timetable',
       value: `click_currirculum_${dept}`,
     });

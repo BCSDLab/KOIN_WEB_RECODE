@@ -40,7 +40,7 @@ export default function HotArticles() {
             className={styles['hot-article__content']}
             to={ROUTES.ArticlesDetail({ id: String(article.id), isLink: true })}
             key={article.id + article.board_id}
-            onClick={() => logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'notice_hot', value: article.title })}
+            onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'notice_hot', value: article.title })}
           >
             <span className={styles['hot-article__rank']}>{ index + 1 }</span>
             <span className={styles['hot-article__item']}>{ article.title }</span>
@@ -54,7 +54,7 @@ export default function HotArticles() {
             key={link.url}
             href={link.url}
             onClick={() => {
-              logger.actionEventClick({ actionTitle: 'CAMPUS', event_label: 'short_cut', value: link.title.join('_') });
+              logger.actionEventClick({ team: 'CAMPUS', event_label: 'short_cut', value: link.title.join('_') });
             }}
           >
             <img
