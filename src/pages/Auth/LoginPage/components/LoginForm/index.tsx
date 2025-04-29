@@ -9,35 +9,37 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './LoginForm.module.scss';
 
 interface IClassUser {
-  userId: HTMLInputElement | null;
-  password: HTMLInputElement | null;
+  userIdInput: HTMLInputElement | null;
+  passwordInput: HTMLInputElement | null;
 }
 
 export default function LoginForm() {
   const [isPasswordVisible, , , toggleIsPasswordVisible] = useBooleanState(false);
   const [isAutoLoginFlag, , , toggleIsAutoLoginFlag] = useBooleanState(false);
+  const logger = useLogger();
   const isMobile = useMediaQuery();
   const submitLogin = useLogin({ isAutoLoginFlag });
   const loginRef = React.useRef<IClassUser>({
-    userId: null,
-    password: null,
+    userIdInput: null,
+    passwordInput: null,
   });
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { userId, password } = loginRef.current;
-    submitLogin({
-      userId: userId ? userId.value : '',
-      password: password ? password.value : '',
-    });
+    const { userIdInput, passwordInput } = loginRef.current;
+
+    const userId = userIdInput ? userIdInput.value : '';
+    const password = passwordInput ? passwordInput.value : '';
+
+    submitLogin({ userId, password });
   };
-  const logger = useLogger();
 
   return (
     <>
       <form className={styles.loginform} onSubmit={onSubmit}>
         <input
           ref={(inputRef) => {
-            loginRef.current.userId = inputRef;
+            loginRef.current.userIdInput = inputRef;
           }}
           className={styles['form-input']}
           autoComplete="username"
@@ -47,7 +49,7 @@ export default function LoginForm() {
         <div className={styles['form-input-wrapper']}>
           <input
             ref={(inputRef) => {
-              loginRef.current.password = inputRef;
+              loginRef.current.passwordInput = inputRef;
             }}
             className={styles['form-input']}
             type={isPasswordVisible ? 'text' : 'password'}
@@ -70,7 +72,7 @@ export default function LoginForm() {
             [styles.loginform__button]: true,
             [styles['loginform__first-button']]: true,
           })}
-          onClick={() => {
+          onSubmit={() => {
             logger.actionEventClick({
               team: 'USER',
               event_label: 'login',
