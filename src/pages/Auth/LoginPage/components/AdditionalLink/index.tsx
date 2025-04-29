@@ -34,7 +34,7 @@ export default function AdditionalLink() {
             logger.actionEventClick({
               team: 'USER',
               event_label: 'login',
-              value: '비밀번호찾기',
+              value: '메인 페이지',
             });
           }}
         >
@@ -51,6 +51,7 @@ export default function AdditionalLink() {
       <a
         className={styles.help__link}
         href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp"
+        target="_blank"
         onClick={() => {
           logger.actionEventClick({
             team: 'USER',
@@ -58,6 +59,7 @@ export default function AdditionalLink() {
             value: '아이디찾기',
           });
         }}
+        rel="noopener noreferrer"
       >
         아이디 찾기
       </a>
