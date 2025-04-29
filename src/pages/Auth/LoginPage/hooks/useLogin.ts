@@ -2,7 +2,7 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { auth } from 'api';
-import { LoginResponse } from 'api/auth/entity';
+import type { LoginResponse } from 'api/auth/entity';
 import { REGEX } from 'static/auth';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import { setCookie } from 'utils/ts/cookie';
@@ -29,7 +29,6 @@ export const useLogin = (state: IsAutoLogin) => {
       if (state.isAutoLoginFlag) {
         setRefreshToken(data.refresh_token);
       }
-
       queryClient.invalidateQueries();
       setCookie('AUTH_TOKEN_KEY', data.token);
       setToken(data.token);
@@ -46,6 +45,8 @@ export const useLogin = (state: IsAutoLogin) => {
   });
 
   const login = async (userInfo: UserInfo) => {
+    const hashedPassword = await sha256(userInfo.password);
+
     if (userInfo.userId === '') {
       showToast('error', '계정을 입력해주세요');
       return;
@@ -62,12 +63,12 @@ export const useLogin = (state: IsAutoLogin) => {
       showToast('error', '아우누리 계정 형식이 아닙니다.');
       return;
     }
-    const hashedPassword = await sha256(userInfo.password);
 
     postLogin.mutate({
       email: `${userInfo.userId}@koreatech.ac.kr`,
       password: hashedPassword,
     });
   };
+
   return login;
 };
