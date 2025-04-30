@@ -60,7 +60,10 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
 
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
-  const isFormFilled = isPasswordAllValid && nickname;
+  const [isUserIdChecked, setIsUserIdChecked] = useState(false);
+  const [validatedNickname, setValidatedNickname] = useState<string | null>(null);
+  const isNicknameValid = !nickname || validatedNickname === nickname;
+  const isFormFilled = isPasswordAllValid && userId && isUserIdChecked && isNicknameValid;
 
   const getEmailCheckMessage = (
     fieldValue: string | undefined,
@@ -76,8 +79,10 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
     mutationFn: nicknameDuplicateCheck,
     onSuccess: () => {
       setPhoneMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
+      setValidatedNickname(nickname);
     },
     onError: (err) => {
+      setValidatedNickname(null);
       if (isKoinError(err)) {
         if (err.status === 400) {
           setPhoneMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
@@ -94,8 +99,10 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
     mutationFn: checkId,
     onSuccess: () => {
       setIdMessage({ type: 'success', content: MESSAGES.USERID.AVAILABLE });
+      setIsUserIdChecked(true);
     },
     onError: (err) => {
+      setIsUserIdChecked(false);
       if (isKoinError(err)) {
         if (err.status === 400) {
           setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
@@ -265,6 +272,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
                   placeholder="닉네임은 변경 가능합니다."
                   isDelete
                   isButton
+                  value={field.value ?? ''}
                   message={phoneMessage}
                   buttonText="중복 확인"
                   buttonDisabled={!field.value}
