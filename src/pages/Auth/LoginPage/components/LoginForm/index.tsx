@@ -6,6 +6,8 @@ import ShowIcon from 'assets/svg/show-icon.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { Link } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import styles from './LoginForm.module.scss';
 
 interface IClassUser {
@@ -83,9 +85,9 @@ export default function LoginForm() {
           로그인
         </button>
         {isMobile && (
-        <button
-          type="button"
+        <Link
           className={styles.loginform__button}
+          to={ROUTES.AuthSignup()}
           onClick={() => {
             logger.actionEventClick({
               team: 'USER',
@@ -95,7 +97,7 @@ export default function LoginForm() {
           }}
         >
           회원가입
-        </button>
+        </Link>
         )}
       </form>
       <div aria-hidden="true" className={styles['auto-login']}>
