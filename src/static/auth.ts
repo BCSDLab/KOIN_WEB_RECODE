@@ -32,6 +32,6 @@ export const MESSAGES = {
 export type UserType = '학생' | '외부인';
 
 export const GENDER_OPTIONS = [
-  { label: '남성', value: 'male' },
-  { label: '여성', value: 'female' },
+  { label: '남성', value: '0' },
+  { label: '여성', value: '1' },
 ];

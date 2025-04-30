@@ -107,7 +107,7 @@ export class UserAcademicInfo<R extends UserAcademicInfoResponse> implements API
 
   path = '/user/student/me/academic-info';
 
-  response! : R;
+  response!: R;
 
   auth = true;
 
@@ -187,7 +187,7 @@ export class CheckPhone<R extends CheckPhoneResponse> implements APIRequest<R> {
 
   path: string;
 
-  response! : R;
+  response!: R;
 
   auth = false;
 
@@ -205,7 +205,7 @@ export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: SmsSendRequest) {}
+  constructor(public data: SmsSendRequest) { }
 }
 
 export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
@@ -217,5 +217,5 @@ export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: SmsVerifyRequest) {}
+  constructor(public data: SmsVerifyRequest) { }
 }

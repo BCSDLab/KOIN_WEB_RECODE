@@ -11,6 +11,9 @@ import MobileUserTypeStep from './Steps/MobileUserTypeStep';
 import MobileStudentDetailStep from './Steps/MobileStudentDetailStep';
 import MobileGuestDetailStep from './Steps/MobileExternalDetailStep';
 import styles from './SignupPage.module.scss';
+import Verification from './Steps/VerificationStep';
+import StudentDetail from './Steps/StudentDetailStep';
+import ExternalDetail from './Steps/ExternalDetailStep';
 import CompleteStep from './Steps/CompleteStep';
 
 type StepTitle = '약관동의' | '본인인증' | '회원유형선택' | '정보입력' | '완료';
@@ -43,6 +46,22 @@ function SignupPage() {
     },
   });
 
+  function renderDetailStep() {
+    if (userType === '학생') {
+      return isMobile
+        ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
+        : <StudentDetail onNext={() => nextStep('완료')} />;
+    }
+
+    if (userType === '외부인') {
+      return isMobile
+        ? <MobileGuestDetailStep onNext={() => nextStep('완료')} />
+        : <ExternalDetail />;
+    }
+
+    return null;
+  }
+
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
       <div className={styles.container}>
@@ -70,8 +89,15 @@ function SignupPage() {
           <Step name="약관동의">
             <Terms onNext={() => nextStep('본인인증')} />
           </Step>
-          <Step name="본인인증">
-            <MobileVerification onNext={() => nextStep('회원유형선택')} />
+          <Step name="본인 인증">
+            {isMobile ? (
+              <MobileVerification onNext={() => nextStep('회원 유형 선택')} />
+            ) : (
+              <Verification
+                onNext={() => nextStep('정보 입력')}
+                setUserType={setUserType}
+              />
+            )}
           </Step>
           <Step name="회원유형선택">
             <MobileUserTypeStep
@@ -81,9 +107,11 @@ function SignupPage() {
               }}
             />
           </Step>
-          <Step name="정보입력">
-            {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('완료')} />}
-            {userType === '외부인' && <MobileGuestDetailStep onNext={() => nextStep('완료')} />}
+          <Step name="정보 입력">
+            {renderDetailStep()}
+            {/* 다음 pr 때 수정될 부분입니다. */}
+            {/* {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('완료')} />}
+            {userType === '외부인' && <MobileGuestDetailStep onNext={() => nextStep('완료')} />} */}
           </Step>
           <Step name="완료">
             <CompleteStep />

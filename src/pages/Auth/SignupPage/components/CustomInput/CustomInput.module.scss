@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .container {
   display: flex;
   width: 100%;
@@ -14,21 +16,44 @@
 
 .button {
   display: flex;
-  min-width: 86px;
-  height: 32px;
+  min-width: 120px;
+  height: 48px;
   justify-content: center;
   align-items: center;
-  border-radius: 4px;
-  background-color: #175c8e;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 400;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid #175c8e;
+  color: #175c8e;
+  font-family: Pretendard, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
   line-height: 160%;
+  
+    &:disabled {
+      border: 1px solid #e1e1e1;
+      color: #cacaca;
+      cursor: not-allowed;
+    }
 
-  &:disabled {
-    background-color: #e1e1e1;
-    color: #000;
-    cursor: not-allowed;
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    min-width: 86px;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background-color: #175c8e;
+  
+    color: #fff;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 160%;
+  
+    &:disabled {
+      background-color: #e1e1e1;
+      color: #000;
+      cursor: not-allowed;
+    }
   }
 }
 
@@ -36,34 +61,34 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
-
+  
   &__input {
-    width: 100%;
-    padding: 8px 64px 8px 4px;
-    border: none;
-    border-bottom: 1px solid #e1e1e1;
-    font-size: 14px;
+    min-width: 296px;
+    height: 32px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid #e1e1e1;
+    font-size: 16px;
     font-weight: 400;
     line-height: 160%;
 
     &::placeholder {
       color: #cacaca;
-      font-size: 13px;
+      font-size: 16px;
     }
   }
 
   &__optionButton {
     position: absolute;
-    right: 4px;
+    right: 12px;
     display: flex;
     background: none;
     cursor: pointer;
   }
-
+  
   &__timer {
     position: absolute;
-    right: 26px;
+    right: 12px;
     display: flex;
     background: none;
     margin-top: 2px;
@@ -71,6 +96,43 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 160%;
+
+    &--active {
+      right: 40px;
+    }
+  }
+
+  @include media.media-breakpoint(mobile) { 
+    width: 100%;
+
+    &__input {
+      width: 100%;
+      min-width: 224px;
+      padding: 8px 0px;
+      border: none;
+      border-bottom: 1px solid #e1e1e1;
+      border-radius: 0px;
+      font-size: 13px;
+  
+      &::placeholder {
+        font-size: 14px;
+      }
+    }
+  
+    &__optionButton {
+      right: 4px;
+    }
+  
+    &__timer {
+      right: 0px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 160%;
+
+      &--active {
+        right: 26px;
+      }
+    }
   }
 }
 
