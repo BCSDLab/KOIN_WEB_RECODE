@@ -21,8 +21,8 @@ interface GeneralFormValues {
   password: string,
   password_check?: string,
   gender: string,
-  email: string,
-  nickname: string,
+  email: string | null,
+  nickname: string | null,
 }
 
 function ExternalDetail({ onNext }: ExternalDetailStepProps) {
@@ -35,8 +35,6 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
   const password = useWatch({ control, name: 'password' });
   const passwordCheck = useWatch({ control, name: 'password_check' });
   const { errors } = useFormState({ control });
-
-  const email = useWatch({ control, name: 'email' });
 
   const isPasswordEntered = Boolean(password);
   const isPasswordCheckEntered = Boolean(passwordCheck);
@@ -68,7 +66,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
     fieldValue: string | undefined,
     fieldError: FieldError | undefined,
   ): InputMessage | undefined => {
-    if (!fieldValue || fieldError) {
+    if (!fieldValue || !fieldError) {
       return undefined;
     }
     return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
@@ -118,8 +116,17 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
   });
 
   const onSubmit = (formData: GeneralFormValues) => {
-    const { password_check, ...signupData } = formData;
-    signup(signupData);
+    const payload = {
+      name: formData.name,
+      phone_number: formData.phone_number,
+      user_id: formData.user_id,
+      password: formData.password,
+      gender: formData.gender,
+      email: formData.email === '' ? null : formData.email,
+      nickname: formData.nickname === '' ? null : formData.nickname,
+    };
+
+    signup(payload);
   };
 
   return (
@@ -135,7 +142,10 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
         <div className={`${styles.divider} ${styles['divider--top']}`} />
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className={styles['form-wrapper']}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={styles['form-wrapper']}
+      >
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
@@ -284,10 +294,11 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
                 },
               }}
               render={({ field, fieldState }) => {
-                const message = getEmailCheckMessage(field.value, fieldState.error);
+                const message = getEmailCheckMessage(field.value ?? undefined, fieldState.error);
                 return (
                   <CustomInput
                     {...field}
+                    value={field.value ?? ''}
                     placeholder="이메일을 입력해 주세요."
                     message={message}
                   />
@@ -296,24 +307,21 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
             />
           </div>
         </div>
-      </form>
 
-      <div className={styles.container__wrapper}>
-        <div className={`${styles.divider} ${styles['divider--bottom']}`} />
-        <button
-          type="submit"
-          onClick={() => {
-            onNext();
-          }}
-          className={cn({
-            [styles['next-button']]: true,
-            [styles['next-button--active']]: Boolean(isFormFilled),
-          })}
-          disabled={!isFormFilled}
-        >
-          회원가입 완료
-        </button>
-      </div>
+        <div className={styles.container__wrapper}>
+          <div className={`${styles.divider} ${styles['divider--bottom']}`} />
+          <button
+            type="submit"
+            className={cn({
+              [styles['next-button']]: true,
+              [styles['next-button--active']]: Boolean(isFormFilled),
+            })}
+            disabled={!isFormFilled}
+          >
+            회원가입 완료
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
