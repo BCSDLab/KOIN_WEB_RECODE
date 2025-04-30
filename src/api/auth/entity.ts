@@ -23,8 +23,8 @@ export type LoginGeneralRequest = {
   user_id: string;
   password: string;
   gender: string;
-  email: string;
-  nickname: string;
+  email: string | null;
+  nickname: string | null;
 };
 
 export interface LoginResponse extends APIResponse {
