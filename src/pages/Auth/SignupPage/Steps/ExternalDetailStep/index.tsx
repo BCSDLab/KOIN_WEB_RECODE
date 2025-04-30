@@ -210,36 +210,6 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
           </div>
         </div>
 
-        {/* <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="name"
-              className={styles.wrapper__label}
-            >
-              비밀번호 확인
-              <span className={styles.required}>*</span>
-            </label>
-            <Controller
-              name="password_check"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                validate: (value) => value === getValues('password'),
-              }}
-              render={({ field }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="비밀번호를 한번 더 입력해 주세요."
-                  type="password"
-                  isVisibleButton
-                  message={passwordMessage}
-                />
-              )}
-            />
-          </div>
-        </div> */}
-
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
@@ -267,7 +237,6 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
                 />
               )}
             />
-
           </div>
         </div>
 
@@ -312,7 +281,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
               htmlFor="name"
               className={styles.wrapper__label}
             >
-              이메일(선택)
+              이메일 (선택)
             </label>
             <Controller
               name="email"
@@ -353,6 +322,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
           </button>
         </div>
       </form>
+
     </div>
   );
 }
