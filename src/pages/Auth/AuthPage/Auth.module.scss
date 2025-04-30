@@ -24,8 +24,7 @@
     justify-content: center;
 
     @include media.media-breakpoint(mobile) {
-      max-width: 300px;
-      margin: 0;
+      margin: 0 48px;
     }
   }
 
