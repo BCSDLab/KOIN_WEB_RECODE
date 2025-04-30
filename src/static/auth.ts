@@ -1,7 +1,8 @@
 export const REGEX = {
   PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/]{6,18}$/,
   NICKNAME: /^[가-힣a-zA-Z0-9]{1,10}$/,
-  USERID: /^\d{0,13}$/,
+  USERID: /^.{1,13}$/,
+  STUDENT_NUMBER: /^\d{8,10}$/,
 };
 
 export const MESSAGES = {
@@ -32,11 +33,14 @@ export const MESSAGES = {
     DUPLICATED: '이미 사용 중인 아이디입니다.',
     INVALID: '올바른 아이디 양식이 아닙니다. 다시 입력해 주세요.',
   },
+  STUDENT_NUMBER: {
+    FORMAT: '올바른 학번 양식이 아닙니다. 다시 입력해 주세요.',
+  },
 };
 
 export type UserType = '학생' | '외부인';
 
 export const GENDER_OPTIONS = [
-  { label: '남성', value: 'male' },
-  { label: '여성', value: 'female' },
+  { label: '남성', value: '0' },
+  { label: '여성', value: '1' },
 ];

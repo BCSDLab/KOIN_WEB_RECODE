@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupStudent } from 'api/auth';
 import { useState } from 'react';
 import {
-  Controller, useFormContext, useFormState, useWatch,
+  Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
@@ -32,24 +32,21 @@ interface StudentFormValues {
 
 function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   const {
-    control, getValues, handleSubmit, trigger,
+    control, getValues, trigger, handleSubmit,
   } = useFormContext<StudentFormValues>();
   const { errors } = useFormState({ control });
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
   const userId = (useWatch({ control, name: 'user_id' }) ?? '') as string;
 
-  const password = useWatch({ control, name: 'password' });
   const passwordCheck = useWatch({ control, name: 'password_check' });
 
-  const isPasswordPatternValid = REGEX.PASSWORD.test(password || '');
-  const isPasswordValid = isPasswordPatternValid && !errors.password;
   const isPasswordCheckValid = passwordCheck && !errors.password_check;
-  const isPasswordAllValid = isPasswordValid && isPasswordCheckValid;
+  const isPasswordAllValid = isPasswordCheckValid;
 
   const [major, setMajor] = useState<string | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
-  const isFormFilled = isPasswordAllValid && major && nickname;
+  const isFormFilled = isPasswordAllValid && major && nickname && userId;
 
   const { data: deptList } = useDeptList();
   const deptOptionList = deptList.map((dept) => ({
@@ -100,13 +97,32 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     },
   });
 
-  const onSubmit = (formData: StudentFormValues) => {
-    const { password_check, ...signupData } = formData;
-    signup(signupData);
+  const onSubmit = async (formData: StudentFormValues) => {
+    const { password_check, email, ...rest } = formData;
+    const completeEmail = email ? `${email}@koreatech.ac.kr` : '';
+
+    signup({
+      ...rest,
+      email: completeEmail,
+    });
+  };
+
+  const getPasswordCheckMessage = (
+    fieldValue: string | undefined,
+    fieldError: FieldError | undefined,
+  ): InputMessage | undefined => {
+    if (!fieldValue) return undefined;
+    if (fieldError) {
+      return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
+    }
+    return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={styles.container}
+    >
       <div className={styles['form-container']}>
         <div className={styles.wrapper}>
           <h1 className={styles.wrapper__header}>사용하실 아이디를 입력해 주세요.</h1>
@@ -162,28 +178,24 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 />
               )}
             />
-            {isPasswordValid && (
-              <Controller
-                name="password_check"
-                control={control}
-                defaultValue=""
-                rules={{
-                  required: true,
-                  validate: (value) => value === getValues('password'),
-                }}
-                render={({ field, fieldState }) => (
-                  <CustomInput
-                    {...field}
-                    placeholder="비밀번호를 다시 입력해 주세요."
-                    type="password"
-                    isVisibleButton
-                    message={fieldState.error
-                      ? { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH }
-                      : { type: 'success', content: MESSAGES.PASSWORD.MATCH }}
-                  />
-                )}
-              />
-            )}
+            <Controller
+              name="password_check"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                validate: (value) => value === getValues('password'),
+              }}
+              render={({ field, fieldState }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="비밀번호를 다시 입력해 주세요."
+                  type="password"
+                  isVisibleButton
+                  message={getPasswordCheckMessage(field.value, fieldState.error)}
+                />
+              )}
+            />
 
           </div>
         </div>
@@ -211,8 +223,20 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
               name="student_number"
               control={control}
               defaultValue=""
-              render={({ field }) => (
-                <CustomInput {...field} placeholder="학번을 입력해주세요." isDelete />
+              rules={{
+                required: true,
+                pattern: {
+                  value: REGEX.STUDENT_NUMBER,
+                  message: '',
+                },
+              }}
+              render={({ field, fieldState }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="학번을 입력해주세요."
+                  isDelete
+                  message={fieldState.error ? { type: 'warning', content: MESSAGES.STUDENT_NUMBER.FORMAT } : null}
+                />
               )}
             />
             <div className={styles['input-wrapper']}>
@@ -230,12 +254,13 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 render={({ field }) => (
                   <CustomInput
                     {...field}
-                    placeholder="닉네임을 입력해 주세요. (선택)"
+                    placeholder="닉네임은 변경 가능합니다. (선택)"
                     isDelete
                     isButton
                     message={phoneMessage}
                     buttonText="중복 확인"
                     buttonOnClick={() => checkNickname(nickname)}
+                    buttonDisabled={!field.value}
                   />
                 )}
               />
@@ -246,7 +271,10 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-                  <CustomInput {...field} placeholder="koreatech 이메일(선택)" />
+                  <CustomInput
+                    {...field}
+                    placeholder="koreatech 이메일(선택)"
+                  />
                 )}
               />
               <div className={styles['email-wrapper__title']}>@koreatech.ac.kr</div>
@@ -257,10 +285,6 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
 
       <button
         type="submit"
-        onClick={() => {
-          // onSubmit(getValues());
-          onNext();
-        }}
         className={styles['next-button']}
         disabled={!isFormFilled}
       >
