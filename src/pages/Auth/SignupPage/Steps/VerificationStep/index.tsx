@@ -7,13 +7,11 @@ import { isKoinError } from '@bcsdlab/koin';
 import ROUTES from 'static/routes';
 import { useNavigate } from 'react-router-dom';
 import type { SmsSendResponse } from 'api/auth/entity';
-import { GENDER_OPTIONS, MESSAGES } from 'static/auth';
+import { UserType, GENDER_OPTIONS, MESSAGES } from 'static/auth';
 import { cn } from '@bcsdlab/utils';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './VerificationStep.module.scss';
-
-type UserType = '학생' | '외부인';
 
 interface VerificationProps {
   onNext: () => void;
