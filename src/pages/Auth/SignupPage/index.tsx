@@ -46,22 +46,6 @@ function SignupPage() {
     },
   });
 
-  function renderDetailStep() {
-    if (userType === '학생') {
-      return isMobile
-        ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
-        : <StudentDetail onNext={() => nextStep('완료')} />;
-    }
-
-    if (userType === '외부인') {
-      return isMobile
-        ? <MobileGuestDetailStep onNext={() => nextStep('완료')} />
-        : <ExternalDetail />;
-    }
-
-    return null;
-  }
-
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
       <div className={styles.container}>
@@ -108,10 +92,17 @@ function SignupPage() {
             />
           </Step>
           <Step name="정보 입력">
-            {renderDetailStep()}
-            {/* 다음 pr 때 수정될 부분입니다. */}
-            {/* {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('완료')} />}
-            {userType === '외부인' && <MobileGuestDetailStep onNext={() => nextStep('완료')} />} */}
+            {userType === '학생' && (
+              isMobile
+                ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
+                : <StudentDetail />
+            )}
+
+            {userType === '외부인' && (
+              isMobile
+                ? <MobileGuestDetailStep onNext={() => nextStep('완료')} />
+                : <ExternalDetail onNext={() => nextStep('완료')} />
+            )}
           </Step>
           <Step name="완료">
             <CompleteStep />
