@@ -18,7 +18,6 @@
     margin-top: 32px;
     padding: 0;
     border: 0;
-    gap: 16px;
   }
 
   &__link {
@@ -36,9 +35,8 @@
       gap: 4px;
       justify-content: center;
       align-items: center;
-      width: 100px;
       height: 20px;
-      padding: 0;
+      padding: 0 8px;
     }
 
     & + & {
