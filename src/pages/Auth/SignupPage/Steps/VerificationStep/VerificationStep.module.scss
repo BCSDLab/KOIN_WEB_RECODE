@@ -1,11 +1,9 @@
 .container {
   display: flex;
   flex-direction: column;
-  //max-width: 640px;
   justify-content: center;
   align-items: center;
   font-family: Pretendard, sans-serif;
-  // overflow-y: scroll;
   height: 1100px;
 
   &__wrappe {
@@ -65,7 +63,6 @@
   align-items: center;
   gap: 16px;
   padding: 0 24px;
-  font-family: Pretendard, sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 160%;
@@ -89,6 +86,7 @@
   
   &__checkbox {
     display: flex;
+    gap: 8px;
   }
 }
 
