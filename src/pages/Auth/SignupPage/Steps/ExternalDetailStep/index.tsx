@@ -32,36 +32,17 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
   const userId = (useWatch({ control, name: 'user_id' }) ?? '') as string;
 
-  const password = useWatch({ control, name: 'password' });
-  const passwordCheck = useWatch({ control, name: 'password_check' });
   const { errors } = useFormState({ control });
 
-  const isPasswordEntered = Boolean(password);
-  const isPasswordCheckEntered = Boolean(passwordCheck);
-
-  const isPasswordPatternValid = REGEX.PASSWORD.test(password || '');
-  const isPasswordValid = isPasswordPatternValid && !errors.password;
+  const passwordCheck = useWatch({ control, name: 'password_check' });
   const isPasswordCheckValid = passwordCheck && !errors.password_check;
-  const isPasswordAllValid = isPasswordValid && isPasswordCheckValid;
-
-  const isPasswordSame = password === passwordCheck;
-
-  let passwordMessage: InputMessage | null = null;
-
-  if (isPasswordEntered && isPasswordCheckEntered) {
-    if (!isPasswordPatternValid) {
-      passwordMessage = { type: 'warning', content: MESSAGES.PASSWORD.FORMAT };
-    } else if (!isPasswordSame) {
-      passwordMessage = { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
-    } else {
-      passwordMessage = { type: 'success', content: MESSAGES.PASSWORD.MATCH };
-    }
-  }
+  const isPasswordAllValid = isPasswordCheckValid;
 
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [isUserIdChecked, setIsUserIdChecked] = useState(false);
   const [validatedNickname, setValidatedNickname] = useState<string | null>(null);
+
   const isNicknameValid = !nickname || validatedNickname === nickname;
   const isFormFilled = isPasswordAllValid && userId && isUserIdChecked && isNicknameValid;
 
@@ -114,6 +95,17 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
       }
     },
   });
+
+  const getPasswordCheckMessage = (
+    fieldValue: string | undefined,
+    fieldError: FieldError | undefined,
+  ): InputMessage | undefined => {
+    if (!fieldValue) return undefined;
+    if (fieldError) {
+      return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
+    }
+    return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
+  };
 
   const { mutate: signup } = useMutation({
     mutationFn: (variables: GeneralFormValues) => signupGeneral(variables),
@@ -218,7 +210,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
           </div>
         </div>
 
-        <div className={styles['form-container']}>
+        {/* <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
               htmlFor="name"
@@ -245,6 +237,37 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
                 />
               )}
             />
+          </div>
+        </div> */}
+
+        <div className={styles['form-container']}>
+          <div className={styles['name-wrapper']}>
+            <label
+              htmlFor="name"
+              className={styles.wrapper__label}
+            >
+              비밀번호 확인
+              <span className={styles.required}>*</span>
+            </label>
+            <Controller
+              name="password_check"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                validate: (value) => value === getValues('password'),
+              }}
+              render={({ field, fieldState }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="비밀번호를 한번 더 입력해 주세요."
+                  type="password"
+                  isVisibleButton
+                  message={getPasswordCheckMessage(field.value, fieldState.error)}
+                />
+              )}
+            />
+
           </div>
         </div>
 
