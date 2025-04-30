@@ -95,7 +95,7 @@ export default function AdditionalLink() {
       </Link>
       <Link
         className={styles.help__link}
-        to={ROUTES.AuthSignup()}
+        to={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
         onClick={() => {
           logger.actionEventClick({
             team: 'USER',

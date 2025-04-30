@@ -87,7 +87,7 @@ export default function LoginForm() {
         {isMobile && (
         <Link
           className={styles.loginform__button}
-          to={ROUTES.AuthSignup()}
+          to={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
           onClick={() => {
             logger.actionEventClick({
               team: 'USER',
