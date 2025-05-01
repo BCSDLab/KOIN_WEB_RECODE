@@ -1,7 +1,9 @@
 export const REGEX = {
   PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/]{6,18}$/,
   NICKNAME: /^[가-힣a-zA-Z0-9]{1,10}$/,
-  EMAIL: /^[a-z_0-9]{1,12}$/,
+  EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
+  USERID: /^.{1,13}$/,
+  STUDENT_NUMBER: /^\d{8,10}$/,
 };
 
 export const MESSAGES = {
@@ -26,6 +28,17 @@ export const MESSAGES = {
     INCORRECT: '인증번호가 일치하지 않습니다. 다시 입력해 주세요.',
     CORRECT: '인증번호가 일치합니다.',
     STOP: '1일 발송 한도를 초과했습니다. 24시간 이후 재시도 바랍니다.',
+  },
+  USERID: {
+    AVAILABLE: '사용 가능한 아이디입니다.',
+    DUPLICATED: '이미 사용 중인 아이디입니다.',
+    INVALID: '올바른 아이디 양식이 아닙니다. 다시 입력해 주세요.',
+  },
+  STUDENT_NUMBER: {
+    FORMAT: '올바른 학번 양식이 아닙니다. 다시 입력해 주세요.',
+  },
+  EMAIL: {
+    FORMAT: '올바른 이메일 형식이 아닙니다. 다시 입력해 주세요.',
   },
 };
 
