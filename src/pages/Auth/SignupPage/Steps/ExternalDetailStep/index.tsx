@@ -17,7 +17,7 @@ interface ExternalDetailStepProps {
 interface GeneralFormValues {
   name: string,
   phone_number: string,
-  user_id: string,
+  login_id: string,
   password: string,
   password_check?: string,
   gender: string,
@@ -30,7 +30,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
     control, getValues, handleSubmit, trigger,
   } = useFormContext<GeneralFormValues>();
   const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
-  const userId = (useWatch({ control, name: 'user_id' }) ?? '') as string;
+  const userId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
 
   const { errors } = useFormState({ control });
 
@@ -118,7 +118,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
     const payload = {
       name: formData.name,
       phone_number: formData.phone_number,
-      user_id: formData.user_id,
+      login_id: formData.login_id,
       password: formData.password,
       gender: formData.gender,
       email: formData.email === '' ? null : formData.email,
@@ -148,14 +148,14 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
-              htmlFor="user_id"
+              htmlFor="login_id"
               className={styles.wrapper__label}
             >
               아이디
               <span className={styles.required}>*</span>
             </label>
             <Controller
-              name="user_id"
+              name="login_id"
               control={control}
               defaultValue=""
               render={({ field }) => (
