@@ -1,27 +1,20 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-function useStep<T extends string>(initialStep: T) {
-  const [currentStep, setCurrentStep] = useState<T>(initialStep);
-  const [historyStep, setHistoryStep] = useState<T[]>([initialStep]);
+function useStep<T extends string>() {
   const navigate = useNavigate();
+  const { currentStep } = useParams<{ currentStep: T }>();
+
+  if (!currentStep) {
+    throw new Error('URL parameter \'currentstep\' is required for signup flow.');
+  }
 
   const nextStep = (next: T) => {
-    setCurrentStep(next);
-    setHistoryStep((prev) => [next, ...prev]);
+    navigate(`/auth/signup/${next}`);
   };
 
   const goBack = () => {
-    if (historyStep.length <= 1) {
-      navigate(-1);
-      return;
-    }
-    setHistoryStep((prev) => {
-      const newHistory = prev.slice(1);
-      setCurrentStep(newHistory[0]);
-      return newHistory;
-    });
+    navigate(-1);
   };
 
   function Step({ name, children }: { name: T; children: React.ReactNode }) {

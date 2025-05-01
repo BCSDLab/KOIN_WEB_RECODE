@@ -8,7 +8,7 @@ export type LoginRequest = {
 export type LoginStudentRequest = {
   name: string;
   phone_number: string;
-  user_id: string;
+  login_id: string;
   password: string;
   department: string;
   student_number: string;
@@ -20,7 +20,7 @@ export type LoginStudentRequest = {
 export type LoginGeneralRequest = {
   name: string;
   phone_number: string;
-  user_id: string;
+  login_id: string;
   password: string;
   gender: string;
   email: string | null;
@@ -138,7 +138,6 @@ export interface SmsSendResponse extends APIResponse {
   remaining_count: number;
   current_count: number;
 }
-
 export interface SmsVerifyResponse extends APIResponse { }
 
 export interface SmsSendRequest {

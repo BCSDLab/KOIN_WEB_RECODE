@@ -57,7 +57,7 @@ export class NicknameDuplicateCheck<R extends NicknameDuplicateCheckResponse> im
 export class SignupStudent<R extends SignupStudentResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = 'v2/user/student/register';
+  path = 'v2/users/students/register';
 
   response!: R;
 
@@ -69,7 +69,7 @@ export class SignupStudent<R extends SignupStudentResponse> implements APIReques
 export class SignupGeneral<R extends SignupGeneralResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = 'v2/user/general/register';
+  path = 'v2/users/register';
 
   response!: R;
 
@@ -214,7 +214,7 @@ export class CheckPhone<R extends CheckPhoneResponse> implements APIRequest<R> {
 export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/verification/sms/send';
+  path = '/users/verification/sms/send';
 
   response!: R;
 
@@ -226,7 +226,7 @@ export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
 export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/verification/sms/verify';
+  path = '/users/verification/sms/verify';
 
   response!: R;
 
