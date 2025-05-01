@@ -15,10 +15,9 @@
 }
 
 .logo {
-  display: flex;
-    width: 96px;
-    height: 56px;
-    margin: 100px auto 24px;
+  width: 96px;
+  height: 56px;
+  margin: 100px auto 24px;
 
   @include media.media-breakpoint(mobile) {
     display: flex;
@@ -102,7 +101,6 @@
 }
 
 .button-login-navigate {
-  display: flex;
   width: 320px;
   height: 64px;
   padding: 10px;
