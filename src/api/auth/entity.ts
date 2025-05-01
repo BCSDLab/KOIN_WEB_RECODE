@@ -20,7 +20,7 @@ export type LoginStudentRequest = {
 export type LoginGeneralRequest = {
   name: string;
   phone_number: string;
-  user_id: string;
+  login_id: string;
   password: string;
   gender: string;
   email: string;

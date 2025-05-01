@@ -3,6 +3,7 @@ export const REGEX = {
   NICKNAME: /^[가-힣a-zA-Z0-9]{1,10}$/,
   USERID: /^[a-z0-9_.-]{5,13}$/,
   STUDENT_NUMBER: /^\d{8,10}$/,
+  EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
 };
 
 export const MESSAGES = {
@@ -36,6 +37,9 @@ export const MESSAGES = {
   },
   STUDENT_NUMBER: {
     FORMAT: '올바른 학번 양식이 아닙니다. 다시 입력해 주세요.',
+  },
+  EMAIL: {
+    FORMAT: '올바른 이메일 형식이 아닙니다. 다시 입력해 주세요.',
   },
 };
 
