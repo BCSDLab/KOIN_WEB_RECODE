@@ -29,9 +29,10 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [isCodeCorrect, setIsCodeCorrect] = useState(false);
   const [smsSendCount, setSmsSendCount] = useState(0);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const { isRunning: isTimer, secondsLeft: timerValue, start: runTimer } = useCountdownTimer({
-    duration: 200,
+    duration: 180,
     onExpire: () => {
       if (!isCodeCorrect) {
         setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
@@ -95,6 +96,21 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     },
   });
 
+  const onClickSendVerificationButton = () => {
+    if (isButtonDisabled) return;
+
+    setIsButtonDisabled(true);
+
+    checkVerificationCode({
+      phone_number: phoneNumber,
+      verification_code: verificationCode,
+    });
+
+    setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 2000);
+  };
+
   const isNameAndGenderFilled = name?.trim() && gender?.length > 0;
   const isFormFilled = name && gender && phoneNumber && verificationCode;
 
@@ -137,11 +153,12 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                 <CustomInput
                   {...field}
                   placeholder="- 없이 번호를 입력해 주세요."
-                  isDelete
+                  isDelete={!isCodeCorrect}
                   message={phoneMessage}
                   isButton
+                  disabled={isCodeCorrect}
                   buttonText="인증번호 발송"
-                  buttonDisabled={!field.value}
+                  buttonDisabled={!field.value || isButtonDisabled || isCodeCorrect}
                   buttonOnClick={() => checkPhoneNumber(phoneNumber)}
                 >
                   {phoneMessage?.type === 'success' && (
@@ -181,12 +198,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                   isButton
                   buttonText="인증번호 확인"
                   buttonDisabled={!field.value}
-                  buttonOnClick={() => {
-                    checkVerificationCode({
-                      phone_number: phoneNumber,
-                      verification_code: verificationCode,
-                    });
-                  }}
+                  buttonOnClick={() => onClickSendVerificationButton()}
                 />
               )}
             />

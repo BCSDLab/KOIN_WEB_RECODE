@@ -214,7 +214,7 @@ export class CheckPhone<R extends CheckPhoneResponse> implements APIRequest<R> {
 export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/verification/sms/send';
+  path = '/users/verification/sms/send';
 
   response!: R;
 
@@ -226,7 +226,7 @@ export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
 export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/verification/sms/verify';
+  path = '/users/verification/sms/verify';
 
   response!: R;
 
