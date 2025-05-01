@@ -138,6 +138,7 @@ export interface SmsSendResponse extends APIResponse {
   remaining_count: number;
   current_count: number;
 }
+
 export interface SmsVerifyResponse extends APIResponse { }
 
 export interface SmsSendRequest {
