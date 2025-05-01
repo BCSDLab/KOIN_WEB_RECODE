@@ -148,7 +148,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
-              htmlFor="name"
+              htmlFor="user_id"
               className={styles.wrapper__label}
             >
               아이디
@@ -176,7 +176,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
-              htmlFor="name"
+              htmlFor="password"
               className={styles.wrapper__label}
             >
               비밀번호
@@ -213,7 +213,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
-              htmlFor="name"
+              htmlFor="password_check"
               className={styles.wrapper__label}
             >
               비밀번호 확인
@@ -243,7 +243,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
-              htmlFor="name"
+              htmlFor="nickname"
               className={styles.wrapper__label}
             >
               닉네임 (선택)
@@ -278,7 +278,7 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
-              htmlFor="name"
+              htmlFor="email"
               className={styles.wrapper__label}
             >
               이메일 (선택)

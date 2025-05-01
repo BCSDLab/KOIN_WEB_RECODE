@@ -41,7 +41,7 @@ function CompleteStep() {
 
           <div className={styles['subTitle-container']}>
             <div className={styles.subTitle}>회원가입이 완료되었습니다.</div>
-            <div className={styles.subTtitle}>홈페이지에서 바로 로그인이 가능합니다.</div>
+            <div className={styles.subTitle}>홈페이지에서 바로 로그인이 가능합니다.</div>
           </div>
 
           <button
