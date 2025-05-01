@@ -24,7 +24,6 @@ import {
   LoginGeneralRequest,
   SignupStudentResponse,
   LoginStudentRequest,
-  CheckIdResponse,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -57,7 +56,7 @@ export class NicknameDuplicateCheck<R extends NicknameDuplicateCheckResponse> im
 export class SignupStudent<R extends SignupStudentResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = 'v2/users/students/register';
+  path = 'v2/user/student/register';
 
   response!: R;
 
@@ -69,7 +68,7 @@ export class SignupStudent<R extends SignupStudentResponse> implements APIReques
 export class SignupGeneral<R extends SignupGeneralResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = 'v2/users/register';
+  path = 'v2/user/general/register';
 
   response!: R;
 
@@ -143,20 +142,6 @@ export class DeleteUser<R extends DeleteResponse> implements APIRequest<R> {
   constructor(public authorization: string) { }
 }
 
-export class CheckId<R extends CheckIdResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path: string;
-
-  response!: R;
-
-  auth = false;
-
-  constructor(loginId: string) {
-    this.path = `/user/check/id?loginId=${loginId}`;
-  }
-}
-
 export class FindPassword<R extends FindPasswordResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
@@ -214,7 +199,7 @@ export class CheckPhone<R extends CheckPhoneResponse> implements APIRequest<R> {
 export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/users/verification/sms/send';
+  path = '/user/verification/sms/send';
 
   response!: R;
 
@@ -226,7 +211,7 @@ export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
 export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/users/verification/sms/verify';
+  path = '/user/verification/sms/verify';
 
   response!: R;
 

@@ -15,7 +15,6 @@ import {
   CheckPhone,
   SmsSend,
   SmsVerify,
-  CheckId,
 } from './APIDetail';
 
 export const login = APIClient.of(Login);
@@ -47,5 +46,3 @@ export const checkPhone = APIClient.of(CheckPhone);
 export const smsSend = APIClient.of(SmsSend);
 
 export const smsVerify = APIClient.of(SmsVerify);
-
-export const checkId = APIClient.of(CheckId);

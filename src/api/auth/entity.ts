@@ -8,7 +8,7 @@ export type LoginRequest = {
 export type LoginStudentRequest = {
   name: string;
   phone_number: string;
-  login_id: string;
+  user_id: string;
   password: string;
   department: string;
   student_number: string;
@@ -20,11 +20,11 @@ export type LoginStudentRequest = {
 export type LoginGeneralRequest = {
   name: string;
   phone_number: string;
-  login_id: string;
+  user_id: string;
   password: string;
   gender: string;
-  email: string | null;
-  nickname: string | null;
+  email: string;
+  nickname: string;
 };
 
 export interface LoginResponse extends APIResponse {
@@ -110,8 +110,6 @@ export interface UserUpdateRequest {
 
 export interface DeleteResponse extends APIResponse { }
 
-export interface CheckIdResponse extends APIResponse { }
-
 export interface FindPasswordResponse extends APIResponse {
   code: number;
   message: string;
@@ -138,6 +136,7 @@ export interface SmsSendResponse extends APIResponse {
   remaining_count: number;
   current_count: number;
 }
+
 export interface SmsVerifyResponse extends APIResponse { }
 
 export interface SmsSendRequest {
