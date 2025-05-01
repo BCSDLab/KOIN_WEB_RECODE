@@ -32,11 +32,14 @@ export default function SearchBarModal({ onClose }:SearchBarModalProps) {
   }, []);
   const debounceTimeout = useRef<null | NodeJS.Timeout>(null);
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    if (value.length === 0) setRelateSearchItems(undefined);
+    const inputValue = e.target.value.trim();
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
     debounceTimeout.current = setTimeout(async () => {
-      const data = await getRelateSearch(value);
+      if (inputValue.length === 0) {
+        setRelateSearchItems(undefined);
+        return;
+      }
+      const data = await getRelateSearch(inputValue);
       setRelateSearchItems(data);
     }, 200);
   }, []);
