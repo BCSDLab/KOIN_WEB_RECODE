@@ -89,12 +89,12 @@ function SignupPage() {
           <Step name="약관동의">
             <Terms onNext={() => nextStep('본인인증')} />
           </Step>
-          <Step name="본인 인증">
+          <Step name="본인인증">
             {isMobile ? (
-              <MobileVerification onNext={() => nextStep('회원 유형 선택')} />
+              <MobileVerification onNext={() => nextStep('회원유형선택')} />
             ) : (
               <Verification
-                onNext={() => nextStep('정보 입력')}
+                onNext={() => nextStep('정보입력')}
                 setUserType={setUserType}
               />
             )}
@@ -107,7 +107,7 @@ function SignupPage() {
               }}
             />
           </Step>
-          <Step name="정보 입력">
+          <Step name="정보입력">
             {renderDetailStep()}
             {/* 다음 pr 때 수정될 부분입니다. */}
             {/* {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('완료')} />}
