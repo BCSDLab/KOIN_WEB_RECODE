@@ -8,7 +8,7 @@ export type LoginRequest = {
 export type LoginStudentRequest = {
   name: string;
   phone_number: string;
-  user_id: string;
+  login_id: string;
   password: string;
   department: string;
   student_number: string;

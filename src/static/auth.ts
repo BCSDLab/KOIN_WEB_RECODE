@@ -32,6 +32,7 @@ export const MESSAGES = {
     AVAILABLE: '사용 가능한 아이디입니다.',
     DUPLICATED: '이미 사용 중인 아이디입니다.',
     INVALID: '올바른 아이디 양식이 아닙니다. 다시 입력해 주세요.',
+    REQUIRED: '영소문자, 숫자, _, -, . 로만 조합된 문자열만 입력 가능합니다.',
   },
   STUDENT_NUMBER: {
     FORMAT: '올바른 학번 양식이 아닙니다. 다시 입력해 주세요.',
