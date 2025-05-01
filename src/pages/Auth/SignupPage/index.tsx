@@ -21,7 +21,7 @@ const stepTitles: StepTitle[] = ['약관동의', '본인인증', '회원유형�
 function SignupPage() {
   const {
     Step, nextStep, goBack, currentStep,
-  } = useStep<StepTitle>('약관동의');
+  } = useStep<StepTitle>();
   const currentIndex = stepTitles.indexOf(currentStep);
   const [userType, setUserType] = useState<UserType | null>(null);
   const isMobile = useMediaQuery();
