@@ -13,8 +13,8 @@ export type LoginStudentRequest = {
   department: string;
   student_number: string;
   gender: string;
-  email?: string;
-  nickname: string;
+  email: string | null;
+  nickname: string | null;
 };
 
 export type LoginGeneralRequest = {
@@ -23,8 +23,8 @@ export type LoginGeneralRequest = {
   login_id: string;
   password: string;
   gender: string;
-  email: string;
-  nickname: string;
+  email: string | null;
+  nickname: string | null;
 };
 
 export interface LoginResponse extends APIResponse {

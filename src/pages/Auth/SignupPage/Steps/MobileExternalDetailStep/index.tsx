@@ -22,8 +22,8 @@ interface GeneralFormValues {
   login_id: string;
   password: string;
   gender: string;
-  email: string;
-  nickname: string;
+  email: string | null,
+  nickname: string | null,
   password_check?: string;
   department?: string;
   student_number?: string;
@@ -33,7 +33,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   const {
     control, getValues, handleSubmit, trigger,
   } = useFormContext<GeneralFormValues>();
-  const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
+  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
   const loginId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
 
   const password = useWatch({ control, name: 'password' });
@@ -48,7 +48,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [nicknameMessage, setNicknameMessage] = useState<InputMessage | null>(null);
   const isIdPasswordValid = loginId && passwordCheck && !errors.password_check;
-  const isFormFilled = isPasswordAllValid && nickname;
+  const isFormFilled = loginId && isPasswordAllValid;
 
   const { mutate: checkNickname } = useMutation({
     mutationFn: nicknameDuplicateCheck,
@@ -89,6 +89,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   const { mutate: signup } = useMutation({
     mutationFn: (variables: GeneralFormValues) => signupGeneral(variables),
     onSuccess: () => {
+      showToast('success', '회원가입이 완료되었습니다.');
       onNext();
     },
     onError: (err) => {
@@ -100,13 +101,6 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
     },
   });
 
-  const onSubmit = (formData: GeneralFormValues) => {
-    const {
-      password_check, department, student_number, ...signupData
-    } = formData;
-    signup(signupData);
-  };
-
   const getPasswordCheckMessage = (
     fieldValue: string | undefined,
     fieldError: FieldError | undefined,
@@ -116,6 +110,20 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
       return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
     }
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
+  };
+
+  const onSubmit = (formData: GeneralFormValues) => {
+    const {
+      password_check, email, nickname, department, student_number, ...signupData
+    } = formData;
+    const completeEmail = email || null;
+    const completeNickname = nickname || null;
+
+    signup({
+      ...signupData,
+      email: completeEmail,
+      nickname: completeNickname,
+    });
   };
 
   return (
@@ -203,7 +211,6 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                       control={control}
                       defaultValue=""
                       rules={{
-                        required: true,
                         pattern: {
                           value: REGEX.NICKNAME,
                           message: '',
@@ -217,8 +224,9 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                           isButton
                           message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
                           buttonText="중복 확인"
-                          buttonOnClick={() => checkNickname(nickname)}
-                          buttonDisabled={!nickname}
+                          buttonOnClick={() => checkNickname(nicknameControl)}
+                          buttonDisabled={!nicknameControl}
+                          value={field.value ?? ''}
                         />
                       )}
                     />
@@ -228,7 +236,6 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                     control={control}
                     defaultValue=""
                     rules={{
-                      required: true,
                       pattern: {
                         value: REGEX.EMAIL,
                         message: '',
@@ -239,17 +246,16 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                         message={fieldState.error ? { type: 'warning', content: MESSAGES.EMAIL.FORMAT } : null}
                         {...field}
                         placeholder="이메일을 입력해 주세요. (선택)"
+                        value={field.value ?? ''}
                       />
                     )}
                   />
                 </>
               )
             }
-
           </div>
         </div>
       </div>
-
       <button
         type="submit"
         className={styles['next-button']}

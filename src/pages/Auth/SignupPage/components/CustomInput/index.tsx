@@ -21,7 +21,7 @@ export type InputMessage = {
 interface CustomInputProps extends ComponentPropsWithoutRef<'input'> {
   placeholder?: string;
   type?: 'text' | 'password';
-  message?: InputMessage;
+  message?: InputMessage | null;
   isDelete?: boolean;
   isVisibleButton?: boolean;
   isTimer?: boolean;

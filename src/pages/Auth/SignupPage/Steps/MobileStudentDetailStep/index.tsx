@@ -27,8 +27,8 @@ interface StudentFormValues {
   department: string,
   student_number: string,
   gender: string,
-  email: string,
-  nickname: string,
+  email: string | null,
+  nickname: string | null,
 }
 
 function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
@@ -36,7 +36,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     control, getValues, trigger, handleSubmit,
   } = useFormContext<StudentFormValues>();
   const { errors } = useFormState({ control });
-  const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
+  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
   const loginId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
 
   const passwordCheck = useWatch({ control, name: 'password_check' });
@@ -106,12 +106,16 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   });
 
   const onSubmit = async (formData: StudentFormValues) => {
-    const { password_check, email, ...rest } = formData;
-    const completeEmail = email ? `${email}@koreatech.ac.kr` : '';
+    const {
+      password_check, email, nickname, ...signupData
+    } = formData;
+    const completeEmail = email ? `${email}@koreatech.ac.kr` : null;
+    const completeNickname = nicknameControl || null;
 
     signup({
-      ...rest,
+      ...signupData,
       email: completeEmail,
+      nickname: completeNickname,
     });
   };
 
@@ -267,8 +271,9 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                     isButton
                     message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
                     buttonText="중복 확인"
-                    buttonOnClick={() => checkNickname(nickname)}
-                    buttonDisabled={!field.value}
+                    buttonOnClick={() => checkNickname(nicknameControl)}
+                    buttonDisabled={!nicknameControl}
+                    value={field.value ?? ''}
                   />
                 )}
               />
@@ -282,6 +287,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                   <CustomInput
                     {...field}
                     placeholder="koreatech 이메일(선택)"
+                    value={field.value ?? ''}
                   />
                 )}
               />
