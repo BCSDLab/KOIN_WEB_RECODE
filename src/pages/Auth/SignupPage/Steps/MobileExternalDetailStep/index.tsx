@@ -3,11 +3,12 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupGeneral } from 'api/auth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './MobileExternalDetailStep.module.scss';
@@ -40,48 +41,42 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   const passwordCheck = useWatch({ control, name: 'password_check' });
   const { errors } = useFormState({ control });
 
-  const isPasswordPatternValid = REGEX.PASSWORD.test(password || '');
-  const isPasswordValid = isPasswordPatternValid && !errors.password;
-  const isPasswordCheckValid = passwordCheck && !errors.password_check;
-  const isPasswordAllValid = isPasswordValid && isPasswordCheckValid;
+  const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
+  const [isCorrectNickname, setIsCorrectNickname, setIsInCorrectNickname] = useBooleanState(false);
 
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [nicknameMessage, setNicknameMessage] = useState<InputMessage | null>(null);
-  const isIdPasswordValid = loginId && passwordCheck && !errors.password_check;
-  const isFormFilled = loginId && isPasswordAllValid;
 
-  const { mutate: checkNickname } = useMutation({
-    mutationFn: nicknameDuplicateCheck,
-    onSuccess: () => {
-      setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
-    },
-    onError: (err) => {
-      if (isKoinError(err)) {
-        if (err.status === 400) {
-          setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
-        }
-
-        if (err.status === 409) {
-          setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
-        }
-      }
-    },
-  });
+  const isIdPasswordValid = loginId && isCorrectId
+    && password && passwordCheck && !errors.password_check;
+  const isFormFilled = isIdPasswordValid && (!nicknameControl || isCorrectNickname);
 
   const { mutate: checkUserId } = useMutation({
     mutationFn: checkId,
     onSuccess: () => {
       setIdMessage({ type: 'success', content: MESSAGES.USERID.AVAILABLE });
+      setIsCorrectId();
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
-        }
+        if (err.status === 400) { setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID }); }
 
-        if (err.status === 409) {
-          setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED });
-        }
+        if (err.status === 409) { setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED }); }
+      }
+    },
+  });
+
+  const { mutate: checkNickname } = useMutation({
+    mutationFn: nicknameDuplicateCheck,
+    onSuccess: () => {
+      setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
+      setIsCorrectNickname();
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) { setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT }); }
+
+        if (err.status === 409) { setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.DUPLICATED }); }
       }
     },
   });
@@ -89,14 +84,11 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
   const { mutate: signup } = useMutation({
     mutationFn: (variables: GeneralFormValues) => signupGeneral(variables),
     onSuccess: () => {
-      showToast('success', '회원가입이 완료되었습니다.');
       onNext();
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          showToast('error', '회원가입에 실패했습니다. 다시 시도해 주세요.');
-        }
+        if (err.status === 400) { showToast('error', '회원가입에 실패했습니다. 다시 시도해 주세요.'); }
       }
     },
   });
@@ -125,6 +117,16 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
       nickname: completeNickname,
     });
   };
+
+  useEffect(() => {
+    setIdMessage(null);
+    setInCorrectId();
+  }, [loginId, setInCorrectId]);
+
+  useEffect(() => {
+    setNicknameMessage(null);
+    setIsInCorrectNickname();
+  }, [nicknameControl, setIsInCorrectNickname]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
@@ -182,77 +184,74 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                 />
               )}
             />
-            {isPasswordValid && (
+            <Controller
+              name="password_check"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                validate: (value) => value === getValues('password'),
+              }}
+              render={({ field, fieldState }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="비밀번호를 다시 입력해 주세요."
+                  type="password"
+                  isVisibleButton
+                  message={getPasswordCheckMessage(field.value, fieldState.error)}
+                />
+              )}
+            />
+
+            {isIdPasswordValid && (
+            <>
+              <div className={styles['input-wrapper']}>
+                <Controller
+                  name="nickname"
+                  control={control}
+                  defaultValue=""
+                  rules={{
+                    pattern: {
+                      value: REGEX.NICKNAME,
+                      message: '',
+                    },
+                  }}
+                  render={({ field, fieldState }) => (
+                    <CustomInput
+                      {...field}
+                      placeholder="닉네임을 입력해 주세요. (선택)"
+                      isDelete
+                      isButton
+                      message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
+                      buttonText="중복 확인"
+                      buttonOnClick={() => checkNickname(nicknameControl)}
+                      buttonDisabled={!nicknameControl}
+                      value={field.value ?? ''}
+                    />
+                  )}
+                />
+              </div>
               <Controller
-                name="password_check"
+                name="email"
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: true,
-                  validate: (value) => value === getValues('password'),
+                  pattern: {
+                    value: REGEX.EMAIL,
+                    message: '',
+                  },
                 }}
                 render={({ field, fieldState }) => (
                   <CustomInput
                     {...field}
-                    placeholder="비밀번호를 다시 입력해 주세요."
-                    type="password"
-                    isVisibleButton
-                    message={getPasswordCheckMessage(field.value, fieldState.error)}
+                    placeholder="이메일을 입력해 주세요. (선택)"
+                    value={field.value ?? ''}
+                    message={fieldState.error ? { type: 'warning', content: MESSAGES.EMAIL.FORMAT } : null}
                   />
                 )}
               />
+            </>
             )}
-            {
-              isIdPasswordValid && (
-                <>
-                  <div className={styles['input-wrapper']}>
-                    <Controller
-                      name="nickname"
-                      control={control}
-                      defaultValue=""
-                      rules={{
-                        pattern: {
-                          value: REGEX.NICKNAME,
-                          message: '',
-                        },
-                      }}
-                      render={({ field, fieldState }) => (
-                        <CustomInput
-                          {...field}
-                          placeholder="닉네임을 입력해 주세요. (선택)"
-                          isDelete
-                          isButton
-                          message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
-                          buttonText="중복 확인"
-                          buttonOnClick={() => checkNickname(nicknameControl)}
-                          buttonDisabled={!nicknameControl}
-                          value={field.value ?? ''}
-                        />
-                      )}
-                    />
-                  </div>
-                  <Controller
-                    name="email"
-                    control={control}
-                    defaultValue=""
-                    rules={{
-                      pattern: {
-                        value: REGEX.EMAIL,
-                        message: '',
-                      },
-                    }}
-                    render={({ field, fieldState }) => (
-                      <CustomInput
-                        message={fieldState.error ? { type: 'warning', content: MESSAGES.EMAIL.FORMAT } : null}
-                        {...field}
-                        placeholder="이메일을 입력해 주세요. (선택)"
-                        value={field.value ?? ''}
-                      />
-                    )}
-                  />
-                </>
-              )
-            }
           </div>
         </div>
       </div>
