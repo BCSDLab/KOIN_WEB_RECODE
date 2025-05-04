@@ -1,42 +1,44 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-restricted-imports */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { checkPhone, smsSend, smsVerify } from 'api/auth';
 import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
-import ROUTES from 'static/routes';
-import { useNavigate } from 'react-router-dom';
-import type { SmsSendResponse } from 'api/auth/entity';
 import { GENDER_OPTIONS, MESSAGES } from 'static/auth';
+import ROUTES from 'static/routes';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import type { SmsSendResponse } from 'api/auth/entity';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
-import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './MobileVerification.module.scss';
+
+import CustomInput, { type InputMessage } from '../../components/CustomInput';
 
 interface MobileVerificationProps {
   onNext: () => void;
 }
 
 function MobileVerification({ onNext }: MobileVerificationProps) {
-  const navigate = useNavigate();
   const { control, register } = useFormContext();
   const name = useWatch({ control, name: 'name' });
   const gender = useWatch({ control, name: 'gender' });
   const phoneNumber = useWatch({ control, name: 'phone_number' });
   const verificationCode = useWatch({ control, name: 'verification_code' });
 
-  const [showVerificationField, setShowVerificationField] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
-  const [isCodeCorrect, setIsCodeCorrect] = useState(false);
   const [smsSendCount, setSmsSendCount] = useState(0);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isDisabled, enableButton, disableButton] = useBooleanState(false);
+  const [isVerificationShown, showVerification] = useBooleanState(false);
+  const [isVerified, enableVerified] = useBooleanState(false);
+  const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
 
-  const { isRunning: isTimer, secondsLeft: timerValue, start: runTimer } = useCountdownTimer({
+  const {
+    isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,
+  } = useCountdownTimer({
     duration: 180,
     onExpire: () => {
-      if (!isCodeCorrect) {
-        setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
-      }
+      if (!isVerified) setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
     },
   });
 
@@ -45,17 +47,18 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     onSuccess: (data : SmsSendResponse) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
-      setShowVerificationField(true);
+      showVerification();
       setSmsSendCount(data.remaining_count);
+      enableButton();
+      setTimeout(() => {
+        disableButton();
+      }, 3000);
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
-        }
-        if (err.status === 429) {
-          setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
-        }
+        if (err.status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+
+        if (err.status === 429) { setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP }); }
       }
     },
   });
@@ -64,16 +67,14 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     mutationFn: smsVerify,
     onSuccess: () => {
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
-      setIsCodeCorrect(true);
+      enableVerified();
+      setCorrect();
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
-        }
-        if (err.status === 404) {
-          setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
-        }
+        if (err.status === 400) { setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT }); }
+
+        if (err.status === 404) { setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT }); }
       }
     },
   });
@@ -85,38 +86,36 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
-        }
+        if (err.status === 400) { setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID }); }
 
-        if (err.status === 409) {
-          setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED });
-        }
+        if (err.status === 409) { setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED }); }
       }
     },
   });
 
   const onClickSendVerificationButton = () => {
-    if (isButtonDisabled) return;
-
-    setIsButtonDisabled(true);
-
     checkVerificationCode({
       phone_number: phoneNumber,
       verification_code: verificationCode,
     });
-
-    setTimeout(() => {
-      setIsButtonDisabled(false);
-    }, 2000);
   };
 
   const isNameAndGenderFilled = name?.trim() && gender?.length > 0;
   const isFormFilled = name && gender && phoneNumber && verificationCode;
 
-  const goToLogin = () => {
-    navigate(ROUTES.Auth());
-  };
+  useEffect(() => {
+    disableButton();
+    stopTimer();
+    setVerificationMessage(null);
+    setPhoneMessage(null);
+    setIncorrect();
+  }, [phoneNumber]);
+
+  useEffect(() => {
+    if (timerValue === 120) {
+      setVerificationMessage({ type: 'default', content: MESSAGES.VERIFICATION.DEFAULT });
+    }
+  }, [timerValue]);
 
   return (
     <div className={styles.container}>
@@ -153,12 +152,12 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                 <CustomInput
                   {...field}
                   placeholder="- 없이 번호를 입력해 주세요."
-                  isDelete={!isCodeCorrect}
+                  isDelete={!isVerified}
                   message={phoneMessage}
                   isButton
-                  disabled={isCodeCorrect}
+                  disabled={isVerified}
                   buttonText="인증번호 발송"
-                  buttonDisabled={!field.value || isButtonDisabled || isCodeCorrect}
+                  buttonDisabled={!field.value || isDisabled || isVerified}
                   buttonOnClick={() => checkPhoneNumber(phoneNumber)}
                 >
                   {phoneMessage?.type === 'success' && (
@@ -171,9 +170,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                   )}
                   {
                     phoneMessage?.type === 'error' && (
-                    <button onClick={() => goToLogin()} type="button" className={styles['label-link-button']}>
-                      로그인하기
-                    </button>
+                      <a href={ROUTES.Auth()} className={styles['label-link-button']}>로그인하기</a>
                     )
                   }
                 </CustomInput>
@@ -181,7 +178,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
             />
           </div>
 
-          {showVerificationField && (
+          {isVerificationShown && (
           <div className={styles['input-wrapper']}>
             <Controller
               name="verification_code"
@@ -192,14 +189,26 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                   {...field}
                   placeholder="인증번호를 입력해주세요."
                   isDelete
-                  isTimer={isCodeCorrect ? false : isTimer}
+                  isTimer={isVerified ? false : isTimer}
                   timerValue={timerValue}
                   message={verificationMessage}
                   isButton
                   buttonText="인증번호 확인"
                   buttonDisabled={!field.value}
                   buttonOnClick={() => onClickSendVerificationButton()}
-                />
+                >
+                  {verificationMessage?.type === 'default' && (
+                    <a
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSeRGc4IIHrsTqZsDLeX__lZ7A-acuioRbABZZFBDY9eMsMTxQ/viewform"
+                      className={styles['label-link-button']}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      문의하기
+                    </a>
+
+                  )}
+                </CustomInput>
               )}
             />
           </div>
@@ -212,7 +221,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
         type="button"
         onClick={onNext}
         className={styles['next-button']}
-        disabled={!isFormFilled}
+        disabled={!isFormFilled || !isCodeCorrect}
       >
         다음
       </button>
