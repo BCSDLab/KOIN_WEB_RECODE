@@ -34,7 +34,7 @@ function SignupPage() {
     defaultValues: {
       name: '',
       phone_number: '',
-      user_id: '',
+      login_id: '',
       password: '',
       password_check: '',
       department: '',

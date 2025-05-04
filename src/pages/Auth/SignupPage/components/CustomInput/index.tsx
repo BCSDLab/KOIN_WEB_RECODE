@@ -14,14 +14,14 @@ import { cn } from '@bcsdlab/utils';
 import styles from './CustomInput.module.scss';
 
 export type InputMessage = {
-  type: 'error' | 'warning' | 'success' | 'info';
+  type: 'error' | 'warning' | 'success' | 'info' | 'default';
   content: string;
 } | null;
 
 interface CustomInputProps extends ComponentPropsWithoutRef<'input'> {
   placeholder?: string;
   type?: 'text' | 'password';
-  message?: InputMessage;
+  message?: InputMessage | null;
   isDelete?: boolean;
   isVisibleButton?: boolean;
   isTimer?: boolean;

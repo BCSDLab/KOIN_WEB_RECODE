@@ -13,8 +13,8 @@ export type LoginStudentRequest = {
   department: string;
   student_number: string;
   gender: string;
-  email?: string;
-  nickname: string;
+  email: string | null;
+  nickname: string | null;
 };
 
 export type LoginGeneralRequest = {

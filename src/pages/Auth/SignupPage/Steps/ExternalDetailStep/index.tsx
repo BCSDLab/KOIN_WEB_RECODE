@@ -15,14 +15,14 @@ interface ExternalDetailStepProps {
 }
 
 interface GeneralFormValues {
-  name: string,
-  phone_number: string,
-  login_id: string,
-  password: string,
-  password_check?: string,
-  gender: string,
-  email: string | null,
-  nickname: string | null,
+  name: string;
+  phone_number: string;
+  login_id: string;
+  password: string;
+  password_check?: string;
+  gender: string;
+  email: string | null;
+  nickname: string | null;
 }
 
 function ExternalDetail({ onNext }: ExternalDetailStepProps) {
