@@ -34,7 +34,7 @@ function Verification({ onNext, setUserType }: VerificationProps) {
   const [buttonText, setButtonText] = useState('인증번호 발송');
 
   const { isRunning: isTimer, secondsLeft: timerValue, start: runTimer } = useCountdownTimer({
-    duration: 20,
+    duration: 180,
     onExpire: () => {
       if (!isCodeCorrect) {
         setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
