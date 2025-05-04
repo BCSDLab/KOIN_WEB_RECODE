@@ -3,11 +3,12 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupStudent } from 'api/auth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import CustomSelector from '../../components/CustomSelector';
@@ -36,18 +37,21 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     control, getValues, trigger, handleSubmit,
   } = useFormContext<StudentFormValues>();
   const { errors } = useFormState({ control });
-  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
-  const loginId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
 
+  const loginId = (useWatch({ control, name: 'login_id' }) ?? '');
   const passwordCheck = useWatch({ control, name: 'password_check' });
+  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '');
 
-  const isPasswordCheckValid = passwordCheck && !errors.password_check;
-  const isPasswordAllValid = isPasswordCheckValid;
+  const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
+  const [isCorrectNickname, setIsCorrectNickname, setIsInCorrectNickname] = useBooleanState(false);
 
   const [major, setMajor] = useState<string | null>(null);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [nicknameMessage, setNicknameMessage] = useState<InputMessage | null>(null);
-  const isFormFilled = isPasswordAllValid && major && loginId;
+
+  const isIdPasswordValid = loginId && isCorrectId && passwordCheck && !errors.password_check;
+
+  const isFormFilled = isIdPasswordValid && major && (!nicknameControl || isCorrectNickname);
 
   const { data: deptList } = useDeptList();
   const deptOptionList = deptList.map((dept) => ({
@@ -55,38 +59,32 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     value: dept.name,
   }));
 
-  const { mutate: checkNickname } = useMutation({
-    mutationFn: nicknameDuplicateCheck,
-    onSuccess: () => {
-      setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
-    },
-    onError: (err) => {
-      if (isKoinError(err)) {
-        if (err.status === 400) {
-          setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
-        }
-
-        if (err.status === 409) {
-          setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
-        }
-      }
-    },
-  });
-
   const { mutate: checkUserId } = useMutation({
     mutationFn: checkId,
     onSuccess: () => {
       setIdMessage({ type: 'success', content: MESSAGES.USERID.AVAILABLE });
+      setIsCorrectId();
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
-        }
+        if (err.status === 400) { setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID }); }
 
-        if (err.status === 409) {
-          setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED });
-        }
+        if (err.status === 409) { setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED }); }
+      }
+    },
+  });
+
+  const { mutate: checkNickname } = useMutation({
+    mutationFn: nicknameDuplicateCheck,
+    onSuccess: () => {
+      setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
+      setIsCorrectNickname();
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) { setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT }); }
+
+        if (err.status === 409) { setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.DUPLICATED }); }
       }
     },
   });
@@ -98,12 +96,21 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          showToast('error', '회원가입에 실패했습니다. 다시 시도해 주세요.');
-        }
+        if (err.status === 400) { showToast('error', '회원가입에 실패했습니다. 다시 시도해 주세요.'); }
       }
     },
   });
+
+  const getPasswordCheckMessage = (
+    fieldValue: string | undefined,
+    fieldError: FieldError | undefined,
+  ): InputMessage | undefined => {
+    if (!fieldValue) return undefined;
+    if (fieldError) {
+      return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
+    }
+    return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
+  };
 
   const onSubmit = async (formData: StudentFormValues) => {
     const {
@@ -119,16 +126,15 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     });
   };
 
-  const getPasswordCheckMessage = (
-    fieldValue: string | undefined,
-    fieldError: FieldError | undefined,
-  ): InputMessage | undefined => {
-    if (!fieldValue) return undefined;
-    if (fieldError) {
-      return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
-    }
-    return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
-  };
+  useEffect(() => {
+    setIdMessage(null);
+    setInCorrectId();
+  }, [loginId, setInCorrectId]);
+
+  useEffect(() => {
+    setNicknameMessage(null);
+    setIsInCorrectNickname();
+  }, [nicknameControl, setIsInCorrectNickname]);
 
   return (
     <form
@@ -211,7 +217,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
 
           </div>
         </div>
-        {isPasswordAllValid && (
+        {isIdPasswordValid && (
           <div className={styles.wrapper}>
             <h1 className={styles.wrapper__header}>학부와 학번을 알려주세요.</h1>
             <Controller
@@ -257,7 +263,6 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: true,
                   pattern: {
                     value: REGEX.NICKNAME,
                     message: '',
@@ -283,11 +288,18 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 name="email"
                 control={control}
                 defaultValue=""
-                render={({ field }) => (
+                rules={{
+                  pattern: {
+                    value: REGEX.STUDENTEMAIL,
+                    message: '',
+                  },
+                }}
+                render={({ field, fieldState }) => (
                   <CustomInput
                     {...field}
                     placeholder="koreatech 이메일(선택)"
                     value={field.value ?? ''}
+                    message={fieldState.error ? { type: 'warning', content: MESSAGES.EMAIL.FORMAT } : null}
                   />
                 )}
               />
