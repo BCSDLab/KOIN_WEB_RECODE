@@ -20,16 +20,16 @@ interface MobileVerificationProps {
 }
 
 interface StudentFormValues {
-  name: string,
-  phone_number: string,
-  login_id: string,
-  password: string,
-  password_check?: string,
-  department: string,
-  student_number: string,
-  gender: string,
-  email: string | null,
-  nickname: string | null,
+  name: string;
+  phone_number: string;
+  login_id: string;
+  password: string;
+  password_check?: string;
+  department: string;
+  student_number: string;
+  gender: string;
+  email: string | null;
+  nickname: string | null;
 }
 
 function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {

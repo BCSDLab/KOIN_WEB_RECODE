@@ -23,8 +23,8 @@ interface GeneralFormValues {
   login_id: string;
   password: string;
   gender: string;
-  email: string | null,
-  nickname: string | null,
+  email: string | null;
+  nickname: string | null;
   password_check?: string;
   department?: string;
   student_number?: string;
