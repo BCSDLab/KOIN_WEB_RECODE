@@ -16,15 +16,15 @@ import StudentDetail from './Steps/StudentDetailStep';
 import ExternalDetail from './Steps/ExternalDetailStep';
 import CompleteStep from './Steps/CompleteStep';
 
-type StepTitle = '약관 동의' | '본인 인증' | '회원 유형 선택' | '정보 입력' | '완료';
+type StepTitle = '약관동의' | '본인인증' | '회원유형선택' | '정보입력' | '완료';
 type UserType = '학생' | '외부인';
 
-const stepTitles: StepTitle[] = ['약관 동의', '본인 인증', '회원 유형 선택', '정보 입력', '완료'];
+const stepTitles: StepTitle[] = ['약관동의', '본인인증', '회원유형선택', '정보입력', '완료'];
 
 function SignupPage() {
   const {
     Step, nextStep, goBack, currentStep,
-  } = useStep<StepTitle>('약관 동의');
+  } = useStep<StepTitle>();
   const currentIndex = stepTitles.indexOf(currentStep);
   const [userType, setUserType] = useState<UserType | null>(null);
   const isMobile = useMediaQuery();
@@ -45,22 +45,6 @@ function SignupPage() {
       verification_code: '',
     },
   });
-
-  function renderDetailStep() {
-    if (userType === '학생') {
-      return isMobile
-        ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
-        : <StudentDetail onNext={() => nextStep('완료')} />;
-    }
-
-    if (userType === '외부인') {
-      return isMobile
-        ? <MobileGuestDetailStep onNext={() => nextStep('완료')} />
-        : <ExternalDetail />;
-    }
-
-    return null;
-  }
 
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
@@ -86,32 +70,39 @@ function SignupPage() {
           />
         )}
         <FormProvider {...methods}>
-          <Step name="약관 동의">
-            <Terms onNext={() => nextStep('본인 인증')} />
+          <Step name="약관동의">
+            <Terms onNext={() => nextStep('본인인증')} />
           </Step>
-          <Step name="본인 인증">
+          <Step name="본인인증">
             {isMobile ? (
-              <MobileVerification onNext={() => nextStep('회원 유형 선택')} />
+              <MobileVerification onNext={() => nextStep('회원유형선택')} />
             ) : (
               <Verification
-                onNext={() => nextStep('정보 입력')}
+                onNext={() => nextStep('정보입력')}
                 setUserType={setUserType}
               />
             )}
           </Step>
-          <Step name="회원 유형 선택">
+          <Step name="회원유형선택">
             <MobileUserTypeStep
               onSelectType={(type: UserType) => {
                 setUserType(type);
-                nextStep('정보 입력');
+                nextStep('정보입력');
               }}
             />
           </Step>
-          <Step name="정보 입력">
-            {renderDetailStep()}
-            {/* 다음 pr 때 수정될 부분입니다. */}
-            {/* {userType === '학생' && <MobileStudentDetailStep onNext={() => nextStep('완료')} />}
-            {userType === '외부인' && <MobileGuestDetailStep onNext={() => nextStep('완료')} />} */}
+          <Step name="정보입력">
+            {userType === '학생' && (
+              isMobile
+                ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
+                : <StudentDetail onNext={() => nextStep('완료')} />
+            )}
+
+            {userType === '외부인' && (
+              isMobile
+                ? <MobileGuestDetailStep onNext={() => nextStep('완료')} />
+                : <ExternalDetail onNext={() => nextStep('완료')} />
+            )}
           </Step>
           <Step name="완료">
             <CompleteStep />

@@ -34,11 +34,14 @@
 .select {
   position: relative;
   display: inline-block;
-  width: 100%;
   border-radius: 12px;
+  max-width: 320px;
 
   @include media.media-breakpoint(mobile) {
+    max-width: 100%;
     font-size: 13px;
+    border: none;
+    box-shadow: 0px 1px 9px 1px rgba(0, 0, 0, 0.06);
   }
 
   @include inherit-text-style;
@@ -58,8 +61,8 @@
   &__trigger {
     position: relative;
     width: 100%;
-    padding: 16px 24px;
-    border-radius: 5px;
+    padding: 16px 12px;
+    border-radius: 12px;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
@@ -73,6 +76,10 @@
 
     &--white-background {
       border: 1px solid #e1e1e1;
+
+      @include media.media-breakpoint(mobile) {
+        border: none;
+      }
     }
 
     &:hover {

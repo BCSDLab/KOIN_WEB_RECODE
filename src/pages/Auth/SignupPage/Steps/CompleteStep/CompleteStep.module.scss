@@ -1,9 +1,12 @@
 @use "src/utils/scss/media" as media;
 
 .container {
+  display: flex;
+  flex-direction: column;
+  font-family: Pretendard, sans-serif;
+  align-items: center;
+
   @include media.media-breakpoint(mobile) {
-    display: flex;
-    flex-direction: column;
     width: 100%;
     height: calc(100% - 40px);
     font-family: Pretendard, sans-serif;
@@ -12,6 +15,10 @@
 }
 
 .logo {
+  width: 96px;
+  height: 56px;
+  margin: 100px auto 24px;
+
   @include media.media-breakpoint(mobile) {
     display: flex;
     width: 96px;
@@ -21,6 +28,13 @@
 }
 
 .title {
+  color: #175c8e;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  margin-top: 80px;
+  margin-bottom: 24px;
+
   @include media.media-breakpoint(mobile) {
     display: flex;
     width: 100%;
@@ -29,7 +43,9 @@
     font-size: 18px;
     font-weight: 500;
     line-height: 160%;
+    margin-top: 0px;
     margin-bottom: 57px;
+    color: #000;
   }
 }
 
@@ -69,4 +85,32 @@
       }
     }
   }
+}
+
+.subTitle-container {
+  display: flex;
+  flex-direction: column;
+  color: #858585;
+  text-align: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  margin-bottom: 80px;
+}
+
+.button-login-navigate {
+  width: 320px;
+  height: 64px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  background-color: #175c8e;
+  color: #fff;
+  border-radius: 16px;
+  text-align: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
 }
