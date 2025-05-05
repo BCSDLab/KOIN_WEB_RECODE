@@ -41,7 +41,7 @@
     max-width: 100%;
     font-size: 13px;
     border: none;
-    box-shadow: 0px 1px 9px 1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 9px 1px rgb(0 0 0 / 6%);
   }
 
   @include inherit-text-style;
@@ -61,17 +61,20 @@
   &__trigger {
     position: relative;
     width: 100%;
-    padding: 16px 12px;
+    height: 48px;
+    padding: 0 12px;
     border-radius: 12px;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    @include inherit-text-style;
-
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+    color: #000;
     background-color: #fff;
-    color: inherit;
     cursor: pointer;
 
     &--white-background {
@@ -80,6 +83,11 @@
       @include media.media-breakpoint(mobile) {
         border: none;
       }
+    }
+
+    &--placeholder {
+      color: #cacaca;
+      font-size: 12px;
     }
 
     &:hover {
@@ -91,7 +99,9 @@
     }
 
     @include media.media-breakpoint(mobile) {
-      padding: 16px;
+      width: 100%;
+      padding: 0 12px;
+      font-size: 13px;
     }
   }
 
@@ -132,9 +142,8 @@
     height: 40px;
     box-sizing: border-box;
     color: #727272;
-
-    @include inherit-text-style;
-
+    font-size: 14px;
+    font-weight: 400;
     cursor: pointer;
 
     &[aria-selected="true"] {

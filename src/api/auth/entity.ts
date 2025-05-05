@@ -37,6 +37,10 @@ export interface NicknameDuplicateCheckResponse extends APIResponse {
   success: string;
 }
 
+export interface EmailDuplicateCheckResponse extends APIResponse {
+  success: string;
+}
+
 export interface SignupRequest {
   email: string;
   password: string;

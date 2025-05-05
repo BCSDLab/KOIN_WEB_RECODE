@@ -74,6 +74,10 @@ function CustomInput({
             {...args}
           />
 
+          {args.name === 'email' && (
+            <span className={styles['input-wrapper__email']}>@koreatech.ac.kr</span>
+          )}
+
           {isTimer && (
           <span
             className={cn({

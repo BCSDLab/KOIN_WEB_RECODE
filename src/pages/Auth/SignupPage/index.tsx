@@ -40,8 +40,8 @@ function SignupPage() {
       department: '',
       student_number: '',
       gender: '',
-      email: '',
-      nickname: '',
+      email: null,
+      nickname: null,
       verification_code: '',
     },
   });
@@ -79,6 +79,7 @@ function SignupPage() {
             ) : (
               <Verification
                 onNext={() => nextStep('정보입력')}
+                onBack={goBack}
                 setUserType={setUserType}
               />
             )}
@@ -95,13 +96,13 @@ function SignupPage() {
             {userType === '학생' && (
               isMobile
                 ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
-                : <StudentDetail onNext={() => nextStep('완료')} />
+                : <StudentDetail onNext={() => nextStep('완료')} onBack={goBack} />
             )}
 
             {userType === '외부인' && (
               isMobile
                 ? <MobileGuestDetailStep onNext={() => nextStep('완료')} />
-                : <ExternalDetail onNext={() => nextStep('완료')} />
+                : <ExternalDetail onNext={() => nextStep('완료')} onBack={goBack} />
             )}
           </Step>
           <Step name="완료">
