@@ -34,14 +34,14 @@ function SignupPage() {
     defaultValues: {
       name: '',
       phone_number: '',
-      user_id: '',
+      login_id: '',
       password: '',
       password_check: '',
       department: '',
       student_number: '',
       gender: '',
-      email: '',
-      nickname: '',
+      email: null,
+      nickname: null,
       verification_code: '',
     },
   });
