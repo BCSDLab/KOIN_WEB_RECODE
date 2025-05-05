@@ -1,4 +1,3 @@
-/* eslint-disable-next-line @typescript-eslint/naming-convention */
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -137,6 +136,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
 
   const onSubmit = async (formData: StudentFormValues) => {
     const {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       password_check, email, nickname, ...signupData
     } = formData;
     const completeEmail = email ? `${email}@koreatech.ac.kr` : null;

@@ -48,7 +48,7 @@
       line-height: 160%;
 
       .required {
-        color: #EC2D30;
+        color: #ec2d30;
       }
     }
   }
@@ -59,7 +59,7 @@
   border: 2px solid #175c8e;
 
   &--top {
-    margin: 0 0 48px 0;
+    margin: 0 0 48px;
   }
 
   &--bottom {
@@ -109,7 +109,7 @@
 .checkbox-wrapper {
   display: flex;
   gap: 32px;
-  
+
   &__checkbox {
     display: flex;
   }
@@ -135,16 +135,16 @@
   gap: 10px;
   color: #4b4b4b;
   background-color: #e1e1e1;
-  font-family: Pretendard,sans-serif;
+  font-family: Pretendard, sans-serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: 160%;
 
-    &--active {
-      color: #fff;
-      background-color: #175c8e;
-    }
+  &--active {
+    color: #fff;
+    background-color: #175c8e;
+  }
 }
 
 .email-input-wrapper {
