@@ -53,10 +53,11 @@ function StudentDetail({ onNext }: VerificationProps) {
   const [nicknameMessage, setNicknameMessage] = useState<InputMessage | null>(null);
 
   const [emailMessage, setEmailMessage] = useState<InputMessage | null>(null);
+  const isEmailValidOrEmpty = !emailControl || !errors.email;
 
   const isFormFilled = isPasswordAllValid
     && loginId
-    && !errors.email
+    && isEmailValidOrEmpty
     && major
     && studentNumber
     && !errors.student_number;
@@ -84,17 +85,6 @@ function StudentDetail({ onNext }: VerificationProps) {
       }
     },
   });
-
-  const checkAndSubmit = async () => {
-    const emailId = getValues('email');
-    const completeEmail = emailId ? `${emailId}@koreatech.ac.kr` : '';
-
-    checkEmail(completeEmail, {
-      onSuccess: () => {
-        handleSubmit(onSubmit)();
-      },
-    });
-  };
 
   const { mutate: checkNickname } = useMutation({
     mutationFn: nicknameDuplicateCheck,
@@ -159,7 +149,24 @@ function StudentDetail({ onNext }: VerificationProps) {
       nickname: completeNickname,
     });
 
-    console.log(signupData);
+    console.log(formData);
+  };
+
+  const checkAndSubmit = () => {
+    const emailId = getValues('email');
+
+    if (!emailId) {
+      handleSubmit(onSubmit)();
+      return;
+    }
+
+    const completeEmail = emailId ? `${emailId}@koreatech.ac.kr` : '';
+
+    checkEmail(completeEmail, {
+      onSuccess: () => {
+        handleSubmit(onSubmit)();
+      },
+    });
   };
 
   const getPasswordCheckMessage = (
@@ -171,6 +178,13 @@ function StudentDetail({ onNext }: VerificationProps) {
       return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
     }
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
+  };
+
+  const getEmailMessage = (fieldValue: string | null, fieldError: FieldError | undefined)
+  : InputMessage | null => {
+    if (fieldValue === '') return null;
+    if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
+    return emailMessage;
   };
 
   return (
@@ -349,8 +363,15 @@ function StudentDetail({ onNext }: VerificationProps) {
                 render={({ field, fieldState }) => (
                   <CustomInput
                     {...field}
-                    placeholder="koreatech 이메일(선택)"
-                    message={fieldState.error ? { type: 'warning', content: MESSAGES.EMAIL.FORMAT } : emailMessage}
+                    placeholder="이메일을 입력해 주세요."
+                    message={getEmailMessage(field.value, fieldState.error)}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      field.onChange(e);
+                      if (value === '') {
+                        setEmailMessage(null);
+                      }
+                    }}
                     value={field.value ?? ''}
                   />
                 )}
