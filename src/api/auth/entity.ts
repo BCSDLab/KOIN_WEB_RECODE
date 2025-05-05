@@ -13,8 +13,8 @@ export type LoginStudentRequest = {
   department: string;
   student_number: string;
   gender: string;
-  email?: string;
-  nickname: string;
+  email: string | null;
+  nickname: string | null;
 };
 
 export type LoginGeneralRequest = {
@@ -34,6 +34,10 @@ export interface LoginResponse extends APIResponse {
 }
 
 export interface NicknameDuplicateCheckResponse extends APIResponse {
+  success: string;
+}
+
+export interface EmailDuplicateCheckResponse extends APIResponse {
   success: string;
 }
 
