@@ -10,10 +10,21 @@
     max-width: 640px;
   }
 
-  &__title {
-    text-align: center;
-    font-size: 30px;
-    font-weight: 700;
+  &__title-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &--title {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    &--icon {
+      visibility: hidden;
+    }
   }
 
   &__subTitleWrapper {

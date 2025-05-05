@@ -7,11 +7,13 @@ import {
 } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import CustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/CustomInput';
+import BackIcon from 'assets/svg/arrow-back.svg';
 import { cn } from '@bcsdlab/utils';
 import styles from './ExternalDetailStep.module.scss';
 
 interface ExternalDetailStepProps {
   onNext: () => void;
+  onBack: () => void;
 }
 
 interface GeneralFormValues {
@@ -25,7 +27,7 @@ interface GeneralFormValues {
   nickname: string | null;
 }
 
-function ExternalDetail({ onNext }: ExternalDetailStepProps) {
+function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
   const {
     control, getValues, handleSubmit, trigger,
   } = useFormContext<GeneralFormValues>();
@@ -131,7 +133,15 @@ function ExternalDetail({ onNext }: ExternalDetailStepProps) {
   return (
     <div className={styles.container}>
       <div className={styles.container__wrapper}>
-        <h1 className={styles.container__title}>회원가입</h1>
+        <div className={styles['container__title-wrapper']}>
+          <button type="button" onClick={onBack} aria-label="뒤로가기">
+            <BackIcon />
+          </button>
+          <h1 className={styles['container__title-wrapper--title']}>회원가입</h1>
+          <div className={styles['container__title-wrapper--icon']}>
+            <BackIcon />
+          </div>
+        </div>
         <div className={styles.container__subTitleWrapper}>
           <span className={styles['container__subTitleWrapper-subTitle']}>
             <span className={styles.required}>*</span>

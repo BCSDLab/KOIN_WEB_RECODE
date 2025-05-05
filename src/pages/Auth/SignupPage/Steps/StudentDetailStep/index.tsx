@@ -13,12 +13,14 @@ import CustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components
 import CustomSelector from 'pages/Auth/SignupPage/components/CustomSelector';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import { cn } from '@bcsdlab/utils';
+import BackIcon from 'assets/svg/arrow-back.svg';
 import showToast from 'utils/ts/showToast';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './StudentDetailStep.module.scss';
 
 interface VerificationProps {
   onNext: () => void;
+  onBack: () => void;
 }
 
 interface StudentFormValues {
@@ -34,7 +36,7 @@ interface StudentFormValues {
   nickname: string | null,
 }
 
-function StudentDetail({ onNext }: VerificationProps) {
+function StudentDetail({ onNext, onBack }: VerificationProps) {
   const {
     control, getValues, handleSubmit, trigger,
   } = useFormContext<StudentFormValues>();
@@ -145,8 +147,6 @@ function StudentDetail({ onNext }: VerificationProps) {
       email: completeEmail,
       nickname: completeNickname,
     });
-
-    console.log(formData);
   };
 
   const checkAndSubmit = () => {
@@ -197,7 +197,16 @@ function StudentDetail({ onNext }: VerificationProps) {
   return (
     <div className={styles.container}>
       <div className={styles.container__wrapper}>
-        <h1 className={styles.container__title}>회원가입</h1>
+
+        <div className={styles['container__title-wrapper']}>
+          <button type="button" onClick={onBack} aria-label="뒤로가기">
+            <BackIcon />
+          </button>
+          <h1 className={styles['container__title-wrapper--title']}>회원가입</h1>
+          <div className={styles['container__title-wrapper--icon']}>
+            <BackIcon />
+          </div>
+        </div>
         <div className={styles.container__subTitleWrapper}>
           <span className={styles['container__subTitleWrapper-subTitle']}>
             <span className={styles.required}>*</span>

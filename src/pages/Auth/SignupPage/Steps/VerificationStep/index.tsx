@@ -9,16 +9,18 @@ import { useNavigate } from 'react-router-dom';
 import type { SmsSendResponse } from 'api/auth/entity';
 import { UserType, GENDER_OPTIONS, MESSAGES } from 'static/auth';
 import { cn } from '@bcsdlab/utils';
+import BackIcon from 'assets/svg/arrow-back.svg';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './VerificationStep.module.scss';
 
 interface VerificationProps {
   onNext: () => void;
+  onBack: () => void;
   setUserType: (type: UserType) => void;
 }
 
-function Verification({ onNext, setUserType }: VerificationProps) {
+function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const navigate = useNavigate();
   const { control, register } = useFormContext();
   const name = useWatch({ control, name: 'name' });
@@ -127,7 +129,15 @@ function Verification({ onNext, setUserType }: VerificationProps) {
     <div className={styles.container}>
 
       <div className={styles.container__wrapper}>
-        <h1 className={styles.container__title}>회원가입</h1>
+        <div className={styles['container__title-wrapper']}>
+          <button type="button" onClick={onBack} aria-label="뒤로가기">
+            <BackIcon />
+          </button>
+          <h1 className={styles['container__title-wrapper--title']}>회원가입</h1>
+          <div className={styles['container__title-wrapper--icon']}>
+            <BackIcon />
+          </div>
+        </div>
         <div className={styles.container__subTitleWrapper}>
           <span className={styles['container__subTitleWrapper-subTitle']}>
             <span className={styles.required}>*</span>

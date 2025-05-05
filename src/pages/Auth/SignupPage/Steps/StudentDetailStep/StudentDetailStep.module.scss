@@ -12,10 +12,21 @@
     align-items: center;
   }
 
-  &__title {
-    text-align: center;
-    font-size: 30px;
-    font-weight: 700;
+  &__title-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &--title {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    &--icon {
+      visibility: hidden;
+    }
   }
 
   &__subTitleWrapper {
@@ -31,7 +42,7 @@
       line-height: 160%;
 
       .required {
-        color: #EC2D30;
+        color: #Ec2d30;
       }
     }
   }
