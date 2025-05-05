@@ -391,7 +391,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                   />
                 )}
               />
-              <span className={styles.email}>@koreatech.ac.kr</span>
             </div>
           </div>
         </div>

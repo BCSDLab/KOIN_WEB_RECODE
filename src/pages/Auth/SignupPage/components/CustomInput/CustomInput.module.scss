@@ -78,6 +78,16 @@
     }
   }
 
+  &__email {
+    position: absolute;
+    right: 12px;
+    color: #000;
+    font-weight: 400;
+    font-size: 14px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
   &__optionButton {
     position: absolute;
     right: 12px;
