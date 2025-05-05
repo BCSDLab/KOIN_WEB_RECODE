@@ -356,7 +356,7 @@ function StudentDetail({ onNext }: VerificationProps) {
                 rules={{
                   required: true,
                   pattern: {
-                    value: REGEX.STUDENT_EMAIL_ID,
+                    value: REGEX.STUDENTEMAIL,
                     message: '',
                   },
                 }}

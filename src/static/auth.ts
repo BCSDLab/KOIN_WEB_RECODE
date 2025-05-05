@@ -4,7 +4,7 @@ export const REGEX = {
   USERID: /^[a-z0-9_.-]{5,13}$/,
   STUDENT_NUMBER: /^\d{8,10}$/,
   EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
-  STUDENT_EMAIL_ID: /^[a-zA-Z0-9._%+-]{2,30}$/,
+  STUDENTEMAIL: /^[a-zA-Z0-9._%+-]{3,30}$/,
 };
 
 export const MESSAGES = {

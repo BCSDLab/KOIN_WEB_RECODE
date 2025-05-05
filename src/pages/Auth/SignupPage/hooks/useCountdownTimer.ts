@@ -11,8 +11,15 @@ function useCountdownTimer({ duration, onExpire }: CountdownTimerOptions) {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const start = () => {
+    clearInterval(intervalRef.current!);
     setSecondsLeft(duration);
     setIsRunning(true);
+  };
+
+  const stop = () => {
+    clearInterval(intervalRef.current!);
+    setIsRunning(false);
+    setSecondsLeft(0);
   };
 
   useEffect(() => {
@@ -34,7 +41,9 @@ function useCountdownTimer({ duration, onExpire }: CountdownTimerOptions) {
     return () => clearInterval(intervalRef.current!);
   }, [isRunning, secondsLeft, onExpire]);
 
-  return { isRunning, secondsLeft, start };
+  return {
+    isRunning, secondsLeft, start, stop,
+  };
 }
 
 export default useCountdownTimer;
