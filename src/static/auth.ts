@@ -1,9 +1,10 @@
 export const REGEX = {
   PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/]{6,18}$/,
-  NICKNAME: /^[가-힣a-zA-Z0-9]{1,10}$/,
-  EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
-  USERID: /^.{1,13}$/,
+  NICKNAME: /^[가-힣a-zA-Z0-9]{0,10}$/,
+  USERID: /^[a-z0-9_.-]{5,13}$/,
   STUDENT_NUMBER: /^\d{8,10}$/,
+  EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
+  STUDENT_EMAIL_ID: /^[a-zA-Z0-9._%+-]{2,30}$/,
 };
 
 export const MESSAGES = {
@@ -33,12 +34,15 @@ export const MESSAGES = {
     AVAILABLE: '사용 가능한 아이디입니다.',
     DUPLICATED: '이미 사용 중인 아이디입니다.',
     INVALID: '올바른 아이디 양식이 아닙니다. 다시 입력해 주세요.',
+    REQUIRED: '5~13자의 영소문자, 숫자와 특수문자( -, _ , .)만 사용 가능합니다.',
   },
   STUDENT_NUMBER: {
     FORMAT: '올바른 학번 양식이 아닙니다. 다시 입력해 주세요.',
   },
   EMAIL: {
+    AVAILABLE: '사용 가능한 이메일입니다.',
     FORMAT: '올바른 이메일 형식이 아닙니다. 다시 입력해 주세요.',
+    DUPLICATED: '이미 사용 중인 이메일입니다.',
   },
 };
 
