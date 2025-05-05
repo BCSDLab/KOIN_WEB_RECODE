@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
-import { REGEX, MESSAGES } from 'static/auth';
+import { REGEX, MESSAGES, UserType } from 'static/auth';
 import CustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/CustomInput';
 import CustomSelector from 'pages/Auth/SignupPage/components/CustomSelector';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
@@ -387,6 +387,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                         setEmailMessage(null);
                       }
                     }}
+                    userType="학생"
                     value={field.value ?? ''}
                   />
                 )}
