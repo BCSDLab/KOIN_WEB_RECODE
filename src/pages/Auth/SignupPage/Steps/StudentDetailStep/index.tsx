@@ -1,9 +1,10 @@
+/* eslint-disable-next-line @typescript-eslint/naming-convention */
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import {
   checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupStudent,
 } from 'api/auth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
@@ -13,6 +14,7 @@ import CustomSelector from 'pages/Auth/SignupPage/components/CustomSelector';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './StudentDetailStep.module.scss';
 
 interface VerificationProps {
@@ -38,15 +40,15 @@ function StudentDetail({ onNext }: VerificationProps) {
   } = useFormContext<StudentFormValues>();
 
   const { errors } = useFormState({ control });
-  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
+
   const loginId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
+  const passwordCheck = useWatch({ control, name: 'password_check' });
+  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
   const emailControl = (useWatch({ control, name: 'email' }) ?? '') as string;
   const studentNumber = (useWatch({ control, name: 'student_number' }) ?? '') as string;
 
-  const passwordCheck = useWatch({ control, name: 'password_check' });
-
-  const isPasswordCheckValid = passwordCheck && !errors.password_check;
-  const isPasswordAllValid = isPasswordCheckValid;
+  const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
+  const [isCorrectNickname, setIsCorrectNickname, setIsInCorrectNickname] = useBooleanState(false);
 
   const [major, setMajor] = useState<string | null>(null);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
@@ -55,10 +57,11 @@ function StudentDetail({ onNext }: VerificationProps) {
   const [emailMessage, setEmailMessage] = useState<InputMessage | null>(null);
   const isEmailValidOrEmpty = !emailControl || !errors.email;
 
-  const isFormFilled = isPasswordAllValid
-    && loginId
+  const isIdPasswordValid = loginId && isCorrectId && passwordCheck && !errors.password_check;
+  const isFormFilled = isIdPasswordValid
     && isEmailValidOrEmpty
     && major
+    && (!nicknameControl || isCorrectNickname)
     && studentNumber
     && !errors.student_number;
 
@@ -70,9 +73,9 @@ function StudentDetail({ onNext }: VerificationProps) {
 
   const { mutate: checkEmail } = useMutation({
     mutationFn: emailDuplicateCheck,
-    // onSuccess: () => {
-    //   setEmailMessage({ type: 'success', content: MESSAGES.EMAIL.AVAILABLE });
-    // },
+    onSuccess: () => {
+      setEmailMessage({ type: 'success', content: MESSAGES.EMAIL.AVAILABLE });
+    },
     onError: (err) => {
       if (isKoinError(err)) {
         if (err.status === 400) {
@@ -90,16 +93,13 @@ function StudentDetail({ onNext }: VerificationProps) {
     mutationFn: nicknameDuplicateCheck,
     onSuccess: () => {
       setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
+      setIsCorrectNickname();
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
-        }
+        if (err.status === 400) setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
 
-        if (err.status === 409) {
-          setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
-        }
+        if (err.status === 409)setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
       }
     },
   });
@@ -108,16 +108,13 @@ function StudentDetail({ onNext }: VerificationProps) {
     mutationFn: checkId,
     onSuccess: () => {
       setIdMessage({ type: 'success', content: MESSAGES.USERID.AVAILABLE });
+      setIsCorrectId();
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
-        }
+        if (err.status === 400) setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
 
-        if (err.status === 409) {
-          setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED });
-        }
+        if (err.status === 409) setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED });
       }
     },
   });
@@ -186,6 +183,16 @@ function StudentDetail({ onNext }: VerificationProps) {
     if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
     return emailMessage;
   };
+
+  useEffect(() => {
+    setIdMessage(null);
+    setInCorrectId();
+  }, [loginId, setInCorrectId]);
+
+  useEffect(() => {
+    setNicknameMessage(null);
+    setIsInCorrectNickname();
+  }, [nicknameControl, setIsInCorrectNickname]);
 
   return (
     <div className={styles.container}>
@@ -316,7 +323,6 @@ function StudentDetail({ onNext }: VerificationProps) {
               control={control}
               defaultValue=""
               rules={{
-                required: true,
                 pattern: {
                   value: REGEX.NICKNAME,
                   message: '',
@@ -345,7 +351,7 @@ function StudentDetail({ onNext }: VerificationProps) {
               htmlFor="email"
               className={styles.wrapper__label}
             >
-              이메일(선택)
+              이메일 (선택)
             </label>
 
             <div className={styles['email-input-wrapper']}>
