@@ -160,3 +160,37 @@
     background-color: #f7941e;
   }
 }
+
+.label-link {
+  display: flex;
+  position: relative;
+  top: 17px;
+  right: 213px;
+  align-items: flex-start;
+
+  &__text {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #727272;
+  }
+
+  &__button {
+    margin-left: 8px;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #175c8e;
+  }
+}
+
+.label-link-button {
+  margin-left: 8px;
+  font-family: Pretendard, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 160%;
+  color: #175c8e;
+}

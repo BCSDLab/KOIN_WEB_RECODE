@@ -219,13 +219,30 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       /5)
                     </div>
                   )}
-                  {
-                    phoneMessage?.type === 'error' && (
-                    <button onClick={() => goToLogin()} type="button" className={styles['label-link-button']}>
+                  {phoneMessage?.type === 'error' && (
+                  <>
+                    <button
+                      onClick={goToLogin}
+                      type="button"
+                      className={styles['label-link-button']}
+                    >
                       로그인하기
                     </button>
-                    )
-                  }
+
+                    <div className={styles['label-link']}>
+                      <div className={styles['label-link__text']}>
+                        해당 전화번호로 가입하신 적 없으신가요?
+                      </div>
+                      <button
+                        onClick={goToLogin}
+                        type="button"
+                        className={styles['label-link__button']}
+                      >
+                        문의하기
+                      </button>
+                    </div>
+                  </>
+                  )}
                 </CustomInput>
               )}
             />
