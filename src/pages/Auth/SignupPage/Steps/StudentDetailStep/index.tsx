@@ -387,6 +387,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                         setEmailMessage(null);
                       }
                     }}
+                    userType="학생"
                     value={field.value ?? ''}
                   />
                 )}
