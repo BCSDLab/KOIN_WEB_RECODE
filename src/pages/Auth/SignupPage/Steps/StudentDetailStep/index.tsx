@@ -369,7 +369,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: true,
                   pattern: {
                     value: REGEX.STUDENTEMAIL,
                     message: '',
@@ -463,10 +462,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
         <button
           type="button"
           onClick={checkAndSubmit}
-          // onClick={() => {
-          //   checkEmail(emailControl);
-          //   // onNext();
-          // }}
           className={cn({
             [styles['next-button']]: true,
             [styles['next-button--active']]: Boolean(isFormFilled),
