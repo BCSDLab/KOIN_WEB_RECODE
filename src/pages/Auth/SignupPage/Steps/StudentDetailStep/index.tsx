@@ -100,7 +100,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
       if (isKoinError(err)) {
         if (err.status === 400) setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
 
-        if (err.status === 409)setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
+        if (err.status === 409) setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
       }
     },
   });
@@ -199,13 +199,15 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
       <div className={styles.container__wrapper}>
 
         <div className={styles['container__title-wrapper']}>
-          <button type="button" onClick={onBack} aria-label="뒤로가기">
+          <button
+            type="button"
+            onClick={onBack}
+            aria-label="뒤로가기"
+            className={styles['container__back-button']}
+          >
             <BackIcon />
           </button>
-          <h1 className={styles['container__title-wrapper--title']}>회원가입</h1>
-          <div className={styles['container__title-wrapper--icon']}>
-            <BackIcon />
-          </div>
+          <h1 className={styles.container__title}>회원가입</h1>
         </div>
         <div className={styles.container__subTitleWrapper}>
           <span className={styles['container__subTitleWrapper-subTitle']}>

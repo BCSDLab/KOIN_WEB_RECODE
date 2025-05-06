@@ -13,20 +13,22 @@
   }
 
   &__title-wrapper {
+    position: relative;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+  }
 
-    &--title {
-      text-align: center;
-      font-size: 30px;
-      font-weight: 700;
-    }
+  &__back-button {
+    position: absolute;
+    left: 0;
+  }
 
-    &--icon {
-      visibility: hidden;
-    }
+  &__title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
   }
 
   &__subTitleWrapper {
