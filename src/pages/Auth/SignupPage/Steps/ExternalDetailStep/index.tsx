@@ -52,21 +52,10 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
   const [emailMessage, setEmailMessage] = useState<InputMessage | null>(null);
   const isEmailValidOrEmpty = !emailControl || !errors.email;
 
-  // const isPasswordCheckValid = passwordCheck && !errors.password_check;
-  // const isPasswordAllValid = isPasswordCheckValid;
-
   const isIdPasswordValid = loginId && isCorrectId && passwordCheck && !errors.password_check;
   const isFormFilled = isIdPasswordValid
     && isEmailValidOrEmpty
     && (!nicknameControl || isCorrectNickname);
-
-  // const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
-  // const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
-  // const [isUserIdChecked, setIsUserIdChecked] = useState(false);
-  // const [validatedNickname, setValidatedNickname] = useState<string | null>(null);
-
-  // const isNicknameValid = !nickname || validatedNickname === nickname;
-  // const isFormFilled = isPasswordAllValid && userId && isUserIdChecked && isNicknameValid;
 
   const { mutate: checkEmail } = useMutation({
     mutationFn: emailDuplicateCheck,
@@ -208,10 +197,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
         <div className={`${styles.divider} ${styles['divider--top']}`} />
       </div>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className={styles['form-wrapper']}
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className={styles['form-wrapper']}>
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
@@ -225,6 +211,13 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
               name="login_id"
               control={control}
               defaultValue=""
+              rules={{
+                required: true,
+                pattern: {
+                  value: REGEX.USERID,
+                  message: '',
+                },
+              }}
               render={({ field, fieldState }) => (
                 <CustomInput
                   {...field}
@@ -333,8 +326,8 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
                   isButton
                   message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
                   buttonText="중복 확인"
-                  buttonDisabled={!field.value}
                   buttonOnClick={() => checkNickname(nicknameControl)}
+                  buttonDisabled={!nicknameControl}
                   value={field.value ?? ''}
                 />
               )}
