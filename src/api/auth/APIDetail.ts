@@ -25,6 +25,7 @@ import {
   SignupStudentResponse,
   LoginStudentRequest,
   CheckIdResponse,
+  EmailDuplicateCheckResponse,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -233,4 +234,18 @@ export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
   auth = false;
 
   constructor(public data: SmsVerifyRequest) { }
+}
+
+export class EmailDuplicateCheck<R extends EmailDuplicateCheckResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = 'user/check/email';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(email: string) {
+    this.path = `/user/check/email?email=${email}`;
+  }
 }

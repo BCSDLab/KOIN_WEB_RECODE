@@ -11,6 +11,7 @@ import { useFormContext } from 'react-hook-form';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import FormatTime from 'pages/Auth/SignupPage/hooks/useFormatTime';
 import { cn } from '@bcsdlab/utils';
+import { UserType } from 'static/auth';
 import styles from './CustomInput.module.scss';
 
 export type InputMessage = {
@@ -30,6 +31,7 @@ interface CustomInputProps extends ComponentPropsWithoutRef<'input'> {
   buttonText?: string;
   buttonOnClick?: () => void;
   buttonDisabled?: boolean;
+  userType?: UserType;
   children?: React.ReactNode;
   forwardRef?: React.Ref<HTMLInputElement>;
 }
@@ -48,6 +50,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>((
     buttonText = '',
     buttonOnClick,
     buttonDisabled,
+    userType,
     children,
     ...args
   },
@@ -78,6 +81,10 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>((
             value={value}
             {...args}
           />
+
+          {args.name === 'email' && userType === '학생' && (
+            <span className={styles['input-wrapper__email']}>@koreatech.ac.kr</span>
+          )}
 
           {isTimer && (
           <span

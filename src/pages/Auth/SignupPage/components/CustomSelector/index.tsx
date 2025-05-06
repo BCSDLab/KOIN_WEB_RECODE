@@ -43,6 +43,7 @@ function CustomSelector({
 
   const selectedOption = options.find((option) => option.value === value);
   const showedLabel = selectedOption?.label ?? placeholder;
+  const isPlaceholder = !selectedOption;
 
   return (
     <div
@@ -59,6 +60,7 @@ function CustomSelector({
           [styles.select__trigger]: true,
           [styles['select__trigger--opened']]: isOpen,
           [styles['select__trigger--white-background']]: isWhiteBackground,
+          [styles['select__trigger--placeholder']]: isPlaceholder,
         })}
         disabled={disabled}
       >

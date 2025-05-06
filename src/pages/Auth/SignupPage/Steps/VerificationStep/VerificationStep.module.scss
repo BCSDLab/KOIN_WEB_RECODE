@@ -4,16 +4,27 @@
   justify-content: center;
   align-items: center;
   font-family: Pretendard, sans-serif;
-  height: 1100px;
+  margin: 120px 0 300px;
 
   &__wrappe {
     max-width: 640px;
   }
 
-  &__title {
-    text-align: center;
-    font-size: 30px;
-    font-weight: 700;
+  &__title-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &--title {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    &--icon {
+      visibility: hidden;
+    }
   }
 
   &__subTitleWrapper {
@@ -29,7 +40,7 @@
       line-height: 160%;
 
       .required {
-        color: #EC2D30;
+        color: #ec2d30;
       }
     }
   }
@@ -40,7 +51,7 @@
   border: 2px solid #175c8e;
 
   &--top {
-    margin: 0 0 48px 0;
+    margin: 0 0 48px;
   }
 
   &--bottom {
@@ -83,7 +94,7 @@
 .checkbox-wrapper {
   display: flex;
   gap: 32px;
-  
+
   &__checkbox {
     display: flex;
     gap: 8px;
@@ -112,10 +123,9 @@
     align-items: center;
     border-radius: 16px;
     background: #cacaca;
-    color: #FFF;
-
+    color: #fff;
     text-align: center;
-    font-family: Pretendard ,sans-serif;
+    font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 500;
     line-height: 160%;
@@ -134,7 +144,7 @@
     align-items: center;
     border-radius: 16px;
     background: #cacaca;
-    color: #FFF;
+    color: #fff;
     text-align: center;
     font-family: Pretendard, sans-serif;
     font-size: 16px;
@@ -149,4 +159,38 @@
   &--active {
     background-color: #f7941e;
   }
+}
+
+.label-link {
+  display: flex;
+  position: relative;
+  top: 17px;
+  right: 213px;
+  align-items: flex-start;
+
+  &__text {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #727272;
+  }
+
+  &__button {
+    margin-left: 8px;
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #175c8e;
+  }
+}
+
+.label-link-button {
+  margin-left: 8px;
+  font-family: Pretendard, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 160%;
+  color: #175c8e;
 }
