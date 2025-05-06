@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithoutRef, forwardRef } from 'react';
 import CloseIcon from 'assets/svg/Login/close.svg';
 import EyeOpenIcon from 'assets/svg/Login/eye-open.svg';
 import EyeCloseIcon from 'assets/svg/Login/eye-close.svg';
@@ -31,24 +31,28 @@ interface CustomInputProps extends ComponentPropsWithoutRef<'input'> {
   buttonOnClick?: () => void;
   buttonDisabled?: boolean;
   children?: React.ReactNode;
+  forwardRef?: React.Ref<HTMLInputElement>;
 }
 
-function CustomInput({
-  value,
-  placeholder,
-  type = 'text',
-  message = null,
-  isDelete = false,
-  isVisibleButton = false,
-  isTimer = false,
-  timerValue = 180,
-  isButton = false,
-  buttonText = '',
-  buttonOnClick,
-  buttonDisabled,
-  children,
-  ...args
-}: CustomInputProps) {
+const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>((
+  {
+    value,
+    placeholder,
+    type = 'text',
+    message = null,
+    isDelete = false,
+    isVisibleButton = false,
+    isTimer = false,
+    timerValue = 180,
+    isButton = false,
+    buttonText = '',
+    buttonOnClick,
+    buttonDisabled,
+    children,
+    ...args
+  },
+  ref,
+) => {
   const { setValue } = useFormContext();
   const [isPasswordVisible, , , togglePasswordVisible] = useBooleanState(false);
 
@@ -67,6 +71,7 @@ function CustomInput({
         <div className={styles['input-wrapper']}>
 
           <input
+            ref={ref}
             className={styles['input-wrapper__input']}
             type={inputType}
             placeholder={placeholder}
@@ -133,6 +138,6 @@ function CustomInput({
 
     </div>
   );
-}
+});
 
 export default CustomInput;
