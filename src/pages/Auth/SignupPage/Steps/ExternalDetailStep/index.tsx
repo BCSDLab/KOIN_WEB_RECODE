@@ -45,6 +45,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
 
   const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
   const [isCorrectNickname, setIsCorrectNickname, setIsInCorrectNickname] = useBooleanState(false);
+  const [isCorrectEmail, setIsCorrectEmail, setInCorrectEmail] = useBooleanState(false);
 
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [nicknameMessage, setNicknameMessage] = useState<InputMessage | null>(null);
@@ -61,6 +62,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     mutationFn: emailDuplicateCheck,
     onSuccess: () => {
       setEmailMessage({ type: 'success', content: MESSAGES.EMAIL.AVAILABLE });
+      setIsCorrectEmail();
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -175,6 +177,11 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     setNicknameMessage(null);
     setIsInCorrectNickname();
   }, [nicknameControl, setIsInCorrectNickname]);
+
+  useEffect(() => {
+    setEmailMessage(null);
+    setInCorrectEmail();
+  }, [emailControl, setInCorrectEmail]);
 
   return (
     <div className={styles.container}>
