@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import {
   checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupGeneral,
 } from 'api/auth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
@@ -44,7 +44,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
   const emailControl = (useWatch({ control, name: 'email' }) ?? '') as string;
 
   const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
-  const [isCorrectNickname, setIsCorrectNickname, setIsInCorrectNickname] = useBooleanState(false);
+  const [isCorrectNickname, setIsCorrectNickname, setInCorrectNickname] = useBooleanState(false);
   const [, setIsCorrectEmail, setInCorrectEmail] = useBooleanState(false);
 
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
@@ -168,21 +168,6 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     return emailMessage;
   };
 
-  useEffect(() => {
-    setIdMessage(null);
-    setInCorrectId();
-  }, [loginId, setInCorrectId]);
-
-  useEffect(() => {
-    setNicknameMessage(null);
-    setIsInCorrectNickname();
-  }, [nicknameControl, setIsInCorrectNickname]);
-
-  useEffect(() => {
-    setEmailMessage(null);
-    setInCorrectEmail();
-  }, [emailControl, setInCorrectEmail]);
-
   return (
     <div className={styles.container}>
       <div className={styles.container__wrapper}>
@@ -228,6 +213,11 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
               render={({ field, fieldState }) => (
                 <CustomInput
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setIdMessage(null);
+                    setInCorrectId();
+                  }}
                   placeholder="최대 13자리까지 입력 가능합니다."
                   isButton
                   message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
@@ -328,6 +318,11 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
               render={({ field, fieldState }) => (
                 <CustomInput
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setNicknameMessage(null);
+                    setInCorrectNickname();
+                  }}
                   placeholder="닉네임은 변경 가능합니다."
                   isDelete
                   isButton
@@ -366,11 +361,9 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
                   placeholder="이메일을 입력해 주세요."
                   message={getEmailMessage(field.value, fieldState.error)}
                   onChange={(e) => {
-                    const { value } = e.target;
                     field.onChange(e);
-                    if (value === '') {
-                      setEmailMessage(null);
-                    }
+                    setEmailMessage(null);
+                    setInCorrectEmail();
                   }}
                   value={field.value ?? ''}
                 />
