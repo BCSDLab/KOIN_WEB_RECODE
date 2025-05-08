@@ -67,6 +67,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>((
   };
 
   const inputType = getInputType();
+  const isDomain = args.name === 'email' && userType === '학생';
 
   return (
     <div className={styles.container}>
@@ -75,7 +76,11 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>((
 
           <input
             ref={ref}
-            className={styles['input-wrapper__input']}
+            className={cn({
+              [styles['input-wrapper__input']]: true,
+              [styles['input-wrapper__input--domain']]: isDomain,
+              [styles['input-wrapper__input--button']]: Boolean(isDelete || isVisibleButton),
+            })}
             type={inputType}
             placeholder={placeholder}
             value={value}
