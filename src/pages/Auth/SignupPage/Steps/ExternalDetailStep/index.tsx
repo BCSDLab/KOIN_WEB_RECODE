@@ -29,6 +29,7 @@ interface GeneralFormValues {
   gender: string;
   email: string | null;
   nickname: string | null;
+  marketing_notification_agreement: boolean;
 }
 
 function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
@@ -130,6 +131,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
       gender: formData.gender,
       email: formData.email === '' ? null : formData.email,
       nickname: formData.nickname === '' ? null : formData.nickname,
+      marketing_notification_agreement: formData.marketing_notification_agreement,
     };
 
     signup(payload);

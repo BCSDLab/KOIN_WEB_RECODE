@@ -33,6 +33,7 @@ interface StudentFormValues {
   gender: string,
   email: string | null,
   nickname: string | null,
+  marketing_notification_agreement: boolean,
 }
 
 function StudentDetail({ onNext, onBack }: VerificationProps) {

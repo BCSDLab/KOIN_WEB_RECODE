@@ -25,6 +25,7 @@ export type LoginGeneralRequest = {
   gender: string;
   email: string | null;
   nickname: string | null;
+  marketing_notification_agreement: boolean;
 };
 
 export interface LoginResponse extends APIResponse {
