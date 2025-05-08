@@ -91,6 +91,10 @@
   }
 }
 
+.input-wrapper {
+  position: relative;
+}
+
 .checkbox-wrapper {
   display: flex;
   gap: 32px;
@@ -161,12 +165,11 @@
   }
 }
 
-.label-link {
+.label-link-wrapper {
   display: flex;
-  position: relative;
-  top: 17px;
-  right: 213px;
-  align-items: flex-start;
+  position: absolute;
+  top: 74px;
+  align-items: center;
 
   &__text {
     font-family: Pretendard, sans-serif;
@@ -183,6 +186,10 @@
     font-weight: 400;
     line-height: 160%;
     color: #175c8e;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
   }
 }
 
