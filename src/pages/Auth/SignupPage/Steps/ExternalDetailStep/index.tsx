@@ -1,6 +1,8 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import { checkId, nicknameDuplicateCheck, signupGeneral } from 'api/auth';
+import {
+  checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupGeneral,
+} from 'api/auth';
 import { useState } from 'react';
 import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
@@ -9,6 +11,8 @@ import { REGEX, MESSAGES } from 'static/auth';
 import CustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/CustomInput';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import { cn } from '@bcsdlab/utils';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import showToast from 'utils/ts/showToast';
 import styles from './ExternalDetailStep.module.scss';
 
 interface ExternalDetailStepProps {
@@ -31,49 +35,59 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
   const {
     control, getValues, handleSubmit, trigger,
   } = useFormContext<GeneralFormValues>();
-  const nickname = (useWatch({ control, name: 'nickname' }) ?? '') as string;
-  const userId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
 
   const { errors } = useFormState({ control });
 
+  const loginId = (useWatch({ control, name: 'login_id' }) ?? '') as string;
   const passwordCheck = useWatch({ control, name: 'password_check' });
-  const isPasswordCheckValid = passwordCheck && !errors.password_check;
-  const isPasswordAllValid = isPasswordCheckValid;
+  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '') as string;
+  const emailControl = (useWatch({ control, name: 'email' }) ?? '') as string;
 
-  const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
+  const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
+  const [isCorrectNickname, setIsCorrectNickname, setInCorrectNickname] = useBooleanState(false);
+  const [, setIsCorrectEmail, setInCorrectEmail] = useBooleanState(false);
+
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
-  const [isUserIdChecked, setIsUserIdChecked] = useState(false);
-  const [validatedNickname, setValidatedNickname] = useState<string | null>(null);
+  const [nicknameMessage, setNicknameMessage] = useState<InputMessage | null>(null);
 
-  const isNicknameValid = !nickname || validatedNickname === nickname;
-  const isFormFilled = isPasswordAllValid && userId && isUserIdChecked && isNicknameValid;
+  const [emailMessage, setEmailMessage] = useState<InputMessage | null>(null);
+  const isEmailValidOrEmpty = !emailControl || !errors.email;
 
-  const getEmailCheckMessage = (
-    fieldValue: string | undefined,
-    fieldError: FieldError | undefined,
-  ): InputMessage | undefined => {
-    if (!fieldValue || !fieldError) {
-      return undefined;
-    }
-    return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
-  };
+  const isIdPasswordValid = loginId && isCorrectId && passwordCheck && !errors.password_check;
+  const isFormFilled = isIdPasswordValid
+    && isEmailValidOrEmpty
+    && (!nicknameControl || isCorrectNickname);
+
+  const { mutate: checkEmail } = useMutation({
+    mutationFn: emailDuplicateCheck,
+    onSuccess: () => {
+      setEmailMessage({ type: 'success', content: MESSAGES.EMAIL.AVAILABLE });
+      setIsCorrectEmail();
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          setEmailMessage({ type: 'warning', content: MESSAGES.EMAIL.FORMAT });
+        }
+
+        if (err.status === 409) {
+          setEmailMessage({ type: 'error', content: MESSAGES.EMAIL.DUPLICATED });
+        }
+      }
+    },
+  });
 
   const { mutate: checkNickname } = useMutation({
     mutationFn: nicknameDuplicateCheck,
     onSuccess: () => {
-      setPhoneMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
-      setValidatedNickname(nickname);
+      setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
+      setIsCorrectNickname();
     },
     onError: (err) => {
-      setValidatedNickname(null);
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          setPhoneMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
-        }
+        if (err.status === 400) setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
 
-        if (err.status === 409) {
-          setPhoneMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
-        }
+        if (err.status === 409)setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
       }
     },
   });
@@ -82,37 +96,28 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     mutationFn: checkId,
     onSuccess: () => {
       setIdMessage({ type: 'success', content: MESSAGES.USERID.AVAILABLE });
-      setIsUserIdChecked(true);
+      setIsCorrectId();
     },
     onError: (err) => {
-      setIsUserIdChecked(false);
       if (isKoinError(err)) {
-        if (err.status === 400) {
-          setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
-        }
+        if (err.status === 400) setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
 
-        if (err.status === 409) {
-          setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED });
-        }
+        if (err.status === 409) setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED });
       }
     },
   });
-
-  const getPasswordCheckMessage = (
-    fieldValue: string | undefined,
-    fieldError: FieldError | undefined,
-  ): InputMessage | undefined => {
-    if (!fieldValue) return undefined;
-    if (fieldError) {
-      return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
-    }
-    return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
-  };
 
   const { mutate: signup } = useMutation({
     mutationFn: (variables: GeneralFormValues) => signupGeneral(variables),
     onSuccess: () => {
       onNext();
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          showToast('error', '회원가입에 실패했습니다. 다시 시도해 주세요.');
+        }
+      }
     },
   });
 
@@ -128,6 +133,39 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     };
 
     signup(payload);
+  };
+
+  const checkAndSubmit = () => {
+    const emailId = getValues('email');
+
+    if (!emailId) {
+      handleSubmit(onSubmit)();
+      return;
+    }
+
+    checkEmail(emailId, {
+      onSuccess: () => {
+        handleSubmit(onSubmit)();
+      },
+    });
+  };
+
+  const getPasswordCheckMessage = (
+    fieldValue: string | undefined,
+    fieldError: FieldError | undefined,
+  ): InputMessage | undefined => {
+    if (!fieldValue) return undefined;
+    if (fieldError) {
+      return { type: 'warning', content: MESSAGES.PASSWORD.MISMATCH };
+    }
+    return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
+  };
+
+  const getEmailMessage = (fieldValue: string | null, fieldError: FieldError | undefined)
+  : InputMessage | null => {
+    if (fieldValue === '') return null;
+    if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
+    return emailMessage;
   };
 
   return (
@@ -151,10 +189,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
         <div className={`${styles.divider} ${styles['divider--top']}`} />
       </div>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className={styles['form-wrapper']}
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className={styles['form-wrapper']}>
         <div className={styles['form-container']}>
           <div className={styles['name-wrapper']}>
             <label
@@ -168,15 +203,27 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
               name="login_id"
               control={control}
               defaultValue=""
-              render={({ field }) => (
+              rules={{
+                required: true,
+                pattern: {
+                  value: REGEX.USERID,
+                  message: '',
+                },
+              }}
+              render={({ field, fieldState }) => (
                 <CustomInput
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setIdMessage(null);
+                    setInCorrectId();
+                  }}
                   placeholder="최대 13자리까지 입력 가능합니다."
                   isButton
-                  message={idMessage}
+                  message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
                   buttonText="중복 확인"
                   buttonDisabled={!field.value}
-                  buttonOnClick={() => checkUserId(userId)}
+                  buttonOnClick={() => checkUserId(loginId)}
                 />
               )}
             />
@@ -268,17 +315,22 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
                   message: '',
                 },
               }}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <CustomInput
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setNicknameMessage(null);
+                    setInCorrectNickname();
+                  }}
                   placeholder="닉네임은 변경 가능합니다."
                   isDelete
                   isButton
-                  value={field.value ?? ''}
-                  message={phoneMessage}
+                  message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
                   buttonText="중복 확인"
-                  buttonDisabled={!field.value}
-                  buttonOnClick={() => checkNickname(nickname)}
+                  buttonOnClick={() => checkNickname(nicknameControl)}
+                  buttonDisabled={!nicknameControl}
+                  value={field.value ?? ''}
                 />
               )}
             />
@@ -303,17 +355,19 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
                   message: MESSAGES.EMAIL.FORMAT,
                 },
               }}
-              render={({ field, fieldState }) => {
-                const message = getEmailCheckMessage(field.value ?? undefined, fieldState.error);
-                return (
-                  <CustomInput
-                    {...field}
-                    value={field.value ?? ''}
-                    placeholder="이메일을 입력해 주세요."
-                    message={message}
-                  />
-                );
-              }}
+              render={({ field, fieldState }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="이메일을 입력해 주세요."
+                  message={getEmailMessage(field.value, fieldState.error)}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setEmailMessage(null);
+                    setInCorrectEmail();
+                  }}
+                  value={field.value ?? ''}
+                />
+              )}
             />
           </div>
         </div>
@@ -321,7 +375,8 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
         <div className={styles.container__wrapper}>
           <div className={`${styles.divider} ${styles['divider--bottom']}`} />
           <button
-            type="submit"
+            type="button"
+            onClick={checkAndSubmit}
             className={cn({
               [styles['next-button']]: true,
               [styles['next-button--active']]: Boolean(isFormFilled),
