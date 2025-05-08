@@ -28,6 +28,7 @@ interface GeneralFormValues {
   password_check?: string;
   department?: string;
   student_number?: string;
+  marketing_notification_agreement: boolean;
 }
 
 function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
