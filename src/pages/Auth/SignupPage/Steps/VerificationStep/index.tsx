@@ -201,6 +201,11 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
               render={({ field }) => (
                 <CustomInput
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setPhoneMessage(null);
+                    setIsCodeCorrect(false);
+                  }}
                   placeholder="숫자만 입력해 주세요."
                   isDelete
                   message={phoneMessage}
@@ -263,7 +268,12 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
             render={({ field }) => (
               <CustomInput
                 {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  setVerificationMessage(null);
+                }}
                 placeholder="인증번호를 입력해주세요."
+                maxLength={6}
                 isDelete
                 isTimer={isCodeCorrect ? false : isTimer}
                 timerValue={timerValue}
