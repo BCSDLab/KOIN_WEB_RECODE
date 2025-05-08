@@ -138,18 +138,21 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     },
   });
 
-  const onSubmit = async (formData: StudentFormValues) => {
-    const {
-      password_check, email, nickname, ...signupData
-    } = formData;
-    const completeEmail = email ? `${email}@koreatech.ac.kr` : null;
-    const completeNickname = nickname || null;
+  const onSubmit = (formData: StudentFormValues) => {
+    const payload = {
+      name: formData.name,
+      nickname: formData.nickname === '' ? null : formData.nickname,
+      email: formData.email === '' ? null : `${formData.email}@koreatech.ac.kr`,
+      phone_number: formData.phone_number,
+      student_number: formData.student_number,
+      department: formData.department,
+      gender: formData.gender,
+      login_id: formData.login_id,
+      password: formData.password,
+      marketing_notification_agreement: formData.marketing_notification_agreement,
+    };
 
-    signup({
-      ...signupData,
-      email: completeEmail,
-      nickname: completeNickname,
-    });
+    signup(payload);
   };
 
   const checkAndSubmit = () => {
@@ -186,16 +189,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
     return emailMessage;
   };
-
-  // useEffect(() => {
-  //   setIdMessage(null);
-  //   setInCorrectId();
-  // }, [loginId, setInCorrectId]);
-
-  // useEffect(() => {
-  //   setNicknameMessage(null);
-  //   setIsInCorrectNickname();
-  // }, [nicknameControl, setIsInCorrectNickname]);
 
   return (
     <div className={styles.container}>
