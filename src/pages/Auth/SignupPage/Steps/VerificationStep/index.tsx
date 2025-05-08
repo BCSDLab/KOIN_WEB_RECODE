@@ -94,6 +94,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const { mutate: checkPhoneNumber } = useMutation({
     mutationFn: checkPhone,
     onSuccess: () => {
+      setIsCodeCorrect(false);
       sendSMSToUser({ phone_number: phoneNumber });
     },
     onError: (err) => {
@@ -280,7 +281,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                 message={verificationMessage}
                 isButton
                 buttonText="인증번호 확인"
-                buttonDisabled={!field.value}
+                buttonDisabled={!field.value || isCodeCorrect}
                 buttonOnClick={() => {
                   checkVerificationCode({
                     phone_number: phoneNumber,
