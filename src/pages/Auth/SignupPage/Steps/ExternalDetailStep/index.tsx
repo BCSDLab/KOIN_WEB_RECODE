@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -29,6 +30,7 @@ interface GeneralFormValues {
   gender: string;
   email: string | null;
   nickname: string | null;
+  marketing_notification_agreement: boolean;
 }
 
 function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
@@ -124,12 +126,13 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
   const onSubmit = (formData: GeneralFormValues) => {
     const payload = {
       name: formData.name,
+      nickname: formData.nickname === '' ? null : formData.nickname,
+      email: formData.email === '' ? null : formData.email,
       phone_number: formData.phone_number,
+      gender: formData.gender,
       login_id: formData.login_id,
       password: formData.password,
-      gender: formData.gender,
-      email: formData.email === '' ? null : formData.email,
-      nickname: formData.nickname === '' ? null : formData.nickname,
+      marketing_notification_agreement: formData.marketing_notification_agreement,
     };
 
     signup(payload);

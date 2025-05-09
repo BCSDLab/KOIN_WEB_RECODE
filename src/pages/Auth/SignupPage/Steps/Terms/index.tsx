@@ -9,7 +9,7 @@ interface TermsProps {
   onNext: () => void;
 }
 
-const TERMS_NAMES = ['agreeToPrivacyPolicy', 'agreeToKoinTerms', 'agreeToMarketing'];
+const TERMS_NAMES = ['privacy_policy_agreement', 'koin_terms_agreement', 'marketing_notification_agreement'];
 
 export default function Terms({ onNext }: TermsProps) {
   const { register, setValue, watch } = useFormContext();
@@ -43,11 +43,11 @@ export default function Terms({ onNext }: TermsProps) {
           </span>
         </label>
         {!isMobile && <div className={styles['small-divider']} /> }
-        <label className={styles.term} htmlFor="agreeToPrivacyPolicy">
+        <label className={styles.term} htmlFor="privacy_policy_agreement">
           <CustomCheckbox
-            id="agreeToPrivacyPolicy"
-            checked={watch('agreeToPrivacyPolicy')}
-            {...register('agreeToPrivacyPolicy')}
+            id="privacy_policy_agreement"
+            checked={watch('privacy_policy_agreement')}
+            {...register('privacy_policy_agreement')}
           />
           <span className={styles.term__title}>{isMobile ? '개인정보 이용약관(필수)' : '[필수] 개인정보 이용약관'}</span>
         </label>
@@ -61,12 +61,12 @@ export default function Terms({ onNext }: TermsProps) {
             [styles.term]: true,
             [styles['term__koin-use']]: true,
           })}
-          htmlFor="agreeToKoinTerms"
+          htmlFor="koin_terms_agreement"
         >
           <CustomCheckbox
-            id="agreeToKoinTerms"
-            checked={watch('agreeToKoinTerms')}
-            {...register('agreeToKoinTerms')}
+            id="koin_terms_agreement"
+            checked={watch('koin_terms_agreement')}
+            {...register('koin_terms_agreement')}
           />
           <span className={styles.term__title}>
             {isMobile ? '코인 이용약관(필수)' : '[필수] 코인 이용약관'}
@@ -82,12 +82,12 @@ export default function Terms({ onNext }: TermsProps) {
             [styles.term]: true,
             [styles.term__marketing]: true,
           })}
-          htmlFor="agreeToMarketing"
+          htmlFor="marketing_notification_agreement"
         >
           <CustomCheckbox
-            id="agreeToMarketing"
-            checked={watch('agreeToMarketing')}
-            {...register('agreeToMarketing', { required: false })}
+            id="marketing_notification_agreement"
+            checked={watch('marketing_notification_agreement')}
+            {...register('marketing_notification_agreement', { required: false })}
           />
           <span className={styles.term__title}>
             {isMobile ? '마케팅 수신 동의(선택)' : '[선택] 마케팅 수신 동의'}

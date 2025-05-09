@@ -43,6 +43,7 @@ function SignupPage() {
       email: null,
       nickname: null,
       verification_code: '',
+      marketing_notification_agreement: false,
     },
   });
 

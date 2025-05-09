@@ -94,6 +94,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const { mutate: checkPhoneNumber } = useMutation({
     mutationFn: checkPhone,
     onSuccess: () => {
+      setIsCodeCorrect(false);
       sendSMSToUser({ phone_number: phoneNumber });
     },
     onError: (err) => {
@@ -201,6 +202,11 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
               render={({ field }) => (
                 <CustomInput
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setPhoneMessage(null);
+                    setIsCodeCorrect(false);
+                  }}
                   placeholder="숫자만 입력해 주세요."
                   isDelete
                   message={phoneMessage}
@@ -229,17 +235,16 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       로그인하기
                     </button>
 
-                    <div className={styles['label-link']}>
-                      <div className={styles['label-link__text']}>
+                    <div className={styles['label-link-wrapper']}>
+                      <div className={styles['label-link-wrapper__text']}>
                         해당 전화번호로 가입하신 적 없으신가요?
                       </div>
-                      <button
-                        onClick={goToLogin}
-                        type="button"
-                        className={styles['label-link__button']}
+                      <a
+                        href="https://open.kakao.com/o/sgiYx4Qg"
+                        className={styles['label-link-wrapper__button']}
                       >
                         문의하기
-                      </button>
+                      </a>
                     </div>
                   </>
                   )}
@@ -264,14 +269,19 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
             render={({ field }) => (
               <CustomInput
                 {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  setVerificationMessage(null);
+                }}
                 placeholder="인증번호를 입력해주세요."
+                maxLength={6}
                 isDelete
                 isTimer={isCodeCorrect ? false : isTimer}
                 timerValue={timerValue}
                 message={verificationMessage}
                 isButton
                 buttonText="인증번호 확인"
-                buttonDisabled={!field.value}
+                buttonDisabled={!field.value || isCodeCorrect}
                 buttonOnClick={() => {
                   checkVerificationCode({
                     phone_number: phoneNumber,

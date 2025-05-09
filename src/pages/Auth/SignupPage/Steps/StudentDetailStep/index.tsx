@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import {
   checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupStudent,
 } from 'api/auth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
@@ -33,6 +34,7 @@ interface StudentFormValues {
   gender: string,
   email: string | null,
   nickname: string | null,
+  marketing_notification_agreement: boolean,
 }
 
 function StudentDetail({ onNext, onBack }: VerificationProps) {
@@ -49,7 +51,8 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
   const studentNumber = (useWatch({ control, name: 'student_number' }) ?? '') as string;
 
   const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
-  const [isCorrectNickname, setIsCorrectNickname, setIsInCorrectNickname] = useBooleanState(false);
+  const [isCorrectNickname, setIsCorrectNickname, setInCorrectNickname] = useBooleanState(false);
+  const [, setIsCorrectEmail, setInCorrectEmail] = useBooleanState(false);
 
   const [major, setMajor] = useState<string | null>(null);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
@@ -76,6 +79,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     mutationFn: emailDuplicateCheck,
     onSuccess: () => {
       setEmailMessage({ type: 'success', content: MESSAGES.EMAIL.AVAILABLE });
+      setIsCorrectEmail();
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -134,19 +138,21 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     },
   });
 
-  const onSubmit = async (formData: StudentFormValues) => {
-    const {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      password_check, email, nickname, ...signupData
-    } = formData;
-    const completeEmail = email ? `${email}@koreatech.ac.kr` : null;
-    const completeNickname = nickname || null;
+  const onSubmit = (formData: StudentFormValues) => {
+    const payload = {
+      name: formData.name,
+      nickname: formData.nickname === '' ? null : formData.nickname,
+      email: formData.email === '' ? null : `${formData.email}@koreatech.ac.kr`,
+      phone_number: formData.phone_number,
+      student_number: formData.student_number,
+      department: formData.department,
+      gender: formData.gender,
+      login_id: formData.login_id,
+      password: formData.password,
+      marketing_notification_agreement: formData.marketing_notification_agreement,
+    };
 
-    signup({
-      ...signupData,
-      email: completeEmail,
-      nickname: completeNickname,
-    });
+    signup(payload);
   };
 
   const checkAndSubmit = () => {
@@ -183,16 +189,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
     return emailMessage;
   };
-
-  useEffect(() => {
-    setIdMessage(null);
-    setInCorrectId();
-  }, [loginId, setInCorrectId]);
-
-  useEffect(() => {
-    setNicknameMessage(null);
-    setIsInCorrectNickname();
-  }, [nicknameControl, setIsInCorrectNickname]);
 
   return (
     <div className={styles.container}>
@@ -242,6 +238,11 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
               render={({ field, fieldState }) => (
                 <CustomInput
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setIdMessage(null);
+                    setInCorrectId();
+                  }}
                   placeholder="5~13자리로 입력해 주세요."
                   isButton
                   message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
@@ -342,6 +343,11 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
               render={({ field, fieldState }) => (
                 <CustomInput
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setNicknameMessage(null);
+                    setInCorrectNickname();
+                  }}
                   placeholder="닉네임은 변경 가능합니다."
                   isDelete
                   isButton
@@ -382,11 +388,9 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                     placeholder="이메일을 입력해 주세요."
                     message={getEmailMessage(field.value, fieldState.error)}
                     onChange={(e) => {
-                      const { value } = e.target;
                       field.onChange(e);
-                      if (value === '') {
-                        setEmailMessage(null);
-                      }
+                      setEmailMessage(null);
+                      setInCorrectEmail();
                     }}
                     userType="학생"
                     value={field.value ?? ''}
