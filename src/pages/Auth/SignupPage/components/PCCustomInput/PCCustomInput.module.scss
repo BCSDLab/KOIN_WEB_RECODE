@@ -1,0 +1,161 @@
+.container {
+  display: grid;
+  width: 592px;
+  position: relative;
+}
+
+.label-wrapper {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto 320px 16px 120px;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 160%;
+
+  &__label {
+    justify-self: start;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+
+    .required {
+      color: #ec2d30;
+    }
+  }
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.button {
+  display: flex;
+  min-width: 120px;
+  height: 48px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid #175c8e;
+  color: #175c8e;
+  font-family: Pretendard, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 160%;
+
+  &:disabled {
+    border: 1px solid #e1e1e1;
+    color: #cacaca;
+    cursor: not-allowed;
+  }
+}
+
+.input-wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__input {
+    box-sizing: border-box;
+    width: 320px;
+    height: 48px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid #e1e1e1;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 160%;
+
+    &::placeholder {
+      font-family: Pretendard, sans-serif;
+      color: #cacaca;
+      font-size: 12px;
+    }
+
+    &--domain {
+      padding: 8px 130px 8px 12px;
+    }
+
+    &--button {
+      padding: 8px 35px 8px 12px;
+    }
+  }
+
+  &__email {
+    position: absolute;
+    right: 12px;
+    color: #000;
+    font-weight: 400;
+    font-size: 14px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  &__optionButton {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    background: none;
+    cursor: pointer;
+  }
+
+  &__timer {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    background: none;
+    margin-top: 2px;
+    color: #727272;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 160%;
+
+    &--active {
+      right: 40px;
+    }
+  }
+}
+
+.messageWrapper {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  width: 452px;
+  left: 140px;
+
+  & > svg {
+    display: flex;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+  }
+
+  &__message {
+    display: flex;
+    margin-top: 1px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+
+    &--error {
+      color: #f64c4c;
+    }
+
+    &--success {
+      color: #0c9d61;
+    }
+
+    &--warning {
+      color: #f7941e;
+    }
+
+    &--default {
+      color: #727272;
+    }
+  }
+}
