@@ -180,7 +180,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
           {phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
             <div className={styles['input__error-message']}>
               해당 전화번호로 가입하신 적 없으신가요?
-              <a href={ROUTES.Inquery()} target="_blank" rel="noopener noreferrer" className={styles['label-link-button']}>로그인하기</a>
+              <a href={ROUTES.Inquery()} target="_blank" rel="noopener noreferrer" className={styles['label-link-button']}>문의하기</a>
             </div>
           )}
 
