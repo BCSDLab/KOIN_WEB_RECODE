@@ -240,10 +240,8 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                         해당 전화번호로 가입하신 적 없으신가요?
                       </div>
                       <a
-                        href={ROUTES.Inquery()}
+                        href="https://open.kakao.com/o/sgiYx4Qg"
                         className={styles['label-link-wrapper__button']}
-                        target="_blank"
-                        rel="noopener noreferrer"
                       >
                         문의하기
                       </a>
