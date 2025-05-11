@@ -225,7 +225,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       /5)
                     </div>
                   )}
-                  {phoneMessage?.type === 'error' && (
+                  {phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
                   <>
                     <button
                       onClick={goToLogin}

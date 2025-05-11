@@ -6,9 +6,9 @@ import { checkPhone, smsSend, smsVerify } from 'api/auth';
 import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
 import { GENDER_OPTIONS, MESSAGES } from 'static/auth';
-import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import type { SmsSendResponse } from 'api/auth/entity';
+import ROUTES from 'static/routes';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
 import styles from './MobileVerification.module.scss';
 
@@ -169,7 +169,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                     </div>
                   )}
                   {
-                    phoneMessage?.type === 'error' && (
+                    phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
                       <a href={ROUTES.Auth()} className={styles['label-link-button']}>로그인하기</a>
                     )
                   }
@@ -177,6 +177,12 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
               )}
             />
           </div>
+          {phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
+            <div className={styles['input__error-message']}>
+              해당 전화번호로 가입하신 적 없으신가요?
+              <a href={ROUTES.Inquiry()} target="_blank" rel="noopener noreferrer" className={styles['label-link-button']}>문의하기</a>
+            </div>
+          )}
 
           {isVerificationShown && (
           <div className={styles['input-wrapper']}>
@@ -206,7 +212,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                     >
                       문의하기
                     </a>
-
                   )}
                 </CustomInput>
               )}

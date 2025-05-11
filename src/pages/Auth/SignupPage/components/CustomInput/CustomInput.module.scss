@@ -134,6 +134,10 @@
       border-radius: 0;
       font-size: 13px;
 
+      &:focus {
+        outline: none;
+      }
+
       &::placeholder {
         font-size: 14px;
       }
@@ -143,7 +147,7 @@
       }
 
       &--button {
-        padding: 8px 0;
+        padding: 8px 24px 8px 4px;
       }
     }
 

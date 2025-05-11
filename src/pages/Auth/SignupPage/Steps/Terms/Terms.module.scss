@@ -148,6 +148,7 @@
   }
 
   @include media.media-breakpoint(mobile) {
+    width: 100%;
     margin-top: 32px;
     padding: 12px 0;
     height: 50px;
