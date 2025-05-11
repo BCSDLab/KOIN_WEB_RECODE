@@ -225,7 +225,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       /5)
                     </div>
                   )}
-                  {phoneMessage?.type === 'error' && (
+                  {phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
                   <>
                     <button
                       onClick={goToLogin}
@@ -240,8 +240,10 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                         해당 전화번호로 가입하신 적 없으신가요?
                       </div>
                       <a
-                        href="https://open.kakao.com/o/sgiYx4Qg"
+                        href={ROUTES.Inquery()}
                         className={styles['label-link-wrapper__button']}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         문의하기
                       </a>

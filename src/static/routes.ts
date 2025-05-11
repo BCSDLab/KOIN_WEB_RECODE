@@ -48,6 +48,7 @@ const ROUTES = {
   Webview: () => '/webview',
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
+  Inquery: () => 'https://forms.gle/qYw17r2kihThiJvj7',
 };
 
 export default ROUTES;
