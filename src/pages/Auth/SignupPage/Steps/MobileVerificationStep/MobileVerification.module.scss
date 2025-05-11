@@ -156,3 +156,17 @@
     }
   }
 }
+
+.input {
+  &__error-message {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      gap: 8px;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 160%;
+      color: #727272;
+      margin-top: -16px;
+    }
+  }
+}
