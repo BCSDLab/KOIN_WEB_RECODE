@@ -137,8 +137,9 @@
 
   &__button--hide {
     display: flex;
-    width: 232px;
+    width: auto;
     height: 40px;
+    padding: 0 48px;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
