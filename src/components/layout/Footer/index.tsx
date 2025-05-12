@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
@@ -42,6 +44,10 @@ function Footer(): JSX.Element {
         });
       }
     }
+  };
+
+  const test = () => {
+    throw new Error('🐞 Bugsink sourcemap test error');
   };
 
   return (
@@ -131,7 +137,10 @@ function Footer(): JSX.Element {
               <img src="https://static.koreatech.in/upload/1aae9a021f0338527c28e5c3d0518fa1.png" alt="home" />
             </Link>
           </div>
-          <span className={styles.sitemap__copyright}>
+          <span
+            className={styles.sitemap__copyright}
+            onClick={test}
+          >
             COPYRIGHT ⓒ&nbsp;
             {
               new Date().getFullYear()
