@@ -15,6 +15,7 @@ export default defineConfig({
     port: 3000,
   },
   build: {
+    sourcemap: true,
     outDir: 'build',
   },
   define: { global: 'window' },
