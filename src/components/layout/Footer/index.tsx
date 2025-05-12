@@ -124,7 +124,7 @@ function Footer(): JSX.Element {
               </button>
             </ul>
           )}
-          <div className={styles['sitemap__icon-links']}>
+          <div className={styles['sitemap__icon-links']} onClick={test}>
             <a
               className={styles['sitemap__icon-link']}
               href="https://www.facebook.com/bcsdlab"
@@ -137,10 +137,7 @@ function Footer(): JSX.Element {
               <img src="https://static.koreatech.in/upload/1aae9a021f0338527c28e5c3d0518fa1.png" alt="home" />
             </Link>
           </div>
-          <span
-            className={styles.sitemap__copyright}
-            onClick={test}
-          >
+          <span className={styles.sitemap__copyright}>
             COPYRIGHT ⓒ&nbsp;
             {
               new Date().getFullYear()
