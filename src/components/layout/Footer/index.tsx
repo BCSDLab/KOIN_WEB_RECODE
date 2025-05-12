@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
@@ -44,10 +42,6 @@ function Footer(): JSX.Element {
         });
       }
     }
-  };
-
-  const test = () => {
-    throw new Error('Bugsink sourcemap test error one');
   };
 
   return (
@@ -118,7 +112,7 @@ function Footer(): JSX.Element {
               <button
                 type="button"
                 className={styles.sitemap__link}
-                onClick={() => { test(); navigate(ROUTES.PrivatePolicy()); }}
+                onClick={() => { navigate(ROUTES.PrivatePolicy()); }}
               >
                 개인정보 처리방침
               </button>
