@@ -47,7 +47,7 @@ function Footer(): JSX.Element {
   };
 
   const test = () => {
-    throw new Error('🐞 Bugsink sourcemap test error');
+    throw new Error('Bugsink sourcemap test error one');
   };
 
   return (
@@ -118,13 +118,13 @@ function Footer(): JSX.Element {
               <button
                 type="button"
                 className={styles.sitemap__link}
-                onClick={() => { navigate(ROUTES.PrivatePolicy()); }}
+                onClick={() => { test(); navigate(ROUTES.PrivatePolicy()); }}
               >
                 개인정보 처리방침
               </button>
             </ul>
           )}
-          <div className={styles['sitemap__icon-links']} onClick={test}>
+          <div className={styles['sitemap__icon-links']}>
             <a
               className={styles['sitemap__icon-link']}
               href="https://www.facebook.com/bcsdlab"
