@@ -17,6 +17,7 @@ import styles from './PCCustomInput.module.scss';
 export type InputMessage = {
   type: 'error' | 'warning' | 'success' | 'info' | 'default';
   content: string;
+  code?: 'SMS_LIMIT' | 'ALREADY_REGISTERED' | string;
 } | null;
 
 interface PCCustomInputProps extends ComponentPropsWithoutRef<'input'> {
@@ -26,6 +27,7 @@ interface PCCustomInputProps extends ComponentPropsWithoutRef<'input'> {
   type?: 'text' | 'password';
   message?: InputMessage | null;
   isDelete?: boolean;
+  onClear?: () => void;
   isVisibleButton?: boolean;
   isTimer?: boolean;
   timerValue?: number;
@@ -119,7 +121,14 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
             {isDelete && value && (
             <button
               type="button"
-              onClick={() => setValue(args.name!, '')}
+              onClick={() => {
+                const emptyEvent = {
+                  target: { value: '' },
+                } as React.ChangeEvent<HTMLInputElement>;
+                args.onChange?.(emptyEvent);
+                setValue(args.name!, '');
+                args.onClear?.();
+              }}
               className={styles['input-wrapper__optionButton']}
             >
               <CloseIcon />
