@@ -28,8 +28,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const phoneNumber = useWatch({ control, name: 'phone_number' });
   const verificationCode = useWatch({ control, name: 'verification_code' });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [showVerificationField, setShowVerificationField] = useState(false);
+  const [, setShowVerificationField] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [isCodeCorrect, setIsCodeCorrect] = useState(false);
