@@ -232,7 +232,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
               <PCCustomInput
                 {...field}
                 htmlFor="login_id"
-                labelName="이름"
+                labelName="아이디"
                 onChange={(e) => {
                   field.onChange(e);
                   setIdMessage(null);
