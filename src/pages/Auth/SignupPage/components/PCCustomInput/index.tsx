@@ -74,6 +74,7 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
 
   const inputType = getInputType();
   const isDomain = args.name === 'email' && userType === '학생';
+  const isRequire = !(htmlFor === 'email' || htmlFor === 'nickname');
 
   return (
     <div className={styles.container}>
@@ -84,7 +85,7 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
           className={styles['label-wrapper__label']}
         >
           {labelName}
-          <span className={styles.required}>*</span>
+          {isRequire && <span className={styles.required}>*</span>}
         </label>
 
         <div className={styles.wrapper}>
