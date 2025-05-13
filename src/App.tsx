@@ -43,6 +43,7 @@ import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import ReportPage from 'pages/Articles/ReportPage';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import FindIdPage from 'pages/Auth/FindIdPage';
 
 interface WrapperProps {
   title: string;
@@ -120,6 +121,7 @@ function App() {
         <Route path={ROUTES.Auth()} element={<AuthPage />}>
           <Route index element={<Wrapper title="로그인" element={<LoginPage />} />} />
           {isMobile && <Route path={ROUTES.AuthSignup({ isLink: false })} element={<Wrapper title="회원가입" element={<SignupPage />} />} />}
+          <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage/>} />} />
           <Route path={ROUTES.AuthFindPW()} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} />
           <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />
         </Route>
