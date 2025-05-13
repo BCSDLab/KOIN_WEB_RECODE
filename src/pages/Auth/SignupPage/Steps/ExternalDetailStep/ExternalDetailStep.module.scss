@@ -70,49 +70,20 @@
 .form-container {
   display: flex;
   flex-direction: column;
+  width: 592px;
+  justify-content: center;
   gap: 24px;
 }
 
 .form-wrapper {
   display: flex;
   flex-direction: column;
+  width: 592px;
   gap: 24px;
 }
 
-.name-wrapper,
-.gender-wrapper,
-.number-wrapper,
-.verification-wrapper {
-  display: grid;
-  grid-template-columns: 110px 1fr auto;
-  align-items: center;
-  gap: 16px;
-  padding: 0 24px;
-  font-family: Pretendard, sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 160%;
-
-  label {
-    justify-self: start;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 160%;
-
-    .required {
-      color: #ec2d30;
-    }
-  }
-}
-
-.checkbox-wrapper {
-  display: flex;
-  gap: 32px;
-
-  &__checkbox {
-    display: flex;
-  }
+.input-wrapper {
+  position: relative;
 }
 
 .label-count-number {
@@ -145,18 +116,4 @@
     color: #fff;
     background-color: #175c8e;
   }
-}
-
-.email-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-
-.email {
-  font-family: Pretendard, sans-serif;
-  font-size: 16px;
-  line-height: 160%;
-  white-space: nowrap;
 }

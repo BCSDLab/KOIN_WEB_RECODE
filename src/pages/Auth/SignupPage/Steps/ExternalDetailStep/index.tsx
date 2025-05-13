@@ -9,7 +9,7 @@ import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
-import CustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/CustomInput';
+import PCCustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/PCCustomInput';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import { cn } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -193,186 +193,154 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles['form-wrapper']}>
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="login_id"
-              className={styles.wrapper__label}
-            >
-              아이디
-              <span className={styles.required}>*</span>
-            </label>
-            <Controller
-              name="login_id"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                pattern: {
-                  value: REGEX.USERID,
-                  message: '',
-                },
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
-                  {...field}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    setIdMessage(null);
-                    setInCorrectId();
-                  }}
-                  placeholder="최대 13자리까지 입력 가능합니다."
-                  isButton
-                  message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
-                  buttonText="중복 확인"
-                  buttonDisabled={!field.value}
-                  buttonOnClick={() => checkUserId(loginId)}
-                />
-              )}
-            />
-          </div>
+
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="login_id"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+              pattern: {
+                value: REGEX.USERID,
+                message: '',
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <PCCustomInput
+                {...field}
+                htmlFor="login_id"
+                labelName="아이디"
+                onChange={(e) => {
+                  field.onChange(e);
+                  setIdMessage(null);
+                  setInCorrectId();
+                }}
+                placeholder="최대 13자리까지 입력 가능합니다."
+                isButton
+                message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
+                buttonText="중복 확인"
+                buttonDisabled={!field.value}
+                buttonOnClick={() => checkUserId(loginId)}
+              />
+            )}
+          />
         </div>
 
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="password"
-              className={styles.wrapper__label}
-            >
-              비밀번호
-              <span className={styles.required}>*</span>
-            </label>
-            <Controller
-              name="password"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                pattern: {
-                  value: REGEX.PASSWORD,
-                  message: MESSAGES.PASSWORD.FORMAT,
-                },
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해주세요."
-                  type="password"
-                  onChange={(e) => {
-                    field.onChange(e);
-                    trigger('password_check');
-                  }}
-                  isVisibleButton
-                  message={fieldState.error ? { type: 'warning', content: MESSAGES.PASSWORD.FORMAT } : null}
-                />
-              )}
-            />
-          </div>
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="password"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+              pattern: {
+                value: REGEX.PASSWORD,
+                message: MESSAGES.PASSWORD.FORMAT,
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <PCCustomInput
+                {...field}
+                htmlFor="password"
+                labelName="비밀번호"
+                placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해주세요."
+                type="password"
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('password_check');
+                }}
+                isVisibleButton
+                message={fieldState.error ? { type: 'warning', content: MESSAGES.PASSWORD.FORMAT } : null}
+              />
+            )}
+          />
         </div>
 
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="password_check"
-              className={styles.wrapper__label}
-            >
-              비밀번호 확인
-              <span className={styles.required}>*</span>
-            </label>
-            <Controller
-              name="password_check"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                validate: (value) => value === getValues('password'),
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="비밀번호를 한번 더 입력해 주세요."
-                  type="password"
-                  isVisibleButton
-                  message={getPasswordCheckMessage(field.value, fieldState.error)}
-                />
-              )}
-            />
-          </div>
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="password_check"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+              validate: (value) => value === getValues('password'),
+            }}
+            render={({ field, fieldState }) => (
+              <PCCustomInput
+                {...field}
+                htmlFor="password_check"
+                labelName="비밀번호 확인"
+                placeholder="비밀번호를 한번 더 입력해 주세요."
+                type="password"
+                isVisibleButton
+                message={getPasswordCheckMessage(field.value, fieldState.error)}
+              />
+            )}
+          />
         </div>
 
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="nickname"
-              className={styles.wrapper__label}
-            >
-              닉네임 (선택)
-            </label>
-            <Controller
-              name="nickname"
-              control={control}
-              defaultValue=""
-              rules={{
-                pattern: {
-                  value: REGEX.NICKNAME,
-                  message: '',
-                },
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
-                  {...field}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    setNicknameMessage(null);
-                    setInCorrectNickname();
-                  }}
-                  placeholder="닉네임은 변경 가능합니다."
-                  isDelete
-                  isButton
-                  message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
-                  buttonText="중복 확인"
-                  buttonOnClick={() => checkNickname(nicknameControl)}
-                  buttonDisabled={!nicknameControl}
-                  value={field.value ?? ''}
-                />
-              )}
-            />
-          </div>
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="nickname"
+            control={control}
+            defaultValue=""
+            rules={{
+              pattern: {
+                value: REGEX.NICKNAME,
+                message: '',
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <PCCustomInput
+                {...field}
+                htmlFor="nickname"
+                labelName="닉네임 (선택)"
+                onChange={(e) => {
+                  field.onChange(e);
+                  setNicknameMessage(null);
+                  setInCorrectNickname();
+                }}
+                placeholder="닉네임은 변경 가능합니다."
+                isDelete
+                isButton
+                message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
+                buttonText="중복 확인"
+                buttonOnClick={() => checkNickname(nicknameControl)}
+                buttonDisabled={!nicknameControl}
+                value={field.value ?? ''}
+              />
+            )}
+          />
         </div>
 
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="email"
-              className={styles.wrapper__label}
-            >
-              이메일 (선택)
-            </label>
-            <Controller
-              name="email"
-              control={control}
-              defaultValue=""
-              rules={{
-                pattern: {
-                  value: REGEX.EMAIL,
-                  message: MESSAGES.EMAIL.FORMAT,
-                },
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="이메일을 입력해 주세요."
-                  message={getEmailMessage(field.value, fieldState.error)}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    setEmailMessage(null);
-                    setInCorrectEmail();
-                  }}
-                  value={field.value ?? ''}
-                />
-              )}
-            />
-          </div>
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="email"
+            control={control}
+            defaultValue=""
+            rules={{
+              pattern: {
+                value: REGEX.EMAIL,
+                message: MESSAGES.EMAIL.FORMAT,
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <PCCustomInput
+                {...field}
+                htmlFor="email"
+                labelName="이메일 (선택)"
+                placeholder="이메일을 입력해 주세요."
+                message={getEmailMessage(field.value, fieldState.error)}
+                onChange={(e) => {
+                  field.onChange(e);
+                  setEmailMessage(null);
+                  setInCorrectEmail();
+                }}
+                value={field.value ?? ''}
+              />
+            )}
+          />
         </div>
 
         <div className={styles.container__wrapper}>
