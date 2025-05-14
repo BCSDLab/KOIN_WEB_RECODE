@@ -12,6 +12,7 @@ import reportWebVitals from './reportWebVitals';
 if (import.meta.env.MODE === 'production' && import.meta.env.VITE_BUGSINK_DSN) {
   Sentry.init({
     dsn: import.meta.env.VITE_BUGSINK_DSN,
+    release: 'bugsink-release',
   });
 }
 
