@@ -16,13 +16,13 @@ export default defineConfig({
       authToken: 'b2a60872048b8bb33988bd711ec13e805361733a',
       url: 'https://bugsink.bcsdlab.com/',
       sourcemaps: {
-        assets: 'build/assets/**',
+        assets: 'assets/**',
       },
       release: {
         name: 'bugsink-release',
         inject: true,
-        create: false,
-        finalize: false,
+        create: true,
+        finalize: true,
       },
     })],
   resolve: {
