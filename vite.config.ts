@@ -21,8 +21,8 @@ export default defineConfig({
       release: {
         name: 'bugsink-release',
         inject: true,
-        create: true,
-        finalize: true,
+        create: false,
+        finalize: false,
       },
     })],
   resolve: {
