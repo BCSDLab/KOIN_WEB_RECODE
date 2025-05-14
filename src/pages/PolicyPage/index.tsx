@@ -7,7 +7,7 @@ import styles from './PolicyPage.module.scss';
 
 function PolicyPage() {
   const test = () => {
-    throw new Error('Bugsink sourcemap test error four');
+    throw new Error('Bugsink sourcemap test error five');
   };
 
   return (
@@ -17,10 +17,16 @@ function PolicyPage() {
           <h2 className={styles['body__content--title']}>코인 개인정보처리방침</h2>
           {PRIVACY_POLICY.map((policy) => (
             <section className={styles.policy} key={policy.id}>
-              <h3 className={styles.policy__title} onClick={() => { test(); }}>{policy.title}</h3>
+              <h3 className={styles.policy__title}>{policy.title}</h3>
               {Array.isArray(policy.content) ? (
                 policy.content.map((text, index) => (
-                  <div className={styles.policy__content} key={index}>{text}</div>
+                  <div
+                    className={styles.policy__content}
+                    key={index}
+                    onClick={() => { test(); }}
+                  >
+                    {text}
+                  </div>
                 ))
               ) : (
                 <div className={styles.policy__content}>{policy.content}</div>
