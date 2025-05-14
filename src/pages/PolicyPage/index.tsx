@@ -1,15 +1,8 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-array-index-key */
 import { PRIVACY_POLICY, TERMS_OF_SERVICE } from 'static/policy';
 import styles from './PolicyPage.module.scss';
 
 function PolicyPage() {
-  const test = () => {
-    throw new Error('Bugsink sourcemap test error five');
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.body}>
@@ -28,11 +21,7 @@ function PolicyPage() {
               {policy.items && (
                 <ul>
                   {policy.items.map((item, index) => (
-                    <li
-                      className={styles.policy__items}
-                      key={index}
-                      onClick={() => { test(); }}
-                    >
+                    <li className={styles.policy__items} key={index}>
                       {item}
                     </li>
                   ))}
