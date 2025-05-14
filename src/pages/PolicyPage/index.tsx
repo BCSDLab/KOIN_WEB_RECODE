@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-array-index-key */
@@ -6,14 +7,14 @@ import styles from './PolicyPage.module.scss';
 
 function PolicyPage() {
   const test = () => {
-    throw new Error('Bugsink sourcemap test error one');
+    throw new Error('Bugsink sourcemap test error two');
   };
 
   return (
     <div className={styles.container}>
-      <div className={styles.body}>
+      <div className={styles.body} onClick={() => { test(); }}>
         <div className={styles.body__content}>
-          <h2 className={styles['body__content--title']} onClick={() => { test(); }}>코인 개인정보처리방침</h2>
+          <h2 className={styles['body__content--title']}>코인 개인정보처리방침</h2>
           {PRIVACY_POLICY.map((policy) => (
             <section className={styles.policy} key={policy.id}>
               <h3 className={styles.policy__title}>{policy.title}</h3>
