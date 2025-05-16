@@ -22,6 +22,9 @@ import StoreBenefitPage from 'pages/Store/StoreBenefitPage';
 import CampusInfo from 'pages/CampusInfo';
 import BusRoutePage from 'pages/Bus/BusRoutePage';
 import BusCoursePage from 'pages/Bus/BusCoursePage';
+import ClubListPage from 'pages/Club/ClubListPage';
+import ClubDetailPage from 'pages/Club/ClubDetailPage';
+import NewClubPage from 'pages/Club/NewClubPage';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
@@ -98,6 +101,11 @@ function App() {
 
           <Route path={ROUTES.BusRoute()} element={<Wrapper title="버스" element={<BusRoutePage />} />} />
           <Route path={ROUTES.BusCourse()} element={<Wrapper title="버스" element={<BusCoursePage />} />} />
+
+          <Route path={ROUTES.Club()} element={<Wrapper title="동아리 목록" element={<ClubListPage />} />} />
+          <Route path={ROUTES.ClubDetail({ isLink: false })} element={<Wrapper title="상세 소개" element={<ClubDetailPage />} />} />
+          <Route path={ROUTES.NewClub()} element={<Wrapper title="동아리 생성" element={<NewClubPage />} />} />
+
           <Route path={ROUTES.Cafeteria()} element={<Wrapper title="식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.Articles()} element={<Wrapper title="공지사항" element={<ArticlesPage />} />}>
             <Route index element={<ArticleListPage />} />

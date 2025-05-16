@@ -5,6 +5,7 @@ import Banner from 'components/ui/Banner';
 import BannerB from 'components/ui/BannerB';
 import useBannerCategories from 'components/ui/Banner/hooks/useBannerCategories';
 import IndexBus from './components/IndexBus';
+import IndexClub from './components/IndexClub';
 import IndexCafeteria from './components/IndexCafeteria';
 import IndexArticles from './components/IndexArticles';
 import IndexStore from './components/IndexStore';
@@ -29,6 +30,7 @@ function IndexPage() {
         <div className={styles['mobile-wrapper']}>
           <IndexStore />
           <IndexBus />
+          <IndexClub />
         </div>
         <Suspense fallback={null}>
           <IndexTimetable />
