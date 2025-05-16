@@ -34,9 +34,6 @@ function FindIdPage() {
             <BackIcon />
           </button>
           <h1 className={styles['container__title-wrapper--title']}>아이디 찾기</h1>
-          <div className={styles['container__title-wrapper--icon']}>
-            <BackIcon />
-          </div>
         </div>
         <div className={`${styles.divider} ${styles['divider--top']}`} />
 
