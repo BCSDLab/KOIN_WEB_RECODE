@@ -22,7 +22,7 @@
     gap: 8px;
     align-self: stretch;
     color: #175c8e;
-    font-family: Pretendards;
+    font-family: Pretendard, sans-serif;
     font-size: 18px;
     font-weight: 500;
     line-height: 1.6;
@@ -82,7 +82,7 @@
   }
 
   &__title {
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 20px;
     font-weight: 500;
     white-space: nowrap;
@@ -95,7 +95,7 @@
   }
 
   &__subtitle {
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 14px;
 
     @include media.media-breakpoint(mobile) {
