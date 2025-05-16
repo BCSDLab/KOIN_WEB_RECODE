@@ -44,8 +44,8 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import ReportPage from 'pages/Articles/ReportPage';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import FindIdPage from 'pages/Auth/FindIdPage';
-import FindIdPhonePage from 'pages/Auth/FindIdPage/FindIdPhonePage';
-import FindIdEmailPage from 'pages/Auth/FindIdPage/FindIdEmailPage';
+import FindIdPhonePage from 'pages/Auth/FindIdPage/PCFindIdPage/FindIdPhonePage';
+import FindIdEmailPage from 'pages/Auth/FindIdPage/PCFindIdPage/FindIdEmailPage';
 
 interface WrapperProps {
   title: string;

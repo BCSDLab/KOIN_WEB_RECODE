@@ -1,98 +1,35 @@
+@use "src/utils/scss/media";
+
 .container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: Pretendard, sans-serif;
-
-  &__wrapper {
-    max-width: 640px;
-  }
-
-  &__title-wrapper {
+  @include media.media-breakpoint(mobile) {
     width: 100%;
+    height: 100dvh;
+    box-sizing: border-box;
+    padding: 32px 0 40px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+  }
 
-    &--title {
-      text-align: center;
-      font-size: 30px;
-      font-weight: 700;
+  &__header {
+    @include media.media-breakpoint(mobile) {
       width: 100%;
-      margin-right: 24px;
+      position: relative;
     }
   }
-}
 
-.divider {
-  width: 640px;
-  border: 2px solid #175c8e;
-
-  &--top {
-    margin: 64px 0;
-  }
-
-  &--bottom {
-    margin: 64px 0;
-  }
-}
-
-.gender-wrapper {
-  display: grid;
-  grid-template-columns: 160px 1fr auto;
-  gap: 16px;
-  padding: 0 24px;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 160%;
-  align-items: center;
-
-  label {
-    justify-self: start;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 160%;
-
-    & > div {
-      margin-top: 4px;
+  &__button {
+    @include media.media-breakpoint(mobile) {
+      position: absolute;
+      left: 0;
     }
   }
-}
 
-.checkbox-wrapper {
-  display: flex;
-  gap: 32px;
-
-  &__checkbox {
-    display: flex;
-    gap: 8px;
-  }
-}
-
-.button-wrapper {
-  display: flex;
-  gap: 32px;
-
-  &__next-button {
-    display: flex;
-    width: 240px;
-    height: 64px;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 16px;
-    background: #cacaca;
-    color: #fff;
-    text-align: center;
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 160%;
-
-    &--active {
-      background-color: #175c8e;
+  &__title {
+    @include media.media-breakpoint(mobile) {
+      font-size: 1.125rem;
+      font-weight: 500;
+      line-height: 1.6;
     }
   }
 }
