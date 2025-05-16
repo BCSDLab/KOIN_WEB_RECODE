@@ -2,21 +2,30 @@ import { Link } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
 import AddIcon from 'assets/svg/Club/add-icon.svg';
+import ListIcon from 'assets/svg/Club/list-icon.svg';
 import styles from './IndexClub.module.scss';
 
-export const CLUB_LINKS = [
+interface ClubLinkCardProps {
+  id?: string;
+  imgUrl?: string;
+}
+
+const ClubLinkCard = ({
+  id = '1', // 임시 id 값
+  imgUrl = 'https://placehold.co/60.jpg?text=Coming+soon...',
+}: ClubLinkCardProps) => [
   {
     key: 'popularClubs',
     title: '인기 동아리',
     subtitle: '바로가기',
-    link: ROUTES.ClubDetail({ id: '1', isLink: true }), // 임시 id 값 (추후 인기 동아리 id로 교체)
-    Icon: AddIcon,
+    link: ROUTES.ClubDetail({ id, isLink: true }),
+    img: imgUrl,
   }, {
     key: 'clubList',
     title: '동아리 목록',
     subtitle: '바로가기',
     link: ROUTES.Club(),
-    Icon: AddIcon,
+    Icon: ListIcon,
   }, {
     key: 'addClub',
     title: '동아리 추가',
@@ -24,7 +33,7 @@ export const CLUB_LINKS = [
     link: ROUTES.NewClub(),
     Icon: AddIcon,
   },
-] as const;
+];
 
 function IndexClub() {
   return (
@@ -37,8 +46,8 @@ function IndexClub() {
         </Link>
       </div>
       <div className={styles.cards}>
-        {CLUB_LINKS.map(({
-          key, title, subtitle, link, Icon,
+        {ClubLinkCard({}).map(({
+          key, title, subtitle, link, Icon, img,
         }) => (
           <Link
             to={link}
@@ -46,7 +55,7 @@ function IndexClub() {
             className={styles.card}
           >
             <div className={styles.card__segment}>
-              <Icon />
+              {Icon ? <Icon /> : img && <img src={img} alt="" /> }
               <div className={styles.card__guide}>
                 <span className={styles.card__title}>
                   {title}
