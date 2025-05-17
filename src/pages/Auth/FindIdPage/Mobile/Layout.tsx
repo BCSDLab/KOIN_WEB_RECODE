@@ -8,10 +8,9 @@ import styles from './Mobile.module.scss';
 
 interface LayoutProps {
   children: ReactNode;
-  title?: string;
 }
 
-function MobileLayout({ children, title = '아이디 찾기' }: LayoutProps) {
+function MobileLayout({ children }: LayoutProps) {
   const navigate = useNavigate();
   const handleBack = () => navigate(ROUTES.Auth());
 
@@ -26,7 +25,7 @@ function MobileLayout({ children, title = '아이디 찾기' }: LayoutProps) {
         >
           <ChevronLeftIcon />
         </button>
-        <span className={styles.container__title}>{title}</span>
+        <span className={styles.container__title}>아이디 찾기</span>
       </div>
 
       {children}
