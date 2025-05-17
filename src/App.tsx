@@ -132,7 +132,7 @@ function App() {
           <Route index element={<Wrapper title="로그인" element={<LoginPage />} />} />
           {isMobile && <Route path={ROUTES.AuthSignup({ isLink: false })} element={<Wrapper title="회원가입" element={<SignupPage />} />} />}
           {isMobile && (
-            <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<MobileFindIdPage />} />}>
+            <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage />} />}>
               <Route path={ROUTES.Phone()} element={<Wrapper title="아이디 찾기 - 전화번호" element={<MobileFindIdPhonePage />} />} />
               <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<MobileFindIdEmailPage />} />} />
             </Route>)}
