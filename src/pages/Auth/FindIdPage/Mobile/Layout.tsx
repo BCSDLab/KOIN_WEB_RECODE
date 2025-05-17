@@ -1,5 +1,3 @@
-// src/pages/Auth/FindIdPage/Mobile/Layout.tsx
-
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
