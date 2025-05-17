@@ -22,6 +22,8 @@ export const MESSAGES = {
     INVALID: '올바른 전화번호 양식이 아닙니다. 다시 입력해 주세요.',
     ALREADY_REGISTERED: '이미 가입된 전화 번호입니다.',
     CODE_SENT: '인증번호가 발송되었습니다.',
+    REGISTRATION: '휴대전화 등록을 안 하셨나요?',
+    NOT_REGISTERED: '유효하지 않은 전화번호 입니다.',
   },
   VERIFICATION: {
     DEFAULT: '인증번호 발송이 안 되시나요?',
