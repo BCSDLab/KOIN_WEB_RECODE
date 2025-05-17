@@ -233,6 +233,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                 {...field}
                 htmlFor="login_id"
                 labelName="아이디"
+                isRequired
                 onChange={(e) => {
                   field.onChange(e);
                   setIdMessage(null);
@@ -266,6 +267,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                 {...field}
                 htmlFor="password"
                 labelName="비밀번호"
+                isRequired
                 placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해주세요."
                 type="password"
                 onChange={(e) => {
@@ -293,6 +295,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                 {...field}
                 htmlFor="password_check"
                 labelName="비밀번호 확인"
+                isRequired
                 placeholder="비밀번호를 한번 더 입력해 주세요."
                 type="password"
                 isVisibleButton
@@ -414,6 +417,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                 {...field}
                 htmlFor="student_number"
                 labelName="학번"
+                isRequired
                 placeholder="학번을 입력해주세요."
                 isDelete
                 message={fieldState.error ? { type: 'warning', content: MESSAGES.STUDENT_NUMBER.FORMAT } : null}

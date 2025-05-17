@@ -160,6 +160,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                 labelName="이름"
                 placeholder="이름을 입력해 주세요."
                 isDelete
+                isRequired
               />
             )}
           />
@@ -200,6 +201,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                   setIsCodeCorrect(false);
                 }}
                 placeholder="숫자만 입력해 주세요."
+                isRequired
                 isDelete
                 message={phoneMessage}
                 isButton
@@ -259,6 +261,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                   setVerificationMessage(null);
                 }}
                 placeholder="인증번호를 입력해주세요."
+                isRequired
                 maxLength={6}
                 isDelete
                 isTimer={isCodeCorrect ? false : isTimer}

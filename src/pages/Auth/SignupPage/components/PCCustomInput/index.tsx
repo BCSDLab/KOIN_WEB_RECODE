@@ -36,6 +36,7 @@ interface PCCustomInputProps extends ComponentPropsWithoutRef<'input'> {
   buttonOnClick?: () => void;
   buttonDisabled?: boolean;
   userType?: UserType;
+  isRequired?: boolean;
   children?: React.ReactNode;
   forwardRef?: React.Ref<HTMLInputElement>;
 }
@@ -57,6 +58,7 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
     buttonOnClick,
     buttonDisabled,
     userType,
+    isRequired,
     children,
     ...args
   },
@@ -74,7 +76,6 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
 
   const inputType = getInputType();
   const isDomain = args.name === 'email' && userType === '학생';
-  const isRequire = !(htmlFor === 'email' || htmlFor === 'nickname');
 
   return (
     <div className={styles.container}>
@@ -85,7 +86,7 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
           className={styles['label-wrapper__label']}
         >
           {labelName}
-          {isRequire && <span className={styles.required}>*</span>}
+          {isRequired && <span className={styles.required}>*</span>}
         </label>
 
         <div className={styles.wrapper}>
