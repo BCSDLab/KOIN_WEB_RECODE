@@ -34,6 +34,14 @@ import {
   VerificationEmailVerifyResponse,
   IdFindEmailResponse,
   IdFindEmailRequest,
+  EmailExistsResponse,
+  EmailExistsRequest,
+  VerificationSmsSendResponse,
+  VerificationSmsSendRequest,
+  VerificationSmsVerifyResponse,
+  VerificationSmsVerifyRequest,
+  IdFindSmsResponse,
+  IdFindSmsRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -258,16 +266,17 @@ export class EmailDuplicateCheck<R extends EmailDuplicateCheckResponse> implemen
   }
 }
 
-export class PhoneExists<R extends PhoneExistsResponse> implements APIRequest<R> {
+// 이메일로 ID 찾기
+export class EmailExists<R extends EmailExistsResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/phone/exists';
+  path = '/user/email/exists';
 
   response!: R;
 
   auth = false;
 
-  constructor(public data: PhoneExistsRequest) {}
+  constructor(public data: EmailExistsRequest) { }
 }
 
 export class VerificationEmailSend<
@@ -299,11 +308,61 @@ export class VerificationEmailVerify<
 export class IdFindEmail<R extends IdFindEmailResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/id/find/email';
+  path = '/users/id/find/email';
 
   response!: R;
 
   auth = false;
 
   constructor(public data: IdFindEmailRequest) { }
+}
+
+// 휴대폰으로 ID 찾기
+export class PhoneExists<R extends PhoneExistsResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/user/phone/exists';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: PhoneExistsRequest) {}
+}
+
+export class VerificationSmsSend<R extends VerificationSmsSendResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/verification/sms/send';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: VerificationSmsSendRequest) { }
+}
+
+export class VerificationSmsVerify<
+  R extends VerificationSmsVerifyResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/verification/sms/verify';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: VerificationSmsVerifyRequest) { }
+}
+
+export class IdFindSms <R extends IdFindSmsResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/id/find/sms';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: IdFindSmsRequest) { }
 }
