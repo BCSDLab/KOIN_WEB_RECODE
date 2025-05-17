@@ -153,3 +153,36 @@ export interface SmsVerifyRequest {
   phone_number: string;
   verification_code: string;
 }
+
+export interface PhoneExistsRequest {
+  phone_number: string;
+}
+
+export interface PhoneExistsResponse extends APIResponse { }
+
+export interface VerificationEmailSendResponse extends APIResponse {
+  target: string;
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
+
+export interface VerificationEmailSendRequest {
+  email: string;
+}
+
+export interface VerificationEmailVerifyRequest {
+  email: string;
+  verification_code: string;
+}
+
+export interface VerificationEmailVerifyResponse extends APIResponse { }
+
+export interface IdFindEmailRequest extends APIResponse {
+  email: string;
+  verification_code: string;
+}
+
+export interface IdFindEmailResponse extends APIResponse {
+  login_id: string;
+}
