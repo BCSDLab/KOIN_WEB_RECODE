@@ -229,23 +229,29 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
               },
             }}
             render={({ field, fieldState }) => (
-              <PCCustomInput
-                {...field}
-                htmlFor="login_id"
-                labelName="아이디"
-                isRequired
-                onChange={(e) => {
-                  field.onChange(e);
-                  setIdMessage(null);
-                  setInCorrectId();
-                }}
-                placeholder="5~13자리로 입력해 주세요."
-                isButton
-                message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
-                buttonText="중복 확인"
-                buttonDisabled={!!fieldState.error || !field.value}
-                buttonOnClick={() => checkUserId(loginId)}
-              />
+              <div className={styles['input-with-button']}>
+                <PCCustomInput
+                  {...field}
+                  htmlFor="login_id"
+                  labelName="아이디"
+                  isRequired
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setIdMessage(null);
+                    setInCorrectId();
+                  }}
+                  placeholder="5~13자리로 입력해 주세요."
+                  message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
+                />
+                <button
+                  type="button"
+                  onClick={() => checkUserId(loginId)}
+                  className={styles['check-button']}
+                  disabled={!!fieldState.error || !field.value}
+                >
+                  중복 확인
+                </button>
+              </div>
             )}
           />
         </div>
@@ -306,6 +312,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
         </div>
 
         <div className={styles['input-wrapper']}>
+
           <Controller
             name="nickname"
             control={control}
@@ -317,26 +324,33 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
               },
             }}
             render={({ field, fieldState }) => (
-              <PCCustomInput
-                {...field}
-                htmlFor="nickname"
-                labelName="닉네임 (선택)"
-                onChange={(e) => {
-                  field.onChange(e);
-                  setNicknameMessage(null);
-                  setInCorrectNickname();
-                }}
-                placeholder="닉네임은 변경 가능합니다."
-                isDelete
-                isButton
-                message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
-                buttonText="중복 확인"
-                buttonOnClick={() => checkNickname(nicknameControl)}
-                buttonDisabled={!nicknameControl}
-                value={field.value ?? ''}
-              />
+              <div className={styles['input-with-button']}>
+                <PCCustomInput
+                  {...field}
+                  htmlFor="nickname"
+                  labelName="닉네임 (선택)"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setNicknameMessage(null);
+                    setInCorrectNickname();
+                  }}
+                  placeholder="닉네임은 변경 가능합니다."
+                  isDelete
+                  message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
+                  value={field.value ?? ''}
+                />
+                <button
+                  type="button"
+                  onClick={() => checkNickname(nicknameControl)}
+                  className={styles['check-button']}
+                  disabled={!nicknameControl}
+                >
+                  중복 확인
+                </button>
+              </div>
             )}
           />
+
         </div>
 
         <div className={styles['input-wrapper']}>

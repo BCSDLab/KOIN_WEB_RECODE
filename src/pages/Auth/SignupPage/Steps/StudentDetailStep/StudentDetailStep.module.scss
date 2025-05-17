@@ -81,6 +81,32 @@
   position: relative;
 }
 
+.input-with-button {
+  display: flex;
+  gap: 16px;
+}
+.check-button {
+  display: flex;
+  min-width: 120px;
+  height: 48px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid #175c8e;
+  color: #175c8e;
+  font-family: Pretendard, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 160%;
+
+  &:disabled {
+    border: 1px solid #e1e1e1;
+    color: #cacaca;
+    cursor: not-allowed;
+  }
+}
+
 .department-wrapper {
   display: grid;
   grid-template-columns: auto 320px 136px;

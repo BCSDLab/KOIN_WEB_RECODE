@@ -1,13 +1,13 @@
 .container {
   display: grid;
-  width: 592px;
+  width: 456px;
   position: relative;
 }
 
 .label-wrapper {
   display: grid;
   width: 100%;
-  grid-template-columns: auto 320px 16px 120px;
+  grid-template-columns: auto 320px;
   align-items: center;
   font-size: 18px;
   font-weight: 400;

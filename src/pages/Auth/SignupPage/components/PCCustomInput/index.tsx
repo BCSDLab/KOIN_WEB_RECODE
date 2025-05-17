@@ -31,10 +31,6 @@ interface PCCustomInputProps extends ComponentPropsWithoutRef<'input'> {
   isVisibleButton?: boolean;
   isTimer?: boolean;
   timerValue?: number;
-  isButton?: boolean;
-  buttonText?: string;
-  buttonOnClick?: () => void;
-  buttonDisabled?: boolean;
   userType?: UserType;
   isRequired?: boolean;
   children?: React.ReactNode;
@@ -53,10 +49,6 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
     isVisibleButton = false,
     isTimer = false,
     timerValue = 180,
-    isButton = false,
-    buttonText = '',
-    buttonOnClick,
-    buttonDisabled,
     userType,
     isRequired,
     children,
@@ -147,19 +139,6 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
             </button>
             )}
           </div>
-          {isButton && (
-          <button
-            type="button"
-            className={styles.button}
-            onClick={buttonOnClick}
-            disabled={
-              buttonDisabled
-              || (isTimer && FormatTime(timerValue) === '00:00')
-            }
-          >
-            {buttonText}
-          </button>
-          )}
         </div>
       </div>
       <div>
