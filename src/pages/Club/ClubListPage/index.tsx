@@ -24,6 +24,7 @@ function ClubListPage() {
         <p className={styles.categories__Label}>Category</p>
         {CLUB_CATEGORY.map((category) => (
           <button
+            key={category}
             type="button"
             className={styles.category__button}
           >
