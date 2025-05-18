@@ -43,6 +43,12 @@ import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import ReportPage from 'pages/Articles/ReportPage';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import FindIdPage from 'pages/Auth/FindIdPage';
+import FindIdEmailPage from 'pages/Auth/FindIdPage/PC/EmailPage';
+import FindIdPhonePage from 'pages/Auth/FindIdPage/PC/PhonePage';
+import MobileFindIdPage from 'pages/Auth/FindIdPage/Mobile';
+import MobileFindIdEmailPage from 'pages/Auth/FindIdPage/Mobile/EmailPage';
+import MobileFindIdPhonePage from 'pages/Auth/FindIdPage/Mobile/PhonePage';
 
 interface WrapperProps {
   title: string;
@@ -115,11 +121,21 @@ function App() {
           <Route path={ROUTES.LostItemChat()} element={<Wrapper needAuth title="분실물 쪽지" element={<LostItemChatPage />} />} />
           <Route path={ROUTES.CampusInfo()} element={<Wrapper title="교내 시설물 정보" element={<CampusInfo />} />} />
           {!isMobile && <Route path={ROUTES.AuthSignup({ isLink: false })} element={<Wrapper title="회원가입" element={<SignupPage />} />} />}
+          {!isMobile && (
+            <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage />} />}>
+              <Route path={ROUTES.Phone()} element={<Wrapper title="아이디 찾기 - 전화번호" element={<FindIdPhonePage />} />} />
+              <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<FindIdEmailPage />} />} />
+            </Route>)}
         </Route>
 
         <Route path={ROUTES.Auth()} element={<AuthPage />}>
           <Route index element={<Wrapper title="로그인" element={<LoginPage />} />} />
           {isMobile && <Route path={ROUTES.AuthSignup({ isLink: false })} element={<Wrapper title="회원가입" element={<SignupPage />} />} />}
+          {isMobile && (
+            <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage />} />}>
+              <Route path={ROUTES.Phone()} element={<Wrapper title="아이디 찾기 - 전화번호" element={<MobileFindIdPhonePage />} />} />
+              <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<MobileFindIdEmailPage />} />} />
+            </Route>)}
           <Route path={ROUTES.AuthFindPW()} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} />
           <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />
         </Route>

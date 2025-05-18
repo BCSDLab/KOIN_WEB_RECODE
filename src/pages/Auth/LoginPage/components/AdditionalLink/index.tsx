@@ -14,10 +14,9 @@ export default function AdditionalLink() {
   if (isMobile) {
     return (
       <div className={styles.help}>
-        <a
+        <Link
           className={styles.help__link}
-          href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp"
-          target="_blank"
+          to={ROUTES.AuthFindID()}
           onClick={() => {
             logger.actionEventClick({
               team: 'USER',
@@ -25,11 +24,10 @@ export default function AdditionalLink() {
               value: '아이디찾기',
             });
           }}
-          rel="noopener noreferrer"
         >
           <MagnifyingGlassIcon />
           아이디 찾기
-        </a>
+        </Link>
         <Link
           className={styles.help__link}
           to={ROUTES.AuthFindPW()}
@@ -65,10 +63,9 @@ export default function AdditionalLink() {
 
   return (
     <div className={styles.help}>
-      <a
+      <Link
         className={styles.help__link}
-        href="https://portal.koreatech.ac.kr/kut/page/findUser.jsp"
-        target="_blank"
+        to={ROUTES.AuthFindID()}
         onClick={() => {
           logger.actionEventClick({
             team: 'USER',
@@ -76,10 +73,9 @@ export default function AdditionalLink() {
             value: '아이디찾기',
           });
         }}
-        rel="noopener noreferrer"
       >
         아이디 찾기
-      </a>
+      </Link>
       <Link
         className={styles.help__link}
         to={ROUTES.AuthFindPW()}
