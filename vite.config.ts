@@ -21,7 +21,7 @@ export default defineConfig({
           urlPrefix: '~/assets',
         },
       },
-      authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
+      authToken: import.meta.env.VITE_SENTRY_AUTH_TOKEN,
     }),
   ],
   resolve: {
