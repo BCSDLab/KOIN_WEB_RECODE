@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/no-array-index-key */
 import { PRIVACY_POLICY, TERMS_OF_SERVICE } from 'static/policy';
 import styles from './PolicyPage.module.scss';
@@ -7,7 +9,14 @@ function PolicyPage() {
     <div className={styles.container}>
       <div className={styles.body}>
         <div className={styles.body__content}>
-          <h2 className={styles['body__content--title']}>코인 개인정보처리방침</h2>
+          <h2
+            className={styles['body__content--title']}
+            onClick={() => {
+              throw new Error('click error example 4');
+            }}
+          >
+            코인 개인정보처리방침
+          </h2>
           {PRIVACY_POLICY.map((policy) => (
             <section className={styles.policy} key={policy.id}>
               <h3 className={styles.policy__title}>{policy.title}</h3>
