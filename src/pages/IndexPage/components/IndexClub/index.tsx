@@ -20,13 +20,13 @@ const ClubLinkCard = () => {
       title: '동아리 목록',
       subtitle: '바로가기',
       link: ROUTES.Club(),
-      Icon: ListIcon,
+      icon: <ListIcon />,
     }, {
       key: 'addClub',
       title: '동아리 추가',
       subtitle: '추가하기',
       link: ROUTES.NewClub(),
-      Icon: AddIcon,
+      icon: <AddIcon />,
     },
   ];
 };
@@ -43,7 +43,7 @@ function IndexClub() {
       </div>
       <div className={styles.cards}>
         {ClubLinkCard().map(({
-          key, title, subtitle, link, Icon, img,
+          key, title, subtitle, link, icon, img,
         }) => (
           <Link
             to={link}
@@ -51,7 +51,7 @@ function IndexClub() {
             className={styles.card}
           >
             <div className={styles.card__segment}>
-              {Icon ? <Icon /> : img && <img src={img} alt="title" /> }
+              {icon ?? <img src={img} alt="title" /> }
               <div className={styles.card__guide}>
                 <span className={styles.card__title}>
                   {title}
