@@ -27,20 +27,22 @@ function IndexPage() {
             <BannerB categoryName={bannerCategory.name} categoryId={bannerCategory.id} />
           )}
         </Suspense>
-        <div className={styles['mobile-wrapper']}>
+        <div className={styles['left-container']}>
           <IndexStore />
           <IndexBus />
           <IndexClub />
+          <Suspense fallback={null}>
+            <IndexArticles />
+          </Suspense>
         </div>
-        <Suspense fallback={null}>
-          <IndexTimetable />
-        </Suspense>
-        <Suspense fallback={null}>
-          <IndexArticles />
-        </Suspense>
-        <Suspense fallback={null}>
-          <IndexCafeteria />
-        </Suspense>
+        <div className={styles['right-container']}>
+          <Suspense fallback={null}>
+            <IndexTimetable />
+          </Suspense>
+          <Suspense fallback={null}>
+            <IndexCafeteria />
+          </Suspense>
+        </div>
       </main>
     </Suspense>
   );
