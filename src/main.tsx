@@ -5,9 +5,16 @@ import { BrowserRouter } from 'react-router-dom';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
 import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import * as Sentry from '@sentry/browser';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+if (import.meta.env.MODE === 'production' && import.meta.env.VITE_BUGSINK_DSN) {
+  Sentry.init({
+    dsn: process.env.VITE_GLITCHTIP_DSN,
+    release: 'koin@0.1.0',
+  });
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
