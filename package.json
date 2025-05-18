@@ -47,6 +47,7 @@
     "start": "vite --open --host",
     "build": "tsc && vite build",
     "test": "test --coverage",
+    "sourcemap:clean": "find ./build -name '*.map' -type f -delete",
     "lint": "yarn lint:eslint && yarn lint:stylelint",
     "lint:eslint": "eslint src/ --ext .tsx,.ts",
     "lint:stylelint": "stylelint \"src/**/*.scss\" --config .stylelint.json"
