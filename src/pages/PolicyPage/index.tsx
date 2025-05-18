@@ -1,17 +1,10 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-array-index-key */
 import { PRIVACY_POLICY, TERMS_OF_SERVICE } from 'static/policy';
 import styles from './PolicyPage.module.scss';
 
 function PolicyPage() {
   return (
-    <div
-      className={styles.container}
-      onClick={() => {
-        throw new Error('error example 6');
-      }}
-    >
+    <div className={styles.container}>
       <div className={styles.body}>
         <div className={styles.body__content}>
           <h2 className={styles['body__content--title']}>
