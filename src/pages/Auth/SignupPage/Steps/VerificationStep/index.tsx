@@ -11,8 +11,8 @@ import { UserType, GENDER_OPTIONS, MESSAGES } from 'static/auth';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
-import CustomInput, { type InputMessage } from '../../components/CustomInput';
 import styles from './VerificationStep.module.scss';
+import PCCustomInput, { type InputMessage } from '../../components/PCCustomInput';
 
 interface VerificationProps {
   onNext: () => void;
@@ -28,8 +28,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const phoneNumber = useWatch({ control, name: 'phone_number' });
   const verificationCode = useWatch({ control, name: 'verification_code' });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [showVerificationField, setShowVerificationField] = useState(false);
+  const [, setShowVerificationField] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [isCodeCorrect, setIsCodeCorrect] = useState(false);
@@ -104,7 +103,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
         }
 
         if (err.status === 409) {
-          setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED });
+          setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
         }
       }
     },
@@ -149,20 +148,20 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
       </div>
 
       <div className={styles['form-container']}>
-        <div className={styles['name-wrapper']}>
-          <label
-            htmlFor="name"
-            className={styles.wrapper__label}
-          >
-            이름
-            <span className={styles.required}>*</span>
-          </label>
+        <div className={styles['input-wrapper']}>
           <Controller
             name="name"
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <CustomInput {...field} placeholder="이름을 입력해 주세요." isDelete />
+              <PCCustomInput
+                {...field}
+                htmlFor="name"
+                labelName="이름"
+                placeholder="이름을 입력해 주세요."
+                isDelete
+                isRequired
+              />
             )}
           />
         </div>
@@ -186,21 +185,16 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
           </div>
         </div>
 
-        <div className={styles['number-wrapper']}>
-          <label
-            htmlFor="gender"
-            className={styles.wrapper__label}
-          >
-            휴대전화
-            <span className={styles.required}>*</span>
-          </label>
-          <div className={styles['input-wrapper']}>
-            <Controller
-              name="phone_number"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <CustomInput
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="phone_number"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <div className={styles['input-with-button']}>
+                <PCCustomInput
+                  htmlFor="gender"
+                  labelName="휴대전화"
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
@@ -208,24 +202,23 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                     setIsCodeCorrect(false);
                   }}
                   placeholder="숫자만 입력해 주세요."
+                  isRequired
                   isDelete
                   message={phoneMessage}
-                  isButton
-                  buttonText={buttonText}
-                  buttonDisabled={!field.value}
-                  buttonOnClick={() => {
-                    checkPhoneNumber(phoneNumber);
+                  onClear={() => {
+                    setPhoneMessage(null);
+                    setButtonText('인증번호 발송');
                   }}
                 >
                   {phoneMessage?.type === 'success' && (
-                    <div className={styles['label-count-number']}>
-                      {' '}
-                      남은 횟수 (
-                      {smsSendCount}
-                      /5)
-                    </div>
+                  <div className={styles['label-count-number']}>
+                    {' '}
+                    남은 횟수 (
+                    {smsSendCount}
+                    /5)
+                  </div>
                   )}
-                  {phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
+                  {phoneMessage?.type === 'error' && phoneMessage.code === 'ALREADY_REGISTERED' && (
                   <>
                     <button
                       onClick={goToLogin}
@@ -234,61 +227,70 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                     >
                       로그인하기
                     </button>
-
-                    <div className={styles['label-link-wrapper']}>
-                      <div className={styles['label-link-wrapper__text']}>
-                        해당 전화번호로 가입하신 적 없으신가요?
-                      </div>
-                      <a
-                        href="https://open.kakao.com/o/sgiYx4Qg"
-                        className={styles['label-link-wrapper__button']}
-                      >
-                        문의하기
-                      </a>
-                    </div>
+                    <span className={styles['label-link-split']}>|</span>
+                    <a
+                      href="https://open.kakao.com/o/sgiYx4Qg"
+                      className={styles['label-link-wrapper__button']}
+                    >
+                      문의하기
+                    </a>
                   </>
                   )}
-                </CustomInput>
-              )}
-            />
-          </div>
+                </PCCustomInput>
+                <button
+                  type="button"
+                  onClick={() => checkPhoneNumber(phoneNumber)}
+                  className={styles['check-button']}
+                  disabled={!/^01[016789][0-9]{7,8}$/.test(field.value)}
+                >
+                  {buttonText}
+                </button>
+              </div>
+            )}
+          />
         </div>
 
-        <div className={styles['verification-wrapper']}>
-          <label
-            htmlFor="gender"
-            className={styles.wrapper__label}
-          >
-            휴대전화 인증
-            <span className={styles.required}>*</span>
-          </label>
+        <div className={styles['input-wrapper']}>
           <Controller
             name="verification_code"
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <CustomInput
-                {...field}
-                onChange={(e) => {
-                  field.onChange(e);
-                  setVerificationMessage(null);
-                }}
-                placeholder="인증번호를 입력해주세요."
-                maxLength={6}
-                isDelete
-                isTimer={isCodeCorrect ? false : isTimer}
-                timerValue={timerValue}
-                message={verificationMessage}
-                isButton
-                buttonText="인증번호 확인"
-                buttonDisabled={!field.value || isCodeCorrect}
-                buttonOnClick={() => {
-                  checkVerificationCode({
-                    phone_number: phoneNumber,
-                    verification_code: verificationCode,
-                  });
-                }}
-              />
+              <div className={styles['input-with-button']}>
+                <PCCustomInput
+                  {...field}
+                  htmlFor="gender"
+                  labelName="휴대전화 인증"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setVerificationMessage(null);
+                  }}
+                  placeholder="인증번호를 입력해주세요."
+                  isRequired
+                  maxLength={6}
+                  isDelete
+                  isTimer={isCodeCorrect ? false : isTimer}
+                  timerValue={timerValue}
+                  message={verificationMessage}
+                  onClear={() => {
+                    setVerificationMessage(null);
+                    setIsCodeCorrect(false);
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    checkVerificationCode({
+                      phone_number: phoneNumber,
+                      verification_code: verificationCode,
+                    });
+                  }}
+                  className={styles['check-button']}
+                  disabled={!field.value || isCodeCorrect}
+                >
+                  인증번호 확인
+                </button>
+              </div>
             )}
           />
         </div>

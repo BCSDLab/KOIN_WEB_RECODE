@@ -9,13 +9,13 @@ import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
-import CustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/CustomInput';
 import CustomSelector from 'pages/Auth/SignupPage/components/CustomSelector';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import showToast from 'utils/ts/showToast';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import PCCustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/PCCustomInput';
 import styles from './StudentDetailStep.module.scss';
 
 interface VerificationProps {
@@ -215,134 +215,120 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles['form-wrapper']}>
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="name"
-              className={styles.wrapper__label}
-            >
-              아이디
-              <span className={styles.required}>*</span>
-            </label>
-            <Controller
-              name="login_id"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                pattern: {
-                  value: REGEX.USERID,
-                  message: '',
-                },
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
+
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="login_id"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+              pattern: {
+                value: REGEX.USERID,
+                message: '',
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <div className={styles['input-with-button']}>
+                <PCCustomInput
                   {...field}
+                  htmlFor="login_id"
+                  labelName="아이디"
+                  isRequired
                   onChange={(e) => {
                     field.onChange(e);
                     setIdMessage(null);
                     setInCorrectId();
                   }}
                   placeholder="5~13자리로 입력해 주세요."
-                  isButton
                   message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
-                  buttonText="중복 확인"
-                  buttonDisabled={!!fieldState.error || !field.value}
-                  buttonOnClick={() => checkUserId(loginId)}
                 />
-              )}
-            />
-          </div>
+                <button
+                  type="button"
+                  onClick={() => checkUserId(loginId)}
+                  className={styles['check-button']}
+                  disabled={!!fieldState.error || !field.value}
+                >
+                  중복 확인
+                </button>
+              </div>
+            )}
+          />
         </div>
 
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="password"
-              className={styles.wrapper__label}
-            >
-              비밀번호
-              <span className={styles.required}>*</span>
-            </label>
-            <Controller
-              name="password"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                pattern: {
-                  value: REGEX.PASSWORD,
-                  message: MESSAGES.PASSWORD.FORMAT,
-                },
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해주세요."
-                  type="password"
-                  onChange={(e) => {
-                    field.onChange(e);
-                    trigger('password_check');
-                  }}
-                  isVisibleButton
-                  message={fieldState.error ? { type: 'warning', content: MESSAGES.PASSWORD.FORMAT } : null}
-                />
-              )}
-            />
-          </div>
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="password"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+              pattern: {
+                value: REGEX.PASSWORD,
+                message: MESSAGES.PASSWORD.FORMAT,
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <PCCustomInput
+                {...field}
+                htmlFor="password"
+                labelName="비밀번호"
+                isRequired
+                placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해주세요."
+                type="password"
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('password_check');
+                }}
+                isVisibleButton
+                message={fieldState.error ? { type: 'warning', content: MESSAGES.PASSWORD.FORMAT } : null}
+              />
+            )}
+          />
         </div>
 
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="password_check"
-              className={styles.wrapper__label}
-            >
-              비밀번호 확인
-              <span className={styles.required}>*</span>
-            </label>
-            <Controller
-              name="password_check"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                validate: (value) => value === getValues('password'),
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="비밀번호를 한번 더 입력해 주세요."
-                  type="password"
-                  isVisibleButton
-                  message={getPasswordCheckMessage(field.value, fieldState.error)}
-                />
-              )}
-            />
-          </div>
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="password_check"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+              validate: (value) => value === getValues('password'),
+            }}
+            render={({ field, fieldState }) => (
+              <PCCustomInput
+                {...field}
+                htmlFor="password_check"
+                labelName="비밀번호 확인"
+                isRequired
+                placeholder="비밀번호를 한번 더 입력해 주세요."
+                type="password"
+                isVisibleButton
+                message={getPasswordCheckMessage(field.value, fieldState.error)}
+              />
+            )}
+          />
         </div>
 
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="nickname"
-              className={styles.wrapper__label}
-            >
-              닉네임 (선택)
-            </label>
-            <Controller
-              name="nickname"
-              control={control}
-              defaultValue=""
-              rules={{
-                pattern: {
-                  value: REGEX.NICKNAME,
-                  message: '',
-                },
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
+        <div className={styles['input-wrapper']}>
+
+          <Controller
+            name="nickname"
+            control={control}
+            defaultValue=""
+            rules={{
+              pattern: {
+                value: REGEX.NICKNAME,
+                message: '',
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <div className={styles['input-with-button']}>
+                <PCCustomInput
                   {...field}
+                  htmlFor="nickname"
+                  labelName="닉네임 (선택)"
                   onChange={(e) => {
                     field.onChange(e);
                     setNicknameMessage(null);
@@ -350,11 +336,48 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
                   }}
                   placeholder="닉네임은 변경 가능합니다."
                   isDelete
-                  isButton
                   message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
-                  buttonText="중복 확인"
-                  buttonOnClick={() => checkNickname(nicknameControl)}
-                  buttonDisabled={!nicknameControl}
+                  value={field.value ?? ''}
+                />
+                <button
+                  type="button"
+                  onClick={() => checkNickname(nicknameControl)}
+                  className={styles['check-button']}
+                  disabled={!nicknameControl}
+                >
+                  중복 확인
+                </button>
+              </div>
+            )}
+          />
+
+        </div>
+
+        <div className={styles['input-wrapper']}>
+          <div className={styles['email-input-wrapper']}>
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              rules={{
+                pattern: {
+                  value: REGEX.STUDENTEMAIL,
+                  message: '',
+                },
+              }}
+              render={({ field, fieldState }) => (
+                <PCCustomInput
+                  {...field}
+                  htmlFor="email"
+                  labelName="이메일 (선택)"
+                  placeholder="이메일을 입력해 주세요."
+                  message={getEmailMessage(field.value, fieldState.error)}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    setEmailMessage(null);
+                    setInCorrectEmail();
+                  }}
+                  userType="학생"
                   value={field.value ?? ''}
                 />
               )}
@@ -362,47 +385,8 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
           </div>
         </div>
 
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="email"
-              className={styles.wrapper__label}
-            >
-              이메일 (선택)
-            </label>
-
-            <div className={styles['email-input-wrapper']}>
-              <Controller
-                name="email"
-                control={control}
-                defaultValue=""
-                rules={{
-                  pattern: {
-                    value: REGEX.STUDENTEMAIL,
-                    message: '',
-                  },
-                }}
-                render={({ field, fieldState }) => (
-                  <CustomInput
-                    {...field}
-                    placeholder="이메일을 입력해 주세요."
-                    message={getEmailMessage(field.value, fieldState.error)}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setEmailMessage(null);
-                      setInCorrectEmail();
-                    }}
-                    userType="학생"
-                    value={field.value ?? ''}
-                  />
-                )}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
+        <div className={styles['input-wrapper']}>
+          <div className={styles['department-wrapper']}>
             <label
               htmlFor="department"
               className={styles.wrapper__label}
@@ -430,37 +414,32 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
           </div>
         </div>
 
-        <div className={styles['form-container']}>
-          <div className={styles['name-wrapper']}>
-            <label
-              htmlFor="student_number"
-              className={styles.wrapper__label}
-            >
-              학번
-              <span className={styles.required}>*</span>
-            </label>
-            <Controller
-              name="student_number"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                pattern: {
-                  value: REGEX.STUDENT_NUMBER,
-                  message: '',
-                },
-              }}
-              render={({ field, fieldState }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="학번을 입력해주세요."
-                  isDelete
-                  message={fieldState.error ? { type: 'warning', content: MESSAGES.STUDENT_NUMBER.FORMAT } : null}
-                />
-              )}
-            />
-          </div>
+        <div className={styles['input-wrapper']}>
+          <Controller
+            name="student_number"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: true,
+              pattern: {
+                value: REGEX.STUDENT_NUMBER,
+                message: '',
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <PCCustomInput
+                {...field}
+                htmlFor="student_number"
+                labelName="학번"
+                isRequired
+                placeholder="학번을 입력해주세요."
+                isDelete
+                message={fieldState.error ? { type: 'warning', content: MESSAGES.STUDENT_NUMBER.FORMAT } : null}
+              />
+            )}
+          />
         </div>
+
       </form>
 
       <div className={styles.container__wrapper}>
