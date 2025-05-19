@@ -7,7 +7,9 @@ function PolicyPage() {
     <div className={styles.container}>
       <div className={styles.body}>
         <div className={styles.body__content}>
-          <h2 className={styles['body__content--title']}>코인 개인정보처리방침</h2>
+          <h2 className={styles['body__content--title']}>
+            코인 개인정보처리방침
+          </h2>
           {PRIVACY_POLICY.map((policy) => (
             <section className={styles.policy} key={policy.id}>
               <h3 className={styles.policy__title}>{policy.title}</h3>
@@ -21,7 +23,9 @@ function PolicyPage() {
               {policy.items && (
                 <ul>
                   {policy.items.map((item, index) => (
-                    <li className={styles.policy__items} key={index}>{item}</li>
+                    <li className={styles.policy__items} key={index}>
+                      {item}
+                    </li>
                   ))}
                 </ul>
               )}
