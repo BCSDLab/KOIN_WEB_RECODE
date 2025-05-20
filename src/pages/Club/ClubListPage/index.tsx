@@ -70,6 +70,7 @@ function ClubListPage() {
             </div>
             <div className={styles.description__dropdown}>
               <Selector
+                isWhiteBackground={false}
                 options={sorts}
                 value={sortValue}
                 onChange={onChangeSort}
@@ -78,9 +79,11 @@ function ClubListPage() {
           </div>
           <div className={styles.card__list}>
             {clubList.map((club) => (
-              <div
+              <button
+                type="button"
                 key={club.id}
                 className={styles.card}
+                onClick={() => navigate(`/club/${club.id}`)}
               >
                 <div className={styles.card__info}>
                   <div className={styles['card__info-title']}>{club.name}</div>
@@ -91,7 +94,7 @@ function ClubListPage() {
                   src={club.imageUrl}
                   alt={club.name}
                 />
-              </div>
+              </button>
             ))}
           </div>
         </main>

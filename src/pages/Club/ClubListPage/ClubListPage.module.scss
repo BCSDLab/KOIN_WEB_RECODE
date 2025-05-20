@@ -49,11 +49,10 @@ main {
 
   .categories {
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
     align-items: center;
     justify-content: space-between;
     row-gap: 66px;
-    flex-wrap: wrap;
     margin: 24px 0;
     border-top: 2px solid #175c8e;
     border-bottom: 2px solid #175c8e;
@@ -65,7 +64,7 @@ main {
       color: #000;
     }
 
-    &__button{
+    &__button {
       width: 100px;
       height: 100px;
       padding: 10px;
@@ -104,7 +103,43 @@ main {
     }
 
     &__dropdown {
+      button {
+        display: flex;
+        width: 100px;
+        height: 30px;
+        padding: 8px 4px 8px 12px;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 8px;
+        border: 1px solid #e1e1e1;
+        background-color: #fafafa;
+        color: #000;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 160%;
+      }
 
+      ul {
+        box-shadow: none;
+        border-radius: 8px;
+        color: #4b4b4b;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 160%;
+      }
+
+      li {
+        width: 100px;
+        height: 30px;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        &:hover {
+          border-radius: 8px;
+        }
+      }
     }
   }
 
