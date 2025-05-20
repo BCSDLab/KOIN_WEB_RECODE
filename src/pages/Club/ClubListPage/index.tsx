@@ -8,17 +8,17 @@ import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
 
-const sortOptions = [
-  { label: '생성순', value: '생성순' },
-  { label: '조회순', value: '조회순' },
+const SORT_OPTIONS = [
+  { label: '생성순', value: 'created' },
+  { label: '조회순', value: 'views' },
 ];
 
 function ClubListPage() {
   const navigate = useNavigate();
-  const [sortValue, setSortValue] = useState(sortOptions[DEFAULT_OPTION_INDEX].value);
+  const [sortValue, setSortValue] = useState(SORT_OPTIONS[DEFAULT_OPTION_INDEX].value);
   const clubCategories = useClubCategories();
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
-  const clubList = useClubList({ categoryId: selectedCategoryId, hitSort: sortValue !== '생성순' });
+  const clubList = useClubList({ categoryId: selectedCategoryId, hitSort: sortValue !== 'created' });
   const totalCount = clubList.length;
 
   const onChangeSort = (e: { target: { value: string } }) => {
@@ -73,7 +73,7 @@ function ClubListPage() {
             <div className={styles.description__dropdown}>
               <Selector
                 isWhiteBackground={false}
-                options={sortOptions}
+                options={SORT_OPTIONS}
                 value={sortValue}
                 onChange={onChangeSort}
               />
