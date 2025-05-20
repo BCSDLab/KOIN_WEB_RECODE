@@ -3,14 +3,14 @@ import ROUTES from 'static/routes';
 import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
 import AddIcon from 'assets/svg/Club/add-icon.svg';
 import ListIcon from 'assets/svg/Club/list-icon.svg';
-import useHotClubs from 'pages/Club/hooks/useHotClubs';
+import useHotClub from 'pages/Club/hooks/useHotClub';
 import styles from './IndexClub.module.scss';
 
 const ClubLinkCard = () => {
-  const { data: hotClubInfo } = useHotClubs();
+  const { data: hotClubInfo } = useHotClub();
   return [
     {
-      key: 'popularClubs',
+      key: 'popularClub',
       title: '인기 동아리',
       subtitle: '바로가기',
       link: ROUTES.ClubDetail({ id: hotClubInfo.club_id.toString(), isLink: true }),

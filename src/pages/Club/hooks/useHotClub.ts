@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { club } from 'api';
 
-function useHotClubs() {
+function useHotClub() {
   const data = useSuspenseQuery(
     {
       queryKey: ['hot-club'],
@@ -11,4 +11,4 @@ function useHotClubs() {
   return data;
 }
 
-export default useHotClubs;
+export default useHotClub;

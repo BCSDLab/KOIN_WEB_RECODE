@@ -1,21 +1,23 @@
 import { cn } from '@bcsdlab/utils';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useClubsCategories from 'pages/Club/hooks/useClubsCategories';
+import useClubCategories from 'pages/Club/hooks/useClubCategories';
 import useClubList from 'pages/Club/hooks/useClubList';
 import { Selector } from 'components/ui/Selector';
 import styles from './ClubListPage.module.scss';
 
-const sorts = [
+const DEFAULT_OPTION_INDEX = 0;
+
+const sortOptions = [
   { label: '생성순', value: '생성순' },
   { label: '조회순', value: '조회순' },
 ];
 
 function ClubListPage() {
   const navigate = useNavigate();
-  const [sortValue, setSortValue] = useState(sorts[0].label);
-  const clubCategories = useClubsCategories();
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>(undefined);
+  const [sortValue, setSortValue] = useState(sortOptions[DEFAULT_OPTION_INDEX].value);
+  const clubCategories = useClubCategories();
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
   const clubList = useClubList({ categoryId: selectedCategoryId, hitSort: sortValue !== '생성순' });
   const totalCount = clubList.length;
 
@@ -71,7 +73,7 @@ function ClubListPage() {
             <div className={styles.description__dropdown}>
               <Selector
                 isWhiteBackground={false}
-                options={sorts}
+                options={sortOptions}
                 value={sortValue}
                 onChange={onChangeSort}
               />

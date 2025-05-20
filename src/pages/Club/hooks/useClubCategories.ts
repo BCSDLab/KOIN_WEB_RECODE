@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { club } from 'api';
 
-function useClubsCategories() {
+function useClubCategories() {
   const { data } = useSuspenseQuery(
     {
       queryKey: ['club-categories'],
@@ -11,4 +11,4 @@ function useClubsCategories() {
   return data.club_categories;
 }
 
-export default useClubsCategories;
+export default useClubCategories;

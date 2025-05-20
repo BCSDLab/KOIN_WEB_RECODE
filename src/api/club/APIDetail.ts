@@ -2,7 +2,7 @@ import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type {
   ClubCategoriesResponse,
   ClubListResponse,
-  HotClubsResponse,
+  HotClubResponse,
 } from './entity';
 
 export class ClubCategories<R extends ClubCategoriesResponse> implements APIRequest<R> {
@@ -26,12 +26,12 @@ export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
 
   constructor(public categoryId?: number, public hitSort?: boolean) {
     this.path = '/clubs'
-    + `${categoryId !== undefined ? `?categoryId=${categoryId}` : ''}`
-    + `${hitSort !== undefined ? `${categoryId !== undefined ? '&' : '?'}hitSort=${hitSort}` : ''}`;
+    + `${(categoryId && `?categoryId=${categoryId}`) || ''}`
+    + `${(hitSort && `${categoryId ? '&' : '?'}hitSort=${hitSort}`) || ''}`;
   }
 }
 
-export class HotClubs<R extends HotClubsResponse> implements APIRequest<R> {
+export class HotClub<R extends HotClubResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/clubs/hot';

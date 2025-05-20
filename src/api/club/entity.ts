@@ -17,10 +17,10 @@ export interface ClubCategoryInfo {
 }
 
 export interface ClubListResponse extends APIResponse {
-  club_categories: ClubCategoryInfo[];
+  clubs: ClubCategoryInfo[];
 }
 
-export interface HotClubsResponse extends APIResponse {
+export interface HotClubResponse extends APIResponse {
   club_id: number;
   name: string;
   image_url: string;

@@ -13,7 +13,8 @@ function useClubList({ categoryId, hitSort }: ClubListProps) {
       queryFn: () => club.getClubList(categoryId, hitSort),
     },
   );
-  return data?.club_categories ?? [];
+
+  return data?.clubs ?? [];
 }
 
 export default useClubList;
