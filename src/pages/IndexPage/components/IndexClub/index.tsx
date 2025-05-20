@@ -13,7 +13,7 @@ const ClubLinkCard = () => {
       key: 'popularClubs',
       title: '인기 동아리',
       subtitle: '바로가기',
-      link: ROUTES.ClubDetail({ id: '1', isLink: true }), // id는 추후 api 연결
+      link: ROUTES.ClubDetail({ id: hotClubInfo.club_id.toString(), isLink: true }),
       img: hotClubInfo.image_url || 'https://placehold.co/60.jpg?text=Coming+soon...',
     }, {
       key: 'clubList',
