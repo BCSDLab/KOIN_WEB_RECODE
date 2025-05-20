@@ -1,6 +1,5 @@
 import { cn } from '@bcsdlab/utils';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import useClubCategories from 'pages/Club/hooks/useClubCategories';
 import useClubList from 'pages/Club/hooks/useClubList';
 import { Selector } from 'components/ui/Selector';
@@ -15,19 +14,27 @@ const SORT_OPTIONS = [
 
 function ClubListPage() {
   const navigate = useNavigate();
-  const [sortValue, setSortValue] = useState(SORT_OPTIONS[DEFAULT_OPTION_INDEX].value);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sortValue = searchParams.get('sort') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
+  const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
   const clubCategories = useClubCategories();
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
   const clubList = useClubList({ categoryId: selectedCategoryId, hitSort: sortValue !== 'created' });
   const totalCount = clubList.length;
 
   const onChangeSort = (e: { target: { value: string } }) => {
-    const { target } = e;
-    setSortValue(target?.value);
+    const changedSort = e.target.value;
+    searchParams.set('sort', changedSort);
+    setSearchParams(searchParams);
   };
 
   const handleCategoryClick = (id: number) => {
-    setSelectedCategoryId((prevId) => (prevId === id ? undefined : id));
+    const isSelected = selectedCategoryId === id;
+    if (isSelected) {
+      searchParams.delete('categoryId');
+    } else {
+      searchParams.set('categoryId', String(id));
+    }
+    setSearchParams(searchParams);
   };
 
   return (
@@ -38,7 +45,7 @@ function ClubListPage() {
           <button
             type="button"
             className={styles['header__add-button']}
-            onClick={() => navigate('/club/new')}
+            onClick={() => navigate('/clubs/new')}
           >
             동아리 생성하기
           </button>
@@ -85,7 +92,7 @@ function ClubListPage() {
                 type="button"
                 key={club.id}
                 className={styles.card}
-                onClick={() => navigate(`/club/${club.id}`)}
+                onClick={() => navigate(`/clubs/${club.id}`)}
               >
                 <div className={styles.card__info}>
                   <div className={styles['card__info-title']}>{club.name}</div>
