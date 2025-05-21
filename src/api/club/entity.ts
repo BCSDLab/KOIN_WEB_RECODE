@@ -9,15 +9,17 @@ export interface ClubCategoriesResponse extends APIResponse {
   club_categories: ClubCategory[];
 }
 
-export interface ClubCategoryInfo {
+export interface Club {
   id: number;
   name: string;
   category: string;
+  likes: number;
   imageUrl: string;
+  isLiked: boolean;
 }
 
 export interface ClubListResponse extends APIResponse {
-  clubs: ClubCategoryInfo[];
+  clubs: Club[];
 }
 
 export interface HotClubResponse extends APIResponse {
@@ -25,3 +27,7 @@ export interface HotClubResponse extends APIResponse {
   name: string;
   image_url: string;
 }
+
+export interface AddClubLikeResponse extends APIResponse { }
+
+export interface CancelClubLikeResponse extends APIResponse { }
