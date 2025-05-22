@@ -1,0 +1,10 @@
+@use "src/utils/scss/media" as media;
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+  text-align: center;
+}

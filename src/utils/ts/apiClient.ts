@@ -7,7 +7,7 @@ import qsStringify from 'utils/ts/qsStringfy';
 import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
 import { deleteCookie, setCookie } from './cookie';
-import { redirectToLogin } from './auth';
+import { redirectToLogin, redirectToMaintenance } from './auth';
 
 const API_URL = import.meta.env.VITE_API_PATH;
 
@@ -160,6 +160,9 @@ export default class APIClient {
         }
         redirectToLogin();
       }
+    }
+    if (error.response?.status === 503) {
+      redirectToMaintenance();
     }
     return null;
   }

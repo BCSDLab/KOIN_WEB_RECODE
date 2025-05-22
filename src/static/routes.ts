@@ -48,6 +48,7 @@ const ROUTES = {
   Webview: () => '/webview',
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
+  Maintenance: () => '/maintenance',
 };
 
 export default ROUTES;
