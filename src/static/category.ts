@@ -1,6 +1,6 @@
 import ROUTES from './routes';
 
-export type SubmenuTitle = '공지사항' | '버스 교통편' | '버스 시간표' | '식단' | '시간표' | '복덕방' | '주변상점' | '교내 시설물 정보' | '코인 사장님' | '리뷰 작성하기' | '리뷰 수정하기' | '리뷰 신고하기' | '전화 주문 혜택' | '쪽지';
+export type SubmenuTitle = '공지사항' | '버스 교통편' | '버스 시간표' | '식단' | '동아리' | '시간표' | '복덕방' | '주변상점' | '교내 시설물 정보' | '코인 사장님' | '리뷰 작성하기' | '리뷰 수정하기' | '리뷰 신고하기' | '전화 주문 혜택' | '쪽지';
 
 export interface Submenu {
   title: SubmenuTitle;
@@ -56,6 +56,13 @@ export const CATEGORY: Category[] = [
       {
         title: '시간표',
         link: ROUTES.Timetable(),
+        newFlag: false,
+        planFlag: false,
+        tag: null,
+      },
+      {
+        title: '동아리',
+        link: ROUTES.Club(),
         newFlag: false,
         planFlag: false,
         tag: null,

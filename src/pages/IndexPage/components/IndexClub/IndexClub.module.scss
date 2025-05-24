@@ -6,7 +6,12 @@
   gap: 8px;
 
   @include media.media-breakpoint(mobile) {
-    display: none;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 33px;
+    gap: 0;
   }
 
   &__title {
@@ -19,6 +24,14 @@
     font-weight: 500;
     line-height: 1.6;
     color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      height: auto;
+      margin-top: 0;
+      padding-left: 3px;
+      margin-left: 16px;
+      font-weight: 700;
+    }
   }
 }
 
@@ -29,6 +42,12 @@
   align-items: center;
   gap: 24px;
   padding: 0 8px;
+
+  @include media.media-breakpoint(mobile) {
+    box-sizing: border-box;
+    width: 100%;
+    gap: 16px;
+  }
 }
 
 .card {
@@ -42,16 +61,36 @@
   align-items: center;
   padding: 32px 24px;
 
+  @include media.media-breakpoint(mobile) {
+    height: 65px;
+    padding: 0 16px;
+    background-color: #fafafa;
+  }
+
   &__segment {
     display: flex;
     align-items: center;
     gap: 22px;
+
+    @include media.media-breakpoint(mobile) {
+      gap: 4px;
+
+      img,
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
   }
 
   &__guide {
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    @include media.media-breakpoint(mobile) {
+      gap: 0;
+    }
   }
 
   &__title {
@@ -60,10 +99,21 @@
     font-weight: 500;
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      line-height: 160%;
+    }
   }
 
   &__subtitle {
     font-family: Pretendard, sans-serif;
     font-size: 14px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 160%;
+    }
   }
 }
