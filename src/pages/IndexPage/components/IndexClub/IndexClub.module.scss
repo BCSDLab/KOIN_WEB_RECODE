@@ -75,7 +75,8 @@
     @include media.media-breakpoint(mobile) {
       gap: 4px;
 
-      img, svg {
+      img,
+      svg {
         width: 30px;
         height: 30px;
       }
