@@ -15,7 +15,7 @@ import {
   TERMINAL_CITY_BUS,
 } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
+import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
@@ -200,7 +200,7 @@ function ShuttleTimetable() {
                   });
                 }}
               >
-                <InfomationIcon />
+                <InformationIcon />
                 <div className={styles['info-footer__text']}>
                   정보가 정확하지 않나요?
                 </div>
@@ -234,7 +234,7 @@ function ShuttleTimetable() {
               });
             }}
           >
-            <InfomationIcon />
+            <InformationIcon />
             <div className={styles['info-footer__text']}>
               정보가 정확하지 않나요?
             </div>
@@ -316,7 +316,7 @@ function ExpressTimetable() {
       />
       <div className={styles['express-footer']}>
         <div className={styles['express-footer__date']}>
-          업데이트 날짜:
+          업데이트 날짜 :
           {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
         </div>
         <button
@@ -331,7 +331,7 @@ function ExpressTimetable() {
             });
           }}
         >
-          <InfomationIcon />
+          <InformationIcon />
           <div className={styles['info-footer__text']}>
             정보가 정확하지 않나요?
           </div>
@@ -431,7 +431,7 @@ function CityTimetable() {
 
       <div className={styles['express-footer']}>
         <div className={styles['express-footer__date']}>
-          업데이트 날짜:
+          업데이트 날짜 :
           {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
         </div>
         <button
@@ -446,7 +446,7 @@ function CityTimetable() {
             });
           }}
         >
-          <InfomationIcon />
+          <InformationIcon />
           <div className={styles['info-footer__text']}>
             정보가 정확하지 않나요?
           </div>

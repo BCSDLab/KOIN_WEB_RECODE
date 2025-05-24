@@ -1,7 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import * as api from 'api';
 import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -64,7 +64,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const logger = useLogger();
   const token = useTokenState();
   const { pathname, search } = useLocation();
-  const navigate = useNavigate();
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
   const isLoggedin = !!token;
@@ -135,7 +134,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         event_category: 'click',
       });
     }
-    navigate(ROUTES.Main(), { replace: true });
   };
 
   const escapeByheader = async (title: string) => {
@@ -146,6 +144,13 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         value: `탈출_헤더_${title}`,
         event_category: 'click',
       });
+    }
+  };
+
+  const handleMenuClick = (title: string) => {
+    logShortcut(title);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
     }
   };
 
@@ -207,7 +212,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 <Link
                   className={styles.megamenu__link}
                   to={isStage && menu.stageLink ? menu.stageLink : menu.link}
-                  onClick={() => logShortcut(menu.title)}
+                  onClick={() => handleMenuClick(menu.title)}
                 >
                   {menu.title}
                 </Link>
