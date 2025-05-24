@@ -1,4 +1,5 @@
 import { cn } from '@bcsdlab/utils';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useClubCategories from 'pages/Club/hooks/useClubCategories';
@@ -7,6 +8,7 @@ import useClubLike from 'pages/Club/hooks/useClubLike';
 import { Selector } from 'components/ui/Selector';
 import HeartOutline from 'assets/svg/Club/heart-outline-icon.svg';
 import HeartFilled from 'assets/svg/Club/heart-filled-icon.svg';
+import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -19,6 +21,7 @@ const SORT_OPTIONS = [
 function ClubListPage() {
   const token = useTokenState();
   const navigate = useNavigate();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const sortValue = searchParams.get('sort') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
   const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
@@ -49,6 +52,10 @@ function ClubListPage() {
     clubId: number,
   ) => {
     e.stopPropagation();
+    if (!token) {
+      openModal();
+      return;
+    }
     clubLikeMutate({
       token,
       isLiked,
@@ -138,6 +145,9 @@ function ClubListPage() {
           </div>
         </main>
       </div>
+      {isModalOpen && (
+        <ClubAuthModal onClose={closeModal} />
+      )}
     </div>
   );
 }
