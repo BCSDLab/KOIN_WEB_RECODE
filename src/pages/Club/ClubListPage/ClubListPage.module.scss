@@ -7,6 +7,11 @@
   display: flex;
   justify-content: center;
   font-family: Pretendard, sans-serif;
+
+  @include media.media-breakpoint(mobile) {
+    box-sizing: border-box;
+    padding: 0 24px 60px 24px;
+  }
 }
 
 .container {
@@ -59,6 +64,10 @@ main {
     border-bottom: 2px solid #175c8e;
     padding: 20px;
 
+    @include media.media-breakpoint(mobile) {
+      padding: 8px 0;
+    }
+
     &__label {
       font-size: 32px;
       font-weight: 700;
@@ -78,6 +87,12 @@ main {
       color: #727272;
       font-size: 26px;
       font-weight: 700;
+
+      @include media.media-breakpoint(mobile) {
+        width: 62px;
+        height: 62px;
+        font-size: 20px;
+      }
 
       &--selected {
         background-color: #175c8e;
@@ -159,6 +174,10 @@ main {
     align-items: center;
     border-radius: 8px;
     border: 1px solid #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+    }
 
     &__info {
       width: 160px;

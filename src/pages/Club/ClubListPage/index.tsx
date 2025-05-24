@@ -1,4 +1,5 @@
 import { cn } from '@bcsdlab/utils';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -19,6 +20,7 @@ const SORT_OPTIONS = [
 ];
 
 function ClubListPage() {
+  const isMobile = useMediaQuery();
   const token = useTokenState();
   const navigate = useNavigate();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -78,7 +80,7 @@ function ClubListPage() {
         </div>
         <main>
           <div className={styles.categories}>
-            <p className={styles.categories__label}>Category</p>
+            {!isMobile && <p className={styles.categories__label}>Category</p>}
             {clubCategories.map((category) => (
               <button
                 key={category.id}
