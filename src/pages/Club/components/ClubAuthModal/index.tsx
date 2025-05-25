@@ -3,10 +3,10 @@ import ROUTES from 'static/routes';
 import styles from './ClubAuthModal.module.scss';
 
 interface ClubAuthModalProps {
-  onClose: () => void;
+  closeModal: () => void;
 }
 
-function ClubAuthModal({ onClose }: ClubAuthModalProps) {
+function ClubAuthModal({ closeModal }: ClubAuthModalProps) {
   const navigate = useNavigate();
 
   return (
@@ -24,14 +24,17 @@ function ClubAuthModal({ onClose }: ClubAuthModalProps) {
           <button
             type="button"
             className={styles['container__button--login']}
-            onClick={() => navigate(ROUTES.Auth())}
+            onClick={() => {
+              navigate(ROUTES.Auth());
+              closeModal();
+            }}
           >
             로그인하기
           </button>
           <button
             type="button"
             className={styles['container__button--back']}
-            onClick={() => onClose()}
+            onClick={() => closeModal()}
           >
             취소하기
           </button>

@@ -1,6 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useClubCategories from 'pages/Club/hooks/useClubCategories';
@@ -20,10 +21,10 @@ const SORT_OPTIONS = [
 ];
 
 function ClubListPage() {
+  const portalManager = useModalPortal();
   const isMobile = useMediaQuery();
   const token = useTokenState();
   const navigate = useNavigate();
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const sortValue = searchParams.get('sort') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
   const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
@@ -55,7 +56,11 @@ function ClubListPage() {
   ) => {
     e.stopPropagation();
     if (!token) {
-      openModal();
+      portalManager.open((portalOption: Portal) => (
+        <ClubAuthModal
+          closeModal={portalOption.close}
+        />
+      ));
       return;
     }
     clubLikeMutate({
@@ -147,9 +152,6 @@ function ClubListPage() {
           </div>
         </main>
       </div>
-      {isModalOpen && (
-        <ClubAuthModal onClose={closeModal} />
-      )}
     </div>
   );
 }

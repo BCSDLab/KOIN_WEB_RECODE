@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteCancelLike, putAddClubLike } from 'api/club';
+import { deleteClubLike, putClubLike } from 'api/club';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import showToast from 'utils/ts/showToast';
 
@@ -17,7 +17,7 @@ function useClubLike() {
       isLiked,
       clubId,
     }: ClubLikeProps) => (
-      isLiked ? deleteCancelLike(token, clubId) : putAddClubLike(token, clubId)
+      isLiked ? deleteClubLike(token, clubId) : putClubLike(token, clubId)
     ),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['club-list'] }),
     onError: (e) => {

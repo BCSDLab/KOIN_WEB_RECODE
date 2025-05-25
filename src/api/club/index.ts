@@ -13,6 +13,6 @@ export const getClubList = APIClient.of(ClubList);
 
 export const getHotClub = APIClient.of(HotClub);
 
-export const putAddClubLike = APIClient.of(AddClubLike);
+export const putClubLike = APIClient.of(AddClubLike);
 
-export const deleteCancelLike = APIClient.of(CancelClubLike);
+export const deleteClubLike = APIClient.of(CancelClubLike);
