@@ -1,25 +1,37 @@
 import { cn } from '@bcsdlab/utils';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { Portal } from 'components/modal/Modal/PortalProvider';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useClubCategories from 'pages/Club/hooks/useClubCategories';
 import useClubList from 'pages/Club/hooks/useClubList';
+import useClubLike from 'pages/Club/hooks/useClubLike';
 import { Selector } from 'components/ui/Selector';
+import HeartOutline from 'assets/svg/Club/heart-outline-icon.svg';
+import HeartFilled from 'assets/svg/Club/heart-filled-icon.svg';
+import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
 
 const SORT_OPTIONS = [
-  { label: '생성순', value: 'created' },
-  { label: '조회순', value: 'views' },
+  { label: '생성순', value: 'NONE' },
+  { label: '조회순', value: 'HITS_DESC' },
 ];
 
 function ClubListPage() {
+  const portalManager = useModalPortal();
+  const isMobile = useMediaQuery();
+  const token = useTokenState();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const sortValue = searchParams.get('sort') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
   const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
   const clubCategories = useClubCategories();
-  const clubList = useClubList({ categoryId: selectedCategoryId, hitSort: sortValue !== 'created' });
+  const clubList = useClubList({ token, categoryId: selectedCategoryId, hitSort: sortValue });
   const totalCount = clubList.length;
+  const { mutate: clubLikeMutate } = useClubLike();
 
   const onChangeSort = (e: { target: { value: string } }) => {
     const changedSort = e.target.value;
@@ -37,6 +49,27 @@ function ClubListPage() {
     setSearchParams(searchParams);
   };
 
+  const handleLikeClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    isLiked: boolean,
+    clubId: number,
+  ) => {
+    e.stopPropagation();
+    if (!token) {
+      portalManager.open((portalOption: Portal) => (
+        <ClubAuthModal
+          closeModal={portalOption.close}
+        />
+      ));
+      return;
+    }
+    clubLikeMutate({
+      token,
+      isLiked,
+      clubId,
+    });
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
@@ -52,7 +85,7 @@ function ClubListPage() {
         </div>
         <main>
           <div className={styles.categories}>
-            <p className={styles.categories__label}>Category</p>
+            {!isMobile && <p className={styles.categories__label}>Category</p>}
             {clubCategories.map((category) => (
               <button
                 key={category.id}
@@ -95,8 +128,19 @@ function ClubListPage() {
                 onClick={() => navigate(`/clubs/${club.id}`)}
               >
                 <div className={styles.card__info}>
-                  <div className={styles['card__info-title']}>{club.name}</div>
-                  <div className={styles['card__info-category']}>{club.category}</div>
+                  <div className={styles['card__info-header']}>
+                    <p className={styles['card__info-title']}>{club.name}</p>
+                    <p className={styles['card__info-category']}>{club.category}</p>
+                  </div>
+                  <div className={styles['card__info-likes']}>
+                    <button
+                      type="button"
+                      onClick={(e) => handleLikeClick(e, club.isLiked, club.id)}
+                    >
+                      {club.isLiked ? <HeartFilled /> : <HeartOutline />}
+                    </button>
+                    <p>{club.likes}</p>
+                  </div>
                 </div>
                 <img
                   className={styles.card__logo}
