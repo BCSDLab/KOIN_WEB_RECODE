@@ -27,7 +27,6 @@ import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
 import TimetablePage from 'pages/TimetablePage/MainTimetablePage';
 import CafeteriaPage from 'pages/Cafeteria';
-import MetaHelmet from 'components/layout/MetaHelmet';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
 import AddReviewPage from 'pages/Store/StoreReviewPage/AddReviewPage';
 import EditReviewPage from 'pages/Store/StoreReviewPage/EditReviewPage';
@@ -54,12 +53,12 @@ function Wrapper({
   element,
   needAuth = false, // 로그인이 필요한 라우트
 }: WrapperProps) {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const token = useTokenState();
 
   useEffect(() => {
     document.title = `코인 - ${title}`;
-  }, [title, location]);
+  }, [title, pathname]);
 
   if (needAuth && !token) {
     return <Navigate replace to={ROUTES.Main()} />;
@@ -67,7 +66,6 @@ function Wrapper({
 
   return (
     <>
-      <MetaHelmet title={title} />
       {element}
       <Suspense fallback={null}>
         <PageViewTracker />
