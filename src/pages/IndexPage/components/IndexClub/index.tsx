@@ -5,6 +5,7 @@ import AddIcon from 'assets/svg/Club/add-icon.svg';
 import ListIcon from 'assets/svg/Club/list-icon.svg';
 import useHotClub from 'pages/Club/hooks/useHotClub';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexClub.module.scss';
 
 const ClubLinkCard = () => {
@@ -33,7 +34,15 @@ const ClubLinkCard = () => {
 };
 
 function IndexClub() {
+  const logger = useLogger();
   const isMobile = useMediaQuery();
+  const logClubList = () => logger.actionEventClick({
+    team: 'CAMPUS',
+    event_category: 'click',
+    event_label: 'main_club',
+    value: '',
+  });
+
   return (
     <section className={styles.template}>
       <div className={styles.template__title}>
@@ -52,6 +61,7 @@ function IndexClub() {
               to={link}
               key={key}
               className={styles.card}
+              onClick={key === 'clubList' ? logClubList : undefined}
             >
               <div className={styles.card__segment}>
                 {icon ?? <img src={img} alt="title" /> }
@@ -77,6 +87,7 @@ function IndexClub() {
               to={link}
               key={key}
               className={styles.card}
+              onClick={key === 'clubList' ? logClubList : undefined}
             >
               <div className={styles.card__segment}>
                 {icon ?? <img src={img} alt="title" /> }

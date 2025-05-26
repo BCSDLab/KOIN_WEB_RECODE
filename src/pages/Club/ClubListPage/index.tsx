@@ -1,4 +1,5 @@
 import { cn } from '@bcsdlab/utils';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { Portal } from 'components/modal/Modal/PortalProvider';
@@ -26,6 +27,7 @@ const SORT_OPTIONS = [
 ];
 
 function ClubListPage() {
+  const logger = useLogger();
   const portalManager = useModalPortal();
   const isMobile = useMediaQuery();
   const token = useTokenState();
@@ -38,13 +40,29 @@ function ClubListPage() {
   const totalCount = clubList.length;
   const { mutate: clubLikeMutate } = useClubLike();
 
+  const handleCreateClubClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_main_create',
+      value: '생성하기',
+    });
+    navigate('/clubs/new');
+  };
+
   const onChangeSort = (e: { target: { value: string } }) => {
     const changedSort = e.target.value;
     searchParams.set('sort', changedSort);
     setSearchParams(searchParams);
   };
 
-  const handleCategoryClick = (id: number) => {
+  const handleCategoryClick = (name: string, id: number) => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_main_category',
+      value: `${name}`,
+    });
     const isSelected = selectedCategoryId === id;
     if (isSelected) {
       searchParams.delete('categoryId');
@@ -52,6 +70,16 @@ function ClubListPage() {
       searchParams.set('categoryId', String(id));
     }
     setSearchParams(searchParams);
+  };
+
+  const handleCardClick = (name: string, id: number) => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_main_select',
+      value: `${name}`,
+    });
+    navigate(`/clubs/${id}`);
   };
 
   const handleLikeClick = (
@@ -83,7 +111,7 @@ function ClubListPage() {
           <button
             type="button"
             className={styles['header__add-button']}
-            onClick={() => navigate('/clubs/new')}
+            onClick={() => handleCreateClubClick()}
           >
             동아리 생성하기
           </button>
@@ -99,7 +127,7 @@ function ClubListPage() {
                 })}
                 key={category.id}
                 type="button"
-                onClick={() => handleCategoryClick(category.id)}
+                onClick={() => handleCategoryClick(category.name, category.id)}
               >
                 <div
                   className={cn({
@@ -142,7 +170,7 @@ function ClubListPage() {
                 type="button"
                 key={club.id}
                 className={styles.card}
-                onClick={() => navigate(`/clubs/${club.id}`)}
+                onClick={() => handleCardClick(club.name, club.id)}
               >
                 <div className={styles.card__info}>
                   <div className={styles['card__info-header']}>
