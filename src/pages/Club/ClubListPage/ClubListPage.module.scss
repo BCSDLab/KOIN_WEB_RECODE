@@ -94,10 +94,10 @@ main {
       }
 
       &--selected {
-        color: #6DBBDD;
+        color: #6dbbdd;
 
-        @include media.media-breakpoint(mobile){
-          color: #175C8E;
+        @include media.media-breakpoint(mobile) {
+          color: #175c8e;
         }
       }
 
@@ -117,7 +117,7 @@ main {
         }
 
         &--selected {
-          background-color: #6DBBDD;
+          background-color: #6dbbdd;
         }
       }
     }
