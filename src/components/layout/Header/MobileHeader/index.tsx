@@ -8,6 +8,7 @@ import { createPortal } from 'react-dom';
 import HamburgerIcon from 'assets/svg/hamburger-icon.svg';
 import KoinServiceLogo from 'assets/svg/koin-service-logo.svg';
 import ArrowBackIcon from 'assets/svg/white-arrow-back-icon.svg';
+import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import ROUTES from 'static/routes';
@@ -75,13 +76,14 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               backInDetailPage();
             }}
           >
-            <ArrowBackIcon />
+            {pathname.startsWith(ROUTES.NewClub()) ? <BlackArrowBackIcon /> : <ArrowBackIcon />}
           </button>
         )}
         <span
           className={cn({
             [styles.mobileheader__title]: true,
             [styles['mobileheader__title--main']]: isMain,
+            [styles['mobileheader__title--new-club']]: pathname.startsWith(ROUTES.NewClub()),
           })}
         >
           {isMain ? (
@@ -91,6 +93,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               .flatMap((category) => category.submenu)
               .find((submenu) => pathname.startsWith(submenu.link))?.title ?? ''
           )}
+          {pathname.startsWith(ROUTES.NewClub()) && '동아리 생성'}
         </span>
         {isCustomButton ? (
           <span
@@ -110,6 +113,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
             type="button"
             aria-label="메뉴 버튼"
             onClick={handleHamburgerClick}
+            disabled={pathname.startsWith(ROUTES.NewClub()) || pathname.startsWith(ROUTES.Club())}
           >
             <HamburgerIcon />
           </button>

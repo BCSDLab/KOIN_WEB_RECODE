@@ -25,3 +25,22 @@ export interface HotClubResponse extends APIResponse {
   name: string;
   image_url: string;
 }
+
+export interface NewClubData {
+  name: string;
+  image_url: string;
+  club_managers: {
+    user_id: string;
+  }[];
+  club_category_id: number;
+  location: string;
+  description: string;
+  instagram?: string;
+  google_form?: string;
+  open_chat?: string;
+  phone_number?: string;
+  role:string;
+}
+
+export interface PostClubResponse extends APIResponse {
+}

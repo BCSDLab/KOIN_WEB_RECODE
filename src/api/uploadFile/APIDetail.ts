@@ -30,3 +30,9 @@ export class LostItemUploadFile<R extends UploadImage> extends BaseUploadFile<R>
     super(authorization, formData, 'LOST_ITEMS/upload/file');
   }
 }
+
+export class ClubUploadFile<R extends UploadImage> extends BaseUploadFile<R> {
+  constructor(authorization: string, formData: FormData) {
+    super(authorization, formData, 'CLUB/upload/file');
+  }
+}
