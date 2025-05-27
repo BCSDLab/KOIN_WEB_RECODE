@@ -180,16 +180,16 @@ function ClubListPage() {
                   <div className={styles['card__info-likes']}>
                     <button
                       type="button"
-                      onClick={(e) => handleLikeClick(e, club.isLiked, club.id)}
+                      onClick={(e) => handleLikeClick(e, club.is_liked, club.id)}
                     >
-                      {club.isLiked ? <HeartFilled /> : <HeartOutline />}
+                      {club.is_liked ? <HeartFilled /> : <HeartOutline />}
                     </button>
                     <p>{club.likes}</p>
                   </div>
                 </div>
                 <img
                   className={styles.card__logo}
-                  src={club.imageUrl}
+                  src={club.image_url}
                   alt={club.name}
                 />
               </button>
