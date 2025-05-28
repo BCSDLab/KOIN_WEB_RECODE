@@ -66,6 +66,7 @@ main {
 
     @include media.media-breakpoint(mobile) {
       padding: 8px 0;
+      border: none;
     }
 
     &__label {
@@ -75,28 +76,49 @@ main {
     }
 
     &__button {
-      width: 100px;
-      height: 100px;
-      padding: 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      border-radius: 50px;
-      background-color: #f5f5f5;
+      font-size: 22px;
+      font-weight: 500;
       color: #727272;
-      font-size: 26px;
-      font-weight: 700;
+      gap: 8px;
 
       @include media.media-breakpoint(mobile) {
-        width: 62px;
-        height: 62px;
-        font-size: 20px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 160%;
+        color: #1f1f1f;
+        gap: 0;
       }
 
       &--selected {
-        background-color: #175c8e;
-        color: #fff;
+        color: #6dbbdd;
+
+        @include media.media-breakpoint(mobile) {
+          color: #175c8e;
+        }
+      }
+
+      &-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100px;
+        height: 100px;
+        border-radius: 99px;
+        opacity: 0.6;
+        background-color: #f5f5f5;
+
+        @include media.media-breakpoint(mobile) {
+          width: 62px;
+          height: 62px;
+        }
+
+        &--selected {
+          background-color: #6dbbdd;
+        }
       }
     }
   }
