@@ -5,8 +5,9 @@ import {
 } from 'react-hook-form';
 import CustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/CustomInput';
 import { useMutation } from '@tanstack/react-query';
-import { checkPhone, smsSend, smsVerify } from 'api/auth';
-import { SmsSendResponse } from 'api/auth/entity';
+import {
+  phoneExists, smsSend, smsVerify, idFindSms,
+} from 'api/auth';
 import { MESSAGES } from 'static/auth';
 import { isKoinError } from '@bcsdlab/koin';
 import useCountdownTimer from 'pages/Auth/SignupPage/hooks/useCountdownTimer';
@@ -20,6 +21,7 @@ function MobileFindIdPhonePage() {
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
   const [isVerified, enableVerified] = useBooleanState(false);
+  const [isCodeVerified, enableCodeVerified] = useBooleanState(false);
   const [smsSendCount, setSmsSendCount] = useState(0);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const navigate = useNavigate();
@@ -37,10 +39,6 @@ function MobileFindIdPhonePage() {
   const phoneNumber = useWatch({ control, name: 'phone_number' });
   const verificationCode = useWatch({ control, name: 'verification_code' });
 
-  const onSubmit = (data : any) => {
-    console.log('입력된 데이터:', data);
-  };
-
   const {
     isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,
   } = useCountdownTimer({
@@ -50,12 +48,12 @@ function MobileFindIdPhonePage() {
     },
   });
 
-  const { mutate: sendSMSToUser } = useMutation({
+  const { mutate: sendVerificationSms } = useMutation({
     mutationFn: smsSend,
-    onSuccess: (data : SmsSendResponse) => {
+    onSuccess: ({ remaining_count }) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
-      setSmsSendCount(data.remaining_count);
+      setSmsSendCount(remaining_count);
       enableButton();
       setTimeout(() => {
         disableButton();
@@ -70,25 +68,25 @@ function MobileFindIdPhonePage() {
     },
   });
 
-  const { mutate: checkPhoneNumber } = useMutation({
-    mutationFn: checkPhone,
+  const { mutate: checkPhoneExists } = useMutation({
+    mutationFn: phoneExists,
     onSuccess: () => {
-      sendSMSToUser({ phone_number: phoneNumber });
+      sendVerificationSms({ phone_number: phoneNumber });
+      setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID }); }
-
-        if (err.status === 409) { setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED }); }
+        if (err.status === 404) { setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.NOT_REGISTERED }); }
       }
     },
   });
 
-  const { mutate: checkVerificationCode } = useMutation({
+  const { mutate: checkVerificationSmsVerify } = useMutation({
     mutationFn: smsVerify,
     onSuccess: () => {
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
       enableVerified();
+      enableCodeVerified();
       setCorrect();
     },
     onError: (err) => {
@@ -100,8 +98,23 @@ function MobileFindIdPhonePage() {
     },
   });
 
+  const { mutate: findId } = useMutation({
+    mutationFn: idFindSms,
+    onSuccess: ({ login_id }) => {
+      navigate(ROUTES.IDResult());
+      navigate(`${ROUTES.IDResult()}?userId=${login_id}`);
+    },
+  });
+
   const onClickSendVerificationButton = () => {
-    checkVerificationCode({
+    checkVerificationSmsVerify({
+      phone_number: phoneNumber,
+      verification_code: verificationCode,
+    });
+  };
+
+  const onClickFindIdButton = () => {
+    findId({
       phone_number: phoneNumber,
       verification_code: verificationCode,
     });
@@ -119,7 +132,7 @@ function MobileFindIdPhonePage() {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.container}>
+      <form onSubmit={methods.handleSubmit(onClickFindIdButton)} className={styles.container}>
         <div className={styles['form-container']}>
           <div className={styles['name-gender-wrapper']}>
             <h1 className={styles['name-gender-wrapper__header']}>휴대전화 번호</h1>
@@ -135,10 +148,10 @@ function MobileFindIdPhonePage() {
                   isDelete={!isVerified}
                   message={phoneMessage}
                   isButton
-                  // disabled={isVerified}
+                  disabled={isVerified}
                   buttonText="인증번호 발송"
                   buttonDisabled={!field.value || isDisabled || isVerified}
-                  buttonOnClick={() => checkPhoneNumber(phoneNumber)}
+                  buttonOnClick={() => checkPhoneExists({ phone_number: phoneNumber })}
                 >
                   {phoneMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
@@ -163,13 +176,14 @@ function MobileFindIdPhonePage() {
                 <CustomInput
                   {...field}
                   placeholder="인증번호를 입력해주세요."
-                  isDelete
+                  isDelete={!isCodeVerified}
                   isTimer={isVerified ? false : isTimer}
                   timerValue={timerValue}
                   message={verificationMessage}
                   isButton
+                  disabled={isCodeVerified}
                   buttonText="인증번호 확인"
-                  buttonDisabled={!field.value}
+                  buttonDisabled={!field.value || isDisabled || isCodeVerified}
                   buttonOnClick={() => onClickSendVerificationButton()}
                 >
                   {verificationMessage?.type === 'default' && (
@@ -187,8 +201,7 @@ function MobileFindIdPhonePage() {
           </div>
         </div>
         <button
-          type="button"
-          // onClick={onNext}
+          type="submit"
           className={styles['next-button']}
           disabled={!isFormFilled || !isCodeCorrect}
         >

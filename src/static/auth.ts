@@ -45,6 +45,8 @@ export const MESSAGES = {
     AVAILABLE: '사용 가능한 이메일입니다.',
     FORMAT: '올바른 이메일 형식이 아닙니다. 다시 입력해 주세요.',
     DUPLICATED: '이미 사용 중인 이메일입니다.',
+    NOT_REGISTERED: '유효하지 않은 이메일입니다.',
+    CODE_SENT: '인증번호가 발송되었습니다.',
   },
 };
 
