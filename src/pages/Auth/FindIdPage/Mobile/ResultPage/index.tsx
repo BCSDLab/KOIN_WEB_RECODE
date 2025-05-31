@@ -3,7 +3,8 @@ import styles from './ResultPage.module.scss';
 
 function ResultPage() {
   const [searchParams] = useSearchParams();
-  const userId = searchParams.get('login_id');
+  const userId = searchParams.get('userId');
+
   return (
     <div className={styles.container}>
       <h1>Result Page</h1>
