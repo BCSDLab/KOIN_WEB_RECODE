@@ -58,7 +58,7 @@ export const smsVerify = APIClient.of(SmsVerify);
 export const checkId = APIClient.of(CheckId);
 
 export const emailDuplicateCheck = APIClient.of(EmailDuplicateCheck);
-///
+
 export const emailExists = APIClient.of(EmailExists);
 
 export const verificationEmailSend = APIClient.of(VerificationEmailSend);

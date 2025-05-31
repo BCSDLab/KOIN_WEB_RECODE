@@ -261,8 +261,6 @@ export class EmailDuplicateCheck<R extends EmailDuplicateCheckResponse> implemen
     this.path = `/user/check/email?email=${email}`;
   }
 }
-
-// 이메일로 ID 찾기
 export class EmailExists<R extends EmailExistsResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
@@ -313,7 +311,6 @@ export class IdFindEmail<R extends IdFindEmailResponse> implements APIRequest<R>
   constructor(public data: IdFindEmailRequest) { }
 }
 
-// 휴대폰으로 ID 찾기
 export class PhoneExists<R extends PhoneExistsResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 

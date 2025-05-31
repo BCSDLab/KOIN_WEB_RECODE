@@ -154,7 +154,6 @@ export interface SmsVerifyRequest {
   verification_code: string;
 }
 
-// 이메일로 ID 찾기
 export interface EmailExistsRequest {
   email: string;
 }
@@ -187,7 +186,6 @@ export interface IdFindEmailResponse extends APIResponse {
   login_id: string;
 }
 
-// 휴대폰으로 ID 찾기
 export interface PhoneExistsRequest {
   phone_number: string;
 }
