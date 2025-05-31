@@ -22,8 +22,6 @@ import {
   VerificationEmailVerify,
   IdFindEmail,
   PhoneExists,
-  VerificationSmsSend,
-  VerificationSmsVerify,
   IdFindSms,
 } from './APIDetail';
 
@@ -60,7 +58,7 @@ export const smsVerify = APIClient.of(SmsVerify);
 export const checkId = APIClient.of(CheckId);
 
 export const emailDuplicateCheck = APIClient.of(EmailDuplicateCheck);
-
+///
 export const emailExists = APIClient.of(EmailExists);
 
 export const verificationEmailSend = APIClient.of(VerificationEmailSend);
@@ -70,9 +68,5 @@ export const verificationEmailVerify = APIClient.of(VerificationEmailVerify);
 export const idFindEmail = APIClient.of(IdFindEmail);
 
 export const phoneExists = APIClient.of(PhoneExists);
-
-export const verificationSmsSend = APIClient.of(VerificationSmsSend);
-
-export const verificationSmsVerify = APIClient.of(VerificationSmsVerify);
 
 export const idFindSms = APIClient.of(IdFindSms);

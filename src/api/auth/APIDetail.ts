@@ -36,10 +36,6 @@ import {
   IdFindEmailRequest,
   EmailExistsResponse,
   EmailExistsRequest,
-  VerificationSmsSendResponse,
-  VerificationSmsSendRequest,
-  VerificationSmsVerifyResponse,
-  VerificationSmsVerifyRequest,
   IdFindSmsResponse,
   IdFindSmsRequest,
 } from './entity';
@@ -328,31 +324,6 @@ export class PhoneExists<R extends PhoneExistsResponse> implements APIRequest<R>
   auth = false;
 
   constructor(public data: PhoneExistsRequest) {}
-}
-
-export class VerificationSmsSend<R extends VerificationSmsSendResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path = '/users/verification/sms/send';
-
-  response!: R;
-
-  auth = false;
-
-  constructor(public data: VerificationSmsSendRequest) { }
-}
-
-export class VerificationSmsVerify<
-  R extends VerificationSmsVerifyResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path = '/users/verification/sms/verify';
-
-  response!: R;
-
-  auth = false;
-
-  constructor(public data: VerificationSmsVerifyRequest) { }
 }
 
 export class IdFindSms <R extends IdFindSmsResponse> implements APIRequest<R> {

@@ -212,7 +212,9 @@ export interface VerificationSmsVerifyRequest {
   verification_code: string;
 }
 
-export interface IdFindSmsResponse extends APIResponse { }
+export interface IdFindSmsResponse extends APIResponse {
+  login_id: string;
+}
 
 export interface IdFindSmsRequest {
   phone_number: string;
