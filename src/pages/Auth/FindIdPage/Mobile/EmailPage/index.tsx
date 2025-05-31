@@ -103,7 +103,6 @@ function MobileFindIdEmailPage() {
   const { mutate: findEmail } = useMutation({
     mutationFn: idFindEmail,
     onSuccess: ({ login_id }) => {
-      navigate(ROUTES.IDResult());
       navigate(`${ROUTES.IDResult()}?userId=${login_id}`);
     },
   });
