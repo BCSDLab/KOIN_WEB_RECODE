@@ -39,10 +39,6 @@ function MobileFindIdPhonePage() {
   const phoneNumber = useWatch({ control, name: 'phone_number' });
   const verificationCode = useWatch({ control, name: 'verification_code' });
 
-  const onSubmit = (data : any) => {
-    console.log('입력된 데이터:', data);
-  };
-
   const {
     isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,
   } = useCountdownTimer({
@@ -52,7 +48,6 @@ function MobileFindIdPhonePage() {
     },
   });
 
-  // 2. 휴대폰 인증 코드 전송
   const { mutate: sendVerificationSms } = useMutation({
     mutationFn: smsSend,
     onSuccess: ({ remaining_count }) => {
@@ -73,7 +68,6 @@ function MobileFindIdPhonePage() {
     },
   });
 
-  // 1. 휴대폰 존재 여부 확인
   const { mutate: checkPhoneExists } = useMutation({
     mutationFn: phoneExists,
     onSuccess: () => {
@@ -87,7 +81,6 @@ function MobileFindIdPhonePage() {
     },
   });
 
-  // 3. 휴대폰 인증 코드 검증
   const { mutate: checkVerificationSmsVerify } = useMutation({
     mutationFn: smsVerify,
     onSuccess: () => {
@@ -105,7 +98,6 @@ function MobileFindIdPhonePage() {
     },
   });
 
-  // 4. ID 찾기
   const { mutate: findId } = useMutation({
     mutationFn: idFindSms,
     onSuccess: ({ login_id }) => {
@@ -140,7 +132,7 @@ function MobileFindIdPhonePage() {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.container}>
+      <form onSubmit={methods.handleSubmit(onClickFindIdButton)} className={styles.container}>
         <div className={styles['form-container']}>
           <div className={styles['name-gender-wrapper']}>
             <h1 className={styles['name-gender-wrapper__header']}>휴대전화 번호</h1>
@@ -209,8 +201,7 @@ function MobileFindIdPhonePage() {
           </div>
         </div>
         <button
-          type="button"
-          onClick={onClickFindIdButton}
+          type="submit"
           className={styles['next-button']}
           disabled={!isFormFilled || !isCodeCorrect}
         >

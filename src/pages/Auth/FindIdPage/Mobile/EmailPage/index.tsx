@@ -39,10 +39,6 @@ function MobileFindIdEmailPage() {
   const email = useWatch({ control, name: 'email' });
   const verificationCode = useWatch({ control, name: 'verification_code' });
 
-  const onSubmit = (data : any) => {
-    console.log('입력된 데이터:', data);
-  };
-
   const {
     isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,
   } = useCountdownTimer({
@@ -52,7 +48,6 @@ function MobileFindIdEmailPage() {
     },
   });
 
-  // 2. 이메일 인증 코드 전송
   const { mutate: sendVerificationEmail } = useMutation({
     mutationFn: verificationEmailSend,
     onSuccess: ({ remaining_count }) => {
@@ -73,7 +68,6 @@ function MobileFindIdEmailPage() {
     },
   });
 
-  // 1. 이메일 존재 여부 확인
   const { mutate: checkEmailExists } = useMutation({
     mutationFn: emailExists,
     onSuccess: () => {
@@ -89,7 +83,6 @@ function MobileFindIdEmailPage() {
     },
   });
 
-  // 3. 이메일 인증 코드 검증
   const { mutate: checkVerificationEmailVerify } = useMutation({
     mutationFn: verificationEmailVerify,
     onSuccess: () => {
@@ -107,7 +100,6 @@ function MobileFindIdEmailPage() {
     },
   });
 
-  // 4. ID 찾기
   const { mutate: findEmail } = useMutation({
     mutationFn: idFindEmail,
     onSuccess: ({ login_id }) => {
@@ -135,14 +127,13 @@ function MobileFindIdEmailPage() {
   useEffect(() => {
     disableButton();
     stopTimer();
-    // setVerificationMessage({ type: 'default', content: MESSAGES.PHONE.REGISTRATION });
     setEmailMessage(null);
     setIncorrect();
   }, [email]);
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.container}>
+      <form onSubmit={methods.handleSubmit(onClickFindIdButton)} className={styles.container}>
         <div className={styles['form-container']}>
           <div className={styles['name-gender-wrapper']}>
             <h1 className={styles['name-gender-wrapper__header']}>이메일</h1>
@@ -212,8 +203,7 @@ function MobileFindIdEmailPage() {
           </div>
         </div>
         <button
-          type="button"
-          onClick={onClickFindIdButton}
+          type="submit"
           className={styles['next-button']}
           disabled={!isFormFilled || !isCodeCorrect}
         >
