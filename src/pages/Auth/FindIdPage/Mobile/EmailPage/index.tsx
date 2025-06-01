@@ -186,17 +186,7 @@ function MobileFindIdEmailPage() {
                   buttonText="인증번호 확인"
                   buttonDisabled={!field.value || isDisabled || isCodeVerified}
                   buttonOnClick={() => onClickSendVerificationButton()}
-                >
-                  {verificationMessage?.type === 'default' && (
-                    <button
-                      className={styles['label-link-button']}
-                      type="button"
-                      onClick={() => navigate(ROUTES.Email())}
-                    >
-                      이메일로 찾기
-                    </button>
-                  )}
-                </CustomInput>
+                />
               )}
             />
           </div>
