@@ -49,6 +49,7 @@ import FindIdPhonePage from 'pages/Auth/FindIdPage/PC/PhonePage';
 import MobileFindIdEmailPage from 'pages/Auth/FindIdPage/Mobile/EmailPage';
 import MobileFindIdPhonePage from 'pages/Auth/FindIdPage/Mobile/PhonePage';
 import MobileFindIdResultPage from 'pages/Auth/FindIdPage/Mobile/ResultPage';
+import FindIdResultPage from 'pages/Auth/FindIdPage/PC/ResultPage';
 
 interface WrapperProps {
   title: string;
@@ -125,6 +126,7 @@ function App() {
             <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage />} />}>
               <Route path={ROUTES.Phone()} element={<Wrapper title="아이디 찾기 - 전화번호" element={<FindIdPhonePage />} />} />
               <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<FindIdEmailPage />} />} />
+              <Route path={ROUTES.IDResult()} element={<Wrapper title="아이디 찾기 - 결과" element={<FindIdResultPage />} />} />
             </Route>)}
         </Route>
 
