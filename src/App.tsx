@@ -46,9 +46,9 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import FindIdPage from 'pages/Auth/FindIdPage';
 import FindIdEmailPage from 'pages/Auth/FindIdPage/PC/EmailPage';
 import FindIdPhonePage from 'pages/Auth/FindIdPage/PC/PhonePage';
-import MobileFindIdPage from 'pages/Auth/FindIdPage/Mobile';
 import MobileFindIdEmailPage from 'pages/Auth/FindIdPage/Mobile/EmailPage';
 import MobileFindIdPhonePage from 'pages/Auth/FindIdPage/Mobile/PhonePage';
+import MobileFindIdResultPage from 'pages/Auth/FindIdPage/Mobile/ResultPage';
 
 interface WrapperProps {
   title: string;
@@ -135,6 +135,7 @@ function App() {
             <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage />} />}>
               <Route path={ROUTES.Phone()} element={<Wrapper title="아이디 찾기 - 전화번호" element={<MobileFindIdPhonePage />} />} />
               <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<MobileFindIdEmailPage />} />} />
+              <Route path={ROUTES.IDResult()} element={<Wrapper title="아이디 찾기 - 결과" element={<MobileFindIdResultPage />} />} />
             </Route>)}
           <Route path={ROUTES.AuthFindPW()} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} />
           {/* <Route path={ROUTES.AuthFindPW()} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} /> */}
