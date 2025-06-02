@@ -18,8 +18,9 @@ function useEmailVerification({ email }: { email: string }) {
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
   const [isVerified, enableVerified] = useBooleanState(false);
   const [isCodeVerified, enableCodeVerified] = useBooleanState(false);
-  const [smsSendCount, setSmsSendCount] = useState(0);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
+
+  const [smsSendCount, setSmsSendCount] = useState(0);
 
   const {
     isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,

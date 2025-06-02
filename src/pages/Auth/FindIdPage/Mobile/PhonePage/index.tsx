@@ -32,10 +32,10 @@ function MobileFindIdPhonePage() {
     findId,
     isDisabled,
     disableButton,
-    isVerified,
-    isCodeVerified,
+    isVerified, //
+    isCodeVerified, //
     smsSendCount,
-    isCodeCorrect,
+    isCodeCorrect, //
     setIncorrect,
     setPhoneMessage,
     setVerificationMessage,
