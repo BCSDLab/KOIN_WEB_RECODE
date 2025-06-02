@@ -39,6 +39,7 @@ const ROUTES = {
   AuthFindID: () => '/auth/findid',
   Phone: () => '/auth/findid/phone',
   Email: () => '/auth/findid/email',
+  IDResult: () => '/auth/findid/result',
   AuthModifyInfo: () => '/auth/modifyinfo',
   Review: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/review/${id}` : '/review/:id'),
   ReviewEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/edit/review/${id}` : '/edit/review/:id'),

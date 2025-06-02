@@ -26,6 +26,18 @@ import {
   LoginStudentRequest,
   CheckIdResponse,
   EmailDuplicateCheckResponse,
+  PhoneExistsResponse,
+  PhoneExistsRequest,
+  VerificationEmailSendResponse,
+  VerificationEmailSendRequest,
+  VerificationEmailVerifyRequest,
+  VerificationEmailVerifyResponse,
+  IdFindEmailResponse,
+  IdFindEmailRequest,
+  EmailExistsResponse,
+  EmailExistsRequest,
+  IdFindSmsResponse,
+  IdFindSmsRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -248,4 +260,77 @@ export class EmailDuplicateCheck<R extends EmailDuplicateCheckResponse> implemen
   constructor(email: string) {
     this.path = `/user/check/email?email=${email}`;
   }
+}
+export class EmailExists<R extends EmailExistsResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/user/email/exists';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: EmailExistsRequest) { }
+}
+
+export class VerificationEmailSend<
+  R extends VerificationEmailSendResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/verification/email/send';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: VerificationEmailSendRequest) { }
+}
+
+export class VerificationEmailVerify<
+  R extends VerificationEmailVerifyResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/verification/email/verify';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: VerificationEmailVerifyRequest) { }
+}
+
+export class IdFindEmail<R extends IdFindEmailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/id/find/email';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: IdFindEmailRequest) { }
+}
+
+export class PhoneExists<R extends PhoneExistsResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/user/phone/exists';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: PhoneExistsRequest) {}
+}
+
+export class IdFindSms <R extends IdFindSmsResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/id/find/sms';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: IdFindSmsRequest) { }
 }
