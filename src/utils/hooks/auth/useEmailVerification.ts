@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
-function usePhoneVerification({ email }: { email: string }) {
+function useEmailVerification({ email }: { email: string }) {
   const navigate = useNavigate();
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [emailMessage, setEmailMessage] = useState<InputMessage | null>(null);
@@ -110,4 +110,4 @@ function usePhoneVerification({ email }: { email: string }) {
   };
 }
 
-export default usePhoneVerification;
+export default useEmailVerification;

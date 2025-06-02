@@ -13,7 +13,6 @@ function MobileFindIdEmailPage() {
     defaultValues: {
       email: '',
       verification_code: '',
-      phone_number: '',
     },
   });
 

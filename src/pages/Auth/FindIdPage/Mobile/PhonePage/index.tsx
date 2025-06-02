@@ -17,7 +17,6 @@ function MobileFindIdPhonePage() {
   const methods = useForm({
     mode: 'onChange',
     defaultValues: {
-      email: '',
       verification_code: '',
       phone_number: '',
     },
