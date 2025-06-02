@@ -95,7 +95,6 @@ function usePhoneVerification({ phoneNumber }: { phoneNumber: string }) {
   const { mutate: findId } = useMutation({
     mutationFn: idFindSms,
     onSuccess: ({ login_id }) => {
-      navigate(ROUTES.IDResult());
       navigate(`${ROUTES.IDResult()}?userId=${login_id}`);
     },
   });
