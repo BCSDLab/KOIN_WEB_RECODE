@@ -19,6 +19,7 @@ function NewClubPage() {
     location: '',
     description: '',
     role: '',
+    is_like_hidden: false,
   });
 
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);

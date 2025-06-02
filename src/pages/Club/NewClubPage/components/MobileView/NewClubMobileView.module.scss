@@ -105,7 +105,6 @@
     font-family: Pretendard, sans-serif;
     font-size: 16px;
     font-weight: 500;
-    margin-top: 16px;
   }
 }
 
@@ -246,4 +245,28 @@
 
 .form-contact .form__text-input {
   max-width: 270px;
+}
+
+.name-header {
+  margin-top: 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.like {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #000;
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.like svg {
+  width: 24px;
+  height: 24px;
 }

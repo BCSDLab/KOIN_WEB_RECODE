@@ -8,14 +8,15 @@ import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import DropDownIcon from 'assets/svg/Club/dropdown-icon.svg';
-// import DisplayIcon from 'assets/svg/Club/display-icon.svg';
-// import NonDisplayIcon from 'assets/svg/Club/nondisplay-icon.svg';
-import { useState } from 'react';
+import DisplayIcon from 'assets/svg/Club/display-icon.svg';
+import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
+import LikeIcon from 'assets/svg/Club/like-icon.svg';
+import { Dispatch, SetStateAction, useState } from 'react';
 import styles from './NewClubMobileView.module.scss';
 
 interface MobileViewProps {
   formData: NewClubData;
-  setFormData: (data: NewClubData) => void;
+  setFormData: Dispatch<SetStateAction<NewClubData>>;
   openModal: () => void;
 }
 
@@ -51,11 +52,18 @@ export default function MobileView({
   };
 
   const handleOpenModal = () => {
-    if (!formData.name || !formData.location || !formData.description) {
-      showToast('error', '동아리명, 위치, 소개는 필수 입력 사항입니다.');
+    if (!formData.name || !formData.location || !formData.image_url) {
+      showToast('error', '동아리명, 위치, 이미지는 필수 입력 사항입니다.');
       return;
     }
     openModal();
+  };
+
+  const handleClickLike = () => {
+    setFormData((prev) => ({
+      ...prev,
+      is_like_hidden: !prev.is_like_hidden,
+    }));
   };
 
   return (
@@ -110,7 +118,14 @@ export default function MobileView({
           </button>
         </div>
         <div className={styles['form-name']}>
-          <div className={styles['form-label__name']}>동아리명</div>
+          <div className={styles['name-header']}>
+            <div className={styles['form-label__name']}>동아리명</div>
+            <button type="button" className={styles.like} onClick={handleClickLike}>
+              <LikeIcon />
+              좋아요 표시하기
+              {formData.is_like_hidden ? <DisplayIcon /> : <UndisplayIcon />}
+            </button>
+          </div>
           <input
             className={styles['form__text-input']}
             value={formData.name}
@@ -182,7 +197,7 @@ export default function MobileView({
           <textarea
             className={styles.form__textarea}
             rows={1}
-            placeholder="동아리 소개를 입력해주세요(필수)"
+            placeholder="동아리 소개를 입력해주세요(선택)"
             value={formData.description}
             onChange={(e) => {
               autoResize(e.currentTarget);

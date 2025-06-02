@@ -1,6 +1,7 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type {
   ClubCategoriesResponse,
+  ClubDetailResponse,
   ClubListResponse,
   HotClubResponse,
   NewClubData,
@@ -53,4 +54,18 @@ export class PostClub<R extends PostClubResponse> implements APIRequest<R> {
   auth = true;
 
   constructor(public authorization: string, public data: NewClubData) { }
+}
+
+export class ClubDetail<R extends ClubDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/clubs';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public clubId: number) {
+    this.path = `/clubs/${clubId}`;
+  }
 }

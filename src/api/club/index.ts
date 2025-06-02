@@ -1,6 +1,7 @@
 import APIClient from 'utils/ts/apiClient';
 import {
   ClubCategories,
+  ClubDetail,
   ClubList,
   HotClub,
   PostClub,
@@ -13,3 +14,5 @@ export const getClubList = APIClient.of(ClubList);
 export const getHotClub = APIClient.of(HotClub);
 
 export const postClub = APIClient.of(PostClub);
+
+export const getClubDetail = APIClient.of(ClubDetail);

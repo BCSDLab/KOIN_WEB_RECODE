@@ -6,13 +6,16 @@ import showToast from 'utils/ts/showToast';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import DropDownIcon from 'assets/svg/Club/dropdown-icon.svg';
+import LikeIcon from 'assets/svg/Club/like-icon.svg';
+import DisplayIcon from 'assets/svg/Club/display-icon.svg';
+import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
 import styles from './NewClubPCView.module.scss';
 
 interface PCViewProps {
   formData: NewClubData;
-  setFormData: (data: NewClubData) => void;
+  setFormData: Dispatch<SetStateAction<NewClubData>>;
   openModal: () => void;
 }
 export default function PCView({ formData, setFormData, openModal }: PCViewProps) {
@@ -20,7 +23,6 @@ export default function PCView({ formData, setFormData, openModal }: PCViewProps
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
   const [isDragOver, setIsDragOver] = useState(false);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-
   const saveImage = async () => {
     try {
       const images = await saveImgFile();
@@ -68,12 +70,20 @@ export default function PCView({ formData, setFormData, openModal }: PCViewProps
   };
 
   const handleOpenModal = () => {
-    if (!formData.name || !formData.location || !formData.description) {
-      showToast('error', '동아리명, 위치, 소개는 필수 입력 사항입니다.');
+    if (!formData.name || !formData.location || !formData.image_url) {
+      showToast('error', '동아리명, 위치, 이미지는 필수 입력 사항입니다.');
       return;
     }
     openModal();
   };
+
+  const handleClickLike = () => {
+    setFormData((prev) => ({
+      ...prev,
+      is_like_hidden: !prev.is_like_hidden,
+    }));
+  };
+
   return (
     <div className={styles.layout}>
       <div className={styles.header}>
@@ -159,7 +169,7 @@ export default function PCView({ formData, setFormData, openModal }: PCViewProps
               className={styles.form__textarea}
               value={formData.description}
               rows={1}
-              placeholder="동아리 소개를 입력해주세요(필수)"
+              placeholder="동아리 소개를 입력해주세요(선택)"
               onChange={(e) => {
                 autoResize(e.currentTarget);
                 setFormData({ ...formData, description: e.target.value });
@@ -259,7 +269,11 @@ export default function PCView({ formData, setFormData, openModal }: PCViewProps
                 </label>
               </div>
             )}
-
+          <button type="button" className={styles.like} onClick={handleClickLike}>
+            <LikeIcon />
+            좋아요 표시하기
+            {formData.is_like_hidden ? <DisplayIcon /> : <UndisplayIcon />}
+          </button>
         </div>
       </div>
     </div>

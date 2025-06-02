@@ -262,3 +262,19 @@
     }
   }
 }
+
+.like {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  color: #000;
+  font-family: Pretendard, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

@@ -40,7 +40,26 @@ export interface NewClubData {
   open_chat?: string;
   phone_number?: string;
   role:string;
+  is_like_hidden:boolean;
 }
 
 export interface PostClubResponse extends APIResponse {
+}
+
+export interface ClubDetailResponse extends APIResponse {
+  id: number;
+  name: string;
+  category: string;
+  location: string;
+  image_url: string;
+  likes: number;
+  description: string;
+  introduction: string;
+  instagram: string | null;
+  google_form: string | null;
+  open_chat: string | null;
+  phone_number: string | null;
+  manager: boolean;
+  is_liked: boolean;
+  updated_at: string;
 }
