@@ -46,7 +46,7 @@ function useEmailVerification({ email }: { email: string }) {
       if (isKoinError(err)) {
         if (err.status === 400) setEmailMessage({ type: 'warning', content: MESSAGES.EMAIL.FORMAT });
 
-        if (err.status === 429) { setEmailMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP }); }
+        if (err.status === 429) setEmailMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
       }
     },
   });
@@ -59,9 +59,9 @@ function useEmailVerification({ email }: { email: string }) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { setEmailMessage({ type: 'warning', content: MESSAGES.EMAIL.FORMAT }); }
+        if (err.status === 400) setEmailMessage({ type: 'warning', content: MESSAGES.EMAIL.FORMAT });
 
-        if (err.status === 404) { setEmailMessage({ type: 'warning', content: MESSAGES.EMAIL.NOT_REGISTERED }); }
+        if (err.status === 404) setEmailMessage({ type: 'warning', content: MESSAGES.EMAIL.NOT_REGISTERED });
       }
     },
   });
@@ -76,9 +76,9 @@ function useEmailVerification({ email }: { email: string }) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT }); }
+        if (err.status === 400) setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
 
-        if (err.status === 404) { setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT }); }
+        if (err.status === 404) setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
       }
     },
   });

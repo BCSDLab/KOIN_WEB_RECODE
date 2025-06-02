@@ -55,7 +55,7 @@ function usePhoneVerification({ phoneNumber }: { phoneNumber: string }) {
       if (isKoinError(err)) {
         if (err.status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
 
-        if (err.status === 429) { setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP }); }
+        if (err.status === 429) setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
       }
     },
   });
@@ -68,9 +68,9 @@ function usePhoneVerification({ phoneNumber }: { phoneNumber: string }) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID }); }
+        if (err.status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
 
-        if (err.status === 404) { setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.NOT_REGISTERED }); }
+        if (err.status === 404) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.NOT_REGISTERED });
       }
     },
   });
@@ -85,9 +85,9 @@ function usePhoneVerification({ phoneNumber }: { phoneNumber: string }) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT }); }
+        if (err.status === 400) setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
 
-        if (err.status === 404) { setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT }); }
+        if (err.status === 404) setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
       }
     },
   });

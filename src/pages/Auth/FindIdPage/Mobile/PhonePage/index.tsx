@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import {
   Controller, FormProvider, useForm, useWatch,
 } from 'react-hook-form';
-
 import { MESSAGES } from 'static/auth';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
