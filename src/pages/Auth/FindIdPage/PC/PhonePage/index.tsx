@@ -139,7 +139,17 @@ function FindIdPhonePage() {
                       isTimer={isCodeCorrect ? false : isTimer}
                       timerValue={timerValue}
                       isDelete={!isVerified}
-                    />
+                    >
+                      {verificationMessage?.type === 'default' && (
+                      <button
+                        className={styles['label-link-button']}
+                        type="button"
+                        onClick={() => navigate(ROUTES.Email())}
+                      >
+                        이메일로 찾기
+                      </button>
+                      )}
+                    </PCCustomInput>
                     <button
                       type="button"
                       onClick={() => onClickSendVerificationButton()}
