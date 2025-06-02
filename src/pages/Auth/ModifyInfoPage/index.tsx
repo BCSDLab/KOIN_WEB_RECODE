@@ -1,4 +1,6 @@
-import React, { Suspense, useImperativeHandle } from 'react';
+import React, {
+  Suspense, useEffect, useImperativeHandle, useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
 import { cn, sha256 } from '@bcsdlab/utils';
@@ -14,13 +16,20 @@ import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import ROUTES from 'static/routes';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
 import { Selector } from 'components/ui/Selector';
+import { usePhoneVerification } from 'pages/Auth/ModifyInfoPage/hooks/usePhoneVerification';
+import ErrorIcon from 'assets/svg/Login/error.svg';
+import CorrectIcon from 'assets/svg/Login/correct.svg';
+import WarningIcon from 'assets/svg/Login/warning.svg';
+import BlindIcon from 'assets/svg/blind-icon.svg';
+import ShowIcon from 'assets/svg/show-icon.svg';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
+import { ModifyFormValidationProvider, useValidationContext } from './hooks/useValidationContext';
 
 const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
 
-const PHONENUMBER_REGEX = /^\d{3}-\d{3,4}-\d{4}$/;
+const PHONENUMBER_REGEX = /^\d{3}\d{3,4}\d{4}$/;
 
 interface IFormType {
   [key: string]: {
@@ -32,6 +41,7 @@ interface IFormType {
 interface ICustomFormInput {
   value: unknown;
   valid: string | true;
+  isVerified?: boolean;
 }
 
 interface IRegisterOption {
@@ -87,7 +97,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       'phone-number': 'phone_number',
       'student-number': 'student_number',
     };
-    const compareFields = ['name', 'nickname', 'gender', 'phone-number', 'student-number'];
+    const compareFields = ['name', 'nickname', 'gender', 'phone-number', 'student-number', 'email'];
     compareFields.forEach((field) => {
       if (!fieldRefs.current[field]) return;
       const fieldRef = fieldRefs.current[field].ref;
@@ -158,8 +168,15 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   name,
   required,
 }, ref) => {
-  const [password, setPassword] = React.useState('');
-  const [passwordConfirmValue, setPasswordConfirmValue] = React.useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmValue, setPasswordConfirmValue] = useState('');
+  const [visible, setVisible] = useState({
+    password: false,
+    passwordConfirm: false,
+  });
+  const [validationMessage, setValidationMessage] = useState<string>('');
+  const { isValid, setIsValid } = useValidationContext();
+
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = true;
 
@@ -179,34 +196,108 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       value: password,
     };
   }, [password, passwordConfirmValue]);
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    const currentPassword = e.target.value;
+    if (currentPassword !== '' && currentPassword.length >= 6 && currentPassword.length <= 18) {
+      setValidationMessage('비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.');
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+    } else if (currentPassword.length < 6 || currentPassword.length > 18) {
+      setValidationMessage('비밀번호는 6자 이상 18자 이하여야 합니다.');
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+    }
+  };
+
+  const handlePasswordConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const currentPasswordConfirmValue = e.target.value;
+    setPasswordConfirmValue(currentPasswordConfirmValue);
+    if (password.trim() !== '' && password === currentPasswordConfirmValue) {
+      setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
+    } else {
+      setValidationMessage('입력하신 비밀번호가 일치하지 않습니다.');
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+    }
+  };
+
   return (
-    <>
-      <input
-        className={cn({
-          [styles['form-input']]: true,
-          [styles['form-input--invalid']]: password.trim() !== '' && password !== passwordConfirmValue,
+    <div className={styles['form-input__password']}>
+      <div className={styles['form-input__label-wrapper']}>
+        <label htmlFor="email" className={styles['form-input__label']}>
+          비밀번호 변경
+          <span className={styles['form-input__required']}>*</span>
+        </label>
+        <input
+          className={cn({
+            [styles['form-input']]: true,
+            [styles['form-input--invalid']]: password.trim() !== '' && password !== passwordConfirmValue,
+          })}
+          type={visible.password ? 'text' : 'password'}
+          autoComplete="new-password"
+          placeholder="특수문자 포함 영어와 숫자 6~18자리로 입력해 주세요."
+          onChange={handlePasswordChange}
+          required={required}
+          name={name}
+          value={password}
+        />
+        <button
+          type="button"
+          className={cn({
+            [styles['form-input__toggle']]: true,
+            [styles['form-input__toggle--active']]: visible.password,
+          })}
+          onClick={() => setVisible((prev) => ({ ...prev, password: !prev.password }))}
+        >
+          {visible.password ? <ShowIcon /> : <BlindIcon />}
+        </button>
+      </div>
+      <div className={styles['form-input__label-wrapper']}>
+        <label htmlFor="email" className={styles['form-input__label']}>
+          비밀번호 확인
+          <span className={styles['form-input__required']}>*</span>
+        </label>
+        <input
+          className={styles['form-input']}
+          type={visible.passwordConfirm ? 'text' : 'password'}
+          onChange={handlePasswordConfirmChange}
+          autoComplete="new-password"
+          placeholder="비밀번호를 한번 더 입력해 주세요."
+          value={passwordConfirmValue}
+        />
+        <button
+          type="button"
+          className={cn({
+            [styles['form-input__toggle']]: true,
+            [styles['form-input__toggle--active']]: visible.passwordConfirm,
+          })}
+          onClick={() => setVisible((prev) => (
+            { ...prev, passwordConfirm: !prev.passwordConfirm }
+          ))}
+        >
+          {visible.passwordConfirm ? <ShowIcon /> : <BlindIcon />}
+        </button>
+        {!isValid.isPasswordValid && password.trim() !== '' && (
+        <p className={cn({
+          [styles['form-message']]: true,
+          [styles['form-message--error']]: true,
         })}
-        type="password"
-        autoComplete="new-password"
-        placeholder="비밀번호 (선택)"
-        onChange={(e) => setPassword(e.target.value)}
-        required={required}
-        name={name}
-      />
-      <span className={styles.modify__advice}>
-        비밀번호는 특수문자, 숫자를 포함해 6자 이상 18자 이하여야 합니다.
-      </span>
-      <input
-        className={styles['form-input']}
-        type="password"
-        onChange={(e) => setPasswordConfirmValue(e.target.value)}
-        autoComplete="new-password"
-        placeholder="비밀번호 확인 (선택)"
-      />
-      <span className={styles.modify__advice}>
-        비밀번호를 입력하지 않으면 기존 비밀번호를 유지합니다.
-      </span>
-    </>
+        >
+          <ErrorIcon />
+          {validationMessage}
+        </p>
+        )}
+        {isValid.isPasswordValid && (
+        <p className={cn({
+          [styles['form-message']]: true,
+          [styles['form-message--success']]: true,
+        })}
+        >
+          <CorrectIcon />
+          비밀번호가 일치합니다.
+        </p>
+        )}
+      </div>
+    </div>
   );
 });
 
@@ -269,25 +360,30 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         [styles['modify__row--nickname']]: true,
       })}
     >
-      <input
-        onChange={handleNicknameChange}
-        className={styles['form-input']}
-        type="text"
-        autoComplete="nickname"
-        placeholder="닉네임 (선택)"
-        defaultValue={userInfo?.nickname || ''}
-        {...props}
-      />
-      <button
-        type="button"
-        className={cn({
-          [styles.modify__button]: true,
-          [styles['modify__button--nickname']]: true,
-        })}
-        onClick={onClickNicknameDuplicateCheckButton}
-      >
-        중복확인
-      </button>
+      <div className={styles['form-input__label-wrapper']}>
+        <label htmlFor="email" className={styles['form-input__label']}>
+          닉네임(선택)
+        </label>
+        <input
+          onChange={handleNicknameChange}
+          className={styles['form-input']}
+          type="text"
+          autoComplete="nickname"
+          placeholder="닉네임 (선택)"
+          defaultValue={userInfo?.nickname || ''}
+          {...props}
+        />
+        <button
+          type="button"
+          className={cn({
+            [styles.modify__button]: true,
+            [styles['modify__button--nickname']]: true,
+          })}
+          onClick={onClickNicknameDuplicateCheckButton}
+        >
+          중복확인
+        </button>
+      </div>
     </div>
   );
 });
@@ -301,10 +397,22 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     label: dept.name,
     value: dept.name,
   }));
+  const { setIsValid } = useValidationContext();
 
   const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
     setStudentNumber(target?.value ?? '');
+    if (target.value.length === 10) {
+      setIsValid((prev) => ({ ...prev, isStudentInfoValid: true }));
+    }
+  };
+
+  const handleChangeMajor = (event: { target: { value: string } }) => {
+    const { target } = event;
+    setMajor(target?.value ?? '');
+    if (target.value) {
+      setIsValid((prev) => ({ ...prev, isStudentMajorValid: true }));
+    }
   };
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
@@ -327,29 +435,38 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
   }, [studentNumber, major]);
   return (
     <>
-      <input
-        className={styles['form-input']}
-        placeholder="학번 (선택)"
-        value={studentNumber}
-        onChange={onChangeMajorInput}
-        {...props}
-      />
-      <div className={styles['form-input__select']}>
-        <Selector
-          options={deptOptionList}
-          value={major}
-          onChange={(event) => setMajor(event.target.value)}
-          placeholder="학부 (선택)"
+      <div className={styles['form-input__label-wrapper']}>
+        <label htmlFor="email" className={styles['form-input__label']}>
+          학부
+          <span className={styles['form-input__required']}>*</span>
+        </label>
+        <div className={styles['form-input__select']}>
+          <Selector
+            options={deptOptionList}
+            value={major}
+            onChange={handleChangeMajor}
+            placeholder="학부 (선택)"
+          />
+        </div>
+      </div>
+      <div className={styles['form-input__label-wrapper']}>
+        <label htmlFor="email" className={styles['form-input__label']}>
+          학번
+          <span className={styles['form-input__required']}>*</span>
+        </label>
+        <input
+          className={styles['form-input']}
+          placeholder="학번 (선택)"
+          value={studentNumber}
+          onChange={onChangeMajorInput}
+          {...props}
         />
       </div>
     </>
   );
 });
 
-const GenderSelectorWithRef = React.forwardRef((
-  { options }: { options: { label: string; value:string }[] },
-  ref,
-) => {
+const GenderInput = React.forwardRef((_, ref) => {
   const { data: userInfo } = useUser();
   const [
     selectedValue, setSelectedValue,
@@ -360,18 +477,206 @@ const GenderSelectorWithRef = React.forwardRef((
   }));
 
   return (
-    <div
-      className={cn({
-        [styles['form-input__select']]: true,
-        [styles['form-input__select--flex-end']]: true,
-      })}
-      style={{ marginLeft: '6px' }}
-    >
-      <Selector
-        options={options}
-        value={String(selectedValue)}
-        onChange={(event) => setSelectedValue(event.target.value)}
-        placeholder="성별 (선택)"
+    <div className={styles['form-input__label-wrapper']}>
+      <label htmlFor="email" className={styles['form-input__label']}>
+        성별
+        <span className={styles['form-input__required']}>*</span>
+      </label>
+      <div
+        className={styles['form-input__radio']}
+      >
+        <div className={styles['form-input__radio-wrapper']}>
+          <input
+            type="radio"
+            id="female"
+            name="female"
+            value="1"
+            checked={selectedValue === '1'}
+            onChange={(e) => setSelectedValue(e.target.value)}
+          />
+          <label htmlFor="female" className={styles['form-input__label']}>
+            여자
+          </label>
+        </div>
+        <div className={styles['form-input__radio-wrapper']}>
+          <input
+            type="radio"
+            id="male"
+            name="male"
+            value="0"
+            checked={selectedValue === '0'}
+            onChange={(e) => setSelectedValue(e.target.value)}
+          />
+          <label htmlFor="male" className={styles['form-input__label']}>
+            남자
+          </label>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+const PhoneInput = React.forwardRef((props, ref) => {
+  const { data: userInfo } = useUser();
+  const [phoneNumber, setPhoneNumber] = useState<string>(userInfo?.phone_number.replace(/-/g, '') || '');
+  const [codeNumber, setCodeNumber] = useState<string>('');
+  const { setIsValid } = useValidationContext();
+
+  const {
+    checkPhoneNumber,
+    verifyCode,
+    phoneMessage,
+    verificationMessage,
+    smsSendCount,
+    isVerified,
+    timeLeft,
+    formattedTime,
+    isRunning,
+  } = usePhoneVerification(
+    phoneNumber,
+  );
+
+  useEffect(() => {
+    if (verifyCode.isSuccess) {
+      setIsValid((prev) => ({ ...prev, isPhoneNumberValid: true }));
+    }
+  }, [verifyCode.isSuccess, setIsValid]);
+
+  useImperativeHandle(ref, () => {
+    const value = phoneNumber.replace(/-/g, '');
+    const valid = PHONENUMBER_REGEX.test(value)
+      ? true
+      : '전화번호 양식을 지켜주세요. (Ex: 010-0000-0000)';
+    const originalValue = userInfo?.phone_number.replace(/-/g, '');
+
+    if (value !== originalValue) {
+      return { value, valid, isVerified };
+    }
+    return { value, valid };
+  });
+
+  const handleStartVerification = () => {
+    if (phoneNumber !== userInfo?.phone_number.replace(/-/g, '')) {
+      checkPhoneNumber.mutate(phoneNumber);
+    }
+  };
+
+  return (
+    <>
+      <div className={styles['form-input__label-wrapper']}>
+        <label htmlFor="phone" className={styles['form-input__label']}>
+          휴대전화 변경
+          <span className={styles['form-input__required']}>*</span>
+        </label>
+        <input
+          className={styles['form-input']}
+          type="text"
+          autoComplete="tel"
+          placeholder="전화번호 (Ex.010-0000-0000)"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value.replace(/[^0-9]/g, ''))}
+          {...props}
+        />
+        <button
+          type="button"
+          className={cn({
+            [styles.modify__button]: true,
+            [styles['modify__button--phone']]: true,
+            [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number.replace(/-/g, ''),
+          })}
+          onClick={handleStartVerification}
+          disabled={phoneNumber === userInfo?.phone_number.replace(/-/g, '')}
+        >
+          인증번호 발송
+        </button>
+        {phoneMessage && (
+        <p className={cn({
+          [styles['form-message']]: true,
+          [styles[`form-message--${phoneMessage.type}`]]: true,
+        })}
+        >
+          {phoneMessage.type === 'success' && <CorrectIcon />}
+          {phoneMessage.type === 'error' && <ErrorIcon />}
+          {phoneMessage.type === 'warning' && <WarningIcon />}
+          {phoneMessage.content}
+          <span className={styles['form-message--count']}>
+            남은 횟수:
+            {`${smsSendCount}/5`}
+          </span>
+        </p>
+        )}
+      </div>
+      <div className={styles['form-input__label-wrapper']}>
+        <label htmlFor="code" className={styles['form-input__label']}>
+          휴대전화 인증
+          <span className={styles['form-input__required']}>*</span>
+        </label>
+        <input
+          className={styles['form-input']}
+          type="text"
+          autoComplete="one-time-code"
+          placeholder="인증번호를 입력해주세요."
+          value={codeNumber}
+          onChange={(e) => setCodeNumber(e.target.value.replace(/[^0-9]/g, ''))}
+        />
+        {isRunning && (
+        <p className={styles['form-message--timer']}>
+          {formattedTime}
+        </p>
+        )}
+        <button
+          type="button"
+          className={cn({
+            [styles.modify__button]: true,
+            [styles['modify__button--phone']]: true,
+            [styles['modify__button--active']]: codeNumber !== '',
+          })}
+          onClick={() => verifyCode.mutate(
+            { phone_number: phoneNumber, verification_code: codeNumber },
+          )}
+          disabled={codeNumber === '' || timeLeft === 0 || !isRunning}
+        >
+          인증하기
+        </button>
+        {verificationMessage && (
+        <p className={cn({
+          [styles['form-message']]: true,
+          [styles[`form-message--${verificationMessage.type}`]]: true,
+        })}
+        >
+          {verificationMessage.type === 'success' && <CorrectIcon />}
+          {verificationMessage.type === 'error' && <ErrorIcon />}
+          {verificationMessage.type === 'warning' && <WarningIcon />}
+          {verificationMessage.content}
+        </p>
+        )}
+      </div>
+    </>
+  );
+});
+
+const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
+  const { data: userInfo } = useUser();
+  const [email, setEmail] = useState<string>(userInfo?.email || '');
+
+  useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => ({
+    value: email,
+    valid: true,
+  }), [email]);
+
+  return (
+    <div className={styles['form-input__label-wrapper']}>
+      <label htmlFor="email" className={styles['form-input__label']}>
+        이메일(선택)
+      </label>
+      <input
+        className={styles['form-input']}
+        type="email"
+        autoComplete="email"
+        placeholder="이메일 (선택)"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        {...props}
       />
     </div>
   );
@@ -415,6 +720,8 @@ function ModifyInfoDefaultPage() {
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
   const portalManager = useModalPortal();
   const { mutate: deleteUser } = useUserDelete();
+  const { isValid } = useValidationContext();
+
   const onClickUserDeleteConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     deleteUser(token);
@@ -432,94 +739,73 @@ function ModifyInfoDefaultPage() {
   };
 
   return (
-    <>
-      <form className={styles.modify} onSubmit={onSubmitModifyForm}>
-        <input
-          className={styles['form-input']}
-          type="text"
-          readOnly
-          disabled
-          defaultValue={userInfo?.email}
-        />
-        <span className={styles.modify__advice}>
-          계정명은 변경하실 수 없습니다.
-        </span>
-        <PasswordForm {...register('password')} />
-        <input
-          className={styles['form-input']}
-          type="text"
-          autoComplete="name"
-          defaultValue={userInfo?.name}
-          placeholder="이름 (선택)"
-          {...register('name')}
-        />
-        <NicknameForm {...register('nickname')} />
-        <MajorInput {...register('student-number')} />
-        <input
-          className={styles['form-input']}
-          type="text"
-          autoComplete="name"
-          defaultValue={userInfo?.phone_number}
-          placeholder="전화번호 (Ex.010-0000-0000) (선택)"
-          {...register('phone-number', {
-            validFunction: (value) => {
-              if (typeof value !== 'string') {
-                return '오류가 발생했습니다';
-              }
-              if (!value) {
-                return true;
-              }
-              if (!PHONENUMBER_REGEX.test(value)) {
-                return '전화번호 양식을 지켜주세요. (Ex: 010-0000-0000)';
-              }
-
-              return true;
-            },
-          })}
-        />
-        <GenderSelectorWithRef {...register('gender')} options={[{ label: '남', value: '0' }, { label: '여', value: '1' }]} />
-        <button
-          type="submit"
-          disabled={status === 'pending'}
-          className={cn({
-            [styles.modify__button]: true,
-            [styles['modify__button--flex-end']]: true,
-            [styles['modify__button--block']]: true,
-            [styles['modify__button--large-font']]: true,
-          })}
-        >
-          정보수정
-        </button>
-        <button
-          type="button"
-          disabled={status === 'pending'}
-          className={cn({
-            [styles.modify__button]: true,
-            [styles['modify__button--delete']]: true,
-            [styles['modify__button--flex-end']]: true,
-            [styles['modify__button--block']]: true,
-            [styles['modify__button--large-font']]: true,
-          })}
-          onClick={onClickDeleteUser}
-        >
-          회원탈퇴
-        </button>
-      </form>
-      <div className={styles.modify__section}>
-        <span className={styles.modify__copyright}>
-          COPYRIGHT ⓒ&nbsp;
-          {new Date().getFullYear()}
-          &nbsp;BY BCSDLab ALL RIGHTS RESERVED.
+    <div className={styles.container}>
+      <span className={styles.title}>정보 변경</span>
+      <div className={styles.container__description}>
+        <span className={styles['advice-character']}>*</span>
+        <span className={styles.advice}>
+          필수 입력사항
         </span>
       </div>
-    </>
+      <form className={styles.modify} onSubmit={onSubmitModifyForm}>
+        <div className={styles['form-input__label-wrapper']}>
+          <label htmlFor="email" className={styles['form-input__label']}>
+            아이디
+            <span className={styles['form-input__required']}>*</span>
+          </label>
+          <input
+            className={styles['form-input']}
+            type="text"
+            readOnly
+            disabled
+            id="email"
+            defaultValue={userInfo?.email}
+          />
+        </div>
+        <p className={styles['form-input__description']}>
+          계정 아이디는 변경하실 수 없습니다.
+        </p>
+        <PasswordForm {...register('password')} />
+        <GenderInput {...register('gender')} />
+        <PhoneInput {...register('phone-number')} />
+        <MajorInput {...register('student-number')} />
+        <EmailForm {...register('email')} />
+        <NicknameForm {...register('nickname')} />
+        <hr className={styles.divider} />
+        <div className={styles.buttons__wrapper}>
+          <button
+            type="submit"
+            disabled={status === 'pending' || !Object.values(isValid).some((value) => value)}
+            className={cn({
+              [styles.modify__button]: true,
+              [styles['modify__button--submit']]: true,
+            })}
+          >
+            정보수정
+          </button>
+          <button
+            type="button"
+            disabled={status === 'pending'}
+            className={cn({
+              [styles.modify__button]: true,
+              [styles['modify__button--remove']]: true,
+            })}
+            onClick={onClickDeleteUser}
+          >
+            회원탈퇴
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
 
 function ModifyInfoPage() {
   return (
     <Suspense fallback={<LoadingSpinner size="40px" />}>
-      <ModifyInfoDefaultPage />
+      <ModifyFormValidationProvider>
+        <ModifyInfoDefaultPage />
+      </ModifyFormValidationProvider>
     </Suspense>
   );
 }

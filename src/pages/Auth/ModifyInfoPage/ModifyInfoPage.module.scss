@@ -1,42 +1,128 @@
 @use "src/utils/scss/media";
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 640px;
+  margin: 120px auto 160px;
+  font-family: Pretendard, sans-serif;
+
+  &__description {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    gap: 4px;
+  }
+}
+
+.title {
+  text-align: center;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 37px;
+}
+
+.advice-character {
+  color: #ec2d30;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+}
+
+.advice {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+}
+
 .form-input {
-  width: 100%;
-  height: 45px;
-  box-sizing: border-box;
-  border: #d2dae2 1px solid;
-  font-size: 15px;
-  padding-left: 20px;
-  margin-bottom: 12px;
+  display: flex;
+  padding: 11px 32px 11px 12px;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px solid #e1e1e1;
+  width: 320px;
+  height: 26px;
+  line-height: 160%;
 
   &::placeholder {
-    font-size: 15px;
-    letter-spacing: -0.8px;
-    color: #bec9d5;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #cacaca;
   }
 
   &:disabled {
-    background-color: #e5eaf0;
-    border: 1px solid #d2dae2;
-    color: #b5c1cd;
+    background-color: #eee;
+    border: 1px solid #e1e1e1;
+    color: #cacaca;
+  }
+
+  &__password {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 5px;
+  }
+
+  &__radio {
+    display: flex;
+    margin-left: 6px;
+  }
+
+  &__radio-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__label-wrapper {
+    position: relative;
+    display: flex;
+  }
+
+  &__label {
+    font-family: Pretendard, sans-serif;
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.6;
+    width: 136px;
+  }
+
+  &__required {
+    color: #ec2d30;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
   }
 
   &__select {
-    width: 192px;
+    width: 346px;
     height: 45px;
     font-size: 15px;
-    margin-bottom: 12px;
-    order: 99;
-
-    ul {
-      top: inherit;
-      bottom: 50px;
-    }
 
     @include media.media-breakpoint(mobile) {
       width: 155px;
       height: 36px;
     }
+  }
+
+  &__description {
+    position: absolute;
+    color: #cacaca;
+    top: 100px;
+    left: 166px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.6;
   }
 
   &--invalid {
@@ -63,6 +149,18 @@
 
   &--flex-end {
     order: 99;
+  }
+
+  &__toggle {
+    position: absolute;
+    right: 148px;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
   }
 }
 
@@ -128,8 +226,14 @@
 }
 
 .modify {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
+  border-top: 1px solid #175c8e;
+  padding: 48px 24px;
+  margin-top: 8px;
+  gap: 24px;
 
   @include media.media-breakpoint(mobile) {
     width: 320px;
@@ -170,18 +274,10 @@
   }
 
   &__button {
-    height: 45px;
-    background-color: #175c8e;
-    border: 1px solid #175c8e;
-    font-family: NanumSquare, sans-serif;
-    line-height: 1.3;
-    letter-spacing: -1px;
+    border-radius: 12px;
     text-align: center;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: Pretendard, sans-serif;
+    line-height: 1.6;
 
     &:disabled {
       background: #e5eaf0;
@@ -189,8 +285,12 @@
     }
 
     &--nickname {
-      font-size: 12px;
-      width: 79px;
+      font-size: 14px;
+      width: 120px;
+      height: 100%;
+      border: 1px solid #e1e1e1;
+      background-color: transparent;
+      color: #cacaca;
       margin-left: 6px;
 
       @include media.media-breakpoint(mobile) {
@@ -199,30 +299,53 @@
       }
     }
 
-    &--delete {
-      font-size: 20px;
-      width: 390px;
-      font-weight: 700;
-      margin-top: 12px;
-      background: #c83535;
-      border: 1px solid #c83535;
+    &--submit {
+      width: 240px;
+      height: 64px;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      background-color: #175c8e;
+      color: #fff;
+
+      &:disabled {
+        background-color: #cacaca;
+      }
     }
 
-    &--block {
-      width: 100%;
-    }
-
-    &--flex-end {
-      order: 99;
-    }
-
-    &--large-font {
-      font-size: 20px;
-      font-weight: bold;
+    &--remove {
+      width: 240px;
+      height: 64px;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      background-color: #eb6f70;
+      color: #fff;
 
       @include media.media-breakpoint(mobile) {
-        font-size: 15px;
+        width: 320px;
+        height: 36px;
+        font-size: 14px;
       }
+    }
+
+    &--phone {
+      width: 120px;
+      height: 48px;
+      border: 1px solid #e1e1e1;
+      background-color: transparent;
+      color: #cacaca;
+      margin-left: 6px;
+
+      @include media.media-breakpoint(mobile) {
+        width: 75px;
+        height: 36px;
+      }
+    }
+
+    &--active {
+      border: 1px solid #175c8e;
+      color: #175c8e;
     }
   }
 
@@ -333,5 +456,59 @@
       height: 127px;
       margin: 0 auto;
     }
+  }
+}
+
+.buttons {
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 64px;
+    width: 100%;
+  }
+}
+
+.divider {
+  width: 100%;
+  border: 0.5px solid #175c8e;
+}
+
+.form-message {
+  position: absolute;
+  bottom: -20px;
+  left: 140px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &--success {
+    color: #0c9d61;
+  }
+
+  &--error {
+    color: #ec2d30;
+  }
+
+  &--warning {
+    color: #f7941e;
+  }
+
+  &--count {
+    color: #727272;
+    margin-left: 4px;
+  }
+
+  &--timer {
+    position: absolute;
+    top: 50%;
+    right: 180px;
+    transform: translateY(-50%);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #727272;
   }
 }
