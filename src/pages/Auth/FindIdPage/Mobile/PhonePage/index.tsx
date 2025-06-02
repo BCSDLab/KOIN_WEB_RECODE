@@ -36,7 +36,7 @@ function MobileFindIdPhonePage() {
     isCodeVerified,
     smsSendCount,
     isCodeCorrect,
-    // setIncorrect,
+    setIncorrect,
     setPhoneMessage,
     setVerificationMessage,
     verificationMessage,
@@ -57,7 +57,7 @@ function MobileFindIdPhonePage() {
 
   useEffect(() => {
     stopTimer();
-    // setIncorrect();
+    setIncorrect();
     disableButton();
     setPhoneMessage(null);
     setVerificationMessage({ type: 'default', content: MESSAGES.PHONE.REGISTRATION });
