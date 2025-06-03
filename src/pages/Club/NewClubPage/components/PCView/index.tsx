@@ -17,8 +17,11 @@ interface PCViewProps {
   formData: NewClubData;
   setFormData: Dispatch<SetStateAction<NewClubData>>;
   openModal: () => void;
+  isEdit?: boolean;
 }
-export default function PCView({ formData, setFormData, openModal }: PCViewProps) {
+export default function PCView({
+  formData, setFormData, openModal, isEdit,
+}: PCViewProps) {
   const navigate = useNavigate();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
   const [isDragOver, setIsDragOver] = useState(false);
@@ -90,10 +93,12 @@ export default function PCView({ formData, setFormData, openModal }: PCViewProps
         <h1 className={styles.header__title}>동아리 생성</h1>
         <div className={styles['header__button-container']}>
           <button type="button" className={styles.header__button} onClick={() => navigate(ROUTES.Club())}>
-            생성 취소
+            {!isEdit && '생성'}
+            {' '}
+            취소
           </button>
           <button type="button" className={styles.header__button} onClick={handleOpenModal}>
-            생성 요청
+            {isEdit ? '저장' : '생성 요청'}
           </button>
         </div>
       </div>
@@ -272,7 +277,7 @@ export default function PCView({ formData, setFormData, openModal }: PCViewProps
           <button type="button" className={styles.like} onClick={handleClickLike}>
             <LikeIcon />
             좋아요 표시하기
-            {formData.is_like_hidden ? <DisplayIcon /> : <UndisplayIcon />}
+            {formData.is_like_hidden ? <UndisplayIcon /> : <DisplayIcon />}
           </button>
         </div>
       </div>

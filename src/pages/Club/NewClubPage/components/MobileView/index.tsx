@@ -18,12 +18,14 @@ interface MobileViewProps {
   formData: NewClubData;
   setFormData: Dispatch<SetStateAction<NewClubData>>;
   openModal: () => void;
+  isEdit?: boolean
 }
 
 export default function MobileView({
   formData,
   setFormData,
   openModal,
+  isEdit,
 }: MobileViewProps) {
   const navigate = useNavigate();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
@@ -107,14 +109,16 @@ export default function MobileView({
             className={styles['button-group__top__button']}
             onClick={() => navigate(ROUTES.Club())}
           >
-            생성 취소
+            {!isEdit && '생성'}
+            {' '}
+            취소
           </button>
           <button
             type="button"
             className={styles['button-group__top__button']}
             onClick={handleOpenModal}
           >
-            생성 요청
+            {isEdit ? '저장' : '생성 요청'}
           </button>
         </div>
         <div className={styles['form-name']}>
@@ -123,7 +127,7 @@ export default function MobileView({
             <button type="button" className={styles.like} onClick={handleClickLike}>
               <LikeIcon />
               좋아요 표시하기
-              {formData.is_like_hidden ? <DisplayIcon /> : <UndisplayIcon />}
+              {formData.is_like_hidden ? <UndisplayIcon /> : <DisplayIcon />}
             </button>
           </div>
           <input
