@@ -19,6 +19,7 @@ interface MobileViewProps {
   setFormData: Dispatch<SetStateAction<NewClubData>>;
   openModal: () => void;
   isEdit?: boolean
+  clubId?:string;
 }
 
 export default function MobileView({
@@ -26,6 +27,7 @@ export default function MobileView({
   setFormData,
   openModal,
   isEdit,
+  clubId,
 }: MobileViewProps) {
   const navigate = useNavigate();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
@@ -68,6 +70,14 @@ export default function MobileView({
     }));
   };
 
+  const handleClickCancel = () => {
+    if (isEdit) {
+      navigate(ROUTES.ClubDetail({ id: clubId, isLink: true }));
+    } else {
+      navigate(ROUTES.Club());
+    }
+  };
+
   return (
     <div className={styles.layout}>
       <div className={styles['form-container']}>
@@ -107,7 +117,7 @@ export default function MobileView({
           <button
             type="button"
             className={styles['button-group__top__button']}
-            onClick={() => navigate(ROUTES.Club())}
+            onClick={handleClickCancel}
           >
             {!isEdit && '생성'}
             {' '}

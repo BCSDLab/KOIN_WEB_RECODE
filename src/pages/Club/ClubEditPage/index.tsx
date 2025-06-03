@@ -28,9 +28,21 @@ export default function ClubEditPage() {
   return (
     <div className={styles.layout}>
       {isMobile ? (
-        <MobileView formData={formData} setFormData={setFormData} openModal={openModal} isEdit />
+        <MobileView
+          formData={formData}
+          setFormData={setFormData}
+          openModal={openModal}
+          isEdit
+          clubId={id}
+        />
       ) : (
-        <PCView formData={formData} setFormData={setFormData} openModal={openModal} isEdit />
+        <PCView
+          formData={formData}
+          setFormData={setFormData}
+          openModal={openModal}
+          isEdit
+          clubId={id}
+        />
       )}
 
       {isModalOpen && (

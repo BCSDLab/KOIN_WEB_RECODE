@@ -18,9 +18,10 @@ interface PCViewProps {
   setFormData: Dispatch<SetStateAction<NewClubData>>;
   openModal: () => void;
   isEdit?: boolean;
+  clubId?:string;
 }
 export default function PCView({
-  formData, setFormData, openModal, isEdit,
+  formData, setFormData, openModal, isEdit, clubId,
 }: PCViewProps) {
   const navigate = useNavigate();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
@@ -87,12 +88,20 @@ export default function PCView({
     }));
   };
 
+  const handleClickCancel = () => {
+    if (isEdit) {
+      navigate(ROUTES.ClubDetail({ id: clubId, isLink: true }));
+    } else {
+      navigate(ROUTES.Club());
+    }
+  };
+
   return (
     <div className={styles.layout}>
       <div className={styles.header}>
         <h1 className={styles.header__title}>동아리 생성</h1>
         <div className={styles['header__button-container']}>
-          <button type="button" className={styles.header__button} onClick={() => navigate(ROUTES.Club())}>
+          <button type="button" className={styles.header__button} onClick={handleClickCancel}>
             {!isEdit && '생성'}
             {' '}
             취소
