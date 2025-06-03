@@ -76,14 +76,14 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               backInDetailPage();
             }}
           >
-            {pathname.startsWith(ROUTES.NewClub()) ? <BlackArrowBackIcon /> : <ArrowBackIcon />}
+            {(pathname.startsWith(ROUTES.NewClub()) || pathname.startsWith('/clubs/edit')) ? <BlackArrowBackIcon /> : <ArrowBackIcon />}
           </button>
         )}
         <span
           className={cn({
             [styles.mobileheader__title]: true,
             [styles['mobileheader__title--main']]: isMain,
-            [styles['mobileheader__title--new-club']]: pathname.startsWith(ROUTES.NewClub()),
+            [styles['mobileheader__title--new-club']]: pathname.startsWith(ROUTES.NewClub()) || pathname.startsWith('/clubs/edit'),
           })}
         >
           {isMain ? (
@@ -93,7 +93,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               .flatMap((category) => category.submenu)
               .find((submenu) => pathname.startsWith(submenu.link))?.title ?? ''
           )}
-          {pathname.startsWith(ROUTES.NewClub()) && '동아리 생성'}
+          {pathname.startsWith(ROUTES.NewClub()) && ' 생성'}
+          {pathname.startsWith('/clubs/edit') && ' 수정'}
         </span>
         {isCustomButton ? (
           <span

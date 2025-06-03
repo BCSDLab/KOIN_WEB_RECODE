@@ -19,7 +19,7 @@ function Header() {
       className={cn({
         [styles.header]: true,
         [styles['header--main']]: isMain,
-        [styles['header--new-club']]: pathname.startsWith(ROUTES.NewClub()) && isMobile,
+        [styles['header--new-club']]: (pathname.startsWith(ROUTES.NewClub()) || pathname.startsWith('/clubs/edit')) && isMobile,
       })}
     >
       <nav className={styles.header__content}>
