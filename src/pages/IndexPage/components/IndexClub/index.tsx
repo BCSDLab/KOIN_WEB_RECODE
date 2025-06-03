@@ -4,6 +4,8 @@ import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
 import AddIcon from 'assets/svg/Club/add-icon.svg';
 import ListIcon from 'assets/svg/Club/list-icon.svg';
 import useHotClub from 'pages/Club/hooks/useHotClub';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexClub.module.scss';
 
 const ClubLinkCard = () => {
@@ -32,6 +34,15 @@ const ClubLinkCard = () => {
 };
 
 function IndexClub() {
+  const logger = useLogger();
+  const isMobile = useMediaQuery();
+  const logClubList = () => logger.actionEventClick({
+    team: 'CAMPUS',
+    event_category: 'click',
+    event_label: 'main_club',
+    value: '',
+  });
+
   return (
     <section className={styles.template}>
       <div className={styles.template__title}>
@@ -41,30 +52,59 @@ function IndexClub() {
           동아리
         </Link>
       </div>
-      <div className={styles.cards}>
-        {ClubLinkCard().map(({
-          key, title, subtitle, link, icon, img,
-        }) => (
-          <Link
-            to={link}
-            key={key}
-            className={styles.card}
-          >
-            <div className={styles.card__segment}>
-              {icon ?? <img src={img} alt="title" /> }
-              <div className={styles.card__guide}>
-                <span className={styles.card__title}>
-                  {title}
-                </span>
-                <span className={styles.card__subtitle}>
-                  {subtitle}
-                </span>
+      {isMobile ? (
+        <div className={styles.cards}>
+          {ClubLinkCard().slice(0, 2).map(({
+            key, title, subtitle, link, icon, img,
+          }) => (
+            <Link
+              to={link}
+              key={key}
+              className={styles.card}
+              onClick={key === 'clubList' ? logClubList : undefined}
+            >
+              <div className={styles.card__segment}>
+                {icon ?? <img src={img} alt="title" /> }
+                <div className={styles.card__guide}>
+                  <span className={styles.card__title}>
+                    {title}
+                  </span>
+                  <span className={styles.card__subtitle}>
+                    {subtitle}
+                  </span>
+                </div>
               </div>
-            </div>
-            <ChevronRight />
-          </Link>
-        ))}
-      </div>
+              <ChevronRight />
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className={styles.cards}>
+          {ClubLinkCard().map(({
+            key, title, subtitle, link, icon, img,
+          }) => (
+            <Link
+              to={link}
+              key={key}
+              className={styles.card}
+              onClick={key === 'clubList' ? logClubList : undefined}
+            >
+              <div className={styles.card__segment}>
+                {icon ?? <img src={img} alt="title" /> }
+                <div className={styles.card__guide}>
+                  <span className={styles.card__title}>
+                    {title}
+                  </span>
+                  <span className={styles.card__subtitle}>
+                    {subtitle}
+                  </span>
+                </div>
+              </div>
+              <ChevronRight />
+            </Link>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

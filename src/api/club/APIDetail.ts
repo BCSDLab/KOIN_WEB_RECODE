@@ -22,7 +22,7 @@ export class ClubCategories<R extends ClubCategoriesResponse> implements APIRequ
 
   response!: R;
 
-  auth = false;
+  constructor(public authorization?: string) { }
 }
 
 export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
@@ -32,9 +32,7 @@ export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
 
   response!: R;
 
-  auth = false;
-
-  constructor(public categoryId?: number, public hitSort?: boolean) {
+  constructor(public authorization?: string, public categoryId?: number, public hitSort?: string) {
     this.path = '/clubs'
     + `${(categoryId && `?categoryId=${categoryId}`) || ''}`
     + `${(hitSort && `${categoryId ? '&' : '?'}hitSort=${hitSort}`) || ''}`;

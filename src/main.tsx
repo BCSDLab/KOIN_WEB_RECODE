@@ -9,9 +9,10 @@ import * as Sentry from '@sentry/browser';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-if (import.meta.env.MODE === 'production' && import.meta.env.VITE_BUGSINK_DSN) {
+if (import.meta.env.MODE === 'production' && import.meta.env.VITE_GLITCHTIP_DSN) {
   Sentry.init({
-    dsn: import.meta.env.VITE_BUGSINK_DSN,
+    dsn: import.meta.env.VITE_GLITCHTIP_DSN,
+    release: 'koin@0.1.0',
   });
 }
 
