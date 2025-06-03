@@ -8,7 +8,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
-import { useUser } from 'utils/hooks/state/useUser';
 import showToast from 'utils/ts/showToast';
 import ROUTES from 'static/routes';
 import { uploadLostItemFile } from 'api/uploadFile';
@@ -22,6 +21,7 @@ import BlockIcon from 'assets/svg/Articles/block.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
 
 import { useChatLogger } from 'pages/Articles/hooks/useChatLogger';
+import { UserResponse } from 'api/auth/entity';
 import DeleteModal from './components/DeleteModal';
 import useChatroomQuery from './hooks/useChatroomQuery';
 import {
@@ -32,12 +32,14 @@ import {
 } from './utils/date';
 import styles from './LostItemChatPage.module.scss';
 
-function LostItemChatPage() {
+interface LostItemChatPageProps {
+  userInfo: UserResponse | null
+}
+function LostItemChatPage({ userInfo }: LostItemChatPageProps) {
   const isMobile = useMediaQuery();
   const [searchParams] = useSearchParams();
 
   const token = useTokenState();
-  const { data: user } = useUser();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadLostItemFile });
 
   const clientRef = useRef<Client | null>(null);
@@ -63,7 +65,7 @@ function LostItemChatPage() {
       return;
     }
 
-    if (!articleId || !chatroomId || !user) {
+    if (!articleId || !chatroomId || !userInfo) {
       showToast('error', '채팅방 정보를 불러오는데 실패했습니다.');
       return;
     }
@@ -82,7 +84,7 @@ function LostItemChatPage() {
       heartbeatOutgoing: 4000,
       onConnect: () => {
         stompClient.subscribe(
-          `/topic/chatroom/list/${user.id}`,
+          `/topic/chatroom/list/${userInfo.id}`,
           (message) => {
             const receivedMessage = JSON.parse(message.body);
             setChatroomListState(receivedMessage);
@@ -115,7 +117,7 @@ function LostItemChatPage() {
 
   const uploadImage = async () => {
     try {
-      if (user === null || !chatroomDetail) {
+      if (userInfo === null || !chatroomDetail) {
         showToast('error', '유저정보 혹은 채팅방 정보를 불러오는데 실패했습니다.');
         return;
       }
@@ -123,7 +125,7 @@ function LostItemChatPage() {
       const imageUrlList = await saveImgFile();
       if (imageUrlList && imageUrlList.length === 1) {
         const newMessage = {
-          user_nickname: user.nickname || user.anonymous_nickname,
+          user_nickname: userInfo.nickname || userInfo.anonymous_nickname,
           user_id: chatroomDetail.user_id,
           content: imageUrlList[0],
           timestamp: getKoreaISODate(),
@@ -143,12 +145,12 @@ function LostItemChatPage() {
 
   const sendMessage = async () => {
     try {
-      if (!inputValue.trim() || user === null || !chatroomDetail) {
+      if (!inputValue.trim() || userInfo === null || !chatroomDetail) {
         return;
       }
 
       const newMessage = {
-        user_nickname: user.nickname || user.anonymous_nickname,
+        user_nickname: userInfo.nickname || userInfo.anonymous_nickname,
         user_id: chatroomDetail.user_id,
         content: inputValue,
         timestamp: getKoreaISODate(),
@@ -287,7 +289,7 @@ function LostItemChatPage() {
                   const messageTime = formatISODateToTime(message.timestamp);
                   const prevTime = formatISODateToTime(messages[index - 1]?.timestamp);
                   const isSenderChanged = message.user_id !== messages[index - 1]?.user_id;
-                  const isMe = message.user_id === user?.id;
+                  const isMe = message.user_id === userInfo?.id;
 
                   return acc.concat(
                     (index === 0 || messageDate !== prevDate) && <div key={`date-${index}`} className={styles['message-date-header']}>{messageDate}</div>,
@@ -307,7 +309,7 @@ function LostItemChatPage() {
                             { (isSenderChanged || (messageTime !== prevTime)) && (
                               <div className={styles['message-item--header']}>
                                 <div className={styles['message-item--profile']}><PersonIcon /></div>
-                                <div className={styles['message-item--name']}>{message.user_nickname || user?.anonymous_nickname || '익명'}</div>
+                                <div className={styles['message-item--name']}>{message.user_nickname || userInfo?.anonymous_nickname || '익명'}</div>
                               </div>
                             )}
                             <div className={styles['message-item']}>
@@ -335,7 +337,7 @@ function LostItemChatPage() {
                   const isSenderChanged = index === 0
                     ? message.user_id !== messages[messages.length - 1]?.user_id
                     : message.user_id !== currentMessageList[index - 1]?.user_id;
-                  const isMe = (message.user_id === user?.id);
+                  const isMe = (message.user_id === userInfo?.id);
 
                   return acc.concat(
                     (messageDate !== prevDate) && <div key={`date-${index}`} className={styles['message-date-header']}>{messageDate}</div>,
@@ -355,7 +357,7 @@ function LostItemChatPage() {
                             { (isSenderChanged || (messageTime !== prevTime)) && (
                               <div className={styles['message-item--header']}>
                                 <div className={styles['message-item--profile']}><PersonIcon /></div>
-                                <div className={styles['message-item--name']}>{message.user_nickname || user?.anonymous_nickname || '익명'}</div>
+                                <div className={styles['message-item--name']}>{message.user_nickname || userInfo?.anonymous_nickname || '익명'}</div>
                               </div>
                             )}
                             <div className={styles['message-item']}>
