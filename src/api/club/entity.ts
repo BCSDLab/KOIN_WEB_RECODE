@@ -63,3 +63,45 @@ export interface ClubDetailResponse extends APIResponse {
   is_liked: boolean;
   updated_at: string;
 }
+
+export interface PutClubLikeResonse extends APIResponse {
+
+}
+
+export interface DeleteClubLikeResonse extends APIResponse {
+
+}
+
+export interface ClubInroductionData {
+  introduction : string;
+}
+
+export interface ClubQnAData {
+  root_count: number;
+
+  total_count: number;
+
+  qnas: ClubQnAItem[];
+}
+
+export interface ClubQnAItem {
+  id: number;
+  author_id: number;
+  nickname: string;
+  content: string;
+  created_at: string;
+  children: ClubQnAItem[];
+}
+
+export interface ClubNewQnA {
+  parent_id: number | null,
+  content: string
+}
+
+export interface PostClubQnAResponse {
+
+}
+
+export interface DeleteClubQnAResponse {
+
+}
