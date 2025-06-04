@@ -12,6 +12,7 @@ import {
   PutClub,
   PutClubInroduction,
   PutClubLike,
+  PutNewClubManager,
 } from './APIDetail';
 
 export const getClubCategories = APIClient.of(ClubCategories);
@@ -37,3 +38,5 @@ export const getClubQnA = APIClient.of(GetClubQnA);
 export const deleteClubQnA = APIClient.of(DeleteClubQnA);
 
 export const putClubDetail = APIClient.of(PutClub);
+
+export const putNewClubManager = APIClient.of(PutNewClubManager);

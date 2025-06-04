@@ -12,6 +12,7 @@ import useClubLikeMutation from './hooks/useClubLike';
 import ClubIntroduction from './components/ClubIntrodution';
 import ClubQnA from './components/ClubQnA';
 import CreateQnAModal from './components/CreateQnAModal';
+import MandateClubManagerModal from './components/MandateClubManagerModal';
 
 export default function ClubDetailPage() {
   const { id } = useParams();
@@ -27,6 +28,7 @@ export default function ClubDetailPage() {
   const [isEdit, setIsEdit] = useState(false);
   const [introduction, setIntroduction] = useState(clubDetail.introduction);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const [isMandateModalOpen, openMandateModal, closeMandateModal] = useBooleanState(false);
 
   const {
     clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync,
@@ -54,6 +56,7 @@ export default function ClubDetailPage() {
   const handleEditClick = async () => {
     navigate(ROUTES.ClubEdit({ id: String(id), isLink: true }));
   };
+
   return (
     <div className={styles.layout}>
       {!isMobile && (
@@ -110,9 +113,9 @@ export default function ClubDetailPage() {
               )}
             </div>
           )}
-          {isMobile && (
+          {(isMobile && clubDetail.manager) && (
             <div className={styles['club-detail__edit-button__container']}>
-              <button type="button" className={styles['club-detail__edit-button']}>
+              <button type="button" className={styles['club-detail__edit-button']} onClick={openMandateModal}>
                 권한 위임
               </button>
               <button type="button" className={styles['club-detail__edit-button']} onClick={handleEditClick}>
@@ -312,6 +315,15 @@ export default function ClubDetailPage() {
           clubId={id}
         />
       )}
+      {
+        isMandateModalOpen && (
+          <MandateClubManagerModal
+            closeModal={closeMandateModal}
+            clubId={id}
+            clubName={clubDetail.name}
+          />
+        )
+      }
     </div>
   );
 }

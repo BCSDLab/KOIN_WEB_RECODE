@@ -66,13 +66,9 @@ export interface ClubDetailResponse extends APIResponse {
   updated_at: string;
 }
 
-export interface PutClubLikeResonse extends APIResponse {
+export type PutClubLikeResonse = APIResponse;
 
-}
-
-export interface DeleteClubLikeResonse extends APIResponse {
-
-}
+export type DeleteClubLikeResonse = APIResponse;
 
 export interface ClubInroductionData {
   introduction : string;
@@ -100,10 +96,12 @@ export interface ClubNewQnA {
   content: string
 }
 
-export interface PostClubQnAResponse {
+export type PostClubQnAResponse = APIResponse;
 
+export type DeleteClubQnAResponse = APIResponse;
+
+export interface NewClubManager {
+  club_id: number;
+  changed_manager_id: string;
 }
-
-export interface DeleteClubQnAResponse {
-
-}
+export type NewClubManagerResponse = APIResponse;

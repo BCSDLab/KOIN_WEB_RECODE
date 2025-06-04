@@ -10,6 +10,8 @@ import type {
   DeleteClubQnAResponse,
   HotClubResponse,
   NewClubData,
+  NewClubManager,
+  NewClubManagerResponse,
   PostClubQnAResponse,
   PostClubResponse,
   PutClubLikeResonse,
@@ -189,5 +191,21 @@ export class PutClub<R extends PostClubResponse> implements APIRequest<R> {
     public clubId: number | string,
   ) {
     this.path = `/clubs/${clubId}`;
+  }
+}
+
+export class PutNewClubManager<R extends NewClubManagerResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/clubs/empowerment';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public data: NewClubManager,
+  ) {
   }
 }
