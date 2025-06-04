@@ -77,7 +77,6 @@ export interface RefreshResponse extends APIResponse {
 }
 
 export interface UserResponse extends APIResponse {
-  id: number;
   anonymous_nickname: string;
   email: string;
   gender: 0 | 1;
@@ -114,14 +113,22 @@ export interface UserAcademicInfoResponse extends APIResponse {
 
 export interface UserUpdateRequest {
   password?: string;
-  identity?: number;
-  is_graduated?: boolean;
   gender?: 0 | 1;
   major?: string;
   name?: string;
   nickname?: string;
   phone_number?: string;
   student_number?: string;
+  email?: string;
+}
+
+export interface GeneralUserUpdateRequest {
+  gender?: 0 | 1;
+  name?: string;
+  nickname?: string;
+  phone_number?: string;
+  email?: string;
+  password?: string;
 }
 
 export interface DeleteResponse extends APIResponse { }
