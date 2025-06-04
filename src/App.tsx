@@ -45,6 +45,8 @@ import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import ReportPage from 'pages/Articles/ReportPage';
 import ClubEditPage from 'pages/Club/ClubEditPage';
+import { useTokenStore } from 'utils/zustand/auth';
+import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 
 interface WrapperProps {
   title: string;
@@ -79,6 +81,21 @@ function Wrapper({
 }
 
 function App() {
+  useEffect(() => {
+    window.onNativeCallback = (id, value) => {
+      if (id === 'accessToken')  useTokenStore.getState().setToken(value);
+      if (id === 'refreshToken') useTokenStore.getState().setRefreshToken(value);
+    };
+
+    window.setTokens = setTokensFromNative;
+
+    requestTokensFromNative();
+
+    return () => {
+      delete window.onNativeCallback;
+      delete window.setTokens;
+    };
+  }, []);
   return (
     <>
       <Routes>
