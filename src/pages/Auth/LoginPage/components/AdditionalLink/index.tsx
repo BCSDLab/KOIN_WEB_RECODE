@@ -30,7 +30,7 @@ export default function AdditionalLink() {
         </Link>
         <Link
           className={styles.help__link}
-          to={ROUTES.AuthFindPW()}
+          to={ROUTES.AuthFindPW({ step: '계정인증', isLink: true })}
           onClick={() => {
             logger.actionEventClick({
               team: 'USER',
@@ -78,7 +78,7 @@ export default function AdditionalLink() {
       </Link>
       <Link
         className={styles.help__link}
-        to={ROUTES.AuthFindPW()}
+        to={ROUTES.AuthFindPW({ step: '계정인증', isLink: true })}
         onClick={() => {
           logger.actionEventClick({
             team: 'USER',

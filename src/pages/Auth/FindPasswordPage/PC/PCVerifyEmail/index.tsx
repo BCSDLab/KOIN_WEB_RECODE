@@ -6,7 +6,7 @@ interface PCVerifyEmailProps {
 function PCVerifyEmail({ onNext, onBack }: PCVerifyEmailProps) {
   return (
     <div>
-      Email 인증 페이지
+      PC Email 인증 페이지
       <button
         type="button"
         onClick={onNext}
