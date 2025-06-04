@@ -6,7 +6,7 @@ import { useState } from 'react';
 import {
   Controller, useFormContext, useWatch,
 } from 'react-hook-form';
-import { MESSAGES } from 'static/auth';
+import { ContactType, MESSAGES } from 'static/auth';
 import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
 import styles from './PCVerifyPhone.module.scss';
 
@@ -14,9 +14,12 @@ interface FindPasswordProps {
   onNext: () => void;
   onBack: () => void;
   goToEmailStep: () => void;
+  setContactType: (type: ContactType) => void;
 }
 
-function PCVerifyPhone({ onNext, onBack, goToEmailStep }: FindPasswordProps) {
+function PCVerifyPhone({
+  onNext, onBack, goToEmailStep, setContactType,
+}: FindPasswordProps) {
   const { control, getValues } = useFormContext();
 
   const loginId = useWatch({ control, name: 'loginId' });
@@ -62,6 +65,7 @@ function PCVerifyPhone({ onNext, onBack, goToEmailStep }: FindPasswordProps) {
     }, {
       onSuccess: () => {
         // 아이디가 존재할 경우, 아이디-휴대폰 일치 여부 확인
+        setContactType('PHONE');
         checkIdMatchPhone({
           login_id: loginId,
           phone_number: phoneNumber,

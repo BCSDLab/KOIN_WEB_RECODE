@@ -1,25 +1,27 @@
 import {
   Controller, useFormContext, useWatch, FieldError,
 } from 'react-hook-form';
-import { MESSAGES, REGEX } from 'static/auth';
+import { ContactType, MESSAGES, REGEX } from 'static/auth';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/PCCustomInput';
 import { isKoinError } from '@bcsdlab/koin';
 import showToast from 'utils/ts/showToast';
-import { resetPasswordSms } from 'api/auth';
+import { resetPasswordEmail, resetPasswordSms } from 'api/auth';
 import { useMutation } from '@tanstack/react-query';
 import styles from './PCResetPasswordPhone.module.scss';
 
 interface PCResetPasswordPhoneProps {
   onNext: () => void;
   onBack: () => void;
+  contactType: ContactType;
 }
 
 interface PasswordResetFormValues {
   loginId: string,
-  contactType: string,
+  contactType: ContactType,
   phoneNumber: string,
+  email: string,
   verificationCode: string,
   password: string,
   passwordCheck: string,
@@ -27,7 +29,7 @@ interface PasswordResetFormValues {
   newPasswordCheck: string,
 }
 
-function PCResetPasswordPhone({ onNext, onBack }: PCResetPasswordPhoneProps) {
+function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPhoneProps) {
   const {
     control, getValues, trigger,
   } = useFormContext<PasswordResetFormValues>();
@@ -48,7 +50,7 @@ function PCResetPasswordPhone({ onNext, onBack }: PCResetPasswordPhoneProps) {
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 
-  const { mutate: submitResetPassword } = useMutation({
+  const { mutate: submitResetPasswordSms } = useMutation({
     mutationFn: resetPasswordSms,
     onSuccess: () => {
       onNext(); // 완료 페이지로 이동
@@ -60,13 +62,34 @@ function PCResetPasswordPhone({ onNext, onBack }: PCResetPasswordPhoneProps) {
     },
   });
 
+  const { mutate: submitResetPasswordEmail } = useMutation({
+    mutationFn: resetPasswordEmail,
+    onSuccess: () => {
+      onNext(); // 완료 페이지로 이동
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        showToast('error', '비밀번호 재설정에 실패했습니다.');
+      }
+    },
+  });
+
   const onClickSubmit = () => {
-    const { loginId, phoneNumber } = getValues();
-    submitResetPassword({
-      login_id: loginId,
-      phone_number: phoneNumber,
-      new_password: newPassword,
-    });
+    const { loginId, email, phoneNumber } = getValues();
+
+    if (contactType === 'PHONE') {
+      submitResetPasswordSms({
+        login_id: loginId,
+        phone_number: phoneNumber,
+        new_password: newPassword,
+      });
+    } else {
+      submitResetPasswordEmail({
+        login_id: loginId,
+        email,
+        new_password: newPassword,
+      });
+    }
   };
 
   console.log(getValues());
