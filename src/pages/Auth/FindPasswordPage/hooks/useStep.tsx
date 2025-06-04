@@ -1,25 +1,26 @@
-import { ReactNode, ReactElement, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function useStep<T extends string>(initialStep: T) {
   const navigate = useNavigate();
+
   const [currentStep, setCurrentStep] = useState<T>(initialStep);
 
-  const nextStep = (next: T) => setCurrentStep(next);
+  const nextStep = (step: T) => setCurrentStep(step);
   const goBack = () => {
     navigate(-1);
   };
 
   function Step({
     name,
-    step,
+    current,
     children,
   }: {
     name: T;
-    step: T;
+    current: T;
     children: ReactNode;
-  }): ReactElement | null {
-    return step === name ? <div>{children}</div> : null;
+  }) {
+    return current === name ? <div>{children}</div> : null;
   }
 
   return {

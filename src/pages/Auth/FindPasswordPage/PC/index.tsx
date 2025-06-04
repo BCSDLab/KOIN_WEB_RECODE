@@ -1,119 +1,282 @@
-import { cn } from '@bcsdlab/utils';
-import BackIcon from 'assets/svg/arrow-back.svg';
-import PCCustomInput from 'pages/Auth/SignupPage/components/PCCustomInput';
-import {
-  Controller, useForm, useFormContext, useWatch,
-} from 'react-hook-form';
-import styles from './PCFindPasswordPage.module.scss';
+// import { isKoinError } from '@bcsdlab/koin';
+// import { cn } from '@bcsdlab/utils';
+// import { useMutation } from '@tanstack/react-query';
+// import { checkPhone, smsSend, smsVerify } from 'api/auth';
+// import { SmsSendResponse } from 'api/auth/entity';
+// import BackIcon from 'assets/svg/arrow-back.svg';
+// import PCCustomInput, { InputMessage } from 'pages/Auth/SignupPage/components/PCCustomInput';
+// import useCountdownTimer from 'pages/Auth/SignupPage/hooks/useCountdownTimer';
+// import { useState } from 'react';
+// import {
+//   Controller, useFormContext, useWatch,
+// } from 'react-hook-form';
+// import { useNavigate } from 'react-router-dom';
+// import { MESSAGES } from 'static/auth';
+// import ROUTES from 'static/routes';
+// import styles from './PCFindPasswordPage.module.scss';
 
-interface FindPasswordProps {
-  onNext: () => void;
-  onBack: () => void;
-}
+// interface FindPasswordProps {
+//   onNext: () => void;
+//   onBack: () => void;
+//   goToEmailStep: () => void;
+// }
 
-function PCFindPassword({ onNext, onBack }: FindPasswordProps) {
-  const { control, register } = useFormContext();
+// function PCFindPassword({ onNext, onBack, goToEmailStep }: FindPasswordProps) {
+//   const { control, getValues } = useFormContext();
 
-  const loginId = useWatch({ control, name: 'loginId' });
-  const contactType = useWatch({ control, name: 'contactType' });
+//   const loginId = useWatch({ control, name: 'loginId' });
 
-  const isFormFilled = contactType !== '';
+//   console.log(getValues());
 
-  // const onNext = () => {
-  //   if (contactType === 'phone') {
-  //     navigate(ROUTES.AuthFindPasswordPhone());
-  //   } else if (contactType === 'email') {
-  //     navigate(ROUTES.AuthFindPasswordEmail());
-  //   }
-  // };
+//   const navigate = useNavigate();
+//   const phoneNumber = useWatch({ control, name: 'phoneNumber' });
+//   const verificationCode = useWatch({ control, name: 'verificationCode' });
 
-  // const methods = useForm({
-  //   mode: 'onChange',
-  //   defaultValues: {
-  //     login_id: '',
-  //     password: '',
-  //     password_check: '',
-  //     phone: null,
-  //     email: null,
-  //     verification_code: '',
-  //   },
-  // });
+//   const [, setShowVerificationField] = useState(false);
+//   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
+//   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
+//   const [isCodeCorrect, setIsCodeCorrect] = useState(false);
+//   const [smsSendCount, setSmsSendCount] = useState(0);
+//   const [buttonText, setButtonText] = useState('인증번호 발송');
 
-  return (
-    <div className={styles.container}>
+//   const { isRunning: isTimer, secondsLeft: timerValue, start: runTimer } = useCountdownTimer({
+//     duration: 180,
+//     onExpire: () => {
+//       if (!isCodeCorrect) {
+//         setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
+//       }
+//     },
+//   });
 
-      <div className={styles.container__wrapper}>
-        <div className={styles['container__title-wrapper']}>
-          <button
-            type="button"
-            onClick={onBack}
-            aria-label="뒤로가기"
-            className={styles['container__back-button']}
-          >
-            <BackIcon />
-          </button>
-          <h1 className={styles.container__title}>비밀번호 찾기</h1>
-        </div>
-      </div>
+//   const { mutate: sendSMSToUser } = useMutation({
+//     mutationFn: smsSend,
+//     onSuccess: (data : SmsSendResponse) => {
+//       setPhoneMessage({ type: 'default', content: MESSAGES.FIND_PASSWORD.NOT_REGISTERED });
+//       runTimer();
+//       setShowVerificationField(true);
+//       setSmsSendCount(data.remaining_count);
 
-      <div className={`${styles.divider} ${styles['divider--top']}`} />
+//       setSmsSendCount(data.remaining_count);
 
-      <div className={styles['form-container']}>
+//       if (data.remaining_count < 5) {
+//         setButtonText('인증번호 재발송');
+//       } else {
+//         setButtonText('인증번호 발송');
+//       }
+//     },
+//     onError: (err) => {
+//       if (isKoinError(err)) {
+//         if (err.status === 400) {
+//           setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+//         }
+//         if (err.status === 429) {
+//           setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
+//         }
+//       }
+//     },
+//   });
 
-        <div className={styles['input-wrapper']}>
-          <Controller
-            name="name"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <PCCustomInput
-                {...field}
-                htmlFor="name"
-                labelName="아이디"
-                placeholder="아이디를 입력해 주세요."
-                isDelete
-              />
-            )}
-          />
-        </div>
+//   const { mutate: checkVerificationCode } = useMutation({
+//     mutationFn: smsVerify,
+//     onSuccess: () => {
+//       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
+//       setIsCodeCorrect(true);
+//     },
+//     onError: (err) => {
+//       if (isKoinError(err)) {
+//         if (err.status === 400) {
+//           setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
+//         }
+//         if (err.status === 404) {
+//           setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
+//         }
+//       }
+//     },
+//   });
 
-        <div className={styles['contactType-wrapper']}>
-          <label
-            htmlFor="contactType"
-            className={styles.wrapper__label}
-          >
-            인증수단
-          </label>
+//   const goToLogin = () => {
+//     navigate(ROUTES.Auth());
+//   };
 
-          <div className={styles['checkbox-wrapper']}>
-            <label className={styles['checkbox-wrapper__checkbox']}>
-              <input type="radio" value="PHONE" {...register('contactType')} />
-              <div>전화번호</div>
-            </label>
-            <label className={styles['checkbox-wrapper__checkbox']}>
-              <input type="radio" value="EMAIL" {...register('contactType')} />
-              <div>이메일</div>
-            </label>
-          </div>
-        </div>
+//   const isFormFilled = loginId && phoneNumber && verificationCode && isCodeCorrect;
 
-      </div>
+//   return (
+//     <div className={styles.container}>
 
-      <div className={`${styles.divider} ${styles['divider--bottom']}`} />
+//       <div className={styles.container__wrapper}>
+//         <div className={styles['container__title-wrapper']}>
+//           <button
+//             type="button"
+//             onClick={onBack}
+//             aria-label="뒤로가기"
+//             className={styles['container__back-button']}
+//           >
+//             <BackIcon />
+//           </button>
+//           <h1 className={styles.container__title}>비밀번호 찾기</h1>
+//         </div>
+//       </div>
 
-      <button
-        type="button"
-        onClick={onNext}
-        className={cn({
-          [styles['button-next']]: true,
-          [styles['button-next--active']]: isFormFilled,
-        })}
-        disabled={!isFormFilled}
-      >
-        다음
-      </button>
-    </div>
-  );
-}
+//       <div className={`${styles.divider} ${styles['divider--top']}`} />
 
-export default PCFindPassword;
+//       <div className={styles['form-container']}>
+
+//         <div className={styles['input-wrapper']}>
+//           <Controller
+//             name="loginId"
+//             control={control}
+//             defaultValue=""
+//             render={({ field }) => (
+//               <PCCustomInput
+//                 {...field}
+//                 htmlFor="loginId"
+//                 labelName="아이디"
+//                 placeholder="아이디를 입력해 주세요."
+//                 isDelete
+//                 isRequired
+//               />
+//             )}
+//           />
+//         </div>
+
+//         <div className={styles['input-wrapper']}>
+//           <Controller
+//             name="phoneNumber"
+//             control={control}
+//             defaultValue=""
+//             render={({ field }) => (
+//               <div className={styles['input-with-button']}>
+//                 <PCCustomInput
+//                   htmlFor="phoneNumber"
+//                   labelName="휴대전화"
+//                   {...field}
+//                   onChange={(e) => {
+//                     field.onChange(e);
+//                     setPhoneMessage(null);
+//                     setIsCodeCorrect(false);
+//                   }}
+//                   placeholder="숫자만 입력해 주세요."
+//                   isRequired
+//                   isDelete
+//                   message={phoneMessage}
+//                   onClear={() => {
+//                     setPhoneMessage(null);
+//                     setButtonText('인증번호 발송');
+//                   }}
+//                 >
+//                   {phoneMessage?.type === 'default' && (
+//                     <button
+//                       type="button"
+//                       className={styles.findByEmailLink}
+//                       onClick={goToEmailStep}
+//                     >
+//                       이메일로 찾기
+//                     </button>
+//                   )}
+//                   {phoneMessage?.type === 'success' && (
+//                   <div className={styles['label-count-number']}>
+//                     {' '}
+//                     남은 횟수 (
+//                     {smsSendCount}
+//                     /5)
+//                   </div>
+//                   )}
+//                 </PCCustomInput>
+//                 <button
+//                   type="button"
+//                   onClick={() => sendSMSToUser({ phone_number: phoneNumber })}
+//                   className={styles['check-button']}
+//                   disabled={!/^01[016789][0-9]{7,8}$/.test(field.value)}
+//                 >
+//                   {buttonText}
+//                 </button>
+//               </div>
+//             )}
+//           />
+//         </div>
+
+//         <div className={styles['input-wrapper']}>
+//           <Controller
+//             name="verificationCode"
+//             control={control}
+//             defaultValue=""
+//             render={({ field }) => (
+//               <div className={styles['input-with-button']}>
+//                 <PCCustomInput
+//                   {...field}
+//                   htmlFor="verificationCode"
+//                   labelName="휴대전화 인증"
+//                   onChange={(e) => {
+//                     field.onChange(e);
+//                     setVerificationMessage(null);
+//                   }}
+//                   placeholder="인증번호를 입력해주세요."
+//                   isRequired
+//                   maxLength={6}
+//                   isDelete
+//                   isTimer={isCodeCorrect ? false : isTimer}
+//                   timerValue={timerValue}
+//                   message={verificationMessage}
+//                   onClear={() => {
+//                     setVerificationMessage(null);
+//                     setIsCodeCorrect(false);
+//                   }}
+//                 />
+//                 <button
+//                   type="button"
+//                   onClick={() => {
+//                     checkVerificationCode({
+//                       phone_number: phoneNumber,
+//                       verification_code: verificationCode,
+//                     });
+//                   }}
+//                   className={styles['check-button']}
+//                   disabled={!field.value || isCodeCorrect}
+//                 >
+//                   인증번호 확인
+//                 </button>
+//               </div>
+//             )}
+//           />
+//         </div>
+
+//         {/* <div className={styles['contactType-wrapper']}>
+//           <label
+//             htmlFor="contactType"
+//             className={styles.wrapper__label}
+//           >
+//             인증수단
+//           </label>
+
+//           <div className={styles['checkbox-wrapper']}>
+//             <label className={styles['checkbox-wrapper__checkbox']}>
+//               <input type="radio" value="PHONE" {...register('contactType')} />
+//               <div>전화번호</div>
+//             </label>
+//             <label className={styles['checkbox-wrapper__checkbox']}>
+//               <input type="radio" value="EMAIL" {...register('contactType')} />
+//               <div>이메일</div>
+//             </label>
+//           </div>
+//         </div> */}
+
+//       </div>
+
+//       <div className={`${styles.divider} ${styles['divider--bottom']}`} />
+
+//       <button
+//         type="button"
+//         onClick={onNext}
+//         className={cn({
+//           [styles['button-next']]: true,
+//           [styles['button-next--active']]: isFormFilled,
+//         })}
+//         disabled={!isFormFilled}
+//       >
+//         다음
+//       </button>
+//     </div>
+//   );
+// }
+
+// export default PCFindPassword;

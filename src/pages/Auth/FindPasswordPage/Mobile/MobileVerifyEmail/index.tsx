@@ -1,13 +1,12 @@
 interface MobileFindPasswordProps {
   onNext: () => void;
   onBack: () => void;
-  goToEmailStep: () => void;
 }
 
-function MobileFindPassword({ onNext, onBack, goToEmailStep }: MobileFindPasswordProps) {
+function MobileVerifyEmail({ onNext, onBack }: MobileFindPasswordProps) {
   return (
     <div>
-      MobileFindPassword
+      Mobile Find Password Email Page
       <div>
         Email 인증 페이지
         <button
@@ -23,16 +22,9 @@ function MobileFindPassword({ onNext, onBack, goToEmailStep }: MobileFindPasswor
         >
           Back 버튼
         </button>
-
-        <button
-          type="button"
-          onClick={goToEmailStep}
-        >
-          goToEmailStep 버튼
-        </button>
       </div>
     </div>
   );
 }
 
-export default MobileFindPassword;
+export default MobileVerifyEmail;
