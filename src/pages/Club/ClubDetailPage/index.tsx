@@ -8,6 +8,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
 import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useClubDetail from './hooks/useClubdetail';
 import styles from './ClubDetailPage.module.scss';
 import useClubLikeMutation from './hooks/useClubLike';
@@ -25,6 +26,7 @@ export default function ClubDetailPage() {
   } = useClubDetail(id);
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
+  const logger = useLogger();
 
   const [navType, setNavType] = useState('상세 소개');
   const [isEdit, setIsEdit] = useState(false);
@@ -63,7 +65,32 @@ export default function ClubDetailPage() {
   };
 
   const handleEditClick = async () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_correction',
+      value: '수정하기',
+    });
     navigate(ROUTES.ClubEdit({ id: String(id), isLink: true }));
+  };
+  const handleMandateClick = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_delegation_authority',
+      value: '권한위임',
+    });
+    openMandateModal();
+  };
+
+  const handleNavClick = (navValue:string) => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_tab_select',
+      value: `${navValue}`,
+    });
+    setNavType(navValue);
   };
 
   return (
@@ -124,7 +151,7 @@ export default function ClubDetailPage() {
           )}
           {(isMobile && clubDetail.manager) && (
             <div className={styles['club-detail__edit-button__container']}>
-              <button type="button" className={styles['club-detail__edit-button']} onClick={openMandateModal}>
+              <button type="button" className={styles['club-detail__edit-button']} onClick={handleMandateClick}>
                 권한 위임
               </button>
               <button type="button" className={styles['club-detail__edit-button']} onClick={handleEditClick}>
@@ -252,7 +279,7 @@ export default function ClubDetailPage() {
             [styles['nav-type']]: true,
             [styles['nav-type--active']]: navType === '상세 소개',
           })}
-          onClick={() => setNavType('상세 소개')}
+          onClick={() => handleNavClick('상세 소개')}
         >
           상세소개
         </button>
@@ -262,7 +289,7 @@ export default function ClubDetailPage() {
             [styles['nav-type']]: true,
             [styles['nav-type--active']]: navType === 'Q&A',
           })}
-          onClick={() => setNavType('Q&A')}
+          onClick={() => handleNavClick('Q&A')}
         >
           Q&A
         </button>

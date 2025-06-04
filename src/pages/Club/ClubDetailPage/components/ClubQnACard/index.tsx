@@ -8,6 +8,7 @@ import useClubQnA from 'pages/Club/ClubDetailPage/hooks/useClubQnA';
 import { useState } from 'react';
 import showToast from 'utils/ts/showToast';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ClubQnACard.module.scss';
 
 interface ClubQnACardProps {
@@ -18,6 +19,7 @@ interface ClubQnACardProps {
 
 export default function ClubQnACard({ clubQnAData, clubId, isManager }: ClubQnACardProps) {
   const { data: userInfo } = useUser();
+  const logger = useLogger();
   const [newReply, setNewReply] = useState('');
 
   const isMobile = useMediaQuery();
@@ -45,6 +47,12 @@ export default function ClubQnACard({ clubQnAData, clubId, isManager }: ClubQnAC
   };
 
   const handleDeleteQnA = async (qnaId : number) => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_Q&A_delete_confirm',
+      value: '삭제하기',
+    });
     await deleteClubQnAMutateAsync(qnaId);
   };
   return (

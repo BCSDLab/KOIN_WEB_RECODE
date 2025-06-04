@@ -1,6 +1,7 @@
 import { ClubNewQnA } from 'api/club/entity';
 import useClubQnA from 'pages/Club/ClubDetailPage/hooks/useClubQnA';
 import { useState } from 'react';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CreateQnAModal.module.scss';
 
 interface CreateQnAModalProps {
@@ -12,6 +13,7 @@ export default function CreateQnAModal({
   closeModal,
   clubId,
 }: CreateQnAModalProps) {
+  const logger = useLogger();
   const [newQnA, setNewQnA] = useState<ClubNewQnA>({
     parent_id: null,
     content: '',
@@ -20,6 +22,12 @@ export default function CreateQnAModal({
   const { postClubQnAStatus, postClubQnAMutateAsync } = useClubQnA(clubId);
 
   const handleSubmit = async () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_Q&A_add_confirm',
+      value: 'Q&A',
+    });
     await postClubQnAMutateAsync(newQnA);
     closeModal();
   };
