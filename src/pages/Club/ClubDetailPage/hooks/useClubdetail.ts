@@ -20,7 +20,7 @@ export default function useClubDetail(clubId: number | string | undefined) {
   });
 
   const {
-    status: clubIntrodutionEditStatus,
+    status: clubIntroductionEditStatus,
     mutateAsync: clubIntroductionEditMutateAsync,
   } = useMutation({
     mutationFn: async (data:ClubInroductionData) => {
@@ -36,6 +36,6 @@ export default function useClubDetail(clubId: number | string | undefined) {
     },
   });
   return {
-    clubDetail, clubIntrodutionEditStatus, clubIntroductionEditMutateAsync,
+    clubDetail, clubIntroductionEditStatus, clubIntroductionEditMutateAsync,
   };
 }

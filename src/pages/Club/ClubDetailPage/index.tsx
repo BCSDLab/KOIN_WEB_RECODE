@@ -18,7 +18,7 @@ export default function ClubDetailPage() {
   const { id } = useParams();
   const {
     clubDetail,
-    clubIntrodutionEditStatus,
+    clubIntroductionEditStatus,
     clubIntroductionEditMutateAsync,
   } = useClubDetail(id);
   const isMobile = useMediaQuery();
@@ -75,7 +75,7 @@ export default function ClubDetailPage() {
               type="button"
               className={styles['club-detail__pc-header__button']}
               onClick={handleIntroductionSave}
-              disabled={clubIntrodutionEditStatus === 'pending'}
+              disabled={clubIntroductionEditStatus === 'pending'}
             >
               저장
             </button>
@@ -273,7 +273,7 @@ export default function ClubDetailPage() {
               type="button"
               className={styles['club-detail__mobile-button__button']}
               onClick={handleIntroductionSave}
-              disabled={clubIntrodutionEditStatus === 'pending'}
+              disabled={clubIntroductionEditStatus === 'pending'}
             >
               저장
             </button>

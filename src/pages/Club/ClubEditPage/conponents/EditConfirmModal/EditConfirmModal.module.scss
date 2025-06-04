@@ -118,4 +118,20 @@
       font-size: 15px;
     }
   }
+
+  &__reset {
+    border-radius: 4px;
+    background: #eb6f70;
+    width: 100%;
+    padding: 6px 12px;
+    gap: 10px;
+    color: #fff;
+    font-family: Pretendard, sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 15px;
+    }
+  }
 }
