@@ -24,6 +24,11 @@ import {
   IdFindEmail,
   PhoneExists,
   IdFindSms,
+  IdExists,
+  IdMatchPhone,
+  IdMatchEmail,
+  ResetPasswordSms,
+  ResetPasswordEmail,
 } from './APIDetail';
 
 export const login = APIClient.of(Login);
@@ -73,3 +78,13 @@ export const idFindEmail = APIClient.of(IdFindEmail);
 export const phoneExists = APIClient.of(PhoneExists);
 
 export const idFindSms = APIClient.of(IdFindSms);
+
+export const idExists = APIClient.of(IdExists);
+
+export const idMatchPhone = APIClient.of(IdMatchPhone);
+
+export const idMatchEmail = APIClient.of(IdMatchEmail);
+
+export const resetPasswordSms = APIClient.of(ResetPasswordSms);
+
+export const resetPasswordEmail = APIClient.of(ResetPasswordEmail);

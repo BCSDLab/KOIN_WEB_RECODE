@@ -39,6 +39,16 @@ import {
   IdFindSmsResponse,
   IdFindSmsRequest,
   GeneralUserResponse,
+  IdExistsResponse,
+  IdExistsRequest,
+  IdMatchPhoneResponse,
+  IdMatchPhoneRequest,
+  IdMatchEmailResponse,
+  IdMatchEmailRequest,
+  ResetPasswordSmsResponse,
+  ResetPasswordSmsRequest,
+  ResetPasswordEmailResponse,
+  ResetPasswordEmailRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -333,10 +343,10 @@ export class PhoneExists<R extends PhoneExistsResponse> implements APIRequest<R>
 
   auth = false;
 
-  constructor(public data: PhoneExistsRequest) {}
+  constructor(public data: PhoneExistsRequest) { }
 }
 
-export class IdFindSms <R extends IdFindSmsResponse> implements APIRequest<R> {
+export class IdFindSms<R extends IdFindSmsResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/users/id/find/sms';
@@ -346,4 +356,64 @@ export class IdFindSms <R extends IdFindSmsResponse> implements APIRequest<R> {
   auth = false;
 
   constructor(public data: IdFindSmsRequest) { }
+}
+
+export class IdExists<R extends IdExistsResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/user/id/exists';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: IdExistsRequest) { }
+}
+
+export class IdMatchPhone<R extends IdMatchPhoneResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/id/match/phone';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: IdMatchPhoneRequest) { }
+}
+
+export class IdMatchEmail<R extends IdMatchEmailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/id/match/phone';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: IdMatchEmailRequest) { }
+}
+
+export class ResetPasswordSms<R extends ResetPasswordSmsResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/password/reset/sms';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: ResetPasswordSmsRequest) { }
+}
+
+export class ResetPasswordEmail<R extends ResetPasswordEmailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/users/password/reset/email';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public data: ResetPasswordEmailRequest) { }
 }

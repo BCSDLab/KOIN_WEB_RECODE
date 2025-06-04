@@ -203,6 +203,42 @@ export interface PhoneExistsRequest {
 
 export interface PhoneExistsResponse extends APIResponse { }
 
+export interface IdExistsRequest {
+  login_id: string;
+}
+
+export interface IdExistsResponse extends APIResponse { }
+
+export interface IdMatchPhoneRequest {
+  login_id: string;
+  phone_number: string;
+}
+
+export interface IdMatchPhoneResponse extends APIResponse { }
+
+export interface IdMatchEmailRequest {
+  login_id: string;
+  email: string;
+}
+
+export interface IdMatchEmailResponse extends APIResponse { }
+
+export interface ResetPasswordSmsRequest {
+  login_id: string;
+  phone_number: string;
+  new_password: string;
+}
+
+export interface ResetPasswordSmsResponse extends APIResponse { }
+
+export interface ResetPasswordEmailRequest {
+  login_id: string;
+  email: string;
+  new_password: string;
+}
+
+export interface ResetPasswordEmailResponse extends APIResponse { }
+
 export interface VerificationSmsSendResponse extends APIResponse {
   target: string;
   total_count: number;
