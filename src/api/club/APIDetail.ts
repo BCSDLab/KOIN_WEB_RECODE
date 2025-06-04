@@ -1,10 +1,20 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type {
   ClubCategoriesResponse,
+  ClubDetailResponse,
+  ClubInroductionData,
   ClubListResponse,
+  ClubNewQnA,
+  ClubQnAData,
+  DeleteClubLikeResonse,
+  DeleteClubQnAResponse,
   HotClubResponse,
-  AddClubLikeResponse,
-  CancelClubLikeResponse,
+  NewClubData,
+  NewClubManager,
+  NewClubManagerResponse,
+  PostClubQnAResponse,
+  PostClubResponse,
+  PutClubLikeResonse,
 } from './entity';
 
 export class ClubCategories<R extends ClubCategoriesResponse> implements APIRequest<R> {
@@ -41,30 +51,161 @@ export class HotClub<R extends HotClubResponse> implements APIRequest<R> {
   auth = false;
 }
 
-export class AddClubLike<R extends AddClubLikeResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.PUT;
+export class PostClub<R extends PostClubResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
 
-  path: string;
+  path = '/clubs';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(public authorization: string, public data: NewClubData) { }
+}
+
+export class ClubDetail<R extends ClubDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/clubs';
 
   response!: R;
 
   auth = true;
 
   constructor(public authorization: string, public clubId: number) {
+    this.path = `/clubs/${clubId}`;
+  }
+}
+
+export class PutClubInroduction<R extends ClubDetailResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/clubs';
+
+  response!:R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number | string,
+    public data: ClubInroductionData,
+  ) {
+    this.path = `/clubs/${clubId}/introduction`;
+  }
+}
+
+export class PutClubLike<R extends PutClubLikeResonse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/clubs';
+
+  response!:R;
+
+  auth = true;
+
+  constructor(public authorization: string, public clubId: number | string) {
     this.path = `/clubs/${clubId}/like`;
   }
 }
 
-export class CancelClubLike<R extends CancelClubLikeResponse> implements APIRequest<R> {
+export class DeleteClubLike<R extends DeleteClubLikeResonse> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 
-  path: string;
+  path = '/clubs';
+
+  response!:R;
+
+  auth = true;
+
+  constructor(public authorization: string, public clubId: number | string) {
+    this.path = `/clubs/${clubId}/like/cancel`;
+  }
+}
+
+export class PostClubQnA<R extends PostClubQnAResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path = '/clubs';
+
+  response!:R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number | string,
+    public data: ClubNewQnA,
+  ) {
+    this.path = `/clubs/${clubId}/qna`;
+  }
+}
+
+export class GetClubQnA<R extends ClubQnAData> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/clubs';
+
+  response!:R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number | string,
+  ) {
+    this.path = `/clubs/${clubId}/qna`;
+  }
+}
+
+export class DeleteClubQnA<R extends DeleteClubQnAResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path = '/clubs';
+
+  response!:R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number | string,
+    public qnaId: number | string,
+  ) {
+    this.path = `/clubs/${clubId}/qna/${qnaId}`;
+  }
+}
+
+export class PutClub<R extends PostClubResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/clubs';
 
   response!: R;
 
   auth = true;
 
-  constructor(public authorization: string, public clubId: number) {
-    this.path = `/clubs/${clubId}/like/cancel`;
+  constructor(
+    public authorization: string,
+    public data: NewClubData,
+    public clubId: number | string,
+  ) {
+    this.path = `/clubs/${clubId}`;
+  }
+}
+
+export class PutNewClubManager<R extends NewClubManagerResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = '/clubs/empowerment';
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public data: NewClubManager,
+  ) {
   }
 }

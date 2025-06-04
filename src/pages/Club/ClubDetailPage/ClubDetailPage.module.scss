@@ -1,1 +1,274 @@
 @use "src/utils/scss/media" as media;
+
+.layout {
+  width: 100%;
+  height: 100%;
+  padding: 3% 15%;
+  box-sizing: border-box;
+
+  @include media.media-breakpoint(mobile) {
+    padding: 3%;
+  }
+}
+
+.club-detail {
+  &__pc-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    color: #175c8e;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 24px;
+
+    &__button-box {
+      display: flex;
+      gap: 24px;
+    }
+
+    &__button {
+      color: #fff;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 4px;
+      background: #175c8e;
+      padding: 7px 14px;
+    }
+  }
+
+  &__summary {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border: 2px solid #175c8e;
+    border-left: none;
+    border-right: none;
+    padding: 20px 0;
+
+    @include media.media-breakpoint(mobile) {
+      border: none;
+      padding: 0 5px;
+      width: 100%;
+    }
+
+    &__text-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    &__title {
+      color: #000;
+      font-family: Pretendard, sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 40px;
+
+      @include media.media-breakpoint(mobile) {
+        color: #000;
+        font-family: Pretendard, sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+    }
+
+    &__image-container {
+      width: 100%;
+      max-width: 400px;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    &__image-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 300px;
+
+      @include media.media-breakpoint(mobile) {
+        width: 100%;
+        height: 100%;
+        margin-bottom: 16px;
+      }
+    }
+
+    &__image {
+      max-width: 300px;
+    }
+
+    &__row {
+      margin-bottom: 30px;
+
+      @include media.media-breakpoint(mobile) {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+
+      &--mobile {
+        display: flex;
+        gap: 5px;
+      }
+
+      &--manager {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    &__like {
+      margin-bottom: 8px;
+      color: #000;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    &__like svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    &__contacts {
+      &__row {
+        margin-bottom: 10px;
+
+        @include media.media-breakpoint(mobile) {
+          margin-bottom: 4px;
+        }
+      }
+    }
+  }
+
+  &__like {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    &__text {
+      color: #000;
+      font-family: Pretendard, sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__like svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  &__mobile-button {
+    &__container {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    &__box {
+      display: flex;
+      gap: 24px;
+    }
+
+    &__button {
+      color: #fff;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 4px;
+      background: #175c8e;
+      padding: 7px 14px;
+
+      @include media.media-breakpoint(mobile) {
+        margin-top: 20px;
+        box-sizing: border-box;
+        height: 32px;
+        padding: 6px 12px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__edit-button {
+    display: flex;
+    width: 140px;
+    height: 32px;
+    padding: 6px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background: #175c8e;
+    color: #fff;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    box-sizing: border-box;
+
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      width: 100px;
+      min-width: 60px;
+    }
+
+    &__container {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+
+      @include media.media-breakpoint(mobile) {
+        gap: 8px;
+        margin: 16px 0;
+      }
+    }
+  }
+}
+
+.nav {
+  width: 100%;
+  display: flex;
+}
+
+.nav-type {
+  width: 100%;
+  color: #000;
+  font-family: Pretendard, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 24px 35px;
+  box-sizing: border-box;
+  border-bottom: 1px solid transparent;
+
+  &--active {
+    border-bottom: 1px solid #175c8e;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 14px 25px;
+  }
+}

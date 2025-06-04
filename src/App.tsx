@@ -44,6 +44,9 @@ import LostItemDetailPage from 'pages/Articles/LostItemDetailPage';
 import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import ReportPage from 'pages/Articles/ReportPage';
+import ClubEditPage from 'pages/Club/ClubEditPage';
+import { useTokenStore } from 'utils/zustand/auth';
+import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 
 interface WrapperProps {
   title: string;
@@ -78,6 +81,21 @@ function Wrapper({
 }
 
 function App() {
+  useEffect(() => {
+    window.onNativeCallback = (id, value) => {
+      if (id === 'accessToken')  useTokenStore.getState().setToken(value);
+      if (id === 'refreshToken') useTokenStore.getState().setRefreshToken(value);
+    };
+
+    window.setTokens = setTokensFromNative;
+
+    requestTokensFromNative();
+
+    return () => {
+      delete window.onNativeCallback;
+      delete window.setTokens;
+    };
+  }, []);
   return (
     <>
       <Routes>
@@ -104,6 +122,7 @@ function App() {
 
           <Route path={ROUTES.Club()} element={<Wrapper title="동아리 목록" element={<ClubListPage />} />} />
           <Route path={ROUTES.ClubDetail({ isLink: false })} element={<Wrapper title="상세 소개" element={<ClubDetailPage />} />} />
+          <Route path={ROUTES.ClubEdit({ isLink: false })} element={<Wrapper title="동아리 수정" element={<ClubEditPage />} />} />
           <Route path={ROUTES.NewClub()} element={<Wrapper title="동아리 생성" element={<NewClubPage />} />} />
 
           <Route path={ROUTES.Cafeteria()} element={<Wrapper title="식단" element={<CafeteriaPage />} />} />
