@@ -11,6 +11,7 @@ interface FormValidation {
   isStudentMajorValid: boolean;
   isEmailValid?: boolean;
   isNicknameValid?: boolean;
+  isGenderValid?: boolean;
 }
 
 interface ModifyFormValidationContextType {

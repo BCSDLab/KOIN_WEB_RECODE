@@ -431,7 +431,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
-  const [studentNumber, setStudentNumber] = useState<string>(isStudentUser(userInfo) ? userInfo?.student_number : '');
+  const [studentNumber, setStudentNumber] = useState<string>(isStudentUser(userInfo) ? userInfo.student_number ?? '' : '');
   const { data: deptList } = useDeptList();
   const [major, setMajor] = useState<string | null>(
     isStudentUser(userInfo) ? userInfo?.major : null,
@@ -616,7 +616,7 @@ const GenderInput = React.forwardRef((_, ref) => {
 
 const PhoneInput = React.forwardRef((props, ref) => {
   const { data: userInfo } = useUser();
-  const [phoneNumber, setPhoneNumber] = useState<string>(userInfo?.phone_number.replace(/-/g, '') || '');
+  const [phoneNumber, setPhoneNumber] = useState<string>(userInfo?.phone_number ?? '');
   const [codeNumber, setCodeNumber] = useState<string>('');
   const { setIsValid } = useValidationContext();
   const isMobile = useMediaQuery();
@@ -646,7 +646,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
     const valid = PHONENUMBER_REGEX.test(value)
       ? true
       : '전화번호 양식을 지켜주세요. (Ex: 010-0000-0000)';
-    const originalValue = userInfo?.phone_number.replace(/-/g, '');
+    const originalValue = (userInfo?.phone_number ?? '').replace(/-/g, '');
 
     if (value !== originalValue) {
       return { value, valid, isVerified };
@@ -676,7 +676,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
               autoComplete="tel"
               placeholder="전화번호 (Ex.010-0000-0000)"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value.replace(/[^0-9]/g, ''))}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               {...props}
             />
             <button
@@ -684,10 +684,10 @@ const PhoneInput = React.forwardRef((props, ref) => {
               className={cn({
                 [styles.modify__button]: true,
                 [styles['modify__button--phone']]: true,
-                [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number.replace(/-/g, ''),
+                [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
               })}
               onClick={handleStartVerification}
-              disabled={phoneNumber === userInfo?.phone_number.replace(/-/g, '')}
+              disabled={phoneNumber === userInfo?.phone_number}
             >
               {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
             </button>
@@ -722,7 +722,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
                 autoComplete="one-time-code"
                 placeholder="인증번호를 입력해주세요."
                 value={codeNumber}
-                onChange={(e) => setCodeNumber(e.target.value.replace(/[^0-9]/g, ''))}
+                onChange={(e) => setCodeNumber(e.target.value)}
               />
               {isRunning && (
               <p className={styles['form-message--timer']}>
@@ -773,7 +773,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
               autoComplete="tel"
               placeholder="전화번호 (Ex.010-0000-0000)"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value.replace(/[^0-9]/g, ''))}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               {...props}
             />
             <button
@@ -781,10 +781,10 @@ const PhoneInput = React.forwardRef((props, ref) => {
               className={cn({
                 [styles.modify__button]: true,
                 [styles['modify__button--phone']]: true,
-                [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number.replace(/-/g, ''),
+                [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
               })}
               onClick={handleStartVerification}
-              disabled={phoneNumber === userInfo?.phone_number.replace(/-/g, '')}
+              disabled={phoneNumber === userInfo?.phone_number}
             >
               {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
             </button>
@@ -816,7 +816,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
               autoComplete="one-time-code"
               placeholder="인증번호를 입력해주세요."
               value={codeNumber}
-              onChange={(e) => setCodeNumber(e.target.value.replace(/[^0-9]/g, ''))}
+              onChange={(e) => setCodeNumber(e.target.value)}
             />
             {isRunning && (
             <p className={styles['form-message--timer']}>

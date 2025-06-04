@@ -85,6 +85,7 @@ export interface UserResponse extends APIResponse {
   nickname: string;
   phone_number: string;
   student_number: string;
+  user_type: 'STUDENT';
 }
 
 export interface GeneralUserResponse extends APIResponse {
