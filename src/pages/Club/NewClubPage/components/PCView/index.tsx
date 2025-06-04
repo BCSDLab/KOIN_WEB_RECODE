@@ -11,6 +11,8 @@ import DropDownIcon from 'assets/svg/Club/dropdown-icon.svg';
 import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import DisplayIcon from 'assets/svg/Club/display-icon.svg';
 import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
+import { cn } from '@bcsdlab/utils';
+import ClubInputErrorCondition from 'pages/Club/components/ClubInputErrorCondition';
 import styles from './NewClubPCView.module.scss';
 
 interface PCViewProps {
@@ -117,12 +119,16 @@ export default function PCView({
           <div className={styles['form-name']}>
             <div className={styles['form-label__name']}>동아리명</div>
             <input
-              className={styles['form__text-input']}
+              className={cn({
+                [styles['form__text-input']]: true,
+                [styles['form__text-input--error']]: true,
+              })}
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="동아리명을 입력해주세요(필수)"
             />
+            {!formData.image_url && <ClubInputErrorCondition />}
           </div>
           <div className={styles['form-category']}>
             <div className={styles['form-label']}>분과</div>
@@ -166,17 +172,21 @@ export default function PCView({
             </div>
             <div className={styles['form-category__description']}>(필수)</div>
           </div>
-
           <div className={styles['form-location']}>
             <div className={styles['form-label']}>동아리 방 위치:</div>
             <input
-              className={styles['form__text-input']}
+              className={cn({
+                [styles['form__text-input']]: true,
+                [styles['form__text-input--error']]: true,
+              })}
               type="text"
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               placeholder="동아리 방 위치를 입력하세요(필수)"
             />
+            {!formData.image_url && <ClubInputErrorCondition />}
           </div>
+
           <div className={styles['form-description']}>
             <div className={styles['form-label']}>동아리 소개:</div>
             <textarea
@@ -242,7 +252,13 @@ export default function PCView({
             : (
               <div className={styles['form-image']}>
                 <label
-                  className={`${styles['form-image__label']} ${isDragOver ? styles['form-image__label--drag-over'] : ''}`}
+                  className={cn(
+                    {
+                      [styles['form-image__label']]: true,
+                      [styles['form-image__label--drag-over']]: isDragOver,
+                      [styles['form-image__label--error']]: !formData.image_url,
+                    },
+                  )}
                   htmlFor="club-image-upload"
                   onDragOver={(e) => {
                     e.preventDefault();
@@ -283,6 +299,7 @@ export default function PCView({
                 </label>
               </div>
             )}
+          {!formData.image_url && <ClubInputErrorCondition />}
           <button type="button" className={styles.like} onClick={handleClickLike}>
             <LikeIcon />
             좋아요 표시하기

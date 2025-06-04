@@ -12,6 +12,8 @@ import DisplayIcon from 'assets/svg/Club/display-icon.svg';
 import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
 import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import { Dispatch, SetStateAction, useState } from 'react';
+import ClubInputErrorCondition from 'pages/Club/components/ClubInputErrorCondition';
+import { cn } from '@bcsdlab/utils';
 import styles from './NewClubMobileView.module.scss';
 
 interface MobileViewProps {
@@ -92,7 +94,10 @@ export default function MobileView({
         ) : (
           <div className={styles['form-image']}>
             <label
-              className={styles['form-image__label']}
+              className={cn({
+                [styles['form-image__label']]: true,
+                [styles['form-image__label--error']]: !formData.image_url,
+              })}
               htmlFor="club-image-upload"
               aria-label="동아리 이미지 업로드"
             >
@@ -111,6 +116,7 @@ export default function MobileView({
                 <div>업로드해주세요.</div>
               </div>
             </label>
+            {!formData.image_url && <ClubInputErrorCondition />}
           </div>
         )}
         <div className={styles['button-group__top']}>
@@ -133,7 +139,9 @@ export default function MobileView({
         </div>
         <div className={styles['form-name']}>
           <div className={styles['name-header']}>
-            <div className={styles['form-label__name']}>동아리명</div>
+            <div className={styles['form-label__name']}>
+              동아리명
+            </div>
             <button type="button" className={styles.like} onClick={handleClickLike}>
               <LikeIcon />
               좋아요 표시하기
@@ -141,12 +149,16 @@ export default function MobileView({
             </button>
           </div>
           <input
-            className={styles['form__text-input']}
+            className={cn({
+              [styles['form__text-input']]: true,
+              [styles['form__text-input--error']]: true,
+            })}
             value={formData.name}
             placeholder="동아리명을 입력해주세요(필수)"
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </div>
+        {!formData.name && <ClubInputErrorCondition />}
         <div className={styles['form-category']}>
           <div className={styles['form-label']}>분과:</div>
           <div
@@ -200,12 +212,16 @@ export default function MobileView({
         <div className={styles['form-location']}>
           <div className={styles['form-label']}>동아리 방 위치:</div>
           <input
-            className={styles['form__text-input']}
+            className={cn({
+              [styles['form__text-input']]: true,
+              [styles['form__text-input--error']]: true,
+            })}
             value={formData.location}
             placeholder="동아리 방 위치를 입력하세요(필수)"
             onChange={(e) => setFormData({ ...formData, location: e.target.value })}
           />
         </div>
+        {!formData.location && <ClubInputErrorCondition />}
         <div className={styles['form-description']}>
           <div className={styles['form-label']}>동아리 소개:</div>
           <textarea

@@ -17,6 +17,7 @@ import HobbyIcon from 'assets/svg/Club/hobby-icon.svg';
 import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
 import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -39,6 +40,7 @@ function ClubListPage() {
   const clubList = useClubList({ token, categoryId: selectedCategoryId, hitSort: sortValue });
   const totalCount = clubList.length;
   const { mutate: clubLikeMutate } = useClubLike();
+  const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
 
   const handleCreateClubClick = () => {
     logger.actionEventClick({
@@ -47,7 +49,11 @@ function ClubListPage() {
       event_label: 'club_main_create',
       value: '생성하기',
     });
-    navigate('/clubs/new');
+    if (!token) {
+      openAuthModal();
+    } else {
+      navigate('/clubs/new');
+    }
   };
 
   const onChangeSort = (e: { target: { value: string } }) => {
@@ -197,6 +203,9 @@ function ClubListPage() {
           </div>
         </main>
       </div>
+      {
+        isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
+      }
     </div>
   );
 }
