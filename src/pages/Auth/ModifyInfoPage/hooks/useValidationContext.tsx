@@ -7,6 +7,8 @@ interface FormValidation {
   isPhoneValid: boolean;
   isStudentIdValid: boolean;
   isStudentMajorValid: boolean;
+  isEmailValid?: boolean;
+  isNicknameValid?: boolean;
 }
 
 interface ModifyFormValidationContextType {
