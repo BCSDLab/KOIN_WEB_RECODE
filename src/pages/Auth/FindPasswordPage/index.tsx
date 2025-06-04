@@ -60,7 +60,7 @@ function FindPasswordPage() {
 
   if (!step) throw new Error('step param is required');
 
-  const nextStep = (next: StepTitle) => navigate(`/auth/findpw/${next}`);
+  const nextStep = (next: StepTitle) => navigate(ROUTES.AuthFindPW({ step: next, isLink: true }));
   const goBack = () => navigate(-1);
 
   const progressSteps: ProgressStepTitle[] = ['계정인증', '비밀번호변경'];
