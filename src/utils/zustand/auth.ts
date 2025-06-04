@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { getCookie } from 'utils/ts/cookie';
 
-export type UserType = 'STUDENT' | 'GENERAL' | null;
+export type UserType = 'STUDENT' | 'GENERAL';
 
 type State = {
   token: string;
