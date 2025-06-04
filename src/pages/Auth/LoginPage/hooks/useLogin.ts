@@ -3,7 +3,6 @@ import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { auth } from 'api';
 import type { LoginResponse } from 'api/auth/entity';
-import { REGEX } from 'static/auth';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import { setCookie } from 'utils/ts/cookie';
 import showToast from 'utils/ts/showToast';
@@ -14,12 +13,12 @@ interface IsAutoLogin {
 }
 
 interface UserInfo {
-  userId: string;
-  password: string;
+  login_id: string;
+  login_pw: string;
 }
 
 export const useLogin = (state: IsAutoLogin) => {
-  const { setToken, setRefreshToken } = useTokenStore();
+  const { setToken, setRefreshToken, setUserType } = useTokenStore();
   const { redirectAfterLogin } = useLoginRedirect();
   const queryClient = useQueryClient();
 
@@ -31,7 +30,9 @@ export const useLogin = (state: IsAutoLogin) => {
       }
       queryClient.invalidateQueries();
       setCookie('AUTH_TOKEN_KEY', data.token);
+      setCookie('AUTH_USER_TYPE', data.user_type);
       setToken(data.token);
+      setUserType(data.user_type);
       redirectAfterLogin();
     },
     onError: (error) => {
@@ -45,28 +46,20 @@ export const useLogin = (state: IsAutoLogin) => {
   });
 
   const login = async (userInfo: UserInfo) => {
-    const hashedPassword = await sha256(userInfo.password);
+    const hashedPassword = await sha256(userInfo.login_pw);
 
-    if (userInfo.userId === '') {
+    if (userInfo.login_id === '') {
       showToast('error', '계정을 입력해주세요');
       return;
     }
-    if (userInfo.password === '') {
+    if (userInfo.login_id === '') {
       showToast('error', '비밀번호를 입력해주세요');
-      return;
-    }
-    if (userInfo.userId.indexOf('@koreatech.ac.kr') !== -1) {
-      showToast('error', '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.');
-      return;
-    }
-    if (!REGEX.EMAIL.test(userInfo.userId)) {
-      showToast('error', '아우누리 계정 형식이 아닙니다.');
       return;
     }
 
     postLogin.mutate({
-      email: `${userInfo.userId}@koreatech.ac.kr`,
-      password: hashedPassword,
+      login_id: userInfo.login_id,
+      login_pw: hashedPassword,
     });
   };
 

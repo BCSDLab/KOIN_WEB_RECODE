@@ -33,7 +33,7 @@ export default function LoginForm() {
     const userId = userIdInput ? userIdInput.value : '';
     const password = passwordInput ? passwordInput.value : '';
 
-    submitLogin({ userId, password });
+    submitLogin({ login_id: userId, login_pw: password });
   };
 
   return (

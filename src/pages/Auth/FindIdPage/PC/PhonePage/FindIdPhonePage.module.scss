@@ -4,8 +4,13 @@
   justify-content: center;
   align-items: center;
   font-family: Pretendard, sans-serif;
+  padding-top: 240px;
+  padding-bottom: 280px;
 
-  &__wrapper {
+  &__form-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     max-width: 640px;
   }
 
@@ -25,41 +30,96 @@
   }
 }
 
+.label-count-number {
+  margin-left: 8px;
+  color: #727272;
+  font-family: Pretendard, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 160%;
+}
+
+.label-link-button {
+  color: #175c8e;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 160%;
+  margin-left: 8px;
+}
+
 .divider {
   width: 640px;
   border: 2px solid #175c8e;
 
   &--top {
-    margin: 64px 0;
+    margin: 48px 0;
   }
 
   &--bottom {
-    margin: 64px 0;
+    margin: 48px 0;
   }
 }
 
-.button-wrapper {
+.input-container {
   display: flex;
-  gap: 32px;
+  flex-direction: column;
+  gap: 48px;
+}
 
-  &__next-button {
-    display: flex;
-    width: 240px;
-    height: 64px;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 16px;
-    background: #cacaca;
-    color: #fff;
-    text-align: center;
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 160%;
+.input-wrapper {
+  position: relative;
+}
 
-    &--active {
-      background-color: #175c8e;
-    }
+.input-with-button {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.check-button {
+  display: flex;
+  min-width: 120px;
+  height: 48px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid #175c8e;
+  color: #175c8e;
+  font-family: Pretendard, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 160%;
+
+  &:disabled {
+    border: 1px solid #e1e1e1;
+    color: #cacaca;
+    cursor: not-allowed;
+  }
+}
+
+.button-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.next-button {
+  display: flex;
+  width: 320px;
+  padding: 12px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background: #175c8e;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 160%;
+
+  &:disabled {
+    background: #e1e1e1;
+    color: #4b4b4b;
+    cursor: not-allowed;
   }
 }

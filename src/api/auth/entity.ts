@@ -1,8 +1,8 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
 export type LoginRequest = {
-  email: string;
-  password: string;
+  login_id: string;
+  login_pw: string;
 };
 
 export type LoginStudentRequest = {
@@ -31,7 +31,7 @@ export type LoginGeneralRequest = {
 export interface LoginResponse extends APIResponse {
   token: string;
   refresh_token: string;
-  userType: 'STUDENT';
+  user_type: 'STUDENT' | 'GENERAL';
 }
 
 export interface NicknameDuplicateCheckResponse extends APIResponse {
@@ -86,6 +86,17 @@ export interface UserResponse extends APIResponse {
   nickname: string;
   phone_number: string;
   student_number: string;
+}
+
+export interface GeneralUserResponse extends APIResponse {
+  id: number;
+  login_id: string;
+  email: string;
+  gender: 0 | 1;
+  name: string;
+  nickname: string;
+  phone_number: string;
+  user_type: 'GENERAL';
 }
 
 export interface UserAcademicInfoResponse extends APIResponse {
@@ -150,6 +161,71 @@ export interface SmsSendRequest {
 }
 
 export interface SmsVerifyRequest {
+  phone_number: string;
+  verification_code: string;
+}
+
+export interface EmailExistsRequest {
+  email: string;
+}
+
+export interface EmailExistsResponse extends APIResponse { }
+export interface VerificationEmailSendResponse extends APIResponse {
+  target: string;
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
+
+export interface VerificationEmailSendRequest {
+  email: string;
+}
+
+export interface VerificationEmailVerifyRequest {
+  email: string;
+  verification_code: string;
+}
+
+export interface VerificationEmailVerifyResponse extends APIResponse { }
+
+export interface IdFindEmailRequest {
+  email: string;
+  verification_code: string;
+}
+
+export interface IdFindEmailResponse extends APIResponse {
+  login_id: string;
+}
+
+export interface PhoneExistsRequest {
+  phone_number: string;
+}
+
+export interface PhoneExistsResponse extends APIResponse { }
+
+export interface VerificationSmsSendResponse extends APIResponse {
+  target: string;
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
+
+export interface VerificationSmsSendRequest {
+  phone_number: string;
+}
+
+export interface VerificationSmsVerifyResponse extends APIResponse { }
+
+export interface VerificationSmsVerifyRequest {
+  phone_number: string;
+  verification_code: string;
+}
+
+export interface IdFindSmsResponse extends APIResponse {
+  login_id: string;
+}
+
+export interface IdFindSmsRequest {
   phone_number: string;
   verification_code: string;
 }

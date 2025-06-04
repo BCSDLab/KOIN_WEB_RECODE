@@ -6,6 +6,7 @@ import {
   SignupStudent,
   SignupGeneral,
   User,
+  GeneralUser,
   UserAcademicInfo,
   UpdateUser,
   FindPassword,
@@ -17,6 +18,12 @@ import {
   SmsVerify,
   CheckId,
   EmailDuplicateCheck,
+  EmailExists,
+  VerificationEmailSend,
+  VerificationEmailVerify,
+  IdFindEmail,
+  PhoneExists,
+  IdFindSms,
 } from './APIDetail';
 
 export const login = APIClient.of(Login);
@@ -30,6 +37,8 @@ export const signupGeneral = APIClient.of(SignupGeneral);
 export const refresh = APIClient.of(Refresh);
 
 export const getUser = APIClient.of(User);
+
+export const getGeneralUser = APIClient.of(GeneralUser);
 
 export const getUserAcademicInfo = APIClient.of(UserAcademicInfo);
 
@@ -52,3 +61,15 @@ export const smsVerify = APIClient.of(SmsVerify);
 export const checkId = APIClient.of(CheckId);
 
 export const emailDuplicateCheck = APIClient.of(EmailDuplicateCheck);
+
+export const emailExists = APIClient.of(EmailExists);
+
+export const verificationEmailSend = APIClient.of(VerificationEmailSend);
+
+export const verificationEmailVerify = APIClient.of(VerificationEmailVerify);
+
+export const idFindEmail = APIClient.of(IdFindEmail);
+
+export const phoneExists = APIClient.of(PhoneExists);
+
+export const idFindSms = APIClient.of(IdFindSms);
