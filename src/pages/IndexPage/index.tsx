@@ -5,6 +5,7 @@ import Banner from 'components/ui/Banner';
 import BannerB from 'components/ui/BannerB';
 import useBannerCategories from 'components/ui/Banner/hooks/useBannerCategories';
 import IndexBus from './components/IndexBus';
+import IndexClub from './components/IndexClub';
 import IndexCafeteria from './components/IndexCafeteria';
 import IndexArticles from './components/IndexArticles';
 import IndexStore from './components/IndexStore';
@@ -26,19 +27,22 @@ function IndexPage() {
             <BannerB categoryName={bannerCategory.name} categoryId={bannerCategory.id} />
           )}
         </Suspense>
-        <div className={styles['mobile-wrapper']}>
+        <div className={styles['left-container']}>
           <IndexStore />
           <IndexBus />
+          <IndexClub />
+          <Suspense fallback={null}>
+            <IndexArticles />
+          </Suspense>
         </div>
-        <Suspense fallback={null}>
-          <IndexTimetable />
-        </Suspense>
-        <Suspense fallback={null}>
-          <IndexArticles />
-        </Suspense>
-        <Suspense fallback={null}>
-          <IndexCafeteria />
-        </Suspense>
+        <div className={styles['right-container']}>
+          <Suspense fallback={null}>
+            <IndexTimetable />
+          </Suspense>
+          <Suspense fallback={null}>
+            <IndexCafeteria />
+          </Suspense>
+        </div>
       </main>
     </Suspense>
   );
