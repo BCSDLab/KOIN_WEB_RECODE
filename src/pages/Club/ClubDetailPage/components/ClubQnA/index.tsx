@@ -1,5 +1,6 @@
 import ClubQnACard from 'pages/Club/ClubDetailPage/components/ClubQnACard';
 import useClubQnA from 'pages/Club/ClubDetailPage/hooks/useClubQnA';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './ClubQnA.module.scss';
 
@@ -15,7 +16,14 @@ export default function ClubQnA({
 }: ClubQnAProps) {
   const { clubQnAData } = useClubQnA(clubId);
   const token = useTokenState();
+  const logger = useLogger();
   const hadleClickAddButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_Q&A_add',
+      value: 'Q&A',
+    });
     if (!token) {
       openAuthModal();
     } else {

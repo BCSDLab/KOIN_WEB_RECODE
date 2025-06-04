@@ -2,6 +2,7 @@ import { NewClubData } from 'api/club/entity';
 import { useState } from 'react';
 import usePostNewClub from 'pages/Club/NewClubPage/hooks/usePostNewClub';
 import { getClubCategoryName } from 'utils/ts/clubCategoryMapping';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './AdditionalInfoModal.module.scss';
 
 interface AdditionalInfoModalProps {
@@ -15,10 +16,26 @@ export default function AdditionalInfoModal({
   formData,
   setFormData,
 }: AdditionalInfoModalProps) {
+  const logger = useLogger();
   const [step, setStep] = useState(1);
   const { status, mutateAsync } = usePostNewClub();
 
+  const handleNextStep = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_create_request_check',
+      value: '확인',
+    });
+    setStep(2);
+  };
   const handleSubmit = async () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_create_request_authority',
+      value: `${formData.role}`,
+    });
     await mutateAsync(formData);
     closeModal();
   };
@@ -82,7 +99,7 @@ export default function AdditionalInfoModal({
           </div>
           <div className={styles['info-button-container']}>
             <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
-            <button className={styles['info-button__confirm']} type="button" onClick={() => setStep(2)}>확인</button>
+            <button className={styles['info-button__confirm']} type="button" onClick={handleNextStep}>확인</button>
           </div>
         </div>
         )}

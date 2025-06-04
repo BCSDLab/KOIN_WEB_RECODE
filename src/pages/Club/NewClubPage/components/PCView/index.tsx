@@ -13,6 +13,7 @@ import DisplayIcon from 'assets/svg/Club/display-icon.svg';
 import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
 import { cn } from '@bcsdlab/utils';
 import ClubInputErrorCondition from 'pages/Club/components/ClubInputErrorCondition';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './NewClubPCView.module.scss';
 
 interface PCViewProps {
@@ -26,6 +27,7 @@ export default function PCView({
   formData, setFormData, openModal, isEdit, clubId,
 }: PCViewProps) {
   const navigate = useNavigate();
+  const logger = useLogger();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
   const [isDragOver, setIsDragOver] = useState(false);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
@@ -92,10 +94,41 @@ export default function PCView({
 
   const handleClickCancel = () => {
     if (isEdit) {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_correction_cancel',
+        value: '취소',
+      });
       navigate(ROUTES.ClubDetail({ id: clubId, isLink: true }));
     } else {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_create_cancel',
+        value: '생성취소',
+      });
       navigate(ROUTES.Club());
     }
+  };
+
+  const handleClickSave = () => {
+    if (isEdit) {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_correction_save',
+        value: '저장',
+      });
+    } else {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_create_request',
+        value: '생성요청',
+      });
+    }
+    handleOpenModal();
   };
 
   return (
@@ -108,7 +141,7 @@ export default function PCView({
             {' '}
             취소
           </button>
-          <button type="button" className={styles.header__button} onClick={handleOpenModal}>
+          <button type="button" className={styles.header__button} onClick={handleClickSave}>
             {isEdit ? '저장' : '생성 요청'}
           </button>
         </div>

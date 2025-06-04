@@ -14,6 +14,7 @@ import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import { Dispatch, SetStateAction, useState } from 'react';
 import ClubInputErrorCondition from 'pages/Club/components/ClubInputErrorCondition';
 import { cn } from '@bcsdlab/utils';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './NewClubMobileView.module.scss';
 
 interface MobileViewProps {
@@ -32,6 +33,7 @@ export default function MobileView({
   clubId,
 }: MobileViewProps) {
   const navigate = useNavigate();
+  const logger = useLogger();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 
@@ -74,10 +76,41 @@ export default function MobileView({
 
   const handleClickCancel = () => {
     if (isEdit) {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_correction_cancel',
+        value: '취소',
+      });
       navigate(ROUTES.ClubDetail({ id: clubId, isLink: true }));
     } else {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_create_cancel',
+        value: '생성취소',
+      });
       navigate(ROUTES.Club());
     }
+  };
+
+  const handleClickSave = () => {
+    if (isEdit) {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_correction_save',
+        value: '저장',
+      });
+    } else {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_create_request',
+        value: '생성요청',
+      });
+    }
+    handleOpenModal();
   };
 
   return (
@@ -132,7 +165,7 @@ export default function MobileView({
           <button
             type="button"
             className={styles['button-group__top__button']}
-            onClick={handleOpenModal}
+            onClick={handleClickSave}
           >
             {isEdit ? '저장' : '생성 요청'}
           </button>
