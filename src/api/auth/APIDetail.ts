@@ -38,12 +38,13 @@ import {
   EmailExistsRequest,
   IdFindSmsResponse,
   IdFindSmsRequest,
+  GeneralUserResponse,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/user/login';
+  path = '/v2/users/login';
 
   response!: R;
 
@@ -107,6 +108,18 @@ export class User<R extends UserResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/user/student/me';
+
+  response!: R;
+
+  auth = false;
+
+  constructor(public authorization: string) { }
+}
+
+export class GeneralUser<R extends GeneralUserResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/v2/users/me';
 
   response!: R;
 

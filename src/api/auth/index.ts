@@ -6,6 +6,7 @@ import {
   SignupStudent,
   SignupGeneral,
   User,
+  GeneralUser,
   UserAcademicInfo,
   UpdateUser,
   FindPassword,
@@ -36,6 +37,8 @@ export const signupGeneral = APIClient.of(SignupGeneral);
 export const refresh = APIClient.of(Refresh);
 
 export const getUser = APIClient.of(User);
+
+export const getGeneralUser = APIClient.of(GeneralUser);
 
 export const getUserAcademicInfo = APIClient.of(UserAcademicInfo);
 
