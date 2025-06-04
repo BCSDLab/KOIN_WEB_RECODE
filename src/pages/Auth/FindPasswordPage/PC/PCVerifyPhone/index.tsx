@@ -27,6 +27,7 @@ function PCVerifyPhone({ onNext, onBack, goToEmailStep }: FindPasswordProps) {
   const verificationCode = useWatch({ control, name: 'verificationCode' });
 
   const [buttonText, setButtonText] = useState('인증번호 발송');
+  const [isVerificationSent, setIsVerificationSent] = useState(false);
 
   const {
     phoneMessage,
@@ -49,7 +50,7 @@ function PCVerifyPhone({ onNext, onBack, goToEmailStep }: FindPasswordProps) {
     checkIdMatchPhone,
     idMessage,
     setIdMessage,
-  } = usePhoneVerification({ phoneNumber, loginId, onNext });
+  } = usePhoneVerification({ phoneNumber, onNext });
 
   const onClickSendVerificationButton = () => {
     checkVerificationSmsVerify({ phone_number: phoneNumber, verification_code: verificationCode });
@@ -126,51 +127,60 @@ function PCVerifyPhone({ onNext, onBack, goToEmailStep }: FindPasswordProps) {
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <div className={styles['input-with-button']}>
-                <PCCustomInput
-                  htmlFor="phoneNumber"
-                  labelName="휴대전화"
-                  {...field}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    setPhoneMessage(null);
-                  }}
-                  placeholder="숫자만 입력해 주세요."
-                  isRequired
-                  message={phoneMessage}
-                  disabled={isVerified}
-                  isDelete={!isVerified}
-                  onClear={() => {
-                    setPhoneMessage(null);
-                    setButtonText('인증번호 발송');
-                  }}
-                >
-                  {phoneMessage?.type === 'default' && (
+              <div>
+                <div className={styles['input-with-button']}>
+                  <PCCustomInput
+                    htmlFor="phoneNumber"
+                    labelName="휴대전화"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPhoneMessage(null);
+                    }}
+                    placeholder="숫자만 입력해 주세요."
+                    isRequired
+                    message={phoneMessage}
+                    disabled={isVerified}
+                    isDelete={!isVerified}
+                    onClear={() => {
+                      setPhoneMessage(null);
+                      setButtonText('인증번호 발송');
+                    }}
+                  >
+                    {phoneMessage?.type === 'success' && (
+                    <div className={styles['label-count-number']}>
+                      {' '}
+                      남은 횟수 (
+                      {smsSendCount}
+                      /5)
+                    </div>
+                    )}
+                  </PCCustomInput>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      checkPhoneExists({ phone_number: phoneNumber });
+                      setIsVerificationSent(true);
+                    }}
+                    className={styles['check-button']}
+                    disabled={!field.value || isDisabled || isVerified}
+                  >
+                    {buttonText}
+                  </button>
+                </div>
+                {!isVerificationSent && (
+                  <div className={styles['email-navigate']}>
+                    <div className={styles['email-navigate__text']}>휴대전화 등록을 안 하셨나요?</div>
                     <button
                       type="button"
-                      className={styles.findByEmailLink}
+                      className={styles['email-navigate__link']}
                       onClick={goToEmailStep}
                     >
                       이메일로 찾기
                     </button>
-                  )}
-                  {phoneMessage?.type === 'success' && (
-                  <div className={styles['label-count-number']}>
-                    {' '}
-                    남은 횟수 (
-                    {smsSendCount}
-                    /5)
                   </div>
-                  )}
-                </PCCustomInput>
-                <button
-                  type="button"
-                  onClick={() => checkPhoneExists({ phone_number: phoneNumber })}
-                  className={styles['check-button']}
-                  disabled={!field.value || isDisabled || isVerified}
-                >
-                  {buttonText}
-                </button>
+
+                )}
               </div>
             )}
           />

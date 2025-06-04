@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%
+    width: 100%;
   }
 
   &__title-wrapper {
@@ -96,7 +96,7 @@
   display: flex;
   gap: 80px;
   align-items: center;
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 160%;
@@ -124,6 +124,7 @@
 .input-with-button {
   display: flex;
   gap: 16px;
+  position: relative;
 }
 
 .check-button {
@@ -169,11 +170,25 @@
   }
 }
 
-.findByEmailLink {
-  font-family: Pretendard, sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 160%;
-  color: #175c8e;
-  margin-left: 8px;
+.email-navigate {
+  display: flex;
+  position: absolute;
+  left: 140px;
+
+  &__text {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #727272;
+  }
+
+  &__link {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #175c8e;
+    margin-left: 8px;
+  }
+  
 }

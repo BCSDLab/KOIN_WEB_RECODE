@@ -72,7 +72,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     mutationFn: phoneExists,
     onSuccess: () => {
       sendVerificationSms({ phone_number: phoneNumber });
-      setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
+      // setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
     },
     onError: (err) => {
       if (isKoinError(err)) {
