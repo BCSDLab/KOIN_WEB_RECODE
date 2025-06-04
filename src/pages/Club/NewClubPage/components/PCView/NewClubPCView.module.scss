@@ -102,6 +102,10 @@
       outline: none;
       border-color: #175c8e;
     }
+
+    &--error {
+      border: 1px solid #f7941e;
+    }
   }
 
   &__textarea {
@@ -174,6 +178,10 @@
 
     &:hover {
       background-color: #e0e0e0;
+    }
+
+    &--error {
+      border: 1px solid #f7941e;
     }
   }
 

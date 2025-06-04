@@ -14,11 +14,9 @@ function ClubAuthModal({ closeModal }: ClubAuthModalProps) {
       <div className={styles.container}>
         <div className={styles.container__notice}>
           <h4 className={styles['container__notice--title']}>
-            좋아요 기능을 사용하기
-            <br />
-            위해 로그인이 필요해요.
+            로그인이 필요한 기능입니다.
           </h4>
-          <div className={styles['container__notice--description']}>동아리 좋아요 기능은 로그인이 필요한 서비스입니다.</div>
+          <div className={styles['container__notice--description']}>로그인 하시겠어요?</div>
         </div>
         <div className={styles.container__button}>
           <button

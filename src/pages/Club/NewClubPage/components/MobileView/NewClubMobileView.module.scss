@@ -10,7 +10,8 @@
 .form-image {
   margin-top: 20px;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
   &__input {
     display: none;
@@ -31,6 +32,12 @@
 
     &:hover {
       background-color: #e0e0e0;
+    }
+
+    &--error {
+      border-radius: 16px;
+      border: 1px solid #ffa928;
+      background: #eee;
     }
   }
 
@@ -124,6 +131,10 @@
     &:focus {
       outline: none;
       border-color: #175c8e;
+    }
+
+    &--error {
+      border: 1px solid #f7941e;
     }
   }
 

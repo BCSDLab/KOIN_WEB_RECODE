@@ -6,6 +6,8 @@ import { cn } from '@bcsdlab/utils';
 import { useState } from 'react';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
+import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import useClubDetail from './hooks/useClubdetail';
 import styles from './ClubDetailPage.module.scss';
 import useClubLikeMutation from './hooks/useClubLike';
@@ -29,6 +31,9 @@ export default function ClubDetailPage() {
   const [introduction, setIntroduction] = useState(clubDetail.introduction);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isMandateModalOpen, openMandateModal, closeMandateModal] = useBooleanState(false);
+  const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
+
+  const token = useTokenState();
 
   const {
     clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync,
@@ -36,6 +41,10 @@ export default function ClubDetailPage() {
   const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
   const handleToggleLike = async () => {
     if (!id || isPending) return;
+    if (!token) {
+      openAuthModal();
+      return;
+    }
     if (clubDetail.is_liked) {
       await clubUnlikeMutateAsync();
     } else {
@@ -307,6 +316,7 @@ export default function ClubDetailPage() {
           openModal={openModal}
           clubId={id}
           isManager={clubDetail.manager}
+          openAuthModal={openAuthModal}
         />
       )}
       {isModalOpen && (
@@ -323,6 +333,9 @@ export default function ClubDetailPage() {
             clubName={clubDetail.name}
           />
         )
+      }
+      {
+        isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
       }
     </div>
   );
