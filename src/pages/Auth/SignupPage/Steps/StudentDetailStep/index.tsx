@@ -11,7 +11,7 @@ import {
 import { REGEX, MESSAGES } from 'static/auth';
 import CustomSelector from 'pages/Auth/SignupPage/components/CustomSelector';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
-import { cn } from '@bcsdlab/utils';
+import { cn, sha256 } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import showToast from 'utils/ts/showToast';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -138,7 +138,8 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     },
   });
 
-  const onSubmit = (formData: StudentFormValues) => {
+  const onSubmit = async (formData: StudentFormValues) => {
+    const hashedPassword = await sha256(formData.password);
     const payload = {
       name: formData.name,
       nickname: formData.nickname === '' ? null : formData.nickname,
@@ -148,7 +149,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
       department: formData.department,
       gender: formData.gender,
       login_id: formData.login_id,
-      password: formData.password,
+      password: hashedPassword,
       marketing_notification_agreement: formData.marketing_notification_agreement,
     };
 

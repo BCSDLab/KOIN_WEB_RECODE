@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-restricted-imports */
 import { isKoinError } from '@bcsdlab/koin';
+import { sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupGeneral } from 'api/auth';
 import { useEffect, useState } from 'react';
@@ -105,15 +106,18 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 
-  const onSubmit = (formData: GeneralFormValues) => {
+  const onSubmit = async (formData: GeneralFormValues) => {
     const {
-      password_check, email, nickname, department, student_number, ...signupData
+      password_check, email, nickname, department, student_number,
+      password: signupPasswordData, ...signupData
     } = formData;
     const completeEmail = email || null;
     const completeNickname = nickname || null;
+    const hashedPassword = await sha256(signupPasswordData);
 
     signup({
       ...signupData,
+      password: hashedPassword,
       email: completeEmail,
       nickname: completeNickname,
     });
