@@ -162,6 +162,20 @@
     border: none;
     cursor: pointer;
   }
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__student-email {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    color: #cacaca;
+    font-size: 12px;
+    line-height: 1.6;
+  }
 }
 
 .select {
@@ -282,15 +296,16 @@
     &:disabled {
       background: #e5eaf0;
       border: solid 1px #d2dae2;
+      color: #cacaca;
     }
 
     &--nickname {
       font-size: 14px;
       width: 120px;
       height: 100%;
-      border: 1px solid #e1e1e1;
+      border: 1px solid #175c8e;
       background-color: transparent;
-      color: #cacaca;
+      color: #175c8e;
       margin-left: 6px;
 
       @include media.media-breakpoint(mobile) {
@@ -310,6 +325,8 @@
 
       &:disabled {
         background-color: #cacaca;
+        color: #fff;
+        border: none;
       }
     }
 
@@ -504,7 +521,7 @@
   &--timer {
     position: absolute;
     top: 50%;
-    right: 180px;
+    right: 155px;
     transform: translateY(-50%);
     font-size: 14px;
     font-weight: 500;

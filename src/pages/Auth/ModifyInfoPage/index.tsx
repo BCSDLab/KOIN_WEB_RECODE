@@ -9,11 +9,12 @@ import { Portal } from 'components/modal/Modal/PortalProvider';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useDeptList from 'pages/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'pages/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
-import { UserUpdateRequest, UserResponse } from 'api/auth/entity';
+import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/state/useUser';
 import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import ROUTES from 'static/routes';
+import { REGEX } from 'static/auth';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
 import { Selector } from 'components/ui/Selector';
 import { usePhoneVerification } from 'pages/Auth/ModifyInfoPage/hooks/usePhoneVerification';
@@ -22,6 +23,8 @@ import CorrectIcon from 'assets/svg/Login/correct.svg';
 import WarningIcon from 'assets/svg/Login/warning.svg';
 import BlindIcon from 'assets/svg/blind-icon.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
+import { useTokenStore } from 'utils/zustand/auth';
+import { isStudentUser } from 'utils/ts/userTypeGuards';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
@@ -75,6 +78,7 @@ const isRefICustomFormInput = (
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const fieldRefs = React.useRef<IFormType>({});
   const { data: userInfo } = useUser();
+  const isStudent = isStudentUser(userInfo);
 
   const register = (name: string, options: IRegisterOption = {}): RegisterReturn => ({
     required: options.required,
@@ -97,7 +101,9 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       'phone-number': 'phone_number',
       'student-number': 'student_number',
     };
-    const compareFields = ['name', 'nickname', 'gender', 'phone-number', 'student-number', 'email'];
+    const baseFields = ['name', 'nickname', 'gender', 'phone-number', 'email'];
+    const compareFields = isStudent ? [...baseFields, 'student-number'] : baseFields;
+
     compareFields.forEach((field) => {
       if (!fieldRefs.current[field]) return;
       const fieldRef = fieldRefs.current[field].ref;
@@ -120,7 +126,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
         studentInfo.major = inputValue && typeof inputValue === 'object' && 'major' in inputValue ? inputValue.major : null;
       }
       const userResponseField = mappedFields[field] || field;
-      const originalValue = userInfo ? userInfo[userResponseField] : '';
+      const originalValue = (userInfo && isStudent) ? userInfo[userResponseField] : '';
       if (inputValue !== originalValue
         || studentInfo.studentNumber !== originalValue
         || studentInfo.major !== originalValue) {
@@ -314,6 +320,8 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     currentCheckedNickname,
   } = useNicknameDuplicateCheck();
 
+  const { setIsValid } = useValidationContext();
+
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentNicknameValue(e.target.value);
   };
@@ -326,6 +334,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       return;
     }
     changeTargetNickname(currentNicknameValue);
+    setIsValid((prev) => ({ ...prev, isNicknameValid: true }));
   };
 
   useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
@@ -380,6 +389,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
             [styles['modify__button--nickname']]: true,
           })}
           onClick={onClickNicknameDuplicateCheckButton}
+          disabled={currentNicknameValue === userInfo?.nickname}
         >
           중복확인
         </button>
@@ -390,9 +400,11 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 
 const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
-  const [studentNumber, setStudentNumber] = React.useState<string>(userInfo?.student_number || '');
+  const [studentNumber, setStudentNumber] = useState<string>(isStudentUser(userInfo) ? userInfo?.student_number : '');
   const { data: deptList } = useDeptList();
-  const [major, setMajor] = React.useState<string | null>(userInfo?.major || null);
+  const [major, setMajor] = useState<string | null>(
+    isStudentUser(userInfo) ? userInfo?.major : null,
+  );
   const deptOptionList = deptList.map((dept) => ({
     label: dept.name,
     value: dept.name,
@@ -657,27 +669,54 @@ const PhoneInput = React.forwardRef((props, ref) => {
 
 const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
-  const [email, setEmail] = useState<string>(userInfo?.email || '');
+  const { setIsValid } = useValidationContext();
+  const { userType } = useTokenStore();
+
+  const isStudent = userType === 'STUDENT';
+
+  const initialEmail = userInfo?.email || '';
+  const initialEmailValue = isStudent ? initialEmail.split('@')[0] : initialEmail;
+
+  const [email, setEmail] = useState<string>(initialEmailValue);
+
+  const fullEmail = isStudent ? `${email}@koreatech.ac.kr` : email;
 
   useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => ({
-    value: email,
+    value: fullEmail,
     valid: true,
-  }), [email]);
+  }), [fullEmail]);
+
+  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+
+    const newEmail = isStudent ? input.replace(/@.*/, '') : input;
+    setEmail(newEmail);
+
+    const completeEmail = isStudent ? `${newEmail}@koreatech.ac.kr` : newEmail;
+
+    if (completeEmail !== userInfo?.email && REGEX.EMAIL.test(completeEmail)) {
+      setIsValid((prev) => ({ ...prev, isEmailValid: true }));
+    }
+  };
 
   return (
     <div className={styles['form-input__label-wrapper']}>
       <label htmlFor="email" className={styles['form-input__label']}>
         이메일(선택)
       </label>
-      <input
-        className={styles['form-input']}
-        type="email"
-        autoComplete="email"
-        placeholder="이메일 (선택)"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        {...props}
-      />
+      <div className={styles['form-input__wrapper']}>
+        <input
+          className={styles['form-input']}
+          type={isStudent ? 'text' : 'email'}
+          autoComplete="email"
+          placeholder="이메일 (선택)"
+          value={email}
+          onChange={handleChangeEmail}
+          {...props}
+        />
+        {userType === 'STUDENT' && <span className={styles['form-input__student-email']}>@koreatech.ac.kr</span>}
+      </div>
+
     </div>
   );
 });
@@ -691,21 +730,25 @@ const useModifyInfoForm = () => {
     showToast('success', '성공적으로 정보를 수정하였습니다.');
     queryClient.invalidateQueries({ queryKey: ['userInfo', token] });
   };
-  const { status, mutate } = useUserInfoUpdate({ onSuccess });
+  const { userType } = useTokenStore();
+  const isStudent = userType === 'STUDENT';
+  const { status, mutate } = useUserInfoUpdate(userType, { onSuccess });
   const submitForm: ISubmitForm = async (formValue) => {
-    const payload: UserUpdateRequest = {
-      identity: 0,
-      // 옵션
+    const payload: UserUpdateRequest & GeneralUserUpdateRequest = {
       name: formValue.name || undefined,
       nickname: formValue.nickname || undefined,
       gender: formValue.gender ?? undefined,
-      major: formValue['student-number'].major || undefined,
-      student_number: formValue['student-number'].studentNumber || undefined,
       phone_number: formValue['phone-number'] || undefined,
-      is_graduated: false,
+      email: formValue.email || undefined,
     };
-    if ((formValue.password.trim()).length > 0) {
-      payload.password = await sha256(formValue.password);
+
+    if (isStudent) {
+      payload.major = formValue['student-number'].major || undefined;
+      payload.student_number = formValue['student-number'].studentNumber || undefined;
+
+      if ((formValue.password.trim()).length > 0) {
+        payload.password = await sha256(formValue.password);
+      }
     }
     mutate(payload);
   };
@@ -721,6 +764,7 @@ function ModifyInfoDefaultPage() {
   const portalManager = useModalPortal();
   const { mutate: deleteUser } = useUserDelete();
   const { isValid } = useValidationContext();
+  const isStudent = isStudentUser(userInfo);
 
   const onClickUserDeleteConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -759,7 +803,7 @@ function ModifyInfoDefaultPage() {
             readOnly
             disabled
             id="email"
-            defaultValue={userInfo?.email}
+            defaultValue={isStudent ? userInfo?.email : userInfo?.login_id}
           />
         </div>
         <p className={styles['form-input__description']}>
@@ -768,7 +812,7 @@ function ModifyInfoDefaultPage() {
         <PasswordForm {...register('password')} />
         <GenderInput {...register('gender')} />
         <PhoneInput {...register('phone-number')} />
-        <MajorInput {...register('student-number')} />
+        {isStudent && <MajorInput {...register('student-number')} />}
         <EmailForm {...register('email')} />
         <NicknameForm {...register('nickname')} />
         <hr className={styles.divider} />
