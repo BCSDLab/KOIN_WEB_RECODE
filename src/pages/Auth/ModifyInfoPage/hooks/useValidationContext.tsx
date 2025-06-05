@@ -3,6 +3,8 @@ import {
 } from 'react';
 
 interface FormValidation {
+  isNameValid?: boolean;
+  isNickNameValid?: boolean;
   isPasswordValid: boolean;
   isPhoneValid: boolean;
   isStudentIdValid: boolean;

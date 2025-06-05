@@ -11,7 +11,7 @@ import {
 import { REGEX, MESSAGES } from 'static/auth';
 import PCCustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/PCCustomInput';
 import BackIcon from 'assets/svg/arrow-back.svg';
-import { cn } from '@bcsdlab/utils';
+import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import styles from './ExternalDetailStep.module.scss';
@@ -123,7 +123,8 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     },
   });
 
-  const onSubmit = (formData: GeneralFormValues) => {
+  const onSubmit = async (formData: GeneralFormValues) => {
+    const hashedPassword = await sha256(formData.password);
     const payload = {
       name: formData.name,
       nickname: formData.nickname === '' ? null : formData.nickname,
@@ -131,7 +132,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
       phone_number: formData.phone_number,
       gender: formData.gender,
       login_id: formData.login_id,
-      password: formData.password,
+      password: hashedPassword,
       marketing_notification_agreement: formData.marketing_notification_agreement,
     };
 

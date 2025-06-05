@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-restricted-imports */
 import { isKoinError } from '@bcsdlab/koin';
+import { sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupStudent } from 'api/auth';
 import { useEffect, useState } from 'react';
@@ -115,13 +116,15 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
 
   const onSubmit = async (formData: StudentFormValues) => {
     const {
-      password_check, email, nickname, ...signupData
+      password_check, email, nickname, password, ...signupData
     } = formData;
+    const hashedPassword = await sha256(password);
     const completeEmail = email ? `${email}@koreatech.ac.kr` : null;
     const completeNickname = nicknameControl || null;
 
     signup({
       ...signupData,
+      password: hashedPassword,
       email: completeEmail,
       nickname: completeNickname,
     });

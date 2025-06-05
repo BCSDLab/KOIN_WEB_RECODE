@@ -122,7 +122,7 @@ function App() {
           <Route path={ROUTES.LostItemLost()} element={<Wrapper title="분실물 글쓰기" element={<LostItemWritePage />} />} />
           <Route path={ROUTES.LostItemChat()} element={<Wrapper needAuth title="분실물 쪽지" element={<ProtectedLostItemChatPage />} />} />
           <Route path={ROUTES.CampusInfo()} element={<Wrapper title="교내 시설물 정보" element={<CampusInfo />} />} />
-          <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />
+          {!isMobile && <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />}
           {!isMobile && <Route path={ROUTES.AuthSignup({ isLink: false })} element={<Wrapper title="회원가입" element={<SignupPage />} />} />}
           {!isMobile && (
             <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage />} />}>
@@ -135,6 +135,7 @@ function App() {
         <Route path={ROUTES.Auth()} element={<AuthPage />}>
           <Route index element={<Wrapper title="로그인" element={<LoginPage />} />} />
           {isMobile && <Route path={ROUTES.AuthSignup({ isLink: false })} element={<Wrapper title="회원가입" element={<SignupPage />} />} />}
+          {isMobile && <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />}
           {isMobile && (
             <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage />} />}>
               <Route path={ROUTES.Phone()} element={<Wrapper title="아이디 찾기 - 전화번호" element={<MobileFindIdPhonePage />} />} />
