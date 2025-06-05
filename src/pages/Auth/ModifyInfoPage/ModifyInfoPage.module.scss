@@ -294,8 +294,8 @@
     line-height: 1.6;
 
     &:disabled {
-      background: #e5eaf0;
-      border: solid 1px #d2dae2;
+      background: transparent;
+      border: solid 1px #e1e1e1;
       color: #cacaca;
     }
 
