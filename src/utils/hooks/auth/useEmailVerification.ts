@@ -111,7 +111,7 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
   const { mutate: checkIdMatchEmail } = useMutation({
     mutationFn: idMatchEmail,
     onSuccess: () => {
-      if (onNext) onNext(); // 다음 단계로 이동
+      if (onNext) onNext();
     },
     onError: (err) => {
       if (isKoinError(err)) {
