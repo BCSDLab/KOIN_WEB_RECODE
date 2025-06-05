@@ -15,10 +15,10 @@ import useCountdownTimer from 'pages/Auth/SignupPage/hooks/useCountdownTimer';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 
-type UsePhoneVerificationProps = {
+interface UsePhoneVerificationProps {
   phoneNumber: string;
   onNext?: () => void;
-};
+}
 
 function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps) {
   const navigate = useNavigate();
@@ -121,7 +121,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
   const { mutate: checkIdMatchPhone } = useMutation({
     mutationFn: idMatchPhone,
     onSuccess: () => {
-      if (onNext) onNext(); // 다음 단계로 이동
+      if (onNext) onNext();
     },
     onError: (err) => {
       if (isKoinError(err)) {
