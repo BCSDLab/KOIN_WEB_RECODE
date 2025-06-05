@@ -20,7 +20,7 @@ interface FindPasswordProps {
 function PCVerifyPhone({
   onNext, onBack, goToEmailStep, setContactType,
 }: FindPasswordProps) {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
 
   const loginId = useWatch({ control, name: 'loginId' });
 
@@ -35,7 +35,6 @@ function PCVerifyPhone({
     checkPhoneExists,
     checkVerificationSmsVerify,
     isDisabled,
-    // disableButton,
     isVerified,
     isCodeVerified,
     smsSendCount,
@@ -46,7 +45,7 @@ function PCVerifyPhone({
     verificationMessage,
     isTimer,
     timerValue,
-    // stopTimer,
+    stopTimer,
     checkIdExists,
     checkIdMatchPhone,
     idMessage,
@@ -138,6 +137,10 @@ function PCVerifyPhone({
                     onChange={(e) => {
                       field.onChange(e);
                       setPhoneMessage(null);
+                      stopTimer();
+                      setIncorrect();
+                      setVerificationMessage(null);
+                      setValue('verificationCode', '');
                     }}
                     placeholder="숫자만 입력해 주세요."
                     isRequired
