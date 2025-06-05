@@ -10,7 +10,7 @@ function ResultPage() {
     navigate(ROUTES.Auth());
   };
   const onClickPassword = () => {
-    navigate(ROUTES.AuthFindPW());
+    navigate(ROUTES.AuthFindPW({ step: '계정인증', isLink: true }));
   };
 
   return (

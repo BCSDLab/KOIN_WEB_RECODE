@@ -2,7 +2,7 @@ import {
   Controller, useFormContext, useWatch, FieldError,
 } from 'react-hook-form';
 import { ContactType, MESSAGES, REGEX } from 'static/auth';
-import { cn } from '@bcsdlab/utils';
+import { cn, sha256 } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/PCCustomInput';
 import { isKoinError } from '@bcsdlab/koin';
@@ -74,20 +74,21 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
     },
   });
 
-  const onClickSubmit = () => {
+  const onClickSubmit = async () => {
     const { loginId, email, phoneNumber } = getValues();
+    const hashedPassword = await sha256(newPassword);
 
     if (contactType === 'PHONE') {
       submitResetPasswordSms({
         login_id: loginId,
         phone_number: phoneNumber,
-        new_password: newPassword,
+        new_password: hashedPassword,
       });
     } else {
       submitResetPasswordEmail({
         login_id: loginId,
         email,
-        new_password: newPassword,
+        new_password: hashedPassword,
       });
     }
   };
