@@ -1,7 +1,8 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import {
-  idFindSms, phoneExists, smsSend, smsVerify,
+  idExists,
+  idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify,
 } from 'api/auth';
 import { useNavigate } from 'react-router-dom';
 import { MESSAGES } from 'static/auth';
@@ -12,8 +13,14 @@ import {
 import ROUTES from 'static/routes';
 import useCountdownTimer from 'pages/Auth/SignupPage/hooks/useCountdownTimer';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import showToast from 'utils/ts/showToast';
 
-function usePhoneVerification({ phoneNumber }: { phoneNumber: string }) {
+interface UsePhoneVerificationProps {
+  phoneNumber: string;
+  onNext?: () => void;
+}
+
+function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps) {
   const navigate = useNavigate();
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
@@ -22,6 +29,7 @@ function usePhoneVerification({ phoneNumber }: { phoneNumber: string }) {
   const [isCodeVerified, enableCodeVerified] = useBooleanState(false);
   const [smsSendCount, setSmsSendCount] = useState(0);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
+  const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
 
   const {
     isRunning: isTimer,
@@ -64,7 +72,7 @@ function usePhoneVerification({ phoneNumber }: { phoneNumber: string }) {
     mutationFn: phoneExists,
     onSuccess: () => {
       sendVerificationSms({ phone_number: phoneNumber });
-      setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
+      // setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -99,6 +107,31 @@ function usePhoneVerification({ phoneNumber }: { phoneNumber: string }) {
     },
   });
 
+  const { mutate: checkIdExists } = useMutation({
+    mutationFn: idExists,
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) setIdMessage({ type: 'warning', content: MESSAGES.ID.FORMAT });
+
+        if (err.status === 404) setIdMessage({ type: 'warning', content: MESSAGES.ID.NOT_REGISTERED });
+      }
+    },
+  });
+
+  const { mutate: checkIdMatchPhone } = useMutation({
+    mutationFn: idMatchPhone,
+    onSuccess: () => {
+      if (onNext) onNext();
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400 || err.status === 404) {
+          showToast('error', '아이디와 휴대폰 번호가 일치하지 않습니다');
+        }
+      }
+    },
+  });
+
   return {
     phoneMessage,
     checkPhoneExists,
@@ -117,6 +150,10 @@ function usePhoneVerification({ phoneNumber }: { phoneNumber: string }) {
     isTimer,
     timerValue,
     stopTimer,
+    checkIdExists,
+    checkIdMatchPhone,
+    idMessage,
+    setIdMessage,
   };
 }
 

@@ -51,9 +51,15 @@ export const MESSAGES = {
   FIND_PASSWORD: {
     NOT_REGISTERED: '휴대전화 등록을 안 하셨나요?',
   },
+  ID: {
+    FORMAT: '올바른 아이디 양식이 아닙니다. 다시 입력해 주세요.',
+    NOT_REGISTERED: '유효하지 않은 아이디입니다.',
+  },
 };
 
 export type UserType = '학생' | '외부인';
+
+export type ContactType = 'PHONE' | 'EMAIL';
 
 export const GENDER_OPTIONS = [
   { label: '남성', value: '0' },

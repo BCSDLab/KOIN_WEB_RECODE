@@ -1,11 +1,12 @@
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ProgressBar from 'pages/Auth/SignupPage/components/ProgressBar';
 import ROUTES from 'static/routes';
+import { ContactType } from 'static/auth';
 import styles from './FindPasswordPage.module.scss';
 import CompletePage from './Complete';
 import PCVerifyEmail from './PC/PCVerifyEmail';
@@ -39,6 +40,8 @@ function FindPasswordPage() {
   const isMobile = useMediaQuery();
   const { step } = useParams<{ step: StepTitle }>();
   const navigate = useNavigate();
+  const [contactType, setContactType] = useState<ContactType>('PHONE');
+
   const methods = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -104,6 +107,7 @@ function FindPasswordPage() {
                 onNext={() => nextStep('비밀번호변경')}
                 onBack={goBack}
                 goToEmailStep={() => nextStep('이메일인증')}
+                setContactType={setContactType}
               />
             )}
           </Step>
@@ -112,7 +116,7 @@ function FindPasswordPage() {
             {isMobile ? (
               <MobileVerifyEmail onNext={() => nextStep('비밀번호변경')} onBack={goBack} />
             ) : (
-              <PCVerifyEmail onNext={() => nextStep('비밀번호변경')} onBack={goBack} />
+              <PCVerifyEmail onNext={() => nextStep('비밀번호변경')} onBack={goBack} setContactType={setContactType} />
             )}
           </Step>
 
@@ -120,7 +124,7 @@ function FindPasswordPage() {
             {isMobile ? (
               <MobileResetPassword onNext={() => nextStep('완료')} onBack={goBack} />
             ) : (
-              <PCResetPasswordPhone onNext={() => nextStep('완료')} onBack={goBack} />
+              <PCResetPasswordPhone onNext={() => nextStep('완료')} onBack={goBack} contactType={contactType} />
             )}
           </Step>
 
