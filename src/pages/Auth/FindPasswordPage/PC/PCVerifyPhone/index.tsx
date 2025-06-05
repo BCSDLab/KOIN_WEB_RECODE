@@ -20,11 +20,9 @@ interface FindPasswordProps {
 function PCVerifyPhone({
   onNext, onBack, goToEmailStep, setContactType,
 }: FindPasswordProps) {
-  const { control, getValues } = useFormContext();
+  const { control } = useFormContext();
 
   const loginId = useWatch({ control, name: 'loginId' });
-
-  console.log(getValues());
 
   const phoneNumber = useWatch({ control, name: 'phoneNumber' });
   const verificationCode = useWatch({ control, name: 'verificationCode' });

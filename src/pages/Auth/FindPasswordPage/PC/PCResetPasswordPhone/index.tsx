@@ -92,8 +92,6 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
     }
   };
 
-  console.log(getValues());
-
   return (
     <div className={styles.container}>
 
