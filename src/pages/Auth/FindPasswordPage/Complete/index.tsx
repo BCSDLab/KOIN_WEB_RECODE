@@ -1,4 +1,5 @@
 import LogoIcon from 'assets/svg/Login/logo.svg';
+import CheckIcon from 'assets/svg/orenge-check.svg';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -18,7 +19,7 @@ function CompletePage() {
   return (
     <div className={styles.container}>
       <div className={styles.logo}>
-        <LogoIcon />
+        {isMobile ? <CheckIcon /> : <LogoIcon />}
       </div>
 
       <div className={styles['title-container']}>

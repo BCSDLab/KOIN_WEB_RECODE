@@ -16,14 +16,10 @@
 }
 
 .logo {
+  display: flex;
   width: 96px;
   height: 56px;
-
-  @include media.media-breakpoint(mobile) {
-    display: flex;
-    width: 96px;
-    height: 56px;
-  }
+  justify-content: center;
 }
 
 .title-container {
