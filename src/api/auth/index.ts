@@ -9,6 +9,7 @@ import {
   GeneralUser,
   UserAcademicInfo,
   UpdateUser,
+  UpdateGeneralUser,
   FindPassword,
   DeleteUser,
   CheckPassword,
@@ -48,6 +49,8 @@ export const getGeneralUser = APIClient.of(GeneralUser);
 export const getUserAcademicInfo = APIClient.of(UserAcademicInfo);
 
 export const updateUser = APIClient.of(UpdateUser);
+
+export const updateGeneralUser = APIClient.of(UpdateGeneralUser);
 
 export const deleteUser = APIClient.of(DeleteUser);
 

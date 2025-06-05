@@ -49,6 +49,7 @@ import {
   ResetPasswordSmsRequest,
   ResetPasswordEmailResponse,
   ResetPasswordEmailRequest,
+  GeneralUserUpdateRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -154,7 +155,7 @@ export class UserAcademicInfo<R extends UserAcademicInfoResponse> implements API
 export class UpdateUser<R extends UserResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
-  path = '/user/student/me';
+  path = '/v2/users/students/me';
 
   response!: R;
 
@@ -163,6 +164,22 @@ export class UpdateUser<R extends UserResponse> implements APIRequest<R> {
   auth = true;
 
   constructor(public authorization: string, data: UserUpdateRequest) {
+    this.data = data;
+  }
+}
+
+export class UpdateGeneralUser<R extends GeneralUserResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path = 'v2/users/me';
+
+  response!: R;
+
+  data: UserUpdateRequest;
+
+  auth = true;
+
+  constructor(public authorization: string, data: GeneralUserUpdateRequest) {
     this.data = data;
   }
 }
