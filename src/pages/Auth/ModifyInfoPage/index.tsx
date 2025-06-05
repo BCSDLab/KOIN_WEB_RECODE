@@ -419,6 +419,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
                 [styles['modify__button--nickname']]: true,
               })}
               onClick={onClickNicknameDuplicateCheckButton}
+              disabled={currentNicknameValue === userInfo?.nickname}
             >
               중복확인
             </button>
@@ -655,7 +656,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
   });
 
   const handleStartVerification = () => {
-    if (phoneNumber !== userInfo?.phone_number.replace(/-/g, '')) {
+    if (phoneNumber !== userInfo?.phone_number) {
       checkPhoneNumber.mutate(phoneNumber);
     }
   };
@@ -905,7 +906,6 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
         />
         {userType === 'STUDENT' && <span className={styles['form-input__student-email']}>@koreatech.ac.kr</span>}
       </div>
-
     </div>
   );
 });
