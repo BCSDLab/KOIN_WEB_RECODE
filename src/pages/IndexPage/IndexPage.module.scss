@@ -6,7 +6,7 @@
   margin: 0 auto;
   padding: 40px 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   flex-wrap: wrap;
   gap: 24px;
@@ -24,10 +24,19 @@
   }
 }
 
-.mobile-wrapper {
+.left-container {
+  display: flex;
+  flex-direction: column;
+
   @include media.media-breakpoint(mobile) {
     width: 100%;
     display: flex;
     flex-direction: column;
   }
+}
+
+.right-container {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
 }

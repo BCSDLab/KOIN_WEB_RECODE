@@ -1,7 +1,9 @@
 export * as abTest from './abTest';
 export * as auth from './auth';
+export * as banner from './banner';
 export * as bus from './bus';
 export * as cafeteria from './cafeteria';
+export * as club from './club';
 export * as coopshop from './coopshop';
 export * as dept from './dept';
 export * as articles from './articles';

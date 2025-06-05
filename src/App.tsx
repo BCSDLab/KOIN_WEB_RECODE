@@ -22,12 +22,14 @@ import StoreBenefitPage from 'pages/Store/StoreBenefitPage';
 import CampusInfo from 'pages/CampusInfo';
 import BusRoutePage from 'pages/Bus/BusRoutePage';
 import BusCoursePage from 'pages/Bus/BusCoursePage';
+import ClubListPage from 'pages/Club/ClubListPage';
+import ClubDetailPage from 'pages/Club/ClubDetailPage';
+import NewClubPage from 'pages/Club/NewClubPage';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
 import TimetablePage from 'pages/TimetablePage/MainTimetablePage';
 import CafeteriaPage from 'pages/Cafeteria';
-import MetaHelmet from 'components/layout/MetaHelmet';
 import ModifyInfoPage from 'pages/Auth/ModifyInfoPage';
 import AddReviewPage from 'pages/Store/StoreReviewPage/AddReviewPage';
 import EditReviewPage from 'pages/Store/StoreReviewPage/EditReviewPage';
@@ -42,6 +44,9 @@ import LostItemDetailPage from 'pages/Articles/LostItemDetailPage';
 import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import ReportPage from 'pages/Articles/ReportPage';
+import ClubEditPage from 'pages/Club/ClubEditPage';
+import { useTokenStore } from 'utils/zustand/auth';
+import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import FindIdPage from 'pages/Auth/FindIdPage';
 import FindIdEmailPage from 'pages/Auth/FindIdPage/PC/EmailPage';
@@ -63,12 +68,12 @@ function Wrapper({
   element,
   needAuth = false, // 로그인이 필요한 라우트
 }: WrapperProps) {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const token = useTokenState();
 
   useEffect(() => {
     document.title = `코인 - ${title}`;
-  }, [title, location]);
+  }, [title, pathname]);
 
   if (needAuth && !token) {
     return <Navigate replace to={ROUTES.Main()} />;
@@ -76,7 +81,6 @@ function Wrapper({
 
   return (
     <>
-      <MetaHelmet title={title} />
       {element}
       <Suspense fallback={null}>
         <PageViewTracker />
@@ -86,7 +90,21 @@ function Wrapper({
 }
 
 function App() {
-  const isMobile = useMediaQuery();
+  useEffect(() => {
+    window.onNativeCallback = (id, value) => {
+      if (id === 'accessToken')  useTokenStore.getState().setToken(value);
+      if (id === 'refreshToken') useTokenStore.getState().setRefreshToken(value);
+    };
+
+    window.setTokens = setTokensFromNative;
+
+    requestTokensFromNative();
+
+    return () => {
+      delete window.onNativeCallback;
+      delete window.setTokens;
+    };
+  }, []);
   return (
     <>
       <Routes>
@@ -110,6 +128,12 @@ function App() {
 
           <Route path={ROUTES.BusRoute()} element={<Wrapper title="버스" element={<BusRoutePage />} />} />
           <Route path={ROUTES.BusCourse()} element={<Wrapper title="버스" element={<BusCoursePage />} />} />
+
+          <Route path={ROUTES.Club()} element={<Wrapper title="동아리 목록" element={<ClubListPage />} />} />
+          <Route path={ROUTES.ClubDetail({ isLink: false })} element={<Wrapper title="상세 소개" element={<ClubDetailPage />} />} />
+          <Route path={ROUTES.ClubEdit({ isLink: false })} element={<Wrapper title="동아리 수정" element={<ClubEditPage />} />} />
+          <Route path={ROUTES.NewClub()} element={<Wrapper title="동아리 생성" element={<NewClubPage />} />} />
+
           <Route path={ROUTES.Cafeteria()} element={<Wrapper title="식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.Articles()} element={<Wrapper title="공지사항" element={<ArticlesPage />} />}>
             <Route index element={<ArticleListPage />} />

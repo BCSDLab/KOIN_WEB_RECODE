@@ -12,7 +12,7 @@ import styles from './SearchBar.module.scss';
 
 export default function SearchBar() {
   const { data: categories } = useStoreCategories();
-  const { params } = useParamsHandler();
+  const { params, searchParams } = useParamsHandler();
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -31,7 +31,7 @@ export default function SearchBar() {
           openModal();
         }}
       >
-        검색어를 입력해주세요
+        {searchParams.get('storeName') || '검색어를 입력하세요'}
       </button>
       )}
       {/* <input
