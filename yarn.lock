@@ -6537,6 +6537,7 @@ __metadata:
     postcss: ^8.4.47
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-hook-form: ^7.55.0
     react-quill: ^2.0.0
     react-router-dom: ^6.3.0
     react-swipeable: ^7.0.2
@@ -7768,6 +7769,15 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: 7d323310bea3a91be2965f9468d552f201b1c27891e45ddc2d6b8f717680c95a75ae0bc1e3f5cf41472446a2589a75aed4483aee8169287909fcd59ad149e8cc
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.55.0":
+  version: 7.55.0
+  resolution: "react-hook-form@npm:7.55.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: ff37fba242c0e94911bf8515bfe1b0670f93bf0ed0c44c923108859244f41da3f0f6dffcf70d570b152ef6b1d56936d943b45fba11c63f21b913fba8f0da862b
   languageName: node
   linkType: hard
 

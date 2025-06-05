@@ -1,3 +1,4 @@
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ProgressBar.module.scss';
 
 interface Steps {
@@ -15,19 +16,23 @@ interface ProgressBarProps {
  * @param currentIndex number
  */
 export default function ProgressBar({ steps, currentIndex }: ProgressBarProps) {
+  const isMobile = useMediaQuery();
   const stepLength = steps.length;
   const progressBarWidthRate = currentIndex < stepLength
     ? Number((currentIndex + 1) / stepLength) * 100 : 0;
 
-  return (
-    <div className={styles.container}>
-      <div className={styles['progress-content']}>
-        <span>{`${currentIndex + 1}. ${steps[currentIndex].title}`}</span>
-        <span>{`${currentIndex + 1} / ${stepLength}`}</span>
+  if (isMobile) {
+    return (
+      <div className={styles.container}>
+        <div className={styles['progress-content']}>
+          <span>{`${currentIndex + 1}. ${steps[currentIndex].title}`}</span>
+          <span>{`${currentIndex + 1} / ${stepLength}`}</span>
+        </div>
+        <div className={styles['progress-bar-wrapper']}>
+          <div className={styles['progress-bar']} style={{ width: `${progressBarWidthRate}%` }} />
+        </div>
       </div>
-      <div className={styles['progress-bar-wrapper']}>
-        <div className={styles['progress-bar']} style={{ width: `${progressBarWidthRate}%` }} />
-      </div>
-    </div>
-  );
+    );
+  }
+  return null;
 }
