@@ -402,7 +402,7 @@ export class IdMatchPhone<R extends IdMatchPhoneResponse> implements APIRequest<
 export class IdMatchEmail<R extends IdMatchEmailResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
-  path = '/users/id/match/phone';
+  path = '/users/id/match/email';
 
   response!: R;
 

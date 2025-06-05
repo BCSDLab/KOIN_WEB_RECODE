@@ -84,7 +84,6 @@ function PCVerifyPhone({
 
   return (
     <div className={styles.container}>
-
       <div className={styles.container__wrapper}>
         <div className={styles['container__title-wrapper']}>
           <button
@@ -102,7 +101,6 @@ function PCVerifyPhone({
       <div className={`${styles.divider} ${styles['divider--top']}`} />
 
       <div className={styles['form-container']}>
-
         <div className={styles['input-wrapper']}>
           <Controller
             name="loginId"
@@ -184,7 +182,6 @@ function PCVerifyPhone({
                       이메일로 찾기
                     </button>
                   </div>
-
                 )}
               </div>
             )}
@@ -231,7 +228,6 @@ function PCVerifyPhone({
             )}
           />
         </div>
-
       </div>
 
       <div className={`${styles.divider} ${styles['divider--bottom']}`} />
