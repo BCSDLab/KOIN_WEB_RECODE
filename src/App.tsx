@@ -90,6 +90,7 @@ function Wrapper({
 }
 
 function App() {
+  const isMobile = useMediaQuery();
   useEffect(() => {
     window.onNativeCallback = (id, value) => {
       if (id === 'accessToken')  useTokenStore.getState().setToken(value);
