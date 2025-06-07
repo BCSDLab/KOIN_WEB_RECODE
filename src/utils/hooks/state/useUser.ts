@@ -20,6 +20,21 @@ export const useUser = () => {
       if (!token) return null;
       return getUserInfo(token, userType);
     },
+    select: (rawData) => {
+      if (!rawData) return null;
+
+      if (rawData.user_type === 'STUDENT') {
+        return rawData;
+      }
+
+      const timeStamp = Date.now();
+      const anonymousNickname = `익명${rawData.id}${timeStamp.toString().slice(-4)}`;
+
+      return {
+        ...rawData,
+        anonymous_nickname: anonymousNickname,
+      };
+    },
   });
 
   return {
