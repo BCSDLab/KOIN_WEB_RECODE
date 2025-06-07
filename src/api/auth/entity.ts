@@ -79,6 +79,7 @@ export interface RefreshResponse extends APIResponse {
 export interface UserResponse extends APIResponse {
   id: number;
   anonymous_nickname: string;
+  login_id: string;
   email: string;
   gender: 0 | 1;
   major: string; // 학부
