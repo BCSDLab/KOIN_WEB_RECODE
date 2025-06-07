@@ -27,12 +27,13 @@ import ChevronLeft from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useTokenStore } from 'utils/zustand/auth';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
+import { useAuthentication } from 'utils/zustand/authentication';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
 import { ModifyFormValidationProvider, useValidationContext } from './hooks/useValidationContext';
 
-const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
 
 const PHONENUMBER_REGEX = /^\d{3}\d{3,4}\d{4}$/;
 
@@ -971,10 +972,10 @@ const useModifyInfoForm = () => {
     if (isStudent) {
       payload.major = formValue['student-number'].major || undefined;
       payload.student_number = formValue['student-number'].studentNumber || undefined;
+    }
 
-      if (!isMobile && formValue.password.trim().length > 0) {
-        payload.password = await sha256(formValue.password);
-      }
+    if (!isMobile && formValue.password.trim().length > 0) {
+      payload.password = await sha256(formValue.password);
     }
     mutate(payload);
   };
@@ -982,14 +983,17 @@ const useModifyInfoForm = () => {
 };
 
 function ModifyInfoDefaultPage() {
-  const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
   const navigate = useNavigate();
+  const portalManager = useModalPortal();
+
+  const { status, submitForm } = useModifyInfoForm();
   const { data: userInfo } = useUser();
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
-  const portalManager = useModalPortal();
   const { mutate: deleteUser } = useUserDelete();
+
   const { isValid } = useValidationContext();
+  const isAuthenticated = useAuthentication();
   const isMobile = useMediaQuery();
   const isStudent = isStudentUser(userInfo);
 
@@ -1008,6 +1012,13 @@ function ModifyInfoDefaultPage() {
       />
     ));
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate(ROUTES.Main());
+      showToast('error', '로그인이 필요합니다.');
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className={styles.container}>
@@ -1052,7 +1063,7 @@ function ModifyInfoDefaultPage() {
             readOnly
             disabled
             id="email"
-            defaultValue={isStudent ? userInfo?.email : userInfo?.login_id}
+            defaultValue={userInfo?.login_id}
           />
         </div>
         {!isMobile && (
