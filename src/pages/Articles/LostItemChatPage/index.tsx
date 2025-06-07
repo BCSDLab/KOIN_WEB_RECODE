@@ -21,7 +21,7 @@ import BlockIcon from 'assets/svg/Articles/block.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
 
 import { useChatLogger } from 'pages/Articles/hooks/useChatLogger';
-import { UserResponse } from 'api/auth/entity';
+import { useUser } from 'utils/hooks/state/useUser';
 import DeleteModal from './components/DeleteModal';
 import useChatroomQuery from './hooks/useChatroomQuery';
 import {
@@ -32,12 +32,10 @@ import {
 } from './utils/date';
 import styles from './LostItemChatPage.module.scss';
 
-interface LostItemChatPageProps {
-  userInfo: UserResponse | null
-}
-function LostItemChatPage({ userInfo }: LostItemChatPageProps) {
+function LostItemChatPage() {
   const isMobile = useMediaQuery();
   const [searchParams] = useSearchParams();
+  const { data: userInfo } = useUser();
 
   const token = useTokenState();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadLostItemFile });
