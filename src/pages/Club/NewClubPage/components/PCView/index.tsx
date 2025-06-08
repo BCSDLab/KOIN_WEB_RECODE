@@ -14,17 +14,18 @@ import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
 import { cn } from '@bcsdlab/utils';
 import ClubInputErrorCondition from 'pages/Club/components/ClubInputErrorCondition';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { addHyphen } from 'utils/ts/formatPhoneNumber';
 import styles from './NewClubPCView.module.scss';
 
 interface PCViewProps {
   formData: NewClubData;
   setFormData: Dispatch<SetStateAction<NewClubData>>;
+  setType?:Dispatch<SetStateAction<string>>;
   openModal: () => void;
   isEdit?: boolean;
-  clubId?:string;
 }
 export default function PCView({
-  formData, setFormData, openModal, isEdit, clubId,
+  formData, setFormData, openModal, isEdit, setType,
 }: PCViewProps) {
   const navigate = useNavigate();
   const logger = useLogger();
@@ -93,14 +94,15 @@ export default function PCView({
   };
 
   const handleClickCancel = () => {
-    if (isEdit) {
+    if (isEdit && setType) {
       logger.actionEventClick({
         team: 'CAMPUS',
         event_category: 'click',
         event_label: 'club_correction_cancel',
         value: '취소',
       });
-      navigate(ROUTES.ClubDetail({ id: clubId, isLink: true }));
+      setType('cancel');
+      openModal();
     } else {
       logger.actionEventClick({
         team: 'CAMPUS',
@@ -113,13 +115,14 @@ export default function PCView({
   };
 
   const handleClickSave = () => {
-    if (isEdit) {
+    if (isEdit && setType) {
       logger.actionEventClick({
         team: 'CAMPUS',
         event_category: 'click',
         event_label: 'club_correction_save',
         value: '저장',
       });
+      setType('confirm');
     } else {
       logger.actionEventClick({
         team: 'CAMPUS',
@@ -131,10 +134,18 @@ export default function PCView({
     handleOpenModal();
   };
 
+  const handleEditClickEditButton = () => {
+    // 일단 드래그 선택을 위해서 기존 이미지 제거만
+    setFormData({ ...formData, image_url: '' });
+  };
+
   return (
     <div className={styles.layout}>
       <div className={styles.header}>
-        <h1 className={styles.header__title}>동아리 생성</h1>
+        <h1 className={styles.header__title}>
+          동아리
+          {isEdit ? ' 수정' : ' 생성'}
+        </h1>
         <div className={styles['header__button-container']}>
           <button type="button" className={styles.header__button} onClick={handleClickCancel}>
             {!isEdit && '생성'}
@@ -154,14 +165,14 @@ export default function PCView({
             <input
               className={cn({
                 [styles['form__text-input']]: true,
-                [styles['form__text-input--error']]: true,
+                [styles['form__text-input--error']]: formData.name.length === 0,
               })}
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="동아리명을 입력해주세요(필수)"
             />
-            {!formData.image_url && <ClubInputErrorCondition />}
+            {!formData.name && <ClubInputErrorCondition />}
           </div>
           <div className={styles['form-category']}>
             <div className={styles['form-label']}>분과</div>
@@ -210,14 +221,15 @@ export default function PCView({
             <input
               className={cn({
                 [styles['form__text-input']]: true,
-                [styles['form__text-input--error']]: true,
+                [styles['form__text-input--error']]: formData.location.length === 0,
               })}
               type="text"
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               placeholder="동아리 방 위치를 입력하세요(필수)"
+              maxLength={20}
             />
-            {!formData.image_url && <ClubInputErrorCondition />}
+            {!formData.location && <ClubInputErrorCondition />}
           </div>
 
           <div className={styles['form-description']}>
@@ -231,6 +243,7 @@ export default function PCView({
                 autoResize(e.currentTarget);
                 setFormData({ ...formData, description: e.target.value });
               }}
+              maxLength={40}
               onInput={(e) => autoResize(e.currentTarget)}
             />
           </div>
@@ -270,7 +283,10 @@ export default function PCView({
               className={styles['form__text-input']}
               type="text"
               value={formData.phone_number}
-              onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
+              onChange={(e) => setFormData((prev) => ({
+                ...prev,
+                phone_number: addHyphen(e.target.value),
+              }))}
               placeholder="대표자 전화번호를 입력해주세요.(선택)"
             />
           </div>
@@ -279,7 +295,20 @@ export default function PCView({
         <div className={styles['form-right']}>
           {formData.image_url ? (
             <div className={styles['form-image__preview']}>
-              <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
+              {isEdit && (
+                <div className={styles['form-image__edit-button__box']}>
+                  <button
+                    type="button"
+                    className={styles['form-image__edit-button']}
+                    onClick={handleEditClickEditButton}
+                  >
+                    이미지 변경
+                  </button>
+                </div>
+              )}
+              <div className={styles['form-image__img__box']}>
+                <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
+              </div>
             </div>
           )
             : (
@@ -335,7 +364,7 @@ export default function PCView({
           {!formData.image_url && <ClubInputErrorCondition />}
           <button type="button" className={styles.like} onClick={handleClickLike}>
             <LikeIcon />
-            좋아요 표시하기
+            {formData.is_like_hidden ? '좋아요 숨기기' : '좋아요 표시하기'}
             {formData.is_like_hidden ? <UndisplayIcon /> : <DisplayIcon />}
           </button>
         </div>

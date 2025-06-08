@@ -49,6 +49,7 @@ export interface RefreshResponse extends APIResponse {
 
 export interface UserResponse extends APIResponse {
   id: number;
+  login_id:string;
   anonymous_nickname: string;
   email: string;
   gender: 0 | 1;

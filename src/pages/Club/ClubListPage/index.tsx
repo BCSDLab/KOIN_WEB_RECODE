@@ -18,6 +18,7 @@ import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
 import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useUser } from 'utils/hooks/state/useUser';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -41,6 +42,8 @@ function ClubListPage() {
   const totalCount = clubList.length;
   const { mutate: clubLikeMutate } = useClubLike();
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
+
+  const { data: userInfo } = useUser();
 
   const handleCreateClubClick = () => {
     logger.actionEventClick({
@@ -114,6 +117,7 @@ function ClubListPage() {
       <div className={styles.container}>
         <div className={styles.header}>
           <p className={styles.header__title}>동아리 목록</p>
+          {userInfo && (
           <button
             type="button"
             className={styles['header__add-button']}
@@ -121,6 +125,7 @@ function ClubListPage() {
           >
             동아리 생성하기
           </button>
+          )}
         </div>
         <main>
           <div className={styles.categories}>

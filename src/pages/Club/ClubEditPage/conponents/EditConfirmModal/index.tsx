@@ -1,24 +1,25 @@
 import { NewClubData } from 'api/club/entity';
-import { useState } from 'react';
 import usePutClub from 'pages/Club/ClubEditPage/hooks/usePutClub';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import styles from './EditConfirmModal.module.scss';
 
 interface EditConfirmModalProps {
   closeModal: () => void;
   formData: NewClubData;
   resetForm: () => void;
+  type: string;
 }
 
 export default function EditConfirmModal({
   closeModal,
   formData,
   resetForm,
+  type,
 }: EditConfirmModalProps) {
   const { id } = useParams();
-  const [step, setStep] = useState(1);
   const { status, mutateAsync } = usePutClub(id);
-
+  const navigate = useNavigate();
   const handleSubmit = async () => {
     await mutateAsync(formData);
     closeModal();
@@ -26,6 +27,7 @@ export default function EditConfirmModal({
   const handleCancelEdit = () => {
     resetForm();
     closeModal();
+    navigate(ROUTES.ClubDetail({ id, isLink: true }));
   };
   return (
     <div
@@ -41,7 +43,7 @@ export default function EditConfirmModal({
         onClick={(e) => e.stopPropagation()}
         role="presentation"
       >
-        {step === 1 && (
+        {type === 'confirm' && (
         <div className={styles['modal-content']}>
           <h1 className={styles['modal-title']}>수정 확인</h1>
           <div className={styles['info-row__description--question']}>
@@ -54,12 +56,12 @@ export default function EditConfirmModal({
             <div className={styles['info-text']}>계속 진행하시겠습니까?</div>
           </div>
           <div className={styles['info-button-container']}>
-            <button className={styles['info-button__cancel']} type="button" onClick={() => setStep(2)}>취소</button>
+            <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
             <button className={styles['info-button__confirm']} type="button" onClick={handleSubmit} disabled={status === 'pending'}>확인</button>
           </div>
         </div>
         )}
-        {step === 2 && (
+        {type === 'cancel' && (
         <div className={styles['modal-content']}>
           <h1 className={styles['modal-title']}>수정 취소</h1>
           <div className={styles['info-row__description--question']}>
