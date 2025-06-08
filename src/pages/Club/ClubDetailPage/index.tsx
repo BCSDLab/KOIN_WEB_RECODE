@@ -202,7 +202,6 @@ export default function ClubDetailPage() {
           </div>
           <div className={styles['club-detail__summary__row']}>
             분과:
-            {' '}
             {clubDetail.category}
             {' '}
             분과
