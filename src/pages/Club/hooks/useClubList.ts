@@ -4,14 +4,14 @@ import { club } from 'api';
 interface ClubListProps {
   token?: string;
   categoryId?: number;
-  hitSort?: string;
+  sortType?: string;
 }
 
-function useClubList({ token, categoryId, hitSort }: ClubListProps) {
+function useClubList({ token, categoryId, sortType }: ClubListProps) {
   const { data } = useQuery(
     {
-      queryKey: ['club-list', categoryId, hitSort],
-      queryFn: () => club.getClubList(token, categoryId, hitSort),
+      queryKey: ['club-list', categoryId, sortType],
+      queryFn: () => club.getClubList(token, categoryId, sortType),
     },
   );
 
