@@ -34,10 +34,10 @@ function ClubListPage() {
   const token = useTokenState();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const sortValue = searchParams.get('sort') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
+  const sortValue = searchParams.get('sortType') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
   const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
   const clubCategories = useClubCategories();
-  const clubList = useClubList({ token, categoryId: selectedCategoryId, hitSort: sortValue });
+  const clubList = useClubList({ token, categoryId: selectedCategoryId, sortType: sortValue });
   const totalCount = clubList.length;
   const { mutate: clubLikeMutate } = useClubLike();
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
@@ -58,8 +58,8 @@ function ClubListPage() {
 
   const onChangeSort = (e: { target: { value: string } }) => {
     const changedSort = e.target.value;
-    searchParams.set('sort', changedSort);
-    setSearchParams(searchParams);
+    searchParams.set('sortType', changedSort);
+    setSearchParams(searchParams, { replace: true });
   };
 
   const handleCategoryClick = (name: string, id: number) => {
@@ -75,7 +75,7 @@ function ClubListPage() {
     } else {
       searchParams.set('categoryId', String(id));
     }
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   };
 
   const handleCardClick = (name: string, id: number) => {
@@ -141,11 +141,11 @@ function ClubListPage() {
                     [styles['categories__button-icon--selected']]: category.id === selectedCategoryId,
                   })}
                 >
-                  {category.id === 1 && <MikeIcon />}
-                  {category.id === 2 && <ExerciseIcon />}
-                  {category.id === 3 && <HobbyIcon />}
-                  {category.id === 4 && <ReligionIcon />}
-                  {category.id === 5 && <BookIcon />}
+                  {category.name === '공연' && <MikeIcon />}
+                  {category.name === '운동' && <ExerciseIcon />}
+                  {category.name === '종교' && <ReligionIcon />}
+                  {category.name === '취미' && <HobbyIcon />}
+                  {category.name === '학술' && <BookIcon />}
                 </div>
                 {category.name}
               </button>

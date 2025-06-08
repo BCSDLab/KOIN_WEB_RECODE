@@ -119,15 +119,15 @@ export default function ClubDetailPage() {
         ) : (
           <div className={styles['club-detail__pc-header__button-box']}>
             {clubDetail.manager
-             && (
-             <button
-               type="button"
-               className={styles['club-detail__pc-header__button']}
-               onClick={() => setIsEdit(true)}
-             >
-               상세 소개 수정하기
-             </button>
-             )}
+              && (
+              <button
+                type="button"
+                className={styles['club-detail__pc-header__button']}
+                onClick={() => setIsEdit(true)}
+              >
+                상세 소개 수정하기
+              </button>
+              )}
           </div>
         )}
       </div>
@@ -317,16 +317,16 @@ export default function ClubDetailPage() {
         ) : (
           <div className={styles['club-detail__mobile-button__button-box']}>
             {clubDetail.manager && navType === '상세 소개'
-             && (
-             <button
-               type="button"
-               className={styles['club-detail__mobile-button__button']}
-               onClick={() => setIsEdit(true)}
-             >
-               상세 소개 수정
-               {!isMobile && '하기'}
-             </button>
-             )}
+              && (
+              <button
+                type="button"
+                className={styles['club-detail__mobile-button__button']}
+                onClick={() => setIsEdit(true)}
+              >
+                상세 소개 수정
+                {!isMobile && '하기'}
+              </button>
+              )}
           </div>
         )}
       </div>
