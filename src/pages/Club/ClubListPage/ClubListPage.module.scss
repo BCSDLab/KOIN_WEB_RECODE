@@ -10,7 +10,7 @@
 
   @include media.media-breakpoint(mobile) {
     box-sizing: border-box;
-    padding: 0 24px 60px;
+    padding: 16px 24px 60px;
   }
 }
 
@@ -21,6 +21,10 @@
   align-items: center;
   width: 1136px;
   margin-top: 56px;
+
+  @include media.media-breakpoint(mobile) {
+    margin-top: 0px;
+  }
 }
 
 .header {
