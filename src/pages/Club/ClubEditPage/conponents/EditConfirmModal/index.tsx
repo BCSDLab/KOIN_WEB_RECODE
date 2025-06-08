@@ -2,6 +2,7 @@ import { NewClubData } from 'api/club/entity';
 import usePutClub from 'pages/Club/ClubEditPage/hooks/usePutClub';
 import { useNavigate, useParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './EditConfirmModal.module.scss';
 
 interface EditConfirmModalProps {
@@ -19,14 +20,27 @@ export default function EditConfirmModal({
 }: EditConfirmModalProps) {
   const { id } = useParams();
   const { status, mutateAsync } = usePutClub(id);
+  const logger = useLogger();
   const navigate = useNavigate();
   const handleSubmit = async () => {
     await mutateAsync(formData);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_introduction_correction_save_confirm',
+      value: '저장하기',
+    });
     closeModal();
   };
   const handleCancelEdit = () => {
     resetForm();
     closeModal();
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_introduction_correction_cancel_confirm',
+      value: '취소하기',
+    });
     navigate(ROUTES.ClubDetail({ id, isLink: true }));
   };
   return (

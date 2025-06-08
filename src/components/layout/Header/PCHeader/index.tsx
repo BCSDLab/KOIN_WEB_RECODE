@@ -87,6 +87,9 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
       쪽지: {
         team: 'CAMPUS', event_label: 'header', value: '쪽지', event_category: 'click',
       },
+      동아리: {
+        team: 'CAMPUS', event_label: 'header', value: '동아리', event_category: 'click',
+      },
     };
 
     if (loggingMap[title]) {

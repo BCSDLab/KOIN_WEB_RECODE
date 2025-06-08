@@ -62,18 +62,42 @@ export default function ClubDetailPage() {
     }
     if (clubDetail.is_liked) {
       await clubUnlikeMutateAsync();
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_introduction_like_cancel',
+        value: clubDetail.name,
+      });
     } else {
       await clubLikeMutateAsync();
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_introduction_like',
+        value: clubDetail.name,
+      });
     }
   };
 
   const handleIntroductionSave = async () => {
     await clubIntroductionEditMutateAsync({ introduction });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_introduction_correction_save',
+      value: '저장',
+    });
     setIsEdit(false);
   };
 
   const handleIntroductionCancel = () => {
     setIntroduction(clubDetail.introduction);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_introduction_correction_cancel',
+      value: '취소',
+    });
     setIsEdit(false);
   };
 
@@ -120,6 +144,16 @@ export default function ClubDetailPage() {
       showToast('success', '전화번호가 복사되었습니다.');
     }
   };
+
+  const handleClickDetailInfo = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_tab_select',
+      value: '상세소개 수정하기',
+    });
+    setIsEdit(true);
+  };
   return (
     <div className={styles.layout}>
       {!isMobile && (
@@ -150,7 +184,7 @@ export default function ClubDetailPage() {
               <button
                 type="button"
                 className={styles['club-detail__pc-header__button']}
-                onClick={() => setIsEdit(true)}
+                onClick={handleClickDetailInfo}
               >
                 상세 소개 수정하기
               </button>
@@ -367,7 +401,7 @@ export default function ClubDetailPage() {
               <button
                 type="button"
                 className={styles['club-detail__mobile-button__button']}
-                onClick={() => setIsEdit(true)}
+                onClick={handleClickDetailInfo}
               >
                 상세 소개 수정
                 {!isMobile && '하기'}
