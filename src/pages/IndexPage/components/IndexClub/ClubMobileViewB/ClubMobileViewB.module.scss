@@ -1,0 +1,40 @@
+@use "src/utils/scss/media" as media;
+
+@include media.media-breakpoint(mobile) {
+  .categories {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    height: 84px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 12px 0;
+    padding: 0 24px;
+
+    &__button {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #1f1f1f;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 160%;
+
+      &-icon {
+        display: flex;
+        box-sizing: border-box;
+        height: 62px;
+        padding: 5px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        aspect-ratio: 1/1;
+        border-radius: 99px;
+        opacity: 0.6;
+        background: #f5f5f5;
+      }
+    }
+  }
+}
