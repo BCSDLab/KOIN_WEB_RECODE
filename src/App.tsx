@@ -83,7 +83,6 @@ function Wrapper({
 function App() {
   //ios 브릿지
   useEffect(() => {
-    requestTokensFromNative();
 
     window.setTokens = setTokensFromNative;
 
