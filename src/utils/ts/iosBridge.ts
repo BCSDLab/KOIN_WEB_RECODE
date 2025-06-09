@@ -1,8 +1,8 @@
 import { useTokenStore } from 'utils/zustand/auth';
 
 export function setTokensFromNative(access: string, refresh: string) {
-  useTokenStore.getState().setToken(access);
-  useTokenStore.getState().setRefreshToken(refresh);
+  if (access) useTokenStore.getState().setToken(access);
+  if (refresh) useTokenStore.getState().setRefreshToken(refresh);
 }
 
 export function requestTokensFromNative() {
@@ -15,4 +15,8 @@ export function saveTokensToNative(access: string, refresh: string) {
   window.webkit?.messageHandlers?.tokenBridge.postMessage(
     `saveTokens:${payload}`,
   );
+}
+
+export function backbuttonTapp() {
+  window.webkit?.messageHandlers?.tokenBridge?.postMessage('backbuttonTapped');
 }
