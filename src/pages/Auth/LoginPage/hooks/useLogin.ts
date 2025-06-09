@@ -5,6 +5,7 @@ import { auth } from 'api';
 import type { LoginResponse } from 'api/auth/entity';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import { setCookie } from 'utils/ts/cookie';
+import { saveTokensToNative } from 'utils/ts/iosBridge';
 import showToast from 'utils/ts/showToast';
 import { useTokenStore } from 'utils/zustand/auth';
 
@@ -34,6 +35,9 @@ export const useLogin = (state: IsAutoLogin) => {
       setToken(data.token);
       setUserType(data.user_type);
       redirectAfterLogin();
+      if (window.webkit?.messageHandlers?.tokenBridge) {
+        saveTokensToNative(data.token, data.refresh_token);
+      }
     },
     onError: (error) => {
       if (isKoinError(error)) {
