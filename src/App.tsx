@@ -83,20 +83,12 @@ function Wrapper({
 function App() {
   //ios 브릿지
   useEffect(() => {
+    window.setTokens = setTokensFromNative;
+
     requestTokensFromNative();
 
-    window.onNativeCallback = (id: string, value: string) => {
-      if (id === 'accessToken') {
-        useTokenStore.getState().setToken(value);
-      }
-      if (id === 'refreshToken') {
-        useTokenStore.getState().setRefreshToken(value);
-      }
-    };
-
-
     return () => {
-      delete window.onNativeCallback;
+      delete window.setTokens;
     };
   }, []);
 
