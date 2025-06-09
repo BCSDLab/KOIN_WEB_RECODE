@@ -18,6 +18,7 @@
 
   &__content {
     color: #000;
+    width: 100%;
     font-family: Pretendard, sans-serif;
     overflow-wrap: break-word;
     word-break: break-all;
@@ -44,6 +45,8 @@
     width: 100%;
     display: flex;
     align-items: center;
+    flex-direction: column;
+    gap: 10px;
 
     &__text {
       color: #000;
@@ -52,6 +55,8 @@
       font-weight: 400;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      width: 100%;
 
       @include media.media-breakpoint(mobile) {
         margin-top: 16px;
@@ -88,7 +93,7 @@
         align-items: center;
       }
 
-      &__box svg {
+      &__box button {
         position: absolute;
         top: 10px;
         right: 5px;
@@ -97,14 +102,17 @@
 
     &__delete-button {
       display: flex;
-      width: 80px;
-      height: 40px;
       padding: 6px 12px;
       justify-content: center;
       align-items: center;
       gap: 10px;
       border-radius: 4px;
       background-color: #eb6f70;
+      color: #fff;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
 
       @include media.media-breakpoint(mobile) {
         width: 30px;
