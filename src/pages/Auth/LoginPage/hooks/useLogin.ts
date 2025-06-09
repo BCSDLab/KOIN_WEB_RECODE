@@ -14,12 +14,14 @@ interface IsAutoLogin {
 }
 
 interface UserInfo {
-  login_id: string;
-  login_pw: string;
+  userId: string;
+  password: string;
 }
 
+const emailLocalPartRegex = /^[a-z_0-9]{1,12}$/;
+
 export const useLogin = (state: IsAutoLogin) => {
-  const { setToken, setRefreshToken, setUserType } = useTokenStore();
+  const { setToken, setRefreshToken } = useTokenStore();
   const { redirectAfterLogin } = useLoginRedirect();
   const queryClient = useQueryClient();
 
@@ -29,11 +31,10 @@ export const useLogin = (state: IsAutoLogin) => {
       if (state.isAutoLoginFlag) {
         setRefreshToken(data.refresh_token);
       }
+
       queryClient.invalidateQueries();
       setCookie('AUTH_TOKEN_KEY', data.token);
-      setCookie('AUTH_USER_TYPE', data.user_type);
       setToken(data.token);
-      setUserType(data.user_type);
       redirectAfterLogin();
       if (window.webkit?.messageHandlers?.tokenBridge) {
         saveTokensToNative(data.token, data.refresh_token);
@@ -50,22 +51,28 @@ export const useLogin = (state: IsAutoLogin) => {
   });
 
   const login = async (userInfo: UserInfo) => {
-    const hashedPassword = await sha256(userInfo.login_pw);
-
-    if (userInfo.login_id === '') {
+    if (userInfo.userId === '') {
       showToast('error', '계정을 입력해주세요');
       return;
     }
-    if (userInfo.login_id === '') {
+    if (userInfo.password === '') {
       showToast('error', '비밀번호를 입력해주세요');
       return;
     }
+    if (userInfo.userId.indexOf('@koreatech.ac.kr') !== -1) {
+      showToast('error', '계정명은 @koreatech.ac.kr을 빼고 입력해주세요.');
+      return;
+    }
+    if (!emailLocalPartRegex.test(userInfo.userId)) {
+      showToast('error', '아우누리 계정 형식이 아닙니다.');
+      return;
+    }
+    const hashedPassword = await sha256(userInfo.password);
 
     postLogin.mutate({
-      login_id: userInfo.login_id,
-      login_pw: hashedPassword,
+      email: `${userInfo.userId}@koreatech.ac.kr`,
+      password: hashedPassword,
     });
   };
-
   return login;
 };
