@@ -1,25 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getGeneralUser, getUser } from 'api/auth';
-import { GeneralUserResponse, UserResponse } from 'api/auth/entity';
-import { UserType, useTokenStore } from 'utils/zustand/auth';
-
-export type UnionUserResponse = UserResponse | GeneralUserResponse;
-
-const getUserInfo = async (token: string, userType: UserType): Promise<UnionUserResponse> => {
-  if (userType === 'STUDENT') {
-    return getUser(token);
-  }
-  return getGeneralUser(token);
-};
+import { getUser } from 'api/auth';
+import { useTokenStore } from 'utils/zustand/auth';
 
 export const useUser = () => {
-  const { token, userType } = useTokenStore();
+  const { token } = useTokenStore();
   const { data, isError } = useSuspenseQuery({
-    queryKey: ['userInfo', token, userType],
-    queryFn: () => {
-      if (!token) return null;
-      return getUserInfo(token, userType);
-    },
+    queryKey: ['userInfo', token],
+    queryFn: () => (token ? getUser(token) : null),
   });
 
   return {
