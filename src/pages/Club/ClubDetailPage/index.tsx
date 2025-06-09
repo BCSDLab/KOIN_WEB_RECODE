@@ -14,6 +14,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
+import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useClubDetail from './hooks/useClubdetail';
 import styles from './ClubDetailPage.module.scss';
 import useClubLikeMutation from './hooks/useClubLike';
@@ -78,6 +79,7 @@ export default function ClubDetailPage() {
       });
     }
   };
+  const debouncedToggleLike = useDebounce(handleToggleLike, 300);
 
   const handleIntroductionSave = async () => {
     await clubIntroductionEditMutateAsync({ introduction });
@@ -154,6 +156,7 @@ export default function ClubDetailPage() {
     });
     setIsEdit(true);
   };
+
   return (
     <div className={styles.layout}>
       {!isMobile && (
@@ -228,7 +231,7 @@ export default function ClubDetailPage() {
           >
             <h1 className={styles['club-detail__summary__title']}>{clubDetail.name}</h1>
             {isMobile && (
-            <button type="button" className={styles['club-detail__summary__like']} onClick={handleToggleLike}>
+            <button type="button" className={styles['club-detail__summary__like']} onClick={debouncedToggleLike}>
               {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
               {clubDetail.likes}
             </button>
@@ -339,7 +342,7 @@ export default function ClubDetailPage() {
               )}
             </div>
             {!clubDetail.is_like_hidden && (
-            <button type="button" className={styles['club-detail__like']} disabled={isPending} onClick={handleToggleLike}>
+            <button type="button" className={styles['club-detail__like']} disabled={isPending} onClick={debouncedToggleLike}>
               {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
               <div className={styles['club-detail__like__text']}>
                 좋아요
