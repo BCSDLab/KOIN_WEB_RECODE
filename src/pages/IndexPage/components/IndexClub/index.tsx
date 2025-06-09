@@ -17,7 +17,9 @@ const getClubLinkCardData = (hotClubInfo: HotClubResponse) => [
     key: 'popularClub',
     title: '인기 동아리',
     subtitle: '바로가기',
-    link: ROUTES.ClubDetail({ id: hotClubInfo?.club_id?.toString?.(), isLink: true }),
+    link: hotClubInfo.club_id !== -1
+      ? ROUTES.ClubDetail({ id: hotClubInfo.club_id.toString(), isLink: true })
+      : ROUTES.Club(),
     img: hotClubInfo?.image_url || 'https://placehold.co/60.jpg?text=Coming+soon...',
   },
   {
