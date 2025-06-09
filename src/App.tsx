@@ -91,21 +91,18 @@ function Wrapper({
 
 function App() {
   const isMobile = useMediaQuery();
+
+  //ios 브릿지
   useEffect(() => {
-    window.onNativeCallback = (id, value) => {
-      if (id === 'accessToken')  useTokenStore.getState().setToken(value);
-      if (id === 'refreshToken') useTokenStore.getState().setRefreshToken(value);
-    };
+     window.setTokens = setTokensFromNative;
 
-    window.setTokens = setTokensFromNative;
+     requestTokensFromNative();
 
-    requestTokensFromNative();
+     return () => {
+       delete window.setTokens;
+     };
+   }, []);
 
-    return () => {
-      delete window.onNativeCallback;
-      delete window.setTokens;
-    };
-  }, []);
   return (
     <>
       <Routes>
