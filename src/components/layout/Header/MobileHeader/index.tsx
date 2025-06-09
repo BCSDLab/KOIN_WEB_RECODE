@@ -12,6 +12,7 @@ import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import ROUTES from 'static/routes';
+import { useHeaderTitle } from 'utils/zustand/customTitle';
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
@@ -30,6 +31,9 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
   const navigate = useNavigate();
   const logger = useLogger();
   const { id } = useParams();
+
+  const { customTitle } = useHeaderTitle();
+
   const backInDetailPage = async () => {
     if (pathname.includes(ROUTES.Store()) && id) {
       const response = await api.store.getStoreDetailInfo(id!);
@@ -61,6 +65,12 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
     openSidebar();
   };
 
+  const isClubRoute = [
+    ROUTES.NewClub(),
+    '/clubs/edit',
+    ROUTES.Club(),
+  ].some((prefix) => pathname.startsWith(prefix));
+
   return (
     <>
       <div className={styles.mobileheader}>
@@ -76,25 +86,26 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
               backInDetailPage();
             }}
           >
-            {(pathname.startsWith(ROUTES.NewClub()) || pathname.startsWith('/clubs/edit')) ? <BlackArrowBackIcon /> : <ArrowBackIcon />}
+            {isClubRoute ? <BlackArrowBackIcon /> : <ArrowBackIcon />}
           </button>
         )}
         <span
           className={cn({
             [styles.mobileheader__title]: true,
             [styles['mobileheader__title--main']]: isMain,
-            [styles['mobileheader__title--new-club']]: pathname.startsWith(ROUTES.NewClub()) || pathname.startsWith('/clubs/edit'),
+            [styles['mobileheader__title--new-club']]: isClubRoute,
           })}
         >
-          {isMain ? (
-            <KoinServiceLogo />
-          ) : (
+          {isMain && <KoinServiceLogo />}
+          {!isMain && isClubRoute && customTitle}
+          {!isMain && !isClubRoute && (
             CATEGORY
-              .flatMap((category) => category.submenu)
-              .find((submenu) => pathname.startsWith(submenu.link))?.title ?? ''
+              .flatMap((c) => c.submenu)
+              .find((s) => pathname.startsWith(s.link))
+              ?.title ?? ''
           )}
-          {pathname.startsWith(ROUTES.NewClub()) && ' 생성'}
-          {pathname.startsWith('/clubs/edit') && ' 수정'}
+          {pathname.startsWith(ROUTES.NewClub()) && '동아리 생성'}
+          {pathname.startsWith('/clubs/edit') && '동아리 수정'}
         </span>
         {isCustomButton ? (
           <span
@@ -110,11 +121,11 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
             className={cn({
               [styles.mobileheader__icon]: true,
               [styles['mobileheader__icon--right']]: true,
+              [styles['mobileheader__icon--none']]: isClubRoute,
             })}
             type="button"
             aria-label="메뉴 버튼"
             onClick={handleHamburgerClick}
-            disabled={pathname.startsWith(ROUTES.NewClub()) || pathname.startsWith(ROUTES.Club())}
           >
             <HamburgerIcon />
           </button>

@@ -52,7 +52,7 @@ export default function MandateClubManagerModal({
           </div>
           <div className={styles['info-row']}>
             <div className={styles['info-field']}>현 권한자 아이디: </div>
-            {userInfo?.id}
+            {userInfo?.login_id}
           </div>
           <div className={styles['info-row']}>
             <div className={styles['info-field']}>향후 권한자 아이디 : </div>

@@ -24,6 +24,7 @@ export default function ClubEditPage() {
   const resetForm = () => setFormData(originalDataRef.current);
 
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const [type, setType] = useState('');
 
   return (
     <div className={styles.layout}>
@@ -33,7 +34,7 @@ export default function ClubEditPage() {
           setFormData={setFormData}
           openModal={openModal}
           isEdit
-          clubId={id}
+          setType={setType}
         />
       ) : (
         <PCView
@@ -41,7 +42,7 @@ export default function ClubEditPage() {
           setFormData={setFormData}
           openModal={openModal}
           isEdit
-          clubId={id}
+          setType={setType}
         />
       )}
 
@@ -50,6 +51,7 @@ export default function ClubEditPage() {
           closeModal={closeModal}
           formData={formData}
           resetForm={resetForm}
+          type={type}
         />
       )}
     </div>

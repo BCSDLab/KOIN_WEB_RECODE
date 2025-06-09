@@ -5,6 +5,7 @@
   height: 100%;
   padding: 3% 15%;
   box-sizing: border-box;
+  position: relative;
 
   @include media.media-breakpoint(mobile) {
     padding: 3%;
@@ -101,7 +102,14 @@
     }
 
     &__image {
-      max-width: 300px;
+      width: 300px;
+      height: 300px;
+      overflow: hidden;
+
+      @include media.media-breakpoint(mobile) {
+        width: 200px;
+        height: 200px;
+      }
     }
 
     &__row {
@@ -110,7 +118,7 @@
       @include media.media-breakpoint(mobile) {
         display: flex;
         align-items: center;
-        margin-bottom: 4px;
+        margin-bottom: 8px;
       }
 
       &--mobile {
@@ -134,6 +142,10 @@
       display: flex;
       align-items: center;
       gap: 4px;
+
+      @include media.media-breakpoint(mobile) {
+        margin-bottom: 8px;
+      }
     }
 
     &__like svg {
@@ -144,10 +156,22 @@
     &__contacts {
       &__row {
         margin-bottom: 10px;
+        display: flex;
+        gap: 6px;
+        align-items: center;
 
         @include media.media-breakpoint(mobile) {
-          margin-bottom: 4px;
+          margin-bottom: 8px;
         }
+
+        &__link {
+          color: #3a70e2;
+        }
+      }
+
+      &__text {
+        display: flex;
+        align-items: center;
       }
     }
   }
@@ -179,6 +203,7 @@
       width: 100%;
       display: flex;
       justify-content: flex-end;
+      margin-bottom: 5px;
     }
 
     &__box {
@@ -270,5 +295,23 @@
     font-size: 16px;
     font-weight: 500;
     padding: 14px 25px;
+  }
+}
+
+.up-floating-button {
+  border-radius: 99px;
+  background: #175c8e;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    position: sticky;
+    bottom: 20px;
   }
 }

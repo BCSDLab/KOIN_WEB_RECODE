@@ -81,6 +81,7 @@ function Wrapper({
 }
 
 function App() {
+  //ios 브릿지
   useEffect(() => {
     window.onNativeCallback = (id, value) => {
       if (id === 'accessToken')  useTokenStore.getState().setToken(value);
@@ -96,6 +97,7 @@ function App() {
       delete window.setTokens;
     };
   }, []);
+
   return (
     <>
       <Routes>

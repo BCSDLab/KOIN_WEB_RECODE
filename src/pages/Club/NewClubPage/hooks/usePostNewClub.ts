@@ -13,9 +13,7 @@ export default function usePostNewClub() {
   const navigate = useNavigate();
   const { status, mutateAsync } = useMutation({
     mutationFn: async (data: NewClubData) => {
-      const response = await postClub(token, data);
-      // 테스트
-      console.log('New club response:', response);
+      await postClub(token, data);
     },
     onSuccess: () => {
       showToast('success', '동아리 생성 요청이 완료되었습니다.');

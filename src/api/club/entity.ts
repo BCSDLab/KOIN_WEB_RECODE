@@ -64,6 +64,7 @@ export interface ClubDetailResponse extends APIResponse {
   manager: boolean;
   is_liked: boolean;
   updated_at: string;
+  is_like_hidden: boolean;
 }
 
 export type PutClubLikeResonse = APIResponse;

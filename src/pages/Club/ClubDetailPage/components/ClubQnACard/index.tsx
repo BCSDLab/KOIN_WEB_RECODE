@@ -80,6 +80,7 @@ export default function ClubQnACard({ clubQnAData, clubId, isManager }: ClubQnAC
                 type="button"
                 className={styles['club-qna-card__reply__delete-button']}
                 disabled={deleteClubQnAStatus === 'pending'}
+                onClick={() => handleDeleteQnA(clubQnAData.id)}
               >
                 삭제하기
               </button>
@@ -92,13 +93,15 @@ export default function ClubQnACard({ clubQnAData, clubId, isManager }: ClubQnAC
         {clubQnAData.created_at}
       </div>
       <div className={styles['club-qna-card__reply']}>
-        <ReplyIcon />
         {clubQnAData.children.map((reply) => (
           <div
             key={reply.id}
             className={styles['club-qna-card__reply__text']}
           >
-            {reply.content}
+            <div>
+              {clubQnAData.children.length > 0 && <ReplyIcon />}
+              {reply.content}
+            </div>
             {(userInfo?.id === clubQnAData.author_id || isManager) && (
             <div className={styles['club-qna-card__reply__delete-button__box']}>
               {isMobile
@@ -125,8 +128,9 @@ export default function ClubQnACard({ clubQnAData, clubId, isManager }: ClubQnAC
             )}
           </div>
         ))}
-        {isManager && (
+        {(isManager && clubQnAData.children.length === 0) && (
           <div className={styles['club-qna-card__reply__input__box']}>
+            <ReplyIcon />
             <input
               className={styles['club-qna-card__reply__input']}
               type="text"

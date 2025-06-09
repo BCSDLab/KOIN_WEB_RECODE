@@ -1,14 +1,19 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import NonLikeIcon from 'assets/svg/Club/unlike-icon.svg';
+import CopyIcon from 'assets/svg/Club/copy-icon.svg';
+import UpIcon from 'assets/svg/Club/up-icon.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
 import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useHeaderTitle } from 'utils/zustand/customTitle';
+import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
+import showToast from 'utils/ts/showToast';
 import useClubDetail from './hooks/useClubdetail';
 import styles from './ClubDetailPage.module.scss';
 import useClubLikeMutation from './hooks/useClubLike';
@@ -35,12 +40,20 @@ export default function ClubDetailPage() {
   const [isMandateModalOpen, openMandateModal, closeMandateModal] = useBooleanState(false);
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
 
+  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
+
   const token = useTokenState();
 
   const {
     clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync,
   } = useClubLikeMutation(id);
   const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
+
+  useEffect(() => {
+    if (clubDetail?.name) setCustomTitle(clubDetail.name);
+  }, [clubDetail?.name, setCustomTitle]);
+  useEffect(() => resetCustomTitle, [resetCustomTitle]);
+
   const handleToggleLike = async () => {
     if (!id || isPending) return;
     if (!token) {
@@ -49,18 +62,42 @@ export default function ClubDetailPage() {
     }
     if (clubDetail.is_liked) {
       await clubUnlikeMutateAsync();
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_introduction_like_cancel',
+        value: clubDetail.name,
+      });
     } else {
       await clubLikeMutateAsync();
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_introduction_like',
+        value: clubDetail.name,
+      });
     }
   };
 
   const handleIntroductionSave = async () => {
     await clubIntroductionEditMutateAsync({ introduction });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_introduction_correction_save',
+      value: '저장',
+    });
     setIsEdit(false);
   };
 
   const handleIntroductionCancel = () => {
     setIntroduction(clubDetail.introduction);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_introduction_correction_cancel',
+      value: '취소',
+    });
     setIsEdit(false);
   };
 
@@ -93,6 +130,30 @@ export default function ClubDetailPage() {
     setNavType(navValue);
   };
 
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('success', '전화번호가 복사되었습니다.');
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+      showToast('success', '전화번호가 복사되었습니다.');
+    }
+  };
+
+  const handleClickDetailInfo = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_tab_select',
+      value: '상세소개 수정하기',
+    });
+    setIsEdit(true);
+  };
   return (
     <div className={styles.layout}>
       {!isMobile && (
@@ -123,7 +184,7 @@ export default function ClubDetailPage() {
               <button
                 type="button"
                 className={styles['club-detail__pc-header__button']}
-                onClick={() => setIsEdit(true)}
+                onClick={handleClickDetailInfo}
               >
                 상세 소개 수정하기
               </button>
@@ -175,7 +236,6 @@ export default function ClubDetailPage() {
           </div>
           <div className={styles['club-detail__summary__row']}>
             분과:
-            {' '}
             {clubDetail.category}
             {' '}
             분과
@@ -189,6 +249,7 @@ export default function ClubDetailPage() {
             {clubDetail.description}
           </div>
           <div className={styles['club-detail__summary__contacts']}>
+            {clubDetail.instagram && (
             <div className={styles['club-detail__summary__contacts__row']}>
               인스타:
               {clubDetail.instagram && (
@@ -203,6 +264,8 @@ export default function ClubDetailPage() {
               </a>
               )}
             </div>
+            )}
+            {clubDetail.google_form && (
             <div className={styles['club-detail__summary__contacts__row']}>
               구글폼:
               {clubDetail.google_form && (
@@ -216,6 +279,8 @@ export default function ClubDetailPage() {
               </a>
               )}
             </div>
+            )}
+            {clubDetail.open_chat && (
             <div className={styles['club-detail__summary__contacts__row']}>
               오픈채팅:
               {clubDetail.open_chat && (
@@ -229,17 +294,30 @@ export default function ClubDetailPage() {
               </a>
               )}
             </div>
+            )}
+            {clubDetail.phone_number && (
             <div className={styles['club-detail__summary__contacts__row']}>
               전화번호:
-              {clubDetail.phone_number}
+              <div className={styles['club-detail__summary__contacts__text']}>
+                {clubDetail.phone_number && formatPhoneNumber(clubDetail.phone_number)}
+                <button
+                  className={styles['copy-button']}
+                  type="button"
+                  aria-label="복사붙여넣기 버튼"
+                  onClick={() => handleCopy(clubDetail.phone_number!)}
+                >
+                  <CopyIcon />
+                </button>
+              </div>
             </div>
+            )}
           </div>
         </div>
         {!isMobile && (
           <div className={styles['club-detail__summary__image-container']}>
-            {!isMobile && (
+            {(!isMobile && clubDetail.manager) && (
             <div className={styles['club-detail__edit-button__container']}>
-              <button type="button" className={styles['club-detail__edit-button']}>
+              <button type="button" className={styles['club-detail__edit-button']} onClick={handleMandateClick}>
                 권한 위임
               </button>
               <button type="button" className={styles['club-detail__edit-button']} onClick={handleEditClick}>
@@ -260,6 +338,7 @@ export default function ClubDetailPage() {
                 </div>
               )}
             </div>
+            {!clubDetail.is_like_hidden && (
             <button type="button" className={styles['club-detail__like']} disabled={isPending} onClick={handleToggleLike}>
               {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
               <div className={styles['club-detail__like__text']}>
@@ -269,6 +348,7 @@ export default function ClubDetailPage() {
                 개
               </div>
             </button>
+            )}
           </div>
         )}
       </div>
@@ -296,7 +376,7 @@ export default function ClubDetailPage() {
       </div>
       {isMobile && (
       <div className={styles['club-detail__mobile-button__container']}>
-        {isEdit ? (
+        {(isEdit && navType === '상세 소개') ? (
           <div className={styles['club-detail__mobile-button__box']}>
             <button
               type="button"
@@ -321,7 +401,7 @@ export default function ClubDetailPage() {
               <button
                 type="button"
                 className={styles['club-detail__mobile-button__button']}
-                onClick={() => setIsEdit(true)}
+                onClick={handleClickDetailInfo}
               >
                 상세 소개 수정
                 {!isMobile && '하기'}
@@ -363,6 +443,20 @@ export default function ClubDetailPage() {
       }
       {
         isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
+      }
+      {
+        navType === 'Q&A' && (
+          <div className={styles['up-floating-button__container']}>
+            <button
+              type="button"
+              className={styles['up-floating-button']}
+              aria-label="스크롤 위로 버튼"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              <UpIcon />
+            </button>
+          </div>
+        )
       }
     </div>
   );
