@@ -1,0 +1,15 @@
+@use "src/utils/scss/media" as media;
+
+.layout {
+  color: #f7941e;
+  font-family: Pretendard, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 14px;
+  }
+}

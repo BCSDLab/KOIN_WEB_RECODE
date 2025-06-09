@@ -1,0 +1,120 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 33px;
+    gap: 0;
+  }
+
+  &__title {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    margin-top: 32px;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      height: auto;
+      margin-top: 0;
+      padding-left: 3px;
+      margin-left: 16px;
+      font-weight: 700;
+    }
+  }
+}
+
+.cards {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 0 8px;
+
+  @include media.media-breakpoint(mobile) {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 12px 0;
+    gap: 16px;
+  }
+}
+
+.card {
+  width: 266px;
+  height: 113px;
+  border-radius: 16px;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px 24px;
+
+  @include media.media-breakpoint(mobile) {
+    height: 65px;
+    padding: 0 16px;
+    background-color: #fafafa;
+  }
+
+  &__segment {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+
+    @include media.media-breakpoint(mobile) {
+      gap: 4px;
+
+      img,
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+
+  &__guide {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    @include media.media-breakpoint(mobile) {
+      gap: 0;
+    }
+  }
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      line-height: 160%;
+    }
+  }
+
+  &__subtitle {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 160%;
+    }
+  }
+}

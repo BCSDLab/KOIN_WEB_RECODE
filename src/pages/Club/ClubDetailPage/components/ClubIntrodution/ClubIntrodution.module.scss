@@ -1,0 +1,44 @@
+/* stylelint-disable rule-empty-line-before */
+@use "src/utils/scss/media" as media;
+
+.layout {
+  padding: 10px 0;
+  display: flex;
+}
+/* stylelint-disable selector-pseudo-class-no-unknown */
+:global {
+  .quill {
+    width: 100%;
+  }
+  .ql-container {
+    width: 100%;
+    height: auto;
+  }
+  .ql-editor {
+    width: 100%;
+  }
+
+  .ql-editor strong {
+    font-weight: 700 !important;
+  }
+  .ql-editor em {
+    font-style: italic !important;
+  }
+}
+/* stylelint-enable selector-pseudo-class-no-unknown */
+
+.text-box {
+  width: 100px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  color: #000;
+  font-family: Actor, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  border: 1px solid #e1e1e1;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: none;
+}

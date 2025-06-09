@@ -40,6 +40,10 @@
         right: 26px;
       }
     }
+
+    &--none {
+      display: none;
+    }
   }
 
   &__title {
@@ -51,6 +55,10 @@
 
     &--main {
       justify-content: flex-start;
+    }
+
+    &--new-club {
+      color: #000;
     }
 
     & > img {

@@ -28,6 +28,19 @@ const queryClient = new QueryClient({
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
+
+declare global {
+  interface Window {
+    webkit?: {
+      messageHandlers?: {
+        [name: string]: { postMessage(body: unknown): void };
+      };
+    };
+    onNativeCallback?: (id: string, value: string) => void;
+    setTokens?: (access: string, refresh: string) => void;
+  }
+}
+
 root.render(
   <React.StrictMode>
     <RecoilRoot>
