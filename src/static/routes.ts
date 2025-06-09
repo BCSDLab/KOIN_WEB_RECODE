@@ -38,13 +38,8 @@ const ROUTES = {
   RoomDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/room/${id}` : '/room/:id'),
   CampusInfo: () => '/campusinfo',
   Auth: () => '/auth',
-  AuthSignup: ({ currentStep, isLink }: ROUTESParams<'currentStep'>) => (isLink ? `/auth/signup/${currentStep}` : '/auth/signup/:currentStep'),
-  AuthFindPW: ({ step, isLink }: ROUTESParams<'step'>) => (isLink ? `/auth/findpw/${step}` : '/auth/findpw/:step'),
-  // AuthFindPW: () => '/auth/findpw',
-  AuthFindID: () => '/auth/findid',
-  Phone: () => '/auth/findid/phone',
-  Email: () => '/auth/findid/email',
-  IDResult: () => '/auth/findid/result',
+  AuthSignup: () => '/auth/signup',
+  AuthFindPW: () => '/auth/findpw',
   AuthModifyInfo: () => '/auth/modifyinfo',
   Review: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/review/${id}` : '/review/:id'),
   ReviewEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/edit/review/${id}` : '/edit/review/:id'),
@@ -57,7 +52,6 @@ const ROUTES = {
   Webview: () => '/webview',
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',
-  Inquiry: () => 'https://forms.gle/qYw17r2kihThiJvj7',
 };
 
 export default ROUTES;
