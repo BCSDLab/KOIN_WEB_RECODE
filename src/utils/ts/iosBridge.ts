@@ -1,5 +1,4 @@
 import { useTokenStore } from 'utils/zustand/auth';
-import showToast from './showToast';
 
 class IOSWebBridge {
   private callbackMap: { [key: string]: (result: any) => void } = {};
@@ -55,14 +54,10 @@ export function setTokensFromNative(access: string, refresh: string) {
 
 export async function requestTokensFromNative(): Promise<{ access: string, refresh: string }> {
   try {
-    const accessPromise = window.NativeBridge?.call('getUserToken');
-    const refreshPromise = window.NativeBridge?.call('getRefreshToken');
-
-    const [accessResult, refreshResult] = await Promise.all([accessPromise, refreshPromise]);
-
+    const tokens = await window.NativeBridge?.call('getUserToken');
     return {
-      access: accessResult?.access || '',
-      refresh: refreshResult?.refresh || '',
+      access: tokens?.access || '',
+      refresh: tokens?.refresh || '',
     };
   } catch (error) {
     return { access: '', refresh: '' };
@@ -71,7 +66,7 @@ export async function requestTokensFromNative(): Promise<{ access: string, refre
 
 export async function saveTokensToNative(access: string, refresh: string): Promise<boolean> {
   try {
-    await window.NativeBridge?.call('saveTokens', { access, refresh });
+    await window.NativeBridge?.call('putUserToken', { access, refresh });
     return true;
   } catch (error) {
     return false;
@@ -79,9 +74,5 @@ export async function saveTokensToNative(access: string, refresh: string): Promi
 }
 
 export async function backButtonTapped(): Promise<void> {
-  try {
-    await window.NativeBridge?.call('backButtonTapped');
-  } catch (error) {
-    showToast('error', '에러 발생');
-  }
+  await window.NativeBridge?.call('backButtonTapped');
 }

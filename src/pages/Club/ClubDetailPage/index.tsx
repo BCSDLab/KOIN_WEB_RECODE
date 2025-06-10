@@ -233,7 +233,7 @@ export default function ClubDetailPage() {
             {isMobile && (
             <button type="button" className={styles['club-detail__summary__like']} onClick={debouncedToggleLike}>
               {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
-              {clubDetail.likes}
+              {!clubDetail.is_like_hidden && clubDetail.likes}
             </button>
             )}
           </div>
@@ -341,17 +341,12 @@ export default function ClubDetailPage() {
                 </div>
               )}
             </div>
-            {!clubDetail.is_like_hidden && (
             <button type="button" className={styles['club-detail__like']} disabled={isPending} onClick={debouncedToggleLike}>
               {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
               <div className={styles['club-detail__like__text']}>
-                좋아요
-                {' '}
-                {clubDetail.likes || 0}
-                개
+                {!clubDetail.is_like_hidden && `좋아요 ${clubDetail.likes || 0} 개`}
               </div>
             </button>
-            )}
           </div>
         )}
       </div>
