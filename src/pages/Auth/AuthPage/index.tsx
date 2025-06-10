@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
-import { backbuttonTapp } from 'utils/ts/iosBridge';
+import { backButtonTapped } from 'utils/ts/iosBridge';
 import styles from './Auth.module.scss';
 
 function AuthPage() {
@@ -8,7 +8,7 @@ function AuthPage() {
   const handleClickBack = () => {
     if (typeof window !== 'undefined'
     && window.webkit?.messageHandlers != null) {
-      backbuttonTapp();
+      backButtonTapped();
     } else {
       navigate(ROUTES.Main());
     }

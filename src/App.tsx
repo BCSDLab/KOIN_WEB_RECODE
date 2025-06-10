@@ -47,6 +47,7 @@ import ReportPage from 'pages/Articles/ReportPage';
 import ClubEditPage from 'pages/Club/ClubEditPage';
 import { useTokenStore } from 'utils/zustand/auth';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
+import showToast from 'utils/ts/showToast';
 
 interface WrapperProps {
   title: string;
@@ -83,9 +84,22 @@ function Wrapper({
 function App() {
   //ios 브릿지
   useEffect(() => {
-
+    // 네이티브에서 토큰을 전달받을 함수 등록
     window.setTokens = setTokensFromNative;
 
+    // 앱 로드 시 토큰 요청
+    const initializeTokens = async () => {
+      try {
+        const tokens = await requestTokensFromNative();
+        if (tokens.access || tokens.refresh) {
+          setTokensFromNative(tokens.access, tokens.refresh);
+        }
+      } catch (error) {
+        console.log('초기 토큰 로드 실패:', error);
+      }
+    };
+
+    initializeTokens();
 
     return () => {
       delete window.setTokens;
