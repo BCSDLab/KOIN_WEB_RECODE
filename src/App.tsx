@@ -95,7 +95,7 @@ function App() {
           setTokensFromNative(tokens.access, tokens.refresh);
         }
       } catch (error) {
-        showToast('error', '토큰 초기화 실패');
+        console.log('초기 토큰 로드 실패:', error);
       }
     };
 
