@@ -119,6 +119,8 @@ export default function AuthenticateUserModal({
               type="button"
               className={cn({
                 [styles['container__check-button']]: true,
+                [styles['container__check-button--input']]: password !== '' && !isKoinError(error),
+                [styles['container__check-button--input-open']]: password !== '' && !isBlind && !isKoinError(error),
                 [styles['container__check-button--error']]: isKoinError(error),
               })}
               onClick={handleCheckPassword}
