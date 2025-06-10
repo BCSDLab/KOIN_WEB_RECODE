@@ -239,17 +239,23 @@ export default function ClubDetailPage() {
           </div>
           <div className={styles['club-detail__summary__row']}>
             분과:
-            {clubDetail.category}
-            {' '}
-            분과
+            <div>
+              {clubDetail.category}
+              {' '}
+              분과
+            </div>
           </div>
           <div className={styles['club-detail__summary__row']}>
             동아리 방 위치:
-            {clubDetail.location}
+            <div>
+              {clubDetail.location}
+            </div>
           </div>
           <div className={styles['club-detail__summary__row']}>
             동아리 소개:
-            {clubDetail.description}
+            <div>
+              {clubDetail.description}
+            </div>
           </div>
           <div className={styles['club-detail__summary__contacts']}>
             {clubDetail.instagram && (

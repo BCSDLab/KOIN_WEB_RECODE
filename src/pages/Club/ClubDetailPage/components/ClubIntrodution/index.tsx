@@ -22,7 +22,7 @@ export default function ClubIntroduction({
   const token = useTokenState();
   const quillRef = useRef<ReactQuill>(null);
 
-  // (A) 이미지를 서버에 업로드하고 URL 리턴
+  // 이미지를 서버에 업로드하고 URL 리턴
   const uploadImage = useCallback(async (file: File) => {
     const formData = new FormData();
     formData.append('multipartFile', file);
@@ -30,7 +30,7 @@ export default function ClubIntroduction({
     return res.file_url; // 서버에서 돌아오는 URL
   }, [token]);
 
-  // (B) 툴바의 image 버튼을 눌렀을 때 동작
+  // 툴바의 image 버튼을 눌렀을 때 동작
   const imageHandler = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
