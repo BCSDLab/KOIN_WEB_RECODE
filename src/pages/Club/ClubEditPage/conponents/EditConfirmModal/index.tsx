@@ -23,7 +23,12 @@ export default function EditConfirmModal({
   const logger = useLogger();
   const navigate = useNavigate();
   const handleSubmit = async () => {
-    await mutateAsync(formData);
+    const submitData = {
+      ...formData,
+      phone_number: formData.phone_number?.replace(/-/g, '') || formData.phone_number,
+    };
+
+    await mutateAsync(submitData);
     logger.actionEventClick({
       team: 'CAMPUS',
       event_category: 'click',
