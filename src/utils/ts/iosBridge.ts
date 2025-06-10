@@ -53,6 +53,14 @@ export function setTokensFromNative(access: string, refresh: string) {
 }
 
 export async function requestTokensFromNative(): Promise<{ access: string, refresh: string }> {
+  // 이미 토큰이 있으면 그냥 반환
+  const existingToken = useTokenStore.getState().token;
+  const existingRefresh = useTokenStore.getState().refreshToken;
+
+  if (existingToken && existingRefresh) {
+    return { access: existingToken, refresh: existingRefresh };
+  }
+
   try {
     const tokens = await window.NativeBridge?.call('getUserToken');
     return {
