@@ -110,9 +110,11 @@ export default function ClubQnACard({
             key={reply.id}
             className={styles['club-qna-card__reply__text']}
           >
-            <div>
+            <div className={styles['club-qna-card__reply__text--content']}>
               {clubQnAData.children.length > 0 && <ReplyIcon />}
-              {reply.content}
+              <p>
+                {reply.content}
+              </p>
             </div>
             {(userInfo?.id === clubQnAData.author_id || isManager) && (
             <div className={styles['club-qna-card__reply__delete-button__box']}>
