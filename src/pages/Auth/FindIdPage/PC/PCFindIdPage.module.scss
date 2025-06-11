@@ -1,0 +1,98 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Pretendard, sans-serif;
+
+  &__wrapper {
+    max-width: 640px;
+  }
+
+  &__title-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &--title {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 700;
+      width: 100%;
+      margin-right: 24px;
+    }
+  }
+}
+
+.divider {
+  width: 640px;
+  border: 2px solid #175c8e;
+
+  &--top {
+    margin: 64px 0;
+  }
+
+  &--bottom {
+    margin: 64px 0;
+  }
+}
+
+.gender-wrapper {
+  display: grid;
+  grid-template-columns: 160px 1fr auto;
+  gap: 16px;
+  padding: 0 24px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 160%;
+  align-items: center;
+
+  label {
+    justify-self: start;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+
+    & > div {
+      margin-top: 4px;
+    }
+  }
+}
+
+.checkbox-wrapper {
+  display: flex;
+  gap: 32px;
+
+  &__checkbox {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.button-wrapper {
+  display: flex;
+  gap: 32px;
+
+  &__next-button {
+    display: flex;
+    width: 240px;
+    height: 64px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    background: #cacaca;
+    color: #fff;
+    text-align: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 160%;
+
+    &--active {
+      background-color: #175c8e;
+    }
+  }
+}

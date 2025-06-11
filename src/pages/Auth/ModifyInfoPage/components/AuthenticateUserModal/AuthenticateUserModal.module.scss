@@ -105,6 +105,16 @@
       border: none;
     }
 
+    &--input {
+      background-color: #10477a;
+      color: #fff;
+    }
+
+    &--input-open {
+      background-color: #175c8e;
+      color: #fff;
+    }
+
     @include media.media-breakpoint(mobile) {
       width: 290px;
       height: 42px;
@@ -128,6 +138,11 @@
 
     &:focus ~ .container__check-button {
       background-color: #175c8e;
+      color: #fff;
+    }
+
+    &:focus ~ .container__check-button--input {
+      background-color: #10477a;
       color: #fff;
     }
 

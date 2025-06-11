@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import * as gtag from 'lib/gtag';
 import { UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/state/useUser';
+import { isStudentUser } from 'utils/ts/userTypeGuards';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null) => {
   if (!userInfo) {
@@ -37,7 +38,11 @@ export default function PageViewTracker() {
   const { data: userInfo } = useUser();
   const prevPathname = useRef('');
 
+  const isStudent = userInfo && isStudentUser(userInfo);
+
   useEffect(() => {
+    if (!isStudent) return;
+
     const handlePageView = () => {
       if (prevPathname.current !== window.location.pathname) {
         setTimeout(() => {
@@ -50,6 +55,6 @@ export default function PageViewTracker() {
       }
     };
     handlePageView();
-  }, [location, userInfo]);
+  }, [location, userInfo, isStudent]);
   return null;
 }
