@@ -123,7 +123,7 @@ function IndexClub() {
               key={key}
               className={styles.card}
               onClick={(e) => {
-                if (!token) {
+                if (!token && key === 'addClub') {
                   e.preventDefault();
                   openAuthModal();
                 } else {
