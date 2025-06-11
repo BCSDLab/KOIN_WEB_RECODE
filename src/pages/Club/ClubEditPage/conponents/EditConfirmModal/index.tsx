@@ -11,9 +11,9 @@ interface EditConfirmModalProps {
   closeModal: () => void;
   formData?: NewClubData ;
   resetForm: () => void;
-  introduction: string;
+  introduction?: string;
   type: string;
-  setIsEdit: Dispatch<SetStateAction<boolean>>;
+  setIsEdit?: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function EditConfirmModal({
@@ -42,7 +42,8 @@ export default function EditConfirmModal({
       };
 
       await mutateAsync(submitData);
-    } else {
+    }
+    if (introduction && setIsEdit) {
       await clubIntroductionEditMutateAsync({ introduction });
       logger.actionEventClick({
         team: 'CAMPUS',
@@ -59,7 +60,8 @@ export default function EditConfirmModal({
       resetForm();
       closeModal();
       navigate(ROUTES.ClubDetail({ id, isLink: true }));
-    } else {
+    }
+    if (introduction && setIsEdit) {
       resetForm();
       logger.actionEventClick({
         team: 'CAMPUS',
