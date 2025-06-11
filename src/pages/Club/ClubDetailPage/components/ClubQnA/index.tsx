@@ -1,5 +1,6 @@
 import ClubQnACard from 'pages/Club/ClubDetailPage/components/ClubQnACard';
 import useClubQnA from 'pages/Club/ClubDetailPage/hooks/useClubQnA';
+import { Dispatch, SetStateAction } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './ClubQnA.module.scss';
@@ -9,10 +10,12 @@ interface ClubQnAProps {
   openModal: () => void;
   clubId: number | string | undefined;
   openAuthModal:()=> void;
+  setQnA:Dispatch<SetStateAction<string>>;
+  setReplyId:Dispatch<SetStateAction<number>>;
 }
 
 export default function ClubQnA({
-  isManager, openModal, clubId, openAuthModal,
+  isManager, openModal, clubId, openAuthModal, setQnA, setReplyId,
 }: ClubQnAProps) {
   const { clubQnAData } = useClubQnA(clubId);
   const token = useTokenState();
@@ -27,6 +30,7 @@ export default function ClubQnA({
     if (!token) {
       openAuthModal();
     } else {
+      setQnA('create');
       openModal();
     }
   };
@@ -45,7 +49,15 @@ export default function ClubQnA({
       )}
 
       {clubQnAData?.qnas.map((item) => (
-        <ClubQnACard key={item.id} clubQnAData={item} clubId={clubId} isManager={isManager} />
+        <ClubQnACard
+          key={item.id}
+          clubQnAData={item}
+          clubId={clubId}
+          isManager={isManager}
+          openModal={openModal}
+          setQnA={setQnA}
+          setReplyId={setReplyId}
+        />
       ))}
     </div>
   );

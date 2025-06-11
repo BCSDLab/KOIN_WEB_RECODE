@@ -5,7 +5,7 @@ import ReplyIcon from 'assets/svg/Club/reply-icon.svg';
 import SendIcon from 'assets/svg/Club/send-icon.svg';
 import DeleteIcon from 'assets/svg/Club/delete-reply-icon.svg';
 import useClubQnA from 'pages/Club/ClubDetailPage/hooks/useClubQnA';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import showToast from 'utils/ts/showToast';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -15,9 +15,14 @@ interface ClubQnACardProps {
   clubQnAData: ClubQnAItem;
   clubId: number | string | undefined;
   isManager: boolean;
+  setQnA:Dispatch<SetStateAction<string>>;
+  openModal: () => void;
+  setReplyId:Dispatch<SetStateAction<number>>;
 }
 
-export default function ClubQnACard({ clubQnAData, clubId, isManager }: ClubQnACardProps) {
+export default function ClubQnACard({
+  clubQnAData, clubId, isManager, setQnA, openModal, setReplyId,
+}: ClubQnACardProps) {
   const { data: userInfo } = useUser();
   const logger = useLogger();
   const [newReply, setNewReply] = useState('');
@@ -55,6 +60,13 @@ export default function ClubQnACard({ clubQnAData, clubId, isManager }: ClubQnAC
     });
     await deleteClubQnAMutateAsync(qnaId);
   };
+
+  const handleDeleteReply = async (qnaId : number) => {
+    setReplyId(qnaId);
+    setQnA('delete');
+    openModal();
+  };
+
   return (
     <div className={styles['club-qna-card']}>
       <div className={styles['club-qna-card__content']}>
@@ -110,7 +122,7 @@ export default function ClubQnACard({ clubQnAData, clubId, isManager }: ClubQnAC
                     type="button"
                     className={styles['club-qna-card__reply__delete-button']}
                     disabled={deleteClubQnAStatus === 'pending'}
-                    onClick={() => handleDeleteQnA(reply.id)}
+                    onClick={() => handleDeleteReply(reply.id)}
                   >
                     <DeleteIcon />
                   </button>
@@ -120,6 +132,7 @@ export default function ClubQnACard({ clubQnAData, clubId, isManager }: ClubQnAC
                     type="button"
                     className={styles['club-qna-card__reply__delete-button']}
                     disabled={deleteClubQnAStatus === 'pending'}
+                    onClick={() => handleDeleteReply(reply.id)}
                   >
                     삭제하기
                   </button>
