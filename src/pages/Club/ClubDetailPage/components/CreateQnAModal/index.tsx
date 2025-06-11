@@ -7,11 +7,15 @@ import styles from './CreateQnAModal.module.scss';
 interface CreateQnAModalProps {
   closeModal: () => void;
   clubId: number | string | undefined;
+  type: string;
+  replyId:number;
 }
 
 export default function CreateQnAModal({
   closeModal,
   clubId,
+  type,
+  replyId,
 }: CreateQnAModalProps) {
   const logger = useLogger();
   const [newQnA, setNewQnA] = useState<ClubNewQnA>({
@@ -19,7 +23,9 @@ export default function CreateQnAModal({
     content: '',
   });
 
-  const { postClubQnAStatus, postClubQnAMutateAsync } = useClubQnA(clubId);
+  const {
+    postClubQnAStatus, postClubQnAMutateAsync, deleteClubQnAStatus, deleteClubQnAMutateAsync,
+  } = useClubQnA(clubId);
 
   const handleSubmit = async () => {
     logger.actionEventClick({
@@ -29,6 +35,17 @@ export default function CreateQnAModal({
       value: 'Q&A',
     });
     await postClubQnAMutateAsync(newQnA);
+    closeModal();
+  };
+
+  const handleDelete = async () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_Q&A_delete_confirm',
+      value: '삭제하기',
+    });
+    await deleteClubQnAMutateAsync(replyId);
     closeModal();
   };
   return (
@@ -45,6 +62,7 @@ export default function CreateQnAModal({
         onClick={(e) => e.stopPropagation()}
         role="presentation"
       >
+        {type === 'create' && (
         <div className={styles['modal-content']}>
           <h1 className={styles['modal-title']}>Q&A 추가</h1>
           <input
@@ -69,6 +87,33 @@ export default function CreateQnAModal({
             </button>
           </div>
         </div>
+        )}
+        {type === 'delete' && (
+        <div className={styles['modal-content']}>
+          <h1 className={styles['modal-title']}>댓글 삭제</h1>
+          <div className={styles['info-row__description']}>
+            <div className={styles['info-text']}>댓글을 삭제하시겠습니까?</div>
+          </div>
+          <div className={styles['info-row__description']}>
+            <div className={styles['info-text']}>
+              해당 댓글은 삭제되며 되돌릴 수 없습니다.
+              <br />
+              정말 삭제하시겠습니까?
+            </div>
+          </div>
+          <div className={styles['info-button-container']}>
+            <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
+            <button
+              className={styles['info-button__delete']}
+              type="button"
+              onClick={handleDelete}
+              disabled={deleteClubQnAStatus === 'pending'}
+            >
+              삭제하기
+            </button>
+          </div>
+        </div>
+        )}
       </div>
     </div>
   );
