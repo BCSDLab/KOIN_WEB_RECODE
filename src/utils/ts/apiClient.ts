@@ -8,6 +8,7 @@ import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
 import { deleteCookie, setCookie } from './cookie';
 import { redirectToLogin } from './auth';
+import { saveTokensToNative } from './iosBridge';
 
 const API_URL = import.meta.env.VITE_API_PATH;
 
@@ -104,8 +105,17 @@ export default class APIClient {
       .then((result) => {
         setCookie('AUTH_TOKEN_KEY', result.token);
         useTokenStore.getState().setToken(result.token);
+
+        if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
+          const currentRefreshToken = useTokenStore.getState().refreshToken || refreshToken;
+          saveTokensToNative(result.token, currentRefreshToken);
+        }
       })
       .catch(() => {
+        if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
+          useTokenStore.getState().setToken('');
+          useTokenStore.getState().setRefreshToken('');
+        }
         redirectToLogin();
       })
       .finally(() => {
@@ -159,6 +169,19 @@ export default class APIClient {
           }
         }
         redirectToLogin();
+      }
+      if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null && useTokenStore.getState().refreshToken) {
+        try {
+          await this.refreshAccessToken(useTokenStore.getState().refreshToken);
+          const retryResponse = await this.retryRequest(error);
+          return retryResponse;
+        } catch (retryError) {
+          useTokenStore.getState().setToken('');
+          useTokenStore.getState().setRefreshToken('');
+          redirectToLogin();
+
+          return null;
+        }
       }
     }
     return null;

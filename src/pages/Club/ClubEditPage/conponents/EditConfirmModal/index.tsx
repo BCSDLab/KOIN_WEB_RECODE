@@ -1,5 +1,7 @@
 import { NewClubData } from 'api/club/entity';
+import useClubDetail from 'pages/Club/ClubDetailPage/hooks/useClubdetail';
 import usePutClub from 'pages/Club/ClubEditPage/hooks/usePutClub';
+import { Dispatch, SetStateAction } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -7,9 +9,11 @@ import styles from './EditConfirmModal.module.scss';
 
 interface EditConfirmModalProps {
   closeModal: () => void;
-  formData: NewClubData;
+  formData?: NewClubData ;
   resetForm: () => void;
+  introduction?: string;
   type: string;
+  setIsEdit?: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function EditConfirmModal({
@@ -17,31 +21,57 @@ export default function EditConfirmModal({
   formData,
   resetForm,
   type,
+  introduction,
+  setIsEdit,
 }: EditConfirmModalProps) {
   const { id } = useParams();
   const { status, mutateAsync } = usePutClub(id);
   const logger = useLogger();
   const navigate = useNavigate();
+
+  const {
+    clubIntroductionEditStatus,
+    clubIntroductionEditMutateAsync,
+  } = useClubDetail(id);
+
   const handleSubmit = async () => {
-    await mutateAsync(formData);
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_category: 'click',
-      event_label: 'club_introduction_correction_save_confirm',
-      value: '저장하기',
-    });
+    if (formData) {
+      const submitData = {
+        ...formData,
+        phone_number: formData.phone_number?.replace(/-/g, '') || formData.phone_number,
+      };
+
+      await mutateAsync(submitData);
+    }
+    if (introduction && setIsEdit) {
+      await clubIntroductionEditMutateAsync({ introduction });
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_introduction_correction_save_confirm',
+        value: '저장하기',
+      });
+      setIsEdit(false);
+    }
     closeModal();
   };
   const handleCancelEdit = () => {
-    resetForm();
-    closeModal();
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_category: 'click',
-      event_label: 'club_introduction_correction_cancel_confirm',
-      value: '취소하기',
-    });
-    navigate(ROUTES.ClubDetail({ id, isLink: true }));
+    if (formData) {
+      resetForm();
+      closeModal();
+      navigate(ROUTES.ClubDetail({ id, isLink: true }));
+    }
+    if (introduction && setIsEdit) {
+      resetForm();
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_introduction_correction_cancel_confirm',
+        value: '취소하기',
+      });
+      closeModal();
+      setIsEdit(false);
+    }
   };
   return (
     <div
@@ -71,7 +101,14 @@ export default function EditConfirmModal({
           </div>
           <div className={styles['info-button-container']}>
             <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
-            <button className={styles['info-button__confirm']} type="button" onClick={handleSubmit} disabled={status === 'pending'}>확인</button>
+            <button
+              className={styles['info-button__confirm']}
+              type="button"
+              onClick={handleSubmit}
+              disabled={(status === 'pending') || (clubIntroductionEditStatus === 'pending')}
+            >
+              확인
+            </button>
           </div>
         </div>
         )}

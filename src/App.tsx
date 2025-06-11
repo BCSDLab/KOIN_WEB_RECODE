@@ -56,6 +56,7 @@ import MobileFindIdPhonePage from 'pages/Auth/FindIdPage/Mobile/PhonePage';
 import MobileFindIdResultPage from 'pages/Auth/FindIdPage/Mobile/ResultPage';
 import FindIdResultPage from 'pages/Auth/FindIdPage/PC/ResultPage';
 import ProtectedLostItemChatPage from 'pages/Articles/LostItemChatPage/ProtectedLostItemChatPage';
+import showToast from 'utils/ts/showToast';
 
 interface WrapperProps {
   title: string;
@@ -94,11 +95,27 @@ function App() {
 
   //ios 브릿지
   useEffect(() => {
+    // 앱 로드 시 토큰 요청 정의
+    const initializeTokens = async () => {
+      const tokens = await requestTokensFromNative();
+      if (tokens.access || tokens.refresh) {
+        setTokensFromNative(tokens.access, tokens.refresh);
+      }
+    };
+    if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+      // 네이티브에서 토큰을 전달받을 함수 등록
+      window.setTokens = setTokensFromNative;
 
-    window.setTokens = setTokensFromNative;
+      const currentPath = window.location.pathname;
+      if (!currentPath.startsWith('/auth')) {
+        initializeTokens();
+      }
+    }
 
     return () => {
-      delete window.setTokens;
+      if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+        delete window.setTokens;
+      }
     };
   }, []);
 

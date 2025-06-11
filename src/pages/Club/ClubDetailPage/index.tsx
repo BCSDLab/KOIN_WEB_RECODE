@@ -15,6 +15,7 @@ import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
+import EditConfirmModal from 'pages/Club/ClubEditPage/conponents/EditConfirmModal';
 import useClubDetail from './hooks/useClubdetail';
 import styles from './ClubDetailPage.module.scss';
 import useClubLikeMutation from './hooks/useClubLike';
@@ -28,7 +29,6 @@ export default function ClubDetailPage() {
   const {
     clubDetail,
     clubIntroductionEditStatus,
-    clubIntroductionEditMutateAsync,
   } = useClubDetail(id);
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
@@ -40,6 +40,11 @@ export default function ClubDetailPage() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isMandateModalOpen, openMandateModal, closeMandateModal] = useBooleanState(false);
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
+  const [isEditModalOpen, openEditModal, closeEditModal] = useBooleanState(false);
+
+  const [QnAType, setQnAType] = useState('');
+  const [introType, setintroType] = useState('');
+  const [replyId, setReplyId] = useState(-1);
 
   const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
 
@@ -82,25 +87,25 @@ export default function ClubDetailPage() {
   const debouncedToggleLike = useDebounce(handleToggleLike, 300);
 
   const handleIntroductionSave = async () => {
-    await clubIntroductionEditMutateAsync({ introduction });
     logger.actionEventClick({
       team: 'CAMPUS',
       event_category: 'click',
       event_label: 'club_introduction_correction_save',
       value: '저장',
     });
-    setIsEdit(false);
+    setintroType('confirm');
+    openEditModal();
   };
 
   const handleIntroductionCancel = () => {
-    setIntroduction(clubDetail.introduction);
     logger.actionEventClick({
       team: 'CAMPUS',
       event_category: 'click',
       event_label: 'club_introduction_correction_cancel',
       value: '취소',
     });
-    setIsEdit(false);
+    setintroType('cancel');
+    openEditModal();
   };
 
   const handleEditClick = async () => {
@@ -233,23 +238,29 @@ export default function ClubDetailPage() {
             {isMobile && (
             <button type="button" className={styles['club-detail__summary__like']} onClick={debouncedToggleLike}>
               {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
-              {clubDetail.likes}
+              {!clubDetail.is_like_hidden && clubDetail.likes}
             </button>
             )}
           </div>
           <div className={styles['club-detail__summary__row']}>
             분과:
-            {clubDetail.category}
-            {' '}
-            분과
+            <div>
+              {clubDetail.category}
+              {' '}
+              분과
+            </div>
           </div>
           <div className={styles['club-detail__summary__row']}>
             동아리 방 위치:
-            {clubDetail.location}
+            <div>
+              {clubDetail.location}
+            </div>
           </div>
           <div className={styles['club-detail__summary__row']}>
             동아리 소개:
-            {clubDetail.description}
+            <div>
+              {clubDetail.description}
+            </div>
           </div>
           <div className={styles['club-detail__summary__contacts']}>
             {clubDetail.instagram && (
@@ -341,17 +352,12 @@ export default function ClubDetailPage() {
                 </div>
               )}
             </div>
-            {!clubDetail.is_like_hidden && (
             <button type="button" className={styles['club-detail__like']} disabled={isPending} onClick={debouncedToggleLike}>
               {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
               <div className={styles['club-detail__like__text']}>
-                좋아요
-                {' '}
-                {clubDetail.likes || 0}
-                개
+                {!clubDetail.is_like_hidden && `좋아요 ${clubDetail.likes || 0} 개`}
               </div>
             </button>
-            )}
           </div>
         )}
       </div>
@@ -427,12 +433,16 @@ export default function ClubDetailPage() {
           clubId={id}
           isManager={clubDetail.manager}
           openAuthModal={openAuthModal}
+          setQnA={setQnAType}
+          setReplyId={setReplyId}
         />
       )}
       {isModalOpen && (
         <CreateQnAModal
           closeModal={closeModal}
           clubId={id}
+          type={QnAType}
+          replyId={replyId}
         />
       )}
       {
@@ -447,6 +457,15 @@ export default function ClubDetailPage() {
       {
         isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
       }
+      {isEditModalOpen && (
+      <EditConfirmModal
+        closeModal={closeEditModal}
+        type={introType}
+        introduction={clubDetail.introduction}
+        setIsEdit={setIsEdit}
+        resetForm={() => setIntroduction(clubDetail.introduction)}
+      />
+      )}
       {
         navType === 'Q&A' && (
           <div className={styles['up-floating-button__container']}>
