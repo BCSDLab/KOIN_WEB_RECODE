@@ -59,7 +59,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
-    if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null && ROUTES.Club()) {
+    if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null && (pathname === ROUTES.Club())) {
       backButtonTapped();
     }
 
