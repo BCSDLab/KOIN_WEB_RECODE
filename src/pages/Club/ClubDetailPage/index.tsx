@@ -252,15 +252,15 @@ export default function ClubDetailPage() {
           </div>
           <div className={styles['club-detail__summary__row']}>
             동아리 방 위치:
-            <div>
-              {clubDetail.location}
-            </div>
+            {' '}
+            {' '}
+            {clubDetail.location}
           </div>
           <div className={styles['club-detail__summary__row']}>
             동아리 소개:
-            <div>
-              {clubDetail.description}
-            </div>
+            {' '}
+            {' '}
+            {clubDetail.description}
           </div>
           <div className={styles['club-detail__summary__contacts']}>
             {clubDetail.instagram && (
@@ -461,7 +461,7 @@ export default function ClubDetailPage() {
       <EditConfirmModal
         closeModal={closeEditModal}
         type={introType}
-        introduction={clubDetail.introduction}
+        introduction={introduction}
         setIsEdit={setIsEdit}
         resetForm={() => setIntroduction(clubDetail.introduction)}
       />
