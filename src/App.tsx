@@ -84,25 +84,27 @@ function Wrapper({
 function App() {
   //ios 브릿지
   useEffect(() => {
-    // 네이티브에서 토큰을 전달받을 함수 등록
-    window.setTokens = setTokensFromNative;
-
-    // 앱 로드 시 토큰 요청
+    // 앱 로드 시 토큰 요청 정의
     const initializeTokens = async () => {
-      try {
-        const tokens = await requestTokensFromNative();
-        if (tokens.access || tokens.refresh) {
-          setTokensFromNative(tokens.access, tokens.refresh);
-        }
-      } catch (error) {
-        console.log('초기 토큰 로드 실패:', error);
+      const tokens = await requestTokensFromNative();
+      if (tokens.access || tokens.refresh) {
+        setTokensFromNative(tokens.access, tokens.refresh);
       }
     };
+    if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+      // 네이티브에서 토큰을 전달받을 함수 등록
+      window.setTokens = setTokensFromNative;
 
-    initializeTokens();
+      const currentPath = window.location.pathname;
+      if (!currentPath.startsWith('/auth')) {
+        initializeTokens();
+      }
+    }
 
     return () => {
-      delete window.setTokens;
+      if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+        delete window.setTokens;
+      }
     };
   }, []);
 
