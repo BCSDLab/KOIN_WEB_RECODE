@@ -54,15 +54,19 @@
       -webkit-line-clamp: 1;
       line-clamp: 1;
       overflow: hidden;
-      white-space: normal;
+      white-space: nowrap;
       text-overflow: ellipsis;
+      line-height: 22px;
+      height: 22px;
     }
 
     & > tr {
       padding: 4px 12px;
-      height: 22px;
       vertical-align: middle;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     & > tr > td:nth-child(1) {
