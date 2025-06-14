@@ -10,6 +10,7 @@
   border-radius: 16px;
   background-color: #fff;
   padding: 12px 26.5px;
+  min-width: 0;
 
   &__button {
     font-family: Pretendard, sans-serif;
@@ -69,5 +70,6 @@
     font-size: 16px;
     line-height: 25.6px;
     letter-spacing: 0%;
+    min-width: 0;
   }
 }
