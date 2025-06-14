@@ -168,7 +168,15 @@ function App() {
               <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<FindIdEmailPage />} />} />
               <Route path={ROUTES.IDResult()} element={<Wrapper title="아이디 찾기 - 결과" element={<FindIdResultPage />} />} />
             </Route>)}
-          {!isMobile && <Route path={ROUTES.AuthFindPW({ isLink: false })} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} />}
+          {!isMobile && (
+            <>
+              <Route path="/auth/findpw" element={<Navigate replace to="/auth/findpw/계정인증" />} />
+              <Route
+                path="/auth/findpw/:step"
+                element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />}
+              />
+            </>
+          )}
         </Route>
 
         <Route path={ROUTES.Auth()} element={<AuthPage />}>
