@@ -61,7 +61,6 @@ function PCVerifyPhone({
       login_id: loginId,
     }, {
       onSuccess: () => {
-        // 아이디가 존재할 경우, 아이디-휴대폰 일치 여부 확인
         setContactType('PHONE');
         checkIdMatchPhone({
           login_id: loginId,
