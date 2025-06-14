@@ -4,7 +4,6 @@
 .layout {
   padding: 10px 0;
   display: flex;
-  justify-content: center;
 }
 /* stylelint-disable selector-pseudo-class-no-unknown */
 :global {
@@ -24,16 +23,6 @@
   }
   .ql-editor em {
     font-style: italic !important;
-  }
-
-  .ql-bubble {
-    width: 100%;
-    border: 1px solid #ccc;
-    img {
-      max-width: 100%;
-      height: auto;
-      object-fit: contain;
-    }
   }
 }
 /* stylelint-enable selector-pseudo-class-no-unknown */

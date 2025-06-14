@@ -9,8 +9,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
-import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './IndexClub.module.scss';
 import ClubMobileViewB from './ClubMobileViewB';
 
@@ -47,7 +45,6 @@ function IndexClub() {
   const ABView = useABTestView('a_main_club_ui', token);
   const logger = useLogger();
   const isMobile = useMediaQuery();
-  const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
 
   const handleClickLog = (key : string) => {
     if (key === 'clubList') {
@@ -122,14 +119,7 @@ function IndexClub() {
               to={link}
               key={key}
               className={styles.card}
-              onClick={(e) => {
-                if (!token && key === 'addClub') {
-                  e.preventDefault();
-                  openAuthModal();
-                } else {
-                  handleClickLog(key);
-                }
-              }}
+              onClick={() => handleClickLog(key)}
             >
               <div className={styles.card__segment}>
                 {icon ?? <img src={img} alt="title" /> }
@@ -147,9 +137,6 @@ function IndexClub() {
           ))}
         </div>
       )}
-      {
-        isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
-      }
     </section>
   );
 }

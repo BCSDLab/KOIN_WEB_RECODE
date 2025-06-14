@@ -24,7 +24,8 @@
     justify-content: center;
 
     @include media.media-breakpoint(mobile) {
-      margin: 0 24px;
+      min-width: 360px;
+      margin: 80px auto;
     }
   }
 
@@ -33,8 +34,8 @@
     margin-bottom: 40px;
 
     @include media.media-breakpoint(mobile) {
-      margin-bottom: 32px;
-      align-self: flex-start;
+      margin-bottom: 60px;
+      margin-right: 17px;
     }
   }
 
@@ -59,11 +60,16 @@
     @include media.media-breakpoint(mobile) {
       top: 15px;
       left: 10px;
+    }
+  }
 
-      img {
-        width: 30px;
-        height: 30px;
-      }
+  &__left-arrow-image {
+    width: 35px;
+    height: 35px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 30px;
+      height: 30px;
     }
   }
 }

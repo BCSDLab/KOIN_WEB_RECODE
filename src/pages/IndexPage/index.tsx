@@ -16,7 +16,7 @@ function IndexPage() {
     <Suspense fallback={null}>
       <main className={styles.template}>
         <Suspense fallback={null}>
-          <Banner categoryId={bannerCategory.id} />
+          <Banner categoryName={bannerCategory.name} categoryId={bannerCategory.id} />
         </Suspense>
         <div className={styles['left-container']}>
           <IndexStore />

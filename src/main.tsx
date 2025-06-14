@@ -28,6 +28,7 @@ const queryClient = new QueryClient({
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
+
 declare global {
   interface Window {
     webkit?: {
@@ -35,12 +36,8 @@ declare global {
         [name: string]: { postMessage(body: unknown): void };
       };
     };
-    onNativeCallback?: (callbackId: string, result: any) => void;
+    onNativeCallback?: (id: string, value: string) => void;
     setTokens?: (access: string, refresh: string) => void;
-    NativeBridge?: {
-      call: (methodName: string, ...args: any[]) => Promise<any>;
-      handleCallback: (callbackId: string, result: any) => void;
-    };
   }
 }
 

@@ -30,7 +30,7 @@
   }
 
   &__service {
-    margin-right: 44px;
+    margin-right: 48px;
 
     &:last-child {
       margin-right: 0;
@@ -110,10 +110,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
-    &:hover {
-      font-weight: bold;
-    }
 
     & > a {
       color: currentcolor;

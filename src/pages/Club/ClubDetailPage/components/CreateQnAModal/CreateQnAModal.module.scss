@@ -122,19 +122,4 @@
       font-size: 15px;
     }
   }
-
-  &__delete {
-    width: 100%;
-    border-radius: 4px;
-    padding: 6px 12px;
-    background: #eb6f70;
-    cursor: pointer;
-    color: #fff;
-    font-family: Pretendard, sans-serif;
-    font-size: 22px;
-
-    @include media.media-breakpoint(mobile) {
-      font-size: 15px;
-    }
-  }
 }

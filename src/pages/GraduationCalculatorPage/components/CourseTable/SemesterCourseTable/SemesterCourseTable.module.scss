@@ -63,9 +63,6 @@
       height: 22px;
       vertical-align: middle;
       text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     & > tr > td:nth-child(1) {
@@ -73,7 +70,6 @@
 
       & div {
         justify-content: flex-start;
-        text-align: left;
       }
     }
 

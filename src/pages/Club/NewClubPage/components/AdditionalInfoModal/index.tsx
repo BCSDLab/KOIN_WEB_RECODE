@@ -36,13 +36,7 @@ export default function AdditionalInfoModal({
       event_label: 'club_create_request_authority',
       value: `${formData.role}`,
     });
-
-    const submitData = {
-      ...formData,
-      phone_number: formData.phone_number?.replace(/-/g, '') || formData.phone_number,
-    };
-
-    await mutateAsync(submitData);
+    await mutateAsync(formData);
     closeModal();
   };
   return (

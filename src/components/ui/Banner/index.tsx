@@ -62,12 +62,13 @@ function BannerCard({
 }
 
 interface BannerProps {
+  categoryName: string;
   categoryId: number;
 }
 
 const HIDE_BANNER_DURATION_DAYS = 7;
 
-function Banner({ categoryId }: BannerProps) {
+function Banner({ categoryName, categoryId }: BannerProps) {
   const isMobile = useMediaQuery();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const logger = useLogger();
@@ -75,7 +76,7 @@ function Banner({ categoryId }: BannerProps) {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentBanner = bannersData.banners[currentPageIndex];
   const [isModalOpen, , closeModal] = useBooleanState((
-    getCookie('HIDE_BANNER') !== `modal_category_${categoryId}`
+    getCookie('HIDE_BANNER') !== categoryName
     && bannersData.count !== 0
   ));
 
@@ -131,9 +132,7 @@ function Banner({ categoryId }: BannerProps) {
       event_label: 'main_modal_hide_7d',
       value: `${currentBanner.title}`,
     });
-    if (categoryId === 1) {
-      setCookie('HIDE_BANNER', `modal_category_${categoryId}`, HIDE_BANNER_DURATION_DAYS);
-    }
+    setCookie('HIDE_BANNER', categoryName, HIDE_BANNER_DURATION_DAYS);
     closeModal();
   };
 
