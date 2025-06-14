@@ -47,6 +47,16 @@ import ReportPage from 'pages/Articles/ReportPage';
 import ClubEditPage from 'pages/Club/ClubEditPage';
 import { useTokenStore } from 'utils/zustand/auth';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import FindIdPage from 'pages/Auth/FindIdPage';
+import FindIdEmailPage from 'pages/Auth/FindIdPage/PC/EmailPage';
+import FindIdPhonePage from 'pages/Auth/FindIdPage/PC/PhonePage';
+import MobileFindIdEmailPage from 'pages/Auth/FindIdPage/Mobile/EmailPage';
+import MobileFindIdPhonePage from 'pages/Auth/FindIdPage/Mobile/PhonePage';
+import MobileFindIdResultPage from 'pages/Auth/FindIdPage/Mobile/ResultPage';
+import FindIdResultPage from 'pages/Auth/FindIdPage/PC/ResultPage';
+import ProtectedLostItemChatPage from 'pages/Articles/LostItemChatPage/ProtectedLostItemChatPage';
+import showToast from 'utils/ts/showToast';
 
 interface WrapperProps {
   title: string;
@@ -81,14 +91,31 @@ function Wrapper({
 }
 
 function App() {
+  const isMobile = useMediaQuery();
+
   //ios 브릿지
   useEffect(() => {
+    // 앱 로드 시 토큰 요청 정의
+    const initializeTokens = async () => {
+      const tokens = await requestTokensFromNative();
+      if (tokens.access || tokens.refresh) {
+        setTokensFromNative(tokens.access, tokens.refresh);
+      }
+    };
+    if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+      // 네이티브에서 토큰을 전달받을 함수 등록
+      window.setTokens = setTokensFromNative;
 
-    window.setTokens = setTokensFromNative;
-
+      const currentPath = window.location.pathname;
+      if (!currentPath.startsWith('/auth')) {
+        initializeTokens();
+      }
+    }
 
     return () => {
-      delete window.setTokens;
+      if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+        delete window.setTokens;
+      }
     };
   }, []);
 
@@ -131,17 +158,34 @@ function App() {
           </Route>
           <Route path={ROUTES.LostItemFound()} element={<Wrapper title="습득물 글쓰기" element={<LostItemWritePage />} />} />
           <Route path={ROUTES.LostItemLost()} element={<Wrapper title="분실물 글쓰기" element={<LostItemWritePage />} />} />
-          <Route path={ROUTES.LostItemChat()} element={<Wrapper needAuth title="분실물 쪽지" element={<LostItemChatPage />} />} />
+          <Route path={ROUTES.LostItemChat()} element={<Wrapper needAuth title="분실물 쪽지" element={<ProtectedLostItemChatPage />} />} />
           <Route path={ROUTES.CampusInfo()} element={<Wrapper title="교내 시설물 정보" element={<CampusInfo />} />} />
+          {!isMobile && <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />}
+          {!isMobile && <Route path={ROUTES.AuthSignup({ isLink: false })} element={<Wrapper title="회원가입" element={<SignupPage />} />} />}
+          {!isMobile && (
+            <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage />} />}>
+              <Route path={ROUTES.Phone()} element={<Wrapper title="아이디 찾기 - 전화번호" element={<FindIdPhonePage />} />} />
+              <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<FindIdEmailPage />} />} />
+              <Route path={ROUTES.IDResult()} element={<Wrapper title="아이디 찾기 - 결과" element={<FindIdResultPage />} />} />
+            </Route>)}
         </Route>
 
         <Route path={ROUTES.Auth()} element={<AuthPage />}>
           <Route index element={<Wrapper title="로그인" element={<LoginPage />} />} />
-          <Route path={ROUTES.AuthSignup()} element={<Wrapper title="회원가입" element={<SignupPage />} />} />
-          <Route path={ROUTES.AuthFindPW()} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} />
+          {isMobile && <Route path={ROUTES.AuthSignup({ isLink: false })} element={<Wrapper title="회원가입" element={<SignupPage />} />} />}
+          {isMobile && <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />}
+          {isMobile && (
+            <Route path={ROUTES.AuthFindID()} element={<Wrapper title="아이디 찾기" element={<FindIdPage />} />}>
+              <Route path={ROUTES.Phone()} element={<Wrapper title="아이디 찾기 - 전화번호" element={<MobileFindIdPhonePage />} />} />
+              <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<MobileFindIdEmailPage />} />} />
+              <Route path={ROUTES.IDResult()} element={<Wrapper title="아이디 찾기 - 결과" element={<MobileFindIdResultPage />} />} />
+            </Route>)}
+          <Route path={ROUTES.AuthFindPW({ isLink: false })} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} />
+          {/* <Route path={ROUTES.AuthFindPW()} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} /> */}
+          <Route path={ROUTES.Auth()} element={<AuthPage />}>
+          </Route>
           <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />
         </Route>
-
         <Route path={ROUTES.Webview()}>
           <Route path={ROUTES.WebviewCampusInfo()} element={<Wrapper title="코인 - 교내 시설물 정보" element={<CampusInfo />} />} />
         </Route>

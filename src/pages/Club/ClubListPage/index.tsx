@@ -95,6 +95,7 @@ function ClubListPage() {
     e: React.MouseEvent<HTMLButtonElement>,
     isLiked: boolean,
     clubId: number,
+    name: string,
   ) => {
     e.stopPropagation();
     if (!token) {
@@ -104,6 +105,21 @@ function ClubListPage() {
         />
       ));
       return;
+    }
+    if (isLiked) {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_main_like_cancel',
+        value: name,
+      });
+    } else {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_main_like',
+        value: name,
+      });
     }
     clubLikeMutate({
       token,
@@ -191,11 +207,11 @@ function ClubListPage() {
                   <div className={styles['card__info-likes']}>
                     <button
                       type="button"
-                      onClick={(e) => handleLikeClick(e, club.is_liked, club.id)}
+                      onClick={(e) => handleLikeClick(e, club.is_liked, club.id, club.name)}
                     >
                       {club.is_liked ? <HeartFilled /> : <HeartOutline />}
                     </button>
-                    <p>{club.likes}</p>
+                    <p>{!club.is_like_hidden && club.likes}</p>
                   </div>
                 </div>
                 <img

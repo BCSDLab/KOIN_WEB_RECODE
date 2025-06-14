@@ -13,6 +13,7 @@ import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
 import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import ROUTES from 'static/routes';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
+import { backButtonTapped } from 'utils/ts/iosBridge';
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
@@ -58,6 +59,10 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
+    if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null && (pathname === ROUTES.Club())) {
+      backButtonTapped();
+    }
+
     navigate(-1);
   };
 

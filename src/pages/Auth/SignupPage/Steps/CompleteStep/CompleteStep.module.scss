@@ -1,0 +1,116 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  font-family: Pretendard, sans-serif;
+  align-items: center;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    height: calc(100% - 40px);
+    font-family: Pretendard, sans-serif;
+    align-items: center;
+  }
+}
+
+.logo {
+  width: 96px;
+  height: 56px;
+  margin: 100px auto 24px;
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    width: 96px;
+    height: 56px;
+    margin: 100px auto 24px;
+  }
+}
+
+.title {
+  color: #175c8e;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  margin-top: 80px;
+  margin-bottom: 24px;
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 160%;
+    margin-top: 0;
+    margin-bottom: 57px;
+    color: #000;
+  }
+}
+
+.button-container {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    align-items: center;
+  }
+
+  &__button {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      width: calc(100% - 48px);
+      height: 48px;
+      padding: 12px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 160%;
+    }
+
+    &--orange {
+      @include media.media-breakpoint(mobile) {
+        background-color: #f7941e;
+      }
+    }
+
+    &--blue {
+      @include media.media-breakpoint(mobile) {
+        background-color: #175c8e;
+      }
+    }
+  }
+}
+
+.subTitle-container {
+  display: flex;
+  flex-direction: column;
+  color: #858585;
+  text-align: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  margin-bottom: 80px;
+}
+
+.button-login-navigate {
+  width: 320px;
+  height: 64px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  background-color: #175c8e;
+  color: #fff;
+  border-radius: 16px;
+  text-align: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+}

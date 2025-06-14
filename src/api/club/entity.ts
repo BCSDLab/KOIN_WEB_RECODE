@@ -16,6 +16,7 @@ export interface Club {
   likes: number;
   image_url: string;
   is_liked: boolean;
+  is_like_hidden:boolean;
 }
 
 export interface ClubListResponse extends APIResponse {
