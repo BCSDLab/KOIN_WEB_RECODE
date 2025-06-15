@@ -11,7 +11,7 @@ interface MobileFindPasswordProps {
 }
 
 function MobileVerifyEmail({ onNext, setContactType }: MobileFindPasswordProps) {
-  const { control, setValue } = useFormContext();
+  const { control } = useFormContext();
 
   const loginId = useWatch({ control, name: 'loginId' });
   const email = useWatch({ control, name: 'email' });
@@ -115,7 +115,6 @@ function MobileVerifyEmail({ onNext, setContactType }: MobileFindPasswordProps) 
                     stopTimer();
                     setIncorrect();
                     setVerificationMessage(null);
-                    setValue('email', '');
                   }}
                   buttonOnClick={() => {
                     checkEmailExists({ email });
