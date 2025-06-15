@@ -1,5 +1,5 @@
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
@@ -41,12 +41,6 @@ function FindPasswordPage() {
   const { step } = useParams<{ step: StepTitle }>();
   const navigate = useNavigate();
   const [contactType, setContactType] = useState<ContactType>('PHONE');
-
-  useEffect(() => {
-    if (step === '비밀번호변경' || step === '완료') {
-      navigate(ROUTES.AuthFindPW({ step: '계정인증', isLink: true }), { replace: true });
-    }
-  }, [step, navigate]);
 
   const methods = useForm({
     mode: 'onChange',
