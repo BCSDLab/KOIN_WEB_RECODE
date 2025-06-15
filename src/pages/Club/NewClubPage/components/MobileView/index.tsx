@@ -150,6 +150,8 @@ export default function MobileView({
               <div className={styles['form-image__label-text']}>
                 <div>클릭하여 사진을</div>
                 <div>업로드해주세요.</div>
+                <br />
+                <div>1:1 비율로 업로드 해주세요</div>
               </div>
             </label>
             {!formData.image_url && <ClubInputErrorCondition />}
@@ -277,7 +279,7 @@ export default function MobileView({
           <input
             className={styles['form__text-input']}
             value={formData.instagram}
-            placeholder="인스타 계정 주소를 입력해주세요.(선택)"
+            placeholder="인스타 아이디를 입력해주세요.(선택)"
             onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
           />
         </div>
@@ -301,15 +303,25 @@ export default function MobileView({
         </div>
         <div className={styles['form-contact']}>
           <div className={styles['form-label']}>전화번호:</div>
-          <input
-            className={styles['form__text-input']}
-            value={formData.phone_number}
-            placeholder="대표자 전화번호를 입력해주세요.(선택)"
-            onChange={(e) => setFormData((prev) => ({
-              ...prev,
-              phone_number: addHyphen(e.target.value),
-            }))}
-          />
+          <div className={styles['form-contact__wrapper']}>
+            <input
+              className={cn({
+                [styles['form__text-input']]: true,
+                [styles['form__text-input--error']]: !formData.phone_number,
+              })}
+              value={formData.phone_number}
+              placeholder="대표자 전화번호를 입력해주세요.(필수)"
+              onChange={(e) => setFormData((prev) => ({
+                ...prev,
+                phone_number: addHyphen(e.target.value),
+              }))}
+            />
+            {!formData.phone_number && (
+              <div className={styles['error-container']}>
+                <ClubInputErrorCondition />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

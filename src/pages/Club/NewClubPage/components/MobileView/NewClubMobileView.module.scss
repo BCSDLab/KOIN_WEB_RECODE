@@ -255,7 +255,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
   gap: 10px;
+
+  &__wrapper {
+    flex: 1;
+    position: relative;
+    max-width: 270px;
+  }
+}
+
+.error-container {
+  position: absolute;
+  left: 0;
+  top: 85%;
 }
 
 .form-contact .form__text-input {

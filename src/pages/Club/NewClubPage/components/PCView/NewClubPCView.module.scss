@@ -146,6 +146,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  position: relative;
+
+  &__wrapper {
+    flex: 1;
+    position: relative;
+    max-width: 390px;
+  }
+}
+
+.error-container {
+  position: absolute;
+  left: 0;
+  top: 100%;
 }
 
 .form-contact .form__text-input {
