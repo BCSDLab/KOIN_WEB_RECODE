@@ -145,6 +145,7 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
           />
         </div>
 
+        {isVerificationSent && (
         <div className={styles['verify-wrapper']}>
           <h1 className={styles['verify-wrapper__header']}>인증 번호</h1>
           <Controller
@@ -166,18 +167,20 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
                 buttonOnClick={() => onClickSendVerificationButton()}
               >
                 {verificationMessage?.type === 'default' && (
-                  <button
-                    className={styles['label-link-button']}
-                    type="button"
-                    onClick={goToEmailStep}
-                  >
-                    이메일로 찾기
-                  </button>
+                <button
+                  className={styles['label-link-button']}
+                  type="button"
+                  onClick={goToEmailStep}
+                >
+                  이메일로 찾기
+                </button>
                 )}
               </CustomInput>
             )}
           />
         </div>
+        )}
+
       </div>
 
       <button
