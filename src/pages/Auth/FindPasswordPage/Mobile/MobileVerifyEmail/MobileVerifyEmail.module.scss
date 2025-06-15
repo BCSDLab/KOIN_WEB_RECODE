@@ -1,0 +1,109 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 40px);
+    margin: 64px auto 0;
+    font-family: Pretendard, sans-serif;
+    justify-content: space-between;
+  }
+}
+
+.form-container {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.id-wrapper,
+.verify-wrapper {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: start;
+    gap: 16px;
+  }
+
+  &__header {
+    @include media.media-breakpoint(mobile) {
+      display: flex;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 160%;
+    }
+  }
+}
+
+.next-button {
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 326px;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: #175c8e;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 160%;
+
+    &:disabled {
+      background: #e1e1e1;
+      color: #4b4b4b;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.label-count-number {
+  color: #727272;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 160%;
+  margin-left: 8px;
+}
+
+.label-link-button {
+  color: #175c8e;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 160%;
+  margin-left: 8px;
+}
+
+.email-navigate {
+  display: flex;
+  position: absolute;
+  width: 100%;
+
+  &__text {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #727272;
+  }
+
+  &__link {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #175c8e;
+    margin-left: 8px;
+  }
+}

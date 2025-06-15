@@ -99,8 +99,8 @@ function FindPasswordPage() {
             {isMobile ? (
               <MobileVerifyPhone
                 onNext={() => nextStep('비밀번호변경')}
-                onBack={goBack}
                 goToEmailStep={() => nextStep('이메일인증')}
+                setContactType={setContactType}
               />
             ) : (
               <PCVerifyPhone
@@ -114,7 +114,7 @@ function FindPasswordPage() {
 
           <Step step={step} name="이메일인증">
             {isMobile ? (
-              <MobileVerifyEmail onNext={() => nextStep('비밀번호변경')} onBack={goBack} />
+              <MobileVerifyEmail onNext={() => nextStep('비밀번호변경')} setContactType={setContactType} />
             ) : (
               <PCVerifyEmail onNext={() => nextStep('비밀번호변경')} onBack={goBack} setContactType={setContactType} />
             )}
@@ -122,7 +122,7 @@ function FindPasswordPage() {
 
           <Step step={step} name="비밀번호변경">
             {isMobile ? (
-              <MobileResetPassword onNext={() => nextStep('완료')} onBack={goBack} />
+              <MobileResetPassword onNext={() => nextStep('완료')} onBack={goBack} contactType={contactType} />
             ) : (
               <PCResetPasswordPhone onNext={() => nextStep('완료')} onBack={goBack} contactType={contactType} />
             )}
