@@ -153,7 +153,21 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
             name="name"
             control={control}
             defaultValue=""
-            render={({ field }) => (
+            rules={{
+              required: '이름은 필수 항목입니다.',
+              validate: (value) => {
+                if (/^[가-힣]+$/.test(value)) {
+                  return (value.length >= 2 && value.length <= 5) || '한글 이름은 2~5자여야 합니다.';
+                }
+
+                if (/^[a-zA-Z\s]+$/.test(value)) {
+                  return (value.length >= 2 && value.length <= 30) || '영문 이름은 2~30자여야 합니다.';
+                }
+
+                return '한글 또는 영문만 입력 가능합니다.';
+              },
+            }}
+            render={({ field, fieldState }) => (
               <PCCustomInput
                 {...field}
                 htmlFor="name"
@@ -161,6 +175,11 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                 placeholder="이름을 입력해 주세요."
                 isDelete
                 isRequired
+                message={
+                  fieldState.error?.message
+                    ? { type: 'warning', content: fieldState.error.message }
+                    : null
+                }
               />
             )}
           />
