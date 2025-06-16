@@ -5,7 +5,8 @@
   flex-direction: column;
   font-family: Pretendard, sans-serif;
   align-items: center;
-  gap: 36px;
+  gap: 80px;
+  margin: 240px 0 300px;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
@@ -25,7 +26,8 @@
 .title-container {
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 24px;
+  height: 100px;
 }
 
 .title {
@@ -33,8 +35,6 @@
   text-align: center;
   font-size: 30px;
   font-weight: 700;
-  margin-top: 80px;
-  margin-bottom: 24px;
 
   @include media.media-breakpoint(mobile) {
     color: #175c8e;

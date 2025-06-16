@@ -106,7 +106,7 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
           >
             <BackIcon />
           </button>
-          <h1 className={styles.container__title}>비밀번호 찾기</h1>
+          <h1 className={styles.container__title}>비밀번호 변경</h1>
         </div>
       </div>
 
