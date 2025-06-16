@@ -115,6 +115,7 @@ export default class APIClient {
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
           useTokenStore.getState().setToken('');
           useTokenStore.getState().setRefreshToken('');
+          return;
         }
         redirectToLogin();
       })
@@ -164,24 +165,14 @@ export default class APIClient {
             const retryResponse = await this.retryRequest(error);
             return retryResponse;
           } catch (retryError) {
-            redirectToLogin();
+            if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
+              useTokenStore.getState().setToken('');
+              useTokenStore.getState().setRefreshToken('');
+            } else redirectToLogin();
             return null;
           }
         }
         redirectToLogin();
-      }
-      if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null && useTokenStore.getState().refreshToken) {
-        try {
-          await this.refreshAccessToken(useTokenStore.getState().refreshToken);
-          const retryResponse = await this.retryRequest(error);
-          return retryResponse;
-        } catch (retryError) {
-          useTokenStore.getState().setToken('');
-          useTokenStore.getState().setRefreshToken('');
-          redirectToLogin();
-
-          return null;
-        }
       }
     }
     return null;
