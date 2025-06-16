@@ -1,6 +1,7 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import {
+  checkPhone,
   idExists,
   idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify,
 } from 'api/auth';
@@ -14,6 +15,7 @@ import ROUTES from 'static/routes';
 import useCountdownTimer from 'pages/Auth/SignupPage/hooks/useCountdownTimer';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
+import { SmsSendResponse } from 'api/auth/entity';
 
 interface UsePhoneVerificationProps {
   phoneNumber: string;
@@ -69,7 +71,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
   });
 
   const { mutate: checkPhoneExists } = useMutation({
-    mutationFn: phoneExists,
+    mutationFn: phoneExists, // 아이디, 비밀번호 찾기 때 사용되는 api
     onSuccess: () => {
       sendVerificationSms({ phone_number: phoneNumber });
       // setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
@@ -96,6 +98,53 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
         if (err.status === 400) setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
 
         if (err.status === 404) setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
+      }
+    },
+  });
+
+  const { mutate: sendSMSToUser } = useMutation({
+    mutationFn: smsSend,
+    onSuccess: (data: SmsSendResponse) => {
+      setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
+      runTimer();
+      // setShowVerificationField(true);
+      setSmsSendCount(data.remaining_count);
+
+      setSmsSendCount(data.remaining_count);
+
+      // if (data.remaining_count < 5) {
+      //   setButtonText('인증번호 재발송');
+      // } else {
+      //   setButtonText('인증번호 발송');
+      // }
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+        }
+        if (err.status === 429) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
+        }
+      }
+    },
+  });
+
+  const { mutate: checkPhoneNumber } = useMutation({
+    mutationFn: checkPhone, // 회원가입 할 때 사용되는 api
+    onSuccess: () => {
+      // setIsCodeCorrect(false);
+      sendSMSToUser({ phone_number: phoneNumber });
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+        }
+
+        if (err.status === 409) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
+        }
       }
     },
   });
@@ -154,6 +203,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     checkIdMatchPhone,
     idMessage,
     setIdMessage,
+    checkPhoneNumber,
   };
 }
 
