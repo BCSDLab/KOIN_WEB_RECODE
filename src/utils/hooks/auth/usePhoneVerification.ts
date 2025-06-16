@@ -74,7 +74,6 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     mutationFn: phoneExists, // 아이디, 비밀번호 찾기 때 사용되는 api
     onSuccess: () => {
       sendVerificationSms({ phone_number: phoneNumber });
-      // setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -107,16 +106,9 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     onSuccess: (data: SmsSendResponse) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
-      // setShowVerificationField(true);
       setSmsSendCount(data.remaining_count);
 
       setSmsSendCount(data.remaining_count);
-
-      // if (data.remaining_count < 5) {
-      //   setButtonText('인증번호 재발송');
-      // } else {
-      //   setButtonText('인증번호 발송');
-      // }
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -133,7 +125,6 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
   const { mutate: checkPhoneNumber } = useMutation({
     mutationFn: checkPhone, // 회원가입 할 때 사용되는 api
     onSuccess: () => {
-      // setIsCodeCorrect(false);
       sendSMSToUser({ phone_number: phoneNumber });
     },
     onError: (err) => {
