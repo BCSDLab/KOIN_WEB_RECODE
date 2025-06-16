@@ -7,6 +7,8 @@ import { UserType, GENDER_OPTIONS } from 'static/auth';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
+import ROUTES from 'static/routes';
+import { useNavigate } from 'react-router-dom';
 import PCCustomInput from '../../components/PCCustomInput';
 import styles from './VerificationStep.module.scss';
 
@@ -17,6 +19,7 @@ interface VerificationProps {
 }
 
 function Verification({ onNext, onBack, setUserType }: VerificationProps) {
+  const navigate = useNavigate();
   const { control, register, setValue } = useFormContext();
   const name = useWatch({ control, name: 'name' });
   const gender = useWatch({ control, name: 'gender' });
@@ -53,6 +56,10 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   && phoneNumber
   && verificationCode
   && isCodeCorrect;
+
+  const goToLogin = () => {
+    navigate(ROUTES.Auth());
+  };
 
   const handleStudentClick = () => {
     setUserType('학생');
@@ -185,12 +192,32 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       /5)
                     </div>
                     )}
+                    {phoneMessage?.type === 'error' && phoneMessage.code === 'ALREADY_REGISTERED' && (
+                    <>
+                      <button
+                        onClick={goToLogin}
+                        type="button"
+                        className={styles['label-link-button']}
+                      >
+                        로그인하기
+                      </button>
+                      <span className={styles['label-link-split']}>|</span>
+                      <a
+                        href="https://open.kakao.com/o/sgiYx4Qg"
+                        className={styles['label-link-wrapper__button']}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        문의하기
+                      </a>
+                    </>
+                    )}
                   </PCCustomInput>
                   <button
                     type="button"
                     onClick={() => {
                       checkPhoneNumber(phoneNumber);
-                      setButtonText('인증번호 재발송');
+                      setButtonText('인증번호 발송');
                     }}
                     className={styles['check-button']}
                     disabled={!field.value || isDisabled || isVerified}
