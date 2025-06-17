@@ -142,7 +142,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     const hashedPassword = await sha256(formData.password);
     const payload = {
       name: formData.name,
-      nickname: formData.nickname === '' ? null : formData.nickname,
+      nickname: formData.nickname?.trim() || null,
       email:
         !formData.email || formData.email.trim() === ''
           ? null
