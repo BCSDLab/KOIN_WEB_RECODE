@@ -202,6 +202,8 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       valid = '입력하신 비밀번호가 일치하지 않습니다.';
     } else if (password.length < 6 || password.length > 18) {
       valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
+    } else if (password.includes(' ') || passwordConfirmValue.includes(' ')) {
+      valid = '비밀번호에 공백이 포함될 수 없습니다.';
     } else if (!PASSWORD_REGEX.test(password)) {
       valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
     }
@@ -997,6 +999,7 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
     <div className={styles['form-input__label-wrapper']}>
       <label htmlFor="name" className={styles['form-input__label']}>
         이름
+        <span className={styles['form-input__required']}>*</span>
       </label>
       <input
         className={styles['form-input']}
@@ -1056,7 +1059,7 @@ function ModifyInfoDefaultPage() {
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
   const { mutate: deleteUser } = useUserDelete();
 
-  const { isValid } = useValidationContext();
+  const { isFormValid } = useValidationContext();
   const isAuthenticated = useAuthentication();
   const isMobile = useMediaQuery();
   const isStudent = isStudentUser(userInfo);
@@ -1151,6 +1154,7 @@ function ModifyInfoDefaultPage() {
           </>
         ) : (
           <>
+            <NameForm {...register('name')} />
             <PasswordForm {...register('password')} />
             <GenderInput {...register('gender')} />
             <PhoneInput {...register('phone-number')} />
@@ -1163,7 +1167,7 @@ function ModifyInfoDefaultPage() {
         <div className={styles.buttons__wrapper}>
           <button
             type="submit"
-            disabled={status === 'pending' || !Object.values(isValid).some((value) => value)}
+            disabled={status === 'pending' || !isFormValid}
             className={cn({
               [styles.modify__button]: true,
               [styles['modify__button--submit']]: true,
