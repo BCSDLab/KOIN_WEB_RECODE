@@ -25,3 +25,9 @@ export function redirectToMain(currentPath?: string) {
   setRedirectPath(pathToSave);
   window.location.href = ROUTES.Main();
 }
+
+export function redirectToClub(currentPath?: string) {
+  const pathToSave = currentPath || window.location.pathname;
+  setRedirectPath(pathToSave);
+  window.location.href = ROUTES.Club();
+}
