@@ -111,12 +111,12 @@ function App() {
         initializeTokens();
       }
     }
-
-    return () => {
-      if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
-        delete window.setTokens;
-      }
-    };
+    // window.setTokens 관련 오류 테스트
+    // return () => {
+    //   if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+    //     delete window.setTokens;
+    //   }
+    // };
   }, []);
 
   return (
