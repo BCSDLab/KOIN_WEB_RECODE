@@ -115,6 +115,7 @@ export default class APIClient {
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
           useTokenStore.getState().setToken('');
           useTokenStore.getState().setRefreshToken('');
+          saveTokensToNative('', ''); // 네이티브 상태도 동기화
           return;
         }
         redirectToLogin();
@@ -168,6 +169,7 @@ export default class APIClient {
             if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
               useTokenStore.getState().setToken('');
               useTokenStore.getState().setRefreshToken('');
+              saveTokensToNative('', ''); // 네이티브 상태도 동기화
             } else redirectToLogin();
             return null;
           }
