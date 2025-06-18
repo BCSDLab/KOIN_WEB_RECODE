@@ -1,5 +1,5 @@
 import React, {
-  Suspense, useEffect, useImperativeHandle, useState,
+  Suspense, useEffect, useImperativeHandle, useReducer, useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
@@ -32,6 +32,7 @@ import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
 import { ModifyFormValidationProvider, useValidationContext } from './hooks/useValidationContext';
+import { passwordValidationReducer } from './reducers/passwordReducer';
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
 
@@ -183,7 +184,11 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     password: false,
     passwordConfirm: false,
   });
-  const [validationMessage, setValidationMessage] = useState<string>('');
+
+  const [validationState, dispatchValidation] = useReducer(
+    passwordValidationReducer,
+    { message: '', isValid: false },
+  );
   const { isValid, setIsValid } = useValidationContext();
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
@@ -207,26 +212,73 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   }, [password, passwordConfirmValue]);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    const currentPassword = e.target.value;
-    if (currentPassword !== '' && currentPassword.length >= 6 && currentPassword.length <= 18) {
-      setValidationMessage('비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.');
+    const { value } = e.target;
+    setPassword(value);
+
+    if (!value) {
+      dispatchValidation({ type: 'EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-    } else if (currentPassword.length < 6 || currentPassword.length > 18) {
-      setValidationMessage('비밀번호는 6자 이상 18자 이하여야 합니다.');
-      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
     }
+
+    if (value.length < 6 || value.length > 18) {
+      dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (!PASSWORD_REGEX.test(value)) {
+      dispatchValidation({ type: 'MISSING_COMPLEXITY' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (passwordConfirmValue === '') {
+      dispatchValidation({ type: 'CONFIRM_EMPTY' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (value !== passwordConfirmValue) {
+      dispatchValidation({ type: 'MISMATCH' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    dispatchValidation({ type: 'VALID' });
+    setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
   };
 
   const handlePasswordConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const currentPasswordConfirmValue = e.target.value;
-    setPasswordConfirmValue(currentPasswordConfirmValue);
-    if (password.trim() !== '' && password === currentPasswordConfirmValue) {
-      setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
-    } else {
-      setValidationMessage('입력하신 비밀번호가 일치하지 않습니다.');
+    const { value } = e.target;
+    setPasswordConfirmValue(value);
+
+    if (password.length < 6 || password.length > 18) {
+      dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
     }
+
+    if (!PASSWORD_REGEX.test(password)) {
+      dispatchValidation({ type: 'MISSING_COMPLEXITY' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (value === '') {
+      dispatchValidation({ type: 'CONFIRM_EMPTY' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (password !== value) {
+      dispatchValidation({ type: 'MISMATCH' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    dispatchValidation({ type: 'VALID' });
+    setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
   };
 
   return (
@@ -292,7 +344,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         })}
         >
           <ErrorIcon />
-          {validationMessage}
+          {validationState.message}
         </p>
         )}
         {isValid.isPasswordValid && (
@@ -397,7 +449,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
                 [styles['modify__button--nickname']]: true,
               })}
               onClick={onClickNicknameDuplicateCheckButton}
-              disabled={currentNicknameValue === userInfo?.nickname}
+              disabled={currentNicknameValue === userInfo?.nickname || currentNicknameValue === ''}
             >
               중복확인
             </button>
@@ -420,7 +472,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
                 [styles['modify__button--nickname']]: true,
               })}
               onClick={onClickNicknameDuplicateCheckButton}
-              disabled={currentNicknameValue === userInfo?.nickname}
+              disabled={currentNicknameValue === userInfo?.nickname || currentNicknameValue === ''}
             >
               중복확인
             </button>
@@ -566,7 +618,7 @@ const GenderInput = React.forwardRef((_, ref) => {
 
   return (
     <div className={styles['form-input__label-wrapper']}>
-      <label htmlFor="email" className={styles['form-input__label']}>
+      <label htmlFor="gender" className={styles['form-input__label']}>
         성별
         <span className={styles['form-input__required']}>*</span>
       </label>
@@ -895,9 +947,9 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
       <label htmlFor="email" className={styles['form-input__label']}>
         이메일(선택)
       </label>
-      <div className={styles['form-input__wrapper']}>
+      <div className={styles['form-input__email-wrapper']}>
         <input
-          className={styles['form-input']}
+          className={styles['form-input__email']}
           type={isStudent ? 'text' : 'email'}
           autoComplete="email"
           placeholder="이메일 (선택)"
@@ -1016,7 +1068,7 @@ function ModifyInfoDefaultPage() {
   useEffect(() => {
     if (!isAuthenticated) {
       navigate(ROUTES.Main());
-      showToast('error', '로그인이 필요합니다.');
+      showToast('error', '비밀번호 인증이 필요합니다.');
     }
   }, [isAuthenticated, navigate]);
 
