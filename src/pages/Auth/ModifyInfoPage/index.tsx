@@ -227,6 +227,12 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       return;
     }
 
+    if (value.includes(' ')) {
+      dispatchValidation({ type: 'SPACING' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
     if (!PASSWORD_REGEX.test(value)) {
       dispatchValidation({ type: 'MISSING_COMPLEXITY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
@@ -255,6 +261,12 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 
     if (password.length < 6 || password.length > 18) {
       dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (value.includes(' ')) {
+      dispatchValidation({ type: 'SPACING' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
       return;
     }
