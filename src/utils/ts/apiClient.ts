@@ -7,7 +7,7 @@ import qsStringify from 'utils/ts/qsStringfy';
 import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
 import { deleteCookie, setCookie } from './cookie';
-import { redirectToLogin } from './auth';
+import { redirectToClub, redirectToLogin } from './auth';
 import { saveTokensToNative } from './iosBridge';
 
 const API_URL = import.meta.env.VITE_API_PATH;
@@ -116,6 +116,7 @@ export default class APIClient {
           useTokenStore.getState().setToken('');
           useTokenStore.getState().setRefreshToken('');
           saveTokensToNative('', ''); // 네이티브 상태도 동기화
+          redirectToClub();
           return;
         }
         redirectToLogin();
@@ -170,6 +171,7 @@ export default class APIClient {
               useTokenStore.getState().setToken('');
               useTokenStore.getState().setRefreshToken('');
               saveTokensToNative('', ''); // 네이티브 상태도 동기화
+              redirectToClub();
             } else redirectToLogin();
             return null;
           }
