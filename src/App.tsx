@@ -90,21 +90,33 @@ function Wrapper({
 
 function App() {
   const isMobile = useMediaQuery();
+
+  //ios 브릿지
   useEffect(() => {
-    window.onNativeCallback = (id, value) => {
-      if (id === 'accessToken')  useTokenStore.getState().setToken(value);
-      if (id === 'refreshToken') useTokenStore.getState().setRefreshToken(value);
+    // 앱 로드 시 토큰 요청 정의
+    const initializeTokens = async () => {
+      const tokens = await requestTokensFromNative();
+      if (tokens.access || tokens.refresh) {
+        setTokensFromNative(tokens.access, tokens.refresh);
+      }
     };
+    if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+      // 네이티브에서 토큰을 전달받을 함수 등록
+      window.setTokens = setTokensFromNative;
 
-    window.setTokens = setTokensFromNative;
-
-    requestTokensFromNative();
+      const currentPath = window.location.pathname;
+      if (!currentPath.startsWith('/auth')) {
+        initializeTokens();
+      }
+    }
 
     return () => {
-      delete window.onNativeCallback;
-      delete window.setTokens;
+      if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
+        delete window.setTokens;
+      }
     };
   }, []);
+
   return (
     <>
       <Routes>
@@ -154,6 +166,15 @@ function App() {
               <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<FindIdEmailPage />} />} />
               <Route path={ROUTES.IDResult()} element={<Wrapper title="아이디 찾기 - 결과" element={<FindIdResultPage />} />} />
             </Route>)}
+          {!isMobile && (
+            <>
+              <Route path="/auth/findpw" element={<Navigate replace to="/auth/findpw/계정인증" />} />
+              <Route
+                path="/auth/findpw/:step"
+                element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />}
+              />
+            </>
+          )}
         </Route>
 
         <Route path={ROUTES.Auth()} element={<AuthPage />}>
@@ -166,8 +187,7 @@ function App() {
               <Route path={ROUTES.Email()} element={<Wrapper title="아이디 찾기 - 이메일" element={<MobileFindIdEmailPage />} />} />
               <Route path={ROUTES.IDResult()} element={<Wrapper title="아이디 찾기 - 결과" element={<MobileFindIdResultPage />} />} />
             </Route>)}
-          <Route path={ROUTES.AuthFindPW({ isLink: false })} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} />
-          {/* <Route path={ROUTES.AuthFindPW()} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} /> */}
+          {isMobile && <Route path={ROUTES.AuthFindPW({ isLink: false })} element={<Wrapper title="비밀번호 찾기" element={<FindPasswordPage />} />} />}
           <Route path={ROUTES.Auth()} element={<AuthPage />}>
           </Route>
           <Route path={ROUTES.AuthModifyInfo()} element={<Wrapper needAuth title="유저 정보변경" element={<ModifyInfoPage />} />} />

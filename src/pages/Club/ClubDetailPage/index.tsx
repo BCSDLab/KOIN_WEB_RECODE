@@ -1,14 +1,21 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import NonLikeIcon from 'assets/svg/Club/unlike-icon.svg';
+import CopyIcon from 'assets/svg/Club/copy-icon.svg';
+import UpIcon from 'assets/svg/Club/up-icon.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
 import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useHeaderTitle } from 'utils/zustand/customTitle';
+import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
+import showToast from 'utils/ts/showToast';
+import { useDebounce } from 'utils/hooks/debounce/useDebounce';
+import EditConfirmModal from 'pages/Club/ClubEditPage/conponents/EditConfirmModal';
 import useClubDetail from './hooks/useClubdetail';
 import styles from './ClubDetailPage.module.scss';
 import useClubLikeMutation from './hooks/useClubLike';
@@ -22,7 +29,6 @@ export default function ClubDetailPage() {
   const {
     clubDetail,
     clubIntroductionEditStatus,
-    clubIntroductionEditMutateAsync,
   } = useClubDetail(id);
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
@@ -34,6 +40,13 @@ export default function ClubDetailPage() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isMandateModalOpen, openMandateModal, closeMandateModal] = useBooleanState(false);
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
+  const [isEditModalOpen, openEditModal, closeEditModal] = useBooleanState(false);
+
+  const [QnAType, setQnAType] = useState('');
+  const [introType, setintroType] = useState('');
+  const [replyId, setReplyId] = useState(-1);
+
+  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
 
   const token = useTokenState();
 
@@ -41,6 +54,12 @@ export default function ClubDetailPage() {
     clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync,
   } = useClubLikeMutation(id);
   const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
+
+  useEffect(() => {
+    if (clubDetail?.name) setCustomTitle(clubDetail.name);
+  }, [clubDetail?.name, setCustomTitle]);
+  useEffect(() => resetCustomTitle, [resetCustomTitle]);
+
   const handleToggleLike = async () => {
     if (!id || isPending) return;
     if (!token) {
@@ -49,19 +68,44 @@ export default function ClubDetailPage() {
     }
     if (clubDetail.is_liked) {
       await clubUnlikeMutateAsync();
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_introduction_like_cancel',
+        value: clubDetail.name,
+      });
     } else {
       await clubLikeMutateAsync();
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_introduction_like',
+        value: clubDetail.name,
+      });
     }
   };
+  const debouncedToggleLike = useDebounce(handleToggleLike, 300);
 
   const handleIntroductionSave = async () => {
-    await clubIntroductionEditMutateAsync({ introduction });
-    setIsEdit(false);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_introduction_correction_save',
+      value: '저장',
+    });
+    setintroType('confirm');
+    openEditModal();
   };
 
   const handleIntroductionCancel = () => {
-    setIntroduction(clubDetail.introduction);
-    setIsEdit(false);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_introduction_correction_cancel',
+      value: '취소',
+    });
+    setintroType('cancel');
+    openEditModal();
   };
 
   const handleEditClick = async () => {
@@ -93,6 +137,31 @@ export default function ClubDetailPage() {
     setNavType(navValue);
   };
 
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('success', '전화번호가 복사되었습니다.');
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+      showToast('success', '전화번호가 복사되었습니다.');
+    }
+  };
+
+  const handleClickDetailInfo = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_category: 'click',
+      event_label: 'club_tab_select',
+      value: '상세소개 수정하기',
+    });
+    setIsEdit(true);
+  };
+
   return (
     <div className={styles.layout}>
       {!isMobile && (
@@ -119,15 +188,15 @@ export default function ClubDetailPage() {
         ) : (
           <div className={styles['club-detail__pc-header__button-box']}>
             {clubDetail.manager
-             && (
-             <button
-               type="button"
-               className={styles['club-detail__pc-header__button']}
-               onClick={() => setIsEdit(true)}
-             >
-               상세 소개 수정하기
-             </button>
-             )}
+              && (
+              <button
+                type="button"
+                className={styles['club-detail__pc-header__button']}
+                onClick={handleClickDetailInfo}
+              >
+                상세 소개 수정하기
+              </button>
+              )}
           </div>
         )}
       </div>
@@ -167,28 +236,34 @@ export default function ClubDetailPage() {
           >
             <h1 className={styles['club-detail__summary__title']}>{clubDetail.name}</h1>
             {isMobile && (
-            <button type="button" className={styles['club-detail__summary__like']} onClick={handleToggleLike}>
+            <button type="button" className={styles['club-detail__summary__like']} onClick={debouncedToggleLike}>
               {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
-              {clubDetail.likes}
+              {!clubDetail.is_like_hidden && clubDetail.likes}
             </button>
             )}
           </div>
           <div className={styles['club-detail__summary__row']}>
             분과:
-            {' '}
-            {clubDetail.category}
-            {' '}
-            분과
+            <div>
+              {clubDetail.category}
+              {' '}
+              분과
+            </div>
           </div>
           <div className={styles['club-detail__summary__row']}>
             동아리 방 위치:
+            {' '}
+            {' '}
             {clubDetail.location}
           </div>
           <div className={styles['club-detail__summary__row']}>
             동아리 소개:
+            {' '}
+            {' '}
             {clubDetail.description}
           </div>
           <div className={styles['club-detail__summary__contacts']}>
+            {clubDetail.instagram && (
             <div className={styles['club-detail__summary__contacts__row']}>
               인스타:
               {clubDetail.instagram && (
@@ -203,6 +278,8 @@ export default function ClubDetailPage() {
               </a>
               )}
             </div>
+            )}
+            {clubDetail.google_form && (
             <div className={styles['club-detail__summary__contacts__row']}>
               구글폼:
               {clubDetail.google_form && (
@@ -216,6 +293,8 @@ export default function ClubDetailPage() {
               </a>
               )}
             </div>
+            )}
+            {clubDetail.open_chat && (
             <div className={styles['club-detail__summary__contacts__row']}>
               오픈채팅:
               {clubDetail.open_chat && (
@@ -229,17 +308,30 @@ export default function ClubDetailPage() {
               </a>
               )}
             </div>
+            )}
+            {clubDetail.phone_number && (
             <div className={styles['club-detail__summary__contacts__row']}>
               전화번호:
-              {clubDetail.phone_number}
+              <div className={styles['club-detail__summary__contacts__text']}>
+                {clubDetail.phone_number && formatPhoneNumber(clubDetail.phone_number)}
+                <button
+                  className={styles['copy-button']}
+                  type="button"
+                  aria-label="복사붙여넣기 버튼"
+                  onClick={() => handleCopy(clubDetail.phone_number!)}
+                >
+                  <CopyIcon />
+                </button>
+              </div>
             </div>
+            )}
           </div>
         </div>
         {!isMobile && (
           <div className={styles['club-detail__summary__image-container']}>
-            {!isMobile && (
+            {(!isMobile && clubDetail.manager) && (
             <div className={styles['club-detail__edit-button__container']}>
-              <button type="button" className={styles['club-detail__edit-button']}>
+              <button type="button" className={styles['club-detail__edit-button']} onClick={handleMandateClick}>
                 권한 위임
               </button>
               <button type="button" className={styles['club-detail__edit-button']} onClick={handleEditClick}>
@@ -260,13 +352,10 @@ export default function ClubDetailPage() {
                 </div>
               )}
             </div>
-            <button type="button" className={styles['club-detail__like']} disabled={isPending} onClick={handleToggleLike}>
+            <button type="button" className={styles['club-detail__like']} disabled={isPending} onClick={debouncedToggleLike}>
               {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
               <div className={styles['club-detail__like__text']}>
-                좋아요
-                {' '}
-                {clubDetail.likes || 0}
-                개
+                {!clubDetail.is_like_hidden && `좋아요 ${clubDetail.likes || 0} 개`}
               </div>
             </button>
           </div>
@@ -296,7 +385,7 @@ export default function ClubDetailPage() {
       </div>
       {isMobile && (
       <div className={styles['club-detail__mobile-button__container']}>
-        {isEdit ? (
+        {(isEdit && navType === '상세 소개') ? (
           <div className={styles['club-detail__mobile-button__box']}>
             <button
               type="button"
@@ -317,16 +406,16 @@ export default function ClubDetailPage() {
         ) : (
           <div className={styles['club-detail__mobile-button__button-box']}>
             {clubDetail.manager && navType === '상세 소개'
-             && (
-             <button
-               type="button"
-               className={styles['club-detail__mobile-button__button']}
-               onClick={() => setIsEdit(true)}
-             >
-               상세 소개 수정
-               {!isMobile && '하기'}
-             </button>
-             )}
+              && (
+              <button
+                type="button"
+                className={styles['club-detail__mobile-button__button']}
+                onClick={handleClickDetailInfo}
+              >
+                상세 소개 수정
+                {!isMobile && '하기'}
+              </button>
+              )}
           </div>
         )}
       </div>
@@ -344,12 +433,16 @@ export default function ClubDetailPage() {
           clubId={id}
           isManager={clubDetail.manager}
           openAuthModal={openAuthModal}
+          setQnA={setQnAType}
+          setReplyId={setReplyId}
         />
       )}
       {isModalOpen && (
         <CreateQnAModal
           closeModal={closeModal}
           clubId={id}
+          type={QnAType}
+          replyId={replyId}
         />
       )}
       {
@@ -363,6 +456,29 @@ export default function ClubDetailPage() {
       }
       {
         isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
+      }
+      {isEditModalOpen && (
+      <EditConfirmModal
+        closeModal={closeEditModal}
+        type={introType}
+        introduction={introduction}
+        setIsEdit={setIsEdit}
+        resetForm={() => setIntroduction(clubDetail.introduction)}
+      />
+      )}
+      {
+        navType === 'Q&A' && (
+          <div className={styles['up-floating-button__container']}>
+            <button
+              type="button"
+              className={styles['up-floating-button']}
+              aria-label="스크롤 위로 버튼"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              <UpIcon />
+            </button>
+          </div>
+        )
       }
     </div>
   );

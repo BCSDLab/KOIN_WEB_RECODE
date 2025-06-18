@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import { setRedirectPath } from 'utils/ts/auth';
 import styles from './ClubAuthModal.module.scss';
 
 interface ClubAuthModalProps {
@@ -8,6 +9,7 @@ interface ClubAuthModalProps {
 
 function ClubAuthModal({ closeModal }: ClubAuthModalProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <div className={styles.background}>
@@ -24,6 +26,7 @@ function ClubAuthModal({ closeModal }: ClubAuthModalProps) {
             className={styles['container__button--login']}
             onClick={() => {
               navigate(ROUTES.Auth());
+              setRedirectPath(location.pathname);
               closeModal();
             }}
           >

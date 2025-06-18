@@ -46,4 +46,30 @@
       width: 105px;
     }
   }
+
+  &__go-back {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+
+    @include media.media-breakpoint(mobile) {
+      top: 15px;
+      left: 10px;
+
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+}
+
+.back-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }

@@ -14,12 +14,18 @@ function Header() {
   const isMain = pathname === '/';
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
+  const isClubRoute = [
+    ROUTES.NewClub(),
+    '/clubs/edit',
+    ROUTES.Club(),
+  ].some((prefix) => pathname.startsWith(prefix));
+
   return (
     <header
       className={cn({
         [styles.header]: true,
         [styles['header--main']]: isMain,
-        [styles['header--new-club']]: (pathname.startsWith(ROUTES.NewClub()) || pathname.startsWith('/clubs/edit')) && isMobile,
+        [styles['header--new-club']]: isClubRoute && isMobile,
       })}
     >
       <nav className={styles.header__content}>

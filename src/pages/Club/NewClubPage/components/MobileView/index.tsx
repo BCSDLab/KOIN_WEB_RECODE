@@ -15,14 +15,15 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import ClubInputErrorCondition from 'pages/Club/components/ClubInputErrorCondition';
 import { cn } from '@bcsdlab/utils';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { addHyphen } from 'utils/ts/formatPhoneNumber';
 import styles from './NewClubMobileView.module.scss';
 
 interface MobileViewProps {
   formData: NewClubData;
   setFormData: Dispatch<SetStateAction<NewClubData>>;
+  setType?:Dispatch<SetStateAction<string>>;
   openModal: () => void;
   isEdit?: boolean
-  clubId?:string;
 }
 
 export default function MobileView({
@@ -30,7 +31,7 @@ export default function MobileView({
   setFormData,
   openModal,
   isEdit,
-  clubId,
+  setType,
 }: MobileViewProps) {
   const navigate = useNavigate();
   const logger = useLogger();
@@ -75,14 +76,15 @@ export default function MobileView({
   };
 
   const handleClickCancel = () => {
-    if (isEdit) {
+    if (isEdit && setType) {
       logger.actionEventClick({
         team: 'CAMPUS',
         event_category: 'click',
         event_label: 'club_correction_cancel',
         value: '취소',
       });
-      navigate(ROUTES.ClubDetail({ id: clubId, isLink: true }));
+      setType('cancel');
+      openModal();
     } else {
       logger.actionEventClick({
         team: 'CAMPUS',
@@ -95,13 +97,14 @@ export default function MobileView({
   };
 
   const handleClickSave = () => {
-    if (isEdit) {
+    if (isEdit && setType) {
       logger.actionEventClick({
         team: 'CAMPUS',
         event_category: 'click',
         event_label: 'club_correction_save',
         value: '저장',
       });
+      setType('confirm');
     } else {
       logger.actionEventClick({
         team: 'CAMPUS',
@@ -147,6 +150,8 @@ export default function MobileView({
               <div className={styles['form-image__label-text']}>
                 <div>클릭하여 사진을</div>
                 <div>업로드해주세요.</div>
+                <br />
+                <div>1:1 비율로 업로드 해주세요</div>
               </div>
             </label>
             {!formData.image_url && <ClubInputErrorCondition />}
@@ -184,7 +189,7 @@ export default function MobileView({
           <input
             className={cn({
               [styles['form__text-input']]: true,
-              [styles['form__text-input--error']]: true,
+              [styles['form__text-input--error']]: formData.name.length === 0,
             })}
             value={formData.name}
             placeholder="동아리명을 입력해주세요(필수)"
@@ -247,7 +252,7 @@ export default function MobileView({
           <input
             className={cn({
               [styles['form__text-input']]: true,
-              [styles['form__text-input--error']]: true,
+              [styles['form__text-input--error']]: formData.location.length === 0,
             })}
             value={formData.location}
             placeholder="동아리 방 위치를 입력하세요(필수)"
@@ -274,7 +279,7 @@ export default function MobileView({
           <input
             className={styles['form__text-input']}
             value={formData.instagram}
-            placeholder="인스타 계정 주소를 입력해주세요.(선택)"
+            placeholder="인스타 아이디를 입력해주세요.(선택)"
             onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
           />
         </div>
@@ -298,12 +303,25 @@ export default function MobileView({
         </div>
         <div className={styles['form-contact']}>
           <div className={styles['form-label']}>전화번호:</div>
-          <input
-            className={styles['form__text-input']}
-            value={formData.phone_number}
-            placeholder="대표자 전화번호를 입력해주세요.(선택)"
-            onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-          />
+          <div className={styles['form-contact__wrapper']}>
+            <input
+              className={cn({
+                [styles['form__text-input']]: true,
+                [styles['form__text-input--error']]: !formData.phone_number,
+              })}
+              value={formData.phone_number}
+              placeholder="대표자 전화번호를 입력해주세요.(필수)"
+              onChange={(e) => setFormData((prev) => ({
+                ...prev,
+                phone_number: addHyphen(e.target.value),
+              }))}
+            />
+            {!formData.phone_number && (
+              <div className={styles['error-container']}>
+                <ClubInputErrorCondition />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -34,10 +34,10 @@ export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(public authorization?: string, public categoryId?: number, public hitSort?: string) {
+  constructor(public authorization?: string, public categoryId?: number, public sortType?: string) {
     this.path = '/clubs'
     + `${(categoryId && `?categoryId=${categoryId}`) || ''}`
-    + `${(hitSort && `${categoryId ? '&' : '?'}hitSort=${hitSort}`) || ''}`;
+    + `${(sortType && `${categoryId ? '&' : '?'}sortType=${sortType}`) || ''}`;
   }
 }
 

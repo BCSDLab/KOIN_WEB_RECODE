@@ -1,8 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 import { PRIVACY_POLICY, TERMS_OF_SERVICE } from 'static/policy';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import styles from './PolicyPage.module.scss';
 
 function PolicyPage() {
+  useScrollToTop();
+
   return (
     <div className={styles.container}>
       <div className={styles.body}>

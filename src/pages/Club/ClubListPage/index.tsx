@@ -18,6 +18,7 @@ import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
 import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useUser } from 'utils/hooks/state/useUser';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -34,13 +35,15 @@ function ClubListPage() {
   const token = useTokenState();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const sortValue = searchParams.get('sort') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
+  const sortValue = searchParams.get('sortType') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
   const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
   const clubCategories = useClubCategories();
-  const clubList = useClubList({ token, categoryId: selectedCategoryId, hitSort: sortValue });
+  const clubList = useClubList({ token, categoryId: selectedCategoryId, sortType: sortValue });
   const totalCount = clubList.length;
   const { mutate: clubLikeMutate } = useClubLike();
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
+
+  const { data: userInfo } = useUser();
 
   const handleCreateClubClick = () => {
     logger.actionEventClick({
@@ -58,8 +61,8 @@ function ClubListPage() {
 
   const onChangeSort = (e: { target: { value: string } }) => {
     const changedSort = e.target.value;
-    searchParams.set('sort', changedSort);
-    setSearchParams(searchParams);
+    searchParams.set('sortType', changedSort);
+    setSearchParams(searchParams, { replace: true });
   };
 
   const handleCategoryClick = (name: string, id: number) => {
@@ -75,7 +78,7 @@ function ClubListPage() {
     } else {
       searchParams.set('categoryId', String(id));
     }
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { replace: true });
   };
 
   const handleCardClick = (name: string, id: number) => {
@@ -92,6 +95,7 @@ function ClubListPage() {
     e: React.MouseEvent<HTMLButtonElement>,
     isLiked: boolean,
     clubId: number,
+    name: string,
   ) => {
     e.stopPropagation();
     if (!token) {
@@ -101,6 +105,21 @@ function ClubListPage() {
         />
       ));
       return;
+    }
+    if (isLiked) {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_main_like_cancel',
+        value: name,
+      });
+    } else {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_category: 'click',
+        event_label: 'club_main_like',
+        value: name,
+      });
     }
     clubLikeMutate({
       token,
@@ -114,6 +133,7 @@ function ClubListPage() {
       <div className={styles.container}>
         <div className={styles.header}>
           <p className={styles.header__title}>동아리 목록</p>
+          {userInfo && (
           <button
             type="button"
             className={styles['header__add-button']}
@@ -121,6 +141,7 @@ function ClubListPage() {
           >
             동아리 생성하기
           </button>
+          )}
         </div>
         <main>
           <div className={styles.categories}>
@@ -141,11 +162,11 @@ function ClubListPage() {
                     [styles['categories__button-icon--selected']]: category.id === selectedCategoryId,
                   })}
                 >
-                  {category.id === 1 && <MikeIcon />}
-                  {category.id === 2 && <ExerciseIcon />}
-                  {category.id === 3 && <HobbyIcon />}
-                  {category.id === 4 && <ReligionIcon />}
-                  {category.id === 5 && <BookIcon />}
+                  {category.name === '공연' && <MikeIcon />}
+                  {category.name === '운동' && <ExerciseIcon />}
+                  {category.name === '종교' && <ReligionIcon />}
+                  {category.name === '취미' && <HobbyIcon />}
+                  {category.name === '학술' && <BookIcon />}
                 </div>
                 {category.name}
               </button>
@@ -186,11 +207,11 @@ function ClubListPage() {
                   <div className={styles['card__info-likes']}>
                     <button
                       type="button"
-                      onClick={(e) => handleLikeClick(e, club.is_liked, club.id)}
+                      onClick={(e) => handleLikeClick(e, club.is_liked, club.id, club.name)}
                     >
                       {club.is_liked ? <HeartFilled /> : <HeartOutline />}
                     </button>
-                    <p>{club.likes}</p>
+                    <p>{!club.is_like_hidden && club.likes}</p>
                   </div>
                 </div>
                 <img
