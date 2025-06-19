@@ -509,13 +509,14 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     value: dept.name,
   }));
   const { setIsValid } = useValidationContext();
+  const isStudent = isStudentUser(userInfo);
   const isMobile = useMediaQuery();
 
-  const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeStudentId = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
     setStudentNumber(target?.value ?? '');
     if (target.value.length === 10) {
-      setIsValid((prev) => ({ ...prev, isStudentInfoValid: true }));
+      setIsValid((prev) => ({ ...prev, isStudentInfoValid: true, isFieldChanged: true }));
     }
   };
 
@@ -523,7 +524,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     const { target } = event;
     setMajor(target?.value ?? '');
     if (target.value) {
-      setIsValid((prev) => ({ ...prev, isStudentMajorValid: true }));
+      setIsValid((prev) => ({ ...prev, isStudentMajorValid: true, isFieldChanged: true }));
     }
   };
 
@@ -545,6 +546,17 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
       valid,
     };
   }, [studentNumber, major]);
+
+  useEffect(() => {
+    if (isStudent) {
+      if (studentNumber === userInfo?.student_number) {
+        setIsValid((prev) => ({ ...prev, isStudentIdValid: true }));
+      }
+      if (major === userInfo?.major) {
+        setIsValid((prev) => ({ ...prev, isStudentMajorValid: true }));
+      }
+    }
+  }, [studentNumber, major, setIsValid, userInfo, isStudent]);
   return (
     <div>
       {isMobile ? (
@@ -558,7 +570,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               className={styles['form-input']}
               placeholder="학번 (선택)"
               value={studentNumber}
-              onChange={onChangeMajorInput}
+              onChange={handleChangeStudentId}
               {...props}
             />
           </div>
@@ -602,7 +614,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               className={styles['form-input']}
               placeholder="학번 (선택)"
               value={studentNumber}
-              onChange={onChangeMajorInput}
+              onChange={handleChangeStudentId}
               {...props}
             />
           </div>
@@ -626,9 +638,15 @@ const GenderInput = React.forwardRef((_, ref) => {
   const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(e.target.value);
     if (e.target.value !== String(userInfo?.gender)) {
-      setIsValid((prev) => ({ ...prev, isGenderValid: true }));
+      setIsValid((prev) => ({ ...prev, isGenderValid: true, isFieldChanged: true }));
     }
   };
+
+  useEffect(() => {
+    if (selectedValue === String(userInfo?.gender)) {
+      setIsValid((prev) => ({ ...prev, isGenderValid: true }));
+    }
+  }, [selectedValue, setIsValid, userInfo]);
 
   return (
     <div className={styles['form-input__label-wrapper']}>
@@ -704,10 +722,14 @@ const PhoneInput = React.forwardRef((props, ref) => {
   );
 
   useEffect(() => {
-    if (verifyCode.isSuccess) {
-      setIsValid((prev) => ({ ...prev, isPhoneNumberValid: true }));
+    if (phoneNumber === userInfo?.phone_number) {
+      setIsValid((prev) => ({ ...prev, isPhoneValid: true }));
     }
-  }, [verifyCode.isSuccess, setIsValid]);
+
+    if (verifyCode.isSuccess) {
+      setIsValid((prev) => ({ ...prev, isPhoneValid: true, isFieldChanged: true }));
+    }
+  }, [verifyCode.isSuccess, setIsValid, phoneNumber, userInfo?.phone_number]);
 
   useImperativeHandle(ref, () => {
     const value = phoneNumber.replace(/-/g, '');
@@ -866,13 +888,16 @@ const PhoneInput = React.forwardRef((props, ref) => {
               {phoneMessage.type === 'error' && <ErrorIcon />}
               {phoneMessage.type === 'warning' && <WarningIcon />}
               {phoneMessage.content}
+              {phoneMessage.type === 'success' && (
               <span className={styles['form-message--count']}>
                 남은 횟수
                 {` (${smsSendCount}/5)`}
               </span>
+              )}
             </p>
             )}
           </div>
+          {phoneMessage?.type === 'success' && (
           <div className={styles['form-input__label-wrapper']}>
             <label htmlFor="code" className={styles['form-input__label']}>
               휴대전화 인증
@@ -918,6 +943,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
             </p>
             )}
           </div>
+          )}
         </>
       )}
     </>
@@ -952,7 +978,7 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
     const completeEmail = isStudent ? `${newEmail}@koreatech.ac.kr` : newEmail;
 
     if (completeEmail !== userInfo?.email && REGEX.EMAIL.test(completeEmail)) {
-      setIsValid((prev) => ({ ...prev, isEmailValid: true }));
+      setIsValid((prev) => ({ ...prev, isEmailValid: true, isFieldChanged: true }));
     }
   };
 
@@ -990,10 +1016,26 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const currentName = e.target.value;
     setName(currentName);
+    if (currentName.trim() === '') {
+      setIsValid((prev) => ({ ...prev, isNameValid: false }));
+      return;
+    }
+
+    if (currentName.length > 20) {
+      setIsValid((prev) => ({ ...prev, isNameValid: false }));
+      return;
+    }
+
     if (currentName !== userInfo?.name) {
-      setIsValid((prev) => ({ ...prev, isNameValid: true }));
+      setIsValid((prev) => ({ ...prev, isNameValid: true, isFieldChanged: true }));
     }
   };
+
+  useEffect(() => {
+    if (name === userInfo?.name) {
+      setIsValid((prev) => ({ ...prev, isNameValid: true }));
+    }
+  }, [name, setIsValid, userInfo]);
 
   return (
     <div className={styles['form-input__label-wrapper']}>

@@ -8,9 +8,10 @@ interface FormValidation {
   isStudentIdValid: boolean;
   isStudentMajorValid: boolean;
   isGenderValid: boolean;
-  isNameValid?: boolean;
+  isNameValid: boolean;
   isEmailValid?: boolean;
   isNicknameValid?: boolean;
+  isFieldChanged: boolean;
 }
 
 interface ModifyFormValidationContextType {
@@ -27,6 +28,8 @@ export function ModifyFormValidationProvider({ children }: { children: React.Rea
     isStudentIdValid: false,
     isStudentMajorValid: false,
     isGenderValid: false,
+    isFieldChanged: false,
+    isNameValid: false,
   });
 
   const value = useMemo(() => ({ isValid, setIsValid }), [isValid, setIsValid]);
@@ -52,13 +55,16 @@ export const useValidationContext = () => {
       && isValid.isStudentIdValid
       && isValid.isStudentMajorValid
       && isValid.isGenderValid
+      && isValid.isNameValid
+      && isValid.isFieldChanged
   ), [
     isValid.isPhoneValid,
     isValid.isStudentIdValid,
     isValid.isStudentMajorValid,
     isValid.isGenderValid,
+    isValid.isNameValid,
+    isValid.isFieldChanged,
   ]) || isValid.isPasswordValid
-  || isValid.isNameValid
   || isValid.isEmailValid
   || isValid.isNicknameValid;
 
