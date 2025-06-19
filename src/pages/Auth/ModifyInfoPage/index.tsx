@@ -391,24 +391,45 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     changeTargetNickname,
     status,
     currentCheckedNickname,
+    mutate,
   } = useNicknameDuplicateCheck();
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentNicknameValue(e.target.value);
-    if (e.target.value !== userInfo?.nickname) {
-      setIsValid((prev) => ({ ...prev, isNicknameValid: true }));
+    const newNickname = e.target.value;
+    setCurrentNicknameValue(newNickname);
+    if (newNickname === '') {
+      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+      return;
+    }
+
+    if (!REGEX.NICKNAME.test(newNickname)) {
+      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
     }
   };
 
   // 닉네임 중복 확인 버튼 클릭 핸들러
   const onClickNicknameDuplicateCheckButton = () => {
     // 현재 입력된 닉네임과 기존 닉네임이 같다면 중복 검사를 수행하지 않습니다.
+    if (currentNicknameValue === '') {
+      showToast('error', '닉네임을 입력해주세요.');
+      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+      return;
+    }
     if (currentNicknameValue === userInfo?.nickname) {
       showToast('info', '기존의 닉네임과 동일합니다.');
       return;
     }
-    changeTargetNickname(currentNicknameValue);
-    setIsValid((prev) => ({ ...prev, isNicknameValid: true }));
+    if (!REGEX.NICKNAME.test(currentNicknameValue)) {
+      showToast('error', '닉네임은 2자 이상 20자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
+      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+      return;
+    }
+    mutate(currentNicknameValue, {
+      onSuccess: () => {
+        setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
+        changeTargetNickname(currentNicknameValue);
+      },
+    });
   };
 
   useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
