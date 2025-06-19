@@ -80,7 +80,6 @@ export interface UserResponse extends APIResponse {
   id: number;
   login_id: string;
   anonymous_nickname: string;
-  login_id: string;
   email: string;
   gender: 0 | 1;
   major: string; // 학부
