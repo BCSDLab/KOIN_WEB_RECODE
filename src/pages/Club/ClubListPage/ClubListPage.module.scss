@@ -252,6 +252,11 @@ main {
       height: 160px;
       flex-shrink: 0;
       aspect-ratio: 1/1;
+
+      @include media.media-breakpoint(mobile) {
+        width: 100px;
+        height: 100px;
+      }
     }
   }
 }
