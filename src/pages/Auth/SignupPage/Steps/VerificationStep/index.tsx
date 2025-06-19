@@ -4,7 +4,7 @@ import {
   Controller, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
 import {
-  UserType, GENDER_OPTIONS, REGEX, MESSAGES,
+  UserType, GENDER_OPTIONS, REGEX, MESSAGES, INQUIRY_URL,
 } from 'static/auth';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
@@ -72,6 +72,18 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
 
   const goToLogin = () => {
     navigate(ROUTES.Auth());
+  };
+
+  const handlePhoneNumberChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  ) => {
+    onChange(e);
+    setPhoneMessage(null);
+    stopTimer();
+    setValue('isCorrect', false);
+    setVerificationMessage(null);
+    setValue('verification_code', '');
   };
 
   const handleStudentClick = () => {
@@ -165,14 +177,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                     htmlFor="phone_number"
                     labelName="휴대전화"
                     {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setPhoneMessage(null);
-                      stopTimer();
-                      setValue('isCorrect', false);
-                      setVerificationMessage(null);
-                      setValue('verification_code', '');
-                    }}
+                    onChange={(e) => handlePhoneNumberChange(e, field.onChange)}
                     placeholder="숫자만 입력해 주세요."
                     isRequired
                     message={phoneMessage}
@@ -202,7 +207,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       </button>
                       <span className={styles['label-link-split']}>|</span>
                       <a
-                        href="https://open.kakao.com/o/sgiYx4Qg"
+                        href={INQUIRY_URL}
                         className={styles['label-link-wrapper__button']}
                         rel="noreferrer"
                         target="_blank"

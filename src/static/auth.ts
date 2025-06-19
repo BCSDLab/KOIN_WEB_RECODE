@@ -73,3 +73,5 @@ export const GENDER_OPTIONS = [
   { label: '남성', value: '0' },
   { label: '여성', value: '1' },
 ];
+
+export const INQUIRY_URL = 'https://open.kakao.com/o/sgiYx4Qg';
