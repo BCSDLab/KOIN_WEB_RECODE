@@ -27,7 +27,7 @@ export default function AuthenticateUserModal({
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
-  const handleClose = disabledClose ? () => {} : onClose;
+  const handleClose = disabledClose ? () => navigate(ROUTES.Main()) : onClose;
   const { backgroundRef } = useOutsideClick({ onOutsideClick: handleClose });
   useEscapeKeyDown({ onEscape: handleClose });
 
@@ -79,16 +79,14 @@ export default function AuthenticateUserModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>내 정보 수정하기</span>
-          {!disabledClose && (
           <div
             className={styles['container__close-button']}
-            onClick={onClose}
+            onClick={handleClose}
             role="button"
             aria-hidden
           >
             <CloseIcon />
           </div>
-          )}
         </header>
         <div
           className={cn({
