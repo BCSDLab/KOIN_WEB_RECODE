@@ -6,7 +6,7 @@ import {
 import { MESSAGES } from 'static/auth';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
-import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
+import usePhoneVerificationInFindId from 'utils/hooks/auth/usePhoneVerificationInFindId';
 import CustomInput from 'pages/Auth/SignupPage/components/CustomInput';
 import styles from './MobileFindIdPhonePage.module.scss';
 
@@ -42,7 +42,7 @@ function MobileFindIdPhonePage() {
     isTimer,
     timerValue,
     stopTimer,
-  } = usePhoneVerification({ phoneNumber });
+  } = usePhoneVerificationInFindId({ phoneNumber });
 
   const isFormFilled = phoneNumber && verificationCode;
 
