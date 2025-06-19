@@ -553,14 +553,19 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = '오류가 발생했습니다';
-    const year = parseInt(studentNumber.slice(0, 4), 10);
-    if (year < 1992 || year > new Date().getFullYear()) {
-      valid = '올바른 입학년도가 아닙니다.';
-    } else if (studentNumber && studentNumber.length !== 10) {
-      valid = '학번은 10자리여야 합니다.';
+    if (!/^\d+$/.test(studentNumber)) {
+      valid = '학번은 숫자만 포함되어야 합니다.';
     } else {
-      valid = true;
+      const year = parseInt(studentNumber.slice(0, 4), 10);
+      if (year < 1992 || year > new Date().getFullYear()) {
+        valid = '올바른 입학년도가 아닙니다.';
+      } else if (studentNumber && studentNumber.length !== 10) {
+        valid = '학번은 10자리여야 합니다.';
+      } else {
+        valid = true;
+      }
     }
+
     return {
       value: {
         studentNumber,
