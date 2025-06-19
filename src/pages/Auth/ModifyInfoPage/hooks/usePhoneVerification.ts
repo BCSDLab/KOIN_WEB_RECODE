@@ -13,7 +13,7 @@ export function usePhoneVerification(phoneNumber: string) {
   { type: string; content: string } | null>(null);
 
   const {
-    start, formattedTime, timeLeft, isRunning,
+    start, stop, formattedTime, timeLeft, isRunning,
   } = useVerificationTimer(180);
 
   const sendSMS = useMutation({
@@ -49,6 +49,7 @@ export function usePhoneVerification(phoneNumber: string) {
     onSuccess: () => {
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
       setIsVerified(true);
+      stop();
     },
     onError: (err) => {
       if (isKoinError(err)) {

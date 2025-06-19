@@ -1,5 +1,5 @@
 import React, {
-  Suspense, useEffect, useImperativeHandle, useState,
+  Suspense, useEffect, useImperativeHandle, useReducer, useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import showToast from 'utils/ts/showToast';
@@ -27,12 +27,16 @@ import ChevronLeft from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useTokenStore } from 'utils/zustand/auth';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
+import { useAuthentication } from 'utils/zustand/authentication';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
 import { ModifyFormValidationProvider, useValidationContext } from './hooks/useValidationContext';
+import { passwordValidationReducer } from './reducers/passwordReducer';
+import AuthenticateUserModal from './components/AuthenticateUserModal';
 
-const PASSWORD_REGEX = /(?=.*?[a-zA-Z])(?=.*?[0-9])(?=.*?[`₩~!@#$%<>^&*()\-=+_?<>:;"',.{}|[\]/\\]).+/g;
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
 
 const PHONENUMBER_REGEX = /^\d{3}\d{3,4}\d{4}$/;
 
@@ -182,7 +186,11 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     password: false,
     passwordConfirm: false,
   });
-  const [validationMessage, setValidationMessage] = useState<string>('');
+
+  const [validationState, dispatchValidation] = useReducer(
+    passwordValidationReducer,
+    { message: '', isValid: false },
+  );
   const { isValid, setIsValid } = useValidationContext();
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
@@ -196,6 +204,8 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       valid = '입력하신 비밀번호가 일치하지 않습니다.';
     } else if (password.length < 6 || password.length > 18) {
       valid = '비밀번호는 6자 이상 18자 이하여야 합니다.';
+    } else if (password.includes(' ') || passwordConfirmValue.includes(' ')) {
+      valid = '비밀번호에 공백이 포함될 수 없습니다.';
     } else if (!PASSWORD_REGEX.test(password)) {
       valid = '비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.';
     }
@@ -206,26 +216,85 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   }, [password, passwordConfirmValue]);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    const currentPassword = e.target.value;
-    if (currentPassword !== '' && currentPassword.length >= 6 && currentPassword.length <= 18) {
-      setValidationMessage('비밀번호는 영문자, 숫자, 특수문자를 각각 하나 이상 사용해야 합니다.');
+    const { value } = e.target;
+    setPassword(value);
+
+    if (!value) {
+      dispatchValidation({ type: 'EMPTY' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
-    } else if (currentPassword.length < 6 || currentPassword.length > 18) {
-      setValidationMessage('비밀번호는 6자 이상 18자 이하여야 합니다.');
-      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
     }
+
+    if (value.length < 6 || value.length > 18) {
+      dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (value.includes(' ')) {
+      dispatchValidation({ type: 'SPACING' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (!PASSWORD_REGEX.test(value)) {
+      dispatchValidation({ type: 'MISSING_COMPLEXITY' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (passwordConfirmValue === '') {
+      dispatchValidation({ type: 'CONFIRM_EMPTY' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (value !== passwordConfirmValue) {
+      dispatchValidation({ type: 'MISMATCH' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    dispatchValidation({ type: 'VALID' });
+    setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
   };
 
   const handlePasswordConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const currentPasswordConfirmValue = e.target.value;
-    setPasswordConfirmValue(currentPasswordConfirmValue);
-    if (password.trim() !== '' && password === currentPasswordConfirmValue) {
-      setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
-    } else {
-      setValidationMessage('입력하신 비밀번호가 일치하지 않습니다.');
+    const { value } = e.target;
+    setPasswordConfirmValue(value);
+
+    if (password.length < 6 || password.length > 18) {
+      dispatchValidation({ type: 'TOO_SHORT_OR_LONG' });
       setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
     }
+
+    if (value.includes(' ')) {
+      dispatchValidation({ type: 'SPACING' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (!PASSWORD_REGEX.test(password)) {
+      dispatchValidation({ type: 'MISSING_COMPLEXITY' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (value === '') {
+      dispatchValidation({ type: 'CONFIRM_EMPTY' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    if (password !== value) {
+      dispatchValidation({ type: 'MISMATCH' });
+      setIsValid((prev) => ({ ...prev, isPasswordValid: false }));
+      return;
+    }
+
+    dispatchValidation({ type: 'VALID' });
+    setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
   };
 
   return (
@@ -291,7 +360,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
         })}
         >
           <ErrorIcon />
-          {validationMessage}
+          {validationState.message}
         </p>
         )}
         {isValid.isPasswordValid && (
@@ -322,24 +391,45 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     changeTargetNickname,
     status,
     currentCheckedNickname,
+    mutate,
   } = useNicknameDuplicateCheck();
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentNicknameValue(e.target.value);
-    if (e.target.value !== userInfo?.nickname) {
-      setIsValid((prev) => ({ ...prev, isNicknameValid: true }));
+    const newNickname = e.target.value;
+    setCurrentNicknameValue(newNickname);
+    if (newNickname === '') {
+      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+      return;
+    }
+
+    if (!REGEX.NICKNAME.test(newNickname)) {
+      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
     }
   };
 
   // 닉네임 중복 확인 버튼 클릭 핸들러
   const onClickNicknameDuplicateCheckButton = () => {
     // 현재 입력된 닉네임과 기존 닉네임이 같다면 중복 검사를 수행하지 않습니다.
+    if (currentNicknameValue === '') {
+      showToast('error', '닉네임을 입력해주세요.');
+      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+      return;
+    }
     if (currentNicknameValue === userInfo?.nickname) {
       showToast('info', '기존의 닉네임과 동일합니다.');
       return;
     }
-    changeTargetNickname(currentNicknameValue);
-    setIsValid((prev) => ({ ...prev, isNicknameValid: true }));
+    if (!REGEX.NICKNAME.test(currentNicknameValue)) {
+      showToast('error', '닉네임은 2자 이상 20자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
+      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+      return;
+    }
+    mutate(currentNicknameValue, {
+      onSuccess: () => {
+        setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
+        changeTargetNickname(currentNicknameValue);
+      },
+    });
   };
 
   useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
@@ -396,7 +486,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
                 [styles['modify__button--nickname']]: true,
               })}
               onClick={onClickNicknameDuplicateCheckButton}
-              disabled={currentNicknameValue === userInfo?.nickname}
+              disabled={currentNicknameValue === userInfo?.nickname || currentNicknameValue === ''}
             >
               중복확인
             </button>
@@ -419,7 +509,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
                 [styles['modify__button--nickname']]: true,
               })}
               onClick={onClickNicknameDuplicateCheckButton}
-              disabled={currentNicknameValue === userInfo?.nickname}
+              disabled={currentNicknameValue === userInfo?.nickname || currentNicknameValue === ''}
             >
               중복확인
             </button>
@@ -442,13 +532,14 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     value: dept.name,
   }));
   const { setIsValid } = useValidationContext();
+  const isStudent = isStudentUser(userInfo);
   const isMobile = useMediaQuery();
 
-  const onChangeMajorInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeStudentId = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
     setStudentNumber(target?.value ?? '');
     if (target.value.length === 10) {
-      setIsValid((prev) => ({ ...prev, isStudentInfoValid: true }));
+      setIsValid((prev) => ({ ...prev, isStudentInfoValid: true, isFieldChanged: true }));
     }
   };
 
@@ -456,20 +547,25 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     const { target } = event;
     setMajor(target?.value ?? '');
     if (target.value) {
-      setIsValid((prev) => ({ ...prev, isStudentMajorValid: true }));
+      setIsValid((prev) => ({ ...prev, isStudentMajorValid: true, isFieldChanged: true }));
     }
   };
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
     let valid: string | true = '오류가 발생했습니다';
-    const year = parseInt(studentNumber.slice(0, 4), 10);
-    if (year < 1992 || year > new Date().getFullYear()) {
-      valid = '올바른 입학년도가 아닙니다.';
-    } else if (studentNumber && studentNumber.length !== 10) {
-      valid = '학번은 10자리여야 합니다.';
+    if (!/^\d+$/.test(studentNumber)) {
+      valid = '학번은 숫자만 포함되어야 합니다.';
     } else {
-      valid = true;
+      const year = parseInt(studentNumber.slice(0, 4), 10);
+      if (year < 1992 || year > new Date().getFullYear()) {
+        valid = '올바른 입학년도가 아닙니다.';
+      } else if (studentNumber && studentNumber.length !== 10) {
+        valid = '학번은 10자리여야 합니다.';
+      } else {
+        valid = true;
+      }
     }
+
     return {
       value: {
         studentNumber,
@@ -478,6 +574,17 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
       valid,
     };
   }, [studentNumber, major]);
+
+  useEffect(() => {
+    if (isStudent) {
+      if (studentNumber === userInfo?.student_number) {
+        setIsValid((prev) => ({ ...prev, isStudentIdValid: true }));
+      }
+      if (major === userInfo?.major) {
+        setIsValid((prev) => ({ ...prev, isStudentMajorValid: true }));
+      }
+    }
+  }, [studentNumber, major, setIsValid, userInfo, isStudent]);
   return (
     <div>
       {isMobile ? (
@@ -491,7 +598,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               className={styles['form-input']}
               placeholder="학번 (선택)"
               value={studentNumber}
-              onChange={onChangeMajorInput}
+              onChange={handleChangeStudentId}
               {...props}
             />
           </div>
@@ -535,7 +642,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               className={styles['form-input']}
               placeholder="학번 (선택)"
               value={studentNumber}
-              onChange={onChangeMajorInput}
+              onChange={handleChangeStudentId}
               {...props}
             />
           </div>
@@ -559,13 +666,19 @@ const GenderInput = React.forwardRef((_, ref) => {
   const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(e.target.value);
     if (e.target.value !== String(userInfo?.gender)) {
-      setIsValid((prev) => ({ ...prev, isGenderValid: true }));
+      setIsValid((prev) => ({ ...prev, isGenderValid: true, isFieldChanged: true }));
     }
   };
 
+  useEffect(() => {
+    if (selectedValue === String(userInfo?.gender)) {
+      setIsValid((prev) => ({ ...prev, isGenderValid: true }));
+    }
+  }, [selectedValue, setIsValid, userInfo]);
+
   return (
     <div className={styles['form-input__label-wrapper']}>
-      <label htmlFor="email" className={styles['form-input__label']}>
+      <label htmlFor="gender" className={styles['form-input__label']}>
         성별
         <span className={styles['form-input__required']}>*</span>
       </label>
@@ -637,10 +750,14 @@ const PhoneInput = React.forwardRef((props, ref) => {
   );
 
   useEffect(() => {
-    if (verifyCode.isSuccess) {
-      setIsValid((prev) => ({ ...prev, isPhoneNumberValid: true }));
+    if (phoneNumber === userInfo?.phone_number) {
+      setIsValid((prev) => ({ ...prev, isPhoneValid: true }));
     }
-  }, [verifyCode.isSuccess, setIsValid]);
+
+    if (verifyCode.isSuccess) {
+      setIsValid((prev) => ({ ...prev, isPhoneValid: true, isFieldChanged: true }));
+    }
+  }, [verifyCode.isSuccess, setIsValid, phoneNumber, userInfo?.phone_number]);
 
   useImperativeHandle(ref, () => {
     const value = phoneNumber.replace(/-/g, '');
@@ -799,13 +916,16 @@ const PhoneInput = React.forwardRef((props, ref) => {
               {phoneMessage.type === 'error' && <ErrorIcon />}
               {phoneMessage.type === 'warning' && <WarningIcon />}
               {phoneMessage.content}
+              {phoneMessage.type === 'success' && (
               <span className={styles['form-message--count']}>
                 남은 횟수
                 {` (${smsSendCount}/5)`}
               </span>
+              )}
             </p>
             )}
           </div>
+          {phoneMessage?.type === 'success' && (
           <div className={styles['form-input__label-wrapper']}>
             <label htmlFor="code" className={styles['form-input__label']}>
               휴대전화 인증
@@ -851,6 +971,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
             </p>
             )}
           </div>
+          )}
         </>
       )}
     </>
@@ -885,7 +1006,7 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
     const completeEmail = isStudent ? `${newEmail}@koreatech.ac.kr` : newEmail;
 
     if (completeEmail !== userInfo?.email && REGEX.EMAIL.test(completeEmail)) {
-      setIsValid((prev) => ({ ...prev, isEmailValid: true }));
+      setIsValid((prev) => ({ ...prev, isEmailValid: true, isFieldChanged: true }));
     }
   };
 
@@ -894,9 +1015,9 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
       <label htmlFor="email" className={styles['form-input__label']}>
         이메일(선택)
       </label>
-      <div className={styles['form-input__wrapper']}>
+      <div className={styles['form-input__email-wrapper']}>
         <input
-          className={styles['form-input']}
+          className={styles['form-input__email']}
           type={isStudent ? 'text' : 'email'}
           autoComplete="email"
           placeholder="이메일 (선택)"
@@ -923,15 +1044,32 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const currentName = e.target.value;
     setName(currentName);
+    if (currentName.trim() === '') {
+      setIsValid((prev) => ({ ...prev, isNameValid: false }));
+      return;
+    }
+
+    if (currentName.length > 20) {
+      setIsValid((prev) => ({ ...prev, isNameValid: false }));
+      return;
+    }
+
     if (currentName !== userInfo?.name) {
-      setIsValid((prev) => ({ ...prev, isNameValid: true }));
+      setIsValid((prev) => ({ ...prev, isNameValid: true, isFieldChanged: true }));
     }
   };
+
+  useEffect(() => {
+    if (name === userInfo?.name) {
+      setIsValid((prev) => ({ ...prev, isNameValid: true }));
+    }
+  }, [name, setIsValid, userInfo]);
 
   return (
     <div className={styles['form-input__label-wrapper']}>
       <label htmlFor="name" className={styles['form-input__label']}>
         이름
+        <span className={styles['form-input__required']}>*</span>
       </label>
       <input
         className={styles['form-input']}
@@ -971,10 +1109,10 @@ const useModifyInfoForm = () => {
     if (isStudent) {
       payload.major = formValue['student-number'].major || undefined;
       payload.student_number = formValue['student-number'].studentNumber || undefined;
+    }
 
-      if (!isMobile && formValue.password.trim().length > 0) {
-        payload.password = await sha256(formValue.password);
-      }
+    if (!isMobile && formValue.password.trim().length > 0) {
+      payload.password = await sha256(formValue.password);
     }
     mutate(payload);
   };
@@ -982,14 +1120,18 @@ const useModifyInfoForm = () => {
 };
 
 function ModifyInfoDefaultPage() {
-  const { status, submitForm } = useModifyInfoForm();
   const token = useTokenState();
   const navigate = useNavigate();
+  const portalManager = useModalPortal();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
+  const { status, submitForm } = useModifyInfoForm();
   const { data: userInfo } = useUser();
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
-  const portalManager = useModalPortal();
   const { mutate: deleteUser } = useUserDelete();
-  const { isValid } = useValidationContext();
+
+  const { isFormValid } = useValidationContext();
+  const isAuthenticated = useAuthentication();
   const isMobile = useMediaQuery();
   const isStudent = isStudentUser(userInfo);
 
@@ -1008,6 +1150,12 @@ function ModifyInfoDefaultPage() {
       />
     ));
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      openModal();
+    }
+  }, [isAuthenticated, openModal]);
 
   return (
     <div className={styles.container}>
@@ -1052,7 +1200,7 @@ function ModifyInfoDefaultPage() {
             readOnly
             disabled
             id="email"
-            defaultValue={isStudent ? userInfo?.email : userInfo?.login_id}
+            defaultValue={userInfo?.login_id}
           />
         </div>
         {!isMobile && (
@@ -1076,6 +1224,7 @@ function ModifyInfoDefaultPage() {
           </>
         ) : (
           <>
+            <NameForm {...register('name')} />
             <PasswordForm {...register('password')} />
             <GenderInput {...register('gender')} />
             <PhoneInput {...register('phone-number')} />
@@ -1088,7 +1237,7 @@ function ModifyInfoDefaultPage() {
         <div className={styles.buttons__wrapper}>
           <button
             type="submit"
-            disabled={status === 'pending' || !Object.values(isValid).some((value) => value)}
+            disabled={status === 'pending' || !isFormValid}
             className={cn({
               [styles.modify__button]: true,
               [styles['modify__button--submit']]: true,
@@ -1111,6 +1260,12 @@ function ModifyInfoDefaultPage() {
           )}
         </div>
       </form>
+      {isModalOpen && (
+        <AuthenticateUserModal
+          onClose={closeModal}
+          disabledClose
+        />
+      )}
     </div>
   );
 }
