@@ -112,7 +112,7 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
             </span>
             )}
 
-            {isDelete && value && (
+            {isDelete && value && !args.disabled && (
             <button
               type="button"
               onClick={() => {

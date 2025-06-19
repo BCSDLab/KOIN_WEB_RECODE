@@ -15,6 +15,7 @@ import ROUTES from 'static/routes';
 import useCountdownTimer from 'pages/Auth/SignupPage/hooks/useCountdownTimer';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
+import { useFormContext } from 'react-hook-form';
 import { SmsSendResponse } from 'api/auth/entity';
 
 interface UsePhoneVerificationProps {
@@ -24,6 +25,7 @@ interface UsePhoneVerificationProps {
 
 function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps) {
   const navigate = useNavigate();
+  const { setValue } = useFormContext();
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
@@ -54,18 +56,27 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     mutationFn: smsSend,
     onSuccess: ({ remaining_count }) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
+      setValue('phoneMessage', { type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
       setSmsSendCount(remaining_count);
       enableButton();
+      setValue('isDisabled', true);
       setTimeout(() => {
         disableButton();
+        setValue('isDisabled', false);
       }, 3000);
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.INVALID });
+        }
 
-        if (err.status === 429) setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
+        if (err.status === 429) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
+          setValue('phoneMessage', { type: 'error', content: MESSAGES.VERIFICATION.STOP });
+        }
       }
     },
   });
@@ -77,9 +88,15 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.INVALID });
+        }
 
-        if (err.status === 404) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.NOT_REGISTERED });
+        if (err.status === 404) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.NOT_REGISTERED });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.NOT_REGISTERED });
+        }
       }
     },
   });
@@ -88,6 +105,9 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     mutationFn: smsVerify,
     onSuccess: () => {
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
+      setValue('verificationMessage', { type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
+      setValue('isCorrect', true);
+      setValue('isDisabled', true);
       enableVerified();
       enableCodeVerified();
       setCorrect();
@@ -98,6 +118,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
 
         if (err.status === 404) setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
       }
+      setValue('isCorrect', false);
     },
   });
 
@@ -105,6 +126,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     mutationFn: smsSend,
     onSuccess: (data: SmsSendResponse) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
+      setValue('phoneMessage', { type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
       setSmsSendCount(data.remaining_count);
 
@@ -114,9 +136,11 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
       if (isKoinError(err)) {
         if (err.status === 400) {
           setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.INVALID });
         }
         if (err.status === 429) {
           setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
+          setValue('phoneMessage', { type: 'error', content: MESSAGES.VERIFICATION.STOP });
         }
       }
     },
@@ -131,10 +155,12 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
       if (isKoinError(err)) {
         if (err.status === 400) {
           setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.INVALID });
         }
 
         if (err.status === 409) {
           setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
+          setValue('phoneMessage', { type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
         }
       }
     },

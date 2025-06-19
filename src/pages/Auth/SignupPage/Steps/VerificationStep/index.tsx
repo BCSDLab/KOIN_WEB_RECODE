@@ -25,22 +25,26 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const gender = useWatch({ control, name: 'gender' });
   const phoneNumber = useWatch({ control, name: 'phone_number' });
   const verificationCode = useWatch({ control, name: 'verification_code' });
+  const isCodeCorrect = useWatch({ control, name: 'isCorrect' });
+  const verificationMessage = useWatch({ control, name: 'verificationMessage' });
+  const phoneMessage = useWatch({ control, name: 'phoneMessage' });
+  const isDisabled = useWatch({ control, name: 'isDisabled' });
   const { errors } = useFormState({ control });
 
   const [buttonText, setButtonText] = useState('인증번호 발송');
 
   const {
-    phoneMessage,
+    // phoneMessage,
     checkVerificationSmsVerify,
-    isDisabled,
+    // isDisabled,
     isVerified,
     isCodeVerified,
     smsSendCount,
-    isCodeCorrect,
-    setIncorrect,
+    // isCodeCorrect,
+    // setIncorrect,
     setPhoneMessage,
     setVerificationMessage,
-    verificationMessage,
+    // verificationMessage,
     isTimer,
     timerValue,
     stopTimer,
@@ -170,14 +174,15 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       field.onChange(e);
                       setPhoneMessage(null);
                       stopTimer();
-                      setIncorrect();
+                      // setIncorrect();
+                      setValue('isCorrect', false);
                       setVerificationMessage(null);
                       setValue('verification_code', '');
                     }}
                     placeholder="숫자만 입력해 주세요."
                     isRequired
                     message={phoneMessage}
-                    disabled={isVerified}
+                    disabled={isDisabled || isVerified}
                     isDelete={!isVerified}
                     onClear={() => {
                       setPhoneMessage(null);
@@ -251,11 +256,12 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                   isTimer={isCodeCorrect ? false : isTimer}
                   timerValue={timerValue}
                   message={verificationMessage}
-                  disabled={isCodeVerified}
+                  disabled={isCodeVerified || isDisabled}
                   isDelete={!isVerified}
                   onClear={() => {
                     setVerificationMessage(null);
-                    setIncorrect();
+                    // setIncorrect();
+                    setValue('isCorrect', false);
                   }}
                 />
                 <button
