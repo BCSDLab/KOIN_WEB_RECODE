@@ -44,6 +44,10 @@ function SignupPage() {
       nickname: null,
       verification_code: '',
       marketing_notification_agreement: false,
+      isCorrect: false,
+      verificationMessage: null,
+      phoneMessage: null,
+      isDisabled: false,
     },
   });
 

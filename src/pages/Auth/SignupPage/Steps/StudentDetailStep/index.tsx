@@ -142,8 +142,11 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     const hashedPassword = await sha256(formData.password);
     const payload = {
       name: formData.name,
-      nickname: formData.nickname === '' ? null : formData.nickname,
-      email: formData.email === '' ? null : `${formData.email}@koreatech.ac.kr`,
+      nickname: formData.nickname?.trim() || null,
+      email:
+        !formData.email || formData.email.trim() === ''
+          ? null
+          : `${formData.email}@koreatech.ac.kr`,
       phone_number: formData.phone_number,
       student_number: formData.student_number,
       department: formData.department,
@@ -157,14 +160,14 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
   };
 
   const checkAndSubmit = () => {
-    const emailId = getValues('email');
+    const emailId = getValues('email')?.trim();
 
     if (!emailId) {
       handleSubmit(onSubmit)();
       return;
     }
 
-    const completeEmail = emailId ? `${emailId}@koreatech.ac.kr` : '';
+    const completeEmail = `${emailId}@koreatech.ac.kr`;
 
     checkEmail(completeEmail, {
       onSuccess: () => {

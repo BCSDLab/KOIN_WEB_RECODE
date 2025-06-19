@@ -127,8 +127,8 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     const hashedPassword = await sha256(formData.password);
     const payload = {
       name: formData.name,
-      nickname: formData.nickname === '' ? null : formData.nickname,
-      email: formData.email === '' ? null : formData.email,
+      nickname: formData.nickname?.trim() || null,
+      email: formData.email?.trim() || null,
       phone_number: formData.phone_number,
       gender: formData.gender,
       login_id: formData.login_id,

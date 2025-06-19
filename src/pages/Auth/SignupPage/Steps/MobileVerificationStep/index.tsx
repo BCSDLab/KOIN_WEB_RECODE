@@ -5,7 +5,7 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { checkPhone, smsSend, smsVerify } from 'api/auth';
 import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
-import { GENDER_OPTIONS, MESSAGES } from 'static/auth';
+import { GENDER_OPTIONS, MESSAGES, REGEX } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import type { SmsSendResponse } from 'api/auth/entity';
 import ROUTES from 'static/routes';
@@ -17,6 +17,18 @@ import CustomInput, { type InputMessage } from '../../components/CustomInput';
 interface MobileVerificationProps {
   onNext: () => void;
 }
+
+export const validateName = (value: string) => {
+  if (/^[가-힣]+$/.test(value)) {
+    return REGEX.NAME_KR.test(value) ? true : MESSAGES.NAME.FORMAT_KR;
+  }
+
+  if (/^[a-zA-Z\s]+$/.test(value)) {
+    return REGEX.NAME_EN.test(value) ? true : MESSAGES.NAME.FORMAT_EN;
+  }
+
+  return MESSAGES.NAME.INVALID;
+};
 
 function MobileVerification({ onNext }: MobileVerificationProps) {
   const { control, register } = useFormContext();
@@ -126,8 +138,21 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
             name="name"
             control={control}
             defaultValue=""
-            render={({ field }) => (
-              <CustomInput {...field} placeholder="실명을 입력해 주세요." isDelete />
+            rules={{
+              required: MESSAGES.NAME.REQUIRED,
+              validate: validateName,
+            }}
+            render={({ field, fieldState }) => (
+              <CustomInput
+                {...field}
+                placeholder="성함을 입력해 주세요."
+                isDelete
+                message={
+                  fieldState.error?.message
+                    ? { type: 'warning', content: fieldState.error.message }
+                    : null
+                }
+              />
             )}
           />
           <div className={styles['checkbox-wrapper']}>

@@ -1,6 +1,7 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
 import {
+  checkPhone,
   idExists,
   idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify,
 } from 'api/auth';
@@ -14,6 +15,8 @@ import ROUTES from 'static/routes';
 import useCountdownTimer from 'pages/Auth/SignupPage/hooks/useCountdownTimer';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
+import { useFormContext } from 'react-hook-form';
+import { SmsSendResponse } from 'api/auth/entity';
 
 interface UsePhoneVerificationProps {
   phoneNumber: string;
@@ -22,6 +25,7 @@ interface UsePhoneVerificationProps {
 
 function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps) {
   const navigate = useNavigate();
+  const { setValue } = useFormContext();
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
@@ -52,33 +56,47 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     mutationFn: smsSend,
     onSuccess: ({ remaining_count }) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
+      setValue('phoneMessage', { type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
       setSmsSendCount(remaining_count);
       enableButton();
+      setValue('isDisabled', true);
       setTimeout(() => {
         disableButton();
+        setValue('isDisabled', false);
       }, 3000);
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.INVALID });
+        }
 
-        if (err.status === 429) setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
+        if (err.status === 429) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
+          setValue('phoneMessage', { type: 'error', content: MESSAGES.VERIFICATION.STOP });
+        }
       }
     },
   });
 
   const { mutate: checkPhoneExists } = useMutation({
-    mutationFn: phoneExists,
+    mutationFn: phoneExists, // 아이디, 비밀번호 찾기 때 사용되는 api
     onSuccess: () => {
       sendVerificationSms({ phone_number: phoneNumber });
-      // setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.INVALID });
+        }
 
-        if (err.status === 404) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.NOT_REGISTERED });
+        if (err.status === 404) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.NOT_REGISTERED });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.NOT_REGISTERED });
+        }
       }
     },
   });
@@ -87,6 +105,9 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     mutationFn: smsVerify,
     onSuccess: () => {
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
+      setValue('verificationMessage', { type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
+      setValue('isCorrect', true);
+      setValue('isDisabled', true);
       enableVerified();
       enableCodeVerified();
       setCorrect();
@@ -96,6 +117,51 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
         if (err.status === 400) setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
 
         if (err.status === 404) setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
+      }
+      setValue('isCorrect', false);
+    },
+  });
+
+  const { mutate: sendSMSToUser } = useMutation({
+    mutationFn: smsSend,
+    onSuccess: (data: SmsSendResponse) => {
+      setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
+      setValue('phoneMessage', { type: 'success', content: MESSAGES.PHONE.CODE_SENT });
+      runTimer();
+      setSmsSendCount(data.remaining_count);
+
+      setSmsSendCount(data.remaining_count);
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.INVALID });
+        }
+        if (err.status === 429) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
+          setValue('phoneMessage', { type: 'error', content: MESSAGES.VERIFICATION.STOP });
+        }
+      }
+    },
+  });
+
+  const { mutate: checkPhoneNumber } = useMutation({
+    mutationFn: checkPhone, // 회원가입 할 때 사용되는 api
+    onSuccess: () => {
+      sendSMSToUser({ phone_number: phoneNumber });
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+          setValue('phoneMessage', { type: 'warning', content: MESSAGES.PHONE.INVALID });
+        }
+
+        if (err.status === 409) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
+          setValue('phoneMessage', { type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
+        }
       }
     },
   });
@@ -154,6 +220,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     checkIdMatchPhone,
     idMessage,
     setIdMessage,
+    checkPhoneNumber,
   };
 }
 
