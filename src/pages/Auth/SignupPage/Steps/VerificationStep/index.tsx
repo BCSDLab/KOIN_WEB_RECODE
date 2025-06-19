@@ -3,7 +3,9 @@ import { useState } from 'react';
 import {
   Controller, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
-import { UserType, GENDER_OPTIONS } from 'static/auth';
+import {
+  UserType, GENDER_OPTIONS, REGEX, MESSAGES,
+} from 'static/auth';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
@@ -17,6 +19,18 @@ interface VerificationProps {
   onBack: () => void;
   setUserType: (type: UserType) => void;
 }
+
+export const validateName = (value: string) => {
+  if (/^[가-힣]+$/.test(value)) {
+    return REGEX.NAME_KR.test(value) ? true : MESSAGES.NAME.FORMAT_KR;
+  }
+
+  if (/^[a-zA-Z\s]+$/.test(value)) {
+    return REGEX.NAME_EN.test(value) ? true : MESSAGES.NAME.FORMAT_EN;
+  }
+
+  return MESSAGES.NAME.INVALID;
+};
 
 function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const navigate = useNavigate();
@@ -99,22 +113,8 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
             control={control}
             defaultValue=""
             rules={{
-              required: '이름은 필수 항목입니다.',
-              validate: (value) => {
-                if (/^[가-힣]+$/.test(value)) {
-                  return (value.length >= 2 && value.length <= 5)
-                    ? true
-                    : '한글 이름은 2~5자여야 합니다.';
-                }
-
-                if (/^[a-zA-Z\s]+$/.test(value)) {
-                  return (value.length >= 2 && value.length <= 30)
-                    ? true
-                    : '영문 이름은 2~30자여야 합니다.';
-                }
-
-                return '한글 또는 영문만 입력 가능합니다.';
-              },
+              required: MESSAGES.NAME.REQUIRED,
+              validate: validateName,
             }}
             render={({ field, fieldState }) => (
               <PCCustomInput

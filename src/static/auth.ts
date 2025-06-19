@@ -5,6 +5,8 @@ export const REGEX = {
   STUDENT_NUMBER: /^(19|20)\d{2}\d{4,6}$/,
   EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
   STUDENTEMAIL: /^[a-zA-Z0-9._%+-]{3,30}$/,
+  NAME_KR: /^[가-힣]{2,5}$/,
+  NAME_EN: /^[a-zA-Z\s]{2,30}$/,
 };
 
 export const MESSAGES = {
@@ -12,6 +14,12 @@ export const MESSAGES = {
     FORMAT: '올바른 비밀번호 양식이 아닙니다. 다시 입력해 주세요.',
     MISMATCH: '비밀번호가 일치하지 않습니다.',
     MATCH: '비밀번호가 일치합니다.',
+  },
+  NAME: {
+    REQUIRED: '이름은 필수 항목입니다.',
+    FORMAT_KR: '한글 이름은 2~5자여야 합니다.',
+    FORMAT_EN: '영문 이름은 2~30자여야 합니다.',
+    INVALID: '한글 또는 영문만 입력 가능합니다.',
   },
   NICKNAME: {
     DUPLICATED: '중복된 닉네임입니다. 다시 입력해 주세요.',
