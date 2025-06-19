@@ -8,7 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
-import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
+import usePhoneVerificationInFindId from 'utils/hooks/auth/usePhoneVerificationInFindId';
 import styles from './FindIdPhonePage.module.scss';
 
 function FindIdPhonePage() {
@@ -44,7 +44,7 @@ function FindIdPhonePage() {
     isTimer,
     timerValue,
     stopTimer,
-  } = usePhoneVerification({ phoneNumber });
+  } = usePhoneVerificationInFindId({ phoneNumber });
 
   const isFormFilled = phoneNumber && verificationCode;
 
