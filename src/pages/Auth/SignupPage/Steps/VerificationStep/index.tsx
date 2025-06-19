@@ -34,17 +34,12 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const [buttonText, setButtonText] = useState('인증번호 발송');
 
   const {
-    // phoneMessage,
     checkVerificationSmsVerify,
-    // isDisabled,
     isVerified,
     isCodeVerified,
     smsSendCount,
-    // isCodeCorrect,
-    // setIncorrect,
     setPhoneMessage,
     setVerificationMessage,
-    // verificationMessage,
     isTimer,
     timerValue,
     stopTimer,
@@ -174,7 +169,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       field.onChange(e);
                       setPhoneMessage(null);
                       stopTimer();
-                      // setIncorrect();
                       setValue('isCorrect', false);
                       setVerificationMessage(null);
                       setValue('verification_code', '');
@@ -260,7 +254,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                   isDelete={!isVerified}
                   onClear={() => {
                     setVerificationMessage(null);
-                    // setIncorrect();
                     setValue('isCorrect', false);
                   }}
                 />
