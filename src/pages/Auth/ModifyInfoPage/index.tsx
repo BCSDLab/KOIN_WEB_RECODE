@@ -28,11 +28,13 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useTokenStore } from 'utils/zustand/auth';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useAuthentication } from 'utils/zustand/authentication';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
 import { ModifyFormValidationProvider, useValidationContext } from './hooks/useValidationContext';
 import { passwordValidationReducer } from './reducers/passwordReducer';
+import AuthenticateUserModal from './components/AuthenticateUserModal';
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
 
@@ -1095,6 +1097,7 @@ function ModifyInfoDefaultPage() {
   const token = useTokenState();
   const navigate = useNavigate();
   const portalManager = useModalPortal();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const { status, submitForm } = useModifyInfoForm();
   const { data: userInfo } = useUser();
@@ -1124,10 +1127,9 @@ function ModifyInfoDefaultPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate(ROUTES.Main());
-      showToast('error', '비밀번호 인증이 필요합니다.');
+      openModal();
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, openModal]);
 
   return (
     <div className={styles.container}>
@@ -1232,6 +1234,12 @@ function ModifyInfoDefaultPage() {
           )}
         </div>
       </form>
+      {isModalOpen && (
+        <AuthenticateUserModal
+          onClose={closeModal}
+          disabledClose
+        />
+      )}
     </div>
   );
 }

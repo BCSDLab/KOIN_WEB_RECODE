@@ -17,16 +17,19 @@ import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
   onClose: () => void;
+  disabledClose?: boolean;
 }
 
 export default function AuthenticateUserModal({
   onClose,
+  disabledClose = false,
 }: AuthenticateUserModalProps) {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
-  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
-  useEscapeKeyDown({ onEscape: onClose });
+  const handleClose = disabledClose ? () => {} : onClose;
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: handleClose });
+  useEscapeKeyDown({ onEscape: handleClose });
 
   const isMobile = useMediaQuery();
   const { updateAuthentication } = useAuthenticationActions();
@@ -76,6 +79,7 @@ export default function AuthenticateUserModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>내 정보 수정하기</span>
+          {!disabledClose && (
           <div
             className={styles['container__close-button']}
             onClick={onClose}
@@ -84,6 +88,7 @@ export default function AuthenticateUserModal({
           >
             <CloseIcon />
           </div>
+          )}
         </header>
         <div
           className={cn({
