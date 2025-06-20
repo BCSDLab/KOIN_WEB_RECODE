@@ -12,7 +12,7 @@ function BoardPage() {
       <Suspense fallback={null}>
         <Outlet />
       </Suspense>
-      <Footer />
+      {!(typeof window !== 'undefined' && window.webkit?.messageHandlers) && <Footer />}
     </>
   );
 }
