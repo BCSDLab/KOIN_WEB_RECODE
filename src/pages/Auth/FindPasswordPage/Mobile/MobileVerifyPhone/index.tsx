@@ -28,7 +28,7 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
     isDisabled,
     isVerified,
     isCodeVerified,
-    smsSendCount,
+    smsSendCountData,
     isCodeCorrect,
     setIncorrect,
     setPhoneMessage,
@@ -123,8 +123,10 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
                   {phoneMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
                       남은 횟수 (
-                      {smsSendCount}
-                      /5)
+                      {smsSendCountData?.remaining_count}
+                      /
+                      {smsSendCountData?.total_count}
+                      )
                     </div>
                   )}
                 </CustomInput>

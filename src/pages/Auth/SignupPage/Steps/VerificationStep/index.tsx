@@ -51,7 +51,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     checkVerificationSmsVerify,
     isVerified,
     isCodeVerified,
-    smsSendCount,
+    smsSendCountData,
     setPhoneMessage,
     setVerificationMessage,
     isTimer,
@@ -192,8 +192,10 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                     <div className={styles['label-count-number']}>
                       {' '}
                       남은 횟수 (
-                      {smsSendCount}
-                      /5)
+                      {smsSendCountData?.remaining_count}
+                      /
+                      {smsSendCountData?.total_count ?? 5}
+                      )
                     </div>
                     )}
                     {phoneMessage?.type === 'error' && phoneMessage.code === 'ALREADY_REGISTERED' && (

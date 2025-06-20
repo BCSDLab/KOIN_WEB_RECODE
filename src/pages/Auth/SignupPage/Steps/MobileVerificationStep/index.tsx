@@ -30,6 +30,12 @@ export const validateName = (value: string) => {
   return MESSAGES.NAME.INVALID;
 };
 
+interface SmsSendCountData {
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
+
 function MobileVerification({ onNext }: MobileVerificationProps) {
   const { control, register } = useFormContext();
   const name = useWatch({ control, name: 'name' });
@@ -39,11 +45,11 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
 
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
-  const [smsSendCount, setSmsSendCount] = useState(0);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
   const [isVerificationShown, showVerification] = useBooleanState(false);
   const [isVerified, enableVerified] = useBooleanState(false);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
+  const [smsSendCountData, setSmsSendCountData] = useState<SmsSendCountData | null>(null);
 
   const {
     isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,
@@ -60,7 +66,11 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
       showVerification();
-      setSmsSendCount(data.remaining_count);
+      setSmsSendCountData({
+        total_count: data.total_count,
+        remaining_count: data.remaining_count,
+        current_count: data.current_count,
+      });
       enableButton();
       setTimeout(() => {
         disableButton();
@@ -189,8 +199,10 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                     <div className={styles['label-count-number']}>
                       {' '}
                       남은 횟수 (
-                      {smsSendCount}
-                      /5)
+                      {smsSendCountData?.remaining_count}
+                      /
+                      {smsSendCountData?.total_count}
+                      )
                     </div>
                   )}
                   {

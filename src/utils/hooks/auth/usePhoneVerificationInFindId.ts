@@ -22,6 +22,12 @@ interface UsePhoneVerificationProps {
   onNext?: () => void;
 }
 
+interface SmsSendCountData {
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
+
 function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificationProps) {
   const navigate = useNavigate();
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
@@ -29,9 +35,9 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
   const [isVerified, enableVerified] = useBooleanState(false);
   const [isCodeVerified, enableCodeVerified] = useBooleanState(false);
-  const [smsSendCount, setSmsSendCount] = useState(0);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
+  const [smsSendCountData, setSmsSendCountData] = useState<SmsSendCountData | null>(null);
 
   const {
     isRunning: isTimer,
@@ -52,10 +58,10 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
 
   const { mutate: sendVerificationSms } = useMutation({
     mutationFn: smsSend,
-    onSuccess: ({ remaining_count }) => {
+    onSuccess: ({ total_count, remaining_count, current_count }) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
-      setSmsSendCount(remaining_count);
+      setSmsSendCountData({ total_count, remaining_count, current_count });
       enableButton();
       setTimeout(() => {
         disableButton();
@@ -114,9 +120,11 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
     onSuccess: (data: SmsSendResponse) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
-      setSmsSendCount(data.remaining_count);
-
-      setSmsSendCount(data.remaining_count);
+      setSmsSendCountData({
+        remaining_count: data.remaining_count,
+        total_count: data.total_count,
+        current_count: data.current_count,
+      });
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -189,7 +197,7 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
     disableButton,
     isVerified,
     isCodeVerified,
-    smsSendCount,
+    smsSendCountData,
     isCodeCorrect,
     setIncorrect,
     setPhoneMessage,

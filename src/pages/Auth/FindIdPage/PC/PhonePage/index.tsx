@@ -35,7 +35,7 @@ function FindIdPhonePage() {
     disableButton,
     isVerified,
     isCodeVerified,
-    smsSendCount,
+    smsSendCountData,
     isCodeCorrect,
     setIncorrect,
     setPhoneMessage,
@@ -104,8 +104,10 @@ function FindIdPhonePage() {
                       <div className={styles['label-count-number']}>
                         {' '}
                         남은 횟수 (
-                        {smsSendCount}
-                        /5)
+                        {smsSendCountData?.remaining_count}
+                        /
+                        {smsSendCountData?.total_count}
+                        )
                       </div>
                       )}
                     </PCCustomInput>

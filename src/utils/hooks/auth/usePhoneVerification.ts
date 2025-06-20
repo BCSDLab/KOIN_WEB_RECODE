@@ -23,6 +23,12 @@ interface UsePhoneVerificationProps {
   onNext?: () => void;
 }
 
+interface SmsSendCountData {
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
+
 function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps) {
   const navigate = useNavigate();
   const { setValue } = useFormContext();
@@ -31,7 +37,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
   const [isVerified, enableVerified] = useBooleanState(false);
   const [isCodeVerified, enableCodeVerified] = useBooleanState(false);
-  const [smsSendCount, setSmsSendCount] = useState(0);
+  const [smsSendCountData, setSmsSendCountData] = useState<SmsSendCountData | null>(null);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
 
@@ -54,11 +60,11 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
 
   const { mutate: sendVerificationSms } = useMutation({
     mutationFn: smsSend,
-    onSuccess: ({ remaining_count }) => {
+    onSuccess: ({ total_count, remaining_count, current_count }) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       setValue('phoneMessage', { type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
-      setSmsSendCount(remaining_count);
+      setSmsSendCountData({ total_count, remaining_count, current_count });
       enableButton();
       setValue('isDisabled', true);
       setTimeout(() => {
@@ -128,9 +134,11 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       setValue('phoneMessage', { type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
-      setSmsSendCount(data.remaining_count);
-
-      setSmsSendCount(data.remaining_count);
+      setSmsSendCountData({
+        remaining_count: data.remaining_count,
+        total_count: data.total_count,
+        current_count: data.current_count,
+      });
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -207,7 +215,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     disableButton,
     isVerified,
     isCodeVerified,
-    smsSendCount,
+    smsSendCountData,
     isCodeCorrect,
     setIncorrect,
     setPhoneMessage,

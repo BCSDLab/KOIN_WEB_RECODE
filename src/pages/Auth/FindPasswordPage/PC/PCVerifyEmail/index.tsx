@@ -33,7 +33,7 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
     isDisabled,
     isVerified,
     isCodeVerified,
-    smsSendCount,
+    emailSendCountData,
     isCodeCorrect,
     setIncorrect,
     setEmailMessage,
@@ -151,8 +151,10 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
                     <div className={styles['label-count-number']}>
                       {' '}
                       남은 횟수 (
-                      {smsSendCount}
-                      /5)
+                      {emailSendCountData?.remaining_count}
+                      /
+                      {emailSendCountData?.total_count}
+                      )
                     </div>
                   )}
                 </PCCustomInput>
