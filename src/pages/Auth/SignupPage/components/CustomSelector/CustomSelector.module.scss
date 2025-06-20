@@ -35,7 +35,7 @@
   position: relative;
   display: inline-block;
   border-radius: 12px;
-  max-width: 320px;
+  width: 100%;
 
   @include media.media-breakpoint(mobile) {
     max-width: 100%;
