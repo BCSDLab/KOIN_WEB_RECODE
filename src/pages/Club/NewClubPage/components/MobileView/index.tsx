@@ -37,6 +37,7 @@ export default function MobileView({
   const logger = useLogger();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const [isTried, setIsTried] = useState(false);
 
   const categoryOptions = [
     { value: 1, label: '학술 분과' },
@@ -113,6 +114,7 @@ export default function MobileView({
         value: '생성요청',
       });
     }
+    setIsTried(true);
     handleOpenModal();
   };
 
@@ -132,7 +134,7 @@ export default function MobileView({
             <label
               className={cn({
                 [styles['form-image__label']]: true,
-                [styles['form-image__label--error']]: !formData.image_url,
+                [styles['form-image__label--error']]: !formData.image_url && isTried,
               })}
               htmlFor="club-image-upload"
               aria-label="동아리 이미지 업로드"
@@ -154,7 +156,7 @@ export default function MobileView({
                 <div>1:1 비율로 업로드 해주세요</div>
               </div>
             </label>
-            {!formData.image_url && <ClubInputErrorCondition />}
+            {!formData.image_url && isTried && <ClubInputErrorCondition />}
           </div>
         )}
         <div className={styles['button-group__top']}>
@@ -189,14 +191,14 @@ export default function MobileView({
           <input
             className={cn({
               [styles['form__text-input']]: true,
-              [styles['form__text-input--error']]: formData.name.length === 0,
+              [styles['form__text-input--error']]: (formData.name.length === 0 && isTried),
             })}
             value={formData.name}
             placeholder="동아리명을 입력해주세요(필수)"
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </div>
-        {!formData.name && <ClubInputErrorCondition />}
+        {!formData.name && isTried && <ClubInputErrorCondition />}
         <div className={styles['form-category']}>
           <div className={styles['form-label']}>분과:</div>
           <div
@@ -252,14 +254,14 @@ export default function MobileView({
           <input
             className={cn({
               [styles['form__text-input']]: true,
-              [styles['form__text-input--error']]: formData.location.length === 0,
+              [styles['form__text-input--error']]: (formData.location.length === 0) && isTried,
             })}
             value={formData.location}
             placeholder="동아리 방 위치를 입력하세요(필수)"
             onChange={(e) => setFormData({ ...formData, location: e.target.value })}
           />
         </div>
-        {!formData.location && <ClubInputErrorCondition />}
+        {!formData.location && isTried && <ClubInputErrorCondition />}
         <div className={styles['form-description']}>
           <div className={styles['form-label']}>동아리 소개:</div>
           <textarea
@@ -307,7 +309,7 @@ export default function MobileView({
             <input
               className={cn({
                 [styles['form__text-input']]: true,
-                [styles['form__text-input--error']]: !formData.phone_number,
+                [styles['form__text-input--error']]: !formData.phone_number && isTried,
               })}
               value={formData.phone_number}
               placeholder="대표자 전화번호를 입력해주세요.(필수)"
@@ -316,7 +318,7 @@ export default function MobileView({
                 phone_number: addHyphen(e.target.value),
               }))}
             />
-            {!formData.phone_number && (
+            {!formData.phone_number && isTried && (
               <div className={styles['error-container']}>
                 <ClubInputErrorCondition />
               </div>
