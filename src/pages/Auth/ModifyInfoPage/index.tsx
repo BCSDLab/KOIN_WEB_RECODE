@@ -16,7 +16,6 @@ import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import ROUTES from 'static/routes';
 import { REGEX } from 'static/auth';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
-import { Selector } from 'components/ui/Selector';
 import { usePhoneVerification } from 'pages/Auth/ModifyInfoPage/hooks/usePhoneVerification';
 import ErrorIcon from 'assets/svg/Login/error.svg';
 import CorrectIcon from 'assets/svg/Login/correct.svg';
@@ -29,6 +28,7 @@ import { useTokenStore } from 'utils/zustand/auth';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useAuthentication } from 'utils/zustand/authentication';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import CustomSelector from 'pages/Auth/SignupPage/components/CustomSelector';
 import UserDeleteModal from './components/UserDeleteModal';
 import styles from './ModifyInfoPage.module.scss';
 import useUserDelete from './hooks/useUserDelete';
@@ -388,7 +388,6 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   const { setIsValid } = useValidationContext();
 
   const {
-    changeTargetNickname,
     status,
     currentCheckedNickname,
     mutate,
@@ -415,19 +414,23 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
       return;
     }
+    if (REGEX.ADMIN_NICKNAME.test(currentNicknameValue)) {
+      showToast('error', '사용할 수 없는 닉네임입니다.');
+      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
+      return;
+    }
     if (currentNicknameValue === userInfo?.nickname) {
       showToast('info', '기존의 닉네임과 동일합니다.');
       return;
     }
     if (!REGEX.NICKNAME.test(currentNicknameValue)) {
-      showToast('error', '닉네임은 2자 이상 20자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
+      showToast('error', '닉네임은 2자 이상 10자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
       return;
     }
     mutate(currentNicknameValue, {
       onSuccess: () => {
         setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
-        changeTargetNickname(currentNicknameValue);
       },
     });
   };
@@ -559,7 +562,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
       const year = parseInt(studentNumber.slice(0, 4), 10);
       if (year < 1992 || year > new Date().getFullYear()) {
         valid = '올바른 입학년도가 아닙니다.';
-      } else if (studentNumber && studentNumber.length !== 10) {
+      } else if (studentNumber && (studentNumber.length < 8 || studentNumber.length > 10)) {
         valid = '학번은 10자리여야 합니다.';
       } else {
         valid = true;
@@ -608,7 +611,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               <span className={styles['form-input__required']}>*</span>
             </label>
             <div className={styles['form-input__select']}>
-              <Selector
+              <CustomSelector
                 options={deptOptionList}
                 value={major}
                 onChange={handleChangeMajor}
@@ -625,11 +628,11 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
               <span className={styles['form-input__required']}>*</span>
             </label>
             <div className={styles['form-input__select']}>
-              <Selector
+              <CustomSelector
                 options={deptOptionList}
                 value={major}
                 onChange={handleChangeMajor}
-                placeholder="학부 (선택)"
+                placeholder="학부를 선택해주세요."
               />
             </div>
           </div>
@@ -740,14 +743,16 @@ const PhoneInput = React.forwardRef((props, ref) => {
     verifyCode,
     phoneMessage,
     verificationMessage,
-    smsSendCount,
     isVerified,
     timeLeft,
     formattedTime,
     isRunning,
+    sendSMS,
   } = usePhoneVerification(
     phoneNumber,
   );
+
+  const { data } = sendSMS;
 
   useEffect(() => {
     if (phoneNumber === userInfo?.phone_number) {
@@ -784,7 +789,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
       <>
         <div className={styles['form-input__label-wrapper']}>
           <label htmlFor="phone" className={styles['form-input__label']}>
-            휴대전화 변경
+            휴대전화
             <span className={styles['form-input__required']}>*</span>
           </label>
           <div className={styles['form-input__row']}>
@@ -820,10 +825,12 @@ const PhoneInput = React.forwardRef((props, ref) => {
             {phoneMessage.type === 'error' && <ErrorIcon />}
             {phoneMessage.type === 'warning' && <WarningIcon />}
             {phoneMessage.content}
-            <span className={styles['form-message--count']}>
-              남은 횟수
-              {` (${smsSendCount}/5)`}
-            </span>
+            {phoneMessage.type === 'success' && (
+              <span className={styles['form-message--count']}>
+                남은 횟수
+                {` (${data?.remaining_count}/${data?.total_count})`}
+              </span>
+            )}
           </p>
           )}
         </div>
@@ -834,19 +841,21 @@ const PhoneInput = React.forwardRef((props, ref) => {
               <span className={styles['form-input__required']}>*</span>
             </label>
             <div className={styles['form-input__row']}>
-              <input
-                className={styles['form-input']}
-                type="text"
-                autoComplete="one-time-code"
-                placeholder="인증번호를 입력해주세요."
-                value={codeNumber}
-                onChange={(e) => setCodeNumber(e.target.value)}
-              />
-              {isRunning && (
-              <p className={styles['form-message--timer']}>
-                {formattedTime}
-              </p>
-              )}
+              <div className={styles['form-input__code-wrapper']}>
+                <input
+                  className={styles['form-input']}
+                  type="text"
+                  autoComplete="one-time-code"
+                  placeholder="인증번호를 입력해주세요."
+                  value={codeNumber}
+                  onChange={(e) => setCodeNumber(e.target.value)}
+                />
+                {isRunning && (
+                <p className={styles['form-message__timer']}>
+                  {formattedTime}
+                </p>
+                )}
+              </div>
               <button
                 type="button"
                 className={cn({
@@ -919,7 +928,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
               {phoneMessage.type === 'success' && (
               <span className={styles['form-message--count']}>
                 남은 횟수
-                {` (${smsSendCount}/5)`}
+                {` (${data?.remaining_count}/${data?.total_count})`}
               </span>
               )}
             </p>
@@ -931,19 +940,21 @@ const PhoneInput = React.forwardRef((props, ref) => {
               휴대전화 인증
               <span className={styles['form-input__required']}>*</span>
             </label>
-            <input
-              className={styles['form-input']}
-              type="text"
-              autoComplete="one-time-code"
-              placeholder="인증번호를 입력해주세요."
-              value={codeNumber}
-              onChange={(e) => setCodeNumber(e.target.value)}
-            />
-            {isRunning && (
-            <p className={styles['form-message--timer']}>
-              {formattedTime}
-            </p>
-            )}
+            <div className={styles['form-input__code-wrapper']}>
+              <input
+                className={styles['form-input']}
+                type="text"
+                autoComplete="one-time-code"
+                placeholder="인증번호를 입력해주세요."
+                value={codeNumber}
+                onChange={(e) => setCodeNumber(e.target.value)}
+              />
+              {isRunning && (
+              <p className={styles['form-message__timer']}>
+                {formattedTime}
+              </p>
+              )}
+            </div>
             <button
               type="button"
               className={cn({
@@ -1103,7 +1114,7 @@ const useModifyInfoForm = () => {
       nickname: formValue.nickname || undefined,
       gender: formValue.gender ?? undefined,
       phone_number: formValue['phone-number'] || undefined,
-      email: formValue.email || undefined,
+      email: formValue.email || null,
     };
 
     if (isStudent) {
@@ -1130,10 +1141,10 @@ function ModifyInfoDefaultPage() {
   const { register, onSubmit: onSubmitModifyForm } = useLightweightForm(submitForm);
   const { mutate: deleteUser } = useUserDelete();
 
-  const { isFormValid } = useValidationContext();
   const isAuthenticated = useAuthentication();
   const isMobile = useMediaQuery();
   const isStudent = isStudentUser(userInfo);
+  const { isFormValid } = useValidationContext(isStudent);
 
   const onClickUserDeleteConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
