@@ -41,7 +41,7 @@ export function ModifyFormValidationProvider({ children }: { children: React.Rea
   );
 }
 
-export const useValidationContext = () => {
+export const useValidationContext = (isStudent?: boolean) => {
   const context = useContext(ModifyFormValidationContext);
 
   if (!context) {
@@ -50,7 +50,7 @@ export const useValidationContext = () => {
 
   const { isValid, setIsValid } = context;
 
-  const isFormValid = useMemo(() => (
+  const isStudentFormValid = useMemo(() => (
     isValid.isPhoneValid
       && isValid.isStudentIdValid
       && isValid.isStudentMajorValid
@@ -67,6 +67,20 @@ export const useValidationContext = () => {
   ]) || isValid.isPasswordValid
   || isValid.isEmailValid
   || isValid.isNicknameValid;
+
+  const isGeneralFormValid = useMemo(() => (
+    isValid.isPhoneValid
+      && isValid.isGenderValid
+      && isValid.isNameValid
+      && isValid.isFieldChanged
+  ), [
+    isValid.isPhoneValid,
+    isValid.isGenderValid,
+    isValid.isNameValid,
+    isValid.isFieldChanged,
+  ]);
+
+  const isFormValid = isStudent ? isStudentFormValid : isGeneralFormValid;
 
   return { isValid, setIsValid, isFormValid };
 };
