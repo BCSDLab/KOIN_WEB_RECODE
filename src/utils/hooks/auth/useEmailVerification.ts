@@ -22,8 +22,8 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [emailMessage, setEmailMessage] = useState<InputMessage | null>(null);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
-  const [isVerified, enableVerified] = useBooleanState(false);
-  const [isCodeVerified, enableCodeVerified] = useBooleanState(false);
+  const [isVerified, enableVerified, disableVerified] = useBooleanState(false);
+  const [isCodeVerified, enableCodeVerified, disableCodeVerified] = useBooleanState(false);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
 
@@ -37,6 +37,16 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
       if (!isVerified) setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
     },
   });
+
+  const resetVerificationState = () => {
+    disableButton();
+    disableVerified();
+    disableCodeVerified();
+    setIncorrect();
+    stopTimer();
+    setEmailMessage(null);
+    setVerificationMessage(null);
+  };
 
   const { mutate: sendVerificationEmail } = useMutation({
     mutationFn: verificationEmailSend,
@@ -119,6 +129,7 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
           showToast('error', '아이디와 이메일이 일치하지 않습니다');
         }
       }
+      resetVerificationState();
     },
   });
 
