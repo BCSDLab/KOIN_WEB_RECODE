@@ -174,6 +174,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
               <div>
                 <div className={styles['input-with-button']}>
                   <PCCustomInput
+                    maxLength={11}
                     htmlFor="phone_number"
                     labelName="휴대전화"
                     {...field}

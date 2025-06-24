@@ -195,6 +195,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                   buttonText="인증번호 발송"
                   buttonDisabled={!field.value || isDisabled || isVerified}
                   buttonOnClick={() => checkPhoneNumber(phoneNumber)}
+                  maxLength={11}
                 >
                   {phoneMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>

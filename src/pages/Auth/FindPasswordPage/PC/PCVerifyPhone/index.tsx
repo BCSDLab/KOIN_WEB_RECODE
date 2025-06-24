@@ -128,6 +128,7 @@ function PCVerifyPhone({
               <div>
                 <div className={styles['input-with-button']}>
                   <PCCustomInput
+                    maxLength={11}
                     htmlFor="phoneNumber"
                     labelName="휴대전화"
                     {...field}
