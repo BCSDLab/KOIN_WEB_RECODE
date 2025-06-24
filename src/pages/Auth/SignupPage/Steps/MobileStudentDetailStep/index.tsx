@@ -38,8 +38,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   const {
     control, getValues, trigger, handleSubmit,
   } = useFormContext<StudentFormValues>();
-  const { errors } = useFormState({ control });
-  const { isValid } = useFormState({ control });
+  const { errors, isValid } = useFormState({ control });
 
   const loginId = (useWatch({ control, name: 'login_id' }) ?? '');
   const passwordCheck = useWatch({ control, name: 'password_check' });
