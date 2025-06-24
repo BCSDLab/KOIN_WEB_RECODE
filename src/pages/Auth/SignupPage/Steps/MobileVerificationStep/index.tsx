@@ -266,7 +266,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
         className={styles['next-button']}
         disabled={!isValid || !isCodeCorrect}
       >
-        다음이름 조건이 만족되지 않더라도 전화 번호 인증시 다음 버튼 활성화되는 이슈 수정
+        다음
       </button>
 
     </div>
