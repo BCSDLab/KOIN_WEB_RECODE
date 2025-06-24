@@ -33,7 +33,7 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
 
-  const [isDisabled, enableButton, disableButton] = useBooleanState(false); // 버튼 비활성화 버튼
+  const [isDisabled, enableButton, disableButton] = useBooleanState(false);
   const [isVerified, enableVerified, disableVerified] = useBooleanState(false);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
