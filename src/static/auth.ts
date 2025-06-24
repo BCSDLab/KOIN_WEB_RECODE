@@ -1,6 +1,7 @@
 export const REGEX = {
   PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/]{6,18}$/,
   NICKNAME: /^[가-힣a-zA-Z0-9]{0,10}$/,
+  ADMIN_NICKNAME: /admin|관리자/,
   USERID: /^[a-z0-9_.-]{5,13}$/,
   STUDENT_NUMBER: /^(19|20)\d{2}\d{4,6}$/,
   EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
