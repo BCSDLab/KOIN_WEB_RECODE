@@ -563,7 +563,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
       if (year < 1992 || year > new Date().getFullYear()) {
         valid = '올바른 입학년도가 아닙니다.';
       } else if (studentNumber && (studentNumber.length < 8 || studentNumber.length > 10)) {
-        valid = '학번은 10자리여야 합니다.';
+        valid = '학번은 8자리에서 10자리 사이여야 합니다.';
       } else {
         valid = true;
       }
