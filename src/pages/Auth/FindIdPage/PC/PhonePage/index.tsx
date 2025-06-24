@@ -98,6 +98,7 @@ function FindIdPhonePage() {
                       message={phoneMessage}
                       disabled={isVerified}
                       isDelete={!isVerified}
+                      maxLength={11}
                     >
                       {phoneMessage?.type === 'success' && (
                       <div className={styles['label-count-number']}>

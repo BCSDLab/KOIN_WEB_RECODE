@@ -80,6 +80,7 @@ function MobileFindIdPhonePage() {
               render={({ field }) => (
                 <CustomInput
                   {...field}
+                  maxLength={11}
                   placeholder="- 없이 번호를 입력해 주세요."
                   isDelete={!isVerified}
                   message={phoneMessage}
