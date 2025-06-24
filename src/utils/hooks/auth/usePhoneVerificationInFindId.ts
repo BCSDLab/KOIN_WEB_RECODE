@@ -32,9 +32,9 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
   const navigate = useNavigate();
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
-  const [isDisabled, enableButton, disableButton] = useBooleanState(false);
-  const [isVerified, enableVerified] = useBooleanState(false);
-  const [isCodeVerified, enableCodeVerified] = useBooleanState(false);
+
+  const [isDisabled, enableButton, disableButton] = useBooleanState(false); // 버튼 비활성화 버튼
+  const [isVerified, enableVerified, disableVerified] = useBooleanState(false);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [smsSendCountData, setSmsSendCountData] = useState<SmsSendCountData | null>(null);
@@ -103,7 +103,6 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
     onSuccess: () => {
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
       enableVerified();
-      enableCodeVerified();
       setCorrect();
     },
     onError: (err) => {
@@ -196,7 +195,7 @@ function usePhoneVerificationInFindId({ phoneNumber, onNext }: UsePhoneVerificat
     isDisabled,
     disableButton,
     isVerified,
-    isCodeVerified,
+    disableVerified,
     smsSendCountData,
     isCodeCorrect,
     setIncorrect,

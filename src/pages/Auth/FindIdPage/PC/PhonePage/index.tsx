@@ -34,7 +34,6 @@ function FindIdPhonePage() {
     isDisabled,
     disableButton,
     isVerified,
-    isCodeVerified,
     smsSendCountData,
     isCodeCorrect,
     setIncorrect,
@@ -137,7 +136,7 @@ function FindIdPhonePage() {
                       htmlFor="verification_code"
                       placeholder="인증번호를 입력해 주세요."
                       message={verificationMessage}
-                      disabled={isCodeVerified}
+                      disabled={isVerified}
                       isTimer={isCodeCorrect ? false : isTimer}
                       timerValue={timerValue}
                       isDelete={!isVerified}
@@ -156,7 +155,7 @@ function FindIdPhonePage() {
                       type="button"
                       onClick={() => onClickSendVerificationButton()}
                       className={styles['check-button']}
-                      disabled={isCodeVerified}
+                      disabled={!field.value || isDisabled || isVerified}
                     >
                       인증번호 확인
                     </button>
@@ -169,7 +168,7 @@ function FindIdPhonePage() {
           <div className={styles['button-container']}>
             <button
               type="submit"
-              disabled={!isFormFilled || !isCodeCorrect}
+              disabled={!isFormFilled || !isVerified}
               className={styles['next-button']}
             >
               다음
