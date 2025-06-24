@@ -29,7 +29,6 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
   const [emailMessage, setEmailMessage] = useState<InputMessage | null>(null);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
   const [isVerified, enableVerified] = useBooleanState(false);
-  const [isCodeVerified, enableCodeVerified] = useBooleanState(false);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [emailSendCountData, setEmailSendCountData] = useState<EmailSendCountData | null>(null);
@@ -83,7 +82,6 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
     onSuccess: () => {
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
       enableVerified();
-      enableCodeVerified();
       setCorrect();
     },
     onError: (err) => {
@@ -135,7 +133,6 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
     isDisabled,
     disableButton,
     isVerified,
-    isCodeVerified,
     emailSendCountData,
     isCodeCorrect,
     setIncorrect,

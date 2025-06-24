@@ -29,7 +29,6 @@ function MobileFindIdEmailPage() {
     isDisabled,
     disableButton,
     isVerified,
-    isCodeVerified,
     emailSendCountData,
     isCodeCorrect,
     setIncorrect,
@@ -110,14 +109,14 @@ function MobileFindIdEmailPage() {
                 <CustomInput
                   {...field}
                   placeholder="인증번호를 입력해주세요."
-                  isDelete={!isCodeVerified}
+                  isDelete={!isVerified}
                   isTimer={isVerified ? false : isTimer}
                   timerValue={timerValue}
                   message={verificationMessage}
                   isButton
-                  disabled={isCodeVerified}
+                  disabled={isVerified}
                   buttonText="인증번호 확인"
-                  buttonDisabled={!field.value || isDisabled || isCodeVerified}
+                  buttonDisabled={!field.value || isDisabled || isVerified}
                   buttonOnClick={() => onClickSendVerificationButton()}
                 />
               )}

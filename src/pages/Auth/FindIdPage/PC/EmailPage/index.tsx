@@ -33,7 +33,6 @@ function FindIdEmailPage() {
     isDisabled,
     disableButton,
     isVerified,
-    isCodeVerified,
     emailSendCountData,
     isCodeCorrect,
     setIncorrect,
@@ -134,20 +133,20 @@ function FindIdEmailPage() {
                     <PCCustomInput
                       {...field}
                       placeholder="인증번호를 입력해 주세요."
-                      isDelete={!isCodeVerified}
+                      isDelete={!isVerified}
                       isTimer={isVerified ? false : isTimer}
                       timerValue={timerValue}
                       message={verificationMessage}
                       isRequired
                       labelName="이메일 인증"
                       htmlFor="verification_code"
-                      disabled={isCodeVerified}
+                      disabled={isVerified}
                     />
                     <button
                       type="button"
                       onClick={() => onClickSendVerificationButton()}
                       className={styles['check-button']}
-                      disabled={!field.value || isDisabled || isCodeVerified}
+                      disabled={!field.value || isDisabled || isVerified}
                     >
                       인증번호 확인
                     </button>
