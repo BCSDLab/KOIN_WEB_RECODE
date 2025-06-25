@@ -1,17 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-restricted-imports */
 import { useEffect, useState } from 'react';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import {
+  Controller, useFormContext, useFormState, useWatch,
+} from 'react-hook-form';
 import { checkPhone, smsSend, smsVerify } from 'api/auth';
 import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
 import { GENDER_OPTIONS, MESSAGES, REGEX } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import type { SmsSendResponse } from 'api/auth/entity';
 import ROUTES from 'static/routes';
+import type { SmsSendResponse } from 'api/auth/entity';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
 import styles from './MobileVerification.module.scss';
-
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
 
 interface MobileVerificationProps {
@@ -30,8 +31,15 @@ export const validateName = (value: string) => {
   return MESSAGES.NAME.INVALID;
 };
 
+interface SmsSendCountData {
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
+
 function MobileVerification({ onNext }: MobileVerificationProps) {
   const { control, register } = useFormContext();
+  const { isValid } = useFormState({ control });
   const name = useWatch({ control, name: 'name' });
   const gender = useWatch({ control, name: 'gender' });
   const phoneNumber = useWatch({ control, name: 'phone_number' });
@@ -39,11 +47,11 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
 
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
-  const [smsSendCount, setSmsSendCount] = useState(0);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
   const [isVerificationShown, showVerification] = useBooleanState(false);
   const [isVerified, enableVerified] = useBooleanState(false);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
+  const [smsSendCountData, setSmsSendCountData] = useState<SmsSendCountData | null>(null);
 
   const {
     isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,
@@ -60,7 +68,11 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
       showVerification();
-      setSmsSendCount(data.remaining_count);
+      setSmsSendCountData({
+        total_count: data.total_count,
+        remaining_count: data.remaining_count,
+        current_count: data.current_count,
+      });
       enableButton();
       setTimeout(() => {
         disableButton();
@@ -113,7 +125,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
   };
 
   const isNameAndGenderFilled = name?.trim() && gender?.length > 0;
-  const isFormFilled = name && gender && phoneNumber && verificationCode;
 
   useEffect(() => {
     disableButton();
@@ -184,13 +195,16 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                   buttonText="인증번호 발송"
                   buttonDisabled={!field.value || isDisabled || isVerified}
                   buttonOnClick={() => checkPhoneNumber(phoneNumber)}
+                  maxLength={11}
                 >
                   {phoneMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
                       {' '}
                       남은 횟수 (
-                      {smsSendCount}
-                      /5)
+                      {smsSendCountData?.remaining_count}
+                      /
+                      {smsSendCountData?.total_count}
+                      )
                     </div>
                   )}
                   {
@@ -251,7 +265,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
         type="button"
         onClick={onNext}
         className={styles['next-button']}
-        disabled={!isFormFilled || !isCodeCorrect}
+        disabled={!isValid || !isCodeCorrect}
       >
         다음
       </button>

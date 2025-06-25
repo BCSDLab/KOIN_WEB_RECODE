@@ -17,17 +17,22 @@ interface UseEmailVerificationProps {
   onNext?: () => void;
 }
 
+interface EmailSendCountData {
+  total_count: number;
+  remaining_count: number;
+  current_count: number;
+}
+
 function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
   const navigate = useNavigate();
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [emailMessage, setEmailMessage] = useState<InputMessage | null>(null);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
   const [isVerified, enableVerified, disableVerified] = useBooleanState(false);
-  const [isCodeVerified, enableCodeVerified, disableCodeVerified] = useBooleanState(false);
+  const [, , disableCodeVerified] = useBooleanState(false);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
-
-  const [smsSendCount, setSmsSendCount] = useState(0);
+  const [emailSendCountData, setEmailSendCountData] = useState<EmailSendCountData | null>(null);
 
   const {
     isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,
@@ -53,10 +58,10 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
     isPending: isSendingVerification,
   } = useMutation({
     mutationFn: verificationEmailSend,
-    onSuccess: ({ remaining_count }) => {
+    onSuccess: ({ total_count, remaining_count, current_count }) => {
       setEmailMessage({ type: 'success', content: MESSAGES.EMAIL.CODE_SENT });
       runTimer();
-      setSmsSendCount(remaining_count);
+      setEmailSendCountData({ total_count, remaining_count, current_count });
       enableButton();
       setTimeout(() => {
         disableButton();
@@ -91,7 +96,6 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
     onSuccess: () => {
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
       enableVerified();
-      enableCodeVerified();
       setCorrect();
     },
     onError: (err) => {
@@ -145,8 +149,7 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
     isDisabled,
     disableButton,
     isVerified,
-    isCodeVerified,
-    smsSendCount,
+    emailSendCountData,
     isCodeCorrect,
     setIncorrect,
     setEmailMessage,
