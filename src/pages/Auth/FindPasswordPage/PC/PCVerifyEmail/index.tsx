@@ -30,6 +30,7 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
     emailMessage,
     checkEmailExists,
     checkVerificationEmailVerify,
+    isSendingVerification,
     isDisabled,
     isVerified,
     isCodeVerified,
@@ -135,7 +136,7 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
                     stopTimer();
                     setIncorrect();
                     setVerificationMessage(null);
-                    setValue('verificationCode', ''); // 변화가 있을시 인증코드 값을 삭제합니다.
+                    setValue('verificationCode', '');
                   }}
                   placeholder="이메일을 입력해 주세요."
                   isRequired
@@ -164,10 +165,9 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
                   className={styles['check-button']}
                   disabled={!field.value || isDisabled || isVerified}
                 >
-                  {buttonText}
+                  {isSendingVerification ? '...' : buttonText}
                 </button>
               </div>
-
             )}
           />
         </div>

@@ -29,8 +29,8 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
-  const [isVerified, enableVerified] = useBooleanState(false);
-  const [isCodeVerified, enableCodeVerified] = useBooleanState(false);
+  const [isVerified, enableVerified, disableVerified] = useBooleanState(false);
+  const [isCodeVerified, enableCodeVerified, disableCodeVerified] = useBooleanState(false);
   const [smsSendCount, setSmsSendCount] = useState(0);
   const [isCodeCorrect, setCorrect, setIncorrect] = useBooleanState(false);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
@@ -52,7 +52,20 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     },
   });
 
-  const { mutate: sendVerificationSms } = useMutation({
+  const resetVerificationState = () => {
+    disableButton();
+    disableVerified();
+    disableCodeVerified();
+    setIncorrect();
+    stopTimer();
+    setPhoneMessage(null);
+    setVerificationMessage(null);
+  };
+
+  const {
+    mutate: sendVerificationSms,
+    isPending: isSendingVerification,
+  } = useMutation({
     mutationFn: smsSend,
     onSuccess: ({ remaining_count }) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
@@ -195,6 +208,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
           showToast('error', '아이디와 휴대폰 번호가 일치하지 않습니다');
         }
       }
+      resetVerificationState();
     },
   });
 
@@ -202,6 +216,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     phoneMessage,
     checkPhoneExists,
     checkVerificationSmsVerify,
+    isSendingVerification,
     findId,
     isDisabled,
     disableButton,

@@ -48,7 +48,10 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
     setVerificationMessage(null);
   };
 
-  const { mutate: sendVerificationEmail } = useMutation({
+  const {
+    mutate: sendVerificationEmail,
+    isPending: isSendingVerification,
+  } = useMutation({
     mutationFn: verificationEmailSend,
     onSuccess: ({ remaining_count }) => {
       setEmailMessage({ type: 'success', content: MESSAGES.EMAIL.CODE_SENT });
@@ -137,6 +140,7 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
     emailMessage,
     checkEmailExists,
     checkVerificationEmailVerify,
+    isSendingVerification,
     findEmail,
     isDisabled,
     disableButton,
