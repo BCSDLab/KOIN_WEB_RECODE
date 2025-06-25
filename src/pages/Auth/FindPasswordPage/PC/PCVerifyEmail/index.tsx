@@ -33,7 +33,6 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
     isSendingVerification,
     isDisabled,
     isVerified,
-    isCodeVerified,
     emailSendCountData,
     isCodeCorrect,
     setIncorrect,
@@ -195,7 +194,6 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
                   isTimer={isCodeCorrect ? false : isTimer}
                   timerValue={timerValue}
                   message={verificationMessage}
-                  disabled={isCodeVerified}
                   isDelete={!isVerified}
                   onClear={() => {
                     setVerificationMessage(null);
