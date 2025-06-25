@@ -23,7 +23,6 @@ function MobileVerifyEmail({ onNext, setContactType }: MobileFindPasswordProps) 
     checkVerificationEmailVerify,
     isDisabled,
     isVerified,
-    isCodeVerified,
     emailSendCountData,
     isCodeCorrect,
     setIncorrect,
@@ -145,14 +144,12 @@ function MobileVerifyEmail({ onNext, setContactType }: MobileFindPasswordProps) 
               <CustomInput
                 {...field}
                 placeholder="인증번호를 입력해주세요."
-                isDelete={!isCodeVerified}
                 isTimer={isVerified ? false : isTimer}
                 timerValue={timerValue}
                 message={verificationMessage}
                 isButton
-                disabled={isCodeVerified}
                 buttonText="인증번호 확인"
-                buttonDisabled={!field.value || isCodeVerified}
+                buttonDisabled={!field.value || isCodeCorrect}
                 buttonOnClick={() => onClickSendVerificationButton()}
               />
             )}
