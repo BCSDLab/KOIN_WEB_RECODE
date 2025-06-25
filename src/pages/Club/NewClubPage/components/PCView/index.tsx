@@ -32,6 +32,7 @@ export default function PCView({
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
   const [isDragOver, setIsDragOver] = useState(false);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const [isTried, setIsTried] = useState(false);
   const saveImage = async () => {
     try {
       const images = await saveImgFile();
@@ -79,8 +80,8 @@ export default function PCView({
   };
 
   const handleOpenModal = () => {
-    if (!formData.name || !formData.location || !formData.image_url) {
-      showToast('error', '동아리명, 위치, 이미지는 필수 입력 사항입니다.');
+    if (!formData.name || !formData.location || !formData.image_url || !formData.phone_number) {
+      showToast('error', '동아리명, 위치, 대표자 연락처, 이미지는 필수 입력 사항입니다.');
       return;
     }
     openModal();
@@ -131,6 +132,7 @@ export default function PCView({
         value: '생성요청',
       });
     }
+    setIsTried(true);
     handleOpenModal();
   };
 
@@ -165,14 +167,14 @@ export default function PCView({
             <input
               className={cn({
                 [styles['form__text-input']]: true,
-                [styles['form__text-input--error']]: formData.name.length === 0,
+                [styles['form__text-input--error']]: (formData.name.length === 0 && isTried),
               })}
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="동아리명을 입력해주세요(필수)"
             />
-            {!formData.name && <ClubInputErrorCondition />}
+            {!formData.name && isTried && <ClubInputErrorCondition />}
           </div>
           <div className={styles['form-category']}>
             <div className={styles['form-label']}>분과</div>
@@ -221,7 +223,7 @@ export default function PCView({
             <input
               className={cn({
                 [styles['form__text-input']]: true,
-                [styles['form__text-input--error']]: formData.location.length === 0,
+                [styles['form__text-input--error']]: (formData.location.length === 0) && isTried,
               })}
               type="text"
               value={formData.location}
@@ -229,7 +231,7 @@ export default function PCView({
               placeholder="동아리 방 위치를 입력하세요(필수)"
               maxLength={20}
             />
-            {!formData.location && <ClubInputErrorCondition />}
+            {!formData.location && isTried && <ClubInputErrorCondition />}
           </div>
 
           <div className={styles['form-description']}>
@@ -283,7 +285,7 @@ export default function PCView({
               <input
                 className={cn({
                   [styles['form__text-input']]: true,
-                  [styles['form__text-input--error']]: formData.location.length === 0,
+                  [styles['form__text-input--error']]: !formData.phone_number && isTried,
                 })}
                 type="text"
                 value={formData.phone_number}
@@ -293,7 +295,7 @@ export default function PCView({
                 }))}
                 placeholder="대표자 전화번호를 입력해주세요.(필수)"
               />
-              {!formData.phone_number && (
+              {!formData.phone_number && isTried && (
               <div className={styles['error-container']}>
                 <ClubInputErrorCondition />
               </div>
@@ -328,7 +330,7 @@ export default function PCView({
                     {
                       [styles['form-image__label']]: true,
                       [styles['form-image__label--drag-over']]: isDragOver,
-                      [styles['form-image__label--error']]: !formData.image_url,
+                      [styles['form-image__label--error']]: !formData.image_url && isTried,
                     },
                   )}
                   htmlFor="club-image-upload"
@@ -373,7 +375,7 @@ export default function PCView({
                 </label>
               </div>
             )}
-          {!formData.image_url && <ClubInputErrorCondition />}
+          {!formData.image_url && isTried && <ClubInputErrorCondition />}
           <button type="button" className={styles.like} onClick={handleClickLike}>
             <LikeIcon />
             {formData.is_like_hidden ? '좋아요 숨기기' : '좋아요 표시하기'}

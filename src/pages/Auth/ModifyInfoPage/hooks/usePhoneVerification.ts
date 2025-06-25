@@ -7,7 +7,6 @@ import { useVerificationTimer } from './useVerificationTimer';
 
 export function usePhoneVerification(phoneNumber: string) {
   const [isVerified, setIsVerified] = useState(false);
-  const [smsSendCount, setSmsSendCount] = useState<number>(0);
   const [phoneMessage, setPhoneMessage] = useState<{ type: string; content: string } | null>(null);
   const [verificationMessage, setVerificationMessage] = useState<
   { type: string; content: string } | null>(null);
@@ -18,9 +17,8 @@ export function usePhoneVerification(phoneNumber: string) {
 
   const sendSMS = useMutation({
     mutationFn: smsSend,
-    onSuccess: (data) => {
+    onSuccess: () => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
-      setSmsSendCount(data.remaining_count);
       start();
     },
     onError: (err) => {
@@ -66,7 +64,7 @@ export function usePhoneVerification(phoneNumber: string) {
     phoneMessage,
     verificationMessage,
     isVerified,
-    smsSendCount,
+    sendSMS,
     setPhoneMessage,
     setVerificationMessage,
     formattedTime,
