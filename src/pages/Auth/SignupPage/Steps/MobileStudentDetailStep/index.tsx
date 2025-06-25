@@ -38,7 +38,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   const {
     control, getValues, trigger, handleSubmit,
   } = useFormContext<StudentFormValues>();
-  const { errors } = useFormState({ control });
+  const { errors, isValid } = useFormState({ control });
 
   const loginId = (useWatch({ control, name: 'login_id' }) ?? '');
   const passwordCheck = useWatch({ control, name: 'password_check' });
@@ -46,7 +46,6 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
 
   const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
   const [isCorrectNickname, setIsCorrectNickname, setIsInCorrectNickname] = useBooleanState(false);
-
   const [major, setMajor] = useState<string | null>(null);
   const [idMessage, setIdMessage] = useState<InputMessage | null>(null);
   const [nicknameMessage, setNicknameMessage] = useState<InputMessage | null>(null);
@@ -316,7 +315,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
       <button
         type="submit"
         className={styles['next-button']}
-        disabled={!isFormFilled}
+        disabled={!isFormFilled || !isValid}
       >
         다음
       </button>

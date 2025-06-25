@@ -37,7 +37,7 @@ function PCVerifyPhone({
     isDisabled,
     isVerified,
     isCodeVerified,
-    smsSendCount,
+    smsSendCountData,
     isCodeCorrect,
     setIncorrect,
     setPhoneMessage,
@@ -128,6 +128,7 @@ function PCVerifyPhone({
               <div>
                 <div className={styles['input-with-button']}>
                   <PCCustomInput
+                    maxLength={11}
                     htmlFor="phoneNumber"
                     labelName="휴대전화"
                     {...field}
@@ -153,8 +154,10 @@ function PCVerifyPhone({
                     <div className={styles['label-count-number']}>
                       {' '}
                       남은 횟수 (
-                      {smsSendCount}
-                      /5)
+                      {smsSendCountData?.remaining_count}
+                      /
+                      {smsSendCountData?.total_count }
+                      )
                     </div>
                     )}
                   </PCCustomInput>

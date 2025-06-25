@@ -24,7 +24,7 @@ function MobileVerifyEmail({ onNext, setContactType }: MobileFindPasswordProps) 
     isDisabled,
     isVerified,
     isCodeVerified,
-    smsSendCount,
+    emailSendCountData,
     isCodeCorrect,
     setIncorrect,
     setEmailMessage,
@@ -123,8 +123,10 @@ function MobileVerifyEmail({ onNext, setContactType }: MobileFindPasswordProps) 
                   {emailMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
                       남은 횟수 (
-                      {smsSendCount}
-                      /5)
+                      {emailSendCountData?.remaining_count}
+                      /
+                      {emailSendCountData?.total_count}
+                      )
                     </div>
                   )}
                 </CustomInput>

@@ -51,7 +51,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     checkVerificationSmsVerify,
     isVerified,
     isCodeVerified,
-    smsSendCount,
+    smsSendCountData,
     setPhoneMessage,
     setVerificationMessage,
     isTimer,
@@ -174,6 +174,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
               <div>
                 <div className={styles['input-with-button']}>
                   <PCCustomInput
+                    maxLength={11}
                     htmlFor="phone_number"
                     labelName="휴대전화"
                     {...field}
@@ -192,8 +193,10 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                     <div className={styles['label-count-number']}>
                       {' '}
                       남은 횟수 (
-                      {smsSendCount}
-                      /5)
+                      {smsSendCountData?.remaining_count}
+                      /
+                      {smsSendCountData?.total_count ?? 5}
+                      )
                     </div>
                     )}
                     {phoneMessage?.type === 'error' && phoneMessage.code === 'ALREADY_REGISTERED' && (

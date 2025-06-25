@@ -32,8 +32,7 @@ function MobileFindIdPhonePage() {
     isDisabled,
     disableButton,
     isVerified,
-    isCodeVerified,
-    smsSendCount,
+    smsSendCountData,
     isCodeCorrect,
     setIncorrect,
     setPhoneMessage,
@@ -81,6 +80,7 @@ function MobileFindIdPhonePage() {
               render={({ field }) => (
                 <CustomInput
                   {...field}
+                  maxLength={11}
                   placeholder="- 없이 번호를 입력해 주세요."
                   isDelete={!isVerified}
                   message={phoneMessage}
@@ -93,8 +93,10 @@ function MobileFindIdPhonePage() {
                   {phoneMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
                       남은 횟수 (
-                      {smsSendCount}
-                      /5)
+                      {smsSendCountData?.remaining_count}
+                      /
+                      {smsSendCountData?.total_count}
+                      )
                     </div>
                   )}
                 </CustomInput>
@@ -113,14 +115,14 @@ function MobileFindIdPhonePage() {
                 <CustomInput
                   {...field}
                   placeholder="인증번호를 입력해주세요."
-                  isDelete={!isCodeVerified}
                   isTimer={isVerified ? false : isTimer}
                   timerValue={timerValue}
                   message={verificationMessage}
+                  isDelete={!isVerified}
                   isButton
-                  disabled={isCodeVerified}
+                  disabled={isVerified}
                   buttonText="인증번호 확인"
-                  buttonDisabled={!field.value || isDisabled || isCodeVerified}
+                  buttonDisabled={!field.value || isDisabled || isVerified}
                   buttonOnClick={() => onClickSendVerificationButton()}
                 >
                   {verificationMessage?.type === 'default' && (
