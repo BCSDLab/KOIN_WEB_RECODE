@@ -101,6 +101,7 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
                 <CustomInput
                   {...field}
                   placeholder="- 없이 번호를 입력해 주세요."
+                  maxLength={11}
                   isDelete={!isVerified}
                   message={phoneMessage}
                   isButton
