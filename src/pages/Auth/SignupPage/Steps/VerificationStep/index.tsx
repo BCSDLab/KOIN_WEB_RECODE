@@ -49,6 +49,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
 
   const {
     checkVerificationSmsVerify,
+    isSendingVerification,
     isVerified,
     isCodeVerified,
     smsSendCountData,
@@ -224,12 +225,12 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                     type="button"
                     onClick={() => {
                       checkPhoneNumber(phoneNumber);
-                      setButtonText('인증번호 발송');
+                      setButtonText('인증번호 재발송');
                     }}
                     className={styles['check-button']}
                     disabled={!field.value || isDisabled || isVerified}
                   >
-                    {buttonText}
+                    {isSendingVerification ? '...' : buttonText}
                   </button>
                 </div>
               </div>

@@ -134,6 +134,7 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
               type="button"
               onClick={togglePasswordVisible}
               className={styles['input-wrapper__optionButton']}
+              tabIndex={-1}
             >
               {isPasswordVisible ? <EyeOpenIcon /> : <EyeCloseIcon />}
             </button>

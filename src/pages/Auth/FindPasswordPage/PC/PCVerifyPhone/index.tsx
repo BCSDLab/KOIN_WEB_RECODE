@@ -34,6 +34,7 @@ function PCVerifyPhone({
     phoneMessage,
     checkPhoneExists,
     checkVerificationSmsVerify,
+    isSendingVerification,
     isDisabled,
     isVerified,
     isCodeVerified,
@@ -170,7 +171,7 @@ function PCVerifyPhone({
                     className={styles['check-button']}
                     disabled={!field.value || isDisabled || isVerified}
                   >
-                    {buttonText}
+                    {isSendingVerification ? '...' : buttonText}
                   </button>
                 </div>
                 {!isVerificationSent && (
