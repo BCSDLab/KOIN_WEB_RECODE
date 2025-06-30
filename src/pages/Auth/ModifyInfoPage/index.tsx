@@ -390,12 +390,17 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   const {
     status,
     currentCheckedNickname,
-    mutate,
+    changeTargetNickname,
   } = useNicknameDuplicateCheck();
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newNickname = e.target.value;
     setCurrentNicknameValue(newNickname);
+    if (newNickname === '' && newNickname !== userInfo?.nickname) {
+      setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
+      return;
+    }
+
     if (newNickname === '') {
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
       return;
@@ -408,12 +413,6 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
 
   // 닉네임 중복 확인 버튼 클릭 핸들러
   const onClickNicknameDuplicateCheckButton = () => {
-    // 현재 입력된 닉네임과 기존 닉네임이 같다면 중복 검사를 수행하지 않습니다.
-    if (currentNicknameValue === '') {
-      showToast('error', '닉네임을 입력해주세요.');
-      setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
-      return;
-    }
     if (REGEX.ADMIN_NICKNAME.test(currentNicknameValue)) {
       showToast('error', '사용할 수 없는 닉네임입니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
@@ -424,11 +423,11 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
       return;
     }
     if (!REGEX.NICKNAME.test(currentNicknameValue)) {
-      showToast('error', '닉네임은 2자 이상 10자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
+      showToast('error', '닉네임은 10자 이하의 한글, 영문, 숫자만 사용할 수 있습니다.');
       setIsValid((prev) => ({ ...prev, isNicknameValid: false }));
       return;
     }
-    mutate(currentNicknameValue, {
+    changeTargetNickname(currentNicknameValue, {
       onSuccess: () => {
         setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
       },
@@ -1047,10 +1046,31 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
   const [name, setName] = useState<string>(userInfo?.name || '');
   const { setIsValid } = useValidationContext();
 
-  useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => ({
-    value: name,
-    valid: true,
-  }), [name]);
+  useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+    let valid: string | true = true;
+    if (name.trim() === '') {
+      valid = '이름을 입력해주세요.';
+    }
+    if (/^[가-힣]+$/.test(name)) {
+      if (REGEX.NAME_KR.test(name)) {
+        valid = true;
+      } else {
+        valid = '한글 이름은 2자 이상 30자 이하로 입력해주세요.';
+      }
+    }
+    if (/^[a-zA-Z]+$/.test(name)) {
+      if (REGEX.NAME_EN.test(name)) {
+        valid = true;
+      } else {
+        valid = '영문 이름은 2자 이상 30자 이하로 입력해주세요.';
+      }
+    }
+
+    return {
+      value: name,
+      valid,
+    };
+  }, [name]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const currentName = e.target.value;
@@ -1060,9 +1080,19 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
       return;
     }
 
-    if (currentName.length > 20) {
-      setIsValid((prev) => ({ ...prev, isNameValid: false }));
-      return;
+    if (/^[가-힣]+$/.test(currentName)) {
+      if (REGEX.NAME_KR.test(currentName)) {
+        setIsValid((prev) => ({ ...prev, isNameValid: true, isFieldChanged: true }));
+      } else {
+        setIsValid((prev) => ({ ...prev, isNameValid: false }));
+      }
+    }
+    if (/^[a-zA-Z]+$/.test(name)) {
+      if (REGEX.NAME_EN.test(name)) {
+        setIsValid((prev) => ({ ...prev, isNameValid: true, isFieldChanged: true }));
+      } else {
+        setIsValid((prev) => ({ ...prev, isNameValid: false }));
+      }
     }
 
     if (currentName !== userInfo?.name) {

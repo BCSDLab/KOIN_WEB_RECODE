@@ -1,3 +1,5 @@
+import { MutateOptions } from '@tanstack/react-query';
+import { NicknameDuplicateCheckResponse } from 'api/auth/entity';
 import React from 'react';
 import showToast from 'utils/ts/showToast';
 import useNicknameCheckServer from './useNicknameCheckServer';
@@ -10,7 +12,10 @@ const useNicknameDuplicateCheck = () => {
   const [nickname, setNickname] = React.useState('');
   const { data, mutate, status } = useNicknameCheckServer();
 
-  const changeTargetNickname = (targetNickname: string) => {
+  const changeTargetNickname = (
+    targetNickname: string,
+    options?: MutateOptions<NicknameDuplicateCheckResponse, unknown, string, unknown> | undefined,
+  ) => {
     if (ADMIN_NICKNAME_REGEX.test(targetNickname)) {
       showToast('warning', '사용할 수 없는 닉네임입니다.');
       return;
@@ -28,7 +33,7 @@ const useNicknameDuplicateCheck = () => {
       return;
     }
     setNickname(targetNickname);
-    mutate(targetNickname);
+    mutate(targetNickname, options);
   };
 
   return {
