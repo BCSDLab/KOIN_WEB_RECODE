@@ -4,8 +4,9 @@ export const REGEX = {
   ADMIN_NICKNAME: /admin|관리자/,
   USERID: /^[a-z0-9_.-]{5,13}$/,
   STUDENT_NUMBER: /^(19|20)\d{2}\d{4,6}$/,
-  EMAIL: /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/,
+  EMAIL: /^(?=.{1,30}$)[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$/,
   STUDENTEMAIL: /^[a-zA-Z0-9._%+-]{3,30}$/,
+  PHONE_NUMBER: /^(\d{3}-\d{3,4}-\d{4}|\d{10,11})$/,
   NAME_KR: /^[가-힣]{2,5}$/,
   NAME_EN: /^[a-zA-Z\s]{2,30}$/,
 };
