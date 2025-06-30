@@ -78,7 +78,9 @@ export const useValidationContext = (isStudent?: boolean) => {
     isValid.isGenderValid,
     isValid.isNameValid,
     isValid.isFieldChanged,
-  ]);
+  ]) || isValid.isPasswordValid
+  || isValid.isEmailValid
+  || isValid.isNicknameValid;
 
   const isFormValid = isStudent ? isStudentFormValid : isGeneralFormValid;
 
