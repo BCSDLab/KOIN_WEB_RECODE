@@ -1030,8 +1030,8 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
       setIsValid((prev) => ({ ...prev, isEmailValid: true, isFieldChanged: true }));
     }
 
-    if (newEmail === '' && !userInfo?.email) {
-      setIsValid((prev) => ({ ...prev, isEmailValid: false, isFieldChanged: false }));
+    if (newEmail === '' && !userInfo?.email && !isValid.isFieldChanged) {
+      setIsValid((prev) => ({ ...prev, isEmailValid: false }));
     }
 
     if (completeEmail !== userInfo?.email && REGEX.EMAIL.test(completeEmail)) {
