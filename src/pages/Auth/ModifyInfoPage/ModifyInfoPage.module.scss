@@ -28,11 +28,11 @@
 
 .header {
   @include media.media-breakpoint(mobile) {
+    position: relative;
     width: 342px;
-    height: 26px;
     margin-top: 14px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
   }
 
@@ -43,9 +43,21 @@
   }
 
   &__delete-account-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 12px;
     font-weight: 500;
     line-height: 1.6;
+  }
+
+  &__go-back {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 24px;
   }
 }
 

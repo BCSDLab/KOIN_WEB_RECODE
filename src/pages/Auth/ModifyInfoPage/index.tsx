@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   Suspense, useEffect, useImperativeHandle, useReducer, useState,
 } from 'react';
@@ -37,9 +38,6 @@ import { passwordValidationReducer } from './reducers/passwordReducer';
 import AuthenticateUserModal from './components/AuthenticateUserModal';
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
-
-const PHONENUMBER_REGEX = /^\d{3}\d{3,4}\d{4}$/;
-
 interface IFormType {
   [key: string]: {
     ref: HTMLInputElement | ICustomFormInput | null;
@@ -256,7 +254,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     }
 
     dispatchValidation({ type: 'VALID' });
-    setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
+    setIsValid((prev) => ({ ...prev, isPasswordValid: true, isFieldChanged: true }));
   };
 
   const handlePasswordConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -294,7 +292,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     }
 
     dispatchValidation({ type: 'VALID' });
-    setIsValid((prev) => ({ ...prev, isPasswordValid: true }));
+    setIsValid((prev) => ({ ...prev, isPasswordValid: true, isFieldChanged: true }));
   };
 
   return (
@@ -396,7 +394,7 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newNickname = e.target.value;
     setCurrentNicknameValue(newNickname);
-    if (newNickname === '' && newNickname !== userInfo?.nickname) {
+    if (newNickname === '' && userInfo?.nickname) {
       setIsValid((prev) => ({ ...prev, isNicknameValid: true, isFieldChanged: true }));
       return;
     }
@@ -586,7 +584,7 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
         setIsValid((prev) => ({ ...prev, isStudentMajorValid: true }));
       }
     }
-  }, [studentNumber, major, setIsValid, userInfo, isStudent]);
+  }, []);
   return (
     <div>
       {isMobile ? (
@@ -676,7 +674,7 @@ const GenderInput = React.forwardRef((_, ref) => {
     if (selectedValue === String(userInfo?.gender)) {
       setIsValid((prev) => ({ ...prev, isGenderValid: true }));
     }
-  }, [selectedValue, setIsValid, userInfo]);
+  }, []);
 
   return (
     <div className={styles['form-input__label-wrapper']}>
@@ -765,9 +763,9 @@ const PhoneInput = React.forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => {
     const value = phoneNumber.replace(/-/g, '');
-    const valid = PHONENUMBER_REGEX.test(value)
+    const valid = REGEX.PHONE_NUMBER.test(value)
       ? true
-      : '전화번호 양식을 지켜주세요. (Ex: 010-0000-0000)';
+      : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
     const originalValue = (userInfo?.phone_number ?? '').replace(/-/g, '');
 
     if (value !== originalValue) {
@@ -796,7 +794,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
               className={styles['form-input']}
               type="text"
               autoComplete="tel"
-              placeholder="전화번호 (Ex.010-0000-0000)"
+              placeholder="전화번호 (Ex.01012345678)"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               {...props}
@@ -897,7 +895,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
               className={styles['form-input']}
               type="text"
               autoComplete="tel"
-              placeholder="전화번호 (Ex.010-0000-0000)"
+              placeholder="전화번호 (Ex.01012345678)"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               {...props}
@@ -990,7 +988,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
 
 const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
-  const { setIsValid } = useValidationContext();
+  const { isValid, setIsValid } = useValidationContext();
   const { userType } = useTokenStore();
 
   const isStudent = userType === 'STUDENT';
@@ -1002,18 +1000,39 @@ const EmailForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProp
 
   const fullEmail = isStudent ? `${email}@koreatech.ac.kr` : email;
 
-  useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => ({
-    value: fullEmail,
-    valid: true,
-  }), [fullEmail]);
+  useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+    let valid: string | true = true;
+    if (email !== '' && !REGEX.EMAIL.test(fullEmail)) {
+      valid = '올바른 이메일 형식이 아닙니다.';
+    }
+    // 이메일이 비어있고, 변한 상태값은 없고, 기존에 이메일이 없는 경우
+    if (email === '' && !userInfo?.email && !isValid.isFieldChanged) {
+      valid = '이메일을 입력해주세요.';
+    }
+
+    // 이메일이 비어있고, 기존에 이메일이 있는 경우
+    if (email === '' && userInfo?.email) {
+      valid = true;
+    }
+    return {
+      value: email === '' ? null : fullEmail,
+      valid,
+    };
+  }, [fullEmail, email, userInfo?.email, isValid.isFieldChanged]);
 
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-
-    const newEmail = isStudent ? input.replace(/@.*/, '') : input;
+    const newEmail = e.target.value;
     setEmail(newEmail);
 
     const completeEmail = isStudent ? `${newEmail}@koreatech.ac.kr` : newEmail;
+
+    if (newEmail === '' && userInfo?.email) {
+      setIsValid((prev) => ({ ...prev, isEmailValid: true, isFieldChanged: true }));
+    }
+
+    if (newEmail === '' && !userInfo?.email) {
+      setIsValid((prev) => ({ ...prev, isEmailValid: false, isFieldChanged: false }));
+    }
 
     if (completeEmail !== userInfo?.email && REGEX.EMAIL.test(completeEmail)) {
       setIsValid((prev) => ({ ...prev, isEmailValid: true, isFieldChanged: true }));
@@ -1104,7 +1123,7 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
     if (name === userInfo?.name) {
       setIsValid((prev) => ({ ...prev, isNameValid: true }));
     }
-  }, [name, setIsValid, userInfo]);
+  }, []);
 
   return (
     <div className={styles['form-input__label-wrapper']}>
