@@ -6,6 +6,7 @@ import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import qsStringify from 'utils/ts/qsStringfy';
 import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
+import { useServerStateStore } from 'utils/zustand/serverState';
 import { deleteCookie, setCookie } from './cookie';
 import { redirectToClub, redirectToLogin } from './auth';
 import { saveTokensToNative } from './iosBridge';
@@ -66,6 +67,11 @@ export default class APIClient {
           resolve(response);
         })
         .catch(async (err) => {
+          if (axios.isAxiosError(err) && err.response?.status === 503) {
+            useServerStateStore.getState().setMaintenance(true);
+            reject(err);
+            return;
+          }
           try {
             if (axios.isAxiosError(err)) {
               const handledResponse = await this.errorMiddleware(err);

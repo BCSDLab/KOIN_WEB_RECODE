@@ -45,9 +45,9 @@ import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import ReportPage from 'pages/Articles/ReportPage';
 import ClubEditPage from 'pages/Club/ClubEditPage';
-import { useTokenStore } from 'utils/zustand/auth';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
-import showToast from 'utils/ts/showToast';
+import { useServerStateStore } from 'utils/zustand/serverState';
+import MaintenancePage from 'pages/Error/Maintenance';
 
 interface WrapperProps {
   title: string;
@@ -82,6 +82,8 @@ function Wrapper({
 }
 
 function App() {
+   const isMaintenance = useServerStateStore((state) => state.isMaintenance);
+
   //ios 브릿지
   useEffect(() => {
     // 앱 로드 시 토큰 요청 정의
@@ -107,6 +109,10 @@ function App() {
     //   }
     // };
   }, []);
+
+  if (isMaintenance) {
+    return <MaintenancePage />;
+  }
 
   return (
     <>
