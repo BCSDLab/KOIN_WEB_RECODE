@@ -45,7 +45,6 @@ import LostItemChatPage from 'pages/Articles/LostItemChatPage';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import ReportPage from 'pages/Articles/ReportPage';
 import ClubEditPage from 'pages/Club/ClubEditPage';
-import { useTokenStore } from 'utils/zustand/auth';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import FindIdPage from 'pages/Auth/FindIdPage';
@@ -55,6 +54,8 @@ import MobileFindIdEmailPage from 'pages/Auth/FindIdPage/Mobile/EmailPage';
 import MobileFindIdPhonePage from 'pages/Auth/FindIdPage/Mobile/PhonePage';
 import MobileFindIdResultPage from 'pages/Auth/FindIdPage/Mobile/ResultPage';
 import FindIdResultPage from 'pages/Auth/FindIdPage/PC/ResultPage';
+import { useServerStateStore } from 'utils/zustand/serverState';
+import MaintenancePage from 'pages/Error/Maintenance';
 
 interface WrapperProps {
   title: string;
@@ -90,6 +91,7 @@ function Wrapper({
 
 function App() {
   const isMobile = useMediaQuery();
+  const isMaintenance = useServerStateStore((state) => state.isMaintenance);
 
   //ios 브릿지
   useEffect(() => {
@@ -116,6 +118,10 @@ function App() {
     //   }
     // };
   }, []);
+
+  if (isMaintenance) {
+    return <MaintenancePage />;
+  }
 
   return (
     <>
