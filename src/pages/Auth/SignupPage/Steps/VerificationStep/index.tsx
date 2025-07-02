@@ -190,15 +190,15 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       setButtonText('인증번호 발송');
                     }}
                   >
-                    {phoneMessage?.type === 'success' && (
-                    <div className={styles['label-count-number']}>
-                      {' '}
-                      남은 횟수 (
-                      {smsSendCountData?.remaining_count}
-                      /
-                      {smsSendCountData?.total_count ?? 5}
-                      )
-                    </div>
+                    {phoneMessage?.type === 'success' && smsSendCountData && (
+                      <div className={styles['label-count-number']}>
+                        {' '}
+                        남은 횟수 (
+                        {smsSendCountData?.remaining_count ?? '0'}
+                        /
+                        {smsSendCountData?.total_count ?? 5}
+                        )
+                      </div>
                     )}
                     {phoneMessage?.type === 'error' && phoneMessage.code === 'ALREADY_REGISTERED' && (
                     <>
