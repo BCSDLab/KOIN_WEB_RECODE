@@ -54,6 +54,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
           type: 'warning',
           content: MESSAGES.VERIFICATION.TIMEOUT,
         });
+        setValue('verificationMessage', { type: 'warning', content: MESSAGES.VERIFICATION.TIMEOUT });
       }
     },
   });
@@ -133,9 +134,15 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
+        if (err.status === 400) {
+          setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
+          setValue('verificationMessage', { type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
+        }
 
-        if (err.status === 404) setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
+        if (err.status === 404) {
+          setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
+          setValue('verificationMessage', { type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
+        }
       }
       setValue('isCorrect', false);
     },
