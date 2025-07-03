@@ -1076,7 +1076,7 @@ const NameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps
       if (REGEX.NAME_KR.test(name)) {
         valid = true;
       } else {
-        valid = '한글 이름은 2자 이상 30자 이하로 입력해주세요.';
+        valid = '한글 이름은 2자 이상 5자 이하로 입력해주세요.';
       }
     }
     if (/^[a-zA-Z]+$/.test(name)) {
