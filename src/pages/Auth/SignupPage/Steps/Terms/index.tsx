@@ -15,6 +15,7 @@ export default function Terms({ onNext }: TermsProps) {
   const { register, setValue, watch } = useFormContext();
   const isMobile = useMediaQuery();
   const watchAllTerms = watch(TERMS_NAMES);
+  const currentYear = new Date().getFullYear();
 
   const handleAllAgreeToggle = () => {
     TERMS_NAMES.forEach((field) => setValue(field, !watchAllTerms.every(Boolean)));
@@ -110,7 +111,11 @@ export default function Terms({ onNext }: TermsProps) {
       </button>
       {!isMobile && (
       <span className={styles.copyright}>
-        COPYRIGHT &copy; 2023 BCSD LAB ALL RIGHTS RESERVED.
+        COPYRIGHT &copy;
+        {' '}
+        {currentYear}
+        {' '}
+        BCSD LAB ALL RIGHTS RESERVED.
       </span>
       )}
     </div>
