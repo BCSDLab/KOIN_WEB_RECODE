@@ -540,8 +540,14 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
   const handleChangeStudentId = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
     setStudentNumber(target?.value ?? '');
-    if (target.value.length === 10) {
-      setIsValid((prev) => ({ ...prev, isStudentInfoValid: true, isFieldChanged: true }));
+    if (target.value.length >= 8 && target.value.length <= 10) {
+      setIsValid((prev) => ({ ...prev, isStudentIdValid: true, isFieldChanged: true }));
+    } else {
+      setIsValid((prev) => ({ ...prev, isStudentIdValid: false }));
+    }
+
+    if (isStudentUser(userInfo) && target.value === userInfo?.student_number) {
+      setIsValid((prev) => ({ ...prev, isFieldChanged: false, isStudentIdValid: false }));
     }
   };
 
@@ -557,15 +563,10 @@ const MajorInput = React.forwardRef<ICustomFormInput, ICustomFormInputProps>((pr
     let valid: string | true = '오류가 발생했습니다';
     if (!/^\d+$/.test(studentNumber)) {
       valid = '학번은 숫자만 포함되어야 합니다.';
+    } else if (studentNumber && (studentNumber.length < 8 || studentNumber.length > 10)) {
+      valid = '학번은 8자리에서 10자리 사이여야 합니다.';
     } else {
-      const year = parseInt(studentNumber.slice(0, 4), 10);
-      if (year < 1992 || year > new Date().getFullYear()) {
-        valid = '올바른 입학년도가 아닙니다.';
-      } else if (studentNumber && (studentNumber.length < 8 || studentNumber.length > 10)) {
-        valid = '학번은 8자리에서 10자리 사이여야 합니다.';
-      } else {
-        valid = true;
-      }
+      valid = true;
     }
 
     return {
