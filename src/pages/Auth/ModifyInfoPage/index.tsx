@@ -322,6 +322,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
             [styles['form-input__toggle--active']]: visible.password,
           })}
           onClick={() => setVisible((prev) => ({ ...prev, password: !prev.password }))}
+          tabIndex={-1}
         >
           {visible.password ? <ShowIcon /> : <BlindIcon />}
         </button>
@@ -348,6 +349,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
           onClick={() => setVisible((prev) => (
             { ...prev, passwordConfirm: !prev.passwordConfirm }
           ))}
+          tabIndex={-1}
         >
           {visible.passwordConfirm ? <ShowIcon /> : <BlindIcon />}
         </button>
