@@ -1,9 +1,12 @@
-import { useCallback, useState } from 'react';
+import {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { cn } from '@bcsdlab/utils';
 import useArrowKeyNavigation from 'utils/hooks/ui/useArrowKeyNavigation';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { createTouchHandlers } from 'utils/ts/touchHandler';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
@@ -18,6 +21,13 @@ function ImageModal({
   onClose,
 }: ImageModalProps) {
   const [selectedIndex, setSelectedIndex] = useState(imageIndex);
+  const [scale, setScale] = useState(1);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const startDistanceRef = useRef(0);
+  const startTranslateRef = useRef({ x: 0, y: 0 });
+  const startTouchRef = useRef<{ x: number; y: number } | null>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+
   const navigateImage = useCallback((move: number) => {
     setSelectedIndex((prevIndex) => {
       const newIndex = prevIndex + move;
@@ -30,6 +40,31 @@ function ImageModal({
   useBodyScrollLock();
 
   useArrowKeyNavigation({ navigateImage });
+
+  useEffect(() => {
+    const imageEl = imageRef.current;
+    if (!imageEl) return () => {};
+
+    const { handleTouchStart, handleTouchMove, handleTouchEnd } = createTouchHandlers({
+      scale,
+      setScale,
+      translate,
+      setTranslate,
+      startDistanceRef,
+      startTranslateRef,
+      startTouchRef,
+    });
+
+    imageEl.addEventListener('touchstart', handleTouchStart, { passive: false });
+    imageEl.addEventListener('touchmove', handleTouchMove, { passive: false });
+    imageEl.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      imageEl.removeEventListener('touchstart', handleTouchStart);
+      imageEl.removeEventListener('touchmove', handleTouchMove);
+      imageEl.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [scale, translate]);
 
   return (
     <div className={styles.background} ref={backgroundRef}>
@@ -56,7 +91,16 @@ function ImageModal({
         />
       )}
       <button className={styles.close} type="button" aria-label="이미지 닫기" onClick={() => onClose()} />
-      <img className={styles.image} src={`${imageList[selectedIndex]}`} alt="상점이미지" />
+      <img
+        ref={imageRef}
+        className={styles.image}
+        src={imageList[selectedIndex]}
+        alt="상점이미지"
+        style={{
+          transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+        }}
+      />
+
     </div>
   );
 }
