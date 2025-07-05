@@ -6,6 +6,7 @@ import useArrowKeyNavigation from 'utils/hooks/ui/useArrowKeyNavigation';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { createTouchHandlers } from 'utils/ts/touchHandler';
 import styles from './ImageModal.module.scss';
 
 export interface ImageModalProps {
@@ -44,52 +45,15 @@ function ImageModal({
     const imageEl = imageRef.current;
     if (!imageEl) return () => {};
 
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 2) {
-        const dx = e.touches[0].clientX - e.touches[1].clientX;
-        const dy = e.touches[0].clientY - e.touches[1].clientY;
-        startDistanceRef.current = Math.hypot(dx, dy);
-      } else if (e.touches.length === 1 && scale > 1) {
-        startTouchRef.current = {
-          x: e.touches[0].clientX,
-          y: e.touches[0].clientY,
-        };
-        startTranslateRef.current = { ...translate };
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length === 2) {
-        e.preventDefault();
-        const dx = e.touches[0].clientX - e.touches[1].clientX;
-        const dy = e.touches[0].clientY - e.touches[1].clientY;
-        const newDistance = Math.hypot(dx, dy);
-        const newScale = newDistance / startDistanceRef.current;
-
-        setScale((prev) => {
-          const clamped = Math.min(Math.max(prev * newScale, 1), 3);
-          startDistanceRef.current = newDistance;
-          return clamped;
-        });
-      } else if (e.touches.length === 1 && scale > 1 && startTouchRef.current) {
-        e.preventDefault();
-        const deltaX = e.touches[0].clientX - startTouchRef.current.x;
-        const deltaY = e.touches[0].clientY - startTouchRef.current.y;
-
-        setTranslate({
-          x: startTranslateRef.current.x + deltaX,
-          y: startTranslateRef.current.y + deltaY,
-        });
-      }
-    };
-
-    const handleTouchEnd = () => {
-      if (scale < 1.05) {
-        setScale(1);
-        setTranslate({ x: 0, y: 0 });
-      }
-      startTouchRef.current = null;
-    };
+    const { handleTouchStart, handleTouchMove, handleTouchEnd } = createTouchHandlers({
+      scale,
+      setScale,
+      translate,
+      setTranslate,
+      startDistanceRef,
+      startTranslateRef,
+      startTouchRef,
+    });
 
     imageEl.addEventListener('touchstart', handleTouchStart, { passive: false });
     imageEl.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -134,8 +98,6 @@ function ImageModal({
         alt="상점이미지"
         style={{
           transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
-          transition: 'transform 0.1s ease',
-          touchAction: 'none',
         }}
       />
 

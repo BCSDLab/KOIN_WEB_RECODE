@@ -18,6 +18,8 @@
   max-height: 100%;
   position: fixed;
   margin: auto;
+  transition: 'transform 0.1s ease';
+  touch-action: 'none';
 
   @include media.media-breakpoint(mobile) {
     & {
