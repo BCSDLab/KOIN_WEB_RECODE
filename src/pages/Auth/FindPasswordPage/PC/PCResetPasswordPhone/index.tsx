@@ -38,6 +38,7 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
   const newPasswordCheck = useWatch({ control, name: 'newPasswordCheck' });
 
   const isFormFilled = newPassword && newPasswordCheck;
+  const isPasswordMatched = newPassword === newPasswordCheck;
 
   const getPasswordCheckMessage = (
     fieldValue: string | undefined,
@@ -177,9 +178,9 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
         onClick={onClickSubmit}
         className={cn({
           [styles['button-next']]: true,
-          [styles['button-next--active']]: Boolean(isFormFilled),
+          [styles['button-next--active']]: Boolean(isFormFilled && isPasswordMatched),
         })}
-        disabled={!isFormFilled}
+        disabled={!isFormFilled || !isPasswordMatched}
       >
         다음
       </button>
