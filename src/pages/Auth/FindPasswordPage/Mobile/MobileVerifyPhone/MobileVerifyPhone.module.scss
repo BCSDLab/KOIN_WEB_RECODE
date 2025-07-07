@@ -28,7 +28,7 @@
 
 .id-wrapper,
 .verify-wrapper,
-.verify-check-wrapper  {
+.verify-check-wrapper {
   @include media.media-breakpoint(mobile) {
     display: flex;
     flex-direction: column;
