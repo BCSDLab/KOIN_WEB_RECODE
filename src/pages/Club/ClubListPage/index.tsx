@@ -24,7 +24,7 @@ import styles from './ClubListPage.module.scss';
 const DEFAULT_OPTION_INDEX = 0;
 
 const SORT_OPTIONS = [
-  { label: '생성순', value: 'NONE' },
+  { label: '생성순', value: 'CREATED_AT_ASC' },
   { label: '조회순', value: 'HITS_DESC' },
 ];
 
