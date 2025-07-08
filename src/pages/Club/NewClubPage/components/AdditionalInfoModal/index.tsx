@@ -37,8 +37,12 @@ export default function AdditionalInfoModal({
       value: `${formData.role}`,
     });
 
+    const trimmedOpenChat = formData.open_chat?.trim();
+    const openChatUrl = trimmedOpenChat === '' ? undefined : `https://${trimmedOpenChat}`;
+
     const submitData = {
       ...formData,
+      open_chat: openChatUrl,
       phone_number: formData.phone_number?.replace(/-/g, '') || formData.phone_number,
     };
 
