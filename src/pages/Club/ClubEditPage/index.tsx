@@ -16,7 +16,13 @@ export default function ClubEditPage() {
 
   const isMobile = useMediaQuery();
 
-  const initForm = () => mapDetailToForm(clubDetail);
+  const initForm = () => {
+    const mapped = mapDetailToForm(clubDetail);
+    return {
+      ...mapped,
+      open_chat: mapped.open_chat?.replace(/^https?:\/\//, '') ?? '',
+    };
+  };
 
   const originalDataRef = useRef<NewClubData>(initForm());
   const [formData, setFormData] = useState<NewClubData>(initForm);

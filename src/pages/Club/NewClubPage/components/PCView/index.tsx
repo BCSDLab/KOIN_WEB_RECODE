@@ -271,14 +271,25 @@ export default function PCView({
           </div>
           <div className={styles['form-contact']}>
             <div className={styles['form-label']}>오픈 채팅:</div>
-            <input
-              className={styles['form__text-input']}
-              type="text"
-              value={formData.open_chat}
-              onChange={(e) => setFormData({ ...formData, open_chat: e.target.value })}
-              placeholder="오픈채팅 링크를 입력해주세요.(선택)"
-            />
+            <div className={styles['form-url__input-wrapper']}>
+              <span className={styles['form-url__prefix']}>https://</span>
+              <input
+                className={styles['form-url__input']}
+                type="text"
+                value={formData.open_chat}
+                placeholder="open.kakao.com/o/abcd1234"
+                onChange={(e) => {
+                  const { value } = e.target;
+                  if (/^https?:\/\//.test(value)) {
+                    showToast('error', '"https://"는 자동으로 포함되어 있습니다.');
+                    return;
+                  }
+                  setFormData({ ...formData, open_chat: value });
+                }}
+              />
+            </div>
           </div>
+
           <div className={styles['form-contact']}>
             <div className={styles['form-label']}>전화번호:</div>
             <div className={styles['form-contact__wrapper']}>
