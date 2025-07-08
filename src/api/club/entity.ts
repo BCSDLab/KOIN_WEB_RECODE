@@ -66,6 +66,11 @@ export interface ClubDetailResponse extends APIResponse {
   is_liked: boolean;
   updated_at: string;
   is_like_hidden: boolean;
+  hot_status?: {
+    month: number;
+    week_of_month: number;
+    streak_count: number;
+  } | null;
 }
 
 export type PutClubLikeResonse = APIResponse;
