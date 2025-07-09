@@ -7,7 +7,12 @@ const isCheckNewArticle = (registered: number[]) => {
   return false;
 };
 
-const convertDate = (time: string) => time.split(' ')[0].replaceAll('-', '.');
+const convertDate = (time: string) => {
+  if (typeof time !== 'string') {
+    return '';
+  }
+  return time.split(' ')[0].replaceAll('-', '.');
+};
 
 function setArticleRegisteredDate(time: string) {
   const registered = convertDate(time).split('.').map((item: string) => parseInt(item, 10));
