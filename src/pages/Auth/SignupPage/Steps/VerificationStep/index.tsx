@@ -194,9 +194,9 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                       <div className={styles['label-count-number']}>
                         {' '}
                         남은 횟수 (
-                        {smsSendCountData?.remaining_count ?? '0'}
+                        {smsSendCountData?.remaining_count}
                         /
-                        {smsSendCountData?.total_count ?? 5}
+                        {smsSendCountData?.total_count}
                         )
                       </div>
                     )}
