@@ -108,6 +108,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>((
             type="button"
             onClick={() => setValue(args.name!, '')}
             className={styles['input-wrapper__optionButton']}
+            tabIndex={-1}
           >
             <CloseIcon />
           </button>
@@ -118,6 +119,7 @@ const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>((
             type="button"
             onClick={togglePasswordVisible}
             className={styles['input-wrapper__optionButton']}
+            tabIndex={-1}
           >
             {isPasswordVisible ? <EyeOpenIcon /> : <EyeCloseIcon />}
           </button>

@@ -149,8 +149,8 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
         </div>
 
         {isVerificationSent && (
-        <div className={styles['verify-wrapper']}>
-          <h1 className={styles['verify-wrapper__header']}>인증 번호</h1>
+        <div className={styles['verify-check-wrapper']}>
+          <h1 className={styles['verify-check-wrapper__header']}>인증 번호</h1>
           <Controller
             name="verificationCode"
             control={control}
