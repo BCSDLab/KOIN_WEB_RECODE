@@ -52,12 +52,14 @@ function SignupPage() {
     },
   });
 
+  const isVerificationStepPassed = methods.getValues('name') && methods.getValues('phone_number') && methods.getValues('gender');
+
   useEffect(() => {
-    if ((currentStep === '회원유형선택' && !methods.getValues('name')) || (currentStep === '정보입력' && !userType)) {
+    if ((currentStep === '회원유형선택' && !isVerificationStepPassed) || (currentStep === '정보입력' && !userType)) {
       showToast('warning', '잘못된 접근입니다.');
       nextStep('약관동의');
     }
-  }, [currentStep, userType, methods, nextStep]);
+  }, [currentStep, userType, methods, nextStep, isVerificationStepPassed]);
 
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
