@@ -6,6 +6,7 @@ import {
 } from 'api/auth';
 import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
+import { cn, sha256 } from '@bcsdlab/utils';
 import CustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/CustomInput';
 import showToast from 'utils/ts/showToast';
 import { ContactType, MESSAGES, REGEX } from 'static/auth';
@@ -38,6 +39,7 @@ function MobileResetPassword({ onNext, contactType }: MobileResetPasswordProps) 
   const newPasswordCheck = useWatch({ control, name: 'newPasswordCheck' });
 
   const isFormFilled = newPassword && newPasswordCheck;
+  const isPasswordMatched = newPassword === newPasswordCheck;
 
   const getPasswordCheckMessage = (
     fieldValue: string | undefined,
@@ -74,20 +76,21 @@ function MobileResetPassword({ onNext, contactType }: MobileResetPasswordProps) 
     },
   });
 
-  const onClickSubmit = () => {
+  const onClickSubmit = async () => {
     const { loginId, email, phoneNumber } = getValues();
+    const hashedPassword = await sha256(newPassword);
 
     if (contactType === 'PHONE') {
       submitResetPasswordSms({
         login_id: loginId,
         phone_number: phoneNumber,
-        new_password: newPassword,
+        new_password: hashedPassword,
       });
     } else {
       submitResetPasswordEmail({
         login_id: loginId,
         email,
-        new_password: newPassword,
+        new_password: hashedPassword,
       });
     }
   };
@@ -150,9 +153,12 @@ function MobileResetPassword({ onNext, contactType }: MobileResetPasswordProps) 
 
       <button
         type="submit"
-        className={styles['next-button']}
         onClick={onClickSubmit}
-        disabled={!isFormFilled}
+        className={cn({
+          [styles['button-next']]: true,
+          [styles['button-next--active']]: Boolean(isFormFilled && isPasswordMatched),
+        })}
+        disabled={!isFormFilled || !isPasswordMatched}
       >
         다음
       </button>

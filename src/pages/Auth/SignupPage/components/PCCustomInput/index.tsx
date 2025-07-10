@@ -124,6 +124,7 @@ const PCCustomInput = forwardRef<HTMLInputElement, PCCustomInputProps>((
                 args.onClear?.();
               }}
               className={styles['input-wrapper__optionButton']}
+              tabIndex={-1}
             >
               <CloseIcon />
             </button>
