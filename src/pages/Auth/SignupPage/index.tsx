@@ -1,8 +1,11 @@
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import { Suspense, useState } from 'react';
+import {
+  Suspense, useCallback, useEffect, useState,
+} from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import showToast from 'utils/ts/showToast';
 import ProgressBar from './components/ProgressBar';
 import MobileVerification from './Steps/MobileVerificationStep';
 import Terms from './Steps/Terms';
@@ -50,6 +53,19 @@ function SignupPage() {
       isDisabled: false,
     },
   });
+
+  const isVerificationStepPassed = methods.getValues('name') && methods.getValues('phone_number') && methods.getValues('gender');
+
+  const goToFirstStep = useCallback(() => {
+    nextStep('약관동의');
+  }, [nextStep]);
+
+  useEffect(() => {
+    if ((currentStep === '회원유형선택' && !isVerificationStepPassed) || (currentStep === '정보입력' && !userType)) {
+      showToast('warning', '잘못된 접근입니다.');
+      goToFirstStep();
+    }
+  }, [currentStep, userType, isVerificationStepPassed, goToFirstStep]);
 
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
