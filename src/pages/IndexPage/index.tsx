@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import Banner from 'components/ui/Banner';
+import UserInfoModal from 'components/ui/UserInfoModal';
 import useBannerCategories from 'components/ui/Banner/hooks/useBannerCategories';
 import IndexBus from './components/IndexBus';
 import IndexClub from './components/IndexClub';
@@ -17,6 +18,9 @@ function IndexPage() {
       <main className={styles.template}>
         <Suspense fallback={null}>
           <Banner categoryId={bannerCategory.id} />
+        </Suspense>
+        <Suspense fallback={null}>
+          <UserInfoModal />
         </Suspense>
         <div className={styles['left-container']}>
           <IndexStore />
