@@ -1,33 +1,14 @@
 import { UserResponse, GeneralUserResponse } from 'api/auth/entity';
 
-export type RequiredStudentFields = {
-  login_id: string;
-  gender: 0 | 1;
-  major: string;
-  name: string;
-  phone_number: string;
-  student_number: string;
-  user_type: 'STUDENT';
-};
-
-export type RequiredGeneralUserFields = {
-  login_id: string;
-  gender: 0 | 1;
-  name: string;
-  phone_number: string;
-  user_type: 'GENERAL';
-};
-
 export const validateStudentInfo = (user: UserResponse): boolean => {
-  const requiredFields: (keyof RequiredStudentFields)[] = [
+  const requiredFields = [
     'login_id',
     'gender',
     'major',
     'name',
     'phone_number',
     'student_number',
-    'user_type',
-  ];
+  ] as const;
 
   return requiredFields.every((field) => {
     const value = user[field];
@@ -36,13 +17,12 @@ export const validateStudentInfo = (user: UserResponse): boolean => {
 };
 
 export const validateGeneralUserInfo = (user: GeneralUserResponse): boolean => {
-  const requiredFields: (keyof RequiredGeneralUserFields)[] = [
+  const requiredFields = [
     'login_id',
     'gender',
     'name',
     'phone_number',
-    'user_type',
-  ];
+  ] as const;
 
   return requiredFields.every((field) => {
     const value = user[field];
