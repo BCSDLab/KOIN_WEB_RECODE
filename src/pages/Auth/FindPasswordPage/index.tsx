@@ -1,5 +1,7 @@
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import { Suspense, useState } from 'react';
+import {
+  Suspense, useCallback, useEffect, useState,
+} from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
@@ -7,6 +9,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ProgressBar from 'pages/Auth/SignupPage/components/ProgressBar';
 import ROUTES from 'static/routes';
 import { ContactType } from 'static/auth';
+import showToast from 'utils/ts/showToast';
 import styles from './FindPasswordPage.module.scss';
 import CompletePage from './Complete';
 import PCVerifyEmail from './PC/PCVerifyEmail';
@@ -56,6 +59,20 @@ function FindPasswordPage() {
     },
   });
 
+  const goToFirstStep = useCallback(() => {
+    navigate(ROUTES.AuthFindPW({ step: '계정인증', isLink: true }));
+  }, [navigate]);
+
+  useEffect(() => {
+    const loginId = methods.getValues('loginId');
+    const verificationCode = methods.getValues('verificationCode');
+
+    if (step === '비밀번호변경' && (!loginId || !verificationCode)) {
+      showToast('warning', '잘못된 접근입니다. 계정 인증을 먼저 진행해주세요.');
+      goToFirstStep();
+    }
+  }, [step, methods, goToFirstStep]);
+
   if (!step) {
     navigate(ROUTES.Auth());
     return null;
@@ -63,7 +80,10 @@ function FindPasswordPage() {
 
   if (!step) throw new Error('step param is required');
 
-  const nextStep = (next: StepTitle) => navigate(ROUTES.AuthFindPW({ step: next, isLink: true }));
+  const nextStep = (next: StepTitle, options?: { replace: boolean }) => {
+    navigate(ROUTES.AuthFindPW({ step: next, isLink: true }), options);
+  };
+
   const goBack = () => navigate(-1);
 
   const progressSteps: ProgressStepTitle[] = ['계정인증', '비밀번호변경'];
@@ -122,9 +142,9 @@ function FindPasswordPage() {
 
           <Step step={step} name="비밀번호변경">
             {isMobile ? (
-              <MobileResetPassword onNext={() => nextStep('완료')} onBack={goBack} contactType={contactType} />
+              <MobileResetPassword onNext={() => nextStep('완료', { replace: true })} onBack={goBack} contactType={contactType} />
             ) : (
-              <PCResetPasswordPhone onNext={() => nextStep('완료')} onBack={goBack} contactType={contactType} />
+              <PCResetPasswordPhone onNext={() => nextStep('완료', { replace: true })} onBack={goBack} contactType={contactType} />
             )}
           </Step>
 
