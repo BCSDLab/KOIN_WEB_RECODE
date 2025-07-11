@@ -1,11 +1,18 @@
 import LogoIcon from 'assets/svg/Login/logo.svg';
+import { useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './CompleteStep.module.scss';
 
 function CompleteStep() {
   const navigate = useNavigate();
+  const { reset } = useFormContext();
   const isMobile = useMediaQuery();
+
+  useEffect(() => {
+    reset();
+  }, [reset]);
 
   return (
     <div className={styles.container}>

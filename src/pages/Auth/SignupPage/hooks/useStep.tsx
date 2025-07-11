@@ -9,8 +9,8 @@ function useStep<T extends string>() {
     throw new Error('URL parameter \'currentstep\' is required for signup flow.');
   }
 
-  const nextStep = (next: T) => {
-    navigate(`/auth/signup/${next}`);
+  const nextStep = (next: T, options?: { replace: boolean }) => {
+    navigate(`/auth/signup/${next}`, options);
   };
 
   const goBack = () => {

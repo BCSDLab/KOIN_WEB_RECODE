@@ -6,6 +6,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
+import { useNavigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import ProgressBar from './components/ProgressBar';
 import MobileVerification from './Steps/MobileVerificationStep';
 import Terms from './Steps/Terms';
@@ -29,6 +31,7 @@ function SignupPage() {
     Step, nextStep, goBack, currentStep,
   } = useStep<StepTitle>();
   const currentIndex = stepTitles.indexOf(currentStep);
+  const navigate = useNavigate();
   const [userType, setUserType] = useState<UserType | null>(null);
   const isMobile = useMediaQuery();
 
@@ -46,6 +49,8 @@ function SignupPage() {
       email: null,
       nickname: null,
       verification_code: '',
+      privacy_policy_agreement: false,
+      koin_terms_agreement: false,
       marketing_notification_agreement: false,
       isCorrect: false,
       verificationMessage: null,
@@ -54,18 +59,34 @@ function SignupPage() {
     },
   });
 
-  const isVerificationStepPassed = methods.getValues('name') && methods.getValues('phone_number') && methods.getValues('gender');
-
   const goToFirstStep = useCallback(() => {
     nextStep('약관동의');
   }, [nextStep]);
 
   useEffect(() => {
-    if ((currentStep === '회원유형선택' && !isVerificationStepPassed) || (currentStep === '정보입력' && !userType)) {
+    const isAgreements = methods.getValues('privacy_policy_agreement') && methods.getValues('koin_terms_agreement');
+    if (currentStep === '본인인증' && !isAgreements) {
+      showToast('warning', '약관에 동의해주세요.');
+      goToFirstStep();
+      return;
+    }
+    const isVerificationStepPassed = methods.getValues('name') && methods.getValues('phone_number') && methods.getValues('gender');
+
+    if ((currentStep === '회원유형선택' && !isVerificationStepPassed)
+      || (currentStep === '정보입력' && (!isVerificationStepPassed || !userType))) {
       showToast('warning', '잘못된 접근입니다.');
       goToFirstStep();
     }
-  }, [currentStep, userType, isVerificationStepPassed, goToFirstStep]);
+  }, [currentStep, userType, methods, goToFirstStep, isMobile]);
+
+  const handleStepBack = useCallback(() => {
+    if (currentIndex > 0) {
+      const previousStep = stepTitles[currentIndex - 1];
+      nextStep(previousStep);
+    } else {
+      navigate(ROUTES.Auth());
+    }
+  }, [currentIndex, nextStep, navigate]);
 
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
@@ -75,7 +96,7 @@ function SignupPage() {
           <button
             type="button"
             className={styles.container__button}
-            onClick={goBack}
+            onClick={handleStepBack}
             aria-label="button"
           >
             <ChevronLeftIcon />
@@ -116,14 +137,14 @@ function SignupPage() {
           <Step name="정보입력">
             {userType === '학생' && (
               isMobile
-                ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
-                : <StudentDetail onNext={() => nextStep('완료')} onBack={goBack} />
+                ? <MobileStudentDetailStep onNext={() => nextStep('완료', { replace: true })} />
+                : <StudentDetail onNext={() => nextStep('완료', { replace: true })} onBack={goBack} />
             )}
 
             {userType === '외부인' && (
               isMobile
-                ? <MobileGuestDetailStep onNext={() => nextStep('완료')} />
-                : <ExternalDetail onNext={() => nextStep('완료')} onBack={goBack} />
+                ? <MobileGuestDetailStep onNext={() => nextStep('완료', { replace: true })} />
+                : <ExternalDetail onNext={() => nextStep('완료', { replace: true })} onBack={goBack} />
             )}
           </Step>
           <Step name="완료">
