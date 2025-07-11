@@ -5,16 +5,17 @@ import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import waveHandAnimation from 'assets/lottie/waveHand.json';
 import useUserInfoModal from './hooks/useUserInfoModal';
 import styles from './UserInfoModal.module.scss';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
 function UserInfoModal() {
   const navigate = useNavigate();
-  const isMobile = useMediaQuery();
   const {
     isModalOpen,
     closeModal,
     userType,
     currentUser,
+    showCloseButton,
+    handleSkipModal,
+    handleCompleteInfo,
   } = useUserInfoModal();
 
   if (!isModalOpen || !currentUser || !userType) {
@@ -23,17 +24,17 @@ function UserInfoModal() {
 
   const handleNavigateToModifyInfo = () => {
     navigate(ROUTES.AuthModifyInfo());
-    closeModal();
+    handleCompleteInfo();
   };
 
   return (
     <div className={styles.background}>
       <div className={styles.container}>
-        {!isMobile && (
+        {showCloseButton && (
           <button
             type="button"
             className={styles.closeButton}
-            onClick={closeModal}
+            onClick={handleSkipModal}
             aria-label="모달 닫기"
           >
             <CloseIcon />
