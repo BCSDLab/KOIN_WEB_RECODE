@@ -17,8 +17,11 @@ export interface Club {
   image_url: string;
   is_liked: boolean;
   is_like_hidden:boolean;
+  recruitment_info: {
+    status: 'NONE' | 'BEFORE' | 'RECRUITING' | 'CLOSED' | 'ALWAYS';
+    dday: number;
+  };
 }
-
 export interface ClubListResponse extends APIResponse {
   clubs: Club[];
 }

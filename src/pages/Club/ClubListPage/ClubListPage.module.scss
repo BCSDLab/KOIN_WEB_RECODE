@@ -183,6 +183,37 @@ main {
         }
       }
     }
+
+    &__filter-button {
+      width: 46px;
+      height: 22px;
+      border: none;
+      border-radius: 999px;
+      background-color: #e1e1e1;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 16px;
+        height: 16px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+    }
+
+    &__filter-button--active {
+      background-color: #175c8e;
+
+      &::before {
+        transform: translateX(24px);
+      }
+    }
   }
 
   .card__list {
@@ -206,7 +237,7 @@ main {
     }
 
     &__info {
-      width: 160px;
+      width: 180px;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -219,6 +250,15 @@ main {
         display: flex;
         flex-direction: column;
         gap: 4px;
+
+        &__title-box {
+          display: flex;
+          gap: 4px;
+
+          @include media.media-breakpoint(mobile) {
+            gap: 2px;
+          }
+        }
       }
 
       &-title {
@@ -226,6 +266,10 @@ main {
         font-weight: 500;
         line-height: 160%;
         color: #000;
+
+        @include media.media-breakpoint(mobile) {
+          font-size: 16px;
+        }
       }
 
       &-likes {
@@ -244,6 +288,41 @@ main {
         font-weight: 400;
         line-height: 160%;
         color: #4b4b4b;
+
+        @include media.media-breakpoint(mobile) {
+          font-size: 12px;
+        }
+      }
+
+      &-recruitment {
+        display: flex;
+        align-items: center;
+
+        @include media.media-breakpoint(mobile) {
+          font-size: 11px;
+        }
+
+        &--recruiting,
+        &--always,
+        &--before,
+        &--closed {
+          border-radius: 16px;
+          color: #fff;
+          padding: 4px 8px;
+        }
+
+        &--before,
+        &--closed {
+          background: #0b3566;
+        }
+
+        &--recruiting {
+          background: #4590bb;
+        }
+
+        &--always {
+          background: #175c8e;
+        }
       }
     }
 
@@ -259,4 +338,8 @@ main {
       }
     }
   }
+}
+
+.hyphen {
+  padding-bottom: 6px;
 }

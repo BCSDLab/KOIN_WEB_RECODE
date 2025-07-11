@@ -236,6 +236,7 @@ export default function ClubDetailPage() {
           >
             <h1 className={styles['club-detail__summary__title']}>{clubDetail.name}</h1>
             <div className={styles['club-detail__summary__like-container']}>
+              {clubDetail.hot_status && (
               <div className={styles['club-detail__summary__like-banner']}>
                 🎉
                 {clubDetail.hot_status?.month}
@@ -244,6 +245,7 @@ export default function ClubDetailPage() {
                 {clubDetail.hot_status?.week_of_month}
                 째주 인기 동아리 🎉
               </div>
+              )}
               {isMobile && (
               <button type="button" className={styles['club-detail__summary__like']} onClick={debouncedToggleLike}>
                 {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
