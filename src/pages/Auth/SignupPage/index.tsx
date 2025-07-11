@@ -22,15 +22,19 @@ import CompleteStep from './Steps/CompleteStep';
 type StepTitle = '약관동의' | '본인인증' | '회원유형선택' | '정보입력' | '완료';
 type UserType = '학생' | '외부인';
 
-const stepTitles: StepTitle[] = ['약관동의', '본인인증', '회원유형선택', '정보입력', '완료'];
+const mobileSteps: StepTitle[] = ['약관동의', '본인인증', '회원유형선택', '정보입력', '완료'];
+const desktopSteps: StepTitle[] = ['약관동의', '본인인증', '정보입력', '완료'];
 
 function SignupPage() {
+  const isMobile = useMediaQuery();
+  const activeSteps = isMobile ? mobileSteps : desktopSteps;
+
   const {
     Step, nextStep, goBack, currentStep,
-  } = useStep<StepTitle>(stepTitles);
-  const currentIndex = stepTitles.indexOf(currentStep);
+  } = useStep<StepTitle>(activeSteps);
+
+  const currentIndex = activeSteps.indexOf(currentStep);
   const [userType, setUserType] = useState<UserType | null>(null);
-  const isMobile = useMediaQuery();
 
   const methods = useForm({
     mode: 'onChange',
@@ -102,7 +106,7 @@ function SignupPage() {
 
         {currentStep !== '완료' && (
           <ProgressBar
-            steps={stepTitles.map((title) => ({ title }))}
+            steps={activeSteps.map((title) => ({ title }))}
             currentIndex={currentIndex}
           />
         )}
