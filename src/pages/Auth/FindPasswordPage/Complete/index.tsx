@@ -20,7 +20,8 @@ function CompletePage() {
 
   useEffect(() => {
     reset();
-  }, [reset]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const goToLogin = () => navigate(ROUTES.Auth());
 
