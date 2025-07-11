@@ -6,8 +6,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
-import { useNavigate } from 'react-router-dom';
-import ROUTES from 'static/routes';
 import ProgressBar from './components/ProgressBar';
 import MobileVerification from './Steps/MobileVerificationStep';
 import Terms from './Steps/Terms';
@@ -29,9 +27,8 @@ const stepTitles: StepTitle[] = ['약관동의', '본인인증', '회원유형�
 function SignupPage() {
   const {
     Step, nextStep, goBack, currentStep,
-  } = useStep<StepTitle>();
+  } = useStep<StepTitle>(stepTitles);
   const currentIndex = stepTitles.indexOf(currentStep);
-  const navigate = useNavigate();
   const [userType, setUserType] = useState<UserType | null>(null);
   const isMobile = useMediaQuery();
 
@@ -64,6 +61,13 @@ function SignupPage() {
   }, [nextStep]);
 
   useEffect(() => {
+    if (currentStep === '완료') {
+      if (methods.getValues('name')) {
+        methods.reset();
+      }
+      return;
+    }
+
     const isAgreements = methods.getValues('privacy_policy_agreement') && methods.getValues('koin_terms_agreement');
     if (currentStep === '본인인증' && !isAgreements) {
       showToast('warning', '약관에 동의해주세요.');
@@ -79,15 +83,6 @@ function SignupPage() {
     }
   }, [currentStep, userType, methods, goToFirstStep, isMobile]);
 
-  const handleStepBack = useCallback(() => {
-    if (currentIndex > 0) {
-      const previousStep = stepTitles[currentIndex - 1];
-      nextStep(previousStep);
-    } else {
-      navigate(ROUTES.Auth());
-    }
-  }, [currentIndex, nextStep, navigate]);
-
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
       <div className={styles.container}>
@@ -96,7 +91,7 @@ function SignupPage() {
           <button
             type="button"
             className={styles.container__button}
-            onClick={handleStepBack}
+            onClick={goBack}
             aria-label="button"
           >
             <ChevronLeftIcon />

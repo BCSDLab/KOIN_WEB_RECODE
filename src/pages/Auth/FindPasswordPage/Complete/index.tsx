@@ -1,7 +1,5 @@
 import LogoIcon from 'assets/svg/Login/logo.svg';
 import CheckIcon from 'assets/svg/orenge-check.svg';
-import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -15,13 +13,7 @@ const SUB_TITLE = [
 
 function CompletePage() {
   const navigate = useNavigate();
-  const { reset } = useFormContext();
   const isMobile = useMediaQuery();
-
-  useEffect(() => {
-    reset();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const goToLogin = () => navigate(ROUTES.Auth());
 

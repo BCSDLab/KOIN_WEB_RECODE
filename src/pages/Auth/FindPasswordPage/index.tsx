@@ -64,6 +64,13 @@ function FindPasswordPage() {
   }, [navigate]);
 
   useEffect(() => {
+    if (step === '완료') {
+      if (methods.getValues('newPassword')) {
+        methods.reset();
+      }
+      return;
+    }
+
     const loginId = methods.getValues('loginId');
     const verificationCode = methods.getValues('verificationCode');
 
