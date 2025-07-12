@@ -185,26 +185,26 @@ function ClubListPage() {
               </strong>
               의 동아리가 있습니다.
             </div>
-            <div className={styles['description__filter-box']}>
-              <div className={styles.description__filter}>
-                모집 중인 동아리
-                <button
-                  type="button"
-                  className={cn({
-                    [styles['description__filter-button']]: true,
-                    [styles['description__filter-button--active']]: isRecruitmentFilter,
-                  })}
-                  onClick={() => setIsRecruitmentFilter((prev) => !prev)}
-                />
-              </div>
-              <div className={styles.description__dropdown}>
-                <Selector
-                  isWhiteBackground={false}
-                  options={SORT_OPTIONS}
-                  value={sortValue}
-                  onChange={onChangeSort}
-                />
-              </div>
+            <div className={styles.description__dropdown}>
+              <Selector
+                isWhiteBackground={false}
+                options={SORT_OPTIONS}
+                value={sortValue}
+                onChange={onChangeSort}
+              />
+            </div>
+          </div>
+          <div className={styles.filter__container}>
+            <div className={styles.filter}>
+              모집 중인 동아리
+              <button
+                type="button"
+                className={cn({
+                  [styles.filter__button]: true,
+                  [styles['filter__button--active']]: isRecruitmentFilter,
+                })}
+                onClick={() => setIsRecruitmentFilter((prev) => !prev)}
+              />
             </div>
           </div>
           <div className={styles.card__list}>

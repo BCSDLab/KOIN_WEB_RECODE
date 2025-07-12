@@ -115,3 +115,29 @@ export interface NewClubManager {
   changed_manager_id: string;
 }
 export type NewClubManagerResponse = APIResponse;
+
+export interface ClubRecruitmentResponse extends APIResponse {
+  id: number;
+  status: 'NONE' | 'BEFORE' | 'RECRUITING' | 'CLOSED' | 'ALWAYS';
+  dday: number;
+  start_date: string;
+  end_date: string;
+  image_url: string;
+  content: string;
+  is_manager: boolean;
+}
+
+export interface ClubEvent {
+  id: number;
+  name: string;
+  image_urls: string[];
+  start_date: string;
+  end_date: string;
+  introduce: string;
+  content: string;
+  status: string;
+}
+
+export interface ClubEventResponse extends ClubEvent, APIResponse {}
+
+export type ClubEventListResponse = (ClubEvent & { is_subscribed: boolean })[];

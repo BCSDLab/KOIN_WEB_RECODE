@@ -23,6 +23,8 @@ import ClubIntroduction from './components/ClubIntrodution';
 import ClubQnA from './components/ClubQnA';
 import CreateQnAModal from './components/CreateQnAModal';
 import MandateClubManagerModal from './components/MandateClubManagerModal';
+import ClubRecruitment from './components/ClubRecruitment';
+import ClubEventList from './components/ClubEventList';
 
 export default function ClubDetailPage() {
   const { id } = useParams();
@@ -162,6 +164,13 @@ export default function ClubDetailPage() {
     setIsEdit(true);
   };
 
+  const handleClickRecruitAddButton = () => {
+    console.log('모집하기 버튼 클릭'); // 수정, 추가 페이지 이동 또는 상태 변경 로직 추가필요
+  };
+
+  const handleClickEventAddButton = () => {
+    console.log('행사 추가 버튼 클릭'); // 수정, 추가 페이지 이동 또는 상태 변경 로직 추가필요
+  };
   return (
     <div className={styles.layout}>
       {!isMobile && (
@@ -187,16 +196,37 @@ export default function ClubDetailPage() {
           </div>
         ) : (
           <div className={styles['club-detail__pc-header__button-box']}>
-            {clubDetail.manager
-              && (
-              <button
-                type="button"
-                className={styles['club-detail__pc-header__button']}
-                onClick={handleClickDetailInfo}
-              >
-                상세 소개 수정하기
-              </button>
-              )}
+            {clubDetail.manager && (
+              <>
+                {navType === '모집' && (
+                  <button
+                    type="button"
+                    className={styles['club-detail__pc-header__button']}
+                    onClick={handleClickRecruitAddButton}
+                  >
+                    모집 추가하기
+                  </button>
+                )}
+                {navType === '행사' && (
+                  <button
+                    type="button"
+                    className={styles['club-detail__pc-header__button']}
+                    onClick={handleClickEventAddButton}
+                  >
+                    행사 추가하기
+                  </button>
+                )}
+                {navType === '상세 소개' && (
+                  <button
+                    type="button"
+                    className={styles['club-detail__pc-header__button']}
+                    onClick={handleClickDetailInfo}
+                  >
+                    상세 소개 수정하기
+                  </button>
+                )}
+              </>
+            )}
           </div>
         )}
       </div>
@@ -388,6 +418,26 @@ export default function ClubDetailPage() {
           type="button"
           className={cn({
             [styles['nav-type']]: true,
+            [styles['nav-type--active']]: navType === '모집',
+          })}
+          onClick={() => handleNavClick('모집')}
+        >
+          모집
+        </button>
+        <button
+          type="button"
+          className={cn({
+            [styles['nav-type']]: true,
+            [styles['nav-type--active']]: navType === '행사',
+          })}
+          onClick={() => handleNavClick('행사')}
+        >
+          행사
+        </button>
+        <button
+          type="button"
+          className={cn({
+            [styles['nav-type']]: true,
             [styles['nav-type--active']]: navType === 'Q&A',
           })}
           onClick={() => handleNavClick('Q&A')}
@@ -447,6 +497,20 @@ export default function ClubDetailPage() {
           openAuthModal={openAuthModal}
           setQnA={setQnAType}
           setReplyId={setReplyId}
+        />
+      )}
+      {navType === '모집' && (
+        <ClubRecruitment
+          clubId={id}
+          isManager={clubDetail.manager}
+          handleClickAddButton={handleClickRecruitAddButton}
+        />
+      )}
+      {navType === '행사' && (
+        <ClubEventList
+          clubId={id}
+          isManager={clubDetail.manager}
+          handleClickAddButton={handleClickEventAddButton}
         />
       )}
       {isModalOpen && (
