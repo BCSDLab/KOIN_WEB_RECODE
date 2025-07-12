@@ -54,7 +54,7 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
   const { mutate: submitResetPasswordSms } = useMutation({
     mutationFn: resetPasswordSms,
     onSuccess: () => {
-      onNext(); // 완료 페이지로 이동
+      onNext();
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -66,7 +66,7 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
   const { mutate: submitResetPasswordEmail } = useMutation({
     mutationFn: resetPasswordEmail,
     onSuccess: () => {
-      onNext(); // 완료 페이지로 이동
+      onNext();
     },
     onError: (err) => {
       if (isKoinError(err)) {

@@ -23,38 +23,50 @@ function PCVerifyPhone({
   const { control, setValue } = useFormContext();
 
   const loginId = useWatch({ control, name: 'loginId' });
-
   const phoneNumber = useWatch({ control, name: 'phoneNumber' });
   const verificationCode = useWatch({ control, name: 'verificationCode' });
+
+  const isCorrect = useWatch({ control, name: 'isCorrect' });
+  const verificationMessage = useWatch({ control, name: 'verificationMessage' });
+  const phoneMessage = useWatch({ control, name: 'phoneMessage' });
+  const isDisabled = useWatch({ control, name: 'isDisabled' });
+  const idMessage = useWatch({ control, name: 'idMessage' });
 
   const [buttonText, setButtonText] = useState('인증번호 발송');
   const [isVerificationSent, setIsVerificationSent] = useState(false);
 
   const {
-    phoneMessage,
     checkPhoneExists,
     checkVerificationSmsVerify,
     isSendingVerification,
-    isDisabled,
     isVerified,
     isCodeVerified,
     smsSendCountData,
-    isCodeCorrect,
-    setIncorrect,
     setPhoneMessage,
     setVerificationMessage,
-    verificationMessage,
     isTimer,
     timerValue,
     stopTimer,
     checkIdExists,
     checkIdMatchPhone,
-    idMessage,
-    setIdMessage,
   } = usePhoneVerification({ phoneNumber, onNext });
 
   const onClickSendVerificationButton = () => {
     checkVerificationSmsVerify({ phone_number: phoneNumber, verification_code: verificationCode });
+  };
+
+  const handlePhoneNumberChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  ) => {
+    onChange(e);
+    setPhoneMessage(null);
+    stopTimer();
+    setValue('isCorrect', false);
+    setValue('verification_code', '');
+    setValue('verificationMessage', null);
+    setValue('isVerified', false);
+    setValue('isCodeVerified', false);
   };
 
   const handleNext = () => {
@@ -71,16 +83,16 @@ function PCVerifyPhone({
       onError: (err) => {
         if (isKoinError(err)) {
           if (err.status === 404) {
-            setIdMessage({ type: 'warning', content: MESSAGES.ID.NOT_REGISTERED });
+            setValue('idMessage', { type: 'warning', content: MESSAGES.ID.NOT_REGISTERED });
           } else if (err.status === 400) {
-            setIdMessage({ type: 'warning', content: MESSAGES.ID.FORMAT });
+            setValue('idMessage', { type: 'warning', content: MESSAGES.ID.FORMAT });
           }
         }
       },
     });
   };
 
-  const isFormFilled = loginId && phoneNumber && verificationCode && isCodeCorrect;
+  const isFormFilled = loginId && phoneNumber && verificationCode && isCorrect;
 
   return (
     <div className={styles.container}>
@@ -133,25 +145,18 @@ function PCVerifyPhone({
                     htmlFor="phoneNumber"
                     labelName="휴대전화"
                     {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setPhoneMessage(null);
-                      stopTimer();
-                      setIncorrect();
-                      setVerificationMessage(null);
-                      setValue('verificationCode', '');
-                    }}
+                    onChange={(e) => handlePhoneNumberChange(e, field.onChange)}
                     placeholder="숫자만 입력해 주세요."
                     isRequired
                     message={phoneMessage}
-                    disabled={isVerified}
+                    disabled={isDisabled || isVerified}
                     isDelete={!isVerified}
                     onClear={() => {
                       setPhoneMessage(null);
                       setButtonText('인증번호 발송');
                     }}
                   >
-                    {phoneMessage?.type === 'success' && (
+                    {phoneMessage?.type === 'success' && smsSendCountData && (
                     <div className={styles['label-count-number']}>
                       {' '}
                       남은 횟수 (
@@ -166,6 +171,7 @@ function PCVerifyPhone({
                     type="button"
                     onClick={() => {
                       checkPhoneExists({ phone_number: phoneNumber });
+                      setButtonText('인증번호 재발송');
                       setIsVerificationSent(true);
                     }}
                     className={styles['check-button']}
@@ -174,7 +180,7 @@ function PCVerifyPhone({
                     {isSendingVerification ? '...' : buttonText}
                   </button>
                 </div>
-                {!isVerificationSent && (
+                {!isVerificationSent && !isCorrect && (
                   <div className={styles['email-navigate']}>
                     <div className={styles['email-navigate__text']}>휴대전화 등록을 안 하셨나요?</div>
                     <button
@@ -209,21 +215,21 @@ function PCVerifyPhone({
                   placeholder="인증번호를 입력해주세요."
                   isRequired
                   maxLength={6}
-                  isTimer={isCodeCorrect ? false : isTimer}
+                  isTimer={isCorrect ? false : isTimer}
                   timerValue={timerValue}
                   message={verificationMessage}
-                  disabled={isCodeVerified}
+                  disabled={isCodeVerified || isDisabled}
                   isDelete={!isVerified}
                   onClear={() => {
                     setVerificationMessage(null);
-                    setIncorrect();
+                    setValue('isCorrect', false);
                   }}
                 />
                 <button
                   type="button"
                   onClick={() => onClickSendVerificationButton()}
                   className={styles['check-button']}
-                  disabled={!field.value || isCodeCorrect}
+                  disabled={!field.value || isCorrect}
                 >
                   인증번호 확인
                 </button>

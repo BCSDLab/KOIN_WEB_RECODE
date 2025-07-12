@@ -22,15 +22,19 @@ import CompleteStep from './Steps/CompleteStep';
 type StepTitle = '약관동의' | '본인인증' | '회원유형선택' | '정보입력' | '완료';
 type UserType = '학생' | '외부인';
 
-const stepTitles: StepTitle[] = ['약관동의', '본인인증', '회원유형선택', '정보입력', '완료'];
+const mobileSteps: StepTitle[] = ['약관동의', '본인인증', '회원유형선택', '정보입력', '완료'];
+const desktopSteps: StepTitle[] = ['약관동의', '본인인증', '정보입력', '완료'];
 
 function SignupPage() {
+  const isMobile = useMediaQuery();
+  const activeSteps = isMobile ? mobileSteps : desktopSteps;
+
   const {
     Step, nextStep, goBack, currentStep,
-  } = useStep<StepTitle>();
-  const currentIndex = stepTitles.indexOf(currentStep);
+  } = useStep<StepTitle>(activeSteps);
+
+  const currentIndex = activeSteps.indexOf(currentStep);
   const [userType, setUserType] = useState<UserType | null>(null);
-  const isMobile = useMediaQuery();
 
   const methods = useForm({
     mode: 'onChange',
@@ -46,6 +50,8 @@ function SignupPage() {
       email: null,
       nickname: null,
       verification_code: '',
+      privacy_policy_agreement: false,
+      koin_terms_agreement: false,
       marketing_notification_agreement: false,
       isCorrect: false,
       verificationMessage: null,
@@ -54,18 +60,32 @@ function SignupPage() {
     },
   });
 
-  const isVerificationStepPassed = methods.getValues('name') && methods.getValues('phone_number') && methods.getValues('gender');
-
   const goToFirstStep = useCallback(() => {
     nextStep('약관동의');
   }, [nextStep]);
 
   useEffect(() => {
-    if ((currentStep === '회원유형선택' && !isVerificationStepPassed) || (currentStep === '정보입력' && !userType)) {
+    if (currentStep === '완료') {
+      if (methods.getValues('name')) {
+        methods.reset();
+      }
+      return;
+    }
+
+    const isAgreements = methods.getValues('privacy_policy_agreement') && methods.getValues('koin_terms_agreement');
+    if (currentStep === '본인인증' && !isAgreements) {
+      showToast('warning', '약관에 동의해주세요.');
+      goToFirstStep();
+      return;
+    }
+    const isVerificationStepPassed = methods.getValues('name') && methods.getValues('phone_number') && methods.getValues('gender');
+
+    if ((currentStep === '회원유형선택' && !isVerificationStepPassed)
+      || (currentStep === '정보입력' && (!isVerificationStepPassed || !userType))) {
       showToast('warning', '잘못된 접근입니다.');
       goToFirstStep();
     }
-  }, [currentStep, userType, isVerificationStepPassed, goToFirstStep]);
+  }, [currentStep, userType, methods, goToFirstStep, isMobile]);
 
   return (
     <Suspense fallback={<LoadingSpinner size="50px" />}>
@@ -86,7 +106,7 @@ function SignupPage() {
 
         {currentStep !== '완료' && (
           <ProgressBar
-            steps={stepTitles.map((title) => ({ title }))}
+            steps={activeSteps.map((title) => ({ title }))}
             currentIndex={currentIndex}
           />
         )}
@@ -116,14 +136,14 @@ function SignupPage() {
           <Step name="정보입력">
             {userType === '학생' && (
               isMobile
-                ? <MobileStudentDetailStep onNext={() => nextStep('완료')} />
-                : <StudentDetail onNext={() => nextStep('완료')} onBack={goBack} />
+                ? <MobileStudentDetailStep onNext={() => nextStep('완료', { replace: true })} />
+                : <StudentDetail onNext={() => nextStep('완료', { replace: true })} onBack={goBack} />
             )}
 
             {userType === '외부인' && (
               isMobile
-                ? <MobileGuestDetailStep onNext={() => nextStep('완료')} />
-                : <ExternalDetail onNext={() => nextStep('완료')} onBack={goBack} />
+                ? <MobileGuestDetailStep onNext={() => nextStep('완료', { replace: true })} />
+                : <ExternalDetail onNext={() => nextStep('완료', { replace: true })} onBack={goBack} />
             )}
           </Step>
           <Step name="완료">

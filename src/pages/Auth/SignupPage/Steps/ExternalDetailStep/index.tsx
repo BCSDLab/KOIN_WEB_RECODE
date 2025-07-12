@@ -109,7 +109,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     },
   });
 
-  const { mutate: signup } = useMutation({
+  const { mutate: signup, isPending } = useMutation({
     mutationFn: (variables: GeneralFormValues) => signupGeneral(variables),
     onSuccess: () => {
       onNext();
@@ -370,7 +370,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
             })}
             disabled={!isFormFilled}
           >
-            회원가입 완료
+            {isPending ? '...' : '회원가입 완료'}
           </button>
         </div>
       </form>
