@@ -4,6 +4,7 @@ import { getUser, getGeneralUser } from 'api/auth';
 import { UserResponse, GeneralUserResponse } from 'api/auth/entity';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { useTokenStore } from 'utils/zustand/auth';
 import { validateUserInfo } from 'utils/ts/userInfoValidator';
 
 type UserInfoModalState = 'FIRST_TIME' | 'SKIPPED_ONCE' | 'COMPLETED';
@@ -20,8 +21,14 @@ interface UseUserInfoModalReturn {
   handleCompleteInfo: () => void;
 }
 
+interface SessionInfo {
+  currentToken: string;
+  hasShownModal: boolean;
+}
+
 export default function useUserInfoModal(): UseUserInfoModalReturn {
   const token = useTokenState();
+  const { userType: storedUserType } = useTokenStore();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [userType, setUserType] = useState<'STUDENT' | 'GENERAL' | null>(null);
   const [modalState, setModalState] = useState<UserInfoModalState>(() => {
@@ -33,18 +40,36 @@ export default function useUserInfoModal(): UseUserInfoModalReturn {
     }
   });
 
-  const getSessionModalKey = useCallback(() => `userInfoModal_shown_${token}`, [token]);
+  const SESSION_KEY = 'userInfoModal_session';
+
+  const getSessionInfo = useCallback((): SessionInfo | null => {
+    try {
+      const saved = localStorage.getItem(SESSION_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  }, []);
 
   const hasShownModalThisSession = useCallback((): boolean => {
     if (!token) return false;
-    return localStorage.getItem(getSessionModalKey()) === 'true';
-  }, [token, getSessionModalKey]);
+
+    const sessionInfo = getSessionInfo();
+    if (!sessionInfo) return false;
+
+    return sessionInfo.currentToken === token && sessionInfo.hasShownModal;
+  }, [token, getSessionInfo]);
 
   const markModalAsShownThisSession = useCallback(() => {
-    if (token) {
-      localStorage.setItem(getSessionModalKey(), 'true');
-    }
-  }, [token, getSessionModalKey]);
+    if (!token) return;
+
+    const sessionInfo: SessionInfo = {
+      currentToken: token,
+      hasShownModal: true,
+    };
+
+    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionInfo));
+  }, [token]);
 
   const showCloseButton = modalState === 'SKIPPED_ONCE';
 
@@ -65,6 +90,9 @@ export default function useUserInfoModal(): UseUserInfoModalReturn {
     closeModal();
   };
 
+  const shouldCallStudentAPI = !storedUserType || storedUserType === 'STUDENT';
+  const shouldCallGeneralAPI = storedUserType === 'GENERAL';
+
   const {
     data: studentUser,
     isSuccess: isStudentSuccess,
@@ -73,13 +101,8 @@ export default function useUserInfoModal(): UseUserInfoModalReturn {
   } = useQuery({
     queryKey: ['user', token],
     queryFn: () => getUser(token),
-    enabled: !!token,
-    retry: (failureCount, error: any) => {
-      if (error?.response?.status === 403) {
-        return false;
-      }
-      return failureCount < 3;
-    },
+    enabled: !!token && shouldCallStudentAPI,
+    retry: false,
   });
 
   const {
@@ -89,11 +112,17 @@ export default function useUserInfoModal(): UseUserInfoModalReturn {
   } = useQuery({
     queryKey: ['generalUser', token],
     queryFn: () => getGeneralUser(token),
-    enabled: !!token && isStudentError,
+    enabled: !!token && (shouldCallGeneralAPI || isStudentError),
     retry: false,
   });
 
   const isLoading = isStudentLoading || isGeneralLoading;
+
+  useEffect(() => {
+    if (token && storedUserType && !userType) {
+      setUserType(storedUserType);
+    }
+  }, [token, storedUserType, userType]);
 
   useEffect(() => {
     if (!token) {
@@ -134,6 +163,7 @@ export default function useUserInfoModal(): UseUserInfoModalReturn {
     generalUser,
     isStudentSuccess,
     isGeneralSuccess,
+    isStudentError,
     openModal,
     modalState,
     hasShownModalThisSession,
