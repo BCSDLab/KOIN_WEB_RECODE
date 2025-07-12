@@ -124,7 +124,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     },
   });
 
-  const { mutate: signup } = useMutation({
+  const { mutate: signup, isPending } = useMutation({
     mutationFn: (variables: StudentFormValues) => signupStudent(variables),
     onSuccess: () => {
       onNext();
@@ -457,7 +457,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
           })}
           disabled={!isFormFilled}
         >
-          회원가입 완료
+          {isPending ? '...' : '회원가입 완료'}
         </button>
       </div>
     </div>
