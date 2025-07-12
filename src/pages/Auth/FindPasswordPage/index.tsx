@@ -149,9 +149,9 @@ function FindPasswordPage() {
 
           <Step step={step} name="비밀번호변경">
             {isMobile ? (
-              <MobileResetPassword onNext={() => nextStep('완료', { replace: true })} onBack={goBack} contactType={contactType} />
+              <MobileResetPassword onNext={() => nextStep('완료')} onBack={goBack} contactType={contactType} />
             ) : (
-              <PCResetPasswordPhone onNext={() => nextStep('완료', { replace: true })} onBack={goBack} contactType={contactType} />
+              <PCResetPasswordPhone onNext={() => nextStep('완료')} onBack={goBack} contactType={contactType} />
             )}
           </Step>
 
