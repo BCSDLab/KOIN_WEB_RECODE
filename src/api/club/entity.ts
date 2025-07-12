@@ -107,3 +107,11 @@ export interface NewClubManager {
   changed_manager_id: string;
 }
 export type NewClubManagerResponse = APIResponse;
+
+export interface ClubRecruitment {
+  start_date: string;
+  end_date: string;
+  is_always_recruiting: boolean;
+  image_url: string;
+  content: string;
+}
