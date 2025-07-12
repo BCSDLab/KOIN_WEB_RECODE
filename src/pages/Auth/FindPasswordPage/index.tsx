@@ -56,6 +56,11 @@ function FindPasswordPage() {
       password_check: '',
       newPassword: '',
       newPasswordCheck: '',
+      isCorrect: false,
+      verificationMessage: null,
+      phoneMessage: null,
+      idMessage: null,
+      isDisabled: false,
     },
   });
 
