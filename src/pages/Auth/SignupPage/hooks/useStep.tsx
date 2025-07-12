@@ -11,7 +11,7 @@ function useStep<T extends string>(steps: T[]) {
     throw new Error('URL parameter \'currentstep\' is required for signup flow.');
   }
   const nextStep = useCallback((next: T, options?: { replace: boolean }) => {
-    navigate(`/auth/signup/${next}`, options);
+    navigate(ROUTES.AuthSignup({ currentStep: next, isLink: true }), options);
   }, [navigate]);
 
   const goBack = useCallback(() => {
