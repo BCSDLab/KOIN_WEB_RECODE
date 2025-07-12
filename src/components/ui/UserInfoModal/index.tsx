@@ -10,7 +10,6 @@ function UserInfoModal() {
   const navigate = useNavigate();
   const {
     isModalOpen,
-    closeModal,
     userType,
     currentUser,
     showCloseButton,
