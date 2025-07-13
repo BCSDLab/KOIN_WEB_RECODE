@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { uploadClubFile } from 'api/uploadFile';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
@@ -9,15 +9,15 @@ import UploadIcon from 'assets/svg/Club/add-image.svg';
 import styles from './ImagesUploadSlider.module.scss';
 
 interface ClubImageUploaderProps {
-  imageUrls: string[];
-  setImageUrls: Dispatch<SetStateAction<string[]>>;
+  imageUrls: Array<string>;
+  addImages: (newImages: Array<string>) => void;
 }
 
 const MAX_IMAGES = 7;
 
 export default function ImagesUploadSlider({
   imageUrls,
-  setImageUrls,
+  addImages,
 }: ClubImageUploaderProps) {
   const isMobile = useMediaQuery();
   const [isDragOver, setIsDragOver] = useState(false);
@@ -38,7 +38,7 @@ export default function ImagesUploadSlider({
       if (images) {
         const uniqueImages = images.filter((url) => !imageUrls.includes(url));
         const nextImages = [...imageUrls, ...uniqueImages];
-        setImageUrls(nextImages);
+        addImages(nextImages);
         setCurrentIdx(nextImages.length - 1);
       }
 
@@ -66,23 +66,26 @@ export default function ImagesUploadSlider({
 
   const handleDelete = (index: number) => {
     const nextImages = imageUrls.filter((_, i) => i !== index);
-    setImageUrls(nextImages);
+    addImages(nextImages);
     setCurrentIdx((prev) => Math.max(0, Math.min(prev, nextImages.length)));
   };
 
-  const totalSlides = imageUrls.length + 1;
-  const goPrev = () => setCurrentIdx((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
-  const goNext = () => setCurrentIdx((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
+  const goPrev = () => setCurrentIdx((prev) => (prev === 0 ? imageUrls.length : prev - 1));
+  const goNext = () => setCurrentIdx((prev) => (prev === imageUrls.length ? 0 : prev + 1));
+  const slideCounter = `${currentIdx + 1}/${imageUrls.length + 1}`;
 
   return (
     <div>
       <div className={styles['form-image__preview']}>
-        <div className={styles['slider-wrapper']}>
-          <span className={styles['slider-counter']}>{`${currentIdx + 1}/${totalSlides}`}</span>
+        <div className={styles.slider}>
+          <span className={styles.slider__counter}>{slideCounter}</span>
 
           <button
             type="button"
-            className={`${styles['slider-arrow']} ${styles['slider-arrow--left']}`}
+            className={cn({
+              [styles.slider__arrow]: true,
+              [styles['slider__arrow--left']]: true,
+            })}
             onClick={goPrev}
             aria-label="이전 이미지"
           >
@@ -154,7 +157,10 @@ export default function ImagesUploadSlider({
           )}
           <button
             type="button"
-            className={`${styles['slider-arrow']} ${styles['slider-arrow--right']}`}
+            className={cn({
+              [styles.slider__arrow]: true,
+              [styles['slider__arrow--right']]: true,
+            })}
             onClick={goNext}
             aria-label="다음 이미지"
           >
@@ -164,7 +170,7 @@ export default function ImagesUploadSlider({
       </div>
 
       <div className={styles['form-image__description']}>
-        <p>4:5 비율로 업로드 해주세요.</p>
+        <p>5:4 비율로 업로드 해주세요.</p>
         <p>사진을 클릭하여 수정/삭제할 수 있습니다.</p>
       </div>
     </div>
