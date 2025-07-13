@@ -10,14 +10,14 @@ import styles from './ImagesUploadSlider.module.scss';
 
 interface ClubImageUploaderProps {
   imageUrls: Array<string>;
-  addImages: (newImages: Array<string>) => void;
+  addImageUrls: (newImageUrls: Array<string>) => void;
 }
 
 const MAX_IMAGES = 7;
 
 export default function ImagesUploadSlider({
   imageUrls,
-  addImages,
+  addImageUrls,
 }: ClubImageUploaderProps) {
   const isMobile = useMediaQuery();
   const [isDragOver, setIsDragOver] = useState(false);
@@ -38,7 +38,7 @@ export default function ImagesUploadSlider({
       if (images) {
         const uniqueImages = images.filter((url) => !imageUrls.includes(url));
         const nextImages = [...imageUrls, ...uniqueImages];
-        addImages(nextImages);
+        addImageUrls(nextImages);
         setCurrentIdx(nextImages.length - 1);
       }
 
@@ -66,7 +66,7 @@ export default function ImagesUploadSlider({
 
   const handleDelete = (index: number) => {
     const nextImages = imageUrls.filter((_, i) => i !== index);
-    addImages(nextImages);
+    addImageUrls(nextImages);
     setCurrentIdx((prev) => Math.max(0, Math.min(prev, nextImages.length)));
   };
 
