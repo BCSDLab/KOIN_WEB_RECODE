@@ -16,8 +16,7 @@
 
 .container {
   width: 1136px;
-  padding-top: 56px;
-  padding-bottom: 60px;
+  padding-block: 56px 60px;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
@@ -97,11 +96,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    > p {
-      font-size: 20px;
-      font-weight: 700;
-    }
   }
 
   &__label {
@@ -150,6 +144,11 @@
       justify-content: space-between;
       width: 100%;
     }
+  }
+
+  &__separator {
+    font-size: 20px;
+    font-weight: 700;
   }
 }
 
