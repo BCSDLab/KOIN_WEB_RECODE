@@ -188,12 +188,18 @@ export default class APIClient {
     if (error.response?.status === 403 && useTokenStore.getState().token) {
       const currentToken = useTokenStore.getState().token;
       if (currentToken) {
-        const response = await axios.get(`${this.baseURL}/user/type`, {
-          headers: {
-            Authorization: `Bearer ${currentToken}`,
-          },
-        });
-        useTokenStore.getState().setUserType(response.data.user_type);
+        try {
+          const response = await axios.get(`${this.baseURL}/user/type`, {
+            headers: {
+              Authorization: `Bearer ${currentToken}`,
+            },
+          });
+          useTokenStore.getState().setUserType(response.data.user_type);
+          const retryResponse = await this.retryRequest(error);
+          return retryResponse;
+        } catch (retryError) {
+          return null;
+        }
       }
     }
     return null;
