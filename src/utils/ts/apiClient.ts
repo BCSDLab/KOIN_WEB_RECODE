@@ -177,12 +177,23 @@ export default class APIClient {
               useTokenStore.getState().setToken('');
               useTokenStore.getState().setRefreshToken('');
               saveTokensToNative('', ''); // 네이티브 상태도 동기화
-              redirectToClub();
-            } else redirectToLogin();
+            }
             return null;
           }
         }
         redirectToLogin();
+      }
+    }
+
+    if (error.response?.status === 403 && useTokenStore.getState().token) {
+      const currentToken = useTokenStore.getState().token;
+      if (currentToken) {
+        const response = await axios.get(`${this.baseURL}/user/type`, {
+          headers: {
+            Authorization: `Bearer ${currentToken}`,
+          },
+        });
+        useTokenStore.getState().setUserType(response.data.user_type);
       }
     }
     return null;
