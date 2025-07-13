@@ -1,0 +1,172 @@
+import { type Dispatch, type SetStateAction, useState } from 'react';
+import { uploadClubFile } from 'api/uploadFile';
+import { cn } from '@bcsdlab/utils';
+import showToast from 'utils/ts/showToast';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useImageUpload from 'pages/Club/NewClubEvent/hooks/useImageUpload';
+import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
+import UploadIcon from 'assets/svg/Club/add-image.svg';
+import styles from './ImagesUploadSlider.module.scss';
+
+interface ClubImageUploaderProps {
+  imageUrls: string[];
+  setImageUrls: Dispatch<SetStateAction<string[]>>;
+}
+
+const MAX_IMAGES = 7;
+
+export default function ImagesUploadSlider({
+  imageUrls,
+  setImageUrls,
+}: ClubImageUploaderProps) {
+  const isMobile = useMediaQuery();
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
+
+  const saveImage = async () => {
+    try {
+      const files = imgRef.current?.files;
+      if (!files || files.length === 0) return;
+
+      if (imageUrls.length + files.length > MAX_IMAGES) {
+        showToast('error', `이미지는 최대 ${MAX_IMAGES}개까지 업로드할 수 있습니다.`);
+        return;
+      }
+
+      const images = await saveImgFile();
+      if (images) {
+        const uniqueImages = images.filter((url) => !imageUrls.includes(url));
+        const nextImages = [...imageUrls, ...uniqueImages];
+        setImageUrls(nextImages);
+        setCurrentIdx(nextImages.length - 1);
+      }
+
+      if (imgRef.current) imgRef.current.value = '';
+    } catch {
+      showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragOver(false);
+
+    const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith('image/'));
+    if (files.length === 0) return;
+
+    if (imgRef.current) {
+      const dataTransfer = new DataTransfer();
+      files.forEach((file) => dataTransfer.items.add(file));
+      imgRef.current.files = dataTransfer.files;
+    }
+
+    await saveImage();
+  };
+
+  const handleDelete = (index: number) => {
+    const nextImages = imageUrls.filter((_, i) => i !== index);
+    setImageUrls(nextImages);
+    setCurrentIdx((prev) => Math.max(0, Math.min(prev, nextImages.length)));
+  };
+
+  const totalSlides = imageUrls.length + 1;
+  const goPrev = () => setCurrentIdx((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
+  const goNext = () => setCurrentIdx((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
+
+  return (
+    <div>
+      <div className={styles['form-image__preview']}>
+        <div className={styles['slider-wrapper']}>
+          <span className={styles['slider-counter']}>{`${currentIdx + 1}/${totalSlides}`}</span>
+
+          <button
+            type="button"
+            className={`${styles['slider-arrow']} ${styles['slider-arrow--left']}`}
+            onClick={goPrev}
+            aria-label="이전 이미지"
+          >
+            <ArrowIcon />
+          </button>
+
+          {currentIdx === imageUrls.length ? (
+            <label
+              className={cn({
+                [styles['form-image__label']]: true,
+                [styles['form-image__label--drag-over']]: isDragOver,
+              })}
+              htmlFor="club-image-upload"
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragOver(true);
+              }}
+              onDragEnter={(e) => {
+                e.preventDefault();
+                setIsDragOver(true);
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault();
+                setIsDragOver(false);
+              }}
+              onDrop={handleDrop}
+              aria-label="동아리 이미지 업로드"
+            >
+              <input
+                id="club-image-upload"
+                className={styles['form-image__input']}
+                type="file"
+                ref={imgRef}
+                accept="image/*"
+                multiple
+                onChange={saveImage}
+                aria-label="동아리 이미지 업로드"
+              />
+              <UploadIcon />
+              <div className={styles['form-image__label-text']}>
+                {isMobile ? (
+                  <>
+                    <div>클릭하여 사진을</div>
+                    <div>업로드 해주세요.</div>
+                  </>
+                ) : (
+                  <>
+                    <div>클릭하거나 사진을 드래그해</div>
+                    <div>업로드 해주세요.</div>
+                  </>
+                )}
+              </div>
+            </label>
+          ) : (
+            <div className={styles['form-image__img__box']}>
+              <button
+                type="button"
+                onClick={() => handleDelete(currentIdx)}
+                className={styles['form-image__img__button']}
+                aria-label="이미지 삭제"
+              >
+                <img
+                  className={styles['form-image__img']}
+                  src={imageUrls[currentIdx]}
+                  alt={`동아리 이미지 미리보기 ${currentIdx + 1}`}
+                />
+              </button>
+            </div>
+          )}
+          <button
+            type="button"
+            className={`${styles['slider-arrow']} ${styles['slider-arrow--right']}`}
+            onClick={goNext}
+            aria-label="다음 이미지"
+          >
+            <ArrowIcon />
+          </button>
+        </div>
+      </div>
+
+      <div className={styles['form-image__description']}>
+        <p>4:5 비율로 업로드 해주세요.</p>
+        <p>사진을 클릭하여 수정/삭제할 수 있습니다.</p>
+      </div>
+    </div>
+  );
+}
