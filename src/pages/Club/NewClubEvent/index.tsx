@@ -9,6 +9,7 @@ import DatePickerModal from 'pages/Club/NewClubRecruitment/components/DatePicker
 import DatePicker from 'components/ui/DatePicker';
 import ImagesUploadSlider from './components/ImagesUploadSlider';
 import TimeSelector from './components/TimeSelector';
+import TimePicker from './components/TimePicker';
 import styles from './NewClubEvent.module.scss';
 
 export default function NewClubEvent() {
@@ -18,6 +19,7 @@ export default function NewClubEvent() {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
+  const [isTimePickerOpen, openTimePicker, closeTimePicker] = useBooleanState(false);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -58,6 +60,12 @@ export default function NewClubEvent() {
         </div>
         )}
         <div className={styles.content}>
+          {isMobile && (
+          <ImagesUploadSlider
+            imageUrls={formData.image_urls}
+            addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
+          />
+          )}
           <div className={styles['form-left']}>
             <div className={styles.form__item}>
               <div className={styles['form__item-title']}>
@@ -73,17 +81,43 @@ export default function NewClubEvent() {
               <div className={styles['form__button-container']}>
                 {isMobile ? (
                   <>
-                    <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
-                      <span>{startYear}</span>
-                      <br />
-                      <span>{startRest}</span>
-                    </button>
+                    <div className={styles['picker-container']}>
+                      <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
+                        <span>{startYear}</span>
+                        <br />
+                        <span>{startRest}</span>
+                      </button>
+                      <button
+                        type="button"
+                        className={styles['time-picker-button']}
+                        onClick={openTimePicker}
+                      >
+                        <span>
+                          {startTime.hour.toString().padStart(2, '0')}
+                          :
+                          {startTime.minute.toString().padStart(2, '0')}
+                        </span>
+                      </button>
+                    </div>
                     <div className={styles.form__separator}>~</div>
-                    <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
-                      <span>{endYear}</span>
-                      <br />
-                      <span>{endRest}</span>
-                    </button>
+                    <div className={styles['picker-container']}>
+                      <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
+                        <span>{endYear}</span>
+                        <br />
+                        <span>{endRest}</span>
+                      </button>
+                      <button
+                        type="button"
+                        className={styles['time-picker-button']}
+                        onClick={openTimePicker}
+                      >
+                        <span>
+                          {startTime.hour.toString().padStart(2, '0')}
+                          :
+                          {startTime.minute.toString().padStart(2, '0')}
+                        </span>
+                      </button>
+                    </div>
                   </>
                 ) : (
                   <>
@@ -129,10 +163,12 @@ export default function NewClubEvent() {
               />
             )}
           </div>
+          {!isMobile && (
           <ImagesUploadSlider
             imageUrls={formData.image_urls}
-            addImages={(newImages) => setFormData({ ...formData, image_urls: newImages })}
+            addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
           />
+          )}
 
           {isMobile && (
             <>
@@ -180,6 +216,16 @@ export default function NewClubEvent() {
           selectedDate={endDate}
           onChange={setEndDate}
           onClose={closeEndCalendar}
+        />
+      )}
+      {isTimePickerOpen && (
+        <TimePicker
+          hour={startTime.hour}
+          minute={startTime.minute}
+          onChange={(hour, minute) => {
+            setStartTime({ hour, minute });
+          }}
+          onClose={closeTimePicker}
         />
       )}
     </div>
