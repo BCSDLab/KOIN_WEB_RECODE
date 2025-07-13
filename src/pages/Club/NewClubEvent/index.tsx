@@ -78,7 +78,7 @@ export default function NewClubEvent() {
                       <br />
                       <span>{startRest}</span>
                     </button>
-                    <p>~</p>
+                    <div className={styles.form__separator}>~</div>
                     <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
                       <span>{endYear}</span>
                       <br />
@@ -99,7 +99,7 @@ export default function NewClubEvent() {
                         onChange={(time) => setStartTime(time)}
                       />
                     </div>
-                    <p>~</p>
+                    <div className={styles.form__separator}>~</div>
                     <div className={styles['picker-container']}>
                       <DatePicker
                         selectedDate={endDate}
@@ -131,10 +131,7 @@ export default function NewClubEvent() {
           </div>
           <ImagesUploadSlider
             imageUrls={formData.image_urls}
-            setImageUrls={(action) => setFormData((prev) => ({
-              ...prev,
-              image_urls: typeof action === 'function' ? action(prev.image_urls) : action,
-            }))}
+            addImages={(newImages) => setFormData({ ...formData, image_urls: newImages })}
           />
 
           {isMobile && (
