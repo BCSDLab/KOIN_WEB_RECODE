@@ -118,7 +118,7 @@ export interface ClubRecruitment {
 
 export interface ClubEvent {
   name: string;
-  image_urls: string[];
+  image_urls: Array<string>;
   start_date: string;
   end_date: string;
   introduce: string;
