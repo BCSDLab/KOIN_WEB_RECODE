@@ -8,6 +8,13 @@ type GTagEvent = {
   current_page?: string;
 };
 
+type SessionEvent = {
+  event_label: string;
+  value: string;
+  event_category: string;
+  custom_session_id: string;
+};
+
 export const GA_TRACKING_ID = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
@@ -43,6 +50,28 @@ export const event = ({
       '체류 시간': duration_time,
       '이전 카테고리': previous_page,
       '현재 페이지': current_page,
+    });
+  }
+};
+
+export const startSession = ({
+  event_label, value, event_category, custom_session_id,
+}: SessionEvent) => {
+  if (typeof window.gtag === 'undefined') return;
+  window.gtag('event', 'session_start', {
+    event_label,
+    value,
+    event_category,
+    custom_session_id,
+  });
+
+  if (import.meta.env.VITE_API_PATH?.includes('stage')) {
+    // eslint-disable-next-line no-console
+    console.table({
+      '세션 시작': event_label,
+      값: value,
+      '이벤트 Category': event_category,
+      '커스텀 세션 ID': custom_session_id,
     });
   }
 };
