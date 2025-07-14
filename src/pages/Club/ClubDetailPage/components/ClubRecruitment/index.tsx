@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useDeleteRecruitment from 'pages/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
+import useDeleteRecruitment from 'pages/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import styles from './ClubRecruitment.module.scss';
 
 interface ClubRecruitmentProps {
@@ -17,9 +17,9 @@ export default function ClubRecruitment({
 }: ClubRecruitmentProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery();
   const { clubRecruitmentData } = useClubRecruitment(clubId);
   const { mutateAsync } = useDeleteRecruitment();
-  const isMobile = useMediaQuery();
 
   return (
     <div className={styles.layout}>
