@@ -25,6 +25,7 @@ const ROUTES = {
   ClubDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/${id}` : '/clubs/:id'),
   NewClub: () => '/clubs/new',
   ClubEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/edit/${id}` : '/clubs/edit/:id'),
+  NewClubRecruitment: () => '/clubs/recruitment',
   Cafeteria: () => '/cafeteria',
   Articles: () => '/articles',
   ArticlesDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/${id}` : '/articles/:id'),

@@ -141,3 +141,13 @@ export interface ClubEvent {
 export interface ClubEventResponse extends ClubEvent, APIResponse {}
 
 export type ClubEventListResponse = (ClubEvent & { is_subscribed: boolean })[];
+
+
+export interface ClubRecruitment {
+  start_date: string;
+  end_date: string;
+  is_always_recruiting: boolean;
+  image_url: string;
+  content: string;
+}
+
