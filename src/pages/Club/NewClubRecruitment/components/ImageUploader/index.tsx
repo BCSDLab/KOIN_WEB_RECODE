@@ -11,13 +11,11 @@ import styles from './ImageUploader.module.scss';
 interface ClubImageUploaderProps {
   formData: ClubRecruitment;
   setFormData: Dispatch<SetStateAction<ClubRecruitment>>;
-  isTried: boolean;
 }
 
 export default function ClubImageUploader({
   formData,
   setFormData,
-  isTried,
 }: ClubImageUploaderProps) {
   const isMobile = useMediaQuery();
   const [isDragOver, setIsDragOver] = useState(false);
@@ -65,7 +63,6 @@ export default function ClubImageUploader({
           {
             [styles['form-image__label']]: true,
             [styles['form-image__label--drag-over']]: isDragOver,
-            [styles['form-image__label--error']]: !formData.image_url && isTried,
           },
         )}
         htmlFor="club-image-upload"

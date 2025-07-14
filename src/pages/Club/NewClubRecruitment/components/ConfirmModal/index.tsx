@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -5,13 +6,25 @@ import styles from './ConfirmModal.module.scss';
 
 interface ConfirmModalProps {
   closeModal: () => void;
+  onSubmit: () => void;
   type?: string;
 }
 
-export default function ConfirmModal({ closeModal, type = 'confirm' }: ConfirmModalProps) {
+export default function ConfirmModal({ closeModal, onSubmit, type = 'confirm' }: ConfirmModalProps) {
+  const navigate = useNavigate();
   const isMobile = useMediaQuery();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
+
+  const handleSubmit = async () => {
+    onSubmit();
+    closeModal();
+  };
+
+  const handleCancel = () => {
+    closeModal();
+    navigate(-1);
+  };
 
   return (
     <div className={styles['modal-background']} ref={backgroundRef}>
@@ -31,7 +44,7 @@ export default function ConfirmModal({ closeModal, type = 'confirm' }: ConfirmMo
             )}
             <div className={styles['info-button-container']}>
               <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
-              <button className={styles['info-button__confirm']} type="button" onClick={() => {}}>생성하기</button>
+              <button className={styles['info-button__confirm']} type="button" onClick={handleSubmit}>생성하기</button>
             </div>
           </>
         )}
@@ -50,8 +63,8 @@ export default function ConfirmModal({ closeModal, type = 'confirm' }: ConfirmMo
               </>
             )}
             <div className={styles['info-button-container']}>
-              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
-              <button className={styles['info-button__reset']} type="button" onClick={() => {}}>삭제하기</button>
+              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>계속 생성</button>
+              <button className={styles['info-button__reset']} type="button" onClick={handleCancel}>취소하기</button>
             </div>
           </>
         )}
