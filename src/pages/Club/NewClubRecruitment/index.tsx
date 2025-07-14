@@ -17,7 +17,7 @@ export default function NewClubRecruitment() {
   const { mutateAsync } = usePostNewRecruitment(Number(id));
   const isMobile = useMediaQuery();
 
-  const [modalType, setModalType] = useState('');
+  const [modalType, setModalType] = useState<'confirm' | 'cancel'>('confirm');
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
@@ -115,7 +115,6 @@ export default function NewClubRecruitment() {
                           start_date: date.toISOString().slice(0, 10),
                         });
                       }}
-                      trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(new Date(formData.start_date))}</button>}
                     />
                     <p>~</p>
                     <DatePicker
@@ -126,7 +125,6 @@ export default function NewClubRecruitment() {
                           end_date: date.toISOString().slice(0, 10),
                         });
                       }}
-                      trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(new Date(formData.end_date))}</button>}
                     />
                   </>
                 )}

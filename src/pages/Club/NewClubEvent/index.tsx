@@ -19,7 +19,7 @@ export default function NewClubEvent() {
   const { mutateAsync } = usePostNewEvent(Number(id));
   const isMobile = useMediaQuery();
 
-  const [modalType, setModalType] = useState('');
+  const [modalType, setModalType] = useState<'confirm' | 'cancel'>('confirm');
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
@@ -141,7 +141,6 @@ export default function NewClubEvent() {
                       <DatePicker
                         selectedDate={startDate}
                         onChange={setStartDate}
-                        trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(startDate)}</button>}
                       />
                       <TimeSelector
                         hour={startTime.hour}
@@ -154,7 +153,6 @@ export default function NewClubEvent() {
                       <DatePicker
                         selectedDate={endDate}
                         onChange={setEndDate}
-                        trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(endDate)}</button>}
                       />
                       <TimeSelector
                         hour={endTime.hour}
