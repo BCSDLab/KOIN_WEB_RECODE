@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { ClubEvent } from 'api/club/entity';
-import { formatKoreanDate } from 'utils/ts/calendar';
+import { useParams } from 'react-router-dom';
+import { ClubEventRequest } from 'api/club/entity';
+import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import DetailDescription from 'pages/Club/NewClubRecruitment/components/DetailDescription';
@@ -10,23 +11,27 @@ import DatePicker from 'components/ui/DatePicker';
 import ImagesUploadSlider from './components/ImagesUploadSlider';
 import TimeSelector from './components/TimeSelector';
 import TimePicker from './components/TimePicker';
+import usePostNewEvent from './hooks/usePostNewEvent';
 import styles from './NewClubEvent.module.scss';
 
 export default function NewClubEvent() {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync } = usePostNewEvent(Number(id));
   const isMobile = useMediaQuery();
 
   const [modalType, setModalType] = useState('');
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
-  const [isTimePickerOpen, openTimePicker, closeTimePicker] = useBooleanState(false);
+  const [isStartTimePickerOpen, openStartTimePicker, closeStartTimePicker] = useBooleanState(false);
+  const [isEndTimePickerOpen, openEndTimePicker, closeEndTimePicker] = useBooleanState(false);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [startTime, setStartTime] = useState({ hour: 0, minute: 0 });
   const [endTime, setEndTime] = useState({ hour: 0, minute: 0 });
 
-  const [formData, setFormData] = useState<ClubEvent>({
+  const [formData, setFormData] = useState<ClubEventRequest>({
     name: '',
     image_urls: [],
     start_date: '',
@@ -34,6 +39,17 @@ export default function NewClubEvent() {
     introduce: '',
     content: '',
   });
+
+  const handleSubmit = async () => {
+    const submitStartDate = formatISODateTime(startDate, startTime.hour, startTime.minute);
+    const submitEndDate = formatISODateTime(endDate, endTime.hour, endTime.minute);
+
+    await mutateAsync({
+      ...formData,
+      start_date: submitStartDate,
+      end_date: submitEndDate,
+    });
+  };
 
   function splitKoreanDate(date: Date): [string, string] {
     const [year, ...rest] = formatKoreanDate(date).split(' ');
@@ -90,7 +106,7 @@ export default function NewClubEvent() {
                       <button
                         type="button"
                         className={styles['time-picker-button']}
-                        onClick={openTimePicker}
+                        onClick={openStartTimePicker}
                       >
                         <span>
                           {startTime.hour.toString().padStart(2, '0')}
@@ -109,12 +125,12 @@ export default function NewClubEvent() {
                       <button
                         type="button"
                         className={styles['time-picker-button']}
-                        onClick={openTimePicker}
+                        onClick={openEndTimePicker}
                       >
                         <span>
-                          {startTime.hour.toString().padStart(2, '0')}
+                          {endTime.hour.toString().padStart(2, '0')}
                           :
-                          {startTime.minute.toString().padStart(2, '0')}
+                          {endTime.minute.toString().padStart(2, '0')}
                         </span>
                       </button>
                     </div>
@@ -202,6 +218,7 @@ export default function NewClubEvent() {
         <ConfirmModal
           type={modalType}
           closeModal={closeModal}
+          onSubmit={handleSubmit}
         />
       )}
       {isStartCalendarOpen && (
@@ -218,14 +235,24 @@ export default function NewClubEvent() {
           onClose={closeEndCalendar}
         />
       )}
-      {isTimePickerOpen && (
+      {isStartTimePickerOpen && (
         <TimePicker
           hour={startTime.hour}
           minute={startTime.minute}
           onChange={(hour, minute) => {
             setStartTime({ hour, minute });
           }}
-          onClose={closeTimePicker}
+          onClose={closeStartTimePicker}
+        />
+      )}
+      {isEndTimePickerOpen && (
+        <TimePicker
+          hour={endTime.hour}
+          minute={endTime.minute}
+          onChange={(hour, minute) => {
+            setEndTime({ hour, minute });
+          }}
+          onClose={closeEndTimePicker}
         />
       )}
     </div>

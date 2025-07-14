@@ -45,6 +45,18 @@ export function formatKoreanDate(date: Date): string {
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 (${DAYS[date.getDay()]})`;
 }
 
+export function formatISODateTime(date: Date, hour: number, minute: number) {
+  const d = new Date(date);
+  d.setHours(hour, minute, 0, 0);
+  const y = d.getFullYear();
+  const m = (d.getMonth() + 1).toString().padStart(2, '0');
+  const day = d.getDate().toString().padStart(2, '0');
+  const h = d.getHours().toString().padStart(2, '0');
+  const min = d.getMinutes().toString().padStart(2, '0');
+  const s = d.getSeconds().toString().padStart(2, '0');
+  return `${y}-${m}-${day}T${h}:${min}:${s}`;
+}
+
 export function isSameDate(date1: Date, date2: Date): boolean {
   return date1.getFullYear() === date2.getFullYear()
     && date1.getMonth() === date2.getMonth()
