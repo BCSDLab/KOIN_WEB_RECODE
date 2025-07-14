@@ -149,3 +149,19 @@ export interface ClubRecruitment {
   image_url: string;
   content: string;
 }
+
+export interface ClubRecruitmentRequest {
+  start_date?: string | null;
+  end_date?: string | null;
+  is_always_recruiting: boolean;
+  image_url: string;
+  content: string;
+}
+export interface ClubEventRequest {
+  name: string;
+  image_urls: string[];
+  start_date: string;
+  end_date: string;
+  introduce: string;
+  content: string;
+}
