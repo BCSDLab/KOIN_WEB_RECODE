@@ -1,6 +1,4 @@
-import {
-  useState, type ReactElement, cloneElement,
-} from 'react';
+import { useState } from 'react';
 import { DAYS } from 'static/day';
 import { cn } from '@bcsdlab/utils';
 import { formatKoreanDate, getCalendarDates, isSameDate } from 'utils/ts/calendar';
@@ -13,10 +11,13 @@ import styles from './DatePicker.module.scss';
 interface DatePickerProps {
   selectedDate: Date;
   onChange: (date: Date) => void;
-  trigger?: ReactElement;
+  triggerType?: 'default';
+  renderTrigger?: (toggle: () => void) => React.ReactNode;
 }
 
-export default function DatePicker({ selectedDate, onChange, trigger }: DatePickerProps) {
+export default function DatePicker({
+  selectedDate, onChange, triggerType, renderTrigger,
+}: DatePickerProps) {
   const [isOpen, , closeDatePicker, toggleOpen] = useBooleanState(false);
   const [viewDate, setViewDate] = useState(selectedDate);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDatePicker });
@@ -29,15 +30,23 @@ export default function DatePicker({ selectedDate, onChange, trigger }: DatePick
     closeDatePicker();
   };
 
-  return (
-    <div className={styles.wrapper} ref={containerRef}>
-      {trigger
-        ? cloneElement(trigger, { onClick: () => toggleOpen() })
-        : (
-          <button type="button" className={styles.input} onClick={() => toggleOpen()}>
+  const renderTriggerElement = () => {
+    if (renderTrigger) return renderTrigger(toggleOpen);
+
+    switch (triggerType) {
+      case 'default':
+      default:
+        return (
+          <button type="button" className={styles['date-picker-button']} onClick={toggleOpen}>
             {formatKoreanDate(selectedDate)}
           </button>
-        )}
+        );
+    }
+  };
+
+  return (
+    <div className={styles.wrapper} ref={containerRef}>
+      {renderTriggerElement()}
 
       {isOpen && (
         <div className={styles.picker}>
