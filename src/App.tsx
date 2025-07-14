@@ -26,6 +26,7 @@ import ClubListPage from 'pages/Club/ClubListPage';
 import ClubDetailPage from 'pages/Club/ClubDetailPage';
 import NewClubPage from 'pages/Club/NewClubPage';
 import NewClubRecruitment from 'pages/Club/NewClubRecruitment';
+import NewClubEvent from 'pages/Club/NewClubEvent';
 import IndexPage from 'pages/IndexPage';
 import RoomPage from 'pages/Room/RoomPage';
 import RoomDetailPage from 'pages/Room/RoomDetailPage';
@@ -153,6 +154,7 @@ function App() {
           <Route path={ROUTES.ClubEdit({ isLink: false })} element={<Wrapper title="동아리 수정" element={<ClubEditPage />} />} />
           <Route path={ROUTES.NewClub()} element={<Wrapper title="동아리 생성" element={<NewClubPage />} />} />
           <Route path={ROUTES.NewClubRecruitment()} element={<Wrapper title="동아리 모집 생성" element={<NewClubRecruitment />} />} />
+          <Route path={ROUTES.NewClubEvent()} element={<Wrapper title="동아리 행사 생성" element={<NewClubEvent />} />} />
 
           <Route path={ROUTES.Cafeteria()} element={<Wrapper title="식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.Articles()} element={<Wrapper title="공지사항" element={<ArticlesPage />} />}>

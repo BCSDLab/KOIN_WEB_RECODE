@@ -151,3 +151,12 @@ export interface ClubRecruitment {
   content: string;
 }
 
+export interface ClubEventRequest {
+  name: string;
+  image_urls: string[];
+  start_date: string;
+  end_date: string;
+  introduce: string;
+  content: string;
+}
+

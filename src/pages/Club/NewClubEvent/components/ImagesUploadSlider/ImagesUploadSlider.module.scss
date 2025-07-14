@@ -1,0 +1,132 @@
+@use "src/utils/scss/media" as media;
+
+.form-image {
+  &__input {
+    display: none;
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 131px 142px;
+    background-color: #eee;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      padding: 160px 0;
+    }
+
+    &--drag-over {
+      background-color: #d0d0d0;
+    }
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+
+    &--error {
+      border: 1px solid #f7941e;
+    }
+  }
+
+  &__label-text {
+    color: #727272;
+    text-align: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 160%;
+  }
+
+  &__preview {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__img {
+    min-width: 400px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+
+    &__box {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  &__description {
+    color: #727272;
+    font-size: 12px;
+    line-height: 160%;
+  }
+}
+
+.slider-wrapper {
+  position: relative;
+
+  &__counter {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    background-color: rgb(0 0 0 / 50%);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 18px;
+    line-height: 160%;
+  }
+
+  &__arrow {
+    position: absolute;
+    cursor: pointer;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #10477a;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--left {
+      left: 18px;
+    }
+
+    &--right {
+      right: 18px;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+      transform: rotate(180deg);
+    }
+
+    &--right svg {
+      transform: none;
+    }
+
+    &:hover {
+      background-color: #175c8e;
+    }
+  }
+}
