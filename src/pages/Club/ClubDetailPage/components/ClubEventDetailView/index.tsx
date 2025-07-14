@@ -1,5 +1,7 @@
-import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
+import { useNavigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import useDeleteEvent from 'pages/Club/ClubDetailPage/hooks/useDeleteEvent';
 import styles from './ClubEventDetailView.module.scss';
 
@@ -12,9 +14,11 @@ export default function ClubEventDetailView({
   clubId,
   eventId,
 }: ClubEventDetailViewProps) {
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery();
   const { clubEventDetail } = useClubEventDetail(clubId, eventId);
   const { mutateAsync } = useDeleteEvent();
-  const isMobile = useMediaQuery();
+
   return (
     <div className={styles['event-detail']}>
       {isMobile && (
@@ -31,7 +35,10 @@ export default function ClubEventDetailView({
           <button
             type="button"
             className={styles['edit-button--edit']}
-            onClick={() => {}} // 수정 로직 추가
+            onClick={() => navigate(
+              ROUTES.ClubEventEdit({ id: String(clubId), isLink: true }),
+              { state: { eventId } },
+            )}
           >
             행사 수정
           </button>

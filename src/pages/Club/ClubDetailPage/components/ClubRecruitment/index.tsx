@@ -1,6 +1,8 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useDeleteRecruitment from 'pages/Club/ClubDetailPage/hooks/useDeleteRecruitment';
+import ROUTES from 'static/routes';
 import styles from './ClubRecruitment.module.scss';
 
 interface ClubRecruitmentProps {
@@ -13,6 +15,8 @@ export default function ClubRecruitment({
   isManager,
   handleClickAddButton,
 }: ClubRecruitmentProps) {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { clubRecruitmentData } = useClubRecruitment(clubId);
   const { mutateAsync } = useDeleteRecruitment();
   const isMobile = useMediaQuery();
@@ -36,7 +40,7 @@ export default function ClubRecruitment({
           <button
             type="button"
             className={styles['edit-button--edit']}
-            onClick={() => {}} // 수정 로직 추가
+            onClick={() => navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }))}
           >
             모집 수정
           </button>
