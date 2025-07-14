@@ -74,13 +74,6 @@ export default function LoginForm() {
             [styles.loginform__button]: true,
             [styles['loginform__first-button']]: true,
           })}
-          onSubmit={() => {
-            logger.actionEventClick({
-              team: 'USER',
-              event_label: 'login',
-              value: '로그인완료',
-            });
-          }}
         >
           로그인
         </button>

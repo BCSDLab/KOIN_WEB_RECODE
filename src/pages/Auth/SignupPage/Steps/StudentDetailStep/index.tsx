@@ -16,6 +16,7 @@ import BackIcon from 'assets/svg/arrow-back.svg';
 import showToast from 'utils/ts/showToast';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import PCCustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/PCCustomInput';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './StudentDetailStep.module.scss';
 
 interface VerificationProps {
@@ -38,6 +39,7 @@ interface StudentFormValues {
 }
 
 function StudentDetail({ onNext, onBack }: VerificationProps) {
+  const logger = useLogger();
   const {
     control, getValues, handleSubmit, trigger,
   } = useFormContext<StudentFormValues>();
@@ -94,32 +96,46 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     },
   });
 
-  const { mutate: checkNickname } = useMutation({
-    mutationFn: nicknameDuplicateCheck,
-    onSuccess: () => {
-      setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
-      setIsCorrectNickname();
-    },
-    onError: (err) => {
-      if (isKoinError(err)) {
-        if (err.status === 400) setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
-
-        if (err.status === 409) setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
-      }
-    },
-  });
-
   const { mutate: checkUserId } = useMutation({
     mutationFn: checkId,
     onSuccess: () => {
       setIdMessage({ type: 'success', content: MESSAGES.USERID.AVAILABLE });
       setIsCorrectId();
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'create_account',
+        value: '아이디생성',
+        event_category: 'click',
+        custom_session_id: '도훈',
+      });
     },
     onError: (err) => {
       if (isKoinError(err)) {
         if (err.status === 400) setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
 
         if (err.status === 409) setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED });
+      }
+    },
+  });
+
+  const { mutate: checkNickname } = useMutation({
+    mutationFn: nicknameDuplicateCheck,
+    onSuccess: () => {
+      setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
+      setIsCorrectNickname();
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'create_account',
+        value: '닉네임생성',
+        event_category: 'click',
+        custom_session_id: '도훈',
+      });
+    },
+    onError: (err) => {
+      if (isKoinError(err)) {
+        if (err.status === 400) setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
+
+        if (err.status === 409) setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
       }
     },
   });
@@ -172,6 +188,13 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     checkEmail(completeEmail, {
       onSuccess: () => {
         handleSubmit(onSubmit)();
+        logger.actionEventClick({
+          team: 'USER',
+          event_label: 'sign_up_completed',
+          value: '회원가입완료',
+          event_category: 'click',
+          custom_session_id: '도훈',
+        });
       },
     });
   };

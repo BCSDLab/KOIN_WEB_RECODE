@@ -234,7 +234,8 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                   logger.actionEventClick({
                     team: 'USER',
                     event_label: 'header',
-                    value: '회원가입',
+                    value: '회원가입 시작',
+                    custom_session_id: '도훈',
                   });
                 }}
               >
@@ -248,7 +249,8 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                   logger.actionEventClick({
                     team: 'USER',
                     event_label: 'header',
-                    value: '로그인',
+                    value: '로그인 시도',
+                    event_category: 'click',
                   });
                 }}
               >
@@ -265,11 +267,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 onClick={() => {
                   openModal();
                   escapeByheader('정보수정');
-                  logger.actionEventClick({
-                    team: 'USER',
-                    event_label: 'header',
-                    value: '정보수정',
-                  });
                 }}
               >
                 정보수정
@@ -284,6 +281,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                     team: 'USER',
                     event_label: 'header',
                     value: '로그아웃',
+                    event_category: 'click',
                   });
                 }}
                 type="button"

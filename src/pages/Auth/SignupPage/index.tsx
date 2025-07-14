@@ -6,6 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import ProgressBar from './components/ProgressBar';
 import MobileVerification from './Steps/MobileVerificationStep';
 import Terms from './Steps/Terms';
@@ -26,6 +27,7 @@ const mobileSteps: StepTitle[] = ['약관동의', '본인인증', '회원유형�
 const desktopSteps: StepTitle[] = ['약관동의', '본인인증', '정보입력', '완료'];
 
 function SignupPage() {
+  const logger = useLogger();
   const isMobile = useMediaQuery();
   const activeSteps = isMobile ? mobileSteps : desktopSteps;
 
@@ -35,6 +37,28 @@ function SignupPage() {
 
   const currentIndex = activeSteps.indexOf(currentStep);
   const [userType, setUserType] = useState<UserType | null>(null);
+
+  const onClickStudent = (user: string) => {
+    if (user === '학생') {
+      setUserType('학생');
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'create_account',
+        value: '학생',
+        event_category: 'click',
+        custom_session_id: '도훈',
+      });
+    } else if (user === '외부인') {
+      setUserType('외부인');
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'create_account',
+        value: '외부인',
+        event_category: 'click',
+        custom_session_id: '도훈',
+      });
+    }
+  };
 
   const methods = useForm({
     mode: 'onChange',
@@ -128,7 +152,8 @@ function SignupPage() {
           <Step name="회원유형선택">
             <MobileUserTypeStep
               onSelectType={(type: UserType) => {
-                setUserType(type);
+                // setUserType(type);
+                onClickStudent(type);
                 nextStep('정보입력');
               }}
             />

@@ -9,6 +9,7 @@ type ActionLoggerProps = {
   previous_page?: string,
   current_page?: string,
   duration_time?: number,
+  custom_session_id?: string,
 };
 
 type LoggerEventProps = {
@@ -19,6 +20,7 @@ type LoggerEventProps = {
   duration_time?: number,
   previous_page?: string,
   current_page?: string,
+  custom_session_id?: string,
 };
 
 const useLogger = () => {
@@ -32,9 +34,17 @@ const useLogger = () => {
     duration_time,
     previous_page,
     current_page,
+    custom_session_id,
   }: LoggerEventProps) => {
     const event = {
-      team, event_category, event_label, value, duration_time, previous_page, current_page,
+      team,
+      event_category,
+      event_label,
+      value,
+      duration_time,
+      previous_page,
+      current_page,
+      custom_session_id,
     };
     gtag.event(event);
     prevEvent.current = event;
@@ -48,9 +58,10 @@ const useLogger = () => {
     previous_page,
     current_page,
     event_category,
+    custom_session_id,
   }: ActionLoggerProps) => {
     logEvent({
-      team, event_category: event_category || 'click', event_label, value, duration_time, previous_page, current_page,
+      team, event_category: event_category || 'click', event_label, value, duration_time, previous_page, current_page, custom_session_id,
     });
   };
 
@@ -75,9 +86,10 @@ const useLogger = () => {
     previous_page,
     current_page,
     event_category,
+    custom_session_id,
   }: ActionLoggerProps) => {
     logEvent({
-      team, event_category: event_category || 'entry', event_label, value, duration_time, previous_page, current_page,
+      team, event_category: event_category || 'entry', event_label, value, duration_time, previous_page, current_page, custom_session_id,
     });
   };
 

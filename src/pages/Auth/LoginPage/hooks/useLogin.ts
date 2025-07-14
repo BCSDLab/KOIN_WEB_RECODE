@@ -3,6 +3,7 @@ import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { auth } from 'api';
 import type { LoginResponse } from 'api/auth/entity';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import { setCookie } from 'utils/ts/cookie';
 import { saveTokensToNative } from 'utils/ts/iosBridge';
@@ -22,10 +23,17 @@ export const useLogin = (state: IsAutoLogin) => {
   const { setToken, setRefreshToken, setUserType } = useTokenStore();
   const { redirectAfterLogin } = useLoginRedirect();
   const queryClient = useQueryClient();
+  const logger = useLogger();
 
   const postLogin = useMutation({
     mutationFn: auth.login,
     onSuccess: (data: LoginResponse) => {
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'login',
+        value: '로그인 완료',
+        event_category: 'click',
+      });
       if (state.isAutoLoginFlag) {
         setRefreshToken(data.refresh_token);
       }
@@ -42,6 +50,12 @@ export const useLogin = (state: IsAutoLogin) => {
     onError: (error) => {
       if (isKoinError(error)) {
         showToast('error', error.message || '로그인에 실패했습니다.');
+        logger.actionEventClick({
+          team: 'USER',
+          event_label: 'login',
+          value: '로그인 실패',
+          event_category: 'click',
+        });
       } else {
         sendClientError(error);
         showToast('error', '로그인에 실패했습니다.');
