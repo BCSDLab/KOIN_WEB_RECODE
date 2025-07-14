@@ -1,186 +1,66 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getUser, getGeneralUser } from 'api/auth';
-import { UserResponse, GeneralUserResponse } from 'api/auth/entity';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import { useState, useEffect } from 'react';
+import { useUser } from 'utils/hooks/state/useUser';
+import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
-import { validateUserInfo } from 'utils/ts/userInfoValidator';
+import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 
-type UserInfoModalState = 'FIRST_TIME' | 'SKIPPED_ONCE' | 'COMPLETED';
-
-interface UseUserInfoModalReturn {
-  isModalOpen: boolean;
-  openModal: () => void;
-  closeModal: () => void;
-  userType: 'STUDENT' | 'GENERAL' | null;
-  currentUser: UserResponse | GeneralUserResponse | null;
-  isLoading: boolean;
-  showCloseButton: boolean;
-  handleSkipModal: () => void;
-  handleCompleteInfo: () => void;
-}
-
-interface SessionInfo {
-  currentToken: string;
-  hasShownModal: boolean;
-}
-
-export default function useUserInfoModal(): UseUserInfoModalReturn {
-  const token = useTokenState();
-  const { userType: storedUserType } = useTokenStore();
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
-  const [userType, setUserType] = useState<'STUDENT' | 'GENERAL' | null>(null);
-  const [modalState, setModalState] = useState<UserInfoModalState>(() => {
-    try {
-      const saved = localStorage.getItem('userInfoModalState') as UserInfoModalState;
-      return ['FIRST_TIME', 'SKIPPED_ONCE', 'COMPLETED'].includes(saved) ? saved : 'FIRST_TIME';
-    } catch {
-      return 'FIRST_TIME';
-    }
-  });
-
-  const SESSION_KEY = 'userInfoModal_session';
-
-  const getSessionInfo = useCallback((): SessionInfo | null => {
-    try {
-      const saved = localStorage.getItem(SESSION_KEY);
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  }, []);
-
-  const hasShownModalThisSession = useCallback((): boolean => {
-    if (!token) return false;
-
-    const sessionInfo = getSessionInfo();
-    if (!sessionInfo) return false;
-
-    return sessionInfo.currentToken === token && sessionInfo.hasShownModal;
-  }, [token, getSessionInfo]);
-
-  const markModalAsShownThisSession = useCallback(() => {
-    if (!token) return;
-
-    const sessionInfo: SessionInfo = {
-      currentToken: token,
-      hasShownModal: true,
-    };
-
-    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionInfo));
-  }, [token]);
-
-  const showCloseButton = modalState === 'SKIPPED_ONCE';
-
-  const handleSkipModal = () => {
-    localStorage.setItem('userInfoModalState', 'SKIPPED_ONCE');
-    setModalState('SKIPPED_ONCE');
-    markModalAsShownThisSession();
-    closeModal();
-  };
-
-  const handleCompleteInfo = () => {
-    if (modalState === 'FIRST_TIME') {
-      localStorage.setItem('userInfoModalState', 'SKIPPED_ONCE');
-      setModalState('SKIPPED_ONCE');
-    }
-
-    markModalAsShownThisSession();
-    closeModal();
-  };
-
-  const shouldCallStudentAPI = !storedUserType || storedUserType === 'STUDENT';
-  const shouldCallGeneralAPI = storedUserType === 'GENERAL';
-
-  const {
-    data: studentUser,
-    isSuccess: isStudentSuccess,
-    isError: isStudentError,
-    isLoading: isStudentLoading,
-  } = useQuery({
-    queryKey: ['user', token],
-    queryFn: () => getUser(token),
-    enabled: !!token && shouldCallStudentAPI,
-    retry: false,
-  });
-
-  const {
-    data: generalUser,
-    isSuccess: isGeneralSuccess,
-    isLoading: isGeneralLoading,
-  } = useQuery({
-    queryKey: ['generalUser', token],
-    queryFn: () => getGeneralUser(token),
-    enabled: !!token && (shouldCallGeneralAPI || isStudentError),
-    retry: false,
-  });
-
-  const isLoading = isStudentLoading || isGeneralLoading;
+export default function useUserInfoModal() {
+  const { token } = useTokenStore();
+  const { data: userInfo } = useUser();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showCloseButton, setShowCloseButton] = useState(false);
 
   useEffect(() => {
-    if (token && storedUserType && !userType) {
-      setUserType(storedUserType);
-    }
-  }, [token, storedUserType, userType]);
-
-  useEffect(() => {
-    if (!token) {
-      setUserType(null);
+    if (!token || !isStudentUser(userInfo)) {
       return;
     }
 
-    let currentUser: UserResponse | GeneralUserResponse | null = null;
-    let currentUserType: 'STUDENT' | 'GENERAL' | null = null;
+    const persistentState = localStorage.getItem(STORAGE_KEY.USER_INFO_COMPLETION);
 
-    if (isStudentSuccess && studentUser) {
-      currentUser = studentUser;
-      currentUserType = 'STUDENT';
-    } else if (isGeneralSuccess && generalUser) {
-      currentUser = generalUser;
-      currentUserType = 'GENERAL';
+    if (persistentState === COMPLETION_STATUS.COMPLETED) {
+      return;
     }
 
-    if (currentUser && currentUserType) {
-      setUserType(currentUserType);
+    const requiredFields: (keyof typeof userInfo)[] = [
+      'login_id', 'gender', 'major', 'name', 'phone_number', 'student_number',
+    ];
 
-      const isValid = validateUserInfo(currentUser);
+    const isInfoMissing = requiredFields.some((field) => !userInfo[field]);
 
-      if (isValid) {
-        localStorage.setItem('userInfoModalState', 'COMPLETED');
-        setModalState('COMPLETED');
-        return;
-      }
-
-      if (!isValid && !hasShownModalThisSession()) {
-        openModal();
-        markModalAsShownThisSession();
-      }
+    if (!isInfoMissing) {
+      localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.COMPLETED);
+      return;
     }
-  }, [
-    token,
-    studentUser,
-    generalUser,
-    isStudentSuccess,
-    isGeneralSuccess,
-    isStudentError,
-    openModal,
-    modalState,
-    hasShownModalThisSession,
-    markModalAsShownThisSession,
-  ]);
 
-  const currentUser = userType === 'STUDENT' ? studentUser : generalUser;
+    const hasShownThisSession = sessionStorage.getItem(STORAGE_KEY.MODAL_SESSION_SHOWN) === 'true';
+    if (hasShownThisSession) {
+      return;
+    }
+
+    const isFirstTime = persistentState !== COMPLETION_STATUS.SKIPPED;
+
+    if (isFirstTime) {
+      localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.SKIPPED);
+    }
+
+    setShowCloseButton(!isFirstTime);
+    setIsModalOpen(true);
+    sessionStorage.setItem(STORAGE_KEY.MODAL_SESSION_SHOWN, 'true');
+  }, [token, userInfo]);
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSkipModal = () => {
+    localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.SKIPPED);
+    closeModal();
+  };
 
   return {
     isModalOpen,
-    openModal,
-    closeModal,
-    userType,
-    currentUser: currentUser || null,
-    isLoading,
     showCloseButton,
     handleSkipModal,
-    handleCompleteInfo,
+    closeModal,
   };
 }

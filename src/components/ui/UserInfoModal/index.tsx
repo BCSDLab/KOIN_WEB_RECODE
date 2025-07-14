@@ -10,20 +10,18 @@ function UserInfoModal() {
   const navigate = useNavigate();
   const {
     isModalOpen,
-    userType,
-    currentUser,
     showCloseButton,
     handleSkipModal,
-    handleCompleteInfo,
+    closeModal,
   } = useUserInfoModal();
 
-  if (!isModalOpen || !currentUser || !userType) {
+  if (!isModalOpen) {
     return null;
   }
 
   const handleNavigateToModifyInfo = () => {
     navigate(ROUTES.AuthModifyInfo());
-    handleCompleteInfo();
+    closeModal();
   };
 
   return (

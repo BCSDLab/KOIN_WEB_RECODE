@@ -77,3 +77,13 @@ export const GENDER_OPTIONS = [
 ];
 
 export const INQUIRY_URL = 'https://open.kakao.com/o/sgiYx4Qg';
+
+export const STORAGE_KEY = {
+  USER_INFO_COMPLETION: 'isUserInfoComplete',
+  MODAL_SESSION_SHOWN: 'userInfoModalShown',
+} as const;
+
+export const COMPLETION_STATUS = {
+  COMPLETED: 'COMPLETED',
+  SKIPPED: 'SKIPPED',
+} as const;
