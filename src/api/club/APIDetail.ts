@@ -2,10 +2,13 @@ import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type {
   ClubCategoriesResponse,
   ClubDetailResponse,
+  ClubEventListResponse,
+  ClubEventResponse,
   ClubInroductionData,
   ClubListResponse,
   ClubNewQnA,
   ClubQnAData,
+  ClubRecruitmentResponse,
   DeleteClubLikeResonse,
   DeleteClubQnAResponse,
   HotClubResponse,
@@ -207,5 +210,41 @@ export class PutNewClubManager<R extends NewClubManagerResponse> implements APIR
     public authorization: string,
     public data: NewClubManager,
   ) {
+  }
+}
+
+export class GetRecruitmentClub<R extends ClubRecruitmentResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/clubs';
+
+  response!: R;
+
+  constructor(public clubId: string | number) {
+    this.path = `/clubs/${clubId}/recruitment`;
+  }
+}
+
+export class GetClubEventList<R extends ClubEventListResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/clubs';
+
+  response!: R;
+
+  constructor(public clubId: string | number, public eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED') {
+    this.path = `/clubs/${clubId}/events?eventType=${eventType}`;
+  }
+}
+
+export class GetClubEventDetail<R extends ClubEventResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/clubs';
+
+  response!: R;
+
+  constructor(public clubId: string | number, public eventId: string | number) {
+    this.path = `/clubs/${clubId}/event/${eventId}`;
   }
 }
