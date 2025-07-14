@@ -15,7 +15,7 @@ import { useUser } from 'utils/hooks/state/useUser';
 import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import ROUTES from 'static/routes';
-import { REGEX } from 'static/auth';
+import { REGEX, STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
 import { usePhoneVerification } from 'pages/Auth/ModifyInfoPage/hooks/usePhoneVerification';
 import ErrorIcon from 'assets/svg/Login/error.svg';
@@ -1153,6 +1153,7 @@ const useModifyInfoForm = () => {
   const token = useTokenState();
   const isMobile = useMediaQuery();
   const onSuccess = () => {
+    localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.COMPLETED);
     navigate(ROUTES.Main());
     showToast('success', '성공적으로 정보를 수정하였습니다.');
     queryClient.invalidateQueries({ queryKey: ['userInfo', token] });
