@@ -20,6 +20,7 @@ import type {
   PostClubQnAResponse,
   PostClubResponse,
   PutClubLikeResonse,
+  UpdateClubEventRequest,
 } from './entity';
 
 export class ClubCategories<R extends ClubCategoriesResponse> implements APIRequest<R> {
@@ -319,6 +320,25 @@ export class PostClubEvent<R extends {}> implements APIRequest<R> {
     public data: ClubEventRequest,
   ) {
     this.path = `/clubs/${clubId}/event`;
+  }
+}
+
+export class PutClubEvent<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+    public eventId: number,
+    public data: UpdateClubEventRequest,
+  ) {
+    this.path = `/clubs/${clubId}/event/${eventId}`;
   }
 }
 
