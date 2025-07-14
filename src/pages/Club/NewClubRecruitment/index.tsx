@@ -87,13 +87,11 @@ export default function NewClubRecruitment() {
                     <DatePicker
                       selectedDate={startDate}
                       onChange={setStartDate}
-                      trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(startDate)}</button>}
                     />
                     <p>~</p>
                     <DatePicker
                       selectedDate={endDate}
                       onChange={setEndDate}
-                      trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(endDate)}</button>}
                     />
                   </>
                 )}
