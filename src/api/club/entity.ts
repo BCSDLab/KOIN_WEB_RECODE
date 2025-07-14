@@ -17,8 +17,11 @@ export interface Club {
   image_url: string;
   is_liked: boolean;
   is_like_hidden:boolean;
+  recruitment_info: {
+    status: 'NONE' | 'BEFORE' | 'RECRUITING' | 'CLOSED' | 'ALWAYS';
+    dday: number;
+  };
 }
-
 export interface ClubListResponse extends APIResponse {
   clubs: Club[];
 }
@@ -66,6 +69,11 @@ export interface ClubDetailResponse extends APIResponse {
   is_liked: boolean;
   updated_at: string;
   is_like_hidden: boolean;
+  hot_status?: {
+    month: number;
+    week_of_month: number;
+    streak_count: number;
+  } | null;
 }
 
 export type PutClubLikeResonse = APIResponse;
@@ -108,6 +116,33 @@ export interface NewClubManager {
 }
 export type NewClubManagerResponse = APIResponse;
 
+export interface ClubRecruitmentResponse extends APIResponse {
+  id: number;
+  status: 'NONE' | 'BEFORE' | 'RECRUITING' | 'CLOSED' | 'ALWAYS';
+  dday: number;
+  start_date: string;
+  end_date: string;
+  image_url: string;
+  content: string;
+  is_manager: boolean;
+}
+
+export interface ClubEvent {
+  id: number;
+  name: string;
+  image_urls: string[];
+  start_date: string;
+  end_date: string;
+  introduce: string;
+  content: string;
+  status: string;
+}
+
+export interface ClubEventResponse extends ClubEvent, APIResponse {}
+
+export type ClubEventListResponse = (ClubEvent & { is_subscribed: boolean })[];
+
+
 export interface ClubRecruitment {
   start_date: string;
   end_date: string;
@@ -116,11 +151,12 @@ export interface ClubRecruitment {
   content: string;
 }
 
-export interface ClubEvent {
+export interface ClubEventRequest {
   name: string;
-  image_urls: Array<string>;
+  image_urls: string[];
   start_date: string;
   end_date: string;
   introduce: string;
   content: string;
 }
+

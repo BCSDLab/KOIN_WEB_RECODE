@@ -9,8 +9,8 @@ import UploadIcon from 'assets/svg/Club/add-image.svg';
 import styles from './ImagesUploadSlider.module.scss';
 
 interface ClubImageUploaderProps {
-  imageUrls: Array<string>;
-  addImageUrls: (newImageUrls: Array<string>) => void;
+  imageUrls: string[];
+  addImageUrls: (newImageUrls: string[]) => void;
 }
 
 const MAX_IMAGES = 7;
