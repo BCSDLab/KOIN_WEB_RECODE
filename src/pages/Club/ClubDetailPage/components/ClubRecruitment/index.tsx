@@ -24,6 +24,7 @@ export default function ClubRecruitment({
         <h2 className={styles['recruitment-info__title']}>
           모집기한
         </h2>
+        {isMobile && (
         <div className={styles['edit-button__container']}>
           <button
             type="button"
@@ -40,6 +41,7 @@ export default function ClubRecruitment({
             모집 수정
           </button>
         </div>
+        )}
       </div>
       )}
       {isManager && isMobile && clubRecruitmentData.status === 'CLOSED' && (
@@ -74,6 +76,7 @@ export default function ClubRecruitment({
               <div className={styles['recruitment-info__date']}>
                 {clubRecruitmentData.start_date}
                 부터
+                {' '}
                 {clubRecruitmentData.end_date}
                 까지
               </div>
