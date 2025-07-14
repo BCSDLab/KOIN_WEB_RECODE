@@ -7,6 +7,7 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 10;
 }
 
 .modal {
@@ -21,6 +22,7 @@
   padding: 24px;
   margin: 0;
   font-family: Pretendard, sans-serif;
+  z-index: 20;
 
   @include media.media-breakpoint(mobile) {
     width: 60%;
