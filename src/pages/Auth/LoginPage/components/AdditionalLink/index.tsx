@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import LockIcon from 'assets/svg/lock-icon.svg';
 import FaceIcon from 'assets/svg/face-icon.svg';
@@ -9,6 +10,7 @@ import styles from './AdditionalLink.module.scss';
 
 export default function AdditionalLink() {
   const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const isMobile = useMediaQuery();
 
   if (isMobile) {
@@ -93,10 +95,11 @@ export default function AdditionalLink() {
         className={styles.help__link}
         to={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
         onClick={() => {
-          logger.actionEventClick({
-            team: 'USER',
-            event_label: 'login',
-            value: '회원가입',
+          sessionLogger.actionSessionEventClick({
+            session_name: 'sign_up',
+            event_label: 'start_sign_up',
+            value: '회원가입 시작',
+            event_category: 'click',
           });
         }}
       >
