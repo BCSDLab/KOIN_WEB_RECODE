@@ -1,3 +1,5 @@
+@use "src/utils/scss/media" as media;
+
 .wrapper {
   position: relative;
   display: inline-block;
@@ -33,13 +35,6 @@
   align-items: center;
   font-weight: bold;
   margin-bottom: 8px;
-
-  button {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-  }
 }
 
 .calendar {
@@ -60,7 +55,6 @@
       border-radius: 50%;
       border: none;
       background: none;
-      cursor: pointer;
       font-size: 14px;
       color: #000;
     }
@@ -86,5 +80,25 @@
     &:hover {
       background-color: #eee;
     }
+  }
+}
+
+.date-picker-button {
+  width: 250px;
+  padding: 4px;
+  background-color: #fafafa;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0 0 0 / 40%), 0 1px 1px rgba(0 0 0 / 10%);
+  font-family: pretendard, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 160%;
+
+  @include media.media-breakpoint(mobile) {
+    max-width: 120px;
+    font-size: 16px;
+    line-height: 160%;
+    font-weight: 500;
   }
 }
