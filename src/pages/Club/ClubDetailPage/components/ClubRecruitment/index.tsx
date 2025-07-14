@@ -22,22 +22,24 @@ export default function ClubRecruitment({
         <h2 className={styles['recruitment-info__title']}>
           모집기한
         </h2>
+        {isMobile && (
         <div className={styles['edit-button__container']}>
           <button
             type="button"
             className={styles['edit-button--delete']}
-            onClick={() => {}} // 삭제 로직 추가
+            onClick={() => {}}
           >
             모집 삭제
           </button>
           <button
             type="button"
             className={styles['edit-button--edit']}
-            onClick={() => {}} // 수정 로직 추가
+            onClick={() => {}}
           >
             모집 수정
           </button>
         </div>
+        )}
       </div>
       )}
       {isManager && isMobile && clubRecruitmentData.status === 'CLOSED' && (
@@ -72,6 +74,7 @@ export default function ClubRecruitment({
               <div className={styles['recruitment-info__date']}>
                 {clubRecruitmentData.start_date}
                 부터
+                {' '}
                 {clubRecruitmentData.end_date}
                 까지
               </div>

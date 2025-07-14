@@ -4,7 +4,6 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useState } from 'react';
 import DownArrow from 'assets/svg/Club/event-filter-down-arrow.svg';
 import UpArrow from 'assets/svg/Club/event-filter-up-arrow.svg';
-
 import ClubEventDetailView from 'pages/Club/ClubDetailPage/components/ClubEventDetailView';
 import styles from './ClubEventList.module.scss';
 
@@ -56,7 +55,7 @@ export default function ClubEventList({
         </div>
       )}
 
-      {eventId !== -1 && (
+      {eventId === -1 && (
       <div className={styles['filter-container']}>
         <div className={styles.dropdown__wrapper}>
           <button
