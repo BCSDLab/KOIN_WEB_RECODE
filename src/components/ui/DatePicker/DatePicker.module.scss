@@ -33,13 +33,6 @@
   align-items: center;
   font-weight: bold;
   margin-bottom: 8px;
-
-  button {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-  }
 }
 
 .calendar {
@@ -60,7 +53,6 @@
       border-radius: 50%;
       border: none;
       background: none;
-      cursor: pointer;
       font-size: 14px;
       color: #000;
     }
