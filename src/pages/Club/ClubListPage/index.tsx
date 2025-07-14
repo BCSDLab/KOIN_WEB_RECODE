@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import { cn } from '@bcsdlab/utils';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -19,6 +20,7 @@ import BookIcon from 'assets/svg/Club/book-icon.svg';
 import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useUser } from 'utils/hooks/state/useUser';
+import { useState } from 'react';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -42,6 +44,7 @@ function ClubListPage() {
   const totalCount = clubList.length;
   const { mutate: clubLikeMutate } = useClubLike();
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
+  const [isRecruitmentFilter, setIsRecruitmentFilter] = useState(false);
 
   const { data: userInfo } = useUser();
 
@@ -191,36 +194,72 @@ function ClubListPage() {
               />
             </div>
           </div>
-          <div className={styles.card__list}>
-            {clubList.map((club) => (
+          <div className={styles.filter__container}>
+            <div className={styles.filter}>
+              모집 중인 동아리
               <button
                 type="button"
-                key={club.id}
-                className={styles.card}
-                onClick={() => handleCardClick(club.name, club.id)}
-              >
-                <div className={styles.card__info}>
-                  <div className={styles['card__info-header']}>
-                    <p className={styles['card__info-title']}>{club.name}</p>
-                    <p className={styles['card__info-category']}>{club.category}</p>
+                className={cn({
+                  [styles.filter__button]: true,
+                  [styles['filter__button--active']]: isRecruitmentFilter,
+                })}
+                onClick={() => setIsRecruitmentFilter((prev) => !prev)}
+              />
+            </div>
+          </div>
+          <div className={styles.card__list}>
+            {clubList
+              .filter((club) => {
+                if (!isRecruitmentFilter) return true;
+                return (
+                  club.recruitment_info.status === 'RECRUITING' || club.recruitment_info.status === 'ALWAYS'
+                );
+              })
+              .map((club) => (
+                <button
+                  type="button"
+                  key={club.id}
+                  className={styles.card}
+                  onClick={() => handleCardClick(club.name, club.id)}
+                >
+                  <div className={styles.card__info}>
+                    <div className={styles['card__info-header']}>
+                      <div className={styles['card__info-header__title-box']}>
+                        <p className={styles['card__info-title']}>{club.name}</p>
+                        {!(club.recruitment_info.status === 'NONE') && (
+                        <div className={styles['card__info-recruitment']}>
+                          {club.recruitment_info.status === 'RECRUITING' && (
+                          <span className={styles['card__info-recruitment--recruiting']}>
+                            D
+                            <span className={styles.hyphen}>-</span>
+                            {club.recruitment_info.dday}
+                          </span>
+                          )}
+                          {club.recruitment_info.status === 'ALWAYS' && <span className={styles['card__info-recruitment--always']}>상시 모집</span>}
+                          {club.recruitment_info.status === 'BEFORE' && <span className={styles['card__info-recruitment--before']}>모집 예정</span>}
+                          {club.recruitment_info.status === 'CLOSED' && <span className={styles['card__info-recruitment--closed']}>마감</span>}
+                        </div>
+                        )}
+                      </div>
+                      <p className={styles['card__info-category']}>{club.category}</p>
+                    </div>
+                    <div className={styles['card__info-likes']}>
+                      <button
+                        type="button"
+                        onClick={(e) => handleLikeClick(e, club.is_liked, club.id, club.name)}
+                      >
+                        {club.is_liked ? <HeartFilled /> : <HeartOutline />}
+                      </button>
+                      <p>{!club.is_like_hidden && club.likes}</p>
+                    </div>
                   </div>
-                  <div className={styles['card__info-likes']}>
-                    <button
-                      type="button"
-                      onClick={(e) => handleLikeClick(e, club.is_liked, club.id, club.name)}
-                    >
-                      {club.is_liked ? <HeartFilled /> : <HeartOutline />}
-                    </button>
-                    <p>{!club.is_like_hidden && club.likes}</p>
-                  </div>
-                </div>
-                <img
-                  className={styles.card__logo}
-                  src={club.image_url}
-                  alt={club.name}
-                />
-              </button>
-            ))}
+                  <img
+                    className={styles.card__logo}
+                    src={club.image_url}
+                    alt={club.name}
+                  />
+                </button>
+              ))}
           </div>
         </main>
       </div>
