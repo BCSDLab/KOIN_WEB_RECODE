@@ -105,7 +105,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
         team: 'USER',
         event_label: 'create_account',
         value: '아이디생성',
-        event_category: 'click',
         custom_session_id: '도훈',
       });
     },
@@ -127,7 +126,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
         team: 'USER',
         event_label: 'create_account',
         value: '닉네임생성',
-        event_category: 'click',
         custom_session_id: '도훈',
       });
     },
@@ -192,7 +190,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
           team: 'USER',
           event_label: 'sign_up_completed',
           value: '회원가입완료',
-          event_category: 'click',
           custom_session_id: '도훈',
         });
       },

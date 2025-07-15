@@ -32,7 +32,6 @@ export const useLogin = (state: IsAutoLogin) => {
         team: 'USER',
         event_label: 'login',
         value: '로그인 완료',
-        event_category: 'click',
       });
       if (state.isAutoLoginFlag) {
         setRefreshToken(data.refresh_token);
@@ -54,7 +53,6 @@ export const useLogin = (state: IsAutoLogin) => {
           team: 'USER',
           event_label: 'login',
           value: '로그인 실패',
-          event_category: 'click',
         });
       } else {
         sendClientError(error);

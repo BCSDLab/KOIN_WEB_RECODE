@@ -146,7 +146,6 @@ function StorePage() {
       team: 'BUSINESS',
       event_label: 'shop_categories',
       value: categoryId.toString(),
-      event_category: 'click',
       previous_page:
         categories.shop_categories.find(
           (item) => item.id === Number(searchParams.get('category')),
@@ -174,7 +173,6 @@ function StorePage() {
           type,
           categories.shop_categories[selectedCategory]?.name,
         ),
-        event_category: 'click',
       });
     }
   };
@@ -189,7 +187,6 @@ function StorePage() {
         type,
         categories.shop_categories[selectedCategory]?.name,
       ),
-      event_category: 'click',
     });
   };
 
@@ -230,7 +227,6 @@ function StorePage() {
       team: 'BUSINESS',
       event_label: 'shop_categories_benefit',
       value: '혜택이 있는 상점 모아보기',
-      event_category: 'click',
       previous_page: categories.shop_categories.find(
         (item) => item.id === Number(searchParams.get('category')),
       )?.name || '전체보기',

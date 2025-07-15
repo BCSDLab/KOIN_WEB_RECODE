@@ -100,7 +100,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           team: 'USER',
           event_label: 'graduation_calculator_back',
           value: `탈출_헤더_${title}`,
-          event_category: 'click',
         });
       }
     }
@@ -134,7 +133,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         team: 'USER',
         event_label: 'graduation_calculator_back',
         value: '탈출_로고',
-        event_category: 'click',
       });
     }
   };
@@ -145,7 +143,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
         team: 'USER',
         event_label: 'graduation_calculator_back',
         value: `탈출_헤더_${title}`,
-        event_category: 'click',
       });
     }
   };
@@ -250,7 +247,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                     team: 'USER',
                     event_label: 'header',
                     value: '로그인 시도',
-                    event_category: 'click',
                   });
                 }}
               >
@@ -281,7 +277,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                     team: 'USER',
                     event_label: 'header',
                     value: '로그아웃',
-                    event_category: 'click',
                   });
                 }}
                 type="button"

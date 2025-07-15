@@ -53,21 +53,18 @@ function IndexClub() {
     if (key === 'clubList') {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'main_club',
         value: '',
       });
     } else if (key === 'popularClub') {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'main_popular_club',
         value: '인기 동아리',
       });
     } else {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'main_club_add',
         value: '동아리 추가',
       });

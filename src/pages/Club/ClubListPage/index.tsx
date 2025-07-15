@@ -48,7 +48,6 @@ function ClubListPage() {
   const handleCreateClubClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_main_create',
       value: '생성하기',
     });
@@ -68,7 +67,6 @@ function ClubListPage() {
   const handleCategoryClick = (name: string, id: number) => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_main_category',
       value: `${name}`,
     });
@@ -84,7 +82,6 @@ function ClubListPage() {
   const handleCardClick = (name: string, id: number) => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_main_select',
       value: `${name}`,
     });
@@ -109,14 +106,12 @@ function ClubListPage() {
     if (isLiked) {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_main_like_cancel',
         value: name,
       });
     } else {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_main_like',
         value: name,
       });

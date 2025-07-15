@@ -17,7 +17,6 @@ export default function DeleteModal({ close, deleteMyReview, storeDetail }: Prop
       team: 'BUSINSESS',
       event_label: 'shop_detail_view_review_delete_done',
       value: storeDetail.name,
-      event_category: 'click',
     });
   };
   const loggingCancelDeleteClick = () => {
@@ -25,7 +24,6 @@ export default function DeleteModal({ close, deleteMyReview, storeDetail }: Prop
       team: 'BUSINSESS',
       event_label: 'shop_detail_view_review_delete_cancel',
       value: storeDetail.name,
-      event_category: 'click',
     });
   };
 

@@ -99,7 +99,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
         team: 'USER',
         event_label: 'identity_verification',
         value: '인증완료',
-        event_category: 'click',
         custom_session_id: '도훈',
       });
     },
@@ -120,7 +119,6 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
         team: 'USER',
         event_label: 'identity_verification',
         value: '인증번호 발송',
-        event_category: 'click',
         custom_session_id: '도훈',
       });
     },

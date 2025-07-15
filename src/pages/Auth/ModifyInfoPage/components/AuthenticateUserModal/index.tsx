@@ -49,7 +49,6 @@ export default function AuthenticateUserModal({
       team: 'USER',
       event_label: 'header',
       value: '정보수정 시도',
-      event_category: 'click',
     });
   };
 

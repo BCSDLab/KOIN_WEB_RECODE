@@ -132,7 +132,6 @@ export default function Panel({ openModal }: PanelProps) {
                   team: 'USER',
                   event_label: 'hamburger',
                   value: '로그아웃',
-                  event_category: 'click',
                 });
               }
               : () => {
@@ -141,7 +140,6 @@ export default function Panel({ openModal }: PanelProps) {
                   team: 'USER',
                   event_label: 'hamburger',
                   value: '로그인 시도',
-                  event_category: 'click',
                 });
               }
           }

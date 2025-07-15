@@ -16,7 +16,6 @@ export default function AdditionalLink() {
       team: 'USER',
       event_label: 'login',
       value: '아이디찾기',
-      event_category: 'click',
     });
   };
 
@@ -25,7 +24,6 @@ export default function AdditionalLink() {
       team: 'USER',
       event_label: 'login',
       value: '비밀번호 찾기',
-      event_category: 'click',
     });
   };
 

@@ -69,7 +69,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
       team: 'USER',
       event_label: 'identity_verification',
       value: '인증완료',
-      event_category: 'click',
       custom_session_id: '도훈',
     });
   };
@@ -103,7 +102,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
       team: 'USER',
       event_label: 'create_account',
       value: '학생',
-      event_category: 'click',
       custom_session_id: '도훈',
     });
   };
@@ -115,7 +113,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
       team: 'USER',
       event_label: 'create_account',
       value: '외부인',
-      event_category: 'click',
       custom_session_id: '도훈',
     });
   };
@@ -253,7 +250,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                         team: 'USER',
                         event_label: 'identity_verification',
                         value: '인증번호 발송',
-                        event_category: 'click',
                         custom_session_id: '도훈',
                       });
                     }}

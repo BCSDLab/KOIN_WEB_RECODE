@@ -29,7 +29,6 @@ export default function StoreBenefitPage() {
       team: 'BUSINESS',
       event_label: 'benefit_shop_categories',
       value,
-      event_category: 'click',
       previous_page: (benefitCategory?.find((category) => String(category.id) === params.category)?.title || 'Unknown'),
       current_page: value,
       duration_time: getCategoryDurationTime(),
