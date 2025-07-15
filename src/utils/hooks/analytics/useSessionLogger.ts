@@ -37,7 +37,7 @@ const getSessionId = (session_name: string, isLogin: 0 | 1): string => {
  * 세션 시작을 기준으로 15분 간의 활동을 기록합니다.
  */
 export const useSessionLogger = () => {
-  const actionSessionEventClick = ({
+  const actionSessionEvent = ({
     session_name,
     event_label,
     value,
@@ -54,6 +54,6 @@ export const useSessionLogger = () => {
   };
 
   return {
-    actionSessionEventClick,
+    actionSessionEvent,
   };
 };

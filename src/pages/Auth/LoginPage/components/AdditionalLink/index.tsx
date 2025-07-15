@@ -87,7 +87,7 @@ export default function AdditionalLink() {
         className={styles.help__link}
         to={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
         onClick={() => {
-          sessionLogger.actionSessionEventClick({
+          sessionLogger.actionSessionEvent({
             session_name: 'sign_up',
             event_label: 'start_sign_up',
             value: '회원가입 시작',

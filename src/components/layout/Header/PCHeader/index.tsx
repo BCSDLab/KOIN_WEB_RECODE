@@ -230,7 +230,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
               <Link
                 to={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
                 onClick={() => {
-                  sessionLogger.actionSessionEventClick({
+                  sessionLogger.actionSessionEvent({
                     session_name: 'sign_up',
                     event_label: 'header',
                     value: '회원가입 시작',

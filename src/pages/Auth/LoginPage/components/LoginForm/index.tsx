@@ -82,7 +82,7 @@ export default function LoginForm() {
           className={styles.loginform__button}
           to={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
           onClick={() => {
-            sessionLogger.actionSessionEventClick({
+            sessionLogger.actionSessionEvent({
               session_name: 'sign_up',
               event_label: 'start_sign_up',
               value: '회원가입 시작',
