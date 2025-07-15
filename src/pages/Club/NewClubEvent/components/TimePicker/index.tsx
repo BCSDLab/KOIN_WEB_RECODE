@@ -30,9 +30,9 @@ export default function TimePicker({
     [],
   );
 
-  // 더미 데이터 추가 (50, 1, 0)
-  const hours = useMemo(() => [50, 50, ...baseHours, 0, 0], [baseHours]);
-  const minutes = useMemo(() => [1, 1, ...baseMinutes, 0, 0], [baseMinutes]);
+  // 더미 데이터 추가 (101~104)
+  const hours = useMemo(() => [101, 102, ...baseHours, 103, 104], [baseHours]);
+  const minutes = useMemo(() => [101, 102, ...baseMinutes, 103, 104], [baseMinutes]);
 
   const hourRef = useRef<HTMLUListElement>(null);
   const minuteRef = useRef<HTMLUListElement>(null);
@@ -153,8 +153,8 @@ export default function TimePicker({
         </div>
 
         <div className={styles.buttons}>
-          <button type="button" onClick={onClose}>취소</button>
-          <button type="button" className={styles.confirm} onClick={() => { onChange(tempHour, tempMinute); onClose(); }}>
+          <button type="button" className={styles['buttons__button--cancel']} onClick={onClose}>취소</button>
+          <button type="button" className={styles['buttons__button--confirm']} onClick={() => { onChange(tempHour, tempMinute); onClose(); }}>
             확인
           </button>
         </div>

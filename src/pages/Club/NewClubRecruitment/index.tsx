@@ -94,15 +94,13 @@ export default function NewClubRecruitment() {
                 {isMobile ? (
                   <>
                     <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
-                      <span>{startYear}</span>
-                      <br />
-                      <span>{startRest}</span>
+                      <div>{startYear}</div>
+                      <div>{startRest}</div>
                     </button>
-                    <p>~</p>
+                    <div className={styles.form__separator}>~</div>
                     <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
-                      <span>{endYear}</span>
-                      <br />
-                      <span>{endRest}</span>
+                      <div>{endYear}</div>
+                      <div>{endRest}</div>
                     </button>
                   </>
                 ) : (
@@ -117,7 +115,7 @@ export default function NewClubRecruitment() {
                       }}
                       trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(new Date(formData.start_date))}</button>}
                     />
-                    <p>~</p>
+                    <div className={styles.form__separator}>~</div>
                     <DatePicker
                       selectedDate={new Date(formData.end_date)}
                       onChange={(date) => {
