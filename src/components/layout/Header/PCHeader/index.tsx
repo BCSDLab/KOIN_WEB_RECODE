@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './PCHeader.module.scss';
@@ -62,6 +63,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
   const logout = useLogout();
   const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const token = useTokenState();
   const { pathname, search } = useLocation();
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
@@ -228,11 +230,11 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
               <Link
                 to={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
                 onClick={() => {
-                  logger.actionEventClick({
-                    team: 'USER',
+                  sessionLogger.actionSessionEvent({
+                    session_name: 'sign_up',
                     event_label: 'header',
                     value: '회원가입 시작',
-                    custom_session_id: '도훈',
+                    event_category: 'click',
                   });
                 }}
               >

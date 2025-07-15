@@ -3,11 +3,11 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useLogin } from 'pages/Auth/LoginPage/hooks/useLogin';
 import BlindIcon from 'assets/svg/blind-icon.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { Link } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import styles from './LoginForm.module.scss';
 
 interface IClassUser {
@@ -18,7 +18,7 @@ interface IClassUser {
 export default function LoginForm() {
   const [isPasswordVisible, , , toggleIsPasswordVisible] = useBooleanState(false);
   const [isAutoLoginFlag, , , toggleIsAutoLoginFlag] = useBooleanState(false);
-  const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const isMobile = useMediaQuery();
   const submitLogin = useLogin({ isAutoLoginFlag });
   const loginRef = React.useRef<IClassUser>({
@@ -82,10 +82,11 @@ export default function LoginForm() {
           className={styles.loginform__button}
           to={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
           onClick={() => {
-            logger.actionEventClick({
-              team: 'USER',
-              event_label: 'login',
-              value: '회원가입',
+            sessionLogger.actionSessionEvent({
+              session_name: 'sign_up',
+              event_label: 'start_sign_up',
+              value: '회원가입 시작',
+              event_category: 'click',
             });
           }}
         >
