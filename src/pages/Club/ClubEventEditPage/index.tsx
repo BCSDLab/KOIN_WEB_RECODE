@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { UpdateClubEventRequest } from 'api/club/entity';
+import { ClubEventRequest } from 'api/club/entity';
 import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -35,13 +35,13 @@ export default function NewClubEvent() {
   const [startTime, setStartTime] = useState({ hour: 0, minute: 0 });
   const [endTime, setEndTime] = useState({ hour: 0, minute: 0 });
 
-  const [formData, setFormData] = useState<UpdateClubEventRequest>({
+  const [formData, setFormData] = useState<ClubEventRequest>({
     name: clubEventDetail.name,
-    imageUrls: clubEventDetail.image_urls,
+    image_urls: clubEventDetail.image_urls,
     introduce: clubEventDetail.introduce,
     content: clubEventDetail.content,
-    startDate: clubEventDetail.start_date,
-    endDate: clubEventDetail.end_date,
+    start_date: clubEventDetail.start_date,
+    end_date: clubEventDetail.end_date,
   });
 
   useEffect(() => {
@@ -65,8 +65,8 @@ export default function NewClubEvent() {
       eventId,
       data: {
         ...formData,
-        startDate: submitStartDate,
-        endDate: submitEndDate,
+        start_date: submitStartDate,
+        end_date: submitEndDate,
       },
     });
   };
@@ -98,8 +98,8 @@ export default function NewClubEvent() {
         <div className={styles.content}>
           {isMobile && (
           <ImagesUploadSlider
-            imageUrls={formData.imageUrls}
-            addImageUrls={(newImages) => setFormData({ ...formData, imageUrls: newImages })}
+            imageUrls={formData.image_urls}
+            addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
           />
           )}
           <div className={styles['form-left']}>
@@ -205,8 +205,8 @@ export default function NewClubEvent() {
           </div>
           {!isMobile && (
           <ImagesUploadSlider
-            imageUrls={formData.imageUrls}
-            addImageUrls={(newImages) => setFormData({ ...formData, imageUrls: newImages })}
+            imageUrls={formData.image_urls}
+            addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
           />
           )}
 

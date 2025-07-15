@@ -20,7 +20,6 @@ import type {
   PostClubQnAResponse,
   PostClubResponse,
   PutClubLikeResonse,
-  UpdateClubEventRequest,
 } from './entity';
 
 export class ClubCategories<R extends ClubCategoriesResponse> implements APIRequest<R> {
@@ -336,7 +335,7 @@ export class PutClubEvent<R extends {}> implements APIRequest<R> {
     public authorization: string,
     public clubId: number,
     public eventId: number,
-    public data: UpdateClubEventRequest,
+    public data: ClubEventRequest,
   ) {
     this.path = `/clubs/${clubId}/event/${eventId}`;
   }

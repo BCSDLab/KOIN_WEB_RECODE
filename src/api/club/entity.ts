@@ -165,12 +165,3 @@ export interface ClubEventRequest {
   introduce: string;
   content: string;
 }
-
-export interface UpdateClubEventRequest {
-  name: string;
-  imageUrls: string[];
-  startDate: string;
-  endDate: string;
-  introduce: string;
-  content: string;
-}

@@ -1,7 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { putClubEvent } from 'api/club';
-import { UpdateClubEventRequest } from 'api/club/entity';
+import { ClubEventRequest } from 'api/club/entity';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -13,7 +13,7 @@ export default function usePutClubEvent(clubId: number | undefined) {
   const navigate = useNavigate();
 
   const { mutateAsync } = useMutation({
-    mutationFn: async ({ eventId, data }: { eventId: number; data: UpdateClubEventRequest }) => {
+    mutationFn: async ({ eventId, data }: { eventId: number; data: ClubEventRequest }) => {
       await putClubEvent(token, clubId!, eventId, data);
     },
     onSuccess: () => {
