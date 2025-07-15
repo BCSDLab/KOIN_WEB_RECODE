@@ -110,9 +110,9 @@ export default function NewClubEvent() {
                         onClick={openTimePicker}
                       >
                         <div>
-                          {startTime.hour.toString().padStart(2, '0')}
+                          {endTime.hour.toString().padStart(2, '0')}
                           :
-                          {startTime.minute.toString().padStart(2, '0')}
+                          {endTime.minute.toString().padStart(2, '0')}
                         </div>
                       </button>
                     </div>
