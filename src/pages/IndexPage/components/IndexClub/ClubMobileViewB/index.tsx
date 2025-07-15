@@ -19,7 +19,6 @@ function ClubMobileViewB() {
   const handleCategoryClick = (name: string, id: number) => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_main_category',
       value: `${name}`,
     });

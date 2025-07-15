@@ -83,7 +83,6 @@ function StoreDetailPage({ id }: Props) {
         team: 'BUSINESS',
         event_label: 'shop_detail_view_review_back',
         value: '',
-        event_category: 'click',
         previous_page: '리뷰',
         current_page: '전화',
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
@@ -93,7 +92,6 @@ function StoreDetailPage({ id }: Props) {
       team: 'BUSINESS',
       event_label: `${storeType}_call`,
       value: storeDetail!.name,
-      event_category: 'click',
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
@@ -112,7 +110,6 @@ function StoreDetailPage({ id }: Props) {
         team: 'BUSINESS',
         event_label: 'shop_detail_view_review_back',
         value: storeDetail.name,
-        event_category: 'click',
         previous_page: '리뷰',
         current_page: '전체보기',
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
@@ -167,7 +164,6 @@ function StoreDetailPage({ id }: Props) {
           team: 'BUSINESS',
           event_label: 'shop_detail_view_review_back',
           value: storeDetail.name,
-          event_category: 'click',
           previous_page: '리뷰',
           current_page: param.get('state') || '메뉴',
           duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterReviewPage'))) / 1000,
@@ -364,7 +360,7 @@ function StoreDetailPage({ id }: Props) {
               param.set('state', '메뉴');
               setParam(param, { replace: true });
               logger.actionEventClick({
-                team: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail!.name, event_category: 'click',
+                team: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail!.name,
               });
             }}
           >

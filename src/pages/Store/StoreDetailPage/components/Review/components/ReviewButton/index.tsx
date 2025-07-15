@@ -36,7 +36,6 @@ export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_detail_view_review_write',
-      event_category: 'click',
       value: storeDetail.name,
     });
     sessionStorage.setItem('enterReview', new Date().getTime().toString());

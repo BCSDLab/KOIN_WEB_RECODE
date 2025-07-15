@@ -45,7 +45,6 @@ function StudentForm() {
       team: 'USER',
       event_label: 'graduation_calculator_department',
       value: `학과 드롭다운_${target.value}`,
-      event_category: 'click',
     });
     setDepartment(target.value);
     handleMajor(target.value);

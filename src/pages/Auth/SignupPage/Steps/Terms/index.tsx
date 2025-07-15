@@ -3,6 +3,7 @@ import CustomCheckbox from 'pages/Auth/SignupPage/components/CustomCheckbox';
 import { privacy, koin, marketing } from 'static/terms';
 import { useFormContext } from 'react-hook-form';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './Terms.module.scss';
 
 interface TermsProps {
@@ -16,9 +17,21 @@ export default function Terms({ onNext }: TermsProps) {
   const isMobile = useMediaQuery();
   const watchAllTerms = watch(TERMS_NAMES);
   const currentYear = new Date().getFullYear();
+  const logger = useLogger();
 
   const handleAllAgreeToggle = () => {
     TERMS_NAMES.forEach((field) => setValue(field, !watchAllTerms.every(Boolean)));
+  };
+
+  const onClickNext = () => {
+    onNext();
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'terms_agreement',
+      value: '약관동의',
+      event_category: 'click',
+      custom_session_id: '도훈',
+    });
   };
 
   return (
@@ -104,7 +117,7 @@ export default function Terms({ onNext }: TermsProps) {
       <button
         type="button"
         className={styles['term-button']}
-        onClick={onNext}
+        onClick={onClickNext}
         disabled={!(watch(TERMS_NAMES.slice(0, 2)).every(Boolean))}
       >
         다음

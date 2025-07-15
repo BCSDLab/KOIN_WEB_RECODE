@@ -102,7 +102,7 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
   });
 
   const { mutate: checkPhoneExists } = useMutation({
-    mutationFn: phoneExists, // 아이디, 비밀번호 찾기 때 사용되는 api
+    mutationFn: phoneExists,
     onSuccess: () => {
       sendVerificationSms({ phone_number: phoneNumber });
     },

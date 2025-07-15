@@ -52,14 +52,12 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
         team: 'USER',
         event_label: 'graduation_calculator_semester',
         value: `학기 드롭다운_${clickededSemester.year}${clickededSemester.term}`,
-        event_category: 'click',
       });
     } else {
       logger.actionEventClick({
         team: 'USER',
         event_label: 'timetable',
         value: `click_semester_${clickededSemester.year}${clickededSemester.term}`,
-        event_category: 'click',
       });
     }
     closePopup();

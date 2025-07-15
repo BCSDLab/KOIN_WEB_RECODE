@@ -26,7 +26,6 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
       team: 'USER',
       event_label: 'graduation_calculator_lectures_list',
       value: `강의 개설 목록_${courseType}`,
-      event_category: 'click',
     });
     lock();
     startTransition(() => portalManger.open((portalOption: Portal) => (

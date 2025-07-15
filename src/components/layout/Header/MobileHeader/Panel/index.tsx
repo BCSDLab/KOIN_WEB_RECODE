@@ -139,7 +139,7 @@ export default function Panel({ openModal }: PanelProps) {
                 logger.actionEventClick({
                   team: 'USER',
                   event_label: 'hamburger',
-                  value: '로그인',
+                  value: '로그인 시도',
                 });
               }
           }

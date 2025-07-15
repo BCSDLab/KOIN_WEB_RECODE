@@ -30,7 +30,6 @@ export default function CreateQnAModal({
   const handleSubmit = async () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_Q&A_add_confirm',
       value: 'Q&A',
     });
@@ -41,7 +40,6 @@ export default function CreateQnAModal({
   const handleDelete = async () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_Q&A_delete_confirm',
       value: '삭제하기',
     });

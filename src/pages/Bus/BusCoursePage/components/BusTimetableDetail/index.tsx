@@ -63,7 +63,6 @@ export default function BusTimetableDetail() {
                     logger.actionEventClick({
                       team: 'CAMPUS',
                       event_label: name === '등교' ? 'go_to_school' : 'go_home',
-                      event_category: 'click',
                       value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
                     });
                   }}
@@ -90,7 +89,6 @@ export default function BusTimetableDetail() {
                   logger.actionEventClick({
                     team: 'CAMPUS',
                     event_label: name === '등교' ? 'go_to_school' : 'go_home',
-                    event_category: 'click',
                     value: `${shuttleTimetableDetail.route_type}_${shuttleTimetableDetail.route_name}`,
                   });
                 }}

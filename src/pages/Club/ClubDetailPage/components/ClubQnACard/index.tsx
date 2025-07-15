@@ -54,7 +54,6 @@ export default function ClubQnACard({
   const handleDeleteQnA = async (qnaId : number) => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_Q&A_delete_confirm',
       value: '삭제하기',
     });
