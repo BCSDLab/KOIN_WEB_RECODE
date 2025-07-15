@@ -9,6 +9,7 @@ import {
   Controller, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
@@ -35,6 +36,7 @@ interface StudentFormValues {
 }
 
 function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
+  const logger = useLogger();
   const {
     control, getValues, trigger, handleSubmit,
   } = useFormContext<StudentFormValues>();
@@ -65,6 +67,12 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     onSuccess: () => {
       setIdMessage({ type: 'success', content: MESSAGES.USERID.AVAILABLE });
       setIsCorrectId();
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'create_account',
+        value: '아이디생성',
+        custom_session_id: '도훈',
+      });
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -80,6 +88,12 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     onSuccess: () => {
       setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
       setIsCorrectNickname();
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'create_account',
+        value: '닉네임생성',
+        custom_session_id: '도훈',
+      });
     },
     onError: (err) => {
       if (isKoinError(err)) {
@@ -94,6 +108,12 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     mutationFn: (variables: StudentFormValues) => signupStudent(variables),
     onSuccess: () => {
       onNext();
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'sign_up_completed',
+        value: '회원가입완료',
+        custom_session_id: '도훈',
+      });
     },
     onError: (err) => {
       if (isKoinError(err)) {

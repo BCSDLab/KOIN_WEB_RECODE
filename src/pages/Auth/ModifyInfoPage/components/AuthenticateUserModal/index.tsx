@@ -13,6 +13,7 @@ import { useAuthenticationActions } from 'utils/zustand/authentication';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -24,6 +25,7 @@ export default function AuthenticateUserModal({
   onClose,
   disabledClose = false,
 }: AuthenticateUserModalProps) {
+  const logger = useLogger();
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [isBlind, setIsBlind] = useState(true);
@@ -43,6 +45,11 @@ export default function AuthenticateUserModal({
     }
     const hashedPassword = await sha256(password);
     checkPassword({ password: hashedPassword });
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'header',
+      value: '정보수정 시도',
+    });
   };
 
   const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

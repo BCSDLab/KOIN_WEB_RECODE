@@ -78,7 +78,6 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
       team: 'BUSINESS',
       event_label: 'shop_detail_view_review_write_done',
       value: storeDetail.name,
-      event_category: 'click',
       duration_time: getReviewDurationTime,
     });
   };

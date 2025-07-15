@@ -47,7 +47,6 @@ export default function EditConfirmModal({
       await clubIntroductionEditMutateAsync({ introduction });
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_introduction_correction_save_confirm',
         value: '저장하기',
       });
@@ -65,7 +64,6 @@ export default function EditConfirmModal({
       resetForm();
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_introduction_correction_cancel_confirm',
         value: '취소하기',
       });

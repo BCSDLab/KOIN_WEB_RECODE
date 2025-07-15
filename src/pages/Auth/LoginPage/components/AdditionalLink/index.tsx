@@ -13,19 +13,29 @@ export default function AdditionalLink() {
   const sessionLogger = useSessionLogger();
   const isMobile = useMediaQuery();
 
+  const onClickFindId = () => {
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'login',
+      value: '아이디찾기',
+    });
+  };
+
+  const onClickFindPassword = () => {
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'login',
+      value: '비밀번호 찾기',
+    });
+  };
+
   if (isMobile) {
     return (
       <div className={styles.help}>
         <Link
           className={styles.help__link}
           to={ROUTES.AuthFindID()}
-          onClick={() => {
-            logger.actionEventClick({
-              team: 'USER',
-              event_label: 'login',
-              value: '아이디찾기',
-            });
-          }}
+          onClick={onClickFindId}
         >
           <MagnifyingGlassIcon />
           아이디 찾기
@@ -33,13 +43,7 @@ export default function AdditionalLink() {
         <Link
           className={styles.help__link}
           to={ROUTES.AuthFindPW({ step: '계정인증', isLink: true })}
-          onClick={() => {
-            logger.actionEventClick({
-              team: 'USER',
-              event_label: 'login',
-              value: '비밀번호찾기',
-            });
-          }}
+          onClick={onClickFindPassword}
         >
           <LockIcon />
           비밀번호 찾기
@@ -68,26 +72,14 @@ export default function AdditionalLink() {
       <Link
         className={styles.help__link}
         to={ROUTES.AuthFindID()}
-        onClick={() => {
-          logger.actionEventClick({
-            team: 'USER',
-            event_label: 'login',
-            value: '아이디찾기',
-          });
-        }}
+        onClick={onClickFindId}
       >
         아이디 찾기
       </Link>
       <Link
         className={styles.help__link}
         to={ROUTES.AuthFindPW({ step: '계정인증', isLink: true })}
-        onClick={() => {
-          logger.actionEventClick({
-            team: 'USER',
-            event_label: 'login',
-            value: '비밀번호찾기',
-          });
-        }}
+        onClick={onClickFindPassword}
       >
         비밀번호 찾기
       </Link>
