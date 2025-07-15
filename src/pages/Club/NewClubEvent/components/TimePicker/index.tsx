@@ -153,8 +153,8 @@ export default function TimePicker({
         </div>
 
         <div className={styles.buttons}>
-          <button type="button" className={styles['buttons__button--cancel']} onClick={onClose}>취소</button>
-          <button type="button" className={styles['buttons__button--confirm']} onClick={() => { onChange(tempHour, tempMinute); onClose(); }}>
+          <button type="button" className={cn({ [styles.buttons__button]: true, [styles['buttons__button--cancel']]: true })} onClick={onClose}>취소</button>
+          <button type="button" className={cn({ [styles.buttons__button]: true, [styles['buttons__button--confirm']]: true })} onClick={() => { onChange(tempHour, tempMinute); onClose(); }}>
             확인
           </button>
         </div>
