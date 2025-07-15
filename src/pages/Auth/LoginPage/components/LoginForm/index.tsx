@@ -3,7 +3,6 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useLogin } from 'pages/Auth/LoginPage/hooks/useLogin';
 import BlindIcon from 'assets/svg/blind-icon.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import { cn } from '@bcsdlab/utils';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { Link } from 'react-router-dom';
@@ -19,7 +18,6 @@ interface IClassUser {
 export default function LoginForm() {
   const [isPasswordVisible, , , toggleIsPasswordVisible] = useBooleanState(false);
   const [isAutoLoginFlag, , , toggleIsAutoLoginFlag] = useBooleanState(false);
-  const logger = useLogger();
   const sessionLogger = useSessionLogger();
   const isMobile = useMediaQuery();
   const submitLogin = useLogin({ isAutoLoginFlag });
