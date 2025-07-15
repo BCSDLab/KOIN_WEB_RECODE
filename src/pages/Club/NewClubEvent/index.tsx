@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ClubEvent } from 'api/club/entity';
+import { ClubEventRequest } from 'api/club/entity';
 import { formatKoreanDate } from 'utils/ts/calendar';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -26,7 +26,7 @@ export default function NewClubEvent() {
   const [startTime, setStartTime] = useState({ hour: 0, minute: 0 });
   const [endTime, setEndTime] = useState({ hour: 0, minute: 0 });
 
-  const [formData, setFormData] = useState<ClubEvent>({
+  const [formData, setFormData] = useState<ClubEventRequest>({
     name: '',
     image_urls: [],
     start_date: '',
@@ -83,39 +83,37 @@ export default function NewClubEvent() {
                   <>
                     <div className={styles['picker-container']}>
                       <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
-                        <span>{startYear}</span>
-                        <br />
-                        <span>{startRest}</span>
+                        <div>{startYear}</div>
+                        <div>{startRest}</div>
                       </button>
                       <button
                         type="button"
                         className={styles['time-picker-button']}
                         onClick={openTimePicker}
                       >
-                        <span>
+                        <div>
                           {startTime.hour.toString().padStart(2, '0')}
                           :
                           {startTime.minute.toString().padStart(2, '0')}
-                        </span>
+                        </div>
                       </button>
                     </div>
                     <div className={styles.form__separator}>~</div>
                     <div className={styles['picker-container']}>
                       <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
-                        <span>{endYear}</span>
-                        <br />
-                        <span>{endRest}</span>
+                        <div>{endYear}</div>
+                        <div>{endRest}</div>
                       </button>
                       <button
                         type="button"
                         className={styles['time-picker-button']}
                         onClick={openTimePicker}
                       >
-                        <span>
+                        <div>
                           {startTime.hour.toString().padStart(2, '0')}
                           :
                           {startTime.minute.toString().padStart(2, '0')}
-                        </span>
+                        </div>
                       </button>
                     </div>
                   </>
@@ -125,7 +123,6 @@ export default function NewClubEvent() {
                       <DatePicker
                         selectedDate={startDate}
                         onChange={setStartDate}
-                        trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(startDate)}</button>}
                       />
                       <TimeSelector
                         hour={startTime.hour}
@@ -138,7 +135,6 @@ export default function NewClubEvent() {
                       <DatePicker
                         selectedDate={endDate}
                         onChange={setEndDate}
-                        trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(endDate)}</button>}
                       />
                       <TimeSelector
                         hour={endTime.hour}
