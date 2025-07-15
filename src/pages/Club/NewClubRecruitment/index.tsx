@@ -113,7 +113,6 @@ export default function NewClubRecruitment() {
                           start_date: date.toISOString().slice(0, 10),
                         });
                       }}
-                      trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(new Date(formData.start_date))}</button>}
                     />
                     <div className={styles.form__separator}>~</div>
                     <DatePicker
@@ -124,7 +123,6 @@ export default function NewClubRecruitment() {
                           end_date: date.toISOString().slice(0, 10),
                         });
                       }}
-                      trigger={<button type="button" className={styles['date-picker-button']}>{formatKoreanDate(new Date(formData.end_date))}</button>}
                     />
                   </>
                 )}
