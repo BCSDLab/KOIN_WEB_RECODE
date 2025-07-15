@@ -153,8 +153,8 @@ function App() {
           <Route path={ROUTES.ClubDetail({ isLink: false })} element={<Wrapper title="상세 소개" element={<ClubDetailPage />} />} />
           <Route path={ROUTES.ClubEdit({ isLink: false })} element={<Wrapper title="동아리 수정" element={<ClubEditPage />} />} />
           <Route path={ROUTES.NewClub()} element={<Wrapper title="동아리 생성" element={<NewClubPage />} />} />
-          <Route path={ROUTES.NewClubRecruitment()} element={<Wrapper title="동아리 모집 생성" element={<NewClubRecruitment />} />} />
-          <Route path={ROUTES.NewClubEvent()} element={<Wrapper title="동아리 행사 생성" element={<NewClubEvent />} />} />
+          <Route path={ROUTES.NewClubRecruitment({ isLink: false })} element={<Wrapper title="동아리 모집 생성" element={<NewClubRecruitment />} />} />
+          <Route path={ROUTES.NewClubEvent({ isLink: false })} element={<Wrapper title="동아리 행사 생성" element={<NewClubEvent />} />} />
 
           <Route path={ROUTES.Cafeteria()} element={<Wrapper title="식단" element={<CafeteriaPage />} />} />
           <Route path={ROUTES.Articles()} element={<Wrapper title="공지사항" element={<ArticlesPage />} />}>

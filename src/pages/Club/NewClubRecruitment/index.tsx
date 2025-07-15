@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ClubRecruitment } from 'api/club/entity';
 import { formatKoreanDate } from 'utils/ts/calendar';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -8,35 +9,46 @@ import ClubImageUploader from './components/ImageUploader';
 import DetailDescription from './components/DetailDescription';
 import DatePickerModal from './components/DatePickerModal';
 import ConfirmModal from './components/ConfirmModal';
+import usePostNewRecruitment from './hooks/usePostNewRecruitment';
 import styles from './NewClubRecruitment.module.scss';
 
 export default function NewClubRecruitment() {
+  const { id } = useParams<{ id: string }>();
+  const { mutateAsync } = usePostNewRecruitment(Number(id));
   const isMobile = useMediaQuery();
 
   const [modalType, setModalType] = useState('');
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
-  const [isAlwaysRecruiting,,,toggleIsAlwaysRecruiting] = useBooleanState(false);
 
-  const [isTried] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const todayStr = new Date().toISOString().slice(0, 10);
   const [formData, setFormData] = useState<ClubRecruitment>({
-    start_date: '',
-    end_date: '',
+    start_date: todayStr,
+    end_date: todayStr,
     is_always_recruiting: false,
     image_url: '',
     content: '',
   });
+
+  const handleSubmit = async () => {
+    const payload = formData.is_always_recruiting
+      ? {
+        ...formData,
+        start_date: null,
+        end_date: null,
+      }
+      : formData;
+    await mutateAsync(payload);
+  };
 
   function splitKoreanDate(date: Date): [string, string] {
     const [year, ...rest] = formatKoreanDate(date).split(' ');
     return [year, rest.join(' ')];
   }
 
-  const [startYear, startRest] = splitKoreanDate(startDate);
-  const [endYear, endRest] = splitKoreanDate(endDate);
+  const [startYear, startRest] = splitKoreanDate(new Date(formData.start_date));
+  const [endYear, endRest] = splitKoreanDate(new Date(formData.end_date));
 
   return (
     <div className={styles.layout}>
@@ -63,35 +75,54 @@ export default function NewClubRecruitment() {
                   <label htmlFor="period" className={styles.form__label}>
                     상시 모집
                   </label>
-                  <input id="period" type="checkbox" checked={isAlwaysRecruiting} className={styles.form__checkbox} onChange={toggleIsAlwaysRecruiting} />
+                  <input
+                    id="period"
+                    type="checkbox"
+                    checked={formData.is_always_recruiting}
+                    className={styles.form__checkbox}
+                    onChange={() => {
+                      setFormData({
+                        ...formData,
+                        is_always_recruiting: !formData.is_always_recruiting,
+                      });
+                    }}
+                  />
                 </div>
               </div>
-              { !isAlwaysRecruiting && (
+              { !formData.is_always_recruiting && (
               <div className={styles['form__button-container']}>
                 {isMobile ? (
                   <>
                     <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
-                      <span>{startYear}</span>
-                      <br />
-                      <span>{startRest}</span>
+                      <div>{startYear}</div>
+                      <div>{startRest}</div>
                     </button>
-                    <p>~</p>
+                    <div className={styles.form__separator}>~</div>
                     <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
-                      <span>{endYear}</span>
-                      <br />
-                      <span>{endRest}</span>
+                      <div>{endYear}</div>
+                      <div>{endRest}</div>
                     </button>
                   </>
                 ) : (
                   <>
                     <DatePicker
-                      selectedDate={startDate}
-                      onChange={setStartDate}
+                      selectedDate={new Date(formData.start_date)}
+                      onChange={(date) => {
+                        setFormData({
+                          ...formData,
+                          start_date: date.toISOString().slice(0, 10),
+                        });
+                      }}
                     />
-                    <p>~</p>
+                    <div className={styles.form__separator}>~</div>
                     <DatePicker
-                      selectedDate={endDate}
-                      onChange={setEndDate}
+                      selectedDate={new Date(formData.end_date)}
+                      onChange={(date) => {
+                        setFormData({
+                          ...formData,
+                          end_date: date.toISOString().slice(0, 10),
+                        });
+                      }}
                     />
                   </>
                 )}
@@ -108,7 +139,6 @@ export default function NewClubRecruitment() {
           <ClubImageUploader
             formData={formData}
             setFormData={setFormData}
-            isTried={isTried}
           />
           {isMobile && (
             <>
@@ -142,19 +172,30 @@ export default function NewClubRecruitment() {
         <ConfirmModal
           type={modalType}
           closeModal={closeModal}
+          onSubmit={handleSubmit}
         />
       )}
       {isStartCalendarOpen && (
         <DatePickerModal
-          selectedDate={startDate}
-          onChange={setStartDate}
+          selectedDate={new Date(formData.start_date)}
+          onChange={(date) => {
+            setFormData({
+              ...formData,
+              start_date: date.toISOString().slice(0, 10),
+            });
+          }}
           onClose={closeStartCalendar}
         />
       )}
       {isEndCalendarOpen && (
         <DatePickerModal
-          selectedDate={endDate}
-          onChange={setEndDate}
+          selectedDate={new Date(formData.end_date)}
+          onChange={(date) => {
+            setFormData({
+              ...formData,
+              end_date: date.toISOString().slice(0, 10),
+            });
+          }}
           onClose={closeEndCalendar}
         />
       )}
