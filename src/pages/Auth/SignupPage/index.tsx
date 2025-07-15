@@ -38,24 +38,15 @@ function SignupPage() {
   const currentIndex = activeSteps.indexOf(currentStep);
   const [userType, setUserType] = useState<UserType | null>(null);
 
-  const onClickStudent = (user: string) => {
-    if (user === '학생') {
-      setUserType('학생');
-      logger.actionEventClick({
-        team: 'USER',
-        event_label: 'create_account',
-        value: '학생',
-        custom_session_id: '도훈',
-      });
-    } else if (user === '외부인') {
-      setUserType('외부인');
-      logger.actionEventClick({
-        team: 'USER',
-        event_label: 'create_account',
-        value: '외부인',
-        custom_session_id: '도훈',
-      });
-    }
+  const onClickStudent = (user: UserType) => {
+    setUserType(user);
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'create_account',
+      value: user,
+      event_category: 'click',
+      custom_session_id: '도훈',
+    });
   };
 
   const methods = useForm({
