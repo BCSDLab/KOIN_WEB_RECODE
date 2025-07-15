@@ -1,5 +1,6 @@
 import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useDeleteEvent from 'pages/Club/ClubDetailPage/hooks/useDeleteEvent';
 import styles from './ClubEventDetailView.module.scss';
 
 interface ClubEventDetailViewProps {
@@ -12,6 +13,7 @@ export default function ClubEventDetailView({
   eventId,
 }: ClubEventDetailViewProps) {
   const { clubEventDetail } = useClubEventDetail(clubId, eventId);
+  const { mutateAsync } = useDeleteEvent();
   const isMobile = useMediaQuery();
   return (
     <div className={styles['event-detail']}>
@@ -22,7 +24,7 @@ export default function ClubEventDetailView({
           <button
             type="button"
             className={styles['edit-button--delete']}
-            onClick={() => {}} // 삭제 로직 추가
+            onClick={() => mutateAsync(Number(eventId))}
           >
             행사 삭제
           </button>

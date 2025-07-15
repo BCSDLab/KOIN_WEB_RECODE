@@ -3,11 +3,13 @@ import type {
   ClubCategoriesResponse,
   ClubDetailResponse,
   ClubEventListResponse,
+  ClubEventRequest,
   ClubEventResponse,
   ClubInroductionData,
   ClubListResponse,
   ClubNewQnA,
   ClubQnAData,
+  ClubRecruitmentRequest,
   ClubRecruitmentResponse,
   DeleteClubLikeResonse,
   DeleteClubQnAResponse,
@@ -245,6 +247,95 @@ export class GetClubEventDetail<R extends ClubEventResponse> implements APIReque
   response!: R;
 
   constructor(public clubId: string | number, public eventId: string | number) {
+    this.path = `/clubs/${clubId}/event/${eventId}`;
+  }
+}
+
+export class PostClubRecruitment<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+    public data: ClubRecruitmentRequest,
+  ) {
+    this.path = `/clubs/${clubId}/recruitment`;
+  }
+}
+
+export class PutClubRecruitment<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+    public data: ClubRecruitmentRequest,
+  ) {
+    this.path = `/clubs/${clubId}/recruitment`;
+  }
+}
+
+export class DeleteClubRecruitment<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path : string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+  ) {
+    this.path = `/clubs/${clubId}/recruitment`;
+  }
+}
+
+export class PostClubEvent<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+    public data: ClubEventRequest,
+  ) {
+    this.path = `/clubs/${clubId}/event`;
+  }
+}
+
+export class DeleteClubEvent<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+    public eventId: number,
+  ) {
     this.path = `/clubs/${clubId}/event/${eventId}`;
   }
 }

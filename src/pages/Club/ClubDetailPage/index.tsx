@@ -165,11 +165,11 @@ export default function ClubDetailPage() {
   };
 
   const handleClickRecruitAddButton = () => {
-    console.log('모집하기 버튼 클릭'); // 수정, 추가 페이지 이동 또는 상태 변경 로직 추가필요
+    navigate(ROUTES.NewClubRecruitment({ id: String(id), isLink: true }));
   };
 
   const handleClickEventAddButton = () => {
-    console.log('행사 추가 버튼 클릭'); // 수정, 추가 페이지 이동 또는 상태 변경 로직 추가필요
+    navigate(ROUTES.NewClubEvent({ id: String(id), isLink: true }));
   };
   return (
     <div className={styles.layout}>

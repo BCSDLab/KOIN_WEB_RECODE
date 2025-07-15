@@ -111,8 +111,8 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
           )}
           {pathname.startsWith(ROUTES.NewClub()) && '동아리 생성'}
           {pathname.startsWith('/clubs/edit') && '동아리 수정'}
-          {pathname.startsWith(ROUTES.NewClubRecruitment()) && '동아리 모집 생성'}
-          {pathname.startsWith(ROUTES.NewClubEvent()) && '동아리 행사 생성'}
+          {pathname.startsWith('/clubs/recruitment') && '동아리 모집 생성'}
+          {pathname.startsWith('/clubs/event') && '동아리 행사 생성'}
         </span>
         {isCustomButton ? (
           <span
