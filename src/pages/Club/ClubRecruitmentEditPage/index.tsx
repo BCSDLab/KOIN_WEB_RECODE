@@ -22,6 +22,8 @@ function getYyyyMmDd(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
+const TODAY = getYyyyMmDd(new Date());
+
 export default function ClubRecruitmentEditPage() {
   const { id } = useParams<{ id: string }>();
   const isMobile = useMediaQuery();
@@ -33,10 +35,9 @@ export default function ClubRecruitmentEditPage() {
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
 
-  const todayStr = new Date().toISOString().slice(0, 10);
   const [formData, setFormData] = useState<ClubRecruitment>({
-    start_date: clubRecruitmentData.start_date ?? todayStr,
-    end_date: clubRecruitmentData.end_date ?? todayStr,
+    start_date: clubRecruitmentData.start_date ?? TODAY,
+    end_date: clubRecruitmentData.end_date ?? TODAY,
     is_always_recruiting: clubRecruitmentData.status === 'ALWAYS',
     image_url: clubRecruitmentData.image_url,
     content: clubRecruitmentData.content,
@@ -204,7 +205,7 @@ export default function ClubRecruitmentEditPage() {
           onChange={(date) => {
             setFormData({
               ...formData,
-              start_date: date.toISOString().slice(0, 10),
+              start_date: getYyyyMmDd(date),
             });
           }}
           onClose={closeStartCalendar}
@@ -216,7 +217,7 @@ export default function ClubRecruitmentEditPage() {
           onChange={(date) => {
             setFormData({
               ...formData,
-              end_date: date.toISOString().slice(0, 10),
+              end_date: getYyyyMmDd(date),
             });
           }}
           onClose={closeEndCalendar}
