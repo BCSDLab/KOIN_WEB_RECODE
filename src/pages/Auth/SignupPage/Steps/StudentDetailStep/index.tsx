@@ -16,7 +16,7 @@ import BackIcon from 'assets/svg/arrow-back.svg';
 import showToast from 'utils/ts/showToast';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import PCCustomInput, { type InputMessage } from 'pages/Auth/SignupPage/components/PCCustomInput';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import styles from './StudentDetailStep.module.scss';
 
 interface VerificationProps {
@@ -39,7 +39,7 @@ interface StudentFormValues {
 }
 
 function StudentDetail({ onNext, onBack }: VerificationProps) {
-  const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const {
     control, getValues, handleSubmit, trigger,
   } = useFormContext<StudentFormValues>();
@@ -101,11 +101,11 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     onSuccess: () => {
       setIdMessage({ type: 'success', content: MESSAGES.USERID.AVAILABLE });
       setIsCorrectId();
-      logger.actionEventClick({
-        team: 'USER',
+      sessionLogger.actionSessionEvent({
         event_label: 'create_account',
         value: '아이디생성',
-        custom_session_id: '도훈',
+        event_category: 'click',
+        session_name: 'sign_up',
       });
     },
     onError: (err) => {
@@ -122,11 +122,11 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     onSuccess: () => {
       setNicknameMessage({ type: 'success', content: MESSAGES.NICKNAME.AVAILABLE });
       setIsCorrectNickname();
-      logger.actionEventClick({
-        team: 'USER',
+      sessionLogger.actionSessionEvent({
         event_label: 'create_account',
         value: '닉네임생성',
-        custom_session_id: '도훈',
+        event_category: 'click',
+        session_name: 'sign_up',
       });
     },
     onError: (err) => {
@@ -186,11 +186,11 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     checkEmail(completeEmail, {
       onSuccess: () => {
         handleSubmit(onSubmit)();
-        logger.actionEventClick({
-          team: 'USER',
+        sessionLogger.actionSessionEvent({
           event_label: 'sign_up_completed',
           value: '회원가입완료',
-          custom_session_id: '도훈',
+          event_category: 'click',
+          session_name: 'sign_up',
         });
       },
     });

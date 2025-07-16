@@ -17,7 +17,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import { useFormContext } from 'react-hook-form';
 import { SmsSendResponse } from 'api/auth/entity';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 
 interface UsePhoneVerificationProps {
   phoneNumber: string;
@@ -32,7 +32,7 @@ interface SmsSendCountData {
 }
 
 function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificationProps) {
-  const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const navigate = useNavigate();
   const { setValue } = useFormContext();
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
@@ -135,11 +135,11 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
       enableCodeVerified();
       setCorrect();
       if (step === 'signup') {
-        logger.actionEventClick({
-          team: 'USER',
+        sessionLogger.actionSessionEvent({
           event_label: 'identity_verification',
           value: '인증완료',
-          custom_session_id: '도훈',
+          event_category: 'click',
+          session_name: 'sign_up',
         });
       }
     },

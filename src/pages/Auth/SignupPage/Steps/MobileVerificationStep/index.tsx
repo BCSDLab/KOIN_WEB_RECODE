@@ -11,7 +11,7 @@ import { GENDER_OPTIONS, MESSAGES, REGEX } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
 import type { SmsSendResponse } from 'api/auth/entity';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
 import styles from './MobileVerification.module.scss';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
@@ -39,7 +39,7 @@ interface SmsSendCountData {
 }
 
 function MobileVerification({ onNext }: MobileVerificationProps) {
-  const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const { control, register } = useFormContext();
   const { isValid } = useFormState({ control });
   const name = useWatch({ control, name: 'name' });
@@ -95,11 +95,11 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       setVerificationMessage({ type: 'success', content: MESSAGES.VERIFICATION.CORRECT });
       enableVerified();
       setCorrect();
-      logger.actionEventClick({
-        team: 'USER',
+      sessionLogger.actionSessionEvent({
         event_label: 'identity_verification',
         value: '인증완료',
-        custom_session_id: '도훈',
+        event_category: 'click',
+        session_name: 'sign_up',
       });
     },
     onError: (err) => {
@@ -115,11 +115,11 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     mutationFn: checkPhone,
     onSuccess: () => {
       sendSMSToUser({ phone_number: phoneNumber });
-      logger.actionEventClick({
-        team: 'USER',
+      sessionLogger.actionSessionEvent({
         event_label: 'identity_verification',
         value: '인증번호 발송',
-        custom_session_id: '도훈',
+        event_category: 'click',
+        session_name: 'sign_up',
       });
     },
     onError: (err) => {
