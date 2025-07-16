@@ -2,10 +2,6 @@
 
 .form {
   &__item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
     width: 550px;
 
     @include media.media-breakpoint(mobile) {
@@ -13,16 +9,11 @@
     }
   }
 
-  &__item-title {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
   &__label {
     font-weight: 500;
     font-size: 22px;
+    text-align: left;
+    margin-bottom: 12px;
 
     @include media.media-breakpoint(mobile) {
       font-size: 16px;

@@ -10,7 +10,6 @@
 
   @include media.media-breakpoint(mobile) {
     padding: 16px 24px;
-    font-family: Pretendard, sans-serif;
   }
 }
 
@@ -62,7 +61,6 @@
   justify-content: space-between;
 
   @include media.media-breakpoint(mobile) {
-    display: flex;
     flex-direction: column;
     gap: 16px;
     padding: 0;
@@ -97,11 +95,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
 
-    > p {
-      font-size: 20px;
-      font-weight: 700;
-    }
+  &__separator {
+    font-size: 20px;
+    font-weight: 700;
   }
 
   &__label {
@@ -118,15 +116,6 @@
     display: flex;
     align-items: center;
     gap: 8px;
-  }
-
-  &__date-input {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    font-size: 16px;
-    line-height: 160%;
   }
 
   &__checkbox {
@@ -163,8 +152,6 @@
   @include media.media-breakpoint(mobile) {
     max-width: 120px;
     font-size: 16px;
-    line-height: 160%;
-    font-weight: 500;
   }
 }
 
