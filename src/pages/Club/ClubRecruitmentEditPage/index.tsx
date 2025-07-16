@@ -13,6 +13,11 @@ import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitme
 import usePutClubRecruitment from './hooks/usePutClubRecruitment';
 import styles from './ClubRecruitmentEditPage.module.scss';
 
+function splitKoreanDate(date: Date): [string, string] {
+  const [year, ...rest] = formatKoreanDate(date).split(' ');
+  return [year, rest.join(' ')];
+}
+
 export default function ClubRecruitmentEditPage() {
   const { id } = useParams<{ id: string }>();
   const isMobile = useMediaQuery();
@@ -44,13 +49,18 @@ export default function ClubRecruitmentEditPage() {
     await mutateAsync(payload);
   };
 
-  function splitKoreanDate(date: Date): [string, string] {
-    const [year, ...rest] = formatKoreanDate(date).split(' ');
-    return [year, rest.join(' ')];
-  }
-
   const [startYear, startRest] = splitKoreanDate(new Date(formData.start_date));
   const [endYear, endRest] = splitKoreanDate(new Date(formData.end_date));
+
+  const handleClickCancelButton = () => {
+    setModalType('editCancel');
+    openModal();
+  };
+
+  const handleClickEditButton = () => {
+    setModalType('edit');
+    openModal();
+  };
 
   return (
     <div className={styles.layout}>
@@ -59,10 +69,18 @@ export default function ClubRecruitmentEditPage() {
         <div className={styles.header}>
           <h1 className={styles.header__title}>모집 수정</h1>
           <div className={styles['header__button-container']}>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('editCancel'); openModal(); }}>
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickCancelButton}
+            >
               수정 취소
             </button>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('edit'); openModal(); }}>
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickEditButton}
+            >
               수정 완료
             </button>
           </div>
@@ -96,15 +114,13 @@ export default function ClubRecruitmentEditPage() {
                 {isMobile ? (
                   <>
                     <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
-                      <span>{startYear}</span>
-                      <br />
-                      <span>{startRest}</span>
+                      <div>{startYear}</div>
+                      <div>{startRest}</div>
                     </button>
-                    <p>~</p>
+                    <div className={styles.form__separator}>~</div>
                     <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
-                      <span>{endYear}</span>
-                      <br />
-                      <span>{endRest}</span>
+                      <div>{endYear}</div>
+                      <div>{endRest}</div>
                     </button>
                   </>
                 ) : (
@@ -118,7 +134,7 @@ export default function ClubRecruitmentEditPage() {
                         });
                       }}
                     />
-                    <p>~</p>
+                    <div className={styles.form__separator}>~</div>
                     <DatePicker
                       selectedDate={new Date(formData.end_date)}
                       onChange={(date) => {
@@ -154,20 +170,19 @@ export default function ClubRecruitmentEditPage() {
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('editCancel'); openModal(); }}
+                  onClick={handleClickCancelButton}
                 >
                   수정 취소
                 </button>
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('edit'); openModal(); }}
+                  onClick={handleClickEditButton}
                 >
                   수정 하기
                 </button>
               </div>
             </>
-
           )}
         </div>
       </div>

@@ -15,7 +15,12 @@ import DatePicker from 'components/ui/DatePicker';
 import usePutClubEvent from './hooks/usePutClubEvent';
 import styles from './ClubEventEditPage.module.scss';
 
-export default function NewClubEvent() {
+function splitKoreanDate(date: Date): [string, string] {
+  const [year, ...rest] = formatKoreanDate(date).split(' ');
+  return [year, rest.join(' ')];
+}
+
+export default function ClubEventEditPage() {
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const { eventId } = location.state;
@@ -71,13 +76,18 @@ export default function NewClubEvent() {
     });
   };
 
-  function splitKoreanDate(date: Date): [string, string] {
-    const [year, ...rest] = formatKoreanDate(date).split(' ');
-    return [year, rest.join(' ')];
-  }
-
   const [startYear, startRest] = splitKoreanDate(startDate);
   const [endYear, endRest] = splitKoreanDate(endDate);
+
+  const handleClickCancelButton = () => {
+    setModalType('editCancel');
+    openModal();
+  };
+
+  const handleClickEditButton = () => {
+    setModalType('edit');
+    openModal();
+  };
 
   return (
     <div className={styles.layout}>
@@ -86,10 +96,18 @@ export default function NewClubEvent() {
         <div className={styles.header}>
           <h1 className={styles.header__title}>행사 수정</h1>
           <div className={styles['header__button-container']}>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('editCancel'); openModal(); }}>
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickCancelButton}
+            >
               수정 취소
             </button>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('edit'); openModal(); }}>
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickEditButton}
+            >
               수정 완료
             </button>
           </div>
@@ -104,9 +122,7 @@ export default function NewClubEvent() {
           )}
           <div className={styles['form-left']}>
             <div className={styles.form__item}>
-              <div className={styles['form__item-title']}>
-                <div className={styles.form__label}>행사 이름</div>
-              </div>
+              <div className={styles.form__label}>행사 이름</div>
               <input
                 type="text"
                 value={formData.name}
@@ -117,47 +133,47 @@ export default function NewClubEvent() {
             </div>
 
             <div className={styles.form__item}>
-              <div className={styles['form__item-title']}>
-                <div className={styles.form__label}>행사 일시</div>
-              </div>
+              <div className={styles.form__label}>행사 일시</div>
               <div className={styles['form__button-container']}>
                 {isMobile ? (
                   <>
                     <div className={styles['picker-container']}>
-                      <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
-                        <span>{startYear}</span>
-                        <br />
-                        <span>{startRest}</span>
+                      <button
+                        type="button"
+                        onClick={openStartCalendar}
+                        className={styles['date-picker-button']}
+                      >
+                        <div>{startYear}</div>
+                        <div>{startRest}</div>
                       </button>
                       <button
                         type="button"
                         className={styles['time-picker-button']}
                         onClick={openStartTimePicker}
                       >
-                        <span>
+                        <div>
                           {startTime.hour.toString().padStart(2, '0')}
                           :
                           {startTime.minute.toString().padStart(2, '0')}
-                        </span>
+                        </div>
                       </button>
                     </div>
                     <div className={styles.form__separator}>~</div>
                     <div className={styles['picker-container']}>
                       <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
-                        <span>{endYear}</span>
-                        <br />
-                        <span>{endRest}</span>
+                        <div>{endYear}</div>
+                        <div>{endRest}</div>
                       </button>
                       <button
                         type="button"
                         className={styles['time-picker-button']}
                         onClick={openEndTimePicker}
                       >
-                        <span>
+                        <div>
                           {endTime.hour.toString().padStart(2, '0')}
                           :
                           {endTime.minute.toString().padStart(2, '0')}
-                        </span>
+                        </div>
                       </button>
                     </div>
                   </>
@@ -191,10 +207,14 @@ export default function NewClubEvent() {
               </div>
             </div>
             <div className={styles.form__item}>
-              <div className={styles['form__item-title']}>
-                <div className={styles.form__label}>행사 내용</div>
-              </div>
-              <input type="text" value={formData.introduce} className={styles.form__input} placeholder="행사 내용" onChange={(e) => setFormData({ ...formData, introduce: e.target.value })} />
+              <div className={styles.form__label}>행사 내용</div>
+              <input
+                type="text"
+                value={formData.introduce}
+                className={styles.form__input}
+                placeholder="행사 내용"
+                onChange={(e) => setFormData({ ...formData, introduce: e.target.value })}
+              />
             </div>
             {!isMobile && (
               <DetailDescription
@@ -220,20 +240,19 @@ export default function NewClubEvent() {
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('editCancel'); openModal(); }}
+                  onClick={handleClickCancelButton}
                 >
                   수정 취소
                 </button>
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('edit'); openModal(); }}
+                  onClick={handleClickEditButton}
                 >
                   수정 하기
                 </button>
               </div>
             </>
-
           )}
         </div>
       </div>
