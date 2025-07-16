@@ -17,10 +17,12 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import { useFormContext } from 'react-hook-form';
 import { SmsSendResponse } from 'api/auth/entity';
+import useLogger from 'utils/hooks/analytics/useLogger';
 
 interface UsePhoneVerificationProps {
   phoneNumber: string;
   onNext?: () => void;
+  step?: 'signup' | 'findId' | 'findPassword';
 }
 
 interface SmsSendCountData {
@@ -29,7 +31,8 @@ interface SmsSendCountData {
   current_count: number;
 }
 
-function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps) {
+function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificationProps) {
+  const logger = useLogger();
   const navigate = useNavigate();
   const { setValue } = useFormContext();
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
@@ -131,6 +134,14 @@ function usePhoneVerification({ phoneNumber, onNext }: UsePhoneVerificationProps
       enableVerified();
       enableCodeVerified();
       setCorrect();
+      if (step === 'signup') {
+        logger.actionEventClick({
+          team: 'USER',
+          event_label: 'identity_verification',
+          value: '인증완료',
+          custom_session_id: '도훈',
+        });
+      }
     },
     onError: (err) => {
       if (isKoinError(err)) {

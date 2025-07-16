@@ -71,6 +71,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:29.7.0"],\
             ["josa-js", "npm:0.0.2"],\
             ["lodash", "npm:4.17.21"],\
+            ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
             ["postcss", "npm:8.4.47"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:18.2.0"],\
@@ -8425,6 +8426,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:29.7.0"],\
             ["josa-js", "npm:0.0.2"],\
             ["lodash", "npm:4.17.21"],\
+            ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
             ["postcss", "npm:8.4.47"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:18.2.0"],\
@@ -8550,6 +8552,42 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["loose-envify", "npm:1.4.0"],\
             ["js-tokens", "npm:4.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["lottie-react", [\
+        ["npm:2.4.1", {\
+          "packageLocation": "./.yarn/cache/lottie-react-npm-2.4.1-91badf61e2-ac79931d98.zip/node_modules/lottie-react/",\
+          "packageDependencies": [\
+            ["lottie-react", "npm:2.4.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1", {\
+          "packageLocation": "./.yarn/__virtual__/lottie-react-virtual-8cd5d2f590/0/cache/lottie-react-npm-2.4.1-91badf61e2-ac79931d98.zip/node_modules/lottie-react/",\
+          "packageDependencies": [\
+            ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
+            ["@types/react", "npm:18.2.55"],\
+            ["@types/react-dom", "npm:18.2.19"],\
+            ["lottie-web", "npm:5.13.0"],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["lottie-web", [\
+        ["npm:5.13.0", {\
+          "packageLocation": "./.yarn/cache/lottie-web-npm-5.13.0-eada0c2e04-f634eddbfc.zip/node_modules/lottie-web/",\
+          "packageDependencies": [\
+            ["lottie-web", "npm:5.13.0"]\
           ],\
           "linkType": "HARD"\
         }]\
