@@ -1,5 +1,6 @@
 import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useDeleteRecruitment from 'pages/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import styles from './ClubRecruitment.module.scss';
 
 interface ClubRecruitmentProps {
@@ -13,6 +14,7 @@ export default function ClubRecruitment({
   handleClickAddButton,
 }: ClubRecruitmentProps) {
   const { clubRecruitmentData } = useClubRecruitment(clubId);
+  const { mutateAsync } = useDeleteRecruitment();
   const isMobile = useMediaQuery();
 
   return (
@@ -27,14 +29,14 @@ export default function ClubRecruitment({
           <button
             type="button"
             className={styles['edit-button--delete']}
-            onClick={() => {}}
+            onClick={() => mutateAsync()}
           >
             모집 삭제
           </button>
           <button
             type="button"
             className={styles['edit-button--edit']}
-            onClick={() => {}}
+            onClick={() => {}} // 수정 로직 추가
           >
             모집 수정
           </button>
