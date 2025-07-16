@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -21,6 +22,20 @@ export default function ClubRecruitment({
   const { clubRecruitmentData } = useClubRecruitment(clubId);
   const { mutateAsync } = useDeleteRecruitment();
 
+  useEffect(() => {
+    if (!id) {
+      navigate(ROUTES.Club());
+    }
+  }, [id, navigate]);
+
+  const handleClickDeleteButton = async () => {
+    await mutateAsync();
+  };
+
+  const handleClickEditButton = () => {
+    navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
+  };
+
   return (
     <div className={styles.layout}>
       {!(clubRecruitmentData.status === 'CLOSED') && (
@@ -33,14 +48,14 @@ export default function ClubRecruitment({
           <button
             type="button"
             className={styles['edit-button--delete']}
-            onClick={() => mutateAsync()}
+            onClick={handleClickDeleteButton}
           >
             모집 삭제
           </button>
           <button
             type="button"
             className={styles['edit-button--edit']}
-            onClick={() => navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }))}
+            onClick={handleClickEditButton}
           >
             모집 수정
           </button>

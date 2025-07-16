@@ -8,16 +8,30 @@ import styles from './ClubEventDetailView.module.scss';
 interface ClubEventDetailViewProps {
   clubId: number | string | undefined;
   eventId: number | string;
+  setEventId: (eventID: number) => void;
 }
 
 export default function ClubEventDetailView({
   clubId,
   eventId,
+  setEventId,
 }: ClubEventDetailViewProps) {
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
   const { clubEventDetail } = useClubEventDetail(clubId, eventId);
   const { mutateAsync } = useDeleteEvent();
+
+  const handleClickDeleteButton = async () => {
+    await mutateAsync(Number(eventId));
+    setEventId(-1);
+  };
+
+  const handleClickEditButton = () => {
+    navigate(
+      ROUTES.ClubEventEdit({ id: String(clubId), isLink: true }),
+      { state: { eventId } },
+    );
+  };
 
   return (
     <div className={styles['event-detail']}>
@@ -28,17 +42,14 @@ export default function ClubEventDetailView({
           <button
             type="button"
             className={styles['edit-button--delete']}
-            onClick={() => mutateAsync(Number(eventId))}
+            onClick={handleClickDeleteButton}
           >
             행사 삭제
           </button>
           <button
             type="button"
             className={styles['edit-button--edit']}
-            onClick={() => navigate(
-              ROUTES.ClubEventEdit({ id: String(clubId), isLink: true }),
-              { state: { eventId } },
-            )}
+            onClick={handleClickEditButton}
           >
             행사 수정
           </button>

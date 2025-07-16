@@ -7,14 +7,14 @@ import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
-export default function usePutClubRecruitment(clubId: number | undefined) {
+export default function usePutClubRecruitment(clubId: number) {
   const token = useTokenState();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const { mutateAsync } = useMutation({
     mutationFn: async (data: ClubRecruitmentRequest) => {
-      await putClubRecruitment(token, clubId!, data);
+      await putClubRecruitment(token, clubId, data);
     },
     onSuccess: () => {
       showToast('success', '동아리 모집 수정 요청이 완료되었습니다.');
