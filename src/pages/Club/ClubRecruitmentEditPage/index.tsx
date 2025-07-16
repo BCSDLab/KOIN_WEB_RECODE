@@ -18,6 +18,10 @@ function splitKoreanDate(date: Date): [string, string] {
   return [year, rest.join(' ')];
 }
 
+function getYyyyMmDd(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
 export default function ClubRecruitmentEditPage() {
   const { id } = useParams<{ id: string }>();
   const isMobile = useMediaQuery();
@@ -130,7 +134,7 @@ export default function ClubRecruitmentEditPage() {
                       onChange={(date) => {
                         setFormData({
                           ...formData,
-                          start_date: date.toISOString().slice(0, 10),
+                          start_date: getYyyyMmDd(date),
                         });
                       }}
                     />
@@ -140,7 +144,7 @@ export default function ClubRecruitmentEditPage() {
                       onChange={(date) => {
                         setFormData({
                           ...formData,
-                          end_date: date.toISOString().slice(0, 10),
+                          end_date: getYyyyMmDd(date),
                         });
                       }}
                     />
