@@ -13,7 +13,7 @@ export default function useDeleteEvent() {
   return useMutation({
     mutationFn: (eventId: number) => deleteClubEvent(token, Number(id), eventId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['clubEvent', 'clubEventDetail', 'ClubEventList', id] });
+      queryClient.invalidateQueries({ queryKey: ['clubEventList', id] });
       showToast('success', '행사 삭제되었습니다.');
     },
     onError: (error) => {
