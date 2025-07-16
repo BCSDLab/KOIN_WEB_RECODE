@@ -5,12 +5,16 @@ import { useState } from 'react';
 import DownArrow from 'assets/svg/Club/event-filter-down-arrow.svg';
 import UpArrow from 'assets/svg/Club/event-filter-up-arrow.svg';
 import ClubEventDetailView from 'pages/Club/ClubDetailPage/components/ClubEventDetailView';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ClubEventList.module.scss';
 
 interface ClubEventListProps {
   clubId: number | string | undefined;
   isManager: boolean;
   handleClickAddButton: () => void;
+  eventId: number | string;
+  setEventId: (id: number | string) => void;
+  clubName: string;
 }
 
 const statusOptions = [
@@ -24,12 +28,15 @@ export default function ClubEventList({
   clubId,
   isManager,
   handleClickAddButton,
+  eventId,
+  setEventId,
+  clubName,
 }: ClubEventListProps) {
   const [selectedStatus, setSelectedStatus] = useState<'RECENT' | 'UPCOMING' | 'ONGOING' | 'ENDED'>('RECENT');
   const { clubEventList } = useClubEventList(clubId, selectedStatus);
   const isMobile = useMediaQuery();
-  const [eventId, setEventId] = useState<string | number>(-1);
   const [isOpen, setIsOpen] = useState(false);
+  const logger = useLogger();
 
   const getStatusLabel = (value: string) => {
     const option = statusOptions.find((opt) => opt.value === value);
@@ -37,6 +44,11 @@ export default function ClubEventList({
   };
 
   const handleStatusSelect = (value: 'RECENT' | 'UPCOMING' | 'ONGOING' | 'ENDED') => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_filter',
+      value: `${getStatusLabel(value)}`,
+    });
     setSelectedStatus(value);
     setIsOpen(false);
   };
@@ -90,9 +102,9 @@ export default function ClubEventList({
       )}
       <div className={styles['club-event-list']}>
         {eventId === -1 ? clubEventList.map((event) => (
-          <ClubEventCard key={event.id} event={event} setEventId={setEventId} />
+          <ClubEventCard key={event.id} event={event} setEventId={setEventId} clubName={clubName} />
         ))
-          : <ClubEventDetailView clubId={clubId} eventId={eventId} />}
+          : <ClubEventDetailView clubId={clubId} eventId={eventId} isManager={isManager} />}
       </div>
     </div>
   );
