@@ -65,12 +65,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
 
   const onClickSendVerificationButton = () => {
     checkVerificationSmsVerify({ phone_number: phoneNumber, verification_code: verificationCode });
-    logger.actionEventClick({
-      team: 'USER',
-      event_label: 'identity_verification',
-      value: '인증완료',
-      custom_session_id: '도훈',
-    });
   };
 
   const isFormFilled = name && !errors.name
