@@ -11,7 +11,7 @@ import BackIcon from 'assets/svg/arrow-back.svg';
 import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
 import ROUTES from 'static/routes';
 import { useNavigate } from 'react-router-dom';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import PCCustomInput from '../../components/PCCustomInput';
 import styles from './VerificationStep.module.scss';
 
@@ -34,7 +34,7 @@ export const validateName = (value: string) => {
 };
 
 function Verification({ onNext, onBack, setUserType }: VerificationProps) {
-  const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const navigate = useNavigate();
   const { control, register, setValue } = useFormContext();
   const name = useWatch({ control, name: 'name' });
@@ -92,22 +92,22 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const handleStudentClick = () => {
     setUserType('학생');
     onNext();
-    logger.actionEventClick({
-      team: 'USER',
+    sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: '학생',
-      custom_session_id: '도훈',
+      event_category: 'click',
+      session_name: 'sign_up',
     });
   };
 
   const handleExternalClick = () => {
     setUserType('외부인');
     onNext();
-    logger.actionEventClick({
-      team: 'USER',
+    sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: '외부인',
-      custom_session_id: '도훈',
+      event_category: 'click',
+      session_name: 'sign_up',
     });
   };
 
@@ -240,11 +240,11 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                     onClick={() => {
                       checkPhoneNumber(phoneNumber);
                       setButtonText('인증번호 재발송');
-                      logger.actionEventClick({
-                        team: 'USER',
+                      sessionLogger.actionSessionEvent({
                         event_label: 'identity_verification',
                         value: '인증번호 발송',
-                        custom_session_id: '도훈',
+                        event_category: 'click',
+                        session_name: 'sign_up',
                       });
                     }}
                     className={styles['check-button']}

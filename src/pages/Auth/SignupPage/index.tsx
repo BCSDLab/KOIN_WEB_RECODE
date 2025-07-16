@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import ProgressBar from './components/ProgressBar';
 import MobileVerification from './Steps/MobileVerificationStep';
 import Terms from './Steps/Terms';
@@ -27,7 +27,7 @@ const mobileSteps: StepTitle[] = ['약관동의', '본인인증', '회원유형�
 const desktopSteps: StepTitle[] = ['약관동의', '본인인증', '정보입력', '완료'];
 
 function SignupPage() {
-  const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const isMobile = useMediaQuery();
   const activeSteps = isMobile ? mobileSteps : desktopSteps;
 
@@ -40,12 +40,11 @@ function SignupPage() {
 
   const onClickStudent = (user: UserType) => {
     setUserType(user);
-    logger.actionEventClick({
-      team: 'USER',
+    sessionLogger.actionSessionEvent({
       event_label: 'create_account',
       value: user,
       event_category: 'click',
-      custom_session_id: '도훈',
+      session_name: 'sign_up',
     });
   };
 
