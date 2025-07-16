@@ -7,6 +7,7 @@ import {
 } from 'api/auth/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useMutation } from '@tanstack/react-query';
+import useLogger from 'utils/hooks/analytics/useLogger';
 
 interface UserUpdateOption {
   onSuccess?: () => void;
@@ -20,6 +21,7 @@ const useUserInfoUpdate = <T = unknown>(
   options: UserUpdateOption = {},
 ) => {
   const token = useTokenState();
+  const logger = useLogger();
   const { status, mutate } = useMutation<
   T,
   AxiosError<{ message?: string }>,
@@ -32,12 +34,24 @@ const useUserInfoUpdate = <T = unknown>(
     ),
     onSuccess: () => {
       options.onSuccess?.();
+      logger.actionEventClick({
+        event_label: 'user_info',
+        value: '정보수정 완료',
+        event_category: 'click',
+        team: 'USER',
+      });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       if (error.message) {
         showToast('error', error.message || '에러가 발생했습니다.');
       }
       options.onError?.();
+      logger.actionEventClick({
+        event_label: 'user_info',
+        value: '정보수정 실패',
+        event_category: 'click',
+        team: 'USER',
+      });
     },
   });
 
