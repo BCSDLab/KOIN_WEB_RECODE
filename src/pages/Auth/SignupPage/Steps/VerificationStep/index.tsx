@@ -4,7 +4,7 @@ import {
   Controller, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
 import {
-  UserType, GENDER_OPTIONS, REGEX, MESSAGES, INQUIRY_URL,
+  type UserType, GENDER_OPTIONS, MESSAGES, INQUIRY_URL,
 } from 'static/auth';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import PCCustomInput from '../../components/PCCustomInput';
 import styles from './VerificationStep.module.scss';
+import { validateName } from '../../hooks/validators';
 
 interface VerificationProps {
   onNext: () => void;
@@ -21,26 +22,16 @@ interface VerificationProps {
   setUserType: (type: UserType) => void;
 }
 
-export const validateName = (value: string) => {
-  if (/^[가-힣]+$/.test(value)) {
-    return REGEX.NAME_KR.test(value) ? true : MESSAGES.NAME.FORMAT_KR;
-  }
-
-  if (/^[a-zA-Z\s]+$/.test(value)) {
-    return REGEX.NAME_EN.test(value) ? true : MESSAGES.NAME.FORMAT_EN;
-  }
-
-  return MESSAGES.NAME.INVALID;
-};
-
 function Verification({ onNext, onBack, setUserType }: VerificationProps) {
   const logger = useLogger();
   const navigate = useNavigate();
   const { control, register, setValue } = useFormContext();
+
   const name = useWatch({ control, name: 'name' });
   const gender = useWatch({ control, name: 'gender' });
   const phoneNumber = useWatch({ control, name: 'phone_number' });
   const verificationCode = useWatch({ control, name: 'verification_code' });
+
   const isCodeCorrect = useWatch({ control, name: 'isCorrect' });
   const verificationMessage = useWatch({ control, name: 'verificationMessage' });
   const phoneMessage = useWatch({ control, name: 'phoneMessage' });
@@ -89,24 +80,13 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     setValue('verification_code', '');
   };
 
-  const handleStudentClick = () => {
-    setUserType('학생');
+  const UserTypeClick = (user: UserType) => {
+    setUserType(user);
     onNext();
     logger.actionEventClick({
       team: 'USER',
       event_label: 'create_account',
-      value: '학생',
-      custom_session_id: '도훈',
-    });
-  };
-
-  const handleExternalClick = () => {
-    setUserType('외부인');
-    onNext();
-    logger.actionEventClick({
-      team: 'USER',
-      event_label: 'create_account',
-      value: '외부인',
+      value: user,
       custom_session_id: '도훈',
     });
   };
@@ -306,7 +286,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
       <div className={styles['button-wrapper']}>
         <button
           type="button"
-          onClick={handleStudentClick}
+          onClick={() => UserTypeClick('학생')}
           className={cn({
             [styles['button-wrapper__next-button-student']]: true,
             [styles['button-wrapper__next-button-student--active']]: isFormFilled,
@@ -318,7 +298,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
 
         <button
           type="button"
-          onClick={handleExternalClick}
+          onClick={() => UserTypeClick('외부인')}
           className={cn({
             [styles['button-wrapper__next-button-external']]: true,
             [styles['button-wrapper__next-button-external--active']]: isFormFilled,

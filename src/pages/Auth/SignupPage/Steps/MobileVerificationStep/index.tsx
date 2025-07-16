@@ -7,7 +7,7 @@ import {
 import { checkPhone, smsSend, smsVerify } from 'api/auth';
 import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
-import { GENDER_OPTIONS, MESSAGES, REGEX } from 'static/auth';
+import { GENDER_OPTIONS, MESSAGES } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
 import type { SmsSendResponse } from 'api/auth/entity';
@@ -15,22 +15,11 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useCountdownTimer from '../../hooks/useCountdownTimer';
 import styles from './MobileVerification.module.scss';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
+import { validateName } from '../../hooks/validators';
 
 interface MobileVerificationProps {
   onNext: () => void;
 }
-
-export const validateName = (value: string) => {
-  if (/^[가-힣]+$/.test(value)) {
-    return REGEX.NAME_KR.test(value) ? true : MESSAGES.NAME.FORMAT_KR;
-  }
-
-  if (/^[a-zA-Z\s]+$/.test(value)) {
-    return REGEX.NAME_EN.test(value) ? true : MESSAGES.NAME.FORMAT_EN;
-  }
-
-  return MESSAGES.NAME.INVALID;
-};
 
 interface SmsSendCountData {
   total_count: number;
@@ -40,12 +29,14 @@ interface SmsSendCountData {
 
 function MobileVerification({ onNext }: MobileVerificationProps) {
   const logger = useLogger();
-  const { control, register } = useFormContext();
+  const { control, register, setValue } = useFormContext();
   const { isValid } = useFormState({ control });
+
   const name = useWatch({ control, name: 'name' });
   const gender = useWatch({ control, name: 'gender' });
   const phoneNumber = useWatch({ control, name: 'phone_number' });
   const verificationCode = useWatch({ control, name: 'verification_code' });
+  const step = useWatch({ control, name: 'step' });
 
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
@@ -140,6 +131,11 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
 
   const isNameAndGenderFilled = name?.trim() && gender?.length > 0;
 
+  const onClickNextStep = () => {
+    onNext();
+    setValue('step', '본인인증');
+  };
+
   useEffect(() => {
     disableButton();
     stopTimer();
@@ -153,6 +149,12 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       setVerificationMessage({ type: 'default', content: MESSAGES.VERIFICATION.DEFAULT });
     }
   }, [timerValue]);
+
+  useEffect(() => {
+    if (step === '본인인증' && '회원유형선택' && '정보입력' && '완료') {
+      showVerification();
+    }
+  }, [step]);
 
   return (
     <div className={styles.container}>
@@ -277,7 +279,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
 
       <button
         type="button"
-        onClick={onNext}
+        onClick={onClickNextStep}
         className={styles['next-button']}
         disabled={!isValid || !isCodeCorrect}
       >

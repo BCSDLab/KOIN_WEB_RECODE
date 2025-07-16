@@ -7,6 +7,7 @@ import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import showToast from 'utils/ts/showToast';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import type { UserType } from 'static/auth';
 import ProgressBar from './components/ProgressBar';
 import MobileVerification from './Steps/MobileVerificationStep';
 import Terms from './Steps/Terms';
@@ -21,8 +22,6 @@ import ExternalDetail from './Steps/ExternalDetailStep';
 import CompleteStep from './Steps/CompleteStep';
 
 type StepTitle = '약관동의' | '본인인증' | '회원유형선택' | '정보입력' | '완료';
-type UserType = '학생' | '외부인';
-
 const mobileSteps: StepTitle[] = ['약관동의', '본인인증', '회원유형선택', '정보입력', '완료'];
 const desktopSteps: StepTitle[] = ['약관동의', '본인인증', '정보입력', '완료'];
 
@@ -70,6 +69,7 @@ function SignupPage() {
       verificationMessage: null,
       phoneMessage: null,
       isDisabled: false,
+      step: '약관동의',
     },
   });
 
@@ -141,7 +141,6 @@ function SignupPage() {
           <Step name="회원유형선택">
             <MobileUserTypeStep
               onSelectType={(type: UserType) => {
-                // setUserType(type);
                 onClickStudent(type);
                 nextStep('정보입력');
               }}
