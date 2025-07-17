@@ -11,6 +11,7 @@ import type {
   ClubQnAData,
   ClubRecruitmentRequest,
   ClubRecruitmentResponse,
+  ClubSearchResponse,
   DeleteClubLikeResonse,
   DeleteClubQnAResponse,
   HotClubResponse,
@@ -59,6 +60,22 @@ export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
       isRecruiting: isRecruiting ?? false,
       ...(query ? { query } : {}),
     };
+  }
+}
+
+export class GetRelatedSearchClub<R extends ClubSearchResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/clubs/search/related';
+
+  response!: R;
+
+  params: {
+    query: string;
+  };
+
+  constructor(query: string) {
+    this.params = { query };
   }
 }
 

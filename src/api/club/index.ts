@@ -11,6 +11,7 @@ import {
   GetClubEventList,
   GetClubQnA,
   GetRecruitmentClub,
+  GetRelatedSearchClub,
   HotClub,
   PostClub,
   PostClubEvent,
@@ -27,6 +28,8 @@ import {
 export const getClubCategories = APIClient.of(ClubCategories);
 
 export const getClubList = APIClient.of(ClubList);
+
+export const searchClub = APIClient.of(GetRelatedSearchClub);
 
 export const getHotClub = APIClient.of(HotClub);
 

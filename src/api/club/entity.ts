@@ -9,6 +9,14 @@ export interface ClubCategoriesResponse extends APIResponse {
   club_categories: ClubCategory[];
 }
 
+export interface ClubSearchItem {
+  club_id: number;
+  club_name: string;
+}
+
+export interface ClubSearchResponse extends APIResponse {
+  keywords: ClubSearchItem[];
+}
 export interface Club {
   id: number;
   name: string;
