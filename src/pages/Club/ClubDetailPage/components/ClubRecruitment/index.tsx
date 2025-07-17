@@ -24,7 +24,7 @@ export default function ClubRecruitment({
         <h2 className={styles['recruitment-info__title']}>
           모집기한
         </h2>
-        {isMobile && (
+        {isMobile && isManager && (
         <div className={styles['edit-button__container']}>
           <button
             type="button"
