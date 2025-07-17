@@ -39,10 +39,26 @@ export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(public authorization?: string, public categoryId?: number, public sortType?: string) {
-    this.path = '/clubs'
-    + `${(categoryId && `?categoryId=${categoryId}`) || ''}`
-    + `${(sortType && `${categoryId ? '&' : '?'}sortType=${sortType}`) || ''}`;
+  params: {
+    categoryId?: number;
+    sortType?: string;
+    isRecruiting: boolean;
+    query?: string;
+  };
+
+  constructor(
+    public authorization?: string,
+    public categoryId?: number,
+    public sortType?: string,
+    public isRecruiting?: boolean,
+    public query?: string,
+  ) {
+    this.params = {
+      ...(categoryId !== undefined ? { categoryId } : {}),
+      ...(sortType ? { sortType } : {}),
+      isRecruiting: isRecruiting ?? false,
+      ...(query ? { query } : {}),
+    };
   }
 }
 
