@@ -1,6 +1,11 @@
-import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useDeleteRecruitment from 'pages/Club/ClubDetailPage/hooks/useDeleteRecruitment';
+import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
 import styles from './ClubRecruitment.module.scss';
 
 interface ClubRecruitmentProps {
@@ -13,9 +18,30 @@ export default function ClubRecruitment({
   isManager,
   handleClickAddButton,
 }: ClubRecruitmentProps) {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery();
   const { clubRecruitmentData } = useClubRecruitment(clubId);
   const { mutateAsync } = useDeleteRecruitment();
-  const isMobile = useMediaQuery();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
+  useEffect(() => {
+    if (!id) {
+      navigate(ROUTES.Club());
+    }
+  }, [id, navigate]);
+
+  const handleDeleteRecruitment = async () => {
+    await mutateAsync();
+  };
+
+  const handleClickDeleteButton = async () => {
+    openModal();
+  };
+
+  const handleClickEditButton = () => {
+    navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
+  };
 
   return (
     <div className={styles.layout}>
@@ -29,14 +55,14 @@ export default function ClubRecruitment({
           <button
             type="button"
             className={styles['edit-button--delete']}
-            onClick={() => mutateAsync()}
+            onClick={handleClickDeleteButton}
           >
             모집 삭제
           </button>
           <button
             type="button"
             className={styles['edit-button--edit']}
-            onClick={() => {}} // 수정 로직 추가
+            onClick={handleClickEditButton}
           >
             모집 수정
           </button>
@@ -89,6 +115,13 @@ export default function ClubRecruitment({
             </div>
           </>
         )}
+      {isModalOpen && (
+        <ConfirmModal
+          type="recruitmentDelete"
+          closeModal={closeModal}
+          onSubmit={handleDeleteRecruitment}
+        />
+      )}
     </div>
   );
 }

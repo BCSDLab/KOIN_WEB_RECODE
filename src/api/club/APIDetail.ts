@@ -322,6 +322,25 @@ export class PostClubEvent<R extends {}> implements APIRequest<R> {
   }
 }
 
+export class PutClubEvent<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+    public eventId: number,
+    public data: ClubEventRequest,
+  ) {
+    this.path = `/clubs/${clubId}/event/${eventId}`;
+  }
+}
+
 export class DeleteClubEvent<R extends {}> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 

@@ -8,9 +8,7 @@ interface DetailDescriptionProps {
 export default function DetailDescription({ value, onChange }: DetailDescriptionProps) {
   return (
     <div className={styles.form__item}>
-      <label htmlFor="content" className={styles['form__item-title']}>
-        <span className={styles.form__label}>상세 내용</span>
-      </label>
+      <div className={styles.form__label}>상세 내용</div>
       <textarea
         id="content"
         className={styles.form__textarea}

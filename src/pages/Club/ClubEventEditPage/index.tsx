@@ -1,25 +1,34 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { ClubEventRequest } from 'api/club/entity';
+import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import DetailDescription from 'pages/Club/NewClubRecruitment/components/DetailDescription';
 import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
 import DatePickerModal from 'pages/Club/NewClubRecruitment/components/DatePickerModal';
+import ImagesUploadSlider from 'pages/Club/NewClubEvent/components/ImagesUploadSlider';
+import TimeSelector from 'pages/Club/NewClubEvent/components/TimeSelector';
+import TimePicker from 'pages/Club/NewClubEvent/components/TimePicker';
 import DatePicker from 'components/ui/DatePicker';
-import ImagesUploadSlider from './components/ImagesUploadSlider';
-import TimeSelector from './components/TimeSelector';
-import TimePicker from './components/TimePicker';
-import usePostNewEvent from './hooks/usePostNewEvent';
-import styles from './NewClubEvent.module.scss';
+import usePutClubEvent from './hooks/usePutClubEvent';
+import styles from './ClubEventEditPage.module.scss';
 
-export default function NewClubEvent() {
+function splitKoreanDate(date: Date): [string, string] {
+  const [year, ...rest] = formatKoreanDate(date).split(' ');
+  return [year, rest.join(' ')];
+}
+
+export default function ClubEventEditPage() {
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
-  const { mutateAsync } = usePostNewEvent(Number(id));
+  const { eventId } = location.state;
+  const { clubEventDetail } = useClubEventDetail(id, eventId);
+  const { mutateAsync } = usePutClubEvent(Number(id));
   const isMobile = useMediaQuery();
 
-  const [modalType, setModalType] = useState<'confirm' | 'cancel'>('confirm');
+  const [modalType, setModalType] = useState<'edit' | 'editCancel'>('edit');
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
@@ -32,45 +41,74 @@ export default function NewClubEvent() {
   const [endTime, setEndTime] = useState({ hour: 0, minute: 0 });
 
   const [formData, setFormData] = useState<ClubEventRequest>({
-    name: '',
-    image_urls: [],
-    start_date: '',
-    end_date: '',
-    introduce: '',
-    content: '',
+    name: clubEventDetail.name,
+    image_urls: clubEventDetail.image_urls,
+    introduce: clubEventDetail.introduce,
+    content: clubEventDetail.content,
+    start_date: clubEventDetail.start_date,
+    end_date: clubEventDetail.end_date,
   });
+
+  useEffect(() => {
+    if (!clubEventDetail) return;
+
+    const start = new Date(clubEventDetail.start_date);
+    const end = new Date(clubEventDetail.end_date);
+
+    setStartDate(start);
+    setStartTime({ hour: start.getHours(), minute: start.getMinutes() });
+
+    setEndDate(end);
+    setEndTime({ hour: end.getHours(), minute: end.getMinutes() });
+  }, [clubEventDetail]);
 
   const handleSubmit = async () => {
     const submitStartDate = formatISODateTime(startDate, startTime.hour, startTime.minute);
     const submitEndDate = formatISODateTime(endDate, endTime.hour, endTime.minute);
 
     await mutateAsync({
-      ...formData,
-      start_date: submitStartDate,
-      end_date: submitEndDate,
+      eventId,
+      data: {
+        ...formData,
+        start_date: submitStartDate,
+        end_date: submitEndDate,
+      },
     });
   };
 
-  function splitKoreanDate(date: Date): [string, string] {
-    const [year, ...rest] = formatKoreanDate(date).split(' ');
-    return [year, rest.join(' ')];
-  }
-
   const [startYear, startRest] = splitKoreanDate(startDate);
   const [endYear, endRest] = splitKoreanDate(endDate);
+
+  const handleClickCancelButton = () => {
+    setModalType('editCancel');
+    openModal();
+  };
+
+  const handleClickEditButton = () => {
+    setModalType('edit');
+    openModal();
+  };
 
   return (
     <div className={styles.layout}>
       <div className={styles.container}>
         {!isMobile && (
         <div className={styles.header}>
-          <h1 className={styles.header__title}>행사 생성</h1>
+          <h1 className={styles.header__title}>행사 수정</h1>
           <div className={styles['header__button-container']}>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('cancel'); openModal(); }}>
-              생성 취소
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickCancelButton}
+            >
+              수정 취소
             </button>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('confirm'); openModal(); }}>
-              생성 완료
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickEditButton}
+            >
+              수정 완료
             </button>
           </div>
         </div>
@@ -84,21 +122,27 @@ export default function NewClubEvent() {
           )}
           <div className={styles['form-left']}>
             <div className={styles.form__item}>
-              <div className={styles['form__item-title']}>
-                <div className={styles.form__label}>행사 이름</div>
-              </div>
-              <input type="text" className={styles.form__input} placeholder="행사 이름" onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+              <div className={styles.form__label}>행사 이름</div>
+              <input
+                type="text"
+                value={formData.name}
+                className={styles.form__input}
+                placeholder="행사 이름"
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
             </div>
 
             <div className={styles.form__item}>
-              <div className={styles['form__item-title']}>
-                <div className={styles.form__label}>행사 일시</div>
-              </div>
+              <div className={styles.form__label}>행사 일시</div>
               <div className={styles['form__button-container']}>
                 {isMobile ? (
                   <>
                     <div className={styles['picker-container']}>
-                      <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
+                      <button
+                        type="button"
+                        onClick={openStartCalendar}
+                        className={styles['date-picker-button']}
+                      >
                         <div>{startYear}</div>
                         <div>{startRest}</div>
                       </button>
@@ -163,10 +207,14 @@ export default function NewClubEvent() {
               </div>
             </div>
             <div className={styles.form__item}>
-              <div className={styles['form__item-title']}>
-                <div className={styles.form__label}>행사 내용</div>
-              </div>
-              <input type="text" className={styles.form__input} placeholder="행사 내용" onChange={(e) => setFormData({ ...formData, introduce: e.target.value })} />
+              <div className={styles.form__label}>행사 내용</div>
+              <input
+                type="text"
+                value={formData.introduce}
+                className={styles.form__input}
+                placeholder="행사 내용"
+                onChange={(e) => setFormData({ ...formData, introduce: e.target.value })}
+              />
             </div>
             {!isMobile && (
               <DetailDescription
@@ -192,20 +240,19 @@ export default function NewClubEvent() {
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('cancel'); openModal(); }}
+                  onClick={handleClickCancelButton}
                 >
-                  생성 취소
+                  수정 취소
                 </button>
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('confirm'); openModal(); }}
+                  onClick={handleClickEditButton}
                 >
-                  생성 하기
+                  수정 하기
                 </button>
               </div>
             </>
-
           )}
         </div>
       </div>

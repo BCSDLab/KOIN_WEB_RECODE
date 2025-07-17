@@ -5,30 +5,42 @@ import { formatKoreanDate } from 'utils/ts/calendar';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import DatePicker from 'components/ui/DatePicker';
-import ClubImageUploader from './components/ImageUploader';
-import DetailDescription from './components/DetailDescription';
-import DatePickerModal from './components/DatePickerModal';
-import ConfirmModal from './components/ConfirmModal';
-import usePostNewRecruitment from './hooks/usePostNewRecruitment';
-import styles from './NewClubRecruitment.module.scss';
+import DetailDescription from 'pages/Club/NewClubRecruitment/components/DetailDescription';
+import ClubImageUploader from 'pages/Club/NewClubRecruitment/components/ImageUploader';
+import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
+import DatePickerModal from 'pages/Club/NewClubRecruitment/components/DatePickerModal';
+import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
+import usePutClubRecruitment from './hooks/usePutClubRecruitment';
+import styles from './ClubRecruitmentEditPage.module.scss';
 
-export default function NewClubRecruitment() {
+function splitKoreanDate(date: Date): [string, string] {
+  const [year, ...rest] = formatKoreanDate(date).split(' ');
+  return [year, rest.join(' ')];
+}
+
+function getYyyyMmDd(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+const TODAY = getYyyyMmDd(new Date());
+
+export default function ClubRecruitmentEditPage() {
   const { id } = useParams<{ id: string }>();
-  const { mutateAsync } = usePostNewRecruitment(Number(id));
   const isMobile = useMediaQuery();
+  const { clubRecruitmentData } = useClubRecruitment(Number(id));
+  const { mutateAsync } = usePutClubRecruitment(Number(id));
 
-  const [modalType, setModalType] = useState<'confirm' | 'cancel'>('confirm');
+  const [modalType, setModalType] = useState<'edit' | 'editCancel'>('edit');
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
 
-  const todayStr = new Date().toISOString().slice(0, 10);
   const [formData, setFormData] = useState<ClubRecruitment>({
-    start_date: todayStr,
-    end_date: todayStr,
-    is_always_recruiting: false,
-    image_url: '',
-    content: '',
+    start_date: clubRecruitmentData.start_date ?? TODAY,
+    end_date: clubRecruitmentData.end_date ?? TODAY,
+    is_always_recruiting: clubRecruitmentData.status === 'ALWAYS',
+    image_url: clubRecruitmentData.image_url,
+    content: clubRecruitmentData.content,
   });
 
   const handleSubmit = async () => {
@@ -42,26 +54,39 @@ export default function NewClubRecruitment() {
     await mutateAsync(payload);
   };
 
-  function splitKoreanDate(date: Date): [string, string] {
-    const [year, ...rest] = formatKoreanDate(date).split(' ');
-    return [year, rest.join(' ')];
-  }
-
   const [startYear, startRest] = splitKoreanDate(new Date(formData.start_date));
   const [endYear, endRest] = splitKoreanDate(new Date(formData.end_date));
+
+  const handleClickCancelButton = () => {
+    setModalType('editCancel');
+    openModal();
+  };
+
+  const handleClickEditButton = () => {
+    setModalType('edit');
+    openModal();
+  };
 
   return (
     <div className={styles.layout}>
       <div className={styles.container}>
         {!isMobile && (
         <div className={styles.header}>
-          <h1 className={styles.header__title}>모집 생성</h1>
+          <h1 className={styles.header__title}>모집 수정</h1>
           <div className={styles['header__button-container']}>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('cancel'); openModal(); }}>
-              생성 취소
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickCancelButton}
+            >
+              수정 취소
             </button>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('confirm'); openModal(); }}>
-              생성 완료
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickEditButton}
+            >
+              수정 완료
             </button>
           </div>
         </div>
@@ -110,7 +135,7 @@ export default function NewClubRecruitment() {
                       onChange={(date) => {
                         setFormData({
                           ...formData,
-                          start_date: date.toISOString().slice(0, 10),
+                          start_date: getYyyyMmDd(date),
                         });
                       }}
                     />
@@ -120,7 +145,7 @@ export default function NewClubRecruitment() {
                       onChange={(date) => {
                         setFormData({
                           ...formData,
-                          end_date: date.toISOString().slice(0, 10),
+                          end_date: getYyyyMmDd(date),
                         });
                       }}
                     />
@@ -150,20 +175,19 @@ export default function NewClubRecruitment() {
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('cancel'); openModal(); }}
+                  onClick={handleClickCancelButton}
                 >
-                  생성 취소
+                  수정 취소
                 </button>
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('confirm'); openModal(); }}
+                  onClick={handleClickEditButton}
                 >
-                  생성 하기
+                  수정 하기
                 </button>
               </div>
             </>
-
           )}
         </div>
       </div>
@@ -181,7 +205,7 @@ export default function NewClubRecruitment() {
           onChange={(date) => {
             setFormData({
               ...formData,
-              start_date: date.toISOString().slice(0, 10),
+              start_date: getYyyyMmDd(date),
             });
           }}
           onClose={closeStartCalendar}
@@ -193,7 +217,7 @@ export default function NewClubRecruitment() {
           onChange={(date) => {
             setFormData({
               ...formData,
-              end_date: date.toISOString().slice(0, 10),
+              end_date: getYyyyMmDd(date),
             });
           }}
           onClose={closeEndCalendar}

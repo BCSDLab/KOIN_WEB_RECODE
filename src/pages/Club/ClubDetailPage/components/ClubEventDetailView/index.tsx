@@ -1,25 +1,54 @@
-import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { cn } from '@bcsdlab/utils';
 import { useSwipeable } from 'react-swipeable';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import PreImageIcon from 'assets/svg/Club/pre-image-icon.svg';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
+import useDeleteEvent from 'pages/Club/ClubDetailPage/hooks/useDeleteEvent';
+import ROUTES from 'static/routes';
 import NextImageIcon from 'assets/svg/Club/next-image-icon.svg';
-import { cn } from '@bcsdlab/utils';
+import PreImageIcon from 'assets/svg/Club/pre-image-icon.svg';
+import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
 import styles from './ClubEventDetailView.module.scss';
 
 interface ClubEventDetailViewProps {
   clubId: number | string | undefined;
   eventId: number | string;
+  setEventId: (eventID: number) => void;
   isManager: boolean;
 }
 
 export default function ClubEventDetailView({
   clubId,
   eventId,
+  setEventId,
   isManager,
 }: ClubEventDetailViewProps) {
-  const { clubEventDetail } = useClubEventDetail(clubId, eventId);
+  const navigate = useNavigate();
   const isMobile = useMediaQuery();
+  const { clubEventDetail } = useClubEventDetail(clubId, eventId);
+  const { mutateAsync } = useDeleteEvent();
+
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
+  const handleEventDelete = async () => {
+    await mutateAsync(Number(eventId));
+    setEventId(-1);
+    closeModal();
+  };
+
+  const handleClickDeleteButton = async () => {
+    openModal();
+  };
+
+  const handleClickEditButton = () => {
+    navigate(
+      ROUTES.ClubEventEdit({ id: String(clubId), isLink: true }),
+      { state: { eventId } },
+    );
+  };
+
   const [selectImage, setSelectImage] = useState(0);
 
   const handlePrevButtonClick = () => {
@@ -45,14 +74,14 @@ export default function ClubEventDetailView({
           <button
             type="button"
             className={styles['edit-button--delete']}
-            onClick={() => {}}
+            onClick={handleClickDeleteButton}
           >
             행사 삭제
           </button>
           <button
             type="button"
             className={styles['edit-button--edit']}
-            onClick={() => {}}
+            onClick={handleClickEditButton}
           >
             행사 수정
           </button>
@@ -147,6 +176,14 @@ export default function ClubEventDetailView({
         {' '}
         {clubEventDetail.content}
       </div>
+      {isModalOpen && (
+        <ConfirmModal
+          type="eventDelete"
+          closeModal={closeModal}
+          onSubmit={handleEventDelete}
+        />
+      )}
     </div>
+
   );
 }

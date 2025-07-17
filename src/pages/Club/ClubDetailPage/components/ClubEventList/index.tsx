@@ -102,9 +102,21 @@ export default function ClubEventList({
       )}
       <div className={styles['club-event-list']}>
         {eventId === -1 ? clubEventList.map((event) => (
-          <ClubEventCard key={event.id} event={event} setEventId={setEventId} clubName={clubName} />
+          <ClubEventCard
+            key={event.id}
+            event={event}
+            setEventId={setEventId}
+            clubName={clubName}
+          />
         ))
-          : <ClubEventDetailView clubId={clubId} eventId={eventId} isManager={isManager} />}
+          : (
+            <ClubEventDetailView
+              clubId={clubId}
+              eventId={eventId}
+              setEventId={setEventId}
+              isManager={isManager}
+            />
+          )}
       </div>
     </div>
   );
