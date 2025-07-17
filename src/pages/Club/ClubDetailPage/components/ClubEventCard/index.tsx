@@ -17,7 +17,7 @@ export default function ClubEventCard({ event, setEventId, clubName }: ClubEvent
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_event_select',
-      value: `${clubName}`,
+      value: clubName,
     });
     setEventId(event.id);
   };

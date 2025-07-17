@@ -82,30 +82,11 @@ export default function ClubEventDetailView({
               src={clubEventDetail.image_urls[selectImage]}
               alt={clubEventDetail.name}
             />
-            {!isMobile && (
-            <>
-              <button
-                type="button"
-                className={styles['event-detail__image__pre-button']}
-                aria-label="이전 이미지"
-                onClick={handlePrevButtonClick}
-              >
-                <PreImageIcon />
-              </button>
-              <button
-                type="button"
-                className={styles['event-detail__image__next-button']}
-                aria-label="다음 이미지"
-                onClick={handleNextButtonClick}
-              >
-                <NextImageIcon />
-              </button>
-            </>
-            )}
-            {isMobile && (
+            {isMobile ? (
               <div className={styles['event-detail__image__marker__container']}>
                 {clubEventDetail.image_urls.map((_, index) => (
                   <div
+                    key={clubEventDetail.image_urls[index]}
                     className={cn({
                       [styles['event-detail__image__marker']]: true,
                       [styles['event-detail__image__marker--active']]: selectImage === index,
@@ -113,6 +94,25 @@ export default function ClubEventDetailView({
                   />
                 ))}
               </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className={styles['event-detail__image__pre-button']}
+                  aria-label="이전 이미지"
+                  onClick={handlePrevButtonClick}
+                >
+                  <PreImageIcon />
+                </button>
+                <button
+                  type="button"
+                  className={styles['event-detail__image__next-button']}
+                  aria-label="다음 이미지"
+                  onClick={handleNextButtonClick}
+                >
+                  <NextImageIcon />
+                </button>
+              </>
             )}
           </>
         )}
