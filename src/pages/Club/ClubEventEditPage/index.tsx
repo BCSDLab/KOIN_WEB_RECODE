@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ClubEventRequest } from 'api/club/entity';
 import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
@@ -21,9 +21,8 @@ function splitKoreanDate(date: Date): [string, string] {
 }
 
 export default function ClubEventEditPage() {
-  const location = useLocation();
   const { id } = useParams<{ id: string }>();
-  const { eventId } = location.state;
+  const { eventId } = useParams<{ eventId: string }>();
   const { clubEventDetail } = useClubEventDetail(id, eventId);
   const { mutateAsync } = usePutClubEvent(Number(id));
   const isMobile = useMediaQuery();
@@ -67,7 +66,7 @@ export default function ClubEventEditPage() {
     const submitEndDate = formatISODateTime(endDate, endTime.hour, endTime.minute);
 
     await mutateAsync({
-      eventId,
+      eventId: Number(eventId),
       data: {
         ...formData,
         start_date: submitStartDate,
