@@ -19,6 +19,8 @@ import ExerciseIcon from 'assets/svg/Club/exercise-icon.svg';
 import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
 import HeartFilled from 'assets/svg/Club/heart-filled-icon.svg';
 import HeartOutline from 'assets/svg/Club/heart-outline-icon.svg';
+import ClubSearchBar from './components/ClubSearchBar/ClubSearchBar';
+import ClubSearchBarModal from './components/ClubSearchBarModal/ClubSearchBarModal';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -38,6 +40,7 @@ function ClubListPage() {
   const portalManager = useModalPortal();
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const clubName = searchParams.get('clubName') ?? '';
   const isRecruitingParam = searchParams.get('isRecruiting') === 'true';
   const sortValue = searchParams.get('sortType') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
   const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
@@ -50,6 +53,7 @@ function ClubListPage() {
     categoryId: selectedCategoryId,
     sortType: sortValue,
     isRecruiting: isRecruitingParam,
+    query: clubName,
   });
 
   const totalCount = clubList.length;
@@ -209,13 +213,8 @@ function ClubListPage() {
               </button>
             ))}
           </div>
-          <div>
-            <input
-              type="text"
-              className={styles.search}
-              placeholder="검색어를 입력해주세요."
-            />
-          </div>
+          {isMobile && (<ClubSearchBar />)}
+          {!isMobile && <ClubSearchBarModal onClose={() => {}} />}
           <div className={styles.description}>
             <div className={styles.description__message}>
               총
