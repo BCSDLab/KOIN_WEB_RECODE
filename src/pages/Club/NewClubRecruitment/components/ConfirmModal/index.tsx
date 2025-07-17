@@ -7,7 +7,7 @@ import styles from './ConfirmModal.module.scss';
 interface ConfirmModalProps {
   closeModal: () => void;
   onSubmit: () => void;
-  type?: 'confirm' | 'cancel' | 'edit' | 'editCancel';
+  type?: 'confirm' | 'cancel' | 'edit' | 'editCancel' | 'eventDelete' | 'recruitmentDelete';
 }
 
 export default function ConfirmModal({ closeModal, onSubmit, type = 'confirm' }: ConfirmModalProps) {
@@ -109,6 +109,50 @@ export default function ConfirmModal({ closeModal, onSubmit, type = 'confirm' }:
             <div className={styles['info-button-container']}>
               <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>계속하기</button>
               <button className={styles['info-button__reset']} type="button" onClick={() => navigate(-1)}>취소하기</button>
+            </div>
+          </>
+        )}
+        {type === 'eventDelete' && (
+          <>
+            {isMobile ? (
+              <>
+                <div className={styles['info-text']}>행사를 삭제하시겠어요?</div>
+                <div className={styles['info-text']}>행사가 삭제되며 되돌릴 수 없어요.</div>
+              </>
+            ) : (
+              <>
+                <h1 className={styles['modal-title']}>행사 삭제</h1>
+                <div className={styles['info-text']}>행사를 삭제하시겠어요?</div>
+                <br />
+                <div className={styles['info-text']}>행사가 삭제되며 되돌릴 수 없어요.</div>
+                <div className={styles['info-text']}>계속 진행하시겠어요?</div>
+              </>
+            )}
+            <div className={styles['info-button-container']}>
+              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
+              <button className={styles['info-button__reset']} type="button" onClick={handleSubmit}>삭제하기</button>
+            </div>
+          </>
+        )}
+        {type === 'recruitmentDelete' && (
+          <>
+            {isMobile ? (
+              <>
+                <div className={styles['info-text']}>모집 공고를 삭제하시겠어요?</div>
+                <div className={styles['info-text']}>모집 공고가 삭제되며 되돌릴 수 없어요.</div>
+              </>
+            ) : (
+              <>
+                <h1 className={styles['modal-title']}>모집 공고 삭제</h1>
+                <div className={styles['info-text']}>모집 공고를 삭제하시겠어요?</div>
+                <br />
+                <div className={styles['info-text']}>모집 공고가 삭제되며 되돌릴 수 없어요.</div>
+                <div className={styles['info-text']}>계속 진행하시겠어요?</div>
+              </>
+            )}
+            <div className={styles['info-button-container']}>
+              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
+              <button className={styles['info-button__reset']} type="button" onClick={handleSubmit}>삭제하기</button>
             </div>
           </>
         )}

@@ -3,6 +3,8 @@ import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import useDeleteEvent from 'pages/Club/ClubDetailPage/hooks/useDeleteEvent';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
 import styles from './ClubEventDetailView.module.scss';
 
 interface ClubEventDetailViewProps {
@@ -21,9 +23,16 @@ export default function ClubEventDetailView({
   const { clubEventDetail } = useClubEventDetail(clubId, eventId);
   const { mutateAsync } = useDeleteEvent();
 
-  const handleClickDeleteButton = async () => {
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
+  const handleEventDelete = async () => {
     await mutateAsync(Number(eventId));
     setEventId(-1);
+    closeModal();
+  };
+
+  const handleClickDeleteButton = async () => {
+    openModal();
   };
 
   const handleClickEditButton = () => {
@@ -101,6 +110,14 @@ export default function ClubEventDetailView({
         {' '}
         {clubEventDetail.content}
       </div>
+      {isModalOpen && (
+        <ConfirmModal
+          type="eventDelete"
+          closeModal={closeModal}
+          onSubmit={handleEventDelete}
+        />
+      )}
     </div>
+
   );
 }

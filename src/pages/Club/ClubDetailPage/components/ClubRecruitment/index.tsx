@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useDeleteRecruitment from 'pages/Club/ClubDetailPage/hooks/useDeleteRecruitment';
+import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
 import styles from './ClubRecruitment.module.scss';
 
 interface ClubRecruitmentProps {
@@ -21,6 +23,7 @@ export default function ClubRecruitment({
   const isMobile = useMediaQuery();
   const { clubRecruitmentData } = useClubRecruitment(clubId);
   const { mutateAsync } = useDeleteRecruitment();
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   useEffect(() => {
     if (!id) {
@@ -28,8 +31,12 @@ export default function ClubRecruitment({
     }
   }, [id, navigate]);
 
-  const handleClickDeleteButton = async () => {
+  const handleDeleteRecruitment = async () => {
     await mutateAsync();
+  };
+
+  const handleClickDeleteButton = async () => {
+    openModal();
   };
 
   const handleClickEditButton = () => {
@@ -108,6 +115,13 @@ export default function ClubRecruitment({
             </div>
           </>
         )}
+      {isModalOpen && (
+        <ConfirmModal
+          type="recruitmentDelete"
+          closeModal={closeModal}
+          onSubmit={handleDeleteRecruitment}
+        />
+      )}
     </div>
   );
 }
