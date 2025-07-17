@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { cn } from '@bcsdlab/utils';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -204,6 +203,7 @@ function ClubListPage() {
                   [styles['filter__button--active']]: isRecruitmentFilter,
                 })}
                 onClick={() => setIsRecruitmentFilter((prev) => !prev)}
+                aria-label={isRecruitmentFilter ? '모집 중인 동아리 필터 해제' : '모집 중인 동아리 필터 적용'}
               />
             </div>
           </div>
