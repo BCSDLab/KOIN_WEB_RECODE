@@ -45,12 +45,16 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
+    font-size: 22px;
+    font-weight: 500;
     border: 2px solid #175c8e;
     border-left: none;
     border-right: none;
     padding: 20px 0;
 
     @include media.media-breakpoint(mobile) {
+      font-size: 18px;
+      line-height: 160%;
       border: none;
       padding: 0 5px;
       width: 100%;
@@ -161,7 +165,6 @@
         margin-bottom: 10px;
         display: flex;
         gap: 6px;
-        align-items: center;
 
         @include media.media-breakpoint(mobile) {
           margin-bottom: 8px;
@@ -169,6 +172,11 @@
 
         &__link {
           color: #3a70e2;
+          overflow-wrap: anywhere;
+        }
+
+        &--label {
+          white-space: nowrap;
         }
       }
 
@@ -273,6 +281,10 @@
       }
     }
   }
+}
+
+.copy-button {
+  height: 22px;
 }
 
 .nav {
