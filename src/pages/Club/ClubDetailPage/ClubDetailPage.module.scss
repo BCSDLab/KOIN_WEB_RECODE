@@ -165,7 +165,6 @@
         margin-bottom: 10px;
         display: flex;
         gap: 6px;
-        align-items: center;
 
         @include media.media-breakpoint(mobile) {
           margin-bottom: 8px;
@@ -175,7 +174,7 @@
           color: #3a70e2;
           overflow-wrap: anywhere;
         }
-        
+
         &--label {
           white-space: nowrap;
           
