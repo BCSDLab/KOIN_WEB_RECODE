@@ -45,11 +45,13 @@ export default function ClubRecruitment({
 
   return (
     <div className={styles.layout}>
-      {!(clubRecruitmentData.status === 'CLOSED') && (
+      {clubRecruitmentData.status !== 'NONE' && (
       <div className={styles['recruitment-info__title__box']}>
+        {clubRecruitmentData.status !== 'CLOSED' && (
         <h2 className={styles['recruitment-info__title']}>
           모집기한
         </h2>
+        )}
         {isMobile && isManager && (
         <div className={styles['edit-button__container']}>
           <button
@@ -70,7 +72,8 @@ export default function ClubRecruitment({
         )}
       </div>
       )}
-      {isManager && isMobile && clubRecruitmentData.status === 'CLOSED' && (
+
+      {isManager && isMobile && clubRecruitmentData.status === 'NONE' && (
         <div className={styles['create-button__container']}>
           <button
             type="button"
@@ -81,7 +84,7 @@ export default function ClubRecruitment({
           </button>
         </div>
       )}
-      {clubRecruitmentData.status === 'CLOSED'
+      {clubRecruitmentData.status === 'CLOSED' || clubRecruitmentData.status === 'NONE'
         ? <div className={styles['recruitment-info--none']}>모집이 마감되었어요.</div> : (
           <>
             <div className={styles['recruitment-info__header']}>
