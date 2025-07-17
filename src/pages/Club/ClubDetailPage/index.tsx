@@ -35,6 +35,7 @@ export default function ClubDetailPage() {
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const logger = useLogger();
+  const [eventId, setEventId] = useState<string | number>(-1);
 
   const [navType, setNavType] = useState('상세 소개');
   const [isEdit, setIsEdit] = useState(false);
@@ -430,7 +431,7 @@ export default function ClubDetailPage() {
             [styles['nav-type']]: true,
             [styles['nav-type--active']]: navType === '행사',
           })}
-          onClick={() => handleNavClick('행사')}
+          onClick={() => { handleNavClick('행사'); setEventId(-1); }}
         >
           행사
         </button>
@@ -511,6 +512,9 @@ export default function ClubDetailPage() {
           clubId={id}
           isManager={clubDetail.manager}
           handleClickAddButton={handleClickEventAddButton}
+          eventId={eventId}
+          setEventId={setEventId}
+          clubName={clubDetail.name}
         />
       )}
       {isModalOpen && (
