@@ -144,10 +144,16 @@ main {
       }
     }
 
+    &__filter {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
     &__dropdown {
       button {
         display: flex;
-        width: 100px;
+        width: 130px;
         height: 30px;
         padding: 8px 4px 8px 12px;
         justify-content: space-between;
@@ -171,7 +177,7 @@ main {
       }
 
       li {
-        width: 100px;
+        width: 130px;
         height: 30px;
         padding: 8px 12px;
         display: flex;
