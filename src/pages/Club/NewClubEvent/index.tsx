@@ -99,39 +99,37 @@ export default function NewClubEvent() {
                   <>
                     <div className={styles['picker-container']}>
                       <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
-                        <span>{startYear}</span>
-                        <br />
-                        <span>{startRest}</span>
+                        <div>{startYear}</div>
+                        <div>{startRest}</div>
                       </button>
                       <button
                         type="button"
                         className={styles['time-picker-button']}
                         onClick={openStartTimePicker}
                       >
-                        <span>
+                        <div>
                           {startTime.hour.toString().padStart(2, '0')}
                           :
                           {startTime.minute.toString().padStart(2, '0')}
-                        </span>
+                        </div>
                       </button>
                     </div>
                     <div className={styles.form__separator}>~</div>
                     <div className={styles['picker-container']}>
                       <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
-                        <span>{endYear}</span>
-                        <br />
-                        <span>{endRest}</span>
+                        <div>{endYear}</div>
+                        <div>{endRest}</div>
                       </button>
                       <button
                         type="button"
                         className={styles['time-picker-button']}
                         onClick={openEndTimePicker}
                       >
-                        <span>
+                        <div>
                           {endTime.hour.toString().padStart(2, '0')}
                           :
                           {endTime.minute.toString().padStart(2, '0')}
-                        </span>
+                        </div>
                       </button>
                     </div>
                   </>

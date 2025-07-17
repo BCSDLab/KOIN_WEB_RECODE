@@ -43,29 +43,24 @@
   justify-content: space-between;
   width: 100%;
 
-  button {
+  &__button {
     flex: 1;
     padding: 12px;
-    border: none;
     border-radius: 8px;
     font-weight: 500;
     font-size: 15px;
     cursor: pointer;
     transition: background-color 0.2s ease;
 
-    &:first-child {
+    &--cancel {
       border: 1px solid #8e8e8e;
       background-color: white;
       color: #333;
     }
 
-    &.confirm {
+    &--confirm {
       background-color: #1966b3;
       color: white;
-    }
-
-    &:hover {
-      opacity: 0.95;
     }
   }
 }
