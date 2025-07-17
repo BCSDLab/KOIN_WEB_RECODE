@@ -266,7 +266,6 @@ export default function ClubDetailPage() {
             {clubDetail.instagram && (
             <div className={styles['club-detail__summary__contacts__row']}>
               인스타:
-              {clubDetail.instagram && (
               <a
                 href={`https://www.instagram.com/${clubDetail.instagram}`}
                 target="_blank"
@@ -276,28 +275,24 @@ export default function ClubDetailPage() {
                 @
                 {clubDetail.instagram}
               </a>
-              )}
             </div>
             )}
             {clubDetail.google_form && (
             <div className={styles['club-detail__summary__contacts__row']}>
-              구글폼:
-              {clubDetail.google_form && (
+              <div className={styles['club-detail__summary__contacts__row--label']}>구글폼:</div>
               <a
                 href={clubDetail.google_form}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles['club-detail__summary__contacts__row__link']}
               >
-                {clubDetail.google_form}
+                <div className={styles['club-detail__summary__contacts__row__text']}>{clubDetail.google_form}</div>
               </a>
-              )}
             </div>
             )}
             {clubDetail.open_chat && (
             <div className={styles['club-detail__summary__contacts__row']}>
-              오픈채팅:
-              {clubDetail.open_chat && (
+              <div className={styles['club-detail__summary__contacts__row--label']}>오픈채팅:</div>
               <a
                 href={clubDetail.open_chat}
                 target="_blank"
@@ -306,12 +301,11 @@ export default function ClubDetailPage() {
               >
                 {clubDetail.open_chat}
               </a>
-              )}
             </div>
             )}
             {clubDetail.phone_number && (
             <div className={styles['club-detail__summary__contacts__row']}>
-              전화번호:
+              <div className={styles['club-detail__summary__contacts__row--label']}>전화번호:</div>
               <div className={styles['club-detail__summary__contacts__text']}>
                 {clubDetail.phone_number && formatPhoneNumber(clubDetail.phone_number)}
                 <button
