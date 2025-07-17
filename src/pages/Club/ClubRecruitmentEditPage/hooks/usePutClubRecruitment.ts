@@ -18,7 +18,7 @@ export default function usePutClubRecruitment(clubId: number) {
     },
     onSuccess: () => {
       showToast('success', '동아리 모집 수정 요청이 완료되었습니다.');
-      queryClient.invalidateQueries({ queryKey: ['clubDetail', 'clubRecruitment'] });
+      queryClient.invalidateQueries({ queryKey: ['clubRecruitment'] });
       navigate(ROUTES.ClubDetail({ id: String(clubId), isLink: true }));
     },
     onError: (e) => {
