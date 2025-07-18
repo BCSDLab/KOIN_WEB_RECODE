@@ -103,15 +103,22 @@ export default function ClubRecruitment({
               </div>
               )}
               <div className={styles['recruitment-info__date']}>
-                {clubRecruitmentData.start_date}
-                부터
-                {' '}
-                {clubRecruitmentData.end_date}
-                까지
+                {clubRecruitmentData.start_date !== null
+                && clubRecruitmentData.end_date !== null && (
+                  <>
+                    {clubRecruitmentData.start_date}
+                    부터
+                    {' '}
+                    {clubRecruitmentData.end_date}
+                    까지
+                  </>
+                )}
               </div>
             </div>
             <div className={styles['recruitment-info__image__container']}>
-              <img className={styles['recruitment-info__image']} src={clubRecruitmentData.image_url} alt="모집 이미지" />
+              {clubRecruitmentData.image_url && (
+                <img className={styles['recruitment-info__image']} src={clubRecruitmentData.image_url} alt="모집 이미지" />
+              )}
             </div>
             <div className={styles['recruitment-info__content']}>
               {clubRecruitmentData.content}
