@@ -39,7 +39,7 @@ export default function ClubDetailPage() {
     clubIntroductionEditStatus,
   } = useClubDetail(id);
   const { clubRecruitmentData } = useClubRecruitment(id);
-  const { mutateAsync } = useDeleteRecruitment();
+  const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
@@ -193,7 +193,7 @@ export default function ClubDetailPage() {
   };
 
   const handleDeleteRecruitment = async () => {
-    await mutateAsync();
+    await deleteRecruitment();
   };
 
   const handleClickRecruitDeleteButton = () => {
