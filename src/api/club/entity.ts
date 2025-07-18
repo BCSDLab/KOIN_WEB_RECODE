@@ -17,6 +17,7 @@ export interface ClubSearchItem {
 export interface ClubSearchResponse extends APIResponse {
   keywords: ClubSearchItem[];
 }
+
 export interface Club {
   id: number;
   name: string;
@@ -30,6 +31,7 @@ export interface Club {
     dday: number;
   };
 }
+
 export interface ClubListResponse extends APIResponse {
   clubs: Club[];
 }
@@ -122,6 +124,7 @@ export interface NewClubManager {
   club_id: number;
   changed_manager_id: string;
 }
+
 export type NewClubManagerResponse = APIResponse;
 
 export interface ClubRecruitmentResponse extends APIResponse {
@@ -165,6 +168,7 @@ export interface ClubRecruitmentRequest {
   image_url: string;
   content: string;
 }
+
 export interface ClubEventRequest {
   name: string;
   image_urls: string[];
