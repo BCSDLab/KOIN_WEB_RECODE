@@ -35,7 +35,11 @@
       font-weight: 500;
       border-radius: 4px;
       background: #175c8e;
-      padding: 7px 14px;
+      padding: 9px 14px;
+
+      &--delete {
+        background: #eb6f70;
+      }
     }
   }
 
@@ -70,14 +74,13 @@
       font-family: Pretendard, sans-serif;
       font-size: 32px;
       font-weight: 700;
-      margin-bottom: 40px;
 
       @include media.media-breakpoint(mobile) {
         color: #000;
         font-family: Pretendard, sans-serif;
         font-size: 20px;
         font-weight: 700;
-        margin-bottom: 8px;
+        margin-bottom: 0;
       }
     }
 
@@ -131,6 +134,7 @@
       &--mobile {
         display: flex;
         gap: 5px;
+        justify-content: space-between;
       }
 
       &--manager {
@@ -140,7 +144,6 @@
     }
 
     &__like {
-      margin-bottom: 8px;
       color: #000;
       font-family: Pretendard, sans-serif;
       font-size: 14px;
@@ -149,10 +152,6 @@
       display: flex;
       align-items: center;
       gap: 4px;
-
-      @include media.media-breakpoint(mobile) {
-        margin-bottom: 8px;
-      }
     }
 
     &__like svg {
@@ -165,10 +164,6 @@
         margin-bottom: 10px;
         display: flex;
         gap: 6px;
-
-        @include media.media-breakpoint(mobile) {
-          margin-bottom: 8px;
-        }
 
         &__link {
           color: #3a70e2;
@@ -183,6 +178,36 @@
       &__text {
         display: flex;
         align-items: center;
+      }
+    }
+
+    &__like-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-left: 10px;
+    }
+
+    &__like-banner {
+      border-radius: 4px;
+      background: #cff1f9;
+      font-family: Pretendard, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      display: flex;
+      padding: 0 8px;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+
+      @include media.media-breakpoint(mobile) {
+        height: 32px;
+        padding: 0 8px;
+        gap: 10px;
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 400;
       }
     }
   }
@@ -302,14 +327,19 @@
   box-sizing: border-box;
   border-bottom: 1px solid transparent;
 
-  &--active {
-    border-bottom: 1px solid #175c8e;
-  }
-
   @include media.media-breakpoint(mobile) {
     font-size: 16px;
-    font-weight: 500;
-    padding: 14px 25px;
+    font-weight: 400;
+    padding: 14px 0;
+  }
+
+  &--active {
+    border-bottom: 1px solid #175c8e;
+    color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      font-weight: 600;
+    }
   }
 }
 

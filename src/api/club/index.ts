@@ -3,21 +3,33 @@ import {
   ClubCategories,
   ClubDetail,
   ClubList,
+  DeleteClubEvent,
   DeleteClubLike,
   DeleteClubQnA,
+  DeleteClubRecruitment,
+  GetClubEventDetail,
+  GetClubEventList,
   GetClubQnA,
+  GetRecruitmentClub,
+  GetRelatedSearchClub,
   HotClub,
   PostClub,
+  PostClubEvent,
   PostClubQnA,
+  PostClubRecruitment,
   PutClub,
+  PutClubEvent,
   PutClubInroduction,
   PutClubLike,
+  PutClubRecruitment,
   PutNewClubManager,
 } from './APIDetail';
 
 export const getClubCategories = APIClient.of(ClubCategories);
 
 export const getClubList = APIClient.of(ClubList);
+
+export const searchClub = APIClient.of(GetRelatedSearchClub);
 
 export const getHotClub = APIClient.of(HotClub);
 
@@ -40,3 +52,21 @@ export const deleteClubQnA = APIClient.of(DeleteClubQnA);
 export const putClubDetail = APIClient.of(PutClub);
 
 export const putNewClubManager = APIClient.of(PutNewClubManager);
+
+export const getRecruitmentClub = APIClient.of(GetRecruitmentClub);
+
+export const getClubEventList = APIClient.of(GetClubEventList);
+
+export const getClubEventDetail = APIClient.of(GetClubEventDetail);
+
+export const postClubRecruitment = APIClient.of(PostClubRecruitment);
+
+export const putClubRecruitment = APIClient.of(PutClubRecruitment);
+
+export const deleteClubRecruitment = APIClient.of(DeleteClubRecruitment);
+
+export const postClubEvent = APIClient.of(PostClubEvent);
+
+export const putClubEvent = APIClient.of(PutClubEvent);
+
+export const deleteClubEvent = APIClient.of(DeleteClubEvent);
