@@ -2,9 +2,9 @@ import NavigateStoreIcon from 'assets/svg/Store/navigate-store-icon.svg';
 import styles from './RelateSearchItem.module.scss';
 
 interface RelateSearchItemProps {
-  url : string | null;
+  url : string;
   content : string;
-  onClick: () => void;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function RelateSearchItem({ url, content, onClick }: RelateSearchItemProps) {
