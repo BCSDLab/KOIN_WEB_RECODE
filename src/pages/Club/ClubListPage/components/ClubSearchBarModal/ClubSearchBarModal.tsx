@@ -24,9 +24,6 @@ export default function ClubSearchBarModal({ onClose }: ClubSearchBarModalProps)
   const navigate = useNavigate();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
   useEscapeKeyDown({ onEscape: onClose });
-  useEffect(() => {
-    clubRef.current?.focus();
-  }, []);
 
   const debounceTimeout = useRef<null | NodeJS.Timeout>(null);
   const handleInputChange = useCallback((e:ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +48,10 @@ export default function ClubSearchBarModal({ onClose }: ClubSearchBarModalProps)
     onClose();
     setRelateSearchItems(undefined);
   };
+
+  useEffect(() => {
+    clubRef.current?.focus();
+  }, []);
 
   return (
     <div className={styles['search-bar-modal__background']} ref={backgroundRef}>
@@ -85,7 +86,7 @@ export default function ClubSearchBarModal({ onClose }: ClubSearchBarModalProps)
               content={item.club_name}
               onClick={() => {
                 setParams('clubName', item.club_name, {
-                  deleteBeforeParam: searchParams.get('clubName') === undefined,
+                  deleteBeforeParam: !!searchParams.get('clubName'),
                   replacePage: true,
                 });
                 onClose();
