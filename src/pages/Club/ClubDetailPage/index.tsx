@@ -30,6 +30,8 @@ import useClubRecruitment from './hooks/useClubRecruitment';
 import useDeleteRecruitment from './hooks/useDeleteRecruitment';
 import styles from './ClubDetailPage.module.scss';
 
+const NO_SELECTED_EVENT_ID = -1;
+
 export default function ClubDetailPage() {
   const { id } = useParams();
   const {
@@ -194,7 +196,7 @@ export default function ClubDetailPage() {
     await mutateAsync();
   };
 
-  const handleClickRecruitDeleteButton = async () => {
+  const handleClickRecruitDeleteButton = () => {
     openRecruitDeleteModal();
   };
 
@@ -207,7 +209,7 @@ export default function ClubDetailPage() {
     setEventId(-1);
   };
 
-  const handleClickEventDeleteButton = async () => {
+  const handleClickEventDeleteButton = () => {
     openEventDeleteModal();
   };
 
@@ -274,7 +276,7 @@ export default function ClubDetailPage() {
                   )
                 )}
                 {navType === '행사' && (
-                  eventId === -1 ? (
+                  eventId === NO_SELECTED_EVENT_ID ? (
                     <button
                       type="button"
                       className={styles['club-detail__pc-header__button']}
