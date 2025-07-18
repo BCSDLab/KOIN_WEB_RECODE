@@ -55,10 +55,10 @@ export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
     public query?: string,
   ) {
     this.params = {
-      ...(categoryId !== undefined ? { categoryId } : {}),
-      ...(sortType ? { sortType } : {}),
-      isRecruiting: isRecruiting ?? false,
-      ...(query ? { query } : {}),
+      ...(categoryId && { categoryId }),
+      ...(sortType && { sortType }),
+      isRecruiting: !!isRecruiting,
+      ...(query && { query }),
     };
   }
 }
