@@ -11,6 +11,7 @@ import type {
   ClubQnAData,
   ClubRecruitmentRequest,
   ClubRecruitmentResponse,
+  ClubSearchResponse,
   DeleteClubLikeResonse,
   DeleteClubQnAResponse,
   HotClubResponse,
@@ -39,10 +40,42 @@ export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(public authorization?: string, public categoryId?: number, public sortType?: string) {
-    this.path = '/clubs'
-    + `${(categoryId && `?categoryId=${categoryId}`) || ''}`
-    + `${(sortType && `${categoryId ? '&' : '?'}sortType=${sortType}`) || ''}`;
+  params: {
+    categoryId?: number;
+    sortType?: string;
+    isRecruiting: boolean;
+    query?: string;
+  };
+
+  constructor(
+    public authorization?: string,
+    public categoryId?: number,
+    public sortType?: string,
+    public isRecruiting?: boolean,
+    public query?: string,
+  ) {
+    this.params = {
+      ...(categoryId && { categoryId }),
+      ...(sortType && { sortType }),
+      isRecruiting: !!isRecruiting,
+      ...(query && { query }),
+    };
+  }
+}
+
+export class GetRelatedSearchClub<R extends ClubSearchResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/clubs/search/related';
+
+  response!: R;
+
+  params: {
+    query: string;
+  };
+
+  constructor(query: string) {
+    this.params = { query };
   }
 }
 

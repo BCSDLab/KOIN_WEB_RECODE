@@ -43,14 +43,23 @@ export default function ClubRecruitment({
     navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
   };
 
+  const isRecruitmentExist = clubRecruitmentData.status !== 'NONE';
+  const isRecruitmentClosed = clubRecruitmentData.status === 'CLOSED';
+  const isNone = clubRecruitmentData.status === 'NONE';
+  const isMobileManager = isMobile && isManager;
+  const canCreate = isManager && isMobile && isNone;
+  const RecruitmentEnd = isRecruitmentClosed || isNone;
+
   return (
     <div className={styles.layout}>
-      {!(clubRecruitmentData.status === 'CLOSED') && (
+      {isRecruitmentExist && (
       <div className={styles['recruitment-info__title__box']}>
+        {!isRecruitmentClosed && (
         <h2 className={styles['recruitment-info__title']}>
           모집기한
         </h2>
-        {isMobile && isManager && (
+        )}
+        {isMobileManager && (
         <div className={styles['edit-button__container']}>
           <button
             type="button"
@@ -70,7 +79,8 @@ export default function ClubRecruitment({
         )}
       </div>
       )}
-      {isManager && isMobile && clubRecruitmentData.status === 'CLOSED' && (
+
+      {canCreate && (
         <div className={styles['create-button__container']}>
           <button
             type="button"
@@ -81,11 +91,11 @@ export default function ClubRecruitment({
           </button>
         </div>
       )}
-      {clubRecruitmentData.status === 'CLOSED'
+      {RecruitmentEnd
         ? <div className={styles['recruitment-info--none']}>모집이 마감되었어요.</div> : (
           <>
             <div className={styles['recruitment-info__header']}>
-              {!(clubRecruitmentData.status === 'NONE') && (
+              {isRecruitmentExist && (
               <div className={styles['recruitment-info__dday']}>
                 {clubRecruitmentData.status === 'RECRUITING' && (
                 <span className={styles['recruitment-info__dday--recruiting']}>
@@ -100,15 +110,22 @@ export default function ClubRecruitment({
               </div>
               )}
               <div className={styles['recruitment-info__date']}>
-                {clubRecruitmentData.start_date}
-                부터
-                {' '}
-                {clubRecruitmentData.end_date}
-                까지
+                {clubRecruitmentData.start_date !== null
+                && clubRecruitmentData.end_date !== null && (
+                  <>
+                    {clubRecruitmentData.start_date}
+                    부터
+                    {' '}
+                    {clubRecruitmentData.end_date}
+                    까지
+                  </>
+                )}
               </div>
             </div>
             <div className={styles['recruitment-info__image__container']}>
-              <img className={styles['recruitment-info__image']} src={clubRecruitmentData.image_url} alt="모집 이미지" />
+              {clubRecruitmentData.image_url && (
+                <img className={styles['recruitment-info__image']} src={clubRecruitmentData.image_url} alt="모집 이미지" />
+              )}
             </div>
             <div className={styles['recruitment-info__content']}>
               {clubRecruitmentData.content}

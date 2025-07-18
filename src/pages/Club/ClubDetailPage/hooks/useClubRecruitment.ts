@@ -19,7 +19,7 @@ export default function useClubRecruitment(clubId: number | string | undefined) 
         if (isKoinError(e) && e.status === 404) {
           return {
             id: 0,
-            status: 'CLOSED',
+            status: 'NONE',
             dday: 0,
             start_date: '',
             end_date: '',

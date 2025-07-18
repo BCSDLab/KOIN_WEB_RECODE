@@ -35,7 +35,11 @@
       font-weight: 500;
       border-radius: 4px;
       background: #175c8e;
-      padding: 7px 14px;
+      padding: 9px 14px;
+
+      &--delete {
+        background: #eb6f70;
+      }
     }
   }
 

@@ -37,6 +37,10 @@
     font-size: 20px;
     font-weight: 500;
     color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 18px;
+    }
   }
 
   &__add-button {
@@ -51,6 +55,12 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      height: 32px;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
   }
 }
 
@@ -69,7 +79,8 @@ main {
     padding: 20px;
 
     @include media.media-breakpoint(mobile) {
-      padding: 8px 0;
+      margin: 16px 0;
+      padding: 0;
       border: none;
     }
 
@@ -133,21 +144,35 @@ main {
     justify-content: space-between;
     align-items: center;
 
+    @include media.media-breakpoint(mobile) {
+      margin-block: 16px 0;
+    }
+
     &__message {
       color: #4b4b4b;
       font-size: 16px;
       font-weight: 400;
       line-height: 160%;
 
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+      }
+
       strong {
         color: #000;
       }
     }
 
+    &__filter {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
     &__dropdown {
       button {
         display: flex;
-        width: 100px;
+        width: 130px;
         height: 30px;
         padding: 8px 4px 8px 12px;
         justify-content: space-between;
@@ -159,6 +184,11 @@ main {
         font-size: 16px;
         font-weight: 400;
         line-height: 160%;
+
+        @include media.media-breakpoint(mobile) {
+          width: 120px;
+          font-size: 14px;
+        }
       }
 
       ul {
@@ -171,7 +201,7 @@ main {
       }
 
       li {
-        width: 100px;
+        width: 120px;
         height: 30px;
         padding: 8px 12px;
         display: flex;
@@ -225,10 +255,6 @@ main {
           gap: 4px;
           flex-wrap: wrap;
           align-items: center;
-
-          @include media.media-breakpoint(mobile) {
-            gap: 2px;
-          }
         }
       }
 
@@ -240,6 +266,7 @@ main {
 
         @include media.media-breakpoint(mobile) {
           font-size: 16px;
+          font-weight: 700;
         }
       }
 
@@ -320,6 +347,10 @@ main {
   align-items: center;
   gap: 4px;
   margin: 8px 0;
+
+  @include media.media-breakpoint(mobile) {
+    font-size: 14px;
+  }
 
   &__container {
     display: flex;

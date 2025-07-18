@@ -19,7 +19,10 @@ function splitKoreanDate(date: Date): [string, string] {
 }
 
 function getYyyyMmDd(date: Date): string {
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 const TODAY = getYyyyMmDd(new Date());
@@ -36,8 +39,12 @@ export default function ClubRecruitmentEditPage() {
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
 
   const [formData, setFormData] = useState<ClubRecruitment>({
-    start_date: clubRecruitmentData.start_date ?? TODAY,
-    end_date: clubRecruitmentData.end_date ?? TODAY,
+    start_date: clubRecruitmentData.start_date
+      ? clubRecruitmentData.start_date.replace(/\./g, '-')
+      : TODAY,
+    end_date: clubRecruitmentData.end_date
+      ? clubRecruitmentData.end_date.replace(/\./g, '-')
+      : TODAY,
     is_always_recruiting: clubRecruitmentData.status === 'ALWAYS',
     image_url: clubRecruitmentData.image_url,
     content: clubRecruitmentData.content,

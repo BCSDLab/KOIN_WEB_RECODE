@@ -44,8 +44,11 @@ export default function ClubEventDetailView({
 
   const handleClickEditButton = () => {
     navigate(
-      ROUTES.ClubEventEdit({ id: String(clubId), isLink: true }),
-      { state: { eventId } },
+      ROUTES.ClubEventEdit({
+        id: String(clubId),
+        eventId: String(eventId),
+        isLink: true,
+      }),
     );
   };
 
