@@ -37,10 +37,6 @@
     font-size: 20px;
     font-weight: 500;
     color: #175c8e;
-
-    @include media.media-breakpoint(mobile) {
-      font-size: 18px;
-    }
   }
 
   &__add-button {
@@ -55,12 +51,6 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 160%;
-
-    @include media.media-breakpoint(mobile) {
-      height: 32px;
-      padding: 6px 12px;
-      font-size: 12px;
-    }
   }
 }
 
@@ -79,8 +69,7 @@ main {
     padding: 20px;
 
     @include media.media-breakpoint(mobile) {
-      margin: 16px 0;
-      padding: 0;
+      padding: 8px 0;
       border: none;
     }
 
@@ -144,35 +133,21 @@ main {
     justify-content: space-between;
     align-items: center;
 
-    @include media.media-breakpoint(mobile) {
-      margin-block: 16px 0;
-    }
-
     &__message {
       color: #4b4b4b;
       font-size: 16px;
       font-weight: 400;
       line-height: 160%;
 
-      @include media.media-breakpoint(mobile) {
-        font-size: 14px;
-      }
-
       strong {
         color: #000;
       }
     }
 
-    &__filter {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
     &__dropdown {
       button {
         display: flex;
-        width: 130px;
+        width: 100px;
         height: 30px;
         padding: 8px 4px 8px 12px;
         justify-content: space-between;
@@ -184,11 +159,6 @@ main {
         font-size: 16px;
         font-weight: 400;
         line-height: 160%;
-
-        @include media.media-breakpoint(mobile) {
-          width: 120px;
-          font-size: 14px;
-        }
       }
 
       ul {
@@ -201,7 +171,7 @@ main {
       }
 
       li {
-        width: 120px;
+        width: 100px;
         height: 30px;
         padding: 8px 12px;
         display: flex;
@@ -236,7 +206,7 @@ main {
     }
 
     &__info {
-      width: 180px;
+      width: 160px;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -249,13 +219,6 @@ main {
         display: flex;
         flex-direction: column;
         gap: 4px;
-
-        &__title-box {
-          display: flex;
-          gap: 4px;
-          flex-wrap: wrap;
-          align-items: center;
-        }
       }
 
       &-title {
@@ -263,11 +226,6 @@ main {
         font-weight: 500;
         line-height: 160%;
         color: #000;
-
-        @include media.media-breakpoint(mobile) {
-          font-size: 16px;
-          font-weight: 700;
-        }
       }
 
       &-likes {
@@ -286,41 +244,6 @@ main {
         font-weight: 400;
         line-height: 160%;
         color: #4b4b4b;
-
-        @include media.media-breakpoint(mobile) {
-          font-size: 12px;
-        }
-      }
-
-      &-recruitment {
-        display: flex;
-        align-items: center;
-
-        @include media.media-breakpoint(mobile) {
-          font-size: 11px;
-        }
-
-        &--recruiting,
-        &--always,
-        &--before,
-        &--closed {
-          border-radius: 16px;
-          color: #fff;
-          padding: 4px 8px;
-        }
-
-        &--before,
-        &--closed {
-          background: #0b3566;
-        }
-
-        &--recruiting {
-          background: #4590bb;
-        }
-
-        &--always {
-          background: #175c8e;
-        }
       }
     }
 
@@ -333,59 +256,6 @@ main {
       @include media.media-breakpoint(mobile) {
         width: 100px;
         height: 100px;
-      }
-    }
-  }
-}
-
-.hyphen {
-  padding-bottom: 6px;
-}
-
-.filter {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin: 8px 0;
-
-  @include media.media-breakpoint(mobile) {
-    font-size: 14px;
-  }
-
-  &__container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 100%;
-  }
-
-  &__button {
-    width: 46px;
-    height: 22px;
-    border: none;
-    border-radius: 999px;
-    background-color: #e1e1e1;
-    position: relative;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 16px;
-      height: 16px;
-      background-color: white;
-      border-radius: 50%;
-      transition: transform 0.3s ease;
-    }
-
-    &--active {
-      background-color: #175c8e;
-
-      &::before {
-        transform: translateX(24px);
       }
     }
   }

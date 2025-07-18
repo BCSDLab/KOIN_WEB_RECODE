@@ -2,16 +2,10 @@ import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type {
   ClubCategoriesResponse,
   ClubDetailResponse,
-  ClubEventListResponse,
-  ClubEventRequest,
-  ClubEventResponse,
   ClubInroductionData,
   ClubListResponse,
   ClubNewQnA,
   ClubQnAData,
-  ClubRecruitmentRequest,
-  ClubRecruitmentResponse,
-  ClubSearchResponse,
   DeleteClubLikeResonse,
   DeleteClubQnAResponse,
   HotClubResponse,
@@ -40,42 +34,10 @@ export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
 
   response!: R;
 
-  params: {
-    categoryId?: number;
-    sortType?: string;
-    isRecruiting: boolean;
-    query?: string;
-  };
-
-  constructor(
-    public authorization?: string,
-    public categoryId?: number,
-    public sortType?: string,
-    public isRecruiting?: boolean,
-    public query?: string,
-  ) {
-    this.params = {
-      ...(categoryId && { categoryId }),
-      ...(sortType && { sortType }),
-      isRecruiting: !!isRecruiting,
-      ...(query && { query }),
-    };
-  }
-}
-
-export class GetRelatedSearchClub<R extends ClubSearchResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/clubs/search/related';
-
-  response!: R;
-
-  params: {
-    query: string;
-  };
-
-  constructor(query: string) {
-    this.params = { query };
+  constructor(public authorization?: string, public categoryId?: number, public sortType?: string) {
+    this.path = '/clubs'
+    + `${(categoryId && `?categoryId=${categoryId}`) || ''}`
+    + `${(sortType && `${categoryId ? '&' : '?'}sortType=${sortType}`) || ''}`;
   }
 }
 
@@ -245,149 +207,5 @@ export class PutNewClubManager<R extends NewClubManagerResponse> implements APIR
     public authorization: string,
     public data: NewClubManager,
   ) {
-  }
-}
-
-export class GetRecruitmentClub<R extends ClubRecruitmentResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/clubs';
-
-  response!: R;
-
-  constructor(public clubId: string | number) {
-    this.path = `/clubs/${clubId}/recruitment`;
-  }
-}
-
-export class GetClubEventList<R extends ClubEventListResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/clubs';
-
-  response!: R;
-
-  constructor(public clubId: string | number, public eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED') {
-    this.path = `/clubs/${clubId}/events?eventType=${eventType}`;
-  }
-}
-
-export class GetClubEventDetail<R extends ClubEventResponse> implements APIRequest<R> {
-  method = HTTP_METHOD.GET;
-
-  path = '/clubs';
-
-  response!: R;
-
-  constructor(public clubId: string | number, public eventId: string | number) {
-    this.path = `/clubs/${clubId}/event/${eventId}`;
-  }
-}
-
-export class PostClubRecruitment<R extends {}> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path: string;
-
-  response!: R;
-
-  auth = true;
-
-  constructor(
-    public authorization: string,
-    public clubId: number,
-    public data: ClubRecruitmentRequest,
-  ) {
-    this.path = `/clubs/${clubId}/recruitment`;
-  }
-}
-
-export class PutClubRecruitment<R extends {}> implements APIRequest<R> {
-  method = HTTP_METHOD.PUT;
-
-  path: string;
-
-  response!: R;
-
-  auth = true;
-
-  constructor(
-    public authorization: string,
-    public clubId: number,
-    public data: ClubRecruitmentRequest,
-  ) {
-    this.path = `/clubs/${clubId}/recruitment`;
-  }
-}
-
-export class DeleteClubRecruitment<R extends {}> implements APIRequest<R> {
-  method = HTTP_METHOD.DELETE;
-
-  path : string;
-
-  response!: R;
-
-  auth = true;
-
-  constructor(
-    public authorization: string,
-    public clubId: number,
-  ) {
-    this.path = `/clubs/${clubId}/recruitment`;
-  }
-}
-
-export class PostClubEvent<R extends {}> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
-
-  path: string;
-
-  response!: R;
-
-  auth = true;
-
-  constructor(
-    public authorization: string,
-    public clubId: number,
-    public data: ClubEventRequest,
-  ) {
-    this.path = `/clubs/${clubId}/event`;
-  }
-}
-
-export class PutClubEvent<R extends {}> implements APIRequest<R> {
-  method = HTTP_METHOD.PUT;
-
-  path: string;
-
-  response!: R;
-
-  auth = true;
-
-  constructor(
-    public authorization: string,
-    public clubId: number,
-    public eventId: number,
-    public data: ClubEventRequest,
-  ) {
-    this.path = `/clubs/${clubId}/event/${eventId}`;
-  }
-}
-
-export class DeleteClubEvent<R extends {}> implements APIRequest<R> {
-  method = HTTP_METHOD.DELETE;
-
-  path: string;
-
-  response!: R;
-
-  auth = true;
-
-  constructor(
-    public authorization: string,
-    public clubId: number,
-    public eventId: number,
-  ) {
-    this.path = `/clubs/${clubId}/event/${eventId}`;
   }
 }

@@ -60,10 +60,8 @@ export default function EditConfirmModal({
       closeModal();
       navigate(ROUTES.ClubDetail({ id, isLink: true }));
     }
-    if (setIsEdit) {
-      if (introduction) {
-        resetForm();
-      }
+    if (introduction && setIsEdit) {
+      resetForm();
       logger.actionEventClick({
         team: 'CAMPUS',
         event_label: 'club_introduction_correction_cancel_confirm',
