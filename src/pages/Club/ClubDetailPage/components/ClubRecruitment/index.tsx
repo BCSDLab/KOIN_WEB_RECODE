@@ -43,16 +43,23 @@ export default function ClubRecruitment({
     navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
   };
 
+  const isRecruitmentExist = clubRecruitmentData.status !== 'NONE';
+  const isRecruitmentClosed = clubRecruitmentData.status === 'CLOSED';
+  const isNone = clubRecruitmentData.status === 'NONE';
+  const isMobileManager = isMobile && isManager;
+  const canCreate = isManager && isMobile && isNone;
+  const RecruitmentEnd = isRecruitmentClosed || isNone;
+
   return (
     <div className={styles.layout}>
-      {clubRecruitmentData.status !== 'NONE' && (
+      {isRecruitmentExist && (
       <div className={styles['recruitment-info__title__box']}>
-        {clubRecruitmentData.status !== 'CLOSED' && (
+        {!isRecruitmentClosed && (
         <h2 className={styles['recruitment-info__title']}>
           모집기한
         </h2>
         )}
-        {isMobile && isManager && (
+        {isMobileManager && (
         <div className={styles['edit-button__container']}>
           <button
             type="button"
@@ -73,7 +80,7 @@ export default function ClubRecruitment({
       </div>
       )}
 
-      {isManager && isMobile && clubRecruitmentData.status === 'NONE' && (
+      {canCreate && (
         <div className={styles['create-button__container']}>
           <button
             type="button"
@@ -84,11 +91,11 @@ export default function ClubRecruitment({
           </button>
         </div>
       )}
-      {clubRecruitmentData.status === 'CLOSED' || clubRecruitmentData.status === 'NONE'
+      {RecruitmentEnd
         ? <div className={styles['recruitment-info--none']}>모집이 마감되었어요.</div> : (
           <>
             <div className={styles['recruitment-info__header']}>
-              {!(clubRecruitmentData.status === 'NONE') && (
+              {isRecruitmentExist && (
               <div className={styles['recruitment-info__dday']}>
                 {clubRecruitmentData.status === 'RECRUITING' && (
                 <span className={styles['recruitment-info__dday--recruiting']}>
