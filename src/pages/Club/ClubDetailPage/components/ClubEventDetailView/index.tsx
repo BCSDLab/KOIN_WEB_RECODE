@@ -19,6 +19,21 @@ interface ClubEventDetailViewProps {
   isManager: boolean;
 }
 
+function formatDateTimeByDevice(dateTimeStr: string, isMobile: boolean) {
+  const date = new Date(dateTimeStr);
+
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+
+  if (isMobile) {
+    return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
+  }
+  return `${yyyy}년 ${mm}월 ${dd}일 ${hh}시 ${min}분`;
+}
+
 export default function ClubEventDetailView({
   clubId,
   eventId,
@@ -94,10 +109,11 @@ export default function ClubEventDetailView({
       )}
       {isMobile && (
       <div className={styles.mobile__date}>
-        {clubEventDetail.start_date.split('T')[0]}
+        {formatDateTimeByDevice(clubEventDetail.start_date, isMobile)}
         {' '}
         부터
-        {clubEventDetail.end_date.split('T')[0]}
+        {' '}
+        {formatDateTimeByDevice(clubEventDetail.end_date, isMobile)}
         {' '}
         까지
       </div>
@@ -160,10 +176,11 @@ export default function ClubEventDetailView({
         <div className={styles['event-detail__content']}>
           행사 날짜:
           {' '}
-          {clubEventDetail.start_date.split('T')[0]}
+          {formatDateTimeByDevice(clubEventDetail.start_date, isMobile)}
           {' '}
           부터
-          {clubEventDetail.end_date.split('T')[0]}
+          {' '}
+          {formatDateTimeByDevice(clubEventDetail.end_date, isMobile)}
           {' '}
           까지
         </div>
