@@ -9,6 +9,15 @@ export interface ClubCategoriesResponse extends APIResponse {
   club_categories: ClubCategory[];
 }
 
+export interface ClubSearchItem {
+  club_id: number;
+  club_name: string;
+}
+
+export interface ClubSearchResponse extends APIResponse {
+  keywords: ClubSearchItem[];
+}
+
 export interface Club {
   id: number;
   name: string;
@@ -17,6 +26,10 @@ export interface Club {
   image_url: string;
   is_liked: boolean;
   is_like_hidden:boolean;
+  recruitment_info: {
+    status: 'NONE' | 'BEFORE' | 'RECRUITING' | 'CLOSED' | 'ALWAYS';
+    dday: number;
+  };
 }
 
 export interface ClubListResponse extends APIResponse {
@@ -66,6 +79,11 @@ export interface ClubDetailResponse extends APIResponse {
   is_liked: boolean;
   updated_at: string;
   is_like_hidden: boolean;
+  hot_status?: {
+    month: number;
+    week_of_month: number;
+    streak_count: number;
+  } | null;
 }
 
 export type PutClubLikeResonse = APIResponse;
@@ -106,4 +124,56 @@ export interface NewClubManager {
   club_id: number;
   changed_manager_id: string;
 }
+
 export type NewClubManagerResponse = APIResponse;
+
+export interface ClubRecruitmentResponse extends APIResponse {
+  id: number;
+  status: 'NONE' | 'BEFORE' | 'RECRUITING' | 'CLOSED' | 'ALWAYS';
+  dday: number;
+  start_date: string;
+  end_date: string;
+  image_url: string;
+  content: string;
+  is_manager: boolean;
+}
+
+export interface ClubEvent {
+  id: number;
+  name: string;
+  image_urls: string[];
+  start_date: string;
+  end_date: string;
+  introduce: string;
+  content: string;
+  status: string;
+}
+
+export interface ClubEventResponse extends ClubEvent, APIResponse {}
+
+export type ClubEventListResponse = (ClubEvent & { is_subscribed: boolean })[];
+
+export interface ClubRecruitment {
+  start_date: string;
+  end_date: string;
+  is_always_recruiting: boolean;
+  image_url: string;
+  content: string;
+}
+
+export interface ClubRecruitmentRequest {
+  start_date?: string | null;
+  end_date?: string | null;
+  is_always_recruiting: boolean;
+  image_url: string;
+  content: string;
+}
+
+export interface ClubEventRequest {
+  name: string;
+  image_urls: string[];
+  start_date: string;
+  end_date: string;
+  introduce: string;
+  content: string;
+}
