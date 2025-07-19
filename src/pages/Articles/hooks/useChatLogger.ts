@@ -19,7 +19,6 @@ export const useChatLogger = () => {
         team: 'CAMPUS',
         event_label: event.label,
         value: eventValue || event.value,
-        event_category: 'click',
       });
     }
   };

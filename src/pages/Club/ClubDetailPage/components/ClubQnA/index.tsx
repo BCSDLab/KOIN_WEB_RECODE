@@ -23,7 +23,6 @@ export default function ClubQnA({
   const hadleClickAddButton = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_Q&A_add',
       value: 'Q&A',
     });

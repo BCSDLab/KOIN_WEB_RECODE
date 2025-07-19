@@ -13,7 +13,6 @@ export default function GraduationCalculatorAuthModal() {
       team: 'USER',
       event_label: 'graduation_calculator_login',
       value: '로그인',
-      event_category: 'click',
     });
     navigate(ROUTES.Auth());
     setRedirectPath(ROUTES.GraduationCalculator());

@@ -27,7 +27,6 @@ function DeleteLectureModal({
       team: 'USER',
       event_label: 'graduation_calculator_delete_lecture',
       value: '강의 삭제',
-      event_category: 'click',
     });
     handleDeleteLecture();
     setModalOpenFalse();

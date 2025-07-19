@@ -78,7 +78,6 @@ function GraduationCalculatorPage() {
         team: 'USER',
         event_label: 'graduation_calculator_back',
         value: '탈출_OS 스와이프',
-        event_category: 'click',
       });
       return;
     }
@@ -86,7 +85,6 @@ function GraduationCalculatorPage() {
       team: 'USER',
       event_label: 'graduation_calculator_back',
       value: '탈출_뒤로가기',
-      event_category: 'click',
     });
   }, [logger]);
 

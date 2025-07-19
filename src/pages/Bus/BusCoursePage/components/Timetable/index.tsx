@@ -78,7 +78,6 @@ function TemplateShuttleVersion({
               logger.actionEventClick({
                 team: 'CAMPUS',
                 event_label: 'area_specific_route',
-                event_category: 'click',
                 value: `${route.type}_${route.route_name}`,
               });
             }}
@@ -132,7 +131,6 @@ function ShuttleTimetable() {
               logger.actionEventClick({
                 team: 'CAMPUS',
                 event_label: 'shuttle_bus_route',
-                event_category: 'click',
                 value,
               });
             }}

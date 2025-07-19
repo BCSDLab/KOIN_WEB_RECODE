@@ -25,7 +25,6 @@ export default function LoginRequiredModal({
         team: 'BUSINESS',
         event_label: `shop_detail_view_review_${type}_login`,
         value: shopName,
-        event_category: 'click',
       });
     }
   };
@@ -36,7 +35,6 @@ export default function LoginRequiredModal({
         team: 'BUSINESS',
         event_label: `shop_detail_view_review_${type}_cancel`,
         value: shopName,
-        event_category: 'click',
       });
     }
   };

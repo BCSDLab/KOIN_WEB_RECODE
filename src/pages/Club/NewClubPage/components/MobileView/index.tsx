@@ -80,7 +80,6 @@ export default function MobileView({
     if (isEdit && setType) {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_correction_cancel',
         value: '취소',
       });
@@ -89,7 +88,6 @@ export default function MobileView({
     } else {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_create_cancel',
         value: '생성취소',
       });
@@ -101,7 +99,6 @@ export default function MobileView({
     if (isEdit && setType) {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_correction_save',
         value: '저장',
       });
@@ -109,7 +106,6 @@ export default function MobileView({
     } else {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_create_request',
         value: '생성요청',
       });

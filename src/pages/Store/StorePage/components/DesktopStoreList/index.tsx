@@ -47,7 +47,6 @@ export default function DesktopStoreList(storeListProps: StoreListProps) {
             team: 'BUSINESS',
             event_label: `${storeType}_click`,
             value: store.name,
-            event_category: 'click',
             previous_page: `${koreanCategory || '전체보기'}`,
             current_page: `${store.name}`,
             duration_time: getCategoryDurationTime(),

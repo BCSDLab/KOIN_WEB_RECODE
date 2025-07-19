@@ -35,7 +35,6 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
       team: 'BUSINESS',
       event_label: 'shop_detail_view_review_delete',
       value: storeDetail.name,
-      event_category: 'click',
     });
     portalManager.open((portalOption: Portal) => (
       <DeleteModal
@@ -65,7 +64,6 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
       team: 'BUSINESS',
       event_label: 'shop_detail_view_review_report',
       value: storeDetail.name,
-      event_category: 'click',
     });
   };
 

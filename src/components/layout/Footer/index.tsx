@@ -38,7 +38,6 @@ function Footer(): JSX.Element {
           team: 'USER',
           event_label: 'graduation_calculator_back',
           value: `탈출_푸터_${title}`,
-          event_category: 'click',
         });
       }
     }

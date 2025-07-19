@@ -25,7 +25,6 @@ export default function useMandateClubManagerMutation(clubId: number | string | 
     onSuccess: () => {
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_delegation_authority_confirm',
         value: '권한위임',
       });

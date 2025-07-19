@@ -82,7 +82,6 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
               team: 'USER',
               event_label: 'graduation_calculator',
               value: '졸업학점 계산기',
-              event_category: 'click',
             });
           }}
         >

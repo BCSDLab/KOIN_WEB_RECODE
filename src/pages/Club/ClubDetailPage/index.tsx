@@ -70,7 +70,6 @@ export default function ClubDetailPage() {
       await clubUnlikeMutateAsync();
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_introduction_like_cancel',
         value: clubDetail.name,
       });
@@ -78,7 +77,6 @@ export default function ClubDetailPage() {
       await clubLikeMutateAsync();
       logger.actionEventClick({
         team: 'CAMPUS',
-        event_category: 'click',
         event_label: 'club_introduction_like',
         value: clubDetail.name,
       });
@@ -89,7 +87,6 @@ export default function ClubDetailPage() {
   const handleIntroductionSave = async () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_introduction_correction_save',
       value: '저장',
     });
@@ -100,7 +97,6 @@ export default function ClubDetailPage() {
   const handleIntroductionCancel = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_introduction_correction_cancel',
       value: '취소',
     });
@@ -111,7 +107,6 @@ export default function ClubDetailPage() {
   const handleEditClick = async () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_correction',
       value: '수정하기',
     });
@@ -120,7 +115,6 @@ export default function ClubDetailPage() {
   const handleMandateClick = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_delegation_authority',
       value: '권한위임',
     });
@@ -130,7 +124,6 @@ export default function ClubDetailPage() {
   const handleNavClick = (navValue:string) => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_tab_select',
       value: `${navValue}`,
     });
@@ -155,7 +148,6 @@ export default function ClubDetailPage() {
   const handleClickDetailInfo = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_tab_select',
       value: '상세소개 수정하기',
     });

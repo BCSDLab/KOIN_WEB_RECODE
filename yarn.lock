@@ -6534,9 +6534,11 @@ __metadata:
     jest: ^29.7.0
     josa-js: ^0.0.2
     lodash: ^4.17.21
+    lottie-react: ^2.4.1
     postcss: ^8.4.47
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-hook-form: ^7.55.0
     react-quill: ^2.0.0
     react-router-dom: ^6.3.0
     react-swipeable: ^7.0.2
@@ -6645,6 +6647,25 @@ __metadata:
   bin:
     loose-envify: cli.js
   checksum: 6517e24e0cad87ec9888f500c5b5947032cdfe6ef65e1c1936a0c48a524b81e65542c9c3edc91c97d5bddc806ee2a985dbc79be89215d613b1de5db6d1cfe6f4
+  languageName: node
+  linkType: hard
+
+"lottie-react@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "lottie-react@npm:2.4.1"
+  dependencies:
+    lottie-web: ^5.10.2
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: ac79931d98ea38fd3a9139139fb976d24a3e4e0ede86c74d69c5571b971122ee7e98432949f0f4af33f48b736fe8448918f124d48548dd46925bab484c09e73f
+  languageName: node
+  linkType: hard
+
+"lottie-web@npm:^5.10.2":
+  version: 5.13.0
+  resolution: "lottie-web@npm:5.13.0"
+  checksum: f634eddbfc49a243af598c8c3b5b2bc347c6980cb85ef3e17a394aa52e2d4d1d04ef565d9cf1581727eec598717932abf5e0e0aba111b4d64f2a9dadaeaa98e2
   languageName: node
   linkType: hard
 
@@ -7768,6 +7789,15 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: 7d323310bea3a91be2965f9468d552f201b1c27891e45ddc2d6b8f717680c95a75ae0bc1e3f5cf41472446a2589a75aed4483aee8169287909fcd59ad149e8cc
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.55.0":
+  version: 7.60.0
+  resolution: "react-hook-form@npm:7.60.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 8700c2932604fe2b3fbdd47a459bec58fb5a2003a336b418b98d8771d1a6ec472531c6758188e23329f86413f736cc5a1c1a84a59341f5b3b9dd4f9fd704fb18
   languageName: node
   linkType: hard
 

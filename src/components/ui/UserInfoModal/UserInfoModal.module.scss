@@ -1,0 +1,172 @@
+@use "src/utils/scss/media" as media;
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #00000026;
+  z-index: 21;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 24px;
+  border: none;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: 0 8px 32px 0 #00000014;
+  flex-direction: column;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 100;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 383px;
+  height: auto;
+  box-sizing: border-box;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    height: 100%;
+    padding: 32px 24px 74px;
+    gap: 16px;
+    position: relative;
+  }
+}
+
+.lottieContainer {
+  width: 200px;
+  height: 107px;
+  aspect-ratio: 200/107;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 160px;
+    height: 86px;
+    aspect-ratio: 200/107;
+  }
+}
+
+.notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  margin-bottom: 32px;
+
+  &__title {
+    font-family: Pretendard, sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.4;
+    color: #1f1f1f;
+    margin: 0;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 20px;
+    }
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    div {
+      font-family: Pretendard, sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #8e8e8e;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.actionButton {
+  width: 100%;
+  padding: 16px 24px;
+  background-color: #175c8e;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: Pretendard, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #10477a;
+  }
+
+  &:active {
+    background-color: #0d3a66;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    position: absolute;
+    bottom: 50px;
+    left: 24px;
+    right: 24px;
+    width: calc(100% - 48px);
+    padding: 14px 20px;
+    font-size: 15px;
+    background-color: #b611f5;
+    border-radius: 8px;
+  }
+}

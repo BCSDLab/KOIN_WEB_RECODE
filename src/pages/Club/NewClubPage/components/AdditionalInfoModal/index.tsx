@@ -23,7 +23,6 @@ export default function AdditionalInfoModal({
   const handleNextStep = () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_create_request_check',
       value: '확인',
     });
@@ -32,7 +31,6 @@ export default function AdditionalInfoModal({
   const handleSubmit = async () => {
     logger.actionEventClick({
       team: 'CAMPUS',
-      event_category: 'click',
       event_label: 'club_create_request_authority',
       value: `${formData.role}`,
     });
