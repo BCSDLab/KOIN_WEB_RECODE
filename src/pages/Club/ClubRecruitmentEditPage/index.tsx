@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ClubRecruitment } from 'api/club/entity';
-import { formatKoreanDate } from 'utils/ts/calendar';
+import { formatKoreanDate, getYyyyMmDd } from 'utils/ts/calendar';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import DatePicker from 'components/ui/DatePicker';
@@ -16,13 +16,6 @@ import styles from './ClubRecruitmentEditPage.module.scss';
 function splitKoreanDate(date: Date): [string, string] {
   const [year, ...rest] = formatKoreanDate(date).split(' ');
   return [year, rest.join(' ')];
-}
-
-function getYyyyMmDd(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
 }
 
 const TODAY = getYyyyMmDd(new Date());
