@@ -1,6 +1,6 @@
 import { timetable } from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useTokenStore } from 'utils/store/useTokenStore';
+import { useTokenStore } from 'utils/zustand/auth';
 
 export const MY_SEMESTER_INFO_KEY = 'my_semester';
 
