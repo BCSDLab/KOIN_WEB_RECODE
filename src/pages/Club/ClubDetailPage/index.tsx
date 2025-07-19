@@ -350,12 +350,17 @@ export default function ClubDetailPage() {
             <div className={styles['club-detail__summary__like-container']}>
               {clubDetail.hot_status && (
               <div className={styles['club-detail__summary__like-banner']}>
-                🎉
-                {clubDetail.hot_status?.month}
-                월
-                {' '}
-                {clubDetail.hot_status?.week_of_month}
-                째주 인기 동아리 🎉
+                {clubDetail.hot_status.streak_count >= 2
+                  ? `🎉 ${clubDetail.hot_status.streak_count}주 연속 인기 동아리 🎉`
+                  : (
+                    <>
+                      🎉
+                      {clubDetail.hot_status?.month}
+                      월
+                      {clubDetail.hot_status?.week_of_month}
+                      째주 인기 동아리 🎉
+                    </>
+                  )}
               </div>
               )}
               {isMobile && (

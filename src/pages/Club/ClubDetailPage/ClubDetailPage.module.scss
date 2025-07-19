@@ -165,6 +165,10 @@
         display: flex;
         gap: 6px;
 
+        @include media.media-breakpoint(mobile) {
+          margin-bottom: 8px;
+        }
+
         &__link {
           color: #3a70e2;
           overflow-wrap: anywhere;
