@@ -8,6 +8,8 @@ import ClubEventDetailView from 'pages/Club/ClubDetailPage/components/ClubEventD
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ClubEventList.module.scss';
 
+const NO_SELECTED_EVENT_ID = -1;
+
 interface ClubEventListProps {
   clubId: number | string | undefined;
   isManager: boolean;
@@ -55,7 +57,7 @@ export default function ClubEventList({
 
   return (
     <div className="club-event-list">
-      {isManager && isMobile && eventId === -1 && (
+      {isManager && isMobile && eventId === NO_SELECTED_EVENT_ID && (
         <div className={styles['create-button__container']}>
           <button
             type="button"
@@ -67,7 +69,7 @@ export default function ClubEventList({
         </div>
       )}
 
-      {eventId === -1 && (
+      {eventId === NO_SELECTED_EVENT_ID && (
       <div className={styles['filter-container']}>
         <div className={styles.dropdown__wrapper}>
           <button
@@ -101,23 +103,30 @@ export default function ClubEventList({
       </div>
       )}
       <div className={styles['club-event-list']}>
-        {eventId === -1 ? clubEventList.map((event) => (
-          <ClubEventCard
-            key={event.id}
-            event={event}
-            setEventId={setEventId}
-            clubName={clubName}
-          />
-        ))
-          : (
-            <ClubEventDetailView
-              clubId={clubId}
-              eventId={eventId}
+        {eventId === NO_SELECTED_EVENT_ID && clubEventList.length === 0 && (
+          <div className={styles['club-event-list__empty']}>
+            등록된 행사가 없습니다.
+          </div>
+        )}
+        {eventId === NO_SELECTED_EVENT_ID && clubEventList.length > 0
+          && clubEventList.map((event) => (
+            <ClubEventCard
+              key={event.id}
+              event={event}
               setEventId={setEventId}
-              isManager={isManager}
+              clubName={clubName}
             />
-          )}
+          ))}
+        {eventId !== NO_SELECTED_EVENT_ID && (
+          <ClubEventDetailView
+            clubId={clubId}
+            eventId={eventId}
+            setEventId={setEventId}
+            isManager={isManager}
+          />
+        )}
       </div>
+
     </div>
   );
 }

@@ -9,15 +9,19 @@
   gap: 10px;
   cursor: pointer;
 
+  &--ended {
+    background-color: rgb(0 0 0 / 60%);
+  }
+
   &__image {
-    max-width: 250px;
-    max-height: 200px;
+    width: 250px;
+    height: 200px;
     object-fit: cover;
     object-position: center;
 
     @include media.media-breakpoint(mobile) {
-      max-width: 100px;
-      max-height: 76px;
+      width: 100px;
+      height: 76px;
     }
   }
 
@@ -32,6 +36,8 @@
 
     @include media.media-breakpoint(mobile) {
       font-size: 12px;
+      gap: 0;
+      line-height: 160%;
     }
   }
 
@@ -59,17 +65,25 @@
     font-weight: 400;
     border-radius: 16px;
 
-    &--upcomingSoon {
+    @include media.media-breakpoint(mobile) {
+      padding: 4px 8px;
+      font-size: 10px;
+    }
+
+    &--soon {
       background-color: #4590bb;
     }
 
-    &--upcoming,
-    &--ended {
+    &--upcoming {
       background-color: #175c8e;
     }
 
     &--ongoing {
       background-color: #6dbbdd;
+    }
+
+    &--ended {
+      background-color: #0b3566;
     }
   }
 }
