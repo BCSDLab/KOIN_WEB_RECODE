@@ -31,16 +31,24 @@ export default function ClubRecruitmentEditPage() {
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
 
+  const {
+    start_date: startDate,
+    end_date: endDate,
+    status: recruitmentStatus,
+    image_url: imageUrl,
+    content: recruitmentContent,
+  } = clubRecruitmentData;
+
   const [formData, setFormData] = useState<ClubRecruitment>({
-    start_date: clubRecruitmentData.start_date
-      ? clubRecruitmentData.start_date.replace(/\./g, '-')
+    start_date: startDate
+      ? startDate.replace(/\./g, '-')
       : TODAY,
-    end_date: clubRecruitmentData.end_date
-      ? clubRecruitmentData.end_date.replace(/\./g, '-')
+    end_date: endDate
+      ? endDate.replace(/\./g, '-')
       : TODAY,
-    is_always_recruiting: clubRecruitmentData.status === 'ALWAYS',
-    image_url: clubRecruitmentData.image_url,
-    content: clubRecruitmentData.content,
+    is_always_recruiting: recruitmentStatus === 'ALWAYS',
+    image_url: imageUrl,
+    content: recruitmentContent,
   });
 
   const handleSubmit = async () => {
