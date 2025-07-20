@@ -25,7 +25,9 @@ export default function useUserInfoModal() {
       'login_id', 'gender', 'major', 'name', 'phone_number', 'student_number',
     ];
 
-    const isInfoMissing = requiredFields.some((field) => !userInfo[field]);
+    const isInfoMissing = requiredFields.some(
+      (field) => userInfo[field] === undefined || userInfo[field] === null || userInfo[field] === '',
+    );
 
     if (!isInfoMissing) {
       localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.COMPLETED);
