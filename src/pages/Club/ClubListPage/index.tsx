@@ -20,7 +20,7 @@ import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
 import HeartFilled from 'assets/svg/Club/heart-filled-icon.svg';
 import HeartOutline from 'assets/svg/Club/heart-outline-icon.svg';
 import ClubSearchBar from './components/ClubSearchBar/ClubSearchBar';
-import ClubSearchBarModal from './components/ClubSearchBarModal/ClubSearchBarModal';
+import ClubSearchContainer from './components/ClubSearchContainer';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -216,8 +216,8 @@ function ClubListPage() {
               </button>
             ))}
           </div>
-          {isMobile && (<ClubSearchBar />)}
-          {!isMobile && <ClubSearchBarModal onClose={() => {}} />}
+          {isMobile && <ClubSearchBar />}
+          {!isMobile && <ClubSearchContainer />}
           <div className={styles.description}>
             <div className={styles.description__message}>
               총
