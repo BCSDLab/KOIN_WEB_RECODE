@@ -49,9 +49,19 @@ export default function ClubImageUploader({
   if (formData.image_url) {
     return (
       <div className={styles['form-image__preview']}>
-        <div className={styles['form-image__img__box']}>
-          <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
-        </div>
+        <button
+          type="button"
+          className={styles['form-image__img__box']}
+          onClick={() => setFormData({ ...formData, image_url: '' })}
+          style={{ cursor: 'pointer' }}
+          aria-label="이미지 클릭 시 삭제"
+        >
+          <img
+            className={styles['form-image__img']}
+            src={formData.image_url}
+            alt="동아리 이미지 미리보기"
+          />
+        </button>
       </div>
     );
   }
