@@ -27,6 +27,7 @@ export default function DetailDescription({ value, onChange }: DetailDescription
         onChange={(e) => onChange(e.target.value)}
         placeholder="상세 내용을 적어주세요."
         ref={textareaRef}
+        maxLength={1500}
       />
     </div>
   );
