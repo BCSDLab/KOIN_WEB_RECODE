@@ -53,7 +53,6 @@ export default function ClubImageUploader({
           type="button"
           className={styles['form-image__img__box']}
           onClick={() => setFormData({ ...formData, image_url: '' })}
-          style={{ cursor: 'pointer' }}
           aria-label="이미지 클릭 시 삭제"
         >
           <img

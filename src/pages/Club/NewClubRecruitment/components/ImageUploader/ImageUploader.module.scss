@@ -73,6 +73,7 @@
       width: 100%;
       display: flex;
       justify-content: flex-end;
+      cursor: pointer;
 
       @include media.media-breakpoint(mobile) {
         height: 100%;
