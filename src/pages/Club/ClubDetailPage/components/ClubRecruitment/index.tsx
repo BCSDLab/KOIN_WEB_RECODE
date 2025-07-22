@@ -52,7 +52,7 @@ export default function ClubRecruitment({
 
   return (
     <div className={styles.layout}>
-      {isRecruitmentExist && (
+      {isRecruitmentExist && isMobile && (
       <div className={styles['recruitment-info__title__box']}>
         {!isRecruitmentClosed && (
         <h2 className={styles['recruitment-info__title']}>
@@ -94,42 +94,87 @@ export default function ClubRecruitment({
       {RecruitmentEnd
         ? <div className={styles['recruitment-info--none']}>모집이 마감되었어요.</div> : (
           <>
-            <div className={styles['recruitment-info__header']}>
-              {isRecruitmentExist && (
-              <div className={styles['recruitment-info__dday']}>
-                {clubRecruitmentData.status === 'RECRUITING' && (
-                <span className={styles['recruitment-info__dday--recruiting']}>
-                  D
-                  <span className={styles.hyphen}>-</span>
-                  {clubRecruitmentData.dday}
-                </span>
-                )}
-                {clubRecruitmentData.status === 'ALWAYS' && <span className={styles['recruitment-info__dday--always']}>상시 모집</span>}
-                {clubRecruitmentData.status === 'BEFORE' && <span className={styles['recruitment-info__dday--before']}>모집 예정</span>}
-                {clubRecruitmentData.status === 'CLOSED' && <span className={styles['recruitment-info__dday--closed']}>마감</span>}
+            {!isMobile && (
+            <div className={styles['recruitment-info__container']}>
+              <div className={styles['recruitment-info__container--left']}>
+                <div className={styles['recruitment-info__title']}>
+                  모집 기한
+                </div>
+                <div className={styles['recruitment-info__date-container']}>
+                  <div className={styles['recruitment-info__dday']}>
+                    {clubRecruitmentData.status === 'RECRUITING' && (
+                    <span className={styles['recruitment-info__dday--recruiting']}>
+                      D
+                      <span className={styles.hyphen}>-</span>
+                      {clubRecruitmentData.dday}
+                    </span>
+                    )}
+                    {clubRecruitmentData.status === 'ALWAYS' && <span className={styles['recruitment-info__dday--always']}>상시 모집</span>}
+                    {clubRecruitmentData.status === 'BEFORE' && <span className={styles['recruitment-info__dday--before']}>모집 예정</span>}
+                    {clubRecruitmentData.status === 'CLOSED' && <span className={styles['recruitment-info__dday--closed']}>마감</span>}
+                  </div>
+                  <div className={styles['recruitment-info__date']}>
+                    {clubRecruitmentData.start_date !== null && (
+                    <>
+                      {clubRecruitmentData.start_date}
+                      {' '}
+                      부터
+                      {' '}
+                      {clubRecruitmentData.end_date}
+                      {' '}
+                      까지
+                    </>
+                    )}
+                  </div>
+                </div>
+                <div className={styles['recruitment-info__content']}>
+                  {clubRecruitmentData.content}
+                </div>
               </div>
-              )}
-              <div className={styles['recruitment-info__date']}>
-                {clubRecruitmentData.start_date !== null
-                && clubRecruitmentData.end_date !== null && (
-                  <>
-                    {clubRecruitmentData.start_date}
-                    부터
-                    {' '}
-                    {clubRecruitmentData.end_date}
-                    까지
-                  </>
-                )}
-              </div>
-            </div>
-            <div className={styles['recruitment-info__image__container']}>
-              {clubRecruitmentData.image_url && (
+              <div className={styles['recruitment-info__image__container']}>
+                {clubRecruitmentData.image_url && (
                 <img className={styles['recruitment-info__image']} src={clubRecruitmentData.image_url} alt="모집 이미지" />
-              )}
+                )}
+              </div>
             </div>
-            <div className={styles['recruitment-info__content']}>
-              {clubRecruitmentData.content}
-            </div>
+            )}
+            {isMobile && (
+              <>
+                <div className={styles['recruitment-info__header']}>
+                  <div className={styles['recruitment-info__dday']}>
+                    {clubRecruitmentData.status === 'RECRUITING' && (
+                    <span className={styles['recruitment-info__dday--recruiting']}>
+                      D
+                      <span className={styles.hyphen}>-</span>
+                      {clubRecruitmentData.dday}
+                    </span>
+                    )}
+                    {clubRecruitmentData.status === 'ALWAYS' && <span className={styles['recruitment-info__dday--always']}>상시 모집</span>}
+                    {clubRecruitmentData.status === 'BEFORE' && <span className={styles['recruitment-info__dday--before']}>모집 예정</span>}
+                    {clubRecruitmentData.status === 'CLOSED' && <span className={styles['recruitment-info__dday--closed']}>마감</span>}
+                  </div>
+                  <div className={styles['recruitment-info__date']}>
+                    {clubRecruitmentData.start_date !== null && (
+                    <>
+                      {clubRecruitmentData.start_date}
+                      부터
+                      {' '}
+                      {clubRecruitmentData.end_date}
+                      까지
+                    </>
+                    )}
+                  </div>
+                </div>
+                <div className={styles['recruitment-info__image__container']}>
+                  {clubRecruitmentData.image_url && (
+                  <img className={styles['recruitment-info__image']} src={clubRecruitmentData.image_url} alt="모집 이미지" />
+                  )}
+                </div>
+                <div className={styles['recruitment-info__content']}>
+                  {clubRecruitmentData.content}
+                </div>
+              </>
+            )}
           </>
         )}
       {isModalOpen && (
