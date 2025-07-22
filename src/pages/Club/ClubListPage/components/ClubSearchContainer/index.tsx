@@ -8,6 +8,8 @@ import { ClubSearchResponse } from 'api/club/entity';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import RelateSearchItem from 'pages/Club/ClubListPage/components/RelateSearchItem/RelateSearchItem';
+import CloseIcon from 'assets/svg/close-icon-grey.svg';
+import SearchIcon from 'assets/svg/Club/search.svg';
 import styles from './ClubSearchContainer.module.scss';
 
 interface ClubSearchContainerProps {
@@ -45,26 +47,53 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
     setRelateSearchItems(undefined);
   };
 
+  const handleDeleteButtonClick = () => {
+    if (clubRef.current) {
+      clubRef.current.value = '';
+      setParams('clubName', '', {
+        deleteBeforeParam: true,
+        replacePage: true,
+      });
+      setRelateSearchItems(undefined);
+    }
+    if (onClose) onClose();
+  };
+
   return (
     <div className={styles.container}>
-      <input
-        ref={clubRef}
-        className={styles['search-bar']}
-        defaultValue={
-              searchParams.get('clubName') === undefined ? '' : searchParams.get('clubName') ?? ''
-            }
-        type="text"
-        name="search"
-        placeholder="검색어를 입력해주세요"
-        autoComplete="off"
-        onChange={handleInputChange}
-        onKeyUp={(e) => {
-          if (e.key === 'Enter') {
-            handleSearch();
-            setRelateSearchItems(undefined);
-          }
-        }}
-      />
+      <div className={styles['search-bar-container']}>
+        <div className={styles['search-bar__input-wrapper']}>
+          <SearchIcon />
+          <input
+            ref={clubRef}
+            className={styles['search-bar']}
+            defaultValue={
+        searchParams.get('clubName') === undefined
+          ? ''
+          : searchParams.get('clubName') ?? ''
+      }
+            type="text"
+            name="search"
+            placeholder="검색어를 입력해주세요"
+            autoComplete="off"
+            onChange={handleInputChange}
+            onKeyUp={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch();
+                setRelateSearchItems(undefined);
+              }
+            }}
+          />
+          <button
+            className={styles['search-bar__delete-button']}
+            type="button"
+            aria-label="검색어 삭제"
+            onClick={handleDeleteButtonClick}
+          >
+            <CloseIcon />
+          </button>
+        </div>
+      </div>
       <div className={styles.result}>
         {relateSearchItems?.keywords.map((item) => (
           <RelateSearchItem
