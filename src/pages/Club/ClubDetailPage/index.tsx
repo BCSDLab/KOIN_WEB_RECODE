@@ -355,10 +355,10 @@ export default function ClubDetailPage() {
                   : (
                     <>
                       🎉
-                      {clubDetail.hot_status?.month}
+                      {clubDetail.hot_status.month}
                       월
                       {' '}
-                      {clubDetail.hot_status?.week_of_month}
+                      {clubDetail.hot_status.week_of_month}
                       째주 인기 동아리 🎉
                     </>
                   )}
