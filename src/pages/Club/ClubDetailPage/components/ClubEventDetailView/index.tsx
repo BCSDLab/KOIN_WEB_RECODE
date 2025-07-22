@@ -34,6 +34,13 @@ function formatDateTimeByDevice(dateTimeStr: string, isMobile: boolean) {
   return `${yyyy}년 ${mm}월 ${dd}일 ${hh}시 ${min}분`;
 }
 
+const statusOptions = [
+  { label: '곧 행사 진행', value: 'SOON' },
+  { label: '행사 예정', value: 'UPCOMING' },
+  { label: '행사 진행 중', value: 'ONGOING' },
+  { label: '종료된 행사', value: 'ENDED' },
+] as const;
+
 export default function ClubEventDetailView({
   clubId,
   eventId,
@@ -46,6 +53,11 @@ export default function ClubEventDetailView({
   const { mutateAsync } = useDeleteEvent();
 
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+
+  const getStatusLabel = (value: string) => {
+    const option = statusOptions.find((opt) => opt.value === value);
+    return option ? option.label : '최신 등록순';
+  };
 
   const handleEventDelete = async () => {
     await mutateAsync(Number(eventId));
@@ -172,6 +184,16 @@ export default function ClubEventDetailView({
           행사 이름:
           {' '}
           {clubEventDetail.name}
+          <div className={cn({
+            [styles['event-detail__status']]: true,
+            [styles['event-detail__status--soon']]: clubEventDetail.status === 'SOON',
+            [styles['event-detail__status--ended']]: clubEventDetail.status === 'ENDED',
+            [styles['event-detail__status--upcoming']]: clubEventDetail.status === 'UPCOMING',
+            [styles['event-detail__status--ongoing']]: clubEventDetail.status === 'ONGOING',
+          })}
+          >
+            {getStatusLabel(clubEventDetail.status)}
+          </div>
         </div>
         <div className={styles['event-detail__content']}>
           행사 날짜:
@@ -191,6 +213,7 @@ export default function ClubEventDetailView({
         {' '}
         {clubEventDetail.introduce}
       </div>
+      {!isMobile && <hr className={styles['event-detail__divider']} />}
       <div className={styles['event-detail__content']}>
         상세 내용:
         {' '}
