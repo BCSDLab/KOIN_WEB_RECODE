@@ -55,9 +55,20 @@ export default function ClubEventList({
     setIsOpen(false);
   };
 
+  if (eventId !== NO_SELECTED_EVENT_ID) {
+    return (
+      <ClubEventDetailView
+        clubId={clubId}
+        eventId={eventId}
+        setEventId={setEventId}
+        isManager={isManager}
+      />
+    );
+  }
+
   return (
     <div className="club-event-list">
-      {isManager && isMobile && eventId === NO_SELECTED_EVENT_ID && (
+      {isManager && isMobile && (
         <div className={styles['create-button__container']}>
           <button
             type="button"
@@ -69,7 +80,6 @@ export default function ClubEventList({
         </div>
       )}
 
-      {eventId === NO_SELECTED_EVENT_ID && (
       <div className={styles['filter-container']}>
         <div className={styles.dropdown__wrapper}>
           <button
@@ -86,47 +96,37 @@ export default function ClubEventList({
           </button>
 
           {isOpen && (
-          <div className={styles.dropdown__menu}>
-            {statusOptions.map((option) => (
-              <button
-                type="button"
-                key={option.value}
-                onClick={() => handleStatusSelect(option.value)}
-                className={styles.dropdown__item}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
+            <div className={styles.dropdown__menu}>
+              {statusOptions.map((option) => (
+                <button
+                  type="button"
+                  key={option.value}
+                  onClick={() => handleStatusSelect(option.value)}
+                  className={styles.dropdown__item}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           )}
         </div>
       </div>
-      )}
       <div className={styles['club-event-list']}>
-        {eventId === NO_SELECTED_EVENT_ID && clubEventList.length === 0 && (
+        {clubEventList.length === 0 ? (
           <div className={styles['club-event-list__empty']}>
             등록된 행사가 없습니다.
           </div>
-        )}
-        {eventId === NO_SELECTED_EVENT_ID && clubEventList.length > 0
-          && clubEventList.map((event) => (
+        ) : (
+          clubEventList.map((event) => (
             <ClubEventCard
               key={event.id}
               event={event}
               setEventId={setEventId}
               clubName={clubName}
             />
-          ))}
-        {eventId !== NO_SELECTED_EVENT_ID && (
-          <ClubEventDetailView
-            clubId={clubId}
-            eventId={eventId}
-            setEventId={setEventId}
-            isManager={isManager}
-          />
+          ))
         )}
       </div>
-
     </div>
   );
 }
