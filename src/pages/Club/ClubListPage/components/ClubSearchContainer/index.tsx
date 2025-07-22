@@ -1,6 +1,4 @@
-import {
-  type ChangeEvent, useCallback, useRef, useState,
-} from 'react';
+import { type ChangeEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import { searchClub } from 'api/club';
@@ -18,14 +16,14 @@ interface ClubSearchContainerProps {
 
 export default function ClubSearchContainer({ onClose }: ClubSearchContainerProps) {
   const navigate = useNavigate();
-  const clubRef = useRef<HTMLInputElement | null>(null);
 
   const { searchParams, setParams } = useParamsHandler();
-  const [relateSearchItems, setRelateSearchItems] = useState<ClubSearchResponse>();
+  const [searchValue, setSearchValue] = useState<string>(searchParams.get('clubName') ?? '');
+  const [relateSearchItems, setRelateSearchItems] = useState<ClubSearchResponse | null>(null);
 
   const debouncedSearch = useDebounce(async (inputValue: string) => {
     if (inputValue.length === 0) {
-      setRelateSearchItems(undefined);
+      setRelateSearchItems(null);
       return;
     }
     const data = await searchClub(inputValue);
@@ -38,24 +36,22 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
   }, [debouncedSearch]);
 
   const handleSearch = () => {
-    const value = clubRef.current?.value ?? '';
+    const value = searchValue.trim();
     setParams('clubName', value, {
-      deleteBeforeParam: searchParams.get('clubName') === undefined,
+      deleteBeforeParam: !!searchParams.get('clubName'),
       replacePage: true,
     });
     if (onClose) onClose();
-    setRelateSearchItems(undefined);
+    setRelateSearchItems(null);
   };
 
   const handleDeleteButtonClick = () => {
-    if (clubRef.current) {
-      clubRef.current.value = '';
-      setParams('clubName', '', {
-        deleteBeforeParam: true,
-        replacePage: true,
-      });
-      setRelateSearchItems(undefined);
-    }
+    setSearchValue('');
+    setParams('clubName', '', {
+      deleteBeforeParam: true,
+      replacePage: true,
+    });
+    setRelateSearchItems(null);
     if (onClose) onClose();
   };
 
@@ -65,22 +61,20 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
         <div className={styles['search-bar__input-wrapper']}>
           <SearchIcon />
           <input
-            ref={clubRef}
             className={styles['search-bar']}
-            defaultValue={
-        searchParams.get('clubName') === undefined
-          ? ''
-          : searchParams.get('clubName') ?? ''
-      }
+            value={searchValue}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              handleInputChange(e);
+            }}
             type="text"
             name="search"
             placeholder="검색어를 입력해주세요"
             autoComplete="off"
-            onChange={handleInputChange}
             onKeyUp={(e) => {
               if (e.key === 'Enter') {
                 handleSearch();
-                setRelateSearchItems(undefined);
+                setRelateSearchItems(null);
               }
             }}
           />
