@@ -1,5 +1,9 @@
 @use "src/utils/scss/media";
 
+.container {
+  position: relative;
+}
+
 .search-bar-container {
   width: 100%;
   margin-top: 20px;
@@ -22,10 +26,15 @@
   background-color: white;
 
   @include media.media-breakpoint(mobile) {
-    padding: 0 10px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 0 16px;
     border: none;
-    border-bottom: 1px solid #e1e1e1;
     box-shadow: none;
+
+    &--result-opened {
+      border-radius: 8px 8px 0 0;
+    }
   }
 }
 
@@ -38,12 +47,23 @@
   padding: 12px 0;
 
   @include media.media-breakpoint(mobile) {
-    height: 40px;
+    background-color: #f5f5f5;
     font-size: 14px;
     padding: 12px 0;
   }
 
   &::placeholder {
     color: #727272;
+  }
+}
+
+.result {
+  @include media.media-breakpoint(mobile) {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    border-top: none;
   }
 }

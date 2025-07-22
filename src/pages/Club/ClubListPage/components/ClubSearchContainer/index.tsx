@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import { searchClub } from 'api/club';
 import { ClubSearchResponse } from 'api/club/entity';
+import { cn } from '@bcsdlab/utils';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import RelateSearchItem from 'pages/Club/ClubListPage/components/RelateSearchItem/RelateSearchItem';
@@ -10,12 +12,9 @@ import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SearchIcon from 'assets/svg/Club/search.svg';
 import styles from './ClubSearchContainer.module.scss';
 
-interface ClubSearchContainerProps {
-  onClose?: () => void;
-}
-
-export default function ClubSearchContainer({ onClose }: ClubSearchContainerProps) {
+export default function ClubSearchContainer() {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery();
 
   const { searchParams, setParams } = useParamsHandler();
   const [searchValue, setSearchValue] = useState<string>(searchParams.get('clubName') ?? '');
@@ -42,7 +41,6 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
       deleteBeforeParam: !!searchParams.get('clubName'),
       replacePage: true,
     });
-    if (onClose) onClose();
     setRelateSearchItems(null);
   };
 
@@ -53,7 +51,6 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
       replacePage: true,
     });
     setRelateSearchItems(null);
-    if (onClose) onClose();
   };
 
   const handleRelateSearchItemClick = (item: ClubSearchResponse['keywords'][number]) => {
@@ -67,11 +64,17 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
     }));
   };
 
+  const isResultExist = !!relateSearchItems?.keywords?.length;
+
   return (
     <div className={styles.container}>
       <div className={styles['search-bar-container']}>
-        <div className={styles['search-bar__input-wrapper']}>
-          <SearchIcon />
+        <div className={cn({
+          [styles['search-bar__input-wrapper']]: true,
+          [styles['search-bar__input-wrapper--result-opened']]: isResultExist,
+        })}
+        >
+          {!isMobile && <SearchIcon />}
           <input
             className={styles['search-bar']}
             value={searchValue}
@@ -94,7 +97,7 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
             aria-label="검색어 삭제"
             onClick={handleDeleteButtonClick}
           >
-            <CloseIcon />
+            {!isMobile ? <CloseIcon /> : <SearchIcon />}
           </button>
         </div>
       </div>
