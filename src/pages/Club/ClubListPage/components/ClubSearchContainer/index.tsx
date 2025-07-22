@@ -32,6 +32,7 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.trim();
+    setSearchValue(inputValue);
     debouncedSearch(inputValue);
   }, [debouncedSearch]);
 
@@ -55,6 +56,17 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
     if (onClose) onClose();
   };
 
+  const handleRelateSearchItemClick = (item: ClubSearchResponse['keywords'][number]) => {
+    setParams('clubName', item.club_name, {
+      deleteBeforeParam: !!searchParams.get('clubName'),
+      replacePage: true,
+    });
+    navigate(ROUTES.ClubDetail({
+      id: String(item.club_id),
+      isLink: true,
+    }));
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles['search-bar-container']}>
@@ -64,7 +76,6 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
             className={styles['search-bar']}
             value={searchValue}
             onChange={(e) => {
-              setSearchValue(e.target.value);
               handleInputChange(e);
             }}
             type="text"
@@ -74,7 +85,6 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
             onKeyUp={(e) => {
               if (e.key === 'Enter') {
                 handleSearch();
-                setRelateSearchItems(null);
               }
             }}
           />
@@ -94,16 +104,7 @@ export default function ClubSearchContainer({ onClose }: ClubSearchContainerProp
             key={item.club_id}
             url={item.club_id ? `/club/${item.club_id}` : ''}
             content={item.club_name}
-            onClick={() => {
-              setParams('clubName', item.club_name, {
-                deleteBeforeParam: !!searchParams.get('clubName'),
-                replacePage: true,
-              });
-              navigate(ROUTES.ClubDetail({
-                id: String(item.club_id),
-                isLink: true,
-              }));
-            }}
+            onClick={() => handleRelateSearchItemClick(item)}
           />
         ))}
       </div>
