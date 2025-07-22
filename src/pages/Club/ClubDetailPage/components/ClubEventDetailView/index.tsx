@@ -19,7 +19,7 @@ interface ClubEventDetailViewProps {
   isManager: boolean;
 }
 
-function formatDateTimeByDevice(dateTimeStr: string, isMobile: boolean) {
+const formatDateTimeByDevice = (dateTimeStr: string, isMobile: boolean) => {
   const date = new Date(dateTimeStr);
 
   const yyyy = date.getFullYear();
@@ -32,7 +32,7 @@ function formatDateTimeByDevice(dateTimeStr: string, isMobile: boolean) {
     return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
   }
   return `${yyyy}년 ${mm}월 ${dd}일 ${hh}시 ${min}분`;
-}
+};
 
 const statusOptions = [
   { label: '곧 행사 진행', value: 'SOON' },

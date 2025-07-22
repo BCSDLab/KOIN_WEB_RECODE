@@ -22,7 +22,7 @@ const getStatusLabel = (value: string) => {
   return option?.label ?? '상태 없음';
 };
 
-function splitDateTime(dateTimeStr: string) {
+const splitDateTime = (dateTimeStr: string) => {
   const [date, time] = dateTimeStr.split('T');
 
   const [yyyy, mm, dd] = date.split('-');
@@ -34,7 +34,7 @@ function splitDateTime(dateTimeStr: string) {
   const fullFormatted = `${dateFormatted} ${timeFormatted}`;
 
   return fullFormatted;
-}
+};
 
 export default function ClubEventCard({ event, setEventId, clubName }: ClubEventCardProps) {
   const isMobile = useMediaQuery();
@@ -49,6 +49,17 @@ export default function ClubEventCard({ event, setEventId, clubName }: ClubEvent
     setEventId(event.id);
   };
 
+  const handleKeyDownEventCard = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter') {
+      logger.actionEventClick({
+        team: 'CAMPUS',
+        event_label: 'club_event_select',
+        value: clubName,
+      });
+      setEventId(event.id);
+    }
+  };
+
   return (
     <div
       role="button"
@@ -58,7 +69,7 @@ export default function ClubEventCard({ event, setEventId, clubName }: ClubEvent
       })}
       onClick={handleClickEventCard}
       tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && handleClickEventCard()}
+      onKeyDown={handleKeyDownEventCard}
     >
       {event.image_urls.length > 0 && (
         <img src={event.image_urls[0]} alt={event.name} className={styles['club-event-card__image']} />

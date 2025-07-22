@@ -35,9 +35,7 @@ const DEFAULT_SORT_OPTIONS = [
   { label: '조회순', value: 'HITS_DESC' },
 ];
 
-function getDdayLabel(dday: number) {
-  return dday === 0 ? 'D-Day' : `D-${dday}`;
-}
+const getDDayLabel = (dday: number) => (dday === 0 ? 'D-Day' : `D-${dday}`);
 
 function ClubListPage() {
   const logger = useLogger();
@@ -286,7 +284,7 @@ function ClubListPage() {
                         <div className={styles['card__info-recruitment']}>
                           {club.recruitment_info.status === 'RECRUITING' && (
                           <span className={styles['card__info-recruitment--recruiting']}>
-                            {getDdayLabel(club.recruitment_info.dday)}
+                            {getDDayLabel(club.recruitment_info.dday)}
                           </span>
                           )}
                           {club.recruitment_info.status === 'ALWAYS' && <span className={styles['card__info-recruitment--always']}>상시 모집</span>}
