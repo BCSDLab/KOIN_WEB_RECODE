@@ -128,7 +128,7 @@ export default function NewClubRecruitment() {
             {!isMobile && (
               <DetailDescription
                 value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               />
             )}
           </div>
@@ -140,7 +140,7 @@ export default function NewClubRecruitment() {
             <>
               <DetailDescription
                 value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               />
               <div className={styles['button-group__bottom']}>
                 <button

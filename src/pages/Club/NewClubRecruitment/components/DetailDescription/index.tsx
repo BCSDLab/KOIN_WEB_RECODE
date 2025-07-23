@@ -3,7 +3,7 @@ import styles from './DetailDescription.module.scss';
 
 interface DetailDescriptionProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
 }
 
 export default function DetailDescription({ value, onChange }: DetailDescriptionProps) {
@@ -24,7 +24,7 @@ export default function DetailDescription({ value, onChange }: DetailDescription
         id="content"
         className={styles.form__textarea}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
         placeholder="상세 내용을 적어주세요."
         ref={textareaRef}
         maxLength={1500}

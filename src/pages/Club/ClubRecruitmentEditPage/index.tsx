@@ -165,7 +165,7 @@ export default function ClubRecruitmentEditPage() {
             {!isMobile && (
               <DetailDescription
                 value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               />
             )}
           </div>
@@ -177,7 +177,7 @@ export default function ClubRecruitmentEditPage() {
             <>
               <DetailDescription
                 value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               />
               <div className={styles['button-group__bottom']}>
                 <button
