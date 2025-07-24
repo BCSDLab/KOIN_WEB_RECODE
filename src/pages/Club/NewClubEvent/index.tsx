@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ClubEventRequest } from 'api/club/entity';
 import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useClubDetail from 'pages/Club/ClubDetailPage/hooks/useClubdetail';
 import DetailDescription from 'pages/Club/NewClubRecruitment/components/DetailDescription';
 import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
 import DatePickerModal from 'pages/Club/NewClubRecruitment/components/DatePickerModal';
@@ -16,7 +18,9 @@ import styles from './NewClubEvent.module.scss';
 
 export default function NewClubEvent() {
   const { id } = useParams<{ id: string }>();
+  const { clubDetail } = useClubDetail(Number(id));
   const { mutateAsync } = usePostNewEvent(Number(id));
+  const logger = useLogger();
   const isMobile = useMediaQuery();
 
   const [modalType, setModalType] = useState<'confirm' | 'cancel'>('confirm');
@@ -49,6 +53,11 @@ export default function NewClubEvent() {
       start_date: submitStartDate,
       end_date: submitEndDate,
     });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_confirm',
+      value: clubDetail.name,
+    });
   };
 
   function splitKoreanDate(date: Date): [string, string] {
@@ -59,6 +68,24 @@ export default function NewClubEvent() {
   const [startYear, startRest] = splitKoreanDate(startDate);
   const [endYear, endRest] = splitKoreanDate(endDate);
 
+  const handleClickEventConfirmButton = () => {
+    setModalType('confirm');
+    openModal();
+  };
+
+  const handleClickEventCancelButton = () => {
+    setModalType('cancel');
+    openModal();
+  };
+
+  const cancelEventCreation = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_cancel',
+      value: clubDetail.name,
+    });
+  };
+
   return (
     <div className={styles.layout}>
       <div className={styles.container}>
@@ -66,10 +93,18 @@ export default function NewClubEvent() {
         <div className={styles.header}>
           <h1 className={styles.header__title}>행사 생성</h1>
           <div className={styles['header__button-container']}>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('cancel'); openModal(); }}>
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickEventCancelButton}
+            >
               생성 취소
             </button>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('confirm'); openModal(); }}>
+            <button
+              type="button"
+              className={styles.header__button}
+              onClick={handleClickEventConfirmButton}
+            >
               생성 완료
             </button>
           </div>
@@ -171,7 +206,7 @@ export default function NewClubEvent() {
             {!isMobile && (
               <DetailDescription
                 value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               />
             )}
           </div>
@@ -186,20 +221,20 @@ export default function NewClubEvent() {
             <>
               <DetailDescription
                 value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               />
               <div className={styles['button-group__bottom']}>
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('cancel'); openModal(); }}
+                  onClick={handleClickEventCancelButton}
                 >
                   생성 취소
                 </button>
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('confirm'); openModal(); }}
+                  onClick={handleClickEventConfirmButton}
                 >
                   생성 하기
                 </button>
@@ -215,6 +250,7 @@ export default function NewClubEvent() {
           type={modalType}
           closeModal={closeModal}
           onSubmit={handleSubmit}
+          onCancel={cancelEventCreation}
         />
       )}
       {isStartCalendarOpen && (

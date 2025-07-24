@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
 import { useSwipeable } from 'react-swipeable';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import useDeleteEvent from 'pages/Club/ClubDetailPage/hooks/useDeleteEvent';
+import useClubDetail from 'pages/Club/ClubDetailPage/hooks/useClubdetail';
 import ROUTES from 'static/routes';
 import NextImageIcon from 'assets/svg/Club/next-image-icon.svg';
 import PreImageIcon from 'assets/svg/Club/pre-image-icon.svg';
@@ -19,30 +21,74 @@ interface ClubEventDetailViewProps {
   isManager: boolean;
 }
 
+const formatDateTimeByDevice = (dateTimeStr: string, isMobile: boolean) => {
+  const date = new Date(dateTimeStr);
+
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+
+  if (isMobile) {
+    return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
+  }
+  return `${yyyy}년 ${mm}월 ${dd}일 ${hh}시 ${min}분`;
+};
+
+const statusOptions = [
+  { label: '곧 행사 진행', value: 'SOON' },
+  { label: '행사 예정', value: 'UPCOMING' },
+  { label: '행사 진행 중', value: 'ONGOING' },
+  { label: '종료된 행사', value: 'ENDED' },
+] as const;
+
 export default function ClubEventDetailView({
   clubId,
   eventId,
   setEventId,
   isManager,
 }: ClubEventDetailViewProps) {
+  const logger = useLogger();
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
+  const { clubDetail } = useClubDetail(clubId);
   const { clubEventDetail } = useClubEventDetail(clubId, eventId);
   const { mutateAsync } = useDeleteEvent();
 
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
+  const getStatusLabel = (value: string) => {
+    const option = statusOptions.find((opt) => opt.value === value);
+    return option ? option.label : '최신 등록순';
+  };
+
   const handleEventDelete = async () => {
     await mutateAsync(Number(eventId));
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete_confirm',
+      value: clubDetail.name,
+    });
     setEventId(-1);
     closeModal();
   };
 
   const handleClickDeleteButton = async () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete',
+      value: clubDetail.name,
+    });
     openModal();
   };
 
   const handleClickEditButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_correction',
+      value: clubDetail.name,
+    });
     navigate(
       ROUTES.ClubEventEdit({
         id: String(clubId),
@@ -94,10 +140,11 @@ export default function ClubEventDetailView({
       )}
       {isMobile && (
       <div className={styles.mobile__date}>
-        {clubEventDetail.start_date.split('T')[0]}
+        {formatDateTimeByDevice(clubEventDetail.start_date, isMobile)}
         {' '}
         부터
-        {clubEventDetail.end_date.split('T')[0]}
+        {' '}
+        {formatDateTimeByDevice(clubEventDetail.end_date, isMobile)}
         {' '}
         까지
       </div>
@@ -156,14 +203,25 @@ export default function ClubEventDetailView({
           행사 이름:
           {' '}
           {clubEventDetail.name}
+          <div className={cn({
+            [styles['event-detail__status']]: true,
+            [styles['event-detail__status--soon']]: clubEventDetail.status === 'SOON',
+            [styles['event-detail__status--ended']]: clubEventDetail.status === 'ENDED',
+            [styles['event-detail__status--upcoming']]: clubEventDetail.status === 'UPCOMING',
+            [styles['event-detail__status--ongoing']]: clubEventDetail.status === 'ONGOING',
+          })}
+          >
+            {getStatusLabel(clubEventDetail.status)}
+          </div>
         </div>
         <div className={styles['event-detail__content']}>
           행사 날짜:
           {' '}
-          {clubEventDetail.start_date.split('T')[0]}
+          {formatDateTimeByDevice(clubEventDetail.start_date, isMobile)}
           {' '}
           부터
-          {clubEventDetail.end_date.split('T')[0]}
+          {' '}
+          {formatDateTimeByDevice(clubEventDetail.end_date, isMobile)}
           {' '}
           까지
         </div>
@@ -174,6 +232,7 @@ export default function ClubEventDetailView({
         {' '}
         {clubEventDetail.introduce}
       </div>
+      {!isMobile && <hr className={styles['event-detail__divider']} />}
       <div className={styles['event-detail__content']}>
         상세 내용:
         {' '}

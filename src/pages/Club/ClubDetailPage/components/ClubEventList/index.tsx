@@ -8,6 +8,8 @@ import ClubEventDetailView from 'pages/Club/ClubDetailPage/components/ClubEventD
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ClubEventList.module.scss';
 
+const NO_SELECTED_EVENT_ID = -1;
+
 interface ClubEventListProps {
   clubId: number | string | undefined;
   isManager: boolean;
@@ -53,9 +55,20 @@ export default function ClubEventList({
     setIsOpen(false);
   };
 
+  if (eventId !== NO_SELECTED_EVENT_ID) {
+    return (
+      <ClubEventDetailView
+        clubId={clubId}
+        eventId={eventId}
+        setEventId={setEventId}
+        isManager={isManager}
+      />
+    );
+  }
+
   return (
     <div className="club-event-list">
-      {isManager && isMobile && eventId === -1 && (
+      {isManager && isMobile && (
         <div className={styles['create-button__container']}>
           <button
             type="button"
@@ -67,7 +80,6 @@ export default function ClubEventList({
         </div>
       )}
 
-      {eventId === -1 && (
       <div className={styles['filter-container']}>
         <div className={styles.dropdown__wrapper}>
           <button
@@ -84,39 +96,36 @@ export default function ClubEventList({
           </button>
 
           {isOpen && (
-          <div className={styles.dropdown__menu}>
-            {statusOptions.map((option) => (
-              <button
-                type="button"
-                key={option.value}
-                onClick={() => handleStatusSelect(option.value)}
-                className={styles.dropdown__item}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
+            <div className={styles.dropdown__menu}>
+              {statusOptions.map((option) => (
+                <button
+                  type="button"
+                  key={option.value}
+                  onClick={() => handleStatusSelect(option.value)}
+                  className={styles.dropdown__item}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           )}
         </div>
       </div>
-      )}
       <div className={styles['club-event-list']}>
-        {eventId === -1 ? clubEventList.map((event) => (
-          <ClubEventCard
-            key={event.id}
-            event={event}
-            setEventId={setEventId}
-            clubName={clubName}
-          />
-        ))
-          : (
-            <ClubEventDetailView
-              clubId={clubId}
-              eventId={eventId}
+        {clubEventList.length === 0 ? (
+          <div className={styles['club-event-list__empty']}>
+            등록된 행사가 없습니다.
+          </div>
+        ) : (
+          clubEventList.map((event) => (
+            <ClubEventCard
+              key={event.id}
+              event={event}
               setEventId={setEventId}
-              isManager={isManager}
+              clubName={clubName}
             />
-          )}
+          ))
+        )}
       </div>
     </div>
   );

@@ -83,6 +83,21 @@
   display: flex;
   gap: 12px;
   flex-direction: column;
+
+  &__empty {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #727272;
+    font-size: 22px;
+    font-weight: 500;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 18px;
+    }
+  }
 }
 
 .create-button {

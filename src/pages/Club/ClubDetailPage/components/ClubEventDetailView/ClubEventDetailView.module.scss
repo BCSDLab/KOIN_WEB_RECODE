@@ -12,15 +12,48 @@
   }
 
   &__content {
+    display: flex;
+    gap: 20px;
     color: #000;
-    font-size: 26px;
-    font-weight: 700;
+    font-size: 18px;
     white-space: pre-wrap;
-    margin-top: 10px;
+    margin-top: 20px;
 
     @include media.media-breakpoint(mobile) {
       font-size: 15px;
-      font-weight: 400;
+    }
+  }
+
+  &__divider {
+    margin: 20px 0;
+    border: 1px solid #4b4b4b;
+  }
+
+  &__status {
+    padding: 4px 8px;
+    color: #fff;
+    font-size: 11px;
+    border-radius: 16px;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 4px 8px;
+      font-size: 10px;
+    }
+
+    &--soon {
+      background-color: #4590bb;
+    }
+
+    &--upcoming {
+      background-color: #175c8e;
+    }
+
+    &--ongoing {
+      background-color: #6dbbdd;
+    }
+
+    &--ended {
+      background-color: #0b3566;
     }
   }
 

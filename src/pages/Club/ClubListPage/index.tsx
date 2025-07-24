@@ -19,18 +19,22 @@ import ExerciseIcon from 'assets/svg/Club/exercise-icon.svg';
 import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
 import HeartFilled from 'assets/svg/Club/heart-filled-icon.svg';
 import HeartOutline from 'assets/svg/Club/heart-outline-icon.svg';
-import ClubSearchBar from './components/ClubSearchBar/ClubSearchBar';
-import ClubSearchBarModal from './components/ClubSearchBarModal/ClubSearchBarModal';
+import ClubSearchContainer from './components/ClubSearchContainer';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
 
-const SORT_OPTIONS = [
-  { label: '생성순', value: 'CREATED_AT_ASC' },
-  { label: '조회순', value: 'HITS_DESC' },
+const RECRUITING_SORT_OPTIONS = [
   { label: '모집 글 생성순', value: 'RECRUITMENT_UPDATED_DESC' },
   { label: '모집 마감 순', value: 'RECRUITING_DEADLINE_ASC' },
 ];
+
+const DEFAULT_SORT_OPTIONS = [
+  { label: '생성순', value: 'CREATED_AT_ASC' },
+  { label: '조회순', value: 'HITS_DESC' },
+];
+
+const getDDayLabel = (dday: number) => (dday === 0 ? 'D-Day' : `D-${dday}`);
 
 function ClubListPage() {
   const logger = useLogger();
@@ -42,7 +46,7 @@ function ClubListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const clubName = searchParams.get('clubName') ?? '';
   const isRecruitingParam = searchParams.get('isRecruiting') === 'true';
-  const sortValue = searchParams.get('sortType') ?? SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
+  const sortValue = searchParams.get('sortType') ?? DEFAULT_SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
   const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
 
   const { data: userInfo } = useUser();
@@ -89,6 +93,11 @@ function ClubListPage() {
   const handleRecruitmentFilterToggle = () => {
     const next = !isRecruitingParam;
 
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_main_recruiting_toggle',
+      value: next ? 'on' : 'off',
+    });
     if (
       !next
     && (sortValue === 'RECRUITMENT_UPDATED_DESC' || sortValue === 'RECRUITING_DEADLINE_ASC')
@@ -98,6 +107,7 @@ function ClubListPage() {
 
     if (next) {
       searchParams.set('isRecruiting', 'true');
+      searchParams.set('sortType', 'RECRUITMENT_UPDATED_DESC');
     } else {
       searchParams.delete('isRecruiting');
     }
@@ -208,8 +218,7 @@ function ClubListPage() {
               </button>
             ))}
           </div>
-          {isMobile && (<ClubSearchBar />)}
-          {!isMobile && <ClubSearchBarModal onClose={() => {}} />}
+          <ClubSearchContainer />
           <div className={styles.description}>
             <div className={styles.description__message}>
               총
@@ -238,7 +247,7 @@ function ClubListPage() {
               <div className={styles.description__dropdown}>
                 <Selector
                   isWhiteBackground={false}
-                  options={SORT_OPTIONS}
+                  options={isRecruitingParam ? RECRUITING_SORT_OPTIONS : DEFAULT_SORT_OPTIONS}
                   value={sortValue}
                   onChange={onChangeSort}
                 />
@@ -278,9 +287,7 @@ function ClubListPage() {
                         <div className={styles['card__info-recruitment']}>
                           {club.recruitment_info.status === 'RECRUITING' && (
                           <span className={styles['card__info-recruitment--recruiting']}>
-                            D
-                            <span className={styles.hyphen}>-</span>
-                            {club.recruitment_info.dday}
+                            {getDDayLabel(club.recruitment_info.dday)}
                           </span>
                           )}
                           {club.recruitment_info.status === 'ALWAYS' && <span className={styles['card__info-recruitment--always']}>상시 모집</span>}

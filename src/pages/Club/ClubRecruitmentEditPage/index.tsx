@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ClubRecruitment } from 'api/club/entity';
-import { formatKoreanDate } from 'utils/ts/calendar';
+import { formatKoreanDate, getYyyyMmDd } from 'utils/ts/calendar';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import DatePicker from 'components/ui/DatePicker';
@@ -9,6 +10,7 @@ import DetailDescription from 'pages/Club/NewClubRecruitment/components/DetailDe
 import ClubImageUploader from 'pages/Club/NewClubRecruitment/components/ImageUploader';
 import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
 import DatePickerModal from 'pages/Club/NewClubRecruitment/components/DatePickerModal';
+import useClubDetail from 'pages/Club/ClubDetailPage/hooks/useClubdetail';
 import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
 import usePutClubRecruitment from './hooks/usePutClubRecruitment';
 import styles from './ClubRecruitmentEditPage.module.scss';
@@ -18,18 +20,13 @@ function splitKoreanDate(date: Date): [string, string] {
   return [year, rest.join(' ')];
 }
 
-function getYyyyMmDd(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
 const TODAY = getYyyyMmDd(new Date());
 
 export default function ClubRecruitmentEditPage() {
   const { id } = useParams<{ id: string }>();
+  const logger = useLogger();
   const isMobile = useMediaQuery();
+  const { clubDetail } = useClubDetail(id);
   const { clubRecruitmentData } = useClubRecruitment(Number(id));
   const { mutateAsync } = usePutClubRecruitment(Number(id));
 
@@ -38,16 +35,24 @@ export default function ClubRecruitmentEditPage() {
   const [isStartCalendarOpen, openStartCalendar, closeStartCalendar] = useBooleanState(false);
   const [isEndCalendarOpen, openEndCalendar, closeEndCalendar] = useBooleanState(false);
 
+  const {
+    start_date: startDate,
+    end_date: endDate,
+    status: recruitmentStatus,
+    image_url: imageUrl,
+    content: recruitmentContent,
+  } = clubRecruitmentData;
+
   const [formData, setFormData] = useState<ClubRecruitment>({
-    start_date: clubRecruitmentData.start_date
-      ? clubRecruitmentData.start_date.replace(/\./g, '-')
+    start_date: startDate
+      ? startDate.replace(/\./g, '-')
       : TODAY,
-    end_date: clubRecruitmentData.end_date
-      ? clubRecruitmentData.end_date.replace(/\./g, '-')
+    end_date: endDate
+      ? endDate.replace(/\./g, '-')
       : TODAY,
-    is_always_recruiting: clubRecruitmentData.status === 'ALWAYS',
-    image_url: clubRecruitmentData.image_url,
-    content: clubRecruitmentData.content,
+    is_always_recruiting: recruitmentStatus === 'ALWAYS',
+    image_url: imageUrl,
+    content: recruitmentContent,
   });
 
   const handleSubmit = async () => {
@@ -59,6 +64,11 @@ export default function ClubRecruitmentEditPage() {
       }
       : formData;
     await mutateAsync(payload);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_correction_confirm',
+      value: clubDetail.name,
+    });
   };
 
   const [startYear, startRest] = splitKoreanDate(new Date(formData.start_date));
@@ -72,6 +82,14 @@ export default function ClubRecruitmentEditPage() {
   const handleClickEditButton = () => {
     setModalType('edit');
     openModal();
+  };
+
+  const handleCancel = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_correction_cancel',
+      value: clubDetail.name,
+    });
   };
 
   return (
@@ -164,7 +182,7 @@ export default function ClubRecruitmentEditPage() {
             {!isMobile && (
               <DetailDescription
                 value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               />
             )}
           </div>
@@ -176,7 +194,7 @@ export default function ClubRecruitmentEditPage() {
             <>
               <DetailDescription
                 value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               />
               <div className={styles['button-group__bottom']}>
                 <button
@@ -204,6 +222,7 @@ export default function ClubRecruitmentEditPage() {
           type={modalType}
           closeModal={closeModal}
           onSubmit={handleSubmit}
+          onCancel={handleCancel}
         />
       )}
       {isStartCalendarOpen && (

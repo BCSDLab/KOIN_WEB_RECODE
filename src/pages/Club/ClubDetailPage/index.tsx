@@ -152,10 +152,10 @@ export default function ClubDetailPage() {
     setNavType(navValue);
   };
 
-  const handleCopy = async (text: string) => {
+  const handleCopy = async (text: string, label: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      showToast('success', '전화번호가 복사되었습니다.');
+      showToast('success', `${label}가 복사되었습니다.`);
     } catch {
       const textarea = document.createElement('textarea');
       textarea.value = text;
@@ -163,7 +163,7 @@ export default function ClubDetailPage() {
       textarea.select();
       document.execCommand('copy');
       textarea.remove();
-      showToast('success', '전화번호가 복사되었습니다.');
+      showToast('success', `${label}가 복사되었습니다.`);
     }
   };
 
@@ -177,35 +177,75 @@ export default function ClubDetailPage() {
   };
 
   const handleClickRecruitAddButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_new_recruitment',
+      value: clubDetail.name,
+    });
     navigate(ROUTES.NewClubRecruitment({ id: String(id), isLink: true }));
   };
 
   const handleClickEventAddButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_new_event',
+      value: clubDetail.name,
+    });
     navigate(ROUTES.NewClubEvent({ id: String(id), isLink: true }));
   };
 
   const handleDeleteRecruitment = async () => {
     await deleteRecruitment();
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_delete_confirm',
+      value: clubDetail.name,
+    });
   };
 
   const handleClickRecruitDeleteButton = () => {
     openRecruitDeleteModal();
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_delete',
+      value: clubDetail.name,
+    });
   };
 
   const handleClickRecruitEditButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_correction',
+      value: clubDetail.name,
+    });
     navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
   };
 
   const handleDeleteEvent = async () => {
     await deleteEvent(Number(eventId));
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete_confirm',
+      value: clubDetail.name,
+    });
     setEventId(-1);
   };
 
   const handleClickEventDeleteButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete',
+      value: clubDetail.name,
+    });
     openEventDeleteModal();
   };
 
   const handleClickEventEditButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_correction',
+      value: clubDetail.name,
+    });
     navigate(ROUTES.ClubEventEdit({ id: String(id), eventId: String(eventId), isLink: true }));
   };
 
@@ -213,7 +253,7 @@ export default function ClubDetailPage() {
     <div className={styles.layout}>
       {!isMobile && (
       <div className={styles['club-detail__pc-header']}>
-        상세소개
+        {navType}
         {isEdit ? (
           <div className={styles['club-detail__pc-header__button-box']}>
             <button
@@ -243,7 +283,7 @@ export default function ClubDetailPage() {
                       className={styles['club-detail__pc-header__button']}
                       onClick={handleClickRecruitAddButton}
                     >
-                      모집 추가하기
+                      모집 생성하기
                     </button>
                   ) : (
                     <>
@@ -274,7 +314,7 @@ export default function ClubDetailPage() {
                       className={styles['club-detail__pc-header__button']}
                       onClick={handleClickEventAddButton}
                     >
-                      행사 추가하기
+                      행사 생성하기
                     </button>
                   ) : (
                     <>
@@ -350,12 +390,18 @@ export default function ClubDetailPage() {
             <div className={styles['club-detail__summary__like-container']}>
               {clubDetail.hot_status && (
               <div className={styles['club-detail__summary__like-banner']}>
-                🎉
-                {clubDetail.hot_status?.month}
-                월
-                {' '}
-                {clubDetail.hot_status?.week_of_month}
-                째주 인기 동아리 🎉
+                {clubDetail.hot_status.streak_count >= 2
+                  ? `🎉 ${clubDetail.hot_status.streak_count}주 연속 인기 동아리 🎉`
+                  : (
+                    <>
+                      🎉
+                      {clubDetail.hot_status.month}
+                      월
+                      {' '}
+                      {clubDetail.hot_status.week_of_month}
+                      째주 인기 동아리 🎉
+                    </>
+                  )}
               </div>
               )}
               {isMobile && (
@@ -399,6 +445,14 @@ export default function ClubDetailPage() {
                 @
                 {clubDetail.instagram}
               </a>
+              <button
+                className={styles['copy-button']}
+                type="button"
+                aria-label="복사붙여넣기 버튼"
+                onClick={() => handleCopy(`https://www.instagram.com/${clubDetail.instagram}`, '인스타그램')}
+              >
+                <CopyIcon />
+              </button>
             </div>
             )}
             {clubDetail.google_form && (
@@ -410,8 +464,16 @@ export default function ClubDetailPage() {
                 rel="noopener noreferrer"
                 className={styles['club-detail__summary__contacts__row__link']}
               >
-                <div className={styles['club-detail__summary__contacts__row__text']}>{clubDetail.google_form}</div>
+                <div className={styles['club-detail__summary__contacts__row__text']}>https://docs.google.com/forms/...</div>
               </a>
+              <button
+                className={styles['copy-button']}
+                type="button"
+                aria-label="복사붙여넣기 버튼"
+                onClick={() => handleCopy(clubDetail.google_form!, '구글폼')}
+              >
+                <CopyIcon />
+              </button>
             </div>
             )}
             {clubDetail.open_chat && (
@@ -425,6 +487,14 @@ export default function ClubDetailPage() {
               >
                 {clubDetail.open_chat}
               </a>
+              <button
+                className={styles['copy-button']}
+                type="button"
+                aria-label="복사붙여넣기 버튼"
+                onClick={() => handleCopy(clubDetail.open_chat!, '오픈채팅')}
+              >
+                <CopyIcon />
+              </button>
             </div>
             )}
             {clubDetail.phone_number && (
@@ -432,15 +502,15 @@ export default function ClubDetailPage() {
               <div className={styles['club-detail__summary__contacts__row--label']}>전화번호:</div>
               <div className={styles['club-detail__summary__contacts__text']}>
                 {clubDetail.phone_number && formatPhoneNumber(clubDetail.phone_number)}
-                <button
-                  className={styles['copy-button']}
-                  type="button"
-                  aria-label="복사붙여넣기 버튼"
-                  onClick={() => handleCopy(clubDetail.phone_number!)}
-                >
-                  <CopyIcon />
-                </button>
               </div>
+              <button
+                className={styles['copy-button']}
+                type="button"
+                aria-label="복사붙여넣기 버튼"
+                onClick={() => handleCopy(clubDetail.phone_number!, '전화번호')}
+              >
+                <CopyIcon />
+              </button>
             </div>
             )}
           </div>
