@@ -177,35 +177,75 @@ export default function ClubDetailPage() {
   };
 
   const handleClickRecruitAddButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_new_recruitment',
+      value: clubDetail.name,
+    });
     navigate(ROUTES.NewClubRecruitment({ id: String(id), isLink: true }));
   };
 
   const handleClickEventAddButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_new_event',
+      value: clubDetail.name,
+    });
     navigate(ROUTES.NewClubEvent({ id: String(id), isLink: true }));
   };
 
   const handleDeleteRecruitment = async () => {
     await deleteRecruitment();
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_delete_confirm',
+      value: clubDetail.name,
+    });
   };
 
   const handleClickRecruitDeleteButton = () => {
     openRecruitDeleteModal();
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_delete',
+      value: clubDetail.name,
+    });
   };
 
   const handleClickRecruitEditButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_correction',
+      value: clubDetail.name,
+    });
     navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
   };
 
   const handleDeleteEvent = async () => {
     await deleteEvent(Number(eventId));
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete_confirm',
+      value: clubDetail.name,
+    });
     setEventId(-1);
   };
 
   const handleClickEventDeleteButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete',
+      value: clubDetail.name,
+    });
     openEventDeleteModal();
   };
 
   const handleClickEventEditButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_correction',
+      value: clubDetail.name,
+    });
     navigate(ROUTES.ClubEventEdit({ id: String(id), eventId: String(eventId), isLink: true }));
   };
 
@@ -243,7 +283,7 @@ export default function ClubDetailPage() {
                       className={styles['club-detail__pc-header__button']}
                       onClick={handleClickRecruitAddButton}
                     >
-                      모집 추가하기
+                      모집 생성하기
                     </button>
                   ) : (
                     <>
@@ -274,7 +314,7 @@ export default function ClubDetailPage() {
                       className={styles['club-detail__pc-header__button']}
                       onClick={handleClickEventAddButton}
                     >
-                      행사 추가하기
+                      행사 생성하기
                     </button>
                   ) : (
                     <>

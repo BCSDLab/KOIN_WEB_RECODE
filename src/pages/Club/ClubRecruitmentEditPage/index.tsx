@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ClubRecruitment } from 'api/club/entity';
 import { formatKoreanDate, getYyyyMmDd } from 'utils/ts/calendar';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import DatePicker from 'components/ui/DatePicker';
@@ -9,6 +10,7 @@ import DetailDescription from 'pages/Club/NewClubRecruitment/components/DetailDe
 import ClubImageUploader from 'pages/Club/NewClubRecruitment/components/ImageUploader';
 import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
 import DatePickerModal from 'pages/Club/NewClubRecruitment/components/DatePickerModal';
+import useClubDetail from 'pages/Club/ClubDetailPage/hooks/useClubdetail';
 import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
 import usePutClubRecruitment from './hooks/usePutClubRecruitment';
 import styles from './ClubRecruitmentEditPage.module.scss';
@@ -22,7 +24,9 @@ const TODAY = getYyyyMmDd(new Date());
 
 export default function ClubRecruitmentEditPage() {
   const { id } = useParams<{ id: string }>();
+  const logger = useLogger();
   const isMobile = useMediaQuery();
+  const { clubDetail } = useClubDetail(id);
   const { clubRecruitmentData } = useClubRecruitment(Number(id));
   const { mutateAsync } = usePutClubRecruitment(Number(id));
 
@@ -60,6 +64,11 @@ export default function ClubRecruitmentEditPage() {
       }
       : formData;
     await mutateAsync(payload);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_correction_confirm',
+      value: clubDetail.name,
+    });
   };
 
   const [startYear, startRest] = splitKoreanDate(new Date(formData.start_date));
@@ -73,6 +82,14 @@ export default function ClubRecruitmentEditPage() {
   const handleClickEditButton = () => {
     setModalType('edit');
     openModal();
+  };
+
+  const handleCancel = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_correction_cancel',
+      value: clubDetail.name,
+    });
   };
 
   return (
@@ -205,6 +222,7 @@ export default function ClubRecruitmentEditPage() {
           type={modalType}
           closeModal={closeModal}
           onSubmit={handleSubmit}
+          onCancel={handleCancel}
         />
       )}
       {isStartCalendarOpen && (

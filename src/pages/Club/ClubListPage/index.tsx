@@ -93,6 +93,11 @@ function ClubListPage() {
   const handleRecruitmentFilterToggle = () => {
     const next = !isRecruitingParam;
 
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_main_recruiting_toggle',
+      value: next ? 'on' : 'off',
+    });
     if (
       !next
     && (sortValue === 'RECRUITMENT_UPDATED_DESC' || sortValue === 'RECRUITING_DEADLINE_ASC')

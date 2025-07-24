@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ClubRecruitment } from 'api/club/entity';
 import { formatKoreanDate, getYyyyMmDd } from 'utils/ts/calendar';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useClubDetail from 'pages/Club/ClubDetailPage/hooks/useClubdetail';
 import DatePicker from 'components/ui/DatePicker';
 import ClubImageUploader from './components/ImageUploader';
 import DetailDescription from './components/DetailDescription';
@@ -13,7 +15,9 @@ import usePostNewRecruitment from './hooks/usePostNewRecruitment';
 import styles from './NewClubRecruitment.module.scss';
 
 export default function NewClubRecruitment() {
+  const logger = useLogger();
   const { id } = useParams<{ id: string }>();
+  const { clubDetail } = useClubDetail(id);
   const { mutateAsync } = usePostNewRecruitment(Number(id));
   const isMobile = useMediaQuery();
 
@@ -46,6 +50,19 @@ export default function NewClubRecruitment() {
         end_date: getYyyyMmDd(endDate),
       };
     await mutateAsync(payload);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_confirm',
+      value: clubDetail.name,
+    });
+  };
+
+  const handleCancel = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_cancel',
+      value: clubDetail.name,
+    });
   };
 
   function splitKoreanDate(date: Date): [string, string] {
@@ -169,6 +186,7 @@ export default function NewClubRecruitment() {
           type={modalType}
           closeModal={closeModal}
           onSubmit={handleSubmit}
+          onCancel={handleCancel}
         />
       )}
       {isStartCalendarOpen && (

@@ -4,6 +4,7 @@ import ROUTES from 'static/routes';
 import { searchClub } from 'api/club';
 import { ClubSearchResponse } from 'api/club/entity';
 import { cn } from '@bcsdlab/utils';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
@@ -13,6 +14,7 @@ import SearchIcon from 'assets/svg/Club/search.svg';
 import styles from './ClubSearchContainer.module.scss';
 
 export default function ClubSearchContainer() {
+  const logger = useLogger();
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
 
@@ -37,6 +39,11 @@ export default function ClubSearchContainer() {
 
   const handleSearch = () => {
     const value = searchValue.trim();
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_main_search',
+      value,
+    });
     setParams('clubName', value, {
       deleteBeforeParam: !!searchParams.get('clubName'),
       replacePage: true,
@@ -85,7 +92,7 @@ export default function ClubSearchContainer() {
             name="search"
             placeholder="검색어를 입력해주세요"
             autoComplete="off"
-            onKeyUp={(e) => {
+            onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 handleSearch();
               }

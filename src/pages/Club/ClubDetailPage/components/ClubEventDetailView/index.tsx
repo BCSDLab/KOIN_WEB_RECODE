@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
 import { useSwipeable } from 'react-swipeable';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import useDeleteEvent from 'pages/Club/ClubDetailPage/hooks/useDeleteEvent';
+import useClubDetail from 'pages/Club/ClubDetailPage/hooks/useClubdetail';
 import ROUTES from 'static/routes';
 import NextImageIcon from 'assets/svg/Club/next-image-icon.svg';
 import PreImageIcon from 'assets/svg/Club/pre-image-icon.svg';
@@ -47,8 +49,10 @@ export default function ClubEventDetailView({
   setEventId,
   isManager,
 }: ClubEventDetailViewProps) {
+  const logger = useLogger();
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
+  const { clubDetail } = useClubDetail(clubId);
   const { clubEventDetail } = useClubEventDetail(clubId, eventId);
   const { mutateAsync } = useDeleteEvent();
 
@@ -61,15 +65,30 @@ export default function ClubEventDetailView({
 
   const handleEventDelete = async () => {
     await mutateAsync(Number(eventId));
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete_confirm',
+      value: clubDetail.name,
+    });
     setEventId(-1);
     closeModal();
   };
 
   const handleClickDeleteButton = async () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete',
+      value: clubDetail.name,
+    });
     openModal();
   };
 
   const handleClickEditButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_correction',
+      value: clubDetail.name,
+    });
     navigate(
       ROUTES.ClubEventEdit({
         id: String(clubId),

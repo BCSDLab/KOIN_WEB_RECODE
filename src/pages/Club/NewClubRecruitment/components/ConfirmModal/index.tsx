@@ -7,10 +7,13 @@ import styles from './ConfirmModal.module.scss';
 interface ConfirmModalProps {
   closeModal: () => void;
   onSubmit: () => void;
+  onCancel?: () => void;
   type?: 'confirm' | 'cancel' | 'edit' | 'editCancel' | 'eventDelete' | 'recruitmentDelete';
 }
 
-export default function ConfirmModal({ closeModal, onSubmit, type = 'confirm' }: ConfirmModalProps) {
+export default function ConfirmModal({
+  closeModal, onSubmit, onCancel, type = 'confirm',
+}: ConfirmModalProps) {
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
@@ -23,6 +26,7 @@ export default function ConfirmModal({ closeModal, onSubmit, type = 'confirm' }:
 
   const handleCancel = () => {
     closeModal();
+    onCancel?.();
     navigate(-1);
   };
 
@@ -94,8 +98,8 @@ export default function ConfirmModal({ closeModal, onSubmit, type = 'confirm' }:
           <>
             {isMobile ? (
               <>
-                <div className={styles['info-text']}>작성하신 내용으로</div>
-                <div className={styles['info-text']}>수정하시겠어요?</div>
+                <div className={styles['info-text']}>수정을 취소하시겠어요?</div>
+                <div className={styles['info-text']}>작성하신 내용은 모두 사라져요.</div>
               </>
             ) : (
               <>
@@ -108,7 +112,7 @@ export default function ConfirmModal({ closeModal, onSubmit, type = 'confirm' }:
             )}
             <div className={styles['info-button-container']}>
               <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>계속하기</button>
-              <button className={styles['info-button__reset']} type="button" onClick={() => navigate(-1)}>취소하기</button>
+              <button className={styles['info-button__reset']} type="button" onClick={handleCancel}>취소하기</button>
             </div>
           </>
         )}

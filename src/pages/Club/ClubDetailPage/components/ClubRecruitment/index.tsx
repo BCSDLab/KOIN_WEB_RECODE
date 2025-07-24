@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useClubDetail from 'pages/Club/ClubDetailPage/hooks/useClubdetail';
 import useClubRecruitment from 'pages/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useDeleteRecruitment from 'pages/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
@@ -18,9 +20,11 @@ export default function ClubRecruitment({
   isManager,
   handleClickAddButton,
 }: ClubRecruitmentProps) {
+  const logger = useLogger();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
+  const { clubDetail } = useClubDetail(id);
   const { clubRecruitmentData } = useClubRecruitment(clubId);
   const { mutateAsync } = useDeleteRecruitment();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -33,13 +37,28 @@ export default function ClubRecruitment({
 
   const handleDeleteRecruitment = async () => {
     await mutateAsync();
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_delete_confirm',
+      value: clubDetail.name,
+    });
   };
 
-  const handleClickDeleteButton = async () => {
+  const handleClickDeleteButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_delete',
+      value: clubDetail.name,
+    });
     openModal();
   };
 
   const handleClickEditButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_correction',
+      value: clubDetail.name,
+    });
     navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
   };
 

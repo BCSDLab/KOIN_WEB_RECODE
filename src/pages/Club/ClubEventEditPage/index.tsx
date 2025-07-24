@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ClubEventRequest } from 'api/club/entity';
 import { useClubEventDetail } from 'pages/Club/ClubDetailPage/hooks/useClubEvent';
 import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import DetailDescription from 'pages/Club/NewClubRecruitment/components/DetailDescription';
@@ -12,6 +13,7 @@ import ImagesUploadSlider from 'pages/Club/NewClubEvent/components/ImagesUploadS
 import TimeSelector from 'pages/Club/NewClubEvent/components/TimeSelector';
 import TimePicker from 'pages/Club/NewClubEvent/components/TimePicker';
 import DatePicker from 'components/ui/DatePicker';
+import useClubDetail from 'pages/Club/ClubDetailPage/hooks/useClubdetail';
 import usePutClubEvent from './hooks/usePutClubEvent';
 import styles from './ClubEventEditPage.module.scss';
 
@@ -21,8 +23,10 @@ function splitKoreanDate(date: Date): [string, string] {
 }
 
 export default function ClubEventEditPage() {
+  const logger = useLogger();
   const { id } = useParams<{ id: string }>();
   const { eventId } = useParams<{ eventId: string }>();
+  const { clubDetail } = useClubDetail(id);
   const { clubEventDetail } = useClubEventDetail(id, eventId);
   const { mutateAsync } = usePutClubEvent(Number(id));
   const isMobile = useMediaQuery();
@@ -73,6 +77,11 @@ export default function ClubEventEditPage() {
         end_date: submitEndDate,
       },
     });
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_correction_confirm',
+      value: clubDetail.name,
+    });
   };
 
   const [startYear, startRest] = splitKoreanDate(startDate);
@@ -86,6 +95,14 @@ export default function ClubEventEditPage() {
   const handleClickEditButton = () => {
     setModalType('edit');
     openModal();
+  };
+
+  const cancelEventEdit = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_correction_cancel',
+      value: clubDetail.name,
+    });
   };
 
   return (
@@ -261,6 +278,7 @@ export default function ClubEventEditPage() {
           type={modalType}
           closeModal={closeModal}
           onSubmit={handleSubmit}
+          onCancel={cancelEventEdit}
         />
       )}
       {isStartCalendarOpen && (
