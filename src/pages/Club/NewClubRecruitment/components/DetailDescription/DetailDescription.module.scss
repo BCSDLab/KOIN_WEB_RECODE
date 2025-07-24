@@ -1,0 +1,43 @@
+@use "src/utils/scss/media" as media;
+
+.form {
+  &__item {
+    width: 550px;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+    }
+  }
+
+  &__label {
+    font-weight: 500;
+    font-size: 22px;
+    text-align: left;
+    margin-bottom: 12px;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  &__textarea {
+    width: 100%;
+    height: 68px;
+    box-sizing: border-box;
+    padding: 8px 16px;
+    border-radius: 4px;
+    resize: none;
+    border: 1px solid #6dbbdd;
+    background-color: #f5f5f5;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      height: 60px;
+      font-size: 14px;
+    }
+  }
+}

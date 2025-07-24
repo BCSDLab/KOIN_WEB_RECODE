@@ -1,28 +1,36 @@
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import ROUTES from 'static/routes';
+import { cn } from '@bcsdlab/utils';
+import showToast from 'utils/ts/showToast';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useHeaderTitle } from 'utils/zustand/customTitle';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
+import { useDebounce } from 'utils/hooks/debounce/useDebounce';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import NonLikeIcon from 'assets/svg/Club/unlike-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
 import UpIcon from 'assets/svg/Club/up-icon.svg';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { cn } from '@bcsdlab/utils';
-import { useEffect, useState } from 'react';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import ROUTES from 'static/routes';
 import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { useHeaderTitle } from 'utils/zustand/customTitle';
-import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
-import showToast from 'utils/ts/showToast';
-import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import EditConfirmModal from 'pages/Club/ClubEditPage/conponents/EditConfirmModal';
-import useClubDetail from './hooks/useClubdetail';
-import styles from './ClubDetailPage.module.scss';
-import useClubLikeMutation from './hooks/useClubLike';
-import ClubIntroduction from './components/ClubIntrodution';
+import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
 import ClubQnA from './components/ClubQnA';
+import ClubEventList from './components/ClubEventList';
 import CreateQnAModal from './components/CreateQnAModal';
+import ClubRecruitment from './components/ClubRecruitment';
+import ClubIntroduction from './components/ClubIntrodution';
 import MandateClubManagerModal from './components/MandateClubManagerModal';
+import useClubDetail from './hooks/useClubdetail';
+import useDeleteEvent from './hooks/useDeleteEvent';
+import useClubLikeMutation from './hooks/useClubLike';
+import useClubRecruitment from './hooks/useClubRecruitment';
+import useDeleteRecruitment from './hooks/useDeleteRecruitment';
+import styles from './ClubDetailPage.module.scss';
+
+const NO_SELECTED_EVENT_ID = -1;
 
 export default function ClubDetailPage() {
   const { id } = useParams();
@@ -30,9 +38,13 @@ export default function ClubDetailPage() {
     clubDetail,
     clubIntroductionEditStatus,
   } = useClubDetail(id);
+  const { clubRecruitmentData } = useClubRecruitment(id);
+  const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
+  const { mutateAsync: deleteEvent } = useDeleteEvent();
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const logger = useLogger();
+  const [eventId, setEventId] = useState<string | number>(-1);
 
   const [navType, setNavType] = useState('상세 소개');
   const [isEdit, setIsEdit] = useState(false);
@@ -41,6 +53,16 @@ export default function ClubDetailPage() {
   const [isMandateModalOpen, openMandateModal, closeMandateModal] = useBooleanState(false);
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
   const [isEditModalOpen, openEditModal, closeEditModal] = useBooleanState(false);
+  const [
+    isRecruitDeleteModalOpen,
+    openRecruitDeleteModal,
+    closeRecruitDeleteModal,
+  ] = useBooleanState(false);
+  const [
+    isEventDeleteModalOpen,
+    openEventDeleteModal,
+    closeEventDeleteModal,
+  ] = useBooleanState(false);
 
   const [QnAType, setQnAType] = useState('');
   const [introType, setintroType] = useState('');
@@ -130,10 +152,10 @@ export default function ClubDetailPage() {
     setNavType(navValue);
   };
 
-  const handleCopy = async (text: string) => {
+  const handleCopy = async (text: string, label: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      showToast('success', '전화번호가 복사되었습니다.');
+      showToast('success', `${label}가 복사되었습니다.`);
     } catch {
       const textarea = document.createElement('textarea');
       textarea.value = text;
@@ -141,7 +163,7 @@ export default function ClubDetailPage() {
       textarea.select();
       document.execCommand('copy');
       textarea.remove();
-      showToast('success', '전화번호가 복사되었습니다.');
+      showToast('success', `${label}가 복사되었습니다.`);
     }
   };
 
@@ -154,11 +176,84 @@ export default function ClubDetailPage() {
     setIsEdit(true);
   };
 
+  const handleClickRecruitAddButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_new_recruitment',
+      value: clubDetail.name,
+    });
+    navigate(ROUTES.NewClubRecruitment({ id: String(id), isLink: true }));
+  };
+
+  const handleClickEventAddButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_new_event',
+      value: clubDetail.name,
+    });
+    navigate(ROUTES.NewClubEvent({ id: String(id), isLink: true }));
+  };
+
+  const handleDeleteRecruitment = async () => {
+    await deleteRecruitment();
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_delete_confirm',
+      value: clubDetail.name,
+    });
+  };
+
+  const handleClickRecruitDeleteButton = () => {
+    openRecruitDeleteModal();
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_delete',
+      value: clubDetail.name,
+    });
+  };
+
+  const handleClickRecruitEditButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_recruitment_correction',
+      value: clubDetail.name,
+    });
+    navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
+  };
+
+  const handleDeleteEvent = async () => {
+    await deleteEvent(Number(eventId));
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete_confirm',
+      value: clubDetail.name,
+    });
+    setEventId(-1);
+  };
+
+  const handleClickEventDeleteButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_delete',
+      value: clubDetail.name,
+    });
+    openEventDeleteModal();
+  };
+
+  const handleClickEventEditButton = () => {
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_correction',
+      value: clubDetail.name,
+    });
+    navigate(ROUTES.ClubEventEdit({ id: String(id), eventId: String(eventId), isLink: true }));
+  };
+
   return (
     <div className={styles.layout}>
       {!isMobile && (
       <div className={styles['club-detail__pc-header']}>
-        상세소개
+        {navType}
         {isEdit ? (
           <div className={styles['club-detail__pc-header__button-box']}>
             <button
@@ -179,16 +274,81 @@ export default function ClubDetailPage() {
           </div>
         ) : (
           <div className={styles['club-detail__pc-header__button-box']}>
-            {clubDetail.manager
-              && (
-              <button
-                type="button"
-                className={styles['club-detail__pc-header__button']}
-                onClick={handleClickDetailInfo}
-              >
-                상세 소개 수정하기
-              </button>
-              )}
+            {clubDetail.manager && (
+              <>
+                {navType === '모집' && (
+                  clubRecruitmentData.status === 'NONE' ? (
+                    <button
+                      type="button"
+                      className={styles['club-detail__pc-header__button']}
+                      onClick={handleClickRecruitAddButton}
+                    >
+                      모집 생성하기
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className={cn({
+                          [styles['club-detail__pc-header__button']]: true,
+                          [styles['club-detail__pc-header__button--delete']]: true,
+                        })}
+                        onClick={handleClickRecruitDeleteButton}
+                      >
+                        모집 공고 삭제하기
+                      </button>
+                      <button
+                        type="button"
+                        className={styles['club-detail__pc-header__button']}
+                        onClick={handleClickRecruitEditButton}
+                      >
+                        모집 공고 수정하기
+                      </button>
+                    </>
+                  )
+                )}
+                {navType === '행사' && (
+                  eventId === NO_SELECTED_EVENT_ID ? (
+                    <button
+                      type="button"
+                      className={styles['club-detail__pc-header__button']}
+                      onClick={handleClickEventAddButton}
+                    >
+                      행사 생성하기
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className={cn({
+                          [styles['club-detail__pc-header__button']]: true,
+                          [styles['club-detail__pc-header__button--delete']]: true,
+                        })}
+                        onClick={handleClickEventDeleteButton}
+                      >
+                        행사 삭제하기
+                      </button>
+                      <button
+                        type="button"
+                        className={styles['club-detail__pc-header__button']}
+                        onClick={handleClickEventEditButton}
+                      >
+                        행사 수정하기
+                      </button>
+                    </>
+                  )
+                )}
+                {navType === '상세 소개' && (
+                  <button
+                    type="button"
+                    className={styles['club-detail__pc-header__button']}
+                    onClick={handleClickDetailInfo}
+                  >
+                    상세 소개 수정하기
+                  </button>
+                )}
+              </>
+            )}
           </div>
         )}
       </div>
@@ -227,12 +387,30 @@ export default function ClubDetailPage() {
           })}
           >
             <h1 className={styles['club-detail__summary__title']}>{clubDetail.name}</h1>
-            {isMobile && (
-            <button type="button" className={styles['club-detail__summary__like']} onClick={debouncedToggleLike}>
-              {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
-              {!clubDetail.is_like_hidden && clubDetail.likes}
-            </button>
-            )}
+            <div className={styles['club-detail__summary__like-container']}>
+              {clubDetail.hot_status && (
+              <div className={styles['club-detail__summary__like-banner']}>
+                {clubDetail.hot_status.streak_count >= 2
+                  ? `🎉 ${clubDetail.hot_status.streak_count}주 연속 인기 동아리 🎉`
+                  : (
+                    <>
+                      🎉
+                      {clubDetail.hot_status.month}
+                      월
+                      {' '}
+                      {clubDetail.hot_status.week_of_month}
+                      째주 인기 동아리 🎉
+                    </>
+                  )}
+              </div>
+              )}
+              {isMobile && (
+              <button type="button" className={styles['club-detail__summary__like']} onClick={debouncedToggleLike}>
+                {clubDetail.is_liked ? <LikeIcon /> : <NonLikeIcon />}
+                {!clubDetail.is_like_hidden && clubDetail.likes}
+              </button>
+              )}
+            </div>
           </div>
           <div className={styles['club-detail__summary__row']}>
             분과:
@@ -267,6 +445,14 @@ export default function ClubDetailPage() {
                 @
                 {clubDetail.instagram}
               </a>
+              <button
+                className={styles['copy-button']}
+                type="button"
+                aria-label="복사붙여넣기 버튼"
+                onClick={() => handleCopy(`https://www.instagram.com/${clubDetail.instagram}`, '인스타그램')}
+              >
+                <CopyIcon />
+              </button>
             </div>
             )}
             {clubDetail.google_form && (
@@ -278,8 +464,16 @@ export default function ClubDetailPage() {
                 rel="noopener noreferrer"
                 className={styles['club-detail__summary__contacts__row__link']}
               >
-                <div className={styles['club-detail__summary__contacts__row__text']}>{clubDetail.google_form}</div>
+                <div className={styles['club-detail__summary__contacts__row__text']}>https://docs.google.com/forms/...</div>
               </a>
+              <button
+                className={styles['copy-button']}
+                type="button"
+                aria-label="복사붙여넣기 버튼"
+                onClick={() => handleCopy(clubDetail.google_form!, '구글폼')}
+              >
+                <CopyIcon />
+              </button>
             </div>
             )}
             {clubDetail.open_chat && (
@@ -293,6 +487,14 @@ export default function ClubDetailPage() {
               >
                 {clubDetail.open_chat}
               </a>
+              <button
+                className={styles['copy-button']}
+                type="button"
+                aria-label="복사붙여넣기 버튼"
+                onClick={() => handleCopy(clubDetail.open_chat!, '오픈채팅')}
+              >
+                <CopyIcon />
+              </button>
             </div>
             )}
             {clubDetail.phone_number && (
@@ -300,15 +502,15 @@ export default function ClubDetailPage() {
               <div className={styles['club-detail__summary__contacts__row--label']}>전화번호:</div>
               <div className={styles['club-detail__summary__contacts__text']}>
                 {clubDetail.phone_number && formatPhoneNumber(clubDetail.phone_number)}
-                <button
-                  className={styles['copy-button']}
-                  type="button"
-                  aria-label="복사붙여넣기 버튼"
-                  onClick={() => handleCopy(clubDetail.phone_number!)}
-                >
-                  <CopyIcon />
-                </button>
               </div>
+              <button
+                className={styles['copy-button']}
+                type="button"
+                aria-label="복사붙여넣기 버튼"
+                onClick={() => handleCopy(clubDetail.phone_number!, '전화번호')}
+              >
+                <CopyIcon />
+              </button>
             </div>
             )}
           </div>
@@ -357,6 +559,26 @@ export default function ClubDetailPage() {
           onClick={() => handleNavClick('상세 소개')}
         >
           상세소개
+        </button>
+        <button
+          type="button"
+          className={cn({
+            [styles['nav-type']]: true,
+            [styles['nav-type--active']]: navType === '모집',
+          })}
+          onClick={() => handleNavClick('모집')}
+        >
+          모집
+        </button>
+        <button
+          type="button"
+          className={cn({
+            [styles['nav-type']]: true,
+            [styles['nav-type--active']]: navType === '행사',
+          })}
+          onClick={() => { handleNavClick('행사'); setEventId(-1); }}
+        >
+          행사
         </button>
         <button
           type="button"
@@ -423,6 +645,23 @@ export default function ClubDetailPage() {
           setReplyId={setReplyId}
         />
       )}
+      {navType === '모집' && (
+        <ClubRecruitment
+          clubId={id}
+          isManager={clubDetail.manager}
+          handleClickAddButton={handleClickRecruitAddButton}
+        />
+      )}
+      {navType === '행사' && (
+        <ClubEventList
+          clubId={id}
+          isManager={clubDetail.manager}
+          handleClickAddButton={handleClickEventAddButton}
+          eventId={eventId}
+          setEventId={setEventId}
+          clubName={clubDetail.name}
+        />
+      )}
       {isModalOpen && (
         <CreateQnAModal
           closeModal={closeModal}
@@ -451,6 +690,20 @@ export default function ClubDetailPage() {
         setIsEdit={setIsEdit}
         resetForm={() => setIntroduction(clubDetail.introduction)}
       />
+      )}
+      {isRecruitDeleteModalOpen && (
+        <ConfirmModal
+          type="recruitmentDelete"
+          closeModal={closeRecruitDeleteModal}
+          onSubmit={handleDeleteRecruitment}
+        />
+      )}
+      {isEventDeleteModalOpen && (
+        <ConfirmModal
+          type="eventDelete"
+          closeModal={closeEventDeleteModal}
+          onSubmit={handleDeleteEvent}
+        />
       )}
       {
         navType === 'Q&A' && (
