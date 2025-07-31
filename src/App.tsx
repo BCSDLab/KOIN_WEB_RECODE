@@ -50,7 +50,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import ReportPage from 'pages/Articles/ReportPage';
 import ClubEditPage from 'pages/Club/ClubEditPage';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
-import { tryAutoLogin } from 'utils/hooks/auth/useAutoLogin';
+import { useAutoLogin } from 'utils/hooks/auth/useAutoLogin';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import FindIdPage from 'pages/Auth/FindIdPage';
 import FindIdEmailPage from 'pages/Auth/FindIdPage/PC/EmailPage';
@@ -97,6 +97,7 @@ function Wrapper({
 function App() {
   const isMobile = useMediaQuery();
   const isMaintenance = useServerStateStore((state) => state.isMaintenance);
+  useAutoLogin();
 
   //ios 브릿지
   useEffect(() => {
@@ -122,10 +123,6 @@ function App() {
     //     delete window.setTokens;
     //   }
     // };
-  }, []);
-
-  useEffect(() => {
-    tryAutoLogin();
   }, []);
 
   if (isMaintenance) {
