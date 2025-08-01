@@ -2,16 +2,13 @@ import { useEffect } from 'react';
 import useAuth from './useAuth';
 
 const useAutoLogin = () => {
-  const { mutateAsync: refreshAccessToken } = useAuth();
-  const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
-  const refreshToken = refreshTokenStorage
-    ? JSON.parse(refreshTokenStorage).state.refreshToken
-    : undefined;
+  const { refreshAccessToken, getRefreshToken } = useAuth();
+  const refreshToken = getRefreshToken();
 
   useEffect(() => {
     const autoLogin = async () => {
       if (!refreshToken) return;
-      await refreshAccessToken({ refresh_token: refreshToken });
+      await refreshAccessToken(refreshToken);
     };
 
     autoLogin();

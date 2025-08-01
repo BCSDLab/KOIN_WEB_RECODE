@@ -3,18 +3,33 @@ import { refresh } from 'api/auth';
 import { setCookie } from 'utils/ts/cookie';
 import { useTokenStore } from 'utils/zustand/auth';
 
-const useAuth = () => useMutation({
-  mutationFn: async ({ refresh_token }: { refresh_token: string }) => {
-    const response = await refresh({ refresh_token });
-    setCookie('AUTH_TOKEN_KEY', response.token);
-    useTokenStore.getState().setToken(response.token);
+const useAuth = () => {
+  const { setToken, setRefreshToken } = useTokenStore.getState();
 
-    return response;
-  },
-  onError: () => {
-    useTokenStore.getState().setToken('');
-    useTokenStore.getState().setRefreshToken('');
-  },
-});
+  const getRefreshToken = () => {
+    const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
+    return refreshTokenStorage && JSON.parse(refreshTokenStorage).refresh_token;
+  };
+
+  const { mutateAsync: refreshAccessToken } = useMutation({
+    mutationFn: async ({ refresh_token }: { refresh_token: string }) => {
+      const response = await refresh({ refresh_token });
+      return response;
+    },
+    onSuccess: (response) => {
+      setCookie('AUTH_TOKEN_KEY', response.token);
+      setToken(response.token);
+    },
+    onError: () => {
+      setToken('');
+      setRefreshToken('');
+    },
+  });
+
+  return {
+    refreshAccessToken,
+    getRefreshToken,
+  };
+};
 
 export default useAuth;
