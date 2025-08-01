@@ -7,8 +7,7 @@ const useAutoLogin = () => {
 
   useEffect(() => {
     const autoLogin = async () => {
-      if (!refreshToken) return;
-      await refreshAccessToken(refreshToken);
+      if (refreshToken) await refreshAccessToken(refreshToken);
     };
 
     autoLogin();

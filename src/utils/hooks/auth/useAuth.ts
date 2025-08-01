@@ -8,11 +8,11 @@ const useAuth = () => {
 
   const getRefreshToken = () => {
     const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
-    return refreshTokenStorage && JSON.parse(refreshTokenStorage).refresh_token;
+    return refreshTokenStorage && JSON.parse(refreshTokenStorage).state.refreshToken;
   };
 
   const { mutateAsync: refreshAccessToken } = useMutation({
-    mutationFn: async ({ refresh_token }: { refresh_token: string }) => {
+    mutationFn: async (refresh_token : string) => {
       const response = await refresh({ refresh_token });
       return response;
     },
