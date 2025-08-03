@@ -10,7 +10,7 @@ import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import useAllMyLectures from 'pages/TimetablePage/hooks/useAllMyLectures';
 import { LectureInfo } from 'api/graduationCalculator/entity';
 import { Selector } from 'components/ui/Selector';
-import _ from 'lodash';
+import { pick } from 'utils/ts/object';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './SemesterLectureListModal.module.scss';
 
@@ -73,7 +73,7 @@ export default function SemesterLectureListModal({
   const allMyLecturesInfo = (allMyLectures ?? [])
     .filter((myLecture) => myLecture.course_type === course)
     .map((lecture) => ({
-      ..._.pick(lecture, ['id', 'code', 'professor', 'grades', 'department']),
+      ...pick(lecture, ['id', 'code', 'professor', 'grades', 'department']),
       name: lecture.class_title,
     }));
 
