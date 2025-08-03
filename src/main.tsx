@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
-import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as Sentry from '@sentry/browser';
 import App from './App';
@@ -46,15 +45,13 @@ declare global {
 
 root.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <PortalProvider>
-            <App />
-          </PortalProvider>
-        </QueryClientProvider>
-      </BrowserRouter>
-    </RecoilRoot>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <PortalProvider>
+          <App />
+        </PortalProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 );
 
