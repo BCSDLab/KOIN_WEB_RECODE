@@ -41,7 +41,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/file-saver", "npm:2.0.7"],\
             ["@types/gtag.js", "npm:0.0.19"],\
             ["@types/jest", "npm:27.5.2"],\
-            ["@types/lodash", "npm:4.17.13"],\
             ["@types/navermaps", "npm:3.7.4"],\
             ["@types/node", "npm:16.18.80"],\
             ["@types/react", "npm:18.2.55"],\
@@ -70,7 +69,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["html2canvas", "npm:1.4.1"],\
             ["jest", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:29.7.0"],\
             ["josa-js", "npm:0.0.2"],\
-            ["lodash", "npm:4.17.21"],\
             ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
             ["postcss", "npm:8.4.47"],\
             ["react", "npm:18.2.0"],\
@@ -3355,15 +3353,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-json5-npm-0.0.29-f63a7916bd-e60b153664.zip/node_modules/@types/json5/",\
           "packageDependencies": [\
             ["@types/json5", "npm:0.0.29"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["@types/lodash", [\
-        ["npm:4.17.13", {\
-          "packageLocation": "./.yarn/cache/@types-lodash-npm-4.17.13-ec44e3530a-d0bf8fbd95.zip/node_modules/@types/lodash/",\
-          "packageDependencies": [\
-            ["@types/lodash", "npm:4.17.13"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8386,7 +8375,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/file-saver", "npm:2.0.7"],\
             ["@types/gtag.js", "npm:0.0.19"],\
             ["@types/jest", "npm:27.5.2"],\
-            ["@types/lodash", "npm:4.17.13"],\
             ["@types/navermaps", "npm:3.7.4"],\
             ["@types/node", "npm:16.18.80"],\
             ["@types/react", "npm:18.2.55"],\
@@ -8415,7 +8403,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["html2canvas", "npm:1.4.1"],\
             ["jest", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:29.7.0"],\
             ["josa-js", "npm:0.0.2"],\
-            ["lodash", "npm:4.17.21"],\
             ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
             ["postcss", "npm:8.4.47"],\
             ["react", "npm:18.2.0"],\
