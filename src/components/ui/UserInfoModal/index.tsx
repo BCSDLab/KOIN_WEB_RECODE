@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import Lottie from 'lottie-react';
 import ROUTES from 'static/routes';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import waveHandAnimation from 'assets/lottie/waveHand.json';
+import { lazy } from 'react';
 import useUserInfoModal from './hooks/useUserInfoModal';
 import styles from './UserInfoModal.module.scss';
+
+const Lottie = lazy(() => import('lottie-react'));
 
 function UserInfoModal() {
   const navigate = useNavigate();

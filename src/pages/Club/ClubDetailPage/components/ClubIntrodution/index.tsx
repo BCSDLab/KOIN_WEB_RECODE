@@ -1,12 +1,15 @@
 // ClubIntroduction.tsx
 import {
-  Dispatch, SetStateAction, useCallback, useMemo, useRef,
+  Dispatch, lazy, SetStateAction, useCallback, useMemo, useRef,
 } from 'react';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { uploadClubFile } from 'api/uploadFile';
+import type ReactQuillType from 'react-quill';
+
 import styles from './ClubIntrodution.module.scss';
+
+const ReactQuill = lazy(() => import('react-quill'));
 
 interface Props {
   isEdit: boolean;
@@ -20,7 +23,7 @@ export default function ClubIntroduction({
   setIntroduction,
 }: Props) {
   const token = useTokenState();
-  const quillRef = useRef<ReactQuill>(null);
+  const quillRef = useRef<ReactQuillType>(null);
 
   // 이미지를 서버에 업로드하고 URL 리턴
   const uploadImage = useCallback(async (file: File) => {
