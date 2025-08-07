@@ -189,7 +189,7 @@ export default class APIClient {
       const currentToken = useTokenStore.getState().token;
       if (currentToken) {
         try {
-          const response = await axios.get(`${this.baseURL}/user/type`, {
+          const response = await axios.get(`${this.baseURL}/user/auth`, {
             headers: {
               Authorization: `Bearer ${currentToken}`,
             },
