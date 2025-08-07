@@ -485,7 +485,7 @@ export default function ClubDetailPage() {
                 rel="noopener noreferrer"
                 className={styles['club-detail__summary__contacts__row__link']}
               >
-                {clubDetail.open_chat}
+                https://open.kakao.com/o/...
               </a>
               <button
                 className={styles['copy-button']}
