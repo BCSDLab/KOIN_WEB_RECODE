@@ -22,7 +22,7 @@ const ROUTES = {
   BusRoute: () => '/bus/route',
   BusCourse: () => '/bus/course',
   Club: () => '/clubs',
-  ClubDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/${id}` : '/clubs/:id'),
+  ClubDetail: ({ id, isLink, hot }: ROUTESParams<'id' | 'hot'>) => (isLink ? `/clubs/${id}?hot=${hot}` : '/clubs/:id'),
   NewClub: () => '/clubs/new',
   ClubEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/edit/${id}` : '/clubs/edit/:id'),
   NewClubRecruitment: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/recruitment/${id}` : '/clubs/recruitment/:id'),
