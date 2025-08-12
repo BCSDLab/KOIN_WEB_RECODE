@@ -14,6 +14,7 @@ import { useResetHeaderButton } from 'utils/hooks/layout/useResetHeaderButton';
 import ROUTES from 'static/routes';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
 import { backButtonTapped } from 'utils/ts/iosBridge';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import Panel from './Panel';
 import styles from './MobileHeader.module.scss';
 
@@ -35,6 +36,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
 
   const { customTitle } = useHeaderTitle();
 
+  const { params } = useParamsHandler();
   const backInDetailPage = async () => {
     if (pathname.includes(ROUTES.Store()) && id) {
       const response = await api.store.getStoreDetailInfo(id!);
@@ -59,11 +61,18 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
     }
-    if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null && (pathname === ROUTES.Club())) {
-      backButtonTapped();
-    }
 
-    navigate(-1);
+    if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null
+      && (pathname === ROUTES.Club() || params.hot === 'true')) {
+      backButtonTapped();
+      return;
+    }
+    // 메인 페이지가 아닌 페이지로 접근한 경우 뒤로가기하면 메인으로
+    if (window.history.state?.idx === 0) {
+      navigate(ROUTES.Main());
+    } else {
+      navigate(-1);
+    }
   };
 
   const handleHamburgerClick = () => {
