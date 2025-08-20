@@ -5,8 +5,8 @@ import { setRedirectPath } from 'utils/ts/auth';
 import styles from './LoginRequiredModal.module.scss';
 
 interface Props {
-  title: string;
-  description:string;
+  title?: string;
+  description?:string;
   closeModal:()=>void;
   type?: string;
   shopName?: string;
@@ -65,6 +65,7 @@ export default function LoginRequiredModal({
               setRedirectPath(`${location.pathname}${location.search}`);
               loggingLoginClick();
               navigate(ROUTES.Auth());
+              closeModal();
             }}
           >
             로그인하기
