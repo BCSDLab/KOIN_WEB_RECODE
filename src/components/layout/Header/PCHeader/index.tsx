@@ -1,6 +1,6 @@
 import { cn } from '@bcsdlab/utils';
 import * as api from 'api';
-import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import LoginRequired from 'components/modal/LoginRequired';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -154,9 +154,10 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
   const openLoginModal = () => {
     portalManager.open((portalOption: Portal) => (
-      <LoginRequiredModal
-        closeModal={portalOption.close}
-        type="report"
+      <LoginRequired
+        title="쪽지를 사용하기"
+        description="로그인 후 이용해주세요."
+        onClose={portalOption.close}
       />
     ));
   };

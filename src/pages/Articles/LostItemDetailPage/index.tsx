@@ -14,8 +14,8 @@ import ReportIcon from 'assets/svg/Articles/report.svg';
 import ReportModal from 'pages/Articles/LostItemDetailPage/components/ReportModal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import LoginRequired from 'components/modal/LoginRequired';
 import styles from './LostItemDetailPage.module.scss';
-import LoginRequireLostItemModal from './components/LoginRequireLostItemModal';
 import usePostLostItemChatroom from './hooks/usePostLostItemChatroom';
 
 export default function LostItemDetailPage() {
@@ -43,7 +43,7 @@ export default function LostItemDetailPage() {
     registeredAt,
   } = article;
 
-  const { logFindUserDeleteClick, logItemPostReportClick } = useArticlesLogger();
+  const { logFindUserDeleteClick, logItemPostReportClick, logLoginRequire } = useArticlesLogger();
 
   const handleDeleteButtonClick = () => {
     logFindUserDeleteClick();
@@ -64,9 +64,9 @@ export default function LostItemDetailPage() {
       reportBranch();
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequireLostItemModal
-          actionTitle="게시글을 신고 하려면"
-          detailExplanation="로그인 후 이용해주세요."
+        <LoginRequired
+          title="게시글을 신고하기"
+          description="로그인 후 이용해주세요."
           onClose={portalOption.close}
         />
       ));
@@ -79,10 +79,11 @@ export default function LostItemDetailPage() {
       navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequireLostItemModal
-          actionTitle="쪽지를 보내려면"
-          detailExplanation="로그인 후 이용해주세요."
+        <LoginRequired
+          title="쪽지를 보내기"
+          description="로그인 후 이용해주세요."
           onClose={portalOption.close}
+          onLoginClick={() => logLoginRequire('쪽지 보내기 팝업')}
         />
       ));
     }

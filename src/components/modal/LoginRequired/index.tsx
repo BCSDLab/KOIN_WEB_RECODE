@@ -1,36 +1,42 @@
-import { useNavigate } from 'react-router-dom';
-import { useArticlesLogger } from 'pages/Articles/hooks/useArticlesLogger';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
-import styles from './LoginRequireLostItemModal.module.scss';
+import { setRedirectPath } from 'utils/ts/auth';
+import ROUTES from 'static/routes';
+import styles from './index.module.scss';
 
-interface LoginRequireLostItemModalProps {
-  actionTitle: string;
-  detailExplanation: string;
+interface LoginRequiredProps {
+  title: string;
+  description: string;
   onClose: () => void;
+  onLoginClick?: () => void;
+  onCancelClick?: () => void;
+  enableRedirect?: boolean;
 }
-
-function LoginRequireLostItemModal(
-  {
-    actionTitle,
-    detailExplanation,
-    onClose,
-  }: LoginRequireLostItemModalProps,
-) {
-  const { logLoginRequire } = useArticlesLogger();
+export default function LoginRequired({
+  title,
+  description,
+  onClose,
+  onLoginClick,
+  onCancelClick,
+  enableRedirect = true,
+}: LoginRequiredProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
-  const sentences = detailExplanation.split('.');
+  const sentences = description.split('.');
 
   const goLogin = () => {
-    if (actionTitle === '게시글을 작성하려면') {
-      logLoginRequire('게시글 작성 팝업');
-    } else if (actionTitle === '쪽지를 보내려면') {
-      logLoginRequire('쪽지 보내기 팝업');
-    }
+    if (onLoginClick) onLoginClick();
+    if (enableRedirect) setRedirectPath(`${location.pathname}${location.search}`);
     onClose();
-    navigate('/auth');
+    navigate(ROUTES.Auth());
+  };
+
+  const cancel = () => {
+    if (onCancelClick) onCancelClick();
+    onClose();
   };
 
   return (
@@ -46,16 +52,15 @@ function LoginRequireLostItemModal(
         </button>
         <div className={styles.container__header}>
           <div className={styles.container__title}>
-            {actionTitle}
-            <div>로그인이 필요해요.</div>
+            {title}
+            <div>위해 로그인이 필요해요.</div>
           </div>
           <div className={styles.container__detail}>
             {sentences.map((sentence, index) => (
-              <div>
+              <div key={`${sentence}-${String(index)}`}>
                 {sentence}
                 {index < sentences.length - 1 && '.'}
               </div>
-
             ))}
           </div>
         </div>
@@ -64,7 +69,7 @@ function LoginRequireLostItemModal(
           <button type="button" className={styles['container__button--login']} onClick={goLogin}>
             로그인하기
           </button>
-          <button type="button" className={styles['container__button--cancel']} onClick={onClose}>
+          <button type="button" className={styles['container__button--cancel']} onClick={cancel}>
             닫기
           </button>
         </div>
@@ -72,5 +77,3 @@ function LoginRequireLostItemModal(
     </div>
   );
 }
-
-export default LoginRequireLostItemModal;
