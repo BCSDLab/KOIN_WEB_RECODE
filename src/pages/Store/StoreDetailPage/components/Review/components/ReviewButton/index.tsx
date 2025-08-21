@@ -1,6 +1,5 @@
 import { Portal } from 'components/modal/Modal/PortalProvider';
-import LoginRequired from 'components/modal/LoginRequired';
-
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { useUser } from 'utils/hooks/state/useUser';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -36,7 +35,7 @@ export default function ReviewButton({ goReviewPage }: { goReviewPage: ()=> void
       });
     };
     portalManager.open((portalOption: Portal) => (
-      <LoginRequired
+      <LoginRequiredModal
         title={REVEIW_LOGIN[0]}
         description={REVEIW_LOGIN[1]}
         onClose={portalOption.close}

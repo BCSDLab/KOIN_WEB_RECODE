@@ -14,7 +14,7 @@ import ReportIcon from 'assets/svg/Articles/report.svg';
 import ReportModal from 'pages/Articles/LostItemDetailPage/components/ReportModal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import LoginRequired from 'components/modal/LoginRequired';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import styles from './LostItemDetailPage.module.scss';
 import usePostLostItemChatroom from './hooks/usePostLostItemChatroom';
 
@@ -64,7 +64,7 @@ export default function LostItemDetailPage() {
       reportBranch();
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequired
+        <LoginRequiredModal
           title="게시글을 신고하기"
           description="로그인 후 이용해주세요."
           onClose={portalOption.close}
@@ -79,7 +79,7 @@ export default function LostItemDetailPage() {
       navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequired
+        <LoginRequiredModal
           title="쪽지를 보내기"
           description="로그인 후 이용해주세요."
           onClose={portalOption.close}

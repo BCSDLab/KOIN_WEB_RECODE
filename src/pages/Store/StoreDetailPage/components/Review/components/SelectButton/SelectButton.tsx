@@ -4,8 +4,7 @@ import DeleteModal from 'pages/Store/StoreDetailPage/components/Review/component
 import { useDeleteReview } from 'pages/Store/StoreDetailPage/hooks/useDeleteReview';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from 'utils/hooks/state/useUser';
-import LoginRequired from 'components/modal/LoginRequired';
-
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import showToast from 'utils/ts/showToast';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
@@ -63,7 +62,7 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
       });
     };
     portalManager.open((portalOption: Portal) => (
-      <LoginRequired
+      <LoginRequiredModal
         title={REVEIW_REPORT_LOGIN[0]}
         description={REVEIW_REPORT_LOGIN[1]}
         onClose={portalOption.close}

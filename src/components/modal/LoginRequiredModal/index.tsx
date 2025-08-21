@@ -3,7 +3,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import { setRedirectPath } from 'utils/ts/auth';
 import ROUTES from 'static/routes';
-import styles from './index.module.scss';
+import styles from './LoginRequiredModal.module.scss';
 
 interface LoginRequiredProps {
   title: string;
@@ -13,7 +13,7 @@ interface LoginRequiredProps {
   onCancelClick?: () => void;
   enableRedirect?: boolean;
 }
-export default function LoginRequired({
+export default function LoginRequiredModal({
   title,
   description,
   onClose,

@@ -7,7 +7,7 @@ import {
 import NoReview from 'assets/svg/Review/no-review.svg';
 import ChervronUp from 'assets/svg/chervron-up.svg';
 import { Portal } from 'components/modal/Modal/PortalProvider';
-import LoginRequired from 'components/modal/LoginRequired';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import StarList from 'pages/Store/StoreDetailPage/components/Review/components/StarList/StarList';
 import { REVEIW_LOGIN } from 'pages/Store/StoreDetailPage/components/Review/components/ReviewButton/index';
@@ -47,7 +47,7 @@ export default function ReviewList() {
   const checkUser = (): boolean => {
     if (!userInfo) {
       portalManager.open((portalOption: Portal) => (
-        <LoginRequired
+        <LoginRequiredModal
           title={REVEIW_LOGIN[0]}
           description={REVEIW_LOGIN[1]}
           onClose={portalOption.close}
