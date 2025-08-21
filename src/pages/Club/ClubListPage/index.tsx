@@ -147,8 +147,8 @@ function ClubListPage() {
     if (!token) {
       portalManager.open((portalOption: Portal) => (
         <LoginRequiredModal
-          title="좋아요를"
-          description="로그인 후 이용해주세요."
+          title="좋아요 기능을 사용하기"
+          description="동아리 좋아요 기능은 로그인이 필요한 서비스입니다."
           onClose={portalOption.close}
         />
       ));
