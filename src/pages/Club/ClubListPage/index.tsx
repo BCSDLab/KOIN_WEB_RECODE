@@ -1,6 +1,5 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { cn } from '@bcsdlab/utils';
-import { useUser } from 'utils/hooks/state/useUser';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -11,7 +10,6 @@ import useClubLike from 'pages/Club/hooks/useClubLike';
 import useClubCategories from 'pages/Club/hooks/useClubCategories';
 import { Selector } from 'components/ui/Selector';
 import { Portal } from 'components/modal/Modal/PortalProvider';
-import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import MikeIcon from 'assets/svg/Club/mike-icon.svg';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
 import HobbyIcon from 'assets/svg/Club/hobby-icon.svg';
@@ -19,6 +17,7 @@ import ExerciseIcon from 'assets/svg/Club/exercise-icon.svg';
 import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
 import HeartFilled from 'assets/svg/Club/heart-filled-icon.svg';
 import HeartOutline from 'assets/svg/Club/heart-outline-icon.svg';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ClubSearchContainer from './components/ClubSearchContainer';
 import styles from './ClubListPage.module.scss';
 
@@ -49,7 +48,6 @@ function ClubListPage() {
   const sortValue = searchParams.get('sortType') ?? DEFAULT_SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
   const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
 
-  const { data: userInfo } = useUser();
   const clubCategories = useClubCategories();
   const { mutate: clubLikeMutate } = useClubLike();
   const clubList = useClubList({
@@ -148,8 +146,10 @@ function ClubListPage() {
     e.stopPropagation();
     if (!token) {
       portalManager.open((portalOption: Portal) => (
-        <ClubAuthModal
-          closeModal={portalOption.close}
+        <LoginRequiredModal
+          title="좋아요를"
+          description="로그인 후 이용해주세요."
+          onClose={portalOption.close}
         />
       ));
       return;
@@ -179,7 +179,7 @@ function ClubListPage() {
       <div className={styles.container}>
         <div className={styles.header}>
           <p className={styles.header__title}>동아리 목록</p>
-          {userInfo && (
+          {token && (
           <button
             type="button"
             className={styles['header__add-button']}
@@ -319,7 +319,13 @@ function ClubListPage() {
         </main>
       </div>
       {
-        isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
+        isAuthModalOpen && (
+          <LoginRequiredModal
+            title="동아리를 생성하기"
+            description="로그인 후 이용해주세요."
+            onClose={closeAuthModal}
+          />
+        )
       }
     </div>
   );

@@ -14,9 +14,9 @@ import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import NonLikeIcon from 'assets/svg/Club/unlike-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
 import UpIcon from 'assets/svg/Club/up-icon.svg';
-import ClubAuthModal from 'pages/Club/components/ClubAuthModal';
 import EditConfirmModal from 'pages/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'pages/Club/NewClubRecruitment/components/ConfirmModal';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ClubQnA from './components/ClubQnA';
 import ClubEventList from './components/ClubEventList';
 import CreateQnAModal from './components/CreateQnAModal';
@@ -680,7 +680,13 @@ export default function ClubDetailPage() {
         )
       }
       {
-        isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
+        isAuthModalOpen && (
+          <LoginRequiredModal
+            title="좋아요를"
+            description="로그인 후 이용해주세요."
+            onClose={closeAuthModal}
+          />
+        )
       }
       {isEditModalOpen && (
       <EditConfirmModal
