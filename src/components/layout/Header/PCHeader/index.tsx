@@ -1,7 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import * as api from 'api';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
@@ -164,7 +164,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
   const handleMenuClick = (e: React.MouseEvent<HTMLAnchorElement>, title: string) => {
     logShortcut(title);
-    if (title === '쪽지') {
+    if (!token && title === '쪽지') {
       e.preventDefault();
       openLoginModal();
     }
