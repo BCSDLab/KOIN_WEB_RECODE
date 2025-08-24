@@ -1,19 +1,25 @@
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { Link, useLocation } from 'react-router-dom';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './Footer.module.scss';
 
 function Footer(): JSX.Element {
   const isMobile = useMediaQuery();
   const logger = useLogger();
+  const portalManager = useModalPortal();
+  const token = useTokenState();
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
 
   const location = useLocation();
   const { pathname } = location; // 현재 URL의 경로
 
-  const logShortcut = async (title: string) => {
+  const logShortcut = (title: string) => {
     const loggingMap: Record<
     string,
     { team: string; event_label: string; value: string; event_category?: string }> = {
@@ -43,6 +49,20 @@ function Footer(): JSX.Element {
     }
   };
 
+  const handleClickMenu = (e: React.MouseEvent<HTMLAnchorElement>, title: string) => {
+    logShortcut(title);
+    if (!token && title === '쪽지') {
+      e.preventDefault();
+      portalManager.open((portalOption: Portal) => (
+        <LoginRequiredModal
+          title="쪽지를 사용하기"
+          description="로그인 후 이용해주세요."
+          onClose={portalOption.close}
+        />
+      ));
+    }
+  };
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footer__content}>
@@ -54,7 +74,7 @@ function Footer(): JSX.Element {
                 <li className={styles.footer__service} key={submenuInfo.title}>
                   <Link
                     to={isStage && submenuInfo.stageLink ? submenuInfo.stageLink : submenuInfo.link}
-                    onClick={() => logShortcut(submenuInfo.title)}
+                    onClick={(e) => handleClickMenu(e, submenuInfo.title)}
                   >
                     {submenuInfo.title}
                   </Link>

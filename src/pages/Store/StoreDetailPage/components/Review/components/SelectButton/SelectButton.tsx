@@ -5,7 +5,6 @@ import { useDeleteReview } from 'pages/Store/StoreDetailPage/hooks/useDeleteRevi
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from 'utils/hooks/state/useUser';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-
 import showToast from 'utils/ts/showToast';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useStoreDetail from 'pages/Store/StoreDetailPage/hooks/useStoreDetail';
@@ -18,7 +17,7 @@ interface Props {
   is_reported: boolean | undefined;
 }
 const REVEIW_REPORT_LOGIN = [
-  '리뷰 신고 시 ',
+  '리뷰를 신고하기 ',
   '리뷰 신고는 회원만 사용 가능합니다.',
 ];
 export default function SelectButton({ is_mine, review_id, is_reported }: Props) {
@@ -48,13 +47,27 @@ export default function SelectButton({ is_mine, review_id, is_reported }: Props)
   const { data: userInfo } = useUser();
 
   const openLoginModal = () => {
+    const loggingLoginClick = () => {
+      logger.actionEventClick({
+        team: 'BUSINESS',
+        event_label: 'shop_detail_view_review_report_login',
+        value: storeDetail.name,
+      });
+    };
+    const loggingCancelClick = () => {
+      logger.actionEventClick({
+        team: 'BUSINESS',
+        event_label: 'shop_detail_view_review_report_cancel',
+        value: storeDetail.name,
+      });
+    };
     portalManager.open((portalOption: Portal) => (
       <LoginRequiredModal
         title={REVEIW_REPORT_LOGIN[0]}
         description={REVEIW_REPORT_LOGIN[1]}
-        closeModal={portalOption.close}
-        type="report"
-        shopName={storeDetail.name}
+        onClose={portalOption.close}
+        onLoginClick={loggingLoginClick}
+        onCancelClick={loggingCancelClick}
       />
     ));
   };
