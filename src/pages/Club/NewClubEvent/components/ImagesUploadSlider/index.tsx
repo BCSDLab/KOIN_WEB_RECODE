@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { uploadClubFile } from 'api/uploadFile';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
+import resizeImageFile from 'utils/ts/useImageResize';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useImageUpload from 'pages/Club/NewClubEvent/hooks/useImageUpload';
+import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import styles from './ImagesUploadSlider.module.scss';
@@ -13,8 +14,6 @@ interface ClubImageUploaderProps {
   addImageUrls: (newImageUrls: string[]) => void;
 }
 
-const MAX_IMAGES = 7;
-
 export default function ImagesUploadSlider({
   imageUrls,
   addImageUrls,
@@ -22,18 +21,14 @@ export default function ImagesUploadSlider({
   const isMobile = useMediaQuery();
   const [isDragOver, setIsDragOver] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
+  const { imgRef, saveImgFile, setImageFile } = useImageUpload({
+    uploadFn: uploadClubFile,
+    maxLength: 7,
+    resize: (file) => resizeImageFile(file),
+  });
 
   const saveImage = async () => {
     try {
-      const files = imgRef.current?.files;
-      if (!files || files.length === 0) return;
-
-      if (imageUrls.length + files.length > MAX_IMAGES) {
-        showToast('error', `이미지는 최대 ${MAX_IMAGES}개까지 업로드할 수 있습니다.`);
-        return;
-      }
-
       const images = await saveImgFile();
       if (images) {
         const uniqueImages = images.filter((url) => !imageUrls.includes(url));
@@ -73,6 +68,10 @@ export default function ImagesUploadSlider({
   const goPrev = () => setCurrentIdx((prev) => (prev === 0 ? imageUrls.length : prev - 1));
   const goNext = () => setCurrentIdx((prev) => (prev === imageUrls.length ? 0 : prev + 1));
   const slideCounter = `${currentIdx + 1}/${imageUrls.length + 1}`;
+
+  useEffect(() => {
+    setImageFile(imageUrls);
+  }, [imageUrls, setImageFile]);
 
   return (
     <div>
