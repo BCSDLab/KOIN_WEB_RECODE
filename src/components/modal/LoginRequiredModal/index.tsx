@@ -1,73 +1,76 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import ROUTES from 'static/routes';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import { setRedirectPath } from 'utils/ts/auth';
+import ROUTES from 'static/routes';
 import styles from './LoginRequiredModal.module.scss';
 
-interface Props {
+interface LoginRequiredProps {
   title: string;
-  description:string;
-  closeModal:()=>void;
-  type?: string;
-  shopName?: string;
+  description: string;
+  onClose: () => void;
+  onLoginClick?: () => void;
+  onCancelClick?: () => void;
+  enableRedirect?: boolean;
 }
-
 export default function LoginRequiredModal({
-  title = '', description = '', closeModal, type, shopName,
-}: Props) {
+  title,
+  description,
+  onClose,
+  onLoginClick,
+  onCancelClick,
+  enableRedirect = true,
+}: LoginRequiredProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const logger = useLogger();
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
-  const loggingLoginClick = () => {
-    if (shopName) {
-      logger.actionEventClick({
-        team: 'BUSINESS',
-        event_label: `shop_detail_view_review_${type}_login`,
-        value: shopName,
-      });
-    }
+  const sentences = description.split('.');
+
+  const goLogin = () => {
+    if (onLoginClick) onLoginClick();
+    if (enableRedirect) setRedirectPath(`${location.pathname}${location.search}`);
+    onClose();
+    navigate(ROUTES.Auth());
   };
 
-  const loggingCancelClick = () => {
-    if (shopName) {
-      logger.actionEventClick({
-        team: 'BUSINESS',
-        event_label: `shop_detail_view_review_${type}_cancel`,
-        value: shopName,
-      });
-    }
+  const cancel = () => {
+    if (onCancelClick) onCancelClick();
+    onClose();
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.modal}>
-        <div className={styles.modal__title}>
-          {title}
-          <span>로그인</span>
-          을 해주세요.
+    <div className={styles.background} ref={backgroundRef}>
+      <div className={styles.container}>
+        <button
+          className={styles.container__icon}
+          type="button"
+          aria-label="닫기 버튼"
+          onClick={onClose}
+        >
+          <CloseIcon />
+        </button>
+        <div className={styles.container__header}>
+          <div className={styles.container__title}>
+            {title}
+            <div>위해 로그인이 필요해요.</div>
+          </div>
+          <div className={styles.container__detail}>
+            {sentences.map((sentence, index) => (
+              <div key={`${sentence}-${String(index)}`}>
+                {sentence}
+                {index < sentences.length - 1 && '.'}
+              </div>
+            ))}
+          </div>
         </div>
-        <div className={styles.modal__description}>{description}</div>
-        <div className={styles.modal__description}>회원가입 또는 로그인 후 이용해주세요 :-)</div>
-        <div className={styles.modal__button}>
-          <button
-            type="button"
-            onClick={() => {
-              loggingCancelClick();
-              closeModal();
-            }}
-          >
-            취소하기
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setRedirectPath(`${location.pathname}${location.search}`);
-              loggingLoginClick();
-              navigate(ROUTES.Auth());
-            }}
-          >
+
+        <div className={styles.container__button}>
+          <button type="button" className={styles['container__button--login']} onClick={goLogin}>
             로그인하기
+          </button>
+          <button type="button" className={styles['container__button--cancel']} onClick={cancel}>
+            닫기
           </button>
         </div>
       </div>

@@ -1,5 +1,7 @@
 import { cn } from '@bcsdlab/utils';
 import * as api from 'api';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CATEGORY, Category, Submenu } from 'static/category';
@@ -7,6 +9,7 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './PCHeader.module.scss';
 
@@ -67,7 +70,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const token = useTokenState();
   const { pathname, search } = useLocation();
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
-
+  const portalManager = useModalPortal();
   const isLoggedin = !!token;
 
   const logShortcut = (title: string) => {
@@ -149,8 +152,23 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     }
   };
 
-  const handleMenuClick = (title: string) => {
+  const openLoginModal = () => {
+    portalManager.open((portalOption: Portal) => (
+      <LoginRequiredModal
+        title="쪽지를 사용하기"
+        description="로그인 후 이용해주세요."
+        onClose={portalOption.close}
+      />
+    ));
+  };
+
+  const handleMenuClick = (e: React.MouseEvent<HTMLAnchorElement>, title: string) => {
     logShortcut(title);
+    if (!token && title === '쪽지') {
+      e.preventDefault();
+      openLoginModal();
+    }
+
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
@@ -214,7 +232,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 <Link
                   className={styles.megamenu__link}
                   to={isStage && menu.stageLink ? menu.stageLink : menu.link}
-                  onClick={() => handleMenuClick(menu.title)}
+                  onClick={(e) => handleMenuClick(e, menu.title)}
                 >
                   {menu.title}
                 </Link>
