@@ -10,6 +10,10 @@ import ROUTES from 'static/routes';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -26,6 +30,8 @@ export default function Panel({ openModal }: PanelProps) {
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
+  const token = useTokenState();
+  const portalManager = useModalPortal();
 
   const logShortcut = (title: string) => {
     if (title === '공지사항') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '공지사항' });
@@ -68,15 +74,29 @@ export default function Panel({ openModal }: PanelProps) {
     }
   };
 
-  const handleSubmenuClick = (submenu: Submenu) => {
+  const openLoginModal = () => {
+    portalManager.open((portalOption: Portal) => (
+      <LoginRequiredModal
+        title="쪽지를 사용하기"
+        description="로그인 후 이용해주세요."
+        onClose={portalOption.close}
+      />
+    ));
+  };
+
+  const handleSubmenuClick = (e: React.MouseEvent<HTMLButtonElement>, submenu: Submenu) => {
     logShortcut(submenu.title);
     logExitExistingPage(submenu.title);
-    closeSidebar();
     if (submenu.openInNewTab) {
       window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
+    } else if (!token && submenu.title === '쪽지') {
+      e.preventDefault();
+      openLoginModal();
+      return;
     } else {
       navigate(submenu.link);
     }
+    closeSidebar();
   };
 
   return (
@@ -159,7 +179,7 @@ export default function Panel({ openModal }: PanelProps) {
                   <button
                     type="button"
                     className={styles.category__button}
-                    onClick={() => handleSubmenuClick(submenu)}
+                    onClick={(e) => handleSubmenuClick(e, submenu)}
                   >
                     {submenu.title}
                   </button>
