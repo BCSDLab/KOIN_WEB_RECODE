@@ -84,13 +84,12 @@ export default function Panel({ openModal }: PanelProps) {
     ));
   };
 
-  const handleSubmenuClick = (e: React.MouseEvent<HTMLButtonElement>, submenu: Submenu) => {
+  const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
     logExitExistingPage(submenu.title);
     if (submenu.openInNewTab) {
       window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
     } else if (!token && submenu.title === '쪽지') {
-      e.preventDefault();
       openLoginModal();
       return;
     } else {
@@ -179,7 +178,7 @@ export default function Panel({ openModal }: PanelProps) {
                   <button
                     type="button"
                     className={styles.category__button}
-                    onClick={(e) => handleSubmenuClick(e, submenu)}
+                    onClick={() => handleSubmenuClick(submenu)}
                   >
                     {submenu.title}
                   </button>
