@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { uploadClubFile } from 'api/uploadFile';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
-import resizeImageFile from 'utils/ts/useImageResize';
+import resizeImageFile from 'utils/ts/imageResize';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
