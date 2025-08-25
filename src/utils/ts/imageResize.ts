@@ -1,30 +1,27 @@
-export interface ResizeOptions {
-  maxWidth?: number;
-  maxHeight?: number;
-  quality?: number;
-}
-
-const resizeImageFile = async (
+const imageResize = (
   file: File,
-  {
-    maxWidth = 1200,
-    maxHeight = 1200,
-    quality = 0.8,
-  }: ResizeOptions = {},
+  options: { maxWidth?: number; maxHeight?: number; quality?: number },
 ): Promise<Blob> => {
-  const bitmap = await createImageBitmap(file);
+  const worker = new Worker(new URL('../worker/image.worker.ts', import.meta.url), {
+    type: 'module',
+  });
 
-  const ratio = Math.min(maxWidth / bitmap.width, maxHeight / bitmap.height, 1);
-  const width = Math.round(bitmap.width * ratio);
-  const height = Math.round(bitmap.height * ratio);
-
-  const canvas = new OffscreenCanvas(width, height);
-  const context = canvas.getContext('2d');
-
-  if (!context) return file;
-  context.drawImage(bitmap, 0, 0, width, height);
-
-  return canvas.convertToBlob({ type: 'image/webp', quality });
+  return new Promise<Blob>((resolve, reject) => {
+    worker.onmessage = (e) => {
+      worker.terminate();
+      resolve(e.data);
+    };
+    worker.onerror = (error) => {
+      worker.terminate();
+      reject(error);
+    };
+    worker.postMessage({
+      file,
+      maxWidth: options?.maxWidth ?? 1200,
+      maxHeight: options?.maxHeight ?? 1200,
+      quality: options?.quality ?? 0.8,
+    });
+  });
 };
 
-export default resizeImageFile;
+export default imageResize;

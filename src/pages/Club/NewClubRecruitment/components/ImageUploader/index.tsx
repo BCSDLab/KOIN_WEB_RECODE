@@ -3,7 +3,7 @@ import { uploadClubFile } from 'api/uploadFile';
 import { ClubRecruitment } from 'api/club/entity';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
-import resizeImageFile from 'utils/ts/imageResize';
+import imageResize from 'utils/ts/imageResize';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
@@ -24,7 +24,7 @@ export default function ClubImageUploader({
     imgRef, saveImgFile, setImageFile,
   } = useImageUpload({
     uploadFn: uploadClubFile,
-    resize: (file) => resizeImageFile(file),
+    resize: (file) => imageResize(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.8 }),
   });
 
   const saveImage = async () => {

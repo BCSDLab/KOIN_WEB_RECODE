@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { uploadClubFile } from 'api/uploadFile';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
-import resizeImageFile from 'utils/ts/imageResize';
+import imageResize from 'utils/ts/imageResize';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
@@ -24,7 +24,7 @@ export default function ImagesUploadSlider({
   const { imgRef, saveImgFile, setImageFile } = useImageUpload({
     uploadFn: uploadClubFile,
     maxLength: 7,
-    resize: (file) => resizeImageFile(file),
+    resize: (file) => imageResize(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.8 }),
   });
 
   const saveImage = async () => {

@@ -39,6 +39,6 @@ export default defineConfig(({ mode }) => {
       outDir: 'build',
       sourcemap: true,
     },
-    define: { global: 'window' },
+    define: { global: 'globalThis' },
   };
 });
