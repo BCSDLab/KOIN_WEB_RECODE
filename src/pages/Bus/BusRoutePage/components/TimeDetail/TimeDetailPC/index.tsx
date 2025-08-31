@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'pages/Bus/BusRoutePage/components/SelectDropdown';
 import { useBusLogger } from 'pages/Bus/hooks/useBusLogger';
+import useSemester from 'pages/Bus/BusRoutePage/hooks/useSemester';
 import styles from './TimeDetailPC.module.scss';
 
 interface TimeDetailPCProps {
@@ -14,6 +15,11 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
     setNow, setDayOfMonth, setHour, setMinute,
   } = timeSelect.timeHandler;
   const { logDepartureNowClick } = useBusLogger();
+  const { data: semesterData } = useSemester();
+
+  const displaySemester = semesterData.semester.includes('-')
+    ? semesterData.semester.split('-')[1].trim()
+    : semesterData.semester;
 
   const dates = [...Array(90)].map((_, index) => {
     const now = new Date();
@@ -57,7 +63,14 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
       <div className={styles.guide}>
         <span className={styles.guide__title}>출발 시각 설정</span>
         <span className={styles.guide__description}>
-          정규학기(2025-09-01 ~ 2025-12-19)의 시간표가 제공됩니다.
+          {displaySemester}
+          (
+          {semesterData.startDate}
+          {' '}
+          ~
+          {' '}
+          {semesterData.endDate}
+          )의 시간표가 제공됩니다.
         </span>
       </div>
       <div className={styles['time-detail']}>

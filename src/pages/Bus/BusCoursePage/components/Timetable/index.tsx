@@ -19,6 +19,7 @@ import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
+import useSemester from 'pages/Bus/BusRoutePage/hooks/useSemester';
 import styles from './Timetable.module.scss';
 
 interface TemplateShuttleVersionProps {
@@ -32,6 +33,8 @@ interface TemplateShuttleVersionProps {
   category: string;
 }
 
+const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
+
 function TemplateShuttleVersion({
   region,
   routes,
@@ -40,6 +43,7 @@ function TemplateShuttleVersion({
   const isMobile = useMediaQuery();
   const navigate = useNavigate();
   const logger = useLogger();
+
   const filteredRoutes = (route: string) => routes.filter(({ type }) => {
     if (route === '전체') {
       return true;
@@ -103,16 +107,22 @@ function TemplateShuttleVersion({
 }
 
 function ShuttleTimetable() {
-  const { shuttleCourse } = useShuttleCourse();
   const logger = useLogger();
-  const [selectedCourseId] = useIndexValueSelect();
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery();
   const [searchParams] = useSearchParams();
   const routeId = searchParams.get('routeId');
-  const navigate = useNavigate();
+
+  const { data: semesterData } = useSemester();
+  const { shuttleCourse } = useShuttleCourse();
+  const [selectedCourseId] = useIndexValueSelect();
   const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
-  const isMobile = useMediaQuery();
-  const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
+
   const [category, setCategory] = useState('전체');
+
+  const displaySemester = semesterData.semester.includes('-')
+    ? semesterData.semester.split('-')[1].trim()
+    : semesterData.semester;
 
   return (
     <div className={styles['timetable-container']}>
@@ -182,7 +192,14 @@ function ShuttleTimetable() {
             ))}
             <div className={styles['info-footer-mobile']}>
               <div className={styles['info-footer-mobile__text']}>
-                정규학기(2025년 9월 1일 ~ 12월 19일)의
+                {displaySemester}
+                (
+                {semesterData.startDate}
+                {' '}
+                ~
+                {' '}
+                {semesterData.endDate}
+                )
                 <br />
                 시간표가 제공됩니다.
               </div>

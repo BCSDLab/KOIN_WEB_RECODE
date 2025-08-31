@@ -4,6 +4,7 @@ import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import PickerColumn from 'pages/Bus/BusRoutePage/components/PickerColumn';
+import useSemester from 'pages/Bus/BusRoutePage/hooks/useSemester';
 import styles from './TimeDetailMobile.module.scss';
 
 interface TimeDetailMobileProps {
@@ -20,6 +21,7 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
   const [selectedHour, setSelectedHour] = useState(hour % 12);
   const [selectedMinute, setSelectedMinute] = useState(minute);
 
+  const { data: semesterData } = useSemester();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: close });
   useBodyScrollLock();
 
@@ -37,6 +39,10 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
     setNow(now);
     close();
   };
+
+  const displaySemester = semesterData.semester.includes('-')
+    ? semesterData.semester.split('-')[1].trim()
+    : semesterData.semester;
 
   const dates = [...Array(90)].map((_, index) => {
     const now = new Date();
@@ -62,7 +68,16 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
         <div className={styles.guide}>
           <span className={styles.guide__title}>출발 시각 설정</span>
           <span className={styles.guide__description}>
-            <div>정규학기(2025-09-01 ~ 2025-12-19)의</div>
+            <div>
+              {displaySemester}
+              (
+              {semesterData.startDate}
+              {' '}
+              ~
+              {' '}
+              {semesterData.endDate}
+              )
+            </div>
             <div>시간표가 제공됩니다.</div>
           </span>
         </div>
