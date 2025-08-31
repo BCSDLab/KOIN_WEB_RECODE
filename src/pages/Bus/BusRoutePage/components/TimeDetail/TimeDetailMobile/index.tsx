@@ -62,7 +62,7 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
         <div className={styles.guide}>
           <span className={styles.guide__title}>출발 시각 설정</span>
           <span className={styles.guide__description}>
-            <div>계절학기(2024-12-21 ~ 2025-01-14)의</div>
+            <div>계절학기(2025-09-01 ~ 2025-12-19)의</div>
             <div>시간표가 제공됩니다.</div>
           </span>
         </div>

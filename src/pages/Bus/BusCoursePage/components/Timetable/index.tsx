@@ -182,7 +182,7 @@ function ShuttleTimetable() {
             ))}
             <div className={styles['info-footer-mobile']}>
               <div className={styles['info-footer-mobile__text']}>
-                정규학기(2025년 3월 4일 ~ 6월 20일)의
+                정규학기(2025년 9월 1일 ~ 12월 19일)의
                 <br />
                 시간표가 제공됩니다.
               </div>
