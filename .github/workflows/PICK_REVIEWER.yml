@@ -34,7 +34,7 @@ jobs:
             }
             const [reviewer1, reviewer2] = pickTwo(candidates);
 
-            setOutput(prCreatorJson.name, prUrl, randomReviewer1, randomReviewer2);
+            setOutput(prCreatorJson.name, prUrl, reviewer1, reviewer2);
 
             function setOutput(prCreator, prUrl, reviewer1, reviewer2) {
               core.setOutput('writer', JSON.stringify(prCreator));
