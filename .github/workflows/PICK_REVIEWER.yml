@@ -20,27 +20,32 @@ jobs:
             const fs = require('fs');
 
             const developers = JSON.parse(fs.readFileSync(`${{ github.workspace }}/.github/workflows/reviewer.json`));
-            const prCreator = context.payload.pull_request.user.login;
+            
+            const prCreatorLogin = context.payload.pull_request.user.login;
             const prUrl = context.payload.pull_request.html_url;
-            const prCreatorJson = developers.reviewers.find(person => person.githubName === prCreator);
 
-            //PrCreator가 reviewer에 등록되지 않은 사람인 경우
-            if (!prCreatorJson) {
-              const reviewerArr = developers.reviewers;
-              const randomReviewer1 = getRandomReviewer(reviewerArr);
-              const randomReviewer2 = getRandomReviewer(reviewerArr.filter(reviewer => reviewer.name !== randomReviewer1.name));
-              setOutput(prCreator, prUrl, randomReviewer1, randomReviewer2);
-            } else {
-              const candidateInternalReviewers = developers.reviewers.filter(person => person.team === prCreatorJson.team && person.githubName !== prCreator);
-              const candidateExternalReviewers = developers.reviewers.filter(person => person.team !== prCreatorJson.team);
-              const randomReviewer1 = getRandomReviewer(candidateInternalReviewers);
-              const randomReviewer2 = getRandomReviewer(candidateExternalReviewers);
-              setOutput(prCreatorJson.name, prUrl, randomReviewer1, randomReviewer2);
+            // 작성자 이름(명단 없으면 login 사용)
+            const prCreatorJson = developers.reviewers.find(p => p.githubName === prCreatorLogin);
+            const writer = prCreatorJson?.name ?? prCreatorLogin;
+
+            // 작성자 제외 후보
+            const candidates = developers.reviewers.filter(p => p.githubName !== prCreatorLogin);
+
+            if (candidates.length < 2) {
+              core.setFailed(`리뷰어 후보가 2명 미만입니다. 현재 후보 수: ${candidates.length}`);
+              return;
             }
 
-            function getRandomReviewer(reviewers) {
-              return reviewers[Math.floor(Math.random() * reviewers.length)];
+            // 랜덤 2명 뽑기
+            function pickTwo(arr) {
+              const a = Math.floor(Math.random() * arr.length);
+              let b = Math.floor(Math.random() * arr.length);
+              while (b === a) b = Math.floor(Math.random() * arr.length);
+              return [arr[a], arr[b]];
             }
+            const [reviewer1, reviewer2] = pickTwo(candidates);
+
+            setOutput(writer, prUrl, reviewer1, reviewer2);
 
             function setOutput(prCreator, prUrl, reviewer1, reviewer2) {
               core.setOutput('writer', JSON.stringify(prCreator));
