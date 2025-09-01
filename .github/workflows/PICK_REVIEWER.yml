@@ -27,11 +27,12 @@ jobs:
 
             // 랜덤 2명 뽑기
             function pickTwo(arr) {
-              const a = Math.floor(Math.random() * arr.length);
-              let b = Math.floor(Math.random() * arr.length);
-              while (b === a) b = Math.floor(Math.random() * arr.length);
-              return [arr[a], arr[b]];
+              const a = arr[Math.floor(Math.random() * arr.length)];
+              const rest = arr.filter(item => item !== a);
+              const b = rest[Math.floor(Math.random() * rest.length)];
+              return [a, b];
             }
+            
             const [reviewer1, reviewer2] = pickTwo(candidates);
 
             setOutput(prCreatorJson.name, prUrl, reviewer1, reviewer2);
