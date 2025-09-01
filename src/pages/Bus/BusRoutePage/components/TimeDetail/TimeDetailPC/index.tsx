@@ -2,11 +2,17 @@ import { useState } from 'react';
 import { useTimeSelect } from 'pages/Bus/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'pages/Bus/BusRoutePage/components/SelectDropdown';
 import { useBusLogger } from 'pages/Bus/hooks/useBusLogger';
-import useSemester from 'pages/Bus/BusRoutePage/hooks/useSemester';
+import useCoopSemester from 'pages/Bus/BusRoutePage/hooks/useCoopSemester';
 import styles from './TimeDetailPC.module.scss';
 
 interface TimeDetailPCProps {
   timeSelect: ReturnType<typeof useTimeSelect>;
+}
+
+function formatSemesterLabel(semester?: string) {
+  if (!semester) return '';
+  const parts = semester.split('-');
+  return (parts[1] ?? parts[0]).trim();
 }
 
 export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
@@ -15,11 +21,9 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
     setNow, setDayOfMonth, setHour, setMinute,
   } = timeSelect.timeHandler;
   const { logDepartureNowClick } = useBusLogger();
-  const { data: semesterData } = useSemester();
+  const { data: semesterData } = useCoopSemester();
 
-  const displaySemester = semesterData.semester.includes('-')
-    ? semesterData.semester.split('-')[1].trim()
-    : semesterData.semester;
+  const displaySemester = formatSemesterLabel(semesterData.semester);
 
   const dates = [...Array(90)].map((_, index) => {
     const now = new Date();
@@ -65,11 +69,11 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
         <span className={styles.guide__description}>
           {displaySemester}
           (
-          {semesterData.startDate}
+          {semesterData.from_date}
           {' '}
           ~
           {' '}
-          {semesterData.endDate}
+          {semesterData.to_date}
           )의 시간표가 제공됩니다.
         </span>
       </div>

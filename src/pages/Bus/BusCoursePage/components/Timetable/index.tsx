@@ -19,7 +19,7 @@ import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ROUTES from 'static/routes';
-import useSemester from 'pages/Bus/BusRoutePage/hooks/useSemester';
+import useCoopSemester from 'pages/Bus/BusRoutePage/hooks/useCoopSemester';
 import styles from './Timetable.module.scss';
 
 interface TemplateShuttleVersionProps {
@@ -34,6 +34,12 @@ interface TemplateShuttleVersionProps {
 }
 
 const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
+
+function formatSemesterLabel(semester?: string) {
+  if (!semester) return '';
+  const parts = semester.split('-');
+  return (parts[1] ?? parts[0]).trim();
+}
 
 function TemplateShuttleVersion({
   region,
@@ -113,16 +119,14 @@ function ShuttleTimetable() {
   const [searchParams] = useSearchParams();
   const routeId = searchParams.get('routeId');
 
-  const { data: semesterData } = useSemester();
+  const { data: semesterData } = useCoopSemester();
   const { shuttleCourse } = useShuttleCourse();
   const [selectedCourseId] = useIndexValueSelect();
   const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
 
   const [category, setCategory] = useState('전체');
 
-  const displaySemester = semesterData.semester.includes('-')
-    ? semesterData.semester.split('-')[1].trim()
-    : semesterData.semester;
+  const displaySemester = formatSemesterLabel(semesterData.semester);
 
   return (
     <div className={styles['timetable-container']}>
@@ -194,11 +198,11 @@ function ShuttleTimetable() {
               <div className={styles['info-footer-mobile__text']}>
                 {displaySemester}
                 (
-                {semesterData.startDate}
+                {semesterData.from_date}
                 {' '}
                 ~
                 {' '}
-                {semesterData.endDate}
+                {semesterData.to_date}
                 )
                 <br />
                 시간표가 제공됩니다.
