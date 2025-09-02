@@ -68,7 +68,7 @@ export const useLogin = (state: IsAutoLogin) => {
       showToast('error', '계정을 입력해주세요');
       return;
     }
-    if (userInfo.login_id === '') {
+    if (userInfo.login_pw === '') {
       showToast('error', '비밀번호를 입력해주세요');
       return;
     }
