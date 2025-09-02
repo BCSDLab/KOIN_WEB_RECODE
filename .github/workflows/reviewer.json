@@ -2,53 +2,43 @@
   "reviewers": [
     {
       "name": "정해성",
-      "githubName": "junghaesung79",
-      "team" : "business"
-    },
-    {
-      "name": "곽승주",
-      "githubName": "Gwak-Seungju",
-      "team" : "business"
+      "githubName": "junghaesung79"
     },
     {
       "name": "강성훈",
-      "githubName": "kang-s-h",
-      "team" : "business"
+      "githubName": "kang-s-h"
     },
     {
       "name": "김혜준",
-      "githubName": "hyejun0228",
-      "team" : "user"
+      "githubName": "hyejun0228"
     },
     {
       "name": "조정원",
-      "githubName": "JeongWon-CHO",
-      "team" : "user"
+      "githubName": "JeongWon-CHO"
     },
     {
       "name": "김도훈",
-      "githubName": "dooohun",
-      "team" : "user"
-    },
-    {
-      "name": "최정훈",
-      "githubName": "hoooooony",
-      "team" : "campus"
-    },
-    {
-      "name": "서예진",
-      "githubName": "Yejin0070",
-      "team" : "campus"
+      "githubName": "dooohun"
     },
     {
       "name": "이준영",
-      "githubName": "ff1451",
-      "team" : "campus"
+      "githubName": "ff1451"
     },
     {
       "name": "김민재",
-      "githubName": "D0Dam",
-      "team" : "campus"
+      "githubName": "D0Dam"
+    },
+    {
+      "name": "김아영",
+      "githubName": "gimadud"
+    },
+    {
+      "name": "이동훈",
+      "githubName": "pcasfs"
+    },
+    {
+      "name": "이재익",
+      "githubName": "JAEIK-23"
     }
   ]
 }
