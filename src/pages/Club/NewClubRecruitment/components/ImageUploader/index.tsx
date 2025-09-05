@@ -2,8 +2,9 @@ import { type Dispatch, type SetStateAction, useState } from 'react';
 import { uploadClubFile } from 'api/uploadFile';
 import { ClubRecruitment } from 'api/club/entity';
 import { cn } from '@bcsdlab/utils';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
+import imageResize from 'utils/ts/imageResize';
+import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import styles from './ImageUploader.module.scss';
@@ -19,7 +20,12 @@ export default function ClubImageUploader({
 }: ClubImageUploaderProps) {
   const isMobile = useMediaQuery();
   const [isDragOver, setIsDragOver] = useState(false);
-  const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
+  const {
+    imgRef, saveImgFile, setImageFile,
+  } = useImageUpload({
+    uploadFn: uploadClubFile,
+    resize: (file) => imageResize(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.8 }),
+  });
 
   const saveImage = async () => {
     try {
@@ -27,6 +33,14 @@ export default function ClubImageUploader({
       if (images) setFormData({ ...formData, image_url: images[0] });
     } catch {
       showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
+  const clearImage = () => {
+    setFormData((prev) => ({ ...prev, image_url: '' }));
+    setImageFile([]);
+    if (imgRef.current) {
+      imgRef.current.value = '';
     }
   };
 
@@ -52,7 +66,7 @@ export default function ClubImageUploader({
         <button
           type="button"
           className={styles['form-image__img__box']}
-          onClick={() => setFormData({ ...formData, image_url: '' })}
+          onClick={clearImage}
           aria-label="이미지 클릭 시 삭제"
         >
           <img
