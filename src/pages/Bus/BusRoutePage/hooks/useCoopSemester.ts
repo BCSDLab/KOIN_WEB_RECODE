@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { coopshop } from 'api';
 
 const useCoopSemester = () => useSuspenseQuery({
-  queryKey: ['semester'],
+  queryKey: ['coopSemester'],
   queryFn: async () => coopshop.getAllShopInfo(),
 });
 
