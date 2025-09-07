@@ -41,7 +41,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/file-saver", "npm:2.0.7"],\
             ["@types/gtag.js", "npm:0.0.19"],\
             ["@types/jest", "npm:27.5.2"],\
+<<<<<<< HEAD
+=======
             ["@types/lodash", "npm:4.17.13"],\
+>>>>>>> main
             ["@types/navermaps", "npm:3.7.4"],\
             ["@types/node", "npm:16.18.80"],\
             ["@types/react", "npm:18.2.55"],\
@@ -70,7 +73,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["html2canvas", "npm:1.4.1"],\
             ["jest", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:29.7.0"],\
             ["josa-js", "npm:0.0.2"],\
-            ["lodash", "npm:4.17.21"],\
             ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
             ["postcss", "npm:8.4.47"],\
             ["react", "npm:18.2.0"],\
@@ -81,7 +83,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-swipeable", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.0.2"],\
             ["react-toastify", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:9.1.3"],\
             ["react-window", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:1.8.10"],\
-            ["recoil", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.7.7"],\
             ["reset-css", "npm:5.0.2"],\
             ["sass", "npm:1.70.0"],\
             ["stylelint", "npm:14.16.1"],\
@@ -3360,6 +3361,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+<<<<<<< HEAD
+=======
       ["@types/lodash", [\
         ["npm:4.17.13", {\
           "packageLocation": "./.yarn/cache/@types-lodash-npm-4.17.13-ec44e3530a-d0bf8fbd95.zip/node_modules/@types/lodash/",\
@@ -3369,6 +3372,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+>>>>>>> main
       ["@types/minimist", [\
         ["npm:1.2.5", {\
           "packageLocation": "./.yarn/cache/@types-minimist-npm-1.2.5-c85664a9d8-477047b606.zip/node_modules/@types/minimist/",\
@@ -6800,6 +6804,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+<<<<<<< HEAD
+=======
       ["hamt_plus", [\
         ["npm:1.0.2", {\
           "packageLocation": "./.yarn/cache/hamt_plus-npm-1.0.2-67a52ee1df-af26ea32db.zip/node_modules/hamt_plus/",\
@@ -6809,6 +6815,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+>>>>>>> main
       ["hard-rejection", [\
         ["npm:2.1.0", {\
           "packageLocation": "./.yarn/cache/hard-rejection-npm-2.1.0-a80f2a977d-7baaf80a0c.zip/node_modules/hard-rejection/",\
@@ -8396,7 +8403,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/file-saver", "npm:2.0.7"],\
             ["@types/gtag.js", "npm:0.0.19"],\
             ["@types/jest", "npm:27.5.2"],\
+<<<<<<< HEAD
+=======
             ["@types/lodash", "npm:4.17.13"],\
+>>>>>>> main
             ["@types/navermaps", "npm:3.7.4"],\
             ["@types/node", "npm:16.18.80"],\
             ["@types/react", "npm:18.2.55"],\
@@ -8425,7 +8435,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["html2canvas", "npm:1.4.1"],\
             ["jest", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:29.7.0"],\
             ["josa-js", "npm:0.0.2"],\
+<<<<<<< HEAD
+=======
             ["lodash", "npm:4.17.21"],\
+>>>>>>> main
             ["lottie-react", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.4.1"],\
             ["postcss", "npm:8.4.47"],\
             ["react", "npm:18.2.0"],\
@@ -8436,7 +8449,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-swipeable", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.0.2"],\
             ["react-toastify", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:9.1.3"],\
             ["react-window", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:1.8.10"],\
+<<<<<<< HEAD
+=======
             ["recoil", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:0.7.7"],\
+>>>>>>> main
             ["reset-css", "npm:5.0.2"],\
             ["sass", "npm:1.70.0"],\
             ["stylelint", "npm:14.16.1"],\
@@ -10194,6 +10210,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+<<<<<<< HEAD
+=======
       ["recoil", [\
         ["npm:0.7.7", {\
           "packageLocation": "./.yarn/cache/recoil-npm-0.7.7-4452f58b67-65edecbcb8.zip/node_modules/recoil/",\
@@ -10225,6 +10243,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+>>>>>>> main
       ["redent", [\
         ["npm:3.0.0", {\
           "packageLocation": "./.yarn/cache/redent-npm-3.0.0-31892f4906-fa1ef20404.zip/node_modules/redent/",\

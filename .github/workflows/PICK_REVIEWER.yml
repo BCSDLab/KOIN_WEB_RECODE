@@ -23,24 +23,19 @@ jobs:
             const prCreator = context.payload.pull_request.user.login;
             const prUrl = context.payload.pull_request.html_url;
             const prCreatorJson = developers.reviewers.find(person => person.githubName === prCreator);
+            const candidates = developers.reviewers.filter(person => person.githubName !== prCreator);
 
-            //PrCreator가 reviewer에 등록되지 않은 사람인 경우
-            if (!prCreatorJson) {
-              const reviewerArr = developers.reviewers;
-              const randomReviewer1 = getRandomReviewer(reviewerArr);
-              const randomReviewer2 = getRandomReviewer(reviewerArr.filter(reviewer => reviewer.name !== randomReviewer1.name));
-              setOutput(prCreator, prUrl, randomReviewer1, randomReviewer2);
-            } else {
-              const candidateInternalReviewers = developers.reviewers.filter(person => person.team === prCreatorJson.team && person.githubName !== prCreator);
-              const candidateExternalReviewers = developers.reviewers.filter(person => person.team !== prCreatorJson.team);
-              const randomReviewer1 = getRandomReviewer(candidateInternalReviewers);
-              const randomReviewer2 = getRandomReviewer(candidateExternalReviewers);
-              setOutput(prCreatorJson.name, prUrl, randomReviewer1, randomReviewer2);
+            // 랜덤 2명 뽑기
+            function pickTwo(arr) {
+              const a = arr[Math.floor(Math.random() * arr.length)];
+              const rest = arr.filter(item => item !== a);
+              const b = rest[Math.floor(Math.random() * rest.length)];
+              return [a, b];
             }
+            
+            const [reviewer1, reviewer2] = pickTwo(candidates);
 
-            function getRandomReviewer(reviewers) {
-              return reviewers[Math.floor(Math.random() * reviewers.length)];
-            }
+            setOutput(prCreatorJson.name, prUrl, reviewer1, reviewer2);
 
             function setOutput(prCreator, prUrl, reviewer1, reviewer2) {
               core.setOutput('writer', JSON.stringify(prCreator));
