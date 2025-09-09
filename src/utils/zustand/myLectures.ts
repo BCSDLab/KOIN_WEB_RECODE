@@ -26,7 +26,9 @@ interface TimeStringState {
 
 export const useLecturesStore = create<State & Action>(
   (set, get) => ({
-    lectures: JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}'),
+    lectures: typeof window !== 'undefined'
+      ? JSON.parse(localStorage.getItem(MY_LECTURES_KEY) ?? '{}')
+      : {},
     action: {
       addLecture: (lecture, semester) => {
         const timetableInfoList = get().lectures;

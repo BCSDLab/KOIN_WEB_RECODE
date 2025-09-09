@@ -5,19 +5,19 @@ import {
   idExists,
   idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify,
 } from 'api/auth';
-import { useNavigate } from 'react-router-dom';
 import { MESSAGES } from 'static/auth';
 import { useState } from 'react';
 import {
   type InputMessage,
-} from 'pages/Auth/SignupPage/components/CustomInput';
+} from 'components/Auth/SignupPage/components/CustomInput';
 import ROUTES from 'static/routes';
-import useCountdownTimer from 'pages/Auth/SignupPage/hooks/useCountdownTimer';
+import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import { useFormContext } from 'react-hook-form';
 import { SmsSendResponse } from 'api/auth/entity';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
+import { useRouter } from 'next/router';
 
 interface UsePhoneVerificationProps {
   phoneNumber: string;
@@ -33,7 +33,7 @@ interface SmsSendCountData {
 
 function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificationProps) {
   const sessionLogger = useSessionLogger();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { setValue } = useFormContext();
   const [phoneMessage, setPhoneMessage] = useState<InputMessage | null>(null);
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
@@ -208,7 +208,7 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
   const { mutate: findId } = useMutation({
     mutationFn: idFindSms,
     onSuccess: ({ login_id }) => {
-      navigate(`${ROUTES.IDResult()}?userId=${login_id}`);
+      router.push(`${ROUTES.IDResult()}?userId=${login_id}`);
     },
   });
 

@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import * as gtag from 'lib/gtag';
 import { UserResponse } from 'api/auth/entity';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
+import { isomorphicLocalStorage } from 'utils/ts/env';
+import { useRouter } from 'next/router';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null) => {
   if (!userInfo) {
-    localStorage.removeItem('uuid');
+    isomorphicLocalStorage.removeItem('uuid');
     return '';
   }
 
@@ -17,24 +18,24 @@ const userUniqueIdGenerator = (userInfo: UserResponse | null) => {
   if (id && studentNumber) {
     const newStudentNumber = studentNumber.slice(0, 6);
     const newUserId = `${newStudentNumber}-${idString}`;
-    localStorage.setItem('uuid', newUserId);
+    isomorphicLocalStorage.setItem('uuid', newUserId);
 
     return newUserId;
   }
 
   if (id && !studentNumber) {
     const newUserId = `anonymous_${idString}`;
-    localStorage.setItem('uuid', newUserId);
+    isomorphicLocalStorage.setItem('uuid', newUserId);
 
     return newUserId;
   }
 
-  localStorage.removeItem('uuid');
+  isomorphicLocalStorage.removeItem('uuid');
   return '';
 };
 
 export default function PageViewTracker() {
-  const location = useLocation();
+  const router = useRouter();
   const { data: userInfo } = useUser();
   const prevPathname = useRef('');
 
@@ -42,12 +43,13 @@ export default function PageViewTracker() {
 
   useEffect(() => {
     if (!isStudent) return;
+    const currentPath = router.asPath;
 
     const handlePageView = () => {
-      if (prevPathname.current !== window.location.pathname) {
+      if (prevPathname.current !== currentPath) {
         setTimeout(() => {
           gtag.pageView(
-            window.location.pathname + window.location.search,
+            currentPath + window.location.search,
             userUniqueIdGenerator(userInfo) || '',
           );
           prevPathname.current = window.location.pathname;
@@ -55,6 +57,6 @@ export default function PageViewTracker() {
       }
     };
     handlePageView();
-  }, [location, userInfo, isStudent]);
+  }, [router, userInfo, isStudent]);
   return null;
 }

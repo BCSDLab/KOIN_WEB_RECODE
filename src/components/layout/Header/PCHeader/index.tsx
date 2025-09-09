@@ -1,7 +1,8 @@
 import { cn } from '@bcsdlab/utils';
 import * as api from 'api';
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -65,10 +66,15 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const logger = useLogger();
   const sessionLogger = useSessionLogger();
   const token = useTokenState();
-  const { pathname, search } = useLocation();
-  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
+  const router = useRouter();
+  const { asPath } = router;
+  const pathname = asPath.split('?')[0] || '/';
+  const search = asPath.includes('?') ? `?${asPath.split('?')[1]}` : '';
+  const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  const isLoggedin = !!token;
+  const isLoggedin = mounted && !!token;
 
   const logShortcut = (title: string) => {
     const loggingMap: Record<
@@ -160,10 +166,9 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
     <>
       <Link
         className={styles.header__logo}
-        to={ROUTES.Main()}
+        href={ROUTES.Main()}
         tabIndex={0}
         onClick={escapeByLogo}
-        type="button"
       >
         <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
       </Link>
@@ -208,18 +213,22 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           aria-labelledby={Array.from({ length: 2 }, (_, index) => ID[`LABEL${index + 1}`]).join(' ')}
         >
           <ul className={styles.megamenu__content}>
-            {panelMenuList?.slice(0, -4).map((menu) => (
-              <li className={styles.megamenu__menu} key={menu.title}>
-                {/* TODO: 키보드 Focus 접근성 향상 */}
-                <Link
-                  className={styles.megamenu__link}
-                  to={isStage && menu.stageLink ? menu.stageLink : menu.link}
-                  onClick={() => handleMenuClick(menu.title)}
-                >
-                  {menu.title}
-                </Link>
-              </li>
-            ))}
+            {panelMenuList?.slice(0, -4).map((menu) => {
+              const preferred = isStage && menu.stageLink ? menu.stageLink : menu.link;
+              const href = preferred ?? ROUTES.Main();
+              return (
+                <li className={styles.megamenu__menu} key={menu.title}>
+                  {/* TODO: 키보드 Focus 접근성 향상 */}
+                  <Link
+                    className={styles.megamenu__link}
+                    href={href}
+                    onClick={() => handleMenuClick(menu.title)}
+                  >
+                    {menu.title}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
@@ -228,7 +237,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           <>
             <li className={styles['header__auth-link']}>
               <Link
-                to={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
+                href={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
                 onClick={() => {
                   sessionLogger.actionSessionEvent({
                     session_name: 'sign_up',
@@ -243,7 +252,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
             </li>
             <li className={styles['header__auth-link']}>
               <Link
-                to={ROUTES.Auth()}
+                href={ROUTES.Auth()}
                 onClick={() => {
                   logger.actionEventClick({
                     team: 'USER',

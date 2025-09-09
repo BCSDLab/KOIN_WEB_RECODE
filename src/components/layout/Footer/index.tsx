@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { CATEGORY } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -8,10 +9,10 @@ import styles from './Footer.module.scss';
 function Footer(): JSX.Element {
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
+  const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
 
-  const location = useLocation();
-  const { pathname } = location; // 현재 URL의 경로
+  const router = useRouter();
+  const { pathname } = router; // 현재 URL의 경로
 
   const logShortcut = async (title: string) => {
     const loggingMap: Record<
@@ -50,22 +51,29 @@ function Footer(): JSX.Element {
           <ul className={styles.footer__services}>
             {CATEGORY
               .flatMap((categoryInfo) => categoryInfo.submenu)
-              .slice(0, -4).map((submenuInfo) => (
-                <li className={styles.footer__service} key={submenuInfo.title}>
-                  <Link
-                    to={isStage && submenuInfo.stageLink ? submenuInfo.stageLink : submenuInfo.link}
-                    onClick={() => logShortcut(submenuInfo.title)}
-                  >
-                    {submenuInfo.title}
-                  </Link>
-                </li>
-              ))}
+              .slice(0, -4)
+              .map((submenuInfo) => {
+                const isStageLink = isStage && submenuInfo.stageLink;
+                const href = (
+                  isStageLink ? (submenuInfo.stageLink ?? submenuInfo.link) : submenuInfo.link
+                ) ?? ROUTES.Main();
+                return (
+                  <li className={styles.footer__service} key={submenuInfo.title}>
+                    <Link
+                      href={href}
+                      onClick={() => logShortcut(submenuInfo.title)}
+                    >
+                      {submenuInfo.title}
+                    </Link>
+                  </li>
+                );
+              })}
           </ul>
         )}
         <div className={styles.sitemap}>
           <Link
             className={styles.sitemap__logo}
-            to={ROUTES.Main()}
+            href={ROUTES.Main()}
           >
             <img
               src="https://static.koreatech.in/assets/img/logo_white.png"
@@ -87,7 +95,7 @@ function Footer(): JSX.Element {
                 <a href="https://portal.koreatech.ac.kr" target="_blank" rel="noreferrer">아우누리 바로가기</a>
               </li>
               <Link
-                to={ROUTES.PrivatePolicy()}
+                href={ROUTES.PrivatePolicy()}
                 className={styles.sitemap__link}
               >
                 개인정보 처리방침
@@ -108,7 +116,7 @@ function Footer(): JSX.Element {
                 <a href="https://bcsdlab.com" target="_blank" rel="noreferrer">BCSD Lab 바로가기</a>
               </li>
               <Link
-                to={ROUTES.PrivatePolicy()}
+                href={ROUTES.PrivatePolicy()}
                 className={styles.sitemap__link}
               >
                 개인정보 처리방침
@@ -124,7 +132,7 @@ function Footer(): JSX.Element {
             >
               <img src="https://static.koreatech.in/upload/fead6221d535ff547d4801081ee8f2e3.png" alt="facebook" />
             </a>
-            <Link className={styles['sitemap__icon-link']} to={ROUTES.Main()}>
+            <Link className={styles['sitemap__icon-link']} href={ROUTES.Main()}>
               <img src="https://static.koreatech.in/upload/1aae9a021f0338527c28e5c3d0518fa1.png" alt="home" />
             </Link>
           </div>

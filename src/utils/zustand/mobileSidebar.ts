@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { useEffect } from 'react';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 interface SidebarState {
   isSidebarOpen: boolean;
@@ -18,7 +18,7 @@ const useSidebarStore = create<SidebarState>((set) => ({
 }));
 
 export function useMobileSidebar() {
-  const { pathname } = useLocation();
+  const router = useRouter();
   const isMobile = useMediaQuery();
   const {
     isSidebarOpen, closeSidebar, openSidebar, toggleSidebar,
@@ -37,7 +37,7 @@ export function useMobileSidebar() {
 
   useEffect(() => {
     closeSidebar();
-  }, [closeSidebar, pathname]);
+  }, [closeSidebar, router.pathname]);
 
   return {
     isSidebarOpen,

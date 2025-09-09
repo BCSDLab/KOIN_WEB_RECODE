@@ -1,15 +1,15 @@
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import {
   setRedirectPath, getRedirectPath, clearRedirectPath, redirectToLogin,
 } from 'utils/ts/auth';
 
 export function useLoginRedirect() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const redirectAfterLogin = () => {
     const redirectPath = getRedirectPath();
     clearRedirectPath();
-    navigate(redirectPath);
+    router.push(redirectPath);
   };
 
   return {

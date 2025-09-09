@@ -3,7 +3,9 @@ import * as api from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useABTestView = (title: string, authorization?: string) => {
-  const accessHistoryId = localStorage.getItem('access_history_id');
+  const accessHistoryId = typeof window !== 'undefined'
+    ? localStorage.getItem('access_history_id')
+    : null;
 
   const { data: abTestView } = useSuspenseQuery({
     queryKey: ['abTestView', title, accessHistoryId],
@@ -17,8 +19,11 @@ export const useABTestView = (title: string, authorization?: string) => {
     },
   });
 
+  // 최초 편입 시
   if (abTestView.access_history_id) {
-    localStorage.setItem('access_history_id', abTestView.access_history_id.toString());
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('access_history_id', abTestView.access_history_id.toString());
+    }
   }
 
   return abTestView.variable_name || 'default';

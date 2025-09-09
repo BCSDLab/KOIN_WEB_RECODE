@@ -1,5 +1,7 @@
 import { useTokenStore } from 'utils/zustand/auth';
 
+const isBrowser = () => typeof window !== 'undefined';
+
 class IOSWebBridge {
   private callbackMap: { [key: string]: (result: any) => void } = {};
 
@@ -40,12 +42,14 @@ class IOSWebBridge {
 }
 
 // 전역 브릿지 인스턴스
-window.NativeBridge = new IOSWebBridge();
+if (isBrowser()) {
+  window.NativeBridge = new IOSWebBridge();
 
-// 네이티브에서 호출할 콜백 함수
-window.onNativeCallback = (callbackId: string, result: any) => {
-  window.NativeBridge?.handleCallback(callbackId, result);
-};
+  // 네이티브에서 호출할 콜백 함수
+  window.onNativeCallback = (callbackId: string, result: any) => {
+    window.NativeBridge?.handleCallback(callbackId, result);
+  };
+}
 
 export function setTokensFromNative(access: string, refresh: string) {
   if (access) useTokenStore.getState().setToken(access);
@@ -56,6 +60,8 @@ export async function requestTokensFromNative(): Promise<{ access: string, refre
   // 이미 토큰이 있으면 그냥 반환
   const existingToken = useTokenStore.getState().token;
   const existingRefresh = useTokenStore.getState().refreshToken;
+
+  if (!isBrowser()) return { access: '', refresh: '' };
 
   if (existingToken && existingRefresh) {
     return { access: existingToken, refresh: existingRefresh };
@@ -73,6 +79,7 @@ export async function requestTokensFromNative(): Promise<{ access: string, refre
 }
 
 export async function saveTokensToNative(access: string, refresh: string): Promise<boolean> {
+  if (!isBrowser()) return false;
   try {
     await window.NativeBridge?.call('putUserToken', { access, refresh });
     return true;
@@ -82,5 +89,7 @@ export async function saveTokensToNative(access: string, refresh: string): Promi
 }
 
 export async function backButtonTapped(): Promise<void> {
-  await window.NativeBridge?.call('backButtonTapped');
+  if (isBrowser()) {
+    await window.NativeBridge?.call('backButtonTapped');
+  }
 }

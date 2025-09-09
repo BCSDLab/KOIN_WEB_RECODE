@@ -1,0 +1,48 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  width: 1131px;
+  margin: 68px auto 84px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    margin: 0 auto 16px;
+  }
+}
+
+.title {
+  font-family: NanumSquare, sans-serif;
+  letter-spacing: -1.5px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #175c8e;
+  padding-bottom: 21px;
+  border-bottom: 2px solid #175c8e;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  padding-top: 18px;
+  height: 878px;
+
+  @include media.media-breakpoint(mobile) {
+    flex-direction: column;
+  }
+}
+
+.map {
+  width: 752px;
+  height: 100%;
+  z-index: 0;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    height: 500px;
+    flex-direction: column;
+  }
+}
+
+.hidden {
+  display: none;
+}

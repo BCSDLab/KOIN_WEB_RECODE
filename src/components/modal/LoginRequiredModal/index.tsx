@@ -1,7 +1,7 @@
-import { useLocation, useNavigate } from 'react-router-dom';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
 import { setRedirectPath } from 'utils/ts/auth';
+import { useRouter } from 'next/router';
 import styles from './LoginRequiredModal.module.scss';
 
 interface Props {
@@ -15,8 +15,7 @@ interface Props {
 export default function LoginRequiredModal({
   title = '', description = '', closeModal, type, shopName,
 }: Props) {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
   const logger = useLogger();
 
   const loggingLoginClick = () => {
@@ -62,9 +61,9 @@ export default function LoginRequiredModal({
           <button
             type="button"
             onClick={() => {
-              setRedirectPath(`${location.pathname}${location.search}`);
+              setRedirectPath(`${router.asPath}${router.query}`);
               loggingLoginClick();
-              navigate(ROUTES.Auth());
+              router.push(ROUTES.Auth());
             }}
           >
             로그인하기
