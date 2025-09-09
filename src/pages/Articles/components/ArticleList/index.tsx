@@ -105,7 +105,11 @@ export default function ArticleList({ articles }: ArticleListProps) {
               </div>
 
             </div>
-            <div className={styles.list__author}>{isMobile ? `${article.author}` : article.author}</div>
+            <div className={styles.list__author}>
+              <div className={styles.list__author__content}>
+                {isMobile ? `${article.author}` : article.author}
+              </div>
+            </div>
             <div className={styles['list__registered-at']}>{setArticleRegisteredDate(article.registered_at)[0]}</div>
           </Link>
         );
