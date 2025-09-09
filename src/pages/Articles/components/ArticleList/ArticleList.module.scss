@@ -44,10 +44,23 @@
     height: 100%;
     color: #175c8e;
     font-size: 15px;
-    display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    display: flex;
+
+    &__content {
+      display: block;
+      padding: 0 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4;
+
+      @include media.media-breakpoint(mobile) {
+        display: inline;
+      }
+    }
 
     @include media.media-breakpoint(mobile) {
       display: inline;
