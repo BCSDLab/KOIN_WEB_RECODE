@@ -22,6 +22,11 @@ export default function RouteList({
     depart,
     arrival,
   });
+  const isReady = Boolean(depart) && Boolean(arrival);
+
+  if (!isReady) {
+    return null;
+  }
 
   if (!data) return null;
 
