@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import Suspense from 'components/ssr/SSRSuspense';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'components/Articles/hooks/useArticles';
 import useLogger from 'utils/hooks/analytics/useLogger';

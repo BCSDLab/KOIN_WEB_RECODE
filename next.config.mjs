@@ -22,8 +22,9 @@ const nextConfig = {
   experimental: {
     workerThreads: false,
   },
+  images: { unoptimized: true },
   output: 'export',
-  distDir: './dist', // Changes the build output directory to `./dist/`.
+  distDir: 'dist',
 };
 
 export default nextConfig;

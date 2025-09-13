@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import Suspense from 'components/ssr/SSRSuspense';
 import ArticleHeader from 'components/Articles/components/ArticleHeader';
 import ArticleContent from 'components/Articles/components/ArticleContent';
 import useArticle from 'components/Articles/hooks/useArticle';
@@ -9,7 +9,7 @@ function ArticlesDetailPage({ id }: { id: string }) {
   const { article } = useArticle(id);
 
   return (
-    <Suspense>
+    <>
       <ArticleHeader
         boardId={article.board_id}
         title={article.title}
@@ -20,7 +20,7 @@ function ArticlesDetailPage({ id }: { id: string }) {
       <ArticleContent
         content={article.content}
       />
-    </Suspense>
+    </>
   );
 }
 
@@ -34,7 +34,9 @@ export default function ArticlesDetailPageWrapper() {
 
   return (
     <ArticlesPageLayout>
-      <ArticlesDetailPage id={id} />
+      <Suspense fallback={<div />}>
+        <ArticlesDetailPage id={id} />
+      </Suspense>
     </ArticlesPageLayout>
   );
 }

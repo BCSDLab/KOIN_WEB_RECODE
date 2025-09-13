@@ -62,7 +62,7 @@ function AutoLogin() {
 }
 
 // 메인 App 컴포넌트
-function App({ Component, pageProps }: AppPropsWithAuth) {
+export default function App({ Component, pageProps }: AppPropsWithAuth) {
   const router = useRouter();
   const [client] = React.useState(queryClient);
   const isMaintenance = useServerStateStore((state) => state.isMaintenance);
@@ -132,5 +132,3 @@ function App({ Component, pageProps }: AppPropsWithAuth) {
     </QueryClientProvider>
   );
 }
-
-export default App;

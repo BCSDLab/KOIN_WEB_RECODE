@@ -1,16 +1,17 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import ROUTES from 'static/routes';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import styles from './ResultPage.module.scss';
 
 function ResultPage() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const { searchParams } = useParamsHandler();
   const userId = searchParams.get('userId');
   const onClickLogin = () => {
-    navigate(ROUTES.Auth());
+    router.push(ROUTES.Auth());
   };
   const onClickPassword = () => {
-    navigate(ROUTES.AuthFindPW({ step: '계정인증', isLink: true }));
+    router.push(ROUTES.AuthFindPW({ step: '계정인증', isLink: true }));
   };
 
   return (

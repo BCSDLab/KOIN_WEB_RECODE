@@ -4,7 +4,7 @@ import ROUTES from 'static/routes';
 import LeftBracket from 'assets/svg/left-angle-bracket.svg';
 import RightBracket from 'assets/svg/right-angle-bracket.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { Suspense } from 'react';
+import Suspense from 'components/ssr/SSRSuspense';
 import { useRouter } from 'next/router';
 import { useCarouselController } from './hooks/useCarouselController';
 import styles from './EventCarousel.module.scss';

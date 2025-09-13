@@ -1,6 +1,6 @@
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import HotArticles from 'components/Articles/components/HotArticle';
-import { Suspense } from 'react';
+import Suspense from 'components/ssr/SSRSuspense';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 // import { useUser } from 'utils/hooks/state/useUser';
 import LostItemRouteButton from 'components/Articles/components/LostItemRouteButton';

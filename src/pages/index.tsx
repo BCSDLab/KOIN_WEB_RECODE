@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import Suspense from 'components/ssr/SSRSuspense';
 import Banner from 'components/ui/Banner';
 import UserInfoModal from 'components/ui/UserInfoModal';
 import useBannerCategories from 'components/ui/Banner/hooks/useBannerCategories';

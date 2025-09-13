@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import Suspense from 'components/ssr/SSRSuspense';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';

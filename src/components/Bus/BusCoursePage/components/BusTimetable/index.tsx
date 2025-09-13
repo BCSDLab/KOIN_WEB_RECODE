@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import Suspense from 'components/ssr/SSRSuspense';
 import { cn } from '@bcsdlab/utils';
 import BusNotice from 'components/Bus/components/BusNotice';
 import { BUS_TYPES } from 'static/bus';

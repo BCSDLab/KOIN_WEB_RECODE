@@ -1,7 +1,7 @@
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postBlockLostItemChatroom } from 'api/articles';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
@@ -9,7 +9,7 @@ import showToast from 'utils/ts/showToast';
 const useDeleteLostItemChatroom = () => {
   const token = useTokenState();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const { mutate } = useMutation({
     mutationFn: ({ articleId, chatroomId }: { articleId: number, chatroomId: number }) => (
@@ -17,7 +17,7 @@ const useDeleteLostItemChatroom = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chatroom'] });
       showToast('success', '채팅방이 차단되었습니다.');
-      navigate(ROUTES.LostItemChat());
+      router.push(ROUTES.LostItemChat());
     },
     onError: (e) => {
       if (isKoinError(e)) {
