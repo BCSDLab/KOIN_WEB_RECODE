@@ -13,7 +13,7 @@ import ReportIcon from 'assets/svg/Articles/report.svg';
 import ReportModal from 'components/Articles/LostItemDetailPage/components/ReportModal';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import LoginRequireLostItemModal from 'components/Articles/LostItemDetailPage/components/LoginRequireLostItemModal';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import usePostLostItemChatroom from 'components/Articles/LostItemDetailPage/hooks/usePostLostItemChatroom';
 import { useRouter } from 'next/router';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
@@ -65,9 +65,9 @@ function LostItemDetailPage({ id }: { id: string }) {
       reportBranch();
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequireLostItemModal
-          actionTitle="게시글을 신고 하려면"
-          detailExplanation="로그인 후 이용해주세요."
+        <LoginRequiredModal
+          title="게시글을 신고 하려면"
+          description="로그인 후 이용해주세요."
           onClose={portalOption.close}
         />
       ));
@@ -80,9 +80,9 @@ function LostItemDetailPage({ id }: { id: string }) {
       navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequireLostItemModal
-          actionTitle="쪽지를 보내려면"
-          detailExplanation="로그인 후 이용해주세요."
+        <LoginRequiredModal
+          title="쪽지를 보내려면"
+          description="로그인 후 이용해주세요."
           onClose={portalOption.close}
         />
       ));

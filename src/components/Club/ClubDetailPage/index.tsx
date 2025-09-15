@@ -13,7 +13,6 @@ import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import NonLikeIcon from 'assets/svg/Club/unlike-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
 import UpIcon from 'assets/svg/Club/up-icon.svg';
-import ClubAuthModal from 'components/Club/components/ClubAuthModal';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import { useRouter } from 'next/router';

@@ -9,7 +9,7 @@ import useClubLike from 'components/Club/hooks/useClubLike';
 import useClubCategories from 'components/Club/hooks/useClubCategories';
 import { Selector } from 'components/ui/Selector';
 import { Portal } from 'components/modal/Modal/PortalProvider';
-import ClubAuthModal from 'components/Club/components/ClubAuthModal';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import MikeIcon from 'assets/svg/Club/mike-icon.svg';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
 import HobbyIcon from 'assets/svg/Club/hobby-icon.svg';

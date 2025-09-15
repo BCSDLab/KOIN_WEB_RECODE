@@ -19,7 +19,7 @@ import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ROUTES from 'static/routes';
 import { useRouter } from 'next/router';
-import useCoopSemester from 'pages/Bus/BusRoutePage/hooks/useCoopSemester';
+import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
 import styles from './Timetable.module.scss';
 
 interface TemplateShuttleVersionProps {
@@ -118,8 +118,6 @@ function ShuttleTimetable() {
   const { routeId } = router.query;
 
   const isMobile = useMediaQuery();
-  const [searchParams] = useSearchParams();
-  const routeId = searchParams.get('routeId');
 
   const { data: semesterData } = useCoopSemester();
   const { shuttleCourse } = useShuttleCourse();
