@@ -17,6 +17,7 @@ import ClubAuthModal from 'components/Club/components/ClubAuthModal';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import { useRouter } from 'next/router';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ClubQnA from './components/ClubQnA';
 import ClubEventList from './components/ClubEventList';
 import CreateQnAModal from './components/CreateQnAModal';
@@ -681,7 +682,13 @@ export default function ClubDetailPage() {
         )
       }
       {
-        isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
+        isAuthModalOpen && (
+          <LoginRequiredModal
+            title="좋아요 기능을 사용하기"
+            description="동아리 좋아요 기능은 로그인이 필요한 서비스입니다."
+            onClose={closeAuthModal}
+          />
+        )
       }
       {isEditModalOpen && (
       <EditConfirmModal

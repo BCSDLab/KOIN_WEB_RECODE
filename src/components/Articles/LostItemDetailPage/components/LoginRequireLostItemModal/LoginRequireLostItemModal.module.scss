@@ -12,6 +12,8 @@
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
   width: 377px;
   box-shadow: 0 8px 32px 0 #00000014;
   box-shadow: 0 2px 20px 0 #0000000a;
@@ -21,7 +23,7 @@
   &__icon {
     display: flex;
     padding: 16px 24px;
-    justify-content: flex-end;
+    justify-content: end;
     align-items: center;
     gap: 8px;
     align-self: stretch;

@@ -9,6 +9,10 @@ import ROUTES from 'static/routes';
 import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useRouter } from 'next/router';
 import styles from './Panel.module.scss';
 
@@ -26,6 +30,8 @@ export default function Panel({ openModal }: PanelProps) {
 
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
+  const token = useTokenState();
+  const portalManager = useModalPortal();
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
 
   const logShortcut = (title: string) => {
@@ -69,15 +75,38 @@ export default function Panel({ openModal }: PanelProps) {
     }
   };
 
+  const openLoginModal = () => {
+    portalManager.open((portalOption: Portal) => (
+      <LoginRequiredModal
+        title="쪽지를 사용하기"
+        description="로그인 후 이용해주세요."
+        onClose={portalOption.close}
+      />
+    ));
+  };
+
+  const openLoginModal = () => {
+    portalManager.open((portalOption: Portal) => (
+      <LoginRequiredModal
+        title="쪽지를 사용하기"
+        description="로그인 후 이용해주세요."
+        onClose={portalOption.close}
+      />
+    ));
+  };
+
   const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
     logExitExistingPage(submenu.title);
-    closeSidebar();
     if (submenu.openInNewTab) {
       window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
+    } else if (!token && submenu.title === '쪽지') {
+      openLoginModal();
+      return;
     } else {
       router.push(submenu.link);
     }
+    closeSidebar();
   };
 
   return (

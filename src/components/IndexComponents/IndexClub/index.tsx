@@ -8,7 +8,7 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
-import ClubAuthModal from 'components/Club/components/ClubAuthModal';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import Link from 'next/link';
 import styles from './IndexClub.module.scss';
@@ -145,7 +145,13 @@ function IndexClub() {
         </div>
       )}
       {
-        isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
+        isAuthModalOpen && (
+          <LoginRequiredModal
+            title="동아리를 생성하기"
+            description="로그인 후 이용해주세요."
+            onClose={closeAuthModal}
+          />
+        )
       }
     </section>
   );

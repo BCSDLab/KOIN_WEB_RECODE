@@ -48,7 +48,7 @@ export default function ReviewList({ id }: { id: string }) {
         <LoginRequiredModal
           title={REVEIW_LOGIN[0]}
           description={REVEIW_LOGIN[1]}
-          closeModal={portalOption.close}
+          onClose={portalOption.close}
         />
       ));
     }

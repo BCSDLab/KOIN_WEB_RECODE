@@ -2,10 +2,17 @@ import { useState } from 'react';
 import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'components/Bus/BusRoutePage/components/SelectDropdown';
 import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
+import useCoopSemester from 'pages/Bus/BusRoutePage/hooks/useCoopSemester';
 import styles from './TimeDetailPC.module.scss';
 
 interface TimeDetailPCProps {
   timeSelect: ReturnType<typeof useTimeSelect>;
+}
+
+function formatSemesterLabel(semester?: string) {
+  if (!semester) return '';
+  const parts = semester.split('-');
+  return (parts[1] ?? parts[0]).trim();
 }
 
 export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
@@ -14,6 +21,9 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
     setNow, setDayOfMonth, setHour, setMinute,
   } = timeSelect.timeHandler;
   const { logDepartureNowClick } = useBusLogger();
+  const { data: semesterData } = useCoopSemester();
+
+  const displaySemester = formatSemesterLabel(semesterData.semester);
 
   const dates = [...Array(90)].map((_, index) => {
     const now = new Date();
@@ -57,7 +67,14 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
       <div className={styles.guide}>
         <span className={styles.guide__title}>출발 시각 설정</span>
         <span className={styles.guide__description}>
-          계절학기(2024-12-21 ~ 2025-01-14)의 시간표가 제공됩니다.
+          {displaySemester}
+          (
+          {semesterData.from_date}
+          {' '}
+          ~
+          {' '}
+          {semesterData.to_date}
+          )의 시간표가 제공됩니다.
         </span>
       </div>
       <div className={styles['time-detail']}>

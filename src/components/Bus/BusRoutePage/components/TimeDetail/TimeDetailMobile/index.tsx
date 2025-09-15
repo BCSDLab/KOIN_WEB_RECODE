@@ -4,11 +4,18 @@ import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import PickerColumn from 'components/Bus/BusRoutePage/components/PickerColumn';
+import useCoopSemester from 'pages/Bus/BusRoutePage/hooks/useCoopSemester';
 import styles from './TimeDetailMobile.module.scss';
 
 interface TimeDetailMobileProps {
   timeSelect: ReturnType<typeof useTimeSelect>;
   close: () => void;
+}
+
+function formatSemesterLabel(semester?: string) {
+  if (!semester) return '';
+  const parts = semester.split('-');
+  return (parts[1] ?? parts[0]).trim();
 }
 
 export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobileProps) {
@@ -20,6 +27,7 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
   const [selectedHour, setSelectedHour] = useState(hour % 12);
   const [selectedMinute, setSelectedMinute] = useState(minute);
 
+  const { data: semesterData } = useCoopSemester();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: close });
   useBodyScrollLock();
 
@@ -37,6 +45,8 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
     setNow(now);
     close();
   };
+
+  const displaySemester = formatSemesterLabel(semesterData.semester);
 
   const dates = [...Array(90)].map((_, index) => {
     const now = new Date();
@@ -62,7 +72,16 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
         <div className={styles.guide}>
           <span className={styles.guide__title}>출발 시각 설정</span>
           <span className={styles.guide__description}>
-            <div>계절학기(2024-12-21 ~ 2025-01-14)의</div>
+            <div>
+              {displaySemester}
+              (
+              {semesterData.from_date}
+              {' '}
+              ~
+              {' '}
+              {semesterData.to_date}
+              )
+            </div>
             <div>시간표가 제공됩니다.</div>
           </span>
         </div>

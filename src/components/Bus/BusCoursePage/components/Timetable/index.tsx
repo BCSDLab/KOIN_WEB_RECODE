@@ -19,6 +19,7 @@ import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import ROUTES from 'static/routes';
 import { useRouter } from 'next/router';
+import useCoopSemester from 'pages/Bus/BusRoutePage/hooks/useCoopSemester';
 import styles from './Timetable.module.scss';
 
 interface TemplateShuttleVersionProps {
@@ -32,6 +33,14 @@ interface TemplateShuttleVersionProps {
   category: string;
 }
 
+const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
+
+function formatSemesterLabel(semester?: string) {
+  if (!semester) return '';
+  const parts = semester.split('-');
+  return (parts[1] ?? parts[0]).trim();
+}
+
 function TemplateShuttleVersion({
   region,
   routes,
@@ -40,6 +49,7 @@ function TemplateShuttleVersion({
   const isMobile = useMediaQuery();
   const router = useRouter();
   const logger = useLogger();
+
   const filteredRoutes = (route: string) => routes.filter(({ type }) => {
     if (route === '전체') {
       return true;
@@ -103,16 +113,22 @@ function TemplateShuttleVersion({
 }
 
 function ShuttleTimetable() {
-  const { shuttleCourse } = useShuttleCourse();
   const logger = useLogger();
-  const [selectedCourseId] = useIndexValueSelect();
   const router = useRouter();
   const { routeId } = router.query;
 
-  const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
   const isMobile = useMediaQuery();
-  const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
+  const [searchParams] = useSearchParams();
+  const routeId = searchParams.get('routeId');
+
+  const { data: semesterData } = useCoopSemester();
+  const { shuttleCourse } = useShuttleCourse();
+  const [selectedCourseId] = useIndexValueSelect();
+  const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
+
   const [category, setCategory] = useState('전체');
+
+  const displaySemester = formatSemesterLabel(semesterData.semester);
 
   return (
     <div className={styles['timetable-container']}>
@@ -182,7 +198,14 @@ function ShuttleTimetable() {
             ))}
             <div className={styles['info-footer-mobile']}>
               <div className={styles['info-footer-mobile__text']}>
-                정규학기(2025년 3월 4일 ~ 6월 20일)의
+                {displaySemester}
+                (
+                {semesterData.from_date}
+                {' '}
+                ~
+                {' '}
+                {semesterData.to_date}
+                )
                 <br />
                 시간표가 제공됩니다.
               </div>

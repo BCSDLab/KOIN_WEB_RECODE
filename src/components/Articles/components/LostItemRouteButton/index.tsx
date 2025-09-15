@@ -13,7 +13,12 @@ import Link from 'next/link';
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
-  const { logItemWriteClick, logFindUserWriteClick, logLostItemWriteClick } = useArticlesLogger();
+  const {
+    logItemWriteClick,
+    logFindUserWriteClick,
+    logLostItemWriteClick,
+    logLoginRequire,
+  } = useArticlesLogger();
   const [isWriting, setIsWriting] = useState(false);
   const router = useRouter();
   const { pathname } = router;
@@ -28,10 +33,11 @@ export default function LostItemRouteButton() {
       }
     } else {
       portalManager.open((portalOption) => (
-        <LoginRequireLostItemModal
-          actionTitle="게시글을 작성하려면"
-          detailExplanation="로그인 후 분실물 주인을 찾아주세요!"
+        <LoginRequiredModal
+          title="게시글을 작성하기"
+          description="로그인 후 분실물 주인을 찾아주세요!"
           onClose={portalOption.close}
+          onLoginClick={() => logLoginRequire('게시글 작성 팝업')}
         />
       ));
     }
