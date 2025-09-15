@@ -426,3 +426,5 @@ export default function LostItemChatPageWrapper() {
 
   return <LostItemChatPage token={token} />;
 }
+
+LostItemChatPageWrapper.requireAuth = true;

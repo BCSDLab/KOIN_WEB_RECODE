@@ -14,6 +14,9 @@ import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { useServerStateStore } from 'utils/zustand/serverState';
 import MaintenancePage from 'components/Maintenance';
+import { getCookie } from 'utils/ts/cookie';
+import ROUTES from 'static/routes';
+import useMount from 'utils/hooks/state/useMount';
 
 declare global {
   interface Window {
@@ -61,6 +64,21 @@ function AutoLogin() {
   return null;
 }
 
+const useAuthGuard = (requireAuth: boolean | undefined) => {
+  const router = useRouter();
+  const isMount = useMount();
+
+  useEffect(() => {
+    if (!requireAuth) return;
+    if (!isMount) return;
+    const token = getCookie('AUTH_TOKEN_KEY');
+    if (!token) {
+      // 하이드레이션 경합 방지
+      router.replace(ROUTES.Main());
+    }
+  }, [isMount, requireAuth, router]);
+};
+
 // 메인 App 컴포넌트
 export default function App({ Component, pageProps }: AppPropsWithAuth) {
   const router = useRouter();
@@ -101,6 +119,9 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
     //   }
     // };
   }, []);
+
+  const needAuth = Component.requireAuth;
+  useAuthGuard(needAuth);
 
   if (isMaintenance) {
     return <MaintenancePage />;

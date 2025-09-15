@@ -1347,4 +1347,6 @@ function ModifyInfoPage() {
   );
 }
 
+ModifyInfoPage.requireAuth = true;
+
 export default ModifyInfoPage;

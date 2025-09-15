@@ -21,4 +21,6 @@ function AddReviewPage() {
   return <AddReviewComponent id={pageId} />;
 }
 
+AddReviewPage.requireAuth = true;
+
 export default AddReviewPage;

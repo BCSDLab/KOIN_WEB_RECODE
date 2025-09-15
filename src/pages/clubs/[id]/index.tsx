@@ -13,7 +13,7 @@ import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import NonLikeIcon from 'assets/svg/Club/unlike-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
 import UpIcon from 'assets/svg/Club/up-icon.svg';
-import ClubAuthModal from 'components/Club/components/ClubAuthModal';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import { useRouter } from 'next/router';
@@ -680,7 +680,13 @@ function ClubDetailPage({ id }: { id: string }) {
         )
       }
       {
-        isAuthModalOpen && <ClubAuthModal closeModal={closeAuthModal} />
+        isAuthModalOpen && (
+        <LoginRequiredModal
+          title="좋아요 기능을 사용하기"
+          description="동아리 좋아요 기능은 로그인이 필요한 서비스입니다."
+          onClose={closeAuthModal}
+        />
+        )
       }
       {isEditModalOpen && (
       <EditConfirmModal

@@ -85,16 +85,6 @@ export default function Panel({ openModal }: PanelProps) {
     ));
   };
 
-  const openLoginModal = () => {
-    portalManager.open((portalOption: Portal) => (
-      <LoginRequiredModal
-        title="쪽지를 사용하기"
-        description="로그인 후 이용해주세요."
-        onClose={portalOption.close}
-      />
-    ));
-  };
-
   const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
     logExitExistingPage(submenu.title);

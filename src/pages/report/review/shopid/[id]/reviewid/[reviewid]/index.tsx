@@ -173,3 +173,5 @@ export default function ReviewReportingPageWrapper() {
   if (typeof id !== 'string' || typeof reviewid !== 'string') return null;
   return <ReviewReportingPage shopid={id} reviewid={reviewid} />;
 }
+
+ReviewReportingPageWrapper.requireAuth = true;

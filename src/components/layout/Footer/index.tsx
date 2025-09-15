@@ -74,7 +74,8 @@ function Footer(): JSX.Element {
               .slice(0, -4).map((submenuInfo) => (
                 <li className={styles.footer__service} key={submenuInfo.title}>
                   <Link
-                    to={isStage && submenuInfo.stageLink ? submenuInfo.stageLink : submenuInfo.link}
+                    href={isStage && submenuInfo.stageLink
+                      ? submenuInfo.stageLink : submenuInfo.link}
                     onClick={(e) => handleClickMenu(e, submenuInfo.title)}
                   >
                     {submenuInfo.title}

@@ -89,7 +89,7 @@ export default function SelectButton({
             <button
               type="button"
               onClick={() => router.push(
-                ROUTES.ReviewEdit({ id: store_id, isLink: true }),
+                ROUTES.ReviewEdit({ id: store_id, reviewId: String(review_id), isLink: true }),
               )}
               className={styles.section}
             >
