@@ -2,8 +2,8 @@
 /* stylelint-disable scss/at-import-no-partial-leading-underscore */
 @import "reset-css/sass/_reset";
 /* stylelint-enable scss/at-import-no-partial-leading-underscore */
-@import 'react-quill/dist/quill.snow.css';
-@import 'react-toastify/dist/ReactToastify.min.css';
+@import "react-quill/dist/quill.snow.css";
+@import "react-toastify/dist/ReactToastify.min.css";
 
 @font-face {
   font-family: NanumBarunGothic;
@@ -58,7 +58,7 @@ button {
 }
 
 a {
-  text-decoration: none;  
+  text-decoration: none;
 }
 
 button {
@@ -73,10 +73,12 @@ button {
 .quill {
   width: 100%;
 }
+
 .ql-container {
   width: 100%;
   height: auto;
 }
+
 .ql-editor {
   width: 100%;
 }
@@ -84,6 +86,7 @@ button {
 .ql-editor strong {
   font-weight: 700 !important;
 }
+
 .ql-editor em {
   font-style: italic !important;
 }
@@ -91,6 +94,7 @@ button {
 .ql-bubble {
   width: 100%;
   border: 1px solid #ccc;
+
   img {
     max-width: 100%;
     height: auto;
