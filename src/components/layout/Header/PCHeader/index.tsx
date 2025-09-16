@@ -233,18 +233,6 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           aria-labelledby={Array.from({ length: 2 }, (_, index) => ID[`LABEL${index + 1}`]).join(' ')}
         >
           <ul className={styles.megamenu__content}>
-            {panelMenuList && panelMenuList.slice(0, -4).map((menu) => (
-              <li className={styles.megamenu__menu} key={menu.title}>
-                {/* TODO: 키보드 Focus 접근성 향상 */}
-                <Link
-                  className={styles.megamenu__link}
-                  href={isStage && menu.stageLink ? menu.stageLink : menu.link}
-                  onClick={(e) => handleMenuClick(e, menu.title)}
-                >
-                  {menu.title}
-                </Link>
-              </li>
-            ))}
             {panelMenuList?.slice(0, -4).map((menu) => {
               const preferred = isStage && menu.stageLink ? menu.stageLink : menu.link;
               const href = preferred ?? ROUTES.Main();
