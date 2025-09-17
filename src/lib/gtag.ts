@@ -1,3 +1,5 @@
+import { sendGTMEvent } from '@next/third-parties/google';
+
 type GTagEvent = {
   team: string;
   event_category: string;
@@ -20,8 +22,13 @@ const API_PATH = process.env.NEXT_PUBLIC_API_PATH;
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageView = (url: string, userId?: string) => {
-  if (typeof window.gtag === 'undefined') return;
-  window.gtag('config', GA_TRACKING_ID as string, {
+  // if (typeof window.gtag === 'undefined') return;
+  // window.gtag('config', GA_TRACKING_ID as string, {
+  //   page_path: url,
+  //   user_id: userId,
+  // });
+  sendGTMEvent({
+    event: 'page_view',
     page_path: url,
     user_id: userId,
   });
@@ -37,8 +44,18 @@ export const event = ({
   previous_page,
   current_page,
 }: GTagEvent) => {
-  if (typeof window.gtag === 'undefined') return;
-  window.gtag('event', team, {
+  // window.gtag('event', team, {
+  //   event_category,
+  //   event_label,
+  //   value,
+  //   duration_time,
+  //   previous_page,
+  //   current_page,
+  // });
+
+  sendGTMEvent({
+    event: team,
+    team,
     event_category,
     event_label,
     value,
@@ -67,8 +84,15 @@ export const startSession = ({
   event_category,
   custom_session_id,
 }: SessionEvent) => {
-  if (typeof window.gtag === 'undefined') return;
-  window.gtag('event', 'session_start', {
+  // if (typeof window.gtag === 'undefined') return;
+  // window.gtag('event', 'session_start', {
+  //   event_label,
+  //   value,
+  //   event_category,
+  //   custom_session_id,
+  // });
+  sendGTMEvent({
+    event: 'session_start',
     event_label,
     value,
     event_category,
