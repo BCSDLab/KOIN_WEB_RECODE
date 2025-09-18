@@ -15,7 +15,6 @@ interface DefaultPageProps {
 export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: DefaultPageProps) {
   const logger = useLogger();
   const handlePopState = React.useCallback(() => {
-    history.back();
     // swipe로 뒤로가기 시
     if (sessionStorage.getItem('swipeToBack') === 'true') {
       logger.actionEventSwipe({
@@ -26,6 +25,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
         current_page: '메인',
         duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
+      history.back();
       return;
     }
     // 브라우저의 뒤로가기 버튼 클릭 시 / 마우스 사이드 버튼 누를 시
@@ -38,12 +38,6 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
       duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
     });
   }, [logger]);
-
-  React.useEffect(() => {
-    if (history.state.state !== 'timetable') {
-      history.pushState({ state: 'timetable' }, '');
-    }
-  }, []);
 
   React.useEffect(() => {
     window.addEventListener('popstate', handlePopState);

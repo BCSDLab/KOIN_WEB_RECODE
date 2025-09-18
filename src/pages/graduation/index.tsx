@@ -80,13 +80,13 @@ export default function GraduationCalculatorPage() {
 
   const logger = useLogger();
   const handlePopState = React.useCallback(() => {
-    history.back();
     if (sessionStorage.getItem('swipeToBack') === 'true') {
       logger.actionEventSwipe({
         team: 'USER',
         event_label: 'graduation_calculator_back',
         value: '탈출_OS 스와이프',
       });
+      history.back();
       return;
     }
     logger.actionEventClick({
@@ -95,12 +95,6 @@ export default function GraduationCalculatorPage() {
       value: '탈출_뒤로가기',
     });
   }, [logger]);
-
-  React.useEffect(() => {
-    if (history.state.state !== 'graduation') {
-      history.pushState({ state: 'graduation' }, '');
-    }
-  }, []);
 
   React.useEffect(() => {
     window.addEventListener('popstate', handlePopState);
