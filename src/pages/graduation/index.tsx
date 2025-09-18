@@ -23,6 +23,7 @@ import CalculatorHelpModal from 'components/GraduationCalculatorPage/CalculatorH
 import useAgreeGraduationCreidts from 'components/GraduationCalculatorPage/hooks/useAgreeGraduationCreidts';
 import GraduationCalculatorAuthModal from 'components/GraduationCalculatorPage/components/GraduationCalculatorAuthModal';
 import dynamic from 'next/dynamic';
+import Suspense from 'components/ssr/SSRSuspense';
 import styles from './GraduationCalculatorPage.module.scss';
 
 const CreditChart = dynamic(
@@ -32,7 +33,7 @@ const CreditChart = dynamic(
   },
 );
 
-export default function GraduationCalculatorPage() {
+function GraduationCalculatorComponent() {
   const token = useTokenState();
   const semester = useSemester();
   const { lock, unlock } = useScrollLock(false);
@@ -177,5 +178,13 @@ export default function GraduationCalculatorPage() {
         <GraduationCalculatorAuthModal />
       )}
     </div>
+  );
+}
+
+export default function GraduationCalculatorPage() {
+  return (
+    <Suspense fallback={null}>
+      <GraduationCalculatorComponent />
+    </Suspense>
   );
 }
