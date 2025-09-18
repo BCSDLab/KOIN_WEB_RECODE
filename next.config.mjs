@@ -9,9 +9,7 @@ const nextConfig = {
           options: {
             svgo: true,
             svgoConfig: {
-              plugins: [
-                { name: 'removeViewBox', active: false },
-              ],
+              plugins: [],
             },
           },
         },],
