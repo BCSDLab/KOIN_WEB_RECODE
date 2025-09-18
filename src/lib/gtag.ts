@@ -1,3 +1,5 @@
+import { sendGTMEvent } from '@next/third-parties/google';
+
 type GTagEvent = {
   team: string;
   event_category: string;
@@ -15,12 +17,18 @@ type SessionEvent = {
   custom_session_id: string;
 };
 
-export const GA_TRACKING_ID = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID;
+const API_PATH = process.env.NEXT_PUBLIC_API_PATH;
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageView = (url: string, userId?: string) => {
-  if (typeof window.gtag === 'undefined') return;
-  window.gtag('config', GA_TRACKING_ID as string, {
+  // if (typeof window.gtag === 'undefined') return;
+  // window.gtag('config', GA_TRACKING_ID as string, {
+  //   page_path: url,
+  //   user_id: userId,
+  // });
+  sendGTMEvent({
+    event: 'page_view',
     page_path: url,
     user_id: userId,
   });
@@ -28,10 +36,26 @@ export const pageView = (url: string, userId?: string) => {
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/events
 export const event = ({
-  team, event_category, event_label, value, duration_time, previous_page, current_page,
+  team,
+  event_category,
+  event_label,
+  value,
+  duration_time,
+  previous_page,
+  current_page,
 }: GTagEvent) => {
-  if (typeof window.gtag === 'undefined') return;
-  window.gtag('event', team, {
+  // window.gtag('event', team, {
+  //   event_category,
+  //   event_label,
+  //   value,
+  //   duration_time,
+  //   previous_page,
+  //   current_page,
+  // });
+
+  sendGTMEvent({
+    event: team,
+    team,
     event_category,
     event_label,
     value,
@@ -40,7 +64,7 @@ export const event = ({
     current_page,
   });
 
-  if (import.meta.env.VITE_API_PATH?.includes('stage')) {
+  if (API_PATH?.includes('stage')) {
     // eslint-disable-next-line no-console
     console.table({
       팀: team,
@@ -55,17 +79,27 @@ export const event = ({
 };
 
 export const startSession = ({
-  event_label, value, event_category, custom_session_id,
+  event_label,
+  value,
+  event_category,
+  custom_session_id,
 }: SessionEvent) => {
-  if (typeof window.gtag === 'undefined') return;
-  window.gtag('event', 'session_start', {
+  // if (typeof window.gtag === 'undefined') return;
+  // window.gtag('event', 'session_start', {
+  //   event_label,
+  //   value,
+  //   event_category,
+  //   custom_session_id,
+  // });
+  sendGTMEvent({
+    event: 'session_start',
     event_label,
     value,
     event_category,
     custom_session_id,
   });
 
-  if (import.meta.env.VITE_API_PATH?.includes('stage')) {
+  if (API_PATH?.includes('stage')) {
     // eslint-disable-next-line no-console
     console.table({
       '세션 시작': event_label,

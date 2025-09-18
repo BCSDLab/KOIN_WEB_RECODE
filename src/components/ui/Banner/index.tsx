@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
-import { Link } from 'react-router-dom';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import { setCookie, getCookie } from 'utils/ts/cookie';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import Link from 'next/link';
 import useBanners from './hooks/useBanners';
 import styles from './Banner.module.scss';
 
@@ -24,7 +24,7 @@ function BannerCard({
     <div>
       {redirect_link ? (
         <Link
-          to={redirect_link}
+          href={redirect_link}
           onClick={handleImageLinkClick}
         >
           <img

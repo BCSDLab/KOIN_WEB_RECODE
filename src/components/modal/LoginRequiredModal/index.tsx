@@ -1,7 +1,7 @@
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import { setRedirectPath } from 'utils/ts/auth';
+import { useRouter } from 'next/router';
 import ROUTES from 'static/routes';
 import styles from './LoginRequiredModal.module.scss';
 
@@ -21,17 +21,16 @@ export default function LoginRequiredModal({
   onCancelClick,
   enableRedirect = true,
 }: LoginRequiredProps) {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
   const sentences = description.split('.');
 
   const goLogin = () => {
     if (onLoginClick) onLoginClick();
-    if (enableRedirect) setRedirectPath(`${location.pathname}${location.search}`);
+    if (enableRedirect) setRedirectPath(`${router.asPath}${router.query}`);
     onClose();
-    navigate(ROUTES.Auth());
+    router.push(ROUTES.Auth());
   };
 
   const cancel = () => {
@@ -64,7 +63,6 @@ export default function LoginRequiredModal({
             ))}
           </div>
         </div>
-
         <div className={styles.container__button}>
           <button type="button" className={styles['container__button--login']} onClick={goLogin}>
             로그인하기

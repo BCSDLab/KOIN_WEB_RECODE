@@ -50,8 +50,8 @@ const ROUTES = {
   Email: () => '/auth/findid/email',
   IDResult: () => '/auth/findid/result',
   AuthModifyInfo: () => '/auth/modifyinfo',
-  Review: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/review/${id}` : '/review/:id'),
-  ReviewEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/edit/review/${id}` : '/edit/review/:id'),
+  Review: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/store/review/${id}` : '/review/:id'),
+  ReviewEdit: ({ id, reviewId, isLink }: ROUTESParams<'id' | 'reviewId'>) => (isLink ? `/store/review/edit/${id}/${reviewId}` : '/store/review/edit/:id/:reviewId'),
   ReviewReport: ({
     shopid,
     reviewid,

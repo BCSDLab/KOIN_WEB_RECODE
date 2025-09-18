@@ -11,7 +11,7 @@ import { deleteCookie, setCookie } from './cookie';
 import { redirectToClub, redirectToLogin } from './auth';
 import { saveTokensToNative } from './iosBridge';
 
-const API_URL = import.meta.env.VITE_API_PATH;
+const API_URL = process.env.NEXT_PUBLIC_API_PATH;
 
 type Constructor<T> = new (...args: any[]) => T;
 

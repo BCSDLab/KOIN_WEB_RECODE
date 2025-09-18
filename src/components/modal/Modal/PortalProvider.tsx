@@ -32,11 +32,11 @@ interface PortalProviderProps {
 
 const PortalProvider = function PortalProvider({ children }: PortalProviderProps) {
   const [modalPortal, setModalPortal] = React.useState<ReactNode>();
+  const [mounted, setMounted] = React.useState(false);
+  const [container, setContainer] = React.useState<Element | null>(null);
 
   const open: OpenFunc = React.useCallback((element, options = {}) => {
-    const {
-      onClose,
-    } = options;
+    const { onClose, appendTo } = options;
 
     const close: CloseFunc = () => setModalPortal(undefined);
 
@@ -53,6 +53,7 @@ const PortalProvider = function PortalProvider({ children }: PortalProviderProps
     const privatePortal: ReactNode = portalElement;
 
     setModalPortal(privatePortal);
+    if (appendTo) setContainer(appendTo);
   }, []);
 
   const portalOption = React.useMemo(() => ({
@@ -60,12 +61,19 @@ const PortalProvider = function PortalProvider({ children }: PortalProviderProps
     close: () => setModalPortal(undefined),
   }), [open]);
 
+  React.useEffect(() => {
+    setMounted(true);
+    if (typeof document !== 'undefined') {
+      setContainer((prev) => prev ?? document.body);
+    }
+  }, []);
+
   return (
     <PortalContext.Provider value={portalOption}>
       { children }
-      <>
-        { ReactDOM.createPortal(modalPortal, document.body) }
-      </>
+      { mounted && modalPortal && container
+        ? ReactDOM.createPortal(modalPortal, container)
+        : null }
     </PortalContext.Provider>
   );
 };

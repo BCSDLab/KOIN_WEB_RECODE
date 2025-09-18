@@ -1,16 +1,16 @@
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { type InputMessage } from 'pages/Auth/SignupPage/components/CustomInput';
-import useCountdownTimer from 'pages/Auth/SignupPage/hooks/useCountdownTimer';
+import { type InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
+import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
 import {
   emailExists, verificationEmailSend, verificationEmailVerify, idFindEmail, idExists, idMatchEmail,
 } from 'api/auth';
 import { MESSAGES } from 'static/auth';
 import { isKoinError } from '@bcsdlab/koin';
 import ROUTES from 'static/routes';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import showToast from 'utils/ts/showToast';
+import { useRouter } from 'next/router';
 
 interface UseEmailVerificationProps {
   email: string;
@@ -24,7 +24,7 @@ interface EmailSendCountData {
 }
 
 function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [verificationMessage, setVerificationMessage] = useState<InputMessage | null>(null);
   const [emailMessage, setEmailMessage] = useState<InputMessage | null>(null);
   const [isDisabled, enableButton, disableButton] = useBooleanState(false);
@@ -110,7 +110,7 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
   const { mutate: findEmail } = useMutation({
     mutationFn: idFindEmail,
     onSuccess: ({ login_id }) => {
-      navigate(`${ROUTES.IDResult()}?userId=${login_id}`);
+      router.push(`${ROUTES.IDResult()}?userId=${login_id}`);
     },
   });
 

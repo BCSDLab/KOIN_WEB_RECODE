@@ -1,5 +1,4 @@
 import { cn } from '@bcsdlab/utils';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { CATEGORY, Submenu } from 'static/category';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
@@ -14,6 +13,7 @@ import type { Portal } from 'components/modal/Modal/PortalProvider';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { useRouter } from 'next/router';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -23,15 +23,16 @@ interface PanelProps {
 export default function Panel({ openModal }: PanelProps) {
   const { isSidebarOpen, closeSidebar } = useMobileSidebar();
   const { data: userInfo } = useUser();
-  const { pathname } = useLocation();
+  const router = useRouter();
+  const { pathname } = router;
   const logout = useLogout();
   const logger = useLogger();
-  const navigate = useNavigate();
+
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
-  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
   const token = useTokenState();
   const portalManager = useModalPortal();
+  const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
 
   const logShortcut = (title: string) => {
     if (title === '공지사항') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '공지사항' });
@@ -70,7 +71,7 @@ export default function Panel({ openModal }: PanelProps) {
       closeSidebar();
       openModal();
     } else {
-      navigate(ROUTES.Auth());
+      router.push(ROUTES.Auth());
     }
   };
 
@@ -93,7 +94,7 @@ export default function Panel({ openModal }: PanelProps) {
       openLoginModal();
       return;
     } else {
-      navigate(submenu.link);
+      router.push(submenu.link);
     }
     closeSidebar();
   };
@@ -154,7 +155,7 @@ export default function Panel({ openModal }: PanelProps) {
                 });
               }
               : () => {
-                navigate(ROUTES.Auth());
+                router.push(ROUTES.Auth());
                 logger.actionEventClick({
                   team: 'USER',
                   event_label: 'hamburger',

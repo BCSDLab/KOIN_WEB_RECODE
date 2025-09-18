@@ -1,13 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
 import { refresh } from 'api/auth';
 import { setCookie } from 'utils/ts/cookie';
+import { isomorphicLocalStorage } from 'utils/ts/env';
 import { useTokenStore } from 'utils/zustand/auth';
 
 const useAuth = () => {
   const { setToken, setRefreshToken } = useTokenStore.getState();
 
   const getRefreshToken = () => {
-    const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
+    const refreshTokenStorage = isomorphicLocalStorage.getItem('refresh-token-storage');
     return refreshTokenStorage && JSON.parse(refreshTokenStorage).state.refreshToken;
   };
 

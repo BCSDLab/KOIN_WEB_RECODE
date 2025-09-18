@@ -14,11 +14,20 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
       "*": ["src/*"]
-    }
+    },
+    "plugins": [{ "name": "next" }],
+    "incremental": true,
   },
-  "include": ["."]
+  "include": [
+    "next-env.d.ts", 
+    "**/*.ts", 
+    "**/*.tsx", 
+    ".next/types/**/*.ts",
+    "src/types/**/*.d.ts",
+  ],
+  "exclude": ["node_modules"]
 }

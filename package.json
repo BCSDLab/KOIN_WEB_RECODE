@@ -5,6 +5,7 @@
   "dependencies": {
     "@bcsdlab/koin": "^0.0.15",
     "@bcsdlab/utils": "^0.0.15",
+    "@next/third-parties": "latest",
     "@sentry/browser": "^9.14.0",
     "@stomp/stompjs": "^7.0.0",
     "@tanstack/react-query": "^5.28.6",
@@ -28,11 +29,11 @@
     "html2canvas": "^1.4.1",
     "josa-js": "^0.0.2",
     "lottie-react": "^2.4.1",
+    "next": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.55.0",
     "react-quill": "^2.0.0",
-    "react-router-dom": "^6.3.0",
     "react-swipeable": "^7.0.2",
     "react-toastify": "^9.0.8",
     "react-window": "^1.8.7",
@@ -43,8 +44,8 @@
     "zustand": "^4.5.2"
   },
   "scripts": {
-    "start": "vite --open --host",
-    "build": "tsc && vite build",
+    "start": "next dev",
+    "build": "tsc && next build",
     "test": "test --coverage",
     "sourcemap:clean": "find ./build -name '*.map' -type f -delete",
     "lint": "yarn lint:eslint && yarn lint:stylelint",
@@ -71,12 +72,11 @@
   },
   "devDependencies": {
     "@sentry/cli": "^2.45.0",
-    "@sentry/vite-plugin": "^3.4.0",
+    "@svgr/webpack": "^8.1.0",
     "@types/file-saver": "^2.0.7",
     "@types/gtag.js": "^0.0.19",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
-    "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^8.18.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
@@ -91,10 +91,11 @@
     "stylelint": "^14.9.1",
     "stylelint-config-standard": "^26.0.0",
     "stylelint-config-standard-scss": "^4.0.0",
-    "stylelint-selector-bem-pattern": "^2.1.1",
-    "vite": "^5.4.8",
-    "vite-plugin-svgr": "^4.2.0",
-    "vite-tsconfig-paths": "^5.0.1"
+    "stylelint-selector-bem-pattern": "^2.1.1"
+  },
+  "engines": {
+    "node": "20.11.1",
+    "yarn": "3.8.0"
   },
   "type": "module",
   "packageManager": "yarn@3.8.0"

@@ -1,26 +1,36 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
-export const useScrollLogging = (loggingFunc: () => void, targetPercent = 0.7) => {
-  const [currentHeight, setCurrentHeight] = useState<number>(window.scrollY);
-  const id = useRef<null | NodeJS.Timeout>(null);
-  const debounce = (func: () => void) => {
-    if (id.current) clearTimeout(id.current);
-    id.current = setTimeout(func, 200);
-  };
+export const useScrollLogging = (
+  loggingFunc: () => void,
+  targetPercent = 0.7,
+) => {
+  const loggedRef = useRef(false); // 이미 로깅했는지 여부
   const isMobile = useMediaQuery();
-  useEffect(() => {
-    const onScroll = () => debounce(() => {
-      if (document.body.scrollHeight * targetPercent > window.scrollY) {
-        setCurrentHeight(window.scrollY);
-      }
-    });
-    window.addEventListener('scroll', onScroll);
-    window.addEventListener('resize', () => setCurrentHeight(window.scrollY));
 
-    if ((document.body.scrollHeight - window.innerHeight) * targetPercent < currentHeight) {
-      loggingFunc();
-    }
-    return () => window.removeEventListener('scroll', onScroll); // 웹 사이트 높이의 70퍼센트를 넘을 때 로깅
-  }, [currentHeight, loggingFunc, isMobile, targetPercent]);
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined; // SSR 방어
+
+    const onScroll = () => {
+      if (loggedRef.current) return; // 이미 로깅했으면 무시
+
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const threshold = docHeight * targetPercent;
+
+      if (scrollTop >= threshold) {
+        loggingFunc();
+        loggedRef.current = true; // 다시는 호출 안 됨
+      }
+    };
+
+    window.addEventListener('scroll', onScroll);
+
+    // 혹시 이미 스크롤된 상태라면 즉시 체크
+    onScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [loggingFunc, targetPercent, isMobile]);
 };

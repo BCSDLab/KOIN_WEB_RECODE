@@ -1,15 +1,15 @@
-import { useNavigate } from 'react-router-dom';
 import ROUTES from 'static/routes';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import waveHandAnimation from 'assets/lottie/waveHand.json';
 import { lazy } from 'react';
+import { useRouter } from 'next/router';
 import useUserInfoModal from './hooks/useUserInfoModal';
 import styles from './UserInfoModal.module.scss';
 
 const Lottie = lazy(() => import('lottie-react'));
 
 function UserInfoModal() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     isModalOpen,
     showCloseButton,
@@ -22,7 +22,7 @@ function UserInfoModal() {
   }
 
   const handleNavigateToModifyInfo = () => {
-    navigate(ROUTES.AuthModifyInfo());
+    router.push(ROUTES.AuthModifyInfo());
     closeModal();
   };
 

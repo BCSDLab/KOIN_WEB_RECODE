@@ -1,15 +1,16 @@
-import { useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
-import AuthenticateUserModal from 'pages/Auth/ModifyInfoPage/components/AuthenticateUserModal';
+import AuthenticateUserModal from 'components/AuthenticateUserModal';
 import ROUTES from 'static/routes';
 import styles from './Header.module.scss';
 import PCHeader from './PCHeader';
 import MobileHeader from './MobileHeader';
 
 function Header() {
-  const { pathname } = useLocation();
+  const router = useRouter();
+  const pathname = router.asPath || router.pathname;
   const isMobile = useMediaQuery();
   const isMain = pathname === '/';
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
