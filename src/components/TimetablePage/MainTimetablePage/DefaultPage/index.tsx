@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-globals */
-import React, { Suspense } from 'react';
+import React from 'react';
+import Suspense from 'components/ssr/SSRSuspense';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import TimetableList from 'components/TimetablePage/components/TimetableList';
 import MainTimetable from 'components/TimetablePage/components/MainTimetable';
