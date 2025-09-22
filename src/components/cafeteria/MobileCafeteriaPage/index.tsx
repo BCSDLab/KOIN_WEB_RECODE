@@ -94,6 +94,10 @@ export default function MobileCafeteriaPage({
         <Suspense fallback={<div />}>
           <MobileDiningBlocks diningType={diningType} />
         </Suspense>
+        <div className={styles['mo-ab-test-btn']}>
+          오늘 학식 메뉴가 별로라면?
+          <button type="button" onClick={() => { }}> 주변상점 보기</button>
+        </div>
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
 

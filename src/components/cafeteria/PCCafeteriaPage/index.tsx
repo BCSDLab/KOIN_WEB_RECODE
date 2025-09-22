@@ -94,6 +94,10 @@ export default function PCCafeteriaPage({
       <div>
         <DateNavigator />
       </div>
+      <div className={styles['pc-ab-test-btn']}>
+        오늘 학식 메뉴가 별로라면?
+        <button type="button" onClick={() => { }}> 주변상점 보기</button>
+      </div>
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
           <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />
