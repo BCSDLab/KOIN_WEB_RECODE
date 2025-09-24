@@ -25,13 +25,13 @@ function IndexCafeteria() {
   const logger = useLogger();
   const sessionLogger = useSessionLogger();
   const { dinings } = useDinings(diningTime.generateDiningDate());
-  const onClickStore = () => {
+  const handleSessionLogging = () => {
     sessionLogger.actionSessionEvent({
       event_label: 'main_menu_moveDetailView',
       value: '오늘 식단, 내일 식단',
       event_category: 'click',
       session_name: 'dining2shop',
-      sessionLifetime: 30,
+      session_Lifetime: 30,
     });
   };
 
@@ -75,7 +75,7 @@ function IndexCafeteria() {
           className={styles.header__title}
           onClick={() => {
             handleMoreClick();
-            onClickStore();
+            handleSessionLogging();
           }}
         >
           {`${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`}
@@ -85,7 +85,7 @@ function IndexCafeteria() {
           className={styles.header__more}
           onClick={() => {
             handleMoreClick();
-            onClickStore();
+            handleSessionLogging();
           }}
         >
           더보기
