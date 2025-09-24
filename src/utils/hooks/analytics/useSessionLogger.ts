@@ -6,8 +6,8 @@ interface SessionEvent {
   event_label: string;
   value: string;
   event_category?: string;
-  isLogin?: 0 | 1;
-  sessionLifetime?: number;
+  is_Login?: 0 | 1;
+  session_lifetime?: number;
 }
 
 const PLATFORM = 'WEB';
@@ -18,14 +18,14 @@ const generateAlphaString = (length: number): string => {
   return result;
 };
 
-const getSessionId = (session_name: string, isLogin: 0 | 1, sessionLifetime: number): string => {
+const getSessionId = (session_name: string, is_Login: 0 | 1, sessionLifetime: number): string => {
   const existedSessionId = getCookie('custom_session_id');
   if (existedSessionId) {
     return existedSessionId;
   }
   const randomString = generateAlphaString(5);
   const currentTime = Math.floor(Date.now() / 1000);
-  const newSessionId = `${session_name}_${isLogin}_${PLATFORM}_${currentTime}_${randomString}`;
+  const newSessionId = `${session_name}_${is_Login}_${PLATFORM}_${currentTime}_${randomString}`;
 
   const minutes = sessionLifetime;
   const day = minutes / (60 * 24); // 15분을 일 단위로 변환
@@ -43,10 +43,10 @@ export const useSessionLogger = () => {
     event_label,
     value,
     event_category,
-    isLogin = 0,
-    sessionLifetime = 15,
+    is_Login = 0,
+    session_lifetime = 15,
   }: SessionEvent) => {
-    const customSessionId = getSessionId(session_name, isLogin, sessionLifetime);
+    const customSessionId = getSessionId(session_name, is_Login, session_lifetime);
     gtag.startSession({
       event_label,
       value,
