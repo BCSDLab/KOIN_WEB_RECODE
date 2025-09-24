@@ -9,6 +9,7 @@ import useDinings from 'components/cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { DiningTime } from 'components/cafeteria/utils/time';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import ROUTES from 'static/routes';
 import { DiningPlace } from 'api/dinings/entity';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
@@ -22,7 +23,17 @@ function IndexCafeteria() {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const { dinings } = useDinings(diningTime.generateDiningDate());
+  const onClickStore = () => {
+    sessionLogger.actionSessionEvent({
+      event_label: 'main_menu_moveDetailView',
+      value: '오늘 식단, 내일 식단',
+      event_category: 'click',
+      session_name: 'dining2shop',
+      sessionLifetime: 30,
+    });
+  };
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
@@ -62,14 +73,20 @@ function IndexCafeteria() {
         <button
           type="button"
           className={styles.header__title}
-          onClick={handleMoreClick}
+          onClick={() => {
+            handleMoreClick();
+            onClickStore();
+          }}
         >
           {`${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`}
         </button>
         <button
           type="button"
           className={styles.header__more}
-          onClick={handleMoreClick}
+          onClick={() => {
+            handleMoreClick();
+            onClickStore();
+          }}
         >
           더보기
           <RightArrow />
