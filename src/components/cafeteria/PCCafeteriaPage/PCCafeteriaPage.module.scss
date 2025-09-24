@@ -101,32 +101,29 @@
   }
 }
 
-
 .pc-ab-test-btn {
   width: 400px;
   height: 53px;
   margin-bottom: 36px;
-  border: solid 1px #F1F8FF;
-  background-color: #F1F8FF;
-  color: #175C8E;
+  border: solid 1px #f1f8ff;
+  background-color: #f1f8ff;
+  color: #175c8e;
   border-radius: 8px;
   font-size: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
   align-self: flex-end;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 5px 5px 10px rgba(0 0 0 / 10%);
 }
 
 .pc-ab-test-btn button {
   width: 130px;
   height: 37px;
-  border: solid 1px #175C8E;
-  background-color: #175C8E;
+  border: solid 1px #175c8e;
+  background-color: #175c8e;
   color: white;
   border-radius: 8px;
   font-size: 18px;
   margin-left: 40px;
-  margin-right: 0px;
 }
-
