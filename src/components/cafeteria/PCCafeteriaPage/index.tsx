@@ -9,6 +9,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { DiningType } from 'api/dinings/entity';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import { useRouter } from 'next/router';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -34,6 +35,7 @@ export default function PCCafeteriaPage({
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
+  const router = useRouter();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
 
   const handleDiningTypeChange = (value: DiningType) => {
@@ -96,7 +98,7 @@ export default function PCCafeteriaPage({
       </div>
       <div className={styles['pc-ab-test-btn']}>
         오늘 학식 메뉴가 별로라면?
-        <button type="button" onClick={() => { }}> 주변상점 보기</button>
+        <button type="button" onClick={() => router.push('/store')}> 주변상점 보기</button>
       </div>
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>

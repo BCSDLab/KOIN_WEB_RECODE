@@ -10,6 +10,7 @@ import InformationIcon from 'assets/svg/common/information/information-icon-whit
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { DiningType } from 'api/dinings/entity';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import { useRouter } from 'next/router';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
@@ -23,6 +24,7 @@ export default function MobileCafeteriaPage({
   diningType, setDiningType,
 }: MobileCafeteriaPageProps) {
   const logger = useLogger();
+  const router = useRouter();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
   const { cafeteriaInfo } = useCoopshopCafeteria();
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
@@ -96,7 +98,7 @@ export default function MobileCafeteriaPage({
         </Suspense>
         <div className={styles['mo-ab-test-btn']}>
           오늘 학식 메뉴가 별로라면?
-          <button type="button" onClick={() => { }}> 주변상점 보기</button>
+          <button type="button" onClick={() => router.push('/store')}> 주변상점 보기</button>
         </div>
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
