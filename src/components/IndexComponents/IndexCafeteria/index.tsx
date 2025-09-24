@@ -25,15 +25,6 @@ function IndexCafeteria() {
   const logger = useLogger();
   const sessionLogger = useSessionLogger();
   const { dinings } = useDinings(diningTime.generateDiningDate());
-  const handleSessionLogging = () => {
-    sessionLogger.actionSessionEvent({
-      event_label: 'main_menu_moveDetailView',
-      value: '오늘 식단, 내일 식단',
-      event_category: 'click',
-      session_name: 'dining2shop',
-      session_Lifetime: 30,
-    });
-  };
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
@@ -43,6 +34,13 @@ function IndexCafeteria() {
 
   const handleMoreClick = () => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_menu_moveDetailView', value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단` });
+    sessionLogger.actionSessionEvent({
+      event_label: 'main_menu_moveDetailView',
+      value: '오늘 식단, 내일 식단',
+      event_category: 'click',
+      session_name: 'dining2shop',
+      session_lifetime: 30,
+    });
     router.push(ROUTES.Cafeteria());
   };
 
@@ -75,7 +73,6 @@ function IndexCafeteria() {
           className={styles.header__title}
           onClick={() => {
             handleMoreClick();
-            handleSessionLogging();
           }}
         >
           {`${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`}
@@ -83,10 +80,7 @@ function IndexCafeteria() {
         <button
           type="button"
           className={styles.header__more}
-          onClick={() => {
-            handleMoreClick();
-            handleSessionLogging();
-          }}
+          onClick={handleMoreClick}
         >
           더보기
           <RightArrow />

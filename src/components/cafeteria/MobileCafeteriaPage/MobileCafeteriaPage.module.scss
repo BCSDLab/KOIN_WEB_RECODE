@@ -65,8 +65,8 @@
 }
 
 .ab-test {
-  width: 330px;
-  height: 46px;
+  min-width: 280px;
+  padding: 10px 16px;
   border: solid 1px #f1f8ff;
   background-color: #f1f8ff;
   color: #175c8e;
@@ -85,11 +85,10 @@
 }
 
 .ab-test__button {
-  width: 120px;
-  height: 37px;
+  padding: 8px 16px;
   border: solid 1px #175c8e;
   background-color: #175c8e;
-  color: white;
+  color: #fff;
   border-radius: 8px;
   font-size: 14px;
 }
