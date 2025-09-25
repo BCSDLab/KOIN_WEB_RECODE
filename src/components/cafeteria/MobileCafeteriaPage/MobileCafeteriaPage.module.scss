@@ -71,12 +71,10 @@
   background-color: #f1f8ff;
   color: #175c8e;
   border-radius: 8px;
-  font-size: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  align-self: flex-end;
-    box-shadow: 
+  box-shadow: 
     0px 4px 10px rgba(0, 0, 0, 0.08),
     0px 1px 4px rgba(0, 0, 0, 0.04);
   position: fixed;
@@ -84,16 +82,24 @@
   bottom: 30px;
   transform: translateX(-50%);
   z-index: 100;
-}
 
-.recommend-banner__button {
-  display: inline-flex;          
-  align-items: center;         
-  justify-content: center;  
-  padding: 8px 16px;
-  border: solid 1px #175c8e;
-  background-color: #175c8e;
-  color: #fff;
-  border-radius: 8px;
+  font-family: Pretendard;
   font-size: 14px;
+  line-height: 160%;
+  letter-spacing: 0%;
+  font-weight: 500; 
+
+  &__button {
+    display: inline-flex;          
+    align-items: center;         
+    justify-content: center;  
+    padding: 8px 16px;
+    border-radius: 8px;   
+    background-color: #175c8e;
+    color: #fff;
+    font-family: Pretendard;
+    font-size: 14px;
+    line-height: 160%;
+    letter-spacing: 0%;
+  }
 }

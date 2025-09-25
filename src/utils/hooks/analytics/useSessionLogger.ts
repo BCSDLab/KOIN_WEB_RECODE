@@ -6,7 +6,7 @@ interface SessionEvent {
   event_label: string;
   value: string;
   event_category?: string;
-  is_Login?: 0 | 1;
+  is_login?: 0 | 1;
   session_lifetime?: number;
 }
 
@@ -43,10 +43,10 @@ export const useSessionLogger = () => {
     event_label,
     value,
     event_category,
-    is_Login = 0,
+    is_login = 0,
     session_lifetime = 15,
   }: SessionEvent) => {
-    const customSessionId = getSessionId(session_name, is_Login, session_lifetime);
+    const customSessionId = getSessionId(session_name, is_login, session_lifetime);
     gtag.startSession({
       event_label,
       value,

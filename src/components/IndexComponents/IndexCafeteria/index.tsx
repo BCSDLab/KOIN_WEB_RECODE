@@ -35,8 +35,8 @@ function IndexCafeteria() {
   const handleMoreClick = () => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_menu_moveDetailView', value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단` });
     sessionLogger.actionSessionEvent({
-      event_label: 'main_menu_moveDetailView',
-      value: '오늘 식단, 내일 식단',
+      event_label: 'dining_to_shop',
+      value: '{아침 or 점심 or 저녁}',
       event_category: 'click',
       session_name: 'dining2shop',
       session_lifetime: 30,

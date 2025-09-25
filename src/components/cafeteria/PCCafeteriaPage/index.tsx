@@ -98,7 +98,13 @@ export default function PCCafeteriaPage({
       </div>
       <div className={styles['recommend-banner']}>
         오늘 학식 메뉴가 별로라면?
-        <button type="button" className={styles['recommend-banner__button']} onClick={() => router.push('/store')}> 주변상점 보기</button>
+        <button
+          type="button"
+          className={styles['recommend-banner__button']}
+          onClick={() => router.push('/store')}
+        >
+          주변상점 보기
+        </button>
       </div>
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
