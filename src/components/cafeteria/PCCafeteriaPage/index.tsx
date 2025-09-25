@@ -56,7 +56,7 @@ function PCCafeteriaComponent({
       value: DINING_TYPE_MAP[diningType],
       event_category: 'click',
       session_name: 'dining2shop',
-      session_lifetime: 30,
+      session_lifetime_minutes: 30,
     });
     router.push('/store');
   };

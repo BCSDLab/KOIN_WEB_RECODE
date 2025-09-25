@@ -7,7 +7,7 @@ interface SessionEvent {
   value: string;
   event_category?: string;
   is_login?: 0 | 1;
-  session_lifetime?: number;
+  session_lifetime_minutes?: number;
 }
 
 const PLATFORM = 'WEB';
@@ -44,7 +44,7 @@ export const useSessionLogger = () => {
     value,
     event_category,
     is_login = 0,
-    session_lifetime = 15,
+    session_lifetime_minutes: session_lifetime = 15,
   }: SessionEvent) => {
     const customSessionId = getSessionId(session_name, is_login, session_lifetime);
     gtag.startSession({

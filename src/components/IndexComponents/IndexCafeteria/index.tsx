@@ -59,7 +59,7 @@ function IndexCafeteria() {
       value: designVariant.current,
       event_category: 'a/b test 로깅(메인화면 식단 진입)',
       session_name: 'dining2shop',
-      session_lifetime: 1,
+      session_lifetime_minutes: 1,
     });
 
     if (isomorphicLocalStorage.getItem('cafeteria-tooltip') === null) {
