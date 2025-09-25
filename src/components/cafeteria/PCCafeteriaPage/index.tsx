@@ -115,13 +115,13 @@ function PCCafeteriaComponent({
       </div>
       {designVariant === 'variant' && (
         <div className={styles['recommend-banner']}>
-          오늘 학식 메뉴가 별로라면?
+          <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
           <button
             type="button"
             className={styles['recommend-banner__button']}
             onClick={handleDiningToStore}
           >
-            주변상점 보기
+            <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
           </button>
         </div>
       )}

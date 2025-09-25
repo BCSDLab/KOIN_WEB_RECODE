@@ -82,11 +82,13 @@
   bottom: 30px;
   transform: translateX(-50%);
   z-index: 100;
-  font-family: Pretendard, sans-serif;
-  font-size: 14px;
-  line-height: 160%;
-  letter-spacing: 0%;
-  font-weight: 500;
+
+  &__text-main {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    line-height: 160%;
+    font-weight: 500;
+  }
 
   &__button {
     display: inline-flex;
@@ -96,8 +98,12 @@
     border-radius: 8px;
     background-color: #175c8e;
     color: #fff;
+  }
+
+  &__text-button {
     font-family: Pretendard, sans-serif;
     font-size: 14px;
     line-height: 160%;
+    font-weight: 500;
   }
 }
