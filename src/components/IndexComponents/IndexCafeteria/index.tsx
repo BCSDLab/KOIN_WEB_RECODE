@@ -1,5 +1,5 @@
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import NotServed from 'assets/svg/not-served.svg';
 import Close from 'assets/svg/close-icon-grey.svg';
@@ -25,6 +25,7 @@ function IndexCafeteria() {
   const logger = useLogger();
   const sessionLogger = useSessionLogger();
   const { dinings } = useDinings(diningTime.generateDiningDate());
+  const designVariant = useRef(Math.random() < 0 ? 'design_A' : 'design_B');
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
@@ -34,13 +35,6 @@ function IndexCafeteria() {
 
   const handleMoreClick = () => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_menu_moveDetailView', value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단` });
-    sessionLogger.actionSessionEvent({
-      event_label: 'dining_to_shop',
-      value: '{아침 or 점심 or 저녁}',
-      event_category: 'click',
-      session_name: 'dining2shop',
-      session_lifetime: 30,
-    });
     router.push(ROUTES.Cafeteria());
   };
 
@@ -60,10 +54,18 @@ function IndexCafeteria() {
   };
 
   useEffect(() => {
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining2shop_1',
+      value: designVariant.current,
+      event_category: 'a/b test 로깅(메인화면 식단 진입)',
+      session_name: 'dining2shop',
+      session_lifetime: 1,
+    });
+
     if (isomorphicLocalStorage.getItem('cafeteria-tooltip') === null) {
       openTooltip();
     }
-  }, [openTooltip]);
+  }, [openTooltip, sessionLogger]);
 
   return (
     <section className={styles.template}>
@@ -71,9 +73,7 @@ function IndexCafeteria() {
         <button
           type="button"
           className={styles.header__title}
-          onClick={() => {
-            handleMoreClick();
-          }}
+          onClick={handleMoreClick}
         >
           {`${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`}
         </button>

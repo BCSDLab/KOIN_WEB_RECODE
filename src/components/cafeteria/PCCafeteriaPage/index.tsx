@@ -6,10 +6,13 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { DiningType } from 'api/dinings/entity';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import { useRouter } from 'next/router';
+import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -29,19 +32,33 @@ interface PCCafeteriaPageProps {
   setDiningType: (diningType: DiningType) => void;
 }
 
-export default function PCCafeteriaPage({
+function PCCafeteriaComponent({
   diningType, setDiningType,
 }: PCCafeteriaPageProps) {
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
   const router = useRouter();
+  const sessionLogger = useSessionLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
+  const token = useTokenState();
+  const designVariant = useABTestView('dining_store', token);
 
   const handleDiningTypeChange = (value: DiningType) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[value] });
     setDiningType(value);
     toggleDropdown();
+  };
+
+  const handleDiningToStore = () => {
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining_to_shop',
+      value: DINING_TYPE_MAP[diningType],
+      event_category: 'click',
+      session_name: 'dining2shop',
+      session_lifetime: 30,
+    });
+    router.push('/store');
   };
 
   const 지난주일요일 = getWeekAgo();
@@ -96,16 +113,18 @@ export default function PCCafeteriaPage({
       <div>
         <DateNavigator />
       </div>
-      <div className={styles['recommend-banner']}>
-        오늘 학식 메뉴가 별로라면?
-        <button
-          type="button"
-          className={styles['recommend-banner__button']}
-          onClick={() => router.push('/store')}
-        >
-          주변상점 보기
-        </button>
-      </div>
+      {designVariant === 'variant' && (
+        <div className={styles['recommend-banner']}>
+          오늘 학식 메뉴가 별로라면?
+          <button
+            type="button"
+            className={styles['recommend-banner__button']}
+            onClick={handleDiningToStore}
+          >
+            주변상점 보기
+          </button>
+        </div>
+      )}
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
           <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />
@@ -113,5 +132,15 @@ export default function PCCafeteriaPage({
         <span className={styles['pc-menu-blocks__caution']}>식단 정보는 운영 상황에 따라 변동될 수 있습니다.</span>
       </div>
     </div>
+  );
+}
+
+export default function PCCafeteriaPage({
+  diningType, setDiningType,
+}: PCCafeteriaPageProps) {
+  return (
+    <Suspense fallback={<div />}>
+      <PCCafeteriaComponent diningType={diningType} setDiningType={setDiningType} />
+    </Suspense>
   );
 }
