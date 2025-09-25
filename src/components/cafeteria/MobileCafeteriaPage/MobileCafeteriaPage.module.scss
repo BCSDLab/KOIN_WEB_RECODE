@@ -66,7 +66,7 @@
 
 .recommend-banner {
   width: 358px;
-  height: auto; 
+  height: auto;
   padding: 8px 8px 8px 20px;
   background-color: #f1f8ff;
   color: #175c8e;
@@ -74,30 +74,29 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 
-    0px 4px 10px rgba(0, 0, 0, 0.08),
-    0px 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 4px 10px rgb(0 0 0 / 8%),
+    0 1px 4px rgb(0 0 0 / 4%);
   position: fixed;
   left: 50%;
   bottom: 30px;
   transform: translateX(-50%);
   z-index: 100;
-
-  font-family: Pretendard;
+  font-family: Pretendard, sans-serif;
   font-size: 14px;
   line-height: 160%;
   letter-spacing: 0%;
-  font-weight: 500; 
+  font-weight: 500;
 
   &__button {
-    display: inline-flex;          
-    align-items: center;         
-    justify-content: center;  
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 8px 16px;
-    border-radius: 8px;   
+    border-radius: 8px;
     background-color: #175c8e;
     color: #fff;
-    font-family: Pretendard;
+    font-family: Pretendard, sans-serif;
     font-size: 14px;
     line-height: 160%;
   }
