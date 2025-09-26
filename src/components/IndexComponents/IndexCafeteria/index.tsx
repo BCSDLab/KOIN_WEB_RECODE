@@ -1,5 +1,5 @@
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import NotServed from 'assets/svg/not-served.svg';
 import Close from 'assets/svg/close-icon-grey.svg';
@@ -9,6 +9,7 @@ import useDinings from 'components/cafeteria/hooks/useDinings';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { DiningTime } from 'components/cafeteria/utils/time';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import ROUTES from 'static/routes';
 import { DiningPlace } from 'api/dinings/entity';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
@@ -22,7 +23,9 @@ function IndexCafeteria() {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const { dinings } = useDinings(diningTime.generateDiningDate());
+  const designVariant = useRef(Math.random() < 0 ? 'design_A' : 'design_B');
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
@@ -51,10 +54,18 @@ function IndexCafeteria() {
   };
 
   useEffect(() => {
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining2shop_1',
+      value: designVariant.current,
+      event_category: 'a/b test 로깅(메인화면 식단 진입)',
+      session_name: 'dining2shop',
+      session_lifetime_minutes: 30,
+    });
+
     if (isomorphicLocalStorage.getItem('cafeteria-tooltip') === null) {
       openTooltip();
     }
-  }, [openTooltip]);
+  }, [openTooltip, sessionLogger]);
 
   return (
     <section className={styles.template}>
