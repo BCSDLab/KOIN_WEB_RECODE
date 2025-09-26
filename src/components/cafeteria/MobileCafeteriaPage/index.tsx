@@ -6,14 +6,12 @@ import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import useCoopshopCafeteria from 'components/cafeteria/hooks/useCoopshopCafeteria';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { DiningType } from 'api/dinings/entity';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import { useRouter } from 'next/router';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
@@ -21,10 +19,11 @@ import styles from './MobileCafeteriaPage.module.scss';
 interface MobileCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
+  designVariant: string;
 }
 
 export default function MobileCafeteriaPage({
-  diningType, setDiningType,
+  diningType, setDiningType, designVariant,
 }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const router = useRouter();
@@ -33,8 +32,7 @@ export default function MobileCafeteriaPage({
   const { cafeteriaInfo } = useCoopshopCafeteria();
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
-  const token = useTokenState();
-  const designVariant = useABTestView('dining_store', token);
+
   useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
