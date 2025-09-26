@@ -104,7 +104,7 @@
 .recommend-banner {
   width: 400px;
   padding: 8px 8px 8px 20px;
-  margin: 36px;
+  margin: 36px 0;
   background-color: #f1f8ff;
   color: #175c8e;
   border-radius: 8px;
@@ -124,7 +124,7 @@
   }
 
   &__button {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     padding: 4px 8px;
