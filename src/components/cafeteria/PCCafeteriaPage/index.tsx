@@ -11,8 +11,6 @@ import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { DiningType } from 'api/dinings/entity';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import { useRouter } from 'next/router';
-import { useABTestView } from 'utils/hooks/abTest/useABTestView';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -30,10 +28,11 @@ const getWeekAgo = () => {
 interface PCCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
+  designVariant: string;
 }
 
 function PCCafeteriaComponent({
-  diningType, setDiningType,
+  diningType, setDiningType, designVariant,
 }: PCCafeteriaPageProps) {
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
@@ -41,8 +40,6 @@ function PCCafeteriaComponent({
   const router = useRouter();
   const sessionLogger = useSessionLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
-  const token = useTokenState();
-  const designVariant = useABTestView('dining_store', token);
 
   const handleDiningTypeChange = (value: DiningType) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[value] });
@@ -136,11 +133,15 @@ function PCCafeteriaComponent({
 }
 
 export default function PCCafeteriaPage({
-  diningType, setDiningType,
+  diningType, setDiningType, designVariant,
 }: PCCafeteriaPageProps) {
   return (
     <Suspense fallback={<div />}>
-      <PCCafeteriaComponent diningType={diningType} setDiningType={setDiningType} />
+      <PCCafeteriaComponent
+        diningType={diningType}
+        setDiningType={setDiningType}
+        designVariant={designVariant}
+      />
     </Suspense>
   );
 }
