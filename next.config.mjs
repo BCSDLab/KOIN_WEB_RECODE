@@ -21,6 +21,7 @@ const nextConfig = {
     workerThreads: false,
   },
   images: { unoptimized: true },
+  output: 'export',
   distDir: 'dist',
 };
 
