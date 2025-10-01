@@ -20,8 +20,6 @@ const nextConfig = {
   experimental: {
     workerThreads: false,
   },
-  images: { unoptimized: true },
-  output: 'export',
   distDir: 'dist',
 };
 
