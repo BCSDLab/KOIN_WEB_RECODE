@@ -118,6 +118,26 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
     //     delete window.setTokens;
     //   }
     // };
+    // 로깅을 위한 userId 전달 및 gtag 함수 정의
+    if (typeof window !== 'undefined') {
+      const userId = localStorage.getItem('uuid') || '';
+
+      window.dataLayer = window.dataLayer || [];
+
+      if (userId) {
+        window.dataLayer.push({
+          user_id: userId,
+          event: 'userIdAvailable',
+        });
+      }
+
+      if (typeof window.gtag === 'undefined') {
+        window.gtag = function gtag() {
+          // eslint-disable-next-line prefer-rest-params
+          window.dataLayer.push(arguments);
+        };
+      }
+    }
   }, []);
 
   const needAuth = Component.requireAuth;
