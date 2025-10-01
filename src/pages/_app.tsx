@@ -57,7 +57,7 @@ const queryClient = new QueryClient({
 });
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
 function AutoLogin() {
   useAutoLogin();
