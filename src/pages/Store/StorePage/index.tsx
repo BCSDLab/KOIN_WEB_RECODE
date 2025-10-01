@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { cn } from '@bcsdlab/utils';
 
 import * as api from 'api';
-import type { StoreSorterType, StoreFilterType } from 'api/store/entity';
+import type { StoreSorterType, StoreFilterType, StoreCategory } from 'api/store/entity';
 
 import Close from 'assets/svg/close-icon-20x20.svg';
 import ROUTES from 'static/routes';
@@ -141,11 +141,12 @@ function StorePage() {
     closeTooltip();
   };
 
-  const handleCategoryClick = (categoryId: number) => {
+  const handleCategoryClick = (category: StoreCategory) => {
+    const { id: categoryId, name: categoryName } = category;
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_categories',
-      value: categoryId.toString(),
+      value: categoryName,
       previous_page:
         categories.shop_categories.find(
           (item) => item.id === Number(searchParams.get('category')),
@@ -256,7 +257,7 @@ function StorePage() {
               role="radio"
               aria-checked={category.id === selectedCategory}
               type="button"
-              onClick={() => handleCategoryClick(category.id)}
+              onClick={() => handleCategoryClick(category)}
               key={category.id}
             >
               <img
