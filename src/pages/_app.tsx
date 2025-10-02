@@ -132,10 +132,10 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
       }
 
       if (typeof window.gtag === 'undefined') {
-        window.gtag = function gtag() {
-          // eslint-disable-next-line prefer-rest-params
-          window.dataLayer.push(arguments);
-        };
+        window.gtag = ((...args: Gtag.GtagCommands[]) => {
+          if (window.dataLayer === undefined) return;
+          window.dataLayer.push(args);
+        }) as Gtag.Gtag;
       }
     }
   }, []);
