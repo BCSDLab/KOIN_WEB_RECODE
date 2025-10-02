@@ -1,5 +1,3 @@
-import { sendGTMEvent } from '@next/third-parties/google';
-
 type GTagEvent = {
   team: string;
   event_category: string;
@@ -17,13 +15,14 @@ type SessionEvent = {
   custom_session_id: string;
 };
 
-export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID;
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 const API_PATH = process.env.NEXT_PUBLIC_API_PATH;
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageView = (url: string, userId?: string) => {
-  sendGTMEvent({
-    event: 'page_view',
+  if (typeof window === 'undefined' || typeof window.gtag === 'undefined') return;
+
+  window.gtag('config', GA_TRACKING_ID as string, {
     page_path: url,
     user_id: userId,
   });
@@ -39,9 +38,9 @@ export const event = ({
   previous_page,
   current_page,
 }: GTagEvent) => {
-  sendGTMEvent({
-    event: team,
-    team,
+  if (typeof window === 'undefined' || typeof window.gtag === 'undefined') return;
+
+  window.gtag('event', team, {
     event_category,
     event_label,
     value,
@@ -70,8 +69,9 @@ export const startSession = ({
   event_category,
   custom_session_id,
 }: SessionEvent) => {
-  sendGTMEvent({
-    event: 'session_start',
+  if (typeof window === 'undefined' || typeof window.gtag === 'undefined') return;
+
+  window.gtag('event', 'session_start', {
     event_label,
     value,
     event_category,
