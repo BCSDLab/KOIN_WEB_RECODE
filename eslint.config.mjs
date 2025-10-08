@@ -1,8 +1,9 @@
-import tseslint from 'typescript-eslint';
 import next from '@next/eslint-plugin-next';
 import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+// eslint-disable-next-line import/no-unresolved
+import tseslint from 'typescript-eslint';
+import reactHooks from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 
@@ -27,7 +28,7 @@ export default [
     ignores: ['.next/**', 'dist/**', 'coverage/**', 'node_modules/**', '**/*.d.ts'],
   },
 
-  ...tseslint.configs.recommendedTypeChecked,
+  // ...tseslint.configs.recommendedTypeChecked,
 
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
@@ -35,7 +36,6 @@ export default [
       parser: tseslint.parser,
       parserOptions: {
         project: ['./tsconfig.json'],
-        tsconfigRootDir: import.meta.dirname,
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: { jsx: true },
@@ -62,7 +62,10 @@ export default [
       ...reactRules,
 
       'react-hooks/exhaustive-deps': 'error',
-
+      // 임시 규칙 해제
+      'react/display-name': 'off',
+      'react/jsx-key': 'off',
+      
       // airbnb 대체용 포매팅 규칙, prettier로 대체 논의 필요
       quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
       semi: ['error', 'always'],

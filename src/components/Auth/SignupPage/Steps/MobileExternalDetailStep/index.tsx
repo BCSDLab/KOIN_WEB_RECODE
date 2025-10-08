@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-restricted-imports */
 import { isKoinError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
