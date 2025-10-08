@@ -3628,6 +3628,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dom@npm:^19.2.1":
+  version: 19.2.1
+  resolution: "@types/react-dom@npm:19.2.1"
+  peerDependencies:
+    "@types/react": ^19.2.0
+  checksum: bf159c2f141d9968810b4f67f48a4cf0013d7186ceb9c5be8946c08c4e5fcc0c479feee2ab003c0c35d4e1767ad358dcf9319261102ed680e5be473291486dbf
+  languageName: node
+  linkType: hard
+
 "@types/react-window@npm:^1.8.5":
   version: 1.8.8
   resolution: "@types/react-window@npm:1.8.8"
@@ -3637,7 +3646,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.0.0":
+"@types/react@npm:*":
   version: 18.2.55
   resolution: "@types/react@npm:18.2.55"
   dependencies:
@@ -3645,6 +3654,15 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: a8eb4fa77f73831b9112d4f11a7006217dc0740361649b9b0da3fd441d151a9cd415d5d68b91c0af4e430e063424d301c77489e5edaddc9f711c4e46cf9818a5
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^19.2.2":
+  version: 19.2.2
+  resolution: "@types/react@npm:19.2.2"
+  dependencies:
+    csstype: ^3.0.2
+  checksum: 7eb2d316dd5a6c02acb416524b50bae932c38d055d26e0f561ca23c009c686d16a2b22fcbb941eecbe2ecb167f119e29b9d0142d9d056dd381352c43413b60da
   languageName: node
   linkType: hard
 
@@ -8389,8 +8407,8 @@ __metadata:
     "@types/jest": ^27.0.1
     "@types/navermaps": ^3.6.4
     "@types/node": ^16.7.13
-    "@types/react": ^18.0.0
-    "@types/react-dom": ^18.0.0
+    "@types/react": ^19.2.2
+    "@types/react-dom": ^19.2.1
     "@types/react-window": ^1.8.5
     axios: ^0.27.2
     dayjs: ^1.11.12
@@ -8411,8 +8429,8 @@ __metadata:
     lottie-react: ^2.4.1
     next: latest
     postcss: ^8.4.47
-    react: ^18.2.0
-    react-dom: ^18.2.0
+    react: ^19.2.0
+    react-dom: ^19.2.0
     react-hook-form: ^7.55.0
     react-quill: ^2.0.0
     react-swipeable: ^7.0.2
@@ -8517,7 +8535,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -9751,15 +9769,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.2.0":
-  version: 18.2.0
-  resolution: "react-dom@npm:18.2.0"
+"react-dom@npm:^19.2.0":
+  version: 19.2.0
+  resolution: "react-dom@npm:19.2.0"
   dependencies:
-    loose-envify: ^1.1.0
-    scheduler: ^0.23.0
+    scheduler: ^0.27.0
   peerDependencies:
-    react: ^18.2.0
-  checksum: 7d323310bea3a91be2965f9468d552f201b1c27891e45ddc2d6b8f717680c95a75ae0bc1e3f5cf41472446a2589a75aed4483aee8169287909fcd59ad149e8cc
+    react: ^19.2.0
+  checksum: b6ec952f68a29dcc847143ad48974477e1d3b95cb0a6e0039dd93c7fe64d0ef51f2ca09a19c5eb892ba625ba88c4bcc6f8bc3bdd1c33ccc3f6f17acabbb4882f
   languageName: node
   linkType: hard
 
@@ -9848,12 +9865,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0":
-  version: 18.2.0
-  resolution: "react@npm:18.2.0"
-  dependencies:
-    loose-envify: ^1.1.0
-  checksum: 88e38092da8839b830cda6feef2e8505dec8ace60579e46aa5490fc3dc9bba0bd50336507dc166f43e3afc1c42939c09fe33b25fae889d6f402721dcd78fca1b
+"react@npm:^19.2.0":
+  version: 19.2.0
+  resolution: "react@npm:19.2.0"
+  checksum: 33dd01bf699e1c5040eb249e0f552519adf7ee90b98c49d702a50bf23af6852ea46023a5f7f93966ab10acd7a45428fa0f193c686ecdaa7a75a03886e53ec3fe
   languageName: node
   linkType: hard
 
@@ -10253,12 +10268,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "scheduler@npm:0.23.0"
-  dependencies:
-    loose-envify: ^1.1.0
-  checksum: d79192eeaa12abef860c195ea45d37cbf2bbf5f66e3c4dcd16f54a7da53b17788a70d109ee3d3dde1a0fd50e6a8fc171f4300356c5aee4fc0171de526bf35f8a
+"scheduler@npm:^0.27.0":
+  version: 0.27.0
+  resolution: "scheduler@npm:0.27.0"
+  checksum: 92644ead0a9443e20f9d24132fe93675b156209b9eeb35ea245f8a86768d0cc0fcca56f341eeef21d9b6dd8e72d6d5e260eb5a41d34b05cd605dd45a29f572ef
   languageName: node
   linkType: hard
 
