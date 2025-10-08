@@ -4,6 +4,8 @@
     	"es6": true
     },
     "extends": [
+      "next/core-web-vitals",
+      "plugin:import/recommended",
       "plugin:jsx-a11y/recommended"
     ],
     "globals": {
@@ -19,7 +21,7 @@
       	"project": "./tsconfig.json"
     },
     "plugins": [
-      	"react",
+        "import",
       	"@typescript-eslint"
     ],
     "rules": {
