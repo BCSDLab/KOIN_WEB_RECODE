@@ -4,6 +4,7 @@
     	"es6": true
     },
     "extends": [
+      "next/typescript",
       "next/core-web-vitals",
       "plugin:import/recommended",
       "plugin:jsx-a11y/recommended"
@@ -28,7 +29,7 @@
     "rules": {
       "react-hooks/exhaustive-deps": "error",
 
-      // 포매팅 관련(airbnb 제거하면서 없어짐 : prrettier 논의 필요)
+      // 포매팅 관련(airbnb 제거하면서 없어짐 : 추후 prettier 논의)
       "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
       "semi": ["error", "always"],
       "comma-dangle": ["error", "always-multiline"],
