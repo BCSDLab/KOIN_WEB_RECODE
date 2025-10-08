@@ -3,18 +3,7 @@
     	"browser": true,
     	"es6": true
     },
-    "extends": [
-    	"airbnb",
-    	"airbnb/hooks",
-    	"airbnb-typescript"
-    ],
-    "overrides": [
-      {
-        "files": ["**/*.test.js", "**/*.test.jsx", "**/*.test.ts", "**/*.test.tsx"],
-        "plugins": ["jest"],
-        "extends": ["plugin:jest/recommended"]
-      }
-    ],
+    "extends": [],
     "globals": {
     	"Atomics": "readonly",
     	"SharedArrayBuffer": "readonly"
