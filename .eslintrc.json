@@ -3,7 +3,9 @@
     	"browser": true,
     	"es6": true
     },
-    "extends": [],
+    "extends": [
+      "plugin:jsx-a11y/recommended"
+    ],
     "globals": {
     	"Atomics": "readonly",
     	"SharedArrayBuffer": "readonly"
@@ -43,13 +45,8 @@
           "some": ["nesting", "id"]
         }
       }],
-      "jsx-a11y/label-has-for": ["error", {
-        "required": {
-          "some": ["nesting", "id"]
-        }
-      }],
-       "linebreak-style":"off",
-       "import/prefer-default-export": "off"
+      "linebreak-style":"off",
+      "import/prefer-default-export": "off"
     },
     "settings": {
       "import/resolver": {
