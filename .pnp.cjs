@@ -3225,6 +3225,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["regenerator-runtime", "npm:0.14.1"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:7.28.4", {\
+          "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.28.4-31bc1b0001-934b0a0460.zip/node_modules/@babel/runtime/",\
+          "packageDependencies": [\
+            ["@babel/runtime", "npm:7.28.4"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["@babel/template", [\
@@ -6295,7 +6302,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/broadcast-channel-npm-3.7.0-81ceba70bb-803794c48d.zip/node_modules/broadcast-channel/",\
           "packageDependencies": [\
             ["broadcast-channel", "npm:3.7.0"],\
-            ["@babel/runtime", "npm:7.23.9"],\
+            ["@babel/runtime", "npm:7.28.4"],\
             ["detect-node", "npm:2.1.0"],\
             ["js-sha3", "npm:0.8.0"],\
             ["microseconds", "npm:0.2.0"],\
@@ -10689,7 +10696,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/match-sorter-npm-6.3.4-a2cec580f9-950c160017.zip/node_modules/match-sorter/",\
           "packageDependencies": [\
             ["match-sorter", "npm:6.3.4"],\
-            ["@babel/runtime", "npm:7.23.9"],\
+            ["@babel/runtime", "npm:7.28.4"],\
             ["remove-accents", "npm:0.5.0"]\
           ],\
           "linkType": "HARD"\
@@ -12020,7 +12027,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/react-query-virtual-c62a08cf98/0/cache/react-query-npm-3.39.3-72b2a93edf-d2de6a0992.zip/node_modules/react-query/",\
           "packageDependencies": [\
             ["react-query", "virtual:535b26aed9a0442175de9066fdc3451ebc41131a98ec6ff6bc457a3072a0ef9dd2a52ab64b89417cf26c298fb4d2604958524f96c981a6447fb64befc85dbf26#npm:3.39.3"],\
-            ["@babel/runtime", "npm:7.23.9"],\
+            ["@babel/runtime", "npm:7.28.4"],\
             ["@types/react", null],\
             ["@types/react-dom", null],\
             ["@types/react-native", null],\
@@ -13804,7 +13811,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/unload-npm-2.2.0-c40df6b4d0-88ba950c5f.zip/node_modules/unload/",\
           "packageDependencies": [\
             ["unload", "npm:2.2.0"],\
-            ["@babel/runtime", "npm:7.23.9"],\
+            ["@babel/runtime", "npm:7.28.4"],\
             ["detect-node", "npm:2.1.0"]\
           ],\
           "linkType": "HARD"\
