@@ -27,8 +27,8 @@ export default [
   {
     ignores: ['.next/**', 'dist/**', 'coverage/**', 'node_modules/**', '**/*.d.ts'],
   },
-
-  // ...tseslint.configs.recommendedTypeChecked,
+  // 기존 Typescript ESLint 미설정, 논의 후 적용 필요
+  // ...tseslint.configs.recommendedTypeChecked, 
 
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
@@ -62,7 +62,7 @@ export default [
       ...reactRules,
 
       'react-hooks/exhaustive-deps': 'error',
-      // 임시 규칙 해제
+      // 기존 airbnb 규칙과 다른 규칙들로 인한 에러 방지를 위해 임시 규칙 off 처리
       'react/display-name': 'off',
       'react/jsx-key': 'off',
       
