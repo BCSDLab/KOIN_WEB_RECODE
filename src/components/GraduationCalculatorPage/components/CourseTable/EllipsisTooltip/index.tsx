@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, ReactElement } from 'react';
 import { useEllipsisTooltip } from 'utils/hooks/ui/useEllipsisTooltip';
 import styles from './EllipsisTooltip.module.scss';
 
@@ -9,9 +9,15 @@ interface EllipsisTooltipProps {
 
 const extractText = (node: ReactNode): string => {
   if (typeof node === 'string') return node;
+  if (typeof node === 'number') return String(node);
   if (Array.isArray(node)) return node.map(extractText).join('');
-  if (typeof node === 'object' && node !== null && 'props' in node) {
-    return extractText(node.props.children);
+  if (typeof node === 'object' && node !== null) {
+    if ('props' in node && typeof node.props === 'object' && node.props !== null) {
+      const element = node as ReactElement<{ children?: ReactNode }>;
+      if ('children' in element.props) {
+        return extractText(element.props.children);
+      }
+    }
   }
   return '';
 };

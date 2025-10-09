@@ -25,7 +25,6 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
   }
 
   // 이후에 사용시 해제
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static getDerivedStateFromError(error: Error) {
     if (isKoinError(error) || isAxiosError(error)) {
       return { hasError: true, status: error.status };
@@ -34,7 +33,6 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
   }
 
   // 이후에 사용시 해제
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   componentDidCatch(error: Error, __: ErrorInfo) {
     showToast('error', error.message);
   }

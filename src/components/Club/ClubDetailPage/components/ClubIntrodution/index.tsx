@@ -5,11 +5,12 @@ import {
 
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { uploadClubFile } from 'api/uploadFile';
-import type ReactQuillType from 'react-quill';
+import type ReactQuillType from 'react-quill-new';
 
 import styles from './ClubIntrodution.module.scss';
 
-const ReactQuill = lazy(() => import('react-quill'));
+// eslint-disable-next-line import/no-unresolved
+const ReactQuill = lazy(() => import('react-quill-new'));
 
 interface Props {
   isEdit: boolean;
