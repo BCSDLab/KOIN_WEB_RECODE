@@ -38,7 +38,7 @@ export default function TimePicker({
   const minuteRef = useRef<HTMLUListElement>(null);
 
   const handleScroll = (
-    ref: React.RefObject<HTMLUListElement>,
+    ref: React.RefObject<HTMLUListElement | null>,
     setter: (v: number) => void,
     list: number[],
   ) => {
