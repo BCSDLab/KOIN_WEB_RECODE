@@ -44,7 +44,7 @@ const RAW_RUNTIME_STATE =
           ["@types/gtag.js", "npm:0.0.19"],\
           ["@types/jest", "npm:27.5.2"],\
           ["@types/navermaps", "npm:3.7.4"],\
-          ["@types/node", "npm:16.18.80"],\
+          ["@types/node", "npm:16.18.126"],\
           ["@types/react", "npm:19.2.2"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.1"],\
           ["@types/react-window", "npm:1.8.8"],\
@@ -72,6 +72,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.0"],\
           ["react-hook-form", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.60.0"],\
           ["react-quill", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.0.0"],\
+          ["react-quill-new", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:3.6.0"],\
           ["react-swipeable", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.0.2"],\
           ["react-toastify", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:11.0.5"],\
           ["react-window", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:1.8.10"],\
@@ -5454,10 +5455,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/node", [\
-      ["npm:16.18.80", {\
-        "packageLocation": "./.yarn/cache/@types-node-npm-16.18.80-3881535093-6ed24736cb.zip/node_modules/@types/node/",\
+      ["npm:16.18.126", {\
+        "packageLocation": "./.yarn/cache/@types-node-npm-16.18.126-0221e6e0b8-33e0fa9209.zip/node_modules/@types/node/",\
         "packageDependencies": [\
-          ["@types/node", "npm:16.18.80"]\
+          ["@types/node", "npm:16.18.126"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -8698,6 +8699,13 @@ const RAW_RUNTIME_STATE =
           ["eventemitter3", "npm:2.0.3"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:5.0.1", {\
+        "packageLocation": "./.yarn/cache/eventemitter3-npm-5.0.1-5e423b7df3-ac6423ec31.zip/node_modules/eventemitter3/",\
+        "packageDependencies": [\
+          ["eventemitter3", "npm:5.0.1"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["execa", [\
@@ -8773,6 +8781,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/fast-diff-npm-1.1.2-907d4b29ef-d212e75bea.zip/node_modules/fast-diff/",\
         "packageDependencies": [\
           ["fast-diff", "npm:1.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:1.3.0", {\
+        "packageLocation": "./.yarn/cache/fast-diff-npm-1.3.0-9f19e3b743-9e57415bc6.zip/node_modules/fast-diff/",\
+        "packageDependencies": [\
+          ["fast-diff", "npm:1.3.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11211,7 +11226,7 @@ const RAW_RUNTIME_STATE =
           ["@types/gtag.js", "npm:0.0.19"],\
           ["@types/jest", "npm:27.5.2"],\
           ["@types/navermaps", "npm:3.7.4"],\
-          ["@types/node", "npm:16.18.80"],\
+          ["@types/node", "npm:16.18.126"],\
           ["@types/react", "npm:19.2.2"],\
           ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.1"],\
           ["@types/react-window", "npm:1.8.8"],\
@@ -11239,6 +11254,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.0"],\
           ["react-hook-form", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.60.0"],\
           ["react-quill", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:2.0.0"],\
+          ["react-quill-new", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:3.6.0"],\
           ["react-swipeable", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:7.0.2"],\
           ["react-toastify", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:11.0.5"],\
           ["react-window", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:1.8.10"],\
@@ -11331,11 +11347,38 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["lodash-es", [\
+      ["npm:4.17.21", {\
+        "packageLocation": "./.yarn/cache/lodash-es-npm-4.17.21-b45832dfce-03f39878ea.zip/node_modules/lodash-es/",\
+        "packageDependencies": [\
+          ["lodash-es", "npm:4.17.21"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["lodash.clonedeep", [\
+      ["npm:4.5.0", {\
+        "packageLocation": "./.yarn/cache/lodash.clonedeep-npm-4.5.0-fbc3cda4e5-957ed243f8.zip/node_modules/lodash.clonedeep/",\
+        "packageDependencies": [\
+          ["lodash.clonedeep", "npm:4.5.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["lodash.debounce", [\
       ["npm:4.0.8", {\
         "packageLocation": "./.yarn/cache/lodash.debounce-npm-4.0.8-f1d6e09799-cd0b281978.zip/node_modules/lodash.debounce/",\
         "packageDependencies": [\
           ["lodash.debounce", "npm:4.0.8"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["lodash.isequal", [\
+      ["npm:4.5.0", {\
+        "packageLocation": "./.yarn/cache/lodash.isequal-npm-4.5.0-f8b0f64d63-82fc58a83a.zip/node_modules/lodash.isequal/",\
+        "packageDependencies": [\
+          ["lodash.isequal", "npm:4.5.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12301,6 +12344,13 @@ const RAW_RUNTIME_STATE =
           ["parchment", "npm:1.1.4"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:3.0.0", {\
+        "packageLocation": "./.yarn/cache/parchment-npm-3.0.0-8af750d9d9-67b91be827.zip/node_modules/parchment/",\
+        "packageDependencies": [\
+          ["parchment", "npm:3.0.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["parent-module", [\
@@ -12752,6 +12802,17 @@ const RAW_RUNTIME_STATE =
           ["quill-delta", "npm:3.6.3"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:2.0.3", {\
+        "packageLocation": "./.yarn/cache/quill-npm-2.0.3-15cb4b4fc0-e4207da225.zip/node_modules/quill/",\
+        "packageDependencies": [\
+          ["eventemitter3", "npm:5.0.1"],\
+          ["lodash-es", "npm:4.17.21"],\
+          ["parchment", "npm:3.0.0"],\
+          ["quill", "npm:2.0.3"],\
+          ["quill-delta", "npm:5.1.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["quill-delta", [\
@@ -12762,6 +12823,16 @@ const RAW_RUNTIME_STATE =
           ["extend", "npm:3.0.2"],\
           ["fast-diff", "npm:1.1.2"],\
           ["quill-delta", "npm:3.6.3"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:5.1.0", {\
+        "packageLocation": "./.yarn/cache/quill-delta-npm-5.1.0-885ccecbe2-6cd9a634dd.zip/node_modules/quill-delta/",\
+        "packageDependencies": [\
+          ["fast-diff", "npm:1.3.0"],\
+          ["lodash.clonedeep", "npm:4.5.0"],\
+          ["lodash.isequal", "npm:4.5.0"],\
+          ["quill-delta", "npm:5.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12875,6 +12946,38 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@types/react-dom",\
           "@types/react",\
+          "react-dom",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-quill-new", [\
+      ["npm:3.6.0", {\
+        "packageLocation": "./.yarn/cache/react-quill-new-npm-3.6.0-c5f1c84126-58515b9825.zip/node_modules/react-quill-new/",\
+        "packageDependencies": [\
+          ["react-quill-new", "npm:3.6.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:3.6.0", {\
+        "packageLocation": "./.yarn/__virtual__/react-quill-new-virtual-786a75c8a7/0/cache/react-quill-new-npm-3.6.0-c5f1c84126-58515b9825.zip/node_modules/react-quill-new/",\
+        "packageDependencies": [\
+          ["@types/quill-delta", null],\
+          ["@types/react", "npm:19.2.2"],\
+          ["@types/react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.1"],\
+          ["lodash-es", "npm:4.17.21"],\
+          ["quill", "npm:2.0.3"],\
+          ["quill-delta", null],\
+          ["react", "npm:19.2.0"],\
+          ["react-dom", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:19.2.0"],\
+          ["react-quill-new", "virtual:921150aa31da2575af7c36f953e9f13b3419705f08359e02e507cdb46eef3a76096cce8027f1cca0709c04e91d009a713934e907c9c1efc1e28e5b528ec25863#npm:3.6.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/quill-delta",\
+          "@types/react-dom",\
+          "@types/react",\
+          "quill-delta",\
           "react-dom",\
           "react"\
         ],\
