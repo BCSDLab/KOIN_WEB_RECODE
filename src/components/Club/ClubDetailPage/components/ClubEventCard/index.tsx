@@ -3,12 +3,18 @@ import { ClubEvent } from 'api/club/entity';
 import SmallBellIcon from 'assets/svg/Club/small_bell-icon.svg'
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './ClubEventCard.module.scss';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import ClubNotificationModal from '../ClubNotificationModal';
+import useClubNotification from '../../hooks/useClubNotification';
 
 interface ClubEventCardProps {
   event: ClubEvent & { is_subscribed: boolean };
   setEventId: (id: number | string) => void;
   clubName: string;
+  clubId: number;
 }
 
 const statusOptions = [
@@ -37,35 +43,42 @@ const splitDateTime = (dateTimeStr: string) => {
   return fullFormatted;
 };
 
-export default function ClubEventCard({ event, setEventId, clubName }: ClubEventCardProps) {
-  const isMobile = useMediaQuery();
+export default function ClubEventCard({ event, setEventId, clubId, clubName }: ClubEventCardProps) {
   const logger = useLogger();
+  const token = useTokenState();
+  const isMobile = useMediaQuery();
+
+  const [isRecruitNotifyModalOpen, openRecruitNotifyModal, closeRecruitNotifyModal] = useBooleanState(false);
+  const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
+
+  const { subscribeEventNotification, unsubscribeEventNotification } = useClubNotification(clubId);
 
   const isUpcomingMobile = isMobile && event.status === 'UPCOMING';
+  const notifyModalType = event.is_subscribed ? 'unsubscribed' : 'subscribed';
 
-  const handleClickEventCard = () => {
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'club_event_select',
-      value: clubName,
-    });
-    setEventId(event.id);
-  };
+  const handleClickEventCard = (e: React.MouseEvent<HTMLDivElement>) => {
+  const target = e.target as HTMLElement;
+  if (target.closest('button, a, [role="button"], input, textarea, select')) {
+    return;
+  }
 
-  const handleKeyDownEventCard = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter') {
-      logger.actionEventClick({
-        team: 'CAMPUS',
-        event_label: 'club_event_select',
-        value: clubName,
-      });
-      setEventId(event.id);
-    }
+  logger.actionEventClick({
+    team: 'CAMPUS',
+    event_label: 'club_event_select',
+    value: clubName,
+  });
+  setEventId(event.id);
+};
+
+  const handleClickEventNotifyButton = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!token) return openAuthModal();
+    openRecruitNotifyModal();
   };
 
   return (
-    <button
-      type="button"
+    <div
+      role='button'
       className={cn({
         [styles['club-event-card']]: true,
         [styles['club-event-card--ended']]: event.status === 'ENDED',
@@ -87,22 +100,16 @@ export default function ClubEventCard({ event, setEventId, clubName }: ClubEvent
           })}
           >
             {isUpcomingMobile ? (
-              <div
-                role="button"
+              <button
+                type='button'
                 className={styles['club-event-card__status-button']}
-                aria-label="행사 예정 상태 버튼"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  console.log('알림 설정/해제');
+                  handleClickEventNotifyButton(e);
                 }}
               >
                 {getStatusLabel(event.status)}
-                <SmallBellIcon
-                  className={styles['club-event-card__status-icon']}
-                  aria-hidden
-                  focusable="false"
-                />
-              </div>
+                <SmallBellIcon />
+              </button>
             ) : (
               <>
                 {getStatusLabel(event.status)}
@@ -142,6 +149,25 @@ export default function ClubEventCard({ event, setEventId, clubName }: ClubEvent
           </div>
         </div>
       </div>
-    </button>
+      {isAuthModalOpen && (
+        <LoginRequiredModal
+          title="행사 알림 기능을 사용하기"
+          description="동아리 행사 알림 기능은 로그인이 필요한 서비스입니다."
+          onClose={closeAuthModal}
+        />
+      )}
+      {isRecruitNotifyModalOpen && (
+        <ClubNotificationModal
+          type={notifyModalType}
+          variant="recruit"
+          closeModal={closeRecruitNotifyModal}
+          onSubmit={
+            notifyModalType === 'subscribed'
+              ? () => subscribeEventNotification(event.id)
+              : () => unsubscribeEventNotification(event.id)
+          }
+        />
+      )}
+    </div>
   );
 }

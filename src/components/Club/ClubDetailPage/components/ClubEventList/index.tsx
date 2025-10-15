@@ -34,11 +34,11 @@ export default function ClubEventList({
   setEventId,
   clubName,
 }: ClubEventListProps) {
-  const [selectedStatus, setSelectedStatus] = useState<'RECENT' | 'UPCOMING' | 'ONGOING' | 'ENDED'>('RECENT');
-  const { clubEventList } = useClubEventList(clubId, selectedStatus);
+  const logger = useLogger();
   const isMobile = useMediaQuery();
   const [isOpen, setIsOpen] = useState(false);
-  const logger = useLogger();
+  const [selectedStatus, setSelectedStatus] = useState<'RECENT' | 'UPCOMING' | 'ONGOING' | 'ENDED'>('RECENT');
+  const { clubEventList } = useClubEventList({ clubId, eventType: selectedStatus });
 
   const getStatusLabel = (value: string) => {
     const option = statusOptions.find((opt) => opt.value === value);
@@ -122,6 +122,7 @@ export default function ClubEventList({
               key={event.id}
               event={event}
               setEventId={setEventId}
+              clubId={Number(clubId)}
               clubName={clubName}
             />
           ))

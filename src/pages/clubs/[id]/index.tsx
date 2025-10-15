@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import ROUTES from 'static/routes';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
@@ -18,7 +20,6 @@ import OffBellIcon from 'assets/svg/Club/bell-off-icon.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
-import { useRouter } from 'next/router';
 import ClubQnA from 'components/Club/ClubDetailPage/components/ClubQnA';
 import ClubEventList from 'components/Club/ClubDetailPage/components/ClubEventList';
 import CreateQnAModal from 'components/Club/ClubDetailPage/components/CreateQnAModal';
@@ -30,10 +31,9 @@ import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent'
 import useClubLikeMutation from 'components/Club/ClubDetailPage/hooks/useClubLike';
 import useClubRecruitment from 'components/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
+import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
+import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import styles from './ClubDetailPage.module.scss';
-import Image from 'next/image';
-import ClubRecruitNotifyModal from 'components/Club/ClubDetailPage/components/ClubRecruitNotifyModal';
-import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubRecruitmentNotification';
 
 const NO_SELECTED_EVENT_ID = -1;
 
@@ -741,8 +741,9 @@ function ClubDetailPage({ id }: { id: string }) {
         />
       )}
       {isRecruitNotifyModalOpen && (
-        <ClubRecruitNotifyModal
+        <ClubNotificationModal
           type={notifyModalType}
+          variant="recruit"
           closeModal={closeRecruitNotifyModal}
           onSubmit={
             notifyModalType === 'subscribed'
@@ -750,7 +751,7 @@ function ClubDetailPage({ id }: { id: string }) {
               : unsubscribeRecruitmentNotification
           }
         />
-      )}
+        )}
       {
         navType === 'Q&A' && (
           <div className={styles['up-floating-button__container']}>
