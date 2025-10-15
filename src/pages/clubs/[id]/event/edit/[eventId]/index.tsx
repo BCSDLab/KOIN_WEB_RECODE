@@ -24,7 +24,7 @@ function splitKoreanDate(date: Date): [string, string] {
 
 function ClubEventEditPage({ id, eventId }: { id: string, eventId: string }) {
   const logger = useLogger();
-  const { clubDetail } = useClubDetail(id);
+  const { clubDetail } = useClubDetail(Number(id));
   const { clubEventDetail } = useClubEventDetail(id, eventId);
   const { mutateAsync } = usePutClubEvent(Number(id));
   const isMobile = useMediaQuery();

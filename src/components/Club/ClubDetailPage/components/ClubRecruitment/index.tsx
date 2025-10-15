@@ -24,7 +24,7 @@ export default function ClubRecruitment({
   const router = useRouter();
   const { id } = router.query as { id: string };
   const isMobile = useMediaQuery();
-  const { clubDetail } = useClubDetail(id);
+  const { clubDetail } = useClubDetail(Number(id));
   const { clubRecruitmentData } = useClubRecruitment(clubId);
   const { mutateAsync } = useDeleteRecruitment();
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
