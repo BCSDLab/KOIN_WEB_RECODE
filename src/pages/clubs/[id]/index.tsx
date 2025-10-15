@@ -37,6 +37,21 @@ import styles from './ClubDetailPage.module.scss';
 
 const NO_SELECTED_EVENT_ID = -1;
 
+const TAB_LABEL = {
+  intro: '상세 소개',
+  recruit: '모집',
+  event: '행사',
+  qna: 'Q&A',
+} as const;
+type TabType = keyof typeof TAB_LABEL;
+
+const TAB: Record<string, TabType> = {
+  '상세 소개': 'intro',
+  '모집': 'recruit',
+  '행사': 'event',
+  'Q&A': 'qna',
+};
+
 function ClubDetailPage({ id }: { id: string }) {
   const router = useRouter();
   const {
@@ -49,9 +64,9 @@ function ClubDetailPage({ id }: { id: string }) {
   const isMobile = useMediaQuery();
   const navigate = (path: string) => router.push(path);
   const logger = useLogger();
-  const [eventId, setEventId] = useState<string | number>(-1);
 
   const [navType, setNavType] = useState('상세 소개');
+  const [eventId, setEventId] = useState<string | number>(NO_SELECTED_EVENT_ID);
   const [isEdit, setIsEdit] = useState(false);
   const [introduction, setIntroduction] = useState(clubDetail.introduction);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -86,10 +101,17 @@ function ClubDetailPage({ id }: { id: string }) {
   const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
   const notifyModalType = clubDetail.is_recruit_subscribed ? 'unsubscribed' : 'subscribed';
 
-  useEffect(() => {
-    if (clubDetail?.name) setCustomTitle(clubDetail.name);
-  }, [clubDetail?.name, setCustomTitle]);
-  useEffect(() => resetCustomTitle, [resetCustomTitle]);
+  const syncUrlQuery = (nextLabel: string, extra?: Record<string, string | number | undefined>) => {
+    const tabKey = TAB[nextLabel] ?? 'intro';
+    const nextQuery = { ...router.query, tab: tabKey, ...extra };
+
+    if (tabKey !== 'event') delete (nextQuery as any).eventId;
+
+    router.replace({ pathname: router.pathname, query: nextQuery }, undefined, {
+      shallow: true,
+      scroll: false,
+    });
+  };
 
   const handleToggleLike = async () => {
     if (!id || isPending) return;
@@ -159,6 +181,7 @@ function ClubDetailPage({ id }: { id: string }) {
       value: `${navValue}`,
     });
     setNavType(navValue);
+    syncUrlQuery(navValue);
   };
 
   const handleCopy = async (text: string, label: string) => {
@@ -262,6 +285,25 @@ function ClubDetailPage({ id }: { id: string }) {
     if (!token) return openAuthModal();
     openRecruitNotifyModal();
   };
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    const { tab, eventId: queryEventId } = router.query as { tab?: string; eventId?: string };
+
+    const tabKey = (tab ?? 'intro') as TabType;
+    const nextLabel = TAB_LABEL[tabKey] ?? '상세 소개';
+    setNavType(nextLabel);
+
+    if (tabKey === 'event') {
+      if (queryEventId) setEventId(Number(queryEventId));
+      else setEventId(NO_SELECTED_EVENT_ID);
+    }
+  }, [router.isReady, router.query]);
+
+  useEffect(() => {
+    if (clubDetail?.name) setCustomTitle(clubDetail.name);
+  }, [clubDetail?.name, setCustomTitle]);
+  useEffect(() => resetCustomTitle, [resetCustomTitle]);
 
   return (
     <div className={styles.layout}>
@@ -604,7 +646,11 @@ function ClubDetailPage({ id }: { id: string }) {
             [styles['nav-type']]: true,
             [styles['nav-type--active']]: navType === '행사',
           })}
-          onClick={() => { handleNavClick('행사'); setEventId(-1); }}
+          onClick={() => {
+            handleNavClick('행사');
+            setEventId(NO_SELECTED_EVENT_ID);
+            syncUrlQuery('행사');
+          }}
         >
           행사
         </button>
