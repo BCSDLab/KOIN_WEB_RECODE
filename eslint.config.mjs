@@ -5,7 +5,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
-import globals from 'globals';
+import globals, { node } from 'globals';
 
 const nextRules = {
   ...(next.configs.recommended.rules),
@@ -55,6 +55,7 @@ export default [
       next: { rootDir: ['.'] },
       react: { version: 'detect' },
       'import/resolver': { typescript: {} },
+      node: { tryExtensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'] },
     },
     rules: {
       // Next 추천 규칙 적용

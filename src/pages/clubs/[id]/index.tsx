@@ -13,6 +13,8 @@ import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import NonLikeIcon from 'assets/svg/Club/unlike-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
 import UpIcon from 'assets/svg/Club/up-icon.svg';
+import BellIcon from 'assets/svg/Club/bell-icon.svg';
+import OffBellIcon from 'assets/svg/Club/bell-off-icon.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
@@ -29,6 +31,8 @@ import useClubLikeMutation from 'components/Club/ClubDetailPage/hooks/useClubLik
 import useClubRecruitment from 'components/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import styles from './ClubDetailPage.module.scss';
+import Image from 'next/image';
+import ClubRecruitNotifyModal from 'components/Club/ClubDetailPage/components/ClubRecruitNotifyModal';
 
 const NO_SELECTED_EVENT_ID = -1;
 
@@ -53,6 +57,7 @@ function ClubDetailPage({ id }: { id: string }) {
   const [isMandateModalOpen, openMandateModal, closeMandateModal] = useBooleanState(false);
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
   const [isEditModalOpen, openEditModal, closeEditModal] = useBooleanState(false);
+  const [isRecruitNotifyModalOpen, openRecruitNotifyModal, closeRecruitNotifyModal] = useBooleanState(false);
   const [
     isRecruitDeleteModalOpen,
     openRecruitDeleteModal,
@@ -67,6 +72,7 @@ function ClubDetailPage({ id }: { id: string }) {
   const [QnAType, setQnAType] = useState('');
   const [introType, setintroType] = useState('');
   const [replyId, setReplyId] = useState(-1);
+  const [recruitNotifyModalType, setRecruitNotifyModalType] = useState<'subscribed' | 'unsubscribed'>('subscribed');
 
   const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
 
@@ -249,6 +255,12 @@ function ClubDetailPage({ id }: { id: string }) {
     navigate(ROUTES.ClubEventEdit({ id: String(id), eventId: String(eventId), isLink: true }));
   };
 
+  const handleClickRecruitNotifyButton = () => {
+    if (!token) return openAuthModal();
+    setRecruitNotifyModalType(clubDetail.is_recruit_subscribed ? 'unsubscribed' : 'subscribed');
+    openRecruitNotifyModal();
+  };
+
   return (
     <div className={styles.layout}>
       {!isMobile && (
@@ -358,10 +370,12 @@ function ClubDetailPage({ id }: { id: string }) {
           {isMobile && (
             <div className={styles['club-detail__summary__image-box']}>
               {clubDetail.image_url ? (
-                <img
+                <Image
                   className={styles['club-detail__summary__image']}
                   src={clubDetail.image_url}
                   alt={`${clubDetail.name} 동아리 이미지`}
+                  width={300}
+                  height={300}
                 />
               ) : (
                 <div className={styles['club-detail__image-placeholder']}>
@@ -513,6 +527,14 @@ function ClubDetailPage({ id }: { id: string }) {
               </button>
             </div>
             )}
+            <div>
+              <div className={styles['club-detail__summary__contacts__row']}>
+                <div className={styles['club-detail__summary__contacts__row--label']}>모집알림:</div>
+                <button type='button' aria-label='모집 알림 구독 버튼' onClick={handleClickRecruitNotifyButton}>
+                  {clubDetail.is_recruit_subscribed ? <BellIcon /> : <OffBellIcon />}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         {!isMobile && (
@@ -529,10 +551,12 @@ function ClubDetailPage({ id }: { id: string }) {
             )}
             <div className={styles['club-detail__summary__image-box']}>
               {clubDetail.image_url ? (
-                <img
+                <Image
                   className={styles['club-detail__summary__image']}
                   src={clubDetail.image_url}
                   alt={`${clubDetail.name} 동아리 이미지`}
+                  width={200}
+                  height={200}
                 />
               ) : (
                 <div className={styles['club-detail__image-placeholder']}>
@@ -710,6 +734,13 @@ function ClubDetailPage({ id }: { id: string }) {
           type="eventDelete"
           closeModal={closeEventDeleteModal}
           onSubmit={handleDeleteEvent}
+        />
+      )}
+      {isRecruitNotifyModalOpen && (
+        <ClubRecruitNotifyModal
+          type={recruitNotifyModalType}
+          closeModal={closeRecruitNotifyModal}
+          onSubmit={() => {}}
         />
       )}
       {
