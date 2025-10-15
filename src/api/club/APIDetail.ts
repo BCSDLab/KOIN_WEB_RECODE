@@ -5,14 +5,14 @@ import type {
   ClubEventListResponse,
   ClubEventRequest,
   ClubEventResponse,
-  ClubInroductionData,
+  ClubIntroductionData,
   ClubListResponse,
   ClubNewQnA,
   ClubQnAData,
   ClubRecruitmentRequest,
   ClubRecruitmentResponse,
   ClubSearchResponse,
-  DeleteClubLikeResonse,
+  DeleteClubLikeResponse,
   DeleteClubQnAResponse,
   HotClubResponse,
   NewClubData,
@@ -20,7 +20,7 @@ import type {
   NewClubManagerResponse,
   PostClubQnAResponse,
   PostClubResponse,
-  PutClubLikeResonse,
+  PutClubLikeResponse,
 } from './entity';
 
 export class ClubCategories<R extends ClubCategoriesResponse> implements APIRequest<R> {
@@ -127,13 +127,13 @@ export class PutClubInroduction<R extends ClubDetailResponse> implements APIRequ
   constructor(
     public authorization: string,
     public clubId: number | string,
-    public data: ClubInroductionData,
+    public data: ClubIntroductionData,
   ) {
     this.path = `/clubs/${clubId}/introduction`;
   }
 }
 
-export class PutClubLike<R extends PutClubLikeResonse> implements APIRequest<R> {
+export class PutClubLike<R extends PutClubLikeResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
   path = '/clubs';
@@ -147,7 +147,7 @@ export class PutClubLike<R extends PutClubLikeResonse> implements APIRequest<R> 
   }
 }
 
-export class DeleteClubLike<R extends DeleteClubLikeResonse> implements APIRequest<R> {
+export class DeleteClubLike<R extends DeleteClubLikeResponse> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 
   path = '/clubs';
