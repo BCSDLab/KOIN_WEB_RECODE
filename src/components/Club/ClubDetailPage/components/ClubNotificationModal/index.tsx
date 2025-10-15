@@ -1,19 +1,18 @@
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import { useRouter } from 'next/router';
-import styles from './ClubRecruitNotifyModal.module.scss';
+import styles from './ClubNotificationModal.module.scss';
 
-interface ConfirmModalProps {
+interface ClubNotificationModalProps {
   closeModal: () => void;
   onSubmit: () => void;
-  onCancel?: () => void;
+  variant: 'recruit' | 'event';
   type?: 'subscribed' | 'unsubscribed';
 }
 
-export default function ConfirmModal({
-  closeModal, onSubmit, onCancel, type = 'subscribed',
-}: ConfirmModalProps) {
-  const router = useRouter();
+export default function ClubNotificationModal({
+  closeModal, onSubmit, variant, type = 'subscribed',
+}: ClubNotificationModalProps) {
+
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
   useEscapeKeyDown({ onEscape: closeModal });
 
@@ -22,12 +21,14 @@ export default function ConfirmModal({
     closeModal();
   };
 
+  const notifyType = variant === 'recruit' ? '모집' : '행사';
+
   return (
     <div className={styles['modal-background']} ref={backgroundRef}>
       <div className={styles.modal}>
         {type === 'subscribed' && (
           <>
-            <div className={styles['info-text']}>모집 알림을 받으시겠어요?</div>
+            <div className={styles['info-text']}>{notifyType} 알림을 받으시겠어요?</div>
 
             <div className={styles['info-button-container']}>
               <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소하기</button>
@@ -37,7 +38,7 @@ export default function ConfirmModal({
         )}
         {type === 'unsubscribed' && (
           <>
-            <div className={styles['info-text']}>모집 알림을 취소하시겠어요?</div>
+            <div className={styles['info-text']}>{notifyType} 알림을 취소하시겠어요?</div>
             
             <div className={styles['info-button-container']}>
               <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소하기</button>
