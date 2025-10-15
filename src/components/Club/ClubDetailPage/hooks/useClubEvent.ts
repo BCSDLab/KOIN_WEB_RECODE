@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getClubEventDetail, getClubEventList } from 'api/club';
-import useTokenState from "utils/hooks/state/useTokenState";
+import useTokenState from 'utils/hooks/state/useTokenState';
 
 interface ClubEventListProps {
   clubId: string | number | undefined;
   eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED';
-} 
+}
 
 export function useClubEventList({ clubId, eventType }: ClubEventListProps) {
   const token = useTokenState();

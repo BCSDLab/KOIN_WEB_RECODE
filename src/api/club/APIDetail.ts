@@ -268,7 +268,7 @@ export class GetClubEventList<R extends ClubEventListResponse> implements APIReq
   response!: R;
 
   constructor(
-    public clubId: string | number, 
+    public clubId: string | number,
     public eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED',
     public authorization?: string,
   ) {
@@ -417,7 +417,7 @@ export class DeleteClubRecruitmentNotification<R extends {}> implements APIReque
   method = HTTP_METHOD.DELETE;
 
   path: string;
-  
+
   response!: R;
 
   auth = true;
@@ -452,7 +452,7 @@ export class DeleteClubEventNotification<R extends {}> implements APIRequest<R> 
   method = HTTP_METHOD.DELETE;
 
   path: string;
-  
+
   response!: R;
 
   auth = true;

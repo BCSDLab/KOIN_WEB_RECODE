@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteClubEventNotification, deleteClubRecruitmentNotification, postClubEventNotification, postClubRecruitmentNotification } from "api/club";
-import useTokenState from "utils/hooks/state/useTokenState";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteClubEventNotification, deleteClubRecruitmentNotification, postClubEventNotification, postClubRecruitmentNotification } from 'api/club';
+import useTokenState from 'utils/hooks/state/useTokenState';
 
 export default function useClubNotification(clubId: number) {
   const token = useTokenState();
@@ -12,7 +12,7 @@ export default function useClubNotification(clubId: number) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clubDetail', clubId] });
-    }
+    },
   });
 
   const { mutateAsync: unsubscribeRecruitmentNotification } = useMutation({
@@ -21,7 +21,7 @@ export default function useClubNotification(clubId: number) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clubDetail', clubId] });
-    }
+    },
   });
 
   const { mutateAsync: subscribeEventNotification } = useMutation({
@@ -30,7 +30,7 @@ export default function useClubNotification(clubId: number) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clubDetail', clubId] });
-    }
+    },
   });
 
   const { mutateAsync: unsubscribeEventNotification } = useMutation({
@@ -39,7 +39,7 @@ export default function useClubNotification(clubId: number) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clubDetail', clubId] });
-    }
+    },
   });
 
   return {

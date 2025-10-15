@@ -1,14 +1,14 @@
 import { cn } from '@bcsdlab/utils';
 import { ClubEvent } from 'api/club/entity';
-import SmallBellIcon from 'assets/svg/Club/small_bell-icon.svg'
+import SmallBellIcon from 'assets/svg/Club/small_bell-icon.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import styles from './ClubEventCard.module.scss';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import ClubNotificationModal from '../ClubNotificationModal';
-import useClubNotification from '../../hooks/useClubNotification';
+import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
+import useClubNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
+import styles from './ClubEventCard.module.scss';
 
 interface ClubEventCardProps {
   event: ClubEvent & { is_subscribed: boolean };
@@ -84,6 +84,10 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
         [styles['club-event-card--ended']]: event.status === 'ENDED',
       })}
       onClick={handleClickEventCard}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') handleClickEventCard(e as unknown as React.MouseEvent<HTMLDivElement>);
+      }}
+      tabIndex={0}
     >
       {event.image_urls.length > 0 && (
         <img src={event.image_urls[0]} alt={event.name} className={styles['club-event-card__image']} />
