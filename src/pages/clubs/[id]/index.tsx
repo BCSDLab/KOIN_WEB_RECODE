@@ -33,6 +33,7 @@ import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDelete
 import styles from './ClubDetailPage.module.scss';
 import Image from 'next/image';
 import ClubRecruitNotifyModal from 'components/Club/ClubDetailPage/components/ClubRecruitNotifyModal';
+import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubRecruitmentNotification';
 
 const NO_SELECTED_EVENT_ID = -1;
 
@@ -41,7 +42,7 @@ function ClubDetailPage({ id }: { id: string }) {
   const {
     clubDetail,
     clubIntroductionEditStatus,
-  } = useClubDetail(id);
+  } = useClubDetail(Number(id));
   const { clubRecruitmentData } = useClubRecruitment(id);
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
@@ -72,7 +73,6 @@ function ClubDetailPage({ id }: { id: string }) {
   const [QnAType, setQnAType] = useState('');
   const [introType, setintroType] = useState('');
   const [replyId, setReplyId] = useState(-1);
-  const [recruitNotifyModalType, setRecruitNotifyModalType] = useState<'subscribed' | 'unsubscribed'>('subscribed');
 
   const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
 
@@ -81,7 +81,10 @@ function ClubDetailPage({ id }: { id: string }) {
   const {
     clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync,
   } = useClubLikeMutation(id);
+  const { subscribeRecruitmentNotification, unsubscribeRecruitmentNotification } = useClubRecruitmentNotification(Number(id));
+
   const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
+  const notifyModalType = clubDetail.is_recruit_subscribed ? 'unsubscribed' : 'subscribed';
 
   useEffect(() => {
     if (clubDetail?.name) setCustomTitle(clubDetail.name);
@@ -257,7 +260,6 @@ function ClubDetailPage({ id }: { id: string }) {
 
   const handleClickRecruitNotifyButton = () => {
     if (!token) return openAuthModal();
-    setRecruitNotifyModalType(clubDetail.is_recruit_subscribed ? 'unsubscribed' : 'subscribed');
     openRecruitNotifyModal();
   };
 
@@ -527,14 +529,16 @@ function ClubDetailPage({ id }: { id: string }) {
               </button>
             </div>
             )}
-            <div>
-              <div className={styles['club-detail__summary__contacts__row']}>
-                <div className={styles['club-detail__summary__contacts__row--label']}>모집알림:</div>
-                <button type='button' aria-label='모집 알림 구독 버튼' onClick={handleClickRecruitNotifyButton}>
-                  {clubDetail.is_recruit_subscribed ? <BellIcon /> : <OffBellIcon />}
-                </button>
+            {isMobile && (
+              <div>
+                <div className={styles['club-detail__summary__contacts__row']}>
+                  <div className={styles['club-detail__summary__contacts__row--label']}>모집알림:</div>
+                  <button type='button' aria-label='모집 알림 구독 버튼' onClick={handleClickRecruitNotifyButton}>
+                    {clubDetail.is_recruit_subscribed ? <BellIcon /> : <OffBellIcon />}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         {!isMobile && (
@@ -738,9 +742,13 @@ function ClubDetailPage({ id }: { id: string }) {
       )}
       {isRecruitNotifyModalOpen && (
         <ClubRecruitNotifyModal
-          type={recruitNotifyModalType}
+          type={notifyModalType}
           closeModal={closeRecruitNotifyModal}
-          onSubmit={() => {}}
+          onSubmit={
+            notifyModalType === 'subscribed'
+              ? subscribeRecruitmentNotification
+              : unsubscribeRecruitmentNotification
+          }
         />
       )}
       {

@@ -7,6 +7,7 @@ import {
   DeleteClubLike,
   DeleteClubQnA,
   DeleteClubRecruitment,
+  DeleteClubRecruitmentNotification,
   GetClubEventDetail,
   GetClubEventList,
   GetClubQnA,
@@ -17,6 +18,7 @@ import {
   PostClubEvent,
   PostClubQnA,
   PostClubRecruitment,
+  PostClubRecruitmentNotification,
   PutClub,
   PutClubEvent,
   PutClubInroduction,
@@ -70,3 +72,7 @@ export const postClubEvent = APIClient.of(PostClubEvent);
 export const putClubEvent = APIClient.of(PutClubEvent);
 
 export const deleteClubEvent = APIClient.of(DeleteClubEvent);
+
+export const postClubRecruitmentNotification = APIClient.of(PostClubRecruitmentNotification);
+
+export const deleteClubRecruitmentNotification = APIClient.of(DeleteClubRecruitmentNotification);

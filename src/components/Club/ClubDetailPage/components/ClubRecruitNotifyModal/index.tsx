@@ -22,12 +22,6 @@ export default function ConfirmModal({
     closeModal();
   };
 
-  const handleCancel = () => {
-    closeModal();
-    onCancel?.();
-    router.back();
-  };
-
   return (
     <div className={styles['modal-background']} ref={backgroundRef}>
       <div className={styles.modal}>
@@ -47,7 +41,7 @@ export default function ConfirmModal({
             
             <div className={styles['info-button-container']}>
               <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소하기</button>
-              <button className={styles['info-button__confirm']} type="button" onClick={handleCancel}>알림 취소</button>
+              <button className={styles['info-button__confirm']} type="button" onClick={handleSubmit}>알림 취소</button>
             </div>
           </>
         )}

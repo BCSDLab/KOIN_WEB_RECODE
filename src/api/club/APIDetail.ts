@@ -391,3 +391,37 @@ export class DeleteClubEvent<R extends {}> implements APIRequest<R> {
     this.path = `/clubs/${clubId}/event/${eventId}`;
   }
 }
+
+export class PostClubRecruitmentNotification<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+  ) {
+    this.path = `/clubs/${clubId}/recruitment/notification`;
+  }
+}
+
+export class DeleteClubRecruitmentNotification<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path: string;
+  
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+  ) {
+    this.path = `/clubs/${clubId}/recruitment/notification`;
+  }
+}
