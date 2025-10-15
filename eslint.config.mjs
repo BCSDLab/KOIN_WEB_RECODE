@@ -5,7 +5,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
-import globals, { node } from 'globals';
+import globals from 'globals';
 
 const nextRules = {
   ...(next.configs.recommended.rules),
