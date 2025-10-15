@@ -267,7 +267,11 @@ export class GetClubEventList<R extends ClubEventListResponse> implements APIReq
 
   response!: R;
 
-  constructor(public clubId: string | number, public eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED') {
+  constructor(
+    public clubId: string | number, 
+    public eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED',
+    public authorization?: string,
+  ) {
     this.path = `/clubs/${clubId}/events?eventType=${eventType}`;
   }
 }
@@ -423,5 +427,41 @@ export class DeleteClubRecruitmentNotification<R extends {}> implements APIReque
     public clubId: number,
   ) {
     this.path = `/clubs/${clubId}/recruitment/notification`;
+  }
+}
+
+export class PostClubEventNotification<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.POST;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+    public eventId: number,
+  ) {
+    this.path = `/clubs/${clubId}/event/${eventId}/notification`;
+  }
+}
+
+export class DeleteClubEventNotification<R extends {}> implements APIRequest<R> {
+  method = HTTP_METHOD.DELETE;
+
+  path: string;
+  
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    public clubId: number,
+    public eventId: number,
+  ) {
+    this.path = `/clubs/${clubId}/event/${eventId}/notification`;
   }
 }

@@ -1,8 +1,15 @@
+import { useRouter } from 'next/router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getClubEventDetail, getClubEventList } from 'api/club';
-import { useRouter } from 'next/router';
+import useTokenState from "utils/hooks/state/useTokenState";
 
-export function useClubEventList(clubId: string | number | undefined, eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED') {
+interface ClubEventListProps {
+  clubId: string | number | undefined;
+  eventType: 'RECENT' | 'ONGOING' | 'UPCOMING' | 'ENDED';
+} 
+
+export function useClubEventList({ clubId, eventType }: ClubEventListProps) {
+  const token = useTokenState();
   const router = useRouter();
 
   if (!clubId) {
@@ -10,7 +17,7 @@ export function useClubEventList(clubId: string | number | undefined, eventType:
   }
   const { data: clubEventList } = useSuspenseQuery({
     queryKey: ['clubEventList', clubId, eventType],
-    queryFn: async () => getClubEventList(clubId!, eventType),
+    queryFn: async () => getClubEventList(clubId!, eventType, token),
   });
 
   return { clubEventList };
