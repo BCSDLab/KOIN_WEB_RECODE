@@ -20,7 +20,7 @@
     object-position: center;
 
     @include media.media-breakpoint(mobile) {
-      width: 100px;
+      min-width: 100px;
       height: 76px;
     }
   }
@@ -62,8 +62,12 @@
     padding: 6px 10px;
     color: #fff;
     font-size: 11px;
+    line-height: 16px;
     font-weight: 400;
     border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 
     @include media.media-breakpoint(mobile) {
       padding: 4px 8px;
@@ -85,5 +89,15 @@
     &--ended {
       background-color: #0b3566;
     }
+  }
+
+  &__status-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__body {
+    text-align: start;
   }
 }
