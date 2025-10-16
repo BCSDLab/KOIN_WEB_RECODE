@@ -6,9 +6,14 @@ import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useDatePicker } from 'pages/Cafeteria/hooks/useDatePicker';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { DiningType } from 'api/dinings/entity';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import { useNavigate } from 'react-router-dom';
+import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+import ROUTES from 'static/routes';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -34,12 +39,27 @@ export default function PCCafeteriaPage({
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
+  const navigate = useNavigate();
+  const sessionLogger = useSessionLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
+  const token = useTokenState();
+  const designVariant = useABTestView('dining_store', token);
 
   const handleDiningTypeChange = (value: DiningType) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[value] });
     setDiningType(value);
     toggleDropdown();
+  };
+
+  const handleDiningToStore = () => {
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining_to_shop',
+      value: DINING_TYPE_MAP[diningType],
+      event_category: 'click',
+      session_name: 'dining2shop',
+      session_lifetime_minutes: 30,
+    });
+    navigate(ROUTES.Store);
   };
 
   const 지난주일요일 = getWeekAgo();
@@ -94,6 +114,18 @@ export default function PCCafeteriaPage({
       <div>
         <DateNavigator />
       </div>
+      {designVariant === 'variant' && (
+        <div className={styles['recommend-banner']}>
+          <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
+          <button
+            type="button"
+            className={styles['recommend-banner__button']}
+            onClick={handleDiningToStore}
+          >
+            <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
+          </button>
+        </div>
+      )}
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
           <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />

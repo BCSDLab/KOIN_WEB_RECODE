@@ -63,3 +63,46 @@
     transform: translateX(0);
   }
 }
+
+.recommend-banner {
+  min-width: 320px;
+  padding: 8px 8px 8px 20px;
+  background-color: #f1f8ff;
+  color: #175c8e;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow:
+    0 4px 10px rgb(0 0 0 / 8%),
+    0 1px 4px rgb(0 0 0 / 4%);
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  z-index: 100;
+
+  &__text-main {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    line-height: 160%;
+    font-weight: 500;
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background-color: #175c8e;
+    color: #fff;
+  }
+
+  &__text-button {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    line-height: 160%;
+    font-weight: 500;
+  }
+}
