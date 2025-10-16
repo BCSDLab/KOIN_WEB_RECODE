@@ -59,7 +59,7 @@ export default function PCCafeteriaPage({
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });
-    navigate(ROUTES.Store);
+    navigate(ROUTES.Store());
   };
 
   const 지난주일요일 = getWeekAgo();
