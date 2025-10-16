@@ -34,11 +34,25 @@ function IndexCafeteria() {
 
   const handleMoreClick = () => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_menu_moveDetailView', value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단` });
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining2shop_1',
+      value: designVariant.current,
+      event_category: 'a/b test 로깅(메인화면 식단 진입)',
+      session_name: 'dining2shop',
+      session_lifetime_minutes: 30,
+    });
     navigate(ROUTES.Cafeteria());
   };
 
   const handlePlaceClick = (place: DiningPlace) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_menu_corner', value: place });
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining2shop_1',
+      value: designVariant.current,
+      event_category: 'a/b test 로깅(메인화면 식단 진입)',
+      session_name: 'dining2shop',
+      session_lifetime_minutes: 30,
+    });
     setSelectedPlace(place);
   };
 
@@ -53,18 +67,10 @@ function IndexCafeteria() {
   };
 
   useEffect(() => {
-    sessionLogger.actionSessionEvent({
-      event_label: 'dining2shop_1',
-      value: designVariant.current,
-      event_category: 'a/b test 로깅(메인화면 식단 진입)',
-      session_name: 'dining2shop',
-      session_lifetime_minutes: 30,
-    });
-
     if (localStorage.getItem('cafeteria-tooltip') === null) {
       openTooltip();
     }
-  }, [openTooltip, sessionLogger]);
+  }, [openTooltip]);
 
   return (
     <section className={styles.template}>
