@@ -1,3 +1,6 @@
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { ClubEvent } from 'api/club/entity';
 import SmallBellIcon from 'assets/svg/Club/small_bell-icon.svg';
@@ -9,7 +12,6 @@ import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
 import useClubNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import styles from './ClubEventCard.module.scss';
-import Image from 'next/image';
 
 interface ClubEventCardProps {
   event: ClubEvent & { is_subscribed: boolean };
@@ -45,6 +47,7 @@ const splitDateTime = (dateTimeStr: string) => {
 };
 
 export default function ClubEventCard({ event, setEventId, clubId, clubName }: ClubEventCardProps) {
+  const router = useRouter();
   const logger = useLogger();
   const token = useTokenState();
   const isMobile = useMediaQuery();
@@ -57,19 +60,29 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
   const isUpcomingMobile = isMobile && event.status === 'UPCOMING';
   const notifyModalType = event.is_subscribed ? 'unsubscribed' : 'subscribed';
 
-  const handleClickEventCard = (e: React.MouseEvent<HTMLDivElement>) => {
-  const target = e.target as HTMLElement;
-  if (target.closest('button, a, [role="button"], input, textarea, select')) {
-    return;
-  }
+  const href = {
+    pathname: '/clubs/[id]',
+    query: {
+      ...router.query,
+      id: String(clubId),
+      tab: 'event',
+      eventId: String(event.id),
+    },
+  };
+  const as = `/clubs/${clubId}?tab=event&eventId=${event.id}`;
 
-  logger.actionEventClick({
-    team: 'CAMPUS',
-    event_label: 'club_event_select',
-    value: clubName,
-  });
-  setEventId(event.id);
-};
+  const handleLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+    if ((e.target as HTMLElement).closest('button')) {
+      e.preventDefault();
+      return;
+    }
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'club_event_select',
+      value: clubName,
+    });
+    setEventId(event.id);
+  };
 
   const handleClickEventNotifyButton = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -78,47 +91,54 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
   };
 
   return (
-    <div
-      role='button'
+    <Link
+      href={href}
+      as={as}
+      shallow
+      scroll={false}
+      onClick={handleLinkClick}
       className={cn({
         [styles['club-event-card']]: true,
         [styles['club-event-card--ended']]: event.status === 'ENDED',
       })}
-      onClick={handleClickEventCard}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') handleClickEventCard(e as unknown as React.MouseEvent<HTMLDivElement>);
-      }}
-      tabIndex={0}
     >
       {event.image_urls.length > 0 && (
         <div className={styles['card-image-container']}>
-          <Image src={event.image_urls[0]} alt={event.name} className={styles['club-event-card__image']} fill sizes="250px"/>
+          <Image
+            src={event.image_urls[0]}
+            alt={event.name}
+            className={styles['club-event-card__image']}
+            fill
+            sizes="250px"
+          />
         </div>
       )}
+
       <div className={styles['club-event-card__content']}>
         <div className={styles['club-event-card__header']}>
           <h3 className={styles['club-event-card__title']}>{event.name}</h3>
-          <div className={cn({
-            [styles['club-event-card__status']]: true,
-            [styles['club-event-card__status--soon']]: event.status === 'SOON',
-            [styles['club-event-card__status--ended']]: event.status === 'ENDED',
-            [styles['club-event-card__status--upcoming']]: event.status === 'UPCOMING',
-            [styles['club-event-card__status--ongoing']]: event.status === 'ONGOING',
-          })}
+
+          <div
+            className={cn({
+              [styles['club-event-card__status']]: true,
+              [styles['club-event-card__status--soon']]: event.status === 'SOON',
+              [styles['club-event-card__status--ended']]: event.status === 'ENDED',
+              [styles['club-event-card__status--upcoming']]: event.status === 'UPCOMING',
+              [styles['club-event-card__status--ongoing']]: event.status === 'ONGOING',
+            })}
           >
             {isUpcomingMobile ? (
               <button
-                type='button'
+                type="button"
                 className={styles['club-event-card__status-button']}
                 onClick={handleClickEventNotifyButton}
+                data-no-link
               >
                 {getStatusLabel(event.status)}
                 <SmallBellIcon />
               </button>
             ) : (
-              <>
-                {getStatusLabel(event.status)}
-              </>
+              getStatusLabel(event.status)
             )}
           </div>
         </div>
@@ -126,31 +146,17 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
           <div>
             {isMobile ? (
               <>
-                <div>
-                  {splitDateTime(event.start_date)}
-                  {' '}
-                  ~
-                </div>
-                <div>
-                  {splitDateTime(event.end_date)}
-                </div>
+                <div>{splitDateTime(event.start_date)} ~</div>
+                <div>{splitDateTime(event.end_date)}</div>
               </>
             ) : (
               <>
-                진행 날짜 :
-                {' '}
-                {splitDateTime(event.start_date)}
-                {' '}
-                ~
-                {' '}
-                {splitDateTime(event.end_date)}
+                진행 날짜 : {splitDateTime(event.start_date)} ~ {splitDateTime(event.end_date)}
               </>
             )}
           </div>
           <div>
-            행사 소개 :
-            {' '}
-            {event.introduce}
+            행사 소개 : {event.introduce}
           </div>
         </div>
       </div>
@@ -164,7 +170,7 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
       {isRecruitNotifyModalOpen && (
         <ClubNotificationModal
           type={notifyModalType}
-          variant="recruit"
+          variant="event"
           closeModal={closeRecruitNotifyModal}
           onSubmit={
             notifyModalType === 'subscribed'
@@ -173,6 +179,6 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
           }
         />
       )}
-    </div>
+    </Link>
   );
 }

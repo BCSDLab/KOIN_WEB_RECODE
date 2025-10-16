@@ -286,19 +286,24 @@ function ClubDetailPage({ id }: { id: string }) {
     openRecruitNotifyModal();
   };
 
-  useEffect(() => {
-    if (!router.isReady) return;
-    const { tab, eventId: queryEventId } = router.query as { tab?: string; eventId?: string };
+useEffect(() => {
+  if (!router.isReady) return;
+  const { tab, eventId: queryEventId } = router.query as { tab?: string; eventId?: string };
 
-    const tabKey = (tab ?? 'intro') as TabType;
-    const nextLabel = TAB_LABEL[tabKey] ?? '상세 소개';
-    setNavType(nextLabel);
+  let tabKey = (tab as TabType) ?? 'intro';
+  if (!tab && queryEventId) {
+    tabKey = 'event';
+    router.replace({ pathname: router.pathname, query: { ...router.query, tab: 'event' } }, undefined, { shallow: true, scroll: false });
+  }
 
-    if (tabKey === 'event') {
-      if (queryEventId) setEventId(Number(queryEventId));
-      else setEventId(NO_SELECTED_EVENT_ID);
-    }
-  }, [router.isReady, router.query]);
+  const nextLabel = TAB_LABEL[tabKey] ?? '상세 소개';
+  setNavType(nextLabel);
+
+  if (tabKey === 'event') {
+    if (queryEventId) setEventId(Number(queryEventId));
+    else setEventId(NO_SELECTED_EVENT_ID);
+  }
+}, [router]);
 
   useEffect(() => {
     if (clubDetail?.name) setCustomTitle(clubDetail.name);
