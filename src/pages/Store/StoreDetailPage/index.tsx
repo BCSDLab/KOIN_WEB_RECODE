@@ -423,7 +423,7 @@ function StoreDetail() {
   const { id } = useParams();
 
   return (
-    <StoreErrorBoundary onErrorClick={() => navigate('/store')}>
+    <StoreErrorBoundary onErrorClick={() => navigate(ROUTES.Store)}>
       <Suspense fallback={<div />}>
         <StoreDetailPage id={id} />
       </Suspense>

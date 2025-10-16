@@ -13,6 +13,7 @@ import { DiningType } from 'api/dinings/entity';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import { useNavigate } from 'react-router-dom';
+import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
@@ -81,7 +82,7 @@ export default function MobileCafeteriaPage({
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });
-    navigate('/store');
+    navigate(ROUTES.Store);
   };
 
   useEffect(() => {

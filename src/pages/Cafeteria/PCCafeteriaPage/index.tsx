@@ -12,6 +12,7 @@ import { DiningType } from 'api/dinings/entity';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
 import { useNavigate } from 'react-router-dom';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
@@ -58,7 +59,7 @@ export default function PCCafeteriaPage({
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });
-    navigate('/store');
+    navigate(ROUTES.Store);
   };
 
   const 지난주일요일 = getWeekAgo();
