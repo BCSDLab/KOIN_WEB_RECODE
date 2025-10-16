@@ -82,7 +82,7 @@ export default function MobileCafeteriaPage({
       session_name: 'dining2shop',
       session_lifetime_minutes: 30,
     });
-    navigate(ROUTES.Store);
+    navigate(ROUTES.Store());
   };
 
   useEffect(() => {
