@@ -7,7 +7,6 @@ import SmallBellIcon from 'assets/svg/Club/small_bell-icon.svg';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
 import useClubNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import styles from './ClubEventCard.module.scss';
@@ -48,7 +47,6 @@ const splitDateTime = (dateTimeStr: string) => {
 export default function ClubEventCard({ event, setEventId, clubId, clubName }: ClubEventCardProps) {
   const router = useRouter();
   const logger = useLogger();
-  const token = useTokenState();
   const isMobile = useMediaQuery();
 
   const [isRecruitNotifyModalOpen, openRecruitNotifyModal, closeRecruitNotifyModal] = useBooleanState(false);
