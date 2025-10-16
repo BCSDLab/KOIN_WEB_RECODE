@@ -29,7 +29,7 @@ const getSessionId = (
   is_login: LoginStatus,
   sessionLifetime: number,
 ): string => {
-  const existedSessionId = getCookie('custom_session_id');
+  const existedSessionId = getCookie(`custom_session_id_${session_name}`);
   if (existedSessionId) {
     return existedSessionId;
   }
@@ -39,7 +39,7 @@ const getSessionId = (
 
   const minutes = sessionLifetime;
   const day = minutes / (60 * 24); // 15분을 일 단위로 변환
-  setCookie('custom_session_id', newSessionId, day);
+  setCookie(`custom_session_id_${session_name}`, newSessionId, day);
   return newSessionId;
 };
 
