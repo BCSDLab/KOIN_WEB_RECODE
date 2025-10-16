@@ -16,7 +16,7 @@ import styles from './NewClubRecruitment.module.scss';
 
 function NewClubRecruitment({ id }: { id: string }) {
   const logger = useLogger();
-  const { clubDetail } = useClubDetail(id);
+  const { clubDetail } = useClubDetail(Number(id));
   const { mutateAsync } = usePostNewRecruitment(Number(id));
   const isMobile = useMediaQuery();
 

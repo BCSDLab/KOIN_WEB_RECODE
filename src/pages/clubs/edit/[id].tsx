@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import styles from './ClubEditPage.module.scss';
 
 function ClubEditPage({ id }: { id: string }) {
-  const { clubDetail } = useClubDetail(id);
+  const { clubDetail } = useClubDetail(Number(id));
 
   const isMobile = useMediaQuery();
 

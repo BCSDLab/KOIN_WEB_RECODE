@@ -55,7 +55,7 @@ export default function ClubEventDetailView({
     router.push(path);
   };
   const isMobile = useMediaQuery();
-  const { clubDetail } = useClubDetail(clubId);
+  const { clubDetail } = useClubDetail(Number(clubId));
   const { clubEventDetail } = useClubEventDetail(clubId, eventId);
   const { mutateAsync } = useDeleteEvent();
 

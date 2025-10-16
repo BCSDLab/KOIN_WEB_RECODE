@@ -38,7 +38,7 @@ export default function ClubDetailPage() {
   const {
     clubDetail,
     clubIntroductionEditStatus,
-  } = useClubDetail(id);
+  } = useClubDetail(Number(id));
   const { clubRecruitmentData } = useClubRecruitment(id);
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();

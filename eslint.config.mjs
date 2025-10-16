@@ -55,6 +55,7 @@ export default [
       next: { rootDir: ['.'] },
       react: { version: 'detect' },
       'import/resolver': { typescript: {} },
+      node: { tryExtensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'] },
     },
     rules: {
       // Next 추천 규칙 적용

@@ -1,5 +1,17 @@
 @use "src/utils/scss/media" as media;
 
+.card-image-container {
+  position: relative;
+  width: 250px;
+  height: 200px;
+  flex-shrink: 0;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100px;
+    height: 76px;
+  }
+}
+
 .club-event-card {
   height: 100%;
   padding: 16px;
@@ -14,15 +26,8 @@
   }
 
   &__image {
-    width: 250px;
-    height: 200px;
     object-fit: cover;
     object-position: center;
-
-    @include media.media-breakpoint(mobile) {
-      width: 100px;
-      height: 76px;
-    }
   }
 
   &__content {
@@ -62,8 +67,12 @@
     padding: 6px 10px;
     color: #fff;
     font-size: 11px;
+    line-height: 16px;
     font-weight: 400;
     border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 
     @include media.media-breakpoint(mobile) {
       padding: 4px 8px;
@@ -85,5 +94,17 @@
     &--ended {
       background-color: #0b3566;
     }
+  }
+
+  &__status-button {
+    color: #fff;
+    display: flex;
+    font-size: 11px;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__body {
+    text-align: start;
   }
 }
