@@ -53,7 +53,6 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
   const isMobile = useMediaQuery();
 
   const [isRecruitNotifyModalOpen, openRecruitNotifyModal, closeRecruitNotifyModal] = useBooleanState(false);
-  const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
 
   const { subscribeEventNotification, unsubscribeEventNotification } = useClubNotification(clubId);
 
@@ -85,8 +84,8 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
   };
 
   const handleClickEventNotifyButton = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (!token) return openAuthModal();
     openRecruitNotifyModal();
   };
 
@@ -160,13 +159,6 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
           </div>
         </div>
       </div>
-      {isAuthModalOpen && (
-        <LoginRequiredModal
-          title="행사 알림 기능을 사용하기"
-          description="동아리 행사 알림 기능은 로그인이 필요한 서비스입니다."
-          onClose={closeAuthModal}
-        />
-      )}
       {isRecruitNotifyModalOpen && (
         <ClubNotificationModal
           type={notifyModalType}
