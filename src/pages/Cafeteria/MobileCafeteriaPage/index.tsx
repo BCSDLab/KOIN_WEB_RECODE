@@ -6,10 +6,14 @@ import CafeteriaInfo from 'pages/Cafeteria/components/CafeteriaInfo';
 import useCoopshopCafeteria from 'pages/Cafeteria/hooks/useCoopshopCafeteria';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { DiningType } from 'api/dinings/entity';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
+import { useNavigate } from 'react-router-dom';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
@@ -23,11 +27,14 @@ export default function MobileCafeteriaPage({
   diningType, setDiningType,
 }: MobileCafeteriaPageProps) {
   const logger = useLogger();
+  const navigate = useNavigate();
+  const sessionLogger = useSessionLogger();
   const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
   const { cafeteriaInfo } = useCoopshopCafeteria();
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
-
+  const token = useTokenState();
+  const designVariant = useABTestView('dining_store', token);
   useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
@@ -66,6 +73,17 @@ export default function MobileCafeteriaPage({
     };
   }, [hasLoggedScroll, logger, diningType]);
 
+  const handleDiningToStore = () => {
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining_to_shop',
+      value: DINING_TYPE_MAP[diningType],
+      event_category: 'click',
+      session_name: 'dining2shop',
+      session_lifetime_minutes: 30,
+    });
+    navigate('/store');
+  };
+
   useEffect(() => {
     setHasLoggedScroll(false);
   }, [diningType]);
@@ -94,9 +112,20 @@ export default function MobileCafeteriaPage({
         <Suspense fallback={<div />}>
           <MobileDiningBlocks diningType={diningType} />
         </Suspense>
+        {designVariant === 'variant' && (
+          <div className={styles['recommend-banner']}>
+            <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
+            <button
+              type="button"
+              className={styles['recommend-banner__button']}
+              onClick={handleDiningToStore}
+            >
+              <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
+            </button>
+          </div>
+        )}
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
-
       <div
         className={cn({
           [styles['cafeteria-info']]: true,
