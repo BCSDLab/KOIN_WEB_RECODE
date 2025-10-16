@@ -9,6 +9,7 @@ import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
 import useClubNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import styles from './ClubEventCard.module.scss';
+import Image from 'next/image';
 
 interface ClubEventCardProps {
   event: ClubEvent & { is_subscribed: boolean };
@@ -90,7 +91,9 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
       tabIndex={0}
     >
       {event.image_urls.length > 0 && (
-        <img src={event.image_urls[0]} alt={event.name} className={styles['club-event-card__image']} />
+        <div className={styles['card-image-container']}>
+          <Image src={event.image_urls[0]} alt={event.name} className={styles['club-event-card__image']} fill sizes="250px"/>
+        </div>
       )}
       <div className={styles['club-event-card__content']}>
         <div className={styles['club-event-card__header']}>
@@ -107,9 +110,7 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
               <button
                 type='button'
                 className={styles['club-event-card__status-button']}
-                onClick={(e) => {
-                  handleClickEventNotifyButton(e);
-                }}
+                onClick={handleClickEventNotifyButton}
               >
                 {getStatusLabel(event.status)}
                 <SmallBellIcon />
