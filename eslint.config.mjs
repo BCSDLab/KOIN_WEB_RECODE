@@ -25,7 +25,7 @@ export default [
   a11yFlat,
 
   {
-    ignores: ['.next/**', 'dist/**', 'coverage/**', 'node_modules/**', '**/*.d.ts'],
+    ignores: ['**/.next/**', '**/dist/**', '**/.yarn/**', 'node_modules/**', '**/*.d.ts'],
   },
   // 기존 Typescript ESLint 미설정, 논의 후 적용 필요
   // ...tseslint.configs.recommendedTypeChecked, 
