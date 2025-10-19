@@ -34,7 +34,7 @@ export default function EditConfirmModal({
   const {
     clubIntroductionEditStatus,
     clubIntroductionEditMutateAsync,
-  } = useClubDetail(id);
+  } = useClubDetail(Number(id));
 
   const handleSubmit = async () => {
     if (formData) {

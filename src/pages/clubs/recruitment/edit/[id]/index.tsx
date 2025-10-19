@@ -25,7 +25,7 @@ const TODAY = getYyyyMmDd(new Date());
 function ClubRecruitmentEditPage({ id }: { id: string }) {
   const logger = useLogger();
   const isMobile = useMediaQuery();
-  const { clubDetail } = useClubDetail(id);
+  const { clubDetail } = useClubDetail(Number(id));
   const { clubRecruitmentData } = useClubRecruitment(Number(id));
   const { mutateAsync } = usePutClubRecruitment(Number(id));
 

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import ROUTES from 'static/routes';
 import { cn } from '@bcsdlab/utils';
 import showToast from 'utils/ts/showToast';
@@ -13,10 +15,11 @@ import LikeIcon from 'assets/svg/Club/like-icon.svg';
 import NonLikeIcon from 'assets/svg/Club/unlike-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
 import UpIcon from 'assets/svg/Club/up-icon.svg';
+import BellIcon from 'assets/svg/Club/bell-icon.svg';
+import OffBellIcon from 'assets/svg/Club/bell-off-icon.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
-import { useRouter } from 'next/router';
 import ClubQnA from 'components/Club/ClubDetailPage/components/ClubQnA';
 import ClubEventList from 'components/Club/ClubDetailPage/components/ClubEventList';
 import CreateQnAModal from 'components/Club/ClubDetailPage/components/CreateQnAModal';
@@ -28,31 +31,49 @@ import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent'
 import useClubLikeMutation from 'components/Club/ClubDetailPage/hooks/useClubLike';
 import useClubRecruitment from 'components/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
+import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
+import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import styles from './ClubDetailPage.module.scss';
 
 const NO_SELECTED_EVENT_ID = -1;
+
+const TAB_LABEL = {
+  intro: '상세 소개',
+  recruit: '모집',
+  event: '행사',
+  qna: 'Q&A',
+} as const;
+type TabType = keyof typeof TAB_LABEL;
+
+const TAB: Record<string, TabType> = {
+  '상세 소개': 'intro',
+  '모집': 'recruit',
+  '행사': 'event',
+  'Q&A': 'qna',
+};
 
 function ClubDetailPage({ id }: { id: string }) {
   const router = useRouter();
   const {
     clubDetail,
     clubIntroductionEditStatus,
-  } = useClubDetail(id);
+  } = useClubDetail(Number(id));
   const { clubRecruitmentData } = useClubRecruitment(id);
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
   const isMobile = useMediaQuery();
   const navigate = (path: string) => router.push(path);
   const logger = useLogger();
-  const [eventId, setEventId] = useState<string | number>(-1);
 
   const [navType, setNavType] = useState('상세 소개');
+  const [eventId, setEventId] = useState<string | number>(NO_SELECTED_EVENT_ID);
   const [isEdit, setIsEdit] = useState(false);
   const [introduction, setIntroduction] = useState(clubDetail.introduction);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
   const [isMandateModalOpen, openMandateModal, closeMandateModal] = useBooleanState(false);
   const [isAuthModalOpen, openAuthModal, closeAuthModal] = useBooleanState(false);
   const [isEditModalOpen, openEditModal, closeEditModal] = useBooleanState(false);
+  const [isRecruitNotifyModalOpen, openRecruitNotifyModal, closeRecruitNotifyModal] = useBooleanState(false);
   const [
     isRecruitDeleteModalOpen,
     openRecruitDeleteModal,
@@ -75,12 +96,22 @@ function ClubDetailPage({ id }: { id: string }) {
   const {
     clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync,
   } = useClubLikeMutation(id);
-  const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
+  const { subscribeRecruitmentNotification, unsubscribeRecruitmentNotification } = useClubRecruitmentNotification(Number(id));
 
-  useEffect(() => {
-    if (clubDetail?.name) setCustomTitle(clubDetail.name);
-  }, [clubDetail?.name, setCustomTitle]);
-  useEffect(() => resetCustomTitle, [resetCustomTitle]);
+  const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
+  const notifyModalType = clubDetail.is_recruit_subscribed ? 'unsubscribed' : 'subscribed';
+
+  const syncUrlQuery = (nextLabel: string, extra?: Record<string, string | number | undefined>) => {
+    const tabKey = TAB[nextLabel] ?? 'intro';
+    const nextQuery = { ...router.query, tab: tabKey, ...extra };
+
+    if (tabKey !== 'event') delete (nextQuery as any).eventId;
+
+    router.replace({ pathname: router.pathname, query: nextQuery }, undefined, {
+      shallow: true,
+      scroll: false,
+    });
+  };
 
   const handleToggleLike = async () => {
     if (!id || isPending) return;
@@ -150,6 +181,7 @@ function ClubDetailPage({ id }: { id: string }) {
       value: `${navValue}`,
     });
     setNavType(navValue);
+    syncUrlQuery(navValue);
   };
 
   const handleCopy = async (text: string, label: string) => {
@@ -248,6 +280,35 @@ function ClubDetailPage({ id }: { id: string }) {
     });
     navigate(ROUTES.ClubEventEdit({ id: String(id), eventId: String(eventId), isLink: true }));
   };
+
+  const handleClickRecruitNotifyButton = () => {
+    if (!token) return openAuthModal();
+    openRecruitNotifyModal();
+  };
+
+useEffect(() => {
+  if (!router.isReady) return;
+  const { tab, eventId: queryEventId } = router.query as { tab?: string; eventId?: string };
+
+  let tabKey = (tab as TabType) ?? 'intro';
+  if (!tab && queryEventId) {
+    tabKey = 'event';
+    router.replace({ pathname: router.pathname, query: { ...router.query, tab: 'event' } }, undefined, { shallow: true, scroll: false });
+  }
+
+  const nextLabel = TAB_LABEL[tabKey] ?? '상세 소개';
+  setNavType(nextLabel);
+
+  if (tabKey === 'event') {
+    if (queryEventId) setEventId(Number(queryEventId));
+    else setEventId(NO_SELECTED_EVENT_ID);
+  }
+}, [router]);
+
+  useEffect(() => {
+    if (clubDetail?.name) setCustomTitle(clubDetail.name);
+  }, [clubDetail?.name, setCustomTitle]);
+  useEffect(() => resetCustomTitle, [resetCustomTitle]);
 
   return (
     <div className={styles.layout}>
@@ -358,10 +419,12 @@ function ClubDetailPage({ id }: { id: string }) {
           {isMobile && (
             <div className={styles['club-detail__summary__image-box']}>
               {clubDetail.image_url ? (
-                <img
+                <Image
                   className={styles['club-detail__summary__image']}
                   src={clubDetail.image_url}
                   alt={`${clubDetail.name} 동아리 이미지`}
+                  width={300}
+                  height={300}
                 />
               ) : (
                 <div className={styles['club-detail__image-placeholder']}>
@@ -513,6 +576,16 @@ function ClubDetailPage({ id }: { id: string }) {
               </button>
             </div>
             )}
+            {isMobile && (
+              <div>
+                <div className={styles['club-detail__summary__contacts__row']}>
+                  <div className={styles['club-detail__summary__contacts__row--label']}>모집알림:</div>
+                  <button type='button' aria-label='모집 알림 구독 버튼' onClick={handleClickRecruitNotifyButton}>
+                    {clubDetail.is_recruit_subscribed ? <BellIcon /> : <OffBellIcon />}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         {!isMobile && (
@@ -529,10 +602,12 @@ function ClubDetailPage({ id }: { id: string }) {
             )}
             <div className={styles['club-detail__summary__image-box']}>
               {clubDetail.image_url ? (
-                <img
+                <Image
                   className={styles['club-detail__summary__image']}
                   src={clubDetail.image_url}
                   alt={`${clubDetail.name} 동아리 이미지`}
+                  width={200}
+                  height={200}
                 />
               ) : (
                 <div className={styles['club-detail__image-placeholder']}>
@@ -576,7 +651,11 @@ function ClubDetailPage({ id }: { id: string }) {
             [styles['nav-type']]: true,
             [styles['nav-type--active']]: navType === '행사',
           })}
-          onClick={() => { handleNavClick('행사'); setEventId(-1); }}
+          onClick={() => {
+            handleNavClick('행사');
+            setEventId(NO_SELECTED_EVENT_ID);
+            syncUrlQuery('행사');
+          }}
         >
           행사
         </button>
@@ -712,6 +791,18 @@ function ClubDetailPage({ id }: { id: string }) {
           onSubmit={handleDeleteEvent}
         />
       )}
+      {isRecruitNotifyModalOpen && (
+        <ClubNotificationModal
+          type={notifyModalType}
+          variant="recruit"
+          closeModal={closeRecruitNotifyModal}
+          onSubmit={
+            notifyModalType === 'subscribed'
+              ? subscribeRecruitmentNotification
+              : unsubscribeRecruitmentNotification
+          }
+        />
+        )}
       {
         navType === 'Q&A' && (
           <div className={styles['up-floating-button__container']}>

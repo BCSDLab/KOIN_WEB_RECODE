@@ -77,6 +77,7 @@ export interface ClubDetailResponse extends APIResponse {
   phone_number: string | null;
   manager: boolean;
   is_liked: boolean;
+  is_recruit_subscribed: boolean;
   updated_at: string;
   is_like_hidden: boolean;
   hot_status?: {
@@ -86,11 +87,11 @@ export interface ClubDetailResponse extends APIResponse {
   } | null;
 }
 
-export type PutClubLikeResonse = APIResponse;
+export type PutClubLikeResponse = APIResponse;
 
-export type DeleteClubLikeResonse = APIResponse;
+export type DeleteClubLikeResponse = APIResponse;
 
-export interface ClubInroductionData {
+export interface ClubIntroductionData {
   introduction : string;
 }
 
