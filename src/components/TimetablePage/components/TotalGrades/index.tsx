@@ -1,5 +1,4 @@
 import { Lecture, MyLectureInfo } from 'api/timetable/entity';
-import { useEffect, useState } from 'react';
 import styles from './TotalGrades.module.scss';
 
 interface TotalGradesProps {
@@ -7,15 +6,7 @@ interface TotalGradesProps {
 }
 
 function TotalGrades({ myLectureList = [] }: TotalGradesProps) {
-  const [totalGrades, setTotalGrades] = useState(0);
-
-  useEffect(() => {
-    let sum = 0;
-    myLectureList.forEach((item) => {
-      sum += Number(item.grades);
-    });
-    setTotalGrades(sum);
-  }, [myLectureList]);
+  const totalGrades = myLectureList.reduce((sum, item) => sum + Number(item.grades), 0);
 
   return (
     <div className={styles.grades}>
