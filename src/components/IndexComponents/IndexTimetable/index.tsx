@@ -13,23 +13,13 @@ import styles from './IndexTimetable.module.scss';
 function CurrentSemesterTimetable() {
   const semester = useSemester();
   const token = useTokenState();
-  const [currentFrameIndex, setCurrentFrameIndex] = React.useState<number>(0);
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
 
-  useEffect(() => {
-    if (timetableFrameList) {
-      const mainFrame = timetableFrameList.find(
-        (frame) => frame.is_main,
-      );
-      if (mainFrame && mainFrame.id) {
-        setCurrentFrameIndex(mainFrame.id);
-      }
-    }
-  }, [timetableFrameList]);
+  const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id ?? 0;
 
   return (
     <Timetable
-      timetableFrameId={currentFrameIndex}
+      timetableFrameId={currentFrameId}
       columnWidth={44}
       firstColumnWidth={29}
       rowHeight={17.3}
