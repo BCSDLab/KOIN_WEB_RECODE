@@ -61,8 +61,8 @@ export default [
       // Next 추천 규칙 적용
       ...nextRules,
       ...reactRules,
-
-      'react-hooks/exhaustive-deps': 'error',
+      ...reactHooks.configs['recommended-latest'].rules,
+      
       // 기존 airbnb 규칙과 다른 규칙들로 인한 에러 방지를 위해 임시 규칙 off 처리
       'react/display-name': 'off',
       'react/jsx-key': 'off',
