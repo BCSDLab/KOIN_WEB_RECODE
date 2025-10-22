@@ -29,21 +29,13 @@ interface PaginationProps {
   totalPageNum: number
 }
 
-export default function Pagination(props: PaginationProps) {
+export default function Pagination({ totalPageNum }: PaginationProps) {
   const { calcIndexPage, onClickMove } = usePagination();
   const { params, setParams } = useParamsHandler();
-  const [currentPage, setCurrentPage] = useState(Number(params.page) || 1);
-  const { totalPageNum } = props;
-  const totalPage = Array.from({ length: totalPageNum ?? 5 }, (v, i) => i + 1);
 
-  useEffect(() => {
-    setCurrentPage(Number(params.page) || 1);
-  }, [params.page]);
-
-  const handlePageChange = (newPage: String) => {
-    setCurrentPage(Number(newPage));
-    onClickMove(String(newPage));
-  };
+  const raw = Number(params.page) || 1;
+  const currentPage = Math.min(Math.max(raw, 1), Math.max(totalPageNum, 1));
+  const totalPage = Array.from({ length: totalPageNum || 0 }, (_, i) => i + 1);
 
   return (
     <div className={styles.pagination}>
@@ -51,7 +43,7 @@ export default function Pagination(props: PaginationProps) {
         type="button"
         aria-label="이전 페이지로"
         className={styles.pagination__move}
-        onClick={() => onClickMove(onHandlePrevPage(Number(params.page || 1) - 1))}
+        onClick={onClickMove(onHandlePrevPage(Number(params.page || 1) - 1))}
       >
         이전으로
       </button>
@@ -66,7 +58,7 @@ export default function Pagination(props: PaginationProps) {
                   [styles.pagination__number]: true,
                   [styles['pagination__number--selected']]: (!params.page && limit === 0) || params.page === calcIndexPage(limit, totalPageNum, params.page),
                 })}
-                onClick={() => onClickMove(calcIndexPage(limit, totalPageNum, params.page ?? '1'))}
+                onClick={onClickMove(calcIndexPage(limit, totalPageNum, params.page ?? '1'))}
               >
                 { calcIndexPage(limit, totalPageNum, params.page ?? '1')}
               </button>
@@ -82,7 +74,7 @@ export default function Pagination(props: PaginationProps) {
                   [styles.pagination__number]: true,
                   [styles['pagination__number--selected']]: Number(currentPage) === limit + 1,
                 })}
-                onClick={() => handlePageChange(String(limit + 1))}
+                onClick={onClickMove(String(limit + 1))}
               >
                 { limit + 1 }
               </button>
