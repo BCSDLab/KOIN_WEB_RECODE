@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
-const useMount = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  return isMounted;
-};
+function subscribe(onStateChange: () => void) {
+  const id = setTimeout(onStateChange, 0);
+  return () => clearTimeout(id);
+}
+
+const useMount = (): boolean => useSyncExternalStore(subscribe, () => true, () => false);
 
 export default useMount;
