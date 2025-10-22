@@ -8,15 +8,13 @@ import ClubEventDetailView from 'components/Club/ClubDetailPage/components/ClubE
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ClubEventList.module.scss';
 
-const NO_SELECTED_EVENT_ID = -1;
-
 interface ClubEventListProps {
   clubId: number | string | undefined;
   isManager: boolean;
   handleClickAddButton: () => void;
-  eventId: number | string;
-  setEventId: (id: number | string) => void;
   clubName: string;
+  setEventId: (id: number) => void;
+  eventId?: number;
 }
 
 const statusOptions = [
@@ -55,7 +53,7 @@ export default function ClubEventList({
     setIsOpen(false);
   };
 
-  if (eventId !== NO_SELECTED_EVENT_ID) {
+  if (eventId !== undefined) {
     return (
       <ClubEventDetailView
         clubId={clubId}
