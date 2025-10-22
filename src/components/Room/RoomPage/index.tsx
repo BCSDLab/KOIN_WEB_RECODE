@@ -11,8 +11,8 @@ const LOCATION = { latitude: 36.764617, longitude: 127.2831540 };
 function RoomPage() {
   const isMobile = useMediaQuery();
   const roomList = useRoomList();
-  const map = useNaverMap(LOCATION.latitude, LOCATION.longitude);
-  useMarker({ map, roomList });
+  const { getMap } = useNaverMap(LOCATION.latitude, LOCATION.longitude);
+  useMarker({ getMap, roomList });
   useScrollToTop();
 
   return (

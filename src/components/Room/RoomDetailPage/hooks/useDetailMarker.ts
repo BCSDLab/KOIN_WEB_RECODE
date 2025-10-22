@@ -1,28 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import MarkerIcon from 'components/Room/components/MarkerIcon';
 
 interface DetailMarkerProps {
-  map: naver.maps.Map | null
-  latitude: number | undefined
-  longitude: number | undefined
+  getMap: () => naver.maps.Map | null;
+  latitude: number | undefined;
+  longitude: number | undefined;
 }
 
-function useDetailMarker({ map, latitude, longitude }: DetailMarkerProps) {
-  const [marker, setMarker] = useState<naver.maps.Marker>();
+export default function useDetailMarker({ getMap, latitude, longitude }: DetailMarkerProps) {
+  const markerRef = useRef<naver.maps.Marker | null>(null);
 
   useEffect(() => {
-    if (!map || !latitude || !longitude) return;
-    const newMarker = new naver.maps.Marker({
+    const map = getMap();
+    if (!map || latitude == null || longitude == null || !window.naver) return;
+
+    if (markerRef.current) {
+      markerRef.current.setMap(null);
+      markerRef.current = null;
+    }
+
+    const marker = new naver.maps.Marker({
       position: new naver.maps.LatLng(latitude, longitude),
       map,
-      icon: {
-        content: MarkerIcon(),
-      },
+      icon: { content: MarkerIcon() },
     });
-    setMarker(newMarker);
-  }, [latitude, longitude, map]);
+    markerRef.current = marker;
 
-  return marker;
+    return () => {
+      if (markerRef.current) {
+        markerRef.current.setMap(null);
+        markerRef.current = null;
+      }
+    };
+  }, [getMap, latitude, longitude]);
+
+  const getMarker = () => markerRef.current;
+
+  return { getMarker };
 }
-
-export default useDetailMarker;

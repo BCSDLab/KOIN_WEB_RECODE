@@ -1,28 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { LandListResponse } from 'api/room/entity';
 import MarkerIcon from 'components/Room/components/MarkerIcon';
 import ROUTES from 'static/routes';
 import { useRouter } from 'next/router';
 
 interface MarkerProps {
-  map: naver.maps.Map | null
-  roomList: LandListResponse | undefined
+  getMap: () => naver.maps.Map | null;
+  roomList: LandListResponse | undefined;
 }
 
-function useMarker({ map, roomList }: MarkerProps) {
-  const [markerArray, setMarkerArray] = useState<naver.maps.Marker[]>([]);
+function useMarker({ getMap, roomList }: MarkerProps) {
+  const markersRef = useRef<naver.maps.Marker[]>([]);
   const router = useRouter();
 
   useEffect(() => {
+    const map = getMap();
     if (!map || !roomList || !window.naver) return;
-    const newMarkers = (roomList.lands ?? []).map((land) => {
+
+    markersRef.current.forEach((m) => m.setMap(null));
+    markersRef.current = [];
+
+    const created = (roomList.lands ?? []).map((land) => {
       const marker = new window.naver.maps.Marker({
         position: new window.naver.maps.LatLng(land.latitude, land.longitude),
         title: land.name,
         map,
-        icon: {
-          content: MarkerIcon(),
-        },
+        icon: { content: MarkerIcon() },
         clickable: true,
       });
       marker.addListener('click', () => {
@@ -30,10 +33,17 @@ function useMarker({ map, roomList }: MarkerProps) {
       });
       return marker;
     });
-    setMarkerArray(newMarkers);
-  }, [map, roomList, router]);
 
-  return { markerArray };
+    markersRef.current = created;
+
+    return () => {
+      markersRef.current.forEach((m) => m.setMap(null));
+      markersRef.current = [];
+    };
+  }, [getMap, roomList, router]);
+
+  const getMarkerArray = () => markersRef.current;
+  return { getMarkerArray };
 }
 
 export default useMarker;

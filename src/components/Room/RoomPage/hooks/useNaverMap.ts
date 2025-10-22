@@ -1,12 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 function useNaverMap(latitude: number, longitude: number) {
-  const [map, setMap] = useState<naver.maps.Map | null>(null);
+  const mapRef = useRef<naver.maps.Map | null>(null);
 
   useEffect(() => {
-    if (!map) {
-      const newMaps = new naver.maps.Map('map', {
+    if (!mapRef.current) {
+      const mapInstance = new naver.maps.Map('map', {
         center: new naver.maps.LatLng(latitude, longitude),
         maxZoom: 20,
         minZoom: 15,
@@ -14,21 +13,22 @@ function useNaverMap(latitude: number, longitude: number) {
         zoomControl: true,
         scrollWheel: false,
         draggable: true,
-        zoomControlOptions: {
-          position: naver.maps.Position.TOP_LEFT,
-        },
+        zoomControlOptions: { position: naver.maps.Position.TOP_LEFT },
       });
-      setMap(newMaps);
+      mapRef.current = mapInstance;
 
       return () => {
-        newMaps.destroy();
+        mapInstance.destroy();
+        mapRef.current = null;
       };
     }
 
-    return () => {};
+    mapRef.current.setCenter(new naver.maps.LatLng(latitude, longitude));
   }, [latitude, longitude]);
 
-  return map;
+  const getMap = () => mapRef.current;
+
+  return { getMap };
 }
 
 export default useNaverMap;
