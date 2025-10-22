@@ -1,63 +1,85 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
-import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
+import { storageStore } from 'utils/stores/storageStore';
+import { COMPLETION_STATUS } from 'static/auth';
+
+function useClientReady() {
+  return useSyncExternalStore(
+    (notify) => {
+      const timeoutId = setTimeout(notify, 0);
+      return () => clearTimeout(timeoutId);
+    },
+    () => true,
+    () => false,
+  );
+}
 
 export default function useUserInfoModal() {
+  const isClientReady = useClientReady();
   const { token } = useTokenStore();
   const { data: userInfo } = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showCloseButton, setShowCloseButton] = useState(false);
+
+  const storageSnapshot = useSyncExternalStore(
+    storageStore.subscribe,
+    storageStore.getSnapshot,
+    () => ({ completion: null, sessionShown: false }),
+  );
+
+  let isInformationMissing = false;
+  if (isStudentUser(userInfo)) {
+    const requiredFields: Array<
+      'login_id' | 'gender' | 'major' | 'name' | 'phone_number' | 'student_number'
+    > = ['login_id', 'gender', 'major', 'name', 'phone_number', 'student_number'];
+
+    for (const field of requiredFields) {
+      const value = (userInfo as any)?.[field];
+      if (value === undefined || value === null || value === '') {
+        isInformationMissing = true;
+        break;
+      }
+    }
+  }
+
+  const isModalOpen =
+    isClientReady &&
+    !!token &&
+    isStudentUser(userInfo) &&
+    storageSnapshot.completion !== COMPLETION_STATUS.COMPLETED &&
+    isInformationMissing &&
+    !storageSnapshot.sessionShown;
+
+  const showCloseButton =
+    isModalOpen && storageSnapshot.completion === COMPLETION_STATUS.SKIPPED;
 
   useEffect(() => {
-    if (!token || !isStudentUser(userInfo)) {
+    if (!isClientReady || !token || !isStudentUser(userInfo)) {
       return;
     }
+    if (!isInformationMissing && storageSnapshot.completion !== COMPLETION_STATUS.COMPLETED) {
+      storageStore.markCompleted();
+    }
+  }, [isClientReady, token, userInfo, isInformationMissing, storageSnapshot.completion]);
 
-    const persistentState = localStorage.getItem(STORAGE_KEY.USER_INFO_COMPLETION);
-
-    if (persistentState === COMPLETION_STATUS.COMPLETED) {
+  useEffect(() => {
+    if (!isModalOpen) {
       return;
     }
-
-    const requiredFields: (keyof typeof userInfo)[] = [
-      'login_id', 'gender', 'major', 'name', 'phone_number', 'student_number',
-    ];
-
-    const isInfoMissing = requiredFields.some(
-      (field) => userInfo[field] === undefined || userInfo[field] === null || userInfo[field] === '',
-    );
-
-    if (!isInfoMissing) {
-      localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.COMPLETED);
-      return;
+    if (storageSnapshot.completion !== COMPLETION_STATUS.SKIPPED) {
+      storageStore.markSkipped();
     }
+    storageStore.setSessionShown();
+  }, [isModalOpen, storageSnapshot.completion]);
 
-    const hasShownThisSession = sessionStorage.getItem(STORAGE_KEY.MODAL_SESSION_SHOWN) === 'true';
-    if (hasShownThisSession) {
-      return;
-    }
+  function closeModal() {
+    storageStore.setSessionShown();
+  }
 
-    const isFirstTime = persistentState !== COMPLETION_STATUS.SKIPPED;
-
-    if (isFirstTime) {
-      localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.SKIPPED);
-    }
-
-    setShowCloseButton(!isFirstTime);
-    setIsModalOpen(true);
-    sessionStorage.setItem(STORAGE_KEY.MODAL_SESSION_SHOWN, 'true');
-  }, [token, userInfo]);
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleSkipModal = () => {
-    localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.SKIPPED);
-    closeModal();
-  };
+  function handleSkipModal() {
+    storageStore.markSkipped();
+    storageStore.setSessionShown();
+  }
 
   return {
     isModalOpen,
