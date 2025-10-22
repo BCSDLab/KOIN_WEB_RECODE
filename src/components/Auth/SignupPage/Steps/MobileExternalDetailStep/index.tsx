@@ -3,9 +3,9 @@ import { isKoinError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupGeneral } from 'api/auth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
-  Controller, FieldError, useFormContext, useFormState, useWatch,
+  Controller, ControllerRenderProps, FieldError, useFormContext, useFormState, useWatch,
 } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -122,15 +122,23 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
     });
   };
 
-  useEffect(() => {
-    setIdMessage(null);
-    setInCorrectId();
-  }, [loginId, setInCorrectId]);
+    const handleNicknameChange = (
+      e: React.ChangeEvent<HTMLInputElement>,
+      field: ControllerRenderProps<GeneralFormValues, 'nickname'>,
+    ) => {
+      field.onChange(e);
+      setNicknameMessage(null);
+      setIsInCorrectNickname();
+    };
 
-  useEffect(() => {
-    setNicknameMessage(null);
-    setIsInCorrectNickname();
-  }, [nicknameControl, setIsInCorrectNickname]);
+    const handleLoginIdChange = (
+      e: React.ChangeEvent<HTMLInputElement>,
+      field: ControllerRenderProps<GeneralFormValues, 'login_id'>,
+    ) => {
+      field.onChange(e);
+      setIdMessage(null);
+      setInCorrectId();
+    };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
@@ -152,6 +160,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                 {...field}
                 placeholder="5~13자리로 입력해 주세요."
                 isButton
+                onChange={(e) => {handleLoginIdChange(e, field);}}
                 message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
                 buttonText="중복 확인"
                 buttonDisabled={!!fieldState.error || !field.value}
@@ -226,6 +235,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                       placeholder="닉네임을 입력해 주세요. (선택)"
                       isDelete
                       isButton
+                      onChange={(e) => {handleNicknameChange(e, field);}}
                       message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
                       buttonText="중복 확인"
                       buttonOnClick={() => checkNickname(nicknameControl)}
