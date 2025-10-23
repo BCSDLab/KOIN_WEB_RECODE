@@ -1,36 +1,16 @@
-import { useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import showToast from 'utils/ts/showToast';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import usePagination from 'components/Articles/hooks/usePagination';
 import styles from './Pagination.module.scss';
 
 const LIMIT_COUNT = [0, 1, 2, 3, 4];
 
-const onHandlePrevPage = (moveNumber: number) => {
-  if (moveNumber <= 0) {
-    showToast('error', '첫 페이지입니다.');
-    return '1';
-  }
-
-  return String(moveNumber);
-};
-
-const onHandleNextPage = (moveNumber: number, totalPageNum: number) => {
-  if (moveNumber + 1 >= totalPageNum) {
-    showToast('error', '마지막 페이지입니다.');
-    return String(totalPageNum);
-  }
-
-  return String(moveNumber);
-};
-
 interface PaginationProps {
   totalPageNum: number
 }
 
 export default function Pagination({ totalPageNum }: PaginationProps) {
-  const { calcIndexPage, onClickMove } = usePagination();
+  const { calcIndexPage, onClickMove, onHandlePrevPage, onHandleNextPage } = usePagination();
   const { params, setParams } = useParamsHandler();
 
   const raw = Number(params.page) || 1;
