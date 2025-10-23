@@ -363,7 +363,7 @@ function ClubDetailPage({ id }: { id: string }) {
                   )
                 )}
                 {navType === '행사' && (
-                  selectedEventId === undefined ? (
+                  selectedEventId ? (
                     <button
                       type="button"
                       className={styles['club-detail__pc-header__button']}

@@ -1,10 +1,10 @@
-import { useClubEventList } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
-import ClubEventCard from 'components/Club/ClubDetailPage/components/ClubEventCard';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useState } from 'react';
-import DownArrow from 'assets/svg/Club/event-filter-down-arrow.svg';
 import UpArrow from 'assets/svg/Club/event-filter-up-arrow.svg';
+import DownArrow from 'assets/svg/Club/event-filter-down-arrow.svg';
+import ClubEventCard from 'components/Club/ClubDetailPage/components/ClubEventCard';
+import { useClubEventList } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
 import ClubEventDetailView from 'components/Club/ClubDetailPage/components/ClubEventDetailView';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ClubEventList.module.scss';
 
@@ -53,7 +53,7 @@ export default function ClubEventList({
     setIsOpen(false);
   };
 
-  if (eventId !== undefined) {
+  if (eventId) {
     return (
       <ClubEventDetailView
         clubId={clubId}
