@@ -36,12 +36,6 @@ export function useScrollLock(autoLock: boolean = true): UseScrollLockReturn {
           originalStyle.current = null;
         }
       };
-    } else {
-      if (originalStyle.current) {
-        body.style.overflow = originalStyle.current.overflow;
-        body.style.paddingRight = originalStyle.current.paddingRight;
-        originalStyle.current = null;
-      }
     }
   }, [isLocked]);
 
