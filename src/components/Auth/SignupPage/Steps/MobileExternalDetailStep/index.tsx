@@ -160,7 +160,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                 {...field}
                 placeholder="5~13자리로 입력해 주세요."
                 isButton
-                onChange={(e) => {handleLoginIdChange(e, field);}}
+                onChange={(e) => handleLoginIdChange(e, field)}
                 message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
                 buttonText="중복 확인"
                 buttonDisabled={!!fieldState.error || !field.value}
@@ -235,7 +235,7 @@ function MobileExternalDetailStep({ onNext }: MobileExternalDetailStepProps) {
                       placeholder="닉네임을 입력해 주세요. (선택)"
                       isDelete
                       isButton
-                      onChange={(e) => {handleNicknameChange(e, field);}}
+                      onChange={(e) => handleNicknameChange(e, field)}
                       message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
                       buttonText="중복 확인"
                       buttonOnClick={() => checkNickname(nicknameControl)}

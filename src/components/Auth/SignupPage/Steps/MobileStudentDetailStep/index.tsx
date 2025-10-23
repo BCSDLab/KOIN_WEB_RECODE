@@ -190,7 +190,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 {...field}
                 placeholder="5~13자리로 입력해 주세요."
                 isButton
-                onChange={(e) => {handleLoginIdChange(e, field);}}
+                onChange={(e) => handleLoginIdChange(e, field)}
                 message={fieldState.error ? { type: 'warning', content: MESSAGES.USERID.REQUIRED } : idMessage}
                 buttonText="중복 확인"
                 buttonDisabled={!!fieldState.error || !field.value}
@@ -305,7 +305,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                     placeholder="닉네임은 변경 가능합니다. (선택)"
                     isDelete
                     isButton
-                    onChange={(e) => {handleNicknameChange(e, field);}}
+                    onChange={(e) => handleNicknameChange(e, field)}
                     message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
                     buttonText="중복 확인"
                     buttonOnClick={() => checkNickname(nicknameControl)}
