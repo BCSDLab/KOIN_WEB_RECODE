@@ -3,10 +3,7 @@ import Footer from 'components/layout/Footer';
 import { Suspense, useState } from 'react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [isNativeWebView] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.webkit?.messageHandlers;
-  });
+  const isNativeWebView = typeof window !== 'undefined' && !!window.webkit?.messageHandlers;
 
   return (
     <div id="root">
