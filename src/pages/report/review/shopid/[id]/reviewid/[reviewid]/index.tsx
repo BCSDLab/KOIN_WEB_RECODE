@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import CheckBox from 'components/Store/StoreDetailPage/components/Review/components/CheckBox';
 import { toast } from 'react-toastify';
@@ -53,8 +53,8 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: s
     if (key === 'etc') {
       return { ...REVIEW_CONTEXT.etc, content: etcDescription };
     }
-    const context = REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT];
-    return { title: context.title, content: context.content };
+    const { title, content } = REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT];
+    return { title, content };
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,13 +63,6 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: s
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
     );
   };
-
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 10}px`;
-    }
-  }, [etcDescription]);
 
   const loggingReportDone = () => {
     logger.actionEventClick({
@@ -90,6 +83,13 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: s
     loggingReportDone();
     router.replace(`${ROUTES.StoreDetail({ id: shopid, isLink: true })}?state=리뷰`);
   };
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 10}px`;
+    }
+  }, [etcDescription]);
 
   return (
     <div className={styles['reporting-container']}>
