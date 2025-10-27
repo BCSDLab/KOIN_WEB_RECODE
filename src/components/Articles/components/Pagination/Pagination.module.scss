@@ -49,9 +49,11 @@
     color: #858585;
     background-color: #fff;
 
-    &:hover {
-      background-color: #175c8e;
-      color: white;
+    @media (hover: hover) {
+      &:hover {
+        background-color: #175c8e;
+        color: white;
+      }
     }
 
     @media (max-width: 576px) {
