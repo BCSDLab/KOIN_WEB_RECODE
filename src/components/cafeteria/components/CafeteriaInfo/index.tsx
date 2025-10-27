@@ -78,7 +78,7 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
               {cafeteriaInfo.name}
               &nbsp;
               {cafeteriaInfo.semester}
-              중 운영시간
+              {' '}중 운영시간
             </span>
             <span className={styles.header__sub}>
               <span className={styles['header__sub--bold']}>위치</span>

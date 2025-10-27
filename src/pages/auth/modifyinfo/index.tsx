@@ -678,6 +678,8 @@ const GenderInput = React.forwardRef((_, ref) => {
     setSelectedValue(e.target.value);
     if (String(userInfo?.gender) !== e.target.value) {
       setIsValid((prev) => ({ ...prev, isGenderValid: true, isFieldChanged: true }));
+    } else {
+      setIsValid((prev) => ({ ...prev, isGenderValid: true, isFieldChanged: false }) );
     }
   };
 
