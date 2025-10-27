@@ -17,7 +17,6 @@ export function useScrollLock(autoLock: boolean = true): UseScrollLockReturn {
 
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
-
     const body = document.body;
     if (!body) return;
 
@@ -28,15 +27,15 @@ export function useScrollLock(autoLock: boolean = true): UseScrollLockReturn {
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       body.style.paddingRight = `${scrollbarWidth}px`;
       body.style.overflow = 'hidden';
-
-      return () => {
-        if (originalStyle.current) {
-          body.style.overflow = originalStyle.current.overflow;
-          body.style.paddingRight = originalStyle.current.paddingRight;
-          originalStyle.current = null;
-        }
-      };
     }
+
+    return () => {
+      if (originalStyle.current) {
+        body.style.overflow = originalStyle.current.overflow;
+        body.style.paddingRight = originalStyle.current.paddingRight;
+        originalStyle.current = null;
+      }
+    };
   }, [isLocked]);
 
   const lock = () => setIsLocked(true);
