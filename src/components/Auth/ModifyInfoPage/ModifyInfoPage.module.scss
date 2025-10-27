@@ -12,7 +12,6 @@
   @include media.media-breakpoint(mobile) {
     width: calc(100vw - 48px);
     margin: 0 auto;
-    height: 100dvh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
