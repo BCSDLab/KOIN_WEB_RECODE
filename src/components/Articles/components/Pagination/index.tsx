@@ -10,8 +10,8 @@ interface PaginationProps {
 }
 
 export default function Pagination({ totalPageNum }: PaginationProps) {
-  const { calcIndexPage, onClickMove, onHandlePrevPage, onHandleNextPage } = usePagination();
-  const { params, setParams } = useParamsHandler();
+  const { calcIndexPage, onClickMove } = usePagination();
+  const { params } = useParamsHandler();
 
   const raw = Number(params.page) || 1;
   const currentPage = Math.min(Math.max(raw, 1), Math.max(totalPageNum, 1));
@@ -23,7 +23,7 @@ export default function Pagination({ totalPageNum }: PaginationProps) {
         type="button"
         aria-label="이전 페이지로"
         className={styles.pagination__move}
-        onClick={onClickMove(onHandlePrevPage(Number(params.page || 1) - 1))}
+        onClick={onClickMove('prev', totalPageNum)}
       >
         이전으로
       </button>
@@ -54,7 +54,7 @@ export default function Pagination({ totalPageNum }: PaginationProps) {
                   [styles.pagination__number]: true,
                   [styles['pagination__number--selected']]: Number(currentPage) === limit + 1,
                 })}
-                onClick={onClickMove(String(limit + 1))}
+                onClick={onClickMove(String(limit + 1), totalPageNum)}
               >
                 { limit + 1 }
               </button>
@@ -66,11 +66,7 @@ export default function Pagination({ totalPageNum }: PaginationProps) {
         type="button"
         aria-label="다음 페이지로"
         className={styles.pagination__move}
-        onClick={() => {
-          setParams(
-            { page: String(Number(onHandleNextPage(Number(params.page) || 1, totalPageNum)) + 1) },
-          );
-        }}
+        onClick={onClickMove('next', totalPageNum)}
       >
         다음으로
       </button>
