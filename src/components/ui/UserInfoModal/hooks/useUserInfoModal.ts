@@ -1,85 +1,71 @@
-import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
-import { storageStore } from 'utils/stores/storageStore';
-import { COMPLETION_STATUS } from 'static/auth';
-
-function useClientReady() {
-  return useSyncExternalStore(
-    (notify) => {
-      const timeoutId = setTimeout(notify, 0);
-      return () => clearTimeout(timeoutId);
-    },
-    () => true,
-    () => false,
-  );
-}
+import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 
 export default function useUserInfoModal() {
-  const isClientReady = useClientReady();
   const { token } = useTokenStore();
   const { data: userInfo } = useUser();
 
-  const storageSnapshot = useSyncExternalStore(
-    storageStore.subscribe,
-    storageStore.getSnapshot,
-    () => ({ completion: null, sessionShown: false }),
+  const [dismissed, setDismissed] = useState(false);
+
+  const isStudent = isStudentUser(userInfo);
+  const requiredFields = useMemo(
+    () => (isStudent ? ['login_id', 'gender', 'major', 'name', 'phone_number', 'student_number'] : []) as (keyof NonNullable<typeof userInfo>)[],
+    [isStudent],
   );
 
-  let isInformationMissing = false;
-  if (isStudentUser(userInfo)) {
-    const requiredFields: Array<
-      'login_id' | 'gender' | 'major' | 'name' | 'phone_number' | 'student_number'
-    > = ['login_id', 'gender', 'major', 'name', 'phone_number', 'student_number'];
+  const isInfoMissing = useMemo(() => {
+    if (!token || !isStudent || !userInfo) return false;
+    return requiredFields.some(
+      (field) =>
+        userInfo[field] === undefined ||
+        userInfo[field] === null ||
+        userInfo[field] === '',
+    );
+  }, [token, isStudent, userInfo, requiredFields]);
 
-    for (const field of requiredFields) {
-      const value = (userInfo as any)?.[field];
-      if (value === undefined || value === null || value === '') {
-        isInformationMissing = true;
-        break;
-      }
-    }
-  }
+  const persistentState = useMemo<string | null>(
+    () => (typeof window === 'undefined' ? null : localStorage.getItem(STORAGE_KEY.USER_INFO_COMPLETION)),
+    [],
+  );
 
-  const isModalOpen =
-    isClientReady &&
-    !!token &&
-    isStudentUser(userInfo) &&
-    storageSnapshot.completion !== COMPLETION_STATUS.COMPLETED &&
-    isInformationMissing &&
-    !storageSnapshot.sessionShown;
+  const hasShownThisSession = useMemo<boolean>(
+    () => (typeof window !== 'undefined'
+      ? sessionStorage.getItem(STORAGE_KEY.MODAL_SESSION_SHOWN) === 'true'
+      : false),
+    [],
+  );
 
-  const showCloseButton =
-    isModalOpen && storageSnapshot.completion === COMPLETION_STATUS.SKIPPED;
+  const isFirstTime = persistentState !== COMPLETION_STATUS.SKIPPED;
 
-  useEffect(() => {
-    if (!isClientReady || !token || !isStudentUser(userInfo)) {
-      return;
-    }
-    if (!isInformationMissing && storageSnapshot.completion !== COMPLETION_STATUS.COMPLETED) {
-      storageStore.markCompleted();
-    }
-  }, [isClientReady, token, userInfo, isInformationMissing, storageSnapshot.completion]);
+  const shouldOpen = !!(token && isStudent && isInfoMissing && !hasShownThisSession);
+
+  const isModalOpen = shouldOpen && !dismissed;
+  const showCloseButton = !isFirstTime;
 
   useEffect(() => {
-    if (!isModalOpen) {
-      return;
+    if (!token || !isStudent) return;
+    if (!isInfoMissing) {
+      localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.COMPLETED);
     }
-    if (storageSnapshot.completion !== COMPLETION_STATUS.SKIPPED) {
-      storageStore.markSkipped();
+  }, [token, isStudent, isInfoMissing]);
+
+  useEffect(() => {
+    if (!isModalOpen) return;
+    sessionStorage.setItem(STORAGE_KEY.MODAL_SESSION_SHOWN, 'true');
+    if (isFirstTime) {
+      localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.SKIPPED);
     }
-    storageStore.setSessionShown();
-  }, [isModalOpen, storageSnapshot.completion]);
+  }, [isModalOpen, isFirstTime]);
 
-  function closeModal() {
-    storageStore.setSessionShown();
-  }
+  const closeModal = () => setDismissed(true);
 
-  function handleSkipModal() {
-    storageStore.markSkipped();
-    storageStore.setSessionShown();
-  }
+  const handleSkipModal = () => {
+    localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.SKIPPED);
+    setDismissed(true);
+  };
 
   return {
     isModalOpen,
