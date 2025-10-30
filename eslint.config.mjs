@@ -8,12 +8,7 @@ import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 
 export default [
-  importPlugin.flatConfigs.recommended,
-  jsxA11y.flatConfigs.recommended,
-  ...tseslint.configs.recommended,
-
   {
-    files: ['src/**/*.{ts,tsx,js,jsx}'],
     ignores: [
       '**/.next/**',
       '**/dist/**',
@@ -25,8 +20,13 @@ export default [
       'eslint.config.mjs',
     ],
   },
+
+  importPlugin.flatConfigs.recommended,
+  jsxA11y.flatConfigs.recommended,
+  ...tseslint.configs.recommended,
+
   {
-    files: ['**/*.{ts,tsx,js,jsx}'],
+    files: ['src/**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -59,6 +59,8 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       // 훅 관련 규칙은 다른 pr에서 수정 중이라 완료되면 병합하겠습니다.
       // ...reactHooks.configs['recommended-latest'].rules,
+      // 'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
 
       // 'import/order': [
       //   'error',
@@ -102,6 +104,7 @@ export default [
       'linebreak-style': 'off',
       'import/prefer-default-export': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
 ];
