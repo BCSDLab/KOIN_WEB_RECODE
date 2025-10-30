@@ -1,7 +1,5 @@
 // ClubIntroduction.tsx
-import {
-  Dispatch, lazy, SetStateAction, useCallback, useMemo, useRef,
-} from 'react';
+import { Dispatch, lazy, SetStateAction, useCallback, useMemo, useRef } from 'react';
 
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { uploadClubFile } from 'api/uploadFile';
@@ -9,7 +7,6 @@ import type ReactQuillType from 'react-quill-new';
 
 import styles from './ClubIntrodution.module.scss';
 
-// eslint-disable-next-line import/no-unresolved
 const ReactQuill = lazy(() => import('react-quill-new'));
 
 interface Props {
@@ -18,21 +15,20 @@ interface Props {
   setIntroduction: Dispatch<SetStateAction<string>>;
 }
 
-export default function ClubIntroduction({
-  isEdit,
-  introduction,
-  setIntroduction,
-}: Props) {
+export default function ClubIntroduction({ isEdit, introduction, setIntroduction }: Props) {
   const token = useTokenState();
   const quillRef = useRef<ReactQuillType>(null);
 
   // 이미지를 서버에 업로드하고 URL 리턴
-  const uploadImage = useCallback(async (file: File) => {
-    const formData = new FormData();
-    formData.append('multipartFile', file);
-    const res = await uploadClubFile(token, formData);
-    return res.file_url; // 서버에서 돌아오는 URL
-  }, [token]);
+  const uploadImage = useCallback(
+    async (file: File) => {
+      const formData = new FormData();
+      formData.append('multipartFile', file);
+      const res = await uploadClubFile(token, formData);
+      return res.file_url; // 서버에서 돌아오는 URL
+    },
+    [token],
+  );
 
   // 툴바의 image 버튼을 눌렀을 때 동작
   const imageHandler = useCallback(() => {
@@ -82,9 +78,12 @@ export default function ClubIntroduction({
     };
   }, [isEdit, imageHandler]);
 
-  const handleChange = useCallback((html: string) => {
-    if (isEdit) setIntroduction(html);
-  }, [isEdit, setIntroduction]);
+  const handleChange = useCallback(
+    (html: string) => {
+      if (isEdit) setIntroduction(html);
+    },
+    [isEdit, setIntroduction],
+  );
 
   return (
     <div className={styles.layout}>

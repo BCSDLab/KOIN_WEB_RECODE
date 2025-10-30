@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import ROUTES from 'static/routes';
@@ -7,13 +6,16 @@ function useStep<T extends string>(steps: T[]) {
   const router = useRouter();
   const { id } = router.query as { id?: T };
 
-  const nextStep = useCallback((next: T, options?: { replace: boolean }) => {
-    if (options?.replace) {
-      router.replace(ROUTES.AuthSignup({ currentStep: next, isLink: true }));
-    } else {
-      router.push(ROUTES.AuthSignup({ currentStep: next, isLink: true }));
-    }
-  }, [router]);
+  const nextStep = useCallback(
+    (next: T, options?: { replace: boolean }) => {
+      if (options?.replace) {
+        router.replace(ROUTES.AuthSignup({ currentStep: next, isLink: true }));
+      } else {
+        router.push(ROUTES.AuthSignup({ currentStep: next, isLink: true }));
+      }
+    },
+    [router],
+  );
 
   const goBack = useCallback(() => {
     if (!id) return;
@@ -42,7 +44,10 @@ function useStep<T extends string>(steps: T[]) {
   const currentStep = id;
 
   return {
-    currentStep, nextStep, goBack, Step,
+    currentStep,
+    nextStep,
+    goBack,
+    Step,
   };
 }
 

@@ -44,7 +44,6 @@ export function useScrollLock(autoLock: boolean = true): UseScrollLockReturn {
       lock();
     }
 
-    // eslint-disable-next-line consistent-return
     return () => unlock();
   }, [autoLock]);
 

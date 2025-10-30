@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { ClubNewQnA, ClubQnAItem } from 'api/club/entity';
 import { useUser } from 'utils/hooks/state/useUser';
 import ReplyIcon from 'assets/svg/Club/reply-icon.svg';
@@ -15,13 +14,18 @@ interface ClubQnACardProps {
   clubQnAData: ClubQnAItem;
   clubId: number | string | undefined;
   isManager: boolean;
-  setQnA:Dispatch<SetStateAction<string>>;
+  setQnA: Dispatch<SetStateAction<string>>;
   openModal: () => void;
-  setReplyId:Dispatch<SetStateAction<number>>;
+  setReplyId: Dispatch<SetStateAction<number>>;
 }
 
 export default function ClubQnACard({
-  clubQnAData, clubId, isManager, setQnA, openModal, setReplyId,
+  clubQnAData,
+  clubId,
+  isManager,
+  setQnA,
+  openModal,
+  setReplyId,
 }: ClubQnACardProps) {
   const { data: userInfo } = useUser();
   const logger = useLogger();
@@ -29,12 +33,8 @@ export default function ClubQnACard({
 
   const isMobile = useMediaQuery();
 
-  const {
-    postClubQnAStatus,
-    postClubQnAMutateAsync,
-    deleteClubQnAStatus,
-    deleteClubQnAMutateAsync,
-  } = useClubQnA(clubId);
+  const { postClubQnAStatus, postClubQnAMutateAsync, deleteClubQnAStatus, deleteClubQnAMutateAsync } =
+    useClubQnA(clubId);
 
   const handleSendReply = async () => {
     const content = newReply.trim();
@@ -51,7 +51,7 @@ export default function ClubQnACard({
     setNewReply('');
   };
 
-  const handleDeleteQnA = async (qnaId : number) => {
+  const handleDeleteQnA = async (qnaId: number) => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_Q&A_delete_confirm',
@@ -60,7 +60,7 @@ export default function ClubQnACard({
     await deleteClubQnAMutateAsync(qnaId);
   };
 
-  const handleDeleteReply = async (qnaId : number) => {
+  const handleDeleteReply = async (qnaId: number) => {
     setReplyId(qnaId);
     setQnA('delete');
     openModal();
@@ -74,9 +74,8 @@ export default function ClubQnACard({
           {clubQnAData.content}
         </div>
         {(userInfo?.id === clubQnAData.author_id || isManager) && (
-        <div className={styles['club-qna-card__reply__delete-button__box']}>
-          {isMobile
-            ? (
+          <div className={styles['club-qna-card__reply__delete-button__box']}>
+            {isMobile ? (
               <button
                 type="button"
                 className={styles['club-qna-card__reply__delete-button']}
@@ -85,8 +84,7 @@ export default function ClubQnACard({
               >
                 <DeleteIcon />
               </button>
-            )
-            : (
+            ) : (
               <button
                 type="button"
                 className={styles['club-qna-card__reply__delete-button']}
@@ -96,29 +94,21 @@ export default function ClubQnACard({
                 삭제하기
               </button>
             )}
-        </div>
+          </div>
         )}
       </div>
 
-      <div className={styles['club-qna-card__create-date']}>
-        {clubQnAData.created_at}
-      </div>
+      <div className={styles['club-qna-card__create-date']}>{clubQnAData.created_at}</div>
       <div className={styles['club-qna-card__reply']}>
         {clubQnAData.children.map((reply) => (
-          <div
-            key={reply.id}
-            className={styles['club-qna-card__reply__text']}
-          >
+          <div key={reply.id} className={styles['club-qna-card__reply__text']}>
             <div className={styles['club-qna-card__reply__text--content']}>
               {clubQnAData.children.length > 0 && <ReplyIcon />}
-              <p>
-                {reply.content}
-              </p>
+              <p>{reply.content}</p>
             </div>
             {(userInfo?.id === clubQnAData.author_id || isManager) && (
-            <div className={styles['club-qna-card__reply__delete-button__box']}>
-              {isMobile
-                ? (
+              <div className={styles['club-qna-card__reply__delete-button__box']}>
+                {isMobile ? (
                   <button
                     type="button"
                     className={styles['club-qna-card__reply__delete-button']}
@@ -127,8 +117,7 @@ export default function ClubQnACard({
                   >
                     <DeleteIcon />
                   </button>
-                )
-                : (
+                ) : (
                   <button
                     type="button"
                     className={styles['club-qna-card__reply__delete-button']}
@@ -138,11 +127,11 @@ export default function ClubQnACard({
                     삭제하기
                   </button>
                 )}
-            </div>
+              </div>
             )}
           </div>
         ))}
-        {(isManager && clubQnAData.children.length === 0) && (
+        {isManager && clubQnAData.children.length === 0 && (
           <div className={styles['club-qna-card__reply__input__box']}>
             <ReplyIcon />
             <input

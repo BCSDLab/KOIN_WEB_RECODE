@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import React from 'react';
 import Suspense from 'components/ssr/SSRSuspense';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
@@ -9,8 +8,8 @@ import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {
-  timetableFrameId: number,
-  setCurrentFrameId: (index: number) => void,
+  timetableFrameId: number;
+  setCurrentFrameId: (index: number) => void;
 }
 
 export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: DefaultPageProps) {
@@ -42,10 +41,10 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
 
   React.useEffect(() => {
     window.addEventListener('popstate', handlePopState);
-    return (() => {
+    return () => {
       window.removeEventListener('popstate', handlePopState);
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
@@ -69,17 +68,14 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
         <h1 className={styles['timetable-header__title']}>시간표</h1>
       </div>
       <Suspense
-        fallback={(
+        fallback={
           <div className={styles['central-loading-spinner']}>
             <LoadingSpinner size="100" />
           </div>
-        )}
+        }
       >
         <div className={styles.page__content}>
-          <TimetableList
-            currentFrameIndex={timetableFrameId}
-            setCurrentFrameIndex={setCurrentFrameId}
-          />
+          <TimetableList currentFrameIndex={timetableFrameId} setCurrentFrameIndex={setCurrentFrameId} />
           <MainTimetable timetableFrameId={timetableFrameId} />
         </div>
       </Suspense>

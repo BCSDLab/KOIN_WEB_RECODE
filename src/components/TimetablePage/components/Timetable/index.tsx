@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { Lecture, MyLectureInfo } from 'api/timetable/entity';
-import {
-  BORDER_TOP_COLOR,
-  BACKGROUND_COLOR,
-  DAYS_STRING,
-} from 'static/timetable';
+import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
@@ -79,8 +75,8 @@ function Timetable({
     if (myTimetableLectures !== undefined) {
       myTimetableLectures.forEach((lecture) => {
         lecture.lecture_infos.forEach((info) => {
-          if ((info.end_time % 100) > maxTime) {
-            maxTime = (info.end_time % 100);
+          if (info.end_time % 100 > maxTime) {
+            maxTime = info.end_time % 100;
           }
         });
       });
@@ -105,7 +101,7 @@ function Timetable({
   const calculateMinHeight = (block: number, kind: string) => {
     if (block === 1) return kind === 'name' ? rowHeight / 2 : 0;
 
-    if (block === 2) return (kind === 'name' || kind === 'professor') ? rowHeight / 2 : 0;
+    if (block === 2) return kind === 'name' || kind === 'professor' ? rowHeight / 2 : 0;
 
     if (block === 3) {
       if (kind === 'name' || kind === 'professor' || kind === 'place') return rowHeight / 2;
@@ -117,7 +113,7 @@ function Timetable({
   const calculateLineClamp = (block: number, kind: string, hasLocation: boolean) => {
     if (block === 1) return kind === 'name' ? 1 : 0;
 
-    if (block === 2) return (kind === 'name' || kind === 'professor') ? 1 : 0;
+    if (block === 2) return kind === 'name' || kind === 'professor' ? 1 : 0;
 
     if (block === 3) return hasLocation ? 1 : 2;
 
@@ -131,9 +127,9 @@ function Timetable({
     let maxTime = 0;
     let minimumTime = 999;
     const previewLecture = tempLecture ?? customTempLecture;
-    const myLectureClassTime = previewLecture?.lecture_infos.map(
-      (info) => [(info.start_time % 100), (info.end_time % 100)],
-    ).flat();
+    const myLectureClassTime = previewLecture?.lecture_infos
+      .map((info) => [info.start_time % 100, info.end_time % 100])
+      .flat();
     if (myLectureClassTime) {
       const classTimeArr = myLectureClassTime.map((time) => time % 100);
       maxTime = Math.max(...classTimeArr);
@@ -163,14 +159,8 @@ function Timetable({
   }, [myLectures, setTimeString, tempLecture, customTempLecture]);
 
   return (
-    <div
-      className={styles.timetable}
-      style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}
-    >
-      <div
-        className={styles.timetable__head}
-        style={{ height: isMobile ? undefined : `${rowHeight + 5}px` }}
-      >
+    <div className={styles.timetable} style={{ height: `${totalHeight}px`, fontSize: `${rowHeight / 2}px` }}>
+      <div className={styles.timetable__head} style={{ height: isMobile ? undefined : `${rowHeight + 5}px` }}>
         <div
           className={cn({
             [styles.timetable__col]: true,
@@ -202,7 +192,6 @@ function Timetable({
               className={styles['timetable__row-line']}
               style={{ height: `${rowHeight + 1}px` }}
               // index값이 변경되지 않음
-              // eslint-disable-next-line react/no-array-index-key
               key={`value-${index}`}
             />
           ))}
@@ -220,12 +209,9 @@ function Timetable({
             <div
               style={{ height: `${rowHeight}px` }}
               // index값이 변경되지 않음
-              // eslint-disable-next-line react/no-array-index-key
               key={`${value}-${index}`}
               className={
-                columnWidth > 50
-                  ? styles['timetable__content--time']
-                  : styles['timetable__content--time-main']
+                columnWidth > 50 ? styles['timetable__content--time'] : styles['timetable__content--time-main']
               }
             >
               {value}
@@ -242,14 +228,14 @@ function Timetable({
             }}
             key={`myLectures-${day}`}
           >
-            {(myLectures ?? []).map((lecture, lectureIndex) => (
-              lecture.lecture_infos.map((info) => (
-                info.day === index && (
-                  <div
-                    key={`${lecture.id}-${info.start_time}`}
-                    className={styles.timetable__lecture}
-                    style={
-                      {
+            {(myLectures ?? []).map((lecture, lectureIndex) =>
+              lecture.lecture_infos.map(
+                (info) =>
+                  info.day === index && (
+                    <div
+                      key={`${lecture.id}-${info.start_time}`}
+                      className={styles.timetable__lecture}
+                      style={{
                         backgroundColor: `${BACKGROUND_COLOR[lectureIndex % 15]}`,
                         borderTop: `2px solid ${BORDER_TOP_COLOR[lectureIndex % 15]}`,
                         top: `${(info.start_time % 100) * rowHeight + 1}px`,
@@ -257,105 +243,122 @@ function Timetable({
                         height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight - 1}px`,
                         padding: `${rowHeight / 4}px ${rowHeight / 4}px ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
                         gap: `${rowHeight / 5.5}px`,
-                      }
-                    }
-                    onMouseEnter={() => setIsMouseOver(`${day}-${(info.start_time % 100)}-${(info.end_time % 100)}`)}
-                    onMouseLeave={() => setIsMouseOver('')}
-                  >
-                    {isMouseOver === `${day}-${(info.start_time % 100)}-${(info.end_time % 100)}` && isEditable && (
-                      <>
-                        <div
-                          className={styles['timetable__edit-button']}
-                          onClick={() => handleEditLectureClick(lectureIndex)}
-                          role="button"
-                          aria-hidden
-                        >
-                          <LectureEditIcon />
-                        </div>
-                        <div
-                          className={styles['timetable__delete-button']}
-                          onClick={() => handleRemoveLectureClick(lecture.id)}
-                          role="button"
-                          aria-hidden
-                        >
-                          <LectureCloseIcon />
-                        </div>
-                      </>
-                    )}
-                    <div
-                      className={styles['timetable__lecture-name']}
-                      style={{
-                        fontSize: `${rowHeight / 3 + 1}px`,
-                        lineHeight: `${rowHeight / 2}px`,
-                        minHeight: `${calculateMinHeight(((info.end_time % 100) - (info.start_time % 100) + 1), 'name')}px`,
-                        WebkitLineClamp: calculateLineClamp(((info.end_time % 100) - (info.start_time % 100) + 1), 'name', !!info.place),
                       }}
+                      onMouseEnter={() => setIsMouseOver(`${day}-${info.start_time % 100}-${info.end_time % 100}`)}
+                      onMouseLeave={() => setIsMouseOver('')}
                     >
-                      {'name' in lecture ? lecture.name : lecture.class_title}
-                    </div>
+                      {isMouseOver === `${day}-${info.start_time % 100}-${info.end_time % 100}` && isEditable && (
+                        <>
+                          <div
+                            className={styles['timetable__edit-button']}
+                            onClick={() => handleEditLectureClick(lectureIndex)}
+                            role="button"
+                            aria-hidden
+                          >
+                            <LectureEditIcon />
+                          </div>
+                          <div
+                            className={styles['timetable__delete-button']}
+                            onClick={() => handleRemoveLectureClick(lecture.id)}
+                            role="button"
+                            aria-hidden
+                          >
+                            <LectureCloseIcon />
+                          </div>
+                        </>
+                      )}
+                      <div
+                        className={styles['timetable__lecture-name']}
+                        style={{
+                          fontSize: `${rowHeight / 3 + 1}px`,
+                          lineHeight: `${rowHeight / 2}px`,
+                          minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'name')}px`,
+                          WebkitLineClamp: calculateLineClamp(
+                            (info.end_time % 100) - (info.start_time % 100) + 1,
+                            'name',
+                            !!info.place,
+                          ),
+                        }}
+                      >
+                        {'name' in lecture ? lecture.name : lecture.class_title}
+                      </div>
 
-                    <span
-                      className={styles['timetable__lecture-professor']}
-                      style={{
-                        fontSize: `${rowHeight / 3 + 1}px`,
-                        lineHeight: `${rowHeight / 2}px`,
-                        height: `${rowHeight / 2}px`,
-                        minHeight: `${calculateMinHeight(((info.end_time % 100) - (info.start_time % 100) + 1), 'professor')}px`,
-                        WebkitLineClamp: calculateLineClamp(((info.end_time % 100) - (info.start_time % 100) + 1), 'professor', !!info.place),
-                      }}
-                    >
-                      {lecture.lecture_class}
-                      {` ${lecture.professor}`}
-                    </span>
-                    <div
-                      className={styles['timetable__lecture-place']}
-                      style={{
-                        display: `${((info.end_time % 100) - (info.start_time % 100) + 1) > 2 ? '-webkit-box' : 'none'}`,
-                        fontSize: `${rowHeight / 3 - 1}px`,
-                        lineHeight: `${rowHeight / 2}px`,
-                        height: `${rowHeight / 2}px`,
-                        minHeight: `${calculateMinHeight(((info.end_time % 100) - (info.start_time % 100) + 1), 'place')}px`,
-                        WebkitLineClamp: calculateLineClamp(((((info.end_time % 100) - (info.start_time % 100)) % 100) + 1), 'place', !!(info.place)),
-                      }}
-                    >
-                      {info.place}
+                      <span
+                        className={styles['timetable__lecture-professor']}
+                        style={{
+                          fontSize: `${rowHeight / 3 + 1}px`,
+                          lineHeight: `${rowHeight / 2}px`,
+                          height: `${rowHeight / 2}px`,
+                          minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'professor')}px`,
+                          WebkitLineClamp: calculateLineClamp(
+                            (info.end_time % 100) - (info.start_time % 100) + 1,
+                            'professor',
+                            !!info.place,
+                          ),
+                        }}
+                      >
+                        {lecture.lecture_class}
+                        {` ${lecture.professor}`}
+                      </span>
+                      <div
+                        className={styles['timetable__lecture-place']}
+                        style={{
+                          display: `${(info.end_time % 100) - (info.start_time % 100) + 1 > 2 ? '-webkit-box' : 'none'}`,
+                          fontSize: `${rowHeight / 3 - 1}px`,
+                          lineHeight: `${rowHeight / 2}px`,
+                          height: `${rowHeight / 2}px`,
+                          minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'place')}px`,
+                          WebkitLineClamp: calculateLineClamp(
+                            (((info.end_time % 100) - (info.start_time % 100)) % 100) + 1,
+                            'place',
+                            !!info.place,
+                          ),
+                        }}
+                      >
+                        {info.place}
+                      </div>
                     </div>
-                  </div>
-                )))
-            ))}
+                  ),
+              ),
+            )}
           </div>
         ))}
-        {pathname.includes('regular') && similarSelectedLecture && DAYS_STRING.map((day, index) => (
-          <div
-            className={cn({
-              [styles.timetable__col]: true,
-              [styles['timetable__col--preview']]: true,
-            })}
-            key={`similarSelected-${day}`}
-          >
-            {similarSelectedLecture.map((lecture, lectureIndex) => (
-              lecture.lecture_infos.map((info) => (
-                info.day === index && (
-                  <div
-                    className={cn({
-                      [styles.timetable__lecture]: true,
-                      [styles['timetable__lecture--selected']]: true,
-                    })}
-                    style={{
-                      borderWidth: selectedLectureIndex === lectureIndex ? '2px' : '1px',
-                      top: `${(info.start_time % 100) * rowHeight}px`,
-                      left: `${firstColumnWidth + index * columnWidth + index + 1}px`,
-                      width: isMobile ? undefined : `${columnWidth}px`,
-                      height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight}px`,
-                    }}
-                    key={`similarSelected-${lecture.id}-${info.start_time}`}
-                  />
-                )))
-            ))}
-          </div>
-        ))}
+        {pathname.includes('regular') &&
+          similarSelectedLecture &&
+          DAYS_STRING.map((day, index) => (
+            <div
+              className={cn({
+                [styles.timetable__col]: true,
+                [styles['timetable__col--preview']]: true,
+              })}
+              key={`similarSelected-${day}`}
+            >
+              {similarSelectedLecture.map((lecture, lectureIndex) =>
+                lecture.lecture_infos.map(
+                  (info) =>
+                    info.day === index && (
+                      <div
+                        className={cn({
+                          [styles.timetable__lecture]: true,
+                          [styles['timetable__lecture--selected']]: true,
+                        })}
+                        style={{
+                          borderWidth: selectedLectureIndex === lectureIndex ? '2px' : '1px',
+                          top: `${(info.start_time % 100) * rowHeight}px`,
+                          left: `${firstColumnWidth + index * columnWidth + index + 1}px`,
+                          width: isMobile ? undefined : `${columnWidth}px`,
+                          height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight}px`,
+                        }}
+                        key={`similarSelected-${lecture.id}-${info.start_time}`}
+                      />
+                    ),
+                ),
+              )}
+            </div>
+          ))}
 
-        {pathname.includes('direct') && customTempLecture && (
+        {pathname.includes('direct') &&
+          customTempLecture &&
           DAYS_STRING.map((day, index) => (
             <div
               key={`custom-${day}`}
@@ -364,70 +367,82 @@ function Timetable({
                 [styles['timetable__col--preview']]: true,
               })}
             >
-              {customTempLecture.lecture_infos.map((info, idx) => (
-                (info.end_time % 100) !== undefined
-                && info.days.map((weekday) => (
-                  weekday === day && (
-                  <div
-                    className={cn({
-                      [styles.timetable__lecture]: true,
-                      [styles[`timetable__lecture${isEditing ? '--fixing-preview' : '--preview'}`]]: true,
-                    })}
-                    style={{
-                      top: `${(info.start_time % 100) * rowHeight + 1}px`,
-                      left: `${firstColumnWidth + index * columnWidth + index + 1}px`,
-                      width: isMobile ? undefined : `${columnWidth}px`,
-                      height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight - 1}px`,
-                      padding: `${rowHeight / 4}px ${rowHeight / 4}px
+              {customTempLecture.lecture_infos.map(
+                (info, idx) =>
+                  info.end_time % 100 !== undefined &&
+                  info.days.map(
+                    (weekday) =>
+                      weekday === day && (
+                        <div
+                          className={cn({
+                            [styles.timetable__lecture]: true,
+                            [styles[`timetable__lecture${isEditing ? '--fixing-preview' : '--preview'}`]]: true,
+                          })}
+                          style={{
+                            top: `${(info.start_time % 100) * rowHeight + 1}px`,
+                            left: `${firstColumnWidth + index * columnWidth + index + 1}px`,
+                            width: isMobile ? undefined : `${columnWidth}px`,
+                            height: `${((info.end_time % 100) - (info.start_time % 100) + 1) * rowHeight - 1}px`,
+                            padding: `${rowHeight / 4}px ${rowHeight / 4}px
                       ${rowHeight / 4 - 2}px ${rowHeight / 4}px`,
-                      gap: `${rowHeight / 5.5}px`,
-                    }}
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={`${idx}-${info.start_time}-${info.end_time}`}
-                  >
-                    <div
-                      className={styles['timetable__lecture-name']}
-                      style={{
-                        fontSize: `${rowHeight / 3 + 1}px`,
-                        fontWeight: '500',
-                        lineHeight: `${rowHeight / 2}px`,
-                        minHeight: `${calculateMinHeight(((info.end_time % 100) - (info.start_time % 100) + 1), 'name')}px`,
-                        WebkitLineClamp: calculateLineClamp(((info.end_time % 100) - (info.start_time % 100) + 1), 'name', !!info.place),
-                      }}
-                    >
-                      {customTempLecture.class_title}
-                    </div>
-                    <span
-                      className={styles['timetable__lecture-professor']}
-                      style={{
-                        fontSize: `${rowHeight / 3 + 1}px`,
-                        fontWeight: '400',
-                        lineHeight: `${rowHeight / 2}px`,
-                        minHeight: `${calculateMinHeight(((info.end_time % 100) - (info.start_time % 100) + 1), 'professor')}px`,
-                        WebkitLineClamp: calculateLineClamp(((info.end_time % 100) - (info.start_time % 100) + 1), 'professor', !!info.place),
-                      }}
-                    >
-                      {customTempLecture.professor}
-                    </span>
-                    <div
-                      className={styles['timetable__lecture-place']}
-                      style={{
-                        fontSize: `${rowHeight / 3 - 1}px`,
-                        fontWeight: '500',
-                        lineHeight: `${rowHeight / 2}px`,
-                        minHeight: `${calculateMinHeight(((info.end_time % 100) - (info.start_time % 100) + 1), 'place')}px`,
-                        WebkitLineClamp: calculateLineClamp(((info.end_time % 100) - (info.start_time % 100) + 1), 'place', !!info.place),
-                      }}
-                    >
-                      {info.place}
-                    </div>
-                  </div>
-                  )
-                ))
-              ))}
+                            gap: `${rowHeight / 5.5}px`,
+                          }}
+                          key={`${idx}-${info.start_time}-${info.end_time}`}
+                        >
+                          <div
+                            className={styles['timetable__lecture-name']}
+                            style={{
+                              fontSize: `${rowHeight / 3 + 1}px`,
+                              fontWeight: '500',
+                              lineHeight: `${rowHeight / 2}px`,
+                              minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'name')}px`,
+                              WebkitLineClamp: calculateLineClamp(
+                                (info.end_time % 100) - (info.start_time % 100) + 1,
+                                'name',
+                                !!info.place,
+                              ),
+                            }}
+                          >
+                            {customTempLecture.class_title}
+                          </div>
+                          <span
+                            className={styles['timetable__lecture-professor']}
+                            style={{
+                              fontSize: `${rowHeight / 3 + 1}px`,
+                              fontWeight: '400',
+                              lineHeight: `${rowHeight / 2}px`,
+                              minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'professor')}px`,
+                              WebkitLineClamp: calculateLineClamp(
+                                (info.end_time % 100) - (info.start_time % 100) + 1,
+                                'professor',
+                                !!info.place,
+                              ),
+                            }}
+                          >
+                            {customTempLecture.professor}
+                          </span>
+                          <div
+                            className={styles['timetable__lecture-place']}
+                            style={{
+                              fontSize: `${rowHeight / 3 - 1}px`,
+                              fontWeight: '500',
+                              lineHeight: `${rowHeight / 2}px`,
+                              minHeight: `${calculateMinHeight((info.end_time % 100) - (info.start_time % 100) + 1, 'place')}px`,
+                              WebkitLineClamp: calculateLineClamp(
+                                (info.end_time % 100) - (info.start_time % 100) + 1,
+                                'place',
+                                !!info.place,
+                              ),
+                            }}
+                          >
+                            {info.place}
+                          </div>
+                        </div>
+                      ),
+                  ),
+              )}
             </div>
-          ))
-        )}
+          ))}
       </div>
     </div>
   );

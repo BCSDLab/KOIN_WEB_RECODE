@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-restricted-globals */
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect } from 'react';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
@@ -26,12 +24,9 @@ import dynamic from 'next/dynamic';
 import Suspense from 'components/ssr/SSRSuspense';
 import styles from './GraduationCalculatorPage.module.scss';
 
-const CreditChart = dynamic(
-  () => import('components/GraduationCalculatorPage/components/CreditChart'),
-  {
-    ssr: false,
-  },
-);
+const CreditChart = dynamic(() => import('components/GraduationCalculatorPage/components/CreditChart'), {
+  ssr: false,
+});
 
 function GraduationCalculatorComponent() {
   const token = useTokenState();
@@ -39,9 +34,7 @@ function GraduationCalculatorComponent() {
   const { lock, unlock } = useScrollLock(false);
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
-  const mainFrame = timetableFrameList.find(
-    (frame) => frame.is_main === true,
-  );
+  const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
   const { mutate: agreeGraduationCreidts } = useAgreeGraduationCreidts(token);
   const currentFrameIndex = mainFrame?.id ? mainFrame.id : 0;
   const { data: totalGrades } = useTotalGrades(currentFrameIndex);
@@ -53,9 +46,7 @@ function GraduationCalculatorComponent() {
   };
 
   const handleInformationClick = () => {
-    portalManager.open(() => (
-      <CalculatorHelpModal closeInfo={closeInfo} />
-    ));
+    portalManager.open(() => <CalculatorHelpModal closeInfo={closeInfo} />);
   };
 
   useEffect(() => {
@@ -73,9 +64,7 @@ function GraduationCalculatorComponent() {
     if (!isFirstVisit) {
       sessionStorage.setItem('visitedGraduationPage', 'true');
 
-      portalManager.open(() => (
-        <CalculatorHelpModal closeInfo={closeInfo} />
-      ));
+      portalManager.open(() => <CalculatorHelpModal closeInfo={closeInfo} />);
     }
   }, [token]);
 
@@ -99,10 +88,9 @@ function GraduationCalculatorComponent() {
 
   React.useEffect(() => {
     window.addEventListener('popstate', handlePopState);
-    return (() => {
+    return () => {
       window.removeEventListener('popstate', handlePopState);
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    };
   }, []);
 
   return (
@@ -127,8 +115,7 @@ function GraduationCalculatorComponent() {
             <div className={styles.tooltip}>
               <div className={styles['tooltip-content']}>
                 이곳을 눌러
-                <strong> 가이드</strong>
-                를 확인할 수 있어요.
+                <strong> 가이드</strong>를 확인할 수 있어요.
               </div>
               <button
                 type="button"
@@ -174,9 +161,7 @@ function GraduationCalculatorComponent() {
           </div>
         </div>
       </div>
-      {!token && (
-        <GraduationCalculatorAuthModal />
-      )}
+      {!token && <GraduationCalculatorAuthModal />}
     </div>
   );
 }

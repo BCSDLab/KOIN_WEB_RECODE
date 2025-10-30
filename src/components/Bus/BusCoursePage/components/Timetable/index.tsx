@@ -41,34 +41,31 @@ function formatSemesterLabel(semester?: string) {
   return (parts[1] ?? parts[0]).trim();
 }
 
-function TemplateShuttleVersion({
-  region,
-  routes,
-  category,
-}: TemplateShuttleVersionProps) {
+function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVersionProps) {
   const isMobile = useMediaQuery();
   const router = useRouter();
   const logger = useLogger();
 
-  const filteredRoutes = (route: string) => routes.filter(({ type }) => {
-    if (route === '전체') {
-      return true;
-    }
+  const filteredRoutes = (route: string) =>
+    routes.filter(({ type }) => {
+      if (route === '전체') {
+        return true;
+      }
 
-    if (route === '주중노선') {
-      return type === '주중';
-    }
+      if (route === '주중노선') {
+        return type === '주중';
+      }
 
-    if (route === '주말노선') {
-      return type === '주말';
-    }
+      if (route === '주말노선') {
+        return type === '주말';
+      }
 
-    if (route === '순환노선') {
-      return type === '순환';
-    }
+      if (route === '순환노선') {
+        return type === '순환';
+      }
 
-    return false;
-  });
+      return false;
+    });
 
   if (filteredRoutes(category).length === 0) {
     return null;
@@ -94,9 +91,7 @@ function TemplateShuttleVersion({
           >
             <span className={styles['template-shuttle__list']}>
               <div className={styles['template-shuttle__list_header']}>
-                <span
-                  className={`${styles['template-shuttle__list_type']} ${styles[`type-${route.type}`]}`}
-                >
+                <span className={`${styles['template-shuttle__list_type']} ${styles[`type-${route.type}`]}`}>
                   {route.type}
                 </span>
                 <span className={styles['template-shuttle__list_name']}>{route.route_name}</span>
@@ -106,7 +101,7 @@ function TemplateShuttleVersion({
             <RightArrow />
           </button>
         ))}
-        {isMobile && <div className={styles['main-timetable-mobile__line']} /> }
+        {isMobile && <div className={styles['main-timetable-mobile__line']} />}
       </div>
     </div>
   );
@@ -154,8 +149,8 @@ function ShuttleTimetable() {
         ))}
       </div>
 
-      {!routeId && (
-        !isMobile ? (
+      {!routeId &&
+        (!isMobile ? (
           <div className={styles['main-timetable']}>
             <div className={styles['main-timetable__column']}>
               {[
@@ -187,22 +182,11 @@ function ShuttleTimetable() {
         ) : (
           <div className={styles['main-timetable-mobile']}>
             {shuttleCourse.route_regions.map((text) => (
-              <TemplateShuttleVersion
-                key={text.region}
-                region={text.region}
-                routes={text.routes}
-                category={category}
-              />
+              <TemplateShuttleVersion key={text.region} region={text.region} routes={text.routes} category={category} />
             ))}
             <div className={styles['info-footer-mobile']}>
               <div className={styles['info-footer-mobile__text']}>
-                {displaySemester}
-                (
-                {semesterData.from_date}
-                {' '}
-                ~
-                {' '}
-                {semesterData.to_date}
+                {displaySemester}({semesterData.from_date} ~ {semesterData.to_date}
                 )
                 <br />
                 시간표가 제공됩니다.
@@ -220,26 +204,19 @@ function ShuttleTimetable() {
                 }}
               >
                 <InformationIcon />
-                <div className={styles['info-footer__text']}>
-                  정보가 정확하지 않나요?
-                </div>
+                <div className={styles['info-footer__text']}>정보가 정확하지 않나요?</div>
               </button>
             </div>
           </div>
-        )
-      )}
+        ))}
 
       {routeId && <BusTimetableDetail />}
 
       {!isMobile && (
         <div className={styles['info-footer']}>
           <div className={styles['info-footer__date']}>
-            <div>
-              업데이트 날짜 :
-            </div>
-            <div>
-              {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
-            </div>
+            <div>업데이트 날짜 :</div>
+            <div>{dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}</div>
           </div>
           <button
             type="button"
@@ -254,9 +231,7 @@ function ShuttleTimetable() {
             }}
           >
             <InformationIcon />
-            <div className={styles['info-footer__text']}>
-              정보가 정확하지 않나요?
-            </div>
+            <div className={styles['info-footer__text']}>정보가 정확하지 않나요?</div>
           </button>
         </div>
       )}
@@ -272,7 +247,6 @@ function Template({ arrivalList }: { arrivalList: string[][] }) {
         <div className={styles.timetable__label}>{BUS_TYPES[1].tableHeaders[1]}</div>
       </div>
       {arrivalList.map(([arrival, time], idx) => (
-        // eslint-disable-next-line react/no-array-index-key
         <div className={styles.timetable__row} key={`${arrival} - ${time} - ${idx}`}>
           <span className={styles.timetable__cell_am}>{arrival}</span>
           <span className={styles.timetable__cell_pm}>{time}</span>
@@ -327,16 +301,12 @@ function ExpressTimetable() {
 
           // 오전, 오후 길이 다를 시 맞추기
           const maxLength = Math.max(morning.length, afternoon.length);
-          return Array.from({ length: maxLength }, (_, idx) => [
-            morning[idx] || '',
-            afternoon[idx] || '',
-          ]);
+          return Array.from({ length: maxLength }, (_, idx) => [morning[idx] || '', afternoon[idx] || '']);
         })()}
       />
       <div className={styles['express-footer']}>
         <div className={styles['express-footer__date']}>
-          업데이트 날짜 :
-          {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+          업데이트 날짜 :{dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
         </div>
         <button
           type="button"
@@ -351,9 +321,7 @@ function ExpressTimetable() {
           }}
         >
           <InformationIcon />
-          <div className={styles['info-footer__text']}>
-            정보가 정확하지 않나요?
-          </div>
+          <div className={styles['info-footer__text']}>정보가 정확하지 않나요?</div>
         </button>
       </div>
     </div>
@@ -367,30 +335,34 @@ function CityTimetable() {
 
   const timetable = useCityBusTimetable({
     bus_number: selectedBusNumber,
-    direction: selectedDirection === 'to'
-      ? CITY_COURSES.find((course) => course.bus_number === selectedBusNumber && course.direction !== TERMINAL_CITY_BUS)?.direction || ''
-      : TERMINAL_CITY_BUS,
+    direction:
+      selectedDirection === 'to'
+        ? CITY_COURSES.find(
+            (course) => course.bus_number === selectedBusNumber && course.direction !== TERMINAL_CITY_BUS,
+          )?.direction || ''
+        : TERMINAL_CITY_BUS,
   });
 
   const getTodayTimetable = () => {
     const today = dayjs().day();
-    const dayType = (today === 0 || today === 6) ? '주말' : '평일';
+    const dayType = today === 0 || today === 6 ? '주말' : '평일';
 
-    const todayTimetable = timetable.info.bus_timetables.find(
-      (info) => info.day_of_week === dayType,
-    );
+    const todayTimetable = timetable.info.bus_timetables.find((info) => info.day_of_week === dayType);
 
     const getHours = (time: string) => parseInt(time.split(':')[0], 10);
 
-    const fullTimetable = Array.from({
-      length: Math.max(
-        todayTimetable?.depart_info.filter((time) => getHours(time) < 12).length || 0,
-        todayTimetable?.depart_info.filter((time) => getHours(time) >= 12).length || 0,
-      ),
-    }, (_, idx) => [
-      todayTimetable?.depart_info.filter((time) => getHours(time) < 12)[idx] || '',
-      todayTimetable?.depart_info.filter((time) => getHours(time) >= 12)[idx] || '',
-    ]);
+    const fullTimetable = Array.from(
+      {
+        length: Math.max(
+          todayTimetable?.depart_info.filter((time) => getHours(time) < 12).length || 0,
+          todayTimetable?.depart_info.filter((time) => getHours(time) >= 12).length || 0,
+        ),
+      },
+      (_, idx) => [
+        todayTimetable?.depart_info.filter((time) => getHours(time) < 12)[idx] || '',
+        todayTimetable?.depart_info.filter((time) => getHours(time) >= 12)[idx] || '',
+      ],
+    );
 
     return fullTimetable;
   };
@@ -416,8 +388,7 @@ function CityTimetable() {
                 });
               }}
             >
-              {cityCourse.bus_number}
-              번
+              {cityCourse.bus_number}번
             </button>
           ))}
         </div>
@@ -444,14 +415,11 @@ function CityTimetable() {
           ))}
         </div>
       </div>
-      <Template
-        arrivalList={getTodayTimetable()}
-      />
+      <Template arrivalList={getTodayTimetable()} />
 
       <div className={styles['express-footer']}>
         <div className={styles['express-footer__date']}>
-          업데이트 날짜 :
-          {dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+          업데이트 날짜 :{dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
         </div>
         <button
           type="button"
@@ -466,9 +434,7 @@ function CityTimetable() {
           }}
         >
           <InformationIcon />
-          <div className={styles['info-footer__text']}>
-            정보가 정확하지 않나요?
-          </div>
+          <div className={styles['info-footer__text']}>정보가 정확하지 않나요?</div>
         </button>
       </div>
     </div>
