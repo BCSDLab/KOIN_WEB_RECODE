@@ -1,19 +1,19 @@
-import { cn, sha256 } from '@bcsdlab/utils';
 import { useEffect, useState } from 'react';
-import CloseIcon from 'assets/svg/close-icon-black.svg';
+import { useRouter } from 'next/router';
+import { isKoinError } from '@bcsdlab/koin';
+import { cn, sha256 } from '@bcsdlab/utils';
 import BlindIcon from 'assets/svg/blind-icon.svg';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import ShowIcon from 'assets/svg/show-icon.svg';
 import WarningIcon from 'assets/svg/warning-icon.svg';
 import WarningMobileIcon from 'assets/svg/warning-mobile-icon.svg';
 import useCheckPassword from 'components/layout/Header/hooks/useCheckPassword';
-import { isKoinError } from '@bcsdlab/koin';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useAuthenticationActions } from 'utils/zustand/authentication';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useRouter } from 'next/router';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useAuthenticationActions } from 'utils/zustand/authentication';
 import styles from './AuthenticateUserModal.module.scss';
 
 export interface AuthenticateUserModalProps {
@@ -21,10 +21,7 @@ export interface AuthenticateUserModalProps {
   disabledClose?: boolean;
 }
 
-export default function AuthenticateUserModal({
-  onClose,
-  disabledClose = false,
-}: AuthenticateUserModalProps) {
+export default function AuthenticateUserModal({ onClose, disabledClose = false }: AuthenticateUserModalProps) {
   const logger = useLogger();
   const router = useRouter();
   const [password, setPassword] = useState('');
@@ -35,9 +32,7 @@ export default function AuthenticateUserModal({
 
   const isMobile = useMediaQuery();
   const { updateAuthentication } = useAuthenticationActions();
-  const {
-    mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error, errorMessage,
-  } = useCheckPassword();
+  const { mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error, errorMessage } = useCheckPassword();
 
   const handleCheckPassword = async () => {
     if (password === '') {
@@ -86,12 +81,7 @@ export default function AuthenticateUserModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>내 정보 수정하기</span>
-          <div
-            className={styles['container__close-button']}
-            onClick={handleClose}
-            role="button"
-            aria-hidden
-          >
+          <div className={styles['container__close-button']} onClick={handleClose} role="button" aria-hidden>
             <CloseIcon />
           </div>
         </header>
@@ -139,13 +129,12 @@ export default function AuthenticateUserModal({
             </button>
           </div>
         </div>
-        {!isMobile && isKoinError(error) && error
-          && (
-            <span className={styles['container__error-message']}>
-              <WarningIcon />
-              {errorMessage}
-            </span>
-          )}
+        {!isMobile && isKoinError(error) && error && (
+          <span className={styles['container__error-message']}>
+            <WarningIcon />
+            {errorMessage}
+          </span>
+        )}
       </div>
     </div>
   );

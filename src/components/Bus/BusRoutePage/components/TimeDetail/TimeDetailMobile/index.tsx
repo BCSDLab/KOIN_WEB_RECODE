@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import PickerColumn from 'components/Bus/BusRoutePage/components/PickerColumn';
+import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
 import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import PickerColumn from 'components/Bus/BusRoutePage/components/PickerColumn';
-import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
 import styles from './TimeDetailMobile.module.scss';
 
 interface TimeDetailMobileProps {
@@ -73,25 +73,13 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
           <span className={styles.guide__title}>출발 시각 설정</span>
           <span className={styles.guide__description}>
             <div>
-              {displaySemester}
-              (
-              {semesterData.from_date}
-              {' '}
-              ~
-              {' '}
-              {semesterData.to_date}
-              )
+              {displaySemester}({semesterData.from_date} ~ {semesterData.to_date})
             </div>
             <div>시간표가 제공됩니다.</div>
           </span>
         </div>
         <div className={styles.picker}>
-          <PickerColumn
-            items={dates}
-            selectedIndex={dayOfMonthDiff}
-            onChange={setDayOfMonthDiff}
-            flex={6}
-          />
+          <PickerColumn items={dates} selectedIndex={dayOfMonthDiff} onChange={setDayOfMonthDiff} flex={6} />
           <PickerColumn
             items={['오전', '오후']}
             selectedIndex={meridiem}
@@ -112,18 +100,10 @@ export default function TimeDetailMobile({ timeSelect, close }: TimeDetailMobile
           />
         </div>
         <div className={styles.buttons}>
-          <button
-            className={styles['buttons__now-depart']}
-            type="button"
-            onClick={handleNowDepartClick}
-          >
+          <button className={styles['buttons__now-depart']} type="button" onClick={handleNowDepartClick}>
             지금 출발
           </button>
-          <button
-            className={styles.buttons__complete}
-            type="button"
-            onClick={handleCompleteClick}
-          >
+          <button className={styles.buttons__complete} type="button" onClick={handleCompleteClick}>
             완료
           </button>
         </div>

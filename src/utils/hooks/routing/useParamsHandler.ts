@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import { useMemo, useCallback } from 'react';
+import { useRouter } from 'next/router';
 
 const useParamsHandler = () => {
   const router = useRouter();
@@ -11,10 +11,7 @@ const useParamsHandler = () => {
     return new URLSearchParams(queryString);
   }, [router.asPath]);
 
-  const params = useMemo(
-    () => Object.fromEntries(searchParams.entries()),
-    [searchParams],
-  );
+  const params = useMemo(() => Object.fromEntries(searchParams.entries()), [searchParams]);
 
   const setParams = useCallback(
     (

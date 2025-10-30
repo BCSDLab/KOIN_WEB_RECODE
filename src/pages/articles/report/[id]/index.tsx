@@ -1,5 +1,5 @@
-import ReportForm from 'components/Articles/LostItemDetailPage/components/ReportForm';
 import { useRouter } from 'next/router';
+import ReportForm from 'components/Articles/LostItemDetailPage/components/ReportForm';
 import styles from './ReportPage.module.scss';
 
 function ReportPage({ id }: { id: string }) {
@@ -11,11 +11,7 @@ function ReportPage({ id }: { id: string }) {
 
   return (
     <div className={styles['report-page']}>
-      <ReportForm
-        articleId={Number(id)}
-        onClose={handleClose}
-        isModal={false}
-      />
+      <ReportForm articleId={Number(id)} onClose={handleClose} isModal={false} />
     </div>
   );
 }

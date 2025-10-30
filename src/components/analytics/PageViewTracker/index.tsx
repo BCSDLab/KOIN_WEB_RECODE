@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
-import * as gtag from 'lib/gtag';
-import { UserResponse } from 'api/auth/entity';
-import { useUser } from 'utils/hooks/state/useUser';
-import { isStudentUser } from 'utils/ts/userTypeGuards';
-import { isomorphicLocalStorage } from 'utils/ts/env';
 import { useRouter } from 'next/router';
+import { UserResponse } from 'api/auth/entity';
+import * as gtag from 'lib/gtag';
+import { useUser } from 'utils/hooks/state/useUser';
+import { isomorphicLocalStorage } from 'utils/ts/env';
+import { isStudentUser } from 'utils/ts/userTypeGuards';
 
 const userUniqueIdGenerator = (userInfo: UserResponse | null) => {
   if (!userInfo) {
@@ -48,10 +48,7 @@ export default function PageViewTracker() {
     const handlePageView = () => {
       if (prevPathname.current !== currentPath) {
         setTimeout(() => {
-          gtag.pageView(
-            currentPath + window.location.search,
-            userUniqueIdGenerator(userInfo) || '',
-          );
+          gtag.pageView(currentPath + window.location.search, userUniqueIdGenerator(userInfo) || '');
           prevPathname.current = window.location.pathname;
         }, 1000);
       }

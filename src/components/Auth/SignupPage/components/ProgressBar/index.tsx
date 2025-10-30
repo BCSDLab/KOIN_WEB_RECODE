@@ -7,7 +7,7 @@ interface Steps {
 
 interface ProgressBarProps {
   steps: Steps[];
-  currentIndex: number
+  currentIndex: number;
 }
 
 /**
@@ -18,8 +18,7 @@ interface ProgressBarProps {
 export default function ProgressBar({ steps, currentIndex }: ProgressBarProps) {
   const isMobile = useMediaQuery();
   const stepLength = steps.length;
-  const progressBarWidthRate = currentIndex < stepLength
-    ? Number((currentIndex + 1) / stepLength) * 100 : 0;
+  const progressBarWidthRate = currentIndex < stepLength ? Number((currentIndex + 1) / stepLength) * 100 : 0;
 
   if (isMobile) {
     return (

@@ -9,14 +9,10 @@ export default function useRollbackLecture(token: string, timetableFrameId: numb
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (
-      id: RollbackTimetableLectureRequest,
-    ) => timetable.rollbackTimetableLecture(id, token),
+    mutationFn: (id: RollbackTimetableLectureRequest) => timetable.rollbackTimetableLecture(id, token),
 
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_INFO_LIST, timetableFrameId] },
-      );
+      queryClient.invalidateQueries({ queryKey: [TIMETABLE_INFO_LIST, timetableFrameId] });
     },
 
     onError: (error) => {

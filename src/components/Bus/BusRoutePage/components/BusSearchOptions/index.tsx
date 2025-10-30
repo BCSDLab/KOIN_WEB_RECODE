@@ -1,17 +1,17 @@
-import ChevronDown32 from 'assets/svg/Bus/chevron-down-32x32.svg';
-import ChevronDown24 from 'assets/svg/Bus/chevron-down-24x24.svg';
-import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
 import { cn } from '@bcsdlab/utils';
-import { BUS_TYPE_MAP } from 'components/Bus/BusRoutePage/constants/busType';
-import TimeDetail from 'components/Bus/BusRoutePage/components/TimeDetail';
-import { UseTimeSelectReturn } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { BusTypeRequest } from 'api/bus/entity';
+import ChevronDown24 from 'assets/svg/Bus/chevron-down-24x24.svg';
+import ChevronDown32 from 'assets/svg/Bus/chevron-down-32x32.svg';
+import ChevronDown4b from 'assets/svg/Bus/chevron-down-4b.svg';
+import TimeDetail from 'components/Bus/BusRoutePage/components/TimeDetail';
+import { BUS_TYPE_MAP } from 'components/Bus/BusRoutePage/constants/busType';
+import { UseTimeSelectReturn } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
+import { format12Hour, formatRelativeDate } from 'components/Bus/BusRoutePage/utils/timeModule';
+import { loggingBusTypeMap, useBusLogger } from 'components/Bus/hooks/useBusLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { format12Hour, formatRelativeDate } from 'components/Bus/BusRoutePage/utils/timeModule';
-import { loggingBusTypeMap, useBusLogger } from 'components/Bus/hooks/useBusLogger';
 import styles from './BusSearchOptions.module.scss';
 
 interface BusSearchOptionsProps {
@@ -20,12 +20,10 @@ interface BusSearchOptionsProps {
   timeSelect: UseTimeSelectReturn;
 }
 
-export default function BusSearchOptions({
-  busType, setBusType, timeSelect,
-}: BusSearchOptionsProps) {
+export default function BusSearchOptions({ busType, setBusType, timeSelect }: BusSearchOptionsProps) {
   const isMobile = useMediaQuery();
   const { nowDate } = timeSelect.timeState;
-  const [isTimeDetailOpen,, closeTimeDetail, toggleTimeDetail] = useBooleanState(false);
+  const [isTimeDetailOpen, , closeTimeDetail, toggleTimeDetail] = useBooleanState(false);
   const [isBusTypeOpen, , closeBusType, toggleBusType] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeBusType });
   const { logSearchResultDepartureTimeClick, logSearchResultBusType } = useBusLogger();
@@ -46,11 +44,7 @@ export default function BusSearchOptions({
   return (
     <div className={styles.box} ref={containerRef}>
       <div className={styles['time-bus']}>
-        <button
-          type="button"
-          className={styles['depart-time']}
-          onClick={handleTimeDetailToggle}
-        >
+        <button type="button" className={styles['depart-time']} onClick={handleTimeDetailToggle}>
           <span className={styles['depart-time__text']}>
             {`${formatRelativeDate(nowDate)} ${format12Hour(nowDate)}`}
           </span>
@@ -65,14 +59,8 @@ export default function BusSearchOptions({
           </span>
         </button>
         <div className={styles['bus-type']}>
-          <button
-            type="button"
-            className={styles['bus-type__button']}
-            onClick={toggleBusType}
-          >
-            <span className={styles['bus-type__text']}>
-              {BUS_TYPE_MAP[busType]}
-            </span>
+          <button type="button" className={styles['bus-type__button']} onClick={toggleBusType}>
+            <span className={styles['bus-type__text']}>{BUS_TYPE_MAP[busType]}</span>
             <span
               className={cn({
                 [styles['bus-type__arrow']]: true,
@@ -101,7 +89,7 @@ export default function BusSearchOptions({
           )}
         </div>
       </div>
-      {isTimeDetailOpen && (<TimeDetail timeSelect={timeSelect} close={closeTimeDetail} />)}
+      {isTimeDetailOpen && <TimeDetail timeSelect={timeSelect} close={closeTimeDetail} />}
     </div>
   );
 }

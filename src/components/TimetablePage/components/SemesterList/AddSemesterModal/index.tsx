@@ -1,20 +1,22 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import CloseIcon from 'assets/svg/close-icon-black.svg';
-import {
-  AddTimetableFrameRequest, SemesterCheckResponse, Term, TimetableFrameListResponse,
-} from 'api/timetable/entity';
-import showToast from 'utils/ts/showToast';
 import { UseMutateFunction } from '@tanstack/react-query';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import {
+  AddTimetableFrameRequest,
+  SemesterCheckResponse,
+  Term,
+  TimetableFrameListResponse,
+} from 'api/timetable/entity';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import { Selector } from 'components/ui/Selector';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import showToast from 'utils/ts/showToast';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {
   onClose: () => void;
   setModalOpenFalse: () => void;
-  addSemester:
-  UseMutateFunction<TimetableFrameListResponse, unknown, AddTimetableFrameRequest, unknown>;
+  addSemester: UseMutateFunction<TimetableFrameListResponse, unknown, AddTimetableFrameRequest, unknown>;
   mySemester: SemesterCheckResponse | null;
 }
 
@@ -57,10 +59,7 @@ export default function AddSemesterModal({
   };
   const handleAddSemester = (semesters: AddTimetableFrameRequest) => {
     if (mySemester) {
-      if (mySemester.semesters.some(
-        (semes) => semes.year === semesters.year && semes.term === semesters.term,
-      )
-      ) {
+      if (mySemester.semesters.some((semes) => semes.year === semesters.year && semes.term === semesters.term)) {
         showToast('info', '이미 있는 학기입니다.');
       } else {
         addSemester(semesters);
@@ -74,26 +73,13 @@ export default function AddSemesterModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>학기 추가</span>
-          <div
-            className={styles['container__close-button']}
-            onClick={closeModal}
-            role="button"
-            aria-hidden
-          >
+          <div className={styles['container__close-button']} onClick={closeModal} role="button" aria-hidden>
             <CloseIcon />
           </div>
         </header>
         <div className={styles.container__semester}>
-          <Selector
-            options={years}
-            value={yearValue}
-            onChange={onChangeYear}
-          />
-          <Selector
-            options={semester}
-            value={semesterValue}
-            onChange={onChangeSemester}
-          />
+          <Selector options={years} value={yearValue} onChange={onChangeYear} />
+          <Selector options={semester} value={semesterValue} onChange={onChangeSemester} />
         </div>
         <div className={styles.container__button}>
           <button
@@ -110,7 +96,9 @@ export default function AddSemesterModal({
             className={cn({
               [styles['container__button--save']]: true,
             })}
-            onClick={() => handleAddSemester({ year: Number(yearValue.replace('년도', '')), term: semesterValue as Term })}
+            onClick={() =>
+              handleAddSemester({ year: Number(yearValue.replace('년도', '')), term: semesterValue as Term })
+            }
           >
             추가하기
           </button>

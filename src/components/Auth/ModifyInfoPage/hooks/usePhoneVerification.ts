@@ -1,19 +1,16 @@
-import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { smsSend, smsVerify, checkPhone } from 'api/auth';
 import { isKoinError } from '@bcsdlab/koin';
+import { useMutation } from '@tanstack/react-query';
+import { smsSend, smsVerify, checkPhone } from 'api/auth';
 import { MESSAGES } from 'static/auth';
 import { useVerificationTimer } from './useVerificationTimer';
 
 export function usePhoneVerification(phoneNumber: string) {
   const [isVerified, setIsVerified] = useState(false);
   const [phoneMessage, setPhoneMessage] = useState<{ type: string; content: string } | null>(null);
-  const [verificationMessage, setVerificationMessage] = useState<
-  { type: string; content: string } | null>(null);
+  const [verificationMessage, setVerificationMessage] = useState<{ type: string; content: string } | null>(null);
 
-  const {
-    start, stop, formattedTime, timeLeft, isRunning,
-  } = useVerificationTimer(180);
+  const { start, stop, formattedTime, timeLeft, isRunning } = useVerificationTimer(180);
 
   const sendSMS = useMutation({
     mutationFn: smsSend,

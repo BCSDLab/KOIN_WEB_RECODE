@@ -37,12 +37,14 @@ function useCountdownTimer({ duration, onExpire }: CountdownTimerOptions) {
       });
     }, 1000);
 
-    // eslint-disable-next-line consistent-return
     return () => clearInterval(intervalRef.current!);
   }, [isRunning, secondsLeft, onExpire]);
 
   return {
-    isRunning, secondsLeft, start, stop,
+    isRunning,
+    secondsLeft,
+    start,
+    stop,
   };
 }
 

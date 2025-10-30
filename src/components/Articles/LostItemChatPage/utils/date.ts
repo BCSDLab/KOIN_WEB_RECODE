@@ -28,18 +28,12 @@ export function formatDate(timestamp: string): string {
 
 export const formatISODateToMonthAndDay = (timestamp: string): string => {
   const date = new Date(timestamp);
-  return `${(date.getMonth() + 1).toString().padStart(2, '0')}월 ${date
-    .getDate()
-    .toString()
-    .padStart(2, '0')}일`;
+  return `${(date.getMonth() + 1).toString().padStart(2, '0')}월 ${date.getDate().toString().padStart(2, '0')}일`;
 };
 
 export const formatISODateToTime = (timestamp: string): string => {
   const date = new Date(timestamp);
-  return `${date.getHours().toString().padStart(2, '0')}:${date
-    .getMinutes()
-    .toString()
-    .padStart(2, '0')}`;
+  return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 };
 
 export const getKoreaISODate = () => {

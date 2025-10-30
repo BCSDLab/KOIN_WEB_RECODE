@@ -1,5 +1,5 @@
-import { Lecture, MyLectureInfo } from 'api/timetable/entity';
 import { useEffect, useState } from 'react';
+import { Lecture, MyLectureInfo } from 'api/timetable/entity';
 import styles from './TotalGrades.module.scss';
 
 interface TotalGradesProps {

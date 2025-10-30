@@ -56,8 +56,8 @@ export interface MyLectureInfo {
   target: string;
   professor: string;
   department: string;
-  course_type?: string,
-  general_education_area?: string,
+  course_type?: string;
+  general_education_area?: string;
 }
 
 export interface TimetableLectureInfoResponse extends APIResponse {
@@ -142,7 +142,7 @@ export type TimetableFrameInfo = {
   is_main: boolean;
 };
 
-export interface DeleteTimetableLectureResponse extends APIResponse { }
+export type DeleteTimetableLectureResponse = APIResponse;
 
 export type TimetableFrameListResponse = TimetableFrameInfo[];
 
@@ -153,11 +153,16 @@ export interface EditTimetableFrameRequest {
 
 export type AddTimetableFrameRequest = Semester;
 
-export interface DeleteTimetableFrameResponse extends APIResponse { }
+export type DeleteTimetableFrameResponse = APIResponse;
 
-export interface DeleteSemesterResponse extends APIResponse { }
+export type DeleteSemesterResponse = APIResponse;
 
-export type VersionType = 'android' | 'timetable' | 'shuttle_bus_timetable' | 'express_bus_timetable' | 'city_bus_timetable';
+export type VersionType =
+  | 'android'
+  | 'timetable'
+  | 'shuttle_bus_timetable'
+  | 'express_bus_timetable'
+  | 'city_bus_timetable';
 
 export interface VersionInfoResponse extends APIResponse {
   id: number;

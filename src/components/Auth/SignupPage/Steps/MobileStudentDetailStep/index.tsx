@@ -1,12 +1,10 @@
 /* eslint-disable no-restricted-imports */
+import { useEffect, useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, nicknameDuplicateCheck, signupStudent } from 'api/auth';
-import { useEffect, useState } from 'react';
-import {
-  Controller, FieldError, useFormContext, useFormState, useWatch,
-} from 'react-hook-form';
+import { Controller, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -36,14 +34,12 @@ interface StudentFormValues {
 
 function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   const sessionLogger = useSessionLogger();
-  const {
-    control, getValues, trigger, handleSubmit,
-  } = useFormContext<StudentFormValues>();
+  const { control, getValues, trigger, handleSubmit } = useFormContext<StudentFormValues>();
   const { errors, isValid } = useFormState({ control });
 
-  const loginId = (useWatch({ control, name: 'login_id' }) ?? '');
+  const loginId = useWatch({ control, name: 'login_id' }) ?? '';
   const passwordCheck = useWatch({ control, name: 'password_check' });
-  const nicknameControl = (useWatch({ control, name: 'nickname' }) ?? '');
+  const nicknameControl = useWatch({ control, name: 'nickname' }) ?? '';
 
   const [isCorrectId, setIsCorrectId, setInCorrectId] = useBooleanState(false);
   const [isCorrectNickname, setIsCorrectNickname, setIsInCorrectNickname] = useBooleanState(false);
@@ -75,9 +71,13 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID }); }
+        if (err.status === 400) {
+          setIdMessage({ type: 'warning', content: MESSAGES.USERID.INVALID });
+        }
 
-        if (err.status === 409) { setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED }); }
+        if (err.status === 409) {
+          setIdMessage({ type: 'error', content: MESSAGES.USERID.DUPLICATED });
+        }
       }
     },
   });
@@ -96,9 +96,13 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT }); }
+        if (err.status === 400) {
+          setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
+        }
 
-        if (err.status === 409) { setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.DUPLICATED }); }
+        if (err.status === 409) {
+          setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.DUPLICATED });
+        }
       }
     },
   });
@@ -116,7 +120,9 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { showToast('error', '회원가입에 실패했습니다. 다시 시도해 주세요.'); }
+        if (err.status === 400) {
+          showToast('error', '회원가입에 실패했습니다. 다시 시도해 주세요.');
+        }
       }
     },
   });
@@ -133,9 +139,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   };
 
   const onSubmit = async (formData: StudentFormValues) => {
-    const {
-      password_check, email, nickname, password, ...signupData
-    } = formData;
+    const { email, password, ...signupData } = formData;
     const hashedPassword = await sha256(password);
     const completeEmail = email ? `${email}@koreatech.ac.kr` : null;
     const completeNickname = nicknameControl || null;
@@ -159,10 +163,7 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
   }, [nicknameControl, setIsInCorrectNickname]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className={styles.container}
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
       <div className={styles['form-container']}>
         <div className={styles.wrapper}>
           <h1 className={styles.wrapper__header}>사용하실 아이디를 입력해 주세요.</h1>
@@ -236,7 +237,6 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                 />
               )}
             />
-
           </div>
         </div>
         {isIdPasswordValid && (
@@ -296,7 +296,9 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
                     placeholder="닉네임은 변경 가능합니다. (선택)"
                     isDelete
                     isButton
-                    message={fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage}
+                    message={
+                      fieldState.error ? { type: 'warning', content: MESSAGES.NICKNAME.FORMAT } : nicknameMessage
+                    }
                     buttonText="중복 확인"
                     buttonOnClick={() => checkNickname(nicknameControl)}
                     buttonDisabled={!nicknameControl}
@@ -331,15 +333,10 @@ function MobileStudentDetailStep({ onNext }: MobileVerificationProps) {
         )}
       </div>
 
-      <button
-        type="submit"
-        className={styles['next-button']}
-        disabled={!isFormFilled || !isValid}
-      >
+      <button type="submit" className={styles['next-button']} disabled={!isFormFilled || !isValid}>
         다음
       </button>
     </form>
-
   );
 }
 

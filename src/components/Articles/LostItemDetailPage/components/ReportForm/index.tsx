@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import CheckboxGroup from 'components/Articles/LostItemDetailPage/components/CheckboxGroup';
-import useReportLostItemArticle from 'components/Articles/hooks/useReportLostItemArticle';
-import showToast from 'utils/ts/showToast';
-import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
-import ROUTES from 'static/routes';
-import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
+import useReportLostItemArticle from 'components/Articles/hooks/useReportLostItemArticle';
+import CheckboxGroup from 'components/Articles/LostItemDetailPage/components/CheckboxGroup';
+import { toast } from 'react-toastify';
+import ROUTES from 'static/routes';
+import showToast from 'utils/ts/showToast';
 import styles from './ReportForm.module.scss';
 
 const options = [
@@ -49,7 +49,7 @@ export default function ReportForm({ articleId, onClose, isModal }: ReportFormPr
       } else {
         navigate(ROUTES.Articles());
       }
-    } catch (e) {
+    } catch {
       toast.error('신고 중 오류가 발생했습니다. 다시 시도해주세요.');
       return;
     }
@@ -74,18 +74,10 @@ export default function ReportForm({ articleId, onClose, isModal }: ReportFormPr
       />
 
       <div className={styles.buttons}>
-        <button
-          className={styles.buttons__report}
-          type="button"
-          onClick={handleReportClick}
-        >
+        <button className={styles.buttons__report} type="button" onClick={handleReportClick}>
           신고하기
         </button>
-        <button
-          className={styles.buttons__close}
-          type="button"
-          onClick={onClose}
-        >
+        <button className={styles.buttons__close} type="button" onClick={onClose}>
           닫기
         </button>
       </div>

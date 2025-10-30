@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
+import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
-import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 
 export default function useUserInfoModal() {
   const { token } = useTokenStore();
@@ -22,7 +22,12 @@ export default function useUserInfoModal() {
     }
 
     const requiredFields: (keyof typeof userInfo)[] = [
-      'login_id', 'gender', 'major', 'name', 'phone_number', 'student_number',
+      'login_id',
+      'gender',
+      'major',
+      'name',
+      'phone_number',
+      'student_number',
     ];
 
     const isInfoMissing = requiredFields.some(

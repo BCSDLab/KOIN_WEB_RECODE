@@ -1,13 +1,13 @@
-import Suspense from 'components/ssr/SSRSuspense';
-import Banner from 'components/ui/Banner';
-import UserInfoModal from 'components/ui/UserInfoModal';
-import useBannerCategories from 'components/ui/Banner/hooks/useBannerCategories';
-import IndexBus from 'components/IndexComponents/IndexBus';
-import IndexClub from 'components/IndexComponents/IndexClub';
-import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
 import IndexArticles from 'components/IndexComponents/IndexArticles';
+import IndexBus from 'components/IndexComponents/IndexBus';
+import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
+import IndexClub from 'components/IndexComponents/IndexClub';
 import IndexStore from 'components/IndexComponents/IndexStore';
 import IndexTimetable from 'components/IndexComponents/IndexTimetable';
+import Suspense from 'components/ssr/SSRSuspense';
+import Banner from 'components/ui/Banner';
+import useBannerCategories from 'components/ui/Banner/hooks/useBannerCategories';
+import UserInfoModal from 'components/ui/UserInfoModal';
 import styles from './IndexPage.module.scss';
 
 function Index() {

@@ -22,7 +22,10 @@ export default function FormContent({ content, setContent, type }: FormContentPr
     }
   };
 
-  const placeholderText = type === 'FOUND' ? '습득한 물건에 대한 설명을 적어주세요.' : '물품이나 분실 장소에 대한 추가 설명이 있다면 작성해주세요.';
+  const placeholderText =
+    type === 'FOUND'
+      ? '습득한 물건에 대한 설명을 적어주세요.'
+      : '물품이나 분실 장소에 대한 추가 설명이 있다면 작성해주세요.';
 
   return (
     <div className={styles.content}>

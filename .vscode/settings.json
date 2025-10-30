@@ -4,18 +4,18 @@
     "yarn.lock": true,
     "**/.pnp.*": true
   },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.prettier": "explicit"
+  },
   "eslint.nodePath": ".yarn/sdks",
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
+  "editor.formatOnSave": true,
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "workbench.editorAssociations": {
     "*.svg": "default"
   },
-  "cSpell.words": [
-    "bcsdlab",
-    "BUGSINK",
-    "GLITCHTIP",
-    "Koin",
-    "tanstack",
-    "zustand"
-  ]
+  "cSpell.words": ["bcsdlab", "BUGSINK", "GLITCHTIP", "Koin", "tanstack", "zustand"]
 }

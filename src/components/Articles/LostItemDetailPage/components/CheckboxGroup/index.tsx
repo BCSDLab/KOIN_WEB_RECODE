@@ -14,9 +14,7 @@ interface CheckboxGroupProps {
   onChange: (selected: string[]) => void;
 }
 
-export default function CheckboxGroup({
-  name, options, selectedValues = [], onChange,
-}: CheckboxGroupProps) {
+export default function CheckboxGroup({ name, options, selectedValues = [], onChange }: CheckboxGroupProps) {
   const handleChange = (value: string) => {
     const newSelectedValues = selectedValues.includes(value)
       ? selectedValues.filter((v) => v !== value)

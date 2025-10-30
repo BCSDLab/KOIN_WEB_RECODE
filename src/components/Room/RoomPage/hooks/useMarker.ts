@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { LandListResponse } from 'api/room/entity';
 import MarkerIcon from 'components/Room/components/MarkerIcon';
 import ROUTES from 'static/routes';
-import { useRouter } from 'next/router';
 
 interface MarkerProps {
-  map: naver.maps.Map | null
-  roomList: LandListResponse | undefined
+  map: naver.maps.Map | null;
+  roomList: LandListResponse | undefined;
 }
 
 function useMarker({ map, roomList }: MarkerProps) {

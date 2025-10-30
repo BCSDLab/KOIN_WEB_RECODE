@@ -1,32 +1,32 @@
-import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
+import { useRouter } from 'next/router';
 import { Lecture, MyLectureInfo } from 'api/timetable/entity';
-import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
-import SemesterList from 'components/TimetablePage/components/SemesterList';
-import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
-import { useSemester } from 'utils/zustand/semester';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
+import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import { Portal } from 'components/modal/Modal/PortalProvider';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import SemesterList from 'components/TimetablePage/components/SemesterList';
+import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
+import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
+import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
+import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
 import { toast } from 'react-toastify';
 import ROUTES from 'static/routes';
-import CloseIcon from 'assets/svg/modal-close-icon.svg';
-import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
-import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
-import { useRouter } from 'next/router';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useSemester } from 'utils/zustand/semester';
 import CourseTypeList from './CourseTypeList';
+import DeleteLectureModal from './DeleteLectureModal';
 import SemesterCourseTable from './SemesterCourseTable';
 import styles from './CourseTable.module.scss';
-import DeleteLectureModal from './DeleteLectureModal';
 
 function CourseTable({ frameId }: { frameId: number }) {
   const logger = useLogger();
   const token = useTokenState();
   const portalManager = useModalPortal();
   const { removeMyLecture } = useTimetableMutation(frameId);
-  const { myLectures }: { myLectures: (MyLectureInfo | Lecture) [] } = useMyLectures(frameId);
+  const { myLectures }: { myLectures: (MyLectureInfo | Lecture)[] } = useMyLectures(frameId);
   const allMyLectures = useAllMyLectures(token);
   const isUnSelectedCourseType = (allMyLectures ?? []).find((item) => item.course_type === '이수구분선택');
   const { editMyLecture } = useTimetableMutation(frameId);
@@ -38,14 +38,11 @@ function CourseTable({ frameId }: { frameId: number }) {
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: setModalOpenFalse });
 
-  const filteredMyLectures = (myLectures as MyLectureInfo[] ?? [])
-    .filter((lecture: MyLectureInfo) => lecture.lecture_id !== null || Number(lecture.grades) > 0);
+  const filteredMyLectures = ((myLectures as MyLectureInfo[]) ?? []).filter(
+    (lecture: MyLectureInfo) => lecture.lecture_id !== null || Number(lecture.grades) > 0,
+  );
 
-  const handleCourseTypeChange = (
-    id: number,
-    newCourseType: string,
-    newGeneralEducationArea?: string,
-  ) => {
+  const handleCourseTypeChange = (id: number, newCourseType: string, newGeneralEducationArea?: string) => {
     const targetLecture = filteredMyLectures.find((lecture) => lecture.id === id) as MyLectureInfo;
 
     if (!targetLecture) return;
@@ -69,14 +66,14 @@ function CourseTable({ frameId }: { frameId: number }) {
     if (mySemester?.semesters.length === 0) {
       toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
     } else {
-      navigate(`/${ROUTES.TimetableRegular({ id: String(frameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`);
+      navigate(
+        `/${ROUTES.TimetableRegular({ id: String(frameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`,
+      );
     }
   };
 
   const handleDeleteLecture = (id: number, disableRecoverButton: boolean) => {
-    const lectureToRemove = myLectures.find(
-      (lecture: MyLectureInfo | Lecture) => lecture.id === id,
-    );
+    const lectureToRemove = myLectures.find((lecture: MyLectureInfo | Lecture) => lecture.id === id);
 
     if (!lectureToRemove) return;
 
@@ -105,32 +102,19 @@ function CourseTable({ frameId }: { frameId: number }) {
       id={lecture.id}
       onCourseTypeChange={handleCourseTypeChange}
     />,
-    <button
-      type="button"
-      onClick={(e) => onClickDeleteLecture(e, lecture.id)}
-      aria-label="삭제 버튼"
-    >
+    <button type="button" onClick={(e) => onClickDeleteLecture(e, lecture.id)} aria-label="삭제 버튼">
       <CloseIcon />
     </button>,
   ]);
 
   return (
-    <div
-      className={styles['course-table']}
-      ref={isModalOpen ? null : containerRef}
-    >
+    <div className={styles['course-table']} ref={isModalOpen ? null : containerRef}>
       <SemesterList />
       <div className={styles.content}>
         <div className={styles.content__table}>
-          <SemesterCourseTable
-            tableData={tableData}
-          />
+          <SemesterCourseTable tableData={tableData} />
         </div>
-        <button
-          type="button"
-          className={styles.content__trigger}
-          onClick={onClickEditTimetable}
-        >
+        <button type="button" className={styles.content__trigger} onClick={onClickEditTimetable}>
           시간표 수정하기
         </button>
         {isUnSelectedCourseType && (

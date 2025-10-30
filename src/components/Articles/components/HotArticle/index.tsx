@@ -1,7 +1,7 @@
-import useHotArticleList from 'components/Articles/hooks/useHotArticle';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import ROUTES from 'static/routes';
 import Link from 'next/link';
+import useHotArticleList from 'components/Articles/hooks/useHotArticle';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './HotArticles.module.scss';
 
 const LINK_LIST = [
@@ -42,8 +42,8 @@ export default function HotArticles() {
             key={article.id + article.board_id}
             onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'notice_hot', value: article.title })}
           >
-            <span className={styles['hot-article__rank']}>{ index + 1 }</span>
-            <span className={styles['hot-article__item']}>{ article.title }</span>
+            <span className={styles['hot-article__rank']}>{index + 1}</span>
+            <span className={styles['hot-article__item']}>{article.title}</span>
           </Link>
         ))}
       </div>
@@ -57,11 +57,7 @@ export default function HotArticles() {
               logger.actionEventClick({ team: 'CAMPUS', event_label: 'short_cut', value: link.title.join('_') });
             }}
           >
-            <img
-              className={styles.link__image}
-              src={link.image}
-              alt="alineImg"
-            />
+            <img className={styles.link__image} src={link.image} alt="alineImg" />
           </a>
         ))}
       </div>

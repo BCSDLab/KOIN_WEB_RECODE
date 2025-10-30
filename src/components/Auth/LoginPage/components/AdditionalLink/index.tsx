@@ -1,11 +1,11 @@
+import Link from 'next/link';
+import FaceIcon from 'assets/svg/face-icon.svg';
+import LockIcon from 'assets/svg/lock-icon.svg';
+import MagnifyingGlassIcon from 'assets/svg/Login/magnifying-glass.svg';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import LockIcon from 'assets/svg/lock-icon.svg';
-import FaceIcon from 'assets/svg/face-icon.svg';
-import MagnifyingGlassIcon from 'assets/svg/Login/magnifying-glass.svg';
-import Link from 'next/link';
 import styles from './AdditionalLink.module.scss';
 
 export default function AdditionalLink() {
@@ -32,11 +32,7 @@ export default function AdditionalLink() {
   if (isMobile) {
     return (
       <div className={styles.help}>
-        <Link
-          className={styles.help__link}
-          href={ROUTES.AuthFindID()}
-          onClick={onClickFindId}
-        >
+        <Link className={styles.help__link} href={ROUTES.AuthFindID()} onClick={onClickFindId}>
           <MagnifyingGlassIcon />
           아이디 찾기
         </Link>
@@ -63,17 +59,12 @@ export default function AdditionalLink() {
           둘러보기
         </Link>
       </div>
-
     );
   }
 
   return (
     <div className={styles.help}>
-      <Link
-        className={styles.help__link}
-        href={ROUTES.AuthFindID()}
-        onClick={onClickFindId}
-      >
+      <Link className={styles.help__link} href={ROUTES.AuthFindID()} onClick={onClickFindId}>
         아이디 찾기
       </Link>
       <Link

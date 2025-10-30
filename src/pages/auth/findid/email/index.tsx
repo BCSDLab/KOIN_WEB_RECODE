@@ -1,7 +1,7 @@
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import FindIdLayout from 'components/Auth/FindIdPage/Mobile';
 import MobileFindIdByEmail from 'components/Auth/FindIdPage/Mobile/EmailPage';
 import PCFindIdByEmail from 'components/Auth/FindIdPage/PC/EmailPage';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
 function FindIdPage() {
   const isMobile = useMediaQuery();

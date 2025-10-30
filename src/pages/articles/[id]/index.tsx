@@ -1,9 +1,9 @@
-import Suspense from 'components/ssr/SSRSuspense';
-import ArticleHeader from 'components/Articles/components/ArticleHeader';
-import ArticleContent from 'components/Articles/components/ArticleContent';
-import useArticle from 'components/Articles/hooks/useArticle';
 import { useRouter } from 'next/router';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
+import ArticleContent from 'components/Articles/components/ArticleContent';
+import ArticleHeader from 'components/Articles/components/ArticleHeader';
+import useArticle from 'components/Articles/hooks/useArticle';
+import Suspense from 'components/ssr/SSRSuspense';
 
 function ArticlesDetailPage({ id }: { id: string }) {
   const { article } = useArticle(id);
@@ -17,9 +17,7 @@ function ArticlesDetailPage({ id }: { id: string }) {
         author={article.author}
         hit={article.hit}
       />
-      <ArticleContent
-        content={article.content}
-      />
+      <ArticleContent content={article.content} />
     </>
   );
 }

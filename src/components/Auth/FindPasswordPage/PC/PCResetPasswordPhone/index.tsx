@@ -1,14 +1,12 @@
-import {
-  Controller, useFormContext, useWatch, FieldError,
-} from 'react-hook-form';
-import { ContactType, MESSAGES, REGEX } from 'static/auth';
+import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
+import { useMutation } from '@tanstack/react-query';
+import { resetPasswordEmail, resetPasswordSms } from 'api/auth';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
-import { isKoinError } from '@bcsdlab/koin';
+import { Controller, useFormContext, useWatch, FieldError } from 'react-hook-form';
+import { ContactType, MESSAGES, REGEX } from 'static/auth';
 import showToast from 'utils/ts/showToast';
-import { resetPasswordEmail, resetPasswordSms } from 'api/auth';
-import { useMutation } from '@tanstack/react-query';
 import styles from './PCResetPasswordPhone.module.scss';
 
 interface PCResetPasswordPhoneProps {
@@ -18,21 +16,19 @@ interface PCResetPasswordPhoneProps {
 }
 
 interface PasswordResetFormValues {
-  loginId: string,
-  contactType: ContactType,
-  phoneNumber: string,
-  email: string,
-  verificationCode: string,
-  password: string,
-  passwordCheck: string,
-  newPassword: string,
-  newPasswordCheck: string,
+  loginId: string;
+  contactType: ContactType;
+  phoneNumber: string;
+  email: string;
+  verificationCode: string;
+  password: string;
+  passwordCheck: string;
+  newPassword: string;
+  newPasswordCheck: string;
 }
 
 function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPhoneProps) {
-  const {
-    control, getValues, trigger,
-  } = useFormContext<PasswordResetFormValues>();
+  const { control, getValues, trigger } = useFormContext<PasswordResetFormValues>();
 
   const newPassword = useWatch({ control, name: 'newPassword' });
   const newPasswordCheck = useWatch({ control, name: 'newPasswordCheck' });
@@ -96,15 +92,9 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
 
   return (
     <div className={styles.container}>
-
       <div className={styles.container__wrapper}>
         <div className={styles['container__title-wrapper']}>
-          <button
-            type="button"
-            onClick={onBack}
-            aria-label="뒤로가기"
-            className={styles['container__back-button']}
-          >
+          <button type="button" onClick={onBack} aria-label="뒤로가기" className={styles['container__back-button']}>
             <BackIcon />
           </button>
           <h1 className={styles.container__title}>비밀번호 변경</h1>
@@ -114,7 +104,6 @@ function PCResetPasswordPhone({ onNext, onBack, contactType }: PCResetPasswordPh
       <div className={`${styles.divider} ${styles['divider--top']}`} />
 
       <div className={styles['form-container']}>
-
         <div className={styles['input-wrapper']}>
           <Controller
             name="newPassword"

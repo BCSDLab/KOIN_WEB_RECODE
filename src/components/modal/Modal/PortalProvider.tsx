@@ -10,10 +10,7 @@ interface OpenOptions {
   onClose?: () => void;
 }
 
-type OpenFunc = (
-  element: ((portal: Portal) => React.ReactElement) | React.ReactElement,
-  options?: OpenOptions
-) => void;
+type OpenFunc = (element: ((portal: Portal) => React.ReactElement) | React.ReactElement, options?: OpenOptions) => void;
 
 type CloseFunc = () => void;
 
@@ -22,12 +19,10 @@ export interface PortalManager {
   close: CloseFunc;
 }
 
-export const PortalContext = React.createContext<PortalManager | undefined>(
-  undefined,
-);
+export const PortalContext = React.createContext<PortalManager | undefined>(undefined);
 
 interface PortalProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const PortalProvider = function PortalProvider({ children }: PortalProviderProps) {
@@ -47,8 +42,7 @@ const PortalProvider = function PortalProvider({ children }: PortalProviderProps
       },
     };
 
-    const portalElement = (
-      typeof element === 'function' ? element(portal) : element);
+    const portalElement = typeof element === 'function' ? element(portal) : element;
 
     const privatePortal: ReactNode = portalElement;
 
@@ -56,10 +50,13 @@ const PortalProvider = function PortalProvider({ children }: PortalProviderProps
     if (appendTo) setContainer(appendTo);
   }, []);
 
-  const portalOption = React.useMemo(() => ({
-    open,
-    close: () => setModalPortal(undefined),
-  }), [open]);
+  const portalOption = React.useMemo(
+    () => ({
+      open,
+      close: () => setModalPortal(undefined),
+    }),
+    [open],
+  );
 
   React.useEffect(() => {
     setMounted(true);
@@ -70,10 +67,8 @@ const PortalProvider = function PortalProvider({ children }: PortalProviderProps
 
   return (
     <PortalContext.Provider value={portalOption}>
-      { children }
-      { mounted && modalPortal && container
-        ? ReactDOM.createPortal(modalPortal, container)
-        : null }
+      {children}
+      {mounted && modalPortal && container ? ReactDOM.createPortal(modalPortal, container) : null}
     </PortalContext.Provider>
   );
 };

@@ -26,12 +26,7 @@ interface UseTimetableInfoListParams {
 }
 
 function useTimetableInfoList({ authorization, timetableFrameId }: UseTimetableInfoListParams) {
-  const { data } = useSuspenseQuery<
-  TimetableLectureInfoResponse | null,
-  KoinError,
-  MyLectureInfo[],
-  [string, number]
-  >({
+  const { data } = useSuspenseQuery<TimetableLectureInfoResponse | null, KoinError, MyLectureInfo[], [string, number]>({
     queryKey: [TIMETABLE_INFO_LIST, timetableFrameId],
     queryFn: queryFunction({ authorization, timetableFrameId }),
     select: (rawData) => rawData?.timetable || [],

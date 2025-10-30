@@ -11,7 +11,7 @@ const useClickArrow = (length: number) => {
     }
   };
   const clickRightArrow = () => {
-    if (length && (imgIndex >= length - 1)) {
+    if (length && imgIndex >= length - 1) {
       showToast('info', '마지막 이미지입니다.');
     } else {
       setImgIndx(imgIndex + 1);

@@ -1,5 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteClubEventNotification, deleteClubRecruitmentNotification, postClubEventNotification, postClubRecruitmentNotification } from 'api/club';
+import {
+  deleteClubEventNotification,
+  deleteClubRecruitmentNotification,
+  postClubEventNotification,
+  postClubRecruitmentNotification,
+} from 'api/club';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 export default function useClubNotification(clubId: number) {

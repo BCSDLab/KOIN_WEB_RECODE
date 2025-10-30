@@ -1,11 +1,10 @@
 import { createPortal } from 'react-dom';
+import CloseIcon from 'assets/svg/Articles/close.svg';
+import ReportForm from 'components/Articles/LostItemDetailPage/components/ReportForm';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
-import CloseIcon from 'assets/svg/Articles/close.svg';
 import styles from './ReportModal.module.scss';
-// eslint-disable-next-line no-restricted-imports
-import ReportForm from '../ReportForm';
 
 interface ReportModalProps {
   articleId: number;
@@ -25,11 +24,7 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
             <CloseIcon />
           </button>
         </div>
-        <ReportForm
-          articleId={articleId}
-          onClose={closeReportModal}
-          isModal
-        />
+        <ReportForm articleId={articleId} onClose={closeReportModal} isModal />
       </div>
     </div>,
     document.body,

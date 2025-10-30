@@ -1,10 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 interface DropdownContextType {
   openDropdown: string | null;
@@ -25,11 +19,7 @@ export function DropdownProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(() => ({ openDropdown, toggleDropdown, closeDropdown }), [openDropdown]);
 
-  return (
-    <DropdownContext.Provider value={value}>
-      {children}
-    </DropdownContext.Provider>
-  );
+  return <DropdownContext.Provider value={value}>{children}</DropdownContext.Provider>;
 }
 
 export const useDropdown = () => {

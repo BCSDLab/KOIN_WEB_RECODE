@@ -59,7 +59,7 @@ const CLICK_EVENTS = [
   },
 ] as const;
 
-export type ClickEventLabel = typeof CLICK_EVENTS[number]['label'];
+export type ClickEventLabel = (typeof CLICK_EVENTS)[number]['label'];
 
 export type FindUserCategory = '카드' | '신분증' | '지갑' | '전자제품' | '기타';
 

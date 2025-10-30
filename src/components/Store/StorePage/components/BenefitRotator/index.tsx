@@ -31,7 +31,9 @@ export default function BenefitRotator({ benefits }: BenefitRotatorProps) {
         <span className={isAnimation ? styles['benefit-content__fade-in'] : styles['benefit-content__fade-out']}>
           {benefits[currentIndex]}
         </span>
-      ) : benefits}
+      ) : (
+        benefits
+      )}
     </div>
   );
 }

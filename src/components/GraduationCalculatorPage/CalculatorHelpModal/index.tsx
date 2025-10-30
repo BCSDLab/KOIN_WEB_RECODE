@@ -34,7 +34,9 @@ function CalculatorHelpModal({ closeInfo }: CalculatorHelpModalProps) {
           <div className={styles['container__content-description']}>
             <p>성적이력 엑셀 파일은 아우누리에서 다운로드 받을 수 있는 파일이에요.</p>
             <p className={styles['container__content-description--thin']}>{'아우누리 > 학사 탭 > 학적기본 폴더 >'}</p>
-            <p className={styles['container__content-description--thin']}>{'학적기본사항 파일 > 성적이력 탭 클릭 >우측 엑셀 아이콘 클릭'}</p>
+            <p className={styles['container__content-description--thin']}>
+              {'학적기본사항 파일 > 성적이력 탭 클릭 >우측 엑셀 아이콘 클릭'}
+            </p>
             <p>다운로드한 엑셀 파일을 그대로 올리면 돼요.</p>
             <p className={styles['container__content-description--bold']}>
               엑셀의 학생 개인의 점수와 학점은

@@ -1,11 +1,11 @@
-import { cn } from '@bcsdlab/utils';
 import { useRef, useState } from 'react';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { cn } from '@bcsdlab/utils';
 import DownArrowIcon from 'assets/svg/chervron-up-grey.svg';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import useGeneralEducation from 'components/GraduationCalculatorPage/hooks/useGeneralEducation';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import styles from './CourseTypeList.module.scss';
 
@@ -30,8 +30,7 @@ function CourseTypeList({
   const token = useTokenState();
   const { generalEducation } = useGeneralEducation(token);
   // '교양선택'은 교양 세부 영역 리스트에서 제외
-  const generalCourseType = generalEducation
-    ?.general_education_area.map((area) => area.course_type)?.slice(1) || [];
+  const generalCourseType = generalEducation?.general_education_area.map((area) => area.course_type)?.slice(1) || [];
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [dropdownPosition, setDropdownPosition] = useState({ left: 0, top: 0 });
   const selectedRef = useRef<HTMLButtonElement | null>(null);
@@ -95,10 +94,7 @@ function CourseTypeList({
     handleClosePopup();
   };
 
-  const onClickGeneralOption = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    generalEducationArea: string,
-  ) => {
+  const onClickGeneralOption = (e: React.MouseEvent<HTMLButtonElement>, generalEducationArea: string) => {
     e.stopPropagation();
 
     if (selectedGeneralEducationArea !== generalEducationArea) {
@@ -167,30 +163,29 @@ function CourseTypeList({
               </button>
             </div>
           ))}
-          {hoveredItem === '교양선택'
-          && (
-          <ul
-            className={styles['select__general-list']}
-            onMouseEnter={() => setHoveredItem('교양선택')}
-            onMouseLeave={() => setHoveredItem(null)}
-            style={{
-              left: dropdownPosition.left,
-              top: dropdownPosition.top,
-            }}
-          >
-            {generalCourseType.map((type) => (
-              <button
-                type="button"
-                className={cn({
-                  [styles['select__general-item']]: true,
-                  [styles['select__general-item--selected']]: type === selectedGeneralEducationArea,
-                })}
-                onClick={(e) => onClickGeneralOption(e, type)}
-              >
-                {type}
-              </button>
-            ))}
-          </ul>
+          {hoveredItem === '교양선택' && (
+            <ul
+              className={styles['select__general-list']}
+              onMouseEnter={() => setHoveredItem('교양선택')}
+              onMouseLeave={() => setHoveredItem(null)}
+              style={{
+                left: dropdownPosition.left,
+                top: dropdownPosition.top,
+              }}
+            >
+              {generalCourseType.map((type) => (
+                <button
+                  type="button"
+                  className={cn({
+                    [styles['select__general-item']]: true,
+                    [styles['select__general-item--selected']]: type === selectedGeneralEducationArea,
+                  })}
+                  onClick={(e) => onClickGeneralOption(e, type)}
+                >
+                  {type}
+                </button>
+              ))}
+            </ul>
           )}
         </ul>
       )}

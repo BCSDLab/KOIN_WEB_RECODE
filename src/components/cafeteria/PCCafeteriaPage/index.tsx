@@ -1,16 +1,16 @@
-import Suspense from 'components/ssr/SSRSuspense';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useRouter } from 'next/router';
+import { DiningType } from 'api/dinings/entity';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
-import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import { DiningType } from 'api/dinings/entity';
+import Suspense from 'components/ssr/SSRSuspense';
 import { DAYS, DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
-import { useRouter } from 'next/router';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -31,9 +31,7 @@ interface PCCafeteriaPageProps {
   designVariant: string;
 }
 
-function PCCafeteriaComponent({
-  diningType, setDiningType, designVariant,
-}: PCCafeteriaPageProps) {
+function PCCafeteriaComponent({ diningType, setDiningType, designVariant }: PCCafeteriaPageProps) {
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
@@ -81,12 +79,7 @@ function PCCafeteriaComponent({
       <div className={styles['type-selector']}>
         {formatDiningDate()}
         <div className={styles['dropdown-wrapper']} ref={containerRef}>
-          <button
-            id="dropdown-button"
-            className={styles.dropdown}
-            type="button"
-            onClick={toggleDropdown}
-          >
+          <button id="dropdown-button" className={styles.dropdown} type="button" onClick={toggleDropdown}>
             {`${DINING_TYPE_MAP[diningType]}식단`}
             {dropdownOpen ? <UpperArrow /> : <LowerArrow />}
           </button>
@@ -113,11 +106,7 @@ function PCCafeteriaComponent({
       {designVariant === 'variant' && (
         <div className={styles['recommend-banner']}>
           <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
-          <button
-            type="button"
-            className={styles['recommend-banner__button']}
-            onClick={handleDiningToStore}
-          >
+          <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
             <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
           </button>
         </div>
@@ -132,16 +121,10 @@ function PCCafeteriaComponent({
   );
 }
 
-export default function PCCafeteriaPage({
-  diningType, setDiningType, designVariant,
-}: PCCafeteriaPageProps) {
+export default function PCCafeteriaPage({ diningType, setDiningType, designVariant }: PCCafeteriaPageProps) {
   return (
     <Suspense fallback={<div />}>
-      <PCCafeteriaComponent
-        diningType={diningType}
-        setDiningType={setDiningType}
-        designVariant={designVariant}
-      />
+      <PCCafeteriaComponent diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
     </Suspense>
   );
 }

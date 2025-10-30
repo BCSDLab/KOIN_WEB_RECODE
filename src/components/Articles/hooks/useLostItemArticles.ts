@@ -7,15 +7,13 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 const useLostItemArticles = (data: ItemArticleRequestDTO) => {
   const token = useTokenState();
 
-  const { data: lostItemArticles } = useSuspenseQuery(
-    {
-      queryKey: ['lostItem', data],
-      queryFn: async () => {
-        const response = await articles.getLostItemArticles(token, data);
-        return transformLostItemArticles(response);
-      },
+  const { data: lostItemArticles } = useSuspenseQuery({
+    queryKey: ['lostItem', data],
+    queryFn: async () => {
+      const response = await articles.getLostItemArticles(token, data);
+      return transformLostItemArticles(response);
     },
-  );
+  });
 
   return { lostItemArticles };
 };

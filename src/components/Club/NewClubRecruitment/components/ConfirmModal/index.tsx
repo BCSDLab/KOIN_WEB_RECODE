@@ -1,7 +1,7 @@
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useRouter } from 'next/router';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './ConfirmModal.module.scss';
 
 interface ConfirmModalProps {
@@ -11,9 +11,7 @@ interface ConfirmModalProps {
   type?: 'confirm' | 'cancel' | 'edit' | 'editCancel' | 'eventDelete' | 'recruitmentDelete';
 }
 
-export default function ConfirmModal({
-  closeModal, onSubmit, onCancel, type = 'confirm',
-}: ConfirmModalProps) {
+export default function ConfirmModal({ closeModal, onSubmit, onCancel, type = 'confirm' }: ConfirmModalProps) {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
@@ -47,8 +45,12 @@ export default function ConfirmModal({
               </>
             )}
             <div className={styles['info-button-container']}>
-              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
-              <button className={styles['info-button__confirm']} type="button" onClick={handleSubmit}>생성하기</button>
+              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>
+                취소
+              </button>
+              <button className={styles['info-button__confirm']} type="button" onClick={handleSubmit}>
+                생성하기
+              </button>
             </div>
           </>
         )}
@@ -67,8 +69,12 @@ export default function ConfirmModal({
               </>
             )}
             <div className={styles['info-button-container']}>
-              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>계속 생성</button>
-              <button className={styles['info-button__reset']} type="button" onClick={handleCancel}>취소하기</button>
+              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>
+                계속 생성
+              </button>
+              <button className={styles['info-button__reset']} type="button" onClick={handleCancel}>
+                취소하기
+              </button>
             </div>
           </>
         )}
@@ -89,8 +95,12 @@ export default function ConfirmModal({
               </>
             )}
             <div className={styles['info-button-container']}>
-              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
-              <button className={styles['info-button__confirm']} type="button" onClick={handleSubmit}>수정하기</button>
+              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>
+                취소
+              </button>
+              <button className={styles['info-button__confirm']} type="button" onClick={handleSubmit}>
+                수정하기
+              </button>
             </div>
           </>
         )}
@@ -111,8 +121,12 @@ export default function ConfirmModal({
               </>
             )}
             <div className={styles['info-button-container']}>
-              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>계속하기</button>
-              <button className={styles['info-button__reset']} type="button" onClick={handleCancel}>취소하기</button>
+              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>
+                계속하기
+              </button>
+              <button className={styles['info-button__reset']} type="button" onClick={handleCancel}>
+                취소하기
+              </button>
             </div>
           </>
         )}
@@ -133,8 +147,12 @@ export default function ConfirmModal({
               </>
             )}
             <div className={styles['info-button-container']}>
-              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
-              <button className={styles['info-button__reset']} type="button" onClick={handleSubmit}>삭제하기</button>
+              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>
+                취소
+              </button>
+              <button className={styles['info-button__reset']} type="button" onClick={handleSubmit}>
+                삭제하기
+              </button>
             </div>
           </>
         )}
@@ -155,8 +173,12 @@ export default function ConfirmModal({
               </>
             )}
             <div className={styles['info-button-container']}>
-              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
-              <button className={styles['info-button__reset']} type="button" onClick={handleSubmit}>삭제하기</button>
+              <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>
+                취소
+              </button>
+              <button className={styles['info-button__reset']} type="button" onClick={handleSubmit}>
+                삭제하기
+              </button>
             </div>
           </>
         )}

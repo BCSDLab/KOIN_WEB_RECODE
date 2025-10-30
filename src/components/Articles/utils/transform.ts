@@ -11,9 +11,7 @@ import {
   LostItemArticlesReportForPost,
 } from 'static/articles';
 
-export const transformLostItemArticles = (
-  dto: LostItemArticlesResponseDTO,
-): LostItemArticlesForGet => ({
+export const transformLostItemArticles = (dto: LostItemArticlesResponseDTO): LostItemArticlesForGet => ({
   articles: dto.articles.map((article) => ({
     id: article.id,
     boardId: article.board_id,
@@ -33,9 +31,7 @@ export const transformLostItemArticles = (
   currentPage: dto.current_page,
 });
 
-export const transformSingleLostItemArticle = (
-  dto: SingleLostItemArticleResponseDTO,
-): SingleLostItemArticle => ({
+export const transformSingleLostItemArticle = (dto: SingleLostItemArticleResponseDTO): SingleLostItemArticle => ({
   id: dto.id,
   boardId: dto.board_id,
   type: dto.type,
@@ -56,9 +52,7 @@ export const transformSingleLostItemArticle = (
   updatedAt: dto.updated_at,
 });
 
-export const transformLostItemArticlesForPost = (
-  dto: LostItemArticlesForPost,
-): LostItemArticlesRequestDTO => ({
+export const transformLostItemArticlesForPost = (dto: LostItemArticlesForPost): LostItemArticlesRequestDTO => ({
   articles: dto.articles.map((article) => ({
     type: article.type,
     category: article.category,

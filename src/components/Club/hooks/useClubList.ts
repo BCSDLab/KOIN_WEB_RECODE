@@ -9,15 +9,11 @@ interface ClubListProps {
   query?: string;
 }
 
-function useClubList({
-  token, categoryId, sortType, isRecruiting, query,
-}: ClubListProps) {
-  const { data } = useQuery(
-    {
-      queryKey: ['club-list', categoryId, sortType, isRecruiting, query],
-      queryFn: () => club.getClubList(token, categoryId, sortType, isRecruiting, query),
-    },
-  );
+function useClubList({ token, categoryId, sortType, isRecruiting, query }: ClubListProps) {
+  const { data } = useQuery({
+    queryKey: ['club-list', categoryId, sortType, isRecruiting, query],
+    queryFn: () => club.getClubList(token, categoryId, sortType, isRecruiting, query),
+  });
 
   return data?.clubs ?? [];
 }

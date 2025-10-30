@@ -1,7 +1,5 @@
 import { useRouter } from 'next/router';
-import {
-  setRedirectPath, getRedirectPath, clearRedirectPath, redirectToLogin,
-} from 'utils/ts/auth';
+import { setRedirectPath, getRedirectPath, clearRedirectPath, redirectToLogin } from 'utils/ts/auth';
 
 export function useLoginRedirect() {
   const router = useRouter();

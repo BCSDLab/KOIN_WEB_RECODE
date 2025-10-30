@@ -1,38 +1,31 @@
-/* eslint-disable no-param-reassign */
 /* MobileView.tsx */
+import { Dispatch, SetStateAction, useState } from 'react';
+import { useRouter } from 'next/router';
+import { cn } from '@bcsdlab/utils';
 import { NewClubData } from 'api/club/entity';
-import ROUTES from 'static/routes';
-import showToast from 'utils/ts/showToast';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
-import DropDownIcon from 'assets/svg/Club/dropdown-icon.svg';
 import DisplayIcon from 'assets/svg/Club/display-icon.svg';
-import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
+import DropDownIcon from 'assets/svg/Club/dropdown-icon.svg';
 import LikeIcon from 'assets/svg/Club/like-icon.svg';
-import { Dispatch, SetStateAction, useState } from 'react';
+import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
 import ClubInputErrorCondition from 'components/Club/components/ClubInputErrorCondition';
-import { cn } from '@bcsdlab/utils';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useImageUpload from 'utils/hooks/ui/useImageUpload';
 import { addHyphen } from 'utils/ts/formatPhoneNumber';
-import { useRouter } from 'next/router';
+import showToast from 'utils/ts/showToast';
 import styles from './NewClubMobileView.module.scss';
 
 interface MobileViewProps {
   formData: NewClubData;
   setFormData: Dispatch<SetStateAction<NewClubData>>;
-  setType?:Dispatch<SetStateAction<string>>;
+  setType?: Dispatch<SetStateAction<string>>;
   openModal: () => void;
-  isEdit?: boolean
+  isEdit?: boolean;
 }
 
-export default function MobileView({
-  formData,
-  setFormData,
-  openModal,
-  isEdit,
-  setType,
-}: MobileViewProps) {
+export default function MobileView({ formData, setFormData, openModal, isEdit, setType }: MobileViewProps) {
   const router = useRouter();
   const logger = useLogger();
   const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
@@ -119,11 +112,7 @@ export default function MobileView({
       <div className={styles['form-container']}>
         {formData.image_url ? (
           <div className={styles['form-image__preview']}>
-            <img
-              className={styles['form-image__img']}
-              src={formData.image_url}
-              alt="동아리 이미지 미리보기"
-            />
+            <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
           </div>
         ) : (
           <div className={styles['form-image']}>
@@ -156,28 +145,16 @@ export default function MobileView({
           </div>
         )}
         <div className={styles['button-group__top']}>
-          <button
-            type="button"
-            className={styles['button-group__top__button']}
-            onClick={handleClickCancel}
-          >
-            {!isEdit && '생성'}
-            {' '}
-            취소
+          <button type="button" className={styles['button-group__top__button']} onClick={handleClickCancel}>
+            {!isEdit && '생성'} 취소
           </button>
-          <button
-            type="button"
-            className={styles['button-group__top__button']}
-            onClick={handleClickSave}
-          >
+          <button type="button" className={styles['button-group__top__button']} onClick={handleClickSave}>
             {isEdit ? '저장' : '생성 요청'}
           </button>
         </div>
         <div className={styles['form-name']}>
           <div className={styles['name-header']}>
-            <div className={styles['form-label__name']}>
-              동아리명
-            </div>
+            <div className={styles['form-label__name']}>동아리명</div>
             <button type="button" className={styles.like} onClick={handleClickLike}>
               <LikeIcon />
               좋아요 표시하기
@@ -187,7 +164,7 @@ export default function MobileView({
           <input
             className={cn({
               [styles['form__text-input']]: true,
-              [styles['form__text-input--error']]: (formData.name.length === 0 && isTried),
+              [styles['form__text-input--error']]: formData.name.length === 0 && isTried,
             })}
             value={formData.name}
             placeholder="동아리명을 입력해주세요(필수)"
@@ -198,25 +175,17 @@ export default function MobileView({
         <div className={styles['form-category']}>
           <div className={styles['form-label']}>분과:</div>
           <div
-            className={`${styles.dropdown} ${
-              isDropDownOpen ? styles['dropdown--open'] : ''
-            }`}
+            className={`${styles.dropdown} ${isDropDownOpen ? styles['dropdown--open'] : ''}`}
             role="listbox"
             tabIndex={0}
             onBlur={() => setIsDropDownOpen(false)}
           >
             <button
               type="button"
-              className={`${styles.dropdown__trigger} ${
-                isDropDownOpen ? styles['dropdown__trigger--active'] : ''
-              }`}
+              className={`${styles.dropdown__trigger} ${isDropDownOpen ? styles['dropdown__trigger--active'] : ''}`}
               onClick={() => setIsDropDownOpen(!isDropDownOpen)}
             >
-              {
-                  categoryOptions.find(
-                    (o) => o.value === formData.club_category_id,
-                  )?.label
-                }
+              {categoryOptions.find((o) => o.value === formData.club_category_id)?.label}
               <span className={styles.dropdown__arrow}>
                 <DropDownIcon />
               </span>
@@ -229,9 +198,7 @@ export default function MobileView({
                   role="option"
                   aria-selected={o.value === formData.club_category_id}
                   className={`${styles.dropdown__option} ${
-                    o.value === formData.club_category_id
-                      ? styles['dropdown__option--selected']
-                      : ''
+                    o.value === formData.club_category_id ? styles['dropdown__option--selected'] : ''
                   }`}
                   onMouseDown={() => {
                     setFormData({ ...formData, club_category_id: o.value });
@@ -250,7 +217,7 @@ export default function MobileView({
           <input
             className={cn({
               [styles['form__text-input']]: true,
-              [styles['form__text-input--error']]: (formData.location.length === 0) && isTried,
+              [styles['form__text-input--error']]: formData.location.length === 0 && isTried,
             })}
             value={formData.location}
             placeholder="동아리 방 위치를 입력하세요(필수)"
@@ -308,7 +275,6 @@ export default function MobileView({
               }}
             />
           </div>
-
         </div>
         <div className={styles['form-contact']}>
           <div className={styles['form-label']}>전화번호:</div>
@@ -320,10 +286,12 @@ export default function MobileView({
               })}
               value={formData.phone_number}
               placeholder="대표자 전화번호를 입력해주세요.(필수)"
-              onChange={(e) => setFormData((prev) => ({
-                ...prev,
-                phone_number: addHyphen(e.target.value),
-              }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  phone_number: addHyphen(e.target.value),
+                }))
+              }
             />
             {!formData.phone_number && isTried && (
               <div className={styles['error-container']}>

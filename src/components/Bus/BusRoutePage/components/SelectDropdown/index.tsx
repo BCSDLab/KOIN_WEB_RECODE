@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ChevronLeft from 'assets/svg/Bus/chevron-left.svg';
 import ChevronRight from 'assets/svg/Bus/chevron-right.svg';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './SelectDropdown.module.scss';
@@ -21,9 +21,13 @@ interface SelectDropdownProps {
 }
 
 export default function SelectDropdown({
-  type, options, selectedLabel, setSelectedLabel, setValue,
+  type,
+  options,
+  selectedLabel,
+  setSelectedLabel,
+  setValue,
 }: SelectDropdownProps) {
-  const [isOpen,, setClose, toggleOpen] = useBooleanState(false);
+  const [isOpen, , setClose, toggleOpen] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: setClose });
   const selectedItemRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -62,7 +66,7 @@ export default function SelectDropdown({
       const selectedOffset = selectedElement.offsetTop;
       const selectedHeight = selectedElement.offsetHeight;
 
-      dropdownRef.current.scrollTop = selectedOffset - (dropdownHeight / 2) + (selectedHeight / 2);
+      dropdownRef.current.scrollTop = selectedOffset - dropdownHeight / 2 + selectedHeight / 2;
     }
   }, [isOpen]);
 
@@ -79,11 +83,7 @@ export default function SelectDropdown({
       >
         <ChevronLeft />
       </button>
-      <button
-        type="button"
-        className={styles.selector}
-        onClick={() => toggleOpen()}
-      >
+      <button type="button" className={styles.selector} onClick={() => toggleOpen()}>
         <span className={styles.selector__text}>{selectedLabel}</span>
       </button>
       <button

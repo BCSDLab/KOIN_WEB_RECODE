@@ -1,20 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-restricted-imports */
 import { useEffect, useState } from 'react';
-import {
-  Controller, useFormContext, useFormState, useWatch,
-} from 'react-hook-form';
-import { checkPhone, smsSend, smsVerify } from 'api/auth';
-import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
+import { useMutation } from '@tanstack/react-query';
+import { checkPhone, smsSend, smsVerify } from 'api/auth';
+import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { GENDER_OPTIONS, MESSAGES, REGEX } from 'static/auth';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
-import type { SmsSendResponse } from 'api/auth/entity';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
-import useCountdownTimer from '../../hooks/useCountdownTimer';
-import styles from './MobileVerification.module.scss';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
+import useCountdownTimer from '../../hooks/useCountdownTimer';
+import type { SmsSendResponse } from 'api/auth/entity';
+import styles from './MobileVerification.module.scss';
 
 interface MobileVerificationProps {
   onNext: () => void;
@@ -56,7 +54,10 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
   const [smsSendCountData, setSmsSendCountData] = useState<SmsSendCountData | null>(null);
 
   const {
-    isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,
+    isRunning: isTimer,
+    secondsLeft: timerValue,
+    start: runTimer,
+    stop: stopTimer,
   } = useCountdownTimer({
     duration: 180,
     onExpire: () => {
@@ -66,7 +67,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
 
   const { mutate: sendSMSToUser } = useMutation({
     mutationFn: smsSend,
-    onSuccess: (data : SmsSendResponse) => {
+    onSuccess: (data: SmsSendResponse) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
       runTimer();
       showVerification();
@@ -84,7 +85,9 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
       if (isKoinError(err)) {
         if (err.status === 400) setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
 
-        if (err.status === 429) { setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP }); }
+        if (err.status === 429) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.VERIFICATION.STOP });
+        }
       }
     },
   });
@@ -104,9 +107,13 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT }); }
+        if (err.status === 400) {
+          setVerificationMessage({ type: 'warning', content: MESSAGES.VERIFICATION.INCORRECT });
+        }
 
-        if (err.status === 404) { setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT }); }
+        if (err.status === 404) {
+          setVerificationMessage({ type: 'error', content: MESSAGES.VERIFICATION.TIMEOUT });
+        }
       }
     },
   });
@@ -124,9 +131,13 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
     },
     onError: (err) => {
       if (isKoinError(err)) {
-        if (err.status === 400) { setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID }); }
+        if (err.status === 400) {
+          setPhoneMessage({ type: 'warning', content: MESSAGES.PHONE.INVALID });
+        }
 
-        if (err.status === 409) { setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED }); }
+        if (err.status === 409) {
+          setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED });
+        }
       }
     },
   });
@@ -172,11 +183,7 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
                 {...field}
                 placeholder="성함을 입력해 주세요."
                 isDelete
-                message={
-                  fieldState.error?.message
-                    ? { type: 'warning', content: fieldState.error.message }
-                    : null
-                }
+                message={fieldState.error?.message ? { type: 'warning', content: fieldState.error.message } : null}
               />
             )}
           />
@@ -191,99 +198,96 @@ function MobileVerification({ onNext }: MobileVerificationProps) {
         </div>
 
         {isNameAndGenderFilled && (
-        <div className={styles['number-wrapper']}>
-          <h1 className={styles['number-wrapper__header']}>휴대전화 번호를 입력해 주세요.</h1>
-          <div className={styles['input-wrapper']}>
-            <Controller
-              name="phone_number"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="- 없이 번호를 입력해 주세요."
-                  isDelete={!isVerified}
-                  message={phoneMessage}
-                  isButton
-                  disabled={isVerified}
-                  buttonText="인증번호 발송"
-                  buttonDisabled={!field.value || isDisabled || isVerified}
-                  buttonOnClick={() => checkPhoneNumber(phoneNumber)}
-                  maxLength={11}
-                >
-                  {phoneMessage?.type === 'success' && (
-                    <div className={styles['label-count-number']}>
-                      {' '}
-                      남은 횟수 (
-                      {smsSendCountData?.remaining_count}
-                      /
-                      {smsSendCountData?.total_count}
-                      )
-                    </div>
-                  )}
-                  {
-                    phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
-                      <a href={ROUTES.Auth()} className={styles['label-link-button']}>로그인하기</a>
-                    )
-                  }
-                </CustomInput>
-              )}
-            />
-          </div>
-          {phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
-            <div className={styles['input__error-message']}>
-              해당 전화번호로 가입하신 적 없으신가요?
-              <a href={ROUTES.Inquiry()} target="_blank" rel="noopener noreferrer" className={styles['label-link-button']}>문의하기</a>
+          <div className={styles['number-wrapper']}>
+            <h1 className={styles['number-wrapper__header']}>휴대전화 번호를 입력해 주세요.</h1>
+            <div className={styles['input-wrapper']}>
+              <Controller
+                name="phone_number"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <CustomInput
+                    {...field}
+                    placeholder="- 없이 번호를 입력해 주세요."
+                    isDelete={!isVerified}
+                    message={phoneMessage}
+                    isButton
+                    disabled={isVerified}
+                    buttonText="인증번호 발송"
+                    buttonDisabled={!field.value || isDisabled || isVerified}
+                    buttonOnClick={() => checkPhoneNumber(phoneNumber)}
+                    maxLength={11}
+                  >
+                    {phoneMessage?.type === 'success' && (
+                      <div className={styles['label-count-number']}>
+                        {' '}
+                        남은 횟수 ({smsSendCountData?.remaining_count}/{smsSendCountData?.total_count})
+                      </div>
+                    )}
+                    {phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
+                      <a href={ROUTES.Auth()} className={styles['label-link-button']}>
+                        로그인하기
+                      </a>
+                    )}
+                  </CustomInput>
+                )}
+              />
             </div>
-          )}
-
-          {isVerificationShown && (
-          <div className={styles['input-wrapper']}>
-            <Controller
-              name="verification_code"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <CustomInput
-                  {...field}
-                  placeholder="인증번호를 입력해주세요."
-                  isDelete
-                  isTimer={isVerified ? false : isTimer}
-                  timerValue={timerValue}
-                  message={verificationMessage}
-                  isButton
-                  buttonText="인증번호 확인"
-                  buttonDisabled={!field.value}
-                  buttonOnClick={() => onClickSendVerificationButton()}
+            {phoneMessage?.type === 'error' && phoneMessage?.content === '이미 가입된 전화 번호입니다.' && (
+              <div className={styles['input__error-message']}>
+                해당 전화번호로 가입하신 적 없으신가요?
+                <a
+                  href={ROUTES.Inquiry()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles['label-link-button']}
                 >
-                  {verificationMessage?.type === 'default' && (
-                    <a
-                      href="https://docs.google.com/forms/d/e/1FAIpQLSeRGc4IIHrsTqZsDLeX__lZ7A-acuioRbABZZFBDY9eMsMTxQ/viewform"
-                      className={styles['label-link-button']}
-                      target="_blank"
-                      rel="noreferrer"
+                  문의하기
+                </a>
+              </div>
+            )}
+
+            {isVerificationShown && (
+              <div className={styles['input-wrapper']}>
+                <Controller
+                  name="verification_code"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <CustomInput
+                      {...field}
+                      placeholder="인증번호를 입력해주세요."
+                      isDelete
+                      isTimer={isVerified ? false : isTimer}
+                      timerValue={timerValue}
+                      message={verificationMessage}
+                      isButton
+                      buttonText="인증번호 확인"
+                      buttonDisabled={!field.value}
+                      buttonOnClick={() => onClickSendVerificationButton()}
                     >
-                      문의하기
-                    </a>
+                      {verificationMessage?.type === 'default' && (
+                        <a
+                          href="https://docs.google.com/forms/d/e/1FAIpQLSeRGc4IIHrsTqZsDLeX__lZ7A-acuioRbABZZFBDY9eMsMTxQ/viewform"
+                          className={styles['label-link-button']}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          문의하기
+                        </a>
+                      )}
+                    </CustomInput>
                   )}
-                </CustomInput>
-              )}
-            />
+                />
+              </div>
+            )}
           </div>
-          )}
-        </div>
         )}
       </div>
 
-      <button
-        type="button"
-        onClick={onNext}
-        className={styles['next-button']}
-        disabled={!isValid || !isCodeCorrect}
-      >
+      <button type="button" onClick={onNext} className={styles['next-button']} disabled={!isValid || !isCodeCorrect}>
         다음
       </button>
-
     </div>
   );
 }

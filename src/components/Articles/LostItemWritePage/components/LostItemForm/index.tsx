@@ -1,11 +1,11 @@
 import { cn } from '@bcsdlab/utils';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import { LostItem, LostItemHandler } from 'components/Articles/hooks/useLostItemForm';
-import FormImage from 'components/Articles/LostItemWritePage/components/FormImage';
-import FormContent from 'components/Articles/LostItemWritePage/components/FormContent';
-import FormFoundPlace from 'components/Articles/LostItemWritePage/components/FormFoundPlace';
 import FormCategory from 'components/Articles/LostItemWritePage/components/FormCategory';
+import FormContent from 'components/Articles/LostItemWritePage/components/FormContent';
 import FormDate from 'components/Articles/LostItemWritePage/components/FormDate';
+import FormFoundPlace from 'components/Articles/LostItemWritePage/components/FormFoundPlace';
+import FormImage from 'components/Articles/LostItemWritePage/components/FormImage';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {
@@ -21,9 +21,7 @@ interface LostItemFormProps {
   removeLostItem: (index: number) => void;
 }
 
-export default function LostItemForm({
-  type, count, lostItem, lostItemHandler, removeLostItem,
-}: LostItemFormProps) {
+export default function LostItemForm({ type, count, lostItem, lostItemHandler, removeLostItem }: LostItemFormProps) {
   const {
     category,
     foundDate,
@@ -35,23 +33,14 @@ export default function LostItemForm({
     isDateSelected,
     isFoundPlaceSelected,
   } = lostItem;
-  const {
-    setCategory,
-    setFoundDate,
-    setFoundPlace,
-    setContent,
-    setImages,
-    setHasDateBeenSelected,
-  } = lostItemHandler;
+  const { setCategory, setFoundDate, setFoundPlace, setContent, setImages, setHasDateBeenSelected } = lostItemHandler;
 
   const itemTag = `${MAX_LOST_ITEM_TYPE[type]} ${count + 1}`;
 
   return (
     <div className={styles.container}>
       <div className={styles.tag}>
-        <span className={styles.tag__chip}>
-          {itemTag}
-        </span>
+        <span className={styles.tag__chip}>{itemTag}</span>
         <button
           className={cn({
             [styles.tag__delete]: true,
@@ -88,19 +77,10 @@ export default function LostItemForm({
           />
         </div>
         <div className={`${styles.template__right}`}>
-          <FormImage
-            images={images}
-            setImages={setImages}
-            type={type}
-            formIndex={count}
-          />
+          <FormImage images={images} setImages={setImages} type={type} formIndex={count} />
         </div>
         <div className={styles.template__bottom}>
-          <FormContent
-            content={content}
-            setContent={setContent}
-            type={type}
-          />
+          <FormContent content={content} setContent={setContent} type={type} />
         </div>
       </div>
     </div>

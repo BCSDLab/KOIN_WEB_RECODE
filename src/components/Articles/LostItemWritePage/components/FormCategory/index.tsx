@@ -12,9 +12,7 @@ interface FormCategoryProps {
   type: 'FOUND' | 'LOST';
 }
 
-export default function FormCategory({
-  category, setCategory, isCategorySelected, type,
-}: FormCategoryProps) {
+export default function FormCategory({ category, setCategory, isCategorySelected, type }: FormCategoryProps) {
   const { logFindUserCategory, logLostItemCategory } = useArticlesLogger();
 
   const handleCategoryClick = (item: FindUserCategory) => {

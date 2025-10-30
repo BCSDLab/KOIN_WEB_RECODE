@@ -2,13 +2,13 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { auth } from 'api';
-import type { LoginResponse } from 'api/auth/entity';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import { setCookie } from 'utils/ts/cookie';
 import { saveTokensToNative } from 'utils/ts/iosBridge';
 import showToast from 'utils/ts/showToast';
 import { useTokenStore } from 'utils/zustand/auth';
+import type { LoginResponse } from 'api/auth/entity';
 
 interface IsAutoLogin {
   isAutoLoginFlag: boolean;

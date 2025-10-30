@@ -1,22 +1,31 @@
-import { Review } from 'api/store/entity';
-import EmptyStar from 'assets/svg/Review/empty-star.svg';
-import Star from 'assets/svg/Review/star.svg';
-import Kebab from 'assets/svg/Review/kebab.svg';
-import ClickedKebab from 'assets/svg/Review/clicked-kebab.svg';
-import Mine from 'assets/svg/Review/check-mine.svg';
-import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
-import SelectButton from 'components/Store/StoreDetailPage/components/Review/components/SelectButton/SelectButton';
-import ImageModal from 'components/modal/Modal/ImageModal';
-import { cn } from '@bcsdlab/utils';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
-import { useDropdown } from 'components/Store/StoreDetailPage/hooks/useDropdown';
 import { useCallback, useEffect } from 'react';
+import { cn } from '@bcsdlab/utils';
+import { Review } from 'api/store/entity';
+import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
+import Mine from 'assets/svg/Review/check-mine.svg';
+import ClickedKebab from 'assets/svg/Review/clicked-kebab.svg';
+import EmptyStar from 'assets/svg/Review/empty-star.svg';
+import Kebab from 'assets/svg/Review/kebab.svg';
+import Star from 'assets/svg/Review/star.svg';
+import ImageModal from 'components/modal/Modal/ImageModal';
+import { Portal } from 'components/modal/Modal/PortalProvider';
+import SelectButton from 'components/Store/StoreDetailPage/components/Review/components/SelectButton/SelectButton';
+import { useDropdown } from 'components/Store/StoreDetailPage/hooks/useDropdown';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './ReviewCard.module.scss';
 
 export default function ReviewCard({
-  nick_name, rating, content, image_urls, menu_names,
-  is_mine, is_modified, created_at, review_id, is_reported, store_id,
+  nick_name,
+  rating,
+  content,
+  image_urls,
+  menu_names,
+  is_mine,
+  is_modified,
+  created_at,
+  review_id,
+  is_reported,
+  store_id,
 }: Review & { store_id: string }) {
   const emptyStarList = new Array(5 - rating).fill(false);
   const starList = new Array(rating).fill(true);
@@ -64,59 +73,44 @@ export default function ReviewCard({
           }}
         >
           {isOpen ? <ClickedKebab /> : <Kebab />}
-          {isOpen
-            && (
-            <SelectButton
-              store_id={store_id}
-              is_mine={is_mine}
-              review_id={review_id}
-              is_reported={is_reported}
-            />
-            )}
+          {isOpen && (
+            <SelectButton store_id={store_id} is_mine={is_mine} review_id={review_id} is_reported={is_reported} />
+          )}
         </button>
       </div>
       <div className={styles.rating}>
-        <div>
-          {ratingList.map((ratio, idx) =>
-            // eslint-disable-next-line
-            (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}
-        </div>
+        <div>{ratingList.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}</div>
         <div className={styles.created}>
           {created_at}
           {is_modified && '(수정됨)'}
         </div>
       </div>
-      {is_reported
-        ? (
-          <div className={styles.reported}>
-            <InformationIcon />
-            신고에 의해 숨김 처리되었습니다.
+      {is_reported ? (
+        <div className={styles.reported}>
+          <InformationIcon />
+          신고에 의해 숨김 처리되었습니다.
+        </div>
+      ) : (
+        <>
+          <div className={styles.content}>{content}</div>
+          <div className={styles['image-wrapper']}>
+            {image_urls.map((src, idx) => (
+              <button key={src} onClick={() => onClickImage(image_urls, idx)} type="button">
+                <img key={src} src={src} alt="메뉴 이미지" className={styles.menu__image} />
+              </button>
+            ))}
           </div>
-        ) : (
-          <>
-            <div className={styles.content}>
-              {content}
-            </div>
-            <div className={styles['image-wrapper']}>
-              {image_urls.map((src, idx) => (
-                <button
-                  key={src}
-                  onClick={() => onClickImage(image_urls, idx)}
-                  type="button"
-                >
-                  <img key={src} src={src} alt="메뉴 이미지" className={styles.menu__image} />
-                </button>
-              ))}
-            </div>
-            <div className={styles['menu-card']}>
-              {
-                // eslint-disable-next-line
-                menu_names.map((menu, idx) => <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>{menu}</div>) // 수정, 삭제하지 않음
-              }
-            </div>
-          </>
-        )}
-
+          <div className={styles['menu-card']}>
+            {
+              menu_names.map((menu, idx) => (
+                <div className={styles['menu-card__menu']} key={`${menu} ${idx}`}>
+                  {menu}
+                </div>
+              )) // 수정, 삭제하지 않음
+            }
+          </div>
+        </>
+      )}
     </div>
   );
 }

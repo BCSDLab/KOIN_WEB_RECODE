@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import {
-  Controller, FormProvider, useForm, useWatch,
-} from 'react-hook-form';
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
 import usePhoneVerificationInFindId from 'utils/hooks/auth/usePhoneVerificationInFindId';
@@ -70,10 +68,7 @@ function FindIdPhonePage() {
   return (
     <div className={styles.container}>
       <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(onClickFindIdButton)}
-          className={styles['container__form-wrapper']}
-        >
+        <form onSubmit={methods.handleSubmit(onClickFindIdButton)} className={styles['container__form-wrapper']}>
           <div className={styles['container__title-wrapper']}>
             <button type="button" onClick={onBack} aria-label="뒤로가기">
               <BackIcon />
@@ -101,14 +96,10 @@ function FindIdPhonePage() {
                       maxLength={11}
                     >
                       {phoneMessage?.type === 'success' && (
-                      <div className={styles['label-count-number']}>
-                        {' '}
-                        남은 횟수 (
-                        {smsSendCountData?.remaining_count}
-                        /
-                        {smsSendCountData?.total_count}
-                        )
-                      </div>
+                        <div className={styles['label-count-number']}>
+                          {' '}
+                          남은 횟수 ({smsSendCountData?.remaining_count}/{smsSendCountData?.total_count})
+                        </div>
                       )}
                     </PCCustomInput>
                     <button
@@ -143,13 +134,13 @@ function FindIdPhonePage() {
                       isDelete={!isVerified}
                     >
                       {verificationMessage?.type === 'default' && (
-                      <button
-                        className={styles['label-link-button']}
-                        type="button"
-                        onClick={() => router.push(ROUTES.Email())}
-                      >
-                        이메일로 찾기
-                      </button>
+                        <button
+                          className={styles['label-link-button']}
+                          type="button"
+                          onClick={() => router.push(ROUTES.Email())}
+                        >
+                          이메일로 찾기
+                        </button>
                       )}
                     </PCCustomInput>
                     <button
@@ -167,15 +158,10 @@ function FindIdPhonePage() {
           </div>
           <div className={`${styles.divider} ${styles['divider--bottom']}`} />
           <div className={styles['button-container']}>
-            <button
-              type="submit"
-              disabled={!isFormFilled || !isVerified}
-              className={styles['next-button']}
-            >
+            <button type="submit" disabled={!isFormFilled || !isVerified} className={styles['next-button']}>
               다음
             </button>
           </div>
-
         </form>
       </FormProvider>
     </div>

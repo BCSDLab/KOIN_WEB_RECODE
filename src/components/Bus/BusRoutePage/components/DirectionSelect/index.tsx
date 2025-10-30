@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { Arrival, Depart } from 'api/bus/entity';
+import ExchangeIconMobile from 'assets/svg/Bus/exchange-icon-mobile.svg';
 import ExchangeIcon from 'assets/svg/Bus/exchange-icon.svg';
 import PlaceSelect from 'components/Bus/BusRoutePage/components/PlaceSelect';
 import { LOCATION_TYPE_KEY } from 'components/Bus/BusRoutePage/constants/location';
-import ExchangeIconMobile from 'assets/svg/Bus/exchange-icon-mobile.svg';
 import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './DirectionSelect.module.scss';
 
 interface DirectionSelectProps {
@@ -19,7 +19,12 @@ interface DirectionSelectProps {
 }
 
 export default function DirectionSelect({
-  depart, setDepart, arrival, setArrival, isSearching, lookUp,
+  depart,
+  setDepart,
+  arrival,
+  setArrival,
+  isSearching,
+  lookUp,
 }: DirectionSelectProps) {
   const isMobile = useMediaQuery();
 
@@ -79,11 +84,7 @@ export default function DirectionSelect({
           />
         </div>
         {!isMobile && !isSearching && (
-          <button
-            className={styles['lookup-button']}
-            onClick={lookUp}
-            type="button"
-          >
+          <button className={styles['lookup-button']} onClick={lookUp} type="button">
             조회하기
           </button>
         )}

@@ -26,7 +26,7 @@ class IOSWebBridge {
       try {
         // iOS 웹뷰 통신 - tokenBridge 사용 (iOS에서 등록한 이름)
         window.webkit?.messageHandlers?.tokenBridge?.postMessage(JSON.stringify(payload));
-      } catch (e) {
+      } catch {
         delete this.callbackMap[callbackId]; // clean up
         reject(new Error('iOS WebView 통신 실패'));
       }
@@ -56,7 +56,7 @@ export function setTokensFromNative(access: string, refresh: string) {
   if (refresh) useTokenStore.getState().setRefreshToken(refresh);
 }
 
-export async function requestTokensFromNative(): Promise<{ access: string, refresh: string }> {
+export async function requestTokensFromNative(): Promise<{ access: string; refresh: string }> {
   // 이미 토큰이 있으면 그냥 반환
   const existingToken = useTokenStore.getState().token;
   const existingRefresh = useTokenStore.getState().refreshToken;
@@ -73,7 +73,7 @@ export async function requestTokensFromNative(): Promise<{ access: string, refre
       access: tokens?.access || '',
       refresh: tokens?.refresh || '',
     };
-  } catch (error) {
+  } catch {
     return { access: '', refresh: '' };
   }
 }
@@ -83,7 +83,7 @@ export async function saveTokensToNative(access: string, refresh: string): Promi
   try {
     await window.NativeBridge?.call('putUserToken', { access, refresh });
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }

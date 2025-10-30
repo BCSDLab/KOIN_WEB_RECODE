@@ -1,13 +1,13 @@
 import React, { Suspense, useEffect } from 'react';
-import Timetable from 'components/TimetablePage/components/Timetable';
+import Link from 'next/link';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
-import { useSemesterAction, useSemester } from 'utils/zustand/semester';
+import Timetable from 'components/TimetablePage/components/Timetable';
 import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
-import Link from 'next/link';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useSemesterAction, useSemester } from 'utils/zustand/semester';
 import styles from './IndexTimetable.module.scss';
 
 function CurrentSemesterTimetable() {
@@ -18,9 +18,7 @@ function CurrentSemesterTimetable() {
 
   useEffect(() => {
     if (timetableFrameList) {
-      const mainFrame = timetableFrameList.find(
-        (frame) => frame.is_main,
-      );
+      const mainFrame = timetableFrameList.find((frame) => frame.is_main);
       if (mainFrame && mainFrame.id) {
         setCurrentFrameIndex(mainFrame.id);
       }

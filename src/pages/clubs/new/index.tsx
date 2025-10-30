@@ -1,11 +1,11 @@
-import { NewClubData } from 'api/club/entity';
 import { useState } from 'react';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useUser } from 'utils/hooks/state/useUser';
+import { NewClubData } from 'api/club/entity';
 import AdditionalInfoModal from 'components/Club/NewClubPage/components/AdditionalInfoModal';
 import MobileView from 'components/Club/NewClubPage/components/MobileView';
 import PCView from 'components/Club/NewClubPage/components/PCView';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useUser } from 'utils/hooks/state/useUser';
 import styles from './NewClubPage.module.scss';
 
 function NewClubPage() {
@@ -26,16 +26,12 @@ function NewClubPage() {
 
   return (
     <div className={styles.layout}>
-      {isMobile
-        ? <MobileView formData={formData} setFormData={setFormData} openModal={openModal} />
-        : <PCView formData={formData} setFormData={setFormData} openModal={openModal} />}
-      {isModalOpen && (
-        <AdditionalInfoModal
-          closeModal={closeModal}
-          formData={formData}
-          setFormData={setFormData}
-        />
+      {isMobile ? (
+        <MobileView formData={formData} setFormData={setFormData} openModal={openModal} />
+      ) : (
+        <PCView formData={formData} setFormData={setFormData} openModal={openModal} />
       )}
+      {isModalOpen && <AdditionalInfoModal closeModal={closeModal} formData={formData} setFormData={setFormData} />}
     </div>
   );
 }

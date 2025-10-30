@@ -1,26 +1,19 @@
 /* eslint-disable import/no-duplicates */
-/* eslint-disable react/no-array-index-key */
+
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { Client } from '@stomp/stompjs';
 
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
-import showToast from 'utils/ts/showToast';
-import ROUTES from 'static/routes';
 import { uploadLostItemFile } from 'api/uploadFile';
-import type { LostItemChatroomDetailMessage, LostItemChatroomListResponse } from 'api/articles/entity';
 
-import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
-import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
-import SendIcon from 'assets/svg/Articles/send.svg';
-import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
 import BlockIcon from 'assets/svg/Articles/block.svg';
+import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
+import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
+import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
+import SendIcon from 'assets/svg/Articles/send.svg';
 
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
-import { useUser } from 'utils/hooks/state/useUser';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
 import useChatroomQuery from 'components/Articles/LostItemChatPage/hooks/useChatroomQuery';
 import {
@@ -29,9 +22,16 @@ import {
   formatISODateToTime,
   getKoreaISODate,
 } from 'components/Articles/LostItemChatPage/utils/date';
+import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import Link from 'next/link';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useUser } from 'utils/hooks/state/useUser';
+import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import showToast from 'utils/ts/showToast';
+import type { LostItemChatroomDetailMessage, LostItemChatroomListResponse } from 'api/articles/entity';
 import styles from './LostItemChatPage.module.scss';
 
 function LostItemChatPage({ token }: { token: string }) {
@@ -47,8 +47,7 @@ function LostItemChatPage({ token }: { token: string }) {
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [chatroomListState, setChatroomListState] = useState<
-  LostItemChatroomListResponse | null>(null);
+  const [chatroomListState, setChatroomListState] = useState<LostItemChatroomListResponse | null>(null);
   const { logMessageListSelcetClick } = useChatLogger();
 
   const {
@@ -82,21 +81,15 @@ function LostItemChatPage({ token }: { token: string }) {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
-        stompClient.subscribe(
-          `/topic/chatroom/list/${userInfo.id}`,
-          (message) => {
-            const receivedMessage = JSON.parse(message.body);
-            setChatroomListState(receivedMessage);
-          },
-        );
+        stompClient.subscribe(`/topic/chatroom/list/${userInfo.id}`, (message) => {
+          const receivedMessage = JSON.parse(message.body);
+          setChatroomListState(receivedMessage);
+        });
 
-        stompClient.subscribe(
-          `/topic/chat/${articleId}/${chatroomId}`,
-          async (message) => {
-            const receivedMessage = JSON.parse(message.body);
-            setCurrentMessageList((prev) => [...prev, receivedMessage]);
-          },
-        );
+        stompClient.subscribe(`/topic/chat/${articleId}/${chatroomId}`, async (message) => {
+          const receivedMessage = JSON.parse(message.body);
+          setCurrentMessageList((prev) => [...prev, receivedMessage]);
+        });
       },
       onStompError: () => {
         showToast('error', '채팅 서버와 연결 중 오류가 발생했습니다.');
@@ -137,7 +130,7 @@ function LostItemChatPage({ token }: { token: string }) {
           body: JSON.stringify(newMessage),
         });
       }
-    } catch (error) {
+    } catch {
       showToast('error', '이미지 업로드에 실패했습니다.');
     }
   };
@@ -163,7 +156,7 @@ function LostItemChatPage({ token }: { token: string }) {
       });
 
       setInputValue('');
-    } catch (error) {
+    } catch {
       showToast('error', '메세지 전송에 실패했습니다.');
     }
   };
@@ -186,7 +179,6 @@ function LostItemChatPage({ token }: { token: string }) {
     return () => {
       disconnectChatroom();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatroomId, articleId]);
 
   /**
@@ -219,39 +211,54 @@ function LostItemChatPage({ token }: { token: string }) {
 
       <section className={styles['chat-container']}>
         {!isMobile && (
-        <div className={styles['chat-list']}>
-          {realChatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
-          {realChatroomList?.map(({
-            article_id,
-            chat_room_id,
-            article_title,
-            last_message_at,
-            lost_item_image_url,
-            recent_message_content,
-            unread_message_count,
-          }) => (
-            <Link
-              key={`${chat_room_id}${article_id}`}
-              href={`${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`}
-              className={styles['chat-list--item']}
-              onClick={() => logMessageListSelcetClick()}
-            >
-              {lost_item_image_url
-                ? <div className={styles['chat-list--item--profile']}><img src={lost_item_image_url} alt="분실물 이미지" className={styles['chat-list--item--image']} onError={addErrorImage} /></div>
-                : <div className={styles['chat-list--item--profile']}><DefaultPhotoIcon /></div>}
-              <div className={styles['chat-list--item--content']}>
-                <div className={styles['chat-list--item--title']}>
-                  <div>{article_title}</div>
-                  <div>{formatDate(last_message_at)}</div>
-                </div>
-                <div className={styles['chat-list--item--description']}>
-                  <div className={styles['chat-list--preview-content']}>{recent_message_content}</div>
-                  {unread_message_count !== 0 && <div className={styles['chat-list--message-count']}>{unread_message_count}</div>}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+          <div className={styles['chat-list']}>
+            {realChatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
+            {realChatroomList?.map(
+              ({
+                article_id,
+                chat_room_id,
+                article_title,
+                last_message_at,
+                lost_item_image_url,
+                recent_message_content,
+                unread_message_count,
+              }) => (
+                <Link
+                  key={`${chat_room_id}${article_id}`}
+                  href={`${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`}
+                  className={styles['chat-list--item']}
+                  onClick={() => logMessageListSelcetClick()}
+                >
+                  {lost_item_image_url ? (
+                    <div className={styles['chat-list--item--profile']}>
+                      <img
+                        src={lost_item_image_url}
+                        alt="분실물 이미지"
+                        className={styles['chat-list--item--image']}
+                        onError={addErrorImage}
+                      />
+                    </div>
+                  ) : (
+                    <div className={styles['chat-list--item--profile']}>
+                      <DefaultPhotoIcon />
+                    </div>
+                  )}
+                  <div className={styles['chat-list--item--content']}>
+                    <div className={styles['chat-list--item--title']}>
+                      <div>{article_title}</div>
+                      <div>{formatDate(last_message_at)}</div>
+                    </div>
+                    <div className={styles['chat-list--item--description']}>
+                      <div className={styles['chat-list--preview-content']}>{recent_message_content}</div>
+                      {unread_message_count !== 0 && (
+                        <div className={styles['chat-list--message-count']}>{unread_message_count}</div>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              ),
+            )}
+          </div>
         )}
 
         <div className={styles['chat-view']}>
@@ -266,16 +273,21 @@ function LostItemChatPage({ token }: { token: string }) {
             <>
               <div className={styles['chat-view--header']}>
                 <div>
-                  {chatroomDetail.chat_partner_profile_image
-                    ? <img src={chatroomDetail.chat_partner_profile_image} alt="분실물 이미지" className={styles['chat-list--item--profile']} onError={addErrorImage} />
-                    : <div className={styles['chat-list--item--profile']}><DefaultPhotoIcon /></div>}
+                  {chatroomDetail.chat_partner_profile_image ? (
+                    <img
+                      src={chatroomDetail.chat_partner_profile_image}
+                      alt="분실물 이미지"
+                      className={styles['chat-list--item--profile']}
+                      onError={addErrorImage}
+                    />
+                  ) : (
+                    <div className={styles['chat-list--item--profile']}>
+                      <DefaultPhotoIcon />
+                    </div>
+                  )}
                   <div className={styles['chat-view--title']}>{chatroomDetail.article_title}</div>
                 </div>
-                <button
-                  type="button"
-                  className={styles['chat-block']}
-                  onClick={openDeleteModal}
-                >
+                <button type="button" className={styles['chat-block']} onClick={openDeleteModal}>
                   <BlockIcon />
                   <div>차단하기</div>
                 </button>
@@ -291,86 +303,121 @@ function LostItemChatPage({ token }: { token: string }) {
                   const isMe = message.user_id === userInfo?.id;
 
                   return acc.concat(
-                    (index === 0 || messageDate !== prevDate) && <div key={`date-${index}`} className={styles['message-date-header']}>{messageDate}</div>,
-                    (
-                      isMe
-                        ? (
-                          <div key={index} className={styles['message-item__right']}>
-                            <span className={styles['message-item--time']}>{messageTime}</span>
-                            <span className={styles['message-item--content__right']}>
-                              {message.is_image && <img src={message.content} alt="메세지 이미지" className={styles['message-item--content-image']} />}
-                              {!message.is_image && message.content}
-                            </span>
-                          </div>
-                        )
-                        : (
-                          <div key={index} className={styles['message-item-container']}>
-                            { (isSenderChanged || (messageTime !== prevTime)) && (
-                              <div className={styles['message-item--header']}>
-                                <div className={styles['message-item--profile']}><PersonIcon /></div>
-                                <div className={styles['message-item--name']}>{message.user_nickname || userInfo?.anonymous_nickname || '익명'}</div>
-                              </div>
-                            )}
-                            <div className={styles['message-item']}>
-                              <span className={styles['message-item--content']}>
-                                {message.is_image && <img src={message.content} alt="메세지 이미지" className={styles['message-item--content-image']} />}
-                                {!message.is_image && message.content}
-                              </span>
-                              <span className={styles['message-item--time']}>{messageTime}</span>
+                    (index === 0 || messageDate !== prevDate) && (
+                      <div key={`date-${index}`} className={styles['message-date-header']}>
+                        {messageDate}
+                      </div>
+                    ),
+                    isMe ? (
+                      <div key={index} className={styles['message-item__right']}>
+                        <span className={styles['message-item--time']}>{messageTime}</span>
+                        <span className={styles['message-item--content__right']}>
+                          {message.is_image && (
+                            <img
+                              src={message.content}
+                              alt="메세지 이미지"
+                              className={styles['message-item--content-image']}
+                            />
+                          )}
+                          {!message.is_image && message.content}
+                        </span>
+                      </div>
+                    ) : (
+                      <div key={index} className={styles['message-item-container']}>
+                        {(isSenderChanged || messageTime !== prevTime) && (
+                          <div className={styles['message-item--header']}>
+                            <div className={styles['message-item--profile']}>
+                              <PersonIcon />
+                            </div>
+                            <div className={styles['message-item--name']}>
+                              {message.user_nickname || userInfo?.anonymous_nickname || '익명'}
                             </div>
                           </div>
-                        )
+                        )}
+                        <div className={styles['message-item']}>
+                          <span className={styles['message-item--content']}>
+                            {message.is_image && (
+                              <img
+                                src={message.content}
+                                alt="메세지 이미지"
+                                className={styles['message-item--content-image']}
+                              />
+                            )}
+                            {!message.is_image && message.content}
+                          </span>
+                          <span className={styles['message-item--time']}>{messageTime}</span>
+                        </div>
+                      </div>
                     ),
                   );
                 }, [] as React.ReactNode[])}
-                {currentMessageList.length > 0
-                && currentMessageList.reduce((acc, message, index) => {
-                  const messageDate = formatISODateToMonthAndDay(message.timestamp);
-                  const prevDate = index === 0
-                    ? formatISODateToMonthAndDay(messages[messages.length - 1]?.timestamp)
-                    : formatISODateToMonthAndDay(currentMessageList[index - 1].timestamp);
-                  const messageTime = formatISODateToTime(message.timestamp);
-                  const prevTime = index === 0
-                    ? formatISODateToTime(messages[messages.length - 1]?.timestamp)
-                    : formatISODateToTime(currentMessageList[index - 1].timestamp);
-                  const isSenderChanged = index === 0
-                    ? message.user_id !== messages[messages.length - 1]?.user_id
-                    : message.user_id !== currentMessageList[index - 1]?.user_id;
-                  const isMe = (message.user_id === userInfo?.id);
+                {currentMessageList.length > 0 &&
+                  currentMessageList.reduce((acc, message, index) => {
+                    const messageDate = formatISODateToMonthAndDay(message.timestamp);
+                    const prevDate =
+                      index === 0
+                        ? formatISODateToMonthAndDay(messages[messages.length - 1]?.timestamp)
+                        : formatISODateToMonthAndDay(currentMessageList[index - 1].timestamp);
+                    const messageTime = formatISODateToTime(message.timestamp);
+                    const prevTime =
+                      index === 0
+                        ? formatISODateToTime(messages[messages.length - 1]?.timestamp)
+                        : formatISODateToTime(currentMessageList[index - 1].timestamp);
+                    const isSenderChanged =
+                      index === 0
+                        ? message.user_id !== messages[messages.length - 1]?.user_id
+                        : message.user_id !== currentMessageList[index - 1]?.user_id;
+                    const isMe = message.user_id === userInfo?.id;
 
-                  return acc.concat(
-                    (messageDate !== prevDate) && <div key={`date-${index}`} className={styles['message-date-header']}>{messageDate}</div>,
-                    (
-                      isMe
-                        ? (
-                          <div key={index} className={styles['message-item__right']}>
-                            <span className={styles['message-item--time']}>{formatISODateToTime(message.timestamp)}</span>
-                            <span className={styles['message-item--content__right']}>
-                              {message.is_image && <img src={message.content} alt="메세지 이미지" className={styles['message-item--content-image']} />}
+                    return acc.concat(
+                      messageDate !== prevDate && (
+                        <div key={`date-${index}`} className={styles['message-date-header']}>
+                          {messageDate}
+                        </div>
+                      ),
+                      isMe ? (
+                        <div key={index} className={styles['message-item__right']}>
+                          <span className={styles['message-item--time']}>{formatISODateToTime(message.timestamp)}</span>
+                          <span className={styles['message-item--content__right']}>
+                            {message.is_image && (
+                              <img
+                                src={message.content}
+                                alt="메세지 이미지"
+                                className={styles['message-item--content-image']}
+                              />
+                            )}
+                            {!message.is_image && message.content}
+                          </span>
+                        </div>
+                      ) : (
+                        <div key={index} className={styles['message-item-container']}>
+                          {(isSenderChanged || messageTime !== prevTime) && (
+                            <div className={styles['message-item--header']}>
+                              <div className={styles['message-item--profile']}>
+                                <PersonIcon />
+                              </div>
+                              <div className={styles['message-item--name']}>
+                                {message.user_nickname || userInfo?.anonymous_nickname || '익명'}
+                              </div>
+                            </div>
+                          )}
+                          <div className={styles['message-item']}>
+                            <span className={styles['message-item--content']}>
+                              {message.is_image && (
+                                <img
+                                  src={message.content}
+                                  alt="메세지 이미지"
+                                  className={styles['message-item--content-image']}
+                                />
+                              )}
                               {!message.is_image && message.content}
                             </span>
+                            <span className={styles['message-item--time']}>{messageTime}</span>
                           </div>
-                        )
-                        : (
-                          <div key={index} className={styles['message-item-container']}>
-                            { (isSenderChanged || (messageTime !== prevTime)) && (
-                              <div className={styles['message-item--header']}>
-                                <div className={styles['message-item--profile']}><PersonIcon /></div>
-                                <div className={styles['message-item--name']}>{message.user_nickname || userInfo?.anonymous_nickname || '익명'}</div>
-                              </div>
-                            )}
-                            <div className={styles['message-item']}>
-                              <span className={styles['message-item--content']}>
-                                {message.is_image && <img src={message.content} alt="메세지 이미지" className={styles['message-item--content-image']} />}
-                                {!message.is_image && message.content}
-                              </span>
-                              <span className={styles['message-item--time']}>{messageTime}</span>
-                            </div>
-                          </div>
-                        )
-                    ),
-                  );
-                }, [] as React.ReactNode[])}
+                        </div>
+                      ),
+                    );
+                  }, [] as React.ReactNode[])}
               </div>
               <div className={styles['chat-input-container-wrapper']}>
                 <div className={styles['chat-input-container']}>
@@ -396,7 +443,12 @@ function LostItemChatPage({ token }: { token: string }) {
                     onKeyDown={sendMessageToEnterKeyDown}
                     placeholder="메세지 보내기"
                   />
-                  <button type="button" onClick={sendMessage} className={styles['message-button']} aria-label="문자 전송">
+                  <button
+                    type="button"
+                    onClick={sendMessage}
+                    className={styles['message-button']}
+                    aria-label="문자 전송"
+                  >
                     <SendIcon />
                   </button>
                 </div>

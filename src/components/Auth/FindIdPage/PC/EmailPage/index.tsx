@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import {
-  Controller, FormProvider, useForm, useWatch,
-} from 'react-hook-form';
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import ROUTES from 'static/routes';
 import useEmailVerification from 'utils/hooks/auth/useEmailVerification';
 import styles from './FindIdEmailPage.module.scss';
@@ -71,10 +69,7 @@ function FindIdEmailPage() {
   return (
     <div className={styles.container}>
       <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(onClickFindIdButton)}
-          className={styles['container__form-wrapper']}
-        >
+        <form onSubmit={methods.handleSubmit(onClickFindIdButton)} className={styles['container__form-wrapper']}>
           <div className={styles['container__title-wrapper']}>
             <button type="button" onClick={onBack} aria-label="뒤로가기">
               <BackIcon />
@@ -101,14 +96,10 @@ function FindIdEmailPage() {
                       isDelete={!isVerified}
                     >
                       {emailMessage?.type === 'success' && (
-                      <div className={styles['label-count-number']}>
-                        {' '}
-                        남은 횟수 (
-                        {emailSendCountData?.remaining_count}
-                        /
-                        { emailSendCountData?.total_count}
-                        )
-                      </div>
+                        <div className={styles['label-count-number']}>
+                          {' '}
+                          남은 횟수 ({emailSendCountData?.remaining_count}/{emailSendCountData?.total_count})
+                        </div>
                       )}
                     </PCCustomInput>
                     <button
@@ -157,15 +148,10 @@ function FindIdEmailPage() {
           </div>
           <div className={`${styles.divider} ${styles['divider--bottom']}`} />
           <div className={styles['button-container']}>
-            <button
-              type="submit"
-              disabled={!isFormFilled || !isCodeCorrect}
-              className={styles['next-button']}
-            >
+            <button type="submit" disabled={!isFormFilled || !isCodeCorrect} className={styles['next-button']}>
               다음
             </button>
           </div>
-
         </form>
       </FormProvider>
     </div>

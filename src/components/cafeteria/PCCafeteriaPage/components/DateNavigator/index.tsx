@@ -1,11 +1,11 @@
 import { cn } from '@bcsdlab/utils';
+import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
 import LeftArrow from 'assets/svg/left-angle-bracket.svg';
 import RightArrow from 'assets/svg/right-angle-bracket.svg';
-import InformationIcon from 'assets/svg/common/information/information-icon-grey.svg';
-import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import useCoopshopCafeteria from 'components/cafeteria/hooks/useCoopshopCafeteria';
+import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './DateNavigator.module.scss';
 
 interface DayInfo {
@@ -39,36 +39,21 @@ const generateWeek = (today: Date) => {
 };
 
 export default function DateNavigator() {
-  const {
-    currentDate,
-    checkToday,
-    checkPast,
-    setPrevWeek,
-    setNextWeek,
-    setToday,
-    setDate,
-  } = useDatePicker();
+  const { currentDate, checkToday, checkPast, setPrevWeek, setNextWeek, setToday, setDate } = useDatePicker();
   const portalManager = useModalPortal();
   const { cafeteriaInfo } = useCoopshopCafeteria();
 
   const thisWeek = generateWeek(currentDate());
 
   const handleInformationClick = () => {
-    portalManager.open(() => (
-      <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={portalManager.close} />
-    ));
+    portalManager.open(() => <CafeteriaInfo cafeteriaInfo={cafeteriaInfo} closeInfo={portalManager.close} />);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles['date-wrapper']}>
         <div className={styles.date}>
-          <button
-            className={styles.date__button}
-            type="button"
-            aria-label="이전 날짜"
-            onClick={setPrevWeek}
-          >
+          <button className={styles.date__button} type="button" aria-label="이전 날짜" onClick={setPrevWeek}>
             <LeftArrow />
           </button>
           <button
@@ -82,20 +67,11 @@ export default function DateNavigator() {
           >
             오늘
           </button>
-          <button
-            className={styles.date__button}
-            type="button"
-            aria-label="다음 날짜"
-            onClick={setNextWeek}
-          >
+          <button className={styles.date__button} type="button" aria-label="다음 날짜" onClick={setNextWeek}>
             <RightArrow />
           </button>
         </div>
-        <button
-          type="button"
-          className={styles.information}
-          onClick={() => handleInformationClick()}
-        >
+        <button type="button" className={styles.information} onClick={() => handleInformationClick()}>
           <InformationIcon />
           학생식당정보
         </button>

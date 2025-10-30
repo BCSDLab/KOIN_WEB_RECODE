@@ -1,11 +1,9 @@
-import {
-  useCallback, useEffect, useRef, useState,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
 import useArrowKeyNavigation from 'utils/hooks/ui/useArrowKeyNavigation';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { createTouchHandlers } from 'utils/ts/touchHandler';
 import styles from './ImageModal.module.scss';
 
@@ -15,11 +13,7 @@ export interface ImageModalProps {
   onClose: () => void;
 }
 
-function ImageModal({
-  imageList,
-  imageIndex,
-  onClose,
-}: ImageModalProps) {
+function ImageModal({ imageList, imageIndex, onClose }: ImageModalProps) {
   const [selectedIndex, setSelectedIndex] = useState(imageIndex);
   const [scale, setScale] = useState(1);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
@@ -28,12 +22,15 @@ function ImageModal({
   const startTouchRef = useRef<{ x: number; y: number } | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const navigateImage = useCallback((move: number) => {
-    setSelectedIndex((prevIndex) => {
-      const newIndex = prevIndex + move;
-      return Math.max(0, Math.min(newIndex, imageList.length - 1));
-    });
-  }, [imageList.length]);
+  const navigateImage = useCallback(
+    (move: number) => {
+      setSelectedIndex((prevIndex) => {
+        const newIndex = prevIndex + move;
+        return Math.max(0, Math.min(newIndex, imageList.length - 1));
+      });
+    },
+    [imageList.length],
+  );
 
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
   useEscapeKeyDown({ onEscape: onClose });
@@ -100,7 +97,6 @@ function ImageModal({
           transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
         }}
       />
-
     </div>
   );
 }

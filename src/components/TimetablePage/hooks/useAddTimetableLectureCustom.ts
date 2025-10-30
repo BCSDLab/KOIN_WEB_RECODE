@@ -8,17 +8,9 @@ import { TIMETABLE_INFO_LIST } from './useTimetableInfoList';
 export default function useAddTimetableLectureCustom(token: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (
-      data: AddTimetableLectureCustomRequest,
-    ) => addTimetableLectureCustom(data, token),
+    mutationFn: (data: AddTimetableLectureCustomRequest) => addTimetableLectureCustom(data, token),
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        [
-          TIMETABLE_INFO_LIST,
-          variables.timetable_frame_id,
-        ],
-        data,
-      );
+      queryClient.setQueryData([TIMETABLE_INFO_LIST, variables.timetable_frame_id], data);
     },
     onError: (error) => {
       if (isKoinError(error)) {

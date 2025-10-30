@@ -1,18 +1,18 @@
 import { startTransition, useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@bcsdlab/utils';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useCalculateCredits from 'components/GraduationCalculatorPage/hooks/useCalculateCredits';
 import { GradesByCourseType } from 'api/graduationCalculator/entity';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useCalculateCredits from 'components/GraduationCalculatorPage/hooks/useCalculateCredits';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import useGetMultiMajorLecture from 'components/TimetablePage/hooks/useGetMultiMajorLecture';
-import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
+import { motion, AnimatePresence } from 'framer-motion';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import styles from './CreditChart.module.scss';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import SemesterLectureListModal from './SemesterLectureListModal';
+import styles from './CreditChart.module.scss';
 
-function CreditChart({ totalGrades } : { totalGrades: number }) {
+function CreditChart({ totalGrades }: { totalGrades: number }) {
   const logger = useLogger();
   const { lock, unlock } = useScrollLock(false);
   const portalManger = useModalPortal();
@@ -28,34 +28,40 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
       value: `강의 개설 목록_${courseType}`,
     });
     lock();
-    startTransition(() => portalManger.open((portalOption: Portal) => (
-      <SemesterLectureListModal
-        onClose={() => {
-          portalOption.close();
-          unlock();
-        }}
-        initialCourse={courseType}
-      />
-    )));
+    startTransition(() =>
+      portalManger.open((portalOption: Portal) => (
+        <SemesterLectureListModal
+          onClose={() => {
+            portalOption.close();
+            unlock();
+          }}
+          initialCourse={courseType}
+        />
+      )),
+    );
   };
 
   const updateValues = (newValues: GradesByCourseType[]) => {
     setCreditState(newValues);
   };
-  const multiMajorGrades = multiMajorLecture ? multiMajorLecture
-    .reduce((acc, curr) => acc + Number(curr.grades), 0) : null;
+  const multiMajorGrades = multiMajorLecture
+    ? multiMajorLecture.reduce((acc, curr) => acc + Number(curr.grades), 0)
+    : null;
 
   useEffect(() => {
     if (calculateCredits) {
-      updateValues(
-        [...calculateCredits.course_types,
-          ...(multiMajorGrades ? [{
-            courseType: '다전공',
-            requiredGrades: 0,
-            grades: multiMajorGrades,
-          }] : []),
-        ],
-      );
+      updateValues([
+        ...calculateCredits.course_types,
+        ...(multiMajorGrades
+          ? [
+              {
+                courseType: '다전공',
+                requiredGrades: 0,
+                grades: multiMajorGrades,
+              },
+            ]
+          : []),
+      ]);
     }
   }, [calculateCredits, multiMajorGrades]);
 
@@ -63,15 +69,12 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
     <div className={styles['credit-chart']}>
       <div className={styles['credit-chart__total-grades']}>{`총 학점: ${totalGrades}`}</div>
       <div className={styles['credit-chart__y-axis']}>
-        {Array.from({ length: 13 }, (_, index) => 60 - index * 5).map(
-          (credit, idx) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div key={`y-axis-${idx}`} className={styles['credit-chart__y-axis--value']}>
-              <div>{credit}</div>
-              <div className={styles['credit-chart__contour']} />
-            </div>
-          ),
-        )}
+        {Array.from({ length: 13 }, (_, index) => 60 - index * 5).map((credit, idx) => (
+          <div key={`y-axis-${idx}`} className={styles['credit-chart__y-axis--value']}>
+            <div>{credit}</div>
+            <div className={styles['credit-chart__contour']} />
+          </div>
+        ))}
       </div>
       <motion.div
         layout
@@ -112,9 +115,7 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
                   {`${credit.grades} ${credit.requiredGrades ? `/ ${credit.requiredGrades}` : ''}`}
                 </div>
               </div>
-              <div className={styles['credit-chart__x-axis--name']}>
-                {credit.courseType}
-              </div>
+              <div className={styles['credit-chart__x-axis--name']}>{credit.courseType}</div>
             </motion.div>
           ))}
         </AnimatePresence>

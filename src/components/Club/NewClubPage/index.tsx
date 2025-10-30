@@ -1,5 +1,5 @@
-import { NewClubData } from 'api/club/entity';
 import { useState } from 'react';
+import { NewClubData } from 'api/club/entity';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useUser } from 'utils/hooks/state/useUser';
@@ -26,16 +26,12 @@ function NewClubPage() {
 
   return (
     <div className={styles.layout}>
-      {isMobile
-        ? <MobileView formData={formData} setFormData={setFormData} openModal={openModal} />
-        : <PCView formData={formData} setFormData={setFormData} openModal={openModal} />}
-      {isModalOpen && (
-        <AdditionalInfoModal
-          closeModal={closeModal}
-          formData={formData}
-          setFormData={setFormData}
-        />
+      {isMobile ? (
+        <MobileView formData={formData} setFormData={setFormData} openModal={openModal} />
+      ) : (
+        <PCView formData={formData} setFormData={setFormData} openModal={openModal} />
       )}
+      {isModalOpen && <AdditionalInfoModal closeModal={closeModal} formData={formData} setFormData={setFormData} />}
     </div>
   );
 }

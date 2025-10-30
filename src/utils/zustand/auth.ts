@@ -1,6 +1,6 @@
+import { getCookie } from 'utils/ts/cookie';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { getCookie } from 'utils/ts/cookie';
 
 export type UserType = 'STUDENT' | 'GENERAL';
 
@@ -28,10 +28,11 @@ export const useTokenStore = create(
     }),
     {
       name: 'refresh-token-storage',
-      partialize: (state) => ({
-        refreshToken: state.refreshToken,
-        userType: state.userType,
-      }) as State & Actions,
+      partialize: (state) =>
+        ({
+          refreshToken: state.refreshToken,
+          userType: state.userType,
+        }) as State & Actions,
     },
   ),
 );

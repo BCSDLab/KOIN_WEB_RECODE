@@ -31,11 +31,7 @@ export default function DeleteModal({ close, deleteMyReview, storeDetail }: Prop
     <div className={styles.container}>
       <div className={styles.modal}>
         <div className={styles.modal__title}>
-          리뷰를
-          {' '}
-          <span>삭제</span>
-          {' '}
-          하시겠습니까?
+          리뷰를 <span>삭제</span> 하시겠습니까?
         </div>
         <div className={styles.modal__description}>삭제한 리뷰를 되돌릴 수 없습니다.</div>
         <div className={styles.modal__button}>
