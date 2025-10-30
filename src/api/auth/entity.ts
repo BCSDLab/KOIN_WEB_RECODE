@@ -63,9 +63,9 @@ export interface CheckPasswordRequest {
   password: string;
 }
 
-export interface SignupStudentResponse extends APIResponse { }
+export type SignupStudentResponse = APIResponse;
 
-export interface SignupGeneralResponse extends APIResponse { }
+export type SignupGeneralResponse = APIResponse;
 
 export interface RefreshRequest {
   refresh_token: string;
@@ -134,16 +134,16 @@ export interface GeneralUserUpdateRequest {
   password?: string;
 }
 
-export interface DeleteResponse extends APIResponse { }
+export type DeleteResponse = APIResponse;
 
-export interface CheckIdResponse extends APIResponse { }
+export type CheckIdResponse = APIResponse;
 
 export interface FindPasswordResponse extends APIResponse {
   code: number;
   message: string;
 }
 
-export interface CheckPasswordResponse extends APIResponse { }
+export type CheckPasswordResponse = APIResponse;
 
 export interface UpdateAcademicInfoRequest extends APIResponse {
   student_number: string;
@@ -157,14 +157,14 @@ export interface UpdateAcademicInfoResponse extends APIResponse {
   major: string | null;
 }
 
-export interface CheckPhoneResponse extends APIResponse { }
+export type CheckPhoneResponse = APIResponse;
 export interface SmsSendResponse extends APIResponse {
   target: string;
   total_count: number;
   remaining_count: number;
   current_count: number;
 }
-export interface SmsVerifyResponse extends APIResponse { }
+export type SmsVerifyResponse = APIResponse;
 
 export interface SmsSendRequest {
   phone_number: string;
@@ -179,7 +179,7 @@ export interface EmailExistsRequest {
   email: string;
 }
 
-export interface EmailExistsResponse extends APIResponse { }
+export type EmailExistsResponse = APIResponse;
 export interface VerificationEmailSendResponse extends APIResponse {
   target: string;
   total_count: number;
@@ -196,7 +196,7 @@ export interface VerificationEmailVerifyRequest {
   verification_code: string;
 }
 
-export interface VerificationEmailVerifyResponse extends APIResponse { }
+export type VerificationEmailVerifyResponse = APIResponse;
 
 export interface IdFindEmailRequest {
   email: string;
@@ -211,27 +211,27 @@ export interface PhoneExistsRequest {
   phone_number: string;
 }
 
-export interface PhoneExistsResponse extends APIResponse { }
+export type PhoneExistsResponse = APIResponse;
 
 export interface IdExistsRequest {
   login_id: string;
 }
 
-export interface IdExistsResponse extends APIResponse { }
+export type IdExistsResponse = APIResponse;
 
 export interface IdMatchPhoneRequest {
   login_id: string;
   phone_number: string;
 }
 
-export interface IdMatchPhoneResponse extends APIResponse { }
+export type IdMatchPhoneResponse = APIResponse;
 
 export interface IdMatchEmailRequest {
   login_id: string;
   email: string;
 }
 
-export interface IdMatchEmailResponse extends APIResponse { }
+export type IdMatchEmailResponse = APIResponse;
 
 export interface ResetPasswordSmsRequest {
   login_id: string;
@@ -239,7 +239,7 @@ export interface ResetPasswordSmsRequest {
   new_password: string;
 }
 
-export interface ResetPasswordSmsResponse extends APIResponse { }
+export type ResetPasswordSmsResponse = APIResponse;
 
 export interface ResetPasswordEmailRequest {
   login_id: string;
@@ -247,7 +247,7 @@ export interface ResetPasswordEmailRequest {
   new_password: string;
 }
 
-export interface ResetPasswordEmailResponse extends APIResponse { }
+export type ResetPasswordEmailResponse = APIResponse;
 
 export interface VerificationSmsSendResponse extends APIResponse {
   target: string;
@@ -260,7 +260,7 @@ export interface VerificationSmsSendRequest {
   phone_number: string;
 }
 
-export interface VerificationSmsVerifyResponse extends APIResponse { }
+export type VerificationSmsVerifyResponse = APIResponse;
 
 export interface VerificationSmsVerifyRequest {
   phone_number: string;
