@@ -77,19 +77,11 @@ export default function BusNotice({ loggingLocation }: BusNoticeProps) {
     <div className={styles.container}>
       {showNotice && (
         <div className={styles.notice}>
-          {!isMobile && (<InformationIcon />)}
-          <button
-            className={styles.notice__description}
-            type="button"
-            onClick={handleClickNavigateNotice}
-          >
+          {!isMobile && <InformationIcon />}
+          <button className={styles.notice__description} type="button" onClick={handleClickNavigateNotice}>
             {title}
           </button>
-          <button
-            type="button"
-            onClick={handleClickDismissNotice}
-            aria-label="공지 닫기"
-          >
+          <button type="button" onClick={handleClickDismissNotice} aria-label="공지 닫기">
             <CloseIcon aria-hidden="true" />
           </button>
         </div>

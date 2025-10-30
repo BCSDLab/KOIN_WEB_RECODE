@@ -4,9 +4,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 
 export const useGetReview = (id: number, sorter: string) => {
   const token = useTokenState();
-  const {
-    data, hasNextPage, fetchNextPage, isFetchingNextPage,
-  } = useSuspenseInfiniteQuery({
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery({
     queryKey: ['review', id, sorter],
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getReviewList(id, pageParam, sorter, token),
@@ -17,6 +15,9 @@ export const useGetReview = (id: number, sorter: string) => {
   });
 
   return {
-    data, hasNextPage, fetchNextPage, isFetchingNextPage,
+    data,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
   };
 };

@@ -14,15 +14,10 @@ interface ClubImageUploaderProps {
   setFormData: Dispatch<SetStateAction<ClubRecruitment>>;
 }
 
-export default function ClubImageUploader({
-  formData,
-  setFormData,
-}: ClubImageUploaderProps) {
+export default function ClubImageUploader({ formData, setFormData }: ClubImageUploaderProps) {
   const isMobile = useMediaQuery();
   const [isDragOver, setIsDragOver] = useState(false);
-  const {
-    imgRef, saveImgFile, setImageFile,
-  } = useImageUpload({
+  const { imgRef, saveImgFile, setImageFile } = useImageUpload({
     uploadFn: uploadClubFile,
     resize: (file) => imageResize(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.8 }),
   });
@@ -69,11 +64,7 @@ export default function ClubImageUploader({
           onClick={clearImage}
           aria-label="이미지 클릭 시 삭제"
         >
-          <img
-            className={styles['form-image__img']}
-            src={formData.image_url}
-            alt="동아리 이미지 미리보기"
-          />
+          <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
         </button>
       </div>
     );
@@ -82,12 +73,10 @@ export default function ClubImageUploader({
   return (
     <div className={styles['form-image']}>
       <label
-        className={cn(
-          {
-            [styles['form-image__label']]: true,
-            [styles['form-image__label--drag-over']]: isDragOver,
-          },
-        )}
+        className={cn({
+          [styles['form-image__label']]: true,
+          [styles['form-image__label--drag-over']]: isDragOver,
+        })}
         htmlFor="club-image-upload"
         onDragOver={(e) => {
           e.preventDefault();

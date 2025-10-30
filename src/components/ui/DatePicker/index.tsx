@@ -15,9 +15,7 @@ interface DatePickerProps {
   renderTrigger?: (toggle: () => void) => React.ReactNode;
 }
 
-export default function DatePicker({
-  selectedDate, onChange, triggerType, renderTrigger,
-}: DatePickerProps) {
+export default function DatePicker({ selectedDate, onChange, triggerType, renderTrigger }: DatePickerProps) {
   const [isOpen, , closeDatePicker, toggleOpen] = useBooleanState(false);
   const [viewDate, setViewDate] = useState(selectedDate);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDatePicker });

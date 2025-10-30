@@ -78,20 +78,20 @@ export default function LoginForm() {
           로그인
         </button>
         {isMobile && (
-        <Link
-          className={styles.loginform__button}
-          href={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
-          onClick={() => {
-            sessionLogger.actionSessionEvent({
-              session_name: 'sign_up',
-              event_label: 'start_sign_up',
-              value: '회원가입 시작',
-              event_category: 'click',
-            });
-          }}
-        >
-          회원가입
-        </Link>
+          <Link
+            className={styles.loginform__button}
+            href={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
+            onClick={() => {
+              sessionLogger.actionSessionEvent({
+                session_name: 'sign_up',
+                event_label: 'start_sign_up',
+                value: '회원가입 시작',
+                event_category: 'click',
+              });
+            }}
+          >
+            회원가입
+          </Link>
         )}
       </form>
       <div aria-hidden="true" className={styles['auto-login']}>

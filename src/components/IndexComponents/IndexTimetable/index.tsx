@@ -18,9 +18,7 @@ function CurrentSemesterTimetable() {
 
   useEffect(() => {
     if (timetableFrameList) {
-      const mainFrame = timetableFrameList.find(
-        (frame) => frame.is_main,
-      );
+      const mainFrame = timetableFrameList.find((frame) => frame.is_main);
       if (mainFrame && mainFrame.id) {
         setCurrentFrameIndex(mainFrame.id);
       }

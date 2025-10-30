@@ -64,5 +64,5 @@ interface LostItemArticleReportForPost {
 }
 
 export interface LostItemArticlesReportForPost {
-  reports: LostItemArticleReportForPost[]
+  reports: LostItemArticleReportForPost[];
 }

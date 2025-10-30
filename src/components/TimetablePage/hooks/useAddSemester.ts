@@ -11,14 +11,10 @@ export default function useAddSemester(token: string) {
   const semester = useSemester();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (
-      data: AddTimetableFrameRequest,
-    ) => timetable.addTimetableFrame(data, token),
+    mutationFn: (data: AddTimetableFrameRequest) => timetable.addTimetableFrame(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [MY_SEMESTER_INFO_KEY] });
-      queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] },
-      );
+      queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] });
     },
     onError: (error) => {
       if (isKoinError(error)) {

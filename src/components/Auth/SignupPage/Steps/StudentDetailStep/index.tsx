@@ -1,12 +1,8 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import {
-  checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupStudent,
-} from 'api/auth';
+import { checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupStudent } from 'api/auth';
 import { useState } from 'react';
-import {
-  Controller, FieldError, useFormContext, useFormState, useWatch,
-} from 'react-hook-form';
+import { Controller, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
 import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
@@ -24,24 +20,22 @@ interface VerificationProps {
 }
 
 interface StudentFormValues {
-  name: string,
-  phone_number: string,
-  login_id: string,
-  password: string,
-  password_check?: string,
-  department: string,
-  student_number: string,
-  gender: string,
-  email: string | null,
-  nickname: string | null,
-  marketing_notification_agreement: boolean,
+  name: string;
+  phone_number: string;
+  login_id: string;
+  password: string;
+  password_check?: string;
+  department: string;
+  student_number: string;
+  gender: string;
+  email: string | null;
+  nickname: string | null;
+  marketing_notification_agreement: boolean;
 }
 
 function StudentDetail({ onNext, onBack }: VerificationProps) {
   const sessionLogger = useSessionLogger();
-  const {
-    control, getValues, handleSubmit, trigger,
-  } = useFormContext<StudentFormValues>();
+  const { control, getValues, handleSubmit, trigger } = useFormContext<StudentFormValues>();
 
   const { errors } = useFormState({ control });
 
@@ -63,12 +57,13 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
   const isEmailValidOrEmpty = !emailControl || !errors.email;
 
   const isIdPasswordValid = loginId && isCorrectId && passwordCheck && !errors.password_check;
-  const isFormFilled = isIdPasswordValid
-    && isEmailValidOrEmpty
-    && major
-    && (!nicknameControl || isCorrectNickname)
-    && studentNumber
-    && !errors.student_number;
+  const isFormFilled =
+    isIdPasswordValid &&
+    isEmailValidOrEmpty &&
+    major &&
+    (!nicknameControl || isCorrectNickname) &&
+    studentNumber &&
+    !errors.student_number;
 
   const { data: deptList } = useDeptList();
   const deptOptionList = deptList.map((dept) => ({
@@ -156,10 +151,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     const payload = {
       name: formData.name,
       nickname: formData.nickname?.trim() || null,
-      email:
-        !formData.email || formData.email.trim() === ''
-          ? null
-          : `${formData.email}@koreatech.ac.kr`,
+      email: !formData.email || formData.email.trim() === '' ? null : `${formData.email}@koreatech.ac.kr`,
       phone_number: formData.phone_number,
       student_number: formData.student_number,
       department: formData.department,
@@ -206,8 +198,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 
-  const getEmailMessage = (fieldValue: string | null, fieldError: FieldError | undefined)
-  : InputMessage | null => {
+  const getEmailMessage = (fieldValue: string | null, fieldError: FieldError | undefined): InputMessage | null => {
     if (fieldValue === '') return null;
     if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
     return emailMessage;
@@ -216,14 +207,8 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
   return (
     <div className={styles.container}>
       <div className={styles.container__wrapper}>
-
         <div className={styles['container__title-wrapper']}>
-          <button
-            type="button"
-            onClick={onBack}
-            aria-label="뒤로가기"
-            className={styles['container__back-button']}
-          >
+          <button type="button" onClick={onBack} aria-label="뒤로가기" className={styles['container__back-button']}>
             <BackIcon />
           </button>
           <h1 className={styles.container__title}>회원가입</h1>
@@ -238,7 +223,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles['form-wrapper']}>
-
         <div className={styles['input-wrapper']}>
           <Controller
             name="login_id"
@@ -335,7 +319,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
         </div>
 
         <div className={styles['input-wrapper']}>
-
           <Controller
             name="nickname"
             control={control}
@@ -373,7 +356,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
               </div>
             )}
           />
-
         </div>
 
         <div className={styles['input-wrapper']}>
@@ -410,10 +392,7 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
 
         <div className={styles['input-wrapper']}>
           <div className={styles['department-wrapper']}>
-            <label
-              htmlFor="department"
-              className={styles.wrapper__label}
-            >
+            <label htmlFor="department" className={styles.wrapper__label}>
               학부
               <span className={styles.required}>*</span>
             </label>
@@ -462,7 +441,6 @@ function StudentDetail({ onNext, onBack }: VerificationProps) {
             )}
           />
         </div>
-
       </form>
 
       <div className={styles.container__wrapper}>

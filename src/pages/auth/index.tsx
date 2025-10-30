@@ -15,11 +15,7 @@ function LoginPage() {
 }
 
 LoginPage.getLayout = function getLayout(page: React.ReactElement) {
-  return (
-    <AuthLayout>
-      {page}
-    </AuthLayout>
-  );
+  return <AuthLayout>{page}</AuthLayout>;
 };
 
 export default LoginPage;

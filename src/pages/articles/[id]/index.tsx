@@ -17,9 +17,7 @@ function ArticlesDetailPage({ id }: { id: string }) {
         author={article.author}
         hit={article.hit}
       />
-      <ArticleContent
-        content={article.content}
-      />
+      <ArticleContent content={article.content} />
     </>
   );
 }

@@ -11,10 +11,7 @@ const useParamsHandler = () => {
     return new URLSearchParams(queryString);
   }, [router.asPath]);
 
-  const params = useMemo(
-    () => Object.fromEntries(searchParams.entries()),
-    [searchParams],
-  );
+  const params = useMemo(() => Object.fromEntries(searchParams.entries()), [searchParams]);
 
   const setParams = useCallback(
     (

@@ -10,9 +10,7 @@ function PCFindIdLayout({ children }: { children: React.ReactNode }) {
     }
   }, [router]);
 
-  return (
-    { children }
-  );
+  return { children };
 }
 
 export default PCFindIdLayout;

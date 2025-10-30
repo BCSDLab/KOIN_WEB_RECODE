@@ -20,12 +20,10 @@ interface BusSearchOptionsProps {
   timeSelect: UseTimeSelectReturn;
 }
 
-export default function BusSearchOptions({
-  busType, setBusType, timeSelect,
-}: BusSearchOptionsProps) {
+export default function BusSearchOptions({ busType, setBusType, timeSelect }: BusSearchOptionsProps) {
   const isMobile = useMediaQuery();
   const { nowDate } = timeSelect.timeState;
-  const [isTimeDetailOpen,, closeTimeDetail, toggleTimeDetail] = useBooleanState(false);
+  const [isTimeDetailOpen, , closeTimeDetail, toggleTimeDetail] = useBooleanState(false);
   const [isBusTypeOpen, , closeBusType, toggleBusType] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: closeBusType });
   const { logSearchResultDepartureTimeClick, logSearchResultBusType } = useBusLogger();
@@ -46,11 +44,7 @@ export default function BusSearchOptions({
   return (
     <div className={styles.box} ref={containerRef}>
       <div className={styles['time-bus']}>
-        <button
-          type="button"
-          className={styles['depart-time']}
-          onClick={handleTimeDetailToggle}
-        >
+        <button type="button" className={styles['depart-time']} onClick={handleTimeDetailToggle}>
           <span className={styles['depart-time__text']}>
             {`${formatRelativeDate(nowDate)} ${format12Hour(nowDate)}`}
           </span>
@@ -65,14 +59,8 @@ export default function BusSearchOptions({
           </span>
         </button>
         <div className={styles['bus-type']}>
-          <button
-            type="button"
-            className={styles['bus-type__button']}
-            onClick={toggleBusType}
-          >
-            <span className={styles['bus-type__text']}>
-              {BUS_TYPE_MAP[busType]}
-            </span>
+          <button type="button" className={styles['bus-type__button']} onClick={toggleBusType}>
+            <span className={styles['bus-type__text']}>{BUS_TYPE_MAP[busType]}</span>
             <span
               className={cn({
                 [styles['bus-type__arrow']]: true,
@@ -101,7 +89,7 @@ export default function BusSearchOptions({
           )}
         </div>
       </div>
-      {isTimeDetailOpen && (<TimeDetail timeSelect={timeSelect} close={closeTimeDetail} />)}
+      {isTimeDetailOpen && <TimeDetail timeSelect={timeSelect} close={closeTimeDetail} />}
     </div>
   );
 }

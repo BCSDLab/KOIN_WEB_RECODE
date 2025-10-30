@@ -34,20 +34,11 @@ function CafeteriaPage() {
   return (
     <div className={styles.page}>
       <div className={styles.page__content} key={currentDate().toISOString()}>
-        {isMobile
-          ? (
-            <MobileCafeteriaPage
-              diningType={diningType}
-              setDiningType={setDiningType}
-              designVariant={designVariant}
-            />
-          ) : (
-            <PCCafeteriaPage
-              diningType={diningType}
-              setDiningType={setDiningType}
-              designVariant={designVariant}
-            />
-          )}
+        {isMobile ? (
+          <MobileCafeteriaPage diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
+        ) : (
+          <PCCafeteriaPage diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
+        )}
       </div>
     </div>
   );

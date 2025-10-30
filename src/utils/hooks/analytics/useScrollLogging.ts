@@ -1,10 +1,7 @@
 import { useEffect, useRef } from 'react';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 
-export const useScrollLogging = (
-  loggingFunc: () => void,
-  targetPercent = 0.7,
-) => {
+export const useScrollLogging = (loggingFunc: () => void, targetPercent = 0.7) => {
   const loggedRef = useRef(false); // 이미 로깅했는지 여부
   const isMobile = useMediaQuery();
 

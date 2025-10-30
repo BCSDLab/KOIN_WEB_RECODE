@@ -67,7 +67,9 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
               className={cn({
                 [styles.categories__tag]: true,
                 [styles['categories__tag--active']]: categoryType === menuCategories.name,
-                [styles['categories__tag--inactive']]: !storeMenuCategories.some((menu) => menuCategories.name === menu.name),
+                [styles['categories__tag--inactive']]: !storeMenuCategories.some(
+                  (menu) => menuCategories.name === menu.name,
+                ),
               })}
               type="button"
               onClick={() => {
@@ -81,29 +83,23 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
         ))}
       </ul>
       {storeMenuCategories.map((menuCategories) => (
-        <div
-          id={`${menuCategories.name}`}
-          className={styles.menu}
-          key={menuCategories.name}
-        >
-          {MENU_CATEGORY.map((category) => (
-            category.name === menuCategories.name && (
-              <div className={styles.menu__title} key={category.id}>
-                <img src={category.img} alt={category.name} />
-                {menuCategories.name}
-              </div>
-            )
-          ))}
-          {menuCategories.menus.map((menu) => (
+        <div id={`${menuCategories.name}`} className={styles.menu} key={menuCategories.name}>
+          {MENU_CATEGORY.map(
+            (category) =>
+              category.name === menuCategories.name && (
+                <div className={styles.menu__title} key={category.id}>
+                  <img src={category.img} alt={category.name} />
+                  {menuCategories.name}
+                </div>
+              ),
+          )}
+          {menuCategories.menus.map((menu) =>
             menu.option_prices === null ? (
               <div className={styles['menu-info']} key={menu.id}>
                 <div className={styles['menu-info__card']}>
                   <span title={menu.name}>{menu.name}</span>
                   <span>
-                    {!!menu.single_price && (
-                      menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    )}
-                    원
+                    {!!menu.single_price && menu.single_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
                   </span>
                 </div>
                 {menu.image_urls.length > 0 ? (
@@ -129,10 +125,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                 <div className={styles['menu-info']} key={menu.id + item.option + item.price}>
                   <div className={styles['menu-info__card']}>
                     <span>{`${menu.name} - ${item.option}`}</span>
-                    <span>
-                      {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                      원
-                    </span>
+                    <span>{item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
                   </div>
                   {menu.image_urls.length > 0 && (
                     <div key={`${menu.id}`} className={styles.image}>
@@ -147,8 +140,8 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                   )}
                 </div>
               ))
-            )
-          ))}
+            ),
+          )}
         </div>
       ))}
     </div>

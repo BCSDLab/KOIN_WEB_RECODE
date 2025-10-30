@@ -39,7 +39,7 @@ const CLICK_EVENTS = [
   },
 ] as const;
 
-export type ClickEventLabel = typeof CLICK_EVENTS[number]['label'];
+export type ClickEventLabel = (typeof CLICK_EVENTS)[number]['label'];
 
 export type LoggingLocation = '코리아텍' | '천안역' | '천안터미널';
 export type LoggingBusType = '전체 차종' | '셔틀' | '대성' | '시내';

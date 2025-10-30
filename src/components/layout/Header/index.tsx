@@ -15,11 +15,7 @@ function Header() {
   const isMain = pathname === '/';
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
-  const isClubRoute = [
-    ROUTES.NewClub(),
-    '/clubs/edit',
-    ROUTES.Club(),
-  ].some((prefix) => pathname.startsWith(prefix));
+  const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
 
   return (
     <header
@@ -30,17 +26,9 @@ function Header() {
       })}
     >
       <nav className={styles.header__content}>
-        {isMobile ? (
-          <MobileHeader openModal={openModal} />
-        ) : (
-          <PCHeader openModal={openModal} />
-        )}
+        {isMobile ? <MobileHeader openModal={openModal} /> : <PCHeader openModal={openModal} />}
       </nav>
-      {isModalOpen && (
-        <AuthenticateUserModal
-          onClose={closeModal}
-        />
-      )}
+      {isModalOpen && <AuthenticateUserModal onClose={closeModal} />}
     </header>
   );
 }

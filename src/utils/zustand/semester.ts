@@ -3,13 +3,13 @@ import { persist } from 'zustand/middleware';
 import { Semester, Term } from 'api/timetable/entity';
 
 type State = {
-  semester: Semester
+  semester: Semester;
 };
 
 type Action = {
   action: {
-    updateSemester: (semester: State['semester']) => void
-  }
+    updateSemester: (semester: State['semester']) => void;
+  };
 };
 
 const getRecentSemester = () => {

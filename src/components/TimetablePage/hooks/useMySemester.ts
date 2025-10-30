@@ -6,12 +6,10 @@ export const MY_SEMESTER_INFO_KEY = 'my_semester';
 
 function useSemesterCheck(token: string) {
   const { userType } = useTokenStore();
-  const { data } = useSuspenseQuery(
-    {
-      queryKey: [MY_SEMESTER_INFO_KEY],
-      queryFn: () => ((token && userType === 'STUDENT') ? timetable.getMySemester(token) : null),
-    },
-  );
+  const { data } = useSuspenseQuery({
+    queryKey: [MY_SEMESTER_INFO_KEY],
+    queryFn: () => (token && userType === 'STUDENT' ? timetable.getMySemester(token) : null),
+  });
 
   return { data };
 }

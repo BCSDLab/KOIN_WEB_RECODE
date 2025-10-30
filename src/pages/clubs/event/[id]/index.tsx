@@ -89,39 +89,36 @@ function NewClubEvent({ id }: { id: string }) {
     <div className={styles.layout}>
       <div className={styles.container}>
         {!isMobile && (
-        <div className={styles.header}>
-          <h1 className={styles.header__title}>행사 생성</h1>
-          <div className={styles['header__button-container']}>
-            <button
-              type="button"
-              className={styles.header__button}
-              onClick={handleClickEventCancelButton}
-            >
-              생성 취소
-            </button>
-            <button
-              type="button"
-              className={styles.header__button}
-              onClick={handleClickEventConfirmButton}
-            >
-              생성 완료
-            </button>
+          <div className={styles.header}>
+            <h1 className={styles.header__title}>행사 생성</h1>
+            <div className={styles['header__button-container']}>
+              <button type="button" className={styles.header__button} onClick={handleClickEventCancelButton}>
+                생성 취소
+              </button>
+              <button type="button" className={styles.header__button} onClick={handleClickEventConfirmButton}>
+                생성 완료
+              </button>
+            </div>
           </div>
-        </div>
         )}
         <div className={styles.content}>
           {isMobile && (
-          <ImagesUploadSlider
-            imageUrls={formData.image_urls}
-            addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
-          />
+            <ImagesUploadSlider
+              imageUrls={formData.image_urls}
+              addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
+            />
           )}
           <div className={styles['form-left']}>
             <div className={styles.form__item}>
               <div className={styles['form__item-title']}>
                 <div className={styles.form__label}>행사 이름</div>
               </div>
-              <input type="text" className={styles.form__input} placeholder="행사 이름" onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+              <input
+                type="text"
+                className={styles.form__input}
+                placeholder="행사 이름"
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
             </div>
 
             <div className={styles.form__item}>
@@ -136,15 +133,9 @@ function NewClubEvent({ id }: { id: string }) {
                         <div>{startYear}</div>
                         <div>{startRest}</div>
                       </button>
-                      <button
-                        type="button"
-                        className={styles['time-picker-button']}
-                        onClick={openStartTimePicker}
-                      >
+                      <button type="button" className={styles['time-picker-button']} onClick={openStartTimePicker}>
                         <div>
-                          {startTime.hour.toString().padStart(2, '0')}
-                          :
-                          {startTime.minute.toString().padStart(2, '0')}
+                          {startTime.hour.toString().padStart(2, '0')}:{startTime.minute.toString().padStart(2, '0')}
                         </div>
                       </button>
                     </div>
@@ -154,15 +145,9 @@ function NewClubEvent({ id }: { id: string }) {
                         <div>{endYear}</div>
                         <div>{endRest}</div>
                       </button>
-                      <button
-                        type="button"
-                        className={styles['time-picker-button']}
-                        onClick={openEndTimePicker}
-                      >
+                      <button type="button" className={styles['time-picker-button']} onClick={openEndTimePicker}>
                         <div>
-                          {endTime.hour.toString().padStart(2, '0')}
-                          :
-                          {endTime.minute.toString().padStart(2, '0')}
+                          {endTime.hour.toString().padStart(2, '0')}:{endTime.minute.toString().padStart(2, '0')}
                         </div>
                       </button>
                     </div>
@@ -170,10 +155,7 @@ function NewClubEvent({ id }: { id: string }) {
                 ) : (
                   <>
                     <div className={styles['picker-container']}>
-                      <DatePicker
-                        selectedDate={startDate}
-                        onChange={setStartDate}
-                      />
+                      <DatePicker selectedDate={startDate} onChange={setStartDate} />
                       <TimeSelector
                         hour={startTime.hour}
                         minute={startTime.minute}
@@ -182,15 +164,8 @@ function NewClubEvent({ id }: { id: string }) {
                     </div>
                     <div className={styles.form__separator}>~</div>
                     <div className={styles['picker-container']}>
-                      <DatePicker
-                        selectedDate={endDate}
-                        onChange={setEndDate}
-                      />
-                      <TimeSelector
-                        hour={endTime.hour}
-                        minute={endTime.minute}
-                        onChange={(time) => setEndTime(time)}
-                      />
+                      <DatePicker selectedDate={endDate} onChange={setEndDate} />
+                      <TimeSelector hour={endTime.hour} minute={endTime.minute} onChange={(time) => setEndTime(time)} />
                     </div>
                   </>
                 )}
@@ -200,7 +175,12 @@ function NewClubEvent({ id }: { id: string }) {
               <div className={styles['form__item-title']}>
                 <div className={styles.form__label}>행사 내용</div>
               </div>
-              <input type="text" className={styles.form__input} placeholder="행사 내용" onChange={(e) => setFormData({ ...formData, introduce: e.target.value })} />
+              <input
+                type="text"
+                className={styles.form__input}
+                placeholder="행사 내용"
+                onChange={(e) => setFormData({ ...formData, introduce: e.target.value })}
+              />
             </div>
             {!isMobile && (
               <DetailDescription
@@ -210,10 +190,10 @@ function NewClubEvent({ id }: { id: string }) {
             )}
           </div>
           {!isMobile && (
-          <ImagesUploadSlider
-            imageUrls={formData.image_urls}
-            addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
-          />
+            <ImagesUploadSlider
+              imageUrls={formData.image_urls}
+              addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
+            />
           )}
 
           {isMobile && (
@@ -239,33 +219,17 @@ function NewClubEvent({ id }: { id: string }) {
                 </button>
               </div>
             </>
-
           )}
         </div>
       </div>
 
       {isModalOpen && (
-        <ConfirmModal
-          type={modalType}
-          closeModal={closeModal}
-          onSubmit={handleSubmit}
-          onCancel={cancelEventCreation}
-        />
+        <ConfirmModal type={modalType} closeModal={closeModal} onSubmit={handleSubmit} onCancel={cancelEventCreation} />
       )}
       {isStartCalendarOpen && (
-        <DatePickerModal
-          selectedDate={startDate}
-          onChange={setStartDate}
-          onClose={closeStartCalendar}
-        />
+        <DatePickerModal selectedDate={startDate} onChange={setStartDate} onClose={closeStartCalendar} />
       )}
-      {isEndCalendarOpen && (
-        <DatePickerModal
-          selectedDate={endDate}
-          onChange={setEndDate}
-          onClose={closeEndCalendar}
-        />
-      )}
+      {isEndCalendarOpen && <DatePickerModal selectedDate={endDate} onChange={setEndDate} onClose={closeEndCalendar} />}
       {isStartTimePickerOpen && (
         <TimePicker
           hour={startTime.hour}

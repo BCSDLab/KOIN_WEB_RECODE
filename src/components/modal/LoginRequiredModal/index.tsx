@@ -41,12 +41,7 @@ export default function LoginRequiredModal({
   return (
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
-        <button
-          className={styles.container__icon}
-          type="button"
-          aria-label="닫기 버튼"
-          onClick={onClose}
-        >
+        <button className={styles.container__icon} type="button" aria-label="닫기 버튼" onClick={onClose}>
           <CloseIcon />
         </button>
         <div className={styles.container__header}>

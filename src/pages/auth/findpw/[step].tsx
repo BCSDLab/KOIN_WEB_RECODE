@@ -1,7 +1,5 @@
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import {
-  Suspense, useCallback, useEffect, useState,
-} from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import ChevronLeftIcon from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -109,12 +107,7 @@ function FindPasswordPage({ step }: { step: StepTitle }) {
       <div className={styles.container}>
         {isMobile && step !== '완료' && (
           <div className={styles.container__header}>
-            <button
-              type="button"
-              className={styles.container__button}
-              onClick={goBack}
-              aria-label="뒤로가기"
-            >
+            <button type="button" className={styles.container__button} onClick={goBack} aria-label="뒤로가기">
               <ChevronLeftIcon />
             </button>
             <span className={styles.container__title}>비밀번호 찾기</span>
@@ -122,10 +115,7 @@ function FindPasswordPage({ step }: { step: StepTitle }) {
         )}
 
         {step !== '완료' && (
-          <ProgressBar
-            steps={progressSteps.map((title) => ({ title }))}
-            currentIndex={currentIndex}
-          />
+          <ProgressBar steps={progressSteps.map((title) => ({ title }))} currentIndex={currentIndex} />
         )}
 
         <FormProvider {...methods}>

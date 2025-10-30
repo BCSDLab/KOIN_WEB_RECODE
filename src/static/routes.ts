@@ -13,8 +13,10 @@ const ROUTES = {
   Main: () => '/',
   NotFound: () => '*',
   Timetable: () => '/timetable',
-  TimetableRegular: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `timetable/modify/regular/${id}` : 'timetable/modify/regular/:id'),
-  TimetableDirect: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `timetable/modify/direct/${id}` : 'timetable/modify/direct/:id'),
+  TimetableRegular: ({ id, isLink }: ROUTESParams<'id'>) =>
+    isLink ? `timetable/modify/regular/${id}` : 'timetable/modify/regular/:id',
+  TimetableDirect: ({ id, isLink }: ROUTESParams<'id'>) =>
+    isLink ? `timetable/modify/direct/${id}` : 'timetable/modify/direct/:id',
   GraduationCalculator: () => '/graduation',
   Store: () => '/store',
   BenefitStore: () => '/benefitstore',
@@ -25,16 +27,20 @@ const ROUTES = {
   ClubDetail: ({ id, isLink, hot }: ROUTESParams<'id' | 'hot'>) => (isLink ? `/clubs/${id}?hot=${hot}` : '/clubs/:id'),
   NewClub: () => '/clubs/new',
   ClubEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/edit/${id}` : '/clubs/edit/:id'),
-  NewClubRecruitment: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/recruitment/${id}` : '/clubs/recruitment/:id'),
-  ClubRecruitmentEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/recruitment/edit/${id}` : '/clubs/recruitment/edit/:id'),
+  NewClubRecruitment: ({ id, isLink }: ROUTESParams<'id'>) =>
+    isLink ? `/clubs/recruitment/${id}` : '/clubs/recruitment/:id',
+  ClubRecruitmentEdit: ({ id, isLink }: ROUTESParams<'id'>) =>
+    isLink ? `/clubs/recruitment/edit/${id}` : '/clubs/recruitment/edit/:id',
   NewClubEvent: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/event/${id}` : '/clubs/event/:id'),
-  ClubEventEdit: ({ id, eventId, isLink }: ROUTESParams<'id' | 'eventId'>) => (isLink ? `/clubs/${id}/event/edit/${eventId}` : '/clubs/:id/event/edit/:eventId'),
+  ClubEventEdit: ({ id, eventId, isLink }: ROUTESParams<'id' | 'eventId'>) =>
+    isLink ? `/clubs/${id}/event/edit/${eventId}` : '/clubs/:id/event/edit/:eventId',
   Cafeteria: () => '/cafeteria',
   Articles: () => '/articles',
   ArticlesDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/${id}` : '/articles/:id'),
   ArtilesReport: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/report/${id}` : '/articles/report/:id'),
   LostItemRedirect: () => '/articles/lost-item',
-  LostItemDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/lost-item/${id}` : '/articles/lost-item/:id'),
+  LostItemDetail: ({ id, isLink }: ROUTESParams<'id'>) =>
+    isLink ? `/articles/lost-item/${id}` : '/articles/lost-item/:id',
   LostItemFound: () => '/lost-item/found',
   LostItemLost: () => '/lost-item/lost',
   LostItemChat: () => '/articles/lost-item/chat',
@@ -42,7 +48,8 @@ const ROUTES = {
   RoomDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/room/${id}` : '/room/:id'),
   CampusInfo: () => '/campusinfo',
   Auth: () => '/auth',
-  AuthSignup: ({ currentStep, isLink }: ROUTESParams<'currentStep'>) => (isLink ? `/auth/signup/${currentStep}` : '/auth/signup/:currentStep'),
+  AuthSignup: ({ currentStep, isLink }: ROUTESParams<'currentStep'>) =>
+    isLink ? `/auth/signup/${currentStep}` : '/auth/signup/:currentStep',
   AuthFindPW: ({ step, isLink }: ROUTESParams<'step'>) => (isLink ? `/auth/findpw/${step}` : '/auth/findpw/:step'),
   // AuthFindPW: () => '/auth/findpw',
   AuthFindID: () => '/auth/findid',
@@ -51,13 +58,12 @@ const ROUTES = {
   IDResult: () => '/auth/findid/result',
   AuthModifyInfo: () => '/auth/modifyinfo',
   Review: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/store/review/${id}` : '/review/:id'),
-  ReviewEdit: ({ id, reviewId, isLink }: ROUTESParams<'id' | 'reviewId'>) => (isLink ? `/store/review/edit/${id}/${reviewId}` : '/store/review/edit/:id/:reviewId'),
-  ReviewReport: ({
-    shopid,
-    reviewid,
-    isLink,
-  }: ROUTESParams<'shopid' | 'reviewid'>) => (isLink ? `/report/review/shopid/${shopid}/reviewid/${reviewid}`
-    : '/report/review/shopid/:shopid/reviewid/:reviewid'),
+  ReviewEdit: ({ id, reviewId, isLink }: ROUTESParams<'id' | 'reviewId'>) =>
+    isLink ? `/store/review/edit/${id}/${reviewId}` : '/store/review/edit/:id/:reviewId',
+  ReviewReport: ({ shopid, reviewid, isLink }: ROUTESParams<'shopid' | 'reviewid'>) =>
+    isLink
+      ? `/report/review/shopid/${shopid}/reviewid/${reviewid}`
+      : '/report/review/shopid/:shopid/reviewid/:reviewid',
   Webview: () => '/webview',
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',

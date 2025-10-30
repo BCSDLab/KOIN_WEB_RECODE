@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import {
-  Controller, FormProvider, useForm, useWatch,
-} from 'react-hook-form';
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { MESSAGES } from 'static/auth';
 import ROUTES from 'static/routes';
 import usePhoneVerificationInFindId from 'utils/hooks/auth/usePhoneVerificationInFindId';
@@ -63,15 +61,10 @@ function MobileFindIdPhonePage() {
 
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(onClickFindIdButton)}
-        className={styles.container}
-      >
+      <form onSubmit={methods.handleSubmit(onClickFindIdButton)} className={styles.container}>
         <div className={styles['form-container']}>
           <div className={styles['name-gender-wrapper']}>
-            <h1 className={styles['name-gender-wrapper__header']}>
-              휴대전화 번호
-            </h1>
+            <h1 className={styles['name-gender-wrapper__header']}>휴대전화 번호</h1>
 
             <Controller
               name="phone_number"
@@ -92,11 +85,7 @@ function MobileFindIdPhonePage() {
                 >
                   {phoneMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
-                      남은 횟수 (
-                      {smsSendCountData?.remaining_count}
-                      /
-                      {smsSendCountData?.total_count}
-                      )
+                      남은 횟수 ({smsSendCountData?.remaining_count}/{smsSendCountData?.total_count})
                     </div>
                   )}
                 </CustomInput>
@@ -139,11 +128,7 @@ function MobileFindIdPhonePage() {
             />
           </div>
         </div>
-        <button
-          type="submit"
-          className={styles['next-button']}
-          disabled={!isFormFilled || !isCodeCorrect}
-        >
+        <button type="submit" className={styles['next-button']} disabled={!isFormFilled || !isCodeCorrect}>
           다음
         </button>
       </form>

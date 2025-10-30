@@ -2,7 +2,12 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { type InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
 import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
 import {
-  emailExists, verificationEmailSend, verificationEmailVerify, idFindEmail, idExists, idMatchEmail,
+  emailExists,
+  verificationEmailSend,
+  verificationEmailVerify,
+  idFindEmail,
+  idExists,
+  idMatchEmail,
 } from 'api/auth';
 import { MESSAGES } from 'static/auth';
 import { isKoinError } from '@bcsdlab/koin';
@@ -35,7 +40,10 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
   const [emailSendCountData, setEmailSendCountData] = useState<EmailSendCountData | null>(null);
 
   const {
-    isRunning: isTimer, secondsLeft: timerValue, start: runTimer, stop: stopTimer,
+    isRunning: isTimer,
+    secondsLeft: timerValue,
+    start: runTimer,
+    stop: stopTimer,
   } = useCountdownTimer({
     duration: 180,
     onExpire: () => {
@@ -53,10 +61,7 @@ function useEmailVerification({ email, onNext }: UseEmailVerificationProps) {
     setVerificationMessage(null);
   };
 
-  const {
-    mutate: sendVerificationEmail,
-    isPending: isSendingVerification,
-  } = useMutation({
+  const { mutate: sendVerificationEmail, isPending: isSendingVerification } = useMutation({
     mutationFn: verificationEmailSend,
     onSuccess: ({ total_count, remaining_count, current_count }) => {
       setEmailMessage({ type: 'success', content: MESSAGES.EMAIL.CODE_SENT });

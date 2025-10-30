@@ -1,12 +1,8 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import {
-  checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupGeneral,
-} from 'api/auth';
+import { checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupGeneral } from 'api/auth';
 import { useState } from 'react';
-import {
-  Controller, FieldError, useFormContext, useFormState, useWatch,
-} from 'react-hook-form';
+import { Controller, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
 import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
 import BackIcon from 'assets/svg/arrow-back.svg';
@@ -33,9 +29,7 @@ interface GeneralFormValues {
 }
 
 function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
-  const {
-    control, getValues, handleSubmit, trigger,
-  } = useFormContext<GeneralFormValues>();
+  const { control, getValues, handleSubmit, trigger } = useFormContext<GeneralFormValues>();
 
   const { errors } = useFormState({ control });
 
@@ -55,9 +49,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
   const isEmailValidOrEmpty = !emailControl || !errors.email;
 
   const isIdPasswordValid = loginId && isCorrectId && passwordCheck && !errors.password_check;
-  const isFormFilled = isIdPasswordValid
-    && isEmailValidOrEmpty
-    && (!nicknameControl || isCorrectNickname);
+  const isFormFilled = isIdPasswordValid && isEmailValidOrEmpty && (!nicknameControl || isCorrectNickname);
 
   const { mutate: checkEmail } = useMutation({
     mutationFn: emailDuplicateCheck,
@@ -88,7 +80,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
       if (isKoinError(err)) {
         if (err.status === 400) setNicknameMessage({ type: 'warning', content: MESSAGES.NICKNAME.FORMAT });
 
-        if (err.status === 409)setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
+        if (err.status === 409) setNicknameMessage({ type: 'error', content: MESSAGES.NICKNAME.DUPLICATED });
       }
     },
   });
@@ -164,8 +156,7 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
     return { type: 'success', content: MESSAGES.PASSWORD.MATCH };
   };
 
-  const getEmailMessage = (fieldValue: string | null, fieldError: FieldError | undefined)
-  : InputMessage | null => {
+  const getEmailMessage = (fieldValue: string | null, fieldError: FieldError | undefined): InputMessage | null => {
     if (fieldValue === '') return null;
     if (fieldError) return { type: 'warning', content: MESSAGES.EMAIL.FORMAT };
     return emailMessage;
@@ -193,7 +184,6 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles['form-wrapper']}>
-
         <div className={styles['input-wrapper']}>
           <Controller
             name="login_id"
@@ -373,7 +363,6 @@ function ExternalDetail({ onNext, onBack }: ExternalDetailStepProps) {
           </button>
         </div>
       </form>
-
     </div>
   );
 }

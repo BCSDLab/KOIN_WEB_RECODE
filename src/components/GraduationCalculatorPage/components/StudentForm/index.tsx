@@ -13,30 +13,27 @@ function StudentForm() {
   const { data: academicInfo } = useUserAcademicInfo();
   const { data: deptMajorList } = useDepartmentMajorList();
 
-  const [
-    studentNumber, setStudentNumber,
-  ] = useState<string>(academicInfo?.student_number ?? '');
-  const [
-    department, setDepartment,
-  ] = useState<string>(academicInfo?.department ?? '');
+  const [studentNumber, setStudentNumber] = useState<string>(academicInfo?.student_number ?? '');
+  const [department, setDepartment] = useState<string>(academicInfo?.department ?? '');
   const [major, setMajor] = useState<string>(academicInfo?.major ?? '');
-  const [majorOptionList, setMajorOptionList] = useState<{ label: string, value: string }[]>([{ label: '', value: '' }]);
+  const [majorOptionList, setMajorOptionList] = useState<{ label: string; value: string }[]>([
+    { label: '', value: '' },
+  ]);
 
-  const departmentOptionList = deptMajorList.map(
-    (deptMajor) => ({ label: deptMajor.department, value: deptMajor.department }),
-  );
+  const departmentOptionList = deptMajorList.map((deptMajor) => ({
+    label: deptMajor.department,
+    value: deptMajor.department,
+  }));
 
   const handleStudentNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStudentNumber(e.target.value);
   };
 
   const handleMajor = (dept: string) => {
-    const selectedDeptMajor = deptMajorList.find(
-      (deptMajor) => deptMajor.department === dept,
-    );
-    const majorsOption = selectedDeptMajor ? selectedDeptMajor.majors.map(
-      (majors) => ({ label: majors, value: majors }),
-    ) : [];
+    const selectedDeptMajor = deptMajorList.find((deptMajor) => deptMajor.department === dept);
+    const majorsOption = selectedDeptMajor
+      ? selectedDeptMajor.majors.map((majors) => ({ label: majors, value: majors }))
+      : [];
     setMajorOptionList(majorsOption);
   };
 
@@ -70,14 +67,16 @@ function StudentForm() {
       handleMajor(academicInfo.department);
       setMajor(academicInfo.major);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [academicInfo]);
 
   return (
     <form onSubmit={onSubmitForm} className={styles['student-form']}>
       <div className={styles['student-form__input']}>
         <div className={styles['student-form__input--text']}>내 정보</div>
-        <button type="submit" className={styles['student-form__button']}>저장하기</button>
+        <button type="submit" className={styles['student-form__button']}>
+          저장하기
+        </button>
       </div>
       <div className={styles['student-form__input']}>
         <div className={styles['student-form__input--text']}>학번</div>

@@ -4,7 +4,8 @@ import {
   AddTimetableCustomLecture,
   Lecture,
   MyLectureInfo,
-  TimetableCustomLecture, TimetableRegularLecture,
+  TimetableCustomLecture,
+  TimetableRegularLecture,
 } from 'api/timetable/entity';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useLecturesAction } from 'utils/zustand/myLectures';
@@ -19,8 +20,8 @@ import useEditTimetableLectureRegular from './useEditTimetableLectureRegular';
 import useRollbackLecture from './useRollbackLecture';
 
 type RemoveMyLectureProps = {
-  clickedLecture: Lecture | MyLectureInfo | null,
-  id: number
+  clickedLecture: Lecture | MyLectureInfo | null;
+  id: number;
 };
 
 export default function useTimetableMutation(timetableFrameId: number) {
@@ -36,16 +37,11 @@ export default function useTimetableMutation(timetableFrameId: number) {
 
   const { mutate: rollbackLecture } = useRollbackLecture(token, timetableFrameId);
 
-  const {
-    addLecture: addLectureFromLocalStorage,
-    removeLecture: removeLectureFromLocalStorage,
-  } = useLecturesAction();
+  const { addLecture: addLectureFromLocalStorage, removeLecture: removeLectureFromLocalStorage } = useLecturesAction();
 
   const { mutate: removeLectureFromServer } = useDeleteTimetableLecture(token);
 
-  const addMyLecture = (
-    clickedLecture : AddTimetableCustomLecture | Lecture,
-  ) => {
+  const addMyLecture = (clickedLecture: AddTimetableCustomLecture | Lecture) => {
     if (token) {
       if ('name' in clickedLecture) {
         mutateAddWithServerRegular({
@@ -55,16 +51,16 @@ export default function useTimetableMutation(timetableFrameId: number) {
       } else {
         mutateAddWithServerCustom({
           timetable_frame_id: timetableFrameId,
-          timetable_lecture:
-            {
-              class_title: clickedLecture.class_title,
-              lecture_infos: clickedLecture.lecture_infos,
-              professor: clickedLecture.professor,
-              grades: '0',
-            },
+          timetable_lecture: {
+            class_title: clickedLecture.class_title,
+            lecture_infos: clickedLecture.lecture_infos,
+            professor: clickedLecture.professor,
+            grades: '0',
+          },
         });
       }
-    } else { // (비로그인)정규 강의 추가 시
+    } else {
+      // (비로그인)정규 강의 추가 시
       addLectureFromLocalStorage(clickedLecture as Lecture, `${semester?.year}${semester?.term}`);
     }
   };
@@ -85,36 +81,32 @@ export default function useTimetableMutation(timetableFrameId: number) {
     if ('lecture_id' in editedLecture) {
       mutateEditWithServerRegular({
         timetableFrameId,
-        editedLecture:
-            {
-              id: editedLecture.id,
-              lecture_id: editedLecture.lecture_id,
-              class_title: editedLecture.class_title,
-              class_places: editedLecture.class_places,
-              course_type: editedLecture.course_type,
-              general_education_area: editedLecture.general_education_area,
-            },
+        editedLecture: {
+          id: editedLecture.id,
+          lecture_id: editedLecture.lecture_id,
+          class_title: editedLecture.class_title,
+          class_places: editedLecture.class_places,
+          course_type: editedLecture.course_type,
+          general_education_area: editedLecture.general_education_area,
+        },
         token,
       });
     } else {
       mutateEditWithServerCustom({
         timetableFrameId,
-        editedLecture:
-            {
-              id: editedLecture.id,
-              class_title: editedLecture.class_title,
-              lecture_infos: editedLecture.lecture_infos,
-              professor: editedLecture.professor,
-            },
+        editedLecture: {
+          id: editedLecture.id,
+          class_title: editedLecture.class_title,
+          lecture_infos: editedLecture.lecture_infos,
+          professor: editedLecture.professor,
+        },
         token,
       });
     }
   };
 
   const removeMyLecture = useMutation({
-    mutationFn: async ({
-      clickedLecture, id,
-    } : RemoveMyLectureProps & { disableRecoverButton?: boolean }) => {
+    mutationFn: async ({ clickedLecture, id }: RemoveMyLectureProps & { disableRecoverButton?: boolean }) => {
       sessionStorage.setItem('restoreLecture', JSON.stringify(clickedLecture));
       if (clickedLecture && 'name' in clickedLecture) {
         return Promise.resolve(removeLectureFromLocalStorage(clickedLecture, `${semester?.year}${semester?.term}`));

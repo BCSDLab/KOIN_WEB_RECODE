@@ -9,19 +9,18 @@ export default function useEditTimetableLectureRegular() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ timetableFrameId, editedLecture, token }: {
+    mutationFn: ({
+      timetableFrameId,
+      editedLecture,
+      token,
+    }: {
       timetableFrameId: number;
       editedLecture: TimetableRegularLecture;
-      token: string
-    }) => editTimetableLectureRegular(
-      { timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture },
-      token,
-    ),
+      token: string;
+    }) =>
+      editTimetableLectureRegular({ timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture }, token),
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        [TIMETABLE_INFO_LIST, variables.timetableFrameId],
-        data,
-      );
+      queryClient.setQueryData([TIMETABLE_INFO_LIST, variables.timetableFrameId], data);
       queryClient.invalidateQueries({ queryKey: ['creditsByCourseType'] });
       queryClient.invalidateQueries({ queryKey: ['generalEducation'] });
       queryClient.invalidateQueries({ queryKey: ['allLectures'] });

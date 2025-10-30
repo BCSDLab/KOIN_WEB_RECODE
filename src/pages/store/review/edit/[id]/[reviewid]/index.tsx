@@ -8,9 +8,7 @@ function EditReviewComponent({ id, reviewId }: { id: string; reviewId: string })
   const { storeDetail } = useStoreDetail(id);
   const { mutate } = useEditStoreReview(String(storeDetail.id), reviewId);
   const initialData = useGetStoreReview(id, reviewId);
-  return (
-    <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={initialData} />
-  );
+  return <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={initialData} />;
 }
 
 function EditReviewPage() {

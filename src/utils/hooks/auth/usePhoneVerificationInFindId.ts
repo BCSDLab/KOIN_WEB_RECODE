@@ -1,15 +1,9 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import {
-  checkPhone,
-  idExists,
-  idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify,
-} from 'api/auth';
+import { checkPhone, idExists, idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify } from 'api/auth';
 import { MESSAGES } from 'static/auth';
 import { useState } from 'react';
-import {
-  type InputMessage,
-} from 'components/Auth/SignupPage/components/CustomInput';
+import { type InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
 import ROUTES from 'static/routes';
 import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
 import useBooleanState from 'utils/hooks/state/useBooleanState';

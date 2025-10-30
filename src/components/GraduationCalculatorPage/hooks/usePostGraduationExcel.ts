@@ -10,9 +10,7 @@ const usePostGraduationExcel = () => {
   const queryClient = useQueryClient();
 
   const { mutate, error } = useMutation({
-    mutationFn: async (
-      data: GraduationExcelUploadForPost,
-    ) => uploadGraduationExcel(data, token),
+    mutationFn: async (data: GraduationExcelUploadForPost) => uploadGraduationExcel(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['graduation'] });
     },

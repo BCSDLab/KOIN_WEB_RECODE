@@ -12,7 +12,10 @@ interface ClubNotificationModalProps {
 }
 
 export default function ClubNotificationModal({
-  closeModal, onSubmit, variant, type = 'subscribed',
+  closeModal,
+  onSubmit,
+  variant,
+  type = 'subscribed',
 }: ClubNotificationModalProps) {
   const token = useTokenState();
 

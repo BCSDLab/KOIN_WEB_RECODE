@@ -32,11 +32,7 @@ export default function AdditionalLink() {
   if (isMobile) {
     return (
       <div className={styles.help}>
-        <Link
-          className={styles.help__link}
-          href={ROUTES.AuthFindID()}
-          onClick={onClickFindId}
-        >
+        <Link className={styles.help__link} href={ROUTES.AuthFindID()} onClick={onClickFindId}>
           <MagnifyingGlassIcon />
           아이디 찾기
         </Link>
@@ -63,17 +59,12 @@ export default function AdditionalLink() {
           둘러보기
         </Link>
       </div>
-
     );
   }
 
   return (
     <div className={styles.help}>
-      <Link
-        className={styles.help__link}
-        href={ROUTES.AuthFindID()}
-        onClick={onClickFindId}
-      >
+      <Link className={styles.help__link} href={ROUTES.AuthFindID()} onClick={onClickFindId}>
         아이디 찾기
       </Link>
       <Link

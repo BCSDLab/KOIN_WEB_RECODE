@@ -43,12 +43,7 @@ const statusOptions = [
   { label: '종료된 행사', value: 'ENDED' },
 ] as const;
 
-export default function ClubEventDetailView({
-  clubId,
-  eventId,
-  setEventId,
-  isManager,
-}: ClubEventDetailViewProps) {
+export default function ClubEventDetailView({ clubId, eventId, setEventId, isManager }: ClubEventDetailViewProps) {
   const logger = useLogger();
   const router = useRouter();
   const navigate = (path: string) => {
@@ -119,46 +114,34 @@ export default function ClubEventDetailView({
   return (
     <div className={styles['event-detail']}>
       {isMobile && (
-      <div className={styles.mobile__header}>
-        <h1 className={styles['event-detail__title']}>{clubEventDetail.name}</h1>
-        {isManager && (
-        <div className={styles['edit-button__container']}>
-          <button
-            type="button"
-            className={styles['edit-button--delete']}
-            onClick={handleClickDeleteButton}
-          >
-            행사 삭제
-          </button>
-          <button
-            type="button"
-            className={styles['edit-button--edit']}
-            onClick={handleClickEditButton}
-          >
-            행사 수정
-          </button>
+        <div className={styles.mobile__header}>
+          <h1 className={styles['event-detail__title']}>{clubEventDetail.name}</h1>
+          {isManager && (
+            <div className={styles['edit-button__container']}>
+              <button type="button" className={styles['edit-button--delete']} onClick={handleClickDeleteButton}>
+                행사 삭제
+              </button>
+              <button type="button" className={styles['edit-button--edit']} onClick={handleClickEditButton}>
+                행사 수정
+              </button>
+            </div>
+          )}
         </div>
-        )}
-      </div>
       )}
       {isMobile && (
-      <div className={styles.mobile__date}>
-        {formatDateTimeByDevice(clubEventDetail.start_date, isMobile)}
-        {' '}
-        부터
-        {' '}
-        {formatDateTimeByDevice(clubEventDetail.end_date, isMobile)}
-        {' '}
-        까지
-      </div>
+        <div className={styles.mobile__date}>
+          {formatDateTimeByDevice(clubEventDetail.start_date, isMobile)} 부터{' '}
+          {formatDateTimeByDevice(clubEventDetail.end_date, isMobile)} 까지
+        </div>
       )}
-      <div
-        {...(isMobile ? swipeHandlers : {})}
-        className={styles['event-detail__image__container']}
-      >
+      <div {...(isMobile ? swipeHandlers : {})} className={styles['event-detail__image__container']}>
         {clubEventDetail.image_urls.length > 0 && (
           <>
-            {!isMobile && <div className={styles['event-detail__image__counter']}>{`${selectImage + 1} / ${clubEventDetail.image_urls.length}`}</div>}
+            {!isMobile && (
+              <div
+                className={styles['event-detail__image__counter']}
+              >{`${selectImage + 1} / ${clubEventDetail.image_urls.length}`}</div>
+            )}
             <img
               className={styles['event-detail__image']}
               src={clubEventDetail.image_urls[selectImage]}
@@ -199,56 +182,32 @@ export default function ClubEventDetailView({
           </>
         )}
       </div>
-      {!isMobile
-      && (
-      <>
-        <div className={styles['event-detail__content']}>
-          행사 이름:
-          {' '}
-          {clubEventDetail.name}
-          <div className={cn({
-            [styles['event-detail__status']]: true,
-            [styles['event-detail__status--soon']]: clubEventDetail.status === 'SOON',
-            [styles['event-detail__status--ended']]: clubEventDetail.status === 'ENDED',
-            [styles['event-detail__status--upcoming']]: clubEventDetail.status === 'UPCOMING',
-            [styles['event-detail__status--ongoing']]: clubEventDetail.status === 'ONGOING',
-          })}
-          >
-            {getStatusLabel(clubEventDetail.status)}
+      {!isMobile && (
+        <>
+          <div className={styles['event-detail__content']}>
+            행사 이름: {clubEventDetail.name}
+            <div
+              className={cn({
+                [styles['event-detail__status']]: true,
+                [styles['event-detail__status--soon']]: clubEventDetail.status === 'SOON',
+                [styles['event-detail__status--ended']]: clubEventDetail.status === 'ENDED',
+                [styles['event-detail__status--upcoming']]: clubEventDetail.status === 'UPCOMING',
+                [styles['event-detail__status--ongoing']]: clubEventDetail.status === 'ONGOING',
+              })}
+            >
+              {getStatusLabel(clubEventDetail.status)}
+            </div>
           </div>
-        </div>
-        <div className={styles['event-detail__content']}>
-          행사 날짜:
-          {' '}
-          {formatDateTimeByDevice(clubEventDetail.start_date, isMobile)}
-          {' '}
-          부터
-          {' '}
-          {formatDateTimeByDevice(clubEventDetail.end_date, isMobile)}
-          {' '}
-          까지
-        </div>
-      </>
+          <div className={styles['event-detail__content']}>
+            행사 날짜: {formatDateTimeByDevice(clubEventDetail.start_date, isMobile)} 부터{' '}
+            {formatDateTimeByDevice(clubEventDetail.end_date, isMobile)} 까지
+          </div>
+        </>
       )}
-      <div className={styles['event-detail__content']}>
-        행사 내용:
-        {' '}
-        {clubEventDetail.introduce}
-      </div>
+      <div className={styles['event-detail__content']}>행사 내용: {clubEventDetail.introduce}</div>
       {!isMobile && <hr className={styles['event-detail__divider']} />}
-      <div className={styles['event-detail__content']}>
-        상세 내용:
-        {' '}
-        {clubEventDetail.content}
-      </div>
-      {isModalOpen && (
-        <ConfirmModal
-          type="eventDelete"
-          closeModal={closeModal}
-          onSubmit={handleEventDelete}
-        />
-      )}
+      <div className={styles['event-detail__content']}>상세 내용: {clubEventDetail.content}</div>
+      {isModalOpen && <ConfirmModal type="eventDelete" closeModal={closeModal} onSubmit={handleEventDelete} />}
     </div>
-
   );
 }

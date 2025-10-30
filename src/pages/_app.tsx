@@ -89,9 +89,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
 
   const pageTitle = React.useMemo(() => {
     if (!Component.title) return 'KOIN';
-    return typeof Component.title === 'function'
-      ? Component.title(router.asPath)
-      : Component.title;
+    return typeof Component.title === 'function' ? Component.title(router.asPath) : Component.title;
   }, [Component, router.asPath]);
 
   // ios 브릿지

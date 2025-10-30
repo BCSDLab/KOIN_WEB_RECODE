@@ -14,10 +14,7 @@ interface ClubImageUploaderProps {
   addImageUrls: (newImageUrls: string[]) => void;
 }
 
-export default function ImagesUploadSlider({
-  imageUrls,
-  addImageUrls,
-}: ClubImageUploaderProps) {
+export default function ImagesUploadSlider({ imageUrls, addImageUrls }: ClubImageUploaderProps) {
   const isMobile = useMediaQuery();
   const [isDragOver, setIsDragOver] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);

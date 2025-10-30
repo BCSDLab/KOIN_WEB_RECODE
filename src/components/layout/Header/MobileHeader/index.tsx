@@ -63,8 +63,11 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
       });
     }
 
-    if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null
-      && (pathname === ROUTES.Club() || params.hot === 'true')) {
+    if (
+      typeof window !== 'undefined' &&
+      window.webkit?.messageHandlers != null &&
+      (pathname === ROUTES.Club() || params.hot === 'true')
+    ) {
       backButtonTapped();
       return;
     }
@@ -80,11 +83,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
     openSidebar();
   };
 
-  const isClubRoute = [
-    ROUTES.NewClub(),
-    '/clubs/edit',
-    ROUTES.Club(),
-  ].some((prefix) => pathname.startsWith(prefix));
+  const isClubRoute = [ROUTES.NewClub(), '/clubs/edit', ROUTES.Club()].some((prefix) => pathname.startsWith(prefix));
 
   return (
     <>
@@ -113,16 +112,15 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
         >
           {isMain && <KoinServiceLogo />}
           {!isMain && isClubRoute && customTitle}
-          {!isMain && !isClubRoute && (
-            CATEGORY
-              .flatMap((c) => c.submenu)
-              .find((s) => pathname.startsWith(s.link))
-              ?.title ?? ''
-          )}
+          {!isMain &&
+            !isClubRoute &&
+            (CATEGORY.flatMap((c) => c.submenu).find((s) => pathname.startsWith(s.link))?.title ?? '')}
           {pathname.startsWith(ROUTES.NewClub()) && '동아리 생성'}
           {pathname.startsWith('/clubs/edit') && '동아리 수정'}
           {pathname.startsWith('/clubs/recruitment/edit') && '동아리 모집 수정'}
-          {pathname.startsWith('/clubs/recruitment') && !pathname.startsWith('/clubs/recruitment/edit') && '동아리 모집 생성'}
+          {pathname.startsWith('/clubs/recruitment') &&
+            !pathname.startsWith('/clubs/recruitment/edit') &&
+            '동아리 모집 생성'}
           {pathname.startsWith('/clubs/event/edit') && '동아리 행사 수정'}
           {pathname.startsWith('/clubs/event') && !pathname.startsWith('/clubs/event/edit') && '동아리 행사 생성'}
         </span>
@@ -150,10 +148,7 @@ export default function MobileHeader({ openModal }: MobileHeaderProps) {
           </button>
         )}
       </div>
-      {createPortal(
-        <Panel openModal={openModal} />,
-        document.body,
-      )}
+      {createPortal(<Panel openModal={openModal} />, document.body)}
     </>
   );
 }

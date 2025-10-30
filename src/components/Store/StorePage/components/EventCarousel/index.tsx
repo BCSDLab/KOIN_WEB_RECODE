@@ -16,15 +16,15 @@ interface CardProps {
   thumbnail_images: string[] | null;
 }
 
-function Card({
-  shop_id, event_id, shop_name, thumbnail_images,
-}: CardProps) {
+function Card({ shop_id, event_id, shop_name, thumbnail_images }: CardProps) {
   const router = useRouter();
   const logger = useLogger();
 
   const handleClick = () => {
     logger.actionEventClick({
-      team: 'BUSINESS', event_label: 'shop_categories_event', value: `${shop_name}`,
+      team: 'BUSINESS',
+      event_label: 'shop_categories_event',
+      value: `${shop_name}`,
     });
     router.push(`${ROUTES.StoreDetail({ id: String(shop_id), isLink: true })}?state=이벤트/공지`);
   };
@@ -48,9 +48,7 @@ function Card({
       )}
       <div className={styles['swipe-item__text']}>
         <div>
-          <span className={styles['swipe-item__name']}>
-            {shop_name}
-          </span>
+          <span className={styles['swipe-item__name']}>{shop_name}</span>
           {' 에서'}
         </div>
         <div className={styles['swipe-item__nowrap']}>할인 혜택을 받아보세요!</div>

@@ -19,26 +19,22 @@ function CompletePage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.logo}>
-        {isMobile ? <CheckIcon /> : <LogoIcon />}
-      </div>
+      <div className={styles.logo}>{isMobile ? <CheckIcon /> : <LogoIcon />}</div>
 
       <div className={styles['title-container']}>
         <h2 className={styles.title}>{TITLE}</h2>
 
         <div className={styles['subTitle-container']}>
           {SUB_TITLE.map(({ key, text }) => (
-            <div key={key} className={styles.subTitle}>{text}</div>
+            <div key={key} className={styles.subTitle}>
+              {text}
+            </div>
           ))}
         </div>
       </div>
 
       <div className={styles['button-container']}>
-        <button
-          type="button"
-          className={styles['button-container__button']}
-          onClick={goToLogin}
-        >
+        <button type="button" className={styles['button-container__button']} onClick={goToLogin}>
           로그인 화면 바로가기
         </button>
       </div>

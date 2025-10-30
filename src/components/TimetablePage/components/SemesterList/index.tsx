@@ -36,10 +36,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const [selectedSemester, setSelectedSemester] = React.useState(semester);
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 
-  const { mutate: deleteTimetableFrame } = useDeleteSemester(
-    token,
-    selectedSemester,
-  );
+  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester);
 
   const semesterListToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -128,7 +125,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
         updateSemester(semesterOptionList[0].value);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [semesterOptionList]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -145,11 +142,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     >
       <button
         type="button"
-        onClick={
-          semesterOptionList.length > 0 && semester !== null
-            ? semesterListToggle
-            : onClickAddSemester
-        }
+        onClick={semesterOptionList.length > 0 && semester !== null ? semesterListToggle : onClickAddSemester}
         className={cn({
           [styles.select__trigger]: true,
           [styles['select__trigger--selected']]: isOpenSemesterList,
@@ -158,15 +151,10 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
         })}
       >
         {semesterOptionList.length > 0 && semester !== null
-          ? semesterOptionList.find((item) => item.value === semester)
-            ?.label || semesterOptionList[0].label
+          ? semesterOptionList.find((item) => item.value === semester)?.label || semesterOptionList[0].label
           : '학기 추가하기'}
 
-        {semesterOptionList.length > 0 && semester !== null ? (
-          <DownArrowIcon />
-        ) : (
-          <AddIcon />
-        )}
+        {semesterOptionList.length > 0 && semester !== null ? <DownArrowIcon /> : <AddIcon />}
       </button>
 
       {isOpenSemesterList && (
@@ -183,8 +171,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
                 type="button"
                 className={cn({
                   [styles.select__option]: true,
-                  [styles['select__option--selected']]:
-                    optionValue.value === semester,
+                  [styles['select__option--selected']]: optionValue.value === semester,
                 })}
                 role="option"
                 aria-selected={optionValue.value === semester}
@@ -192,10 +179,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
                 onClick={() => onClickOption(optionValue.value)}
                 tabIndex={0}
               >
-                <li
-                  className={styles['select__option--item']}
-                  key={optionValue.label}
-                >
+                <li className={styles['select__option--item']} key={optionValue.label}>
                   {optionValue.label}
                 </li>
                 <div>
@@ -214,11 +198,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
             ))}
           </ul>
           {!isViewMode && (
-            <button
-              type="button"
-              className={styles['add-button']}
-              onClick={onClickAddSemester}
-            >
+            <button type="button" className={styles['add-button']} onClick={onClickAddSemester}>
               <div>학기 추가하기</div>
               <AddIcon />
             </button>

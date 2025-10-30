@@ -12,9 +12,7 @@ interface DeleteModalProps {
   closeDeleteModal: () => void;
 }
 
-export default function DeleteModal(
-  { articleId, chatroomId, closeDeleteModal }: DeleteModalProps,
-) {
+export default function DeleteModal({ articleId, chatroomId, closeDeleteModal }: DeleteModalProps) {
   const isMobile = useMediaQuery();
   const { mutate: blockChatroom } = useDeleteLostItemChatroom();
 
@@ -32,11 +30,7 @@ export default function DeleteModal(
       <div className={styles.modal}>
         {!isMobile && (
           <div className={styles.modal__close}>
-            <button
-              type="button"
-              onClick={closeDeleteModal}
-              aria-label="닫기"
-            >
+            <button type="button" onClick={closeDeleteModal} aria-label="닫기">
               <CloseIcon />
             </button>
           </div>
@@ -46,18 +40,10 @@ export default function DeleteModal(
           <div>쪽지 수신 및 발신이 모두 차단됩니다.</div>
         </div>
         <div className={styles.modal__buttons}>
-          <button
-            className={styles.buttons__delete}
-            type="button"
-            onClick={handleConfirmDeleteClick}
-          >
+          <button className={styles.buttons__delete} type="button" onClick={handleConfirmDeleteClick}>
             {isMobile ? '확인' : '차단하기'}
           </button>
-          <button
-            className={styles.buttons__cancel}
-            type="button"
-            onClick={closeDeleteModal}
-          >
+          <button className={styles.buttons__cancel} type="button" onClick={closeDeleteModal}>
             닫기
           </button>
         </div>

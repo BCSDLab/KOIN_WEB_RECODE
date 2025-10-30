@@ -30,9 +30,7 @@ export default function ArticlesPageLayout({ children }: { children: React.React
           <LostItemRouteButton />
           {/* isBoard && isCouncil && <LostItemRouteButton /> */}
         </div>
-        <Suspense fallback={<LoadingSpinner size="150px" />}>
-          {children}
-        </Suspense>
+        <Suspense fallback={<LoadingSpinner size="150px" />}>{children}</Suspense>
       </div>
       <div className={styles.aside}>
         <Suspense fallback={<LoadingSpinner size="80px" />}>

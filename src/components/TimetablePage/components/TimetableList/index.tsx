@@ -20,13 +20,11 @@ import { toast } from 'react-toastify';
 import styles from './TimetableList.module.scss';
 
 interface TimetableListProps {
-  currentFrameIndex: number,
-  setCurrentFrameIndex: (index: number) => void
+  currentFrameIndex: number;
+  setCurrentFrameIndex: (index: number) => void;
 }
 
-export default function TimetableList({
-  currentFrameIndex, setCurrentFrameIndex,
-}: TimetableListProps) {
+export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex }: TimetableListProps) {
   const portalManager = useModalPortal();
   const semester = useSemester();
   const token = useTokenState();
@@ -60,16 +58,13 @@ export default function TimetableList({
       if (mySemester?.semesters.length === 0) {
         toast('학기가 존재하지 않습니다. 학기를 추가해주세요.');
       } else {
-        addTimetableFrame(
-          semester,
-          {
-            onSuccess: (newTimetable) => {
-              if (newTimetable && newTimetable[newTimetable.length - 1].id) {
-                setCurrentFrameIndex(newTimetable[newTimetable.length - 1].id!);
-              }
-            },
+        addTimetableFrame(semester, {
+          onSuccess: (newTimetable) => {
+            if (newTimetable && newTimetable[newTimetable.length - 1].id) {
+              setCurrentFrameIndex(newTimetable[newTimetable.length - 1].id!);
+            }
           },
-        );
+        });
       }
     } else {
       portalManager.open((portalOption: Portal) => (
@@ -96,18 +91,13 @@ export default function TimetableList({
     <div className={styles['timetable-list']}>
       <SemesterList />
       <ul className={styles['timetable-list__list']} role="listbox">
-        <div
-          className={styles['timetable-list__list--scroll']}
-          role="button"
-          tabIndex={0}
-        >
+        <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
           {defaultFrame ? (
             <button
               type="button"
               className={cn({
                 [styles['timetable-list__item']]: true,
-                [styles['timetable-list__item--selected']]:
-                  currentFrameIndex === defaultFrame.id || !defaultFrame.id,
+                [styles['timetable-list__item--selected']]: currentFrameIndex === defaultFrame.id || !defaultFrame.id,
               })}
               onClick={() => defaultFrame.id && setCurrentFrameIndex(defaultFrame.id)}
             >
@@ -125,11 +115,7 @@ export default function TimetableList({
                   handleTimetableSettingClick(defaultFrame);
                 }}
               >
-                {currentFrameIndex === defaultFrame.id || !defaultFrame.id ? (
-                  <BlueSettingIcon />
-                ) : (
-                  <SettingIcon />
-                )}
+                {currentFrameIndex === defaultFrame.id || !defaultFrame.id ? <BlueSettingIcon /> : <SettingIcon />}
                 설정
               </button>
             </button>
@@ -145,8 +131,7 @@ export default function TimetableList({
               type="button"
               className={cn({
                 [styles['timetable-list__item']]: true,
-                [styles['timetable-list__item--selected']]:
-                  currentFrameIndex === frame.id || !frame.id,
+                [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id || !frame.id,
               })}
               key={frame.id}
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
@@ -160,31 +145,18 @@ export default function TimetableList({
                   handleTimetableSettingClick(frame);
                 }}
               >
-                {currentFrameIndex === frame.id || !frame.id ? (
-                  <BlueSettingIcon />
-                ) : (
-                  <SettingIcon />
-                )}
+                {currentFrameIndex === frame.id || !frame.id ? <BlueSettingIcon /> : <SettingIcon />}
                 설정
               </button>
             </button>
           ))}
         </div>
-        <button
-          type="button"
-          className={styles['timetable-list__list--add']}
-          onClick={handleAddTimetableClick}
-        >
+        <button type="button" className={styles['timetable-list__list--add']} onClick={handleAddTimetableClick}>
           시간표 추가하기
           <AddIcon />
         </button>
       </ul>
-      {isModalOpen && (
-        <TimetableSettingModal
-          focusFrame={focusFrame!}
-          onClose={closeModal}
-        />
-      )}
+      {isModalOpen && <TimetableSettingModal focusFrame={focusFrame!} onClose={closeModal} />}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import styles from './RoomPage.module.scss';
 import useNaverMap from './hooks/useNaverMap';
 import useMarker from './hooks/useMarker';
 
-const LOCATION = { latitude: 36.764617, longitude: 127.2831540 };
+const LOCATION = { latitude: 36.764617, longitude: 127.283154 };
 
 function RoomPage() {
   const isMobile = useMediaQuery();

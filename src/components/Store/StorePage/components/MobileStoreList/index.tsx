@@ -26,79 +26,69 @@ export default function MobileStoreList(mobileStoreListProps: MobileStoreListPro
   const { searchParams } = useParamsHandler();
   const { data: categories } = useStoreCategories();
   const selectedCategory = Number(searchParams.get('category'));
-  const koreanCategory = categories?.shop_categories.find(
-    (category) => category.id === selectedCategory,
-  )?.name;
+  const koreanCategory = categories?.shop_categories.find((category) => category.id === selectedCategory)?.name;
 
   return (
     <div className={styles['store-list']}>
-      {
-        storeListData?.map((store: StoreListV2) => (
-          <Link
-            href={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴&type=${storeType}`}
-            className={styles['store-list__item']}
-            key={store.id}
-            onClick={() => logger.actionEventClick({
+      {storeListData?.map((store: StoreListV2) => (
+        <Link
+          href={`${ROUTES.StoreDetail({ id: String(store.id), isLink: true })}?state=메뉴&type=${storeType}`}
+          className={styles['store-list__item']}
+          key={store.id}
+          onClick={() =>
+            logger.actionEventClick({
               team: 'BUSINESS',
               event_label: `${storeType}_click`,
               value: store.name,
               previous_page: `${koreanCategory || '전체보기'}`,
               current_page: `${store.name}`,
               duration_time: getCategoryDurationTime(),
-            })}
-          >
-            {store.is_event
-              && store.is_open
-              && (
-                <div className={styles['store-list__item--event']}>
-                  이벤트
-                  <EventIcon />
-                </div>
-              )}
-            {!store.is_open
-              && (
-                <div className={styles['store-none-open']}>
-                  <span className={styles['store-none-open__name']}>{store.name}</span>
-                  {`${pickTopicJosa(store.name)} `}
-                  준비중입니다.
-                </div>
-              )}
-            <div className={styles['store-list__header']}>
-              <div className={styles['store-list__title']}>{store.name}</div>
-              {store.benefit_details && <BenefitRotator benefits={store.benefit_details} />}
-              {store.benefit_detail && <BenefitRotator benefits={store.benefit_detail} />}
+            })
+          }
+        >
+          {store.is_event && store.is_open && (
+            <div className={styles['store-list__item--event']}>
+              이벤트
+              <EventIcon />
             </div>
-            <div className={styles['store-list__content']}>
-              {
-                store?.review_count > 0 ? (
-                  <div className={styles['store-list__review']}>
-                    <div className={styles['store-list__star']}>
-                      <Star />
-                    </div>
-                    <div className={styles['store-list__rate']}>{`${store.average_rate.toFixed(1)}`}</div>
-                    <div className={styles['store-list__review--text']}>
-                      &#40;&nbsp;
-                      {`총 리뷰 ${store?.review_count > 10 ? '10+' : store?.review_count}개`}
-                      &nbsp;&#41;
-                    </div>
-                  </div>
-                ) : (
-                  <div className={styles['store-list__empty']}>
-                    <div className={styles['store-list__star']}>
-                      <EmptyStar />
-                    </div>
-                    <div className={styles['store-list__rate']}>0.0</div>
-                    <div className={styles['store-list__empty--text']}>
-                      첫 번째 리뷰를 작성해보세요 :&#41;
-                    </div>
-                  </div>
-                )
-              }
-
+          )}
+          {!store.is_open && (
+            <div className={styles['store-none-open']}>
+              <span className={styles['store-none-open__name']}>{store.name}</span>
+              {`${pickTopicJosa(store.name)} `}
+              준비중입니다.
             </div>
-          </Link>
-        ))
-      }
+          )}
+          <div className={styles['store-list__header']}>
+            <div className={styles['store-list__title']}>{store.name}</div>
+            {store.benefit_details && <BenefitRotator benefits={store.benefit_details} />}
+            {store.benefit_detail && <BenefitRotator benefits={store.benefit_detail} />}
+          </div>
+          <div className={styles['store-list__content']}>
+            {store?.review_count > 0 ? (
+              <div className={styles['store-list__review']}>
+                <div className={styles['store-list__star']}>
+                  <Star />
+                </div>
+                <div className={styles['store-list__rate']}>{`${store.average_rate.toFixed(1)}`}</div>
+                <div className={styles['store-list__review--text']}>
+                  &#40;&nbsp;
+                  {`총 리뷰 ${store?.review_count > 10 ? '10+' : store?.review_count}개`}
+                  &nbsp;&#41;
+                </div>
+              </div>
+            ) : (
+              <div className={styles['store-list__empty']}>
+                <div className={styles['store-list__star']}>
+                  <EmptyStar />
+                </div>
+                <div className={styles['store-list__rate']}>0.0</div>
+                <div className={styles['store-list__empty--text']}>첫 번째 리뷰를 작성해보세요 :&#41;</div>
+              </div>
+            )}
+          </div>
+        </Link>
+      ))}
     </div>
   );
 }

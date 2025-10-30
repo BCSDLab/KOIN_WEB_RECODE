@@ -10,9 +10,7 @@ interface FormFoundPlaceProps {
   type: 'FOUND' | 'LOST';
 }
 
-export default function FormFoundPlace({
-  foundPlace, setFoundPlace, isFoundPlaceSelected, type,
-}: FormFoundPlaceProps) {
+export default function FormFoundPlace({ foundPlace, setFoundPlace, isFoundPlaceSelected, type }: FormFoundPlaceProps) {
   const handleChange = (value: string) => {
     if (value.length <= MAX_LENGTH) {
       setFoundPlace(value);

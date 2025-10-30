@@ -17,13 +17,8 @@ interface Props {
   is_reported: boolean | undefined;
   store_id: string;
 }
-const REVEIW_REPORT_LOGIN = [
-  '리뷰를 신고하기 ',
-  '리뷰 신고는 회원만 사용 가능합니다.',
-];
-export default function SelectButton({
-  is_mine, review_id, is_reported, store_id,
-}: Props) {
+const REVEIW_REPORT_LOGIN = ['리뷰를 신고하기 ', '리뷰 신고는 회원만 사용 가능합니다.'];
+export default function SelectButton({ is_mine, review_id, is_reported, store_id }: Props) {
   const router = useRouter();
   const portalManager = useModalPortal();
   const mutation = useDeleteReview(store_id, review_id);
@@ -37,11 +32,7 @@ export default function SelectButton({
       value: storeDetail.name,
     });
     portalManager.open((portalOption: Portal) => (
-      <DeleteModal
-        close={portalOption.close}
-        deleteMyReview={mutation.mutate}
-        storeDetail={storeDetail}
-      />
+      <DeleteModal close={portalOption.close} deleteMyReview={mutation.mutate} storeDetail={storeDetail} />
     ));
   };
 
@@ -88,18 +79,14 @@ export default function SelectButton({
           <>
             <button
               type="button"
-              onClick={() => router.push(
-                ROUTES.ReviewEdit({ id: store_id, reviewId: String(review_id), isLink: true }),
-              )}
+              onClick={() =>
+                router.push(ROUTES.ReviewEdit({ id: store_id, reviewId: String(review_id), isLink: true }))
+              }
               className={styles.section}
             >
               수정하기
             </button>
-            <button
-              type="button"
-              onClick={openDeleteModal}
-              className={styles.section}
-            >
+            <button type="button" onClick={openDeleteModal} className={styles.section}>
               삭제하기
             </button>
           </>
@@ -114,11 +101,13 @@ export default function SelectButton({
               }
               if (userInfo) {
                 loggingReportClick();
-                router.push(ROUTES.ReviewReport({
-                  shopid: store_id,
-                  reviewid: String(review_id),
-                  isLink: true,
-                }));
+                router.push(
+                  ROUTES.ReviewReport({
+                    shopid: store_id,
+                    reviewid: String(review_id),
+                    isLink: true,
+                  }),
+                );
               } else {
                 openLoginModal();
               }
@@ -128,8 +117,6 @@ export default function SelectButton({
           </button>
         )}
       </div>
-
     </div>
-
   );
 }

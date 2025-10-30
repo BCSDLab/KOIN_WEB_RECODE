@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
-export default function useClubQnA(clubId:number | string | undefined) {
+export default function useClubQnA(clubId: number | string | undefined) {
   const router = useRouter();
   if (!clubId) {
     router.push('/clubs');
@@ -33,7 +33,7 @@ export default function useClubQnA(clubId:number | string | undefined) {
   });
 
   const { status: deleteClubQnAStatus, mutateAsync: deleteClubQnAMutateAsync } = useMutation({
-    mutationFn: async (qnaId:number) => {
+    mutationFn: async (qnaId: number) => {
       await deleteClubQnA(token, clubId!, qnaId);
     },
     onSuccess: () => {

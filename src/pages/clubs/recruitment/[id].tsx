@@ -39,15 +39,15 @@ function NewClubRecruitment({ id }: { id: string }) {
   const handleSubmit = async () => {
     const payload = formData.is_always_recruiting
       ? {
-        ...formData,
-        start_date: null,
-        end_date: null,
-      }
+          ...formData,
+          start_date: null,
+          end_date: null,
+        }
       : {
-        ...formData,
-        start_date: getYyyyMmDd(startDate),
-        end_date: getYyyyMmDd(endDate),
-      };
+          ...formData,
+          start_date: getYyyyMmDd(startDate),
+          end_date: getYyyyMmDd(endDate),
+        };
     await mutateAsync(payload);
     logger.actionEventClick({
       team: 'CAMPUS',
@@ -76,17 +76,31 @@ function NewClubRecruitment({ id }: { id: string }) {
     <div className={styles.layout}>
       <div className={styles.container}>
         {!isMobile && (
-        <div className={styles.header}>
-          <h1 className={styles.header__title}>모집 생성</h1>
-          <div className={styles['header__button-container']}>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('cancel'); openModal(); }}>
-              생성 취소
-            </button>
-            <button type="button" className={styles.header__button} onClick={() => { setModalType('confirm'); openModal(); }}>
-              생성 완료
-            </button>
+          <div className={styles.header}>
+            <h1 className={styles.header__title}>모집 생성</h1>
+            <div className={styles['header__button-container']}>
+              <button
+                type="button"
+                className={styles.header__button}
+                onClick={() => {
+                  setModalType('cancel');
+                  openModal();
+                }}
+              >
+                생성 취소
+              </button>
+              <button
+                type="button"
+                className={styles.header__button}
+                onClick={() => {
+                  setModalType('confirm');
+                  openModal();
+                }}
+              >
+                생성 완료
+              </button>
+            </div>
           </div>
-        </div>
         )}
         <div className={styles.content}>
           <div className={styles['form-left']}>
@@ -111,34 +125,28 @@ function NewClubRecruitment({ id }: { id: string }) {
                   />
                 </div>
               </div>
-              { !formData.is_always_recruiting && (
-              <div className={styles['form__button-container']}>
-                {isMobile ? (
-                  <>
-                    <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
-                      <div>{startYear}</div>
-                      <div>{startRest}</div>
-                    </button>
-                    <div className={styles.form__separator}>~</div>
-                    <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
-                      <div>{endYear}</div>
-                      <div>{endRest}</div>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <DatePicker
-                      selectedDate={startDate}
-                      onChange={setStartDate}
-                    />
-                    <div className={styles.form__separator}>~</div>
-                    <DatePicker
-                      selectedDate={endDate}
-                      onChange={setEndDate}
-                    />
-                  </>
-                )}
-              </div>
+              {!formData.is_always_recruiting && (
+                <div className={styles['form__button-container']}>
+                  {isMobile ? (
+                    <>
+                      <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
+                        <div>{startYear}</div>
+                        <div>{startRest}</div>
+                      </button>
+                      <div className={styles.form__separator}>~</div>
+                      <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
+                        <div>{endYear}</div>
+                        <div>{endRest}</div>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <DatePicker selectedDate={startDate} onChange={setStartDate} />
+                      <div className={styles.form__separator}>~</div>
+                      <DatePicker selectedDate={endDate} onChange={setEndDate} />
+                    </>
+                  )}
+                </div>
               )}
             </div>
             {!isMobile && (
@@ -148,10 +156,7 @@ function NewClubRecruitment({ id }: { id: string }) {
               />
             )}
           </div>
-          <ClubImageUploader
-            formData={formData}
-            setFormData={setFormData}
-          />
+          <ClubImageUploader formData={formData} setFormData={setFormData} />
           {isMobile && (
             <>
               <DetailDescription
@@ -162,46 +167,36 @@ function NewClubRecruitment({ id }: { id: string }) {
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('cancel'); openModal(); }}
+                  onClick={() => {
+                    setModalType('cancel');
+                    openModal();
+                  }}
                 >
                   생성 취소
                 </button>
                 <button
                   type="button"
                   className={styles['button-group__bottom__button']}
-                  onClick={() => { setModalType('confirm'); openModal(); }}
+                  onClick={() => {
+                    setModalType('confirm');
+                    openModal();
+                  }}
                 >
                   생성 하기
                 </button>
               </div>
             </>
-
           )}
         </div>
       </div>
 
       {isModalOpen && (
-        <ConfirmModal
-          type={modalType}
-          closeModal={closeModal}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-        />
+        <ConfirmModal type={modalType} closeModal={closeModal} onSubmit={handleSubmit} onCancel={handleCancel} />
       )}
       {isStartCalendarOpen && (
-        <DatePickerModal
-          selectedDate={startDate}
-          onChange={setStartDate}
-          onClose={closeStartCalendar}
-        />
+        <DatePickerModal selectedDate={startDate} onChange={setStartDate} onClose={closeStartCalendar} />
       )}
-      {isEndCalendarOpen && (
-        <DatePickerModal
-          selectedDate={endDate}
-          onChange={setEndDate}
-          onClose={closeEndCalendar}
-        />
-      )}
+      {isEndCalendarOpen && <DatePickerModal selectedDate={endDate} onChange={setEndDate} onClose={closeEndCalendar} />}
     </div>
   );
 }

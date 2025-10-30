@@ -1,9 +1,5 @@
-import {
-  Controller, FieldError, useFormContext, useWatch,
-} from 'react-hook-form';
-import {
-  resetPasswordEmail, resetPasswordSms,
-} from 'api/auth';
+import { Controller, FieldError, useFormContext, useWatch } from 'react-hook-form';
+import { resetPasswordEmail, resetPasswordSms } from 'api/auth';
 import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
@@ -19,21 +15,19 @@ interface MobileResetPasswordProps {
 }
 
 interface PasswordResetFormValues {
-  loginId: string,
-  contactType: ContactType,
-  phoneNumber: string,
-  email: string,
-  verificationCode: string,
-  password: string,
-  passwordCheck: string,
-  newPassword: string,
-  newPasswordCheck: string,
+  loginId: string;
+  contactType: ContactType;
+  phoneNumber: string;
+  email: string;
+  verificationCode: string;
+  password: string;
+  passwordCheck: string;
+  newPassword: string;
+  newPasswordCheck: string;
 }
 
 function MobileResetPassword({ onNext, contactType }: MobileResetPasswordProps) {
-  const {
-    control, getValues, trigger,
-  } = useFormContext<PasswordResetFormValues>();
+  const { control, getValues, trigger } = useFormContext<PasswordResetFormValues>();
 
   const newPassword = useWatch({ control, name: 'newPassword' });
   const newPasswordCheck = useWatch({ control, name: 'newPasswordCheck' });

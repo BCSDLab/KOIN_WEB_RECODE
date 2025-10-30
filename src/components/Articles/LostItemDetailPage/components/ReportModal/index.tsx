@@ -25,11 +25,7 @@ export default function ReportModal({ articleId, closeReportModal }: ReportModal
             <CloseIcon />
           </button>
         </div>
-        <ReportForm
-          articleId={articleId}
-          onClose={closeReportModal}
-          isModal
-        />
+        <ReportForm articleId={articleId} onClose={closeReportModal} isModal />
       </div>
     </div>,
     document.body,

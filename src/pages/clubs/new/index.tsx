@@ -26,16 +26,12 @@ function NewClubPage() {
 
   return (
     <div className={styles.layout}>
-      {isMobile
-        ? <MobileView formData={formData} setFormData={setFormData} openModal={openModal} />
-        : <PCView formData={formData} setFormData={setFormData} openModal={openModal} />}
-      {isModalOpen && (
-        <AdditionalInfoModal
-          closeModal={closeModal}
-          formData={formData}
-          setFormData={setFormData}
-        />
+      {isMobile ? (
+        <MobileView formData={formData} setFormData={setFormData} openModal={openModal} />
+      ) : (
+        <PCView formData={formData} setFormData={setFormData} openModal={openModal} />
       )}
+      {isModalOpen && <AdditionalInfoModal closeModal={closeModal} formData={formData} setFormData={setFormData} />}
     </div>
   );
 }

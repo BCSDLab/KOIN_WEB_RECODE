@@ -44,14 +44,8 @@ export default function LostItemWritePage() {
   const type: LostItemType = router.asPath.includes('/found') ? 'FOUND' : 'LOST';
   const isFound = type === 'FOUND';
   const { title, subtitle, description } = TITLES[type];
-  const {
-    lostItems,
-    lostItemHandler,
-    addLostItem,
-    removeLostItem,
-    validateAndUpdateItems,
-    checkArticleFormFull,
-  } = useLostItemForm(type);
+  const { lostItems, lostItemHandler, addLostItem, removeLostItem, validateAndUpdateItems, checkArticleFormFull } =
+    useLostItemForm(type);
 
   useEffect(() => {
     if (user?.name) {
@@ -99,9 +93,7 @@ export default function LostItemWritePage() {
       type,
       category: article.category,
       foundPlace:
-        type === 'LOST' && (!article.foundPlace || article.foundPlace.trim() === '')
-          ? '장소 미상'
-          : article.foundPlace,
+        type === 'LOST' && (!article.foundPlace || article.foundPlace.trim() === '') ? '장소 미상' : article.foundPlace,
       foundDate: getyyyyMMdd(article.foundDate),
       content: article.content,
       images: article.images,
@@ -119,11 +111,7 @@ export default function LostItemWritePage() {
         <div className={styles.header}>
           <span className={styles.header__title}>
             {isMobile ? subtitle : title}
-            {isMobile && (
-              <span>
-                {isFound ? <FoundIcon /> : <LostIcon />}
-              </span>
-            )}
+            {isMobile && <span>{isFound ? <FoundIcon /> : <LostIcon />}</span>}
           </span>
           <span className={styles.header__description}>{description}</span>
         </div>
@@ -140,11 +128,7 @@ export default function LostItemWritePage() {
           ))}
         </div>
         <div className={styles.add}>
-          <button
-            className={styles.add__button}
-            type="button"
-            onClick={handleItemAddClick}
-          >
+          <button className={styles.add__button} type="button" onClick={handleItemAddClick}>
             <AddIcon />
             물품 추가
           </button>

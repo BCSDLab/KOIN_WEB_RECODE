@@ -10,11 +10,10 @@ const getyyyyMM = (date: Date) => {
   return `${yyyy}.${MM}`;
 };
 
-const isSameDate = (date1: Date, date2: Date) => (
-  date1.getFullYear() === date2.getFullYear()
-  && date1.getMonth() === date2.getMonth()
-  && date1.getDate() === date2.getDate()
-);
+const isSameDate = (date1: Date, date2: Date) =>
+  date1.getFullYear() === date2.getFullYear() &&
+  date1.getMonth() === date2.getMonth() &&
+  date1.getDate() === date2.getDate();
 
 const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -26,15 +25,15 @@ interface CalendarProps {
 export default function Calendar({ selectedDate, setSelectedDate }: CalendarProps) {
   const today = new Date();
   const [currentMonthDate, setCurrentMonthDate] = useState(selectedDate);
-  const days = useMemo(() => Array.from({ length: 35 }, (_, i) => {
-    const startDate = new Date(currentMonthDate.getFullYear(), currentMonthDate.getMonth(), 1);
-    startDate.setDate(startDate.getDate() - startDate.getDay());
-    return new Date(
-      startDate.getFullYear(),
-      startDate.getMonth(),
-      startDate.getDate() + i,
-    );
-  }), [currentMonthDate]);
+  const days = useMemo(
+    () =>
+      Array.from({ length: 35 }, (_, i) => {
+        const startDate = new Date(currentMonthDate.getFullYear(), currentMonthDate.getMonth(), 1);
+        startDate.setDate(startDate.getDate() - startDate.getDay());
+        return new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i);
+      }),
+    [currentMonthDate],
+  );
 
   const handleMonthChevronClick = (diff: number) => {
     setCurrentMonthDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + diff, 1));
@@ -43,29 +42,18 @@ export default function Calendar({ selectedDate, setSelectedDate }: CalendarProp
   return (
     <div className={styles.box}>
       <div className={styles.year}>
-        <button
-          type="button"
-          onClick={() => handleMonthChevronClick(-1)}
-          aria-label="이전 달"
-        >
+        <button type="button" onClick={() => handleMonthChevronClick(-1)} aria-label="이전 달">
           <ChevronLeftIcon />
         </button>
         <span className={styles.year__text}>{getyyyyMM(currentMonthDate)}</span>
-        <button
-          type="button"
-          onClick={() => handleMonthChevronClick(1)}
-          aria-label="이전 달"
-        >
+        <button type="button" onClick={() => handleMonthChevronClick(1)} aria-label="이전 달">
           <ChevronRightIcon />
         </button>
       </div>
       <div className={styles.calendar}>
         <div className={styles.calendar__week}>
           {WEEK.map((day) => (
-            <span
-              key={day}
-              className={styles['calendar__day-of-week']}
-            >
+            <span key={day} className={styles['calendar__day-of-week']}>
               {day}
             </span>
           ))}

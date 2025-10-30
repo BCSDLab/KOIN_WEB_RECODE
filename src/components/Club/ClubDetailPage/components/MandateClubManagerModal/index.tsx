@@ -10,40 +10,22 @@ interface CreateQnAModalProps {
   clubName: string;
 }
 
-export default function MandateClubManagerModal({
-  closeModal,
-  clubId,
-  clubName,
-}: CreateQnAModalProps) {
+export default function MandateClubManagerModal({ closeModal, clubId, clubName }: CreateQnAModalProps) {
   const [newManager, setNewManager] = useState<NewClubManager>({
     club_id: Number(clubId),
     changed_manager_id: '',
   });
   const { data: userInfo } = useUser();
 
-  const {
-    mandateClubManagerStatus,
-    mandateClubManagerMutateAsync,
-  } = useMandateClubManagerMutation(clubId);
+  const { mandateClubManagerStatus, mandateClubManagerMutateAsync } = useMandateClubManagerMutation(clubId);
 
   const handleSubmit = async () => {
     await mandateClubManagerMutateAsync(newManager);
     closeModal();
   };
   return (
-    <div
-      className={styles['modal-background']}
-      onClick={closeModal}
-      role="button"
-      tabIndex={0}
-      onKeyDown={() => {
-      }}
-    >
-      <div
-        className={styles.modal}
-        onClick={(e) => e.stopPropagation()}
-        role="presentation"
-      >
+    <div className={styles['modal-background']} onClick={closeModal} role="button" tabIndex={0} onKeyDown={() => {}}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="presentation">
         <div className={styles['modal-content']}>
           <h1 className={styles['modal-title']}>권한 위임</h1>
           <div className={styles['info-row']}>
@@ -65,7 +47,9 @@ export default function MandateClubManagerModal({
             />
           </div>
           <div className={styles['info-button-container']}>
-            <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>취소</button>
+            <button className={styles['info-button__cancel']} type="button" onClick={closeModal}>
+              취소
+            </button>
             <button
               className={styles['info-button__confirm']}
               type="button"

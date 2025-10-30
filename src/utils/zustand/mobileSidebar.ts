@@ -20,9 +20,7 @@ const useSidebarStore = create<SidebarState>((set) => ({
 export function useMobileSidebar() {
   const router = useRouter();
   const isMobile = useMediaQuery();
-  const {
-    isSidebarOpen, closeSidebar, openSidebar, toggleSidebar,
-  } = useSidebarStore((state) => ({
+  const { isSidebarOpen, closeSidebar, openSidebar, toggleSidebar } = useSidebarStore((state) => ({
     isSidebarOpen: state.isSidebarOpen,
     closeSidebar: state.closeSidebar,
     openSidebar: state.openSidebar,

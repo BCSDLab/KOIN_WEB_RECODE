@@ -3,7 +3,7 @@ import { cn } from '@bcsdlab/utils';
 import styles from './RoomDetailOption.module.scss';
 
 type RoomDetailOptionProps = {
-  [key in typeof OPTION_CATEGORY[number]['img_code']]: boolean;
+  [key in (typeof OPTION_CATEGORY)[number]['img_code']]: boolean;
 };
 
 function RoomDetailOption({ roomOptions }: { roomOptions: RoomDetailOptionProps }) {
@@ -18,9 +18,7 @@ function RoomDetailOption({ roomOptions }: { roomOptions: RoomDetailOptionProps 
             })}
           >
             <img src={option.img_url} alt="옵션 이미지" />
-            <div className={styles.option__name}>
-              {option.name}
-            </div>
+            <div className={styles.option__name}>{option.name}</div>
           </div>
         </li>
       ))}

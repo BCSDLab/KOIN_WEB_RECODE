@@ -3,9 +3,7 @@ import { Selector, SelectorProps } from 'components/ui/Selector';
 
 type DeptListboxProps = Omit<SelectorProps, 'options'>;
 
-function DeptListbox({
-  value, onChange, dropDownMaxHeight, isWhiteBackground,
-}: DeptListboxProps) {
+function DeptListbox({ value, onChange, dropDownMaxHeight, isWhiteBackground }: DeptListboxProps) {
   const deptOptionList = [
     { label: '전체', value: '전체' },
     { label: '디자인ㆍ건축공학부', value: '디자인ㆍ건축공학부' },
@@ -16,7 +14,8 @@ function DeptListbox({
     { label: '전기ㆍ전자ㆍ통신공학부', value: '전기ㆍ전자ㆍ통신공학부' },
     { label: '컴퓨터공학부', value: '컴퓨터공학부' },
     { label: '에너지신소재화학공학부', value: '에너지신소재화학공학부' },
-    { label: '교양학부', value: '교양학부' }];
+    { label: '교양학부', value: '교양학부' },
+  ];
 
   React.useEffect(() => {
     if (deptOptionList.length !== 0) {

@@ -41,9 +41,7 @@ function ClubMobileViewB() {
           type="button"
           onClick={() => handleCategoryClick(category.name, category.id)}
         >
-          <div
-            className={styles['categories__button-icon']}
-          >
+          <div className={styles['categories__button-icon']}>
             {category.name === '공연' && <MikeIcon />}
             {category.name === '운동' && <ExerciseIcon />}
             {category.name === '종교' && <ReligionIcon />}

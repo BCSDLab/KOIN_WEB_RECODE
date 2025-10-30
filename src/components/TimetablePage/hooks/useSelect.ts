@@ -1,6 +1,6 @@
 import React from 'react';
 
-const useSelect = (initialValue? : string | null) => {
+const useSelect = (initialValue?: string | null) => {
   const [value, setValue] = React.useState<string | null>(initialValue ?? null);
 
   const onChangeSelect = (e: { target: any }) => {

@@ -17,7 +17,7 @@ import { useRouter } from 'next/router';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
-  openModal: () => void,
+  openModal: () => void;
 }
 
 export default function Panel({ openModal }: PanelProps) {
@@ -36,13 +36,17 @@ export default function Panel({ openModal }: PanelProps) {
 
   const logShortcut = (title: string) => {
     if (title === '공지사항') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '공지사항' });
-    if (title === '버스 교통편') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '교통편 조회하기' });
-    if (title === '버스 시간표') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '버스 시간표' });
+    if (title === '버스 교통편')
+      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '교통편 조회하기' });
+    if (title === '버스 시간표')
+      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '버스 시간표' });
     if (title === '식단') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '식단' });
     if (title === '시간표') logger.actionEventClick({ team: 'USER', event_label: 'hamburger', value: '시간표' });
     if (title === '복덕방') logger.actionEventClick({ team: 'BUSINESS', event_label: 'hamburger', value: '복덕방' });
-    if (title === '주변상점') logger.actionEventClick({ team: 'BUSINESS', event_label: 'hamburger_shop', value: '주변상점' });
-    if (title === '교내 시설물 정보') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '교내 시설물 정보' });
+    if (title === '주변상점')
+      logger.actionEventClick({ team: 'BUSINESS', event_label: 'hamburger_shop', value: '주변상점' });
+    if (title === '교내 시설물 정보')
+      logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '교내 시설물 정보' });
     if (title === '쪽지') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '쪽지' });
     if (title === '동아리') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '동아리' });
   };
@@ -77,11 +81,7 @@ export default function Panel({ openModal }: PanelProps) {
 
   const openLoginModal = () => {
     portalManager.open((portalOption: Portal) => (
-      <LoginRequiredModal
-        title="쪽지를 사용하기"
-        description="로그인 후 이용해주세요."
-        onClose={portalOption.close}
-      />
+      <LoginRequiredModal title="쪽지를 사용하기" description="로그인 후 이용해주세요." onClose={portalOption.close} />
     ));
   };
 
@@ -107,12 +107,7 @@ export default function Panel({ openModal }: PanelProps) {
       })}
     >
       <div className={styles.top}>
-        <button
-          type="button"
-          aria-label="닫기 버튼"
-          className={styles.top__close}
-          onClick={closeSidebar}
-        >
+        <button type="button" aria-label="닫기 버튼" className={styles.top__close} onClick={closeSidebar}>
           <BlackArrowBackIcon />
         </button>
       </div>
@@ -133,13 +128,8 @@ export default function Panel({ openModal }: PanelProps) {
         )}
       </div>
       <div className={styles.auth}>
-        <button
-          className={styles.auth__font}
-          type="button"
-          onClick={() => handleMyInfoClick()}
-        >
-          <PersonIcon />
-          내 정보
+        <button className={styles.auth__font} type="button" onClick={() => handleMyInfoClick()}>
+          <PersonIcon />내 정보
         </button>
         <button
           className={styles.auth__font}
@@ -147,21 +137,21 @@ export default function Panel({ openModal }: PanelProps) {
           onClick={
             userInfo
               ? () => {
-                logout();
-                logger.actionEventClick({
-                  team: 'USER',
-                  event_label: 'hamburger',
-                  value: '로그아웃',
-                });
-              }
+                  logout();
+                  logger.actionEventClick({
+                    team: 'USER',
+                    event_label: 'hamburger',
+                    value: '로그아웃',
+                  });
+                }
               : () => {
-                router.push(ROUTES.Auth());
-                logger.actionEventClick({
-                  team: 'USER',
-                  event_label: 'hamburger',
-                  value: '로그인 시도',
-                });
-              }
+                  router.push(ROUTES.Auth());
+                  logger.actionEventClick({
+                    team: 'USER',
+                    event_label: 'hamburger',
+                    value: '로그인 시도',
+                  });
+                }
           }
         >
           {userInfo ? '로그아웃' : '로그인'}
@@ -170,17 +160,11 @@ export default function Panel({ openModal }: PanelProps) {
       <div className={styles.category}>
         {CATEGORY.map((category) => (
           <div key={category.title}>
-            <div className={styles.category__title}>
-              {category.title}
-            </div>
+            <div className={styles.category__title}>{category.title}</div>
             <ul className={styles.category__submenus}>
               {category.submenu.slice(0, -4).map((submenu) => (
                 <li key={submenu.title} className={styles.category__submenu}>
-                  <button
-                    type="button"
-                    className={styles.category__button}
-                    onClick={() => handleSubmenuClick(submenu)}
-                  >
+                  <button type="button" className={styles.category__button} onClick={() => handleSubmenuClick(submenu)}>
                     {submenu.title}
                   </button>
                 </li>

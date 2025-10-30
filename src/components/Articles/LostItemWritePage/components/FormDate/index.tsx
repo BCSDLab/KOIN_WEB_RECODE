@@ -24,9 +24,14 @@ interface FormDateProps {
 }
 
 export default function FormDate({
-  foundDate, setFoundDate, isDateSelected, hasDateBeenSelected, setHasDateBeenSelected, type,
+  foundDate,
+  setFoundDate,
+  isDateSelected,
+  hasDateBeenSelected,
+  setHasDateBeenSelected,
+  type,
 }: FormDateProps) {
-  const [calendarOpen,, closeCalendar, toggleCalendar] = useBooleanState(false);
+  const [calendarOpen, , closeCalendar, toggleCalendar] = useBooleanState(false);
 
   const handleDateSelect = (date: Date) => {
     setFoundDate(date);
@@ -46,11 +51,7 @@ export default function FormDate({
       <span className={styles.title}>{getDate}</span>
       <div className={styles.date__wrapper} ref={containerRef}>
         <div className={styles.date__wrapper}>
-          <button
-            className={styles.date__toggle}
-            type="button"
-            onClick={toggleCalendar}
-          >
+          <button className={styles.date__toggle} type="button" onClick={toggleCalendar}>
             <span
               className={cn({
                 [styles.date__description]: true,
@@ -59,20 +60,18 @@ export default function FormDate({
             >
               {hasDateBeenSelected ? getyyyyMMdd(foundDate) : placeholderText}
             </span>
-            <span className={cn({
-              [styles.icon]: true,
-              [styles['icon--open']]: calendarOpen,
-            })}
+            <span
+              className={cn({
+                [styles.icon]: true,
+                [styles['icon--open']]: calendarOpen,
+              })}
             >
               <ChevronDown />
             </span>
           </button>
           {calendarOpen && (
             <div className={styles.date__calendar}>
-              <Calendar
-                selectedDate={foundDate}
-                setSelectedDate={handleDateSelect}
-              />
+              <Calendar selectedDate={foundDate} setSelectedDate={handleDateSelect} />
             </div>
           )}
           {!isDateSelected && (

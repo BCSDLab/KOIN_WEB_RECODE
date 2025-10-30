@@ -19,7 +19,12 @@ interface DirectionSelectProps {
 }
 
 export default function DirectionSelect({
-  depart, setDepart, arrival, setArrival, isSearching, lookUp,
+  depart,
+  setDepart,
+  arrival,
+  setArrival,
+  isSearching,
+  lookUp,
 }: DirectionSelectProps) {
   const isMobile = useMediaQuery();
 
@@ -79,11 +84,7 @@ export default function DirectionSelect({
           />
         </div>
         {!isMobile && !isSearching && (
-          <button
-            className={styles['lookup-button']}
-            onClick={lookUp}
-            type="button"
-          >
+          <button className={styles['lookup-button']} onClick={lookUp} type="button">
             조회하기
           </button>
         )}

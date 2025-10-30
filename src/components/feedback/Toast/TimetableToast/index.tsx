@@ -1,7 +1,5 @@
 import { cn } from '@bcsdlab/utils';
-import {
-  useRef, useState,
-} from 'react';
+import { useRef, useState } from 'react';
 import useToastTimer from 'utils/hooks/ui/useToastTimer';
 import styles from './TimetableToast.module.scss';
 
@@ -13,13 +11,7 @@ export interface Toast {
   duration?: number;
 }
 
-export default function TimetableToast({
-  message,
-  recoverMessage,
-  onClose,
-  onRecover,
-  duration = 5000,
-}: Toast) {
+export default function TimetableToast({ message, recoverMessage, onClose, onRecover, duration = 5000 }: Toast) {
   const [isClicked, setIsClicked] = useState(false);
   const toastRef = useRef<HTMLDivElement | null>(null);
 
@@ -48,10 +40,11 @@ export default function TimetableToast({
       {!isClicked ? (
         <>
           <div className={styles.toast__message}>{message}</div>
-          {
-            recoverMessage
-              && <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>취소하기</button>
-          }
+          {recoverMessage && (
+            <button className={styles.toast__button} type="button" onClick={handleRecoverClick}>
+              취소하기
+            </button>
+          )}
         </>
       ) : (
         <div className={styles.toast__message}>{recoverMessage}</div>

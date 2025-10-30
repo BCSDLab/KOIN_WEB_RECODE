@@ -32,11 +32,7 @@ export default function BusRoute({ departDate, schedule }: BusRouteProps) {
           >
             {SHORT_BUS_TYPE_MAP[busType]}
           </div>
-          {busType === 'city' && (
-            <span className={styles['bus-type__bus-number']}>
-              {`${busName}번`}
-            </span>
-          )}
+          {busType === 'city' && <span className={styles['bus-type__bus-number']}>{`${busName}번`}</span>}
         </div>
         <div className={styles['depart-time']}>
           {`${Number(departTime.slice(0, 2)) < 12 ? '오전' : '오후'} ${departTime.slice(0, 5)}`}

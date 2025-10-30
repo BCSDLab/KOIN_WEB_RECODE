@@ -28,21 +28,15 @@ export default function GraduationCalculatorAuthModal() {
             <br />
             위해 로그인이 필요해요.
           </h4>
-          <div className={styles['container__notice--description']}>졸업학점 계산기는 로그인이 필요한 서비스입니다.</div>
+          <div className={styles['container__notice--description']}>
+            졸업학점 계산기는 로그인이 필요한 서비스입니다.
+          </div>
         </div>
         <div className={styles.container__button}>
-          <button
-            type="button"
-            className={styles['container__button--login']}
-            onClick={onClickLogin}
-          >
+          <button type="button" className={styles['container__button--login']} onClick={onClickLogin}>
             로그인하기
           </button>
-          <button
-            type="button"
-            className={styles['container__button--back']}
-            onClick={() => router.back()}
-          >
+          <button type="button" className={styles['container__button--back']} onClick={() => router.back()}>
             이전 화면으로 가기
           </button>
         </div>

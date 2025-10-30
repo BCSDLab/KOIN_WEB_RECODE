@@ -1,8 +1,6 @@
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import {
-  Lecture, MyLectureInfo, Semester, LectureInfo,
-} from 'api/timetable/entity';
+import { Lecture, MyLectureInfo, Semester, LectureInfo } from 'api/timetable/entity';
 import React from 'react';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
 import { useSemester } from 'utils/zustand/semester';
@@ -63,144 +61,123 @@ function CurrentSemesterLectureList({
       return false;
     }
     if (
-      (selected.start_time >= existing.start_time && selected.start_time <= existing.end_time)
-      || (selected.end_time >= existing.start_time && selected.end_time <= existing.end_time)
-      || (selected.start_time <= existing.start_time && selected.end_time >= existing.end_time)
+      (selected.start_time >= existing.start_time && selected.start_time <= existing.end_time) ||
+      (selected.end_time >= existing.start_time && selected.end_time <= existing.end_time) ||
+      (selected.start_time <= existing.start_time && selected.end_time >= existing.end_time)
     ) {
       return true;
     }
 
     return false;
   };
-  const findOverlappingLecture = (
-    myLecturess: MyLectureInfo[],
-    clickedLecture: Lecture,
-  ) => {
-    const overlappingLecture = myLecturess.find(
-      (myLecture) => myLecture.lecture_infos.some(
-        (myLectureInfo) => clickedLecture.lecture_infos.some(
-          (clickedLectureInfo) => isOverlapping(clickedLectureInfo, myLectureInfo),
-        ),
+  const findOverlappingLecture = (myLecturess: MyLectureInfo[], clickedLecture: Lecture) => {
+    const overlappingLecture = myLecturess.find((myLecture) =>
+      myLecture.lecture_infos.some((myLectureInfo) =>
+        clickedLecture.lecture_infos.some((clickedLectureInfo) => isOverlapping(clickedLectureInfo, myLectureInfo)),
       ),
     );
     return overlappingLecture;
   };
 
-  return (
-    lectureList?.length !== 0 ? (
-      <LectureTable
-        rowWidthList={rowWidthList}
-        timetableFrameId={timetableFrameId}
-        list={(lectureList ?? []).filter((lecture) => {
-          const searchFilter = filter.search.toUpperCase();
-          const departmentFilter = filter.department;
-          const searchCondition = lecture.name.toUpperCase().includes(searchFilter)
-            || lecture.code.toUpperCase().includes(searchFilter)
-            || lecture.professor.toUpperCase().includes(searchFilter);
+  return lectureList?.length !== 0 ? (
+    <LectureTable
+      rowWidthList={rowWidthList}
+      timetableFrameId={timetableFrameId}
+      list={(lectureList ?? []).filter((lecture) => {
+        const searchFilter = filter.search.toUpperCase();
+        const departmentFilter = filter.department;
+        const searchCondition =
+          lecture.name.toUpperCase().includes(searchFilter) ||
+          lecture.code.toUpperCase().includes(searchFilter) ||
+          lecture.professor.toUpperCase().includes(searchFilter);
 
-          if (searchFilter !== '' && departmentFilter !== '전체') {
-            return searchCondition && lecture.department === departmentFilter;
-          }
-          if (searchFilter !== '') {
-            return searchCondition;
-          }
-          if (departmentFilter !== '전체') {
-            return lecture.department === departmentFilter;
-          }
+        if (searchFilter !== '' && departmentFilter !== '전체') {
+          return searchCondition && lecture.department === departmentFilter;
+        }
+        if (searchFilter !== '') {
+          return searchCondition;
+        }
+        if (departmentFilter !== '전체') {
+          return lecture.department === departmentFilter;
+        }
 
-          return true;
-        })}
-        myLectures={myLectures}
-        selectedLecture={tempLecture ?? undefined}
-        onClickRow={(clickedLecture) => ('lecture_id' in clickedLecture ? undefined : updateTempLecture(clickedLecture))}
-        onDoubleClickRow={
-          (clickedLecture) => {
-            if ('lecture_id' in clickedLecture) {
-              return;
-            }
-            if (!myLectures) {
-              addMyLecture(clickedLecture);
-              return;
-            }
-            const isContainedLecture = myLectures.some(
-              (lecture) => lecture.code === clickedLecture.code
-                && lecture.lecture_class === clickedLecture.lecture_class,
-            );
-            if (isContainedLecture) {
-              showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
-              return;
-            }
-            const overlappingLecture = findOverlappingLecture(myLectures, clickedLecture);
-            if (overlappingLecture) {
-              const alreadySelectedLectureName = 'name' in overlappingLecture ? overlappingLecture.name : overlappingLecture.class_title;
-              if (userInfo) {
-                if (overlappingLecture.lecture_class) { // 분반이 존재하는 경우
-                  showToast(
-                    'error',
-                    `${alreadySelectedLectureName}(${overlappingLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
-                  );
-                  return;
-                }
-                showToast( // 직접 강의를 추가하여 분반이 존재하지 않는 경우
-                  'error',
-                  `${alreadySelectedLectureName} 강의가 중복되어 추가할 수 없습니다.`,
-                );
-                return;
-              }
+        return true;
+      })}
+      myLectures={myLectures}
+      selectedLecture={tempLecture ?? undefined}
+      onClickRow={(clickedLecture) => ('lecture_id' in clickedLecture ? undefined : updateTempLecture(clickedLecture))}
+      onDoubleClickRow={(clickedLecture) => {
+        if ('lecture_id' in clickedLecture) {
+          return;
+        }
+        if (!myLectures) {
+          addMyLecture(clickedLecture);
+          return;
+        }
+        const isContainedLecture = myLectures.some(
+          (lecture) => lecture.code === clickedLecture.code && lecture.lecture_class === clickedLecture.lecture_class,
+        );
+        if (isContainedLecture) {
+          showToast('error', '동일한 과목이 이미 추가되어 있습니다.');
+          return;
+        }
+        const overlappingLecture = findOverlappingLecture(myLectures, clickedLecture);
+        if (overlappingLecture) {
+          const alreadySelectedLectureName =
+            'name' in overlappingLecture ? overlappingLecture.name : overlappingLecture.class_title;
+          if (userInfo) {
+            if (overlappingLecture.lecture_class) {
+              // 분반이 존재하는 경우
               showToast(
                 'error',
                 `${alreadySelectedLectureName}(${overlappingLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
               );
-            } else {
-              addMyLecture(clickedLecture);
+              return;
             }
+            showToast(
+              // 직접 강의를 추가하여 분반이 존재하지 않는 경우
+              'error',
+              `${alreadySelectedLectureName} 강의가 중복되어 추가할 수 없습니다.`,
+            );
+            return;
           }
+          showToast(
+            'error',
+            `${alreadySelectedLectureName}(${overlappingLecture.lecture_class}) 강의가 중복되어 추가할 수 없습니다.`,
+          );
+        } else {
+          addMyLecture(clickedLecture);
         }
-        version="semesterLectureList"
-      />
-    )
-      : (
-        <div className={styles['empty-list']}>
-          강의 정보가 없습니다.
-        </div>
-      )
+      }}
+      version="semesterLectureList"
+    />
+  ) : (
+    <div className={styles['empty-list']}>강의 정보가 없습니다.</div>
   );
 }
 
 function MyLectureListBox({ rowWidthList, myLectures, timetableFrameId }: MyLectureListBoxProps) {
-  return (
-    myLectures.length !== 0 ? (
-      <LectureTable
-        rowWidthList={rowWidthList}
-        timetableFrameId={timetableFrameId}
-        list={myLectures}
-        myLectures={myLectures}
-        selectedLecture={undefined}
-        onClickRow={undefined}
-        onDoubleClickRow={undefined}
-        version="myLectureList"
-      />
-    ) : (
-      <div className={styles['empty-list']}>
-        현재 등록된 강의가 없습니다. 강의를 추가해 시간표를 완성해 보세요!
-      </div>
-    )
+  return myLectures.length !== 0 ? (
+    <LectureTable
+      rowWidthList={rowWidthList}
+      timetableFrameId={timetableFrameId}
+      list={myLectures}
+      myLectures={myLectures}
+      selectedLecture={undefined}
+      onClickRow={undefined}
+      onDoubleClickRow={undefined}
+      version="myLectureList"
+    />
+  ) : (
+    <div className={styles['empty-list']}>현재 등록된 강의가 없습니다. 강의를 추가해 시간표를 완성해 보세요!</div>
   );
 }
 
 function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
   const logger = useLogger();
 
-  const {
-    onClickSearchButton,
-    onKeyDownSearchInput,
-    value: searchValue,
-    searchInputRef,
-  } = useSearch();
-  const {
-    value: departmentFilterValue,
-    onChangeSelect: onChangeDeptSelect,
-  } = useSelect();
+  const { onClickSearchButton, onKeyDownSearchInput, value: searchValue, searchInputRef } = useSearch();
+  const { value: departmentFilterValue, onChangeSelect: onChangeDeptSelect } = useSelect();
 
   // 가장 최신연도와 월을 가져옴
   const semester = useSemester();
@@ -236,19 +213,12 @@ function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
               });
             }}
           >
-            <img
-              src="https://static.koreatech.in/assets/img/ic-search-gray.png"
-              alt="search"
-            />
+            <img src="https://static.koreatech.in/assets/img/ic-search-gray.png" alt="search" />
           </button>
         </div>
         <div className={styles.page__depart}>
           <React.Suspense fallback={<LoadingSpinner size="50" />}>
-            <DeptListbox
-              value={departmentFilterValue}
-              onChange={onChangeDeptSelect}
-              isWhiteBackground={false}
-            />
+            <DeptListbox value={departmentFilterValue} onChange={onChangeDeptSelect} isWhiteBackground={false} />
           </React.Suspense>
         </div>
       </div>
@@ -300,11 +270,7 @@ function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
       </ErrorBoundary>
       <div className={styles.page__foot}>
         <div className={styles.page__toggle}>
-          <ToggleButton
-            width="46"
-            height="24"
-            handleToggle={toggleLectureList}
-          />
+          <ToggleButton width="46" height="24" handleToggle={toggleLectureList} />
           <div>시간표에 추가한 과목</div>
         </div>
         <ErrorBoundary fallbackClassName="loading">

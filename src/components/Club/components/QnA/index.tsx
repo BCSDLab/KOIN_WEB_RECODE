@@ -1,7 +1,5 @@
 function QnA() {
-  return (
-    <div>QnA</div>
-  );
+  return <div>QnA</div>;
 }
 
 export default QnA;

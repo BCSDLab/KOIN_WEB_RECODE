@@ -9,11 +9,9 @@ import * as Timetable from 'components/Bus/BusCoursePage/components/Timetable';
 import styles from './BusTimetable.module.scss';
 
 export default function BusTimetable() {
-  const [selectedTab, setSelectedTab] = useBusStore(useShallow(
-    (state) => [state.selectedTab, state.setSelectedTab],
-  ));
+  const [selectedTab, setSelectedTab] = useBusStore(useShallow((state) => [state.selectedTab, state.setSelectedTab]));
   const logger = useLogger();
-  const onClickBusTab = (type: typeof BUS_TYPES[number]) => {
+  const onClickBusTab = (type: (typeof BUS_TYPES)[number]) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'timetable_bus_type_tab', value: type.tabValue });
     setSelectedTab(type);
   };
@@ -38,7 +36,7 @@ export default function BusTimetable() {
         ))}
       </ul>
 
-      <Suspense fallback={(<div className={styles.empty} />)}>
+      <Suspense fallback={<div className={styles.empty} />}>
         {selectedTab.key === 'shuttle' && <Timetable.Shuttle />}
         {selectedTab.key === 'express' && <Timetable.Express />}
         {selectedTab.key === 'city' && <Timetable.City />}

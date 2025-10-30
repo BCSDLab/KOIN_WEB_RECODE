@@ -12,13 +12,8 @@ interface ClubLikeProps {
 function useClubLike() {
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
-    mutationFn: ({
-      token,
-      isLiked,
-      clubId,
-    }: ClubLikeProps) => (
-      isLiked ? deleteClubLike(token, clubId) : putClubLike(token, clubId)
-    ),
+    mutationFn: ({ token, isLiked, clubId }: ClubLikeProps) =>
+      isLiked ? deleteClubLike(token, clubId) : putClubLike(token, clubId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['club-list'] }),
     onError: (e) => {
       if (isKoinError(e)) {

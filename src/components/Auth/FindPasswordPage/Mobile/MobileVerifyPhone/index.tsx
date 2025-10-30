@@ -47,27 +47,30 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
   };
 
   const handleNext = () => {
-    checkIdExists({
-      login_id: loginId,
-    }, {
-      onSuccess: () => {
-        // 아이디가 존재할 경우, 아이디-휴대폰 일치 여부 확인
-        setContactType('PHONE');
-        checkIdMatchPhone({
-          login_id: loginId,
-          phone_number: phoneNumber,
-        });
+    checkIdExists(
+      {
+        login_id: loginId,
       },
-      onError: (err) => {
-        if (isKoinError(err)) {
-          if (err.status === 404) {
-            setIdMessage({ type: 'warning', content: MESSAGES.ID.NOT_REGISTERED });
-          } else if (err.status === 400) {
-            setIdMessage({ type: 'warning', content: MESSAGES.ID.FORMAT });
+      {
+        onSuccess: () => {
+          // 아이디가 존재할 경우, 아이디-휴대폰 일치 여부 확인
+          setContactType('PHONE');
+          checkIdMatchPhone({
+            login_id: loginId,
+            phone_number: phoneNumber,
+          });
+        },
+        onError: (err) => {
+          if (isKoinError(err)) {
+            if (err.status === 404) {
+              setIdMessage({ type: 'warning', content: MESSAGES.ID.NOT_REGISTERED });
+            } else if (err.status === 400) {
+              setIdMessage({ type: 'warning', content: MESSAGES.ID.FORMAT });
+            }
           }
-        }
+        },
       },
-    });
+    );
   };
 
   const isFormFilled = loginId && phoneNumber && verificationCode;
@@ -81,16 +84,12 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
             name="loginId"
             control={control}
             defaultValue=""
-            render={({ field }) => (
-              <CustomInput {...field} placeholder="아이디를 입력해 주세요." isDelete />
-            )}
+            render={({ field }) => <CustomInput {...field} placeholder="아이디를 입력해 주세요." isDelete />}
           />
         </div>
 
         <div className={styles['verify-wrapper']}>
-          <h1 className={styles['verify-wrapper__header']}>
-            휴대전화 번호
-          </h1>
+          <h1 className={styles['verify-wrapper__header']}>휴대전화 번호</h1>
 
           <Controller
             name="phoneNumber"
@@ -123,22 +122,14 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
                 >
                   {phoneMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
-                      남은 횟수 (
-                      {smsSendCountData?.remaining_count}
-                      /
-                      {smsSendCountData?.total_count}
-                      )
+                      남은 횟수 ({smsSendCountData?.remaining_count}/{smsSendCountData?.total_count})
                     </div>
                   )}
                 </CustomInput>
                 {!isVerificationSent && (
                   <div className={styles['email-navigate']}>
                     <div className={styles['email-navigate__text']}>휴대전화 등록을 안 하셨나요?</div>
-                    <button
-                      type="button"
-                      className={styles['email-navigate__link']}
-                      onClick={goToEmailStep}
-                    >
+                    <button type="button" className={styles['email-navigate__link']} onClick={goToEmailStep}>
                       이메일로 찾기
                     </button>
                   </div>
@@ -149,41 +140,36 @@ function MobileVerifyPhone({ onNext, goToEmailStep, setContactType }: MobileFind
         </div>
 
         {isVerificationSent && (
-        <div className={styles['verify-check-wrapper']}>
-          <h1 className={styles['verify-check-wrapper__header']}>인증 번호</h1>
-          <Controller
-            name="verificationCode"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <CustomInput
-                {...field}
-                placeholder="인증번호를 입력해주세요."
-                isDelete={!isCodeVerified}
-                isTimer={isVerified ? false : isTimer}
-                timerValue={timerValue}
-                message={verificationMessage}
-                isButton
-                disabled={isCodeVerified}
-                buttonText="인증번호 확인"
-                buttonDisabled={!field.value || isDisabled || isCodeVerified}
-                buttonOnClick={() => onClickSendVerificationButton()}
-              >
-                {verificationMessage?.type === 'default' && (
-                <button
-                  className={styles['label-link-button']}
-                  type="button"
-                  onClick={goToEmailStep}
+          <div className={styles['verify-check-wrapper']}>
+            <h1 className={styles['verify-check-wrapper__header']}>인증 번호</h1>
+            <Controller
+              name="verificationCode"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <CustomInput
+                  {...field}
+                  placeholder="인증번호를 입력해주세요."
+                  isDelete={!isCodeVerified}
+                  isTimer={isVerified ? false : isTimer}
+                  timerValue={timerValue}
+                  message={verificationMessage}
+                  isButton
+                  disabled={isCodeVerified}
+                  buttonText="인증번호 확인"
+                  buttonDisabled={!field.value || isDisabled || isCodeVerified}
+                  buttonOnClick={() => onClickSendVerificationButton()}
                 >
-                  이메일로 찾기
-                </button>
-                )}
-              </CustomInput>
-            )}
-          />
-        </div>
+                  {verificationMessage?.type === 'default' && (
+                    <button className={styles['label-link-button']} type="button" onClick={goToEmailStep}>
+                      이메일로 찾기
+                    </button>
+                  )}
+                </CustomInput>
+              )}
+            />
+          </div>
         )}
-
       </div>
 
       <button

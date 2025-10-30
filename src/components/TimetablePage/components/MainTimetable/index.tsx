@@ -54,8 +54,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
         team: 'USER',
         event_label: 'timetable',
         value: '이미지저장',
-        duration_time:
-        (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
       openModal();
     }
@@ -63,7 +62,9 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
 
   const onClickEdit = () => {
     if (isSemesterAndTimetableExist()) {
-      router.push(`/${ROUTES.TimetableRegular({ id: String(timetableFrameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`);
+      router.push(
+        `/${ROUTES.TimetableRegular({ id: String(timetableFrameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`,
+      );
     }
   };
 
@@ -89,19 +90,11 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           졸업학점 계산기
         </button>
         <Curriculum list={deptList} />
-        <button
-          type="button"
-          className={styles.page__button}
-          onClick={onClickDownloadImage}
-        >
+        <button type="button" className={styles.page__button} onClick={onClickDownloadImage}>
           <DownloadIcon />
           이미지 저장
         </button>
-        <button
-          type="button"
-          className={styles.page__button}
-          onClick={onClickEdit}
-        >
+        <button type="button" className={styles.page__button} onClick={onClickEdit}>
           <div className={styles['page__edit-icon']}>
             <EditIcon />
           </div>
@@ -121,11 +114,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           </React.Suspense>
         </ErrorBoundary>
       </div>
-      <div>
-        {isModalOpen && (
-          <DownloadTimetableModal onClose={closeModal} timetableFrameId={timetableFrameId} />
-        )}
-      </div>
+      <div>{isModalOpen && <DownloadTimetableModal onClose={closeModal} timetableFrameId={timetableFrameId} />}</div>
     </div>
   );
 }

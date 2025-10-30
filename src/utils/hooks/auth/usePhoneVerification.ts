@@ -1,15 +1,9 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import {
-  checkPhone,
-  idExists,
-  idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify,
-} from 'api/auth';
+import { checkPhone, idExists, idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify } from 'api/auth';
 import { MESSAGES } from 'static/auth';
 import { useState } from 'react';
-import {
-  type InputMessage,
-} from 'components/Auth/SignupPage/components/CustomInput';
+import { type InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
 import ROUTES from 'static/routes';
 import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -72,10 +66,7 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
     setVerificationMessage(null);
   };
 
-  const {
-    mutate: sendVerificationSms,
-    isPending: isSendingVerification,
-  } = useMutation({
+  const { mutate: sendVerificationSms, isPending: isSendingVerification } = useMutation({
     mutationFn: smsSend,
     onSuccess: ({ total_count, remaining_count, current_count }) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
@@ -199,7 +190,11 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
 
         if (err.status === 409) {
           setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
-          setValue('phoneMessage', { type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
+          setValue('phoneMessage', {
+            type: 'error',
+            content: MESSAGES.PHONE.ALREADY_REGISTERED,
+            code: 'ALREADY_REGISTERED',
+          });
         }
       }
     },

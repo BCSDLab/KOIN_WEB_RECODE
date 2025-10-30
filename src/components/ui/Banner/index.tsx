@@ -15,18 +15,11 @@ interface BannerCardProps {
   redirect_link: string | null;
 }
 
-function BannerCard({
-  handleImageLinkClick,
-  image_url,
-  redirect_link,
-}: BannerCardProps) {
+function BannerCard({ handleImageLinkClick, image_url, redirect_link }: BannerCardProps) {
   return (
     <div>
       {redirect_link ? (
-        <Link
-          href={redirect_link}
-          onClick={handleImageLinkClick}
-        >
+        <Link href={redirect_link} onClick={handleImageLinkClick}>
           <img
             src={image_url}
             alt="banner"
@@ -74,10 +67,9 @@ function Banner({ categoryId }: BannerProps) {
   const { data: bannersData } = useBanners(categoryId);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentBanner = bannersData.banners[currentPageIndex];
-  const [isModalOpen, , closeModal] = useBooleanState((
-    getCookie('HIDE_BANNER') !== `modal_category_${categoryId}`
-    && bannersData.count !== 0
-  ));
+  const [isModalOpen, , closeModal] = useBooleanState(
+    getCookie('HIDE_BANNER') !== `modal_category_${categoryId}` && bannersData.count !== 0,
+  );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetAutoSlide = () => {
@@ -168,7 +160,7 @@ function Banner({ categoryId }: BannerProps) {
         event_category: 'a/b test 로깅(메인 모달)',
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);
 
   if (!isModalOpen) return null;
@@ -176,10 +168,7 @@ function Banner({ categoryId }: BannerProps) {
   return (
     <div className={styles.background}>
       <div className={styles.container}>
-        <div
-          {...(isMobile ? swipeHandlers : {})}
-          className={styles.slider}
-        >
+        <div {...(isMobile ? swipeHandlers : {})} className={styles.slider}>
           <BannerCard
             handleImageLinkClick={handleImageLinkClick}
             image_url={currentBanner.image_url}
@@ -187,9 +176,7 @@ function Banner({ categoryId }: BannerProps) {
           />
           <div className={styles.slider__pagination}>
             <p className={styles['slider__pagination-label']}>
-              {currentPageIndex + 1}
-              /
-              {bannersData.count}
+              {currentPageIndex + 1}/{bannersData.count}
             </p>
           </div>
           <button
@@ -210,18 +197,10 @@ function Banner({ categoryId }: BannerProps) {
           </button>
         </div>
         <div className={styles.footer}>
-          <button
-            type="button"
-            className={styles['footer__button--hide']}
-            onClick={handleHideForWeek}
-          >
+          <button type="button" className={styles['footer__button--hide']} onClick={handleHideForWeek}>
             일주일 동안 그만 보기
           </button>
-          <button
-            type="button"
-            className={styles['footer__button--close']}
-            onClick={handleCloseBanner}
-          >
+          <button type="button" className={styles['footer__button--close']} onClick={handleCloseBanner}>
             닫기
           </button>
         </div>

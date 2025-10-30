@@ -12,8 +12,8 @@ const useDeleteLostItemChatroom = () => {
   const router = useRouter();
 
   const { mutate } = useMutation({
-    mutationFn: ({ articleId, chatroomId }: { articleId: number, chatroomId: number }) => (
-      postBlockLostItemChatroom(token, articleId, chatroomId)),
+    mutationFn: ({ articleId, chatroomId }: { articleId: number; chatroomId: number }) =>
+      postBlockLostItemChatroom(token, articleId, chatroomId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chatroom'] });
       showToast('success', '채팅방이 차단되었습니다.');

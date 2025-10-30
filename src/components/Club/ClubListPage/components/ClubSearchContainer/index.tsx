@@ -31,11 +31,14 @@ export default function ClubSearchContainer() {
     setRelateSearchItems(data);
   }, 300);
 
-  const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value.trim();
-    setSearchValue(inputValue);
-    debouncedSearch(inputValue);
-  }, [debouncedSearch]);
+  const handleInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const inputValue = e.target.value.trim();
+      setSearchValue(inputValue);
+      debouncedSearch(inputValue);
+    },
+    [debouncedSearch],
+  );
 
   const handleSearch = () => {
     const value = searchValue.trim();
@@ -44,31 +47,42 @@ export default function ClubSearchContainer() {
       event_label: 'club_main_search',
       value,
     });
-    setParams({ clubName: value }, {
-      deleteBeforeParam: !!searchParams.get('clubName'),
-      replacePage: true,
-    });
+    setParams(
+      { clubName: value },
+      {
+        deleteBeforeParam: !!searchParams.get('clubName'),
+        replacePage: true,
+      },
+    );
     setRelateSearchItems(null);
   };
 
   const handleDeleteButtonClick = () => {
     setSearchValue('');
-    setParams({ clubName: '' }, {
-      deleteBeforeParam: true,
-      replacePage: true,
-    });
+    setParams(
+      { clubName: '' },
+      {
+        deleteBeforeParam: true,
+        replacePage: true,
+      },
+    );
     setRelateSearchItems(null);
   };
 
   const handleRelateSearchItemClick = (item: ClubSearchResponse['keywords'][number]) => {
-    setParams({ clubName: item.club_name }, {
-      deleteBeforeParam: !!searchParams.get('clubName'),
-      replacePage: true,
-    });
-    router.push(ROUTES.ClubDetail({
-      id: String(item.club_id),
-      isLink: true,
-    }));
+    setParams(
+      { clubName: item.club_name },
+      {
+        deleteBeforeParam: !!searchParams.get('clubName'),
+        replacePage: true,
+      },
+    );
+    router.push(
+      ROUTES.ClubDetail({
+        id: String(item.club_id),
+        isLink: true,
+      }),
+    );
   };
 
   const isResultExist = !!relateSearchItems?.keywords?.length;
@@ -76,10 +90,11 @@ export default function ClubSearchContainer() {
   return (
     <div className={styles.container}>
       <div className={styles['search-bar-container']}>
-        <div className={cn({
-          [styles['search-bar__input-wrapper']]: true,
-          [styles['search-bar__input-wrapper--result-opened']]: isResultExist,
-        })}
+        <div
+          className={cn({
+            [styles['search-bar__input-wrapper']]: true,
+            [styles['search-bar__input-wrapper--result-opened']]: isResultExist,
+          })}
         >
           {!isMobile && <SearchIcon />}
           <input

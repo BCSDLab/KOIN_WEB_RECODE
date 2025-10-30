@@ -15,9 +15,7 @@ interface DeleteModalProps {
   closeDeleteModal: () => void;
 }
 
-export default function DeleteModal(
-  { articleId, closeDeleteModal }: DeleteModalProps,
-) {
+export default function DeleteModal({ articleId, closeDeleteModal }: DeleteModalProps) {
   const isMobile = useMediaQuery();
   const router = useRouter();
   const { logFindUserDeleteConfirmClick } = useArticlesLogger();
@@ -40,30 +38,18 @@ export default function DeleteModal(
       <div className={styles.modal}>
         {!isMobile && (
           <div className={styles.modal__close}>
-            <button
-              type="button"
-              onClick={closeDeleteModal}
-              aria-label="닫기"
-            >
+            <button type="button" onClick={closeDeleteModal} aria-label="닫기">
               <CloseIcon />
             </button>
           </div>
         )}
         <div className={styles.modal__title}>게시글을 삭제하시겠습니까?</div>
         <div className={styles.modal__buttons}>
-          <button
-            className={styles.buttons__delete}
-            type="button"
-            onClick={handleConfirmDeleteClick}
-          >
+          <button className={styles.buttons__delete} type="button" onClick={handleConfirmDeleteClick}>
             {!isMobile && <GarbageCanIcon />}
             {isMobile ? '확인' : '삭제하기'}
           </button>
-          <button
-            className={styles.buttons__cancel}
-            type="button"
-            onClick={closeDeleteModal}
-          >
+          <button className={styles.buttons__cancel} type="button" onClick={closeDeleteModal}>
             취소
           </button>
         </div>

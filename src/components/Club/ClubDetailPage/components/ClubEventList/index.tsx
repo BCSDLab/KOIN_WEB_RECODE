@@ -56,25 +56,14 @@ export default function ClubEventList({
   };
 
   if (eventId !== NO_SELECTED_EVENT_ID) {
-    return (
-      <ClubEventDetailView
-        clubId={clubId}
-        eventId={eventId}
-        setEventId={setEventId}
-        isManager={isManager}
-      />
-    );
+    return <ClubEventDetailView clubId={clubId} eventId={eventId} setEventId={setEventId} isManager={isManager} />;
   }
 
   return (
     <div className="club-event-list">
       {isManager && isMobile && (
         <div className={styles['create-button__container']}>
-          <button
-            type="button"
-            className={styles['create-button']}
-            onClick={handleClickAddButton}
-          >
+          <button type="button" className={styles['create-button']} onClick={handleClickAddButton}>
             행사 생성하기
           </button>
         </div>
@@ -82,17 +71,9 @@ export default function ClubEventList({
 
       <div className={styles['filter-container']}>
         <div className={styles.dropdown__wrapper}>
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className={styles.dropdown__button}
-          >
+          <button type="button" onClick={() => setIsOpen(!isOpen)} className={styles.dropdown__button}>
             <span>{getStatusLabel(selectedStatus)}</span>
-            {isOpen ? (
-              <UpArrow />
-            ) : (
-              <DownArrow />
-            )}
+            {isOpen ? <UpArrow /> : <DownArrow />}
           </button>
 
           {isOpen && (
@@ -113,9 +94,7 @@ export default function ClubEventList({
       </div>
       <div className={styles['club-event-list']}>
         {clubEventList.length === 0 ? (
-          <div className={styles['club-event-list__empty']}>
-            등록된 행사가 없습니다.
-          </div>
+          <div className={styles['club-event-list__empty']}>등록된 행사가 없습니다.</div>
         ) : (
           clubEventList.map((event) => (
             <ClubEventCard

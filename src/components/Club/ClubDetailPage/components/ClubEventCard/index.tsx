@@ -151,9 +151,7 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
               </>
             )}
           </div>
-          <div>
-            행사 소개 : {event.introduce}
-          </div>
+          <div>행사 소개 : {event.introduce}</div>
         </div>
       </div>
       {isRecruitNotifyModalOpen && (

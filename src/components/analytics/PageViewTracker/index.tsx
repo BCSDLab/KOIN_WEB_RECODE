@@ -48,10 +48,7 @@ export default function PageViewTracker() {
     const handlePageView = () => {
       if (prevPathname.current !== currentPath) {
         setTimeout(() => {
-          gtag.pageView(
-            currentPath + window.location.search,
-            userUniqueIdGenerator(userInfo) || '',
-          );
+          gtag.pageView(currentPath + window.location.search, userUniqueIdGenerator(userInfo) || '');
           prevPathname.current = window.location.pathname;
         }, 1000);
       }

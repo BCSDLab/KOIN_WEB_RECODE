@@ -16,12 +16,7 @@ function MobileLayout({ children }: LayoutProps) {
   return (
     <div className={styles.container}>
       <div className={styles.container__header}>
-        <button
-          type="button"
-          className={styles.container__button}
-          onClick={handleBack}
-          aria-label="뒤로가기"
-        >
+        <button type="button" className={styles.container__button} onClick={handleBack} aria-label="뒤로가기">
           <ChevronLeftIcon />
         </button>
         <span className={styles.container__title}>아이디 찾기</span>

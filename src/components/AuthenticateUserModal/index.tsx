@@ -21,10 +21,7 @@ export interface AuthenticateUserModalProps {
   disabledClose?: boolean;
 }
 
-export default function AuthenticateUserModal({
-  onClose,
-  disabledClose = false,
-}: AuthenticateUserModalProps) {
+export default function AuthenticateUserModal({ onClose, disabledClose = false }: AuthenticateUserModalProps) {
   const logger = useLogger();
   const router = useRouter();
   const [password, setPassword] = useState('');
@@ -35,9 +32,7 @@ export default function AuthenticateUserModal({
 
   const isMobile = useMediaQuery();
   const { updateAuthentication } = useAuthenticationActions();
-  const {
-    mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error, errorMessage,
-  } = useCheckPassword();
+  const { mutate: checkPassword, isSuccess: isCheckPasswordSuccess, error, errorMessage } = useCheckPassword();
 
   const handleCheckPassword = async () => {
     if (password === '') {
@@ -86,12 +81,7 @@ export default function AuthenticateUserModal({
       <div className={styles.container}>
         <header className={styles.container__header}>
           <span className={styles.container__title}>내 정보 수정하기</span>
-          <div
-            className={styles['container__close-button']}
-            onClick={handleClose}
-            role="button"
-            aria-hidden
-          >
+          <div className={styles['container__close-button']} onClick={handleClose} role="button" aria-hidden>
             <CloseIcon />
           </div>
         </header>
@@ -139,13 +129,12 @@ export default function AuthenticateUserModal({
             </button>
           </div>
         </div>
-        {!isMobile && isKoinError(error) && error
-          && (
-            <span className={styles['container__error-message']}>
-              <WarningIcon />
-              {errorMessage}
-            </span>
-          )}
+        {!isMobile && isKoinError(error) && error && (
+          <span className={styles['container__error-message']}>
+            <WarningIcon />
+            {errorMessage}
+          </span>
+        )}
       </div>
     </div>
   );

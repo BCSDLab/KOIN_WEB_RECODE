@@ -34,31 +34,13 @@ function ClubEditPage({ id }: { id: string }) {
   return (
     <div className={styles.layout}>
       {isMobile ? (
-        <MobileView
-          formData={formData}
-          setFormData={setFormData}
-          openModal={openModal}
-          isEdit
-          setType={setType}
-        />
+        <MobileView formData={formData} setFormData={setFormData} openModal={openModal} isEdit setType={setType} />
       ) : (
-        <PCView
-          formData={formData}
-          setFormData={setFormData}
-          openModal={openModal}
-          isEdit
-          setType={setType}
-        />
+        <PCView formData={formData} setFormData={setFormData} openModal={openModal} isEdit setType={setType} />
       )}
 
       {isModalOpen && (
-        <EditConfirmModal
-          closeModal={closeModal}
-          formData={formData}
-          resetForm={resetForm}
-          type={type}
-          id={id}
-        />
+        <EditConfirmModal closeModal={closeModal} formData={formData} resetForm={resetForm} type={type} id={id} />
       )}
     </div>
   );

@@ -4,16 +4,14 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ArticleHeader.module.scss';
 
 interface ArticleHeaderProps {
-  boardId: number
-  title: string
-  registeredAt: string
-  author: string
-  hit: number
+  boardId: number;
+  title: string;
+  registeredAt: string;
+  author: string;
+  hit: number;
 }
 
-export default function ArticleHeader({
-  boardId, title, registeredAt, author, hit,
-}: ArticleHeaderProps) {
+export default function ArticleHeader({ boardId, title, registeredAt, author, hit }: ArticleHeaderProps) {
   const isMobile = useMediaQuery();
 
   return (

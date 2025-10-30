@@ -55,7 +55,6 @@ function CompleteStep() {
           </button>
         </div>
       )}
-
     </div>
   );
 }

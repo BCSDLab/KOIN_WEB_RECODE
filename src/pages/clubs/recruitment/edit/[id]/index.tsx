@@ -43,12 +43,8 @@ function ClubRecruitmentEditPage({ id }: { id: string }) {
   } = clubRecruitmentData;
 
   const [formData, setFormData] = useState<ClubRecruitment>({
-    start_date: startDate
-      ? startDate.replace(/\./g, '-')
-      : TODAY,
-    end_date: endDate
-      ? endDate.replace(/\./g, '-')
-      : TODAY,
+    start_date: startDate ? startDate.replace(/\./g, '-') : TODAY,
+    end_date: endDate ? endDate.replace(/\./g, '-') : TODAY,
     is_always_recruiting: recruitmentStatus === 'ALWAYS',
     image_url: imageUrl,
     content: recruitmentContent,
@@ -57,10 +53,10 @@ function ClubRecruitmentEditPage({ id }: { id: string }) {
   const handleSubmit = async () => {
     const payload = formData.is_always_recruiting
       ? {
-        ...formData,
-        start_date: null,
-        end_date: null,
-      }
+          ...formData,
+          start_date: null,
+          end_date: null,
+        }
       : formData;
     await mutateAsync(payload);
     logger.actionEventClick({
@@ -95,25 +91,17 @@ function ClubRecruitmentEditPage({ id }: { id: string }) {
     <div className={styles.layout}>
       <div className={styles.container}>
         {!isMobile && (
-        <div className={styles.header}>
-          <h1 className={styles.header__title}>모집 수정</h1>
-          <div className={styles['header__button-container']}>
-            <button
-              type="button"
-              className={styles.header__button}
-              onClick={handleClickCancelButton}
-            >
-              수정 취소
-            </button>
-            <button
-              type="button"
-              className={styles.header__button}
-              onClick={handleClickEditButton}
-            >
-              수정 완료
-            </button>
+          <div className={styles.header}>
+            <h1 className={styles.header__title}>모집 수정</h1>
+            <div className={styles['header__button-container']}>
+              <button type="button" className={styles.header__button} onClick={handleClickCancelButton}>
+                수정 취소
+              </button>
+              <button type="button" className={styles.header__button} onClick={handleClickEditButton}>
+                수정 완료
+              </button>
+            </div>
           </div>
-        </div>
         )}
         <div className={styles.content}>
           <div className={styles['form-left']}>
@@ -138,44 +126,44 @@ function ClubRecruitmentEditPage({ id }: { id: string }) {
                   />
                 </div>
               </div>
-              { !formData.is_always_recruiting && (
-              <div className={styles['form__button-container']}>
-                {isMobile ? (
-                  <>
-                    <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
-                      <div>{startYear}</div>
-                      <div>{startRest}</div>
-                    </button>
-                    <div className={styles.form__separator}>~</div>
-                    <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
-                      <div>{endYear}</div>
-                      <div>{endRest}</div>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <DatePicker
-                      selectedDate={new Date(formData.start_date)}
-                      onChange={(date) => {
-                        setFormData({
-                          ...formData,
-                          start_date: getYyyyMmDd(date),
-                        });
-                      }}
-                    />
-                    <div className={styles.form__separator}>~</div>
-                    <DatePicker
-                      selectedDate={new Date(formData.end_date)}
-                      onChange={(date) => {
-                        setFormData({
-                          ...formData,
-                          end_date: getYyyyMmDd(date),
-                        });
-                      }}
-                    />
-                  </>
-                )}
-              </div>
+              {!formData.is_always_recruiting && (
+                <div className={styles['form__button-container']}>
+                  {isMobile ? (
+                    <>
+                      <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
+                        <div>{startYear}</div>
+                        <div>{startRest}</div>
+                      </button>
+                      <div className={styles.form__separator}>~</div>
+                      <button type="button" onClick={openEndCalendar} className={styles['date-picker-button']}>
+                        <div>{endYear}</div>
+                        <div>{endRest}</div>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <DatePicker
+                        selectedDate={new Date(formData.start_date)}
+                        onChange={(date) => {
+                          setFormData({
+                            ...formData,
+                            start_date: getYyyyMmDd(date),
+                          });
+                        }}
+                      />
+                      <div className={styles.form__separator}>~</div>
+                      <DatePicker
+                        selectedDate={new Date(formData.end_date)}
+                        onChange={(date) => {
+                          setFormData({
+                            ...formData,
+                            end_date: getYyyyMmDd(date),
+                          });
+                        }}
+                      />
+                    </>
+                  )}
+                </div>
               )}
             </div>
             {!isMobile && (
@@ -185,10 +173,7 @@ function ClubRecruitmentEditPage({ id }: { id: string }) {
               />
             )}
           </div>
-          <ClubImageUploader
-            formData={formData}
-            setFormData={setFormData}
-          />
+          <ClubImageUploader formData={formData} setFormData={setFormData} />
           {isMobile && (
             <>
               <DetailDescription
@@ -217,12 +202,7 @@ function ClubRecruitmentEditPage({ id }: { id: string }) {
       </div>
 
       {isModalOpen && (
-        <ConfirmModal
-          type={modalType}
-          closeModal={closeModal}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-        />
+        <ConfirmModal type={modalType} closeModal={closeModal} onSubmit={handleSubmit} onCancel={handleCancel} />
       )}
       {isStartCalendarOpen && (
         <DatePickerModal

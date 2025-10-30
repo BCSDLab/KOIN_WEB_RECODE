@@ -41,32 +41,25 @@ export default function SemesterLectureListModal({
   onClose,
   initialCourse,
 }: {
-  onClose: () => void,
-  initialCourse: string,
+  onClose: () => void;
+  initialCourse: string;
 }) {
   const semesters = useSemester();
   const token = useTokenState();
   const allMyLectures = useAllMyLectures(token);
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
   const { data: academicInfo } = useUserAcademicInfo();
-  const semesterOptionList = (semesters ?? []).map(
-    (semesterInfo) => ({
-      label: `${semesterInfo.year}년 ${semesterInfo.term}`,
-      value: `${semesterInfo.year}년 ${semesterInfo.term}`,
-    }),
-  );
+  const semesterOptionList = (semesters ?? []).map((semesterInfo) => ({
+    label: `${semesterInfo.year}년 ${semesterInfo.term}`,
+    value: `${semesterInfo.year}년 ${semesterInfo.term}`,
+  }));
 
   const [semester, setSemester] = useState<{
-    year: number,
-    term: string
+    year: number;
+    term: string;
   }>({ year: semesters[0].year, term: semesters[0].term });
-  const {
-    value: lectureStatus, onChangeSelect: onChangeLectureStatus,
-  } = useSelect(lectureStatusOptions[0].value);
-  const {
-    value: department,
-    onChangeSelect: onChangeDepartment,
-  } = useSelect(academicInfo?.department);
+  const { value: lectureStatus, onChangeSelect: onChangeLectureStatus } = useSelect(lectureStatusOptions[0].value);
+  const { value: department, onChangeSelect: onChangeDepartment } = useSelect(academicInfo?.department);
   const { value: course, onChangeSelect: onChangeCourse } = useSelect(initialCourse);
   const { data: generalCourses } = useCourseType(token, semester, course!);
 
@@ -77,45 +70,37 @@ export default function SemesterLectureListModal({
       name: lecture.class_title,
     }));
 
-  const lecturesInfo = lectureStatus === '수강한 강의'
-    ? allMyLecturesInfo
-    : generalCourses.lectures;
+  const lecturesInfo = lectureStatus === '수강한 강의' ? allMyLecturesInfo : generalCourses.lectures;
 
-  const filteredLecturesByDept = department === '전체'
-    ? lecturesInfo
-    : lecturesInfo.filter(
-      (lecture) => lecture.department === department,
-    );
+  const filteredLecturesByDept =
+    department === '전체' ? lecturesInfo : lecturesInfo.filter((lecture) => lecture.department === department);
 
   function separateByMatchingCodes(lectureInfo: LectureInfo[], takenCode: string[]) {
     const codesSet2 = new Set(takenCode);
 
-    const matched = [
-      ...lectureInfo.filter((item) => codesSet2.has(item.code)),
-    ];
-    const unmatched = [
-      ...lectureInfo.filter((item) => !codesSet2.has(item.code)),
-    ];
+    const matched = [...lectureInfo.filter((item) => codesSet2.has(item.code))];
+    const unmatched = [...lectureInfo.filter((item) => !codesSet2.has(item.code))];
 
     return { matched, unmatched };
   }
 
-  const filteredLectureByLectureStatus = lectureStatus === '수강한 강의'
-    ? separateByMatchingCodes(
-      filteredLecturesByDept,
-      (allMyLectures ?? []).map((item) => item.code),
-    ).matched
-    : separateByMatchingCodes(
-      filteredLecturesByDept,
-      (allMyLectures ?? []).map((item) => item.code),
-    ).unmatched;
+  const filteredLectureByLectureStatus =
+    lectureStatus === '수강한 강의'
+      ? separateByMatchingCodes(
+          filteredLecturesByDept,
+          (allMyLectures ?? []).map((item) => item.code),
+        ).matched
+      : separateByMatchingCodes(
+          filteredLecturesByDept,
+          (allMyLectures ?? []).map((item) => item.code),
+        ).unmatched;
 
   const tableData = filteredLectureByLectureStatus.map((lecture) => [
     <span>{lecture.name}</span>,
     <span>{lecture.professor ? lecture.professor : ''}</span>,
     <span>{lecture.grades}</span>,
     <span>{course}</span>,
-    <span>{ }</span>,
+    <span>{}</span>,
   ]);
 
   return (
@@ -132,12 +117,14 @@ export default function SemesterLectureListModal({
             <Selector
               options={semesterOptionList}
               value={lectureStatus === '수강한 강의' ? '' : `${semester.year}년 ${semester.term}`}
-              onChange={({ target }) => startTransition(() => {
-                setSemester({
-                  year: Number(target.value.slice(0, 4)),
-                  term: target.value.slice(6),
-                });
-              })}
+              onChange={({ target }) =>
+                startTransition(() => {
+                  setSemester({
+                    year: Number(target.value.slice(0, 4)),
+                    term: target.value.slice(6),
+                  });
+                })
+              }
               dropDownMaxHeight={406}
               placeholder="-"
               disabled={lectureStatus === '수강한 강의'}
@@ -179,10 +166,7 @@ export default function SemesterLectureListModal({
           </div>
         </div>
         <div className={styles['container__lecture-table']}>
-          <SemesterCourseTable
-            tableData={tableData}
-            hasProfessor={lectureStatus === '수강한 강의'}
-          />
+          <SemesterCourseTable tableData={tableData} hasProfessor={lectureStatus === '수강한 강의'} />
         </div>
       </div>
     </div>

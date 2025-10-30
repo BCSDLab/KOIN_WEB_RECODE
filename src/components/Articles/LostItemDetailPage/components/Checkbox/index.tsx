@@ -4,15 +4,13 @@ import styles from './Checkbox.module.scss';
 interface CheckboxProps {
   value: string;
   label: string;
-  subtitle:string;
-  name:string;
+  subtitle: string;
+  name: string;
   checked: boolean;
   onChange: () => void;
 }
 
-export default function Checkbox({
-  value, label, subtitle, name, checked, onChange,
-}: CheckboxProps) {
+export default function Checkbox({ value, label, subtitle, name, checked, onChange }: CheckboxProps) {
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -29,11 +27,7 @@ export default function Checkbox({
   };
 
   return (
-    <label
-      className={styles.checkbox}
-      aria-label="button"
-      htmlFor={id}
-    >
+    <label className={styles.checkbox} aria-label="button" htmlFor={id}>
       {value === '5' ? (
         <div className={styles['checkbox__container-etc']}>
           <div className={styles['checkbox__labelheader-etc']}>

@@ -17,9 +17,7 @@ function formatSemesterLabel(semester?: string) {
 
 export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
   const { hour, minute } = timeSelect.timeState;
-  const {
-    setNow, setDayOfMonth, setHour, setMinute,
-  } = timeSelect.timeHandler;
+  const { setNow, setDayOfMonth, setHour, setMinute } = timeSelect.timeHandler;
   const { logDepartureNowClick } = useBusLogger();
   const { data: semesterData } = useCoopSemester();
 
@@ -67,13 +65,7 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
       <div className={styles.guide}>
         <span className={styles.guide__title}>출발 시각 설정</span>
         <span className={styles.guide__description}>
-          {displaySemester}
-          (
-          {semesterData.from_date}
-          {' '}
-          ~
-          {' '}
-          {semesterData.to_date}
+          {displaySemester}({semesterData.from_date} ~ {semesterData.to_date}
           )의 시간표가 제공됩니다.
         </span>
       </div>
@@ -101,11 +93,7 @@ export default function TimeDetailPC({ timeSelect }: TimeDetailPCProps) {
             setValue={setMinute}
           />
         </div>
-        <button
-          className={styles['time-detail__button']}
-          type="button"
-          onClick={handleNowDepartClick}
-        >
+        <button className={styles['time-detail__button']} type="button" onClick={handleNowDepartClick}>
           지금 출발
         </button>
       </div>

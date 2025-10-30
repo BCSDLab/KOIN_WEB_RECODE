@@ -22,11 +22,8 @@ export default function useClubDetail(clubId: number) {
     queryFn: () => getClubDetail(token, Number(clubId)),
   });
 
-  const {
-    status: clubIntroductionEditStatus,
-    mutateAsync: clubIntroductionEditMutateAsync,
-  } = useMutation({
-    mutationFn: async (data:ClubIntroductionData) => {
+  const { status: clubIntroductionEditStatus, mutateAsync: clubIntroductionEditMutateAsync } = useMutation({
+    mutationFn: async (data: ClubIntroductionData) => {
       await putClubInroduction(token, clubId!, data);
     },
     onSuccess: () => {
@@ -39,6 +36,8 @@ export default function useClubDetail(clubId: number) {
     },
   });
   return {
-    clubDetail, clubIntroductionEditStatus, clubIntroductionEditMutateAsync,
+    clubDetail,
+    clubIntroductionEditStatus,
+    clubIntroductionEditMutateAsync,
   };
 }

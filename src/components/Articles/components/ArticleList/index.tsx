@@ -8,7 +8,7 @@ import Link from 'next/link';
 import styles from './ArticleList.module.scss';
 
 interface ArticleListProps {
-  articles: Article[]
+  articles: Article[];
 }
 
 const parseLostItemTitle = (title: string) => {
@@ -82,11 +82,11 @@ export default function ArticleList({ articles }: ArticleListProps) {
                     <div className={styles['title__container-container']}>|</div>
                     <div className={styles['title__container-container']}>{date}</div>
                     {isNewArticle && (
-                    <img
-                      className={styles['title__new-tag']}
-                      src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
-                      alt="new"
-                    />
+                      <img
+                        className={styles['title__new-tag']}
+                        src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
+                        alt="new"
+                      />
                     )}
                   </>
                 ) : (
@@ -94,21 +94,18 @@ export default function ArticleList({ articles }: ArticleListProps) {
                     {/* 일반 공지사항 */}
                     <div className={styles.title__content}>{article.title}</div>
                     {isNewArticle && (
-                    <img
-                      className={styles['title__new-tag']}
-                      src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
-                      alt="new"
-                    />
+                      <img
+                        className={styles['title__new-tag']}
+                        src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
+                        alt="new"
+                      />
                     )}
                   </>
                 )}
               </div>
-
             </div>
             <div className={styles.list__author}>
-              <div className={styles.list__author__content}>
-                {isMobile ? `${article.author}` : article.author}
-              </div>
+              <div className={styles.list__author__content}>{isMobile ? `${article.author}` : article.author}</div>
             </div>
             <div className={styles['list__registered-at']}>{setArticleRegisteredDate(article.registered_at)[0]}</div>
           </Link>

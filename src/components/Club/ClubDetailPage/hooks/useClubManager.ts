@@ -15,11 +15,8 @@ export default function useMandateClubManagerMutation(clubId: number | string | 
   }
   const token = useTokenState();
   const queryClient = useQueryClient();
-  const {
-    status: mandateClubManagerStatus,
-    mutateAsync: mandateClubManagerMutateAsync,
-  } = useMutation({
-    mutationFn: async (data:NewClubManager) => {
+  const { status: mandateClubManagerStatus, mutateAsync: mandateClubManagerMutateAsync } = useMutation({
+    mutationFn: async (data: NewClubManager) => {
       await putNewClubManager(token, data);
     },
     onSuccess: () => {
@@ -38,6 +35,7 @@ export default function useMandateClubManagerMutation(clubId: number | string | 
   });
 
   return {
-    mandateClubManagerStatus, mandateClubManagerMutateAsync,
+    mandateClubManagerStatus,
+    mandateClubManagerMutateAsync,
   };
 }

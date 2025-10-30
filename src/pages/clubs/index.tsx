@@ -81,10 +81,7 @@ function ClubListPage() {
   const onChangeSort = (e: { target: { value: string } }) => {
     const changedSort = e.target.value;
 
-    if (
-      changedSort === 'RECRUITMENT_UPDATED_DESC'
-    || changedSort === 'RECRUITING_DEADLINE_ASC'
-    ) {
+    if (changedSort === 'RECRUITMENT_UPDATED_DESC' || changedSort === 'RECRUITING_DEADLINE_ASC') {
       searchParams.set('isRecruiting', 'true');
     }
 
@@ -99,10 +96,7 @@ function ClubListPage() {
       event_label: 'club_main_recruiting_toggle',
       value: next ? 'on' : 'off',
     });
-    if (
-      !next
-    && (sortValue === 'RECRUITMENT_UPDATED_DESC' || sortValue === 'RECRUITING_DEADLINE_ASC')
-    ) {
+    if (!next && (sortValue === 'RECRUITMENT_UPDATED_DESC' || sortValue === 'RECRUITING_DEADLINE_ASC')) {
       setSearchParams({ sortType: 'CREATED_AT_ASC' });
     }
 
@@ -137,12 +131,7 @@ function ClubListPage() {
     navigate(`/clubs/${id}`);
   };
 
-  const handleLikeClick = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    isLiked: boolean,
-    clubId: number,
-    name: string,
-  ) => {
+  const handleLikeClick = (e: React.MouseEvent<HTMLButtonElement>, isLiked: boolean, clubId: number, name: string) => {
     e.stopPropagation();
     if (!token) {
       portalManager.open((portalOption: Portal) => (
@@ -180,13 +169,9 @@ function ClubListPage() {
         <div className={styles.header}>
           <p className={styles.header__title}>동아리 목록</p>
           {token && (
-          <button
-            type="button"
-            className={styles['header__add-button']}
-            onClick={() => handleCreateClubClick()}
-          >
-            동아리 생성하기
-          </button>
+            <button type="button" className={styles['header__add-button']} onClick={() => handleCreateClubClick()}>
+              동아리 생성하기
+            </button>
           )}
         </div>
         <main className={styles.main}>
@@ -221,28 +206,22 @@ function ClubListPage() {
           <ClubSearchContainer />
           <div className={styles.description}>
             <div className={styles.description__message}>
-              총
-              <strong>
-                {' '}
-                {totalCount}
-                개
-              </strong>
-              의 동아리가 있습니다.
+              총<strong> {totalCount}개</strong>의 동아리가 있습니다.
             </div>
             <div className={styles.description__filter}>
               {!isMobile && (
-              <div className={styles.filter}>
-                모집 중인 동아리
-                <button
-                  type="button"
-                  className={cn({
-                    [styles.filter__button]: true,
-                    [styles['filter__button--active']]: isRecruitingParam,
-                  })}
-                  onClick={handleRecruitmentFilterToggle}
-                  aria-label={isRecruitingParam ? '모집 중인 동아리 필터 해제' : '모집 중인 동아리 필터 적용'}
-                />
-              </div>
+                <div className={styles.filter}>
+                  모집 중인 동아리
+                  <button
+                    type="button"
+                    className={cn({
+                      [styles.filter__button]: true,
+                      [styles['filter__button--active']]: isRecruitingParam,
+                    })}
+                    onClick={handleRecruitmentFilterToggle}
+                    aria-label={isRecruitingParam ? '모집 중인 동아리 필터 해제' : '모집 중인 동아리 필터 적용'}
+                  />
+                </div>
               )}
               <div className={styles.description__dropdown}>
                 <Selector
@@ -256,79 +235,71 @@ function ClubListPage() {
           </div>
           <div className={styles.filter__container}>
             {isMobile && (
-            <div className={styles.filter}>
-              모집 중인 동아리
-              <button
-                type="button"
-                className={cn({
-                  [styles.filter__button]: true,
-                  [styles['filter__button--active']]: isRecruitingParam,
-                })}
-                onClick={handleRecruitmentFilterToggle}
-                aria-label={isRecruitingParam ? '모집 중인 동아리 필터 해제' : '모집 중인 동아리 필터 적용'}
-              />
-            </div>
+              <div className={styles.filter}>
+                모집 중인 동아리
+                <button
+                  type="button"
+                  className={cn({
+                    [styles.filter__button]: true,
+                    [styles['filter__button--active']]: isRecruitingParam,
+                  })}
+                  onClick={handleRecruitmentFilterToggle}
+                  aria-label={isRecruitingParam ? '모집 중인 동아리 필터 해제' : '모집 중인 동아리 필터 적용'}
+                />
+              </div>
             )}
           </div>
           <div className={styles.card__list}>
-            {clubList
-              .map((club) => (
-                <div
-                  role="button"
-                  tabIndex={0}
-                  key={club.id}
-                  className={styles.card}
-                  onKeyDown={() => handleCardClick(club.name, club.id)}
-                  onClick={() => handleCardClick(club.name, club.id)}
-                >
-                  <div className={styles.card__info}>
-                    <div className={styles['card__info-header']}>
-                      <div className={styles['card__info-header__title-box']}>
-                        <p className={styles['card__info-title']}>{club.name}</p>
-                        {!(club.recruitment_info.status === 'NONE') && (
+            {clubList.map((club) => (
+              <div
+                role="button"
+                tabIndex={0}
+                key={club.id}
+                className={styles.card}
+                onKeyDown={() => handleCardClick(club.name, club.id)}
+                onClick={() => handleCardClick(club.name, club.id)}
+              >
+                <div className={styles.card__info}>
+                  <div className={styles['card__info-header']}>
+                    <div className={styles['card__info-header__title-box']}>
+                      <p className={styles['card__info-title']}>{club.name}</p>
+                      {!(club.recruitment_info.status === 'NONE') && (
                         <div className={styles['card__info-recruitment']}>
                           {club.recruitment_info.status === 'RECRUITING' && (
-                          <span className={styles['card__info-recruitment--recruiting']}>
-                            {getDDayLabel(club.recruitment_info.dday)}
-                          </span>
+                            <span className={styles['card__info-recruitment--recruiting']}>
+                              {getDDayLabel(club.recruitment_info.dday)}
+                            </span>
                           )}
-                          {club.recruitment_info.status === 'ALWAYS' && <span className={styles['card__info-recruitment--always']}>상시 모집</span>}
-                          {club.recruitment_info.status === 'BEFORE' && <span className={styles['card__info-recruitment--before']}>모집 예정</span>}
-                          {club.recruitment_info.status === 'CLOSED' && <span className={styles['card__info-recruitment--closed']}>마감</span>}
+                          {club.recruitment_info.status === 'ALWAYS' && (
+                            <span className={styles['card__info-recruitment--always']}>상시 모집</span>
+                          )}
+                          {club.recruitment_info.status === 'BEFORE' && (
+                            <span className={styles['card__info-recruitment--before']}>모집 예정</span>
+                          )}
+                          {club.recruitment_info.status === 'CLOSED' && (
+                            <span className={styles['card__info-recruitment--closed']}>마감</span>
+                          )}
                         </div>
-                        )}
-                      </div>
-                      <p className={styles['card__info-category']}>{club.category}</p>
+                      )}
                     </div>
-                    <div className={styles['card__info-likes']}>
-                      <button
-                        type="button"
-                        onClick={(e) => handleLikeClick(e, club.is_liked, club.id, club.name)}
-                      >
-                        {club.is_liked ? <HeartFilled /> : <HeartOutline />}
-                      </button>
-                      <p>{!club.is_like_hidden && club.likes}</p>
-                    </div>
+                    <p className={styles['card__info-category']}>{club.category}</p>
                   </div>
-                  <img
-                    className={styles.card__logo}
-                    src={club.image_url}
-                    alt={club.name}
-                  />
+                  <div className={styles['card__info-likes']}>
+                    <button type="button" onClick={(e) => handleLikeClick(e, club.is_liked, club.id, club.name)}>
+                      {club.is_liked ? <HeartFilled /> : <HeartOutline />}
+                    </button>
+                    <p>{!club.is_like_hidden && club.likes}</p>
+                  </div>
                 </div>
-              ))}
+                <img className={styles.card__logo} src={club.image_url} alt={club.name} />
+              </div>
+            ))}
           </div>
         </main>
       </div>
-      {
-        isAuthModalOpen && (
-          <LoginRequiredModal
-            title="동아리를 생성하기"
-            description="로그인 후 이용해주세요."
-            onClose={closeAuthModal}
-          />
-        )
-      }
+      {isAuthModalOpen && (
+        <LoginRequiredModal title="동아리를 생성하기" description="로그인 후 이용해주세요." onClose={closeAuthModal} />
+      )}
     </div>
   );
 }

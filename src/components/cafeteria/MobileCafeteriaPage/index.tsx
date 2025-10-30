@@ -22,9 +22,7 @@ interface MobileCafeteriaPageProps {
   designVariant: string;
 }
 
-export default function MobileCafeteriaPage({
-  diningType, setDiningType, designVariant,
-}: MobileCafeteriaPageProps) {
+export default function MobileCafeteriaPage({ diningType, setDiningType, designVariant }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();
@@ -36,15 +34,11 @@ export default function MobileCafeteriaPage({
   useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
-    setButtonContent((
-      <button
-        type="button"
-        aria-label="학생식당 운영 정보 안내"
-        onClick={openCafeteriaInfo}
-      >
+    setButtonContent(
+      <button type="button" aria-label="학생식당 운영 정보 안내" onClick={openCafeteriaInfo}>
         <InformationIcon />
-      </button>
-    ));
+      </button>,
+    );
   }, [setButtonContent, openCafeteriaInfo]);
 
   const handleDiningTypeChange = (dining: DiningType) => {
@@ -113,11 +107,7 @@ export default function MobileCafeteriaPage({
         {designVariant === 'variant' && (
           <div className={styles['recommend-banner']}>
             <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
-            <button
-              type="button"
-              className={styles['recommend-banner__button']}
-              onClick={handleDiningToStore}
-            >
+            <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
               <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
             </button>
           </div>

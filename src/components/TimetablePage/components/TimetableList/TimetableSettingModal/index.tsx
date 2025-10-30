@@ -13,10 +13,7 @@ export interface TimetableSettingModalProps {
   onClose: () => void;
 }
 
-export default function TimetableSettingModal({
-  focusFrame,
-  onClose,
-}: TimetableSettingModalProps) {
+export default function TimetableSettingModal({ focusFrame, onClose }: TimetableSettingModalProps) {
   const token = useTokenState();
   const { mutate: updateFrameInfo } = useUpdateTimetableFrame();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
@@ -98,9 +95,7 @@ export default function TimetableSettingModal({
               disabled={focusFrame.is_main}
               checked={focusFrame.is_main ? true : undefined}
             />
-            <span className={styles['container__checkbox-title']}>
-              기본 시간표로 설정하기
-            </span>
+            <span className={styles['container__checkbox-title']}>기본 시간표로 설정하기</span>
           </label>
 
           <div className={styles.container__button}>

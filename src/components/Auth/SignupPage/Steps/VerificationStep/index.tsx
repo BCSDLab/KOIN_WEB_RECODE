@@ -1,11 +1,7 @@
 /* eslint-disable no-restricted-imports */
 import { useState } from 'react';
-import {
-  Controller, useFormContext, useFormState, useWatch,
-} from 'react-hook-form';
-import {
-  UserType, GENDER_OPTIONS, REGEX, MESSAGES, INQUIRY_URL,
-} from 'static/auth';
+import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
+import { UserType, GENDER_OPTIONS, REGEX, MESSAGES, INQUIRY_URL } from 'static/auth';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
@@ -68,11 +64,7 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
     checkVerificationSmsVerify({ phone_number: phoneNumber, verification_code: verificationCode });
   };
 
-  const isFormFilled = name && !errors.name
-  && gender
-  && phoneNumber
-  && verificationCode
-  && isCodeCorrect;
+  const isFormFilled = name && !errors.name && gender && phoneNumber && verificationCode && isCodeCorrect;
 
   const goToLogin = () => {
     navigate(ROUTES.Auth());
@@ -114,7 +106,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
 
   return (
     <div className={styles.container}>
-
       <div className={styles.container__wrapper}>
         <div className={styles['container__title-wrapper']}>
           <button type="button" onClick={onBack} aria-label="뒤로가기">
@@ -152,21 +143,14 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                 placeholder="이름을 입력해 주세요."
                 isDelete
                 isRequired
-                message={
-                  fieldState.error?.message
-                    ? { type: 'warning', content: fieldState.error.message }
-                    : null
-                }
+                message={fieldState.error?.message ? { type: 'warning', content: fieldState.error.message } : null}
               />
             )}
           />
         </div>
 
         <div className={styles['gender-wrapper']}>
-          <label
-            htmlFor="gender"
-            className={styles.wrapper__label}
-          >
+          <label htmlFor="gender" className={styles.wrapper__label}>
             성별
             <span className={styles.required}>*</span>
           </label>
@@ -208,32 +192,24 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
                     {phoneMessage?.type === 'success' && smsSendCountData && (
                       <div className={styles['label-count-number']}>
                         {' '}
-                        남은 횟수 (
-                        {smsSendCountData?.remaining_count}
-                        /
-                        {smsSendCountData?.total_count}
-                        )
+                        남은 횟수 ({smsSendCountData?.remaining_count}/{smsSendCountData?.total_count})
                       </div>
                     )}
                     {phoneMessage?.type === 'error' && phoneMessage.code === 'ALREADY_REGISTERED' && (
-                    <>
-                      <button
-                        onClick={goToLogin}
-                        type="button"
-                        className={styles['label-link-button']}
-                      >
-                        로그인하기
-                      </button>
-                      <span className={styles['label-link-split']}>|</span>
-                      <a
-                        href={INQUIRY_URL}
-                        className={styles['label-link-wrapper__button']}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        문의하기
-                      </a>
-                    </>
+                      <>
+                        <button onClick={goToLogin} type="button" className={styles['label-link-button']}>
+                          로그인하기
+                        </button>
+                        <span className={styles['label-link-split']}>|</span>
+                        <a
+                          href={INQUIRY_URL}
+                          className={styles['label-link-wrapper__button']}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          문의하기
+                        </a>
+                      </>
                     )}
                   </PCCustomInput>
                   <button
@@ -299,7 +275,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
             )}
           />
         </div>
-
       </div>
 
       <div className={`${styles.divider} ${styles['divider--bottom']}`} />
@@ -329,7 +304,6 @@ function Verification({ onNext, onBack, setUserType }: VerificationProps) {
           기타/외부인
         </button>
       </div>
-
     </div>
   );
 }

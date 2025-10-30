@@ -17,12 +17,8 @@ function TimetablePage() {
   const router = useRouter();
   const { timetableFrameId } = router.query;
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
-  const mainFrame = timetableFrameList.find(
-    (frame) => frame.is_main === true,
-  );
-  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(
-    mainFrame?.id ? mainFrame.id : 0,
-  );
+  const mainFrame = timetableFrameList.find((frame) => frame.is_main === true);
+  const [currentFrameIndex, setCurrentFrameIndex] = React.useState(mainFrame?.id ? mainFrame.id : 0);
 
   React.useEffect(() => {
     if (timetableFrameId) {
@@ -37,10 +33,7 @@ function TimetablePage() {
   return (
     <div className={styles.page}>
       {!isMobile ? (
-        <DefaultPage
-          timetableFrameId={currentFrameIndex}
-          setCurrentFrameId={setCurrentFrameIndex}
-        />
+        <DefaultPage timetableFrameId={currentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
       ) : (
         <MobilePage timetableFrameId={currentFrameIndex} />
       )}

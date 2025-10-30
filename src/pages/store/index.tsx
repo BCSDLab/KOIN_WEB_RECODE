@@ -72,33 +72,19 @@ const toggleNameLabel = {
 
 const CATEGORY_IS_UNDEFINED = -1;
 
-const loggingCategoryToggleSorterValue = (
-  toggleName: 'COUNT' | 'RATING',
-  category: string | undefined,
-) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
+const loggingCategoryToggleSorterValue = (toggleName: 'COUNT' | 'RATING', category: string | undefined) =>
+  `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
 
-const loggingCategoryToggleFilterValue = (
-  toggleName: 'OPEN' | 'DELIVERY',
-  category: string | undefined,
-) => `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
+const loggingCategoryToggleFilterValue = (toggleName: 'OPEN' | 'DELIVERY', category: string | undefined) =>
+  `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
 
-const useStoreList = (
-  sorter: StoreSorterType,
-  filter: StoreFilterType[],
-  params: StoreSearchQueryType,
-) => {
-  const { data: storeList } = useQuery(
-    {
-      queryKey: ['storeListV2', sorter, filter, params.storeName],
-      queryFn: () => api.store.getStoreListV2(
-        sorter,
-        filter,
-        params.storeName,
-      ),
-      retry: 0,
-      placeholderData: (previousData) => previousData,
-    },
-  );
+const useStoreList = (sorter: StoreSorterType, filter: StoreFilterType[], params: StoreSearchQueryType) => {
+  const { data: storeList } = useQuery({
+    queryKey: ['storeListV2', sorter, filter, params.storeName],
+    queryFn: () => api.store.getStoreListV2(sorter, filter, params.storeName),
+    retry: 0,
+    placeholderData: (previousData) => previousData,
+  });
 
   const selectedCategory = Number(params.category);
 
@@ -107,8 +93,7 @@ const useStoreList = (
   }
 
   return storeList.shops.filter(
-    (store) => params.category === undefined
-    || store.category_ids.some((id) => id === selectedCategory),
+    (store) => params.category === undefined || store.category_ids.some((id) => id === selectedCategory),
   );
 };
 
@@ -126,14 +111,11 @@ function StorePage() {
   const [localStorageValue] = useLocalStorage('store-review-tooltip', null);
   const [isTooltipOpen, , closeTooltip] = useBooleanState(localStorageValue === null);
 
-  const filteredTypeList = Object.entries(storeFilterList).filter(([, value]) => value)
+  const filteredTypeList = Object.entries(storeFilterList)
+    .filter(([, value]) => value)
     .map(([key]) => key as StoreFilterType);
   const { data: categories } = useStoreCategories();
-  const storeList = useStoreList(
-    storeSorter,
-    filteredTypeList,
-    params,
-  );
+  const storeList = useStoreList(storeSorter, filteredTypeList, params);
 
   const selectedCategory = Number(searchParams.get('category')) ?? CATEGORY_IS_UNDEFINED;
 
@@ -148,19 +130,20 @@ function StorePage() {
       event_label: 'shop_categories',
       value: categoryId.toString(),
       previous_page:
-        categories.shop_categories.find(
-          (item) => item.id === Number(searchParams.get('category')),
-        )?.name || '전체보기',
+        categories.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '전체보기',
       duration_time: getCategoryDurationTime(),
       current_page: categoryId.toString(),
     });
 
     initializeCategoryEntryTime();
 
-    setParams({ category: `${categoryId}` }, {
-      deleteBeforeParam: false,
-      replacePage: false,
-    });
+    setParams(
+      { category: `${categoryId}` },
+      {
+        deleteBeforeParam: false,
+        replacePage: false,
+      },
+    );
   };
 
   const handleSortCheckBox = (type: StoreSorterType) => () => {
@@ -170,38 +153,28 @@ function StorePage() {
       logger.actionEventClick({
         team: 'BUSINESS',
         event_label: 'shop_can',
-        value: loggingCategoryToggleSorterValue(
-          type,
-          categories.shop_categories[selectedCategory]?.name,
-        ),
+        value: loggingCategoryToggleSorterValue(type, categories.shop_categories[selectedCategory]?.name),
       });
     }
   };
 
-  const handleFilterCheckBox = (type:StoreFilterType) => () => {
+  const handleFilterCheckBox = (type: StoreFilterType) => () => {
     setStoreFilterList((prevFilterList) => ({ ...prevFilterList, [type]: !prevFilterList[type] }));
 
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_can',
-      value: loggingCategoryToggleFilterValue(
-        type,
-        categories.shop_categories[selectedCategory]?.name,
-      ),
+      value: loggingCategoryToggleFilterValue(type, categories.shop_categories[selectedCategory]?.name),
     });
   };
 
   const storeScrollLogging = () => {
-    const currentCategoryId = searchParams.get('category') === undefined
-      ? 0
-      : Number(searchParams.get('category')) - 1;
+    const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
 
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_categories',
-      value: `scroll in ${
-        categories.shop_categories[currentCategoryId]?.name || '전체보기'
-      }`,
+      value: `scroll in ${categories.shop_categories[currentCategoryId]?.name || '전체보기'}`,
       event_category: 'scroll',
     });
   };
@@ -217,10 +190,7 @@ function StorePage() {
     if (sessionStorage.getItem('pushStateCalled')) {
       sessionStorage.removeItem('pushStateCalled');
     }
-    sessionStorage.setItem(
-      'cameFrom',
-      categories.shop_categories[selectedCategory]?.name || '전체보기',
-    );
+    sessionStorage.setItem('cameFrom', categories.shop_categories[selectedCategory]?.name || '전체보기');
   }, [categories, selectedCategory]);
 
   const handleBenefitClick = () => {
@@ -228,9 +198,8 @@ function StorePage() {
       team: 'BUSINESS',
       event_label: 'shop_categories_benefit',
       value: '혜택이 있는 상점 모아보기',
-      previous_page: categories.shop_categories.find(
-        (item) => item.id === Number(searchParams.get('category')),
-      )?.name || '전체보기',
+      previous_page:
+        categories.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '전체보기',
       duration_time: getCategoryDurationTime(),
       current_page: 'benefit',
     });
@@ -249,10 +218,8 @@ function StorePage() {
             <button
               className={cn({
                 [styles.category__menu]: true,
-                [styles['category__menu--selected']]:
-                  category.id === selectedCategory,
-                [styles['category__menu--disabled']]:
-                  category.id === 1 && isMobile,
+                [styles['category__menu--selected']]: category.id === selectedCategory,
+                [styles['category__menu--disabled']]: category.id === 1 && isMobile,
               })}
               role="radio"
               aria-checked={category.id === selectedCategory}
@@ -260,20 +227,12 @@ function StorePage() {
               onClick={() => handleCategoryClick(category.id)}
               key={category.id}
             >
-              <img
-                className={styles.category__image}
-                src={category.image_url}
-                alt="category_img"
-              />
+              <img className={styles.category__image} src={category.image_url} alt="category_img" />
               <span>{category.name}</span>
             </button>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={handleBenefitClick}
-          className={styles.category__benefit}
-        >
+        <button type="button" onClick={handleBenefitClick} className={styles.category__benefit}>
           혜택이 있는 상점 모아보기
         </button>
       </div>
@@ -281,9 +240,7 @@ function StorePage() {
       <div className={styles.option}>
         {params.storeName ? (
           <div className={styles.option__count}>
-            <strong>
-              {`"${params.storeName}" 관련 가게가 총 ${storeList.length}개 있습니다.`}
-            </strong>
+            <strong>{`"${params.storeName}" 관련 가게가 총 ${storeList.length}개 있습니다.`}</strong>
           </div>
         ) : (
           <div className={styles.option__count}>
@@ -298,10 +255,7 @@ function StorePage() {
 
         <div className={styles.option__checkbox}>
           {MOBILE_SORT_CHECK_BOX.map(({ id, content }) => (
-            <div
-              key={id}
-              className={styles['option-checkbox']}
-            >
+            <div key={id} className={styles['option-checkbox']}>
               <label htmlFor={id} className={styles['option-checkbox__label']}>
                 <input
                   id={id}
@@ -315,10 +269,7 @@ function StorePage() {
             </div>
           ))}
           {MOBILE_FILTER_CHECK_BOX.map(({ id, content }) => (
-            <div
-              key={id}
-              className={styles['option-checkbox']}
-            >
+            <div key={id} className={styles['option-checkbox']}>
               <label htmlFor={id} className={styles['option-checkbox__label']}>
                 <input
                   id={id}
@@ -331,32 +282,29 @@ function StorePage() {
               </label>
             </div>
           ))}
-          {
-            isTooltipOpen && (
+          {isTooltipOpen && (
             <div className={styles.tooltip}>
-              <div className={styles.tooltip__content}>
-                지금 리뷰가 가장 많은 상점을 확인해보세요!
-              </div>
-              <button type="button" aria-label="리뷰 툴팁 닫기" className={styles.tooltip__close} onClick={handleTooltipCloseButtonClick}>
+              <div className={styles.tooltip__content}>지금 리뷰가 가장 많은 상점을 확인해보세요!</div>
+              <button
+                type="button"
+                aria-label="리뷰 툴팁 닫기"
+                className={styles.tooltip__close}
+                onClick={handleTooltipCloseButtonClick}
+              >
                 <Close />
               </button>
             </div>
-            )
-          }
+          )}
         </div>
       </div>
-      {isMobile && (
-        <div className={styles['store-mobile-header']}>상점목록</div>
-      )}
+      {isMobile && <div className={styles['store-mobile-header']}>상점목록</div>}
       <EventCarousel />
       <div className={styles.filter}>
-
         {MOBILE_SORT_CHECK_BOX.map(({ id, content, value }) => (
           <button
             className={cn({
               [styles.filter__box]: true,
-              [styles['filter__box--activate']]:
-                storeSorter === id,
+              [styles['filter__box--activate']]: storeSorter === id,
             })}
             key={value}
             type="button"
@@ -370,8 +318,7 @@ function StorePage() {
           <button
             className={cn({
               [styles.filter__box]: true,
-              [styles['filter__box--activate']]:
-                storeFilterList[id],
+              [styles['filter__box--activate']]: storeFilterList[id],
             })}
             key={value}
             type="button"
@@ -382,22 +329,13 @@ function StorePage() {
         ))}
 
         {isTooltipOpen && (
-          <IntroToolTip
-            content="지금 리뷰가 가장 많은 상점을 확인해보세요!"
-            closeTooltip={closeTooltip}
-          />
+          <IntroToolTip content="지금 리뷰가 가장 많은 상점을 확인해보세요!" closeTooltip={closeTooltip} />
         )}
       </div>
       {!isMobile ? (
-        <DesktopStoreList
-          storeListData={storeList}
-          storeType={STORE_PAGE.MAIN}
-        />
+        <DesktopStoreList storeListData={storeList} storeType={STORE_PAGE.MAIN} />
       ) : (
-        <MobileStoreList
-          storeListData={storeList}
-          storeType={STORE_PAGE.MAIN}
-        />
+        <MobileStoreList storeListData={storeList} storeType={STORE_PAGE.MAIN} />
       )}
     </div>
   );

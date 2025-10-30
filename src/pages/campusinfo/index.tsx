@@ -70,8 +70,7 @@ function CampusInfo() {
   };
 
   const getTimeToTypeAndDay = (type: string, day: string) => {
-    const target = cafeteriaInfo?.opens
-      ?.find((open) => open.day_of_week === day && open.type === type);
+    const target = cafeteriaInfo?.opens?.find((open) => open.day_of_week === day && open.type === type);
 
     return target ? getFormattedShopTime(target.open_time, target.close_time) : '미운영';
   };
@@ -80,9 +79,7 @@ function CampusInfo() {
     <div className={styles.container}>
       <div className={styles['title-container']}>
         <h2 className={styles.title}>{`${campusInfo.semester} 시설물 운영 시간`}</h2>
-        <div className={styles.subtitle}>
-          {formatDateRange(campusInfo.from_date, campusInfo.to_date)}
-        </div>
+        <div className={styles.subtitle}>{formatDateRange(campusInfo.from_date, campusInfo.to_date)}</div>
       </div>
       <section className={styles['info-container']}>
         <div className={styles['info-column']}>
@@ -99,7 +96,9 @@ function CampusInfo() {
                   <tr className={styles['table-head__tr']}>
                     <th>시간</th>
                     {CAFETERIA_HEAD_TABLE.row.map((type) => (
-                      <th className={styles['table-head__th']} key={type}>{type}</th>
+                      <th className={styles['table-head__th']} key={type}>
+                        {type}
+                      </th>
                     ))}
                   </tr>
                 </thead>
@@ -111,8 +110,7 @@ function CampusInfo() {
                         <td
                           className={cn({
                             [styles['table-body__td']]: true,
-                            [styles.closed]:
-                              getTimeToTypeAndDay(type, day) === '미운영',
+                            [styles.closed]: getTimeToTypeAndDay(type, day) === '미운영',
                           })}
                           key={`${type}-${day}`}
                         >
@@ -128,13 +126,14 @@ function CampusInfo() {
 
           {filteredCampusInfo.slice(0, 2).map(({ id, name, opens }) => (
             <div className={styles['info-block']} key={id}>
-              <div className={styles['icon-wrapper']}>
-                {SHOP_ICON[name as keyof typeof SHOP_ICON]}
-              </div>
+              <div className={styles['icon-wrapper']}>{SHOP_ICON[name as keyof typeof SHOP_ICON]}</div>
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
-                  <div className={styles['info-description']} key={`${id}-${day_of_week}`}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
+                  <div
+                    className={styles['info-description']}
+                    key={`${id}-${day_of_week}`}
+                  >{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
                 ))}
               </div>
             </div>
@@ -143,13 +142,14 @@ function CampusInfo() {
         <div className={styles['info-column']}>
           {filteredCampusInfo.slice(2, 6).map(({ id, name, opens }) => (
             <div className={styles['info-block']} key={id}>
-              <div className={styles['icon-wrapper']}>
-                {SHOP_ICON[name as keyof typeof SHOP_ICON]}
-              </div>
+              <div className={styles['icon-wrapper']}>{SHOP_ICON[name as keyof typeof SHOP_ICON]}</div>
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
-                  <div className={styles['info-description']} key={`${id}-${day_of_week}`}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
+                  <div
+                    className={styles['info-description']}
+                    key={`${id}-${day_of_week}`}
+                  >{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
                 ))}
               </div>
             </div>
@@ -158,13 +158,14 @@ function CampusInfo() {
         <div className={styles['info-column']}>
           {filteredCampusInfo.slice(6).map(({ id, name, opens }) => (
             <div className={styles['info-block']} key={id}>
-              <div className={styles['icon-wrapper']}>
-                {SHOP_ICON[name as keyof typeof SHOP_ICON]}
-              </div>
+              <div className={styles['icon-wrapper']}>{SHOP_ICON[name as keyof typeof SHOP_ICON]}</div>
               <div className={styles['info-description-container']}>
                 <div className={styles['info-title']}>{name}</div>
                 {opens.map(({ day_of_week, open_time, close_time }) => (
-                  <div className={styles['info-description']} key={`${id}-${day_of_week}`}>{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
+                  <div
+                    className={styles['info-description']}
+                    key={`${id}-${day_of_week}`}
+                  >{`${day_of_week}: ${getFormattedShopTime(open_time, close_time)}`}</div>
                 ))}
               </div>
             </div>

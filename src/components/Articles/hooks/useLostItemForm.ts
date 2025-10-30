@@ -48,9 +48,7 @@ const initialForm: LostItem = {
 };
 
 export const useLostItemForm = (defaultType: 'FOUND' | 'LOST') => {
-  const [lostItems, setLostItems] = useState<Array<LostItem>>(
-    [{ ...initialForm, type: defaultType }],
-  );
+  const [lostItems, setLostItems] = useState<Array<LostItem>>([{ ...initialForm, type: defaultType }]);
 
   const lostItemHandler = (key: number) => ({
     setType: (type: 'FOUND' | 'LOST') => {
@@ -142,11 +140,8 @@ export const useLostItemForm = (defaultType: 'FOUND' | 'LOST') => {
     setLostItems((prev) => prev.filter((_, index) => index !== key));
   };
 
-  const isItemValid = (item: LostItem) => (
-    item.category.trim() !== ''
-    && item.hasDateBeenSelected
-    && (item.type === 'LOST' || item.foundPlace.trim() !== '')
-  );
+  const isItemValid = (item: LostItem) =>
+    item.category.trim() !== '' && item.hasDateBeenSelected && (item.type === 'LOST' || item.foundPlace.trim() !== '');
 
   const checkArticleFormFull = () => {
     const isValid = lostItems.every(isItemValid);
@@ -154,12 +149,14 @@ export const useLostItemForm = (defaultType: 'FOUND' | 'LOST') => {
   };
 
   const validateAndUpdateItems = () => {
-    setLostItems((prev) => prev.map((item) => ({
-      ...item,
-      isCategorySelected: item.category.trim() !== '',
-      isDateSelected: item.hasDateBeenSelected,
-      isFoundPlaceSelected: item.foundPlace.trim() !== '',
-    })));
+    setLostItems((prev) =>
+      prev.map((item) => ({
+        ...item,
+        isCategorySelected: item.category.trim() !== '',
+        isDateSelected: item.hasDateBeenSelected,
+        isFoundPlaceSelected: item.foundPlace.trim() !== '',
+      })),
+    );
   };
 
   return {

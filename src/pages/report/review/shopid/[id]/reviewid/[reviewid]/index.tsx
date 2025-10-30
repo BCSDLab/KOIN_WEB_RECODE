@@ -38,7 +38,7 @@ const REVIEW_CONTEXT = {
   },
 };
 
-function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: string }) {
+function ReviewReportingPage({ shopid, reviewid }: { shopid: string; reviewid: string }) {
   const [selectOptions, setSelectOptions] = useState<string[]>([]);
   const [requestOptions, setRequestOptions] = useState<RequestOption[]>([]);
   const [etcDescription, setEtcDescription] = useState<string>('');
@@ -52,20 +52,16 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: s
     const { value } = event.target;
     setSelectOptions((prevOptions) => {
       const isSelected = prevOptions.includes(value);
-      const updatedOptions = isSelected
-        ? prevOptions.filter((option) => option !== value)
-        : [...prevOptions, value];
+      const updatedOptions = isSelected ? prevOptions.filter((option) => option !== value) : [...prevOptions, value];
 
       const updatedRequestOptions = isSelected
-        ? requestOptions.filter(
-          (option) => option.title !== REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT].title,
-        )
+        ? requestOptions.filter((option) => option.title !== REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT].title)
         : [
-          ...requestOptions,
-          value === 'etc'
-            ? { ...REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT], content: etcDescription }
-            : REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT],
-        ];
+            ...requestOptions,
+            value === 'etc'
+              ? { ...REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT], content: etcDescription }
+              : REVIEW_CONTEXT[value as keyof typeof REVIEW_CONTEXT],
+          ];
 
       setRequestOptions(updatedRequestOptions);
       return updatedOptions;
@@ -78,10 +74,10 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: s
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 10}px`;
     }
 
-    setRequestOptions(
-      (prevOptions) => prevOptions.map((option) => (option.title === REVIEW_CONTEXT.etc.title
-        ? { ...option, content: etcDescription }
-        : option)),
+    setRequestOptions((prevOptions) =>
+      prevOptions.map((option) =>
+        option.title === REVIEW_CONTEXT.etc.title ? { ...option, content: etcDescription } : option,
+      ),
     );
   }, [etcDescription]);
 
@@ -110,26 +106,21 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: s
       <div>
         <div className={styles['reporting-title']}>신고 이유를 선택해주세요.</div>
         <div className={styles['reporting-subtitle-box']}>
-          <p className={styles['reporting-subtitle']}>
-            접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.
-          </p>
-          <p className={styles['reporting-subtitle']}>
-            블라인드 처리까지 시간이 소요될 수 있습니다.
-          </p>
+          <p className={styles['reporting-subtitle']}>접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.</p>
+          <p className={styles['reporting-subtitle']}>블라인드 처리까지 시간이 소요될 수 있습니다.</p>
         </div>
       </div>
       <div className={styles['option-container']}>
         {Object.keys(REVIEW_CONTEXT).map((key) => (
           <div key={key} className={key === 'etc' ? styles['reporting-option--etc'] : styles['reporting-option']}>
-            <CheckBox
-              value={key}
-              name="reason"
-              checked={selectOptions.includes(key)}
-              onChange={handleChange}
-            >
+            <CheckBox value={key} name="reason" checked={selectOptions.includes(key)} onChange={handleChange}>
               <ReportingLabel
                 title={REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].title}
-                description={key === 'etc' ? `${etcDescription.length}/150 자` : REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].content}
+                description={
+                  key === 'etc'
+                    ? `${etcDescription.length}/150 자`
+                    : REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].content
+                }
                 disable={etcDescription.length === 150}
               />
             </CheckBox>

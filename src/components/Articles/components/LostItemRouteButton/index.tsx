@@ -13,12 +13,7 @@ import Link from 'next/link';
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
-  const {
-    logItemWriteClick,
-    logFindUserWriteClick,
-    logLostItemWriteClick,
-    logLoginRequire,
-  } = useArticlesLogger();
+  const { logItemWriteClick, logFindUserWriteClick, logLostItemWriteClick, logLoginRequire } = useArticlesLogger();
   const [isWriting, setIsWriting] = useState(false);
   const router = useRouter();
   const { pathname } = router;
@@ -46,18 +41,18 @@ export default function LostItemRouteButton() {
   return (
     <>
       {isWriting && (
-      <div
-        className={styles.overlay}
-        role="button"
-        tabIndex={0}
-        aria-label="오버레이"
-        onClick={() => setIsWriting(false)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            setIsWriting(false);
-          }
-        }}
-      />
+        <div
+          className={styles.overlay}
+          role="button"
+          tabIndex={0}
+          aria-label="오버레이"
+          onClick={() => setIsWriting(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setIsWriting(false);
+            }
+          }}
+        />
       )}
       <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
         {isWriting && (
@@ -83,15 +78,11 @@ export default function LostItemRouteButton() {
         )}
 
         {pathname.endsWith('articles') && (
-          <button
-            className={styles.links__write}
-            type="button"
-            onClick={handleWritingButtonClick}
-          >
+          <button className={styles.links__write} type="button" onClick={handleWritingButtonClick}>
             {isWriting ? <CloseIcon /> : <PencilIcon />}
             글쓰기
           </button>
-        ) }
+        )}
       </div>
     </>
   );

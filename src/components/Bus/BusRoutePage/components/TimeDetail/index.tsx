@@ -13,11 +13,7 @@ export default function TimeDetail({ timeSelect, close }: TimeDetailProps) {
 
   return (
     <div>
-      {isMobile ? (
-        <TimeDetailMobile timeSelect={timeSelect} close={close} />
-      ) : (
-        <TimeDetailPC timeSelect={timeSelect} />
-      )}
+      {isMobile ? <TimeDetailMobile timeSelect={timeSelect} close={close} /> : <TimeDetailPC timeSelect={timeSelect} />}
     </div>
   );
 }

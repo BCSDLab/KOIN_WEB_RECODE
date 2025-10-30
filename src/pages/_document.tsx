@@ -1,6 +1,4 @@
-import {
-  Html, Head, Main, NextScript,
-} from 'next/document';
+import { Html, Head, Main, NextScript } from 'next/document';
 
 export default function Document() {
   const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
@@ -12,10 +10,7 @@ export default function Document() {
         <meta charSet="utf-8" />
         <meta name="theme-color" content="#000000" />
         <meta name="author" content="BCSD Lab" />
-        <meta
-          name="description"
-          content="보다 편하게, 한국기술교육대학교 생활에 필요한 서비스를 만날 수 있습니다."
-        />
+        <meta name="description" content="보다 편하게, 한국기술교육대학교 생활에 필요한 서비스를 만날 수 있습니다." />
 
         {/* Open Graph */}
         <meta property="og:title" content="코인 - 한기대 커뮤니티" />
@@ -23,10 +18,7 @@ export default function Document() {
           property="og:description"
           content="보다 편하게, 한국기술교육대학교 생활에 필요한 서비스를 만날 수 있습니다."
         />
-        <meta
-          property="og:image"
-          content="https://static.koreatech.in/assets/img/facebook_showcase_image.png"
-        />
+        <meta property="og:image" content="https://static.koreatech.in/assets/img/facebook_showcase_image.png" />
         <meta property="og:image:width" content="1200" />
 
         {/* 국제화/번역 제어 */}
@@ -50,10 +42,7 @@ export default function Document() {
           sizes="180x180"
           href="https://static.koreatech.in/assets/favicons/favicon-32x32.png"
         />
-        <link
-          rel="shortcut icon"
-          href="https://static.koreatech.in/assets/favicons/favicon-32x32.png"
-        />
+        <link rel="shortcut icon" href="https://static.koreatech.in/assets/favicons/favicon-32x32.png" />
       </Head>
       <body>
         {GTM_ID ? (

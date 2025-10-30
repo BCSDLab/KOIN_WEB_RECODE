@@ -22,7 +22,12 @@ export default function useUserInfoModal() {
     }
 
     const requiredFields: (keyof typeof userInfo)[] = [
-      'login_id', 'gender', 'major', 'name', 'phone_number', 'student_number',
+      'login_id',
+      'gender',
+      'major',
+      'name',
+      'phone_number',
+      'student_number',
     ];
 
     const isInfoMissing = requiredFields.some(

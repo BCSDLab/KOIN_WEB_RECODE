@@ -42,6 +42,9 @@ export default function useClubLikeMutation(clubId: number | string | undefined)
     },
   });
   return {
-    clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync,
+    clubLikeStatus,
+    clubUnlikeStatus,
+    clubLikeMutateAsync,
+    clubUnlikeMutateAsync,
   };
 }

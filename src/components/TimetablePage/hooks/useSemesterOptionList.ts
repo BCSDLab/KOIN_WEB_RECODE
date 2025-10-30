@@ -6,12 +6,10 @@ import useSemesterCheck, { MY_SEMESTER_INFO_KEY } from './useMySemester';
 const SEMESTER_INFO_KEY = 'semester';
 
 export const useSemester = () => {
-  const { data } = useSuspenseQuery(
-    {
-      queryKey: [SEMESTER_INFO_KEY],
-      queryFn: timetable.getSemesterInfoList,
-    },
-  );
+  const { data } = useSuspenseQuery({
+    queryKey: [SEMESTER_INFO_KEY],
+    queryFn: timetable.getSemesterInfoList,
+  });
 
   return data ?? [];
 };
@@ -28,12 +26,10 @@ const useSemesterOptionList = () => {
 
   const semesterList = token ? mySemesterList?.semesters : allSemesters;
 
-  const semesterOptionList = (semesterList ?? []).map(
-    (semesterInfo) => ({
-      label: `${semesterInfo.year}년 ${semesterInfo.term}`,
-      value: semesterInfo,
-    }),
-  );
+  const semesterOptionList = (semesterList ?? []).map((semesterInfo) => ({
+    label: `${semesterInfo.year}년 ${semesterInfo.term}`,
+    value: semesterInfo,
+  }));
   return semesterOptionList;
 };
 

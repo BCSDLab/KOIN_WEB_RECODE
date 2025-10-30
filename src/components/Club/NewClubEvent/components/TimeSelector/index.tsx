@@ -16,18 +16,14 @@ interface DropdownProps {
   onChange: (value: number) => void;
 }
 
-function Dropdown({
-  options, value, suffix, onChange,
-}: DropdownProps) {
+function Dropdown({ options, value, suffix, onChange }: DropdownProps) {
   const [isOpen, , close, toggle] = useBooleanState(false);
   const { containerRef } = useOutsideClick({ onOutsideClick: close });
 
   return (
     <div className={styles.dropdownWrapper} ref={containerRef}>
       <button type="button" className={styles.trigger} onClick={toggle}>
-        {value?.toString().padStart(2, '0') ?? '00'}
-        {' '}
-        {suffix}
+        {value?.toString().padStart(2, '0') ?? '00'} {suffix}
         <DownArrowIcon />
       </button>
       {isOpen && (
@@ -52,7 +48,6 @@ function Dropdown({
             >
               {opt.toString().padStart(2, '0')}
             </li>
-
           ))}
         </ul>
       )}

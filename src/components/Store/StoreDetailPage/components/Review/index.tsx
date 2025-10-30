@@ -19,10 +19,7 @@ export default function ReviewPage({ id }: { id: string }) {
     <Suspense fallback={<div />}>
       <div className={styles.container}>
         <div className={styles['button-wrapper']}>
-          <ReviewButton
-            id={id}
-            goReviewPage={() => router.push(ROUTES.Review({ id, isLink: true }))}
-          />
+          <ReviewButton id={id} goReviewPage={() => router.push(ROUTES.Review({ id, isLink: true }))} />
         </div>
         <AverageRating id={id} />
       </div>
