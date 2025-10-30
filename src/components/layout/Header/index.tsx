@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
 import AuthenticateUserModal from 'components/AuthenticateUserModal';
 import ROUTES from 'static/routes';
-import styles from './Header.module.scss';
-import PCHeader from './PCHeader';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import MobileHeader from './MobileHeader';
+import PCHeader from './PCHeader';
+import styles from './Header.module.scss';
 
 function Header() {
   const router = useRouter();

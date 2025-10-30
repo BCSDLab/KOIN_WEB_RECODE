@@ -1,5 +1,5 @@
-import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
+import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ArticleHeader.module.scss';
 

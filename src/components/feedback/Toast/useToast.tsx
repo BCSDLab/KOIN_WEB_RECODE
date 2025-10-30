@@ -1,6 +1,6 @@
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
 import TimetableToast, { Toast } from 'components/feedback/Toast/TimetableToast';
+import { Portal } from 'components/modal/Modal/PortalProvider';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 
 export default function useToast() {
   const portalManager = useModalPortal();

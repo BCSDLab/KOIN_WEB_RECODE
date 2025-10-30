@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { ClubNewQnA } from 'api/club/entity';
 import useClubQnA from 'components/Club/ClubDetailPage/hooks/useClubQnA';
-import { useState } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CreateQnAModal.module.scss';
 

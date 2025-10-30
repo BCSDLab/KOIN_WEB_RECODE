@@ -1,6 +1,6 @@
-import { MobilePage } from 'components/TimetablePage/MainTimetablePage/MobilePage';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { MobilePage } from 'components/TimetablePage/MainTimetablePage/MobilePage';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import DefaultPage from './DefaultPage';
 import styles from './ModifyTimetablePage.module.scss';

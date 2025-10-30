@@ -1,18 +1,18 @@
+import React, { Suspense } from 'react';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
+import PenIcon from 'assets/svg/pen-icon.svg';
+import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import Timetable from 'components/TimetablePage/components/Timetable';
-import React, { Suspense } from 'react';
-import PenIcon from 'assets/svg/pen-icon.svg';
-import LectureList from 'components/TimetablePage/components/LectureList';
 import CustomLecture from 'components/TimetablePage/components/CustomLecture';
+import LectureList from 'components/TimetablePage/components/LectureList';
+import Timetable from 'components/TimetablePage/components/Timetable';
 import TotalGrades from 'components/TimetablePage/components/TotalGrades';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
-import { useSemester } from 'utils/zustand/semester';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
-import TimetableIcon from 'assets/svg/timetable-icon.svg';
-import { useRouter } from 'next/router';
+import { useSemester } from 'utils/zustand/semester';
 import styles from './DefaultPage.module.scss';
 
 export default function DefaultPage({ timetableFrameId }: { timetableFrameId: number }) {

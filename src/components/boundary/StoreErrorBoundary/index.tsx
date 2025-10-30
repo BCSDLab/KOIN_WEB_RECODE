@@ -1,7 +1,7 @@
 import React from 'react';
+import { isKoinError } from '@bcsdlab/koin';
 import { AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
-import { isKoinError } from '@bcsdlab/koin';
 import styles from './StoreErrorBoundary.module.scss';
 
 interface Props {

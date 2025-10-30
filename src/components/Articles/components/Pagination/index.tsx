@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
-import showToast from 'utils/ts/showToast';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import usePagination from 'components/Articles/hooks/usePagination';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import showToast from 'utils/ts/showToast';
 import styles from './Pagination.module.scss';
 
 const LIMIT_COUNT = [0, 1, 2, 3, 4];

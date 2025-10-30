@@ -1,16 +1,16 @@
-import { StoreListV2 } from 'api/store/entity';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { getJosaPicker } from '@bcsdlab/utils';
-import EventIcon from 'assets/svg/event.svg';
-import Star from 'assets/svg/Review/star.svg';
-import EmptyStar from 'assets/svg/Review/empty-star.svg';
-import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
-import { StorePageType } from 'static/store';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import ROUTES from 'static/routes';
-import BenefitRotator from 'components/Store/StorePage/components/BenefitRotator';
-import { getCategoryDurationTime } from 'components/Store/utils/durationTime';
 import Link from 'next/link';
+import { getJosaPicker } from '@bcsdlab/utils';
+import { StoreListV2 } from 'api/store/entity';
+import EventIcon from 'assets/svg/event.svg';
+import EmptyStar from 'assets/svg/Review/empty-star.svg';
+import Star from 'assets/svg/Review/star.svg';
+import BenefitRotator from 'components/Store/StorePage/components/BenefitRotator';
+import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
+import { getCategoryDurationTime } from 'components/Store/utils/durationTime';
+import ROUTES from 'static/routes';
+import { StorePageType } from 'static/store';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import styles from './MobileStoreList.module.scss';
 
 interface MobileStoreListProps {

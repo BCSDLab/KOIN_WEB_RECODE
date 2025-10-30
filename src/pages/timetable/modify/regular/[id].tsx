@@ -1,5 +1,5 @@
-import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
 import { useRouter } from 'next/router';
+import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
 
 export default function ModifyRegularTimetablePage() {
   const router = useRouter();

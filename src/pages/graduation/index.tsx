@@ -1,27 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
-import { useSemester } from 'utils/zustand/semester';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
+import dynamic from 'next/dynamic';
+import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
+import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-grey.svg';
 import QuestionMarkIcon from 'assets/svg/question-mark-icon.svg';
-import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
-import AcademicCapIcon from 'assets/svg/academic-cap-icon.svg';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
-import useTotalGrades from 'components/TimetablePage/hooks/useTotalGrades';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import StudentForm from 'components/GraduationCalculatorPage/components/StudentForm';
+import CalculatorHelpModal from 'components/GraduationCalculatorPage/CalculatorHelpModal';
 import CourseTable from 'components/GraduationCalculatorPage/components/CourseTable';
 import ExcelUploader from 'components/GraduationCalculatorPage/components/ExcelUploader';
 import GeneralCourse from 'components/GraduationCalculatorPage/components/GeneralCourse';
 // import CreditChart from 'components/GraduationCalculatorPage/components/CreditChart';
-import CalculatorHelpModal from 'components/GraduationCalculatorPage/CalculatorHelpModal';
-import useAgreeGraduationCreidts from 'components/GraduationCalculatorPage/hooks/useAgreeGraduationCreidts';
 import GraduationCalculatorAuthModal from 'components/GraduationCalculatorPage/components/GraduationCalculatorAuthModal';
-import dynamic from 'next/dynamic';
+import StudentForm from 'components/GraduationCalculatorPage/components/StudentForm';
+import useAgreeGraduationCreidts from 'components/GraduationCalculatorPage/hooks/useAgreeGraduationCreidts';
 import Suspense from 'components/ssr/SSRSuspense';
+import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
+import useTotalGrades from 'components/TimetablePage/hooks/useTotalGrades';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
+import { useSemester } from 'utils/zustand/semester';
 import styles from './GraduationCalculatorPage.module.scss';
 
 const CreditChart = dynamic(() => import('components/GraduationCalculatorPage/components/CreditChart'), {

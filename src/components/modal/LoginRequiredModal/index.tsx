@@ -1,8 +1,8 @@
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import CloseIcon from 'assets/svg/close-icon-grey.svg';
-import { setRedirectPath } from 'utils/ts/auth';
 import { useRouter } from 'next/router';
+import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import ROUTES from 'static/routes';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { setRedirectPath } from 'utils/ts/auth';
 import styles from './LoginRequiredModal.module.scss';
 
 interface LoginRequiredProps {

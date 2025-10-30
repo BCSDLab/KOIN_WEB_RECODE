@@ -1,11 +1,11 @@
-import Suspense from 'components/ssr/SSRSuspense';
 import { cn } from '@bcsdlab/utils';
+import * as Timetable from 'components/Bus/BusCoursePage/components/Timetable';
 import BusNotice from 'components/Bus/components/BusNotice';
+import Suspense from 'components/ssr/SSRSuspense';
 import { BUS_TYPES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useBusStore } from 'utils/zustand/bus';
 import { useShallow } from 'zustand/react/shallow';
-import * as Timetable from 'components/Bus/BusCoursePage/components/Timetable';
 import styles from './BusTimetable.module.scss';
 
 export default function BusTimetable() {

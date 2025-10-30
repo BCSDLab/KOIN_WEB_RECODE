@@ -1,6 +1,6 @@
+import { Dispatch, SetStateAction } from 'react';
 import ClubQnACard from 'components/Club/ClubDetailPage/components/ClubQnACard';
 import useClubQnA from 'components/Club/ClubDetailPage/hooks/useClubQnA';
-import { Dispatch, SetStateAction } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './ClubQnA.module.scss';

@@ -1,42 +1,42 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
-import showToast from 'utils/ts/showToast';
+import { useRouter } from 'next/router';
 import { cn, sha256 } from '@bcsdlab/utils';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { Portal } from 'components/modal/Modal/PortalProvider';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
-import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
-import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
-import { useUser } from 'utils/hooks/state/useUser';
 import { useQueryClient } from '@tanstack/react-query';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import ROUTES from 'static/routes';
-import { REGEX, STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
-import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
-import { usePhoneVerification } from 'components/Auth/ModifyInfoPage/hooks/usePhoneVerification';
-import ErrorIcon from 'assets/svg/Login/error.svg';
-import CorrectIcon from 'assets/svg/Login/correct.svg';
-import WarningIcon from 'assets/svg/Login/warning.svg';
+import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
 import BlindIcon from 'assets/svg/blind-icon.svg';
-import ShowIcon from 'assets/svg/show-icon.svg';
 import ChevronLeft from 'assets/svg/Login/chevron-left.svg';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useTokenStore } from 'utils/zustand/auth';
-import { isStudentUser } from 'utils/ts/userTypeGuards';
-import { useAuthentication } from 'utils/zustand/authentication';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
+import CorrectIcon from 'assets/svg/Login/correct.svg';
+import ErrorIcon from 'assets/svg/Login/error.svg';
+import WarningIcon from 'assets/svg/Login/warning.svg';
+import ShowIcon from 'assets/svg/show-icon.svg';
+import AuthenticateUserModal from 'components/Auth/ModifyInfoPage/components/AuthenticateUserModal';
 import UserDeleteModal from 'components/Auth/ModifyInfoPage/components/UserDeleteModal';
-import styles from 'components/Auth/ModifyInfoPage/ModifyInfoPage.module.scss';
+import { usePhoneVerification } from 'components/Auth/ModifyInfoPage/hooks/usePhoneVerification';
 import useUserDelete from 'components/Auth/ModifyInfoPage/hooks/useUserDelete';
 import {
   ModifyFormValidationProvider,
   useValidationContext,
 } from 'components/Auth/ModifyInfoPage/hooks/useValidationContext';
 import { passwordValidationReducer } from 'components/Auth/ModifyInfoPage/reducers/passwordReducer';
-import AuthenticateUserModal from 'components/Auth/ModifyInfoPage/components/AuthenticateUserModal';
-import { useRouter } from 'next/router';
+import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
+import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
+import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
+import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import { Portal } from 'components/modal/Modal/PortalProvider';
+import { REGEX, STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
+import ROUTES from 'static/routes';
+import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useUser } from 'utils/hooks/state/useUser';
+import showToast from 'utils/ts/showToast';
+import { isStudentUser } from 'utils/ts/userTypeGuards';
+import { useTokenStore } from 'utils/zustand/auth';
+import { useAuthentication } from 'utils/zustand/authentication';
+import styles from 'components/Auth/ModifyInfoPage/ModifyInfoPage.module.scss';
 
 const PASSWORD_REGEX =
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;

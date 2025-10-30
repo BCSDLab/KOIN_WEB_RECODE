@@ -1,11 +1,11 @@
-import Suspense from 'components/ssr/SSRSuspense';
+import Link from 'next/link';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'components/Articles/hooks/useArticles';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
-import ROUTES from 'static/routes';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
-import Link from 'next/link';
+import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
+import Suspense from 'components/ssr/SSRSuspense';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexArticles.module.scss';
 
 export default function IndexArticles() {

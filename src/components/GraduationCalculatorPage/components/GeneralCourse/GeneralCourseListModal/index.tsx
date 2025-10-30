@@ -1,10 +1,10 @@
+import { startTransition, useState } from 'react';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { useSemester } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import useCourseType from 'components/GraduationCalculatorPage/hooks/useCourseType';
-import { startTransition, useState } from 'react';
+import { useSemester } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './GeneralCourseListModal.module.scss';
 

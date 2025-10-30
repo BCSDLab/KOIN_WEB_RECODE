@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
+import Link from 'next/link';
+import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import { useSwipeable } from 'react-swipeable';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
-import { setCookie, getCookie } from 'utils/ts/cookie';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import Link from 'next/link';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { setCookie, getCookie } from 'utils/ts/cookie';
 import useBanners from './hooks/useBanners';
 import styles from './Banner.module.scss';
 

@@ -1,13 +1,13 @@
-import { NewClubData } from 'api/club/entity';
 import { useRef, useState } from 'react';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useRouter } from 'next/router';
+import { NewClubData } from 'api/club/entity';
+import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
+import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import MobileView from 'components/Club/NewClubPage/components/MobileView';
 import PCView from 'components/Club/NewClubPage/components/PCView';
-import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { mapDetailToForm } from 'utils/ts/clubCategoryMapping';
-import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
-import { useRouter } from 'next/router';
 import styles from './ClubEditPage.module.scss';
 
 function ClubEditPage({ id }: { id: string }) {

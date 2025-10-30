@@ -1,7 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { smsSend, smsVerify, checkPhone } from 'api/auth';
 import { isKoinError } from '@bcsdlab/koin';
+import { useMutation } from '@tanstack/react-query';
+import { smsSend, smsVerify, checkPhone } from 'api/auth';
 import { MESSAGES } from 'static/auth';
 import { useVerificationTimer } from './useVerificationTimer';
 

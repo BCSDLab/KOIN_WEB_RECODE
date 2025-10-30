@@ -1,16 +1,16 @@
 import React from 'react';
 import { cn } from '@bcsdlab/utils';
-import CloseIcon from 'assets/svg/close-icon-black.svg';
+import { UseMutateFunction } from '@tanstack/react-query';
 import {
   AddTimetableFrameRequest,
   SemesterCheckResponse,
   Term,
   TimetableFrameListResponse,
 } from 'api/timetable/entity';
-import showToast from 'utils/ts/showToast';
-import { UseMutateFunction } from '@tanstack/react-query';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import { Selector } from 'components/ui/Selector';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import showToast from 'utils/ts/showToast';
 import styles from './AddSemesterModal.module.scss';
 
 export interface AddSemesterModalProps {

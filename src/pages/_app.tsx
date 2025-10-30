@@ -1,22 +1,22 @@
-import type { AppProps } from 'next/app';
+import React, { useEffect } from 'react';
 import type { NextPage } from 'next';
+import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
 import './index.scss';
-import PortalProvider from 'components/modal/Modal/PortalProvider';
+import Script from 'next/script';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Toast from 'components/feedback/Toast';
-import Script from 'next/script';
 import Layout from 'components/layout';
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import MaintenancePage from 'components/Maintenance';
+import PortalProvider from 'components/modal/Modal/PortalProvider';
+import ROUTES from 'static/routes';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
+import useMount from 'utils/hooks/state/useMount';
+import { getCookie } from 'utils/ts/cookie';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { useServerStateStore } from 'utils/zustand/serverState';
-import MaintenancePage from 'components/Maintenance';
-import { getCookie } from 'utils/ts/cookie';
-import ROUTES from 'static/routes';
-import useMount from 'utils/hooks/state/useMount';
 
 declare global {
   interface Window {

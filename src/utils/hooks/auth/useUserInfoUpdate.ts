@@ -1,10 +1,10 @@
-import { AxiosError } from 'axios';
-import * as api from 'api';
-import showToast from 'utils/ts/showToast';
-import { UserUpdateRequest, GeneralUserUpdateRequest } from 'api/auth/entity';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { useMutation } from '@tanstack/react-query';
+import * as api from 'api';
+import { UserUpdateRequest, GeneralUserUpdateRequest } from 'api/auth/entity';
+import { AxiosError } from 'axios';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 
 interface UserUpdateOption {
   onSuccess?: () => void;

@@ -1,12 +1,12 @@
-import { Controller, useFormContext, useWatch, FieldError } from 'react-hook-form';
-import { ContactType, MESSAGES, REGEX } from 'static/auth';
+import { isKoinError } from '@bcsdlab/koin';
 import { cn, sha256 } from '@bcsdlab/utils';
+import { useMutation } from '@tanstack/react-query';
+import { resetPasswordEmail, resetPasswordSms } from 'api/auth';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
-import { isKoinError } from '@bcsdlab/koin';
+import { Controller, useFormContext, useWatch, FieldError } from 'react-hook-form';
+import { ContactType, MESSAGES, REGEX } from 'static/auth';
 import showToast from 'utils/ts/showToast';
-import { resetPasswordEmail, resetPasswordSms } from 'api/auth';
-import { useMutation } from '@tanstack/react-query';
 import styles from './PCResetPasswordPhone.module.scss';
 
 interface PCResetPasswordPhoneProps {

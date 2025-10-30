@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import PickerColumn from 'components/Bus/BusRoutePage/components/PickerColumn';
+import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
 import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import PickerColumn from 'components/Bus/BusRoutePage/components/PickerColumn';
-import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
 import styles from './TimeDetailMobile.module.scss';
 
 interface TimeDetailMobileProps {

@@ -1,7 +1,7 @@
 import { Suspense, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { DropdownProvider } from 'components/Store/StoreDetailPage/hooks/useDropdown';
 import ROUTES from 'static/routes';
-import { useRouter } from 'next/router';
 import AverageRating from './components/AverageRating/AverageRating';
 import ReviewButton from './components/ReviewButton';
 import ReviewList from './components/ReviewList/ReviewList';

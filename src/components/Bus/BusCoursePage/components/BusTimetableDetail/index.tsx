@@ -1,11 +1,11 @@
-import useShuttleTimetableDetail from 'components/Bus/BusCoursePage/hooks/useShuttleTimetableDetail';
 import { useEffect, useState } from 'react';
-import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
-import { cn } from '@bcsdlab/utils';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
 import { useRouter } from 'next/router';
+import { cn } from '@bcsdlab/utils';
+import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
+import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
+import useShuttleTimetableDetail from 'components/Bus/BusCoursePage/hooks/useShuttleTimetableDetail';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './BusTimetableDetail.module.scss';
 
 export default function BusTimetableDetail() {

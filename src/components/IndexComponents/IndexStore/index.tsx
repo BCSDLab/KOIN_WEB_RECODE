@@ -1,10 +1,10 @@
-import { useStoreCategories } from 'hooks/store/storePage/useCategoryList';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import ROUTES from 'static/routes';
 import { Suspense, useEffect } from 'react';
-import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
+import { useStoreCategories } from 'hooks/store/storePage/useCategoryList';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexStore.module.scss';
 
 interface Category {

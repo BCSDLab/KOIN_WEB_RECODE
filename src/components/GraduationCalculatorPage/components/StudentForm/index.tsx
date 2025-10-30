@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import useDepartmentMajorList from 'components/GraduationCalculatorPage/hooks/useDepartmentMajorList';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import useUpdateAcademicInfo from 'components/GraduationCalculatorPage/hooks/useUpdateAcademicInfo';
 import { Selector } from 'components/ui/Selector';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import styles from './StudentForm.module.scss';
 
 function StudentForm() {

@@ -1,11 +1,10 @@
-import { cn } from '@bcsdlab/utils';
-import * as api from 'api';
-import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { useState, useEffect } from 'react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { cn } from '@bcsdlab/utils';
+import * as api from 'api';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -13,6 +12,7 @@ import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './PCHeader.module.scss';
 
 const ID: { [key: string]: string } = {

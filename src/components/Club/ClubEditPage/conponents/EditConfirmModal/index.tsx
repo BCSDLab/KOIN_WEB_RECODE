@@ -1,8 +1,8 @@
+import { Dispatch, SetStateAction } from 'react';
+import { useRouter } from 'next/router';
 import { NewClubData } from 'api/club/entity';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import usePutClub from 'components/Club/ClubEditPage/hooks/usePutClub';
-import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction } from 'react';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './EditConfirmModal.module.scss';

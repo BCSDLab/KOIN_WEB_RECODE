@@ -62,28 +62,29 @@ export default [
       // 'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
-      // 'import/order': [
-      //   'error',
-      //   {
-      //     groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'object', 'type', 'index'],
-      //     pathGroups: [
-      //       { pattern: 'react', group: 'external', position: 'before' },
-      //       { pattern: 'next', group: 'external', position: 'before' },
-      //       { pattern: 'next/**', group: 'external', position: 'before' },
-      //       { pattern: '@/**', group: 'internal', position: 'after' },
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'object', 'type', 'index'],
+          pathGroups: [
+            { pattern: 'react', group: 'external', position: 'before' },
+            { pattern: 'react-dom', group: 'external', position: 'before' },
+            { pattern: 'next', group: 'external', position: 'before' },
+            { pattern: 'next/**', group: 'external', position: 'before' },
+            { pattern: '@/**', group: 'internal', position: 'after' },
 
-      //       { pattern: '**/*.module.{css,scss,sass}', group: 'index', position: 'after' },
-      //       { pattern: '**/*.{css,scss,sass}', group: 'index', position: 'after' },
-      //       { pattern: './**/*.module.{css,scss,sass}', group: 'index', position: 'after' },
-      //       { pattern: './**/*.{css,scss,sass}', group: 'index', position: 'after' },
-      //       { pattern: '*.module.{css,scss,sass}', group: 'index', position: 'after' },
-      //       { pattern: '*.{css,scss,sass}', group: 'index', position: 'after' },
-      //     ],
+            { pattern: '**/*.module.{css,scss,sass}', group: 'index', position: 'after' },
+            { pattern: '**/*.{css,scss,sass}', group: 'index', position: 'after' },
+            { pattern: './**/*.module.{css,scss,sass}', group: 'index', position: 'after' },
+            { pattern: './**/*.{css,scss,sass}', group: 'index', position: 'after' },
+            { pattern: '*.module.{css,scss,sass}', group: 'index', position: 'after' },
+            { pattern: '*.{css,scss,sass}', group: 'index', position: 'after' },
+          ],
 
-      //     pathGroupsExcludedImportTypes: ['react', 'next'],
-      //     alphabetize: { order: 'asc', caseInsensitive: true },
-      //   },
-      // ],
+          pathGroupsExcludedImportTypes: ['react', 'next'],
+          alphabetize: { order: 'asc', caseInsensitive: true },
+        },
+      ],
 
       'no-restricted-imports': [
         'error',

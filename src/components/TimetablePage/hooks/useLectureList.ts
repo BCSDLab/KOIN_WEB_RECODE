@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Semester } from 'api/timetable/entity';
 import { timetable } from 'api';
+import { Semester } from 'api/timetable/entity';
 
 const SEMESTER_INFO_KEY = 'lecture';
 

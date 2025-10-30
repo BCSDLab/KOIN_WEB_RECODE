@@ -1,14 +1,14 @@
 import { cn } from '@bcsdlab/utils';
 import useCampusInfo from './hooks/useCampusInfo';
-import styles from './CampusInfo.module.scss';
 import Book from './svg/book.svg';
 import Cafe from './svg/cafe.svg';
 import Cut from './svg/cut.svg';
 import Flatware from './svg/flatware.svg';
+import Glasses from './svg/glasses.svg';
 import Laundry from './svg/laundry.svg';
 import PostOffice from './svg/post-office.svg';
 import Print from './svg/print.svg';
-import Glasses from './svg/glasses.svg';
+import styles from './CampusInfo.module.scss';
 
 const CAFETERIA_HEAD_TABLE = {
   row: ['평일', '주말'],

@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import { useMemo, useCallback } from 'react';
+import { useRouter } from 'next/router';
 
 const useParamsHandler = () => {
   const router = useRouter();

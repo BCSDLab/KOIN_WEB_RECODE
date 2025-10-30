@@ -1,10 +1,10 @@
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import RoomList from 'components/Room/components/RoomList';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import useMarker from './hooks/useMarker';
+import useNaverMap from './hooks/useNaverMap';
 import useRoomList from './hooks/useRoomList';
 import styles from './RoomPage.module.scss';
-import useNaverMap from './hooks/useNaverMap';
-import useMarker from './hooks/useMarker';
 
 const LOCATION = { latitude: 36.764617, longitude: 127.283154 };
 

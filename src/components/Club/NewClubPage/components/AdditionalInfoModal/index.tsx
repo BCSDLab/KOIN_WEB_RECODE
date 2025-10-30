@@ -1,8 +1,8 @@
-import { NewClubData } from 'api/club/entity';
 import { useState } from 'react';
+import { NewClubData } from 'api/club/entity';
 import usePostNewClub from 'components/Club/NewClubPage/hooks/usePostNewClub';
-import { getClubCategoryName } from 'utils/ts/clubCategoryMapping';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { getClubCategoryName } from 'utils/ts/clubCategoryMapping';
 import styles from './AdditionalInfoModal.module.scss';
 
 interface AdditionalInfoModalProps {

@@ -1,25 +1,25 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
+import { Semester } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
+import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
-import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
-import useDeleteSemester from 'components/TimetablePage/hooks/useDeleteSemester';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useAddSemester from 'components/TimetablePage/hooks/useAddSemester';
+import useDeleteSemester from 'components/TimetablePage/hooks/useDeleteSemester';
+import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
+import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import useAddSemester from 'components/TimetablePage/hooks/useAddSemester';
-import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { Semester } from 'api/timetable/entity';
-import { useRouter } from 'next/router';
+import { useSemester, useSemesterAction } from 'utils/zustand/semester';
+import AddSemesterModal from './AddSemesterModal';
 import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';
-import AddSemesterModal from './AddSemesterModal';
 
 function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const logger = useLogger();

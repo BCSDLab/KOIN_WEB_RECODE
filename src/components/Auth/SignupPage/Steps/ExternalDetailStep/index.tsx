@@ -1,12 +1,12 @@
+import { useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
+import { cn, sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupGeneral } from 'api/auth';
-import { useState } from 'react';
+import BackIcon from 'assets/svg/arrow-back.svg';
+import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
 import { Controller, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
-import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
-import BackIcon from 'assets/svg/arrow-back.svg';
-import { cn, sha256 } from '@bcsdlab/utils';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
 import styles from './ExternalDetailStep.module.scss';

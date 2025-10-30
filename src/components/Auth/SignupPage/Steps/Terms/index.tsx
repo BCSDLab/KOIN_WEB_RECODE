@@ -1,9 +1,9 @@
 import { cn } from '@bcsdlab/utils';
 import CustomCheckbox from 'components/Auth/SignupPage/components/CustomCheckbox';
-import { privacy, koin, marketing } from 'static/terms';
 import { useFormContext } from 'react-hook-form';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { privacy, koin, marketing } from 'static/terms';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Terms.module.scss';
 
 interface TermsProps {

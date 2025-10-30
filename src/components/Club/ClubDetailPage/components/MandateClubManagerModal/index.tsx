@@ -1,5 +1,5 @@
-import { NewClubManager } from 'api/club/entity';
 import { useState } from 'react';
+import { NewClubManager } from 'api/club/entity';
 import useMandateClubManagerMutation from 'components/Club/ClubDetailPage/hooks/useClubManager';
 import { useUser } from 'utils/hooks/state/useUser';
 import styles from './MandateClubManagerModal.module.scss';

@@ -1,14 +1,14 @@
-import { Lecture, MyLectureInfo } from 'api/timetable/entity';
 import React from 'react';
+import { useRouter } from 'next/router';
+import { cn } from '@bcsdlab/utils';
+import { Lecture, MyLectureInfo } from 'api/timetable/entity';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
-import { cn } from '@bcsdlab/utils';
 import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
-import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import showToast from 'utils/ts/showToast';
-import { useRouter } from 'next/router';
+import { useTempLecture, useTempLectureAction } from 'utils/zustand/myTempLecture';
 import styles from './LectureTable.module.scss';
 
 interface LectureTableProps {

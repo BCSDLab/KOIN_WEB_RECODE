@@ -1,17 +1,17 @@
-import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
-import { useSemester } from 'components/TimetablePage/hooks/useSemesterOptionList';
-import useSelect from 'components/TimetablePage/hooks/useSelect';
-import DeptListbox from 'components/TimetablePage/components/LectureList/DeptListbox';
-import CloseIcon from 'assets/svg/close-icon-grey.svg';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useCourseType from 'components/GraduationCalculatorPage/hooks/useCourseType';
 import { startTransition, useState } from 'react';
-import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
-import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
 import { LectureInfo } from 'api/graduationCalculator/entity';
+import CloseIcon from 'assets/svg/close-icon-grey.svg';
+import SemesterCourseTable from 'components/GraduationCalculatorPage/components/CourseTable/SemesterCourseTable';
+import useCourseType from 'components/GraduationCalculatorPage/hooks/useCourseType';
+import DeptListbox from 'components/TimetablePage/components/LectureList/DeptListbox';
+import useAllMyLectures from 'components/TimetablePage/hooks/useAllMyLectures';
+import useSelect from 'components/TimetablePage/hooks/useSelect';
+import { useSemester } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { Selector } from 'components/ui/Selector';
-import { pick } from 'utils/ts/object';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useUserAcademicInfo from 'utils/hooks/state/useUserAcademicInfo';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { pick } from 'utils/ts/object';
 import styles from './SemesterLectureListModal.module.scss';
 
 const lectureStatusOptions = [

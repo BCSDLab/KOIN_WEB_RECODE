@@ -1,19 +1,19 @@
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { CATEGORY, Submenu } from 'static/category';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { useLogout } from 'utils/hooks/auth/useLogout';
-import { useUser } from 'utils/hooks/state/useUser';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
 import PersonIcon from 'assets/svg/person.svg';
-import ROUTES from 'static/routes';
-import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
-import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
-import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import { CATEGORY, Submenu } from 'static/category';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { useRouter } from 'next/router';
+import { useUser } from 'utils/hooks/state/useUser';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './Panel.module.scss';
 
 interface PanelProps {

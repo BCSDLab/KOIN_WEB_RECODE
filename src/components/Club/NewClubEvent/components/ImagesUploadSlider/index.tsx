@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { uploadClubFile } from 'api/uploadFile';
 import { cn } from '@bcsdlab/utils';
-import showToast from 'utils/ts/showToast';
-import imageResize from 'utils/ts/imageResize';
+import { uploadClubFile } from 'api/uploadFile';
+import UploadIcon from 'assets/svg/Club/add-image.svg';
+import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useImageUpload from 'utils/hooks/ui/useImageUpload';
-import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
-import UploadIcon from 'assets/svg/Club/add-image.svg';
+import imageResize from 'utils/ts/imageResize';
+import showToast from 'utils/ts/showToast';
 import styles from './ImagesUploadSlider.module.scss';
 
 interface ClubImageUploaderProps {

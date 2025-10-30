@@ -1,5 +1,5 @@
-import LogoIcon from 'assets/svg/Login/logo.svg';
 import { useRouter } from 'next/router';
+import LogoIcon from 'assets/svg/Login/logo.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './CompleteStep.module.scss';
 

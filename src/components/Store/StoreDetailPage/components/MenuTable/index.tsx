@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { MenuCategory } from 'api/store/entity';
 import { cn } from '@bcsdlab/utils';
+import { MenuCategory } from 'api/store/entity';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import MENU_CATEGORY from 'static/menu';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';

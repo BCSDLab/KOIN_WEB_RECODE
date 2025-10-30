@@ -1,6 +1,6 @@
+import { useRouter } from 'next/router';
 import LogoIcon from 'assets/svg/Login/logo.svg';
 import CheckIcon from 'assets/svg/orenge-check.svg';
-import { useRouter } from 'next/router';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './Complete.module.scss';

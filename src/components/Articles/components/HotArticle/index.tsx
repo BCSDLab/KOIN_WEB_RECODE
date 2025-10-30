@@ -1,7 +1,7 @@
-import useHotArticleList from 'components/Articles/hooks/useHotArticle';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import ROUTES from 'static/routes';
 import Link from 'next/link';
+import useHotArticleList from 'components/Articles/hooks/useHotArticle';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './HotArticles.module.scss';
 
 const LINK_LIST = [

@@ -1,26 +1,19 @@
 /* eslint-disable import/no-duplicates */
 
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { Client } from '@stomp/stompjs';
 
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
-import showToast from 'utils/ts/showToast';
-import ROUTES from 'static/routes';
 import { uploadLostItemFile } from 'api/uploadFile';
-import type { LostItemChatroomDetailMessage, LostItemChatroomListResponse } from 'api/articles/entity';
 
-import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
-import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
-import SendIcon from 'assets/svg/Articles/send.svg';
-import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
 import BlockIcon from 'assets/svg/Articles/block.svg';
+import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
+import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
 import PersonIcon from 'assets/svg/Articles/person.svg';
+import AddPhotoIcon from 'assets/svg/Articles/photo.svg';
+import SendIcon from 'assets/svg/Articles/send.svg';
 
 import { useChatLogger } from 'components/Articles/hooks/useChatLogger';
-import { useUser } from 'utils/hooks/state/useUser';
 import DeleteModal from 'components/Articles/LostItemChatPage/components/DeleteModal';
 import useChatroomQuery from 'components/Articles/LostItemChatPage/hooks/useChatroomQuery';
 import {
@@ -29,9 +22,16 @@ import {
   formatISODateToTime,
   getKoreaISODate,
 } from 'components/Articles/LostItemChatPage/utils/date';
+import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import Link from 'next/link';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMount from 'utils/hooks/state/useMount';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useUser } from 'utils/hooks/state/useUser';
+import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import showToast from 'utils/ts/showToast';
+import type { LostItemChatroomDetailMessage, LostItemChatroomListResponse } from 'api/articles/entity';
 import styles from './LostItemChatPage.module.scss';
 
 function LostItemChatPage({ token }: { token: string }) {

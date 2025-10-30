@@ -1,12 +1,12 @@
 import React from 'react';
-import { MobilePage } from 'components/TimetablePage/MainTimetablePage/MobilePage';
-import { useSemester } from 'utils/zustand/semester';
-import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage';
 import { useRouter } from 'next/router';
+import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
+import DefaultPage from 'components/TimetablePage/MainTimetablePage/DefaultPage';
+import { MobilePage } from 'components/TimetablePage/MainTimetablePage/MobilePage';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { useSemester } from 'utils/zustand/semester';
 import styles from './TimetablePage.module.scss';
 
 function TimetablePage() {

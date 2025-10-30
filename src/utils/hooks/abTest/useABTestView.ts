@@ -1,5 +1,5 @@
-import * as api from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import * as api from 'api';
 
 export const useABTestView = (title: string, authorization?: string) => {
   const accessHistoryId = typeof window !== 'undefined' ? localStorage.getItem('access_history_id') : null;

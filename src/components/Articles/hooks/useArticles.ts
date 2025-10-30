@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { articles as articlesApi } from 'api/index';
 import { PaginationInfo } from 'api/articles/entity';
+import { articles as articlesApi } from 'api/index';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 const useArticles = (page = '1') => {

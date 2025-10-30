@@ -1,11 +1,11 @@
-import CloseIcon from 'assets/svg/close-icon-black.svg';
-import type { TimetableFrameInfo } from 'api/timetable/entity';
-import useUpdateTimetableFrame from 'components/TimetablePage/hooks/useUpdateTimetableFrame';
-import useDeleteTimetableFrame from 'components/TimetablePage/hooks/useDeleteTimetableFrame';
-import showToast from 'utils/ts/showToast';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
+import useDeleteTimetableFrame from 'components/TimetablePage/hooks/useDeleteTimetableFrame';
+import useUpdateTimetableFrame from 'components/TimetablePage/hooks/useUpdateTimetableFrame';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import showToast from 'utils/ts/showToast';
+import type { TimetableFrameInfo } from 'api/timetable/entity';
 import styles from './TimetableSettingModal.module.scss';
 
 export interface TimetableSettingModalProps {

@@ -1,5 +1,5 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { DeleteResponse } from 'api/auth/entity';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
   StoreListResponse,
   StoreListV2Response,

@@ -1,5 +1,5 @@
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import BusTimetable from 'components/Bus/BusCoursePage/components/BusTimetable';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './BusCoursePage.module.scss';
 
 export default function BusCoursePage() {

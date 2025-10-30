@@ -1,11 +1,11 @@
 import React from 'react';
-import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
-import showToast from 'utils/ts/showToast';
-import Timetable from 'components/TimetablePage/components/Timetable';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import SemesterListbox from 'components/TimetablePage/components/SemesterList';
+import Timetable from 'components/TimetablePage/components/Timetable';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
+import showToast from 'utils/ts/showToast';
 import styles from './MobilePage.module.scss';
 
 function MobilePage({ timetableFrameId }: { timetableFrameId: number }) {

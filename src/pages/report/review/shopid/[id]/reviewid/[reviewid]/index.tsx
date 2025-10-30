@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import CheckBox from 'components/Store/StoreDetailPage/components/Review/components/CheckBox';
-import { toast } from 'react-toastify';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
-import ROUTES from 'static/routes';
 import ReportingLabel from 'components/Store/StoreDetailPage/components/Review/components/ReportingLabel';
 import useReviewReport from 'components/Store/StoreDetailPage/components/Review/components/ReviewReporting/query/useReviewReport';
-import { useRouter } from 'next/router';
+import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
+import { toast } from 'react-toastify';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ReviewReporting.module.scss';
 
 interface RequestOption {

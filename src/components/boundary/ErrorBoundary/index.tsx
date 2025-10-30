@@ -1,7 +1,7 @@
 import React from 'react';
-import showToast from 'utils/ts/showToast';
-import { AxiosError } from 'axios';
 import { sendClientError } from '@bcsdlab/koin';
+import { AxiosError } from 'axios';
+import showToast from 'utils/ts/showToast';
 
 interface Props {
   fallbackClassName: string;

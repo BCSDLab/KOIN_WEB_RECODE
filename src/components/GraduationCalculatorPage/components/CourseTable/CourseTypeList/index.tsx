@@ -1,11 +1,11 @@
-import { cn } from '@bcsdlab/utils';
 import { useRef, useState } from 'react';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { cn } from '@bcsdlab/utils';
 import DownArrowIcon from 'assets/svg/chervron-up-grey.svg';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import useGeneralEducation from 'components/GraduationCalculatorPage/hooks/useGeneralEducation';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import styles from './CourseTypeList.module.scss';
 

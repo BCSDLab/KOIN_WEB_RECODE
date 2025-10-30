@@ -1,13 +1,13 @@
 /* eslint-disable no-restricted-imports */
 import { useState } from 'react';
-import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
-import { UserType, GENDER_OPTIONS, REGEX, MESSAGES, INQUIRY_URL } from 'static/auth';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
-import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
+import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
+import { UserType, GENDER_OPTIONS, REGEX, MESSAGES, INQUIRY_URL } from 'static/auth';
 import ROUTES from 'static/routes';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
-import { useRouter } from 'next/router';
+import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
 import PCCustomInput from '../../components/PCCustomInput';
 import styles from './VerificationStep.module.scss';
 

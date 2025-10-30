@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import { DiningType } from 'api/dinings/entity';
-import { DiningTime } from 'components/cafeteria/utils/time';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
+import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
-import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import { DiningTime } from 'components/cafeteria/utils/time';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import styles from './Cafeteria.module.scss';
 
 function CafeteriaPage() {

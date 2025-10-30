@@ -1,31 +1,31 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
 import { cn } from '@bcsdlab/utils';
+import { useQuery } from '@tanstack/react-query';
 
 import * as api from 'api';
-import type { StoreSorterType, StoreFilterType } from 'api/store/entity';
 
 import Close from 'assets/svg/close-icon-20x20.svg';
+import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
+import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
+import MobileStoreList from 'components/Store/StorePage/components/MobileStoreList';
+import SearchBar from 'components/Store/StorePage/components/SearchBar';
+import SearchBarModal from 'components/Store/StorePage/components/SearchBarModal';
+import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
+import { getCategoryDurationTime, initializeCategoryEntryTime } from 'components/Store/utils/durationTime';
+import IntroToolTip from 'components/ui/IntroToolTip';
 import ROUTES from 'static/routes';
 import { STORE_PAGE } from 'static/store';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
-import SearchBar from 'components/Store/StorePage/components/SearchBar';
-import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
-import MobileStoreList from 'components/Store/StorePage/components/MobileStoreList';
-import { getCategoryDurationTime, initializeCategoryEntryTime } from 'components/Store/utils/durationTime';
-import IntroToolTip from 'components/ui/IntroToolTip';
 
-import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
-import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
-import SearchBarModal from 'components/Store/StorePage/components/SearchBarModal';
 
 import { useLocalStorage } from 'utils/hooks/state/useLocalStorage';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import type { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import styles from './StorePage.module.scss';
 
 type StoreSearchQueryType = {

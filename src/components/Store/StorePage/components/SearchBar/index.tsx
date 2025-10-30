@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
+import SearchBarModal from 'components/Store/StorePage/components/SearchBarModal';
+import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
-import SearchBarModal from 'components/Store/StorePage/components/SearchBarModal';
 import styles from './SearchBar.module.scss';
 
 export default function SearchBar() {

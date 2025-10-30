@@ -1,8 +1,8 @@
-import ROUTES from 'static/routes';
-import CloseIcon from 'assets/svg/close-icon-grey.svg';
-import waveHandAnimation from 'assets/lottie/waveHand.json';
 import { lazy } from 'react';
 import { useRouter } from 'next/router';
+import waveHandAnimation from 'assets/lottie/waveHand.json';
+import CloseIcon from 'assets/svg/close-icon-grey.svg';
+import ROUTES from 'static/routes';
 import useUserInfoModal from './hooks/useUserInfoModal';
 import styles from './UserInfoModal.module.scss';
 

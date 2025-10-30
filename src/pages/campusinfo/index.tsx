@@ -4,10 +4,10 @@ import Book from 'components/CampusInfo/svg/book.svg';
 import Cafe from 'components/CampusInfo/svg/cafe.svg';
 import Cut from 'components/CampusInfo/svg/cut.svg';
 import Flatware from 'components/CampusInfo/svg/flatware.svg';
+import Glasses from 'components/CampusInfo/svg/glasses.svg';
 import Laundry from 'components/CampusInfo/svg/laundry.svg';
 import PostOffice from 'components/CampusInfo/svg/post-office.svg';
 import Print from 'components/CampusInfo/svg/print.svg';
-import Glasses from 'components/CampusInfo/svg/glasses.svg';
 import styles from './CampusInfo.module.scss';
 
 const CAFETERIA_HEAD_TABLE = {

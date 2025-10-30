@@ -1,6 +1,6 @@
-import { useGetReview } from 'components/Store/StoreDetailPage/hooks/useGetReview';
 import Rating from 'components/Store/StoreDetailPage/components/Review/components/Rating/Rating';
 import StarList from 'components/Store/StoreDetailPage/components/Review/components/StarList/StarList';
+import { useGetReview } from 'components/Store/StoreDetailPage/hooks/useGetReview';
 import styles from './AverageRating.module.scss';
 
 export default function AverageRating({ id }: { id: string }) {

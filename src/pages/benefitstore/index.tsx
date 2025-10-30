@@ -1,15 +1,15 @@
+import { useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
 import useBenefitCategory from 'components/Store/StoreBenefitPage/hooks/useBenefitCategory';
 import useStoreBenefitList from 'components/Store/StoreBenefitPage/hooks/useStoreBenefitList';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { STORE_PAGE } from 'static/store';
-import { useEffect } from 'react';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
 import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
-import { getCategoryDurationTime, initializeCategoryEntryTime } from 'components/Store/utils/durationTime';
 import MobileStoreList from 'components/Store/StorePage/components/MobileStoreList';
+import { getCategoryDurationTime, initializeCategoryEntryTime } from 'components/Store/utils/durationTime';
+import { STORE_PAGE } from 'static/store';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import styles from './StoreBenefitPage.module.scss';
 
 export default function StoreBenefitPage() {

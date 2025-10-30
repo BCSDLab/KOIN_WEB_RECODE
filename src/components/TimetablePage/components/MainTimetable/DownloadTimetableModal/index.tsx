@@ -1,9 +1,9 @@
 import React from 'react';
-import Timetable from 'components/TimetablePage/components/Timetable';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
+import Timetable from 'components/TimetablePage/components/Timetable';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
-import { useTimeString } from 'utils/zustand/myLectures';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useTimeString } from 'utils/zustand/myLectures';
 import styles from './DownloadTimetableModal.module.scss';
 
 interface DownloadTimetableModalProps {

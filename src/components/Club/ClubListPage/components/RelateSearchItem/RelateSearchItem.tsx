@@ -1,7 +1,7 @@
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import StoreIcon from 'assets/svg/Club/big-store-icon.svg';
 import BigNavigateIcon from 'assets/svg/Club/big-navigate-icon.svg';
+import StoreIcon from 'assets/svg/Club/big-store-icon.svg';
 import NavigateIcon from 'assets/svg/Store/navigate-store-icon.svg';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './RelateSearchItem.module.scss';
 
 interface RelateSearchItemProps {

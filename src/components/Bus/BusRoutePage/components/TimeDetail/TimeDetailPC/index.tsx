@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import SelectDropdown from 'components/Bus/BusRoutePage/components/SelectDropdown';
-import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
 import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
+import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
+import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
 import styles from './TimeDetailPC.module.scss';
 
 interface TimeDetailPCProps {

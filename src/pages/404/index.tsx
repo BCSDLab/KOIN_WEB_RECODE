@@ -1,5 +1,5 @@
-import Error from 'assets/svg/page-not-found-error.svg';
 import { useRouter } from 'next/router';
+import Error from 'assets/svg/page-not-found-error.svg';
 import styles from './PageNotFound.module.scss';
 
 export default function PageNotFound() {

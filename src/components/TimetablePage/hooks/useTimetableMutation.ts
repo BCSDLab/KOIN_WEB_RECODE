@@ -1,5 +1,5 @@
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import useToast from 'components/feedback/Toast/useToast';
 import {
   AddTimetableCustomLecture,
   Lecture,
@@ -7,13 +7,13 @@ import {
   TimetableCustomLecture,
   TimetableRegularLecture,
 } from 'api/timetable/entity';
+import useToast from 'components/feedback/Toast/useToast';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 import { useLecturesAction } from 'utils/zustand/myLectures';
 import { useSemester } from 'utils/zustand/semester';
-import showToast from 'utils/ts/showToast';
-import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import useAddTimetableLectureRegular from './useAddTimetableLectureRegular';
 import useAddTimetableLectureCustom from './useAddTimetableLectureCustom';
+import useAddTimetableLectureRegular from './useAddTimetableLectureRegular';
 import useDeleteTimetableLecture from './useDeleteTimetableLecture';
 import useEditTimetableLectureCustom from './useEditTimetableLectureCustom';
 import useEditTimetableLectureRegular from './useEditTimetableLectureRegular';

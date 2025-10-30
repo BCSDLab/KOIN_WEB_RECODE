@@ -1,7 +1,7 @@
 import { cn } from '@bcsdlab/utils';
-import NoPhoto from 'assets/svg/no-photography-mobile.svg';
-import NoMeals from 'assets/svg/no-meals-mobile.svg';
 import { Dining } from 'api/dinings/entity';
+import NoMeals from 'assets/svg/no-meals-mobile.svg';
+import NoPhoto from 'assets/svg/no-photography-mobile.svg';
 import styles from './MobileMealImage.module.scss';
 
 interface MobileMealImageProps {

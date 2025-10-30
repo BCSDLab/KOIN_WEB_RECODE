@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@bcsdlab/utils';
-import { useSemester } from 'utils/zustand/semester';
 import { TimetableFrameInfo } from 'api/timetable/entity';
-import { Portal } from 'components/modal/Modal/PortalProvider';
 import AddIcon from 'assets/svg/add-icon.svg';
-import SettingIcon from 'assets/svg/setting-icon.svg';
-import BlueSettingIcon from 'assets/svg/setting-icon-blue.svg';
 import BookMarkIcon from 'assets/svg/book-mark.svg';
-import TimetableSettingModal from 'components/TimetablePage/components/TimetableList/TimetableSettingModal';
+import BlueSettingIcon from 'assets/svg/setting-icon-blue.svg';
+import SettingIcon from 'assets/svg/setting-icon.svg';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
-import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import SemesterList from 'components/TimetablePage/components/SemesterList';
+import TimetableSettingModal from 'components/TimetablePage/components/TimetableList/TimetableSettingModal';
 import useAddTimetableFrame from 'components/TimetablePage/hooks/useAddTimetableFrame';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
+import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import { toast } from 'react-toastify';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useSemester } from 'utils/zustand/semester';
 import styles from './TimetableList.module.scss';
 
 interface TimetableListProps {

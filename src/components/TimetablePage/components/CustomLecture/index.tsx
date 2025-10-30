@@ -1,18 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { MyLectureInfo } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
 import CloseIcon from 'assets/svg/close-icon-black.svg';
-import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
-import { DAYS_STRING, HOUR, MINUTE, START_TIME, END_TIME } from 'static/timetable';
 import WarningIcon from 'assets/svg/warning-icon.svg';
-import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
-import showToast from 'utils/ts/showToast';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
-import { MyLectureInfo } from 'api/timetable/entity';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import uuidv4 from 'utils/ts/uuidGenerater';
+import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
 import { Selector } from 'components/ui/Selector';
+import { DAYS_STRING, HOUR, MINUTE, START_TIME, END_TIME } from 'static/timetable';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
+import uuidv4 from 'utils/ts/uuidGenerater';
+import { useCustomTempLecture, useCustomTempLectureAction } from 'utils/zustand/myCustomTempLecture';
 import styles from './CustomLecture.module.scss';
 
 type Hour = (typeof HOUR)[number]['value'] | '24시';

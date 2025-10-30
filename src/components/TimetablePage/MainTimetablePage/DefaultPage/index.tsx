@@ -1,10 +1,10 @@
 import React from 'react';
-import Suspense from 'components/ssr/SSRSuspense';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import TimetableList from 'components/TimetablePage/components/TimetableList';
-import MainTimetable from 'components/TimetablePage/components/MainTimetable';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
+import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import Suspense from 'components/ssr/SSRSuspense';
+import MainTimetable from 'components/TimetablePage/components/MainTimetable';
+import TimetableList from 'components/TimetablePage/components/TimetableList';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './DefaultPage.module.scss';
 
 interface DefaultPageProps {

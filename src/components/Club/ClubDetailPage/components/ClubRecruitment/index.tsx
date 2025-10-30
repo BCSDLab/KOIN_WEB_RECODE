@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
-import ROUTES from 'static/routes';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useRouter } from 'next/router';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import useClubRecruitment from 'components/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
-import { useRouter } from 'next/router';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import styles from './ClubRecruitment.module.scss';
 
 interface ClubRecruitmentProps {

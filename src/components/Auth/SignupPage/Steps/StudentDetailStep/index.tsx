@@ -1,17 +1,17 @@
+import { useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
+import { cn, sha256 } from '@bcsdlab/utils';
 import { useMutation } from '@tanstack/react-query';
 import { checkId, emailDuplicateCheck, nicknameDuplicateCheck, signupStudent } from 'api/auth';
-import { useState } from 'react';
+import BackIcon from 'assets/svg/arrow-back.svg';
+import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
+import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
+import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
 import { Controller, FieldError, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { REGEX, MESSAGES } from 'static/auth';
-import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
-import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
-import { cn, sha256 } from '@bcsdlab/utils';
-import BackIcon from 'assets/svg/arrow-back.svg';
-import showToast from 'utils/ts/showToast';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import PCCustomInput, { type InputMessage } from 'components/Auth/SignupPage/components/PCCustomInput';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import showToast from 'utils/ts/showToast';
 import styles from './StudentDetailStep.module.scss';
 
 interface VerificationProps {

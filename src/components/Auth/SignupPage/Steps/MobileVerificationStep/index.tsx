@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-restricted-imports */
 import { useEffect, useState } from 'react';
-import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
-import { checkPhone, smsSend, smsVerify } from 'api/auth';
-import { useMutation } from '@tanstack/react-query';
 import { isKoinError } from '@bcsdlab/koin';
+import { useMutation } from '@tanstack/react-query';
+import { checkPhone, smsSend, smsVerify } from 'api/auth';
+import { Controller, useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { GENDER_OPTIONS, MESSAGES, REGEX } from 'static/auth';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import ROUTES from 'static/routes';
-import type { SmsSendResponse } from 'api/auth/entity';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
-import useCountdownTimer from '../../hooks/useCountdownTimer';
-import styles from './MobileVerification.module.scss';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import CustomInput, { type InputMessage } from '../../components/CustomInput';
+import useCountdownTimer from '../../hooks/useCountdownTimer';
+import type { SmsSendResponse } from 'api/auth/entity';
+import styles from './MobileVerification.module.scss';
 
 interface MobileVerificationProps {
   onNext: () => void;

@@ -1,11 +1,11 @@
-import { useGetAllEvents } from 'components/Store/StorePage/components/hooks/useGetAllEvents';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import ROUTES from 'static/routes';
+import { useRouter } from 'next/router';
 import LeftBracket from 'assets/svg/left-angle-bracket.svg';
 import RightBracket from 'assets/svg/right-angle-bracket.svg';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import Suspense from 'components/ssr/SSRSuspense';
-import { useRouter } from 'next/router';
+import { useGetAllEvents } from 'components/Store/StorePage/components/hooks/useGetAllEvents';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useCarouselController } from './hooks/useCarouselController';
 import styles from './EventCarousel.module.scss';
 

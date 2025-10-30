@@ -1,5 +1,5 @@
-import OPTION_CATEGORY from 'static/optionCategory';
 import { cn } from '@bcsdlab/utils';
+import OPTION_CATEGORY from 'static/optionCategory';
 import styles from './RoomDetailOption.module.scss';
 
 type RoomDetailOptionProps = {

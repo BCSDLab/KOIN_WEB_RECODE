@@ -1,16 +1,16 @@
+import Link from 'next/link';
+import { getJosaPicker } from '@bcsdlab/utils';
 import { StoreListV2 } from 'api/store/entity';
 import EventIcon from 'assets/svg/event.svg';
-import Star from 'assets/svg/Review/star.svg';
 import EmptyStar from 'assets/svg/Review/empty-star.svg';
-import { getJosaPicker } from '@bcsdlab/utils';
-import getDayOfWeek from 'utils/ts/getDayOfWeek';
+import Star from 'assets/svg/Review/star.svg';
+import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
+import { getCategoryDurationTime } from 'components/Store/utils/durationTime';
+import ROUTES from 'static/routes';
+import { StorePageType } from 'static/store';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
-import { StorePageType } from 'static/store';
-import ROUTES from 'static/routes';
-import { getCategoryDurationTime } from 'components/Store/utils/durationTime';
-import Link from 'next/link';
+import getDayOfWeek from 'utils/ts/getDayOfWeek';
 import styles from './DesktopStoreList.module.scss';
 
 interface StoreListProps {

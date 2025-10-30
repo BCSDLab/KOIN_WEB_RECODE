@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
-import { useState } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ContactType, MESSAGES } from 'static/auth';
 import useEmailVerification from 'utils/hooks/auth/useEmailVerification';

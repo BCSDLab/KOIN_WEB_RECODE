@@ -1,6 +1,6 @@
 import React from 'react';
-import NotCheck from 'assets/svg/Review/report-item-circle.svg';
 import Check from 'assets/svg/Review/report-item-checked.svg';
+import NotCheck from 'assets/svg/Review/report-item-circle.svg';
 import styles from './CheckBox.module.scss';
 
 interface CheckBoxProps {

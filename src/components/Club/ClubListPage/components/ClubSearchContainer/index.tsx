@@ -1,16 +1,16 @@
 import { type ChangeEvent, useCallback, useState } from 'react';
-import ROUTES from 'static/routes';
+import { useRouter } from 'next/router';
+import { cn } from '@bcsdlab/utils';
 import { searchClub } from 'api/club';
 import { ClubSearchResponse } from 'api/club/entity';
-import { cn } from '@bcsdlab/utils';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useDebounce } from 'utils/hooks/debounce/useDebounce';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import RelateSearchItem from 'components/Club/ClubListPage/components/RelateSearchItem/RelateSearchItem';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import SearchIcon from 'assets/svg/Club/search.svg';
-import { useRouter } from 'next/router';
+import RelateSearchItem from 'components/Club/ClubListPage/components/RelateSearchItem/RelateSearchItem';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useDebounce } from 'utils/hooks/debounce/useDebounce';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import styles from './ClubSearchContainer.module.scss';
 
 export default function ClubSearchContainer() {

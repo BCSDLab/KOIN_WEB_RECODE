@@ -1,5 +1,5 @@
-import FindIdLayout from 'components/Auth/FindIdPage/Mobile';
 import { useRouter } from 'next/router';
+import FindIdLayout from 'components/Auth/FindIdPage/Mobile';
 import ROUTES from 'static/routes';
 import styles from './ResultPage.module.scss';
 

@@ -1,5 +1,5 @@
-import * as api from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import * as api from 'api';
 
 const useStoreDetail = (id: string) => {
   const { data: storeDetail } = useSuspenseQuery({

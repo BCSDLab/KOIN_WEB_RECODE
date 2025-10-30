@@ -1,5 +1,5 @@
-import { articles } from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { articles } from 'api';
 
 function useHotArticleList() {
   const { data: hotArticles } = useSuspenseQuery({

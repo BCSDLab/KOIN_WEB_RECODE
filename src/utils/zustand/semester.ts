@@ -1,6 +1,6 @@
+import { Semester, Term } from 'api/timetable/entity';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Semester, Term } from 'api/timetable/entity';
 
 type State = {
   semester: Semester;

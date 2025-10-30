@@ -1,11 +1,11 @@
 import { cn } from '@bcsdlab/utils';
 import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
 import { LostItem, LostItemHandler } from 'components/Articles/hooks/useLostItemForm';
-import FormImage from 'components/Articles/LostItemWritePage/components/FormImage';
-import FormContent from 'components/Articles/LostItemWritePage/components/FormContent';
-import FormFoundPlace from 'components/Articles/LostItemWritePage/components/FormFoundPlace';
 import FormCategory from 'components/Articles/LostItemWritePage/components/FormCategory';
+import FormContent from 'components/Articles/LostItemWritePage/components/FormContent';
 import FormDate from 'components/Articles/LostItemWritePage/components/FormDate';
+import FormFoundPlace from 'components/Articles/LostItemWritePage/components/FormFoundPlace';
+import FormImage from 'components/Articles/LostItemWritePage/components/FormImage';
 import styles from './LostItemForm.module.scss';
 
 const MAX_LOST_ITEM_TYPE = {

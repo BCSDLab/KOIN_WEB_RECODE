@@ -1,16 +1,16 @@
 import { startTransition, useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@bcsdlab/utils';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useCalculateCredits from 'components/GraduationCalculatorPage/hooks/useCalculateCredits';
 import { GradesByCourseType } from 'api/graduationCalculator/entity';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useCalculateCredits from 'components/GraduationCalculatorPage/hooks/useCalculateCredits';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import useGetMultiMajorLecture from 'components/TimetablePage/hooks/useGetMultiMajorLecture';
-import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
+import { motion, AnimatePresence } from 'framer-motion';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import styles from './CreditChart.module.scss';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import SemesterLectureListModal from './SemesterLectureListModal';
+import styles from './CreditChart.module.scss';
 
 function CreditChart({ totalGrades }: { totalGrades: number }) {
   const logger = useLogger();

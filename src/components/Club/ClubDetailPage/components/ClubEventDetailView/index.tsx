@@ -1,17 +1,17 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
+import NextImageIcon from 'assets/svg/Club/next-image-icon.svg';
+import PreImageIcon from 'assets/svg/Club/pre-image-icon.svg';
+import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
+import { useClubEventDetail } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
+import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent';
+import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import { useSwipeable } from 'react-swipeable';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { useClubEventDetail } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
-import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent';
-import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
-import ROUTES from 'static/routes';
-import NextImageIcon from 'assets/svg/Club/next-image-icon.svg';
-import PreImageIcon from 'assets/svg/Club/pre-image-icon.svg';
-import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
-import { useRouter } from 'next/router';
 import styles from './ClubEventDetailView.module.scss';
 
 interface ClubEventDetailViewProps {

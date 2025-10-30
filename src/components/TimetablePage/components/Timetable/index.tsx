@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { Lecture, MyLectureInfo } from 'api/timetable/entity';
-import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
 import LectureCloseIcon from 'assets/svg/lecture-close-icon.svg';
 import LectureEditIcon from 'assets/svg/lecture-edit-icon.svg';
-import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
-import { useTempLecture } from 'utils/zustand/myTempLecture';
-import { useTimeString } from 'utils/zustand/myLectures';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
+import useTimetableMutation from 'components/TimetablePage/hooks/useTimetableMutation';
+import { BORDER_TOP_COLOR, BACKGROUND_COLOR, DAYS_STRING } from 'static/timetable';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
-import { useRouter } from 'next/router';
+import { useCustomTempLecture } from 'utils/zustand/myCustomTempLecture';
+import { useTimeString } from 'utils/zustand/myLectures';
+import { useTempLecture } from 'utils/zustand/myTempLecture';
 import styles from './Timetable.module.scss';
 
 interface TimetableProps {

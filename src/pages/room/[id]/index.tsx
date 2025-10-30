@@ -1,11 +1,11 @@
+import { useRouter } from 'next/router';
 import RoomDetailImg from 'components/Room/components/RoomDetailImg';
+import RoomDetailMap from 'components/Room/components/RoomDetailMap';
 import RoomDetailOption from 'components/Room/components/RoomDetailOption';
 import RoomDetailTable from 'components/Room/components/RoomDetailTable';
-import RoomDetailMap from 'components/Room/components/RoomDetailMap';
+import useRoomDetail from 'components/Room/RoomDetailPage/hooks/useRoomDetail';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import useRoomDetail from 'components/Room/RoomDetailPage/hooks/useRoomDetail';
-import { useRouter } from 'next/router';
 import styles from './RoomDetailPage.module.scss';
 
 function RoomDetailPage({ id }: { id: string }) {
