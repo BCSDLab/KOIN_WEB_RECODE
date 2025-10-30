@@ -26,7 +26,7 @@ function useImageDownload() {
           saveAs(blob, `${imageName}.jpeg`);
         }
       });
-    } catch (error) {
+    } catch {
       showToast('error', '이미지 다운로드에 실패했습니다.');
     }
   };

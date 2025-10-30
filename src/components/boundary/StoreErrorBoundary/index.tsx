@@ -1,4 +1,4 @@
-import React, { ErrorInfo } from 'react';
+import React from 'react';
 import { AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
 import { isKoinError } from '@bcsdlab/koin';
@@ -15,7 +15,7 @@ interface State {
 }
 
 function isAxiosError(error: AxiosError<any, any> | Error): error is AxiosError<any, any> {
-  return ('response' in error);
+  return 'response' in error;
 }
 
 export default class StoreErrorBoundary extends React.Component<Props, State> {
@@ -33,7 +33,8 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
   }
 
   // 이후에 사용시 해제
-  componentDidCatch(error: Error, __: ErrorInfo) {
+  // componentDidCatch(error: Error, __: ErrorInfo) {
+  componentDidCatch(error: Error) {
     showToast('error', error.message);
   }
 
@@ -45,11 +46,7 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
       return (
         <div className={styles.container}>
           <h1>존재하지 않는 상점입니다.</h1>
-          <button
-            className={styles.button}
-            type="button"
-            onClick={onErrorClick}
-          >
+          <button className={styles.button} type="button" onClick={onErrorClick}>
             상점 목록
           </button>
         </div>

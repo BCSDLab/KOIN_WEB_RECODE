@@ -16,7 +16,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_PATH;
 type Constructor<T> = new (...args: any[]) => T;
 
 // eslint-disable-next-line
-type ResponseType<T> = T extends APIRequest<infer T> ? T : never
+type ResponseType<T> = T extends APIRequest<infer T> ? T : never;
 
 export default class APIClient {
   // API Client Singleton
@@ -27,12 +27,7 @@ export default class APIClient {
   }
 
   /** API를 받아서 호출할 수 있는 함수로 변환합니다. */
-  static toCallable<
-    T extends Constructor<any>,
-    U extends InstanceType<T>,
-    R extends ResponseType<U>,
-  >(api: T) {
-    // eslint-disable-next-line new-cap
+  static toCallable<T extends Constructor<any>, U extends InstanceType<T>, R extends ResponseType<U>>(api: T) {
     return (...args: ConstructorParameters<T>) => APIClient.request<R>(new api(...args));
   }
 
@@ -52,8 +47,8 @@ export default class APIClient {
           url: request.path,
           method: request.method,
           params: request.params,
-          data: request.data instanceof FormData
-            ? request.data : (request.convertBody || this.convertBody)(request.data),
+          data:
+            request.data instanceof FormData ? request.data : (request.convertBody || this.convertBody)(request.data),
           paramsSerializer: (params) => qsStringify(params),
           timeout: this.timeout,
           baseURL: request.baseURL || this.baseURL,
@@ -61,9 +56,7 @@ export default class APIClient {
           responseType: 'json',
         })
         .then((data: AxiosResponse<U>) => {
-          const response = request.parse
-            ? request.parse(data)
-            : this.parse<U>(data);
+          const response = request.parse ? request.parse(data) : this.parse<U>(data);
           resolve(response);
         })
         .catch(async (err) => {
@@ -77,9 +70,7 @@ export default class APIClient {
               const handledResponse = await this.errorMiddleware(err);
 
               if (handledResponse) {
-                const response = request.parse
-                  ? request.parse(handledResponse)
-                  : this.parse<U>(handledResponse);
+                const response = request.parse ? request.parse(handledResponse) : this.parse<U>(handledResponse);
                 resolve(response);
                 return;
               }
@@ -87,7 +78,7 @@ export default class APIClient {
 
             const apiError = this.createKoinErrorFromAxiosError(err);
             reject(apiError);
-          } catch (middlewareError) {
+          } catch {
             const apiError = this.createKoinErrorFromAxiosError(err);
             reject(apiError);
           }
@@ -172,7 +163,7 @@ export default class APIClient {
             await this.refreshAccessToken(refreshToken.state.refreshToken);
             const retryResponse = await this.retryRequest(error);
             return retryResponse;
-          } catch (retryError) {
+          } catch {
             if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
               useTokenStore.getState().setToken('');
               useTokenStore.getState().setRefreshToken('');
@@ -197,7 +188,7 @@ export default class APIClient {
           useTokenStore.getState().setUserType(response.data.user_type);
           const retryResponse = await this.retryRequest(error);
           return retryResponse;
-        } catch (retryError) {
+        } catch {
           return null;
         }
       }
@@ -207,16 +198,16 @@ export default class APIClient {
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
     const { response } = error;
-    return response?.status !== undefined
-      && response?.data !== undefined
-      && response.data.code !== undefined
-      && response.data.message !== undefined;
+    return (
+      response?.status !== undefined &&
+      response?.data !== undefined &&
+      response.data.code !== undefined &&
+      response.data.message !== undefined
+    );
   }
 
   // error 를 경우에 따라 KoinError와 AxiosError로 반환
-  private createKoinErrorFromAxiosError(
-    error: AxiosError<KoinError>,
-  ): KoinError | CustomAxiosError {
+  private createKoinErrorFromAxiosError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
     if (this.isAxiosErrorWithResponseData(error)) {
       const koinError = error.response!;
       return {
@@ -241,10 +232,7 @@ export default class APIClient {
     }
 
     // json body 사용
-    if (
-      request.method === HTTP_METHOD.POST
-      || request.method === HTTP_METHOD.PUT
-    ) {
+    if (request.method === HTTP_METHOD.POST || request.method === HTTP_METHOD.PUT) {
       headers['Content-Type'] = 'application/json';
     }
 

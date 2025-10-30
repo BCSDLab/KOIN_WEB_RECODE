@@ -1,4 +1,4 @@
-import React, { ErrorInfo } from 'react';
+import React from 'react';
 import showToast from 'utils/ts/showToast';
 import { AxiosError } from 'axios';
 import { sendClientError } from '@bcsdlab/koin';
@@ -13,7 +13,7 @@ interface State {
 }
 
 function isAxiosError(error: AxiosError<any, any> | Error): error is AxiosError<any, any> {
-  return ('response' in error);
+  return 'response' in error;
 }
 
 export default class ErrorBoundary extends React.Component<Props, State> {
@@ -24,12 +24,14 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   }
 
   // 이후에 사용시 해제
-  static getDerivedStateFromError(_: Error) {
+  // static getDerivedStateFromError(_: Error) {
+  static getDerivedStateFromError() {
     return { hasError: true };
   }
 
   // 이후에 사용시 해제
-  componentDidCatch(error: AxiosError<any, any> | Error, __: ErrorInfo) {
+  // componentDidCatch(error: AxiosError<any, any> | Error, __: ErrorInfo) {
+  componentDidCatch(error: AxiosError<any, any> | Error) {
     showToast('error', isAxiosError(error) ? error.response?.data.error.message : error.message);
     sendClientError(error);
   }
@@ -38,11 +40,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     const { children, fallbackClassName } = this.props;
     const { hasError } = this.state;
     if (hasError) {
-      return (
-        <div className={fallbackClassName}>
-          Error
-        </div>
-      );
+      return <div className={fallbackClassName}>Error</div>;
     }
     return children;
   }

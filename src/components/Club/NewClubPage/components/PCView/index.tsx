@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { NewClubData } from 'api/club/entity';
 import ROUTES from 'static/routes';
 import showToast from 'utils/ts/showToast';
@@ -20,13 +19,11 @@ import styles from './NewClubPCView.module.scss';
 interface PCViewProps {
   formData: NewClubData;
   setFormData: Dispatch<SetStateAction<NewClubData>>;
-  setType?:Dispatch<SetStateAction<string>>;
+  setType?: Dispatch<SetStateAction<string>>;
   openModal: () => void;
   isEdit?: boolean;
 }
-export default function PCView({
-  formData, setFormData, openModal, isEdit, setType,
-}: PCViewProps) {
+export default function PCView({ formData, setFormData, openModal, isEdit, setType }: PCViewProps) {
   const router = useRouter();
   const navigate = router.push;
   const logger = useLogger();
@@ -40,7 +37,7 @@ export default function PCView({
       if (images) {
         setFormData({ ...formData, image_url: images[0] });
       }
-    } catch (error) {
+    } catch {
       showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
     }
   };
@@ -147,9 +144,7 @@ export default function PCView({
         </h1>
         <div className={styles['header__button-container']}>
           <button type="button" className={styles.header__button} onClick={handleClickCancel}>
-            {!isEdit && '생성'}
-            {' '}
-            취소
+            {!isEdit && '생성'} 취소
           </button>
           <button type="button" className={styles.header__button} onClick={handleClickSave}>
             {isEdit ? '저장' : '생성 요청'}
@@ -164,7 +159,7 @@ export default function PCView({
             <input
               className={cn({
                 [styles['form__text-input']]: true,
-                [styles['form__text-input--error']]: (formData.name.length === 0 && isTried),
+                [styles['form__text-input--error']]: formData.name.length === 0 && isTried,
               })}
               type="text"
               value={formData.name}
@@ -180,8 +175,7 @@ export default function PCView({
               className={`${styles.dropdown} ${isDropDownOpen ? styles['dropdown--open'] : ''}`}
               role="listbox"
               tabIndex={0}
-              onKeyDown={() => {
-              }}
+              onKeyDown={() => {}}
               onBlur={() => setIsDropDownOpen(false)}
             >
               <button
@@ -190,7 +184,9 @@ export default function PCView({
                 onClick={() => setIsDropDownOpen(!isDropDownOpen)}
               >
                 {categoryOptions.find((o) => o.value === formData.club_category_id)?.label}
-                <span className={styles.dropdown__arrow}><DropDownIcon /></span>
+                <span className={styles.dropdown__arrow}>
+                  <DropDownIcon />
+                </span>
               </button>
               <ul className={styles.dropdown__menu}>
                 {categoryOptions.map((o) => (
@@ -199,9 +195,7 @@ export default function PCView({
                     role="option"
                     aria-selected={o.value === formData.club_category_id}
                     className={`${styles.dropdown__option} ${
-                      o.value === formData.club_category_id
-                        ? styles['dropdown__option--selected']
-                        : ''
+                      o.value === formData.club_category_id ? styles['dropdown__option--selected'] : ''
                     }`}
                     onMouseDown={() => {
                       setFormData({ ...formData, club_category_id: o.value });
@@ -220,7 +214,7 @@ export default function PCView({
             <input
               className={cn({
                 [styles['form__text-input']]: true,
-                [styles['form__text-input--error']]: (formData.location.length === 0) && isTried,
+                [styles['form__text-input--error']]: formData.location.length === 0 && isTried,
               })}
               type="text"
               value={formData.location}
@@ -297,16 +291,18 @@ export default function PCView({
                 })}
                 type="text"
                 value={formData.phone_number}
-                onChange={(e) => setFormData((prev) => ({
-                  ...prev,
-                  phone_number: addHyphen(e.target.value),
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    phone_number: addHyphen(e.target.value),
+                  }))
+                }
                 placeholder="대표자 전화번호를 입력해주세요.(필수)"
               />
               {!formData.phone_number && isTried && (
-              <div className={styles['error-container']}>
-                <ClubInputErrorCondition />
-              </div>
+                <div className={styles['error-container']}>
+                  <ClubInputErrorCondition />
+                </div>
               )}
             </div>
           </div>
@@ -330,59 +326,56 @@ export default function PCView({
                 <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
               </div>
             </div>
-          )
-            : (
-              <div className={styles['form-image']}>
-                <label
-                  className={cn(
-                    {
-                      [styles['form-image__label']]: true,
-                      [styles['form-image__label--drag-over']]: isDragOver,
-                      [styles['form-image__label--error']]: !formData.image_url && isTried,
-                    },
-                  )}
-                  htmlFor="club-image-upload"
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setIsDragOver(true);
-                  }}
-                  onDragEnter={(e) => {
-                    e.preventDefault();
-                    setIsDragOver(true);
-                  }}
-                  onDragLeave={(e) => {
-                    e.preventDefault();
-                    setIsDragOver(false);
-                  }}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setIsDragOver(false);
-                    handleDrop(e);
-                  }}
+          ) : (
+            <div className={styles['form-image']}>
+              <label
+                className={cn({
+                  [styles['form-image__label']]: true,
+                  [styles['form-image__label--drag-over']]: isDragOver,
+                  [styles['form-image__label--error']]: !formData.image_url && isTried,
+                })}
+                htmlFor="club-image-upload"
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(true);
+                }}
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(true);
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(false);
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsDragOver(false);
+                  handleDrop(e);
+                }}
+                aria-label="동아리 이미지 업로드"
+              >
+                <input
+                  id="club-image-upload"
+                  className={styles['form-image__input']}
+                  type="file"
+                  ref={imgRef}
+                  accept="image/*"
+                  multiple
+                  onChange={saveImage}
                   aria-label="동아리 이미지 업로드"
-                >
-                  <input
-                    id="club-image-upload"
-                    className={styles['form-image__input']}
-                    type="file"
-                    ref={imgRef}
-                    accept="image/*"
-                    multiple
-                    onChange={saveImage}
-                    aria-label="동아리 이미지 업로드"
-                  />
-                  <UploadIcon />
-                  <div className={styles['form-image__label-text']}>
-                    <div>클릭하거나</div>
-                    <div>사진을 드래그해</div>
-                    <div>업로드해주세요</div>
-                    <br />
-                    <div>1:1 비율로 업로드 해주세요</div>
-                  </div>
-                </label>
-              </div>
-            )}
+                />
+                <UploadIcon />
+                <div className={styles['form-image__label-text']}>
+                  <div>클릭하거나</div>
+                  <div>사진을 드래그해</div>
+                  <div>업로드해주세요</div>
+                  <br />
+                  <div>1:1 비율로 업로드 해주세요</div>
+                </div>
+              </label>
+            </div>
+          )}
           {!formData.image_url && isTried && <ClubInputErrorCondition />}
           <button type="button" className={styles.like} onClick={handleClickLike}>
             <LikeIcon />

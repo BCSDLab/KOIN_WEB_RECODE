@@ -1,11 +1,8 @@
-/* eslint-disable max-len */
 import * as api from 'api';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useABTestView = (title: string, authorization?: string) => {
-  const accessHistoryId = typeof window !== 'undefined'
-    ? localStorage.getItem('access_history_id')
-    : null;
+  const accessHistoryId = typeof window !== 'undefined' ? localStorage.getItem('access_history_id') : null;
 
   const { data: abTestView } = useSuspenseQuery({
     queryKey: ['abTestView', title, accessHistoryId],
@@ -13,7 +10,7 @@ export const useABTestView = (title: string, authorization?: string) => {
       try {
         const response = await api.abTest.abTestAssign(title, authorization || undefined, accessHistoryId);
         return response;
-      } catch (error) {
+      } catch {
         return { access_history_id: null, variable_name: 'default' };
       }
     },
