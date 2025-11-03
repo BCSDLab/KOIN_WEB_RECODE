@@ -1,5 +1,8 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
+import { GetServerSidePropsContext } from 'next';
 import { cn } from '@bcsdlab/utils';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import * as api from 'api';
 import useBenefitCategory from 'components/Store/StoreBenefitPage/hooks/useBenefitCategory';
 import useStoreBenefitList from 'components/Store/StoreBenefitPage/hooks/useStoreBenefitList';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
@@ -12,13 +15,52 @@ import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import styles from './StoreBenefitPage.module.scss';
 
-export default function StoreBenefitPage() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const queryClient = new QueryClient();
+  const { category } = context.query;
+  const categoryId = Array.isArray(category) ? category[0] : category;
+
+  if (!categoryId) {
+    return {
+      notFound: true,
+    };
+  }
+
+  await queryClient.prefetchQuery({
+    queryKey: ['benefitCategory'],
+    queryFn: api.store.getStoreBenefitCategory,
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ['storeBenefit', categoryId],
+    queryFn: async ({ queryKey }) => {
+      const queryFnParams = queryKey[1];
+
+      return api.store.getStoreBenefitList(queryFnParams ?? '1');
+    },
+  });
+
+  // StoreList 페이지에서 사용하는 API
+  await queryClient.prefetchQuery({
+    queryKey: ['storeCategories'],
+    queryFn: api.store.getStoreCategories,
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+}
+
+function StoreBenefit() {
   const { params, searchParams, setParams } = useParamsHandler();
   const isMobile = useMediaQuery();
   const logger = useLogger();
-  const { count, storeBenefitList } = useStoreBenefitList(params?.category ?? '1');
+  const { data } = useStoreBenefitList(params?.category ?? '1');
+  const { count, storeBenefitList } = data;
   const selectedCategory = Number(searchParams.get('category')) ?? 1;
-  const { benefitCategory } = useBenefitCategory();
+  const { data: benefitCategory } = useBenefitCategory();
 
   useEffect(() => {
     initializeCategoryEntryTime();
@@ -89,5 +131,16 @@ export default function StoreBenefitPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function StoreBenefitPage({ dehydrateState }: { dehydrateState: unknown }) {
+  return (
+    <HydrationBoundary state={dehydrateState}>
+      {/* TODO: Loading 디자인 추가 요청 */}
+      <Suspense fallback={null}>
+        <StoreBenefit />
+      </Suspense>
+    </HydrationBoundary>
   );
 }
