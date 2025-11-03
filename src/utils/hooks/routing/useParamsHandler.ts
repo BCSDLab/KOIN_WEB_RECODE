@@ -6,17 +6,10 @@ const useParamsHandler = () => {
 
   // URLSearchParams 형태로 제공
   const searchParams = useMemo(() => {
-    const params = new URLSearchParams();
-
-    Object.entries(router.query).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        params.set(key, value[0]);
-      } else if (value) {
-        params.set(key, value);
-      }
-    });
-    return params;
-  }, [router.query]);
+    if (typeof window === 'undefined') return new URLSearchParams();
+    const queryString = router.asPath.split('?')[1] || '';
+    return new URLSearchParams(queryString);
+  }, [router.asPath]);
 
   const params = useMemo(() => Object.fromEntries(searchParams.entries()), [searchParams]);
 

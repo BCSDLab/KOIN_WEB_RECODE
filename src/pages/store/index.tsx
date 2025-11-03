@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { dehydrate, HydrationBoundary, QueryClient, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import * as api from 'api';
 
-import { getStoreCategories } from 'api/store';
 import Close from 'assets/svg/close-icon-20x20.svg';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
 import EventCarousel from 'components/Store/StorePage/components/EventCarousel';
@@ -21,10 +19,11 @@ import { STORE_PAGE } from 'static/store';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 
+
 import { useLocalStorage } from 'utils/hooks/state/useLocalStorage';
-import useMount from 'utils/hooks/state/useMount';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import type { StoreSorterType, StoreFilterType } from 'api/store/entity';
 import styles from './StorePage.module.scss';
@@ -80,57 +79,26 @@ const loggingCategoryToggleFilterValue = (toggleName: 'OPEN' | 'DELIVERY', categ
   `check_${toggleNameLabel[toggleName]}_${category || '전체보기'}`;
 
 const useStoreList = (sorter: StoreSorterType, filter: StoreFilterType[], params: StoreSearchQueryType) => {
+  const { data: storeList } = useQuery({
+    queryKey: ['storeListV2', sorter, filter, params.storeName],
+    queryFn: () => api.store.getStoreListV2(sorter, filter, params.storeName),
+    retry: 0,
+    placeholderData: (previousData) => previousData,
+  });
+
   const selectedCategory = Number(params.category);
 
-  const { data: storeList } = useQuery({
-    queryKey: ['storeListV2', sorter, filter, selectedCategory],
-    queryFn: () => api.store.getStoreListV2(sorter, filter, params.storeName),
-    placeholderData: (previousData) => previousData,
-    select: (data) => {
-      if (!data || !data.shops) return [];
+  if (!storeList) {
+    return [];
+  }
 
-      if (params.category === undefined) {
-        return data.shops;
-      }
-
-      return data.shops.filter((store) => store.category_ids.some((id) => id === selectedCategory));
-    },
-  });
-
-  return storeList || [];
+  return storeList.shops.filter(
+    (store) => params.category === undefined || store.category_ids.some((id) => id === selectedCategory),
+  );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const queryClient = new QueryClient();
-
-  const { category, storeName } = context.query;
-
-  const selectedCategory = category ? Number(category) : CATEGORY_IS_UNDEFINED;
-  const selectedStoreName = storeName ? String(storeName) : undefined;
-
-  await queryClient.prefetchQuery({
-    queryKey: ['storeCategories'],
-    queryFn: getStoreCategories,
-  });
-
-  await queryClient.prefetchQuery({
-    queryKey: ['storeListV2', 'NONE', [], selectedCategory],
-    queryFn: () => api.store.getStoreListV2('NONE', [], selectedStoreName),
-  });
-
-  await queryClient.prefetchQuery({
-    queryKey: ['all-event'],
-    queryFn: () => api.store.getAllEvent(),
-  });
-
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-}
-
-function Store() {
+function StorePage() {
+  const { params, searchParams, setParams } = useParamsHandler();
   const enterCategoryTimeRef = useRef<number | null>(null);
   const [storeSorter, setStoreSorter] = useState<StoreSorterType>('NONE');
   const [storeFilterList, setStoreFilterList] = useState<{ [key in StoreFilterType]: boolean }>({
@@ -142,15 +110,14 @@ function Store() {
   const isMobile = useMediaQuery();
   const [localStorageValue] = useLocalStorage('store-review-tooltip', null);
   const [isTooltipOpen, , closeTooltip] = useBooleanState(localStorageValue === null);
-  const isMounted = useMount();
 
   const filteredTypeList = Object.entries(storeFilterList)
     .filter(([, value]) => value)
     .map(([key]) => key as StoreFilterType);
   const { data: categories } = useStoreCategories();
-  const storeList = useStoreList(storeSorter, filteredTypeList, router.query);
+  const storeList = useStoreList(storeSorter, filteredTypeList, params);
 
-  const selectedCategory = router.query.category ? Number(router.query.category) : -1;
+  const selectedCategory = Number(searchParams.get('category')) ?? CATEGORY_IS_UNDEFINED;
 
   const handleTooltipCloseButtonClick = () => {
     localStorage.setItem('store-review-tooltip', 'used');
@@ -162,17 +129,21 @@ function Store() {
       team: 'BUSINESS',
       event_label: 'shop_categories',
       value: categoryId.toString(),
-      previous_page: categories.shop_categories.find((item) => item.id === selectedCategory)?.name || '전체보기',
+      previous_page:
+        categories.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '전체보기',
       duration_time: getCategoryDurationTime(),
       current_page: categoryId.toString(),
     });
 
     initializeCategoryEntryTime();
 
-    router.push({
-      pathname: ROUTES.Store(),
-      query: { ...router.query, category: categoryId },
-    });
+    setParams(
+      { category: `${categoryId}` },
+      {
+        deleteBeforeParam: false,
+        replacePage: false,
+      },
+    );
   };
 
   const handleSortCheckBox = (type: StoreSorterType) => () => {
@@ -198,7 +169,7 @@ function Store() {
   };
 
   const storeScrollLogging = () => {
-    const currentCategoryId = selectedCategory;
+    const currentCategoryId = searchParams.get('category') === undefined ? 0 : Number(searchParams.get('category')) - 1;
 
     logger.actionEventClick({
       team: 'BUSINESS',
@@ -216,6 +187,9 @@ function Store() {
       initializeCategoryEntryTime();
       enterCategoryTimeRef.current = currentTime;
     }
+    if (sessionStorage.getItem('pushStateCalled')) {
+      sessionStorage.removeItem('pushStateCalled');
+    }
     sessionStorage.setItem('cameFrom', categories.shop_categories[selectedCategory]?.name || '전체보기');
   }, [categories, selectedCategory]);
 
@@ -224,7 +198,8 @@ function Store() {
       team: 'BUSINESS',
       event_label: 'shop_categories_benefit',
       value: '혜택이 있는 상점 모아보기',
-      previous_page: categories.shop_categories.find((item) => item.id === selectedCategory)?.name || '전체보기',
+      previous_page:
+        categories.shop_categories.find((item) => item.id === Number(searchParams.get('category')))?.name || '전체보기',
       duration_time: getCategoryDurationTime(),
       current_page: 'benefit',
     });
@@ -263,9 +238,9 @@ function Store() {
       </div>
       {!isMobile && <SearchBarModal onClose={() => {}} />}
       <div className={styles.option}>
-        {router.query.storeName ? (
+        {params.storeName ? (
           <div className={styles.option__count}>
-            <strong>{`"${router.query.storeName}" 관련 가게가 총 ${storeList.length}개 있습니다.`}</strong>
+            <strong>{`"${params.storeName}" 관련 가게가 총 ${storeList.length}개 있습니다.`}</strong>
           </div>
         ) : (
           <div className={styles.option__count}>
@@ -307,7 +282,7 @@ function Store() {
               </label>
             </div>
           ))}
-          {isMounted && isTooltipOpen && (
+          {isTooltipOpen && (
             <div className={styles.tooltip}>
               <div className={styles.tooltip__content}>지금 리뷰가 가장 많은 상점을 확인해보세요!</div>
               <button
@@ -353,7 +328,7 @@ function Store() {
           </button>
         ))}
 
-        {isMounted && isTooltipOpen && (
+        {isTooltipOpen && (
           <IntroToolTip content="지금 리뷰가 가장 많은 상점을 확인해보세요!" closeTooltip={closeTooltip} />
         )}
       </div>
@@ -366,10 +341,4 @@ function Store() {
   );
 }
 
-export default function StorePage({ dehydrateState }: { dehydrateState: unknown }) {
-  return (
-    <HydrationBoundary state={dehydrateState}>
-      <Store />
-    </HydrationBoundary>
-  );
-}
+export default StorePage;
