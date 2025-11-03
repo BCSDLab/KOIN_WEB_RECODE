@@ -52,6 +52,7 @@ const queryClient = new QueryClient({
       refetchOnReconnect: true,
       retry: false,
       enabled: typeof window !== 'undefined',
+      staleTime: 60 * 1000, // 1 minutes
     },
   },
 });
