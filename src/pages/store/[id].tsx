@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, HydrationBoundary, QueryClient, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import * as api from 'api';
+import { getReviewList, getStoreDetailInfo, getStoreDetailMenu, getStoreEventList } from 'api/store';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import Phone from 'assets/svg/Review/phone.svg';
 import Copy from 'assets/svg/Store/copy.svg';
@@ -43,24 +43,20 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
   // 리뷰는 토큰(클라이언트 상태)에 의존하고 있어 prefetch 불가
-  await queryClient.prefetchQuery({
-    queryKey: ['storeDetail', 'storeDetailMenu', storeId],
-    queryFn: () =>
-      Promise.all([
-        queryClient.fetchQuery({
-          queryKey: ['storeDetail', storeId],
-          queryFn: () => api.store.getStoreDetailInfo(storeId),
-        }),
-        queryClient.fetchQuery({
-          queryKey: ['storeDetailMenu', storeId],
-          queryFn: () => api.store.getStoreDetailMenu(storeId),
-        }),
-      ]),
-  });
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ['storeDetail', storeId],
+      queryFn: () => getStoreDetailInfo(storeId),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['storeDetailMenu', storeId],
+      queryFn: () => getStoreDetailMenu(storeId),
+    }),
+  ]);
 
   await queryClient.prefetchQuery({
     queryKey: ['storeEventList', storeId],
-    queryFn: ({ queryKey }) => api.store.getStoreEventList(queryKey[1] ?? ''),
+    queryFn: ({ queryKey }) => getStoreEventList(queryKey[1] ?? ''),
   });
 
   return {
@@ -90,15 +86,15 @@ function StoreDetailPage({ id }: Props) {
       Promise.all([
         queryClient.fetchQuery({
           queryKey: ['storeDetail', id],
-          queryFn: () => api.store.getStoreDetailInfo(id),
+          queryFn: () => getStoreDetailInfo(id),
         }),
         queryClient.fetchQuery({
           queryKey: ['storeDetailMenu', id],
-          queryFn: () => api.store.getStoreDetailMenu(id),
+          queryFn: () => getStoreDetailMenu(id),
         }),
         queryClient.fetchQuery({
           queryKey: ['review'],
-          queryFn: () => api.store.getReviewList(Number(id), 1, 'LATEST', token),
+          queryFn: () => getReviewList(Number(id), 1, 'LATEST', token),
         }),
       ]),
   });
