@@ -9,7 +9,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexArticles.module.scss';
 
 export default function IndexArticles() {
-  const { articles } = useArticles();
+  const articlesData = useArticles();
   const logger = useLogger();
 
   const getLink = (id: string, boardId: number) => {
@@ -45,7 +45,7 @@ export default function IndexArticles() {
 
       <Suspense fallback={<div />}>
         <ul className={styles.list}>
-          {articles.slice(0, 7).map((article) => (
+          {articlesData?.articles.slice(0, 7).map((article) => (
             <li key={article.id} className={styles.list__item}>
               <Link href={getLink(String(article.id), article.board_id)} className={styles['list__item-link']}>
                 <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
