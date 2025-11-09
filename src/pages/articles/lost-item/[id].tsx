@@ -12,12 +12,12 @@ import ReportModal from 'components/Articles/LostItemDetailPage/components/Repor
 import usePostLostItemChatroom from 'components/Articles/LostItemDetailPage/hooks/usePostLostItemChatroom';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
 import { transformSingleLostItemArticle } from 'components/Articles/utils/transform';
+import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './LostItemDetailPage.module.scss';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -25,23 +25,24 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   if (typeof id !== 'string') {
     return { notFound: true };
   }
-  const token = context.req.cookies['access_token'] || '';
+  const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
 
   const article = await articles.getSingleLostItemArticle(token, Number(id));
-  return { props: { article: transformSingleLostItemArticle(article), articleId: Number(id) } };
+  return { props: { article: transformSingleLostItemArticle(article), articleId: Number(id), token } };
 };
 
 export default function LostItemDetailPage({
   article,
   articleId,
+  token,
 }: {
   article: ReturnType<typeof transformSingleLostItemArticle>;
   articleId: number;
+  token: string;
 }) {
   const isMobile = useMediaQuery();
   const router = useRouter();
   const navigate = router.push;
-  const token = useTokenState();
   const portalManager = useModalPortal();
 
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
@@ -175,3 +176,5 @@ export default function LostItemDetailPage({
     </ArticlesPageLayout>
   );
 }
+
+LostItemDetailPage.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;

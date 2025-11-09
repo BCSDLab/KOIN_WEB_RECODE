@@ -16,7 +16,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const pageNumber = typeof page === 'string' ? page : '1';
 
   const queryClient = new QueryClient();
-  const token = context.req.cookies['access_token'] || '';
+  const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
 
   await Promise.all([
     queryClient.prefetchQuery({
