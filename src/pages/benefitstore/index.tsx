@@ -2,7 +2,7 @@ import { Suspense, useEffect } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import * as api from 'api';
+import { getStoreBenefitCategory, getStoreBenefitList, getStoreCategories } from 'api/store';
 import useBenefitCategory from 'components/Store/StoreBenefitPage/hooks/useBenefitCategory';
 import useStoreBenefitList from 'components/Store/StoreBenefitPage/hooks/useStoreBenefitList';
 import DesktopStoreList from 'components/Store/StorePage/components/DesktopStoreList';
@@ -28,7 +28,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   await queryClient.prefetchQuery({
     queryKey: ['benefitCategory'],
-    queryFn: api.store.getStoreBenefitCategory,
+    queryFn: getStoreBenefitCategory,
   });
 
   await queryClient.prefetchQuery({
@@ -36,14 +36,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     queryFn: async ({ queryKey }) => {
       const queryFnParams = queryKey[1];
 
-      return api.store.getStoreBenefitList(queryFnParams ?? '1');
+      return getStoreBenefitList(queryFnParams ?? '1');
     },
   });
 
   // StoreList 페이지에서 사용하는 API
   await queryClient.prefetchQuery({
     queryKey: ['storeCategories'],
-    queryFn: api.store.getStoreCategories,
+    queryFn: getStoreCategories,
   });
 
   return {
