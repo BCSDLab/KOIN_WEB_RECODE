@@ -1,8 +1,9 @@
 import React, { Suspense, useEffect, useRef } from 'react';
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import * as api from 'api';
+import { dehydrate, HydrationBoundary, QueryClient, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { getReviewList, getStoreDetailInfo, getStoreDetailMenu, getStoreEventList } from 'api/store';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
 import Phone from 'assets/svg/Review/phone.svg';
 import Copy from 'assets/svg/Store/copy.svg';
@@ -30,8 +31,46 @@ interface Props {
   id: string | undefined;
 }
 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const queryClient = new QueryClient();
+
+  const id = context.params!.id;
+  const storeId = Array.isArray(id) ? id[0] : id;
+
+  if (!storeId) {
+    return {
+      notFound: true,
+    };
+  }
+  // 리뷰는 토큰(클라이언트 상태)에 의존하고 있어 prefetch 불가
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ['storeDetail', storeId],
+      queryFn: () => getStoreDetailInfo(storeId),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['storeDetailMenu', storeId],
+      queryFn: () => getStoreDetailMenu(storeId),
+    }),
+  ]);
+
+  await queryClient.prefetchQuery({
+    queryKey: ['storeEventList', storeId],
+    queryFn: ({ queryKey }) => getStoreEventList(queryKey[1] ?? ''),
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      id: storeId,
+    },
+  };
+}
+
 function StoreDetailPage({ id }: Props) {
-  if (!id || Number.isNaN(Number(id))) throw new Error('잘못된 가게 id 입니다.');
+  if (!id || Number.isNaN(Number(id))) {
+    return <div className={styles.template}>존재하지 않는 상점입니다.</div>;
+  }
 
   const isMobile = useMediaQuery();
   const enterCategoryTimeRef = useRef<number | null>(null);
@@ -47,18 +86,19 @@ function StoreDetailPage({ id }: Props) {
       Promise.all([
         queryClient.fetchQuery({
           queryKey: ['storeDetail', id],
-          queryFn: () => api.store.getStoreDetailInfo(id),
+          queryFn: () => getStoreDetailInfo(id),
         }),
         queryClient.fetchQuery({
           queryKey: ['storeDetailMenu', id],
-          queryFn: () => api.store.getStoreDetailMenu(id),
+          queryFn: () => getStoreDetailMenu(id),
         }),
         queryClient.fetchQuery({
           queryKey: ['review'],
-          queryFn: () => api.store.getReviewList(Number(id), 1, 'LATEST', token),
+          queryFn: () => getReviewList(Number(id), 1, 'LATEST', token),
         }),
       ]),
   });
+
   useEffect(() => {
     if (enterCategoryTimeRef.current === null) {
       const currentTime = new Date().getTime();
@@ -197,10 +237,6 @@ function StoreDetailPage({ id }: Props) {
 
   useEffect(
     () => {
-      if (!sessionStorage.getItem('pushStateCalled')) {
-        history.pushState(null, '', '');
-        sessionStorage.setItem('pushStateCalled', 'true');
-      }
       const handlePopState = () => {
         logger.actionEventClick({
           team: 'BUSINESS',
@@ -210,7 +246,6 @@ function StoreDetailPage({ id }: Props) {
           current_page: sessionStorage.getItem('cameFrom') || '전체보기',
           duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
         });
-        router.back();
       };
       window.addEventListener('popstate', handlePopState);
       return () => {
@@ -435,18 +470,16 @@ function StoreDetailPage({ id }: Props) {
   );
 }
 
-function StoreDetail() {
+function StoreDetail({ dehydratedstate, id }: { dehydratedstate: unknown; id: string }) {
   const router = useRouter();
-  const { id } = router.query;
-
-  const pageId = Array.isArray(id) ? id[0] : id;
-  if (!pageId) return null;
 
   return (
     <StoreErrorBoundary onErrorClick={() => router.push('/store')}>
-      <Suspense fallback={<div />}>
-        <StoreDetailPage id={pageId} />
-      </Suspense>
+      <HydrationBoundary state={dehydratedstate}>
+        <Suspense fallback={<div />}>
+          <StoreDetailPage id={id} />
+        </Suspense>
+      </HydrationBoundary>
     </StoreErrorBoundary>
   );
 }
