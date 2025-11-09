@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import useHotArticleList from 'components/Articles/hooks/useHotArticle';
+import { useQuery } from '@tanstack/react-query';
+import { articles } from 'api';
+import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './HotArticles.module.scss';
@@ -28,8 +30,15 @@ const LINK_LIST = [
 ];
 
 export default function HotArticles() {
-  const { hotArticles } = useHotArticleList();
   const logger = useLogger();
+  const { data: hotArticles, isLoading } = useQuery({
+    queryKey: ['hotArticles'],
+    queryFn: articles.getHotArticles,
+  });
+
+  if (isLoading || !hotArticles) {
+    return <LoadingSpinner size="80" />;
+  }
 
   return (
     <aside className={styles['hot-article']}>

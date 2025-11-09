@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import HotArticles from 'components/Articles/components/HotArticle';
 import LostItemRouteButton from 'components/Articles/components/LostItemRouteButton';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import Suspense from 'components/ssr/SSRSuspense';
 import ROUTES from 'static/routes';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 // import { useUser } from 'utils/hooks/state/useUser';
@@ -26,16 +24,13 @@ export default function ArticlesPageLayout({ children }: { children: React.React
             <h1 className={styles.header__title}>공지사항</h1>
           </Link>
           <div />
-
           <LostItemRouteButton />
           {/* isBoard && isCouncil && <LostItemRouteButton /> */}
         </div>
-        <Suspense fallback={<LoadingSpinner size="150px" />}>{children}</Suspense>
+        {children}
       </div>
       <div className={styles.aside}>
-        <Suspense fallback={<LoadingSpinner size="80px" />}>
-          <HotArticles />
-        </Suspense>
+        <HotArticles />
       </div>
     </div>
   );
