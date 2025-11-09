@@ -65,7 +65,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   return {
     props: {
-      dehydrateState: dehydrate(queryClient),
+      dehydratedState: dehydrate(queryClient),
       id: storeId,
     },
   };
@@ -474,12 +474,12 @@ function StoreDetailPage({ id }: Props) {
   );
 }
 
-function StoreDetail({ dehydrateState, id }: { dehydrateState: unknown; id: string }) {
+function StoreDetail({ dehydratedstate, id }: { dehydratedstate: unknown; id: string }) {
   const router = useRouter();
 
   return (
     <StoreErrorBoundary onErrorClick={() => router.push('/store')}>
-      <HydrationBoundary state={dehydrateState}>
+      <HydrationBoundary state={dehydratedstate}>
         <Suspense fallback={<div />}>
           <StoreDetailPage id={id} />
         </Suspense>
