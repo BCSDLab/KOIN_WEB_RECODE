@@ -4,6 +4,7 @@ import { ArticleResponse } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import ArticleContent from 'components/Articles/components/ArticleContent';
 import ArticleHeader from 'components/Articles/components/ArticleHeader';
+import { SSRLayout } from 'components/layout';
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const id = ctx.query.id;
@@ -28,3 +29,5 @@ export default function ArticlesDetailPage({ article }: { article: ArticleRespon
     </ArticlesPageLayout>
   );
 }
+
+ArticlesDetailPage.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;
