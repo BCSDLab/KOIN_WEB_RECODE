@@ -1,12 +1,12 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { BannersResponse } from 'api/banner/entity';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import { useSwipeable } from 'react-swipeable';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import { setCookie, getCookie } from 'utils/ts/cookie';
-import useBanners from './hooks/useBanners';
+import { setCookie } from 'utils/ts/cookie';
 import styles from './Banner.module.scss';
 
 interface BannerCardProps {
@@ -55,30 +55,28 @@ function BannerCard({ handleImageLinkClick, image_url, redirect_link }: BannerCa
 }
 
 interface BannerProps {
-  categoryId: number;
+  bannersList: BannersResponse;
+  bannerCategoryId: number;
+  isBannerOpen: boolean;
 }
 
 const HIDE_BANNER_DURATION_DAYS = 7;
 
-function Banner({ categoryId }: BannerProps) {
+function Banner({ bannersList, bannerCategoryId, isBannerOpen }: BannerProps) {
   const isMobile = useMediaQuery();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const logger = useLogger();
-  const { data: bannersData } = useBanners(categoryId);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const currentBanner = bannersData.banners[currentPageIndex];
-  const [isModalOpen, , closeModal] = useBooleanState(
-    getCookie('HIDE_BANNER') !== `modal_category_${categoryId}` && bannersData.count !== 0,
-  );
+  const currentBanner = bannersList.banners[currentPageIndex];
+  const [isModalOpen, , closeModal] = useBooleanState(isBannerOpen);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const resetAutoSlide = () => {
+  const resetAutoSlide = useCallback(() => {
     if (intervalRef.current) clearTimeout(intervalRef.current);
 
     intervalRef.current = setTimeout(() => {
-      setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
+      setCurrentPageIndex((prev) => (prev === bannersList.count - 1 ? 0 : prev + 1));
     }, 3000);
-  };
+  }, [bannersList.count]);
 
   const handleImageLinkClick = () => {
     logger.actionEventClick({
@@ -94,7 +92,7 @@ function Banner({ categoryId }: BannerProps) {
       event_label: 'main_next_modal',
       value: `${currentBanner.title}`,
     });
-    setCurrentPageIndex((prev) => (prev === 0 ? bannersData.count - 1 : prev - 1));
+    setCurrentPageIndex((prev) => (prev === 0 ? bannersList.count - 1 : prev - 1));
     resetAutoSlide();
   };
 
@@ -104,7 +102,7 @@ function Banner({ categoryId }: BannerProps) {
       event_label: 'main_next_modal',
       value: `${currentBanner.title}`,
     });
-    setCurrentPageIndex((prev) => (prev === bannersData.count - 1 ? 0 : prev + 1));
+    setCurrentPageIndex((prev) => (prev === bannersList.count - 1 ? 0 : prev + 1));
     resetAutoSlide();
   };
 
@@ -123,8 +121,8 @@ function Banner({ categoryId }: BannerProps) {
       event_label: 'main_modal_hide_7d',
       value: `${currentBanner.title}`,
     });
-    if (categoryId === 1) {
-      setCookie('HIDE_BANNER', `modal_category_${categoryId}`, HIDE_BANNER_DURATION_DAYS);
+    if (bannerCategoryId === 1) {
+      setCookie('HIDE_BANNER', `modal_category_${bannerCategoryId}`, HIDE_BANNER_DURATION_DAYS);
     }
     closeModal();
   };
@@ -136,14 +134,14 @@ function Banner({ categoryId }: BannerProps) {
   });
 
   useEffect(() => {
-    if (!isModalOpen || bannersData.count <= 1) return undefined;
+    if (!isModalOpen || bannersList.count <= 1) return undefined;
 
     resetAutoSlide();
 
     return () => {
       if (intervalRef.current) clearTimeout(intervalRef.current);
     };
-  }, [isModalOpen, bannersData.count, resetAutoSlide]);
+  }, [isModalOpen, bannersList.count, resetAutoSlide]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -176,7 +174,7 @@ function Banner({ categoryId }: BannerProps) {
           />
           <div className={styles.slider__pagination}>
             <p className={styles['slider__pagination-label']}>
-              {currentPageIndex + 1}/{bannersData.count}
+              {currentPageIndex + 1}/{bannersList.count}
             </p>
           </div>
           <button

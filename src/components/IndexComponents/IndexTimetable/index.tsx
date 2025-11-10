@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Timetable from 'components/TimetablePage/components/Timetable';
@@ -61,20 +61,18 @@ export default function IndexTimeTable() {
         시간표
       </Link>
       <ErrorBoundary fallbackClassName="loading">
-        <Suspense fallback={null}>
-          <Link
-            href={ROUTES.Timetable()}
-            onClick={() => {
-              logger.actionEventClick({
-                team: 'USER',
-                event_label: 'main_timetable',
-                value: 'table',
-              });
-            }}
-          >
-            <CurrentSemesterTimetable />
-          </Link>
-        </Suspense>
+        <Link
+          href={ROUTES.Timetable()}
+          onClick={() => {
+            logger.actionEventClick({
+              team: 'USER',
+              event_label: 'main_timetable',
+              value: 'table',
+            });
+          }}
+        >
+          <CurrentSemesterTimetable />
+        </Link>
       </ErrorBoundary>
     </div>
   );

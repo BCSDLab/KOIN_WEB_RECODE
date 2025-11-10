@@ -1,8 +1,8 @@
 import { Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { StoreCategoriesResponse } from 'api/store/entity';
 import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
-import { useStoreCategories } from 'hooks/store/storePage/useCategoryList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexStore.module.scss';
@@ -25,8 +25,7 @@ interface CategoryWithEvent extends Category {
   route: string;
 }
 
-export default function IndexStore() {
-  const { data: categories } = useStoreCategories();
+export default function IndexStore({ categories }: { categories: StoreCategoriesResponse }) {
   const logger = useLogger();
   const router = useRouter();
 
