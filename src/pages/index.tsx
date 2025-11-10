@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next/dist/types';
 import { isKoinError } from '@bcsdlab/koin';
-import { QueryClient } from '@tanstack/react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { club, articles as articlesApi, banner, timetable } from 'api';
 import { getBannerCategoryList } from 'api/banner';
 import { HotClubResponse } from 'api/club/entity';
@@ -12,6 +12,7 @@ import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
 import IndexClub from 'components/IndexComponents/IndexClub';
 import IndexStore from 'components/IndexComponents/IndexStore';
 import IndexTimetable from 'components/IndexComponents/IndexTimetable';
+import { SSRLayout } from 'components/layout';
 import { MY_SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useMySemester';
 import { SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import Banner from 'components/ui/Banner';
@@ -42,7 +43,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     getStoreCategories(),
     getHotClub(),
     queryClient.prefetchQuery({
-      queryKey: ['articles'],
+      queryKey: ['articles', '1'],
       queryFn: () => articlesApi.getArticles(token, '1'),
     }),
     queryClient.prefetchQuery({
@@ -70,6 +71,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       isBannerOpen,
       categories,
       hotClubInfo,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };
@@ -100,3 +102,5 @@ function Index({
 }
 
 export default Index;
+
+Index.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;
