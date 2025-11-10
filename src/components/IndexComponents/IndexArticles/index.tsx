@@ -3,7 +3,6 @@ import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'components/Articles/hooks/useArticles';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
 import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
-import Suspense from 'components/ssr/SSRSuspense';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexArticles.module.scss';
@@ -43,27 +42,25 @@ export default function IndexArticles() {
         </Link>
       </div>
 
-      <Suspense fallback={<div />}>
-        <ul className={styles.list}>
-          {articlesData?.articles.slice(0, 7).map((article) => (
-            <li key={article.id} className={styles.list__item}>
-              <Link href={getLink(String(article.id), article.board_id)} className={styles['list__item-link']}>
-                <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
-                <span className={styles['list__item-title']}>{article.title}</span>
-                {setArticleRegisteredDate(article.registered_at) && (
-                  <img
-                    className={styles['list__item-tag']}
-                    src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
-                    alt="NEW"
-                    aria-hidden
-                  />
-                )}
-              </Link>
-              <span className={styles['list__item-registered']}>{article.registered_at.replaceAll('-', '.')}</span>
-            </li>
-          ))}
-        </ul>
-      </Suspense>
+      <ul className={styles.list}>
+        {articlesData?.articles.slice(0, 7).map((article) => (
+          <li key={article.id} className={styles.list__item}>
+            <Link href={getLink(String(article.id), article.board_id)} className={styles['list__item-link']}>
+              <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
+              <span className={styles['list__item-title']}>{article.title}</span>
+              {setArticleRegisteredDate(article.registered_at) && (
+                <img
+                  className={styles['list__item-tag']}
+                  src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
+                  alt="NEW"
+                  aria-hidden
+                />
+              )}
+            </Link>
+            <span className={styles['list__item-registered']}>{article.registered_at.replaceAll('-', '.')}</span>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
