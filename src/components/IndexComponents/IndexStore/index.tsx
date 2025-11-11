@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { StoreCategoriesResponse } from 'api/store/entity';
@@ -76,21 +76,19 @@ export default function IndexStore({ categories }: { categories: StoreCategories
       <Link href={`${ROUTES.Store()}?category=1`} className={styles.template__title}>
         주변 상점
       </Link>
-      <Suspense fallback={null}>
-        <div className={styles.category__wrapper}>
-          {categoriesWithBenefit.map((category) => (
-            <button
-              key={category.id}
-              className={styles.category__item}
-              onClick={() => handleCategoryClick(category)}
-              type="button"
-            >
-              <img src={category.image_url} alt={category.name} className={styles.category__image} />
-              {category.name}
-            </button>
-          ))}
-        </div>
-      </Suspense>
+      <div className={styles.category__wrapper}>
+        {categoriesWithBenefit.map((category) => (
+          <button
+            key={category.id}
+            className={styles.category__item}
+            onClick={() => handleCategoryClick(category)}
+            type="button"
+          >
+            <img src={category.image_url} alt={category.name} className={styles.category__image} />
+            {category.name}
+          </button>
+        ))}
+      </div>
     </section>
   );
 }
