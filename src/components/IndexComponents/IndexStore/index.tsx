@@ -5,6 +5,7 @@ import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/u
 import { useStoreCategories } from 'hooks/store/storePage/useCategoryList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -29,6 +30,10 @@ export default function IndexStore() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const router = useRouter();
+  const isMobile = useMediaQuery();
+
+  const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
+  const ORDER_BASE_URL = isStage ? 'https://order.stage.koreatech.in' : 'https://order.koreatech.in';
 
   const categoriesWithEvent = categories.shop_categories.map((category: Category) => ({
     ...category,
@@ -40,25 +45,32 @@ export default function IndexStore() {
       previous_page: '메인',
       current_page: category.name,
     },
-    route: `${ROUTES.Store()}?category=${category.id}`,
+    route: `${ORDER_BASE_URL}/shops/?category=${category.id}`,
   }));
 
-  const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map((category) =>
-    category.name === '전체보기'
-      ? {
-          ...category,
-          name: '혜택',
-          image_url: 'https://static.koreatech.in/assets/img/icon/benefit_icon.png',
-          event: {
-            ...category.event,
-            event_label: 'main_shop_benefit',
-            value: '전화주문혜택',
-            current_page: 'benefit',
-          },
-          route: `${ROUTES.BenefitStore()}?category=1`,
-        }
-      : category,
-  );
+  const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map((category) => {
+    if (category.name === '전체보기') {
+      return {
+        ...category,
+        name: '혜택',
+        image_url: 'https://static.koreatech.in/assets/img/icon/benefit_icon.png',
+        event: {
+          ...category.event,
+          event_label: 'main_shop_benefit',
+          value: '전화주문혜택',
+          current_page: 'benefit',
+        },
+        route: `${ROUTES.BenefitStore()}?category=1`,
+      };
+    }
+
+    return {
+      ...category,
+      route: `${ROUTES.Store()}?category=${category.id}`,
+    };
+  });
+
+  const renderCategories = isMobile ? categoriesWithEvent : categoriesWithBenefit;
 
   const handleCategoryClick = ({ event, route }: CategoryWithEvent) => {
     logger.actionEventClick({
@@ -79,7 +91,7 @@ export default function IndexStore() {
       </Link>
       <Suspense fallback={null}>
         <div className={styles.category__wrapper}>
-          {categoriesWithBenefit.map((category) => (
+          {renderCategories.map((category) => (
             <button
               key={category.id}
               className={styles.category__item}
