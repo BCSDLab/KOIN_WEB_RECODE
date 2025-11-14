@@ -72,6 +72,8 @@ export default function IndexStore() {
 
   const renderCategories = isMobile ? categoriesWithEvent : categoriesWithBenefit;
 
+  const titleLink = isMobile ? `${ORDER_BASE_URL}/shops/?category=1` : `${ROUTES.Store()}?category=1`;
+
   const handleCategoryClick = ({ event, route }: CategoryWithEvent) => {
     logger.actionEventClick({
       ...event,
@@ -86,7 +88,7 @@ export default function IndexStore() {
 
   return (
     <section className={styles.template}>
-      <Link href={`${ROUTES.Store()}?category=1`} className={styles.template__title}>
+      <Link href={titleLink} className={styles.template__title}>
         주변 상점
       </Link>
       <Suspense fallback={null}>
