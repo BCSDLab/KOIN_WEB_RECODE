@@ -21,6 +21,7 @@ import ClubRecruitment from 'components/Club/ClubDetailPage/components/ClubRecru
 import CreateQnAModal from 'components/Club/ClubDetailPage/components/CreateQnAModal';
 import MandateClubManagerModal from 'components/Club/ClubDetailPage/components/MandateClubManagerModal';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
+import { useClubEventDetail } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
 import useClubLikeMutation from 'components/Club/ClubDetailPage/hooks/useClubLike';
 import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import useClubRecruitment from 'components/Club/ClubDetailPage/hooks/useClubRecruitment';
@@ -83,6 +84,13 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   const clubId = Number(id);
   const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+  const tab = query.tab as TabType | undefined;
+  const eventId = query.eventId as string | undefined;
+
+  let initialTab: TabType = tab ?? 'intro';
+  if (!tab && eventId) {
+    initialTab = 'event';
+  }
 
   const queryClient = new QueryClient();
 
@@ -108,12 +116,11 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     }),
   ]);
 
-  const tab = query.tab as TabType | undefined;
-  const eventId = query.eventId as string | undefined;
-
-  let initialTab: TabType = tab ?? 'intro';
-  if (!tab && eventId) {
-    initialTab = 'event';
+  if (initialTab === 'event' && Number(eventId) !== NO_SELECTED_EVENT_ID) {
+    await queryClient.prefetchQuery({
+      queryKey: ['clubEventDetail', clubId, eventId],
+      queryFn: () => useClubEventDetail(clubId, eventId),
+    });
   }
 
   return {
