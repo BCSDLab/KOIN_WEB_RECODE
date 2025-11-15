@@ -6,6 +6,7 @@ import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getClubDetail, getRecruitmentClub } from 'api/club';
+import { ClubRecruitmentResponse } from 'api/club/entity';
 import BellIcon from 'assets/svg/Club/bell-icon.svg';
 import OffBellIcon from 'assets/svg/Club/bell-off-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
@@ -59,6 +60,17 @@ const TAB: Record<string, TabType> = {
   'Q&A': 'qna',
 };
 
+const EMPTY_RECRUITMENT: ClubRecruitmentResponse = {
+  id: 0,
+  status: 'NONE',
+  dday: 0,
+  start_date: '',
+  end_date: '',
+  image_url: '',
+  content: '',
+  is_manager: false,
+};
+
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const { params, req, query } = context;
   const id = params?.id;
@@ -88,16 +100,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
           return data;
         } catch (e) {
           if (isKoinError(e) && e.status === 404) {
-            return {
-              id: 0,
-              status: 'NONE',
-              dday: 0,
-              start_date: '',
-              end_date: '',
-              image_url: '',
-              content: '',
-              is_manager: false,
-            };
+            return EMPTY_RECRUITMENT;
           }
           throw e;
         }
@@ -778,6 +781,8 @@ function ClubDetailPage({
       {navType === '모집' && (
         <ClubRecruitment
           clubId={Number(id)}
+          clubName={clubDetail.name}
+          clubRecruitmentData={clubRecruitmentData}
           isManager={clubDetail.manager}
           handleClickAddButton={handleClickRecruitAddButton}
         />
