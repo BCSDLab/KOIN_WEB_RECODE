@@ -48,7 +48,9 @@ const TAB_LABEL = {
   event: '행사',
   qna: 'Q&A',
 } as const;
+
 type TabType = keyof typeof TAB_LABEL;
+type TabLabel = (typeof TAB_LABEL)[TabType];
 
 const TAB: Record<string, TabType> = {
   '상세 소개': 'intro',
@@ -58,7 +60,7 @@ const TAB: Record<string, TabType> = {
 };
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const { params, req } = context;
+  const { params, req, query } = context;
   const id = params?.id;
 
   if (!id || Array.isArray(id)) {
@@ -77,6 +79,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       queryKey: ['clubDetail', clubId],
       queryFn: () => getClubDetail(token, Number(clubId)),
     }),
+
     queryClient.prefetchQuery({
       queryKey: ['clubRecruitment', clubId],
       queryFn: async () => {
@@ -102,27 +105,46 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     }),
   ]);
 
+  const tab = query.tab as TabType | undefined;
+  const eventId = query.eventId as string | undefined;
+
+  let initialTab: TabType = tab ?? 'intro';
+  if (!tab && eventId) {
+    initialTab = 'event';
+  }
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
       serverToken: token,
       initialClubId: clubId,
+      initialTab,
+      initialEventId: eventId ? Number(eventId) : NO_SELECTED_EVENT_ID,
     },
   };
 };
 
-function ClubDetailPage({ id }: { id: number }) {
+function ClubDetailPage({
+  id,
+  initialTab,
+  initialEventId,
+}: {
+  id: string;
+  initialTab: TabType;
+  initialEventId: number;
+}) {
   const router = useRouter();
+  const logger = useLogger();
+  const isMobile = useMediaQuery();
+  const navigate = (path: string) => router.push(path);
+
   const { clubDetail, clubIntroductionEditStatus } = useClubDetail(Number(id));
   const { clubRecruitmentData } = useClubRecruitment(Number(id));
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
-  const isMobile = useMediaQuery();
-  const navigate = (path: string) => router.push(path);
-  const logger = useLogger();
 
-  const [navType, setNavType] = useState('상세 소개');
-  const [eventId, setEventId] = useState<string | number>(NO_SELECTED_EVENT_ID);
+  const [navType, setNavType] = useState<TabLabel>(TAB_LABEL[initialTab] ?? '상세 소개');
+  const [eventId, setEventId] = useState<string | number>(initialEventId);
   const [isEdit, setIsEdit] = useState(false);
   const [introduction, setIntroduction] = useState(clubDetail.introduction);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -149,7 +171,7 @@ function ClubDetailPage({ id }: { id: number }) {
   const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
   const notifyModalType = clubDetail.is_recruit_subscribed ? 'unsubscribed' : 'subscribed';
 
-  const syncUrlQuery = (nextLabel: string, extra?: Record<string, string | number | undefined>) => {
+  const syncUrlQuery = (nextLabel: TabLabel, extra?: Record<string, string | number | undefined>) => {
     const tabKey = TAB[nextLabel] ?? 'intro';
     const nextQuery = { ...router.query, tab: tabKey, ...extra };
 
@@ -222,7 +244,7 @@ function ClubDetailPage({ id }: { id: number }) {
     openMandateModal();
   };
 
-  const handleNavClick = (navValue: string) => {
+  const handleNavClick = (navValue: TabLabel) => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_tab_select',
@@ -338,21 +360,14 @@ function ClubDetailPage({ id }: { id: number }) {
     if (!router.isReady) return;
     const { tab, eventId: queryEventId } = router.query as { tab?: string; eventId?: string };
 
-    let tabKey = (tab as TabType) ?? 'intro';
-    if (!tab && queryEventId) {
-      tabKey = 'event';
-      router.replace({ pathname: router.pathname, query: { ...router.query, tab: 'event' } }, undefined, {
-        shallow: true,
-        scroll: false,
-      });
-    }
+    if (tab) {
+      const tabKey = (tab as TabType) ?? 'intro';
+      const nextLabel = TAB_LABEL[tabKey] ?? '상세 소개';
+      setNavType(nextLabel);
 
-    const nextLabel = TAB_LABEL[tabKey] ?? '상세 소개';
-    setNavType(nextLabel);
-
-    if (tabKey === 'event') {
-      if (queryEventId) setEventId(Number(queryEventId));
-      else setEventId(NO_SELECTED_EVENT_ID);
+      if (tabKey === 'event') {
+        setEventId(queryEventId ? Number(queryEventId) : NO_SELECTED_EVENT_ID);
+      }
     }
   }, [router]);
 
@@ -762,7 +777,7 @@ function ClubDetailPage({ id }: { id: number }) {
       )}
       {navType === '모집' && (
         <ClubRecruitment
-          clubId={id}
+          clubId={Number(id)}
           isManager={clubDetail.manager}
           handleClickAddButton={handleClickRecruitAddButton}
         />
@@ -834,8 +849,16 @@ function ClubDetailPage({ id }: { id: number }) {
   );
 }
 
-export default function ClubDetail({ initialClubId }: { initialClubId: number }) {
-  return <ClubDetailPage id={initialClubId} />;
+export default function ClubDetail({
+  initialClubId,
+  initialTab,
+  initialEventId,
+}: {
+  initialClubId: string;
+  initialTab: TabType;
+  initialEventId: number;
+}) {
+  return <ClubDetailPage id={initialClubId} initialTab={initialTab} initialEventId={initialEventId} />;
 }
 
 ClubDetail.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;

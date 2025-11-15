@@ -1,17 +1,8 @@
-import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getRecruitmentClub } from 'api/club';
 
-export default function useClubRecruitment(clubId: number | string | undefined) {
-  const router = useRouter();
-  const navigate = (path: string) => {
-    router.push(path);
-  };
-
-  if (!clubId) {
-    navigate('/clubs');
-  }
+export default function useClubRecruitment(clubId: number) {
   const { data: clubRecruitmentData } = useSuspenseQuery({
     queryKey: ['clubRecruitment', clubId],
     queryFn: async () => {
