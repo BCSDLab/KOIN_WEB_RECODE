@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
+import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { getClubDetail, getRecruitmentClub } from 'api/club';
 import BellIcon from 'assets/svg/Club/bell-icon.svg';
 import OffBellIcon from 'assets/svg/Club/bell-off-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
@@ -23,6 +27,7 @@ import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent'
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
+import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -52,10 +57,64 @@ const TAB: Record<string, TabType> = {
   'Q&A': 'qna',
 };
 
-function ClubDetailPage({ id }: { id: string }) {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { params, req } = context;
+  const id = params?.id;
+
+  if (!id || Array.isArray(id)) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const clubId = Number(id);
+  const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+
+  const queryClient = new QueryClient();
+
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ['clubDetail', clubId],
+      queryFn: () => getClubDetail(token, Number(clubId)),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['clubRecruitment', clubId],
+      queryFn: async () => {
+        try {
+          const data = await getRecruitmentClub(clubId!);
+          return data;
+        } catch (e) {
+          if (isKoinError(e) && e.status === 404) {
+            return {
+              id: 0,
+              status: 'NONE',
+              dday: 0,
+              start_date: '',
+              end_date: '',
+              image_url: '',
+              content: '',
+              is_manager: false,
+            };
+          }
+          throw e;
+        }
+      },
+    }),
+  ]);
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      serverToken: token,
+      initialClubId: clubId,
+    },
+  };
+};
+
+function ClubDetailPage({ id }: { id: number }) {
   const router = useRouter();
   const { clubDetail, clubIntroductionEditStatus } = useClubDetail(Number(id));
-  const { clubRecruitmentData } = useClubRecruitment(id);
+  const { clubRecruitmentData } = useClubRecruitment(Number(id));
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
   const isMobile = useMediaQuery();
@@ -415,6 +474,7 @@ function ClubDetailPage({ id }: { id: string }) {
                   alt={`${clubDetail.name} 동아리 이미지`}
                   width={300}
                   height={300}
+                  priority
                 />
               ) : (
                 <div className={styles['club-detail__image-placeholder']}>
@@ -583,6 +643,7 @@ function ClubDetailPage({ id }: { id: string }) {
                   alt={`${clubDetail.name} 동아리 이미지`}
                   width={200}
                   height={200}
+                  priority
                 />
               ) : (
                 <div className={styles['club-detail__image-placeholder']}>
@@ -773,13 +834,8 @@ function ClubDetailPage({ id }: { id: string }) {
   );
 }
 
-export default function ClubDetail() {
-  const router = useRouter();
-  const { id } = router.query as { id: string };
-
-  if (!id) {
-    return null;
-  }
-
-  return <ClubDetailPage id={id} />;
+export default function ClubDetail({ initialClubId }: { initialClubId: number }) {
+  return <ClubDetailPage id={initialClubId} />;
 }
+
+ClubDetail.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;

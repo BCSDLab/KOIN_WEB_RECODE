@@ -14,7 +14,7 @@ interface EditConfirmModalProps {
   introduction?: string;
   type: string;
   setIsEdit?: Dispatch<SetStateAction<boolean>>;
-  id: string;
+  id: number;
 }
 
 export default function EditConfirmModal({
@@ -57,7 +57,7 @@ export default function EditConfirmModal({
     if (formData) {
       resetForm();
       closeModal();
-      navigate(ROUTES.ClubDetail({ id, isLink: true }));
+      navigate(ROUTES.ClubDetail({ id: String(id), isLink: true }));
     }
     if (setIsEdit) {
       if (introduction) {
