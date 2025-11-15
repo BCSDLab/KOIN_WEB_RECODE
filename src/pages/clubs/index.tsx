@@ -1,5 +1,9 @@
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { club } from 'api';
 import BookIcon from 'assets/svg/Club/book-icon.svg';
 import ExerciseIcon from 'assets/svg/Club/exercise-icon.svg';
 import HeartFilled from 'assets/svg/Club/heart-filled-icon.svg';
@@ -11,6 +15,7 @@ import ClubSearchContainer from 'components/Club/ClubListPage/components/ClubSea
 import useClubCategories from 'components/Club/hooks/useClubCategories';
 import useClubLike from 'components/Club/hooks/useClubLike';
 import useClubList from 'components/Club/hooks/useClubList';
+import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import { Selector } from 'components/ui/Selector';
@@ -36,9 +41,46 @@ const DEFAULT_SORT_OPTIONS = [
 
 const getDDayLabel = (dday: number) => (dday === 0 ? 'D-Day' : `D-${dday}`);
 
-function ClubListPage() {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { query, req } = context;
+
+  const clubName = query.clubName ? String(query.clubName) : '';
+  const sortType = query.sortType ? String(query.sortType) : DEFAULT_SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
+  const categoryId = query.categoryId ? Number(query.categoryId) : null;
+  const isRecruiting = query.isRecruiting === 'true';
+
+  const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+
+  const queryClient = new QueryClient();
+
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ['club-categories'],
+      queryFn: () => club.getClubCategories(),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['club-list', categoryId, sortType, isRecruiting, clubName],
+      queryFn: () => club.getClubList(token, categoryId ?? undefined, sortType, isRecruiting, clubName),
+    }),
+  ]);
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      initialQuery: {
+        clubName,
+        categoryId,
+        sortType,
+        isRecruiting,
+      },
+      serverToken: token,
+    },
+  };
+};
+
+function ClubListPage({ initialQuery, serverToken }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const logger = useLogger();
-  const token = useTokenState();
+  const clientToken = useTokenState();
   const router = useRouter();
   const navigate = (path: string) => {
     router.push(path);
@@ -46,11 +88,17 @@ function ClubListPage() {
   const isMobile = useMediaQuery();
   const portalManager = useModalPortal();
 
+  const token = clientToken ?? serverToken ?? null;
+
   const { searchParams, setParams: setSearchParams } = useParamsHandler();
-  const clubName = searchParams.get('clubName') ?? '';
-  const isRecruitingParam = searchParams.get('isRecruiting') === 'true';
-  const sortValue = searchParams.get('sortType') ?? DEFAULT_SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
-  const selectedCategoryId = searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined;
+
+  const clubName = searchParams.get('clubName') ?? initialQuery.clubName ?? '';
+  const isRecruitingParam = searchParams.get('isRecruiting') === 'true' ? true : initialQuery.isRecruiting;
+  const sortValue =
+    searchParams.get('sortType') ?? initialQuery.sortType ?? DEFAULT_SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
+  const selectedCategoryId = searchParams.get('categoryId')
+    ? Number(searchParams.get('categoryId'))
+    : (initialQuery.categoryId ?? undefined);
 
   const clubCategories = useClubCategories();
   const { mutate: clubLikeMutate } = useClubLike();
@@ -59,7 +107,7 @@ function ClubListPage() {
     categoryId: selectedCategoryId,
     sortType: sortValue,
     isRecruiting: isRecruitingParam,
-    query: clubName,
+    clubName: clubName,
   });
 
   const totalCount = clubList.length;
@@ -168,11 +216,9 @@ function ClubListPage() {
       <div className={styles.container}>
         <div className={styles.header}>
           <p className={styles.header__title}>동아리 목록</p>
-          {token && (
-            <button type="button" className={styles['header__add-button']} onClick={() => handleCreateClubClick()}>
-              동아리 생성하기
-            </button>
-          )}
+          <button type="button" className={styles['header__add-button']} onClick={() => handleCreateClubClick()}>
+            동아리 생성하기
+          </button>
         </div>
         <main className={styles.main}>
           <div className={styles.categories}>
@@ -291,7 +337,7 @@ function ClubListPage() {
                     <p>{!club.is_like_hidden && club.likes}</p>
                   </div>
                 </div>
-                <img className={styles.card__logo} src={club.image_url} alt={club.name} />
+                <Image className={styles.card__logo} src={club.image_url} alt={club.name} width={160} height={160} />
               </div>
             ))}
           </div>
@@ -305,3 +351,5 @@ function ClubListPage() {
 }
 
 export default ClubListPage;
+
+ClubListPage.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;
