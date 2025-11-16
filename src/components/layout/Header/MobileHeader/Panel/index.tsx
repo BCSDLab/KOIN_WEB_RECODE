@@ -133,7 +133,7 @@ export default function Panel({ openModal }: PanelProps) {
             >
               {userInfo.nickname ?? userInfo.name ?? '회원'}
             </span>
-            님, 안녕하세요!
+            님, 안녕하세요!!!
           </div>
         ) : (
           <div className={styles.greet__font}>로그인 후 더 많은 기능을 사용하세요.</div>
