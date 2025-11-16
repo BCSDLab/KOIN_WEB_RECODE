@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
+import ChevronLeft from 'assets/svg/Articles/chevron-left-circle.svg';
+import ChevronRight from 'assets/svg/Articles/chevron-right-circle.svg';
 import SelectedDotIcon from 'assets/svg/Articles/ellipse-blue.svg';
 import NotSelectedDotIcon from 'assets/svg/Articles/ellipse-grey.svg';
-import ChevronRight from 'assets/svg/Articles/chevron-right-circle.svg';
-import ChevronLeft from 'assets/svg/Articles/chevron-left-circle.svg';
 import { Image } from 'static/articles';
 import styles from './DisplayImage.module.scss';
 
@@ -11,9 +11,7 @@ interface DisplayImageProps {
   images: Image[];
 }
 
-export default function DisplayImage({
-  images,
-}: DisplayImageProps) {
+export default function DisplayImage({ images }: DisplayImageProps) {
   const [image, setImage] = useState(images[0]);
   const imageIndex = images.findIndex((img) => img.id === image.id);
 
@@ -25,11 +23,7 @@ export default function DisplayImage({
     <div className={styles.container}>
       {images.length > 0 && (
         <div className={styles.images}>
-          <img
-            className={styles.images__image}
-            src={image.imageUrl}
-            alt="분실물 이미지"
-          />
+          <img className={styles.images__image} src={image.imageUrl} alt="분실물 이미지" />
           <button
             className={cn({
               [styles.images__button]: true,
@@ -57,15 +51,12 @@ export default function DisplayImage({
         </div>
       )}
       <div className={styles.navigation}>
-        {images.length > 1 && images.map((currentImage, index) => (
-          <button
-            key={currentImage.imageUrl}
-            onClick={() => setImage(currentImage)}
-            type="button"
-          >
-            {imageIndex === index ? <SelectedDotIcon /> : <NotSelectedDotIcon />}
-          </button>
-        ))}
+        {images.length > 1 &&
+          images.map((currentImage, index) => (
+            <button key={currentImage.imageUrl} onClick={() => setImage(currentImage)} type="button">
+              {imageIndex === index ? <SelectedDotIcon /> : <NotSelectedDotIcon />}
+            </button>
+          ))}
       </div>
     </div>
   );

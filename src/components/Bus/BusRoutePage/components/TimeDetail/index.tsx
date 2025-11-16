@@ -1,7 +1,7 @@
+import TimeDetailMobile from 'components/Bus/BusRoutePage/components/TimeDetail/TimeDetailMobile';
+import TimeDetailPC from 'components/Bus/BusRoutePage/components/TimeDetail/TimeDetailPC';
 import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import TimeDetailPC from 'components/Bus/BusRoutePage/components/TimeDetail/TimeDetailPC';
-import TimeDetailMobile from 'components/Bus/BusRoutePage/components/TimeDetail/TimeDetailMobile';
 
 interface TimeDetailProps {
   timeSelect: ReturnType<typeof useTimeSelect>;
@@ -13,11 +13,7 @@ export default function TimeDetail({ timeSelect, close }: TimeDetailProps) {
 
   return (
     <div>
-      {isMobile ? (
-        <TimeDetailMobile timeSelect={timeSelect} close={close} />
-      ) : (
-        <TimeDetailPC timeSelect={timeSelect} />
-      )}
+      {isMobile ? <TimeDetailMobile timeSelect={timeSelect} close={close} /> : <TimeDetailPC timeSelect={timeSelect} />}
     </div>
   );
 }

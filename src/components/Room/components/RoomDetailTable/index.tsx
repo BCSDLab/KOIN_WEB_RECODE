@@ -21,20 +21,43 @@ interface TableData {
 }
 
 function RoomDetailTable({
-  monthlyFee, roomType, charterFee, deposit, floor, managementFee, size, phone,
+  monthlyFee,
+  roomType,
+  charterFee,
+  deposit,
+  floor,
+  managementFee,
+  size,
+  phone,
 }: RoomDetailTableProps) {
   const tableData: TableData[] = [
     {
-      leftTitle: '월세', leftValue: monthlyFee, rightTitle: '방 종류', rightValue: roomType,
+      leftTitle: '월세',
+      leftValue: monthlyFee,
+      rightTitle: '방 종류',
+      rightValue: roomType,
     },
     {
-      leftTitle: '전세', leftValue: charterFee, leftSuffix: '만원', rightTitle: '보증금', rightValue: deposit, rightSuffix: '만원',
+      leftTitle: '전세',
+      leftValue: charterFee,
+      leftSuffix: '만원',
+      rightTitle: '보증금',
+      rightValue: deposit,
+      rightSuffix: '만원',
     },
     {
-      leftTitle: '층수', leftValue: floor, leftSuffix: '층', rightTitle: '관리비', rightValue: managementFee,
+      leftTitle: '층수',
+      leftValue: floor,
+      leftSuffix: '층',
+      rightTitle: '관리비',
+      rightValue: managementFee,
     },
     {
-      leftTitle: '방 크기', leftValue: size, leftSuffix: '평', rightTitle: '연락처', rightValue: phone,
+      leftTitle: '방 크기',
+      leftValue: size,
+      leftSuffix: '평',
+      rightTitle: '연락처',
+      rightValue: phone,
     },
   ];
   return (
@@ -43,9 +66,13 @@ function RoomDetailTable({
         {tableData.map((data) => (
           <tr key={data.leftTitle} className={styles.table__row}>
             <th className={styles.table__title}>{data.leftTitle}</th>
-            <td className={styles.table__cell}>{data.leftValue ? `${data.leftValue}${data.leftSuffix || ''}` : ' - ' }</td>
+            <td className={styles.table__cell}>
+              {data.leftValue ? `${data.leftValue}${data.leftSuffix || ''}` : ' - '}
+            </td>
             <th className={styles.table__title}>{data.rightTitle}</th>
-            <td className={styles.table__cell}>{data.rightValue ? `${data.rightValue}${data.rightSuffix || ''}` : ' - ' }</td>
+            <td className={styles.table__cell}>
+              {data.rightValue ? `${data.rightValue}${data.rightSuffix || ''}` : ' - '}
+            </td>
           </tr>
         ))}
       </tbody>

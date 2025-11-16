@@ -1,7 +1,11 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
-  CourseResponse, BusResponse, BusTimetableResponse,
-  Course, CityBusParams, CityInfoResponse,
+  CourseResponse,
+  BusResponse,
+  BusTimetableResponse,
+  Course,
+  CityBusParams,
+  CityInfoResponse,
   BusRouteInfoResponseDTO,
   BusRouteParams,
   BusNoticeInfoResponse,
@@ -71,8 +75,7 @@ export class ShuttleCourseInfo<R extends ShuttleCourseResponse> implements APIRe
   auth = false;
 }
 
-export class ShuttleTimetableDetailInfo
-  <R extends ShuttleTimetableDetailInfoResponse> implements APIRequest<R> {
+export class ShuttleTimetableDetailInfo<R extends ShuttleTimetableDetailInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -95,9 +98,7 @@ export class BusRouteInfo<R extends BusRouteInfoResponseDTO> implements APIReque
 
   auth = false;
 
-  constructor({
-    dayOfMonth: date, time, busType, depart, arrival,
-  }: BusRouteParams) {
+  constructor({ dayOfMonth: date, time, busType, depart, arrival }: BusRouteParams) {
     this.path = `/bus/route?date=${date}&time=${time}&bus_type=${busType}&depart=${depart}&arrival=${arrival}`;
   }
 }

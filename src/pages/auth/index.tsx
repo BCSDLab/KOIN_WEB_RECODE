@@ -1,7 +1,7 @@
-import LoginForm from 'components/Auth/LoginPage/components/LoginForm';
+import AuthLayout from 'components/Auth/AuthPage';
 import AdditionalLink from 'components/Auth/LoginPage/components/AdditionalLink';
 import Footer from 'components/Auth/LoginPage/components/Footer';
-import AuthLayout from 'components/Auth/AuthPage';
+import LoginForm from 'components/Auth/LoginPage/components/LoginForm';
 import styles from './LoginPage.module.scss';
 
 function LoginPage() {
@@ -15,11 +15,7 @@ function LoginPage() {
 }
 
 LoginPage.getLayout = function getLayout(page: React.ReactElement) {
-  return (
-    <AuthLayout>
-      {page}
-    </AuthLayout>
-  );
+  return <AuthLayout>{page}</AuthLayout>;
 };
 
 export default LoginPage;

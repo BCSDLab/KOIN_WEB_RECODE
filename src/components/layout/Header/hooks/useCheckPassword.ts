@@ -1,10 +1,10 @@
-import * as api from 'api';
-import { useMutation } from '@tanstack/react-query';
-import showToast from 'utils/ts/showToast';
-import { isKoinError, sendClientError } from '@bcsdlab/koin';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { CheckPasswordRequest } from 'api/auth/entity';
 import { useState } from 'react';
+import { isKoinError, sendClientError } from '@bcsdlab/koin';
+import { useMutation } from '@tanstack/react-query';
+import * as api from 'api';
+import { CheckPasswordRequest } from 'api/auth/entity';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 
 const useCheckPassword = () => {
   const token = useTokenState();
@@ -31,7 +31,10 @@ const useCheckPassword = () => {
     },
   });
   return {
-    mutate, isSuccess, error, errorMessage,
+    mutate,
+    isSuccess,
+    error,
+    errorMessage,
   };
 };
 

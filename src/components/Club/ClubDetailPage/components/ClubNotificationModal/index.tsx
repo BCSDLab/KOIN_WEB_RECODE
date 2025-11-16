@@ -1,7 +1,7 @@
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './ClubNotificationModal.module.scss';
 
 interface ClubNotificationModalProps {
@@ -12,7 +12,10 @@ interface ClubNotificationModalProps {
 }
 
 export default function ClubNotificationModal({
-  closeModal, onSubmit, variant, type = 'subscribed',
+  closeModal,
+  onSubmit,
+  variant,
+  type = 'subscribed',
 }: ClubNotificationModalProps) {
   const token = useTokenState();
 

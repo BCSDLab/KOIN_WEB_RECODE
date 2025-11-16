@@ -1,8 +1,8 @@
+import { useRouter } from 'next/router';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { getClubDetail, putClubInroduction } from 'api/club';
 import { ClubIntroductionData } from 'api/club/entity';
-import { useRouter } from 'next/router';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
@@ -22,11 +22,8 @@ export default function useClubDetail(clubId: number) {
     queryFn: () => getClubDetail(token, Number(clubId)),
   });
 
-  const {
-    status: clubIntroductionEditStatus,
-    mutateAsync: clubIntroductionEditMutateAsync,
-  } = useMutation({
-    mutationFn: async (data:ClubIntroductionData) => {
+  const { status: clubIntroductionEditStatus, mutateAsync: clubIntroductionEditMutateAsync } = useMutation({
+    mutationFn: async (data: ClubIntroductionData) => {
       await putClubInroduction(token, clubId!, data);
     },
     onSuccess: () => {
@@ -39,6 +36,8 @@ export default function useClubDetail(clubId: number) {
     },
   });
   return {
-    clubDetail, clubIntroductionEditStatus, clubIntroductionEditMutateAsync,
+    clubDetail,
+    clubIntroductionEditStatus,
+    clubIntroductionEditMutateAsync,
   };
 }

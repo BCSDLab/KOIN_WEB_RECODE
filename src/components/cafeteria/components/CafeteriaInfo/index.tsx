@@ -1,9 +1,9 @@
-import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import BlackArrowBackIcon from 'assets/svg/black-arrow-back-icon.svg';
-import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
+import CloseIcon from 'assets/svg/close-icon-grey.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import type { Opens, CoopShopDetailResponse } from 'api/coopshop/entity';
 import styles from './CafeteriaInfo.module.scss';
 
 interface ScheduleTableProps {
@@ -59,16 +59,10 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
           <>
             <div className={styles.division} />
             <div className={styles['mobile-header']}>
-              <button
-                type="button"
-                aria-label="닫기 버튼"
-                onClick={closeInfo}
-              >
+              <button type="button" aria-label="닫기 버튼" onClick={closeInfo}>
                 <BlackArrowBackIcon />
               </button>
-              <span className={styles['mobile-header__title']}>
-                학생식당정보
-              </span>
+              <span className={styles['mobile-header__title']}>학생식당정보</span>
             </div>
           </>
         )}
@@ -77,8 +71,7 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
             <span className={styles.header__main}>
               {cafeteriaInfo.name}
               &nbsp;
-              {cafeteriaInfo.semester}
-              중 운영시간
+              {cafeteriaInfo.semester} 중 운영시간
             </span>
             <span className={styles.header__sub}>
               <span className={styles['header__sub--bold']}>위치</span>
@@ -89,12 +82,7 @@ export default function CafeteriaInfo({ cafeteriaInfo, closeInfo }: CafeteriaInf
               {cafeteriaInfo.phone}
             </span>
           </div>
-          <button
-            type="button"
-            aria-label="닫기 버튼"
-            className={styles['header__close-button']}
-            onClick={closeInfo}
-          >
+          <button type="button" aria-label="닫기 버튼" className={styles['header__close-button']} onClick={closeInfo}>
             <CloseIcon />
           </button>
         </div>

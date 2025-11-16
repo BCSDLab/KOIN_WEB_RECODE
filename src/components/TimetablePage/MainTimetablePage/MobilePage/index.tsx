@@ -1,11 +1,11 @@
 import React from 'react';
-import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
-import showToast from 'utils/ts/showToast';
-import Timetable from 'components/TimetablePage/components/Timetable';
+import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import SemesterListbox from 'components/TimetablePage/components/SemesterList';
+import Timetable from 'components/TimetablePage/components/Timetable';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
+import showToast from 'utils/ts/showToast';
 import styles from './MobilePage.module.scss';
 
 function MobilePage({ timetableFrameId }: { timetableFrameId: number }) {
@@ -27,35 +27,28 @@ function MobilePage({ timetableFrameId }: { timetableFrameId: number }) {
         <div className={styles.page__header}>
           <div className={styles.page__semester}>
             <React.Suspense
-              fallback={(
+              fallback={
                 <div className={styles['dropdown-loading-spinner']}>
                   <LoadingSpinner />
                 </div>
-              )}
+              }
             >
               <SemesterListbox />
             </React.Suspense>
           </div>
-          <button
-            type="button"
-            className={styles.page__button}
-            onClick={(e) => handleImageDownloadClick(e)}
-          >
-            <img
-              src="https://static.koreatech.in/assets/img/ic-image.png"
-              alt="이미지"
-            />
+          <button type="button" className={styles.page__button} onClick={(e) => handleImageDownloadClick(e)}>
+            <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
             이미지로 저장하기
           </button>
         </div>
         <div ref={timetableRef} className={styles.page__timetable}>
           <ErrorBoundary fallbackClassName="loading">
             <React.Suspense
-              fallback={(
+              fallback={
                 <div className={styles['top-loading-spinner']}>
                   <LoadingSpinner />
                 </div>
-              )}
+              }
             >
               <Timetable
                 timetableFrameId={timetableFrameId}

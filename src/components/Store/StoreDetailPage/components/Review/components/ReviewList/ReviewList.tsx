@@ -1,24 +1,22 @@
-import { useGetReview } from 'components/Store/StoreDetailPage/hooks/useGetReview';
-import ReviewCard from 'components/Store/StoreDetailPage/components/Review/components/ReviewCard/ReviewCard';
-import {
-  useCallback, useDeferredValue, useEffect, useRef, useState,
-} from 'react';
-import NoReview from 'assets/svg/Review/no-review.svg';
+import { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
 import ChervronUp from 'assets/svg/chervron-up.svg';
-import { Portal } from 'components/modal/Modal/PortalProvider';
+import NoReview from 'assets/svg/Review/no-review.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import StarList from 'components/Store/StoreDetailPage/components/Review/components/StarList/StarList';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import { REVEIW_LOGIN } from 'components/Store/StoreDetailPage/components/Review/components/ReviewButton/index';
-import { useUser } from 'utils/hooks/state/useUser';
-import { useGetMyReview } from 'components/Store/StoreDetailPage/hooks/useGetMyReview';
+import ReviewCard from 'components/Store/StoreDetailPage/components/Review/components/ReviewCard/ReviewCard';
+import StarList from 'components/Store/StoreDetailPage/components/Review/components/StarList/StarList';
 import { useDropdown } from 'components/Store/StoreDetailPage/hooks/useDropdown';
+import { useGetMyReview } from 'components/Store/StoreDetailPage/hooks/useGetMyReview';
+import { useGetReview } from 'components/Store/StoreDetailPage/hooks/useGetReview';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { useUser } from 'utils/hooks/state/useUser';
 import styles from './ReviewList.module.scss';
 
 type SortType = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
 
 const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
-type OptionLabel = typeof option[number];
+type OptionLabel = (typeof option)[number];
 
 const sortType: Record<OptionLabel, SortType> = {
   최신순: 'LATEST',
@@ -40,9 +38,7 @@ export default function ReviewList({ id }: { id: string }) {
   const [currentSortType, setCurrentSortType] = useState<SortType>(sortType.최신순);
   const previousSortType = useDeferredValue(currentSortType);
   const currentSortLabel = typeToLabel[currentSortType];
-  const {
-    data, hasNextPage, fetchNextPage,
-  } = useGetReview(Number(id), previousSortType);
+  const { data, hasNextPage, fetchNextPage } = useGetReview(Number(id), previousSortType);
   const reviews = data.pages.flatMap((page) => page.reviews);
   const { data: myReview } = useGetMyReview(id, previousSortType);
   const [isCheckboxClicked, setIsCheckboxClicked] = useState<boolean>(false);
@@ -55,24 +51,24 @@ export default function ReviewList({ id }: { id: string }) {
   const checkUser = (): boolean => {
     if (!userInfo) {
       portalManager.open((portalOption: Portal) => (
-        <LoginRequiredModal
-          title={REVEIW_LOGIN[0]}
-          description={REVEIW_LOGIN[1]}
-          onClose={portalOption.close}
-        />
+        <LoginRequiredModal title={REVEIW_LOGIN[0]} description={REVEIW_LOGIN[1]} onClose={portalOption.close} />
       ));
     }
     return !userInfo;
   };
 
-  const getNextReview = useCallback((entries: IntersectionObserverEntry[]) => {
-    if (hasNextPage && entries[0].isIntersecting) {
-      fetchNextPage();
-    } // 다음 페이지가 있으면 패치
-  }, [hasNextPage, fetchNextPage]);
+  const getNextReview = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      if (hasNextPage && entries[0].isIntersecting) {
+        fetchNextPage();
+      } // 다음 페이지가 있으면 패치
+    },
+    [hasNextPage, fetchNextPage],
+  );
 
   const setStickyMode = useCallback((entries: IntersectionObserverEntry[]) => {
-    if (entries[0].boundingClientRect.top < 0) setIsSticky(true); // 옵저버가 지정한 top에 닿으면 조건부 렌더링
+    if (entries[0].boundingClientRect.top < 0)
+      setIsSticky(true); // 옵저버가 지정한 top에 닿으면 조건부 렌더링
     else setIsSticky(false);
   }, []);
 
@@ -105,105 +101,97 @@ export default function ReviewList({ id }: { id: string }) {
       aria-hidden
     >
       <div ref={startReview} />
-      {(reviews.length > 0 || isCheckboxClicked)
-        && (
-          <div className={styles.selector} ref={selectorRef} style={{ background: isSticky ? '#fafafa' : 'white' }}>
-            {
-              isSticky
-                ? (
-                  <div className={styles.point}>
-                    <StarList
-                      average_rating={Math.floor(data.pages[0].statistics.average_rating)}
-                    />
-                    {`${Math.floor(data.pages[0].statistics.average_rating).toFixed()}점`}
+      {(reviews.length > 0 || isCheckboxClicked) && (
+        <div className={styles.selector} ref={selectorRef} style={{ background: isSticky ? '#fafafa' : 'white' }}>
+          {isSticky ? (
+            <div className={styles.point}>
+              <StarList average_rating={Math.floor(data.pages[0].statistics.average_rating)} />
+              {`${Math.floor(data.pages[0].statistics.average_rating).toFixed()}점`}
+            </div>
+          ) : (
+            <button type="button" className={styles.dropdown}>
+              {currentSortLabel}{' '}
+              <div
+                style={{ transform: openDropdown === 'sort' ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }}
+              >
+                <ChervronUp />
+              </div>
+              <div className={styles.wrapper}>
+                {openDropdown === 'sort' && (
+                  <div className={styles.dropdown__list}>
+                    {option.map((select) => (
+                      <button
+                        type="button"
+                        key={select}
+                        onClick={() => {
+                          setCurrentSortType(sortType[select]);
+                        }}
+                        className={styles['dropdown__list--item']}
+                      >
+                        {select}
+                      </button>
+                    ))}
                   </div>
-                )
-                : (
-                  <button
-                    type="button"
-                    className={styles.dropdown}
-                  >
-                    {currentSortLabel}
-                    {' '}
-                    <div style={{ transform: openDropdown === 'sort' ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }}>
-                      <ChervronUp />
-                    </div>
-                    <div className={styles.wrapper}>
-                      {openDropdown === 'sort' && (
-                        <div className={styles.dropdown__list}>
-                          {option.map((select) => (
-                            <button
-                              type="button"
-                              key={select}
-                              onClick={() => {
-                                setCurrentSortType(sortType[select]);
-                              }}
-                              className={styles['dropdown__list--item']}
-                            >
-                              {select}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                )
-            }
-            <label
-              htmlFor="myReview"
-              className={styles.selector__label}
-            >
-              <input
-                type="checkbox"
-                id="myReview"
-                checked={isCheckboxClicked}
-                onChange={() => {
-                  if (checkUser()) setIsCheckboxClicked(false);
-                  else setIsCheckboxClicked((prev) => !prev);
-                }}
-              />
-              내가 작성한 리뷰
-            </label>
-          </div>
-        )}
-      {isCheckboxClicked && myReview && (
-        myReview.reviews.length > 0 ? (myReview.reviews.map((mine) => (
-          <ReviewCard
-            review_id={mine.review_id}
-            rating={mine.rating}
-            nick_name={mine.nick_name}
-            content={mine.content}
-            image_urls={mine.image_urls}
-            menu_names={mine.menu_names}
-            is_mine={mine.is_mine}
-            is_modified={mine.is_modified}
-            created_at={mine.created_at}
-            key={mine.review_id}
-            store_id={id}
-          />
-        ))) : (
+                )}
+              </div>
+            </button>
+          )}
+          <label htmlFor="myReview" className={styles.selector__label}>
+            <input
+              type="checkbox"
+              id="myReview"
+              checked={isCheckboxClicked}
+              onChange={() => {
+                if (checkUser()) setIsCheckboxClicked(false);
+                else setIsCheckboxClicked((prev) => !prev);
+              }}
+            />
+            내가 작성한 리뷰
+          </label>
+        </div>
+      )}
+      {isCheckboxClicked &&
+        myReview &&
+        (myReview.reviews.length > 0 ? (
+          myReview.reviews.map((mine) => (
+            <ReviewCard
+              review_id={mine.review_id}
+              rating={mine.rating}
+              nick_name={mine.nick_name}
+              content={mine.content}
+              image_urls={mine.image_urls}
+              menu_names={mine.menu_names}
+              is_mine={mine.is_mine}
+              is_modified={mine.is_modified}
+              created_at={mine.created_at}
+              key={mine.review_id}
+              store_id={id}
+            />
+          ))
+        ) : (
           <div className={styles['not-found']}>
             <NoReview />
           </div>
-        )
-      )}
-      {!isCheckboxClicked
-        && (reviews.length > 0 ? reviews.map((review) => (
-          <ReviewCard
-            key={review.review_id}
-            rating={review.rating}
-            nick_name={review.nick_name}
-            content={review.content}
-            image_urls={review.image_urls}
-            menu_names={review.menu_names}
-            is_mine={review.is_mine}
-            is_modified={review.is_modified}
-            created_at={review.created_at}
-            review_id={review.review_id}
-            is_reported={review.is_reported}
-            store_id={id}
-          />
-        )) : (
+        ))}
+      {!isCheckboxClicked &&
+        (reviews.length > 0 ? (
+          reviews.map((review) => (
+            <ReviewCard
+              key={review.review_id}
+              rating={review.rating}
+              nick_name={review.nick_name}
+              content={review.content}
+              image_urls={review.image_urls}
+              menu_names={review.menu_names}
+              is_mine={review.is_mine}
+              is_modified={review.is_modified}
+              created_at={review.created_at}
+              review_id={review.review_id}
+              is_reported={review.is_reported}
+              store_id={id}
+            />
+          ))
+        ) : (
           <div className={styles['not-found']}>
             <NoReview />
           </div>

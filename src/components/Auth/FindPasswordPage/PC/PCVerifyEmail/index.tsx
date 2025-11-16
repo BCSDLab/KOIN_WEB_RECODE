@@ -1,11 +1,9 @@
+import { useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
-import { useState } from 'react';
-import {
-  Controller, useFormContext, useWatch,
-} from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ContactType, MESSAGES } from 'static/auth';
 import useEmailVerification from 'utils/hooks/auth/useEmailVerification';
 import styles from './PCVerifyEmail.module.scss';
@@ -53,42 +51,39 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
   };
 
   const handleNext = () => {
-    checkIdExists({
-      login_id: loginId,
-    }, {
-      onSuccess: () => {
-        // 아이디가 존재할 경우, 아이디-이메일 일치 여부 확인
-        setContactType('EMAIL');
-        checkIdMatchEmail({
-          login_id: loginId,
-          email,
-        });
+    checkIdExists(
+      {
+        login_id: loginId,
       },
-      onError: (err) => {
-        if (isKoinError(err)) {
-          if (err.status === 404) {
-            setIdMessage({ type: 'warning', content: MESSAGES.EMAIL.NOT_REGISTERED });
-          } else if (err.status === 400) {
-            setIdMessage({ type: 'warning', content: MESSAGES.EMAIL.FORMAT });
+      {
+        onSuccess: () => {
+          // 아이디가 존재할 경우, 아이디-이메일 일치 여부 확인
+          setContactType('EMAIL');
+          checkIdMatchEmail({
+            login_id: loginId,
+            email,
+          });
+        },
+        onError: (err) => {
+          if (isKoinError(err)) {
+            if (err.status === 404) {
+              setIdMessage({ type: 'warning', content: MESSAGES.EMAIL.NOT_REGISTERED });
+            } else if (err.status === 400) {
+              setIdMessage({ type: 'warning', content: MESSAGES.EMAIL.FORMAT });
+            }
           }
-        }
+        },
       },
-    });
+    );
   };
 
   const isFormFilled = loginId && email && verificationCode && isCodeCorrect;
 
   return (
     <div className={styles.container}>
-
       <div className={styles.container__wrapper}>
         <div className={styles['container__title-wrapper']}>
-          <button
-            type="button"
-            onClick={onBack}
-            aria-label="뒤로가기"
-            className={styles['container__back-button']}
-          >
+          <button type="button" onClick={onBack} aria-label="뒤로가기" className={styles['container__back-button']}>
             <BackIcon />
           </button>
           <h1 className={styles.container__title}>비밀번호 찾기</h1>
@@ -98,7 +93,6 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
       <div className={`${styles.divider} ${styles['divider--top']}`} />
 
       <div className={styles['form-container']}>
-
         <div className={styles['input-wrapper']}>
           <Controller
             name="loginId"
@@ -150,11 +144,7 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
                   {emailMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
                       {' '}
-                      남은 횟수 (
-                      {emailSendCountData?.remaining_count}
-                      /
-                      {emailSendCountData?.total_count}
-                      )
+                      남은 횟수 ({emailSendCountData?.remaining_count}/{emailSendCountData?.total_count})
                     </div>
                   )}
                 </PCCustomInput>
@@ -212,7 +202,6 @@ function PCVerifyEmail({ onNext, onBack, setContactType }: FindPasswordProps) {
             )}
           />
         </div>
-
       </div>
 
       <div className={`${styles.divider} ${styles['divider--bottom']}`} />

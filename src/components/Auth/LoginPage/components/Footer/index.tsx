@@ -7,16 +7,11 @@ export default function Footer() {
   return (
     <>
       {isMobile && (
-      <a
-        className={styles.owner}
-        href="https://owner.koreatech.in/"
-      >
-        사장님이신가요?
-      </a>
+        <a className={styles.owner} href="https://owner.koreatech.in/">
+          사장님이신가요?
+        </a>
       )}
-      <span className={styles.copyright}>
-        Copyright @ BCSD Lab All rights reserved.
-      </span>
+      <span className={styles.copyright}>Copyright @ BCSD Lab All rights reserved.</span>
     </>
   );
 }

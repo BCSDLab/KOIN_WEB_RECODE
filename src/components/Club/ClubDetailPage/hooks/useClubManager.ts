@@ -1,8 +1,8 @@
+import { useRouter } from 'next/router';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { putNewClubManager } from 'api/club';
 import { NewClubManager } from 'api/club/entity';
-import { useRouter } from 'next/router';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
@@ -15,11 +15,8 @@ export default function useMandateClubManagerMutation(clubId: number | string | 
   }
   const token = useTokenState();
   const queryClient = useQueryClient();
-  const {
-    status: mandateClubManagerStatus,
-    mutateAsync: mandateClubManagerMutateAsync,
-  } = useMutation({
-    mutationFn: async (data:NewClubManager) => {
+  const { status: mandateClubManagerStatus, mutateAsync: mandateClubManagerMutateAsync } = useMutation({
+    mutationFn: async (data: NewClubManager) => {
       await putNewClubManager(token, data);
     },
     onSuccess: () => {
@@ -38,6 +35,7 @@ export default function useMandateClubManagerMutation(clubId: number | string | 
   });
 
   return {
-    mandateClubManagerStatus, mandateClubManagerMutateAsync,
+    mandateClubManagerStatus,
+    mandateClubManagerMutateAsync,
   };
 }

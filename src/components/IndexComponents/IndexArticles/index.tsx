@@ -1,11 +1,11 @@
-import Suspense from 'components/ssr/SSRSuspense';
+import Link from 'next/link';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'components/Articles/hooks/useArticles';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
-import ROUTES from 'static/routes';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
-import Link from 'next/link';
+import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
+import Suspense from 'components/ssr/SSRSuspense';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexArticles.module.scss';
 
 export default function IndexArticles() {
@@ -34,7 +34,9 @@ export default function IndexArticles() {
         <Link
           href={ROUTES.Articles()}
           className={styles.template__link}
-          onClick={() => logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_notice_detail', value: '공지사항' })}
+          onClick={() =>
+            logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_notice_detail', value: '공지사항' })
+          }
         >
           더보기
           <RightArrow aria-hidden />
@@ -45,16 +47,9 @@ export default function IndexArticles() {
         <ul className={styles.list}>
           {articles.slice(0, 7).map((article) => (
             <li key={article.id} className={styles.list__item}>
-              <Link
-                href={getLink(String(article.id), article.board_id)}
-                className={styles['list__item-link']}
-              >
-                <span className={styles['list__item-type']}>
-                  {convertArticlesTag(article.board_id)}
-                </span>
-                <span className={styles['list__item-title']}>
-                  {article.title}
-                </span>
+              <Link href={getLink(String(article.id), article.board_id)} className={styles['list__item-link']}>
+                <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
+                <span className={styles['list__item-title']}>{article.title}</span>
                 {setArticleRegisteredDate(article.registered_at) && (
                   <img
                     className={styles['list__item-tag']}
@@ -64,9 +59,7 @@ export default function IndexArticles() {
                   />
                 )}
               </Link>
-              <span className={styles['list__item-registered']}>
-                {article.registered_at.replaceAll('-', '.')}
-              </span>
+              <span className={styles['list__item-registered']}>{article.registered_at.replaceAll('-', '.')}</span>
             </li>
           ))}
         </ul>

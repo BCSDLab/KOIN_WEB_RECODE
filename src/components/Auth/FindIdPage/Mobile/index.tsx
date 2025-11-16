@@ -13,7 +13,6 @@ function FindIdLayout({ children }: { children: React.ReactNode }) {
       </AuthLayout>
     );
   }
-  // eslint-disable-next-line react/jsx-no-useless-fragment
   return <Layout>{children}</Layout>;
 }
 

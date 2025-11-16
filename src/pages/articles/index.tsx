@@ -1,10 +1,10 @@
-import Pagination from 'components/Articles/components/Pagination';
-import ArticlesHeader from 'components/Articles/components/ArticlesHeader';
-import ArticleList from 'components/Articles/components/ArticleList';
-import usePageParams from 'components/Articles/hooks/usePageParams';
-import useArticles from 'components/Articles/hooks/useArticles';
-import Suspense from 'components/ssr/SSRSuspense';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
+import ArticleList from 'components/Articles/components/ArticleList';
+import ArticlesHeader from 'components/Articles/components/ArticlesHeader';
+import Pagination from 'components/Articles/components/Pagination';
+import useArticles from 'components/Articles/hooks/useArticles';
+import usePageParams from 'components/Articles/hooks/usePageParams';
+import Suspense from 'components/ssr/SSRSuspense';
 
 function ArticleListPage() {
   const paramsPage = usePageParams();

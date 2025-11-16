@@ -15,19 +15,10 @@ function RoomDetailImg({ imgUrl }: RoomDetailImgProps) {
       <div className={styles['img-slider__img']}>
         <img src={imgUrl[imgIndex]} alt="방 사진" />
       </div>
-      <button
-        className={styles['img-slider__img-arrow']}
-        type="button"
-        onClick={() => clickRightArrow()}
-      >
-        <img
-          src="https://static.koreatech.in/assets/ic-room/right-arrow.png"
-          alt="이후 이미지 보기"
-        />
+      <button className={styles['img-slider__img-arrow']} type="button" onClick={() => clickRightArrow()}>
+        <img src="https://static.koreatech.in/assets/ic-room/right-arrow.png" alt="이후 이미지 보기" />
       </button>
-      <div className={styles['img-slider__index']}>
-        {`${imgIndex + 1} / ${imgUrl.length}`}
-      </div>
+      <div className={styles['img-slider__index']}>{`${imgIndex + 1} / ${imgUrl.length}`}</div>
     </div>
   );
 }

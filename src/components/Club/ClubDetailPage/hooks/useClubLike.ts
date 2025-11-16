@@ -1,7 +1,7 @@
+import { useRouter } from 'next/router';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteClubLike, putClubLike } from 'api/club';
-import { useRouter } from 'next/router';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
@@ -42,6 +42,9 @@ export default function useClubLikeMutation(clubId: number | string | undefined)
     },
   });
   return {
-    clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync,
+    clubLikeStatus,
+    clubUnlikeStatus,
+    clubLikeMutateAsync,
+    clubUnlikeMutateAsync,
   };
 }

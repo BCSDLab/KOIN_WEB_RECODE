@@ -9,7 +9,7 @@ import useRollbackTimetableFrame from './useRollbackTimetableFrame';
 import { TIMETABLE_FRAME_KEY } from './useTimetableFrameList';
 
 type DeleteTimetableFrameProps = {
-  id: number,
+  id: number;
 };
 
 export default function useDeleteTimetableFrame(token: string, frameInfo: TimetableFrameInfo) {
@@ -23,9 +23,7 @@ export default function useDeleteTimetableFrame(token: string, frameInfo: Timeta
     mutationFn: ({ id }: DeleteTimetableFrameProps) => timetable.deleteTimetableFrame(token, id),
 
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] },
-      );
+      queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] });
       toast.open({
         message: `선택하신 [${frameInfo.name}]이 삭제되었습니다.`,
         recoverMessage: `[${frameInfo.name}]이 복구되었습니다.`,

@@ -10,14 +10,10 @@ export default function useRollbackTimetableFrame(token: string) {
   const semester = useSemester();
 
   return useMutation({
-    mutationFn: (
-      timetableFrameId: number,
-    ) => timetable.rollbackTimetableFrame(token, timetableFrameId),
+    mutationFn: (timetableFrameId: number) => timetable.rollbackTimetableFrame(token, timetableFrameId),
 
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        { queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] },
-      );
+      queryClient.invalidateQueries({ queryKey: [TIMETABLE_FRAME_KEY + semester.year + semester.term] });
     },
 
     onError: (error) => {

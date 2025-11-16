@@ -1,12 +1,12 @@
-import ROUTES from 'static/routes';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useClubCategories from 'components/Club/hooks/useClubCategories';
-import MikeIcon from 'assets/svg/Club/mike-icon.svg';
+import { useRouter } from 'next/router';
+import BookIcon from 'assets/svg/Club/book-icon.svg';
 import ExerciseIcon from 'assets/svg/Club/exercise-icon.svg';
 import HobbyIcon from 'assets/svg/Club/hobby-icon.svg';
+import MikeIcon from 'assets/svg/Club/mike-icon.svg';
 import ReligionIcon from 'assets/svg/Club/religion-icon.svg';
-import BookIcon from 'assets/svg/Club/book-icon.svg';
-import { useRouter } from 'next/router';
+import useClubCategories from 'components/Club/hooks/useClubCategories';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import styles from './ClubMobileViewB.module.scss';
 
@@ -41,9 +41,7 @@ function ClubMobileViewB() {
           type="button"
           onClick={() => handleCategoryClick(category.name, category.id)}
         >
-          <div
-            className={styles['categories__button-icon']}
-          >
+          <div className={styles['categories__button-icon']}>
             {category.name === '공연' && <MikeIcon />}
             {category.name === '운동' && <ExerciseIcon />}
             {category.name === '종교' && <ReligionIcon />}

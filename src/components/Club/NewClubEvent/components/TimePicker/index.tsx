@@ -1,6 +1,4 @@
-import {
-  useState, useEffect, useRef, useMemo,
-} from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -15,9 +13,7 @@ interface TimePickerProps {
 
 const ITEM_HEIGHT = 36;
 
-export default function TimePicker({
-  onChange, onClose, hour, minute,
-}: TimePickerProps) {
+export default function TimePicker({ onChange, onClose, hour, minute }: TimePickerProps) {
   const [tempHour, setTempHour] = useState(hour);
   const [tempMinute, setTempMinute] = useState(minute);
 
@@ -25,10 +21,7 @@ export default function TimePicker({
   useEscapeKeyDown({ onEscape: onClose });
 
   const baseHours = useMemo(() => Array.from({ length: 24 }, (_, i) => i), []);
-  const baseMinutes = useMemo(
-    () => Array.from({ length: 60 }, (_, i) => i).filter((m) => m % 5 === 0),
-    [],
-  );
+  const baseMinutes = useMemo(() => Array.from({ length: 60 }, (_, i) => i).filter((m) => m % 5 === 0), []);
 
   // 더미 데이터 추가 (101~104)
   const hours = useMemo(() => [101, 102, ...baseHours, 103, 104], [baseHours]);
@@ -37,11 +30,7 @@ export default function TimePicker({
   const hourRef = useRef<HTMLUListElement>(null);
   const minuteRef = useRef<HTMLUListElement>(null);
 
-  const handleScroll = (
-    ref: React.RefObject<HTMLUListElement | null>,
-    setter: (v: number) => void,
-    list: number[],
-  ) => {
+  const handleScroll = (ref: React.RefObject<HTMLUListElement | null>, setter: (v: number) => void, list: number[]) => {
     if (!ref.current) return;
     const index = Math.round(ref.current.scrollTop / ITEM_HEIGHT) + 2;
     const clampedIndex = Math.max(0, Math.min(index, list.length - 1));
@@ -153,8 +142,21 @@ export default function TimePicker({
         </div>
 
         <div className={styles.buttons}>
-          <button type="button" className={cn({ [styles.buttons__button]: true, [styles['buttons__button--cancel']]: true })} onClick={onClose}>취소</button>
-          <button type="button" className={cn({ [styles.buttons__button]: true, [styles['buttons__button--confirm']]: true })} onClick={() => { onChange(tempHour, tempMinute); onClose(); }}>
+          <button
+            type="button"
+            className={cn({ [styles.buttons__button]: true, [styles['buttons__button--cancel']]: true })}
+            onClick={onClose}
+          >
+            취소
+          </button>
+          <button
+            type="button"
+            className={cn({ [styles.buttons__button]: true, [styles['buttons__button--confirm']]: true })}
+            onClick={() => {
+              onChange(tempHour, tempMinute);
+              onClose();
+            }}
+          >
             확인
           </button>
         </div>

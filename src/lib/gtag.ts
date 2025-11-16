@@ -63,12 +63,7 @@ export const event = ({
   }
 };
 
-export const startSession = ({
-  event_label,
-  value,
-  event_category,
-  custom_session_id,
-}: SessionEvent) => {
+export const startSession = ({ event_label, value, event_category, custom_session_id }: SessionEvent) => {
   if (typeof window === 'undefined' || typeof window.gtag === 'undefined') return;
 
   window.gtag('event', 'session_start', {

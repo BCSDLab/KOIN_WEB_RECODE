@@ -1,6 +1,6 @@
+import { useCallback, useEffect, useState } from 'react';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
-import { useCallback, useEffect, useState } from 'react';
 
 export const useCarouselController = (isMobile: boolean) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -8,13 +8,13 @@ export const useCarouselController = (isMobile: boolean) => {
       loop: true,
       slidesToScroll: isMobile ? 1 : 2,
     },
-    [Autoplay(
-      {
+    [
+      Autoplay({
         stopOnInteraction: false,
         stopOnMouseEnter: true,
         delay: 4000,
-      },
-    )],
+      }),
+    ],
   );
 
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -24,24 +24,29 @@ export const useCarouselController = (isMobile: boolean) => {
     }
   }, [emblaApi]);
 
-  const scrollTo = useCallback((direction: 'prev' | 'next') => {
-    if (emblaApi) {
-      if (direction === 'next') emblaApi.scrollNext();
-      if (direction === 'prev') emblaApi.scrollPrev();
-    }
-  }, [emblaApi]);
+  const scrollTo = useCallback(
+    (direction: 'prev' | 'next') => {
+      if (emblaApi) {
+        if (direction === 'next') emblaApi.scrollNext();
+        if (direction === 'prev') emblaApi.scrollPrev();
+      }
+    },
+    [emblaApi],
+  );
 
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.on('slidesInView', updateIndex);
 
-    // eslint-disable-next-line
-    return () => { // 클린업 함수 사용을 위해 off
+    return () => {
+      // 클린업 함수 사용을 위해 off
       emblaApi.off('slidesInView', updateIndex);
     };
   }, [emblaApi, updateIndex]);
 
   return {
-    emblaRef, currentIndex, scrollTo,
+    emblaRef,
+    currentIndex,
+    scrollTo,
   };
 };

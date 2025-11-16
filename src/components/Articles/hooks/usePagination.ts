@@ -21,9 +21,8 @@ type MoveType = string | 'prev' | 'next';
 const usePagination = () => {
   const { params, setParams } = useParamsHandler();
 
-  const calcIndexPage = (limit: number, totalPageNum: number, page: string) => (
-    String(limit + 1 + displayCorrectionNum(totalPageNum, Number(page)))
-  );
+  const calcIndexPage = (limit: number, totalPageNum: number, page: string) =>
+    String(limit + 1 + displayCorrectionNum(totalPageNum, Number(page)));
 
   const onClickMove = (move: MoveType, totalPageNum?: number) => () => {
     const currentPage = Number(params.page) || 1;
@@ -48,12 +47,15 @@ const usePagination = () => {
       targetPage = Number(move);
     }
 
-    setParams({
-      page: String(targetPage),
-    }, {
-      deleteBeforeParam: false,
-      replacePage: true,
-    });
+    setParams(
+      {
+        page: String(targetPage),
+      },
+      {
+        deleteBeforeParam: false,
+        replacePage: true,
+      },
+    );
   };
 
   return {

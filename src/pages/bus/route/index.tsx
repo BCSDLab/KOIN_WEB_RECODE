@@ -1,15 +1,15 @@
 import { Suspense, useState } from 'react';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import BusNotice from 'components/Bus/components/BusNotice';
-import DirectionSelect from 'components/Bus/BusRoutePage/components/DirectionSelect';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
 import BusGuide from 'components/Bus/BusRoutePage/components/BusGuide';
-import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
-import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
-import RouteList from 'components/Bus/BusRoutePage/components/RouteList';
 import BusSearchOptions from 'components/Bus/BusRoutePage/components/BusSearchOptions';
+import DirectionSelect from 'components/Bus/BusRoutePage/components/DirectionSelect';
+import RouteList from 'components/Bus/BusRoutePage/components/RouteList';
+import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
+import BusNotice from 'components/Bus/components/BusNotice';
+import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import styles from './BusRoutePage.module.scss';
 
 export default function BusRoutePage() {
@@ -47,11 +47,7 @@ export default function BusRoutePage() {
         {isLookingUp && (
           <div className={styles.results}>
             <div className={styles.options}>
-              <BusSearchOptions
-                busType={busType}
-                setBusType={setBusType}
-                timeSelect={timeSelect}
-              />
+              <BusSearchOptions busType={busType} setBusType={setBusType} timeSelect={timeSelect} />
             </div>
             <Suspense fallback={<div className={styles.fallback} />}>
               <div className={styles['route-list']}>

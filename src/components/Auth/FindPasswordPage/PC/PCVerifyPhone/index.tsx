@@ -1,11 +1,9 @@
+import { useState } from 'react';
 import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
 import BackIcon from 'assets/svg/arrow-back.svg';
 import PCCustomInput from 'components/Auth/SignupPage/components/PCCustomInput';
-import { useState } from 'react';
-import {
-  Controller, useFormContext, useWatch,
-} from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { ContactType, MESSAGES } from 'static/auth';
 import usePhoneVerification from 'utils/hooks/auth/usePhoneVerification';
 import styles from './PCVerifyPhone.module.scss';
@@ -17,9 +15,7 @@ interface FindPasswordProps {
   setContactType: (type: ContactType) => void;
 }
 
-function PCVerifyPhone({
-  onNext, onBack, goToEmailStep, setContactType,
-}: FindPasswordProps) {
+function PCVerifyPhone({ onNext, onBack, goToEmailStep, setContactType }: FindPasswordProps) {
   const { control, setValue } = useFormContext();
 
   const loginId = useWatch({ control, name: 'loginId' });
@@ -70,26 +66,29 @@ function PCVerifyPhone({
   };
 
   const handleNext = () => {
-    checkIdExists({
-      login_id: loginId,
-    }, {
-      onSuccess: () => {
-        setContactType('PHONE');
-        checkIdMatchPhone({
-          login_id: loginId,
-          phone_number: phoneNumber,
-        });
+    checkIdExists(
+      {
+        login_id: loginId,
       },
-      onError: (err) => {
-        if (isKoinError(err)) {
-          if (err.status === 404) {
-            setValue('idMessage', { type: 'warning', content: MESSAGES.ID.NOT_REGISTERED });
-          } else if (err.status === 400) {
-            setValue('idMessage', { type: 'warning', content: MESSAGES.ID.FORMAT });
+      {
+        onSuccess: () => {
+          setContactType('PHONE');
+          checkIdMatchPhone({
+            login_id: loginId,
+            phone_number: phoneNumber,
+          });
+        },
+        onError: (err) => {
+          if (isKoinError(err)) {
+            if (err.status === 404) {
+              setValue('idMessage', { type: 'warning', content: MESSAGES.ID.NOT_REGISTERED });
+            } else if (err.status === 400) {
+              setValue('idMessage', { type: 'warning', content: MESSAGES.ID.FORMAT });
+            }
           }
-        }
+        },
       },
-    });
+    );
   };
 
   const isFormFilled = loginId && phoneNumber && verificationCode && isCorrect;
@@ -98,12 +97,7 @@ function PCVerifyPhone({
     <div className={styles.container}>
       <div className={styles.container__wrapper}>
         <div className={styles['container__title-wrapper']}>
-          <button
-            type="button"
-            onClick={onBack}
-            aria-label="뒤로가기"
-            className={styles['container__back-button']}
-          >
+          <button type="button" onClick={onBack} aria-label="뒤로가기" className={styles['container__back-button']}>
             <BackIcon />
           </button>
           <h1 className={styles.container__title}>비밀번호 찾기</h1>
@@ -157,14 +151,10 @@ function PCVerifyPhone({
                     }}
                   >
                     {phoneMessage?.type === 'success' && smsSendCountData && (
-                    <div className={styles['label-count-number']}>
-                      {' '}
-                      남은 횟수 (
-                      {smsSendCountData?.remaining_count}
-                      /
-                      {smsSendCountData?.total_count }
-                      )
-                    </div>
+                      <div className={styles['label-count-number']}>
+                        {' '}
+                        남은 횟수 ({smsSendCountData?.remaining_count}/{smsSendCountData?.total_count})
+                      </div>
                     )}
                   </PCCustomInput>
                   <button
@@ -183,11 +173,7 @@ function PCVerifyPhone({
                 {!isVerificationSent && !isCorrect && (
                   <div className={styles['email-navigate']}>
                     <div className={styles['email-navigate__text']}>휴대전화 등록을 안 하셨나요?</div>
-                    <button
-                      type="button"
-                      className={styles['email-navigate__link']}
-                      onClick={goToEmailStep}
-                    >
+                    <button type="button" className={styles['email-navigate__link']} onClick={goToEmailStep}>
                       이메일로 찾기
                     </button>
                   </div>

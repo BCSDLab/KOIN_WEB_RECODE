@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import SeeInfoArrow from 'assets/svg/see-info-arrow.svg';
-import HiddenInfoArrow from 'assets/svg/hidden-info-arrow.svg';
 import { cn } from '@bcsdlab/utils';
 import { StoreEvent } from 'api/store/entity';
+import HiddenInfoArrow from 'assets/svg/hidden-info-arrow.svg';
+import SeeInfoArrow from 'assets/svg/see-info-arrow.svg';
 import EventContent from 'components/Store/StoreDetailPage/components/EventContent';
 import styles from './EventCard.module.scss';
 
@@ -63,20 +63,25 @@ export default function EventCard({ event }: { event: StoreEvent }) {
             className={styles['arrow-button']}
             type="button"
             aria-label="더보기 버튼"
-            onClick={() => { toggleHiddenInfo(hiddenInfo); }}
+            onClick={() => {
+              toggleHiddenInfo(hiddenInfo);
+            }}
           >
             전체보기
             {hiddenInfo ? <SeeInfoArrow /> : <HiddenInfoArrow />}
           </button>
         </div>
-        <div className={cn({
-          [styles['event-content']]: true,
-          [styles['event-content--nonHidden']]: hiddenInfo === false,
-        })}
+        <div
+          className={cn({
+            [styles['event-content']]: true,
+            [styles['event-content--nonHidden']]: hiddenInfo === false,
+          })}
         >
           <EventContent html={event.content} />
         </div>
-        <div className={styles.date}>{`${event.start_date.replace(/-/g, '.')} - ${event.end_date.replace(/-/g, '.')}`}</div>
+        <div
+          className={styles.date}
+        >{`${event.start_date.replace(/-/g, '.')} - ${event.end_date.replace(/-/g, '.')}`}</div>
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ const useAuth = () => {
   };
 
   const { mutateAsync: refreshAccessToken } = useMutation({
-    mutationFn: async (refresh_token : string) => {
+    mutationFn: async (refresh_token: string) => {
       const response = await refresh({ refresh_token });
       return response;
     },

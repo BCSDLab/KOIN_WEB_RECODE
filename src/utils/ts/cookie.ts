@@ -18,11 +18,7 @@ function resolveSecureFlag(explicit?: boolean): boolean {
   return false;
 }
 
-function buildCookieString(
-  name: string,
-  value: string,
-  options: CookieOptions = {},
-): string {
+function buildCookieString(name: string, value: string, options: CookieOptions = {}): string {
   const encName = encodeURIComponent(name);
   const encVal = encodeURIComponent(value);
   const parts: string[] = [`${encName}=${encVal}`];

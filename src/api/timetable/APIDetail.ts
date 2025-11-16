@@ -55,8 +55,7 @@ export class LectureList<R extends LecturesResponse> implements APIRequest<R> {
   }
 }
 
-export class TimetableLectureInfo
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+export class TimetableLectureInfo<R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/v3/timetables/lecture';
@@ -69,15 +68,17 @@ export class TimetableLectureInfo
     [index: string]: number;
   };
 
-  constructor(public authorization: string, timeTableFrameId: number) {
+  constructor(
+    public authorization: string,
+    timeTableFrameId: number,
+  ) {
     this.params = {
       timetable_frame_id: timeTableFrameId,
     };
   }
 }
 
-export class TimetableAllLectureInfo<
-R extends TimetableAllLectureResponse> implements APIRequest<R> {
+export class TimetableAllLectureInfo<R extends TimetableAllLectureResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path = '/v3/timetables/main/lectures';
@@ -86,11 +87,10 @@ R extends TimetableAllLectureResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(public authorization: string) { }
+  constructor(public authorization: string) {}
 }
 
-export class TimetableLectureRegularEdit
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+export class TimetableLectureRegularEdit<R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
   path = '/v3/timetables/lecture/regular';
@@ -99,11 +99,13 @@ export class TimetableLectureRegularEdit
 
   auth = true;
 
-  constructor(public data: TimetableLectureRegularEditRequest, public authorization: string) {}
+  constructor(
+    public data: TimetableLectureRegularEditRequest,
+    public authorization: string,
+  ) {}
 }
 
-export class TimetableLectureCustomEdit
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+export class TimetableLectureCustomEdit<R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
   path = '/v3/timetables/lecture/custom';
@@ -112,11 +114,13 @@ export class TimetableLectureCustomEdit
 
   auth = true;
 
-  constructor(public data: TimetableLectureCustomEditRequest, public authorization: string) {}
+  constructor(
+    public data: TimetableLectureCustomEditRequest,
+    public authorization: string,
+  ) {}
 }
 
-export class TimetableLectureRegularAddition
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+export class TimetableLectureRegularAddition<R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/v3/timetables/lecture/regular';
@@ -125,11 +129,13 @@ export class TimetableLectureRegularAddition
 
   auth = true;
 
-  constructor(public data: AddTimetableLectureRegularRequest, public authorization: string) {}
+  constructor(
+    public data: AddTimetableLectureRegularRequest,
+    public authorization: string,
+  ) {}
 }
 
-export class TimetableLectureCustomAddition
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+export class TimetableLectureCustomAddition<R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/v3/timetables/lecture/custom';
@@ -138,11 +144,13 @@ export class TimetableLectureCustomAddition
 
   auth = true;
 
-  constructor(public data: AddTimetableLectureCustomRequest, public authorization: string) {}
+  constructor(
+    public data: AddTimetableLectureCustomRequest,
+    public authorization: string,
+  ) {}
 }
 
-export class TimetableLectureRollback
-  <R extends TimetableLectureInfoResponse> implements APIRequest<R> {
+export class TimetableLectureRollback<R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;
@@ -151,13 +159,15 @@ export class TimetableLectureRollback
 
   auth = true;
 
-  constructor(public data: RollbackTimetableLectureRequest, public authorization: string) {
+  constructor(
+    public data: RollbackTimetableLectureRequest,
+    public authorization: string,
+  ) {
     this.path = `/v3/timetables/lecture/rollback?timetable_lectures_id=${data.timetable_lectures_id}`;
   }
 }
 
-export class TimetableLectureDeletion
-  <R extends DeleteTimetableLectureResponse> implements APIRequest<R> {
+export class TimetableLectureDeletion<R extends DeleteTimetableLectureResponse> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 
   path = '/v2/timetables/lecture/:id';
@@ -183,7 +193,10 @@ export class TimetableFrameList<R extends TimetableFrameListResponse> implements
 
   auth = true;
 
-  constructor(public authorization: string, semester: Semester) {
+  constructor(
+    public authorization: string,
+    semester: Semester,
+  ) {
     this.path = `/v3/timetables/frame?year=${semester.year}&term=${semester.term}`;
   }
 }
@@ -197,7 +210,10 @@ export class TimetableFrameAddition<R extends TimetableFrameListResponse> implem
 
   auth = true;
 
-  constructor(public data: AddTimetableFrameRequest, public authorization: string) {}
+  constructor(
+    public data: AddTimetableFrameRequest,
+    public authorization: string,
+  ) {}
 }
 
 export class TimetableFrameEdit<R extends TimetableFrameListResponse> implements APIRequest<R> {
@@ -231,15 +247,17 @@ export class DeleteTimetableFrame<R extends DeleteTimetableFrameResponse> implem
     [index: string]: number;
   };
 
-  constructor(public authorization: string, public id: number) {
+  constructor(
+    public authorization: string,
+    public id: number,
+  ) {
     this.params = {
       id,
     };
   }
 }
 
-export class RollbackTimetableFrame<R extends TimetableLectureInfoResponse>
-implements APIRequest<R> {
+export class RollbackTimetableFrame<R extends TimetableLectureInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;
@@ -248,7 +266,10 @@ implements APIRequest<R> {
 
   auth = true;
 
-  constructor(public authorization: string, timetableFrameId: number) {
+  constructor(
+    public authorization: string,
+    timetableFrameId: number,
+  ) {
     this.path = `/v3/timetables/frame/rollback?timetable_frame_id=${timetableFrameId}`;
   }
 }
@@ -262,7 +283,10 @@ export class DeleteSemester<R extends DeleteSemesterResponse> implements APIRequ
 
   auth = true;
 
-  constructor(public authorization: string, semester: Semester) {
+  constructor(
+    public authorization: string,
+    semester: Semester,
+  ) {
     this.path = `/v3/timetables/frames?year=${semester.year}&term=${semester.term}`;
   }
 }

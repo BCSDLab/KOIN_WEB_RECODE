@@ -7,7 +7,7 @@ const CLICK_EVENTS = [
   },
 ] as const;
 
-export type ClickEventLabel = typeof CLICK_EVENTS[number]['label'];
+export type ClickEventLabel = (typeof CLICK_EVENTS)[number]['label'];
 
 export const useChatLogger = () => {
   const logger = useLogger();

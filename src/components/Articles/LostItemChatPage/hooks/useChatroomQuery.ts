@@ -1,20 +1,7 @@
-import {
-  keepPreviousData,
-  skipToken,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import {
-  getLostItemChatroomDetail,
-  getLostItemChatroomDetailMessages,
-  getLostItemChatroomList,
-} from 'api/articles';
+import { keepPreviousData, skipToken, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { getLostItemChatroomDetail, getLostItemChatroomDetailMessages, getLostItemChatroomList } from 'api/articles';
 
-const useChatroomQuery = (
-  token: string,
-  articleId: number | string | null,
-  chatroomId: number | string | null,
-) => {
+const useChatroomQuery = (token: string, articleId: number | string | null, chatroomId: number | string | null) => {
   const { data: chatroomList } = useSuspenseQuery({
     queryKey: ['chatroom', 'lost-item'],
     queryFn: () => getLostItemChatroomList(token),
@@ -25,16 +12,18 @@ const useChatroomQuery = (
 
   const { data: chatroomDetail } = useQuery({
     queryKey: ['chatroom', 'lost-item', articleId, chatroomId],
-    queryFn: (articleId && chatroomId)
-      ? () => getLostItemChatroomDetail(token, Number(articleId), Number(defaultChatroomId))
-      : skipToken,
+    queryFn:
+      articleId && chatroomId
+        ? () => getLostItemChatroomDetail(token, Number(articleId), Number(defaultChatroomId))
+        : skipToken,
     placeholderData: keepPreviousData,
   });
   const { data: messages } = useQuery({
     queryKey: ['chatroom', 'lost-item', articleId, chatroomId, 'messages'],
-    queryFn: (articleId && chatroomId)
-      ? () => getLostItemChatroomDetailMessages(token, Number(articleId), Number(defaultChatroomId))
-      : skipToken,
+    queryFn:
+      articleId && chatroomId
+        ? () => getLostItemChatroomDetailMessages(token, Number(articleId), Number(defaultChatroomId))
+        : skipToken,
     placeholderData: keepPreviousData,
   });
 

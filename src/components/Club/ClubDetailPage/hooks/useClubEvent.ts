@@ -23,10 +23,7 @@ export function useClubEventList({ clubId, eventType }: ClubEventListProps) {
   return { clubEventList };
 }
 
-export function useClubEventDetail(
-  clubId: string | number | undefined,
-  eventId: string | number | undefined,
-) {
+export function useClubEventDetail(clubId: string | number | undefined, eventId: string | number | undefined) {
   const router = useRouter();
 
   if (!clubId) {

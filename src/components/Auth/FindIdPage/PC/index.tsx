@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 function PCFindIdLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -10,9 +10,7 @@ function PCFindIdLayout({ children }: { children: React.ReactNode }) {
     }
   }, [router]);
 
-  return (
-    { children }
-  );
+  return { children };
 }
 
 export default PCFindIdLayout;

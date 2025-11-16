@@ -1,22 +1,22 @@
-import Suspense from 'components/ssr/SSRSuspense';
-import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
-import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
+import { useRouter } from 'next/router';
 import ChatIcon from 'assets/svg/Articles/chat.svg';
+import GarbageCanIcon from 'assets/svg/Articles/garbage-can.svg';
+import ReportIcon from 'assets/svg/Articles/report.svg';
+import ArticlesPageLayout from 'components/Articles/ArticlesPage';
+import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import useSingleLostItemArticle from 'components/Articles/hooks/useSingleLostItemArticle';
 import DeleteModal from 'components/Articles/LostItemDetailPage/components/DeleteModal';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import ROUTES from 'static/routes';
-import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import DisplayImage from 'components/Articles/LostItemDetailPage/components/DisplayImage';
-import ReportIcon from 'assets/svg/Articles/report.svg';
 import ReportModal from 'components/Articles/LostItemDetailPage/components/ReportModal';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import usePostLostItemChatroom from 'components/Articles/LostItemDetailPage/hooks/usePostLostItemChatroom';
-import { useRouter } from 'next/router';
-import ArticlesPageLayout from 'components/Articles/ArticlesPage';
+import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
+import Suspense from 'components/ssr/SSRSuspense';
+import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './LostItemDetailPage.module.scss';
 
 function LostItemDetailPage({ id }: { id: string }) {
@@ -33,16 +33,7 @@ function LostItemDetailPage({ id }: { id: string }) {
   const { article } = useSingleLostItemArticle(token, Number(id));
   const articleId = Number(id);
 
-  const {
-    boardId,
-    category,
-    foundPlace,
-    foundDate,
-    content,
-    author,
-    images,
-    registeredAt,
-  } = article;
+  const { boardId, category, foundPlace, foundDate, content, author, images, registeredAt } = article;
 
   const { logFindUserDeleteClick, logItemPostReportClick } = useArticlesLogger();
 
@@ -103,29 +94,26 @@ function LostItemDetailPage({ id }: { id: string }) {
         </div>
       </div>
       <div className={styles.contents}>
-        <DisplayImage
-          images={images}
-        />
+        <DisplayImage images={images} />
         <div className={styles.contents__content}>{content}</div>
         {article?.author === '총학생회' && (
-        <div className={styles.contents__guide}>
-          <p>분실물 수령을 희망하시는 분은 재실 시간 내에</p>
-          <p>
-            <strong>학생회관 320호 총학생회 사무실</strong>
-            로 방문해 주시기 바랍니다.
-          </p>
-          <p>재실 시간은 공지 사항을 참고해 주시기 바랍니다.</p>
-        </div>
+          <div className={styles.contents__guide}>
+            <p>분실물 수령을 희망하시는 분은 재실 시간 내에</p>
+            <p>
+              <strong>학생회관 320호 총학생회 사무실</strong>로 방문해 주시기 바랍니다.
+            </p>
+            <p>재실 시간은 공지 사항을 참고해 주시기 바랍니다.</p>
+          </div>
         )}
         <div className={styles['button-container']}>
           {isMobile && (
-          <button
-            className={styles['button-container__list-button']}
-            onClick={() => navigate(ROUTES.Articles())}
-            type="button"
-          >
-            목록
-          </button>
+            <button
+              className={styles['button-container__list-button']}
+              onClick={() => navigate(ROUTES.Articles())}
+              type="button"
+            >
+              목록
+            </button>
           )}
           {article.is_mine ? (
             <button
@@ -139,36 +127,29 @@ function LostItemDetailPage({ id }: { id: string }) {
           ) : (
             <div className={styles['button-container__buttons']}>
               {article.author !== '탈퇴한 사용자' && (
-              <button
-                type="button"
-                className={styles['button-container__message-button']}
-                onClick={handleChatroomButtonClick}
-              >
-                <ChatIcon />
-                <div>쪽지 보내기</div>
-              </button>
+                <button
+                  type="button"
+                  className={styles['button-container__message-button']}
+                  onClick={handleChatroomButtonClick}
+                >
+                  <ChatIcon />
+                  <div>쪽지 보내기</div>
+                </button>
               )}
               {article.author !== '총학생회' && (
-              <button
-                className={styles['button-container__report-button']}
-                type="button"
-                onClick={handleReportClick}
-              >
-                <ReportIcon />
-                {!isMobile && '신고'}
-              </button>
+                <button className={styles['button-container__report-button']} type="button" onClick={handleReportClick}>
+                  <ReportIcon />
+                  {!isMobile && '신고'}
+                </button>
               )}
             </div>
           )}
 
-          {isReportModalOpen
-                && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
+          {isReportModalOpen && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
         </div>
       </div>
 
-      {isDeleteModalOpen && (
-        <DeleteModal articleId={articleId} closeDeleteModal={closeDeleteModal} />
-      )}
+      {isDeleteModalOpen && <DeleteModal articleId={articleId} closeDeleteModal={closeDeleteModal} />}
     </div>
   );
 }

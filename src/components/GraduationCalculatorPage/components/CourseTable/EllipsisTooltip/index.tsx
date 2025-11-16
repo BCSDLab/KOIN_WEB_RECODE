@@ -23,19 +23,10 @@ const extractText = (node: ReactNode): string => {
 };
 
 function EllipsisTooltip({ text, children }: EllipsisTooltipProps) {
-  const {
-    textRef,
-    isTooltipVisible,
-    handleMouseEnter,
-    handleMouseLeave,
-  } = useEllipsisTooltip(extractText(text));
+  const { textRef, isTooltipVisible, handleMouseEnter, handleMouseLeave } = useEllipsisTooltip(extractText(text));
 
   return (
-    <div
-      className={styles.ellipsisContainer}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div className={styles.ellipsisContainer} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div ref={textRef} className={styles.ellipsisText}>
         {children}
       </div>

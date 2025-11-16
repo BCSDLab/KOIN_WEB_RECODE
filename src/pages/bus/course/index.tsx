@@ -1,5 +1,5 @@
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import BusTimetable from 'components/Bus/BusCoursePage/components/BusTimetable';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './BusCoursePage.module.scss';
 
 export default function BusCoursePage() {
@@ -10,9 +10,7 @@ export default function BusCoursePage() {
       <div className={styles.container}>
         {isMobile ? (
           <header className={styles['mobile-guide']}>
-            <div className={styles['mobile-guide__title']}>
-              셔틀버스 시간표
-            </div>
+            <div className={styles['mobile-guide__title']}>셔틀버스 시간표</div>
           </header>
         ) : (
           <header className={styles.guide}>

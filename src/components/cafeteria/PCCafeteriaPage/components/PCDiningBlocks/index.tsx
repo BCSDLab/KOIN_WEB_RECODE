@@ -1,15 +1,14 @@
-/* eslint-disable no-param-reassign */
 import { useEffect, useRef } from 'react';
-import useLogger from 'utils/hooks/analytics/useLogger';
+import { Dining, DiningType } from 'api/dinings/entity';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import useDinings from 'components/cafeteria/hooks/useDinings';
 import DetailModal from 'components/cafeteria/PCCafeteriaPage/components/DetailModal';
 import PCMealImage from 'components/cafeteria/PCCafeteriaPage/components/PCMealImage';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import { Portal } from 'components/modal/Modal/PortalProvider';
 import { filterDinings } from 'components/cafeteria/utils/filter';
-import { Dining, DiningType } from 'api/dinings/entity';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import { DINING_TYPE_MAP } from 'static/cafeteria';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import styles from './PCDiningBlocks.module.scss';
 
 interface PCDiningBlocksProps {
@@ -34,9 +33,7 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
       value: `${DINING_TYPE_MAP[dining.type]}_${dining.place}`,
     });
 
-    portalManager.open((portalOption: Portal) => (
-      <DetailModal dining={dining} closeModal={portalOption.close} />
-    ));
+    portalManager.open((portalOption: Portal) => <DetailModal dining={dining} closeModal={portalOption.close} />);
   };
 
   useEffect(() => {
@@ -68,16 +65,16 @@ export default function PCDiningBlocks({ diningType, isThisWeek }: PCDiningBlock
               {!!dining.kcal && !!dining.price_card && !!dining.price_cash && '•'}
               {!!dining.price_card && !!dining.price_cash && `${dining.price_card}원/${dining.price_cash}원`}
             </div>
-            {dining.soldout_at && <span className={`${styles.header__chip} ${styles['header__chip--sold-out']}`}>품절</span>}
-            {!dining.soldout_at && dining.changed_at && <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>변경됨</span>}
+            {dining.soldout_at && (
+              <span className={`${styles.header__chip} ${styles['header__chip--sold-out']}`}>품절</span>
+            )}
+            {!dining.soldout_at && dining.changed_at && (
+              <span className={`${styles.header__chip} ${styles['header__chip--changed']}`}>변경됨</span>
+            )}
           </div>
 
           <div className={styles.content}>
-            <PCMealImage
-              dining={dining}
-              isThisWeek={isThisWeek}
-              handleImageClick={handleImageClick}
-            />
+            <PCMealImage dining={dining} isThisWeek={isThisWeek} handleImageClick={handleImageClick} />
             <div className={styles.content__menu}>
               {dining.menu.map((menuItem) => (
                 <div key={menuItem.id}>{menuItem.name}</div>

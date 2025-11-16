@@ -10,9 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Suspense fallback={null}>
         <Header />
       </Suspense>
-      <Suspense fallback={null}>
-        {children}
-      </Suspense>
+      <Suspense fallback={null}>{children}</Suspense>
       {!isNativeWebView && <Footer />}
     </div>
   );

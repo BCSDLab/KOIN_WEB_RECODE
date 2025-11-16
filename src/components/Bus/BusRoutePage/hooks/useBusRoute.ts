@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getBusRouteInfo } from 'api/bus';
 import { Arrival, BusRouteParams, Depart } from 'api/bus/entity';
-import { transformBusRoute } from 'components/Bus/BusRoutePage/utils/transform';
 import { BusRoute } from 'components/Bus/BusRoutePage/ts/types';
+import { transformBusRoute } from 'components/Bus/BusRoutePage/utils/transform';
 
 const BUS_ROUTE_KEY = 'bus-route';
 

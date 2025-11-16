@@ -1,12 +1,12 @@
 import { cn } from '@bcsdlab/utils';
-import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import usePagination from 'components/Articles/hooks/usePagination';
+import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import styles from './Pagination.module.scss';
 
 const LIMIT_COUNT = [0, 1, 2, 3, 4];
 
 interface PaginationProps {
-  totalPageNum: number
+  totalPageNum: number;
 }
 
 export default function Pagination({ totalPageNum }: PaginationProps) {
@@ -27,25 +27,24 @@ export default function Pagination({ totalPageNum }: PaginationProps) {
       >
         이전으로
       </button>
-      {
-        LIMIT_COUNT.length - 1 < totalPageNum ? (
-          LIMIT_COUNT.map((limit) => (
+      {LIMIT_COUNT.length - 1 < totalPageNum
+        ? LIMIT_COUNT.map((limit) => (
             <span key={limit}>
               <button
                 type="button"
                 aria-label="페이지 이동"
                 className={cn({
                   [styles.pagination__number]: true,
-                  [styles['pagination__number--selected']]: (!params.page && limit === 0) || params.page === calcIndexPage(limit, totalPageNum, params.page),
+                  [styles['pagination__number--selected']]:
+                    (!params.page && limit === 0) || params.page === calcIndexPage(limit, totalPageNum, params.page),
                 })}
                 onClick={onClickMove(calcIndexPage(limit, totalPageNum, params.page ?? '1'))}
               >
-                { calcIndexPage(limit, totalPageNum, params.page ?? '1')}
+                {calcIndexPage(limit, totalPageNum, params.page ?? '1')}
               </button>
             </span>
           ))
-        ) : (
-          totalPage.map((limit) => (
+        : totalPage.map((limit) => (
             <span key={limit + 1}>
               <button
                 type="button"
@@ -56,12 +55,10 @@ export default function Pagination({ totalPageNum }: PaginationProps) {
                 })}
                 onClick={onClickMove(String(limit + 1), totalPageNum)}
               >
-                { limit + 1 }
+                {limit + 1}
               </button>
             </span>
-          ))
-        )
-      }
+          ))}
       <button
         type="button"
         aria-label="다음 페이지로"

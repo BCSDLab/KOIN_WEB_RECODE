@@ -1,14 +1,14 @@
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { ClubEvent } from 'api/club/entity';
 import SmallBellIcon from 'assets/svg/Club/small_bell-icon.svg';
+import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
+import useClubNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import ClubNotificationModal from 'components/Club/ClubDetailPage/components/ClubNotificationModal';
-import useClubNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import styles from './ClubEventCard.module.scss';
 
 interface ClubEventCardProps {
@@ -151,9 +151,7 @@ export default function ClubEventCard({ event, setEventId, clubId, clubName }: C
               </>
             )}
           </div>
-          <div>
-            행사 소개 : {event.introduce}
-          </div>
+          <div>행사 소개 : {event.introduce}</div>
         </div>
       </div>
       {isRecruitNotifyModalOpen && (

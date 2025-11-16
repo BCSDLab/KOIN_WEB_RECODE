@@ -1,20 +1,20 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { ClubEventRequest } from 'api/club/entity';
+import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
 import { useClubEventDetail } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
-import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
+import usePutClubEvent from 'components/Club/ClubEventEditPage/hooks/usePutClubEvent';
+import ImagesUploadSlider from 'components/Club/NewClubEvent/components/ImagesUploadSlider';
+import TimePicker from 'components/Club/NewClubEvent/components/TimePicker';
+import TimeSelector from 'components/Club/NewClubEvent/components/TimeSelector';
+import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
+import DatePickerModal from 'components/Club/NewClubRecruitment/components/DatePickerModal';
+import DetailDescription from 'components/Club/NewClubRecruitment/components/DetailDescription';
+import DatePicker from 'components/ui/DatePicker';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import DetailDescription from 'components/Club/NewClubRecruitment/components/DetailDescription';
-import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
-import DatePickerModal from 'components/Club/NewClubRecruitment/components/DatePickerModal';
-import ImagesUploadSlider from 'components/Club/NewClubEvent/components/ImagesUploadSlider';
-import TimeSelector from 'components/Club/NewClubEvent/components/TimeSelector';
-import TimePicker from 'components/Club/NewClubEvent/components/TimePicker';
-import DatePicker from 'components/ui/DatePicker';
-import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
-import usePutClubEvent from 'components/Club/ClubEventEditPage/hooks/usePutClubEvent';
-import { useRouter } from 'next/router';
+import { formatISODateTime, formatKoreanDate } from 'utils/ts/calendar';
 import styles from './ClubEventEditPage.module.scss';
 
 function splitKoreanDate(date: Date): [string, string] {
@@ -22,7 +22,7 @@ function splitKoreanDate(date: Date): [string, string] {
   return [year, rest.join(' ')];
 }
 
-function ClubEventEditPage({ id, eventId }: { id: string, eventId: string }) {
+function ClubEventEditPage({ id, eventId }: { id: string; eventId: string }) {
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const { clubDetail } = useClubDetail(Number(id));
@@ -100,32 +100,24 @@ function ClubEventEditPage({ id, eventId }: { id: string, eventId: string }) {
     <div className={styles.layout}>
       <div className={styles.container}>
         {!isMobile && (
-        <div className={styles.header}>
-          <h1 className={styles.header__title}>행사 수정</h1>
-          <div className={styles['header__button-container']}>
-            <button
-              type="button"
-              className={styles.header__button}
-              onClick={handleClickCancelButton}
-            >
-              수정 취소
-            </button>
-            <button
-              type="button"
-              className={styles.header__button}
-              onClick={handleClickEditButton}
-            >
-              수정 완료
-            </button>
+          <div className={styles.header}>
+            <h1 className={styles.header__title}>행사 수정</h1>
+            <div className={styles['header__button-container']}>
+              <button type="button" className={styles.header__button} onClick={handleClickCancelButton}>
+                수정 취소
+              </button>
+              <button type="button" className={styles.header__button} onClick={handleClickEditButton}>
+                수정 완료
+              </button>
+            </div>
           </div>
-        </div>
         )}
         <div className={styles.content}>
           {isMobile && (
-          <ImagesUploadSlider
-            imageUrls={formData.image_urls}
-            addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
-          />
+            <ImagesUploadSlider
+              imageUrls={formData.image_urls}
+              addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
+            />
           )}
           <div className={styles['form-left']}>
             <div className={styles.form__item}>
@@ -145,23 +137,13 @@ function ClubEventEditPage({ id, eventId }: { id: string, eventId: string }) {
                 {isMobile ? (
                   <>
                     <div className={styles['picker-container']}>
-                      <button
-                        type="button"
-                        onClick={openStartCalendar}
-                        className={styles['date-picker-button']}
-                      >
+                      <button type="button" onClick={openStartCalendar} className={styles['date-picker-button']}>
                         <div>{startYear}</div>
                         <div>{startRest}</div>
                       </button>
-                      <button
-                        type="button"
-                        className={styles['time-picker-button']}
-                        onClick={openStartTimePicker}
-                      >
+                      <button type="button" className={styles['time-picker-button']} onClick={openStartTimePicker}>
                         <div>
-                          {startTime.hour.toString().padStart(2, '0')}
-                          :
-                          {startTime.minute.toString().padStart(2, '0')}
+                          {startTime.hour.toString().padStart(2, '0')}:{startTime.minute.toString().padStart(2, '0')}
                         </div>
                       </button>
                     </div>
@@ -171,15 +153,9 @@ function ClubEventEditPage({ id, eventId }: { id: string, eventId: string }) {
                         <div>{endYear}</div>
                         <div>{endRest}</div>
                       </button>
-                      <button
-                        type="button"
-                        className={styles['time-picker-button']}
-                        onClick={openEndTimePicker}
-                      >
+                      <button type="button" className={styles['time-picker-button']} onClick={openEndTimePicker}>
                         <div>
-                          {endTime.hour.toString().padStart(2, '0')}
-                          :
-                          {endTime.minute.toString().padStart(2, '0')}
+                          {endTime.hour.toString().padStart(2, '0')}:{endTime.minute.toString().padStart(2, '0')}
                         </div>
                       </button>
                     </div>
@@ -187,10 +163,7 @@ function ClubEventEditPage({ id, eventId }: { id: string, eventId: string }) {
                 ) : (
                   <>
                     <div className={styles['picker-container']}>
-                      <DatePicker
-                        selectedDate={startDate}
-                        onChange={setStartDate}
-                      />
+                      <DatePicker selectedDate={startDate} onChange={setStartDate} />
                       <TimeSelector
                         hour={startTime.hour}
                         minute={startTime.minute}
@@ -199,15 +172,8 @@ function ClubEventEditPage({ id, eventId }: { id: string, eventId: string }) {
                     </div>
                     <div className={styles.form__separator}>~</div>
                     <div className={styles['picker-container']}>
-                      <DatePicker
-                        selectedDate={endDate}
-                        onChange={setEndDate}
-                      />
-                      <TimeSelector
-                        hour={endTime.hour}
-                        minute={endTime.minute}
-                        onChange={(time) => setEndTime(time)}
-                      />
+                      <DatePicker selectedDate={endDate} onChange={setEndDate} />
+                      <TimeSelector hour={endTime.hour} minute={endTime.minute} onChange={(time) => setEndTime(time)} />
                     </div>
                   </>
                 )}
@@ -231,10 +197,10 @@ function ClubEventEditPage({ id, eventId }: { id: string, eventId: string }) {
             )}
           </div>
           {!isMobile && (
-          <ImagesUploadSlider
-            imageUrls={formData.image_urls}
-            addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
-          />
+            <ImagesUploadSlider
+              imageUrls={formData.image_urls}
+              addImageUrls={(newImages) => setFormData({ ...formData, image_urls: newImages })}
+            />
           )}
 
           {isMobile && (
@@ -265,27 +231,12 @@ function ClubEventEditPage({ id, eventId }: { id: string, eventId: string }) {
       </div>
 
       {isModalOpen && (
-        <ConfirmModal
-          type={modalType}
-          closeModal={closeModal}
-          onSubmit={handleSubmit}
-          onCancel={cancelEventEdit}
-        />
+        <ConfirmModal type={modalType} closeModal={closeModal} onSubmit={handleSubmit} onCancel={cancelEventEdit} />
       )}
       {isStartCalendarOpen && (
-        <DatePickerModal
-          selectedDate={startDate}
-          onChange={setStartDate}
-          onClose={closeStartCalendar}
-        />
+        <DatePickerModal selectedDate={startDate} onChange={setStartDate} onClose={closeStartCalendar} />
       )}
-      {isEndCalendarOpen && (
-        <DatePickerModal
-          selectedDate={endDate}
-          onChange={setEndDate}
-          onClose={closeEndCalendar}
-        />
-      )}
+      {isEndCalendarOpen && <DatePickerModal selectedDate={endDate} onChange={setEndDate} onClose={closeEndCalendar} />}
       {isStartTimePickerOpen && (
         <TimePicker
           hour={startTime.hour}

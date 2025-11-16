@@ -1,6 +1,4 @@
-import {
-  createContext, useState, useMemo, Dispatch, SetStateAction, useContext,
-} from 'react';
+import { createContext, useState, useMemo, Dispatch, SetStateAction, useContext } from 'react';
 
 interface FormValidation {
   isPasswordValid?: boolean;
@@ -19,8 +17,7 @@ interface ModifyFormValidationContextType {
   setIsValid: Dispatch<SetStateAction<FormValidation>>;
 }
 
-export const ModifyFormValidationContext = createContext<
-ModifyFormValidationContextType | null>(null);
+export const ModifyFormValidationContext = createContext<ModifyFormValidationContextType | null>(null);
 
 export function ModifyFormValidationProvider({ children }: { children: React.ReactNode }) {
   const [isValid, setIsValid] = useState<FormValidation>({
@@ -34,11 +31,7 @@ export function ModifyFormValidationProvider({ children }: { children: React.Rea
 
   const value = useMemo(() => ({ isValid, setIsValid }), [isValid, setIsValid]);
 
-  return (
-    <ModifyFormValidationContext.Provider value={value}>
-      {children}
-    </ModifyFormValidationContext.Provider>
-  );
+  return <ModifyFormValidationContext.Provider value={value}>{children}</ModifyFormValidationContext.Provider>;
 }
 
 export const useValidationContext = (isStudent?: boolean) => {
@@ -52,21 +45,18 @@ export const useValidationContext = (isStudent?: boolean) => {
 
   const anyAccountChange = !!isValid.isPasswordValid || !!isValid.isEmailValid || !!isValid.isNicknameValid;
 
-    const isStudentFormValid =
-      (isValid.isPhoneValid &&
-        isValid.isStudentIdValid &&
-        isValid.isStudentMajorValid &&
-        isValid.isGenderValid &&
-        isValid.isNameValid &&
-        isValid.isFieldChanged) ||
-      anyAccountChange;
+  const isStudentFormValid =
+    (isValid.isPhoneValid &&
+      isValid.isStudentIdValid &&
+      isValid.isStudentMajorValid &&
+      isValid.isGenderValid &&
+      isValid.isNameValid &&
+      isValid.isFieldChanged) ||
+    anyAccountChange;
 
-    const isGeneralFormValid =
-      (isValid.isPhoneValid &&
-        isValid.isGenderValid &&
-        isValid.isNameValid &&
-        isValid.isFieldChanged) ||
-      anyAccountChange;
+  const isGeneralFormValid =
+    (isValid.isPhoneValid && isValid.isGenderValid && isValid.isNameValid && isValid.isFieldChanged) ||
+    anyAccountChange;
 
   const isFormValid = isStudent ? isStudentFormValid : isGeneralFormValid;
 

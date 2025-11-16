@@ -1,16 +1,14 @@
-import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
 import { useRouter } from 'next/router';
-import ReviewForm from 'components/Store/StoreReviewPage/ReviewForm/ReviewForm';
+import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
 import { useEditStoreReview } from 'components/Store/StoreReviewPage/hooks/useEditStoreReview';
 import { useGetStoreReview } from 'components/Store/StoreReviewPage/hooks/useGetStoreReview';
+import ReviewForm from 'components/Store/StoreReviewPage/ReviewForm/ReviewForm';
 
 function EditReviewComponent({ id, reviewId }: { id: string; reviewId: string }) {
   const { storeDetail } = useStoreDetail(id);
   const { mutate } = useEditStoreReview(String(storeDetail.id), reviewId);
   const initialData = useGetStoreReview(id, reviewId);
-  return (
-    <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={initialData} />
-  );
+  return <ReviewForm storeDetail={storeDetail} mutate={mutate} initialData={initialData} />;
 }
 
 function EditReviewPage() {

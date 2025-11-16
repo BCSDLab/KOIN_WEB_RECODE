@@ -3,9 +3,9 @@ import useNaverMap from 'components/Room/RoomPage/hooks/useNaverMap';
 import styles from './RoomDetailMap.module.scss';
 
 interface RoomDetailMapProps {
-  latitude: number
-  longitude: number
-  address: string
+  latitude: number;
+  longitude: number;
+  address: string;
 }
 
 function RoomDetailMap({ latitude, longitude, address }: RoomDetailMapProps) {

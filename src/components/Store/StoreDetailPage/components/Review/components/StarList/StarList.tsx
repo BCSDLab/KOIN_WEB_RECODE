@@ -11,10 +11,5 @@ export default function StarList({ average_rating }: Props) {
 
   const rating = [...starList, ...emptyStarList];
 
-  return (
-    <div>
-      {/* eslint-disable-next-line */}
-      {rating.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}
-    </div>
-  );
+  return <div>{rating.map((ratio, idx) => (ratio ? <Star key={idx} /> : <EmptyStar key={idx} />))}</div>;
 }

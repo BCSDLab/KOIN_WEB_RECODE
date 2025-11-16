@@ -1,12 +1,12 @@
 import { cn } from '@bcsdlab/utils';
-import NoPhoto from 'assets/svg/no-photography-mobile.svg';
-import NoMeals from 'assets/svg/no-meals-mobile.svg';
 import { Dining } from 'api/dinings/entity';
+import NoMeals from 'assets/svg/no-meals-mobile.svg';
+import NoPhoto from 'assets/svg/no-photography-mobile.svg';
 import styles from './MobileMealImage.module.scss';
 
 interface MobileMealImageProps {
-  dining: Dining,
-  handleImageClick: (dining: Dining) => void,
+  dining: Dining;
+  handleImageClick: (dining: Dining) => void;
 }
 
 export default function MobileMealImage({ dining, handleImageClick }: MobileMealImageProps) {
@@ -31,9 +31,7 @@ export default function MobileMealImage({ dining, handleImageClick }: MobileMeal
           품절된 메뉴입니다.
         </span>
       )}
-      {hasImage
-        ? <img src={dining.image_url!} alt="식단 사진" />
-        : <NoPhoto />}
+      {hasImage ? <img src={dining.image_url!} alt="식단 사진" /> : <NoPhoto />}
     </button>
   );
 }

@@ -1,7 +1,7 @@
+import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getRecruitmentClub } from 'api/club';
-import { useRouter } from 'next/router';
 
 export default function useClubRecruitment(clubId: number | string | undefined) {
   const router = useRouter();

@@ -9,19 +9,17 @@ export default function useEditTimetableLectureCustom() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ timetableFrameId, editedLecture, token }: {
+    mutationFn: ({
+      timetableFrameId,
+      editedLecture,
+      token,
+    }: {
       timetableFrameId: number;
       editedLecture: TimetableCustomLecture;
-      token: string
-    }) => editTimetableLectureCustom(
-      { timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture },
-      token,
-    ),
+      token: string;
+    }) => editTimetableLectureCustom({ timetable_frame_id: timetableFrameId, timetable_lecture: editedLecture }, token),
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        [TIMETABLE_INFO_LIST, variables.timetableFrameId],
-        data,
-      );
+      queryClient.setQueryData([TIMETABLE_INFO_LIST, variables.timetableFrameId], data);
       showToast('success', '강의 수정이 되었습니다.');
     },
     onError: (error) => {

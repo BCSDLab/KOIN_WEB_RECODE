@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from 'react';
+import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 import { useUser } from 'utils/hooks/state/useUser';
+import { useLocalStorage, useSessionStorage } from 'utils/hooks/state/useWebStorage';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
-import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
-import { useLocalStorage, useSessionStorage } from 'utils/hooks/state/useWebStorage';
 
 type Completion = (typeof COMPLETION_STATUS)[keyof typeof COMPLETION_STATUS];
 
@@ -11,15 +11,9 @@ export default function useUserInfoModal() {
   const { token } = useTokenStore();
   const { data: userInfo } = useUser();
 
-  const [completion, setCompletion] = useLocalStorage<Completion | null>(
-    STORAGE_KEY.USER_INFO_COMPLETION,
-    null,
-  );
+  const [completion, setCompletion] = useLocalStorage<Completion | null>(STORAGE_KEY.USER_INFO_COMPLETION, null);
 
-  const [sessionShown, setSessionShown] = useSessionStorage<boolean>(
-    STORAGE_KEY.MODAL_SESSION_SHOWN,
-    false,
-  );
+  const [sessionShown, setSessionShown] = useSessionStorage<boolean>(STORAGE_KEY.MODAL_SESSION_SHOWN, false);
 
   const isStudent = isStudentUser(userInfo);
 
@@ -39,12 +33,7 @@ export default function useUserInfoModal() {
     });
   }, [isStudent, userInfo]);
 
-  const canOpen =
-    !!token &&
-    isStudent &&
-    completion !== COMPLETION_STATUS.COMPLETED &&
-    isInfoMissing &&
-    !sessionShown;
+  const canOpen = !!token && isStudent && completion !== COMPLETION_STATUS.COMPLETED && isInfoMissing && !sessionShown;
 
   const isFirstTime = completion !== COMPLETION_STATUS.SKIPPED;
   const isModalOpen = canOpen;

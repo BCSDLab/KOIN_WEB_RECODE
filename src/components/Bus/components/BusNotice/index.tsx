@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useRouter } from 'next/router';
 import InformationIcon from 'assets/svg/Bus/info.svg';
 import CloseIcon from 'assets/svg/common/close/close-icon-32x32.svg';
 import useBusNotice from 'components/Bus/hooks/useBusNotice';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import { useRouter } from 'next/router';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useLocalStorage } from 'utils/hooks/state/useLocalStorage';
 import styles from './BusNotice.module.scss';
 
@@ -77,19 +77,11 @@ export default function BusNotice({ loggingLocation }: BusNoticeProps) {
     <div className={styles.container}>
       {showNotice && (
         <div className={styles.notice}>
-          {!isMobile && (<InformationIcon />)}
-          <button
-            className={styles.notice__description}
-            type="button"
-            onClick={handleClickNavigateNotice}
-          >
+          {!isMobile && <InformationIcon />}
+          <button className={styles.notice__description} type="button" onClick={handleClickNavigateNotice}>
             {title}
           </button>
-          <button
-            type="button"
-            onClick={handleClickDismissNotice}
-            aria-label="공지 닫기"
-          >
+          <button type="button" onClick={handleClickDismissNotice} aria-label="공지 닫기">
             <CloseIcon aria-hidden="true" />
           </button>
         </div>

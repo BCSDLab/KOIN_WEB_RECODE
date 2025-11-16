@@ -1,23 +1,17 @@
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import {
-  checkPhone,
-  idExists,
-  idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify,
-} from 'api/auth';
-import { MESSAGES } from 'static/auth';
-import { useState } from 'react';
-import {
-  type InputMessage,
-} from 'components/Auth/SignupPage/components/CustomInput';
-import ROUTES from 'static/routes';
+import { checkPhone, idExists, idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify } from 'api/auth';
+import { SmsSendResponse } from 'api/auth/entity';
+import { type InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
 import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
+import { useFormContext } from 'react-hook-form';
+import { MESSAGES } from 'static/auth';
+import ROUTES from 'static/routes';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
-import { useFormContext } from 'react-hook-form';
-import { SmsSendResponse } from 'api/auth/entity';
-import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
-import { useRouter } from 'next/router';
 
 interface UsePhoneVerificationProps {
   phoneNumber: string;
@@ -72,10 +66,7 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
     setVerificationMessage(null);
   };
 
-  const {
-    mutate: sendVerificationSms,
-    isPending: isSendingVerification,
-  } = useMutation({
+  const { mutate: sendVerificationSms, isPending: isSendingVerification } = useMutation({
     mutationFn: smsSend,
     onSuccess: ({ total_count, remaining_count, current_count }) => {
       setPhoneMessage({ type: 'success', content: MESSAGES.PHONE.CODE_SENT });
@@ -199,7 +190,11 @@ function usePhoneVerification({ phoneNumber, onNext, step }: UsePhoneVerificatio
 
         if (err.status === 409) {
           setPhoneMessage({ type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
-          setValue('phoneMessage', { type: 'error', content: MESSAGES.PHONE.ALREADY_REGISTERED, code: 'ALREADY_REGISTERED' });
+          setValue('phoneMessage', {
+            type: 'error',
+            content: MESSAGES.PHONE.ALREADY_REGISTERED,
+            code: 'ALREADY_REGISTERED',
+          });
         }
       }
     },

@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import CheckBox from 'components/Store/StoreDetailPage/components/Review/components/CheckBox';
-import { toast } from 'react-toastify';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
-import ROUTES from 'static/routes';
 import ReportingLabel from 'components/Store/StoreDetailPage/components/Review/components/ReportingLabel';
 import useReviewReport from 'components/Store/StoreDetailPage/components/Review/components/ReviewReporting/query/useReviewReport';
-import { useRouter } from 'next/router';
+import useStoreDetail from 'components/Store/StoreDetailPage/hooks/useStoreDetail';
+import { toast } from 'react-toastify';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ReviewReporting.module.scss';
 
 interface RequestOption {
@@ -38,7 +38,7 @@ const REVIEW_CONTEXT = {
   },
 };
 
-function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: string }) {
+function ReviewReportingPage({ shopid, reviewid }: { shopid: string; reviewid: string }) {
   const router = useRouter();
   const logger = useLogger();
 
@@ -59,9 +59,7 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: s
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setSelectOptions((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
-    );
+    setSelectOptions((prev) => (prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]));
   };
 
   const loggingReportDone = () => {
@@ -96,26 +94,21 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string, reviewid: s
       <div>
         <div className={styles['reporting-title']}>신고 이유를 선택해주세요.</div>
         <div className={styles['reporting-subtitle-box']}>
-          <p className={styles['reporting-subtitle']}>
-            접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.
-          </p>
-          <p className={styles['reporting-subtitle']}>
-            블라인드 처리까지 시간이 소요될 수 있습니다.
-          </p>
+          <p className={styles['reporting-subtitle']}>접수된 신고는 관계자 확인 하에 블라인드 처리됩니다.</p>
+          <p className={styles['reporting-subtitle']}>블라인드 처리까지 시간이 소요될 수 있습니다.</p>
         </div>
       </div>
       <div className={styles['option-container']}>
         {Object.keys(REVIEW_CONTEXT).map((key) => (
           <div key={key} className={key === 'etc' ? styles['reporting-option--etc'] : styles['reporting-option']}>
-            <CheckBox
-              value={key}
-              name="reason"
-              checked={selectOptions.includes(key)}
-              onChange={handleChange}
-            >
+            <CheckBox value={key} name="reason" checked={selectOptions.includes(key)} onChange={handleChange}>
               <ReportingLabel
                 title={REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].title}
-                description={key === 'etc' ? `${etcDescription.length}/150 자` : REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].content}
+                description={
+                  key === 'etc'
+                    ? `${etcDescription.length}/150 자`
+                    : REVIEW_CONTEXT[key as keyof typeof REVIEW_CONTEXT].content
+                }
                 disable={etcDescription.length === 150}
               />
             </CheckBox>

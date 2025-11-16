@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
-import showToast from 'utils/ts/showToast';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { uploadClubFile, uploadLostItemFile, uploadShopFile } from 'api/uploadFile';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 
 // 정의할 수 있는 에러 타입
 export type UploadError = '413' | '415' | '404' | '422' | 'networkError' | '401' | '';
@@ -14,12 +14,7 @@ interface UseImageUploadOptions {
   resize?: (file: File) => Promise<Blob>;
 }
 
-/* eslint-disable */
-export default function useImageUpload({
-  maxLength = 3,
-  uploadFn,
-  resize,
-}: UseImageUploadOptions) {
+export default function useImageUpload({ maxLength = 3, uploadFn, resize }: UseImageUploadOptions) {
   const token = useTokenState();
   const [imageFile, setImageFile] = useState<string[]>([]);
   const [uploadError, setUploadError] = useState<UploadError>('');
@@ -31,7 +26,7 @@ export default function useImageUpload({
 
     // imageFile.length + files.length을 통해 저장된 이미지 + 새로 추가할 이미지의 개수를 파악함
     if (imageFile.length + files.length > maxLength) {
-      showToast('error', `파일은 ${maxLength}개까지 등록할 수 있습니다.`)
+      showToast('error', `파일은 ${maxLength}개까지 등록할 수 있습니다.`);
       return;
     }
 
@@ -96,6 +91,10 @@ export default function useImageUpload({
   };
 
   return {
-    imageFile, imgRef, saveImgFile, uploadError, setImageFile
+    imageFile,
+    imgRef,
+    saveImgFile,
+    uploadError,
+    setImageFile,
   };
 }

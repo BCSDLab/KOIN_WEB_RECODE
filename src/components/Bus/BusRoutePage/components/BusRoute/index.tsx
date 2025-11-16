@@ -1,6 +1,6 @@
+import { cn } from '@bcsdlab/utils';
 import BusIcon from 'assets/svg/Bus/bus-icon-28x28.svg';
 import { SHORT_BUS_TYPE_MAP } from 'components/Bus/BusRoutePage/constants/busType';
-import { cn } from '@bcsdlab/utils';
 import { Schedule } from 'components/Bus/BusRoutePage/ts/types';
 import { formatTimeDifference, formatTimeWithSeconds, isToday } from 'components/Bus/BusRoutePage/utils/timeModule';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -32,11 +32,7 @@ export default function BusRoute({ departDate, schedule }: BusRouteProps) {
           >
             {SHORT_BUS_TYPE_MAP[busType]}
           </div>
-          {busType === 'city' && (
-            <span className={styles['bus-type__bus-number']}>
-              {`${busName}번`}
-            </span>
-          )}
+          {busType === 'city' && <span className={styles['bus-type__bus-number']}>{`${busName}번`}</span>}
         </div>
         <div className={styles['depart-time']}>
           {`${Number(departTime.slice(0, 2)) < 12 ? '오전' : '오후'} ${departTime.slice(0, 5)}`}

@@ -1,20 +1,24 @@
-import { useRouter } from 'next/router';
 import { useMemo, useCallback } from 'react';
+import { useRouter } from 'next/router';
 
 const useParamsHandler = () => {
   const router = useRouter();
 
   // URLSearchParams 형태로 제공
   const searchParams = useMemo(() => {
-    if (typeof window === 'undefined') return new URLSearchParams();
-    const queryString = router.asPath.split('?')[1] || '';
-    return new URLSearchParams(queryString);
-  }, [router.asPath]);
+    const params = new URLSearchParams();
 
-  const params = useMemo(
-    () => Object.fromEntries(searchParams.entries()),
-    [searchParams],
-  );
+    Object.entries(router.query).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        params.set(key, value[0]);
+      } else if (value) {
+        params.set(key, value);
+      }
+    });
+    return params;
+  }, [router.query]);
+
+  const params = useMemo(() => Object.fromEntries(searchParams.entries()), [searchParams]);
 
   const setParams = useCallback(
     (

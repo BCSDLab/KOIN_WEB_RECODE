@@ -1,48 +1,50 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {
-  Suspense, useEffect, useImperativeHandle, useReducer, useState,
-} from 'react';
-import showToast from 'utils/ts/showToast';
+import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
+import { useRouter } from 'next/router';
 import { cn, sha256 } from '@bcsdlab/utils';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { Portal } from 'components/modal/Modal/PortalProvider';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import { useQueryClient } from '@tanstack/react-query';
+import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
+import BlindIcon from 'assets/svg/blind-icon.svg';
+import ChevronLeft from 'assets/svg/Login/chevron-left.svg';
+import CorrectIcon from 'assets/svg/Login/correct.svg';
+import ErrorIcon from 'assets/svg/Login/error.svg';
+import WarningIcon from 'assets/svg/Login/warning.svg';
+import ShowIcon from 'assets/svg/show-icon.svg';
+import AuthenticateUserModal from 'components/Auth/ModifyInfoPage/components/AuthenticateUserModal';
+import UserDeleteModal from 'components/Auth/ModifyInfoPage/components/UserDeleteModal';
+import { usePhoneVerification } from 'components/Auth/ModifyInfoPage/hooks/usePhoneVerification';
+import useUserDelete from 'components/Auth/ModifyInfoPage/hooks/useUserDelete';
+import {
+  ModifyFormValidationProvider,
+  useValidationContext,
+} from 'components/Auth/ModifyInfoPage/hooks/useValidationContext';
+import { passwordValidationReducer } from 'components/Auth/ModifyInfoPage/reducers/passwordReducer';
+import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
 import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
-import { UserUpdateRequest, UserResponse, GeneralUserUpdateRequest } from 'api/auth/entity';
-import { useUser } from 'utils/hooks/state/useUser';
-import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import ROUTES from 'static/routes';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import { REGEX, STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
+import ROUTES from 'static/routes';
 import useUserInfoUpdate from 'utils/hooks/auth/useUserInfoUpdate';
-import { usePhoneVerification } from 'components/Auth/ModifyInfoPage/hooks/usePhoneVerification';
-import ErrorIcon from 'assets/svg/Login/error.svg';
-import CorrectIcon from 'assets/svg/Login/correct.svg';
-import WarningIcon from 'assets/svg/Login/warning.svg';
-import BlindIcon from 'assets/svg/blind-icon.svg';
-import ShowIcon from 'assets/svg/show-icon.svg';
-import ChevronLeft from 'assets/svg/Login/chevron-left.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import { useTokenStore } from 'utils/zustand/auth';
-import { isStudentUser } from 'utils/ts/userTypeGuards';
-import { useAuthentication } from 'utils/zustand/authentication';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
-import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector';
-import UserDeleteModal from 'components/Auth/ModifyInfoPage/components/UserDeleteModal';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useUser } from 'utils/hooks/state/useUser';
+import showToast from 'utils/ts/showToast';
+import { isStudentUser } from 'utils/ts/userTypeGuards';
+import { useTokenStore } from 'utils/zustand/auth';
+import { useAuthentication } from 'utils/zustand/authentication';
 import styles from 'components/Auth/ModifyInfoPage/ModifyInfoPage.module.scss';
-import useUserDelete from 'components/Auth/ModifyInfoPage/hooks/useUserDelete';
-import { ModifyFormValidationProvider, useValidationContext } from 'components/Auth/ModifyInfoPage/hooks/useValidationContext';
-import { passwordValidationReducer } from 'components/Auth/ModifyInfoPage/reducers/passwordReducer';
-import AuthenticateUserModal from 'components/Auth/ModifyInfoPage/components/AuthenticateUserModal';
-import { useRouter } from 'next/router';
 
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
+const PASSWORD_REGEX =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\])[A-Za-z\d!@#$%^&*()\-_=+{}[\]|;:'",.<>/?`~\\]{8,}$/;
 interface IFormType {
   [key: string]: {
     ref: HTMLInputElement | ICustomFormInput | null;
     validFunction?: (value: unknown, fieldRefs: { current: any }) => string | true;
-  }
+  };
 }
 
 interface ICustomFormInput {
@@ -63,9 +65,7 @@ interface RegisterReturn {
 }
 
 export interface ISubmitForm {
-  (formValue: {
-    [key: string]: any;
-  }): void;
+  (formValue: { [key: string]: any }): void;
 }
 
 type UserResponseKeys = Omit<UserResponse, 'anonymous_nickname' | 'major'>;
@@ -76,8 +76,7 @@ interface MappedFields {
 
 const isRefICustomFormInput = (
   elementRef: HTMLInputElement | ICustomFormInput | null,
-): elementRef is ICustomFormInput => (elementRef !== null
-  && Object.prototype.hasOwnProperty.call(elementRef, 'valid'));
+): elementRef is ICustomFormInput => elementRef !== null && Object.prototype.hasOwnProperty.call(elementRef, 'valid');
 
 const useLightweightForm = (submitForm: ISubmitForm) => {
   const fieldRefs = React.useRef<IFormType>({});
@@ -126,14 +125,20 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       }
       // student-number의 경우 major와 studentNumber로 나뉘어져 있음
       if (field === 'student-number') {
-        studentInfo.studentNumber = inputValue && typeof inputValue === 'object' && 'studentNumber' in inputValue ? inputValue.studentNumber : null;
-        studentInfo.major = inputValue && typeof inputValue === 'object' && 'major' in inputValue ? inputValue.major : null;
+        studentInfo.studentNumber =
+          inputValue && typeof inputValue === 'object' && 'studentNumber' in inputValue
+            ? inputValue.studentNumber
+            : null;
+        studentInfo.major =
+          inputValue && typeof inputValue === 'object' && 'major' in inputValue ? inputValue.major : null;
       }
       const userResponseField = mappedFields[field] || field;
-      const originalValue = (userInfo && isStudent) ? userInfo[userResponseField] : '';
-      if (inputValue !== originalValue
-        || studentInfo.studentNumber !== originalValue
-        || studentInfo.major !== originalValue) {
+      const originalValue = userInfo && isStudent ? userInfo[userResponseField] : '';
+      if (
+        inputValue !== originalValue ||
+        studentInfo.studentNumber !== originalValue ||
+        studentInfo.major !== originalValue
+      ) {
         isAnyFieldChanged = true;
       }
     });
@@ -143,17 +148,15 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
       return;
     }
 
-    const isCurrentValidEntries = Object.entries(fieldRefs.current)
-      .map((refValue): [string, string | true] => {
-        if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
-        const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
-          ? refValue[1].ref.valid
-          : refValue[1].validFunction?.(refValue[1].ref?.value ?? '', fieldRefs) ?? true;
+    const isCurrentValidEntries = Object.entries(fieldRefs.current).map((refValue): [string, string | true] => {
+      if (!refValue[1].ref) return [refValue[0], '오류가 발생했습니다.'];
+      const isCurrentNameValid = isRefICustomFormInput(refValue[1].ref)
+        ? refValue[1].ref.valid
+        : (refValue[1].validFunction?.(refValue[1].ref?.value ?? '', fieldRefs) ?? true);
 
-        return [refValue[0], isCurrentNameValid];
-      });
-    const invalidFormEntry = isCurrentValidEntries
-      .find((entry): entry is [string, string] => entry[1] !== true);
+      return [refValue[0], isCurrentNameValid];
+    });
+    const invalidFormEntry = isCurrentValidEntries.find((entry): entry is [string, string] => entry[1] !== true);
     if (!invalidFormEntry) {
       const formValue = Object.entries(fieldRefs?.current).map((nameValue) => {
         if (isRefICustomFormInput(nameValue[1].ref) || nameValue[1].ref !== null) {
@@ -174,10 +177,7 @@ const useLightweightForm = (submitForm: ISubmitForm) => {
 
 type ICustomFormInputProps = Omit<RegisterReturn, 'ref'>;
 
-const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({
-  name,
-  required,
-}, ref) => {
+const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>(({ name, required }, ref) => {
   const [password, setPassword] = useState('');
   const [passwordConfirmValue, setPasswordConfirmValue] = useState('');
   const [visible, setVisible] = useState({
@@ -185,10 +185,7 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     passwordConfirm: false,
   });
 
-  const [validationState, dispatchValidation] = useReducer(
-    passwordValidationReducer,
-    { message: '', isValid: false },
-  );
+  const [validationState, dispatchValidation] = useReducer(passwordValidationReducer, { message: '', isValid: false });
   const { isValid, setIsValid } = useValidationContext();
 
   React.useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
@@ -346,52 +343,45 @@ const PasswordForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
             [styles['form-input__toggle']]: true,
             [styles['form-input__toggle--active']]: visible.passwordConfirm,
           })}
-          onClick={() => setVisible((prev) => (
-            { ...prev, passwordConfirm: !prev.passwordConfirm }
-          ))}
+          onClick={() => setVisible((prev) => ({ ...prev, passwordConfirm: !prev.passwordConfirm }))}
           tabIndex={-1}
         >
           {visible.passwordConfirm ? <ShowIcon /> : <BlindIcon />}
         </button>
         {!isValid.isPasswordValid && password.trim() !== '' && (
-        <p className={cn({
-          [styles['form-message']]: true,
-          [styles['form-message--error']]: true,
-        })}
-        >
-          <ErrorIcon />
-          {validationState.message}
-        </p>
+          <p
+            className={cn({
+              [styles['form-message']]: true,
+              [styles['form-message--error']]: true,
+            })}
+          >
+            <ErrorIcon />
+            {validationState.message}
+          </p>
         )}
         {isValid.isPasswordValid && (
-        <p className={cn({
-          [styles['form-message']]: true,
-          [styles['form-message--success']]: true,
-        })}
-        >
-          <CorrectIcon />
-          비밀번호가 일치합니다.
-        </p>
+          <p
+            className={cn({
+              [styles['form-message']]: true,
+              [styles['form-message--success']]: true,
+            })}
+          >
+            <CorrectIcon />
+            비밀번호가 일치합니다.
+          </p>
         )}
       </div>
     </div>
   );
 });
 
-const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((
-  props,
-  ref,
-) => {
+const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputProps>((props, ref) => {
   const { data: userInfo } = useUser();
   const [currentNicknameValue, setCurrentNicknameValue] = React.useState<string>(userInfo?.nickname || '');
   const isMobile = useMediaQuery();
   const { setIsValid } = useValidationContext();
 
-  const {
-    status,
-    currentCheckedNickname,
-    changeTargetNickname,
-  } = useNicknameDuplicateCheck();
+  const { status, currentCheckedNickname, changeTargetNickname } = useNicknameDuplicateCheck();
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newNickname = e.target.value;
@@ -434,30 +424,26 @@ const NicknameForm = React.forwardRef<ICustomFormInput | null, ICustomFormInputP
     });
   };
 
-  useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(
-    ref,
-    () => {
-      // 닉네임 유효성 검사 로직
-      const isNicknameVerified = currentNicknameValue === currentCheckedNickname;
-      if (currentNicknameValue === '') {
-        return {
-          value: currentNicknameValue,
-          valid: true,
-        };
-      }
-      if (currentNicknameValue !== (userInfo?.nickname || '') && (status !== 'success' || !isNicknameVerified)) {
-        return {
-          value: currentNicknameValue,
-          valid: '닉네임 중복확인을 해주세요.',
-        };
-      }
+  useImperativeHandle<ICustomFormInput | null, ICustomFormInput | null>(ref, () => {
+    // 닉네임 유효성 검사 로직
+    const isNicknameVerified = currentNicknameValue === currentCheckedNickname;
+    if (currentNicknameValue === '') {
       return {
         value: currentNicknameValue,
         valid: true,
       };
-    },
-    [currentCheckedNickname, currentNicknameValue, status, userInfo?.nickname],
-  );
+    }
+    if (currentNicknameValue !== (userInfo?.nickname || '') && (status !== 'success' || !isNicknameVerified)) {
+      return {
+        value: currentNicknameValue,
+        valid: '닉네임 중복확인을 해주세요.',
+      };
+    }
+    return {
+      value: currentNicknameValue,
+      valid: true,
+    };
+  }, [currentCheckedNickname, currentNicknameValue, status, userInfo?.nickname]);
 
   return (
     <div
@@ -678,6 +664,8 @@ const GenderInput = React.forwardRef((_, ref) => {
     setSelectedValue(e.target.value);
     if (String(userInfo?.gender) !== e.target.value) {
       setIsValid((prev) => ({ ...prev, isGenderValid: true, isFieldChanged: true }));
+    } else {
+      setIsValid((prev) => ({ ...prev, isGenderValid: true, isFieldChanged: false }));
     }
   };
 
@@ -687,9 +675,7 @@ const GenderInput = React.forwardRef((_, ref) => {
         성별
         <span className={styles['form-input__required']}>*</span>
       </label>
-      <div
-        className={styles['form-input__radio']}
-      >
+      <div className={styles['form-input__radio']}>
         <div className={styles['form-input__radio-wrapper']}>
           <input
             type="radio"
@@ -750,9 +736,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
     formattedTime,
     isRunning,
     sendSMS,
-  } = usePhoneVerification(
-    phoneNumber,
-  );
+  } = usePhoneVerification(phoneNumber);
 
   const { data } = sendSMS;
 
@@ -768,9 +752,7 @@ const PhoneInput = React.forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => {
     const value = phoneNumber.replace(/-/g, '');
-    const valid = REGEX.PHONE_NUMBER.test(value)
-      ? true
-      : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
+    const valid = REGEX.PHONE_NUMBER.test(value) ? true : '전화번호 양식을 지켜주세요. (Ex: 01012345678)';
     const originalValue = (userInfo?.phone_number ?? '').replace(/-/g, '');
 
     if (value !== originalValue) {
@@ -788,106 +770,102 @@ const PhoneInput = React.forwardRef((props, ref) => {
   return (
     <>
       {isMobile && (
-      <>
-        <div className={styles['form-input__label-wrapper']}>
-          <label htmlFor="phone" className={styles['form-input__label']}>
-            휴대전화
-            <span className={styles['form-input__required']}>*</span>
-          </label>
-          <div className={styles['form-input__row']}>
-            <input
-              className={styles['form-input']}
-              type="text"
-              autoComplete="tel"
-              placeholder="전화번호 (Ex.01012345678)"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              {...props}
-            />
-            <button
-              type="button"
-              className={cn({
-                [styles.modify__button]: true,
-                [styles['modify__button--phone']]: true,
-                [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
-              })}
-              onClick={handleStartVerification}
-              disabled={phoneNumber === userInfo?.phone_number}
-            >
-              {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
-            </button>
-          </div>
-          {phoneMessage && (
-          <p className={cn({
-            [styles['form-message']]: true,
-            [styles[`form-message--${phoneMessage.type}`]]: true,
-          })}
-          >
-            {phoneMessage.type === 'success' && <CorrectIcon />}
-            {phoneMessage.type === 'error' && <ErrorIcon />}
-            {phoneMessage.type === 'warning' && <WarningIcon />}
-            {phoneMessage.content}
-            {phoneMessage.type === 'success' && (
-              <span className={styles['form-message--count']}>
-                남은 횟수
-                {` (${data?.remaining_count}/${data?.total_count})`}
-              </span>
-            )}
-          </p>
-          )}
-        </div>
-        {phoneMessage?.type === 'success' && (
+        <>
           <div className={styles['form-input__label-wrapper']}>
-            <label htmlFor="code" className={styles['form-input__label']}>
-              휴대전화 인증
+            <label htmlFor="phone" className={styles['form-input__label']}>
+              휴대전화
               <span className={styles['form-input__required']}>*</span>
             </label>
             <div className={styles['form-input__row']}>
-              <div className={styles['form-input__code-wrapper']}>
-                <input
-                  className={styles['form-input']}
-                  type="text"
-                  autoComplete="one-time-code"
-                  placeholder="인증번호를 입력해주세요."
-                  value={codeNumber}
-                  onChange={(e) => setCodeNumber(e.target.value)}
-                />
-                {isRunning && (
-                <p className={styles['form-message__timer']}>
-                  {formattedTime}
-                </p>
-                )}
-              </div>
+              <input
+                className={styles['form-input']}
+                type="text"
+                autoComplete="tel"
+                placeholder="전화번호 (Ex.01012345678)"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                {...props}
+              />
               <button
                 type="button"
                 className={cn({
                   [styles.modify__button]: true,
                   [styles['modify__button--phone']]: true,
-                  [styles['modify__button--active']]: codeNumber !== '',
+                  [styles['modify__button--active']]: phoneNumber !== userInfo?.phone_number,
                 })}
-                onClick={() => verifyCode.mutate(
-                  { phone_number: phoneNumber, verification_code: codeNumber },
-                )}
-                disabled={codeNumber === '' || timeLeft === 0 || !isRunning}
+                onClick={handleStartVerification}
+                disabled={phoneNumber === userInfo?.phone_number}
               >
-                인증하기
+                {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
               </button>
             </div>
-            {verificationMessage && (
-            <p className={cn({
-              [styles['form-message']]: true,
-              [styles[`form-message--${verificationMessage.type}`]]: true,
-            })}
-            >
-              {verificationMessage.type === 'success' && <CorrectIcon />}
-              {verificationMessage.type === 'error' && <ErrorIcon />}
-              {verificationMessage.type === 'warning' && <WarningIcon />}
-              {verificationMessage.content}
-            </p>
+            {phoneMessage && (
+              <p
+                className={cn({
+                  [styles['form-message']]: true,
+                  [styles[`form-message--${phoneMessage.type}`]]: true,
+                })}
+              >
+                {phoneMessage.type === 'success' && <CorrectIcon />}
+                {phoneMessage.type === 'error' && <ErrorIcon />}
+                {phoneMessage.type === 'warning' && <WarningIcon />}
+                {phoneMessage.content}
+                {phoneMessage.type === 'success' && (
+                  <span className={styles['form-message--count']}>
+                    남은 횟수
+                    {` (${data?.remaining_count}/${data?.total_count})`}
+                  </span>
+                )}
+              </p>
             )}
           </div>
-        )}
-      </>
+          {phoneMessage?.type === 'success' && (
+            <div className={styles['form-input__label-wrapper']}>
+              <label htmlFor="code" className={styles['form-input__label']}>
+                휴대전화 인증
+                <span className={styles['form-input__required']}>*</span>
+              </label>
+              <div className={styles['form-input__row']}>
+                <div className={styles['form-input__code-wrapper']}>
+                  <input
+                    className={styles['form-input']}
+                    type="text"
+                    autoComplete="one-time-code"
+                    placeholder="인증번호를 입력해주세요."
+                    value={codeNumber}
+                    onChange={(e) => setCodeNumber(e.target.value)}
+                  />
+                  {isRunning && <p className={styles['form-message__timer']}>{formattedTime}</p>}
+                </div>
+                <button
+                  type="button"
+                  className={cn({
+                    [styles.modify__button]: true,
+                    [styles['modify__button--phone']]: true,
+                    [styles['modify__button--active']]: codeNumber !== '',
+                  })}
+                  onClick={() => verifyCode.mutate({ phone_number: phoneNumber, verification_code: codeNumber })}
+                  disabled={codeNumber === '' || timeLeft === 0 || !isRunning}
+                >
+                  인증하기
+                </button>
+              </div>
+              {verificationMessage && (
+                <p
+                  className={cn({
+                    [styles['form-message']]: true,
+                    [styles[`form-message--${verificationMessage.type}`]]: true,
+                  })}
+                >
+                  {verificationMessage.type === 'success' && <CorrectIcon />}
+                  {verificationMessage.type === 'error' && <ErrorIcon />}
+                  {verificationMessage.type === 'warning' && <WarningIcon />}
+                  {verificationMessage.content}
+                </p>
+              )}
+            </div>
+          )}
+        </>
       )}
       {!isMobile && (
         <>
@@ -918,72 +896,68 @@ const PhoneInput = React.forwardRef((props, ref) => {
               {phoneMessage?.type === 'success' ? '인증번호 재발송' : '인증번호 발송'}
             </button>
             {phoneMessage && (
-            <p className={cn({
-              [styles['form-message']]: true,
-              [styles[`form-message--${phoneMessage.type}`]]: true,
-            })}
-            >
-              {phoneMessage.type === 'success' && <CorrectIcon />}
-              {phoneMessage.type === 'error' && <ErrorIcon />}
-              {phoneMessage.type === 'warning' && <WarningIcon />}
-              {phoneMessage.content}
-              {phoneMessage.type === 'success' && (
-              <span className={styles['form-message--count']}>
-                남은 횟수
-                {` (${data?.remaining_count}/${data?.total_count})`}
-              </span>
-              )}
-            </p>
+              <p
+                className={cn({
+                  [styles['form-message']]: true,
+                  [styles[`form-message--${phoneMessage.type}`]]: true,
+                })}
+              >
+                {phoneMessage.type === 'success' && <CorrectIcon />}
+                {phoneMessage.type === 'error' && <ErrorIcon />}
+                {phoneMessage.type === 'warning' && <WarningIcon />}
+                {phoneMessage.content}
+                {phoneMessage.type === 'success' && (
+                  <span className={styles['form-message--count']}>
+                    남은 횟수
+                    {` (${data?.remaining_count}/${data?.total_count})`}
+                  </span>
+                )}
+              </p>
             )}
           </div>
           {phoneMessage?.type === 'success' && (
-          <div className={styles['form-input__label-wrapper']}>
-            <label htmlFor="code" className={styles['form-input__label']}>
-              휴대전화 인증
-              <span className={styles['form-input__required']}>*</span>
-            </label>
-            <div className={styles['form-input__code-wrapper']}>
-              <input
-                className={styles['form-input']}
-                type="text"
-                autoComplete="one-time-code"
-                placeholder="인증번호를 입력해주세요."
-                value={codeNumber}
-                onChange={(e) => setCodeNumber(e.target.value)}
-              />
-              {isRunning && (
-              <p className={styles['form-message__timer']}>
-                {formattedTime}
-              </p>
+            <div className={styles['form-input__label-wrapper']}>
+              <label htmlFor="code" className={styles['form-input__label']}>
+                휴대전화 인증
+                <span className={styles['form-input__required']}>*</span>
+              </label>
+              <div className={styles['form-input__code-wrapper']}>
+                <input
+                  className={styles['form-input']}
+                  type="text"
+                  autoComplete="one-time-code"
+                  placeholder="인증번호를 입력해주세요."
+                  value={codeNumber}
+                  onChange={(e) => setCodeNumber(e.target.value)}
+                />
+                {isRunning && <p className={styles['form-message__timer']}>{formattedTime}</p>}
+              </div>
+              <button
+                type="button"
+                className={cn({
+                  [styles.modify__button]: true,
+                  [styles['modify__button--phone']]: true,
+                  [styles['modify__button--active']]: codeNumber !== '',
+                })}
+                onClick={() => verifyCode.mutate({ phone_number: phoneNumber, verification_code: codeNumber })}
+                disabled={codeNumber === '' || timeLeft === 0 || !isRunning}
+              >
+                인증하기
+              </button>
+              {verificationMessage && (
+                <p
+                  className={cn({
+                    [styles['form-message']]: true,
+                    [styles[`form-message--${verificationMessage.type}`]]: true,
+                  })}
+                >
+                  {verificationMessage.type === 'success' && <CorrectIcon />}
+                  {verificationMessage.type === 'error' && <ErrorIcon />}
+                  {verificationMessage.type === 'warning' && <WarningIcon />}
+                  {verificationMessage.content}
+                </p>
               )}
             </div>
-            <button
-              type="button"
-              className={cn({
-                [styles.modify__button]: true,
-                [styles['modify__button--phone']]: true,
-                [styles['modify__button--active']]: codeNumber !== '',
-              })}
-              onClick={() => verifyCode.mutate(
-                { phone_number: phoneNumber, verification_code: codeNumber },
-              )}
-              disabled={codeNumber === '' || timeLeft === 0 || !isRunning}
-            >
-              인증하기
-            </button>
-            {verificationMessage && (
-            <p className={cn({
-              [styles['form-message']]: true,
-              [styles[`form-message--${verificationMessage.type}`]]: true,
-            })}
-            >
-              {verificationMessage.type === 'success' && <CorrectIcon />}
-              {verificationMessage.type === 'error' && <ErrorIcon />}
-              {verificationMessage.type === 'warning' && <WarningIcon />}
-              {verificationMessage.content}
-            </p>
-            )}
-          </div>
           )}
         </>
       )}
@@ -1228,7 +1202,12 @@ function ModifyInfoDefaultPage() {
     <div className={styles.container}>
       {isMobile ? (
         <div className={styles.header}>
-          <button type="button" onClick={() => router.back()} className={styles['header__go-back']} aria-label="뒤로가기">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className={styles['header__go-back']}
+            aria-label="뒤로가기"
+          >
             <ChevronLeft />
           </button>
           <span className={styles.header__title}>내 프로필</span>
@@ -1246,15 +1225,11 @@ function ModifyInfoDefaultPage() {
           <span className={styles.title}>정보 변경</span>
           <div className={styles.container__description}>
             <span className={styles['advice-character']}>*</span>
-            <span className={styles.advice}>
-              필수 입력사항
-            </span>
+            <span className={styles.advice}>필수 입력사항</span>
           </div>
         </>
       )}
-      {isMobile && (
-        <span className={styles.modify__title}>기본 정보</span>
-      )}
+      {isMobile && <span className={styles.modify__title}>기본 정보</span>}
       <form className={styles.modify} onSubmit={onSubmitModifyForm}>
         <div className={styles['form-input__label-wrapper']}>
           <label htmlFor="email" className={styles['form-input__label']}>
@@ -1270,11 +1245,7 @@ function ModifyInfoDefaultPage() {
             defaultValue={userInfo?.login_id}
           />
         </div>
-        {!isMobile && (
-        <p className={styles['form-input__description']}>
-          계정 아이디는 변경하실 수 없습니다.
-        </p>
-        )}
+        {!isMobile && <p className={styles['form-input__description']}>계정 아이디는 변경하실 수 없습니다.</p>}
         {isMobile ? (
           <>
             <NameForm {...register('name')} />
@@ -1313,26 +1284,21 @@ function ModifyInfoDefaultPage() {
             {isMobile ? '저장' : '정보수정'}
           </button>
           {!isMobile && (
-          <button
-            type="button"
-            disabled={status === 'pending'}
-            className={cn({
-              [styles.modify__button]: true,
-              [styles['modify__button--remove']]: true,
-            })}
-            onClick={onClickDeleteUser}
-          >
-            회원탈퇴
-          </button>
+            <button
+              type="button"
+              disabled={status === 'pending'}
+              className={cn({
+                [styles.modify__button]: true,
+                [styles['modify__button--remove']]: true,
+              })}
+              onClick={onClickDeleteUser}
+            >
+              회원탈퇴
+            </button>
           )}
         </div>
       </form>
-      {isModalOpen && (
-        <AuthenticateUserModal
-          onClose={closeModal}
-          disabledClose
-        />
-      )}
+      {isModalOpen && <AuthenticateUserModal onClose={closeModal} disabledClose />}
     </div>
   );
 }

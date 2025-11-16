@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import {
-  Controller, FormProvider, useForm, useWatch,
-} from 'react-hook-form';
 import CustomInput from 'components/Auth/SignupPage/components/CustomInput';
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import useEmailVerification from 'utils/hooks/auth/useEmailVerification';
 import styles from './EmailPage.module.scss';
 
@@ -82,15 +80,10 @@ function MobileFindIdEmailPage() {
                   buttonText="인증번호 발송"
                   buttonDisabled={!field.value || isDisabled || isVerified}
                   buttonOnClick={() => checkEmailExists({ email: field.value })}
-
                 >
                   {emailMessage?.type === 'success' && (
                     <div className={styles['label-count-number']}>
-                      남은 횟수 (
-                      {emailSendCountData?.remaining_count}
-                      /
-                      {emailSendCountData?.total_count}
-                      )
+                      남은 횟수 ({emailSendCountData?.remaining_count}/{emailSendCountData?.total_count})
                     </div>
                   )}
                 </CustomInput>
@@ -123,16 +116,11 @@ function MobileFindIdEmailPage() {
             />
           </div>
         </div>
-        <button
-          type="submit"
-          className={styles['next-button']}
-          disabled={!isFormFilled || !isCodeCorrect}
-        >
+        <button type="submit" className={styles['next-button']} disabled={!isFormFilled || !isCodeCorrect}>
           다음
         </button>
       </form>
     </FormProvider>
-
   );
 }
 

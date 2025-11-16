@@ -1,37 +1,76 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import getDayOfWeek from 'utils/ts/getDayOfWeek';
-import ImageModal from 'components/modal/Modal/ImageModal';
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { cn } from '@bcsdlab/utils';
-import { Portal } from 'components/modal/Modal/PortalProvider';
-import UpdateInfo from 'components/Store/StoreDetailPage/components/UpdateInfo/UpdateInfo';
-import showToast from 'utils/ts/showToast';
-import useModalPortal from 'utils/hooks/layout/useModalPortal';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { dehydrate, HydrationBoundary, QueryClient, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { getReviewList, getStoreDetailInfo, getStoreDetailMenu, getStoreEventList } from 'api/store';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
-import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
-import Copy from 'assets/svg/Store/copy.svg';
 import Phone from 'assets/svg/Review/phone.svg';
-import ROUTES from 'static/routes';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import * as api from 'api';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+import Copy from 'assets/svg/Store/copy.svg';
 import StoreErrorBoundary from 'components/boundary/StoreErrorBoundary';
-import MenuTable from 'components/Store/StoreDetailPage/components/MenuTable';
+import ImageModal from 'components/modal/Modal/ImageModal';
+import { Portal } from 'components/modal/Modal/PortalProvider';
 import EventTable from 'components/Store/StoreDetailPage/components/EventTable';
+import MenuTable from 'components/Store/StoreDetailPage/components/MenuTable';
 import ReviewPage from 'components/Store/StoreDetailPage/components/Review';
+import UpdateInfo from 'components/Store/StoreDetailPage/components/UpdateInfo/UpdateInfo';
+import ROUTES from 'static/routes';
+import { useABTestView } from 'utils/hooks/abTest/useABTestView';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { useScrollLogging } from 'utils/hooks/analytics/useScrollLogging';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import getDayOfWeek from 'utils/ts/getDayOfWeek';
+import showToast from 'utils/ts/showToast';
 import styles from './StoreDetailPage.module.scss';
 
 interface Props {
   id: string | undefined;
 }
 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const queryClient = new QueryClient();
+
+  const id = context.params!.id;
+  const storeId = Array.isArray(id) ? id[0] : id;
+
+  if (!storeId) {
+    return {
+      notFound: true,
+    };
+  }
+  // 리뷰는 토큰(클라이언트 상태)에 의존하고 있어 prefetch 불가
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ['storeDetail', storeId],
+      queryFn: () => getStoreDetailInfo(storeId),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['storeDetailMenu', storeId],
+      queryFn: () => getStoreDetailMenu(storeId),
+    }),
+  ]);
+
+  await queryClient.prefetchQuery({
+    queryKey: ['storeEventList', storeId],
+    queryFn: ({ queryKey }) => getStoreEventList(queryKey[1] ?? ''),
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      id: storeId,
+    },
+  };
+}
+
 function StoreDetailPage({ id }: Props) {
-  if (!id || Number.isNaN(Number(id))) throw new Error('잘못된 가게 id 입니다.');
+  if (!id || Number.isNaN(Number(id))) {
+    return <div className={styles.template}>존재하지 않는 상점입니다.</div>;
+  }
 
   const isMobile = useMediaQuery();
   const enterCategoryTimeRef = useRef<number | null>(null);
@@ -43,21 +82,23 @@ function StoreDetailPage({ id }: Props) {
   // waterfall 현상 막기
   const { data: paralleData } = useSuspenseQuery({
     queryKey: ['storeDetail', 'storeDetailMenu', 'review', id],
-    queryFn: () => Promise.all([
-      queryClient.fetchQuery({
-        queryKey: ['storeDetail', id],
-        queryFn: () => api.store.getStoreDetailInfo(id),
-      }),
-      queryClient.fetchQuery({
-        queryKey: ['storeDetailMenu', id],
-        queryFn: () => api.store.getStoreDetailMenu(id),
-      }),
-      queryClient.fetchQuery({
-        queryKey: ['review'],
-        queryFn: () => api.store.getReviewList(Number(id), 1, 'LATEST', token),
-      }),
-    ]),
+    queryFn: () =>
+      Promise.all([
+        queryClient.fetchQuery({
+          queryKey: ['storeDetail', id],
+          queryFn: () => getStoreDetailInfo(id),
+        }),
+        queryClient.fetchQuery({
+          queryKey: ['storeDetailMenu', id],
+          queryFn: () => getStoreDetailMenu(id),
+        }),
+        queryClient.fetchQuery({
+          queryKey: ['review'],
+          queryFn: () => getReviewList(Number(id), 1, 'LATEST', token),
+        }),
+      ]),
   });
+
   useEffect(() => {
     if (enterCategoryTimeRef.current === null) {
       const currentTime = new Date().getTime();
@@ -66,9 +107,7 @@ function StoreDetailPage({ id }: Props) {
     }
   }, [logger, testValue]);
   const storeDetail = paralleData[0];
-  const storeDescription = storeDetail?.description
-    ? storeDetail?.description.replace(/(?:\/)/g, '\n')
-    : '-';
+  const storeDescription = storeDetail?.description ? storeDetail?.description.replace(/(?:\/)/g, '\n') : '-';
   const storeMenus = paralleData[1];
   const reviews = paralleData[2];
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
@@ -97,7 +136,10 @@ function StoreDetailPage({ id }: Props) {
 
   const onClickImage = (img: string[], index: number) => {
     logger.actionEventClick({
-      team: 'BUSINESS', event_label: 'shop_picture', value: storeDetail!.name, event_category: 'click',
+      team: 'BUSINESS',
+      event_label: 'shop_picture',
+      value: storeDetail!.name,
+      event_category: 'click',
     });
     portalManager.open((portalOption: Portal) => (
       <ImageModal imageList={img} imageIndex={index} onClose={portalOption.close} />
@@ -115,17 +157,28 @@ function StoreDetailPage({ id }: Props) {
       });
     }
     logger.actionEventClick({
-      team: 'BUSINESS', event_label: 'shop_detail_view_back', value: storeDetail!.name, event_category: 'ShopList', current_page: sessionStorage.getItem('cameFrom') || '전체보기', duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_back',
+      value: storeDetail!.name,
+      event_category: 'ShopList',
+      current_page: sessionStorage.getItem('cameFrom') || '전체보기',
+      duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
     });
   };
   const onClickEventList = () => {
     logger.actionEventClick({
-      team: 'BUSINESS', event_label: 'shop_detail_view_event', value: `${storeDetail.name}`, event_category: 'click',
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_event',
+      value: `${storeDetail.name}`,
+      event_category: 'click',
     });
   };
   const onClickReviewList = () => {
     logger.actionEventClick({
-      team: 'BUSINESS', event_label: 'shop_detail_view_review', value: `${storeDetail.name}`, event_category: 'click',
+      team: 'BUSINESS',
+      event_label: 'shop_detail_view_review',
+      value: `${storeDetail.name}`,
+      event_category: 'click',
     });
   };
   const copyAccount = async (account: string) => {
@@ -134,19 +187,28 @@ function StoreDetailPage({ id }: Props) {
   };
 
   const detailScrollLogging = () => {
-    if ((searchParams.get('state') === '메뉴' || !searchParams.get('state'))) {
+    if (searchParams.get('state') === '메뉴' || !searchParams.get('state')) {
       logger.actionEventClick({
-        team: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail.name, event_category: 'scroll',
+        team: 'BUSINESS',
+        event_label: 'shop_detail_view',
+        value: storeDetail.name,
+        event_category: 'scroll',
       });
     }
     if (searchParams.get('state') === '이벤트/공지') {
       logger.actionEventClick({
-        team: 'BUSINESS', event_label: 'shop_detail_view_event', value: storeDetail.name, event_category: 'scroll',
+        team: 'BUSINESS',
+        event_label: 'shop_detail_view_event',
+        value: storeDetail.name,
+        event_category: 'scroll',
       });
     }
     if (searchParams.get('state') === '리뷰') {
       logger.actionEventClick({
-        team: 'BUSINESS', event_label: 'shop_detail_view_review', value: storeDetail.name, event_category: 'scroll',
+        team: 'BUSINESS',
+        event_label: 'shop_detail_view_review',
+        value: storeDetail.name,
+        event_category: 'scroll',
       });
     }
   };
@@ -175,11 +237,6 @@ function StoreDetailPage({ id }: Props) {
 
   useEffect(
     () => {
-      if (!sessionStorage.getItem('pushStateCalled')) {
-        // eslint-disable-next-line
-        history.pushState(null, '', '');
-        sessionStorage.setItem('pushStateCalled', 'true');
-      }
       const handlePopState = () => {
         logger.actionEventClick({
           team: 'BUSINESS',
@@ -189,7 +246,6 @@ function StoreDetailPage({ id }: Props) {
           current_page: sessionStorage.getItem('cameFrom') || '전체보기',
           duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enter_storeDetail'))) / 1000,
         });
-        router.back();
       };
       window.addEventListener('popstate', handlePopState);
       return () => {
@@ -214,9 +270,7 @@ function StoreDetailPage({ id }: Props) {
             >
               주변 상점
             </button>
-            {storeDetail?.updated_at && (
-              <UpdateInfo date={storeDetail.updated_at} />
-            )}
+            {storeDetail?.updated_at && <UpdateInfo date={storeDetail.updated_at} />}
           </div>
         )}
         <div className={styles['section__store-info']}>
@@ -234,19 +288,19 @@ function StoreDetailPage({ id }: Props) {
                     className={styles['store__detail--phone']}
                   >
                     <div className={styles['store__detail--number']}>
-                      {storeDetail?.phone}
-                      {' '}
+                      {storeDetail?.phone}{' '}
                       <div>
                         <Phone />
                       </div>
                     </div>
                   </a>
-                ) : storeDetail?.phone}
+                ) : (
+                  storeDetail?.phone
+                )}
                 <br />
                 <span>운영시간</span>
                 {storeDetail.open[getDayOfWeek()] && storeDetail?.open
-                  ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${storeDetail?.open[getDayOfWeek()].close_time
-                  }`
+                  ? `${storeDetail?.open[getDayOfWeek()].open_time} ~ ${storeDetail?.open[getDayOfWeek()].close_time}`
                   : '-'}
                 <br />
                 <span>주소정보</span>
@@ -278,24 +332,27 @@ function StoreDetailPage({ id }: Props) {
                 </div>
               </div>
               <div>
-                <span className={cn({
-                  [styles.store__tags]: true,
-                  [styles['store__tags--active']]: storeDetail?.delivery,
-                })}
+                <span
+                  className={cn({
+                    [styles.store__tags]: true,
+                    [styles['store__tags--active']]: storeDetail?.delivery,
+                  })}
                 >
                   #배달가능
                 </span>
-                <span className={cn({
-                  [styles.store__tags]: true,
-                  [styles['store__tags--active']]: storeDetail?.pay_card,
-                })}
+                <span
+                  className={cn({
+                    [styles.store__tags]: true,
+                    [styles['store__tags--active']]: storeDetail?.pay_card,
+                  })}
                 >
                   #카드가능
                 </span>
-                <span className={cn({
-                  [styles.store__tags]: true,
-                  [styles['store__tags--active']]: storeDetail?.pay_bank,
-                })}
+                <span
+                  className={cn({
+                    [styles.store__tags]: true,
+                    [styles['store__tags--active']]: storeDetail?.pay_bank,
+                  })}
                 >
                   #계좌이체가능
                 </span>
@@ -316,9 +373,7 @@ function StoreDetailPage({ id }: Props) {
                   상점목록
                 </button>
               </div>
-              {isMobile && storeDetail?.updated_at && (
-                <UpdateInfo date={storeDetail.updated_at} />
-              )}
+              {isMobile && storeDetail?.updated_at && <UpdateInfo date={storeDetail.updated_at} />}
             </div>
           )}
           <div
@@ -327,8 +382,8 @@ function StoreDetailPage({ id }: Props) {
               [styles['image--none']]: storeDetail?.image_urls.length === 0,
             })}
           >
-            {storeDetail?.image_urls && storeDetail.image_urls.length > 0
-              ? (storeDetail.image_urls.map((img, index) => (
+            {storeDetail?.image_urls && storeDetail.image_urls.length > 0 ? (
+              storeDetail.image_urls.map((img, index) => (
                 <div key={`${img}`} className={styles.image__content}>
                   <button
                     className={styles.image__button}
@@ -339,13 +394,14 @@ function StoreDetailPage({ id }: Props) {
                     <img className={styles.image__poster} src={`${img}`} alt="상점이미지" />
                   </button>
                 </div>
-              ))) : (
-                <div className={styles['empty-image']}>
-                  <div>
-                    <EmptyImageIcon />
-                  </div>
+              ))
+            ) : (
+              <div className={styles['empty-image']}>
+                <div>
+                  <EmptyImageIcon />
                 </div>
-              )}
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.tap}>
@@ -358,7 +414,9 @@ function StoreDetailPage({ id }: Props) {
             onClick={() => {
               setParams({ state: '메뉴' }, { replacePage: true });
               logger.actionEventClick({
-                team: 'BUSINESS', event_label: 'shop_detail_view', value: storeDetail!.name,
+                team: 'BUSINESS',
+                event_label: 'shop_detail_view',
+                value: storeDetail!.name,
               });
             }}
           >
@@ -388,9 +446,7 @@ function StoreDetailPage({ id }: Props) {
               setParams({ state: '리뷰' }, { replacePage: true });
             }}
           >
-            리뷰
-            {' '}
-            {`(${reviews.total_count})`}
+            리뷰 {`(${reviews.total_count})`}
           </button>
         </div>
         {tapType === '메뉴' && storeMenuCategories && storeMenuCategories.length > 0 && (
@@ -414,18 +470,16 @@ function StoreDetailPage({ id }: Props) {
   );
 }
 
-function StoreDetail() {
+function StoreDetail({ dehydratedstate, id }: { dehydratedstate: unknown; id: string }) {
   const router = useRouter();
-  const { id } = router.query;
-
-  const pageId = Array.isArray(id) ? id[0] : id;
-  if (!pageId) return null;
 
   return (
     <StoreErrorBoundary onErrorClick={() => router.push('/store')}>
-      <Suspense fallback={<div />}>
-        <StoreDetailPage id={pageId} />
-      </Suspense>
+      <HydrationBoundary state={dehydratedstate}>
+        <Suspense fallback={<div />}>
+          <StoreDetailPage id={id} />
+        </Suspense>
+      </HydrationBoundary>
     </StoreErrorBoundary>
   );
 }

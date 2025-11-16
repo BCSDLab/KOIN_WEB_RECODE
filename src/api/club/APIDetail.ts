@@ -30,7 +30,7 @@ export class ClubCategories<R extends ClubCategoriesResponse> implements APIRequ
 
   response!: R;
 
-  constructor(public authorization?: string) { }
+  constructor(public authorization?: string) {}
 }
 
 export class ClubList<R extends ClubListResponse> implements APIRequest<R> {
@@ -98,7 +98,10 @@ export class PostClub<R extends PostClubResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(public authorization: string, public data: NewClubData) { }
+  constructor(
+    public authorization: string,
+    public data: NewClubData,
+  ) {}
 }
 
 export class ClubDetail<R extends ClubDetailResponse> implements APIRequest<R> {
@@ -110,7 +113,10 @@ export class ClubDetail<R extends ClubDetailResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(public authorization: string, public clubId: number) {
+  constructor(
+    public authorization: string,
+    public clubId: number,
+  ) {
     this.path = `/clubs/${clubId}`;
   }
 }
@@ -120,7 +126,7 @@ export class PutClubInroduction<R extends ClubDetailResponse> implements APIRequ
 
   path = '/clubs';
 
-  response!:R;
+  response!: R;
 
   auth = true;
 
@@ -138,11 +144,14 @@ export class PutClubLike<R extends PutClubLikeResponse> implements APIRequest<R>
 
   path = '/clubs';
 
-  response!:R;
+  response!: R;
 
   auth = true;
 
-  constructor(public authorization: string, public clubId: number | string) {
+  constructor(
+    public authorization: string,
+    public clubId: number | string,
+  ) {
     this.path = `/clubs/${clubId}/like`;
   }
 }
@@ -152,11 +161,14 @@ export class DeleteClubLike<R extends DeleteClubLikeResponse> implements APIRequ
 
   path = '/clubs';
 
-  response!:R;
+  response!: R;
 
   auth = true;
 
-  constructor(public authorization: string, public clubId: number | string) {
+  constructor(
+    public authorization: string,
+    public clubId: number | string,
+  ) {
     this.path = `/clubs/${clubId}/like/cancel`;
   }
 }
@@ -166,7 +178,7 @@ export class PostClubQnA<R extends PostClubQnAResponse> implements APIRequest<R>
 
   path = '/clubs';
 
-  response!:R;
+  response!: R;
 
   auth = true;
 
@@ -184,7 +196,7 @@ export class GetClubQnA<R extends ClubQnAData> implements APIRequest<R> {
 
   path = '/clubs';
 
-  response!:R;
+  response!: R;
 
   auth = true;
 
@@ -201,7 +213,7 @@ export class DeleteClubQnA<R extends DeleteClubQnAResponse> implements APIReques
 
   path = '/clubs';
 
-  response!:R;
+  response!: R;
 
   auth = true;
 
@@ -244,8 +256,7 @@ export class PutNewClubManager<R extends NewClubManagerResponse> implements APIR
   constructor(
     public authorization: string,
     public data: NewClubManager,
-  ) {
-  }
+  ) {}
 }
 
 export class GetRecruitmentClub<R extends ClubRecruitmentResponse> implements APIRequest<R> {
@@ -283,12 +294,15 @@ export class GetClubEventDetail<R extends ClubEventResponse> implements APIReque
 
   response!: R;
 
-  constructor(public clubId: string | number, public eventId: string | number) {
+  constructor(
+    public clubId: string | number,
+    public eventId: string | number,
+  ) {
     this.path = `/clubs/${clubId}/event/${eventId}`;
   }
 }
 
-export class PostClubRecruitment<R extends {}> implements APIRequest<R> {
+export class PostClubRecruitment<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;
@@ -306,7 +320,7 @@ export class PostClubRecruitment<R extends {}> implements APIRequest<R> {
   }
 }
 
-export class PutClubRecruitment<R extends {}> implements APIRequest<R> {
+export class PutClubRecruitment<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
   path: string;
@@ -324,10 +338,10 @@ export class PutClubRecruitment<R extends {}> implements APIRequest<R> {
   }
 }
 
-export class DeleteClubRecruitment<R extends {}> implements APIRequest<R> {
+export class DeleteClubRecruitment<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 
-  path : string;
+  path: string;
 
   response!: R;
 
@@ -341,7 +355,7 @@ export class DeleteClubRecruitment<R extends {}> implements APIRequest<R> {
   }
 }
 
-export class PostClubEvent<R extends {}> implements APIRequest<R> {
+export class PostClubEvent<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;
@@ -359,7 +373,7 @@ export class PostClubEvent<R extends {}> implements APIRequest<R> {
   }
 }
 
-export class PutClubEvent<R extends {}> implements APIRequest<R> {
+export class PutClubEvent<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.PUT;
 
   path: string;
@@ -378,7 +392,7 @@ export class PutClubEvent<R extends {}> implements APIRequest<R> {
   }
 }
 
-export class DeleteClubEvent<R extends {}> implements APIRequest<R> {
+export class DeleteClubEvent<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 
   path: string;
@@ -396,7 +410,7 @@ export class DeleteClubEvent<R extends {}> implements APIRequest<R> {
   }
 }
 
-export class PostClubRecruitmentNotification<R extends {}> implements APIRequest<R> {
+export class PostClubRecruitmentNotification<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;
@@ -413,7 +427,7 @@ export class PostClubRecruitmentNotification<R extends {}> implements APIRequest
   }
 }
 
-export class DeleteClubRecruitmentNotification<R extends {}> implements APIRequest<R> {
+export class DeleteClubRecruitmentNotification<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 
   path: string;
@@ -430,7 +444,7 @@ export class DeleteClubRecruitmentNotification<R extends {}> implements APIReque
   }
 }
 
-export class PostClubEventNotification<R extends {}> implements APIRequest<R> {
+export class PostClubEventNotification<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path: string;
@@ -448,7 +462,7 @@ export class PostClubEventNotification<R extends {}> implements APIRequest<R> {
   }
 }
 
-export class DeleteClubEventNotification<R extends {}> implements APIRequest<R> {
+export class DeleteClubEventNotification<R extends object> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 
   path: string;

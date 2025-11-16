@@ -1,11 +1,10 @@
-import { cn } from '@bcsdlab/utils';
-import * as api from 'api';
-import LoginRequiredModal from 'components/modal/LoginRequiredModal';
-import type { Portal } from 'components/modal/Modal/PortalProvider';
 import { useState, useEffect } from 'react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { cn } from '@bcsdlab/utils';
+import * as api from 'api';
+import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { CATEGORY, Category, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -13,9 +12,10 @@ import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './PCHeader.module.scss';
 
-const ID: { [key: string]: string; } = {
+const ID: { [key: string]: string } = {
   PANEL: 'megamenu-panel',
   LABEL1: 'megamenu-label-1',
   LABEL2: 'megamenu-label-2',
@@ -26,17 +26,14 @@ const useMegaMenu = (category: Category[]) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const createOnChangeMenu = (title: string) => () => {
-    const selectedSubmenu = category
-      .find((categoryInfo) => categoryInfo.title === title)?.submenu ?? null;
+    const selectedSubmenu = category.find((categoryInfo) => categoryInfo.title === title)?.submenu ?? null;
     setPanelMenuList(selectedSubmenu);
     setIsExpanded(true);
   };
   const onFocusPanel = () => {
     setIsExpanded(true);
   };
-  const hideMegaMenu = (
-    event: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLElement>,
-  ) => {
+  const hideMegaMenu = (event: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLElement>) => {
     if (event.type === 'mouseout') {
       const { currentTarget } = event;
       currentTarget.blur();
@@ -82,9 +79,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   const isLoggedin = mounted && !!token;
 
   const logShortcut = (title: string) => {
-    const loggingMap: Record<
-    string,
-    { team: string; event_label: string; value: string; event_category?: string }> = {
+    const loggingMap: Record<string, { team: string; event_label: string; value: string; event_category?: string }> = {
       공지사항: { team: 'CAMPUS', event_label: 'header', value: '공지사항' },
       '버스 교통편': { team: 'CAMPUS', event_label: 'header', value: '버스 교통편' },
       '버스 시간표': { team: 'CAMPUS', event_label: 'header', value: '버스 시간표' },
@@ -92,16 +87,28 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
       시간표: { team: 'USER', event_label: 'header', value: '시간표' },
       복덕방: { team: 'BUSINESS', event_label: 'header', value: '복덕방' },
       주변상점: {
-        team: 'BUSINESS', event_label: 'header', value: '주변상점', event_category: 'click',
+        team: 'BUSINESS',
+        event_label: 'header',
+        value: '주변상점',
+        event_category: 'click',
       },
       '교내 시설물 정보': {
-        team: 'CAMPUS', event_label: 'header', value: '교내 시설물 정보', event_category: 'click',
+        team: 'CAMPUS',
+        event_label: 'header',
+        value: '교내 시설물 정보',
+        event_category: 'click',
       },
       쪽지: {
-        team: 'CAMPUS', event_label: 'header', value: '쪽지', event_category: 'click',
+        team: 'CAMPUS',
+        event_label: 'header',
+        value: '쪽지',
+        event_category: 'click',
       },
       동아리: {
-        team: 'CAMPUS', event_label: 'header', value: '동아리', event_category: 'click',
+        team: 'CAMPUS',
+        event_label: 'header',
+        value: '동아리',
+        event_category: 'click',
       },
     };
 
@@ -162,11 +169,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
   const openLoginModal = () => {
     portalManager.open((portalOption: Portal) => (
-      <LoginRequiredModal
-        title="쪽지를 사용하기"
-        description="로그인 후 이용해주세요."
-        onClose={portalOption.close}
-      />
+      <LoginRequiredModal title="쪽지를 사용하기" description="로그인 후 이용해주세요." onClose={portalOption.close} />
     ));
   };
 
@@ -184,12 +187,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
 
   return (
     <>
-      <Link
-        className={styles.header__logo}
-        href={ROUTES.Main()}
-        tabIndex={0}
-        onClick={escapeByLogo}
-      >
+      <Link className={styles.header__logo} href={ROUTES.Main()} tabIndex={0} onClick={escapeByLogo}>
         <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
       </Link>
       <div
@@ -202,9 +200,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
       >
         <ul className={styles['megamenu__trigger-list']}>
           {CATEGORY.map((category, index) => (
-            <li
-              key={category.title}
-            >
+            <li key={category.title}>
               <button
                 className={styles.megamenu__trigger}
                 tabIndex={0}
@@ -217,9 +213,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
                 aria-expanded={isMegaMenuExpanded}
                 aria-controls={ID[`LABEL${index + 1}`]}
               >
-                <span>
-                  {category.title}
-                </span>
+                <span>{category.title}</span>
               </button>
             </li>
           ))}
@@ -239,11 +233,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
               return (
                 <li className={styles.megamenu__menu} key={menu.title}>
                   {/* TODO: 키보드 Focus 접근성 향상 */}
-                  <Link
-                    className={styles.megamenu__link}
-                    href={href}
-                    onClick={(e) => handleMenuClick(e, menu.title)}
-                  >
+                  <Link className={styles.megamenu__link} href={href} onClick={(e) => handleMenuClick(e, menu.title)}>
                     {menu.title}
                   </Link>
                 </li>

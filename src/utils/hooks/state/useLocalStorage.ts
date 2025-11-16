@@ -33,9 +33,7 @@ export function useLocalStorage<T>(key: string, defaultValue: T) {
       localStorage.setItem(key, JSON.stringify(newValue));
     }
     // 같은 탭에서도 리렌더링 되도록 강제로 이벤트 발생
-    window.dispatchEvent(
-      new StorageEvent('storage', { key, newValue: newValue ? JSON.stringify(newValue) : null }),
-    );
+    window.dispatchEvent(new StorageEvent('storage', { key, newValue: newValue ? JSON.stringify(newValue) : null }));
   };
 
   return [value, setValue] as const;

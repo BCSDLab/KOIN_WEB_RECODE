@@ -1,25 +1,25 @@
+import React from 'react';
+import { useRouter } from 'next/router';
+import DownloadIcon from 'assets/svg/download-icon.svg';
+import GraduationIcon from 'assets/svg/graduation-icon.svg';
+import EditIcon from 'assets/svg/pen-icon.svg';
+import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
-import React from 'react';
-import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
 import Curriculum from 'components/TimetablePage/components/Curriculum';
-import DownloadIcon from 'assets/svg/download-icon.svg';
-import EditIcon from 'assets/svg/pen-icon.svg';
-import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import Timetable from 'components/TimetablePage/components/Timetable';
 import TotalGrades from 'components/TimetablePage/components/TotalGrades';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
-import { useSemester } from 'utils/zustand/semester';
-import useTokenState from 'utils/hooks/state/useTokenState';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
-import useLogger from 'utils/hooks/analytics/useLogger';
 import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
-import { toast } from 'react-toastify';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
+import { toast } from 'react-toastify';
 import ROUTES from 'static/routes';
-import { useRouter } from 'next/router';
-import styles from './MyLectureTimetable.module.scss';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useSemester } from 'utils/zustand/semester';
 import DownloadTimetableModal from './DownloadTimetableModal';
+import styles from './MyLectureTimetable.module.scss';
 
 function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -54,8 +54,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
         team: 'USER',
         event_label: 'timetable',
         value: '이미지저장',
-        duration_time:
-        (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
       });
       openModal();
     }
@@ -63,7 +62,9 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
 
   const onClickEdit = () => {
     if (isSemesterAndTimetableExist()) {
-      router.push(`/${ROUTES.TimetableRegular({ id: String(timetableFrameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`);
+      router.push(
+        `/${ROUTES.TimetableRegular({ id: String(timetableFrameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`,
+      );
     }
   };
 
@@ -89,19 +90,11 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           졸업학점 계산기
         </button>
         <Curriculum list={deptList} />
-        <button
-          type="button"
-          className={styles.page__button}
-          onClick={onClickDownloadImage}
-        >
+        <button type="button" className={styles.page__button} onClick={onClickDownloadImage}>
           <DownloadIcon />
           이미지 저장
         </button>
-        <button
-          type="button"
-          className={styles.page__button}
-          onClick={onClickEdit}
-        >
+        <button type="button" className={styles.page__button} onClick={onClickEdit}>
           <div className={styles['page__edit-icon']}>
             <EditIcon />
           </div>
@@ -121,11 +114,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           </React.Suspense>
         </ErrorBoundary>
       </div>
-      <div>
-        {isModalOpen && (
-          <DownloadTimetableModal onClose={closeModal} timetableFrameId={timetableFrameId} />
-        )}
-      </div>
+      <div>{isModalOpen && <DownloadTimetableModal onClose={closeModal} timetableFrameId={timetableFrameId} />}</div>
     </div>
   );
 }

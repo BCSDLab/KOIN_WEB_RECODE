@@ -1,6 +1,6 @@
+import { Dispatch, SetStateAction } from 'react';
 import ClubQnACard from 'components/Club/ClubDetailPage/components/ClubQnACard';
 import useClubQnA from 'components/Club/ClubDetailPage/hooks/useClubQnA';
-import { Dispatch, SetStateAction } from 'react';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import styles from './ClubQnA.module.scss';
@@ -9,14 +9,12 @@ interface ClubQnAProps {
   isManager: boolean;
   openModal: () => void;
   clubId: number | string | undefined;
-  openAuthModal:()=> void;
-  setQnA:Dispatch<SetStateAction<string>>;
-  setReplyId:Dispatch<SetStateAction<number>>;
+  openAuthModal: () => void;
+  setQnA: Dispatch<SetStateAction<string>>;
+  setReplyId: Dispatch<SetStateAction<number>>;
 }
 
-export default function ClubQnA({
-  isManager, openModal, clubId, openAuthModal, setQnA, setReplyId,
-}: ClubQnAProps) {
+export default function ClubQnA({ isManager, openModal, clubId, openAuthModal, setQnA, setReplyId }: ClubQnAProps) {
   const { clubQnAData } = useClubQnA(clubId);
   const token = useTokenState();
   const logger = useLogger();
@@ -36,15 +34,11 @@ export default function ClubQnA({
   return (
     <div className={styles.layout}>
       {!isManager && (
-      <div className={styles['create-button__container']}>
-        <button
-          type="button"
-          className={styles['create-button']}
-          onClick={hadleClickAddButton}
-        >
-          Q&A 추가
-        </button>
-      </div>
+        <div className={styles['create-button__container']}>
+          <button type="button" className={styles['create-button']} onClick={hadleClickAddButton}>
+            Q&A 추가
+          </button>
+        </div>
       )}
 
       {clubQnAData?.qnas.map((item) => (

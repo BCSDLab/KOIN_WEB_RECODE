@@ -1,21 +1,15 @@
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
 import { useMutation } from '@tanstack/react-query';
-import {
-  checkPhone,
-  idExists,
-  idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify,
-} from 'api/auth';
-import { MESSAGES } from 'static/auth';
-import { useState } from 'react';
-import {
-  type InputMessage,
-} from 'components/Auth/SignupPage/components/CustomInput';
-import ROUTES from 'static/routes';
+import { checkPhone, idExists, idFindSms, idMatchPhone, phoneExists, smsSend, smsVerify } from 'api/auth';
+import { SmsSendResponse } from 'api/auth/entity';
+import { type InputMessage } from 'components/Auth/SignupPage/components/CustomInput';
 import useCountdownTimer from 'components/Auth/SignupPage/hooks/useCountdownTimer';
+import { MESSAGES } from 'static/auth';
+import ROUTES from 'static/routes';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import showToast from 'utils/ts/showToast';
-import { SmsSendResponse } from 'api/auth/entity';
-import { useRouter } from 'next/router';
 
 interface UsePhoneVerificationProps {
   phoneNumber: string;

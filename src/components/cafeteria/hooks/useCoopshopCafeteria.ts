@@ -4,12 +4,10 @@ import { coopshop } from 'api';
 const COOPSHOP_CAFETERIA_KEY = 'COOPSHOP_CAFETERIA_KEY';
 
 function useCoopshopCafeteria() {
-  const { data: cafeteriaInfo } = useSuspenseQuery(
-    {
-      queryKey: [COOPSHOP_CAFETERIA_KEY],
-      queryFn: () => coopshop.getCafeteriaInfo(),
-    },
-  );
+  const { data: cafeteriaInfo } = useSuspenseQuery({
+    queryKey: [COOPSHOP_CAFETERIA_KEY],
+    queryFn: () => coopshop.getCafeteriaInfo(),
+  });
   return { cafeteriaInfo };
 }
 

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import UpArrow from 'assets/svg/Club/event-filter-up-arrow.svg';
 import DownArrow from 'assets/svg/Club/event-filter-down-arrow.svg';
+import UpArrow from 'assets/svg/Club/event-filter-up-arrow.svg';
 import ClubEventCard from 'components/Club/ClubDetailPage/components/ClubEventCard';
-import { useClubEventList } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
 import ClubEventDetailView from 'components/Club/ClubDetailPage/components/ClubEventDetailView';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useClubEventList } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ClubEventList.module.scss';
 
 interface ClubEventListProps {
@@ -54,25 +54,14 @@ export default function ClubEventList({
   };
 
   if (eventId) {
-    return (
-      <ClubEventDetailView
-        clubId={clubId}
-        eventId={eventId}
-        setEventId={setEventId}
-        isManager={isManager}
-      />
-    );
+    return <ClubEventDetailView clubId={clubId} eventId={eventId} setEventId={setEventId} isManager={isManager} />;
   }
 
   return (
     <div className="club-event-list">
       {isManager && isMobile && (
         <div className={styles['create-button__container']}>
-          <button
-            type="button"
-            className={styles['create-button']}
-            onClick={handleClickAddButton}
-          >
+          <button type="button" className={styles['create-button']} onClick={handleClickAddButton}>
             행사 생성하기
           </button>
         </div>
@@ -80,17 +69,9 @@ export default function ClubEventList({
 
       <div className={styles['filter-container']}>
         <div className={styles.dropdown__wrapper}>
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className={styles.dropdown__button}
-          >
+          <button type="button" onClick={() => setIsOpen(!isOpen)} className={styles.dropdown__button}>
             <span>{getStatusLabel(selectedStatus)}</span>
-            {isOpen ? (
-              <UpArrow />
-            ) : (
-              <DownArrow />
-            )}
+            {isOpen ? <UpArrow /> : <DownArrow />}
           </button>
 
           {isOpen && (
@@ -111,9 +92,7 @@ export default function ClubEventList({
       </div>
       <div className={styles['club-event-list']}>
         {clubEventList.length === 0 ? (
-          <div className={styles['club-event-list__empty']}>
-            등록된 행사가 없습니다.
-          </div>
+          <div className={styles['club-event-list__empty']}>등록된 행사가 없습니다.</div>
         ) : (
           clubEventList.map((event) => (
             <ClubEventCard

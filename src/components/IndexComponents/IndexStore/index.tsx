@@ -1,10 +1,10 @@
-import { useStoreCategories } from 'hooks/store/storePage/useCategoryList';
-import useLogger from 'utils/hooks/analytics/useLogger';
-import ROUTES from 'static/routes';
 import { Suspense, useEffect } from 'react';
-import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
+import { useStoreCategories } from 'hooks/store/storePage/useCategoryList';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -43,21 +43,21 @@ export default function IndexStore() {
     route: `${ROUTES.Store()}?category=${category.id}`,
   }));
 
-  const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map(
-    (category) => (
-      category.name === '전체보기' ? ({
-        ...category,
-        name: '혜택',
-        image_url: 'https://static.koreatech.in/assets/img/icon/benefit_icon.png',
-        event: {
-          ...category.event,
-          event_label: 'main_shop_benefit',
-          value: '전화주문혜택',
-          current_page: 'benefit',
-        },
-        route: `${ROUTES.BenefitStore()}?category=1`,
-      }) : category
-    ),
+  const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map((category) =>
+    category.name === '전체보기'
+      ? {
+          ...category,
+          name: '혜택',
+          image_url: 'https://static.koreatech.in/assets/img/icon/benefit_icon.png',
+          event: {
+            ...category.event,
+            event_label: 'main_shop_benefit',
+            value: '전화주문혜택',
+            current_page: 'benefit',
+          },
+          route: `${ROUTES.BenefitStore()}?category=1`,
+        }
+      : category,
   );
 
   const handleCategoryClick = ({ event, route }: CategoryWithEvent) => {
@@ -74,7 +74,9 @@ export default function IndexStore() {
 
   return (
     <section className={styles.template}>
-      <Link href={`${ROUTES.Store()}?category=1`} className={styles.template__title}>주변 상점</Link>
+      <Link href={`${ROUTES.Store()}?category=1`} className={styles.template__title}>
+        주변 상점
+      </Link>
       <Suspense fallback={null}>
         <div className={styles.category__wrapper}>
           {categoriesWithBenefit.map((category) => (
@@ -84,11 +86,7 @@ export default function IndexStore() {
               onClick={() => handleCategoryClick(category)}
               type="button"
             >
-              <img
-                src={category.image_url}
-                alt={category.name}
-                className={styles.category__image}
-              />
+              <img src={category.image_url} alt={category.name} className={styles.category__image} />
               {category.name}
             </button>
           ))}

@@ -1,25 +1,25 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
-import { useSemester, useSemesterAction } from 'utils/zustand/semester';
-import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
+import { Semester } from 'api/timetable/entity';
 import AddIcon from 'assets/svg/add-icon.svg';
+import DownArrowIcon from 'assets/svg/down-arrow-icon.svg';
 import TrashCanIcon from 'assets/svg/trash-can-icon.svg';
-import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
-import useDeleteSemester from 'components/TimetablePage/hooks/useDeleteSemester';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import InducingLoginModal from 'components/TimetablePage/components/InducingLoginModal';
-import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useAddSemester from 'components/TimetablePage/hooks/useAddSemester';
+import useDeleteSemester from 'components/TimetablePage/hooks/useDeleteSemester';
+import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
+import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import useAddSemester from 'components/TimetablePage/hooks/useAddSemester';
-import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
-import { Semester } from 'api/timetable/entity';
-import { useRouter } from 'next/router';
+import { useSemester, useSemesterAction } from 'utils/zustand/semester';
+import AddSemesterModal from './AddSemesterModal';
 import DeleteSemesterModal from './DeleteSemesterModal';
 import styles from './SemesterList.module.scss';
-import AddSemesterModal from './AddSemesterModal';
 
 function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const logger = useLogger();
@@ -36,10 +36,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
   const [selectedSemester, setSelectedSemester] = React.useState(semester);
   const [isModalOpen, setModalOpenTrue, setModalOpenFalse] = useBooleanState(false);
 
-  const { mutate: deleteTimetableFrame } = useDeleteSemester(
-    token,
-    selectedSemester,
-  );
+  const { mutate: deleteTimetableFrame } = useDeleteSemester(token, selectedSemester);
 
   const semesterListToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -128,7 +125,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
         updateSemester(semesterOptionList[0].value);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [semesterOptionList]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -145,11 +142,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
     >
       <button
         type="button"
-        onClick={
-          semesterOptionList.length > 0 && semester !== null
-            ? semesterListToggle
-            : onClickAddSemester
-        }
+        onClick={semesterOptionList.length > 0 && semester !== null ? semesterListToggle : onClickAddSemester}
         className={cn({
           [styles.select__trigger]: true,
           [styles['select__trigger--selected']]: isOpenSemesterList,
@@ -158,15 +151,10 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
         })}
       >
         {semesterOptionList.length > 0 && semester !== null
-          ? semesterOptionList.find((item) => item.value === semester)
-            ?.label || semesterOptionList[0].label
+          ? semesterOptionList.find((item) => item.value === semester)?.label || semesterOptionList[0].label
           : '학기 추가하기'}
 
-        {semesterOptionList.length > 0 && semester !== null ? (
-          <DownArrowIcon />
-        ) : (
-          <AddIcon />
-        )}
+        {semesterOptionList.length > 0 && semester !== null ? <DownArrowIcon /> : <AddIcon />}
       </button>
 
       {isOpenSemesterList && (
@@ -183,8 +171,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
                 type="button"
                 className={cn({
                   [styles.select__option]: true,
-                  [styles['select__option--selected']]:
-                    optionValue.value === semester,
+                  [styles['select__option--selected']]: optionValue.value === semester,
                 })}
                 role="option"
                 aria-selected={optionValue.value === semester}
@@ -192,10 +179,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
                 onClick={() => onClickOption(optionValue.value)}
                 tabIndex={0}
               >
-                <li
-                  className={styles['select__option--item']}
-                  key={optionValue.label}
-                >
+                <li className={styles['select__option--item']} key={optionValue.label}>
                   {optionValue.label}
                 </li>
                 <div>
@@ -214,11 +198,7 @@ function SemesterList({ isViewMode }: { isViewMode?: boolean }) {
             ))}
           </ul>
           {!isViewMode && (
-            <button
-              type="button"
-              className={styles['add-button']}
-              onClick={onClickAddSemester}
-            >
+            <button type="button" className={styles['add-button']} onClick={onClickAddSemester}>
               <div>학기 추가하기</div>
               <AddIcon />
             </button>

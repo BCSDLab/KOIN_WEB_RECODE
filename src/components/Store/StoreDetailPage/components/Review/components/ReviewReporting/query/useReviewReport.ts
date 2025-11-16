@@ -2,8 +2,8 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postReviewReport } from 'api/store';
 import { ReviewReportRequest } from 'api/store/entity';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { useKoinToast } from 'utils/hooks/koinToast/useKoinToast';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export default function useReviewReport(shopId: string, reviewId: string) {
@@ -12,9 +12,7 @@ export default function useReviewReport(shopId: string, reviewId: string) {
   const openToast = useKoinToast();
 
   const { mutate } = useMutation({
-    mutationFn: (
-      data: ReviewReportRequest,
-    ) => postReviewReport(Number(shopId), Number(reviewId), data, token),
+    mutationFn: (data: ReviewReportRequest) => postReviewReport(Number(shopId), Number(reviewId), data, token),
     onSuccess: () => {
       openToast({ message: '해당 리뷰의 신고가 완료되었습니다.' });
       queryClient.invalidateQueries({ queryKey: ['review', Number(shopId)] });

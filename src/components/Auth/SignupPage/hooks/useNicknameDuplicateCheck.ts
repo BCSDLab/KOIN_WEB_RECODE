@@ -1,6 +1,6 @@
+import React from 'react';
 import { MutateOptions } from '@tanstack/react-query';
 import { NicknameDuplicateCheckResponse } from 'api/auth/entity';
-import React from 'react';
 import showToast from 'utils/ts/showToast';
 import useNicknameCheckServer from './useNicknameCheckServer';
 
