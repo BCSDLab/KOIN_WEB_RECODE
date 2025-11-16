@@ -32,6 +32,8 @@ export default function IndexStore() {
   const router = useRouter();
   const isMobile = useMediaQuery();
 
+  console.log('[IndexStore] isMobile:', isMobile);
+
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
   const ORDER_BASE_URL = isStage ? 'https://order.stage.koreatech.in' : 'https://order.koreatech.in';
 
