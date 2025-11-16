@@ -13,7 +13,7 @@ import styles from './ClubEventCard.module.scss';
 
 interface ClubEventCardProps {
   event: ClubEvent & { is_subscribed: boolean };
-  setEventId: (id: number | string) => void;
+  setEventId: (id: number) => void;
   clubName: string;
   clubId: number;
 }

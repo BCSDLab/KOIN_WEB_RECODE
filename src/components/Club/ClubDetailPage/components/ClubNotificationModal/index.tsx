@@ -23,6 +23,9 @@ export default function ClubNotificationModal({
   const infoText = `${notifyType} 알림을 ${type === 'unsubscribed' ? '취소하시겠어요?' : '받으시겠어요?'}`;
   const confirmText = type === 'unsubscribed' ? '알림 취소' : '알림 받기';
 
+  useEscapeKeyDown({ onEscape: closeModal });
+  const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
+
   if (!token) {
     return (
       <LoginRequiredModal
@@ -32,9 +35,6 @@ export default function ClubNotificationModal({
       />
     );
   }
-
-  useEscapeKeyDown({ onEscape: closeModal });
-  const { backgroundRef } = useOutsideClick({ onOutsideClick: closeModal });
 
   const handleSubmit = () => {
     onSubmit();

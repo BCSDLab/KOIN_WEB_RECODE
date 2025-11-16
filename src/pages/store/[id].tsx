@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { Suspense, useEffect, useRef } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';

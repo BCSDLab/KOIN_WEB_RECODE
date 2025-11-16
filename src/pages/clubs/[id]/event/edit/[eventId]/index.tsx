@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { ClubEventRequest } from 'api/club/entity';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
@@ -24,10 +24,10 @@ function splitKoreanDate(date: Date): [string, string] {
 
 function ClubEventEditPage({ id, eventId }: { id: string; eventId: string }) {
   const logger = useLogger();
+  const isMobile = useMediaQuery();
   const { clubDetail } = useClubDetail(Number(id));
   const { clubEventDetail } = useClubEventDetail(id, eventId);
   const { mutateAsync } = usePutClubEvent(Number(id));
-  const isMobile = useMediaQuery();
 
   const [modalType, setModalType] = useState<'edit' | 'editCancel'>('edit');
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -36,10 +36,16 @@ function ClubEventEditPage({ id, eventId }: { id: string; eventId: string }) {
   const [isStartTimePickerOpen, openStartTimePicker, closeStartTimePicker] = useBooleanState(false);
   const [isEndTimePickerOpen, openEndTimePicker, closeEndTimePicker] = useBooleanState(false);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [startTime, setStartTime] = useState({ hour: 0, minute: 0 });
-  const [endTime, setEndTime] = useState({ hour: 0, minute: 0 });
+  const [startDate, setStartDate] = useState<Date>(() => new Date(clubEventDetail.start_date));
+  const [endDate, setEndDate] = useState<Date>(() => new Date(clubEventDetail.end_date));
+  const [startTime, setStartTime] = useState(() => {
+    const date = new Date(clubEventDetail.start_date);
+    return { hour: date.getHours(), minute: date.getMinutes() };
+  });
+  const [endTime, setEndTime] = useState(() => {
+    const date = new Date(clubEventDetail.end_date);
+    return { hour: date.getHours(), minute: date.getMinutes() };
+  });
 
   const [formData, setFormData] = useState<ClubEventRequest>({
     name: clubEventDetail.name,
@@ -49,19 +55,6 @@ function ClubEventEditPage({ id, eventId }: { id: string; eventId: string }) {
     start_date: clubEventDetail.start_date,
     end_date: clubEventDetail.end_date,
   });
-
-  useEffect(() => {
-    if (!clubEventDetail) return;
-
-    const start = new Date(clubEventDetail.start_date);
-    const end = new Date(clubEventDetail.end_date);
-
-    setStartDate(start);
-    setStartTime({ hour: start.getHours(), minute: start.getMinutes() });
-
-    setEndDate(end);
-    setEndTime({ hour: end.getHours(), minute: end.getMinutes() });
-  }, [clubEventDetail]);
 
   const handleSubmit = async () => {
     const submitStartDate = formatISODateTime(startDate, startTime.hour, startTime.minute);

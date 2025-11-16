@@ -13,21 +13,31 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
 import styles from './ReviewList.module.scss';
 
-const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
+type SortType = 'LATEST' | 'OLDEST' | 'HIGHEST_RATING' | 'LOWEST_RATING';
 
-const sortType = {
+const option = ['최신순', '오래된순', '별점낮은순', '별점높은순'] as const;
+type OptionLabel = (typeof option)[number];
+
+const sortType: Record<OptionLabel, SortType> = {
   최신순: 'LATEST',
   오래된순: 'OLDEST',
   별점높은순: 'HIGHEST_RATING',
   별점낮은순: 'LOWEST_RATING',
 };
 
+const typeToLabel: Record<SortType, OptionLabel> = {
+  LATEST: '최신순',
+  OLDEST: '오래된순',
+  HIGHEST_RATING: '별점높은순',
+  LOWEST_RATING: '별점낮은순',
+};
+
 export default function ReviewList({ id }: { id: string }) {
   const endOfPage = useRef(null);
   const startReview = useRef(null);
-  const currentReviewType = useRef<string>('최신순');
-  const [currentSortType, setCurrentSortType] = useState(sortType.최신순);
+  const [currentSortType, setCurrentSortType] = useState<SortType>(sortType.최신순);
   const previousSortType = useDeferredValue(currentSortType);
+  const currentSortLabel = typeToLabel[currentSortType];
   const { data, hasNextPage, fetchNextPage } = useGetReview(Number(id), previousSortType);
   const reviews = data.pages.flatMap((page) => page.reviews);
   const { data: myReview } = useGetMyReview(id, previousSortType);
@@ -100,7 +110,7 @@ export default function ReviewList({ id }: { id: string }) {
             </div>
           ) : (
             <button type="button" className={styles.dropdown}>
-              {currentReviewType.current}{' '}
+              {currentSortLabel}{' '}
               <div
                 style={{ transform: openDropdown === 'sort' ? 'rotate(180deg)' : '', transition: 'transform 0.15s' }}
               >
@@ -115,7 +125,6 @@ export default function ReviewList({ id }: { id: string }) {
                         key={select}
                         onClick={() => {
                           setCurrentSortType(sortType[select]);
-                          currentReviewType.current = select;
                         }}
                         className={styles['dropdown__list--item']}
                       >

@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { DiningType } from 'api/dinings/entity';
@@ -26,8 +26,9 @@ export default function MobileCafeteriaPage({ diningType, setDiningType, designV
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();
-  const [hasLoggedScroll, setHasLoggedScroll] = useState(false);
+
   const { cafeteriaInfo } = useCoopshopCafeteria();
+  const lastLoggedDiningTypeRef = useRef<DiningType | null>(null);
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
 
@@ -53,9 +54,9 @@ export default function MobileCafeteriaPage({ diningType, setDiningType, designV
       const maxHeight = doc.scrollHeight - doc.clientHeight;
       const scrollPercentage = (scrolled / maxHeight) * 100;
 
-      if (scrollPercentage > 70 && !hasLoggedScroll) {
+      if (scrollPercentage > 70 && lastLoggedDiningTypeRef.current !== diningType) {
         logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[diningType] });
-        setHasLoggedScroll(true);
+        lastLoggedDiningTypeRef.current = diningType;
       }
     };
 
@@ -63,7 +64,7 @@ export default function MobileCafeteriaPage({ diningType, setDiningType, designV
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [hasLoggedScroll, logger, diningType]);
+  }, [logger, diningType]);
 
   const handleDiningToStore = () => {
     sessionLogger.actionSessionEvent({
@@ -75,10 +76,6 @@ export default function MobileCafeteriaPage({ diningType, setDiningType, designV
     });
     router.push('/store');
   };
-
-  useEffect(() => {
-    setHasLoggedScroll(false);
-  }, [diningType]);
 
   useScrollToTop();
 
