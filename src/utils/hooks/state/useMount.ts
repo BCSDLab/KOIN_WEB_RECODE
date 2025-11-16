@@ -1,10 +1,14 @@
-import { useSyncExternalStore } from 'react';
+import { useEffect, useState } from 'react';
 
-function subscribe(onStateChange: () => void) {
-  const id = setTimeout(onStateChange, 0);
-  return () => clearTimeout(id);
-}
+const useMount = () => {
+  const [mounted, setMounted] = useState(false);
 
-const useMount = (): boolean => useSyncExternalStore(subscribe, () => true, () => false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  return mounted;
+};
 
 export default useMount;
