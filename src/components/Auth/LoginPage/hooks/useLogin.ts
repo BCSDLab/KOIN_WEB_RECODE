@@ -19,6 +19,8 @@ interface UserInfo {
   login_pw: string;
 }
 
+const isDevelop = typeof window !== 'undefined' && window.location.hostname.endsWith('koreatech.in');
+
 export const useLogin = (state: IsAutoLogin) => {
   const { setToken, setRefreshToken, setUserType } = useTokenStore();
   const { redirectAfterLogin } = useLoginRedirect();
@@ -37,8 +39,8 @@ export const useLogin = (state: IsAutoLogin) => {
         setRefreshToken(data.refresh_token);
       }
       queryClient.invalidateQueries();
-      setCookie('AUTH_TOKEN_KEY', data.token);
-      setCookie('AUTH_USER_TYPE', data.user_type);
+      setCookie('AUTH_TOKEN_KEY', data.token, { domain: !isDevelop ? '.koreatech.in' : undefined });
+      setCookie('AUTH_USER_TYPE', data.user_type, { domain: !isDevelop ? '.koreatech.in' : undefined });
       setToken(data.token);
       setUserType(data.user_type);
       redirectAfterLogin();
