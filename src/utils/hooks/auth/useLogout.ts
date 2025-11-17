@@ -25,7 +25,7 @@ export const useLogout = () => {
     deleteCookie('AUTH_TOKEN_KEY', { domain: domain });
     sessionStorage.removeItem(STORAGE_KEY.MODAL_SESSION_SHOWN);
     setToken('');
-    window.location.href = ROUTES.Main();
+    // window.location.href = ROUTES.Main();
   };
   return logout;
 };
