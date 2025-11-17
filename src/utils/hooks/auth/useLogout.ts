@@ -20,7 +20,7 @@ export const useLogout = () => {
   const { setToken, setRefreshToken } = useTokenStore();
   const logout = () => {
     const domain = getCookieDomain();
-
+    console.error(domain);
     setRefreshToken('');
     deleteCookie('AUTH_TOKEN_KEY', { domain: domain });
     sessionStorage.removeItem(STORAGE_KEY.MODAL_SESSION_SHOWN);
