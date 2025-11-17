@@ -25,6 +25,10 @@ const getCookieDomain = () => {
   const { hostname } = window.location;
   if (hostname === 'localhost') return undefined;
 
+  if (process.env.NEXT_PUBLIC_API_PATH?.includes('stage')) {
+    return '.stage.koreatech.in';
+  }
+
   return '.koreatech.in';
 };
 
