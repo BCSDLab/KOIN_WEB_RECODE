@@ -33,7 +33,7 @@
   },
   "scripts": {
     "start": "next dev",
-    "start:serve": "next start",
+    "start:serve": "node .next/standalone/server.js",
     "build": "tsc && next build",
     "test": "test --coverage",
     "sourcemap:clean": "find ./build -name '*.map' -type f -delete",
