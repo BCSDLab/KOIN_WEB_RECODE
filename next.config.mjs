@@ -23,7 +23,6 @@ const nextConfig = {
     workerThreads: false,
   },
   images: { unoptimized: true },
-  output: 'standalone',
 };
 
 export default nextConfig;
