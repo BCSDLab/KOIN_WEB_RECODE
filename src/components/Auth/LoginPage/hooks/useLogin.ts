@@ -21,13 +21,9 @@ interface UserInfo {
 
 const getCookieDomain = () => {
   if (typeof window === 'undefined') return undefined;
+
   const { hostname } = window.location;
-
   if (hostname === 'localhost') return undefined;
-
-  if (hostname.includes('.stage.koreatech.in')) {
-    return '.stage.koreatech.in';
-  }
 
   return '.koreatech.in';
 };
@@ -53,7 +49,6 @@ export const useLogin = (state: IsAutoLogin) => {
       }
       queryClient.invalidateQueries();
       setCookie('AUTH_TOKEN_KEY', data.token, { domain: domain });
-      setCookie('DOMAIN_TEST', 'test', { domain: domain });
       setCookie('AUTH_USER_TYPE', data.user_type, { domain: domain });
       setToken(data.token);
       setUserType(data.user_type);
