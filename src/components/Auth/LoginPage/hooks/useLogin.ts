@@ -19,20 +19,18 @@ interface UserInfo {
   login_pw: string;
 }
 
-// const getCookieDomain = () => {
-//   if (typeof window === 'undefined') return undefined;
+const getCookieDomain = () => {
+  if (typeof window === 'undefined') return undefined;
+  const { hostname } = window.location;
 
-//   const { hostname } = window.location;
+  if (hostname === 'localhost') return undefined;
 
-//   if (hostname === 'localhost') return '.koreatech.in';
+  if (hostname.includes('.stage.koreatech.in')) {
+    return '.stage.koreatech.in';
+  }
 
-//   const parts = hostname.split('.');
-//   if (parts.length >= 2) {
-//     return `.${parts.slice(-2).join('.')}`; // .koreatech.in
-//   }
-
-//   return undefined;
-// };
+  return '.koreatech.in';
+};
 
 export const useLogin = (state: IsAutoLogin) => {
   const { setToken, setRefreshToken, setUserType } = useTokenStore();
@@ -43,7 +41,7 @@ export const useLogin = (state: IsAutoLogin) => {
   const postLogin = useMutation({
     mutationFn: auth.login,
     onSuccess: (data: LoginResponse) => {
-      // const domain = getCookieDomain();
+      const domain = getCookieDomain();
 
       logger.actionEventClick({
         team: 'USER',
@@ -54,9 +52,9 @@ export const useLogin = (state: IsAutoLogin) => {
         setRefreshToken(data.refresh_token);
       }
       queryClient.invalidateQueries();
-      setCookie('AUTH_TOKEN_KEY', data.token, { domain: '.koreatech.in' });
-      setCookie('DOMAIN_TEST', 'test', { domain: '.koreatech.in' });
-      setCookie('AUTH_USER_TYPE', data.user_type, { domain: '.koreatech.in' });
+      setCookie('AUTH_TOKEN_KEY', data.token, { domain: domain });
+      setCookie('DOMAIN_TEST', 'test', { domain: domain });
+      setCookie('AUTH_USER_TYPE', data.user_type, { domain: domain });
       setToken(data.token);
       setUserType(data.user_type);
       redirectAfterLogin();
