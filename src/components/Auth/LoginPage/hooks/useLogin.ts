@@ -44,8 +44,8 @@ export const useLogin = (state: IsAutoLogin) => {
     onSuccess: (data: LoginResponse) => {
       const domain = getCookieDomain();
 
-      console.log('Current hostname:', window.location.hostname);
-      console.log('Calculated cookie domain:', domain);
+      console.error('Current hostname:', window.location.hostname);
+      console.error('Calculated cookie domain:', domain);
       logger.actionEventClick({
         team: 'USER',
         event_label: 'login',
