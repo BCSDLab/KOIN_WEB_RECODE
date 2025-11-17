@@ -55,6 +55,7 @@ export const useLogin = (state: IsAutoLogin) => {
       }
       queryClient.invalidateQueries();
       setCookie('AUTH_TOKEN_KEY', data.token, { domain: '.koreatech.in' });
+      setCookie('DOMAIN_TEST', 'test', { domain: '.koreatech.in' });
       setCookie('AUTH_USER_TYPE', data.user_type, { domain: '.koreatech.in' });
       setToken(data.token);
       setUserType(data.user_type);
