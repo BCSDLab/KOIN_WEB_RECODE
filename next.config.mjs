@@ -23,7 +23,7 @@ const nextConfig = {
     workerThreads: false,
   },
   images: { unoptimized: true },
-  distDir: 'dist',
+  // distDir: 'dist',
 };
 
 export default nextConfig;
