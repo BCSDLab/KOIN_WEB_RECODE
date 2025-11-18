@@ -1,5 +1,5 @@
 import { STORAGE_KEY } from 'static/auth';
-// import ROUTES from 'static/routes';
+import ROUTES from 'static/routes';
 import { deleteCookie } from 'utils/ts/cookie';
 import { useTokenStore } from 'utils/zustand/auth';
 
@@ -20,12 +20,12 @@ export const useLogout = () => {
   const { setToken, setRefreshToken } = useTokenStore();
   const logout = () => {
     const domain = getCookieDomain();
-    console.error(domain);
+
     setRefreshToken('');
     deleteCookie('AUTH_TOKEN_KEY', { domain: domain });
     sessionStorage.removeItem(STORAGE_KEY.MODAL_SESSION_SHOWN);
     setToken('');
-    // window.location.href = ROUTES.Main();
+    window.location.href = ROUTES.Main();
   };
   return logout;
 };
