@@ -17,5 +17,11 @@
   "workbench.editorAssociations": {
     "*.svg": "default"
   },
+  "[css]": {
+    "editor.formatOnSave": false
+  },
+  "[scss]": {
+    "editor.formatOnSave": false
+  },
   "cSpell.words": ["bcsdlab", "BUGSINK", "GLITCHTIP", "Koin", "tanstack", "zustand"]
 }
