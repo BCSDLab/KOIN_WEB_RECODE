@@ -25,6 +25,13 @@ import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import {
+  createQueryParser,
+  parseQueryBoolean,
+  parseQueryNumber,
+  parseQueryString,
+  parseServerSideParams,
+} from 'utils/ts/parseServerSideParams';
 import styles from './ClubListPage.module.scss';
 
 const DEFAULT_OPTION_INDEX = 0;
@@ -41,15 +48,34 @@ const DEFAULT_SORT_OPTIONS = [
 
 const getDDayLabel = (dday: number) => (dday === 0 ? 'D-Day' : `D-${dday}`);
 
+interface ClubListQuery {
+  clubName: string;
+  sortType: string;
+  categoryId: number | null;
+  isRecruiting: boolean;
+}
+
+export const parseClubListQuery = createQueryParser<ClubListQuery>({
+  clubName: {
+    parser: parseQueryString,
+    defaultValue: '',
+  },
+  sortType: {
+    parser: (value) => parseQueryString(value, DEFAULT_SORT_OPTIONS[0].value),
+  },
+  categoryId: {
+    parser: parseQueryNumber,
+    defaultValue: null,
+  },
+  isRecruiting: {
+    parser: parseQueryBoolean,
+    defaultValue: false,
+  },
+});
+
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const { query, req } = context;
-
-  const clubName = query.clubName ? String(query.clubName) : '';
-  const sortType = query.sortType ? String(query.sortType) : DEFAULT_SORT_OPTIONS[DEFAULT_OPTION_INDEX].value;
-  const categoryId = query.categoryId ? Number(query.categoryId) : null;
-  const isRecruiting = query.isRecruiting === 'true';
-
-  const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+  const { token, query } = parseServerSideParams(context);
+  const params = parseClubListQuery(query);
 
   const queryClient = new QueryClient();
 
@@ -59,20 +85,16 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       queryFn: () => club.getClubCategories(),
     }),
     queryClient.prefetchQuery({
-      queryKey: ['club-list', categoryId, sortType, isRecruiting, clubName],
-      queryFn: () => club.getClubList(token, categoryId ?? undefined, sortType, isRecruiting, clubName),
+      queryKey: ['club-list', params.categoryId, params.sortType, params.isRecruiting, params.clubName],
+      queryFn: () =>
+        club.getClubList(token, params.categoryId ?? undefined, params.sortType, params.isRecruiting, params.clubName),
     }),
   ]);
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
-      initialQuery: {
-        clubName,
-        categoryId,
-        sortType,
-        isRecruiting,
-      },
+      initialQuery: params,
       serverToken: token,
     },
   };
