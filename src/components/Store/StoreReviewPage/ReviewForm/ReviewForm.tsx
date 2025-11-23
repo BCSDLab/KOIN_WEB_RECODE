@@ -29,7 +29,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
 
   useScrollToTop();
 
-  const [rate, setRate] = useState(initialData.rating || 0);
+  const [rate, setRate] = useState(initialData.rating ?? 0);
 
   const [reviewText, setReviewText] = useState(initialData?.content ?? '');
   const [menuList, setMenuList] = useState<{ id: string; name: string }[]>(
@@ -44,9 +44,6 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   useEffect(() => {
     if (initialData?.image_urls) {
       setImageFile(initialData.image_urls);
-    }
-    if (initialData.rating) {
-      setRate(initialData.rating);
     }
   }, [initialData, setImageFile]);
 
@@ -78,7 +75,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
     });
   };
 
-  const handleSumbit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const reviewData = {
       rating: rate,
@@ -95,7 +92,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSumbit}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.form__name}>
         <div>{storeDetail?.name}</div>
         <div>

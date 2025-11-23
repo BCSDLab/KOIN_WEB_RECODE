@@ -33,6 +33,7 @@ export default function Panel({ openModal }: PanelProps) {
   const token = useTokenState();
   const portalManager = useModalPortal();
   const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
+  const ORDER_BASE_URL = isStage ? 'https://order.stage.koreatech.in' : 'https://order.koreatech.in';
 
   const logShortcut = (title: string) => {
     if (title === '공지사항') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '공지사항' });
@@ -88,14 +89,25 @@ export default function Panel({ openModal }: PanelProps) {
   const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
     logExitExistingPage(submenu.title);
-    if (submenu.openInNewTab) {
-      window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
-    } else if (!token && submenu.title === '쪽지') {
+
+    if (!token && submenu.title === '쪽지') {
       openLoginModal();
       return;
+    }
+
+    if (submenu.title === '주변상점') {
+      const targetUrl = `${ORDER_BASE_URL}/shops/?category=1`;
+      router.push(targetUrl);
+      closeSidebar();
+      return;
+    }
+
+    if (submenu.openInNewTab) {
+      window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
     } else {
       router.push(submenu.link);
     }
+
     closeSidebar();
   };
 

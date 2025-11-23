@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { getClubDetail, getRecruitmentClub } from 'api/club';
+import { getClubDetail, getClubEventDetail, getRecruitmentClub } from 'api/club';
 import BellIcon from 'assets/svg/Club/bell-icon.svg';
 import OffBellIcon from 'assets/svg/Club/bell-off-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
@@ -20,7 +20,6 @@ import ClubRecruitment from 'components/Club/ClubDetailPage/components/ClubRecru
 import CreateQnAModal from 'components/Club/ClubDetailPage/components/CreateQnAModal';
 import MandateClubManagerModal from 'components/Club/ClubDetailPage/components/MandateClubManagerModal';
 import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
-import { useClubEventDetail } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
 import useClubLikeMutation from 'components/Club/ClubDetailPage/hooks/useClubLike';
 import useClubRecruitmentNotification from 'components/Club/ClubDetailPage/hooks/useClubNotification';
 import useClubRecruitment from 'components/Club/ClubDetailPage/hooks/useClubRecruitment';
@@ -42,7 +41,7 @@ import { useHeaderTitle } from 'utils/zustand/customTitle';
 import type { ClubRecruitmentResponse } from 'api/club/entity';
 import styles from './ClubDetailPage.module.scss';
 
-const NO_SELECTED_EVENT_ID = -1;
+export const NO_SELECTED_EVENT_ID = -1;
 
 const TAB_LABEL = {
   intro: '상세 소개',
@@ -86,6 +85,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const token = req.cookies['AUTH_TOKEN_KEY'] || '';
   const tab = query.tab as TabType | undefined;
   const eventId = query.eventId as string | undefined;
+  const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;
 
   let initialTab: TabType = tab ?? 'intro';
   if (!tab && eventId) {
@@ -97,14 +97,14 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ['clubDetail', clubId],
-      queryFn: () => getClubDetail(token, Number(clubId)),
+      queryFn: () => getClubDetail(token, clubId),
     }),
 
     queryClient.prefetchQuery({
       queryKey: ['clubRecruitment', clubId],
       queryFn: async () => {
         try {
-          const data = await getRecruitmentClub(clubId!);
+          const data = await getRecruitmentClub(clubId);
           return data;
         } catch (e) {
           if (isKoinError(e) && e.status === 404) {
@@ -116,20 +116,19 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     }),
   ]);
 
-  if (initialTab === 'event' && Number(eventId) !== NO_SELECTED_EVENT_ID) {
+  if (initialTab === 'event' && numericEventId !== NO_SELECTED_EVENT_ID) {
     await queryClient.prefetchQuery({
-      queryKey: ['clubEventDetail', clubId, eventId],
-      queryFn: () => useClubEventDetail(clubId, eventId),
+      queryKey: ['clubEventDetail', clubId, numericEventId],
+      queryFn: () => getClubEventDetail(clubId, numericEventId),
     });
   }
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
-      serverToken: token,
       initialClubId: clubId,
       initialTab,
-      initialEventId: eventId ? Number(eventId) : NO_SELECTED_EVENT_ID,
+      initialEventId: numericEventId,
     },
   };
 };
@@ -151,8 +150,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
 
-  const [navType, setNavType] = useState<TabLabel>(TAB_LABEL[initialTab] ?? '상세 소개');
-  const [eventId, setEventId] = useState<string | number>(initialEventId);
+  const [eventId, setEventId] = useState<number>(initialEventId);
   const [isEdit, setIsEdit] = useState(false);
   const [introduction, setIntroduction] = useState(clubDetail.introduction);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -175,6 +173,9 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
     useClubLikeMutation(initialClubId);
   const { subscribeRecruitmentNotification, unsubscribeRecruitmentNotification } =
     useClubRecruitmentNotification(initialClubId);
+
+  const tabKeyFromQuery = (router.query.tab as TabType | undefined) ?? initialTab;
+  const navType: TabLabel = TAB_LABEL[tabKeyFromQuery] ?? '상세 소개';
 
   const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
   const notifyModalType = clubDetail.is_recruit_subscribed ? 'unsubscribed' : 'subscribed';
@@ -258,7 +259,6 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
       event_label: 'club_tab_select',
       value: `${navValue}`,
     });
-    setNavType(navValue);
     syncUrlQuery(navValue);
   };
 
@@ -363,21 +363,6 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
     if (!token) return openAuthModal();
     openRecruitNotifyModal();
   };
-
-  useEffect(() => {
-    if (!router.isReady) return;
-    const { tab, eventId: queryEventId } = router.query as { tab?: string; eventId?: string };
-
-    if (tab) {
-      const tabKey = (tab as TabType) ?? 'intro';
-      const nextLabel = TAB_LABEL[tabKey] ?? '상세 소개';
-      setNavType(nextLabel);
-
-      if (tabKey === 'event') {
-        setEventId(queryEventId ? Number(queryEventId) : NO_SELECTED_EVENT_ID);
-      }
-    }
-  }, [router]);
 
   useEffect(() => {
     if (clubDetail?.name) setCustomTitle(clubDetail.name);
@@ -648,7 +633,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
         </div>
         {!isMobile && (
           <div className={styles['club-detail__summary__image-container']}>
-            {!isMobile && clubDetail.manager && (
+            {clubDetail.manager && (
               <div className={styles['club-detail__edit-button__container']}>
                 <button type="button" className={styles['club-detail__edit-button']} onClick={handleMandateClick}>
                   권한 위임
@@ -718,7 +703,6 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
           onClick={() => {
             handleNavClick('행사');
             setEventId(NO_SELECTED_EVENT_ID);
-            syncUrlQuery('행사');
           }}
         >
           행사
@@ -797,7 +781,7 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
           clubId={initialClubId}
           isManager={clubDetail.manager}
           handleClickAddButton={handleClickEventAddButton}
-          eventId={eventId}
+          eventId={Number(eventId)}
           setEventId={setEventId}
           clubName={clubDetail.name}
         />

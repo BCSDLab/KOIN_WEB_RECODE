@@ -19,6 +19,19 @@ interface UserInfo {
   login_pw: string;
 }
 
+const getCookieDomain = () => {
+  if (typeof window === 'undefined') return undefined;
+
+  const { hostname } = window.location;
+  if (hostname === 'localhost') return undefined;
+
+  if (process.env.NEXT_PUBLIC_API_PATH?.includes('stage')) {
+    return '.stage.koreatech.in';
+  }
+
+  return '.koreatech.in';
+};
+
 export const useLogin = (state: IsAutoLogin) => {
   const { setToken, setRefreshToken, setUserType } = useTokenStore();
   const { redirectAfterLogin } = useLoginRedirect();
@@ -28,6 +41,8 @@ export const useLogin = (state: IsAutoLogin) => {
   const postLogin = useMutation({
     mutationFn: auth.login,
     onSuccess: (data: LoginResponse) => {
+      const domain = getCookieDomain();
+
       logger.actionEventClick({
         team: 'USER',
         event_label: 'login',
@@ -37,8 +52,8 @@ export const useLogin = (state: IsAutoLogin) => {
         setRefreshToken(data.refresh_token);
       }
       queryClient.invalidateQueries();
-      setCookie('AUTH_TOKEN_KEY', data.token);
-      setCookie('AUTH_USER_TYPE', data.user_type);
+      setCookie('AUTH_TOKEN_KEY', data.token, { domain: domain });
+      setCookie('AUTH_USER_TYPE', data.user_type, { domain: domain });
       setToken(data.token);
       setUserType(data.user_type);
       redirectAfterLogin();

@@ -9,8 +9,8 @@ interface RoomDetailMapProps {
 }
 
 function RoomDetailMap({ latitude, longitude, address }: RoomDetailMapProps) {
-  const map = useNaverMap(latitude, longitude);
-  useDetailMarker({ map, latitude, longitude });
+  const { getMap } = useNaverMap(latitude, longitude);
+  useDetailMarker({ getMap, latitude, longitude });
   return (
     <div className={styles['map-container']}>
       <div className={styles['map-container__address']}>{address}</div>

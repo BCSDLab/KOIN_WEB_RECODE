@@ -43,36 +43,20 @@ export const useValidationContext = (isStudent?: boolean) => {
 
   const { isValid, setIsValid } = context;
 
+  const anyAccountChange = !!isValid.isPasswordValid || !!isValid.isEmailValid || !!isValid.isNicknameValid;
+
   const isStudentFormValid =
-    useMemo(
-      () =>
-        isValid.isPhoneValid &&
-        isValid.isStudentIdValid &&
-        isValid.isStudentMajorValid &&
-        isValid.isGenderValid &&
-        isValid.isNameValid &&
-        isValid.isFieldChanged,
-      [
-        isValid.isPhoneValid,
-        isValid.isStudentIdValid,
-        isValid.isStudentMajorValid,
-        isValid.isGenderValid,
-        isValid.isNameValid,
-        isValid.isFieldChanged,
-      ],
-    ) ||
-    isValid.isPasswordValid ||
-    isValid.isEmailValid ||
-    isValid.isNicknameValid;
+    (isValid.isPhoneValid &&
+      isValid.isStudentIdValid &&
+      isValid.isStudentMajorValid &&
+      isValid.isGenderValid &&
+      isValid.isNameValid &&
+      isValid.isFieldChanged) ||
+    anyAccountChange;
 
   const isGeneralFormValid =
-    useMemo(
-      () => isValid.isPhoneValid && isValid.isGenderValid && isValid.isNameValid && isValid.isFieldChanged,
-      [isValid.isPhoneValid, isValid.isGenderValid, isValid.isNameValid, isValid.isFieldChanged],
-    ) ||
-    isValid.isPasswordValid ||
-    isValid.isEmailValid ||
-    isValid.isNicknameValid;
+    (isValid.isPhoneValid && isValid.isGenderValid && isValid.isNameValid && isValid.isFieldChanged) ||
+    anyAccountChange;
 
   const isFormValid = isStudent ? isStudentFormValid : isGeneralFormValid;
 

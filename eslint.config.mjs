@@ -57,10 +57,7 @@ export default [
       ...next.configs['core-web-vitals'].rules,
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
-      // 훅 관련 규칙은 다른 pr에서 수정 중이라 완료되면 병합하겠습니다.
-      // ...reactHooks.configs['recommended-latest'].rules,
-      // 'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
+      ...reactHooks.configs['recommended-latest'].rules,
 
       'import/order': [
         'error',

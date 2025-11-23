@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 
 const useMount = () => {
-  const [isMounted, setIsMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    setIsMounted(true);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
   }, []);
-  return isMounted;
+
+  return mounted;
 };
 
 export default useMount;
