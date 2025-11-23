@@ -134,22 +134,20 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   };
 };
 
-function ClubDetailPage({
-  id,
-  initialTab,
-  initialEventId,
-}: {
-  id: string;
+interface ClubDetailPageProps {
+  initialClubId: number;
   initialTab: TabType;
   initialEventId: number;
-}) {
+}
+
+export default function ClubDetailPage({ initialClubId, initialTab, initialEventId }: ClubDetailPageProps) {
   const router = useRouter();
   const logger = useLogger();
   const isMobile = useMediaQuery();
   const navigate = (path: string) => router.push(path);
 
-  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(Number(id));
-  const { clubRecruitmentData } = useClubRecruitment(Number(id));
+  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(initialClubId);
+  const { clubRecruitmentData } = useClubRecruitment(initialClubId);
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
 
@@ -173,10 +171,10 @@ function ClubDetailPage({
 
   const token = useTokenState();
 
-  const { clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync } = useClubLikeMutation(id);
-  const { subscribeRecruitmentNotification, unsubscribeRecruitmentNotification } = useClubRecruitmentNotification(
-    Number(id),
-  );
+  const { clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync } =
+    useClubLikeMutation(initialClubId);
+  const { subscribeRecruitmentNotification, unsubscribeRecruitmentNotification } =
+    useClubRecruitmentNotification(initialClubId);
 
   const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
   const notifyModalType = clubDetail.is_recruit_subscribed ? 'unsubscribed' : 'subscribed';
@@ -194,7 +192,7 @@ function ClubDetailPage({
   };
 
   const handleToggleLike = async () => {
-    if (!id || isPending) return;
+    if (!initialClubId || isPending) return;
     if (!token) {
       openAuthModal();
       return;
@@ -243,7 +241,7 @@ function ClubDetailPage({
       event_label: 'club_correction',
       value: '수정하기',
     });
-    navigate(ROUTES.ClubEdit({ id: String(id), isLink: true }));
+    navigate(ROUTES.ClubEdit({ id: String(initialClubId), isLink: true }));
   };
   const handleMandateClick = () => {
     logger.actionEventClick({
@@ -294,7 +292,7 @@ function ClubDetailPage({
       event_label: 'club_new_recruitment',
       value: clubDetail.name,
     });
-    navigate(ROUTES.NewClubRecruitment({ id: String(id), isLink: true }));
+    navigate(ROUTES.NewClubRecruitment({ id: String(initialClubId), isLink: true }));
   };
 
   const handleClickEventAddButton = () => {
@@ -303,7 +301,7 @@ function ClubDetailPage({
       event_label: 'club_new_event',
       value: clubDetail.name,
     });
-    navigate(ROUTES.NewClubEvent({ id: String(id), isLink: true }));
+    navigate(ROUTES.NewClubEvent({ id: String(initialClubId), isLink: true }));
   };
 
   const handleDeleteRecruitment = async () => {
@@ -330,7 +328,7 @@ function ClubDetailPage({
       event_label: 'club_recruitment_correction',
       value: clubDetail.name,
     });
-    navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
+    navigate(ROUTES.ClubRecruitmentEdit({ id: String(initialClubId), isLink: true }));
   };
 
   const handleDeleteEvent = async () => {
@@ -358,7 +356,7 @@ function ClubDetailPage({
       event_label: 'club_event_correction',
       value: clubDetail.name,
     });
-    navigate(ROUTES.ClubEventEdit({ id: String(id), eventId: String(eventId), isLink: true }));
+    navigate(ROUTES.ClubEventEdit({ id: String(initialClubId), eventId: String(eventId), isLink: true }));
   };
 
   const handleClickRecruitNotifyButton = () => {
@@ -778,7 +776,7 @@ function ClubDetailPage({
       {navType === 'Q&A' && (
         <ClubQnA
           openModal={openModal}
-          clubId={id}
+          clubId={initialClubId}
           isManager={clubDetail.manager}
           openAuthModal={openAuthModal}
           setQnA={setQnAType}
@@ -787,7 +785,7 @@ function ClubDetailPage({
       )}
       {navType === '모집' && (
         <ClubRecruitment
-          clubId={Number(id)}
+          clubId={Number(initialClubId)}
           clubName={clubDetail.name}
           clubRecruitmentData={clubRecruitmentData}
           isManager={clubDetail.manager}
@@ -796,7 +794,7 @@ function ClubDetailPage({
       )}
       {navType === '행사' && (
         <ClubEventList
-          clubId={id}
+          clubId={initialClubId}
           isManager={clubDetail.manager}
           handleClickAddButton={handleClickEventAddButton}
           eventId={eventId}
@@ -804,9 +802,11 @@ function ClubDetailPage({
           clubName={clubDetail.name}
         />
       )}
-      {isModalOpen && <CreateQnAModal closeModal={closeModal} clubId={id} type={QnAType} replyId={replyId} />}
+      {isModalOpen && (
+        <CreateQnAModal closeModal={closeModal} clubId={initialClubId} type={QnAType} replyId={replyId} />
+      )}
       {isMandateModalOpen && (
-        <MandateClubManagerModal closeModal={closeMandateModal} clubId={id} clubName={clubDetail.name} />
+        <MandateClubManagerModal closeModal={closeMandateModal} clubId={initialClubId} clubName={clubDetail.name} />
       )}
       {isAuthModalOpen && (
         <LoginRequiredModal
@@ -822,7 +822,7 @@ function ClubDetailPage({
           introduction={introduction}
           setIsEdit={setIsEdit}
           resetForm={() => setIntroduction(clubDetail.introduction)}
-          id={id}
+          id={initialClubId}
         />
       )}
       {isRecruitDeleteModalOpen && (
@@ -861,16 +861,4 @@ function ClubDetailPage({
   );
 }
 
-export default function ClubDetail({
-  initialClubId,
-  initialTab,
-  initialEventId,
-}: {
-  initialClubId: string;
-  initialTab: TabType;
-  initialEventId: number;
-}) {
-  return <ClubDetailPage id={initialClubId} initialTab={initialTab} initialEventId={initialEventId} />;
-}
-
-ClubDetail.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;
+ClubDetailPage.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;

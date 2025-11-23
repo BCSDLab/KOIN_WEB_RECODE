@@ -14,7 +14,7 @@ interface EditConfirmModalProps {
   introduction?: string;
   type: string;
   setIsEdit?: Dispatch<SetStateAction<boolean>>;
-  id: string;
+  id: number;
 }
 
 export default function EditConfirmModal({
