@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';

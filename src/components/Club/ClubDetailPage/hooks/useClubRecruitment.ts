@@ -1,7 +1,7 @@
 import { isKoinError } from '@bcsdlab/koin';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getRecruitmentClub } from 'api/club';
-import { ClubRecruitmentResponse } from 'api/club/entity';
+import type { ClubRecruitmentResponse } from 'api/club/entity';
 
 const EMPTY_RECRUITMENT: ClubRecruitmentResponse = {
   id: 0,

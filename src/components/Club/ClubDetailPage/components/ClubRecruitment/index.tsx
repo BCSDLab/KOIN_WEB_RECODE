@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
-import { ClubRecruitmentResponse } from 'api/club/entity';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import type { ClubRecruitmentResponse } from 'api/club/entity';
 import styles from './ClubRecruitment.module.scss';
 
 interface ClubRecruitmentProps {

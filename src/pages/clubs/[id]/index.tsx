@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import { GetServerSidePropsContext } from 'next';
+import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getClubDetail, getRecruitmentClub } from 'api/club';
-import { ClubRecruitmentResponse } from 'api/club/entity';
 import BellIcon from 'assets/svg/Club/bell-icon.svg';
 import OffBellIcon from 'assets/svg/Club/bell-off-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
@@ -40,6 +39,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
+import type { ClubRecruitmentResponse } from 'api/club/entity';
 import styles from './ClubDetailPage.module.scss';
 
 const NO_SELECTED_EVENT_ID = -1;
