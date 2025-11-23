@@ -4,7 +4,8 @@ const nextConfig = {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
-      use: [{
+      use: [
+        {
           loader: '@svgr/webpack',
           options: {
             svgo: true,
@@ -12,7 +13,8 @@ const nextConfig = {
               plugins: [],
             },
           },
-        },],
+        },
+      ],
     });
 
     return config;
@@ -21,7 +23,6 @@ const nextConfig = {
     workerThreads: false,
   },
   images: { unoptimized: true },
-  distDir: 'dist',
 };
 
 export default nextConfig;

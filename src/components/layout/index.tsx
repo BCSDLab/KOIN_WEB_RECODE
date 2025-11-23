@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
 
@@ -13,10 +13,8 @@ export function SSRLayout({ children }: { children: React.ReactNode }) {
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [isNativeWebView, setIsNativeWebView] = useState(false);
-  useEffect(() => {
-    setIsNativeWebView(typeof window !== 'undefined' && !!window.webkit?.messageHandlers);
-  }, []);
+  const isNativeWebView = typeof window !== 'undefined' && !!window.webkit?.messageHandlers;
+
   return (
     <div id="root">
       <Suspense fallback={null}>

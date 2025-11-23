@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
-import InfomationIcon from 'assets/svg/Bus/info-gray.svg';
+import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import useShuttleTimetableDetail from 'components/Bus/BusCoursePage/hooks/useShuttleTimetableDetail';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -14,19 +14,15 @@ export default function BusTimetableDetail() {
   const { shuttleTimetableDetail } = useShuttleTimetableDetail(
     routeId ? (Array.isArray(routeId) ? routeId[0] : routeId) : null,
   );
-  const [selectedDetail, setSelectedDetail] = useState<string | null>('');
+  const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
   const isMobile = useMediaQuery();
   const logger = useLogger();
-
-  useEffect(() => {
-    if (shuttleTimetableDetail) {
-      setSelectedDetail(shuttleTimetableDetail.route_info[0].name);
-    }
-  }, [shuttleTimetableDetail]);
 
   if (!shuttleTimetableDetail) return null;
 
   const rowLength = shuttleTimetableDetail.node_info.length + 1;
+  const fallbackName = shuttleTimetableDetail.route_info[0]?.name ?? '';
+  const selectedName = selectedDetail ?? fallbackName;
 
   return (
     <>
@@ -50,7 +46,7 @@ export default function BusTimetableDetail() {
                     type="button"
                     className={cn({
                       [styles.detail__button]: true,
-                      [styles['detail__button--selected']]: selectedDetail === name,
+                      [styles['detail__button--selected']]: selectedName === name,
                     })}
                     onClick={() => {
                       setSelectedDetail(name);
@@ -76,7 +72,7 @@ export default function BusTimetableDetail() {
                   type="button"
                   className={cn({
                     [styles.detail__button]: true,
-                    [styles['detail__button--selected']]: selectedDetail === name,
+                    [styles['detail__button--selected']]: selectedName === name,
                   })}
                   onClick={() => {
                     setSelectedDetail(name);
@@ -99,7 +95,7 @@ export default function BusTimetableDetail() {
               style={{ gridTemplateRows: `repeat(${rowLength}, 1fr)` }}
             >
               {shuttleTimetableDetail.route_info
-                .filter(({ name }) => selectedDetail === name)
+                .filter(({ name }) => selectedName === name)
                 ?.map(({ name, detail, arrival_time }) => (
                   <>
                     <div className={styles['time-table__number']}>
@@ -126,7 +122,7 @@ export default function BusTimetableDetail() {
 
             {isMobile && (
               <div className={styles['info-footer-mobile-detail']}>
-                <InfomationIcon />
+                <InformationIcon />
                 <div>정보가 정확하지 않나요?</div>
               </div>
             )}

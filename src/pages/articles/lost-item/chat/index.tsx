@@ -179,6 +179,7 @@ function LostItemChatPage({ token }: { token: string }) {
     return () => {
       disconnectChatroom();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatroomId, articleId]);
 
   /**

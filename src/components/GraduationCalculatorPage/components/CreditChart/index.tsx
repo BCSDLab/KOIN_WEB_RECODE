@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useState } from 'react';
+import { startTransition } from 'react';
 import { cn } from '@bcsdlab/utils';
 import { GradesByCourseType } from 'api/graduationCalculator/entity';
 import useCalculateCredits from 'components/GraduationCalculatorPage/hooks/useCalculateCredits';
@@ -14,13 +14,12 @@ import styles from './CreditChart.module.scss';
 
 function CreditChart({ totalGrades }: { totalGrades: number }) {
   const logger = useLogger();
-  const { lock, unlock } = useScrollLock(false);
-  const portalManger = useModalPortal();
   const token = useTokenState();
+  const portalManager = useModalPortal();
+  const { lock, unlock } = useScrollLock(false);
   const { data: calculateCredits } = useCalculateCredits(token);
   const { data: multiMajorLecture } = useGetMultiMajorLecture(token);
-  const [creditState, setCreditState] = useState<GradesByCourseType[]>([]);
-  const barsNumber = creditState.length;
+
   const onClickBar = (courseType: string) => {
     logger.actionEventClick({
       team: 'USER',
@@ -29,7 +28,7 @@ function CreditChart({ totalGrades }: { totalGrades: number }) {
     });
     lock();
     startTransition(() =>
-      portalManger.open((portalOption: Portal) => (
+      portalManager.open((portalOption: Portal) => (
         <SemesterLectureListModal
           onClose={() => {
             portalOption.close();
@@ -41,29 +40,16 @@ function CreditChart({ totalGrades }: { totalGrades: number }) {
     );
   };
 
-  const updateValues = (newValues: GradesByCourseType[]) => {
-    setCreditState(newValues);
-  };
-  const multiMajorGrades = multiMajorLecture
-    ? multiMajorLecture.reduce((acc, curr) => acc + Number(curr.grades), 0)
-    : null;
+  const multiMajorGrades = multiMajorLecture?.reduce((sum, item) => sum + Number(item.grades), 0) ?? null;
 
-  useEffect(() => {
-    if (calculateCredits) {
-      updateValues([
+  const creditList: GradesByCourseType[] = calculateCredits
+    ? [
         ...calculateCredits.course_types,
-        ...(multiMajorGrades
-          ? [
-              {
-                courseType: '다전공',
-                requiredGrades: 0,
-                grades: multiMajorGrades,
-              },
-            ]
-          : []),
-      ]);
-    }
-  }, [calculateCredits, multiMajorGrades]);
+        ...(multiMajorGrades ? [{ courseType: '다전공', requiredGrades: 0, grades: multiMajorGrades }] : []),
+      ]
+    : [];
+
+  const barsNumber = creditList.length;
 
   return (
     <div className={styles['credit-chart']}>
@@ -82,7 +68,7 @@ function CreditChart({ totalGrades }: { totalGrades: number }) {
         style={{ gridTemplateColumns: `repeat(${barsNumber}, 1fr)` }}
       >
         <AnimatePresence>
-          {creditState.map((credit) => (
+          {creditList.map((credit) => (
             <motion.div
               key={credit.courseType}
               className={styles['credit-chart__course']}
