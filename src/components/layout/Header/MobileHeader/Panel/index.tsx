@@ -30,6 +30,7 @@ export default function Panel({ openModal }: PanelProps) {
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
   const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
+  const ORDER_BASE_URL = isStage ? 'https://order.stage.koreatech.in' : 'https://order.koreatech.in';
   const token = useTokenState();
   const portalManager = useModalPortal();
 
@@ -87,14 +88,25 @@ export default function Panel({ openModal }: PanelProps) {
   const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
     logExitExistingPage(submenu.title);
-    if (submenu.openInNewTab) {
-      window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
-    } else if (!token && submenu.title === '쪽지') {
+
+    if (!token && submenu.title === '쪽지') {
       openLoginModal();
       return;
+    }
+
+    if (submenu.title === '주변상점') {
+      const targetUrl = `${ORDER_BASE_URL}/shops/?category=1`;
+      window.location.href = targetUrl;
+      closeSidebar();
+      return;
+    }
+
+    if (submenu.openInNewTab) {
+      window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
     } else {
       navigate(submenu.link);
     }
+
     closeSidebar();
   };
 

@@ -4,6 +4,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import ROUTES from 'static/routes';
 import { Suspense, useEffect } from 'react';
 import { getMainDurationTime, initializeMainEntryTime } from 'pages/Store/utils/durationTime';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -28,6 +29,10 @@ export default function IndexStore() {
   const { data: categories } = useStoreCategories();
   const logger = useLogger();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery();
+
+  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
+  const ORDER_BASE_URL = isStage ? 'https://order.stage.koreatech.in' : 'https://order.koreatech.in';
 
   const categoriesWithEvent = categories.shop_categories.map((category: Category) => ({
     ...category,
@@ -39,12 +44,12 @@ export default function IndexStore() {
       previous_page: '메인',
       current_page: category.name,
     },
-    route: `${ROUTES.Store()}?category=${category.id}`,
+    route: `${ORDER_BASE_URL}/shops?category=${category.id}`,
   }));
 
-  const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map(
-    (category) => (
-      category.name === '전체보기' ? ({
+  const categoriesWithBenefit: CategoryWithEvent[] = categoriesWithEvent.map((category) => {
+    if (category.name === '전체보기') {
+      return {
         ...category,
         name: '혜택',
         image_url: 'https://static.koreatech.in/assets/img/icon/benefit_icon.png',
@@ -55,15 +60,30 @@ export default function IndexStore() {
           current_page: 'benefit',
         },
         route: `${ROUTES.BenefitStore()}?category=1`,
-      }) : category
-    ),
-  );
+      };
+    }
+
+    return {
+      ...category,
+      route: `${ROUTES.Store()}?category=${category.id}`,
+    };
+  });
+
+  const renderCategories = isMobile ? categoriesWithEvent : categoriesWithBenefit;
+
+  const titleLink = isMobile ? `${ORDER_BASE_URL}/shops/?category=1` : `${ROUTES.Store()}?category=1`;
 
   const handleCategoryClick = ({ event, route }: CategoryWithEvent) => {
     logger.actionEventClick({
       ...event,
       duration_time: getMainDurationTime(),
     });
+
+    if (route.startsWith('http')) {
+      window.location.href = route;
+      return;
+    }
+
     navigate(route);
   };
 
@@ -73,10 +93,10 @@ export default function IndexStore() {
 
   return (
     <section className={styles.template}>
-      <Link to={`${ROUTES.Store()}?category=1`} className={styles.template__title}>주변 상점</Link>
+      <Link to={titleLink} className={styles.template__title}>주변 상점</Link>
       <Suspense fallback={null}>
         <div className={styles.category__wrapper}>
-          {categoriesWithBenefit.map((category) => (
+          {renderCategories.map((category) => (
             <button
               key={category.id}
               className={styles.category__item}
