@@ -13,13 +13,19 @@
     gap: 0;
   }
 
-  &__title {
+  &__header {
     height: 54px;
     display: flex;
-    flex-direction: row;
-    margin-top: 32px;
     justify-content: space-between;
     align-items: center;
+    margin-top: 32px;
+
+    @include media.media-breakpoint(mobile) {
+      margin-top: 0;
+    }
+  }
+
+  &__title {
     font-family: Pretendard, sans-serif;
     font-size: 18px;
     font-weight: 500;
@@ -27,9 +33,7 @@
     color: #175c8e;
 
     @include media.media-breakpoint(mobile) {
-      margin-top: 0;
-      padding-left: 3px;
-      margin-left: 16px;
+      padding-left: 19px;
       font-weight: 700;
     }
   }
