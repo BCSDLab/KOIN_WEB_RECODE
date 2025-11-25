@@ -5,6 +5,7 @@ import ROUTES from 'static/routes';
 import { Suspense, useEffect } from 'react';
 import { getMainDurationTime, initializeMainEntryTime } from 'pages/Store/utils/durationTime';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { ORDER_BASE_URL } from 'static/url';
 import styles from './IndexStore.module.scss';
 
 interface Category {
@@ -30,9 +31,6 @@ export default function IndexStore() {
   const logger = useLogger();
   const navigate = useNavigate();
   const isMobile = useMediaQuery();
-
-  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
-  const ORDER_BASE_URL = isStage ? 'https://order.stage.koreatech.in' : 'https://order.koreatech.in';
 
   const categoriesWithEvent = categories.shop_categories.map((category: Category) => ({
     ...category,

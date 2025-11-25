@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { auth } from 'api';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
-import { setCookie } from 'utils/ts/cookie';
+import { getCookieDomain, setCookie } from 'utils/ts/cookie';
 import { saveTokensToNative } from 'utils/ts/iosBridge';
 import showToast from 'utils/ts/showToast';
 import { useTokenStore } from 'utils/zustand/auth';
@@ -18,19 +18,6 @@ interface UserInfo {
   login_id: string;
   login_pw: string;
 }
-
-const getCookieDomain = () => {
-  if (typeof window === 'undefined') return undefined;
-
-  const { hostname } = window.location;
-  if (hostname === 'localhost') return undefined;
-
-  if (process.env.NEXT_PUBLIC_API_PATH?.includes('stage')) {
-    return '.stage.koreatech.in';
-  }
-
-  return '.koreatech.in';
-};
 
 export const useLogin = (state: IsAutoLogin) => {
   const { setToken, setRefreshToken, setUserType } = useTokenStore();

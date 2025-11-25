@@ -14,6 +14,7 @@ import type { Portal } from 'components/modal/Modal/PortalProvider';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { IS_STAGE, ORDER_BASE_URL } from 'static/url';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -29,8 +30,7 @@ export default function Panel({ openModal }: PanelProps) {
   const navigate = useNavigate();
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
-  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
-  const ORDER_BASE_URL = isStage ? 'https://order.stage.koreatech.in' : 'https://order.koreatech.in';
+
   const token = useTokenState();
   const portalManager = useModalPortal();
 
@@ -102,7 +102,7 @@ export default function Panel({ openModal }: PanelProps) {
     }
 
     if (submenu.openInNewTab) {
-      window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
+      window.open(IS_STAGE && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
     } else {
       navigate(submenu.link);
     }
