@@ -40,7 +40,13 @@ function ClubEditPage({ id }: { id: string }) {
       )}
 
       {isModalOpen && (
-        <EditConfirmModal closeModal={closeModal} formData={formData} resetForm={resetForm} type={type} id={id} />
+        <EditConfirmModal
+          closeModal={closeModal}
+          formData={formData}
+          resetForm={resetForm}
+          type={type}
+          id={Number(id)}
+        />
       )}
     </div>
   );
