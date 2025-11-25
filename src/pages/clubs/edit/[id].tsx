@@ -10,8 +10,8 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { mapDetailToForm } from 'utils/ts/clubCategoryMapping';
 import styles from './ClubEditPage.module.scss';
 
-function ClubEditPage({ id }: { id: string }) {
-  const { clubDetail } = useClubDetail(Number(id));
+function ClubEditPage({ id }: { id: number }) {
+  const { clubDetail } = useClubDetail(id);
 
   const isMobile = useMediaQuery();
 
@@ -40,13 +40,7 @@ function ClubEditPage({ id }: { id: string }) {
       )}
 
       {isModalOpen && (
-        <EditConfirmModal
-          closeModal={closeModal}
-          formData={formData}
-          resetForm={resetForm}
-          type={type}
-          id={Number(id)}
-        />
+        <EditConfirmModal closeModal={closeModal} formData={formData} resetForm={resetForm} type={type} id={id} />
       )}
     </div>
   );
@@ -60,5 +54,5 @@ export default function ClubEditPageWrapper() {
     return null;
   }
 
-  return <ClubEditPage id={id} />;
+  return <ClubEditPage id={Number(id)} />;
 }
