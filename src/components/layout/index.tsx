@@ -2,6 +2,16 @@ import { Suspense } from 'react';
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
 
+export function SSRLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div id="root">
+      <Header />
+      {children}
+      <Footer />
+    </div>
+  );
+}
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const isNativeWebView = typeof window !== 'undefined' && !!window.webkit?.messageHandlers;
 

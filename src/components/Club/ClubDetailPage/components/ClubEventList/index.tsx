@@ -4,6 +4,7 @@ import UpArrow from 'assets/svg/Club/event-filter-up-arrow.svg';
 import ClubEventCard from 'components/Club/ClubDetailPage/components/ClubEventCard';
 import ClubEventDetailView from 'components/Club/ClubDetailPage/components/ClubEventDetailView';
 import { useClubEventList } from 'components/Club/ClubDetailPage/hooks/useClubEvent';
+import { NO_SELECTED_EVENT_ID } from 'pages/clubs/[id]';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ClubEventList.module.scss';
@@ -14,7 +15,7 @@ interface ClubEventListProps {
   handleClickAddButton: () => void;
   clubName: string;
   setEventId: (id: number) => void;
-  eventId?: number;
+  eventId: number;
 }
 
 const statusOptions = [
@@ -38,6 +39,8 @@ export default function ClubEventList({
   const [selectedStatus, setSelectedStatus] = useState<'RECENT' | 'UPCOMING' | 'ONGOING' | 'ENDED'>('RECENT');
   const { clubEventList } = useClubEventList({ clubId, eventType: selectedStatus });
 
+  const hasSelectedEvent = eventId !== NO_SELECTED_EVENT_ID;
+
   const getStatusLabel = (value: string) => {
     const option = statusOptions.find((opt) => opt.value === value);
     return option ? option.label : '최신 등록순';
@@ -53,7 +56,7 @@ export default function ClubEventList({
     setIsOpen(false);
   };
 
-  if (eventId) {
+  if (hasSelectedEvent) {
     return <ClubEventDetailView clubId={clubId} eventId={eventId} setEventId={setEventId} isManager={isManager} />;
   }
 
