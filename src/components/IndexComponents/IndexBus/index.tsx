@@ -32,8 +32,8 @@ function IndexBus() {
 
   return (
     <section className={styles.template}>
-      <div className={styles.template__title}>
-        <Link href={ROUTES.BusRoute()} onClick={logMainToBus}>
+      <div className={styles.template__header}>
+        <Link className={styles.template__title} href={ROUTES.BusRoute()} onClick={logMainToBus}>
           버스
         </Link>
         {isMobile && (

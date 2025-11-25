@@ -71,9 +71,9 @@ function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
   };
   return (
     <section className={styles.template}>
-      <div className={styles.template__title}>
-        <Link href={ROUTES.Club()}>동아리</Link>
-      </div>
+      <Link className={styles.template__title} href={ROUTES.Club()}>
+        동아리
+      </Link>
       {}
       {isMobile ? (
         ABView === 'hot' ? (
