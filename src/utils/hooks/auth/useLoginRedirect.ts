@@ -25,30 +25,33 @@ export function useLoginRedirect() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const navigateToFallback = () => {
+    const redirectPath = getRedirectPath() || '/';
+    clearRedirectPath();
+    navigate(redirectPath, { replace: true });
+  };
+
   const redirectAfterLogin = () => {
     const searchParams = new URLSearchParams(location.search);
     const redirect = searchParams.get('redirect');
 
     if (!redirect) {
-      const redirectPath = getRedirectPath() || '/';
-      clearRedirectPath();
-      navigate(redirectPath);
+      navigateToFallback();
       return;
     }
 
-    if (redirect.startsWith('http')) {
+    const isAbsoluteUrl = redirect.startsWith('http://') || redirect.startsWith('https://');
+
+    if (isAbsoluteUrl) {
       if (isSafeExternalRedirect(redirect)) {
         window.location.href = redirect;
-        return;
+      } else {
+        navigateToFallback();
       }
-
-      const redirectPath = getRedirectPath() || '/';
-      clearRedirectPath();
-      navigate(redirectPath);
       return;
     }
 
-    navigate(redirect);
+    navigate(redirect, { replace: true });
   };
 
   return {
