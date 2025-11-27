@@ -2,13 +2,13 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { auth } from 'api';
-import type { LoginResponse } from 'api/auth/entity';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
-import { setCookie } from 'utils/ts/cookie';
+import { getCookieDomain, setCookie } from 'utils/ts/cookie';
 import { saveTokensToNative } from 'utils/ts/iosBridge';
 import showToast from 'utils/ts/showToast';
 import { useTokenStore } from 'utils/zustand/auth';
+import type { LoginResponse } from 'api/auth/entity';
 
 interface IsAutoLogin {
   isAutoLoginFlag: boolean;
@@ -28,6 +28,8 @@ export const useLogin = (state: IsAutoLogin) => {
   const postLogin = useMutation({
     mutationFn: auth.login,
     onSuccess: (data: LoginResponse) => {
+      const domain = getCookieDomain();
+
       logger.actionEventClick({
         team: 'USER',
         event_label: 'login',
@@ -37,8 +39,8 @@ export const useLogin = (state: IsAutoLogin) => {
         setRefreshToken(data.refresh_token);
       }
       queryClient.invalidateQueries();
-      setCookie('AUTH_TOKEN_KEY', data.token);
-      setCookie('AUTH_USER_TYPE', data.user_type);
+      setCookie('AUTH_TOKEN_KEY', data.token, { domain });
+      setCookie('AUTH_USER_TYPE', data.user_type, { domain });
       setToken(data.token);
       setUserType(data.user_type);
       redirectAfterLogin();

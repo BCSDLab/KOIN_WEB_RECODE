@@ -14,6 +14,7 @@ import type { Portal } from 'components/modal/Modal/PortalProvider';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { IS_STAGE, ORDER_BASE_URL } from 'static/url';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -29,7 +30,7 @@ export default function Panel({ openModal }: PanelProps) {
   const navigate = useNavigate();
   useEscapeKeyDown({ onEscape: closeSidebar });
   useBodyScrollLock(isSidebarOpen);
-  const isStage = import.meta.env.VITE_API_PATH?.includes('stage');
+
   const token = useTokenState();
   const portalManager = useModalPortal();
 
@@ -87,14 +88,25 @@ export default function Panel({ openModal }: PanelProps) {
   const handleSubmenuClick = (submenu: Submenu) => {
     logShortcut(submenu.title);
     logExitExistingPage(submenu.title);
-    if (submenu.openInNewTab) {
-      window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
-    } else if (!token && submenu.title === '쪽지') {
+
+    if (!token && submenu.title === '쪽지') {
       openLoginModal();
       return;
+    }
+
+    if (submenu.title === '주변상점') {
+      const targetUrl = `${ORDER_BASE_URL}/shops/?category=1`;
+      window.location.href = targetUrl;
+      closeSidebar();
+      return;
+    }
+
+    if (submenu.openInNewTab) {
+      window.open(IS_STAGE && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
     } else {
       navigate(submenu.link);
     }
+
     closeSidebar();
   };
 
