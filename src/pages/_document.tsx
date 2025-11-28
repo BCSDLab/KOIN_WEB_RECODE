@@ -8,6 +8,12 @@ export default function Document() {
       <Head>
         <link rel="preconnect" href="https://static.koreatech.in" crossOrigin="anonymous" />
 
+        <link
+          rel="stylesheet"
+          href="https://static.koreatech.in/assets/font/pretendard-subset.css"
+          crossOrigin="anonymous"
+        />
+
         {/* 기본 메타 */}
         <meta charSet="utf-8" />
         <meta name="theme-color" content="#000000" />
