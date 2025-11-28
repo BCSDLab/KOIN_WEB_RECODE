@@ -45,7 +45,7 @@ function BannerCard({ handleImageLinkClick, image_url, redirect_link, isFirst }:
 
   return (
     <div
-      className={styles.slider__imageOuter}
+      className={styles['slider__image-outer']}
       role="button"
       tabIndex={0}
       onClick={handleImageLinkClick}
