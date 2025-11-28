@@ -1,5 +1,5 @@
-$check-icon-path: "/src/assets/svg/check-icon.svg";
-$white-check-icon-path: "/src/assets/svg/white-check-icon.svg";
+$check-icon-path: "../../../../../assets/svg/check-icon.svg";
+$white-check-icon-path: "../../../../../assets/svg/white-check-icon.svg";
 
 @mixin svg-background($svg-path) {
   background-image: url($svg-path);

@@ -28,7 +28,7 @@ export default function LoginRequiredModal({
 
   const goLogin = () => {
     if (onLoginClick) onLoginClick();
-    if (enableRedirect) setRedirectPath(`${router.asPath}${router.query}`);
+    if (enableRedirect) setRedirectPath(`${router.asPath}`);
     onClose();
     router.push(ROUTES.Auth());
   };
