@@ -22,7 +22,9 @@ const nextConfig = {
   experimental: {
     workerThreads: false,
   },
-  images: { unoptimized: true },
+  images: {
+    domains: ['stage-static.koreatech.in'],
+  },
 };
 
 export default nextConfig;

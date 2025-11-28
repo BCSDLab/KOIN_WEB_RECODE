@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { BannersResponse } from 'api/banner/entity';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
@@ -13,43 +14,48 @@ interface BannerCardProps {
   handleImageLinkClick: () => void;
   image_url: string;
   redirect_link: string | null;
+  isFirst: boolean;
 }
 
-function BannerCard({ handleImageLinkClick, image_url, redirect_link }: BannerCardProps) {
+function BannerCard({ handleImageLinkClick, image_url, redirect_link, isFirst }: BannerCardProps) {
+  const imgWrapper = (
+    <div className={styles.slider__imageWrapper}>
+      <Image
+        src={image_url}
+        alt="banner"
+        fill
+        priority={isFirst}
+        fetchPriority={isFirst ? 'high' : 'auto'}
+        sizes="(max-width: 768px) 100vw, 400px"
+        className={styles.slider__image}
+        onError={(e) => {
+          e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
+        }}
+      />
+    </div>
+  );
+
+  if (redirect_link) {
+    return (
+      <Link href={redirect_link} onClick={handleImageLinkClick} className={styles.slider__imageOuter}>
+        {imgWrapper}
+      </Link>
+    );
+  }
+
   return (
-    <div>
-      {redirect_link ? (
-        <Link href={redirect_link} onClick={handleImageLinkClick}>
-          <img
-            src={image_url}
-            alt="banner"
-            onError={(e) => {
-              e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
-            }}
-            className={styles.slider__image}
-          />
-        </Link>
-      ) : (
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={handleImageLinkClick}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleImageLinkClick();
-            }
-          }}
-        >
-          <img
-            src={image_url}
-            alt="banner"
-            onError={(e) => {
-              e.currentTarget.src = 'https://placehold.co/400.jpg?text=Coming+soon...';
-            }}
-            className={styles.slider__image}
-          />
-        </div>
-      )}
+    <div
+      className={styles.slider__imageOuter}
+      role="button"
+      tabIndex={0}
+      onClick={handleImageLinkClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          handleImageLinkClick();
+        }
+      }}
+    >
+      {imgWrapper}
     </div>
   );
 }
@@ -141,7 +147,7 @@ function Banner({ bannersList, bannerCategoryId, isBannerOpen }: BannerProps) {
     return () => {
       if (intervalRef.current) clearTimeout(intervalRef.current);
     };
-  }, [isModalOpen, bannersList.count, resetAutoSlide]);
+  }, [isModalOpen, bannersList.count, resetAutoSlide, currentPageIndex]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -171,6 +177,7 @@ function Banner({ bannersList, bannerCategoryId, isBannerOpen }: BannerProps) {
             handleImageLinkClick={handleImageLinkClick}
             image_url={currentBanner.image_url}
             redirect_link={currentBanner.redirect_link}
+            isFirst={currentPageIndex === 0}
           />
           <div className={styles.slider__pagination}>
             <p className={styles['slider__pagination-label']}>
