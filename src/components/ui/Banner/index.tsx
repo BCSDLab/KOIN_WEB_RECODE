@@ -19,7 +19,7 @@ interface BannerCardProps {
 
 function BannerCard({ handleImageLinkClick, image_url, redirect_link, isFirst }: BannerCardProps) {
   const imgWrapper = (
-    <div className={styles.slider__imageWrapper}>
+    <div className={styles['slider__image-wrapper']}>
       <Image
         src={image_url}
         alt="banner"
@@ -37,7 +37,7 @@ function BannerCard({ handleImageLinkClick, image_url, redirect_link, isFirst }:
 
   if (redirect_link) {
     return (
-      <Link href={redirect_link} onClick={handleImageLinkClick} className={styles.slider__imageOuter}>
+      <Link href={redirect_link} onClick={handleImageLinkClick} className={styles['slider__image-outer']}>
         {imgWrapper}
       </Link>
     );
