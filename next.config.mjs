@@ -33,7 +33,18 @@ const nextConfig = {
     workerThreads: false,
   },
   images: {
-    domains: ['stage-static.koreatech.in'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'stage-static.koreatech.in',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.koreatech.in',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
