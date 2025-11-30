@@ -109,15 +109,14 @@ export default class APIClient {
         }
       })
       .catch(() => {
+        useTokenStore.getState().setToken('');
+        useTokenStore.getState().setRefreshToken('');
+
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
-          useTokenStore.getState().setToken('');
-          useTokenStore.getState().setRefreshToken('');
           saveTokensToNative('', ''); // 네이티브 상태도 동기화
           redirectToClub();
           return;
         }
-        useTokenStore.getState().setToken('');
-        useTokenStore.getState().setRefreshToken('');
         redirectToLogin();
       })
       .finally(() => {
