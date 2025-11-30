@@ -116,6 +116,8 @@ export default class APIClient {
           redirectToClub();
           return;
         }
+        useTokenStore.getState().setToken('');
+        useTokenStore.getState().setRefreshToken('');
         redirectToLogin();
       })
       .finally(() => {
