@@ -43,7 +43,7 @@
     left: 8px;
 
     @include media.media-breakpoint(mobile) {
-      margin-right: 20px
+      margin-right: 20px;
     }
   }
 
@@ -136,7 +136,7 @@
     text-align: center;
     color: #bbb;
     white-space: nowrap;
- 
+
     @include media.media-breakpoint(mobile) {
       margin: 0 0 1px;
       padding: 16px 16px 12px;
