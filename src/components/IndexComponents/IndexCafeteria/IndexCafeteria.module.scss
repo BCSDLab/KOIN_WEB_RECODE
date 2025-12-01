@@ -42,14 +42,8 @@
     position: relative;
     left: 8px;
 
-    svg {
-      position: relative;
-      top: -1px;
-      right: 3px;
-    }
-
     @include media.media-breakpoint(mobile) {
-      display: none;
+      margin-right: 20px;
     }
   }
 
@@ -143,18 +137,19 @@
     color: #bbb;
     white-space: nowrap;
 
+    @include media.media-breakpoint(mobile) {
+      margin: 0 0 1px;
+      padding: 16px 16px 12px;
+      cursor: pointer;
+    }
+
     &--selected {
       color: #175c8e;
 
       @include media.media-breakpoint(mobile) {
         border-bottom: 1px solid #10477a;
+        margin: 0;
       }
-    }
-
-    @include media.media-breakpoint(mobile) {
-      margin-bottom: 0;
-      padding: 16px 16px 12px;
-      cursor: pointer;
     }
   }
 }
