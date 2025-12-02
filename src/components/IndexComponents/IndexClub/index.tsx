@@ -3,7 +3,6 @@ import { HotClubResponse } from 'api/club/entity';
 import AddIcon from 'assets/svg/Club/add-icon.svg';
 import ListIcon from 'assets/svg/Club/list-icon.svg';
 import ChevronRight from 'assets/svg/IndexPage/Bus/chevron-right.svg';
-import useHotClub from 'components/Club/hooks/useHotClub';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
@@ -41,8 +40,7 @@ const getClubLinkCardData = (hotClubInfo: HotClubResponse) => [
   },
 ];
 
-function IndexClub() {
-  const { data: hotClubInfo } = useHotClub();
+function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
   const clubLinkCardData = getClubLinkCardData(hotClubInfo);
   const token = useTokenState();
   const ABView = useABTestView('a_main_club_ui', token);

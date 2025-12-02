@@ -1,42 +1,42 @@
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import useClubDetail from 'components/Club/ClubDetailPage/hooks/useClubdetail';
-import useClubRecruitment from 'components/Club/ClubDetailPage/hooks/useClubRecruitment';
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import type { ClubRecruitmentResponse } from 'api/club/entity';
 import styles from './ClubRecruitment.module.scss';
 
 interface ClubRecruitmentProps {
-  clubId: number | string | undefined;
+  clubId: number;
+  clubName: string;
   isManager: boolean;
+  clubRecruitmentData: ClubRecruitmentResponse;
   handleClickAddButton: () => void;
 }
-export default function ClubRecruitment({ clubId, isManager, handleClickAddButton }: ClubRecruitmentProps) {
+
+export default function ClubRecruitment({
+  clubId,
+  clubName,
+  isManager,
+  clubRecruitmentData,
+  handleClickAddButton,
+}: ClubRecruitmentProps) {
   const logger = useLogger();
   const router = useRouter();
-  const { id } = router.query as { id: string };
   const isMobile = useMediaQuery();
-  const { clubDetail } = useClubDetail(Number(id));
-  const { clubRecruitmentData } = useClubRecruitment(clubId);
-  const { mutateAsync } = useDeleteRecruitment();
-  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
-  useEffect(() => {
-    if (!id) {
-      router.push(ROUTES.Club());
-    }
-  }, [id, router]);
+  const { mutateAsync } = useDeleteRecruitment();
+
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
 
   const handleDeleteRecruitment = async () => {
     await mutateAsync();
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_recruitment_delete_confirm',
-      value: clubDetail.name,
+      value: clubName,
     });
   };
 
@@ -44,7 +44,7 @@ export default function ClubRecruitment({ clubId, isManager, handleClickAddButto
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_recruitment_delete',
-      value: clubDetail.name,
+      value: clubName,
     });
     openModal();
   };
@@ -53,9 +53,9 @@ export default function ClubRecruitment({ clubId, isManager, handleClickAddButto
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_recruitment_correction',
-      value: clubDetail.name,
+      value: clubName,
     });
-    router.push(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
+    router.push(ROUTES.ClubRecruitmentEdit({ id: String(clubId), isLink: true }));
   };
 
   const isRecruitmentExist = clubRecruitmentData.status !== 'NONE';

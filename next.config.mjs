@@ -17,12 +17,35 @@ const nextConfig = {
       ],
     });
 
+    config.module.rules.push({
+      test: /\.(png|jpe?g|gif|webp|avif)$/i,
+      type: 'asset',
+      parser: {
+        dataUrlCondition: {
+          maxSize: 8 * 1024,
+        },
+      },
+    });
+
     return config;
   },
   experimental: {
     workerThreads: false,
   },
-  images: { unoptimized: true },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'stage-static.koreatech.in',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.koreatech.in',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

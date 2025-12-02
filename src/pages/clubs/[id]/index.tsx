@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { isKoinError } from '@bcsdlab/koin';
 import { cn } from '@bcsdlab/utils';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { getClubDetail, getClubEventDetail, getRecruitmentClub } from 'api/club';
 import BellIcon from 'assets/svg/Club/bell-icon.svg';
 import OffBellIcon from 'assets/svg/Club/bell-off-icon.svg';
 import CopyIcon from 'assets/svg/Club/copy-icon.svg';
@@ -23,6 +27,7 @@ import useDeleteEvent from 'components/Club/ClubDetailPage/hooks/useDeleteEvent'
 import useDeleteRecruitment from 'components/Club/ClubDetailPage/hooks/useDeleteRecruitment';
 import EditConfirmModal from 'components/Club/ClubEditPage/conponents/EditConfirmModal';
 import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmModal';
+import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -33,7 +38,10 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { formatPhoneNumber } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
 import { useHeaderTitle } from 'utils/zustand/customTitle';
+import type { ClubRecruitmentResponse } from 'api/club/entity';
 import styles from './ClubDetailPage.module.scss';
+
+export const NO_SELECTED_EVENT_ID = -1;
 
 const TAB_LABEL = {
   intro: '상세 소개',
@@ -41,7 +49,9 @@ const TAB_LABEL = {
   event: '행사',
   qna: 'Q&A',
 } as const;
+
 type TabType = keyof typeof TAB_LABEL;
+type TabLabel = (typeof TAB_LABEL)[TabType];
 
 const TAB: Record<string, TabType> = {
   '상세 소개': 'intro',
@@ -50,30 +60,97 @@ const TAB: Record<string, TabType> = {
   'Q&A': 'qna',
 };
 
-function ClubDetailPage({ id }: { id: string }) {
+const EMPTY_RECRUITMENT: ClubRecruitmentResponse = {
+  id: 0,
+  status: 'NONE',
+  dday: 0,
+  start_date: '',
+  end_date: '',
+  image_url: '',
+  content: '',
+  is_manager: false,
+};
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { params, req, query } = context;
+  const id = params?.id;
+
+  if (!id || Array.isArray(id)) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const clubId = Number(id);
+  const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+  const tab = query.tab as TabType | undefined;
+  const eventId = query.eventId as string | undefined;
+  const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;
+
+  let initialTab: TabType = tab ?? 'intro';
+  if (!tab && eventId) {
+    initialTab = 'event';
+  }
+
+  const queryClient = new QueryClient();
+
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ['clubDetail', clubId],
+      queryFn: () => getClubDetail(token, clubId),
+    }),
+
+    queryClient.prefetchQuery({
+      queryKey: ['clubRecruitment', clubId],
+      queryFn: async () => {
+        try {
+          const data = await getRecruitmentClub(clubId);
+          return data;
+        } catch (e) {
+          if (isKoinError(e) && e.status === 404) {
+            return EMPTY_RECRUITMENT;
+          }
+          throw e;
+        }
+      },
+    }),
+  ]);
+
+  if (initialTab === 'event' && numericEventId !== NO_SELECTED_EVENT_ID) {
+    await queryClient.prefetchQuery({
+      queryKey: ['clubEventDetail', clubId, numericEventId],
+      queryFn: () => getClubEventDetail(clubId, numericEventId),
+    });
+  }
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      initialClubId: clubId,
+      initialTab,
+      initialEventId: numericEventId,
+    },
+  };
+};
+
+interface ClubDetailPageProps {
+  initialClubId: number;
+  initialTab: TabType;
+  initialEventId: number;
+}
+
+export default function ClubDetailPage({ initialClubId, initialTab, initialEventId }: ClubDetailPageProps) {
+  const router = useRouter();
   const logger = useLogger();
-  const token = useTokenState();
   const isMobile = useMediaQuery();
   const navigate = (path: string) => router.push(path);
-  const router = useRouter();
-  const { isReady, query, pathname } = router;
 
-  const queryTab = query.tab as TabType | undefined;
-  const queryEventId = typeof query.eventId === 'string' ? Number(query.eventId) : undefined;
-
-  const tabKey: TabType = queryTab ?? (queryEventId ? 'event' : 'intro');
-  const navType = TAB_LABEL[tabKey];
-  const selectedEventId: number | undefined =
-    tabKey === 'event' && typeof queryEventId === 'number' ? queryEventId : undefined;
-
-  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(Number(id));
-  const { clubRecruitmentData } = useClubRecruitment(id);
+  const { clubDetail, clubIntroductionEditStatus } = useClubDetail(initialClubId);
+  const { clubRecruitmentData } = useClubRecruitment(initialClubId);
   const { mutateAsync: deleteRecruitment } = useDeleteRecruitment();
   const { mutateAsync: deleteEvent } = useDeleteEvent();
 
-  const [QnAType, setQnAType] = useState('');
-  const [introType, setintroType] = useState('');
-  const [replyId, setReplyId] = useState(-1);
+  const [eventId, setEventId] = useState<number>(initialEventId);
   const [isEdit, setIsEdit] = useState(false);
   const [introduction, setIntroduction] = useState(clubDetail.introduction);
   const [isModalOpen, openModal, closeModal] = useBooleanState(false);
@@ -84,15 +161,26 @@ function ClubDetailPage({ id }: { id: string }) {
   const [isRecruitDeleteModalOpen, openRecruitDeleteModal, closeRecruitDeleteModal] = useBooleanState(false);
   const [isEventDeleteModalOpen, openEventDeleteModal, closeEventDeleteModal] = useBooleanState(false);
 
-  const { clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync } = useClubLikeMutation(id);
-  const { subscribeRecruitmentNotification, unsubscribeRecruitmentNotification } = useClubRecruitmentNotification(
-    Number(id),
-  );
+  const [QnAType, setQnAType] = useState('');
+  const [introType, setintroType] = useState('');
+  const [replyId, setReplyId] = useState(-1);
+
+  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
+
+  const token = useTokenState();
+
+  const { clubLikeStatus, clubUnlikeStatus, clubLikeMutateAsync, clubUnlikeMutateAsync } =
+    useClubLikeMutation(initialClubId);
+  const { subscribeRecruitmentNotification, unsubscribeRecruitmentNotification } =
+    useClubRecruitmentNotification(initialClubId);
+
+  const tabKeyFromQuery = (router.query.tab as TabType | undefined) ?? initialTab;
+  const navType: TabLabel = TAB_LABEL[tabKeyFromQuery] ?? '상세 소개';
 
   const isPending = clubLikeStatus === 'pending' || clubUnlikeStatus === 'pending';
   const notifyModalType = clubDetail.is_recruit_subscribed ? 'unsubscribed' : 'subscribed';
 
-  const syncUrlQuery = (nextLabel: string, extra?: Record<string, string | number | undefined>) => {
+  const syncUrlQuery = (nextLabel: TabLabel, extra?: Record<string, string | number | undefined>) => {
     const tabKey = TAB[nextLabel] ?? 'intro';
     const nextQuery = { ...router.query, tab: tabKey, ...extra };
 
@@ -105,7 +193,7 @@ function ClubDetailPage({ id }: { id: string }) {
   };
 
   const handleToggleLike = async () => {
-    if (!id || isPending) return;
+    if (!initialClubId || isPending) return;
     if (!token) {
       openAuthModal();
       return;
@@ -154,7 +242,7 @@ function ClubDetailPage({ id }: { id: string }) {
       event_label: 'club_correction',
       value: '수정하기',
     });
-    navigate(ROUTES.ClubEdit({ id: String(id), isLink: true }));
+    navigate(ROUTES.ClubEdit({ id: String(initialClubId), isLink: true }));
   };
   const handleMandateClick = () => {
     logger.actionEventClick({
@@ -165,7 +253,7 @@ function ClubDetailPage({ id }: { id: string }) {
     openMandateModal();
   };
 
-  const handleNavClick = (navValue: string) => {
+  const handleNavClick = (navValue: TabLabel) => {
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_tab_select',
@@ -204,7 +292,7 @@ function ClubDetailPage({ id }: { id: string }) {
       event_label: 'club_new_recruitment',
       value: clubDetail.name,
     });
-    navigate(ROUTES.NewClubRecruitment({ id: String(id), isLink: true }));
+    navigate(ROUTES.NewClubRecruitment({ id: String(initialClubId), isLink: true }));
   };
 
   const handleClickEventAddButton = () => {
@@ -213,7 +301,7 @@ function ClubDetailPage({ id }: { id: string }) {
       event_label: 'club_new_event',
       value: clubDetail.name,
     });
-    navigate(ROUTES.NewClubEvent({ id: String(id), isLink: true }));
+    navigate(ROUTES.NewClubEvent({ id: String(initialClubId), isLink: true }));
   };
 
   const handleDeleteRecruitment = async () => {
@@ -240,16 +328,17 @@ function ClubDetailPage({ id }: { id: string }) {
       event_label: 'club_recruitment_correction',
       value: clubDetail.name,
     });
-    navigate(ROUTES.ClubRecruitmentEdit({ id: String(id), isLink: true }));
+    navigate(ROUTES.ClubRecruitmentEdit({ id: String(initialClubId), isLink: true }));
   };
 
   const handleDeleteEvent = async () => {
-    await deleteEvent(Number(selectedEventId));
+    await deleteEvent(Number(eventId));
     logger.actionEventClick({
       team: 'CAMPUS',
       event_label: 'club_event_delete_confirm',
       value: clubDetail.name,
     });
+    setEventId(-1);
   };
 
   const handleClickEventDeleteButton = () => {
@@ -267,7 +356,7 @@ function ClubDetailPage({ id }: { id: string }) {
       event_label: 'club_event_correction',
       value: clubDetail.name,
     });
-    navigate(ROUTES.ClubEventEdit({ id: String(id), eventId: String(selectedEventId), isLink: true }));
+    navigate(ROUTES.ClubEventEdit({ id: String(initialClubId), eventId: String(eventId), isLink: true }));
   };
 
   const handleClickRecruitNotifyButton = () => {
@@ -275,21 +364,10 @@ function ClubDetailPage({ id }: { id: string }) {
     openRecruitNotifyModal();
   };
 
-  const { setCustomTitle, resetCustomTitle } = useHeaderTitle();
-
   useEffect(() => {
     if (clubDetail?.name) setCustomTitle(clubDetail.name);
   }, [clubDetail?.name, setCustomTitle]);
   useEffect(() => resetCustomTitle, [resetCustomTitle]);
-
-  useEffect(() => {
-    if (!isReady) return;
-    const hasEventId = typeof query.eventId === 'string';
-    const hasTab = typeof query.tab === 'string';
-    if (hasEventId && !hasTab) {
-      router.replace({ pathname, query: { ...query, tab: 'event' } }, undefined, { shallow: true, scroll: false });
-    }
-  }, [isReady, pathname, query, router]);
 
   return (
     <div className={styles.layout}>
@@ -349,7 +427,7 @@ function ClubDetailPage({ id }: { id: string }) {
                       </>
                     ))}
                   {navType === '행사' &&
-                    (selectedEventId ? (
+                    (eventId === NO_SELECTED_EVENT_ID ? (
                       <button
                         type="button"
                         className={styles['club-detail__pc-header__button']}
@@ -404,6 +482,7 @@ function ClubDetailPage({ id }: { id: string }) {
                   alt={`${clubDetail.name} 동아리 이미지`}
                   width={300}
                   height={300}
+                  priority
                 />
               ) : (
                 <div className={styles['club-detail__image-placeholder']}>
@@ -554,7 +633,7 @@ function ClubDetailPage({ id }: { id: string }) {
         </div>
         {!isMobile && (
           <div className={styles['club-detail__summary__image-container']}>
-            {!isMobile && clubDetail.manager && (
+            {clubDetail.manager && (
               <div className={styles['club-detail__edit-button__container']}>
                 <button type="button" className={styles['club-detail__edit-button']} onClick={handleMandateClick}>
                   권한 위임
@@ -572,6 +651,7 @@ function ClubDetailPage({ id }: { id: string }) {
                   alt={`${clubDetail.name} 동아리 이미지`}
                   width={200}
                   height={200}
+                  priority
                 />
               ) : (
                 <div className={styles['club-detail__image-placeholder']}>
@@ -622,7 +702,7 @@ function ClubDetailPage({ id }: { id: string }) {
           })}
           onClick={() => {
             handleNavClick('행사');
-            syncUrlQuery('행사');
+            setEventId(NO_SELECTED_EVENT_ID);
           }}
         >
           행사
@@ -680,7 +760,7 @@ function ClubDetailPage({ id }: { id: string }) {
       {navType === 'Q&A' && (
         <ClubQnA
           openModal={openModal}
-          clubId={id}
+          clubId={initialClubId}
           isManager={clubDetail.manager}
           openAuthModal={openAuthModal}
           setQnA={setQnAType}
@@ -689,24 +769,28 @@ function ClubDetailPage({ id }: { id: string }) {
       )}
       {navType === '모집' && (
         <ClubRecruitment
-          clubId={id}
+          clubId={Number(initialClubId)}
+          clubName={clubDetail.name}
+          clubRecruitmentData={clubRecruitmentData}
           isManager={clubDetail.manager}
           handleClickAddButton={handleClickRecruitAddButton}
         />
       )}
       {navType === '행사' && (
         <ClubEventList
-          clubId={id}
+          clubId={initialClubId}
           isManager={clubDetail.manager}
           handleClickAddButton={handleClickEventAddButton}
-          eventId={selectedEventId}
-          setEventId={(next: number) => syncUrlQuery('행사', { eventId: next })}
+          eventId={Number(eventId)}
+          setEventId={setEventId}
           clubName={clubDetail.name}
         />
       )}
-      {isModalOpen && <CreateQnAModal closeModal={closeModal} clubId={id} type={QnAType} replyId={replyId} />}
+      {isModalOpen && (
+        <CreateQnAModal closeModal={closeModal} clubId={initialClubId} type={QnAType} replyId={replyId} />
+      )}
       {isMandateModalOpen && (
-        <MandateClubManagerModal closeModal={closeMandateModal} clubId={id} clubName={clubDetail.name} />
+        <MandateClubManagerModal closeModal={closeMandateModal} clubId={initialClubId} clubName={clubDetail.name} />
       )}
       {isAuthModalOpen && (
         <LoginRequiredModal
@@ -722,7 +806,7 @@ function ClubDetailPage({ id }: { id: string }) {
           introduction={introduction}
           setIsEdit={setIsEdit}
           resetForm={() => setIntroduction(clubDetail.introduction)}
-          id={id}
+          id={initialClubId}
         />
       )}
       {isRecruitDeleteModalOpen && (
@@ -761,13 +845,4 @@ function ClubDetailPage({ id }: { id: string }) {
   );
 }
 
-export default function ClubDetail() {
-  const router = useRouter();
-  const { id } = router.query as { id: string };
-
-  if (!id) {
-    return null;
-  }
-
-  return <ClubDetailPage id={id} />;
-}
+ClubDetailPage.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;

@@ -6,13 +6,13 @@ interface ClubListProps {
   categoryId?: number;
   sortType?: string;
   isRecruiting?: boolean;
-  query?: string;
+  clubName?: string;
 }
 
-function useClubList({ token, categoryId, sortType, isRecruiting, query }: ClubListProps) {
+function useClubList({ token, categoryId, sortType, isRecruiting, clubName }: ClubListProps) {
   const { data } = useQuery({
-    queryKey: ['club-list', categoryId, sortType, isRecruiting, query],
-    queryFn: () => club.getClubList(token, categoryId, sortType, isRecruiting, query),
+    queryKey: ['club-list', categoryId, sortType, isRecruiting, clubName],
+    queryFn: () => club.getClubList(token, categoryId, sortType, isRecruiting, clubName),
   });
 
   return data?.clubs ?? [];

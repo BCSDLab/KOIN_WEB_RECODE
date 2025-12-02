@@ -5,28 +5,6 @@
 @import "react-quill/dist/quill.snow.css";
 @import "react-toastify/dist/ReactToastify.css";
 
-@font-face {
-  font-family: NanumBarunGothic;
-  src:
-    local("NanumBarunGothic"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.eot"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.eot?#iefix") format("embedded-opentype"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.woff") format("woff"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.ttf") format("truetype"),
-    url("https://static.koreatech.in/assets/font/NanumBarunGothic.svg#NanumGothic") format("svg");
-}
-
-@font-face {
-  font-family: NanumSquare;
-  src:
-    local("NanumSquareR"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.eot"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.eot?#iefix") format("embedded-opentype"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.woff") format("woff"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.ttf") format("truetype"),
-    url("https://static.koreatech.in/assets/font/NanumSquareR.svg#NanumGothic") format("svg");
-}
-
 #root {
   display: flex;
   flex-direction: column;
@@ -36,7 +14,7 @@
 
   /* https://css-tricks.com/snippets/css/system-font-stack/ */
   font-family:
-    NanumBarunGothic,
+    Pretendard,
     system-ui,
     "Segoe UI",
     Roboto,
@@ -55,6 +33,7 @@
 a,
 button {
   color: #000;
+  font-family: Pretendard, sans-serif;
 }
 
 a {

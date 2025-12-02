@@ -1,8 +1,8 @@
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { StoreCategoriesResponse } from 'api/store/entity';
 import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
-import { useStoreCategories } from 'hooks/store/storePage/useCategoryList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -26,8 +26,7 @@ interface CategoryWithEvent extends Category {
   route: string;
 }
 
-export default function IndexStore() {
-  const { data: categories } = useStoreCategories();
+export default function IndexStore({ categories }: { categories: StoreCategoriesResponse }) {
   const logger = useLogger();
   const router = useRouter();
   const isMobile = useMediaQuery();
@@ -91,21 +90,19 @@ export default function IndexStore() {
       <Link href={titleLink} className={styles.template__title}>
         주변 상점
       </Link>
-      <Suspense fallback={null}>
-        <div className={styles.category__wrapper}>
-          {renderCategories.map((category) => (
-            <button
-              key={category.id}
-              className={styles.category__item}
-              onClick={() => handleCategoryClick(category)}
-              type="button"
-            >
-              <img src={category.image_url} alt={category.name} className={styles.category__image} />
-              {category.name}
-            </button>
-          ))}
-        </div>
-      </Suspense>
+      <div className={styles.category__wrapper}>
+        {renderCategories.map((category) => (
+          <button
+            key={category.id}
+            className={styles.category__item}
+            onClick={() => handleCategoryClick(category)}
+            type="button"
+          >
+            <img src={category.image_url} alt={category.name} className={styles.category__image} />
+            {category.name}
+          </button>
+        ))}
+      </div>
     </section>
   );
 }

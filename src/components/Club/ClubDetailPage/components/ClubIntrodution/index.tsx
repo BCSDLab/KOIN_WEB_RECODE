@@ -1,13 +1,13 @@
-// ClubIntroduction.tsx
-import { Dispatch, lazy, SetStateAction, useCallback, useMemo, useRef } from 'react';
-
+import { Dispatch, SetStateAction, useCallback, useMemo, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { uploadClubFile } from 'api/uploadFile';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import type ReactQuillType from 'react-quill-new';
-
 import styles from './ClubIntrodution.module.scss';
 
-const ReactQuill = lazy(() => import('react-quill-new'));
+const ReactQuill = dynamic(() => import('react-quill-new'), {
+  ssr: false,
+}) as typeof ReactQuillType;
 
 interface Props {
   isEdit: boolean;
