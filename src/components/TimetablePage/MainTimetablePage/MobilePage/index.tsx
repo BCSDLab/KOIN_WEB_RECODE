@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import SemesterListbox from 'components/TimetablePage/components/SemesterList';
@@ -37,7 +38,13 @@ function MobilePage({ timetableFrameId }: { timetableFrameId: number }) {
             </React.Suspense>
           </div>
           <button type="button" className={styles.page__button} onClick={(e) => handleImageDownloadClick(e)}>
-            <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
+            <Image 
+              src="https://static.koreatech.in/assets/img/ic-image.png" 
+              alt="이미지" 
+              width={24} 
+              height={24}
+              loading="lazy"
+            />
             이미지로 저장하기
           </button>
         </div>
