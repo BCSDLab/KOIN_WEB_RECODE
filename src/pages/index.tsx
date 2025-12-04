@@ -5,7 +5,6 @@ import { club, articles as articlesApi, banner, timetable } from 'api';
 import { getBannerCategoryList } from 'api/banner';
 import { HotClubResponse } from 'api/club/entity';
 import { getStoreCategories } from 'api/store';
-
 import IndexArticles from 'components/IndexComponents/IndexArticles';
 import IndexBus from 'components/IndexComponents/IndexBus';
 import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
@@ -15,8 +14,11 @@ import IndexTimetable from 'components/IndexComponents/IndexTimetable';
 import { SSRLayout } from 'components/layout';
 import { MY_SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useMySemester';
 import { SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useSemesterOptionList';
+import { TIMETABLE_FRAME_KEY } from 'components/TimetablePage/hooks/useTimetableFrameList';
+import { TIMETABLE_INFO_LIST } from 'components/TimetablePage/hooks/useTimetableInfoList';
 import Banner from 'components/ui/Banner';
 import UserInfoModal from 'components/ui/UserInfoModal';
+import { getRecentSemester } from 'utils/timetable/semester';
 import styles from './IndexPage.module.scss';
 
 const getHotClub = async () => {
@@ -37,18 +39,21 @@ const getHotClub = async () => {
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
   const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
-  const userType = context.req.cookies['USER_TYPE'] || '';
+  const userType = context.req.cookies['AUTH_USER_TYPE'] || '';
+
   const datas = await Promise.all([
     getBannerCategoryList(),
     getStoreCategories(),
     getHotClub(),
+    token && userType === 'STUDENT'
+      ? queryClient.fetchQuery({
+          queryKey: [MY_SEMESTER_INFO_KEY],
+          queryFn: () => timetable.getMySemester(token),
+        })
+      : Promise.resolve(null),
     queryClient.prefetchQuery({
       queryKey: ['articles', '1'],
       queryFn: () => articlesApi.getArticles(token, '1'),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: [MY_SEMESTER_INFO_KEY],
-      queryFn: () => (token && userType === 'STUDENT' ? timetable.getMySemester(token) : null),
     }),
     queryClient.prefetchQuery({
       queryKey: [SEMESTER_INFO_KEY],
@@ -58,11 +63,30 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const banners = datas[0];
   const categories = datas[1];
   const hotClubInfo = datas[2];
+  const userSemester = datas[3]?.semesters?.[0] || getRecentSemester();
 
   const bannerCategoryId = Number(banners.banner_categories[0].id);
   const bannersList = await banner.getBanners(bannerCategoryId);
   const isBannerOpen =
     context.req.cookies['HIDE_BANNER'] !== `modal_category_${bannerCategoryId}` && bannersList.count !== 0;
+
+  // 시간표 프레임 및 강의 정보 프리페칭 (Hydration 오류 방지)
+  let mainFrameId: number | null = null;
+  if (token && userType === 'STUDENT') {
+    const timetableFrameList = await queryClient.fetchQuery({
+      queryKey: [TIMETABLE_FRAME_KEY + userSemester.year + userSemester.term],
+      queryFn: () => timetable.getTimetableFrame(token, userSemester),
+    });
+
+    const mainFrame = timetableFrameList.find((frame) => frame.is_main);
+    mainFrameId = mainFrame?.id ?? null;
+    if (mainFrameId !== null) {
+      await queryClient.prefetchQuery({
+        queryKey: [TIMETABLE_INFO_LIST, mainFrameId],
+        queryFn: () => timetable.getTimetableLectureInfo(token, mainFrameId!),
+      });
+    }
+  }
 
   return {
     props: {
@@ -71,6 +95,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       isBannerOpen,
       categories,
       hotClubInfo,
+      initialSemester: userSemester,
+      initialTimetableFrameId: mainFrameId ?? 0,
       dehydratedState: dehydrate(queryClient),
     },
   };
@@ -82,6 +108,8 @@ function Index({
   hotClubInfo,
   bannerCategoryId,
   isBannerOpen,
+  initialSemester,
+  initialTimetableFrameId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <main className={styles.template}>
@@ -94,7 +122,7 @@ function Index({
         <IndexArticles />
       </div>
       <div className={styles['right-container']}>
-        <IndexTimetable />
+        <IndexTimetable initialSemester={initialSemester} initialTimetableFrameId={initialTimetableFrameId} />
         <IndexCafeteria />
       </div>
     </main>
