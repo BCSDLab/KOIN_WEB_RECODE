@@ -40,12 +40,13 @@ export default function BusNotice({ loggingLocation }: BusNoticeProps) {
   const { id, title } = res.data;
   const [lastBusNotice, setLastBusNotice] = useLocalStorage('lastBusNotice', '');
   const [busNoticeDismissed, setBusNoticeDismissed] = useLocalStorage('busNoticeDismissed', 'false');
+  const isDismissed = busNoticeDismissed === 'true';
   const isUpdated = lastBusNotice !== title;
   const logger = useLogger();
   const matched = LOCATION.find((item) => item.location === loggingLocation);
   const logValue = matched?.value || '';
 
-  const [showNotice, setShowNotice] = useState(() => !busNoticeDismissed || isUpdated);
+  const [showNotice, setShowNotice] = useState(() => !isDismissed || isUpdated);
 
   const handleClickNavigateNotice = () => {
     logger.actionEventClick({

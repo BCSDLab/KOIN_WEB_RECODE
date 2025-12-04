@@ -1,7 +1,8 @@
 @use "utils/scss/media.scss" as media;
 
 .container {
-  height: 99px;
+  margin-bottom: 64px;
+  text-align: center;
 
   @include media.media-breakpoint(mobile) {
     width: calc(100vw - 48px);
@@ -10,11 +11,10 @@
 }
 
 .notice {
-  height: 58px;
-  padding: 0 24px;
+  display: inline-flex;
+  padding: 16px 24px;
   border-radius: 8px;
   background-color: #f1f8ff;
-  display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow:
