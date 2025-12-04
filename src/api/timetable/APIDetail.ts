@@ -51,7 +51,7 @@ export class LectureList<R extends LecturesResponse> implements APIRequest<R> {
   response!: R;
 
   constructor(semester: Semester) {
-    this.path = `/v3/lectures?year=${semester.year}&term=${semester.term}`;
+    this.path = `/v3/lectures?year=${semester.year}&term=${encodeURIComponent(semester.term)}`;
   }
 }
 
@@ -197,7 +197,7 @@ export class TimetableFrameList<R extends TimetableFrameListResponse> implements
     public authorization: string,
     semester: Semester,
   ) {
-    this.path = `/v3/timetables/frame?year=${semester.year}&term=${semester.term}`;
+    this.path = `/v3/timetables/frame?year=${semester.year}&term=${encodeURIComponent(semester.term)}`;
   }
 }
 
@@ -287,7 +287,7 @@ export class DeleteSemester<R extends DeleteSemesterResponse> implements APIRequ
     public authorization: string,
     semester: Semester,
   ) {
-    this.path = `/v3/timetables/frames?year=${semester.year}&term=${semester.term}`;
+    this.path = `/v3/timetables/frames?year=${semester.year}&term=${encodeURIComponent(semester.term)}`;
   }
 }
 

@@ -70,7 +70,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const isBannerOpen =
     context.req.cookies['HIDE_BANNER'] !== `modal_category_${bannerCategoryId}` && bannersList.count !== 0;
 
-  // 시간표 프레임 및 강의 정보 프리페칭 (Hydration 오류 방지)
   let mainFrameId: number | null = null;
   if (token && userType === 'STUDENT') {
     const timetableFrameList = await queryClient.fetchQuery({
@@ -95,7 +94,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       isBannerOpen,
       categories,
       hotClubInfo,
-      initialSemester: userSemester,
       initialTimetableFrameId: mainFrameId ?? 0,
       dehydratedState: dehydrate(queryClient),
     },
@@ -108,7 +106,6 @@ function Index({
   hotClubInfo,
   bannerCategoryId,
   isBannerOpen,
-  initialSemester,
   initialTimetableFrameId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
@@ -122,7 +119,7 @@ function Index({
         <IndexArticles />
       </div>
       <div className={styles['right-container']}>
-        <IndexTimetable initialSemester={initialSemester} initialTimetableFrameId={initialTimetableFrameId} />
+        <IndexTimetable initialTimetableFrameId={initialTimetableFrameId} />
         <IndexCafeteria />
       </div>
     </main>
