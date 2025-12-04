@@ -11,6 +11,7 @@ import Timetable from 'components/TimetablePage/components/Timetable';
 import TotalGrades from 'components/TimetablePage/components/TotalGrades';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
 import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
+import ROUTES from 'static/routes';
 import { useTempLecture } from 'utils/zustand/myTempLecture';
 import { useSemester } from 'utils/zustand/semester';
 import styles from './DefaultPage.module.scss';
@@ -28,7 +29,9 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
   );
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
-    navigate(`/timetable/modify?id=${timetableFrameId}&type=${courseType}`);
+    navigate(
+      `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: courseType, isLink: true })}&year=${semester?.year}&term=${semester?.term}`,
+    );
   };
 
   return (
