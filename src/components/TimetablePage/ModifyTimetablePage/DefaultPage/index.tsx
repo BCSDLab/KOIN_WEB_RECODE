@@ -92,7 +92,11 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
               <button
                 type="button"
                 className={styles['page__save-button']}
-                onClick={() => navigate(`/timetable?timetableFrameId=${timetableFrameId}`)}
+                onClick={() =>
+                  navigate(
+                    `/timetable?timetableFrameId=${timetableFrameId}&year=${semester.year}&term=${semester.term}`,
+                  )
+                }
               >
                 <div className={styles['page__pen-icon']}>
                   <PenIcon />

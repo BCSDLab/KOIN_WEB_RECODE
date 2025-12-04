@@ -6,18 +6,6 @@ import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './IndexTimetable.module.scss';
 
-function CurrentSemesterTimetable({ initialTimetableFrameId }: { initialTimetableFrameId: number }) {
-  return (
-    <Timetable
-      timetableFrameId={initialTimetableFrameId}
-      columnWidth={44}
-      firstColumnWidth={29}
-      rowHeight={17.3}
-      totalHeight={369}
-    />
-  );
-}
-
 export default function IndexTimeTable({ initialTimetableFrameId }: { initialTimetableFrameId: number }) {
   const logger = useLogger();
 
@@ -47,7 +35,13 @@ export default function IndexTimeTable({ initialTimetableFrameId }: { initialTim
             });
           }}
         >
-          <CurrentSemesterTimetable initialTimetableFrameId={initialTimetableFrameId} />
+          <Timetable
+            timetableFrameId={initialTimetableFrameId}
+            columnWidth={44}
+            firstColumnWidth={29}
+            rowHeight={17.3}
+            totalHeight={369}
+          />
         </Link>
       </ErrorBoundary>
     </div>
