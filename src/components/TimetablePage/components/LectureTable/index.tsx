@@ -67,7 +67,7 @@ function LectureTable({
       return;
     }
 
-    navigate(`/timetable/modify/direct/${timetableFrameId}?lectureIndex=${lectureIndex}`);
+    navigate(`/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}`);
   };
 
   const { removeMyLecture } = useTimetableMutation(timetableFrameId);

@@ -19,7 +19,6 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
   const router = useRouter();
   const navigate = router.push;
   const semester = useSemester();
-  const { pathname } = router;
   const { myLectures } = useMyLectures(Number(timetableFrameId));
   const { data: lectureList } = useLectureList(semester);
   const tempLecture = useTempLecture();
@@ -29,7 +28,7 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
   );
   const handleCourseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value: courseType } = e.currentTarget;
-    navigate(`/timetable/modify/${courseType}/${timetableFrameId}`);
+    navigate(`/timetable/modify?id=${timetableFrameId}&type=${courseType}`);
   };
 
   return (
@@ -54,12 +53,12 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
                 type="button"
                 className={cn({
                   [styles['page__regular-course-button']]: true,
-                  [styles['page__regular-course-button--active']]: pathname.includes('/regular'),
-                  [styles['page__regular-course-button--inactive']]: pathname.includes('/direct'),
+                  [styles['page__regular-course-button--active']]: router.query.type === 'regular',
+                  [styles['page__regular-course-button--inactive']]: router.query.type === 'direct',
                 })}
                 value="regular"
                 onClick={handleCourseClick}
-                disabled={pathname.includes('/regular')}
+                disabled={router.query.type === 'regular'}
               >
                 정규 과목
               </button>
@@ -67,18 +66,18 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
                 type="button"
                 className={cn({
                   [styles['page__directly-add-button']]: true,
-                  [styles['page__directly-add-button--active']]: pathname.includes('/direct'),
-                  [styles['page__directly-add-button--inactive']]: pathname.includes('/regular'),
+                  [styles['page__directly-add-button--active']]: router.query.type === 'direct',
+                  [styles['page__directly-add-button--inactive']]: router.query.type === 'regular',
                 })}
                 value="direct"
                 onClick={handleCourseClick}
-                disabled={pathname.includes('/direct')}
+                disabled={router.query.type === 'direct'}
               >
                 직접 추가
               </button>
             </div>
             {/* TODO: 직접 추가 UI, 강의 리스트 UI 추가 */}
-            {pathname.includes('/regular') ? (
+            {router.query.type === 'regular' ? (
               <LectureList timetableFrameId={timetableFrameId} />
             ) : (
               <CustomLecture timetableFrameId={timetableFrameId} />

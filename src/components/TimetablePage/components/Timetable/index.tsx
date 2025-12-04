@@ -55,7 +55,7 @@ function Timetable({
       return;
     }
 
-    router.push(`/timetable/modify/direct/${timetableFrameId}?lectureIndex=${lectureIndex}`);
+    router.push(`/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}`);
   };
 
   const handleRemoveLectureClick = (id: number) => {

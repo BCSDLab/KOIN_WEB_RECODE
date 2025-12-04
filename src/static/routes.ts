@@ -13,10 +13,8 @@ const ROUTES = {
   Main: () => '/',
   NotFound: () => '*',
   Timetable: () => '/timetable',
-  TimetableRegular: ({ id, isLink }: ROUTESParams<'id'>) =>
-    isLink ? `timetable/modify/regular/${id}` : 'timetable/modify/regular/:id',
-  TimetableDirect: ({ id, isLink }: ROUTESParams<'id'>) =>
-    isLink ? `timetable/modify/direct/${id}` : 'timetable/modify/direct/:id',
+  TimetableModify: ({ id, type, isLink }: ROUTESParams<'id' | 'type'>) =>
+    isLink ? `timetable/modify?id=${id}${type ? `&type=${type}` : ''}` : 'timetable/modify',
   GraduationCalculator: () => '/graduation',
   Store: () => '/store',
   BenefitStore: () => '/benefitstore',

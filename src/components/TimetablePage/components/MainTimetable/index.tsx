@@ -63,7 +63,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
   const onClickEdit = () => {
     if (isSemesterAndTimetableExist()) {
       router.push(
-        `/${ROUTES.TimetableRegular({ id: String(timetableFrameId), isLink: true })}?year=${semester?.year}&term=${semester?.term}`,
+        `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'regular', isLink: true })}&year=${semester?.year}&term=${semester?.term}`,
       );
     }
   };

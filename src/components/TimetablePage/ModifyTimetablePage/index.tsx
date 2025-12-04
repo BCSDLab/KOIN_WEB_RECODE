@@ -1,9 +1,14 @@
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { MobilePage } from 'components/TimetablePage/MainTimetablePage/MobilePage';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import DefaultPage from './DefaultPage';
 import styles from './ModifyTimetablePage.module.scss';
+
+const MobilePage = dynamic(
+  () => import('components/TimetablePage/MainTimetablePage/MobilePage').then((mod) => mod.MobilePage),
+  { ssr: true },
+);
 
 export default function ModifyTimetablePage({ id }: { id?: string }) {
   const isMobile = useMediaQuery();
