@@ -5,8 +5,8 @@
   text-align: center;
 
   @include media.media-breakpoint(mobile) {
-    width: calc(100vw - 48px);
-    height: auto;
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -22,7 +22,7 @@
     0 1px 1px rgba(0 0 0 / 2%);
 
   @include media.media-breakpoint(mobile) {
-    height: auto;
+    width: calc(100vw - 64px);
     padding: 16px;
     box-shadow: none;
   }
