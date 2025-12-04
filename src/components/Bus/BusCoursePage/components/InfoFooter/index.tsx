@@ -3,11 +3,12 @@ import { BUS_FEEDBACK_FORM } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './InfoFooter.module.scss';
 
-type BUSTYPE = 'EXPRESS' | 'CITY';
+type BUSTYPE = 'SHUTTLE' | 'EXPRESS' | 'CITY';
 
 interface InfoFooterProps {
   type: BUSTYPE;
   updated: string;
+  category?: string;
   destinationCategory?: string;
   selectedDirection?: string;
   selectedBusNumber?: number;
@@ -41,8 +42,11 @@ export default function InfoFooter({
   };
 
   return (
-    <div className={styles['express-footer']}>
-      <div className={styles['express-footer__date']}>업데이트 날짜 :{updated}</div>
+    <div className={styles['info-footer']}>
+      <div className={styles['info-footer__date']}>
+        <span>업데이트 날짜 :</span>
+        {updated}
+      </div>
       <button type="button" className={styles['info-footer__icon']} onClick={() => handleLogging(type)}>
         <InformationIcon />
         <div className={styles['info-footer__text']}>정보가 정확하지 않나요?</div>
