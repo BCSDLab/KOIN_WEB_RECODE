@@ -1,0 +1,100 @@
+@use "src/utils/scss/media" as media;
+
+.timetable-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 0;
+  }
+}
+
+.timetable {
+  border-radius: 16px;
+  border: 1px solid #eee;
+  background: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.timetable__label-wrapper {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 16px 24px 8px;
+  box-sizing: border-box;
+
+  @include media.media-breakpoint(mobile) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.timetable__row {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 24px;
+
+  &:not(:last-child) > span {
+    border-bottom: 1px solid #eee;
+  }
+
+  @include media.media-breakpoint(mobile) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.timetable__label {
+  flex: 1;
+  width: 100%;
+  color: #4b4b4b;
+  text-align: center;
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  line-height: 160%;
+}
+
+.timetable__cell_am {
+  flex: 1;
+  width: 100%;
+  color: #ffc62b;
+  text-align: center;
+  padding: 16px 0;
+  font-family: Pretendard, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 160%;
+
+  @include media.media-breakpoint(mobile) {
+    flex: 0;
+    font-size: 18px;
+    text-align: left;
+  }
+}
+
+.timetable__cell_pm {
+  flex: 1;
+  width: 100%;
+  color: #3a70e2;
+  text-align: center;
+  padding: 16px 0;
+  font-family: Pretendard, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 160%;
+
+  @include media.media-breakpoint(mobile) {
+    flex: 0;
+    font-size: 18px;
+    text-align: left;
+  }
+}
