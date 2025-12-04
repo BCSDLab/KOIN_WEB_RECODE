@@ -44,6 +44,11 @@ const nextConfig = {
         hostname: 'static.koreatech.in',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'bcsdlab.com',
+        pathname: '/**',
+      },
     ],
   },
 };
