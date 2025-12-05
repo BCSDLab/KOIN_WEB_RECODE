@@ -113,19 +113,17 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
                   <BookMarkIcon />
                 </div>
               </div>
-              {currentFrameIndex && (
-                <button
-                  type="button"
-                  className={styles['timetable-list__item--setting']}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleTimetableSettingClick(defaultFrame);
-                  }}
-                >
-                  {currentFrameIndex === defaultFrame.id || !defaultFrame.id ? <BlueSettingIcon /> : <SettingIcon />}
-                  설정
-                </button>
-              )}
+              <button
+                type="button"
+                className={styles['timetable-list__item--setting']}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleTimetableSettingClick(defaultFrame);
+                }}
+              >
+                {currentFrameIndex === defaultFrame.id || !defaultFrame.id ? <BlueSettingIcon /> : <SettingIcon />}
+                설정
+              </button>
             </div>
           ) : (
             <div className={styles['timetable-list__empty-list']}>
@@ -151,19 +149,17 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
               }}
             >
               <li className={styles['timetable-list__item--title']}>{frame.name}</li>
-              {currentFrameIndex && (
-                <button
-                  type="button"
-                  className={styles['timetable-list__item--setting']}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleTimetableSettingClick(frame);
-                  }}
-                >
-                  {currentFrameIndex === frame.id || !frame.id ? <BlueSettingIcon /> : <SettingIcon />}
-                  설정
-                </button>
-              )}
+              <button
+                type="button"
+                className={styles['timetable-list__item--setting']}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleTimetableSettingClick(frame);
+                }}
+              >
+                {currentFrameIndex === frame.id || !frame.id ? <BlueSettingIcon /> : <SettingIcon />}
+                설정
+              </button>
             </div>
           ))}
         </div>

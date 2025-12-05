@@ -2,13 +2,14 @@ import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { timetable } from 'api';
+import { SSRLayout } from 'components/layout';
 import { MY_SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useMySemester';
 import { SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { TIMETABLE_INFO_LIST } from 'components/TimetablePage/hooks/useTimetableInfoList';
 import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
-import type { Term } from 'api/timetable/entity';
+import type * as entity from 'api/timetable/entity';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
@@ -23,7 +24,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       queryFn: () => timetable.getMySemester(token),
     });
     const year = Number(query.year);
-    const term = query.term as Term;
+    const term = query.term as entity.Term;
     const userSemester = mySemesterData?.semesters?.[0];
     const semester = year && term ? { year, term } : userSemester || getRecentSemester();
 
@@ -56,3 +57,5 @@ export default function ModifyTimetablePageWrapper() {
 
   return <ModifyTimetablePage id={id} />;
 }
+
+ModifyTimetablePageWrapper.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;

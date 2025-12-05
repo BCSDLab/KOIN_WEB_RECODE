@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { timetable, dept } from 'api';
+import { SSRLayout } from 'components/layout';
 import { MY_SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useMySemester';
 import { SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import useTimetableFrameList, { TIMETABLE_FRAME_KEY } from 'components/TimetablePage/hooks/useTimetableFrameList';
@@ -115,3 +116,5 @@ function TimetablePage() {
 }
 
 export default TimetablePage;
+
+TimetablePage.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;
