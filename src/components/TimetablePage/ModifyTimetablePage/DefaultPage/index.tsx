@@ -33,6 +33,7 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
       `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: courseType, isLink: true })}&year=${semester?.year}&term=${semester?.term}`,
     );
   };
+  const modifyType = router.query.type;
 
   return (
     <div className={styles.page}>
@@ -56,12 +57,12 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
                 type="button"
                 className={cn({
                   [styles['page__regular-course-button']]: true,
-                  [styles['page__regular-course-button--active']]: router.query.type === 'regular',
-                  [styles['page__regular-course-button--inactive']]: router.query.type === 'direct',
+                  [styles['page__regular-course-button--active']]: modifyType === 'regular',
+                  [styles['page__regular-course-button--inactive']]: modifyType === 'direct',
                 })}
                 value="regular"
                 onClick={handleCourseClick}
-                disabled={router.query.type === 'regular'}
+                disabled={modifyType === 'regular'}
               >
                 정규 과목
               </button>
@@ -69,18 +70,18 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
                 type="button"
                 className={cn({
                   [styles['page__directly-add-button']]: true,
-                  [styles['page__directly-add-button--active']]: router.query.type === 'direct',
-                  [styles['page__directly-add-button--inactive']]: router.query.type === 'regular',
+                  [styles['page__directly-add-button--active']]: modifyType === 'direct',
+                  [styles['page__directly-add-button--inactive']]: modifyType === 'regular',
                 })}
                 value="direct"
                 onClick={handleCourseClick}
-                disabled={router.query.type === 'direct'}
+                disabled={modifyType === 'direct'}
               >
                 직접 추가
               </button>
             </div>
             {/* TODO: 직접 추가 UI, 강의 리스트 UI 추가 */}
-            {router.query.type === 'regular' ? (
+            {modifyType === 'regular' ? (
               <LectureList timetableFrameId={timetableFrameId} />
             ) : (
               <CustomLecture timetableFrameId={timetableFrameId} />

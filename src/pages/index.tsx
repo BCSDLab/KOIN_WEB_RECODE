@@ -93,7 +93,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       isBannerOpen,
       categories,
       hotClubInfo,
-      //initialTimetableFrameId: mainFrameId ?? 0,
       dehydratedState: dehydrate(queryClient),
     },
   };
