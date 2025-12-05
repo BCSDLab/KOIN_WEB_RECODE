@@ -76,7 +76,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       queryKey: [TIMETABLE_FRAME_KEY + userSemester.year + userSemester.term],
       queryFn: () => timetable.getTimetableFrame(token, userSemester),
     });
-
     const mainFrame = timetableFrameList.find((frame) => frame.is_main);
     mainFrameId = mainFrame?.id ?? null;
     if (mainFrameId !== null) {
@@ -94,7 +93,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       isBannerOpen,
       categories,
       hotClubInfo,
-      initialTimetableFrameId: mainFrameId ?? 0,
+      //initialTimetableFrameId: mainFrameId ?? 0,
       dehydratedState: dehydrate(queryClient),
     },
   };
@@ -106,7 +105,7 @@ function Index({
   hotClubInfo,
   bannerCategoryId,
   isBannerOpen,
-  initialTimetableFrameId,
+  // initialTimetableFrameId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <main className={styles.template}>
@@ -119,7 +118,7 @@ function Index({
         <IndexArticles />
       </div>
       <div className={styles['right-container']}>
-        <IndexTimetable initialTimetableFrameId={initialTimetableFrameId} />
+        <IndexTimetable />
         <IndexCafeteria />
       </div>
     </main>
