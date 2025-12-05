@@ -1,13 +1,21 @@
-import React from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Timetable from 'components/TimetablePage/components/Timetable';
+import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOptionList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSemesterAction } from 'utils/zustand/semester';
 import styles from './IndexTimetable.module.scss';
 
 export default function IndexTimeTable({ initialTimetableFrameId }: { initialTimetableFrameId: number }) {
+  const { updateSemester } = useSemesterAction();
+  const semesterOptionList = useSemesterOptionList();
   const logger = useLogger();
+
+  useEffect(() => {
+    if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
+  }, [semesterOptionList, updateSemester]);
 
   return (
     <div className={styles.template}>
