@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Timetable from 'components/TimetablePage/components/Timetable';
@@ -20,7 +20,7 @@ export default function IndexTimeTable() {
 
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id ?? 0;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
   }, [semesterOptionList, updateSemester]);
 
