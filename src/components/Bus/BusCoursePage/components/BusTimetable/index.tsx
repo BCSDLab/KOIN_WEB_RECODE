@@ -1,5 +1,7 @@
 import { cn } from '@bcsdlab/utils';
-import * as Timetable from 'components/Bus/BusCoursePage/components/Timetable';
+import CityTimetable from 'components/Bus/BusCoursePage/components/CityTimetable';
+import ExpressTimetable from 'components/Bus/BusCoursePage/components/ExpressTimetable';
+import ShuttleTimetable from 'components/Bus/BusCoursePage/components/ShuttleTimetable';
 import BusNotice from 'components/Bus/components/BusNotice';
 import Suspense from 'components/ssr/SSRSuspense';
 import { BUS_TYPES } from 'static/bus';
@@ -37,9 +39,9 @@ export default function BusTimetable() {
       </ul>
 
       <Suspense fallback={<div className={styles.empty} />}>
-        {selectedTab.key === 'shuttle' && <Timetable.Shuttle />}
-        {selectedTab.key === 'express' && <Timetable.Express />}
-        {selectedTab.key === 'city' && <Timetable.City />}
+        {selectedTab.key === 'shuttle' && <ShuttleTimetable />}
+        {selectedTab.key === 'express' && <ExpressTimetable />}
+        {selectedTab.key === 'city' && <CityTimetable />}
       </Suspense>
     </section>
   );
