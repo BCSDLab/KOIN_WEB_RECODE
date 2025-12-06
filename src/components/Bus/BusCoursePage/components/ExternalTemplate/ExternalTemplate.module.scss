@@ -21,7 +21,7 @@
   flex-direction: column;
 }
 
-.timetable__label-wrapper {
+.timetable-label {
   width: 100%;
   display: flex;
   gap: 16px;
@@ -29,13 +29,19 @@
   padding: 16px 24px 8px;
   box-sizing: border-box;
 
-  @include media.media-breakpoint(mobile) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  &__text {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+    @include media.media-breakpoint(mobile) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
   }
 }
 
-.timetable__row {
+.timetable-content {
   width: 100%;
   display: flex;
   gap: 16px;
@@ -51,50 +57,40 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
-}
 
-.timetable__label {
-  flex: 1;
-  width: 100%;
-  color: #4b4b4b;
-  text-align: center;
-  font-family: Pretendard, sans-serif;
-  font-size: 18px;
-  line-height: 160%;
-}
+  &__am {
+    flex: 1;
+    width: 100%;
+    color: #ffc62b;
+    text-align: center;
+    padding: 16px 0;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 160%;
 
-.timetable__cell_am {
-  flex: 1;
-  width: 100%;
-  color: #ffc62b;
-  text-align: center;
-  padding: 16px 0;
-  font-family: Pretendard, sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 160%;
-
-  @include media.media-breakpoint(mobile) {
-    flex: 0;
-    font-size: 18px;
-    text-align: left;
+    @include media.media-breakpoint(mobile) {
+      flex: 0;
+      font-size: 18px;
+      text-align: left;
+    }
   }
-}
 
-.timetable__cell_pm {
-  flex: 1;
-  width: 100%;
-  color: #3a70e2;
-  text-align: center;
-  padding: 16px 0;
-  font-family: Pretendard, sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 160%;
+  &__pm {
+    flex: 1;
+    width: 100%;
+    color: #3a70e2;
+    text-align: center;
+    padding: 16px 0;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 160%;
 
-  @include media.media-breakpoint(mobile) {
-    flex: 0;
-    font-size: 18px;
-    text-align: left;
+    @include media.media-breakpoint(mobile) {
+      flex: 0;
+      font-size: 18px;
+      text-align: left;
+    }
   }
 }
