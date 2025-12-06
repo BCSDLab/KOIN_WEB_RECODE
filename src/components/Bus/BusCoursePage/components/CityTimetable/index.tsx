@@ -49,14 +49,15 @@ export default function CityTimetable() {
 
   return (
     <div className={styles['timetable-container']}>
-      <div className={styles['course-category-city-container']}>
-        <div className={styles['course-category-city']}>
-          <div className={styles['course-category__button']}>노선</div>
+      <div className={styles['city-container']}>
+        {/* <div className={styles['content-wrapper']}> */}
+        <div className={styles['city-label']}>
+          <div className={styles['city-label__button']}>노선</div>
           {CITY_COURSES.slice(0, 3).map((cityCourse) => (
             <button
               className={cn({
-                [styles['course-category__button']]: true,
-                [styles['course-category__button--selected']]: cityCourse.bus_number === selectedBusNumber,
+                [styles['city-label__button']]: true,
+                [styles['city-label__button--selected']]: cityCourse.bus_number === selectedBusNumber,
               })}
               type="button"
               onClick={() => {
@@ -72,13 +73,14 @@ export default function CityTimetable() {
             </button>
           ))}
         </div>
-        <div className={styles['course-category-city']}>
-          <div className={styles['course-category__button']}>운행</div>
+
+        <div className={styles['city-label']}>
+          <div className={styles['city-label__button']}>운행</div>
           {cityBusDirections.map((cityBusDirection) => (
             <button
               className={cn({
-                [styles['course-category__button']]: true,
-                [styles['course-category__button--selected']]: cityBusDirection.value === selectedDirection,
+                [styles['city-label__button']]: true,
+                [styles['city-label__button--selected']]: cityBusDirection.value === selectedDirection,
               })}
               type="button"
               onClick={() => {
@@ -94,6 +96,7 @@ export default function CityTimetable() {
             </button>
           ))}
         </div>
+        {/* </div> */}
       </div>
 
       <Template typeNumber={2} arrivalList={getTodayTimetable()} />
