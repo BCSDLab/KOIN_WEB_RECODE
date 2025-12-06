@@ -50,7 +50,6 @@ export default function CityTimetable() {
   return (
     <div className={styles['timetable-container']}>
       <div className={styles['city-container']}>
-        {/* <div className={styles['content-wrapper']}> */}
         <div className={styles['city-label']}>
           <div className={styles['city-label__button']}>노선</div>
           {CITY_COURSES.slice(0, 3).map((cityCourse) => (
@@ -96,7 +95,6 @@ export default function CityTimetable() {
             </button>
           ))}
         </div>
-        {/* </div> */}
       </div>
 
       <Template typeNumber={2} arrivalList={getTodayTimetable()} />
