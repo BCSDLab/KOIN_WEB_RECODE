@@ -34,18 +34,18 @@
     }
   }
 
+  &__text {
+    color: #727272;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 160%;
+  }
+
   @include media.media-breakpoint(mobile) {
     width: 100%;
     flex-direction: column;
     padding: 8px 24px 140px;
   }
-}
-
-.info-footer__text {
-  color: #727272;
-  font-family: Pretendard, sans-serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 160%;
 }
