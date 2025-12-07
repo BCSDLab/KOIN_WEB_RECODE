@@ -18,93 +18,6 @@ $template-shuttle-colors: (
   }
 }
 
-.timetable {
-  border-radius: 16px;
-  border: 1px solid #eee;
-  background: #fff;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.timetable__label-wrapper {
-  width: 100%;
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  padding: 16px 24px 8px;
-  box-sizing: border-box;
-
-  @include media.media-breakpoint(mobile) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.timetable__row {
-  width: 100%;
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  box-sizing: border-box;
-  padding: 0 24px;
-
-  &:not(:last-child) > span {
-    border-bottom: 1px solid #eee;
-  }
-
-  @include media.media-breakpoint(mobile) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.timetable__label {
-  flex: 1;
-  width: 100%;
-  color: #4b4b4b;
-  text-align: center;
-  font-family: Pretendard, sans-serif;
-  font-size: 18px;
-  line-height: 160%;
-}
-
-.timetable__cell_am {
-  flex: 1;
-  width: 100%;
-  color: #ffc62b;
-  text-align: center;
-  padding: 16px 0;
-  font-family: Pretendard, sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 160%;
-
-  @include media.media-breakpoint(mobile) {
-    flex: 0;
-    font-size: 18px;
-    text-align: left;
-  }
-}
-
-.timetable__cell_pm {
-  flex: 1;
-  width: 100%;
-  color: #3a70e2;
-  text-align: center;
-  padding: 16px 0;
-  font-family: Pretendard, sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 160%;
-
-  @include media.media-breakpoint(mobile) {
-    flex: 0;
-    font-size: 18px;
-    text-align: left;
-  }
-}
-
 .main-timetable {
   width: 100%;
   display: flex;
@@ -214,27 +127,6 @@ $template-shuttle-colors: (
   }
 }
 
-.course-category-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #f5f5f5;
-  border-radius: 0 0 12px 12px;
-}
-
-.course-category-city-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #f5f5f5;
-  border-radius: 0 0 12px 12px;
-
-  @include media.media-breakpoint(mobile) {
-    gap: 8px;
-    padding: 14px 24px;
-  }
-}
-
 .course-category {
   width: 100%;
   background-color: #f5f5f5;
@@ -273,83 +165,6 @@ $template-shuttle-colors: (
     border-radius: 0;
     padding: 8px 24px;
     gap: 0;
-  }
-}
-
-.course-category-city {
-  width: 100%;
-  background-color: #f5f5f5;
-  display: flex;
-  gap: 8px;
-  box-sizing: border-box;
-  padding: 8px 24px;
-  border-radius: 0 0 12px 12px;
-
-  &__button {
-    display: flex;
-    padding: 6px 16px;
-    justify-content: center;
-    align-items: center;
-    color: #727272;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: Pretendard, sans-serif;
-
-    &--selected {
-      border-radius: 50px;
-      background: #175c8e;
-      color: #fff;
-      font-weight: 600;
-      line-height: 160%;
-    }
-  }
-
-  @include media.media-breakpoint(mobile) {
-    width: 100vw;
-    border-radius: 0;
-    padding: 0 24px;
-  }
-}
-
-.express-footer {
-  display: flex;
-  box-sizing: border-box;
-  width: 100%;
-  justify-content: space-between;
-  gap: 8px;
-  color: #727272;
-  font-family: Pretendard, sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 160%;
-
-  &__date {
-    font-size: 14px;
-  }
-
-  &__icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    font-family: Pretendard, sans-serif;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 160%;
-
-    @include media.media-breakpoint(mobile) {
-      width: 100%;
-      justify-content: start;
-      padding: 0 24px;
-      margin-bottom: 30px;
-    }
-  }
-
-  @include media.media-breakpoint(mobile) {
-    width: 100%;
-    flex-direction: column;
-    padding: 8px 24px 140px;
   }
 }
 

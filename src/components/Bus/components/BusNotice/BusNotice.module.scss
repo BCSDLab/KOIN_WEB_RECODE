@@ -1,20 +1,20 @@
 @use "utils/scss/media.scss" as media;
 
 .container {
-  height: 99px;
+  margin-bottom: 64px;
+  text-align: center;
 
   @include media.media-breakpoint(mobile) {
-    width: calc(100vw - 48px);
-    height: auto;
+    display: flex;
+    justify-content: center;
   }
 }
 
 .notice {
-  height: 58px;
-  padding: 0 24px;
+  display: inline-flex;
+  padding: 16px 24px;
   border-radius: 8px;
   background-color: #f1f8ff;
-  display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow:
@@ -22,7 +22,7 @@
     0 1px 1px rgba(0 0 0 / 2%);
 
   @include media.media-breakpoint(mobile) {
-    height: auto;
+    width: calc(100vw - 64px);
     padding: 16px;
     box-shadow: none;
   }
