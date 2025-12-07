@@ -7,7 +7,7 @@ import qsStringify from 'utils/ts/qsStringfy';
 import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
-import { deleteCookie, setCookie } from './cookie';
+import { deleteCookie, getCookieDomain, setCookie } from './cookie';
 import { redirectToClub, redirectToLogin } from './auth';
 import { saveTokensToNative } from './iosBridge';
 
@@ -118,9 +118,10 @@ export default class APIClient {
         }
       })
       .catch(() => {
+        useTokenStore.getState().setToken('');
+        useTokenStore.getState().setRefreshToken('');
+
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
-          useTokenStore.getState().setToken('');
-          useTokenStore.getState().setRefreshToken('');
           saveTokensToNative('', ''); // 네이티브 상태도 동기화
           redirectToClub();
           return;
@@ -162,7 +163,10 @@ export default class APIClient {
 
   private async errorMiddleware(error: AxiosError): Promise<AxiosResponse | null> {
     if (error.response?.status === 401) {
-      deleteCookie('AUTH_TOKEN_KEY');
+      const domain = getCookieDomain();
+      deleteCookie('AUTH_TOKEN_KEY', { domain });
+      deleteCookie('AUTH_TOKEN_KEY'); // 하위 호환성 유지
+
       const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
       if (refreshTokenStorage) {
         const refreshToken = JSON.parse(refreshTokenStorage);
@@ -173,9 +177,10 @@ export default class APIClient {
             const retryResponse = await this.retryRequest(error);
             return retryResponse;
           } catch (retryError) {
+            useTokenStore.getState().setToken('');
+            useTokenStore.getState().setRefreshToken('');
+
             if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
-              useTokenStore.getState().setToken('');
-              useTokenStore.getState().setRefreshToken('');
               saveTokensToNative('', ''); // 네이티브 상태도 동기화
             }
             return null;
