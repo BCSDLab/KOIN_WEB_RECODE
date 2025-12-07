@@ -8,6 +8,11 @@ import { cityBusDirections, CITY_COURSES, TERMINAL_CITY_BUS } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CityTimetable.module.scss';
 
+type Direction = {
+  label: string;
+  value: string;
+};
+
 export default function CityTimetable() {
   const [selectedDirection, setSelectedDirection] = useState(cityBusDirections[0].value);
   const [selectedBusNumber, setSelectedBusNumber] = useState(CITY_COURSES[0].bus_number);
@@ -22,6 +27,24 @@ export default function CityTimetable() {
           )?.direction || ''
         : TERMINAL_CITY_BUS,
   });
+
+  const handleBusNumberButton = (busNum: number) => {
+    setSelectedBusNumber(busNum);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'city_bus_route',
+      value: `${busNum}번`,
+    });
+  };
+
+  const handleDirectionButton = (direction: Direction) => {
+    setSelectedDirection(direction.value);
+    logger.actionEventClick({
+      team: 'CAMPUS',
+      event_label: 'city_bus_direction',
+      value: direction.label,
+    });
+  };
 
   const getTodayTimetable = () => {
     const today = dayjs().day();
@@ -59,14 +82,7 @@ export default function CityTimetable() {
                 [styles['city-label__button--selected']]: cityCourse.bus_number === selectedBusNumber,
               })}
               type="button"
-              onClick={() => {
-                setSelectedBusNumber(cityCourse.bus_number);
-                logger.actionEventClick({
-                  team: 'CAMPUS',
-                  event_label: 'city_bus_route',
-                  value: `${cityCourse.bus_number}번`,
-                });
-              }}
+              onClick={() => handleBusNumberButton(cityCourse.bus_number)}
             >
               {cityCourse.bus_number}번
             </button>
@@ -82,14 +98,7 @@ export default function CityTimetable() {
                 [styles['city-label__button--selected']]: cityBusDirection.value === selectedDirection,
               })}
               type="button"
-              onClick={() => {
-                setSelectedDirection(cityBusDirection.value);
-                logger.actionEventClick({
-                  team: 'CAMPUS',
-                  event_label: 'city_bus_direction',
-                  value: cityBusDirection.label,
-                });
-              }}
+              onClick={() => handleDirectionButton(cityBusDirection)}
             >
               {cityBusDirection.label}
             </button>
