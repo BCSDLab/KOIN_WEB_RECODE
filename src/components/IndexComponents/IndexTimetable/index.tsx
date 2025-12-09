@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Timetable from 'components/TimetablePage/components/Timetable';
@@ -19,10 +19,38 @@ export default function IndexTimeTable() {
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
 
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id ?? 0;
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
   }, [semesterOptionList, updateSemester]);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const renderTimetable = (
+    <Timetable
+      timetableFrameId={currentFrameId}
+      columnWidth={44}
+      firstColumnWidth={29}
+      rowHeight={17.3}
+      totalHeight={369}
+    />
+  );
+
+  const renderPlaceholder = (
+    <div
+      aria-hidden
+      style={{
+        height: 369,
+        width: '100%',
+        borderRadius: 12,
+        backgroundColor: '#f7f8fa',
+        border: '1px solid #e4e8ee',
+      }}
+    />
+  );
 
   return (
     <div className={styles.template}>
@@ -50,13 +78,7 @@ export default function IndexTimeTable() {
             });
           }}
         >
-          <Timetable
-            timetableFrameId={currentFrameId}
-            columnWidth={44}
-            firstColumnWidth={29}
-            rowHeight={17.3}
-            totalHeight={369}
-          />
+          {isClient ? renderTimetable : renderPlaceholder}
         </Link>
       </ErrorBoundary>
     </div>
