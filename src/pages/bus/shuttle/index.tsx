@@ -91,7 +91,7 @@ export default function ShuttleBusTimetable() {
             <div className={styles['main-timetable__column']}>
               {[
                 shuttleCourse.route_regions[0], // 천안, 아산
-                shuttleCourse.route_regions[2], // 서울
+                shuttleCourse.route_regions[1], // 청주
               ].map((text) => (
                 <TemplateShuttleVersion
                   key={text.region}
@@ -103,7 +103,7 @@ export default function ShuttleBusTimetable() {
             </div>
             <div className={styles['main-timetable__column']}>
               {[
-                shuttleCourse.route_regions[1], // 청주
+                shuttleCourse.route_regions[2], // 서울
                 shuttleCourse.route_regions[3], // 대전, 세종
               ].map((text) => (
                 <TemplateShuttleVersion
