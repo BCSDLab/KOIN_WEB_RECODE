@@ -1,5 +1,3 @@
-'use client';
-
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import BusNotice from 'components/Bus/BusNotice';

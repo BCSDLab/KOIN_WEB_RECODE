@@ -34,9 +34,15 @@ function formatSemesterLabel(semester?: string) {
   return (parts[1] ?? parts[0]).trim();
 }
 
-export default function ShuttleBusTimetable() {
-  const logger = useLogger();
+function asString(value: string | string[] | undefined): string | undefined {
+  return Array.isArray(value) ? value[0] : value;
+}
 
+export default function ShuttleBusTimetable() {
+  const router = useRouter();
+  const categoryFromURL = asString(router.query.category);
+
+  const logger = useLogger();
   const isMobile = useMediaQuery();
 
   const { data: semesterData } = useCoopSemester();
@@ -44,7 +50,7 @@ export default function ShuttleBusTimetable() {
   const [selectedCourseId] = useIndexValueSelect();
   const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
 
-  const [category, setCategory] = useState('전체');
+  const [category, setCategory] = useState(categoryFromURL || '전체');
 
   const displaySemester = formatSemesterLabel(semesterData.semester);
 
@@ -63,6 +69,10 @@ export default function ShuttleBusTimetable() {
               type="button"
               onClick={() => {
                 setCategory(value);
+                router.replace({
+                  pathname: '/bus/shuttle',
+                  query: { category: value },
+                });
                 logger.actionEventClick({
                   team: 'CAMPUS',
                   event_label: 'shuttle_bus_route',
@@ -136,8 +146,6 @@ export default function ShuttleBusTimetable() {
           </div>
         )}
 
-        {/* {routeId && <BusTimetableDetail />} */}
-
         {!isMobile && (
           <InfoFooter
             type="SHUTTLE"
@@ -190,7 +198,10 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
             className={styles['template-shuttle__list_wrapper']}
             key={route.id}
             onClick={() => {
-              router.push(`/bus/shuttle/${route.id}`);
+              router.push({
+                pathname: `/bus/shuttle/${route.id}`,
+                query: { category },
+              });
               logger.actionEventClick({
                 team: 'CAMPUS',
                 event_label: 'area_specific_route',

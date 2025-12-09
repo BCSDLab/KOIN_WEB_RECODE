@@ -11,14 +11,22 @@ import styles from './ShuttleDetailPage.module.scss';
 
 const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
 
+function asString(value: string | string[] | undefined): string | undefined {
+  return Array.isArray(value) ? value[0] : value;
+}
+
 export default function ShuttleDetailPage() {
   const router = useRouter();
   const { routeId } = router.query;
+
   const { shuttleTimetableDetail } = useShuttleTimetableDetail(
     routeId ? (Array.isArray(routeId) ? routeId[0] : routeId) : null,
   );
+
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
-  const [category, setCategory] = useState('전체');
+
+  const categoryFromURL = router.query.category;
+  const category = asString(categoryFromURL) ?? '전체';
 
   const isMobile = useMediaQuery();
   const logger = useLogger();
@@ -42,7 +50,7 @@ export default function ShuttleDetailPage() {
             })}
             type="button"
             onClick={() => {
-              setCategory(value);
+              router.replace(`/bus/shuttle?category=${value}`);
               logger.actionEventClick({
                 team: 'CAMPUS',
                 event_label: 'shuttle_bus_route',
