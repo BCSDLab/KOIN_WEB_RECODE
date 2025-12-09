@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
-import BusTimetableDetail from 'components/Bus/BusCoursePage/components/BusTimetableDetail';
+import BusCoursePage from 'components/Bus/BusCoursePage';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import useBusTimetable from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
 import useIndexValueSelect from 'components/Bus/BusCoursePage/hooks/useIndexValueSelect';
@@ -11,10 +11,9 @@ import useShuttleCourse from 'components/Bus/BusCoursePage/hooks/useShuttleCours
 import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
 import dayjs from 'dayjs';
 import { BUS_FEEDBACK_FORM, EXPRESS_COURSES } from 'static/bus';
-import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import styles from './ShuttleTimetable.module.scss';
+import styles from './ShuttleBusTimetable.module.scss';
 
 interface TemplateShuttleVersionProps {
   region: string;
@@ -35,76 +34,8 @@ function formatSemesterLabel(semester?: string) {
   return (parts[1] ?? parts[0]).trim();
 }
 
-function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVersionProps) {
-  const isMobile = useMediaQuery();
-  const router = useRouter();
+export default function ShuttleBusTimetable() {
   const logger = useLogger();
-
-  const filteredRoutes = (route: string) =>
-    routes.filter(({ type }) => {
-      if (route === '전체') {
-        return true;
-      }
-
-      if (route === '주중노선') {
-        return type === '주중';
-      }
-
-      if (route === '주말노선') {
-        return type === '주말';
-      }
-
-      if (route === '순환노선') {
-        return type === '순환';
-      }
-
-      return false;
-    });
-
-  if (filteredRoutes(category).length === 0) {
-    return null;
-  }
-
-  return (
-    <div className={styles['template-shuttle']}>
-      <h2 className={styles['template-shuttle__title']}>{region}</h2>
-      <div>
-        {filteredRoutes(category).map((route) => (
-          <button
-            type="button"
-            className={styles['template-shuttle__list_wrapper']}
-            key={route.id}
-            onClick={() => {
-              router.push(`/bus/course?routeId=${route.id}`);
-              logger.actionEventClick({
-                team: 'CAMPUS',
-                event_label: 'area_specific_route',
-                value: `${route.type}_${route.route_name}`,
-              });
-            }}
-          >
-            <span className={styles['template-shuttle__list']}>
-              <div className={styles['template-shuttle__list_header']}>
-                <span className={`${styles['template-shuttle__list_type']} ${styles[`type-${route.type}`]}`}>
-                  {route.type}
-                </span>
-                <span className={styles['template-shuttle__list_name']}>{route.route_name}</span>
-              </div>
-              <div className={styles['template-shuttle__list_sub_name']}>{route.sub_name}</div>
-            </span>
-            <RightArrow />
-          </button>
-        ))}
-        {isMobile && <div className={styles['main-timetable-mobile__line']} />}
-      </div>
-    </div>
-  );
-}
-
-export default function ShuttleTimetable() {
-  const logger = useLogger();
-  const router = useRouter();
-  const { routeId } = router.query;
 
   const isMobile = useMediaQuery();
 
@@ -118,33 +49,34 @@ export default function ShuttleTimetable() {
   const displaySemester = formatSemesterLabel(semesterData.semester);
 
   return (
-    <div className={styles['timetable-container']}>
-      <div className={styles['course-category']}>
-        {courseCategory.map((value) => (
-          <button
-            key={value}
-            className={cn({
-              [styles['course-category__button']]: true,
-              [styles['course-category__button--selected']]: value === category,
-            })}
-            type="button"
-            onClick={() => {
-              setCategory(value);
-              router.push(ROUTES.BusCourse());
-              logger.actionEventClick({
-                team: 'CAMPUS',
-                event_label: 'shuttle_bus_route',
-                value,
-              });
-            }}
-          >
-            {value}
-          </button>
-        ))}
-      </div>
+    <BusCoursePage>
+      <div className={styles['timetable-container']}>
+        {/* 카테고리 버튼 */}
+        <div className={styles['course-category']}>
+          {courseCategory.map((value) => (
+            <button
+              key={value}
+              className={cn({
+                [styles['course-category__button']]: true,
+                [styles['course-category__button--selected']]: value === category,
+              })}
+              type="button"
+              onClick={() => {
+                setCategory(value);
+                logger.actionEventClick({
+                  team: 'CAMPUS',
+                  event_label: 'shuttle_bus_route',
+                  value,
+                });
+              }}
+            >
+              {value}
+            </button>
+          ))}
+        </div>
 
-      {!routeId &&
-        (!isMobile ? (
+        {/* 지역별 리스트 */}
+        {!isMobile ? (
           <div className={styles['main-timetable']}>
             <div className={styles['main-timetable__column']}>
               {[
@@ -202,17 +134,84 @@ export default function ShuttleTimetable() {
               </button>
             </div>
           </div>
+        )}
+
+        {/* {routeId && <BusTimetableDetail />} */}
+
+        {!isMobile && (
+          <InfoFooter
+            type="SHUTTLE"
+            updated={dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+            category={category}
+          />
+        )}
+      </div>
+    </BusCoursePage>
+  );
+}
+
+function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVersionProps) {
+  const isMobile = useMediaQuery();
+  const router = useRouter();
+  const logger = useLogger();
+
+  const filteredRoutes = (route: string) =>
+    routes.filter(({ type }) => {
+      if (route === '전체') {
+        return true;
+      }
+
+      if (route === '주중노선') {
+        return type === '주중';
+      }
+
+      if (route === '주말노선') {
+        return type === '주말';
+      }
+
+      if (route === '순환노선') {
+        return type === '순환';
+      }
+
+      return false;
+    });
+
+  if (filteredRoutes(category).length === 0) {
+    return null;
+  }
+
+  return (
+    <div className={styles['template-shuttle']}>
+      <h2 className={styles['template-shuttle__title']}>{region}</h2>
+      <div>
+        {filteredRoutes(category).map((route) => (
+          <button
+            type="button"
+            className={styles['template-shuttle__list_wrapper']}
+            key={route.id}
+            onClick={() => {
+              router.push(`/bus/shuttle/${route.id}`);
+              logger.actionEventClick({
+                team: 'CAMPUS',
+                event_label: 'area_specific_route',
+                value: `${route.type}_${route.route_name}`,
+              });
+            }}
+          >
+            <span className={styles['template-shuttle__list']}>
+              <div className={styles['template-shuttle__list_header']}>
+                <span className={`${styles['template-shuttle__list_type']} ${styles[`type-${route.type}`]}`}>
+                  {route.type}
+                </span>
+                <span className={styles['template-shuttle__list_name']}>{route.route_name}</span>
+              </div>
+              <div className={styles['template-shuttle__list_sub_name']}>{route.sub_name}</div>
+            </span>
+            <RightArrow />
+          </button>
         ))}
-
-      {routeId && <BusTimetableDetail />}
-
-      {!isMobile && (
-        <InfoFooter
-          type="SHUTTLE"
-          updated={dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
-          category={category}
-        />
-      )}
+        {isMobile && <div className={styles['main-timetable-mobile__line']} />}
+      </div>
     </div>
   );
 }

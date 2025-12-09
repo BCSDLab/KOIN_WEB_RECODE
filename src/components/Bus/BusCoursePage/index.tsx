@@ -1,8 +1,8 @@
-import BusTimetable from 'components/Bus/BusCoursePage/components/BusTimetable';
+import BusTabs from 'components/Bus/BusCoursePage/components/BusTabs';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './BusCoursePage.module.scss';
 
-export default function BusCoursePage() {
+export default function BusCoursePage({ children }: { children: React.ReactNode }) {
   const isMobile = useMediaQuery();
 
   return (
@@ -22,9 +22,10 @@ export default function BusCoursePage() {
             </div>
           </header>
         )}
-        <div className={styles.contents}>
-          <BusTimetable />
-        </div>
+
+        <BusTabs />
+
+        <div className={styles.contents}>{children}</div>
       </div>
     </main>
   );

@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
+import BusCoursePage from 'components/Bus/BusCoursePage';
 import Template from 'components/Bus/BusCoursePage/components/ExternalTemplate';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import { useCityBusTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
 import dayjs from 'dayjs';
 import { cityBusDirections, CITY_COURSES, TERMINAL_CITY_BUS } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import styles from './CityTimetable.module.scss';
+import styles from './CityBusTimetable.module.scss';
 
 type Direction = {
   label: string;
   value: string;
 };
 
-export default function CityTimetable() {
+export default function CityBusTimetable() {
   const [selectedDirection, setSelectedDirection] = useState(cityBusDirections[0].value);
   const [selectedBusNumber, setSelectedBusNumber] = useState(CITY_COURSES[0].bus_number);
   const logger = useLogger();
@@ -71,49 +72,51 @@ export default function CityTimetable() {
   };
 
   return (
-    <div className={styles['timetable-container']}>
-      <div className={styles['city-container']}>
-        <div className={styles['city-label']}>
-          <div className={styles['city-label__button']}>노선</div>
-          {CITY_COURSES.slice(0, 3).map((cityCourse) => (
-            <button
-              className={cn({
-                [styles['city-label__button']]: true,
-                [styles['city-label__button--selected']]: cityCourse.bus_number === selectedBusNumber,
-              })}
-              type="button"
-              onClick={() => handleBusNumberButton(cityCourse.bus_number)}
-            >
-              {cityCourse.bus_number}번
-            </button>
-          ))}
+    <BusCoursePage>
+      <div className={styles['timetable-container']}>
+        <div className={styles['city-container']}>
+          <div className={styles['city-label']}>
+            <div className={styles['city-label__button']}>노선</div>
+            {CITY_COURSES.slice(0, 3).map((cityCourse) => (
+              <button
+                className={cn({
+                  [styles['city-label__button']]: true,
+                  [styles['city-label__button--selected']]: cityCourse.bus_number === selectedBusNumber,
+                })}
+                type="button"
+                onClick={() => handleBusNumberButton(cityCourse.bus_number)}
+              >
+                {cityCourse.bus_number}번
+              </button>
+            ))}
+          </div>
+
+          <div className={styles['city-label']}>
+            <div className={styles['city-label__button']}>운행</div>
+            {cityBusDirections.map((cityBusDirection) => (
+              <button
+                className={cn({
+                  [styles['city-label__button']]: true,
+                  [styles['city-label__button--selected']]: cityBusDirection.value === selectedDirection,
+                })}
+                type="button"
+                onClick={() => handleDirectionButton(cityBusDirection)}
+              >
+                {cityBusDirection.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className={styles['city-label']}>
-          <div className={styles['city-label__button']}>운행</div>
-          {cityBusDirections.map((cityBusDirection) => (
-            <button
-              className={cn({
-                [styles['city-label__button']]: true,
-                [styles['city-label__button--selected']]: cityBusDirection.value === selectedDirection,
-              })}
-              type="button"
-              onClick={() => handleDirectionButton(cityBusDirection)}
-            >
-              {cityBusDirection.label}
-            </button>
-          ))}
-        </div>
+        <Template typeNumber={2} arrivalList={getTodayTimetable()} />
+
+        <InfoFooter
+          type="CITY"
+          updated={dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+          selectedDirection={selectedDirection}
+          selectedBusNumber={selectedBusNumber}
+        />
       </div>
-
-      <Template typeNumber={2} arrivalList={getTodayTimetable()} />
-
-      <InfoFooter
-        type="CITY"
-        updated={dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
-        selectedDirection={selectedDirection}
-        selectedBusNumber={selectedBusNumber}
-      />
-    </div>
+    </BusCoursePage>
   );
 }

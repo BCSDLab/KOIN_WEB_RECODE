@@ -56,7 +56,7 @@ export const CATEGORY: Category[] = [
       },
       {
         title: '버스 시간표',
-        link: ROUTES.BusCourse(),
+        link: ROUTES.BusCourseShuttle(),
         newFlag: false,
         planFlag: false,
         tag: null,

@@ -165,7 +165,7 @@ export const BUS_LINKS = [
     key: 'timetable',
     title: '버스 시간표',
     subtitle: '바로가기',
-    link: ROUTES.BusCourse(),
+    link: ROUTES.BusCourseShuttle(),
     SvgIcon: BusTimetable,
   },
   {

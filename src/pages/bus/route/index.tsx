@@ -1,11 +1,11 @@
 import { Suspense, useState } from 'react';
 import { Arrival, BusTypeRequest, Depart } from 'api/bus/entity';
+import BusNotice from 'components/Bus/BusNotice';
 import BusGuide from 'components/Bus/BusRoutePage/components/BusGuide';
 import BusSearchOptions from 'components/Bus/BusRoutePage/components/BusSearchOptions';
 import DirectionSelect from 'components/Bus/BusRoutePage/components/DirectionSelect';
 import RouteList from 'components/Bus/BusRoutePage/components/RouteList';
 import { useTimeSelect } from 'components/Bus/BusRoutePage/hooks/useTimeSelect';
-import BusNotice from 'components/Bus/components/BusNotice';
 import { useBusLogger } from 'components/Bus/hooks/useBusLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';

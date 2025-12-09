@@ -3,18 +3,23 @@ import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
+import BusCoursePage from 'components/Bus/BusCoursePage';
 import useShuttleTimetableDetail from 'components/Bus/BusCoursePage/hooks/useShuttleTimetableDetail';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import styles from './BusTimetableDetail.module.scss';
+import styles from './ShuttleDetailPage.module.scss';
 
-export default function BusTimetableDetail() {
+const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
+
+export default function ShuttleDetailPage() {
   const router = useRouter();
   const { routeId } = router.query;
   const { shuttleTimetableDetail } = useShuttleTimetableDetail(
     routeId ? (Array.isArray(routeId) ? routeId[0] : routeId) : null,
   );
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
+  const [category, setCategory] = useState('전체');
+
   const isMobile = useMediaQuery();
   const logger = useLogger();
 
@@ -25,7 +30,31 @@ export default function BusTimetableDetail() {
   const selectedName = selectedDetail ?? fallbackName;
 
   return (
-    <>
+    <BusCoursePage>
+      {/* 카테고리 버튼 */}
+      <div className={styles['course-category']}>
+        {courseCategory.map((value) => (
+          <button
+            key={value}
+            className={cn({
+              [styles['course-category__button']]: true,
+              [styles['course-category__button--selected']]: value === category,
+            })}
+            type="button"
+            onClick={() => {
+              setCategory(value);
+              logger.actionEventClick({
+                team: 'CAMPUS',
+                event_label: 'shuttle_bus_route',
+                value,
+              });
+            }}
+          >
+            {value}
+          </button>
+        ))}
+      </div>
+
       {shuttleTimetableDetail.route_info.length <= 2 && (
         <div className={styles['time-table-wrapper']}>
           <div className={styles['time-table-title']}>
@@ -169,6 +198,6 @@ export default function BusTimetableDetail() {
           </div>
         </div>
       )}
-    </>
+    </BusCoursePage>
   );
 }

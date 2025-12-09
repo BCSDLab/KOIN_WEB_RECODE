@@ -1,33 +1,13 @@
 @use "src/utils/scss/media" as media;
 
-.empty {
-  height: 100vh;
-}
-
 .template {
   width: 795px;
   margin: 23px auto 0;
 
   @include media.media-breakpoint(mobile) {
-    min-height: 350px;
     width: 100%;
     margin: 0;
     box-sizing: border-box;
-  }
-
-  &__title {
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: -1px;
-    color: #252525;
-    margin-bottom: 22px;
-  }
-
-  &__loading-spinner {
-    margin: 250px auto;
-    background-color: white;
-    width: 100px;
-    height: 100px;
   }
 }
 
