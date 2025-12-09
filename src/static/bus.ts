@@ -23,7 +23,7 @@ export const BUS_TYPES = [
     tabValue: '시내',
     tableHeaders: ['오전', '오후'],
   },
-];
+] as const;
 
 export const BUS_DIRECTIONS = ['한기대', '야우리', '천안역'];
 
