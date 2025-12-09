@@ -10,9 +10,7 @@ export default function BusTabs() {
   const logger = useLogger();
 
   const pathParts = router.pathname.split('/');
-  const baseTab = pathParts[2] ?? 'shuttle';
-
-  const selectedTab = baseTab ?? 'shuttle';
+  const selectedTab = pathParts[2] ?? 'shuttle';
 
   const onClickBusTab = (type: (typeof BUS_TYPES)[number]) => {
     logger.actionEventClick({
