@@ -4,16 +4,17 @@ import BusCoursePage from 'components/Bus/BusCoursePage';
 import Template from 'components/Bus/BusCoursePage/components/ExternalTemplate';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import useBusTimetable from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
-import useIndexValueSelect from 'components/Bus/BusCoursePage/hooks/useIndexValueSelect';
 import dayjs from 'dayjs';
 import { EXPRESS_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ExpressBusTimetable.module.scss';
 
 export default function ExpressBusTimetable() {
-  const [selectedCourseId, handleCourseChange] = useIndexValueSelect();
-  const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
+  const [selectedCourseId, setSelectedCourseId] = useState(0);
   const [destinationCategory, setDestinationCategory] = useState('병천방면');
+
+  const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
+
   const logger = useLogger();
 
   return (
@@ -21,26 +22,25 @@ export default function ExpressBusTimetable() {
       <div className={styles['timetable-container']}>
         <div className={styles['course-category']}>
           <div className={styles['course-category__button']}>운행</div>
-          {EXPRESS_COURSES.map((value, index) => (
+          {EXPRESS_COURSES.map((course, index) => (
             <button
-              key={value.name}
+              key={course.name}
               className={cn({
                 [styles['course-category__button']]: true,
-                [styles['course-category__button--selected']]: value.name === destinationCategory,
+                [styles['course-category__button--selected']]: course.name === destinationCategory,
               })}
               type="button"
-              onClick={(e) => {
-                setDestinationCategory(value.name);
-                handleCourseChange(e);
+              onClick={() => {
+                setSelectedCourseId(index);
+                setDestinationCategory(course.name);
                 logger.actionEventClick({
                   team: 'CAMPUS',
                   event_label: 'ds_bus_direction',
-                  value: EXPRESS_COURSES[Number(e.currentTarget.dataset.value)].name,
+                  value: course.name,
                 });
               }}
-              data-value={index}
             >
-              {value.name}
+              {course.name}
             </button>
           ))}
         </div>
