@@ -9,7 +9,7 @@ import { TIMETABLE_INFO_LIST } from 'components/TimetablePage/hooks/useTimetable
 import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
-import type * as entity from 'api/timetable/entity';
+import type { Term } from 'api/timetable/entity';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
@@ -24,7 +24,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       queryFn: () => timetable.getMySemester(token),
     });
     const year = Number(query.year);
-    const term = query.term as entity.Term;
+    const term = query.term as Term;
     const userSemester = mySemesterData?.semesters?.[0];
     const semester = year && term ? { year, term } : userSemester || getRecentSemester();
 

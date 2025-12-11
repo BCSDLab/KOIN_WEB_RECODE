@@ -104,7 +104,6 @@ function Index({
   hotClubInfo,
   bannerCategoryId,
   isBannerOpen,
-  // initialTimetableFrameId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <main className={styles.template}>
