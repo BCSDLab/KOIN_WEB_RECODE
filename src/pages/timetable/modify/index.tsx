@@ -16,7 +16,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const { token, query } = parseServerSideParams(context);
   const userType = context.req.cookies['AUTH_USER_TYPE'];
-  const timetableFrameId = Number(context.params?.id);
+  const timetableFrameId = Number(query.id);
 
   if (token && userType === 'STUDENT') {
     const mySemesterData = await queryClient.fetchQuery({

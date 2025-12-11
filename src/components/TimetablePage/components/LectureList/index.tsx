@@ -1,7 +1,5 @@
 import React from 'react';
 import { Lecture, MyLectureInfo, Semester, LectureInfo } from 'api/timetable/entity';
-import ErrorBoundary from 'components/boundary/ErrorBoundary';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import LectureTable, { LECTURE_TABLE_HEADER } from 'components/TimetablePage/components/LectureTable';
 import ToggleButton from 'components/TimetablePage/components/ToggleButton';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
@@ -217,9 +215,7 @@ function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
           </button>
         </div>
         <div className={styles.page__depart}>
-          <React.Suspense fallback={<LoadingSpinner size="50" />}>
-            <DeptListbox value={departmentFilterValue} onChange={onChangeDeptSelect} isWhiteBackground={false} />
-          </React.Suspense>
+          <DeptListbox value={departmentFilterValue} onChange={onChangeDeptSelect} isWhiteBackground={false} />
         </div>
       </div>
       <div className={styles.table__header} role="row">
@@ -245,39 +241,31 @@ function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
           </div>
         ))}
       </div>
-      <ErrorBoundary fallbackClassName="loading">
-        <React.Suspense fallback={<LoadingSpinner size="50" />}>
-          {!isToggled ? (
-            <CurrentSemesterLectureList
-              rowWidthList={widthInfo}
-              timetableFrameId={timetableFrameId}
-              currentSemester={semester}
-              filter={{
-                // 백엔드 수정하면 제거
-                department: departmentFilterValue ?? '전체',
-                search: searchValue ?? '',
-              }}
-              myLectures={(myLectures ?? []) as MyLectureInfo[]}
-            />
-          ) : (
-            <MyLectureListBox
-              rowWidthList={widthInfo}
-              myLectures={(myLectures ?? []) as MyLectureInfo[]}
-              timetableFrameId={timetableFrameId}
-            />
-          )}
-        </React.Suspense>
-      </ErrorBoundary>
+      {!isToggled ? (
+        <CurrentSemesterLectureList
+          rowWidthList={widthInfo}
+          timetableFrameId={timetableFrameId}
+          currentSemester={semester}
+          filter={{
+            // 백엔드 수정하면 제거
+            department: departmentFilterValue ?? '전체',
+            search: searchValue ?? '',
+          }}
+          myLectures={(myLectures ?? []) as MyLectureInfo[]}
+        />
+      ) : (
+        <MyLectureListBox
+          rowWidthList={widthInfo}
+          myLectures={(myLectures ?? []) as MyLectureInfo[]}
+          timetableFrameId={timetableFrameId}
+        />
+      )}
       <div className={styles.page__foot}>
         <div className={styles.page__toggle}>
           <ToggleButton width="46" height="24" handleToggle={toggleLectureList} />
           <div>시간표에 추가한 과목</div>
         </div>
-        <ErrorBoundary fallbackClassName="loading">
-          <React.Suspense fallback={<LoadingSpinner size="50" />}>
-            <LastUpdatedDate />
-          </React.Suspense>
-        </ErrorBoundary>
+        <LastUpdatedDate />
       </div>
     </div>
   );

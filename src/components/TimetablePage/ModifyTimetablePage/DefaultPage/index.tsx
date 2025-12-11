@@ -1,10 +1,9 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import PenIcon from 'assets/svg/pen-icon.svg';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
-import ErrorBoundary from 'components/boundary/ErrorBoundary';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import Suspense from 'components/ssr/SSRSuspense';
 import CustomLecture from 'components/TimetablePage/components/CustomLecture';
 import LectureList from 'components/TimetablePage/components/LectureList';
 import Timetable from 'components/TimetablePage/components/Timetable';
@@ -43,14 +42,8 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
         </div>
         <h1 className={styles.timetable__title}>시간표</h1>
       </div>
-      <Suspense
-        fallback={
-          <div className={styles['central-loading-spinner']}>
-            <LoadingSpinner size="100" />
-          </div>
-        }
-      >
-        <div className={styles.page__content}>
+      <div className={styles.page__content}>
+        <Suspense>
           <div>
             <div className={styles['page__button-group']}>
               <button
@@ -107,22 +100,18 @@ export default function DefaultPage({ timetableFrameId }: { timetableFrameId: nu
                 수정 완료
               </button>
             </div>
-            <ErrorBoundary fallbackClassName="loading">
-              <React.Suspense fallback={<LoadingSpinner size="50" />}>
-                <Timetable
-                  timetableFrameId={timetableFrameId}
-                  similarSelectedLecture={similarSelectedLecture}
-                  selectedLectureIndex={selectedLectureIndex}
-                  columnWidth={88.73}
-                  firstColumnWidth={44.36}
-                  rowHeight={33.07}
-                  totalHeight={699}
-                />
-              </React.Suspense>
-            </ErrorBoundary>
+            <Timetable
+              timetableFrameId={timetableFrameId}
+              similarSelectedLecture={similarSelectedLecture}
+              selectedLectureIndex={selectedLectureIndex}
+              columnWidth={88.73}
+              firstColumnWidth={44.36}
+              rowHeight={33.07}
+              totalHeight={699}
+            />
           </div>
-        </div>
-      </Suspense>
+        </Suspense>
+      </div>
     </div>
   );
 }

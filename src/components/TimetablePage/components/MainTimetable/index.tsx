@@ -4,8 +4,6 @@ import DownloadIcon from 'assets/svg/download-icon.svg';
 import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import EditIcon from 'assets/svg/pen-icon.svg';
 import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
-import ErrorBoundary from 'components/boundary/ErrorBoundary';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Curriculum from 'components/TimetablePage/components/Curriculum';
 import Timetable from 'components/TimetablePage/components/Timetable';
 import TotalGrades from 'components/TimetablePage/components/TotalGrades';
@@ -102,17 +100,13 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
         </button>
       </div>
       <div className={styles.page__timetable}>
-        <ErrorBoundary fallbackClassName="loading">
-          <React.Suspense fallback={<LoadingSpinner size="50" />}>
-            <Timetable
-              timetableFrameId={timetableFrameId}
-              columnWidth={140}
-              firstColumnWidth={70}
-              rowHeight={33}
-              totalHeight={700}
-            />
-          </React.Suspense>
-        </ErrorBoundary>
+        <Timetable
+          timetableFrameId={timetableFrameId}
+          columnWidth={140}
+          firstColumnWidth={70}
+          rowHeight={33}
+          totalHeight={700}
+        />
       </div>
       <div>{isModalOpen && <DownloadTimetableModal onClose={closeModal} timetableFrameId={timetableFrameId} />}</div>
     </div>
