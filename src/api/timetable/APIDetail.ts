@@ -46,12 +46,20 @@ export class SemesterCheck<R extends SemesterCheckResponse> implements APIReques
 export class LectureList<R extends LecturesResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path: string;
+  path = '/v3/lectures';
 
   response!: R;
 
+  params: {
+    year: number;
+    term: string;
+  };
+
   constructor(semester: Semester) {
-    this.path = `/v3/lectures?year=${semester.year}&term=${encodeURIComponent(semester.term)}`;
+    this.params = {
+      year: semester.year,
+      term: semester.term,
+    };
   }
 }
 
@@ -187,17 +195,25 @@ export class TimetableLectureDeletion<R extends DeleteTimetableLectureResponse> 
 export class TimetableFrameList<R extends TimetableFrameListResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path: string;
+  path = '/v3/timetables/frame';
 
   response!: R;
 
   auth = true;
 
+  params: {
+    year: number;
+    term: string;
+  };
+
   constructor(
     public authorization: string,
     semester: Semester,
   ) {
-    this.path = `/v3/timetables/frame?year=${semester.year}&term=${encodeURIComponent(semester.term)}`;
+    this.params = {
+      year: semester.year,
+      term: semester.term,
+    };
   }
 }
 
@@ -277,17 +293,25 @@ export class RollbackTimetableFrame<R extends TimetableLectureInfoResponse> impl
 export class DeleteSemester<R extends DeleteSemesterResponse> implements APIRequest<R> {
   method = HTTP_METHOD.DELETE;
 
-  path: string;
+  path = '/v3/timetables/frames';
 
   response!: R;
 
   auth = true;
 
+  params: {
+    year: number;
+    term: string;
+  };
+
   constructor(
     public authorization: string,
     semester: Semester,
   ) {
-    this.path = `/v3/timetables/frames?year=${semester.year}&term=${encodeURIComponent(semester.term)}`;
+    this.params = {
+      year: semester.year,
+      term: semester.term,
+    };
   }
 }
 
