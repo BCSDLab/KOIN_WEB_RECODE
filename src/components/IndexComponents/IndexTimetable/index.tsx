@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+﻿import { useEffect } from 'react';
 import Link from 'next/link';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Timetable from 'components/TimetablePage/components/Timetable';
@@ -6,6 +6,7 @@ import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOpt
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import styles from './IndexTimetable.module.scss';
@@ -19,15 +20,11 @@ export default function IndexTimeTable() {
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
 
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id ?? 0;
-  const [isClient, setIsClient] = useState(false);
+  const isClient = useMount();
 
   useEffect(() => {
     if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
   }, [semesterOptionList, updateSemester]);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const renderTimetable = (
     <Timetable
