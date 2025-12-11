@@ -23,6 +23,7 @@ export default function ExpressBusTimetable() {
           <div className={styles['course-category__button']}>운행</div>
           {EXPRESS_COURSES.map((value, index) => (
             <button
+              key={value.name}
               className={cn({
                 [styles['course-category__button']]: true,
                 [styles['course-category__button--selected']]: value.name === destinationCategory,

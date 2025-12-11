@@ -30,6 +30,11 @@ export default function BusTabs() {
             <button
               type="button"
               onClick={() => onClickBusTab(type)}
+              onMouseEnter={() => {
+                if (selectedTab !== type.key) {
+                  router.prefetch(`/bus/${type.key}`);
+                }
+              }}
               className={cn({
                 [styles.tabs__tab]: true,
                 [styles['tabs__tab--selected']]: selectedTab === type.key,

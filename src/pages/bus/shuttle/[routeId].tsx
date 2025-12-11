@@ -1,15 +1,15 @@
 import { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
+import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import useShuttleTimetableDetail from 'components/Bus/BusCoursePage/hooks/useShuttleTimetableDetail';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ShuttleDetailPage.module.scss';
-
-const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
 
 function asString(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
@@ -40,28 +40,7 @@ export default function ShuttleDetailPage() {
   return (
     <BusCoursePage>
       {/* 카테고리 버튼 */}
-      <div className={styles['course-category']}>
-        {courseCategory.map((value) => (
-          <button
-            key={value}
-            className={cn({
-              [styles['course-category__button']]: true,
-              [styles['course-category__button--selected']]: value === category,
-            })}
-            type="button"
-            onClick={() => {
-              router.replace(`/bus/shuttle?category=${value}`);
-              logger.actionEventClick({
-                team: 'CAMPUS',
-                event_label: 'shuttle_bus_route',
-                value,
-              });
-            }}
-          >
-            {value}
-          </button>
-        ))}
-      </div>
+      <ShuttleCategoryTabs category={category} onChange={(v) => router.replace(`/bus/shuttle?category=${v}`)} />
 
       {shuttleTimetableDetail.route_info.length <= 2 && (
         <div className={styles['time-table-wrapper']}>
@@ -134,7 +113,7 @@ export default function ShuttleDetailPage() {
               {shuttleTimetableDetail.route_info
                 .filter(({ name }) => selectedName === name)
                 ?.map(({ name, detail, arrival_time }) => (
-                  <>
+                  <React.Fragment key={name}>
                     <div className={styles['time-table__number']}>
                       {name}
                       {detail}
@@ -142,13 +121,13 @@ export default function ShuttleDetailPage() {
                     {arrival_time.map((time) => (
                       <div className={styles['time-table__time']}>{time ? time.split('/')[0] : time}</div>
                     ))}
-                  </>
+                  </React.Fragment>
                 ))}
 
               <div className={styles['time-table__number']}>승하차장명</div>
 
               {shuttleTimetableDetail.node_info.map(({ name, detail }) => (
-                <div className={styles['time-table__node-wrapper']}>
+                <div key={name} className={styles['time-table__node-wrapper']}>
                   <div className={styles['time-table__node']}>
                     <div>{name}</div>
                     {detail && <div className={styles['time-table__node-detail']}>{detail}</div>}
@@ -192,7 +171,7 @@ export default function ShuttleDetailPage() {
             ))}
 
             {shuttleTimetableDetail.route_info.map(({ name, detail, arrival_time }) => (
-              <>
+              <React.Fragment key={name}>
                 <div className={styles['time-table__number']}>
                   {name}
                   <br />
@@ -201,7 +180,7 @@ export default function ShuttleDetailPage() {
                 {arrival_time.map((time) => (
                   <div className={styles['time-table__time']}>{time ? time.split('/')[0] : time}</div>
                 ))}
-              </>
+              </React.Fragment>
             ))}
           </div>
         </div>

@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { cn } from '@bcsdlab/utils';
+import { useQueryClient } from '@tanstack/react-query';
+import { getShuttleTimetableDetailInfo } from 'api/bus';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
+import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import useBusTimetable from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
-import useIndexValueSelect from 'components/Bus/BusCoursePage/hooks/useIndexValueSelect';
 import useShuttleCourse from 'components/Bus/BusCoursePage/hooks/useShuttleCourse';
-import useCoopSemester from 'components/Bus/BusRoutePage/hooks/useCoopSemester';
 import dayjs from 'dayjs';
-import { BUS_FEEDBACK_FORM, EXPRESS_COURSES } from 'static/bus';
+import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ShuttleBusTimetable.module.scss';
@@ -26,64 +26,41 @@ interface TemplateShuttleVersionProps {
   category: string;
 }
 
-const courseCategory = ['전체', '주중노선', '주말노선', '순환노선'];
-
-function formatSemesterLabel(semester?: string) {
-  if (!semester) return '';
-  const parts = semester.split('-');
-  return (parts[1] ?? parts[0]).trim();
-}
-
 function asString(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
 export default function ShuttleBusTimetable() {
   const router = useRouter();
-  const categoryFromURL = asString(router.query.category);
+  const categoryFromURL = asString(router.query.category) ?? '전체';
 
   const logger = useLogger();
   const isMobile = useMediaQuery();
 
-  const { data: semesterData } = useCoopSemester();
   const { shuttleCourse } = useShuttleCourse();
-  const [selectedCourseId] = useIndexValueSelect();
-  const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
 
-  const [category, setCategory] = useState(categoryFromURL || '전체');
+  const updatedDate = useBusTimetable(SHUTTLE_COURSES[0]);
+  const displaySemester = shuttleCourse.semester_info.name;
+  const category = categoryFromURL;
 
-  const displaySemester = formatSemesterLabel(semesterData.semester);
+  useEffect(() => {
+    if (!router.isReady) return; // 아직 router.query 가 준비 안 되었을 때 방지
+
+    const categoryFromURL = asString(router.query.category);
+
+    if (!categoryFromURL) {
+      router.replace({
+        pathname: router.pathname,
+        query: { category: '전체' },
+      });
+    }
+  }, [router, router.isReady]);
 
   return (
     <BusCoursePage>
       <div className={styles['timetable-container']}>
         {/* 카테고리 버튼 */}
-        <div className={styles['course-category']}>
-          {courseCategory.map((value) => (
-            <button
-              key={value}
-              className={cn({
-                [styles['course-category__button']]: true,
-                [styles['course-category__button--selected']]: value === category,
-              })}
-              type="button"
-              onClick={() => {
-                setCategory(value);
-                router.replace({
-                  pathname: '/bus/shuttle',
-                  query: { category: value },
-                });
-                logger.actionEventClick({
-                  team: 'CAMPUS',
-                  event_label: 'shuttle_bus_route',
-                  value,
-                });
-              }}
-            >
-              {value}
-            </button>
-          ))}
-        </div>
+        <ShuttleCategoryTabs category={category} onChange={(v) => router.replace(`/bus/shuttle?category=${v}`)} />
 
         {/* 지역별 리스트 */}
         {!isMobile ? (
@@ -122,7 +99,7 @@ export default function ShuttleBusTimetable() {
             ))}
             <div className={styles['info-footer-mobile']}>
               <div className={styles['info-footer-mobile__text']}>
-                {displaySemester}({semesterData.from_date} ~ {semesterData.to_date}
+                {displaySemester}({shuttleCourse.semester_info.from} ~ {shuttleCourse.semester_info.to}
                 )
                 <br />
                 시간표가 제공됩니다.
@@ -149,7 +126,7 @@ export default function ShuttleBusTimetable() {
         {!isMobile && (
           <InfoFooter
             type="SHUTTLE"
-            updated={dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+            updated={dayjs(updatedDate.info.updated_at).format('YYYY-MM-DD')}
             category={category}
           />
         )}
@@ -159,9 +136,11 @@ export default function ShuttleBusTimetable() {
 }
 
 function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVersionProps) {
-  const isMobile = useMediaQuery();
   const router = useRouter();
+  const isMobile = useMediaQuery();
   const logger = useLogger();
+
+  const queryClient = useQueryClient();
 
   const filteredRoutes = (route: string) =>
     routes.filter(({ type }) => {
@@ -194,18 +173,25 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
       <div>
         {filteredRoutes(category).map((route) => (
           <button
-            type="button"
-            className={styles['template-shuttle__list_wrapper']}
             key={route.id}
-            onClick={() => {
-              router.push({
-                pathname: `/bus/shuttle/${route.id}`,
-                query: { category },
+            type="button"
+            onMouseEnter={() => {
+              queryClient.prefetchQuery({
+                queryKey: ['bus', 'shuttle', 'timetable', route.id],
+                queryFn: () => getShuttleTimetableDetailInfo({ id: route.id }),
+                staleTime: 1000 * 60 * 60,
               });
+            }}
+            className={styles['template-shuttle__list_wrapper']}
+            onClick={() => {
               logger.actionEventClick({
                 team: 'CAMPUS',
                 event_label: 'area_specific_route',
                 value: `${route.type}_${route.route_name}`,
+              });
+              router.push({
+                pathname: `/bus/shuttle/${route.id}`,
+                query: { category },
               });
             }}
           >
