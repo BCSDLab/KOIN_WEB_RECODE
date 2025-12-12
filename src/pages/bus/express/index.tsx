@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { useQueryClient } from '@tanstack/react-query';
+import { getBusTimetableInfo } from 'api/bus';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import Template from 'components/Bus/BusCoursePage/components/ExternalTemplate';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
-import useBusTimetable from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
+import { useExpressTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
 import dayjs from 'dayjs';
 import { EXPRESS_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -13,8 +15,9 @@ export default function ExpressBusTimetable() {
   const [selectedCourseId, setSelectedCourseId] = useState(0);
   const [destinationCategory, setDestinationCategory] = useState('병천방면');
 
-  const timetable = useBusTimetable(EXPRESS_COURSES[selectedCourseId]);
+  const timetable = useExpressTimetable(EXPRESS_COURSES[selectedCourseId]);
 
+  const queryClient = useQueryClient();
   const logger = useLogger();
 
   return (
@@ -37,6 +40,18 @@ export default function ExpressBusTimetable() {
                   team: 'CAMPUS',
                   event_label: 'ds_bus_direction',
                   value: course.name,
+                });
+              }}
+              onMouseEnter={() => {
+                queryClient.prefetchQuery({
+                  queryKey: ['timetable', course.bus_type, course.direction, course.region],
+                  queryFn: () =>
+                    getBusTimetableInfo({
+                      bus_type: course.bus_type,
+                      direction: course.direction,
+                      region: course.region,
+                    }),
+                  staleTime: 1000 * 60 * 60,
                 });
               }}
             >

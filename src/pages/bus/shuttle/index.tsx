@@ -7,7 +7,7 @@ import RightArrow from 'assets/svg/right-arrow.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
-import useBusTimetable from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
+import { useShuttleTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
 import useShuttleCourse from 'components/Bus/BusCoursePage/hooks/useShuttleCourse';
 import dayjs from 'dayjs';
 import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES } from 'static/bus';
@@ -39,7 +39,7 @@ export default function ShuttleBusTimetable() {
 
   const { shuttleCourse } = useShuttleCourse();
 
-  const updatedDate = useBusTimetable(SHUTTLE_COURSES[0]);
+  const timetable = useShuttleTimetable(SHUTTLE_COURSES[0]);
   const displaySemester = shuttleCourse.semester_info.name;
   const category = categoryFromURL;
 
@@ -126,7 +126,7 @@ export default function ShuttleBusTimetable() {
         {!isMobile && (
           <InfoFooter
             type="SHUTTLE"
-            updated={dayjs(updatedDate.info.updated_at).format('YYYY-MM-DD')}
+            updated={dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
             category={category}
           />
         )}
