@@ -13,7 +13,7 @@ import styles from './MobilePage.module.scss';
 
 interface MobilePageProps {
   timetableFrameId: number,
-  setCurrentFrameId: (index: number) => void,
+  setCurrentFrameId?: (index: number) => void,
 }
 
 function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
@@ -33,6 +33,7 @@ function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
   };
 
   useEffect(() => {
+    if (!setCurrentFrameId) return;
     if (!data.find((frame) => frame.id === timetableFrameId)) {
       const mainFrameId = data.find((frame) => frame.is_main)?.id;
       if (mainFrameId) setCurrentFrameId(mainFrameId);
