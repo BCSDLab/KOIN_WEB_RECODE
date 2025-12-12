@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
 import showToast from 'utils/ts/showToast';
@@ -6,10 +6,21 @@ import Timetable from 'pages/TimetablePage/components/Timetable';
 import SemesterListbox from 'pages/TimetablePage/components/SemesterList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
+import { useSemester } from 'utils/zustand/semester';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
 import styles from './MobilePage.module.scss';
 
-function MobilePage({ timetableFrameId }: { timetableFrameId: number }) {
+interface MobilePageProps {
+  timetableFrameId: number,
+  setCurrentFrameId: (index: number) => void,
+}
+
+function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
   const logger = useLogger();
+  const semester = useSemester();
+  const token = useTokenState();
+  const { data } = useTimetableFrameList(token, semester);
   const { onImageDownload: onTimetableImageDownload, divRef: timetableRef } = useImageDownload();
   const handleImageDownloadClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -20,6 +31,13 @@ function MobilePage({ timetableFrameId }: { timetableFrameId: number }) {
     });
     onTimetableImageDownload('my-timetable');
   };
+
+  useEffect(() => {
+    if (!data.find((frame) => frame.id === timetableFrameId)) {
+      const mainFrameId = data.find((frame) => frame.is_main)?.id;
+      if (mainFrameId) setCurrentFrameId(mainFrameId);
+    }
+  }, [data, setCurrentFrameId, timetableFrameId]);
 
   return (
     <>
