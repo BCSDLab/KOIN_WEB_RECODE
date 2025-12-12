@@ -73,6 +73,7 @@
   &__item {
     display: flex;
     width: 100%;
+    box-sizing: border-box;
     border-radius: 5px;
     justify-content: space-between;
     padding: 12px 16px 12px 24px;
@@ -83,6 +84,7 @@
     line-height: 28.8px;
     text-align: left;
     color: #8e8e8e;
+    cursor: pointer;
 
     &--title-container {
       display: flex;

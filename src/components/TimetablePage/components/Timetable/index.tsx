@@ -47,7 +47,7 @@ function Timetable({
   const { timeString, setTimeString } = useTimeString();
   const token = useTokenState();
 
-  const { pathname } = router;
+  const modifyType = router.query.type;
 
   const handleEditLectureClick = (lectureIndex: number) => {
     if (!token) {
@@ -55,7 +55,7 @@ function Timetable({
       return;
     }
 
-    router.push(`/timetable/modify/direct/${timetableFrameId}?lectureIndex=${lectureIndex}`);
+    router.push(`/timetable/modify?id=${timetableFrameId}&type=direct&lectureIndex=${lectureIndex}`);
   };
 
   const handleRemoveLectureClick = (id: number) => {
@@ -323,7 +323,7 @@ function Timetable({
             )}
           </div>
         ))}
-        {pathname.includes('regular') &&
+        {modifyType === 'regular' &&
           similarSelectedLecture &&
           DAYS_STRING.map((day, index) => (
             <div
@@ -357,7 +357,7 @@ function Timetable({
             </div>
           ))}
 
-        {pathname.includes('direct') &&
+        {modifyType === 'direct' &&
           customTempLecture &&
           DAYS_STRING.map((day, index) => (
             <div

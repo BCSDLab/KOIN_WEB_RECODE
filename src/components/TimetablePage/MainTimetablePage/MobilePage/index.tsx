@@ -1,6 +1,6 @@
 import React from 'react';
+import Image from 'next/image';
 import LoadingSpinner from 'assets/svg/loading-spinner.svg';
-import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import SemesterListbox from 'components/TimetablePage/components/SemesterList';
 import Timetable from 'components/TimetablePage/components/Timetable';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -37,28 +37,24 @@ function MobilePage({ timetableFrameId }: { timetableFrameId: number }) {
             </React.Suspense>
           </div>
           <button type="button" className={styles.page__button} onClick={(e) => handleImageDownloadClick(e)}>
-            <img src="https://static.koreatech.in/assets/img/ic-image.png" alt="이미지" />
+            <Image
+              src="https://static.koreatech.in/assets/img/ic-image.png"
+              alt="이미지"
+              width={24}
+              height={24}
+              loading="lazy"
+            />
             이미지로 저장하기
           </button>
         </div>
         <div ref={timetableRef} className={styles.page__timetable}>
-          <ErrorBoundary fallbackClassName="loading">
-            <React.Suspense
-              fallback={
-                <div className={styles['top-loading-spinner']}>
-                  <LoadingSpinner />
-                </div>
-              }
-            >
-              <Timetable
-                timetableFrameId={timetableFrameId}
-                columnWidth={55}
-                firstColumnWidth={52}
-                rowHeight={21}
-                totalHeight={439}
-              />
-            </React.Suspense>
-          </ErrorBoundary>
+          <Timetable
+            timetableFrameId={timetableFrameId}
+            columnWidth={55}
+            firstColumnWidth={52}
+            rowHeight={21}
+            totalHeight={439}
+          />
         </div>
       </div>
       <button

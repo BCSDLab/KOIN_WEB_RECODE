@@ -1,6 +1,5 @@
 import React from 'react';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
-import LoadingSpinner from 'components/feedback/LoadingSpinner';
 import Suspense from 'components/ssr/SSRSuspense';
 import MainTimetable from 'components/TimetablePage/components/MainTimetable';
 import TimetableList from 'components/TimetablePage/components/TimetableList';
@@ -67,13 +66,7 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
         <TimetableIcon />
         <h1 className={styles['timetable-header__title']}>시간표</h1>
       </div>
-      <Suspense
-        fallback={
-          <div className={styles['central-loading-spinner']}>
-            <LoadingSpinner size="100" />
-          </div>
-        }
-      >
+      <Suspense>
         <div className={styles.page__content}>
           <TimetableList currentFrameIndex={timetableFrameId} setCurrentFrameIndex={setCurrentFrameId} />
           <MainTimetable timetableFrameId={timetableFrameId} />

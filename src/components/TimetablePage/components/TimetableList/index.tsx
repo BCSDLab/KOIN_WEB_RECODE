@@ -93,13 +93,19 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
       <ul className={styles['timetable-list__list']} role="listbox">
         <div className={styles['timetable-list__list--scroll']} role="button" tabIndex={0}>
           {defaultFrame ? (
-            <button
-              type="button"
+            <div
+              role="button"
+              tabIndex={0}
               className={cn({
                 [styles['timetable-list__item']]: true,
                 [styles['timetable-list__item--selected']]: currentFrameIndex === defaultFrame.id || !defaultFrame.id,
               })}
               onClick={() => defaultFrame.id && setCurrentFrameIndex(defaultFrame.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && defaultFrame.id) {
+                  setCurrentFrameIndex(defaultFrame.id);
+                }
+              }}
             >
               <div className={styles['timetable-list__item--title-container']}>
                 <li className={styles['timetable-list__item--main-title']}>{defaultFrame.name}</li>
@@ -118,7 +124,7 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
                 {currentFrameIndex === defaultFrame.id || !defaultFrame.id ? <BlueSettingIcon /> : <SettingIcon />}
                 설정
               </button>
-            </button>
+            </div>
           ) : (
             <div className={styles['timetable-list__empty-list']}>
               {mySemester?.semesters.length === 0
@@ -127,14 +133,20 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
             </div>
           )}
           {timetableFrameList?.map((frame) => (
-            <button
-              type="button"
+            <div
+              role="button"
+              tabIndex={0}
               className={cn({
                 [styles['timetable-list__item']]: true,
                 [styles['timetable-list__item--selected']]: currentFrameIndex === frame.id || !frame.id,
               })}
               key={frame.id}
               onClick={() => frame.id && setCurrentFrameIndex(frame.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && frame.id) {
+                  setCurrentFrameIndex(frame.id);
+                }
+              }}
             >
               <li className={styles['timetable-list__item--title']}>{frame.name}</li>
               <button
@@ -148,7 +160,7 @@ export default function TimetableList({ currentFrameIndex, setCurrentFrameIndex 
                 {currentFrameIndex === frame.id || !frame.id ? <BlueSettingIcon /> : <SettingIcon />}
                 설정
               </button>
-            </button>
+            </div>
           ))}
         </div>
         <button type="button" className={styles['timetable-list__list--add']} onClick={handleAddTimetableClick}>

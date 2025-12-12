@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import Link from 'next/link';
 import ErrorBoundary from 'components/boundary/ErrorBoundary';
 import Timetable from 'components/TimetablePage/components/Timetable';
@@ -6,18 +6,27 @@ import useSemesterOptionList from 'components/TimetablePage/hooks/useSemesterOpt
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { useSemesterAction, useSemester } from 'utils/zustand/semester';
+import { useSemester, useSemesterAction } from 'utils/zustand/semester';
 import styles from './IndexTimetable.module.scss';
 
-function CurrentSemesterTimetable() {
+export default function IndexTimeTable() {
+  const { updateSemester } = useSemesterAction();
+  const semesterOptionList = useSemesterOptionList();
+  const logger = useLogger();
   const semester = useSemester();
   const token = useTokenState();
   const { data: timetableFrameList } = useTimetableFrameList(token, semester);
 
   const currentFrameId = timetableFrameList?.find((frame) => frame.is_main)?.id ?? 0;
+  const isClient = useMount();
 
-  return (
+  useEffect(() => {
+    if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
+  }, [semesterOptionList, updateSemester]);
+
+  const renderTimetable = (
     <Timetable
       timetableFrameId={currentFrameId}
       columnWidth={44}
@@ -26,16 +35,19 @@ function CurrentSemesterTimetable() {
       totalHeight={369}
     />
   );
-}
 
-export default function IndexTimeTable() {
-  const { updateSemester } = useSemesterAction();
-  const semesterOptionList = useSemesterOptionList();
-  const logger = useLogger();
-
-  useEffect(() => {
-    if (semesterOptionList.length > 0) updateSemester(semesterOptionList[0].value);
-  }, [semesterOptionList, updateSemester]);
+  const renderPlaceholder = (
+    <div
+      aria-hidden
+      style={{
+        height: 369,
+        width: '100%',
+        borderRadius: 12,
+        backgroundColor: '#f7f8fa',
+        border: '1px solid #e4e8ee',
+      }}
+    />
+  );
 
   return (
     <div className={styles.template}>
@@ -63,7 +75,7 @@ export default function IndexTimeTable() {
             });
           }}
         >
-          <CurrentSemesterTimetable />
+          {isClient ? renderTimetable : renderPlaceholder}
         </Link>
       </ErrorBoundary>
     </div>
