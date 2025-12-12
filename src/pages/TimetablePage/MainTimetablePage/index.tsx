@@ -41,7 +41,7 @@ function TimetablePage() {
           setCurrentFrameId={setCurrentFrameIndex}
         />
       ) : (
-        <MobilePage timetableFrameId={currentFrameIndex} setCurrentFrameIndex={setCurrentFrameIndex} />
+        <MobilePage timetableFrameId={currentFrameIndex} setCurrentFrameId={setCurrentFrameIndex} />
       )}
     </div>
   );

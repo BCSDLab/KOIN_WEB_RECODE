@@ -6,12 +6,17 @@ import Timetable from 'pages/TimetablePage/components/Timetable';
 import SemesterListbox from 'pages/TimetablePage/components/SemesterList';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useImageDownload from 'utils/hooks/ui/useImageDownload';
-import styles from './MobilePage.module.scss';
 import { useSemester } from 'utils/zustand/semester';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import useTimetableFrameList from 'pages/TimetablePage/hooks/useTimetableFrameList';
+import styles from './MobilePage.module.scss';
 
-function MobilePage({ timetableFrameId, setCurrentFrameIndex }: { timetableFrameId: number, setCurrentFrameIndex: (index: number) => void }) {
+interface MobilePageProps {
+  timetableFrameId: number,
+  setCurrentFrameId: (index: number) => void,
+}
+
+function MobilePage({ timetableFrameId, setCurrentFrameId }: MobilePageProps) {
   const logger = useLogger();
   const semester = useSemester();
   const token = useTokenState();
@@ -30,9 +35,9 @@ function MobilePage({ timetableFrameId, setCurrentFrameIndex }: { timetableFrame
   useEffect(() => {
     if (!data.find((frame) => frame.id === timetableFrameId)) {
       const mainFrameId = data.find((frame) => frame.is_main)?.id;
-      if (mainFrameId) setCurrentFrameIndex(mainFrameId);
+      if (mainFrameId) setCurrentFrameId(mainFrameId);
     }
-  }, [data, setCurrentFrameIndex, timetableFrameId]);
+  }, [data, setCurrentFrameId, timetableFrameId]);
 
   return (
     <>
