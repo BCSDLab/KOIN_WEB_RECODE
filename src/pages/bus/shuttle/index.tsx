@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { getShuttleCourseInfo } from 'api/bus';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
-import BusCoursePage from 'components/Bus/BusCoursePage';
+import BusCoursePage, { useBusCourse } from 'components/Bus/BusCoursePage';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
-import { useShuttleTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
+import { useClientShuttleTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
 import useShuttleCourse from 'components/Bus/BusCoursePage/hooks/useShuttleCourse';
+import { SSRLayout } from 'components/layout';
 import dayjs from 'dayjs';
 import { BUS_FEEDBACK_FORM, SHUTTLE_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -29,36 +33,58 @@ function asString(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
+export const getServerSideProps: GetServerSideProps = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['bus', 'courses', 'shuttle'],
+    queryFn: getShuttleCourseInfo,
+    staleTime: 1000 * 60 * 10,
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
+
 export default function ShuttleBusTimetable() {
   const router = useRouter();
-  const categoryFromURL = asString(router.query.category) ?? '전체';
+  const categoryFromURL = asString(router.query.category);
+  const category = categoryFromURL ?? '전체';
 
   const logger = useLogger();
-  const isMobile = useMediaQuery();
+  const { isMobile } = useBusCourse();
 
   const { shuttleCourse } = useShuttleCourse();
-  const timetable = useShuttleTimetable(SHUTTLE_COURSES[0]);
+
+  const { data: timetable } = useClientShuttleTimetable(SHUTTLE_COURSES[0]);
+
   const displaySemester = shuttleCourse.semester_info.name;
-  const category = categoryFromURL;
-
-  useEffect(() => {
-    if (!router.isReady) return;
-
-    const categoryFromURL = asString(router.query.category);
-
-    if (!categoryFromURL) {
-      router.replace({
-        pathname: router.pathname,
-        query: { category: '전체' },
-      });
-    }
-  }, [router, router.isReady]);
+  const updatedAt = timetable?.updated_at;
 
   return (
     <BusCoursePage>
       <div className={styles['timetable-container']}>
         {/* 카테고리 버튼 */}
-        <ShuttleCategoryTabs category={category} onChange={(v) => router.replace(`/bus/shuttle?category=${v}`)} />
+        <ShuttleCategoryTabs
+          category={category}
+          onChange={(v) => {
+            if (v === '전체') {
+              router.replace('/bus/shuttle', undefined, { shallow: true });
+            } else {
+              router.replace(
+                {
+                  pathname: '/bus/shuttle',
+                  query: { category: v },
+                },
+                undefined,
+                { shallow: true },
+              );
+            }
+          }}
+        />
 
         {/* 지역별 리스트 */}
         {!isMobile ? (
@@ -121,12 +147,8 @@ export default function ShuttleBusTimetable() {
           </div>
         )}
 
-        {!isMobile && (
-          <InfoFooter
-            type="SHUTTLE"
-            updated={dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
-            category={category}
-          />
+        {!isMobile && updatedAt && (
+          <InfoFooter type="SHUTTLE" updated={dayjs(updatedAt).format('YYYY-MM-DD')} category={category} />
         )}
       </div>
     </BusCoursePage>
@@ -209,3 +231,5 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
     </div>
   );
 }
+
+ShuttleBusTimetable.getLayout = (page: React.ReactNode) => <SSRLayout>{page}</SSRLayout>;

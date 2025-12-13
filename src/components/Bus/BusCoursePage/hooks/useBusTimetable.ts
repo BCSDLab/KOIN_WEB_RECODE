@@ -1,13 +1,13 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getBusTimetableInfo, getCityBusTimetableInfo } from 'api/bus';
 import {
-  BusRouteInfo as ShuttleInfo,
   CityBusParams,
   CityInfo,
   ExpressCourse,
   ExpressInfo,
   ShuttleCourse,
 } from 'api/bus/entity';
+import useMount from 'utils/hooks/state/useMount';
 
 const TIMETABLE_KEY = 'timetable';
 
@@ -16,24 +16,14 @@ interface CityTimetable {
   type: 'city';
 }
 
-export function useShuttleTimetable(course: ShuttleCourse) {
-  const { bus_type, direction, region } = course;
+export function useClientShuttleTimetable(course: ShuttleCourse) {
+  const isMount = useMount();
 
-  const { data } = useSuspenseQuery({
-    queryKey: ['timetable', 'shuttle', direction, region],
-    queryFn: () =>
-      getBusTimetableInfo({
-        bus_type,
-        direction,
-        region,
-      }),
-    select: (response) => ({
-      info: response as ShuttleInfo,
-      type: 'shuttle' as const,
-    }),
+  return useQuery({
+    queryKey: ['timetable', 'shuttle', course.direction, course.region],
+    queryFn: () => getBusTimetableInfo(course),
+    enabled: isMount,
   });
-
-  return data;
 }
 
 export function useExpressTimetable(course: ExpressCourse) {
