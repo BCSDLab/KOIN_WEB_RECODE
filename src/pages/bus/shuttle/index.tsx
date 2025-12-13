@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useQueryClient } from '@tanstack/react-query';
-import { getShuttleTimetableDetailInfo } from 'api/bus';
 import InformationIcon from 'assets/svg/Bus/info-gray.svg';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import { ShuttleCategoryTabs } from 'components/Bus/BusCoursePage/components/ShuttleCategoryTabs';
+import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
 import { useShuttleTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
 import useShuttleCourse from 'components/Bus/BusCoursePage/hooks/useShuttleCourse';
 import dayjs from 'dayjs';
@@ -38,13 +37,12 @@ export default function ShuttleBusTimetable() {
   const isMobile = useMediaQuery();
 
   const { shuttleCourse } = useShuttleCourse();
-
   const timetable = useShuttleTimetable(SHUTTLE_COURSES[0]);
   const displaySemester = shuttleCourse.semester_info.name;
   const category = categoryFromURL;
 
   useEffect(() => {
-    if (!router.isReady) return; // 아직 router.query 가 준비 안 되었을 때 방지
+    if (!router.isReady) return;
 
     const categoryFromURL = asString(router.query.category);
 
@@ -140,7 +138,7 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
   const isMobile = useMediaQuery();
   const logger = useLogger();
 
-  const queryClient = useQueryClient();
+  const prefetchBusTimetable = useBusPrefetch();
 
   const filteredRoutes = (route: string) =>
     routes.filter(({ type }) => {
@@ -176,10 +174,9 @@ function TemplateShuttleVersion({ region, routes, category }: TemplateShuttleVer
             key={route.id}
             type="button"
             onMouseEnter={() => {
-              queryClient.prefetchQuery({
-                queryKey: ['bus', 'shuttle', 'timetable', route.id],
-                queryFn: () => getShuttleTimetableDetailInfo({ id: route.id }),
-                staleTime: 1000 * 60 * 60,
+              prefetchBusTimetable({
+                type: 'shuttle_detail',
+                id: route.id,
               });
             }}
             className={styles['template-shuttle__list_wrapper']}
