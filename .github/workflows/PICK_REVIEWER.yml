@@ -1,4 +1,4 @@
-name: "Pick Reviewer"
+name: 'Pick Reviewer'
 
 on:
   pull_request:
@@ -32,10 +32,10 @@ jobs:
               const b = rest[Math.floor(Math.random() * rest.length)];
               return [a, b];
             }
-            
+
             const [reviewer1, reviewer2] = pickTwo(candidates);
 
-            setOutput(prCreatorJson.name, prUrl, reviewer1, reviewer2);
+            setOutput(prCreatorJson?.name ?? prCreator, prUrl, reviewer1, reviewer2);
 
             function setOutput(prCreator, prUrl, reviewer1, reviewer2) {
               core.setOutput('writer', JSON.stringify(prCreator));
@@ -48,7 +48,7 @@ jobs:
 
       - name: test valiable
         uses: actions/github-script@v7
-        with: 
+        with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: console.log(${{ steps.pick_random_reviewer.outputs.reviewer1Name }})
 
@@ -57,7 +57,6 @@ jobs:
         with:
           reviewers: ${{ steps.pick_random_reviewer.outputs.reviewer1GithubName }},${{ steps.pick_random_reviewer.outputs.reviewer2GithubName }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      
 
       - name: Send Slack Trigger
         run: |
