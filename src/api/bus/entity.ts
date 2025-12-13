@@ -26,10 +26,16 @@ export interface Course {
   region: string;
 }
 
-export interface CityBusParams {
+export interface CityBusParams {   // API 요청용
   bus_number: number;
   direction: string;
 }
+
+export type CityCourse = {         // UI용
+  bus_number: number;              // ex. 400
+  direction: string;               // ex. 병천3리
+  direction_type: string;          // ex. to
+};
 
 export type CourseResponse = Course[];
 
