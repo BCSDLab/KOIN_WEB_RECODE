@@ -58,9 +58,11 @@ export default function ExpressBusTimetable() {
           typeNumber={1}
           arrivalList={(() => {
             const getHours = (time: string) => parseInt(time.split(':')[0], 10);
+
             const morning = timetable.info.bus_timetables
               .map((info) => info.departure)
               .filter((time) => getHours(time) < 12); // 오전
+
             const afternoon = timetable.info.bus_timetables
               .map((info) => info.departure)
               .filter((time) => getHours(time) >= 12); // 오후
