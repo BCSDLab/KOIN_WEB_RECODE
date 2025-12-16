@@ -66,9 +66,9 @@ export default function useImageUpload({ maxLength = 3, uploadFn, resize }: UseI
         if (data.file_url) {
           uploadedFile.push(data.file_url);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         setImageFile([]);
-        const errorMessage = error.toString();
+        const errorMessage = error instanceof Error ? error.message : String(error);
         if (errorMessage.includes('415')) {
           setUploadError('415');
         } else if (errorMessage.includes('404')) {
