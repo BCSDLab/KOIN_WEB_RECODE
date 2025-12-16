@@ -90,7 +90,7 @@ export default function CityBusTimetable() {
                   prefetchBusTimetable({
                     type: 'city',
                     bus_number: cityCourse.bus_number,
-                    direction: cityCourse.direction,
+                    direction: getDirection(cityCourse.bus_number, selectedDirectionType),
                   })
                 }
               >
