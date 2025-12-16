@@ -18,8 +18,13 @@ import { getCookie } from 'utils/ts/cookie';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
+interface PageProps {
+  dehydratedState?: unknown;
+  [key: string]: unknown;
+}
+
 // 커스텀 페이지 타입
-type NextPageWithAuth<Props = any, IP = Props> = NextPage<Props, IP> & {
+type NextPageWithAuth<Props = PageProps, IP = Props> = NextPage<Props, IP> & {
   requireAuth?: boolean;
   title?: string | ((path: string) => string);
   getLayout?: (page: React.ReactNode) => React.ReactNode;
