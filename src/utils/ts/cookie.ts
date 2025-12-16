@@ -10,6 +10,8 @@ export interface CookieOptions {
   secure?: boolean;
 }
 
+type CookieValue = string | number | boolean;
+
 const isBrowser = () => typeof document !== 'undefined';
 
 function resolveSecureFlag(explicit?: boolean): boolean {
@@ -46,7 +48,7 @@ function buildCookieString(name: string, value: string, options: CookieOptions =
   return parts.join('; ');
 }
 
-export function setCookie(name: string, val: any, dayOrOptions?: number | CookieOptions) {
+export function setCookie(name: string, val: CookieValue, dayOrOptions?: number | CookieOptions) {
   if (!isBrowser()) return;
 
   const value = String(val);
