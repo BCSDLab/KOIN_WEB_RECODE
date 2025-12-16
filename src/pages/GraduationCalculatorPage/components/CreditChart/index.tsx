@@ -50,8 +50,8 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
       updateValues(
         [...calculateCredits.course_types,
           ...(multiMajorGrades ? [{
-            courseType: '다전공',
-            requiredGrades: 0,
+            course_type: '다전공',
+            required_grades: 0,
             grades: multiMajorGrades,
           }] : []),
         ],
@@ -81,17 +81,17 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
         <AnimatePresence>
           {creditState.map((credit) => (
             <motion.div
-              key={credit.courseType}
+              key={credit.course_type}
               className={styles['credit-chart__course']}
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               layout
-              onClick={() => onClickBar(credit.courseType)}
+              onClick={() => onClickBar(credit.course_type)}
             >
               <div
                 style={{
-                  height: `${Number(credit.requiredGrades) * 5}px`,
+                  height: `${Number(credit.required_grades) * 5}px`,
                 }}
                 className={styles['credit-chart__total-credit']}
               >
@@ -101,7 +101,7 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
                   }}
                   className={cn({
                     [styles['credit-chart__earned-credit']]: true,
-                    [styles['credit-chart__earned-credit--full']]: credit.requiredGrades - credit.grades < 2,
+                    [styles['credit-chart__earned-credit--full']]: credit.required_grades - credit.grades < 2,
                   })}
                   initial={{ height: '0%' }}
                   animate={{ height: `${credit.grades * 5}px` }}
@@ -109,11 +109,11 @@ function CreditChart({ totalGrades } : { totalGrades: number }) {
                   layout
                 />
                 <div className={styles['credit-chart__credit-status']}>
-                  {`${credit.grades} ${credit.requiredGrades ? `/ ${credit.requiredGrades}` : ''}`}
+                  {`${credit.grades} ${credit.required_grades ? `/ ${credit.required_grades}` : ''}`}
                 </div>
               </div>
               <div className={styles['credit-chart__x-axis--name']}>
-                {credit.courseType}
+                {credit.course_type}
               </div>
             </motion.div>
           ))}

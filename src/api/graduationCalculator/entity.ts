@@ -39,8 +39,8 @@ export interface GraduationExcelUploadRequest {
 }
 
 export type GradesByCourseType = {
-  courseType: string;
-  requiredGrades: number;
+  course_type: string;
+  required_grades: number;
   grades: number;
 };
 
