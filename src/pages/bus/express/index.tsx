@@ -10,13 +10,35 @@ import { EXPRESS_COURSES } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './ExpressBusTimetable.module.scss';
 
+const SKELETON_ROWS = Array.from({ length: 10 }, () => ['', '']);
+
+type ExpressBusTimetable = {
+  departure: string;
+  arrival: string;
+  charge: number;
+};
+
 export default function ExpressBusTimetable() {
   const [selectedCourseId, setSelectedCourseId] = useState(0);
   const [destinationCategory, setDestinationCategory] = useState('병천방면');
 
-  const timetable = useExpressTimetable(EXPRESS_COURSES[selectedCourseId]);
+  const { data: timetable, isLoading } = useExpressTimetable(EXPRESS_COURSES[selectedCourseId]);
+
   const prefetchBusTimetable = useBusPrefetch();
   const logger = useLogger();
+
+  function buildArrivalList(busTimetables: ExpressBusTimetable[]) {
+    const getHours = (time: string) => parseInt(time.split(':')[0], 10);
+
+    const morning = busTimetables.map((t) => t.departure).filter((time) => getHours(time) < 12);
+    const afternoon = busTimetables.map((t) => t.departure).filter((time) => getHours(time) >= 12);
+    const maxLength = Math.max(morning.length, afternoon.length);
+
+    return Array.from({ length: maxLength }, (_, idx) => [morning[idx] || '', afternoon[idx] || '']);
+  }
+
+  const arrivalList =
+    isLoading || !timetable ? SKELETON_ROWS : buildArrivalList(timetable.bus_timetables as ExpressBusTimetable[]);
 
   return (
     <BusCoursePage>
@@ -54,28 +76,11 @@ export default function ExpressBusTimetable() {
           ))}
         </div>
 
-        <Template
-          typeNumber={1}
-          arrivalList={(() => {
-            const getHours = (time: string) => parseInt(time.split(':')[0], 10);
-
-            const morning = timetable.info.bus_timetables
-              .map((info) => info.departure)
-              .filter((time) => getHours(time) < 12); // 오전
-
-            const afternoon = timetable.info.bus_timetables
-              .map((info) => info.departure)
-              .filter((time) => getHours(time) >= 12); // 오후
-
-            // 오전, 오후 길이 다를 시 맞추기
-            const maxLength = Math.max(morning.length, afternoon.length);
-            return Array.from({ length: maxLength }, (_, idx) => [morning[idx] || '', afternoon[idx] || '']);
-          })()}
-        />
+        <Template typeNumber={1} arrivalList={arrivalList} />
 
         <InfoFooter
           type="EXPRESS"
-          updated={dayjs(timetable.info.updated_at).format('YYYY-MM-DD')}
+          updated={dayjs(timetable?.updated_at).format('YYYY-MM-DD')}
           destinationCategory={destinationCategory}
         />
       </div>

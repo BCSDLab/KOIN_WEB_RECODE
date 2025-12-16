@@ -4,7 +4,6 @@ import {
   CityBusParams,
   CityInfo,
   ExpressCourse,
-  ExpressInfo,
   ShuttleCourse,
 } from 'api/bus/entity';
 import useMount from 'utils/hooks/state/useMount';
@@ -27,23 +26,16 @@ export function useClientShuttleTimetable(course: ShuttleCourse) {
 }
 
 export function useExpressTimetable(course: ExpressCourse) {
-  const { bus_type, direction, region } = course;
-
-  const { data } = useSuspenseQuery({
-    queryKey: ['timetable', 'express', direction, region],
+  return useQuery({
+    queryKey: ['timetable', 'express', course.direction, course.region],
     queryFn: () =>
       getBusTimetableInfo({
-        bus_type,
-        direction,
-        region,
+        bus_type: course.bus_type,
+        direction: course.direction,
+        region: course.region,
       }),
-    select: (response) => ({
-      info: response as ExpressInfo,
-      type: 'express' as const,
-    }),
+    staleTime: 1000 * 60 * 5,
   });
-
-  return data;
 }
 
 export function useCityBusTimetable(course: CityBusParams): CityTimetable {
