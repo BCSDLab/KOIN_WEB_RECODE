@@ -18,22 +18,6 @@ import { getCookie } from 'utils/ts/cookie';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
-declare global {
-  interface Window {
-    webkit?: {
-      messageHandlers?: {
-        [name: string]: { postMessage(body: unknown): void };
-      };
-    };
-    onNativeCallback?: (callbackId: string, result: any) => void;
-    setTokens?: (access: string, refresh: string) => void;
-    NativeBridge?: {
-      call: (methodName: string, ...args: any[]) => Promise<any>;
-      handleCallback: (callbackId: string, result: any) => void;
-    };
-  }
-}
-
 // 커스텀 페이지 타입
 type NextPageWithAuth<Props = any, IP = Props> = NextPage<Props, IP> & {
   requireAuth?: boolean;
@@ -111,12 +95,6 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
         initializeTokens();
       }
     }
-    // window.setTokens 관련 오류 테스트
-    // return () => {
-    //   if (typeof window !== 'undefined' && window.webkit?.messageHandlers) {
-    //     delete window.setTokens;
-    //   }
-    // };
     // 로깅을 위한 userId 전달 및 gtag 함수 정의
     if (typeof window !== 'undefined') {
       const userId = localStorage.getItem('uuid') || '';

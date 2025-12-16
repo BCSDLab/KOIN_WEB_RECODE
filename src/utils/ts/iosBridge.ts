@@ -2,8 +2,15 @@ import { useTokenStore } from 'utils/zustand/auth';
 
 const isBrowser = () => typeof window !== 'undefined';
 
+interface NativeTokens {
+  access: string;
+  refresh: string;
+}
+
+type NativeCallbackResult = NativeTokens | boolean | void;
+
 class IOSWebBridge {
-  private callbackMap: { [key: string]: (result: any) => void } = {};
+  private callbackMap: Record<string, (result: NativeCallbackResult) => void> = {};
 
   private callbackIdCounter = 0;
 
@@ -12,10 +19,10 @@ class IOSWebBridge {
     return `cb_${Date.now()}_${this.callbackIdCounter}`;
   }
 
-  call(methodName: string, ...args: any[]): Promise<any> {
+  call<T extends NativeCallbackResult>(methodName: string, ...args: unknown[]): Promise<T> {
     return new Promise((resolve, reject) => {
       const callbackId = this.generateCallbackId();
-      this.callbackMap[callbackId] = resolve;
+      this.callbackMap[callbackId] = resolve as (result: NativeCallbackResult) => void;
 
       const payload = {
         method: methodName,
@@ -33,7 +40,7 @@ class IOSWebBridge {
     });
   }
 
-  handleCallback(callbackId: string, result: any): void {
+  handleCallback(callbackId: string, result: NativeCallbackResult): void {
     if (this.callbackMap[callbackId]) {
       this.callbackMap[callbackId](result);
       delete this.callbackMap[callbackId];
@@ -46,7 +53,7 @@ if (isBrowser()) {
   window.NativeBridge = new IOSWebBridge();
 
   // 네이티브에서 호출할 콜백 함수
-  window.onNativeCallback = (callbackId: string, result: any) => {
+  window.onNativeCallback = (callbackId: string, result: NativeCallbackResult) => {
     window.NativeBridge?.handleCallback(callbackId, result);
   };
 }
@@ -56,7 +63,7 @@ export function setTokensFromNative(access: string, refresh: string) {
   if (refresh) useTokenStore.getState().setRefreshToken(refresh);
 }
 
-export async function requestTokensFromNative(): Promise<{ access: string; refresh: string }> {
+export async function requestTokensFromNative(): Promise<NativeTokens> {
   // 이미 토큰이 있으면 그냥 반환
   const existingToken = useTokenStore.getState().token;
   const existingRefresh = useTokenStore.getState().refreshToken;
@@ -68,7 +75,7 @@ export async function requestTokensFromNative(): Promise<{ access: string; refre
   }
 
   try {
-    const tokens = await window.NativeBridge?.call('getUserToken');
+    const tokens = await window.NativeBridge?.call<NativeTokens>('getUserToken');
     return {
       access: tokens?.access || '',
       refresh: tokens?.refresh || '',
@@ -81,7 +88,7 @@ export async function requestTokensFromNative(): Promise<{ access: string; refre
 export async function saveTokensToNative(access: string, refresh: string): Promise<boolean> {
   if (!isBrowser()) return false;
   try {
-    await window.NativeBridge?.call('putUserToken', { access, refresh });
+    await window.NativeBridge?.call<boolean>('putUserToken', { access, refresh });
     return true;
   } catch {
     return false;
@@ -90,6 +97,6 @@ export async function saveTokensToNative(access: string, refresh: string): Promi
 
 export async function backButtonTapped(): Promise<void> {
   if (isBrowser()) {
-    await window.NativeBridge?.call('backButtonTapped');
+    await window.NativeBridge?.call<void>('backButtonTapped');
   }
 }
