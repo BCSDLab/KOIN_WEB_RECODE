@@ -4,7 +4,7 @@ import {
   getCityBusTimetableInfo,
   getShuttleTimetableDetailInfo,
 } from 'api/bus';
-import { CourseBusType, Direction } from 'api/bus/entity';
+import { CourseBusType, DirectionType } from 'api/bus/entity';
 
 export type PrefetchParams =
   | {
@@ -14,13 +14,13 @@ export type PrefetchParams =
   | {
     type: 'express';
     bus_type: CourseBusType;
-    direction: Direction;
+    direction: DirectionType;
     region: string;
   }
   | {
     type: 'shuttle';
     bus_type: CourseBusType;
-    direction: Direction;
+    direction: DirectionType;
     region: string;
   }
   | {

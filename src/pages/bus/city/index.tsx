@@ -1,25 +1,31 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@bcsdlab/utils';
+import { DirectionType } from 'api/bus/entity';
 import BusCoursePage from 'components/Bus/BusCoursePage';
 import Template from 'components/Bus/BusCoursePage/components/ExternalTemplate';
 import InfoFooter from 'components/Bus/BusCoursePage/components/InfoFooter';
 import useBusPrefetch from 'components/Bus/BusCoursePage/hooks/useBusPrefetch';
 import { useCityBusTimetable } from 'components/Bus/BusCoursePage/hooks/useBusTimetable';
 import dayjs from 'dayjs';
-import { cityBusDirections, CITY_COURSES, CITY_COURSES_MAP } from 'static/bus';
+import { CITY_COURSES, CITY_COURSES_MAP } from 'static/bus';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './CityBusTimetable.module.scss';
 
-type Direction = {
+type CityDirectionOption = {
   label: string;
-  value: string;
+  value: DirectionType;
 };
+
+const cityBusDirections: CityDirectionOption[] = [
+  { label: '천안방면', value: 'from' },
+  { label: '병천방면', value: 'to' },
+];
 
 const getHours = (time: string) => parseInt(time.split(':')[0], 10);
 
 export default function CityBusTimetable() {
   const [selectedBusNumber, setSelectedBusNumber] = useState(CITY_COURSES[3].bus_number); // 400
-  const [selectedDirectionType, setSelectedDirectionType] = useState(CITY_COURSES[3].direction_type); // to (병천 방면)
+  const [selectedDirectionType, setSelectedDirectionType] = useState<DirectionType>(CITY_COURSES[3].direction_type); // to (병천 방면)
 
   const prefetchBusTimetable = useBusPrefetch();
   const logger = useLogger();
@@ -40,7 +46,7 @@ export default function CityBusTimetable() {
     });
   };
 
-  const handleDirectionButton = (direction: Direction) => {
+  const handleDirectionButton = (direction: CityDirectionOption) => {
     setSelectedDirectionType(direction.value);
 
     logger.actionEventClick({
@@ -50,7 +56,7 @@ export default function CityBusTimetable() {
     });
   };
 
-  function getDirection(bus_number: number, direction_type: string) {
+  function getDirection(bus_number: number, direction_type: DirectionType) {
     return CITY_COURSES_MAP.get(`${bus_number}-${direction_type}`)?.direction ?? '';
   }
 

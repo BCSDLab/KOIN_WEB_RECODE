@@ -143,11 +143,6 @@ export const busLink: BusLink[] = [
   },
 ];
 
-export const cityBusDirections = [
-  { label: '천안방면', value: 'from' },
-  { label: '병천방면', value: 'to' },
-];
-
 export const CITY_COURSES: CityCourse[] = [
   { bus_number: 400, direction: '병천3리', direction_type: 'to' },
   { bus_number: 402, direction: '황사동', direction_type: 'to' },
