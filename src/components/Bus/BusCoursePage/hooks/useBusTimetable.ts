@@ -34,7 +34,6 @@ export function useExpressTimetable(course: ExpressCourse) {
         direction: course.direction,
         region: course.region,
       }),
-    staleTime: 1000 * 60 * 5,
   });
 }
 

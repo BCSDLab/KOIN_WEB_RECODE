@@ -6,8 +6,6 @@ import {
 } from 'api/bus';
 import { CourseBusType, Direction } from 'api/bus/entity';
 
-const DEFAULT_STALE_TIME = 1000 * 60 * 60;
-
 export type PrefetchParams =
   | {
     type: 'shuttle_detail';
@@ -45,7 +43,6 @@ export default function useBusPrefetch() {
               direction: params.direction,
               region: params.region,
             }),
-          staleTime: DEFAULT_STALE_TIME,
         });
       }
 
@@ -53,7 +50,6 @@ export default function useBusPrefetch() {
         return queryClient.prefetchQuery({
           queryKey: ['bus', 'shuttle', 'timetable', params.id],
           queryFn: () => getShuttleTimetableDetailInfo({ id: params.id }),
-          staleTime: DEFAULT_STALE_TIME,
         });
       }
 
@@ -66,7 +62,6 @@ export default function useBusPrefetch() {
               direction: params.direction,
               region: params.region,
             }),
-          staleTime: DEFAULT_STALE_TIME,
         });
       }
 
@@ -78,7 +73,6 @@ export default function useBusPrefetch() {
               bus_number: params.bus_number,
               direction: params.direction,
             }),
-          staleTime: DEFAULT_STALE_TIME,
         });
       }
     }
