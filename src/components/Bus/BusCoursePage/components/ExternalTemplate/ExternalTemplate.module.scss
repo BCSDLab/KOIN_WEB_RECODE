@@ -41,6 +41,17 @@
   }
 }
 
+.timetable-exception {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+
+  @include media.media-breakpoint(mobile) {
+    justify-content: left;
+    margin-left: 24px;
+  }
+}
+
 .timetable-content {
   width: 100%;
   min-height: 32px;
