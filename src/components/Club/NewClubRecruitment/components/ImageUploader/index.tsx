@@ -1,4 +1,5 @@
 import { type Dispatch, type SetStateAction, useState } from 'react';
+import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import { ClubRecruitment } from 'api/club/entity';
 import { uploadClubFile } from 'api/uploadFile';
@@ -60,11 +61,21 @@ export default function ClubImageUploader({ formData, setFormData }: ClubImageUp
       <div className={styles['form-image__preview']}>
         <button
           type="button"
-          className={styles['form-image__img__box']}
+          className={styles['form-image__img-box']}
           onClick={clearImage}
           aria-label="이미지 클릭 시 삭제"
         >
-          <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
+          <span className={styles['form-image__img-wrapper']}>
+            <Image
+              key={formData.image_url}
+              src={formData.image_url}
+              alt="동아리 이미지 미리보기"
+              fill
+              sizes="(max-width: 768px) 100vw, 500px"
+              style={{ objectFit: 'contain' }}
+              priority
+            />
+          </span>
         </button>
       </div>
     );
