@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import BusIcon from 'assets/svg/Bus/bus-icon-32x32.svg';
@@ -11,7 +10,7 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './ShuttleDetailPage.module.scss';
 
-function asString(value: string | string[] | undefined): string | undefined {
+function asString(value: string | string[]): string {
   return Array.isArray(value) ? value[0] : value;
 }
 
@@ -26,7 +25,7 @@ export default function ShuttleDetailPage() {
   const [selectedDetail, setSelectedDetail] = useState<string | null>(null);
 
   const categoryFromURL = router.query.category;
-  const category = asString(categoryFromURL) ?? '전체';
+  const category = categoryFromURL ? asString(categoryFromURL) : '전체';
 
   const isMobile = useMediaQuery();
   const logger = useLogger();
