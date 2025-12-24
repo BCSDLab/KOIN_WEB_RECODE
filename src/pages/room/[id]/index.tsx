@@ -1,12 +1,13 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import Image from 'next/image';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { room } from 'api';
+import { SSRLayout } from 'components/layout';
 import RoomDetailImg from 'components/Room/components/RoomDetailImg';
 import RoomDetailMap from 'components/Room/components/RoomDetailMap';
 import RoomDetailOption from 'components/Room/components/RoomDetailOption';
 import RoomDetailTable from 'components/Room/components/RoomDetailTable';
 import useRoomDetail from 'components/Room/RoomDetailPage/hooks/useRoomDetail';
-import { SSRLayout } from 'components/layout';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { parseQueryString, parseServerSideParams } from 'utils/ts/parseServerSideParams';
@@ -64,7 +65,12 @@ function RoomDetailPage({ id }: InferGetServerSidePropsType<typeof getServerSide
           <RoomDetailImg imgUrl={roomDetail?.image_urls} />
         ) : (
           <div className={styles['info__img-slider__img--empty']}>
-            <img src="https://static.koreatech.in/assets/ic-room/img.png" alt="이미지 없음" />
+            <Image
+              src="https://static.koreatech.in/assets/ic-room/img.png"
+              alt="이미지 없음"
+              width={712}
+              height={402}
+            />
           </div>
         )}
       </div>
