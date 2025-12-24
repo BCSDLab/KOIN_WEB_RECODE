@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { articles } from 'api';
@@ -66,7 +67,7 @@ export default function HotArticles() {
               logger.actionEventClick({ team: 'CAMPUS', event_label: 'short_cut', value: link.title.join('_') });
             }}
           >
-            <img className={styles.link__image} src={link.image} alt="alineImg" />
+            <Image className={styles.link__image} src={link.image} alt="alineImg" width={120} height={50} />
           </a>
         ))}
       </div>

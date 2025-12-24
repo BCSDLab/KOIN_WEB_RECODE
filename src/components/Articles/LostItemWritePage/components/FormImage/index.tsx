@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { uploadLostItemFile } from 'api/uploadFile';
 import PhotoIcon from 'assets/svg/Articles/photo.svg';
 import RemoveImageIcon from 'assets/svg/Articles/remove-image.svg';
@@ -52,7 +53,7 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
         <ul className={styles.images__list}>
           {images.map((url: string) => (
             <li key={url} className={styles.images__item}>
-              <img src={url} className={styles.images__image} alt="분실물 이미지" />
+              <Image src={url} className={styles.images__image} alt="분실물 이미지" width={112} height={99} />
               <button
                 className={styles.images__delete}
                 type="button"
