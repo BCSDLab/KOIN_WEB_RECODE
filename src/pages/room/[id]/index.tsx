@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import RoomDetailImg from 'components/Room/components/RoomDetailImg';
 import RoomDetailMap from 'components/Room/components/RoomDetailMap';
@@ -34,7 +35,12 @@ function RoomDetailPage({ id }: { id: string }) {
           <RoomDetailImg imgUrl={roomDetail?.image_urls} />
         ) : (
           <div className={styles['info__img-slider__img--empty']}>
-            <img src="https://static.koreatech.in/assets/ic-room/img.png" alt="이미지 없음" />
+            <Image
+              src="https://static.koreatech.in/assets/ic-room/img.png"
+              alt="이미지 없음"
+              width={712}
+              height={402}
+            />
           </div>
         )}
       </div>

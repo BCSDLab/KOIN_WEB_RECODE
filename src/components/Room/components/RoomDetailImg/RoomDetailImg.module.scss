@@ -16,22 +16,16 @@
     cursor: pointer;
     border: none;
     background-color: #fff;
-
-    @include media.media-breakpoint(mobile) {
-      img {
-        width: 40px;
-      }
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__img {
+    position: relative;
     height: 400px;
-
-    & > img {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
+    width: 100%;
+    overflow: hidden;
 
     @include media.media-breakpoint(mobile) {
       height: 184px;

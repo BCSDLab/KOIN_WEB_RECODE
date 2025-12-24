@@ -10,11 +10,11 @@
   @include media.media-breakpoint(mobile) {
     font-size: 10px;
     padding-bottom: 25px;
+  }
 
-    img {
-      width: 30px;
-      height: 30px;
-    }
+  &__icon {
+    width: 70px;
+    height: 70px;
   }
 
   &__item {
