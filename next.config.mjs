@@ -49,6 +49,11 @@ const nextConfig = {
         hostname: 'bcsdlab.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        pathname: '/**',
+      },
     ],
   },
 };

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { StoreCategoriesResponse } from 'api/store/entity';
@@ -98,7 +99,14 @@ export default function IndexStore({ categories }: { categories: StoreCategories
             onClick={() => handleCategoryClick(category)}
             type="button"
           >
-            <img src={category.image_url} alt={category.name} className={styles.category__image} />
+            <Image
+              src={category.image_url}
+              alt={category.name}
+              className={styles.category__image}
+              width={48}
+              height={48}
+              sizes="48px"
+            />
             {category.name}
           </button>
         ))}
