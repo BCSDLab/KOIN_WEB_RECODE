@@ -1,4 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable import/no-duplicates */
+// NOTE: 이 페이지는 이미지가 동적으로 바뀌고(채팅/썸네일/메시지), 크기·비율이 제각각입니다.
+// next/image 도입 시 sizes/fill 등 설정·관리 비용이 커지는데 비해(특히 작은/반복 이미지) 체감 이득이 작아 <img>를 유지합니다.
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
