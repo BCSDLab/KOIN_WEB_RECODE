@@ -5,10 +5,29 @@ import useRoomList from 'components/Room/RoomPage/hooks/useRoomList';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import styles from './RoomPage.module.scss';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { room } from 'api';
+import { SSRLayout } from 'components/layout';
 
 const LOCATION = { latitude: 36.764617, longitude: 127.283154 };
 
-function RoomPage() {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['roomList'],
+    queryFn: () => room.getRoomList(),
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};
+
+function RoomPage({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const isMobile = useMediaQuery();
   const roomList = useRoomList();
   const { getMap } = useNaverMap(LOCATION.latitude, LOCATION.longitude);
@@ -27,3 +46,5 @@ function RoomPage() {
 }
 
 export default RoomPage;
+
+RoomPage.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;
