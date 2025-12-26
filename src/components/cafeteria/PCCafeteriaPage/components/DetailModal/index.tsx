@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Dining } from 'api/dinings/entity';
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
@@ -44,7 +45,13 @@ export default function DetailModal({ dining, closeModal }: DetailModalProps): J
             <CloseIcon />
           </button>
         </div>
-        <img className={styles.modal__image} src={dining.image_url!} alt="menu" />
+        <div className={styles.modal__imageWrap}>
+          {dining.image_url && (
+            <div className={styles.modal__imageWrap}>
+              <Image src={dining.image_url} alt="menu" fill priority sizes="672px" className={styles.modal__image} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

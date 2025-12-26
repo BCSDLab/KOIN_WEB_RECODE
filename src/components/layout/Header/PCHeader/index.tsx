@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
@@ -188,7 +187,16 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
   return (
     <>
       <Link className={styles.header__logo} href={ROUTES.Main()} tabIndex={0} onClick={escapeByLogo}>
-        <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
+        {/* 헤더 로고는 작은 정적 이미지라 Next/Image 프록시/도메인 설정 대비 이득이 작아 img 유지 */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://static.koreatech.in/assets/img/logo_white.png"
+          alt="KOIN service logo"
+          width={80}
+          height={44}
+          decoding="async"
+          loading="eager"
+        />
       </Link>
       <div
         className={cn({

@@ -1,14 +1,15 @@
 import { useState } from 'react';
+import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import ChevronLeft from 'assets/svg/Articles/chevron-left-circle.svg';
 import ChevronRight from 'assets/svg/Articles/chevron-right-circle.svg';
 import SelectedDotIcon from 'assets/svg/Articles/ellipse-blue.svg';
 import NotSelectedDotIcon from 'assets/svg/Articles/ellipse-grey.svg';
-import { Image } from 'static/articles';
+import { ArticleImage } from 'static/articles';
 import styles from './DisplayImage.module.scss';
 
 interface DisplayImageProps {
-  images: Image[];
+  images: ArticleImage[];
 }
 
 export default function DisplayImage({ images }: DisplayImageProps) {
@@ -23,7 +24,7 @@ export default function DisplayImage({ images }: DisplayImageProps) {
     <div className={styles.container}>
       {images.length > 0 && (
         <div className={styles.images}>
-          <img className={styles.images__image} src={image.imageUrl} alt="분실물 이미지" />
+          <Image className={styles.images__image} src={image.imageUrl} alt="분실물 이미지" width={586} height={527} />
           <button
             className={cn({
               [styles.images__button]: true,

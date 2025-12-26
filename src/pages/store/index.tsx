@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { GetServerSidePropsContext } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, HydrationBoundary, QueryClient, useQuery } from '@tanstack/react-query';
@@ -252,7 +253,13 @@ function Store() {
               onClick={() => handleCategoryClick(category.id)}
               key={category.id}
             >
-              <img className={styles.category__image} src={category.image_url} alt="category_img" />
+              <Image
+                className={styles.category__image}
+                src={category.image_url}
+                alt="category_img"
+                width={50}
+                height={50}
+              />
               <span>{category.name}</span>
             </button>
           ))}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Lecture, MyLectureInfo, Semester, LectureInfo } from 'api/timetable/entity';
+import SearchIcon from 'assets/svg/Club/search.svg';
 import LectureTable, { LECTURE_TABLE_HEADER } from 'components/TimetablePage/components/LectureTable';
 import ToggleButton from 'components/TimetablePage/components/ToggleButton';
 import useLectureList from 'components/TimetablePage/hooks/useLectureList';
@@ -211,7 +212,7 @@ function LectureList({ timetableFrameId }: { timetableFrameId: number }) {
               });
             }}
           >
-            <img src="https://static.koreatech.in/assets/img/ic-search-gray.png" alt="search" />
+            <SearchIcon />
           </button>
         </div>
         <div className={styles.page__depart}>

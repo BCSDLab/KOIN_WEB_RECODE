@@ -12,7 +12,13 @@ interface State {
   hasError: boolean;
 }
 
-function isAxiosError(error: AxiosError<any, any> | Error): error is AxiosError<any, any> {
+interface AxiosErrorData {
+  error?: {
+    message?: string;
+  };
+}
+
+function isAxiosError(error: AxiosError<AxiosErrorData> | Error): error is AxiosError<AxiosErrorData> {
   return 'response' in error;
 }
 
@@ -30,9 +36,12 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   }
 
   // 이후에 사용시 해제
-  // componentDidCatch(error: AxiosError<any, any> | Error, __: ErrorInfo) {
-  componentDidCatch(error: AxiosError<any, any> | Error) {
-    showToast('error', isAxiosError(error) ? error.response?.data.error.message : error.message);
+  // componentDidCatch(error: AxiosError<AxiosErrorData> | Error, __: ErrorInfo) {
+  componentDidCatch(error: AxiosError<AxiosErrorData> | Error) {
+    const errorMessage = isAxiosError(error)
+      ? (error.response?.data?.error?.message ?? '알 수 없는 오류가 발생했습니다.')
+      : error.message;
+    showToast('error', errorMessage);
     sendClientError(error);
   }
 

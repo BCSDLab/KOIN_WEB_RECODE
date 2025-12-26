@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import { Review } from 'api/store/entity';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
@@ -96,7 +97,14 @@ export default function ReviewCard({
           <div className={styles['image-wrapper']}>
             {image_urls.map((src, idx) => (
               <button key={src} onClick={() => onClickImage(image_urls, idx)} type="button">
-                <img key={src} src={src} alt="메뉴 이미지" className={styles.menu__image} />
+                <Image
+                  src={src}
+                  alt="메뉴 이미지"
+                  width={200}
+                  height={200}
+                  className={styles.menu__image}
+                  sizes="200px"
+                />
               </button>
             ))}
           </div>

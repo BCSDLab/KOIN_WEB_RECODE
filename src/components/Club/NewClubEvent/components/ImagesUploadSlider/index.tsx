@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
@@ -143,11 +144,16 @@ export default function ImagesUploadSlider({ imageUrls, addImageUrls }: ClubImag
                 className={styles['form-image__img__button']}
                 aria-label="이미지 삭제"
               >
-                <img
-                  className={styles['form-image__img']}
-                  src={imageUrls[currentIdx]}
-                  alt={`동아리 이미지 미리보기 ${currentIdx + 1}`}
-                />
+                <div className={styles['form-image__img__wrapper']}>
+                  <Image
+                    className={styles['form-image__img']}
+                    src={imageUrls[currentIdx]}
+                    alt={`동아리 이미지 미리보기 ${currentIdx + 1}`}
+                    fill
+                    sizes={isMobile ? '100vw' : '500px'}
+                    priority={currentIdx === 0}
+                  />
+                </div>
               </button>
             </div>
           )}

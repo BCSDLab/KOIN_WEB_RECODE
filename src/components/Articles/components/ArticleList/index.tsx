@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Article } from 'api/articles/entity';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
@@ -82,10 +83,12 @@ export default function ArticleList({ articles }: ArticleListProps) {
                     <div className={styles['title__container-container']}>|</div>
                     <div className={styles['title__container-container']}>{date}</div>
                     {isNewArticle && (
-                      <img
+                      <Image
                         className={styles['title__new-tag']}
                         src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
                         alt="new"
+                        width={15}
+                        height={15}
                       />
                     )}
                   </>
@@ -94,10 +97,12 @@ export default function ArticleList({ articles }: ArticleListProps) {
                     {/* 일반 공지사항 */}
                     <div className={styles.title__content}>{article.title}</div>
                     {isNewArticle && (
-                      <img
+                      <Image
                         className={styles['title__new-tag']}
                         src="https://static.koreatech.in/upload/7f2af097aeeca368b0a491f9e00f80ca.png"
                         alt="new"
+                        width={15}
+                        height={15}
                       />
                     )}
                   </>

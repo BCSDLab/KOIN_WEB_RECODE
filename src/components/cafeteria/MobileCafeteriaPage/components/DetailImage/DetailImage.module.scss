@@ -34,8 +34,15 @@
     }
   }
 
-  img {
+  &__image {
+    position: relative;
     width: 100%;
-    height: auto;
+    height: 100%;
+    max-width: 90vw;
+    max-height: 90vh;
+
+    img {
+      object-fit: contain;
+    }
   }
 }

@@ -1,3 +1,5 @@
+// 리팩토링 작업중이라 임시로 비활성화
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';

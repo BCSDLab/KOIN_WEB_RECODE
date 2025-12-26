@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
+import DesktopSearchIcon from 'assets/svg/Store/search-icon.svg';
 import SearchBarModal from 'components/Store/StorePage/components/SearchBarModal';
 import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -73,11 +74,7 @@ export default function SearchBar() {
             <MobileSearchIcon />
           </div>
         ) : (
-          <img
-            className={styles['search-icon']}
-            src="https://static.koreatech.in/assets/img/search.png"
-            alt="store_icon"
-          />
+          <DesktopSearchIcon />
         )}
       </button>
       {isModalOpen && <SearchBarModal onClose={closeModal} />}

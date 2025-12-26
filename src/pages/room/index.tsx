@@ -4,6 +4,7 @@ import { SSRLayout } from 'components/layout';
 import RoomList from 'components/Room/components/RoomList';
 import useMarker from 'components/Room/RoomPage/hooks/useMarker';
 import useNaverMap from 'components/Room/RoomPage/hooks/useNaverMap';
+import useNaverMapScript from 'components/Room/RoomPage/hooks/useNaverMapScript';
 import useRoomList from 'components/Room/RoomPage/hooks/useRoomList';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
@@ -29,7 +30,8 @@ export const getServerSideProps = async () => {
 function RoomPage() {
   const isMobile = useMediaQuery();
   const roomList = useRoomList();
-  const { getMap } = useNaverMap(LOCATION.latitude, LOCATION.longitude);
+  const isMapLoaded = useNaverMapScript();
+  const { getMap } = useNaverMap(LOCATION.latitude, LOCATION.longitude, isMapLoaded);
   useMarker({ getMap, roomList });
   useScrollToTop();
 

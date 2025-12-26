@@ -3,7 +3,7 @@ import '@tanstack/react-query';
 
 declare module '@tanstack/react-query' {
   interface Register {
-    defaultError: unknown
+    defaultError: unknown;
   }
 }
 
@@ -22,4 +22,27 @@ declare module '*.svg' {
 declare module '*.svg?url' {
   const content: string;
   export default content;
+}
+
+interface NativeTokens {
+  access: string;
+  refresh: string;
+}
+
+type NativeCallbackResult = NativeTokens | boolean | void;
+
+declare global {
+  interface Window {
+    webkit?: {
+      messageHandlers?: {
+        [name: string]: { postMessage(body: unknown): void };
+      };
+    };
+    onNativeCallback?: (callbackId: string, result: NativeCallbackResult) => void;
+    setTokens?: (access: string, refresh: string) => void;
+    NativeBridge?: {
+      call: <T extends NativeCallbackResult>(methodName: string, ...args: unknown[]) => Promise<T>;
+      handleCallback: (callbackId: string, result: NativeCallbackResult) => void;
+    };
+  }
 }

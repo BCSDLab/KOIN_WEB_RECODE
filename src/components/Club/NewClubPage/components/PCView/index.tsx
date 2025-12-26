@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { NewClubData } from 'api/club/entity';
@@ -322,8 +323,15 @@ export default function PCView({ formData, setFormData, openModal, isEdit, setTy
                   </button>
                 </div>
               )}
-              <div className={styles['form-image__img__box']}>
-                <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
+              <div className={styles['form-image__img-box']}>
+                <Image
+                  className={styles['form-image__img']}
+                  src={formData.image_url}
+                  alt="동아리 이미지 미리보기"
+                  fill
+                  sizes="500px"
+                  priority
+                />
               </div>
             </div>
           ) : (

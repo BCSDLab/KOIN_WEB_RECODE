@@ -1,6 +1,6 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, { Suspense, useEffect, useRef } from 'react';
 import { GetServerSidePropsContext } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, HydrationBoundary, QueryClient, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
@@ -29,7 +29,7 @@ import showToast from 'utils/ts/showToast';
 import styles from './StoreDetailPage.module.scss';
 
 interface Props {
-  id: string | undefined;
+  id: string;
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -69,10 +69,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 function StoreDetailPage({ id }: Props) {
-  if (!id || Number.isNaN(Number(id))) {
-    return <div className={styles.template}>존재하지 않는 상점입니다.</div>;
-  }
-
   const isMobile = useMediaQuery();
   const enterCategoryTimeRef = useRef<number | null>(null);
   const queryClient = useQueryClient();
@@ -81,7 +77,7 @@ function StoreDetailPage({ id }: Props) {
   const testValue = useABTestView('business_call', token);
   const logger = useLogger();
   // waterfall 현상 막기
-  const { data: paralleData } = useSuspenseQuery({
+  const { data: parallelData } = useSuspenseQuery({
     queryKey: ['storeDetail', 'storeDetailMenu', 'review', id],
     queryFn: () =>
       Promise.all([
@@ -107,10 +103,10 @@ function StoreDetailPage({ id }: Props) {
       enterCategoryTimeRef.current = currentTime;
     }
   }, [logger, testValue]);
-  const storeDetail = paralleData[0];
+  const storeDetail = parallelData[0];
   const storeDescription = storeDetail?.description ? storeDetail?.description.replace(/(?:\/)/g, '\n') : '-';
-  const storeMenus = paralleData[1];
-  const reviews = paralleData[2];
+  const storeMenus = parallelData[1];
+  const reviews = parallelData[2];
   const storeMenuCategories = storeMenus ? storeMenus.menu_categories : null;
   const { searchParams, setParams } = useParamsHandler();
   const tapType = searchParams.get('state') ?? '메뉴';
@@ -385,14 +381,21 @@ function StoreDetailPage({ id }: Props) {
           >
             {storeDetail?.image_urls && storeDetail.image_urls.length > 0 ? (
               storeDetail.image_urls.map((img, index) => (
-                <div key={`${img}`} className={styles.image__content}>
+                <div key={img} className={styles.image__content}>
                   <button
                     className={styles.image__button}
                     aria-label="이미지 확대"
                     type="button"
                     onClick={() => onClickImage(storeDetail!.image_urls, index)}
                   >
-                    <img className={styles.image__poster} src={`${img}`} alt="상점이미지" />
+                    <Image
+                      className={styles.image__poster}
+                      src={img}
+                      alt="상점이미지"
+                      width={320}
+                      height={360}
+                      priority
+                    />
                   </button>
                 </div>
               ))

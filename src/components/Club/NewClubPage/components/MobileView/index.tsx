@@ -1,5 +1,5 @@
-/* MobileView.tsx */
 import { Dispatch, SetStateAction, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { NewClubData } from 'api/club/entity';
@@ -112,7 +112,15 @@ export default function MobileView({ formData, setFormData, openModal, isEdit, s
       <div className={styles['form-container']}>
         {formData.image_url ? (
           <div className={styles['form-image__preview']}>
-            <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
+            <Image
+              className={styles['form-image__img']}
+              src={formData.image_url}
+              alt="동아리 이미지 미리보기"
+              width={200}
+              height={200}
+              sizes="200px"
+              priority
+            />
           </div>
         ) : (
           <div className={styles['form-image']}>

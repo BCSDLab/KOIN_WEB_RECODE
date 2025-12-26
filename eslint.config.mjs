@@ -101,7 +101,6 @@ export default [
       'jsx-a11y/label-has-associated-control': ['error', { required: { some: ['nesting', 'id'] } }],
       'linebreak-style': 'off',
       'import/prefer-default-export': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },

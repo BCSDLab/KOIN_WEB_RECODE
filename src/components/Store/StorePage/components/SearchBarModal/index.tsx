@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { getRelateSearch } from 'api/store';
 import { RelatedSearchResponse } from 'api/store/entity';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
+import DesktopSearchIcon from 'assets/svg/Store/search-icon.svg';
 import RelateSearchItem from 'components/Store/StorePage/components/RelateSearchItem';
 import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -88,11 +89,7 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
                 <MobileSearchIcon />
               </div>
             ) : (
-              <img
-                className={styles['search-icon']}
-                src="https://static.koreatech.in/assets/img/search.png"
-                alt="store_icon"
-              />
+              <DesktopSearchIcon />
             )}
           </button>
         </div>

@@ -128,6 +128,7 @@ export default function ClubRecruitment({
               </div>
               <div className={styles['recruitment-info__image__container']}>
                 {clubRecruitmentData.image_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     className={styles['recruitment-info__image']}
                     src={clubRecruitmentData.image_url}
@@ -169,6 +170,7 @@ export default function ClubRecruitment({
               </div>
               <div className={styles['recruitment-info__image__container']}>
                 {clubRecruitmentData.image_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     className={styles['recruitment-info__image']}
                     src={clubRecruitmentData.image_url}
