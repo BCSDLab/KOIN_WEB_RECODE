@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import CloseIcon from 'assets/svg/modal-close-icon.svg';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
@@ -21,7 +22,9 @@ export default function DetailModal({ url, close }: DetailModalProps): JSX.Eleme
       <button type="button" aria-label="닫기" className={styles.photo__close} onClick={close}>
         <CloseIcon />
       </button>
-      <img src={url} alt="mealDetail" />
+      <div className={styles.photo__image}>
+        <Image src={url} alt="상세 이미지" fill priority sizes="100vw" />
+      </div>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import { Dining } from 'api/dinings/entity';
 import NoMeals from 'assets/svg/no-meals-mobile.svg';
@@ -31,7 +32,18 @@ export default function MobileMealImage({ dining, handleImageClick }: MobileMeal
           품절된 메뉴입니다.
         </span>
       )}
-      {hasImage ? <img src={dining.image_url!} alt="식단 사진" /> : <NoPhoto />}
+      {hasImage ? (
+        <Image
+          className={styles.image__img}
+          src={dining.image_url!}
+          alt="식단 사진"
+          width={202}
+          height={135}
+          sizes="202px"
+        />
+      ) : (
+        <NoPhoto />
+      )}
     </button>
   );
 }
