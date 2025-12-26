@@ -24,12 +24,12 @@ function RoomDetailImg({ imgUrl }: RoomDetailImgProps) {
       </button>
       <div className={styles['img-slider__img']}>
         <Image
+          className={styles['img-slider__photo']}
           key={imgUrl[imgIndex]}
           src={imgUrl[imgIndex]}
           alt="방 사진"
           fill
           sizes={isMobile ? '100vw' : '800px'}
-          style={{ objectFit: 'cover' }}
           priority={imgIndex === 0}
         />
       </div>
