@@ -1,4 +1,4 @@
-import { CityBusParams } from 'api/bus/entity';
+import { CityCourse } from 'api/bus/entity';
 import BusRoute from 'assets/svg/IndexPage/Bus/bus-route.svg';
 import BusTimetable from 'assets/svg/IndexPage/Bus/bus-timetable.svg';
 import BusUnibus from 'assets/svg/IndexPage/Bus/bus-unibus.svg';
@@ -23,7 +23,7 @@ export const BUS_TYPES = [
     tabValue: '시내',
     tableHeaders: ['오전', '오후'],
   },
-];
+] as const;
 
 export const BUS_DIRECTIONS = ['한기대', '야우리', '천안역'];
 
@@ -143,19 +143,23 @@ export const busLink: BusLink[] = [
   },
 ];
 
-export const cityBusDirections = [
-  { label: '천안방면', value: 'from' },
-  { label: '병천방면', value: 'to' },
+export const CITY_COURSES: CityCourse[] = [
+  { bus_number: 400, direction: '병천3리', direction_type: 'to' },
+  { bus_number: 402, direction: '황사동', direction_type: 'to' },
+  { bus_number: 405, direction: '유관순열사사적지', direction_type: 'to' },
+  { bus_number: 400, direction: '종합터미널', direction_type: 'from' },
+  { bus_number: 402, direction: '종합터미널', direction_type: 'from' },
+  { bus_number: 405, direction: '종합터미널', direction_type: 'from' },
 ];
 
-export const CITY_COURSES: CityBusParams[] = [
-  { bus_number: 400, direction: '병천3리' },
-  { bus_number: 402, direction: '황사동' },
-  { bus_number: 405, direction: '유관순열사사적지' },
-  { bus_number: 400, direction: '종합터미널' },
-  { bus_number: 402, direction: '종합터미널' },
-  { bus_number: 405, direction: '종합터미널' },
-];
+export const CITY_COURSES_MAP = new Map<  // 조회를 빠르기 하기 위해 map 객체 생성
+  string, // key: '400-to'
+  CityCourse
+>();
+
+CITY_COURSES.forEach((course) => {
+  CITY_COURSES_MAP.set(`${course.bus_number}-${course.direction_type}`, course);
+});
 
 export const DEFAULT_CITY_BUS_NUMBER = 400;
 export const TERMINAL_CITY_BUS = '종합터미널'; // 공통 시내버스 종점
@@ -165,7 +169,7 @@ export const BUS_LINKS = [
     key: 'timetable',
     title: '버스 시간표',
     subtitle: '바로가기',
-    link: ROUTES.BusCourse(),
+    link: ROUTES.BusCourseShuttle(),
     SvgIcon: BusTimetable,
   },
   {

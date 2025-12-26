@@ -1,18 +1,21 @@
 @use "src/utils/scss/media" as media;
 
 .time-table-wrapper {
-  width: 100%;
+  width: 795px;
   border: 1px solid #eee;
   border-radius: 16px;
   height: auto;
   padding-bottom: 16px;
+  margin-top: 24px;
 
   @include media.media-breakpoint(mobile) {
+    width: 100%;
     border: none;
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 0;
+    margin-top: 0;
   }
 }
 
