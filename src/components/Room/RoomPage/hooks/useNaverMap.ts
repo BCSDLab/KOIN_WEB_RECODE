@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-function useNaverMap(latitude: number, longitude: number) {
+function useNaverMap(latitude: number, longitude: number, isLoaded: boolean = true) {
   const mapRef = useRef<naver.maps.Map | null>(null);
 
   useEffect(() => {
-    if (!window.naver?.maps) return;
+    if (!isLoaded || !window.naver?.maps) return;
     if (!document.getElementById('map')) return;
 
     if (!mapRef.current) {
@@ -27,7 +27,7 @@ function useNaverMap(latitude: number, longitude: number) {
     }
 
     mapRef.current.setCenter(new window.naver.maps.LatLng(latitude, longitude));
-  }, [latitude, longitude]);
+  }, [isLoaded, latitude, longitude]);
 
   const getMap = () => mapRef.current;
 

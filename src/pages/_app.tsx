@@ -4,7 +4,6 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import './index.scss';
-import Script from 'next/script';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Toast from 'components/feedback/Toast';
@@ -138,11 +137,6 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
         {/* Google Analytics */}
         {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
 
-        {/* Naver Maps */}
-        <Script
-          src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID}`}
-          strategy="beforeInteractive"
-        />
         <PortalProvider>
           <Head>
             <title>{pageTitle}</title>
