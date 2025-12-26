@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { GetServerSidePropsContext } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { dehydrate, HydrationBoundary, QueryClient, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
@@ -387,7 +388,14 @@ function StoreDetailPage({ id }: Props) {
                     type="button"
                     onClick={() => onClickImage(storeDetail!.image_urls, index)}
                   >
-                    <img className={styles.image__poster} src={`${img}`} alt="상점이미지" />
+                    <Image
+                      className={styles.image__poster}
+                      src={`${img}`}
+                      alt="상점이미지"
+                      width={320}
+                      height={360}
+                      priority
+                    />
                   </button>
                 </div>
               ))
