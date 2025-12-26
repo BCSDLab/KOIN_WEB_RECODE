@@ -381,7 +381,7 @@ function StoreDetailPage({ id }: Props) {
           >
             {storeDetail?.image_urls && storeDetail.image_urls.length > 0 ? (
               storeDetail.image_urls.map((img, index) => (
-                <div key={`${img}`} className={styles.image__content}>
+                <div key={img} className={styles.image__content}>
                   <button
                     className={styles.image__button}
                     aria-label="이미지 확대"
@@ -390,7 +390,7 @@ function StoreDetailPage({ id }: Props) {
                   >
                     <Image
                       className={styles.image__poster}
-                      src={`${img}`}
+                      src={img}
                       alt="상점이미지"
                       width={320}
                       height={360}
