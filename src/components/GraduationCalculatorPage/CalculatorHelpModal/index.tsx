@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './CalculatorHelpModal.module.scss';
@@ -26,11 +27,16 @@ function CalculatorHelpModal({ closeInfo }: CalculatorHelpModalProps) {
         </div>
         <h1 className={styles.container__title}>성적이력 엑셀 파일이요?</h1>
         <div className={styles.container__content}>
-          <img
+          <Image
             className={styles['container__content-image']}
             src="https://static.koreatech.in/assets/img/graduation-credit-calculator/aunuri-guide.png"
             alt="아우누리 성적이력 엑셀 파일 다운로드 가이드"
+            width={385}
+            height={168}
+            sizes="385px"
+            priority
           />
+
           <div className={styles['container__content-description']}>
             <p>성적이력 엑셀 파일은 아우누리에서 다운로드 받을 수 있는 파일이에요.</p>
             <p className={styles['container__content-description--thin']}>{'아우누리 > 학사 탭 > 학적기본 폴더 >'}</p>
