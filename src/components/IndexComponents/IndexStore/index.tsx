@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { StoreCategoriesResponse } from 'api/store/entity';
 import { getMainDurationTime, initializeMainEntryTime } from 'components/Store/utils/durationTime';
 import ROUTES from 'static/routes';
+import { ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import styles from './IndexStore.module.scss';
@@ -30,9 +31,6 @@ export default function IndexStore({ categories }: { categories: StoreCategories
   const logger = useLogger();
   const router = useRouter();
   const isMobile = useMediaQuery();
-
-  const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
-  const ORDER_BASE_URL = isStage ? 'https://order.stage.koreatech.in' : 'https://order.koreatech.in';
 
   const categoriesWithEvent = categories.shop_categories.map((category: Category) => ({
     ...category,
@@ -70,7 +68,6 @@ export default function IndexStore({ categories }: { categories: StoreCategories
   });
 
   const renderCategories = isMobile ? categoriesWithEvent : categoriesWithBenefit;
-
   const titleLink = isMobile ? `${ORDER_BASE_URL}/shops/?category=1` : `${ROUTES.Store()}?category=1`;
 
   const handleCategoryClick = ({ event, route }: CategoryWithEvent) => {
@@ -78,6 +75,12 @@ export default function IndexStore({ categories }: { categories: StoreCategories
       ...event,
       duration_time: getMainDurationTime(),
     });
+
+    if (route.startsWith('http')) {
+      window.location.href = route;
+      return;
+    }
+
     router.push(route);
   };
 
