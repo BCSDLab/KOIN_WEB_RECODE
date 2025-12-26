@@ -41,15 +41,14 @@ type QueryParserConfig<T> = {
   };
 };
 
-export const createQueryParser = <T extends Record<string, unknown>>(config: QueryParserConfig<T>) => {
+export const createQueryParser = <T extends object>(config: QueryParserConfig<T>) => {
   return (query: ParsedUrlQuery): T => {
     const result = {} as T;
 
-    for (const [key, { parser, defaultValue }] of Object.entries(config) as [
-      keyof T,
-      QueryParserConfig<T>[keyof T],
-    ][]) {
-      result[key] = query[key as string] ? parser(query[key as string]) : (defaultValue ?? parser(undefined));
+    for (const [key, configValue] of Object.entries(config)) {
+      const { parser, defaultValue } = configValue as QueryParserConfig<T>[keyof T];
+      const queryValue = query[key];
+      result[key as keyof T] = queryValue ? parser(queryValue) : (defaultValue ?? parser(undefined));
     }
 
     return result;
