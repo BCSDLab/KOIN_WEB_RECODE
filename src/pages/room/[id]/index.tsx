@@ -1,5 +1,8 @@
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { room } from 'api';
+import { SSRLayout } from 'components/layout';
 import RoomDetailImg from 'components/Room/components/RoomDetailImg';
 import RoomDetailMap from 'components/Room/components/RoomDetailMap';
 import RoomDetailOption from 'components/Room/components/RoomDetailOption';
@@ -7,12 +10,39 @@ import RoomDetailTable from 'components/Room/components/RoomDetailTable';
 import useRoomDetail from 'components/Room/RoomDetailPage/hooks/useRoomDetail';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { parseQueryString, parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import styles from './RoomDetailPage.module.scss';
 
-function RoomDetailPage({ id }: { id: string }) {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const { query } = parseServerSideParams(context);
+  const id = parseQueryString(query.id);
+
+  if (!id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['roomDetail', id],
+    queryFn: () => room.getRoomDetailInfo(id),
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      id,
+    },
+  };
+};
+
+function RoomDetailPage({ id }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const isMobile = useMediaQuery();
   const { roomDetail, roomOptions } = useRoomDetail(id);
   useScrollToTop();
+
   return (
     <div className={styles.template}>
       <div>{!isMobile && <h1 className={styles.template__title}>복덕방</h1>}</div>
@@ -58,11 +88,6 @@ function RoomDetailPage({ id }: { id: string }) {
   );
 }
 
-export default function RoomDetailPageWrapper() {
-  const router = useRouter();
-  const { id } = router.query;
-  if (typeof id !== 'string') {
-    return null;
-  }
-  return <RoomDetailPage id={id} />;
-}
+export default RoomDetailPage;
+
+RoomDetailPage.getLayout = (page: React.ReactElement) => <SSRLayout>{page}</SSRLayout>;

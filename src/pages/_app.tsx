@@ -141,7 +141,7 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
         {/* Naver Maps */}
         <Script
           src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID}`}
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
         <PortalProvider>
           <Head>
