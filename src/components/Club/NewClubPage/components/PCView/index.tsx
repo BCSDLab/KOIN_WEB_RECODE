@@ -325,11 +325,11 @@ export default function PCView({ formData, setFormData, openModal, isEdit, setTy
               )}
               <div className={styles['form-image__img-box']}>
                 <Image
+                  className={styles['form-image__img']}
                   src={formData.image_url}
                   alt="동아리 이미지 미리보기"
                   fill
                   sizes="500px"
-                  style={{ objectFit: 'contain' }}
                   priority
                 />
               </div>

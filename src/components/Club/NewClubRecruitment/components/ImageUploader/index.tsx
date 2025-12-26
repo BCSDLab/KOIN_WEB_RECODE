@@ -67,12 +67,11 @@ export default function ClubImageUploader({ formData, setFormData }: ClubImageUp
         >
           <span className={styles['form-image__img-wrapper']}>
             <Image
+              className={styles['form-image__img']}
               key={formData.image_url}
               src={formData.image_url}
               alt="동아리 이미지 미리보기"
               fill
-              sizes="(max-width: 768px) 100vw, 500px"
-              style={{ objectFit: 'contain' }}
               priority
             />
           </span>

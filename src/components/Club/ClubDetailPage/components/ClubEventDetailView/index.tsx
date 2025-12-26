@@ -146,12 +146,12 @@ export default function ClubEventDetailView({ clubId, eventId, setEventId, isMan
 
             <div className={styles['event-detail__image-wrapper']}>
               <Image
+                className={styles['event-detail__image']}
                 key={clubEventDetail.image_urls[selectImage]}
                 src={clubEventDetail.image_urls[selectImage]}
                 alt={clubEventDetail.name}
                 fill
                 sizes={isMobile ? '100vw' : '800px'}
-                style={{ objectFit: 'cover' }}
                 priority={selectImage === 0}
               />
             </div>

@@ -146,11 +146,11 @@ export default function ImagesUploadSlider({ imageUrls, addImageUrls }: ClubImag
               >
                 <div className={styles['form-image__img__wrapper']}>
                   <Image
+                    className={styles['form-image__img']}
                     src={imageUrls[currentIdx]}
                     alt={`동아리 이미지 미리보기 ${currentIdx + 1}`}
                     fill
                     sizes={isMobile ? '100vw' : '500px'}
-                    style={{ objectFit: 'contain' }}
                     priority={currentIdx === 0}
                   />
                 </div>

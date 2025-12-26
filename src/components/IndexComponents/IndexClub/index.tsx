@@ -124,12 +124,11 @@ function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
               <div className={styles.card__segment}>
                 {icon ?? (
                   <Image
+                    className={styles.card__thumb}
                     src={img}
                     alt={title}
-                    width={30}
-                    height={30}
-                    sizes="30px"
-                    style={{ objectFit: 'cover' }}
+                    width={60}
+                    height={60}
                     priority={key === 'popularClub'}
                   />
                 )}
