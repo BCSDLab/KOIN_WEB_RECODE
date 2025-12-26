@@ -26,14 +26,8 @@
   }
 }
 
-.container > header {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .guide {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -72,5 +66,4 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 24px;
 }
