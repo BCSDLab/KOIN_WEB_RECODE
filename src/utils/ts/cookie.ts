@@ -1,3 +1,5 @@
+import { COOKIE_DOMAIN } from 'static/url';
+
 type SameSite = 'lax' | 'strict' | 'none';
 
 export interface CookieOptions {
@@ -81,3 +83,12 @@ export function deleteCookie(name: string, opts?: Pick<CookieOptions, 'path' | '
   };
   document.cookie = buildCookieString(name, '', options);
 }
+
+export const getCookieDomain = () => {
+  if (typeof window === 'undefined') return undefined;
+
+  const { hostname } = window.location;
+  if (hostname === 'localhost') return undefined;
+
+  return COOKIE_DOMAIN;
+};

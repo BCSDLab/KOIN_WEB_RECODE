@@ -8,7 +8,7 @@ import qsStringify from 'utils/ts/qsStringfy';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
 import { redirectToClub, redirectToLogin } from './auth';
-import { deleteCookie, setCookie } from './cookie';
+import { deleteCookie, getCookieDomain, setCookie } from './cookie';
 import { saveTokensToNative } from './iosBridge';
 
 const API_URL = process.env.NEXT_PUBLIC_API_PATH;
@@ -154,7 +154,9 @@ export default class APIClient {
 
   private async errorMiddleware(error: AxiosError): Promise<AxiosResponse | null> {
     if (error.response?.status === 401) {
-      deleteCookie('AUTH_TOKEN_KEY');
+      const domain = getCookieDomain();
+      deleteCookie('AUTH_TOKEN_KEY', domain ? { domain: domain } : undefined);
+
       const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
       if (refreshTokenStorage) {
         const refreshToken = JSON.parse(refreshTokenStorage);
