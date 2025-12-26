@@ -19,24 +19,32 @@ const isSafeExternalRedirect = (url: string) => {
 export function useLoginRedirect() {
   const router = useRouter();
 
+  const navigateToFallback = () => {
+    const redirectPath = getRedirectPath() || '/';
+    clearRedirectPath();
+    router.replace(redirectPath);
+  };
+
   const redirectAfterLogin = () => {
     const { redirect } = router.query;
 
-    if (typeof redirect === 'string' && redirect.length > 0) {
-      if (redirect.startsWith('http')) {
-        if (isSafeExternalRedirect(redirect)) {
-          window.location.href = redirect;
-          return;
-        }
-      } else {
-        router.push(redirect);
-        return;
-      }
+    if (typeof redirect !== 'string' || redirect.length === 0) {
+      navigateToFallback();
+      return;
     }
 
-    const redirectPath = getRedirectPath();
-    clearRedirectPath();
-    router.push(redirectPath);
+    const isAbsoluteUrl = redirect.startsWith('http://') || redirect.startsWith('https://');
+
+    if (isAbsoluteUrl) {
+      if (isSafeExternalRedirect(redirect)) {
+        window.location.href = redirect;
+      } else {
+        navigateToFallback();
+      }
+      return;
+    }
+
+    router.replace(redirect);
   };
 
   return {
