@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import './index.scss';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { pretendard } from 'assets/font';
 import Toast from 'components/feedback/Toast';
 import Layout from 'components/layout';
 import MaintenancePage from 'components/Maintenance';
@@ -129,23 +130,25 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
   }
 
   return (
-    <QueryClientProvider client={client}>
-      <HydrationBoundary state={pageProps.dehydratedState}>
-        {/* Google Tag Manager */}
-        {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
+    <div className={`${pretendard.variable} ${pretendard.className}`}>
+      <QueryClientProvider client={client}>
+        <HydrationBoundary state={pageProps.dehydratedState}>
+          {/* Google Tag Manager */}
+          {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
 
-        {/* Google Analytics */}
-        {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
+          {/* Google Analytics */}
+          {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
 
-        <PortalProvider>
-          <Head>
-            <title>{pageTitle}</title>
-          </Head>
-          <AutoLogin />
-          {getLayout(<Component {...pageProps} />)}
-          <Toast />
-        </PortalProvider>
-      </HydrationBoundary>
-    </QueryClientProvider>
+          <PortalProvider>
+            <Head>
+              <title>{pageTitle}</title>
+            </Head>
+            <AutoLogin />
+            {getLayout(<Component {...pageProps} />)}
+            <Toast />
+          </PortalProvider>
+        </HydrationBoundary>
+      </QueryClientProvider>
+    </div>
   );
 }
