@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
 import { DiningType } from 'api/dinings/entity';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
+import RightArrow from 'assets/svg/right-arrow.svg';
+import StoreCtaIcon from 'assets/svg/store/store-cta-icon.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import Suspense from 'components/ssr/SSRSuspense';
@@ -103,9 +105,18 @@ function PCCafeteriaComponent({ diningType, setDiningType }: PCCafeteriaPageProp
         <DateNavigator />
       </div>
       <div className={styles['recommend-banner']}>
-        <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
-        <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
-          <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
+        <div className={styles['recommend-banner__left']}>
+          <StoreCtaIcon />
+          <p className={styles['recommend-banner__text-left']}>오늘의 학식이 별로라면?</p>
+        </div>
+        <button
+          type="button"
+          className={styles['recommend-banner__right']}
+          onClick={handleDiningToStore}
+          aria-label="내 주변 음식점 보기"
+        >
+          <p className={styles['recommend-banner__text-right']}>내 주변 음식점 보기</p>
+          <RightArrow className={styles['recommend-banner__arrow']} />
         </button>
       </div>
       <div className={styles['pc-menu-blocks']}>

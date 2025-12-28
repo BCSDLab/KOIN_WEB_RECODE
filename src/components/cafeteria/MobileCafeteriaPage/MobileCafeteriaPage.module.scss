@@ -65,34 +65,32 @@
 }
 
 .recommend-banner {
-  padding: 8px 24px 8px 24px;
-  background-color: #ffffff;
+  padding: 8px 24px;
+  background-color: #fff;
   color: #4b4b4b;
   border-radius: 16px;
   display: flex;
   align-items: center;
-  text-align: left;  
-  box-shadow:
-    0 4px 10px rgb(0 0 0 / 8%),
-    0 1px 4px rgb(0 0 0 / 4%);
   margin-top: 6px;
-  
+  box-shadow:
+    0 2px 4px rgb(0 0 0 / 4%),
+    0 1px 1px rgb(0 0 0 / 2%);
+
   &__text {
     margin-left: 16px;
   }
 
   &__text-main {
-    font-family: Pretendard, sans-serif;
     font-size: 12px;
     line-height: 160%;
     font-weight: 500;
   }
 
   &__text-sub {
-  font-size: 16px;
-   color: #D47415;
-   line-height: 160%;
-   font-weight: 600;
+    font-size: 16px;
+    color: #d47415;
+    line-height: 160%;
+    font-weight: 600;
   }
 
   &__button {
