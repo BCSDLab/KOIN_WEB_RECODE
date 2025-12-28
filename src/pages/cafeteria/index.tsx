@@ -37,7 +37,7 @@ function CafeteriaPage() {
         {isMobile ? (
           <MobileCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
         ) : (
-          <PCCafeteriaPage diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
+          <PCCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
         )}
       </div>
     </div>
