@@ -19,10 +19,9 @@ import styles from './MobileCafeteriaPage.module.scss';
 interface MobileCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
-  designVariant: string;
 }
 
-export default function MobileCafeteriaPage({ diningType, setDiningType, designVariant }: MobileCafeteriaPageProps) {
+export default function MobileCafeteriaPage({ diningType, setDiningType }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();
@@ -101,14 +100,12 @@ export default function MobileCafeteriaPage({ diningType, setDiningType, designV
         <Suspense fallback={<div />}>
           <MobileDiningBlocks diningType={diningType} />
         </Suspense>
-        {designVariant === 'variant' && (
-          <div className={styles['recommend-banner']}>
-            <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
-            <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
-              <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
-            </button>
-          </div>
-        )}
+        <div className={styles['recommend-banner']}>
+          <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
+          <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
+            <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
+          </button>
+        </div>
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
       <div

@@ -28,10 +28,9 @@ const getWeekAgo = () => {
 interface PCCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
-  designVariant: string;
 }
 
-function PCCafeteriaComponent({ diningType, setDiningType, designVariant }: PCCafeteriaPageProps) {
+function PCCafeteriaComponent({ diningType, setDiningType }: PCCafeteriaPageProps) {
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
@@ -103,14 +102,12 @@ function PCCafeteriaComponent({ diningType, setDiningType, designVariant }: PCCa
       <div>
         <DateNavigator />
       </div>
-      {designVariant === 'variant' && (
-        <div className={styles['recommend-banner']}>
-          <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
-          <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
-            <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
-          </button>
-        </div>
-      )}
+      <div className={styles['recommend-banner']}>
+        <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
+        <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
+          <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
+        </button>
+      </div>
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
           <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />
@@ -121,10 +118,10 @@ function PCCafeteriaComponent({ diningType, setDiningType, designVariant }: PCCa
   );
 }
 
-export default function PCCafeteriaPage({ diningType, setDiningType, designVariant }: PCCafeteriaPageProps) {
+export default function PCCafeteriaPage({ diningType, setDiningType }: PCCafeteriaPageProps) {
   return (
     <Suspense fallback={<div />}>
-      <PCCafeteriaComponent diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
+      <PCCafeteriaComponent diningType={diningType} setDiningType={setDiningType} />
     </Suspense>
   );
 }
