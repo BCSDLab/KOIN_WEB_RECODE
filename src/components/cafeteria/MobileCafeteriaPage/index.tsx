@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { DiningType } from 'api/dinings/entity';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
+import RightArrow from 'assets/svg/right-arrow.svg';
+import StoreCtaIcon from 'assets/svg/store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import useCoopshopCafeteria from 'components/cafeteria/hooks/useCoopshopCafeteria';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
@@ -98,14 +100,18 @@ export default function MobileCafeteriaPage({ diningType, setDiningType }: Mobil
       </div>
       <div className={styles.blocks}>
         <Suspense fallback={<div />}>
+          <div className={styles['recommend-banner']}>
+            <StoreCtaIcon />
+            <div className={styles['recommend-banner__text']}>
+              <p className={styles['recommend-banner__text-main']}>오늘의 학식이 별로라면?</p>
+              <p className={styles['recommend-banner__text-sub']}>내 주변 음식점 보기</p>
+            </div>
+            <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
+              <RightArrow className={styles['recommend-banner__arrow']} />
+            </button>
+          </div>
           <MobileDiningBlocks diningType={diningType} />
         </Suspense>
-        <div className={styles['recommend-banner']}>
-          <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
-          <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
-            <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
-          </button>
-        </div>
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
       <div

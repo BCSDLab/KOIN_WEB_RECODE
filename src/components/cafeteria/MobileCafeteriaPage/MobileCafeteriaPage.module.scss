@@ -65,44 +65,40 @@
 }
 
 .recommend-banner {
-  min-width: 320px;
-  padding: 8px 8px 8px 20px;
-  background-color: #f1f8ff;
-  color: #175c8e;
-  border-radius: 8px;
+  padding: 8px 24px 8px 24px;
+  background-color: #ffffff;
+  color: #4b4b4b;
+  border-radius: 16px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  text-align: left;  
   box-shadow:
     0 4px 10px rgb(0 0 0 / 8%),
     0 1px 4px rgb(0 0 0 / 4%);
-  position: fixed;
-  left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-  z-index: 100;
+  margin-top: 6px;
+  
+  &__text {
+    margin-left: 16px;
+  }
 
   &__text-main {
     font-family: Pretendard, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 160%;
     font-weight: 500;
+  }
+
+  &__text-sub {
+  font-size: 16px;
+   color: #D47415;
+   line-height: 160%;
+   font-weight: 600;
   }
 
   &__button {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 16px;
-    border-radius: 8px;
-    background-color: #175c8e;
-    color: #fff;
-  }
-
-  &__text-button {
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    line-height: 160%;
-    font-weight: 500;
+    margin-left: auto;
   }
 }
