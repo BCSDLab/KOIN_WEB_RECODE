@@ -5,6 +5,7 @@ import PersonIcon from 'assets/svg/person.svg';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import { CATEGORY, Submenu } from 'static/category';
 import ROUTES from 'static/routes';
+import { IS_STAGE, ORDER_BASE_URL } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -32,8 +33,6 @@ export default function Panel({ openModal }: PanelProps) {
   useBodyScrollLock(isSidebarOpen);
   const token = useTokenState();
   const portalManager = useModalPortal();
-  const isStage = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
-  const ORDER_BASE_URL = isStage ? 'https://order.stage.koreatech.in' : 'https://order.koreatech.in';
 
   const logShortcut = (title: string) => {
     if (title === '공지사항') logger.actionEventClick({ team: 'CAMPUS', event_label: 'hamburger', value: '공지사항' });
@@ -103,7 +102,7 @@ export default function Panel({ openModal }: PanelProps) {
     }
 
     if (submenu.openInNewTab) {
-      window.open(isStage && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
+      window.open(IS_STAGE && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
     } else {
       router.push(submenu.link);
     }
