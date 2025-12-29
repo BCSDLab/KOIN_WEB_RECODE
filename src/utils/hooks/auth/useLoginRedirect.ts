@@ -35,13 +35,11 @@ export function useLoginRedirect() {
 
     const isAbsoluteUrl = redirect.startsWith('http://') || redirect.startsWith('https://');
 
-    if (isAbsoluteUrl) {
-      if (isSafeExternalRedirect(redirect)) {
-        window.location.href = redirect;
-      } else {
-        navigateToFallback();
-      }
-      return;
+    if (!isAbsoluteUrl) return;
+    if (isSafeExternalRedirect(redirect)) {
+      window.location.href = redirect;
+    } else {
+      navigateToFallback();
     }
 
     router.replace(redirect);
