@@ -25,6 +25,7 @@ import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector
 import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import Layout from 'components/layout';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import { REGEX, STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 import ROUTES from 'static/routes';
@@ -1316,5 +1317,6 @@ function ModifyInfoPage() {
 }
 
 ModifyInfoPage.requireAuth = true;
+ModifyInfoPage.getLayout = (page: React.ReactNode) => <Layout hideLayout>{page}</Layout>;
 
 export default ModifyInfoPage;
