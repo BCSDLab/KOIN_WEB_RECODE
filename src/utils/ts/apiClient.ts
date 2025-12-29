@@ -102,7 +102,9 @@ export default class APIClient {
     // 새 refresh 요청을 진행
     this.refreshPromise = APIClient.refresh({ refresh_token: refreshToken })
       .then((result) => {
-        setCookie('AUTH_TOKEN_KEY', result.token);
+        const domain = getCookieDomain();
+
+        setCookie('AUTH_TOKEN_KEY', result.token, domain ? { domain: domain } : undefined);
         useTokenStore.getState().setToken(result.token);
 
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
