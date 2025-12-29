@@ -157,49 +157,49 @@ export default class APIClient {
   }
 
   private async errorMiddleware(error: AxiosError): Promise<AxiosResponse | null> {
+    if (typeof window === 'undefined') return null;
+
     if (error.response?.status === 401) {
       const domain = getCookieDomain();
-      deleteCookie('AUTH_TOKEN_KEY', domain ? { domain: domain } : undefined);
+      deleteCookie('AUTH_TOKEN_KEY', domain ? { domain } : undefined);
 
-      const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
-      if (refreshTokenStorage) {
-        const refreshToken = JSON.parse(refreshTokenStorage) as { state: { refreshToken: string } };
-        // refreshToken이 존재할 시 accessToken 재발급 요청
-        if (refreshToken.state.refreshToken !== '') {
-          try {
-            await this.refreshAccessToken(refreshToken.state.refreshToken);
-            const retryResponse = await this.retryRequest(error);
-            return retryResponse;
-          } catch {
-            if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
-              useTokenStore.getState().setToken('');
-              useTokenStore.getState().setRefreshToken('');
-              saveTokensToNative('', ''); // 네이티브 상태도 동기화
-            }
-            return null;
-          }
+      try {
+        const storage = window.localStorage.getItem('refresh-token-storage');
+        const refreshToken = storage
+          ? (JSON.parse(storage) as { state: { refreshToken: string } }).state.refreshToken
+          : null;
+
+        if (refreshToken) {
+          await this.refreshAccessToken(refreshToken);
+          return await this.retryRequest(error);
         }
-        redirectToLogin();
+      } catch {
+        useTokenStore.getState().setToken('');
+        useTokenStore.getState().setRefreshToken('');
+        if (window.webkit?.messageHandlers != null) {
+          saveTokensToNative('', '');
+        }
       }
+
+      redirectToLogin();
+      return null;
     }
 
-    if (error.response?.status === 403 && useTokenStore.getState().token) {
+    if (error.response?.status === 403) {
       const currentToken = useTokenStore.getState().token;
       if (currentToken) {
         try {
           const response = await axios.get<{ user_type: 'STUDENT' | 'GENERAL' }>(`${this.baseURL}/user/auth`, {
-            headers: {
-              Authorization: `Bearer ${currentToken}`,
-            },
+            headers: { Authorization: `Bearer ${currentToken}` },
           });
           useTokenStore.getState().setUserType(response.data.user_type);
-          const retryResponse = await this.retryRequest(error);
-          return retryResponse;
+          return await this.retryRequest(error);
         } catch {
           return null;
         }
       }
     }
+
     return null;
   }
 
