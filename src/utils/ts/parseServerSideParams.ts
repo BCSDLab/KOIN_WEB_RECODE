@@ -3,13 +3,13 @@ import { getValidToken } from './auth';
 import type { ParsedUrlQuery } from 'querystring';
 
 interface ParsedParams {
-  token: string | null;
+  token: string | undefined;
   query: ParsedUrlQuery;
 }
 
 export const parseServerSideParams = (context: GetServerSidePropsContext): ParsedParams => {
   const { req } = context;
-  const token = req.cookies['AUTH_TOKEN_KEY'] || null;
+  const token = req.cookies['AUTH_TOKEN_KEY'] || undefined;
   const validToken = getValidToken(token);
 
   return {

@@ -42,7 +42,7 @@ export function isTokenExpired(token: string): boolean {
   }
 }
 
-export function getValidToken(token: string | null | undefined): string | null {
-  if (!token) return null;
-  return isTokenExpired(token) ? null : token;
+export function getValidToken(token: string | null | undefined): string | undefined {
+  if (!token) return undefined;
+  return isTokenExpired(token) ? undefined : token;
 }
