@@ -1,17 +1,19 @@
 import type { GetServerSidePropsContext } from 'next';
+import { getValidToken } from './auth';
 import type { ParsedUrlQuery } from 'querystring';
 
 interface ParsedParams {
-  token: string;
+  token: string | null;
   query: ParsedUrlQuery;
 }
 
 export const parseServerSideParams = (context: GetServerSidePropsContext): ParsedParams => {
   const { req } = context;
-  const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+  const token = req.cookies['AUTH_TOKEN_KEY'] || null;
+  const validToken = getValidToken(token);
 
   return {
-    token,
+    token: validToken,
     query: context.query,
   };
 };
