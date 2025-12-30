@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { COOKIE_DOMAIN } from 'static/url';
 import { isTokenExpired } from 'utils/ts/auth';
 
 export function middleware(request: NextRequest) {
@@ -9,6 +10,7 @@ export function middleware(request: NextRequest) {
     response.cookies.set('AUTH_TOKEN_KEY', '', {
       expires: new Date(0),
       path: '/',
+      domain: COOKIE_DOMAIN,
     });
     return response;
   }
