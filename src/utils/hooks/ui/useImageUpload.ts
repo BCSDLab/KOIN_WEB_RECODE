@@ -1,12 +1,20 @@
 import { useRef, useState } from 'react';
 import { uploadClubFile, uploadLostItemFile, uploadShopFile } from 'api/uploadFile';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import showToast from 'utils/ts/showToast';
 
-// 정의할 수 있는 에러 타입
-export type UploadError = '413' | '415' | '404' | '422' | 'networkError' | '401' | '';
+export type UploadErrorCode = '413' | '415' | '404' | '422' | 'network' | '401';
 
-const MAXSIZE = 1024 * 1024 * 10;
+export class UploadError extends Error {
+  constructor(
+    public code: UploadErrorCode,
+    message?: string,
+  ) {
+    super(message ?? code);
+    this.name = 'UploadError';
+  }
+}
+
+const MAX_SIZE = 1024 * 1024 * 10;
 
 interface UseImageUploadOptions {
   maxLength?: number;
@@ -17,84 +25,67 @@ interface UseImageUploadOptions {
 export default function useImageUpload({ maxLength = 3, uploadFn, resize }: UseImageUploadOptions) {
   const token = useTokenState();
   const [imageFile, setImageFile] = useState<string[]>([]);
-  const [uploadError, setUploadError] = useState<UploadError>('');
   const imgRef = useRef<HTMLInputElement>(null);
 
-  const saveImgFile = async () => {
+  const saveImgFile = async (): Promise<string[]> => {
     const files = imgRef.current?.files;
-    if (!files || !files.length) return;
+    if (!files || !files.length) return imageFile;
 
-    // imageFile.length + files.length을 통해 저장된 이미지 + 새로 추가할 이미지의 개수를 파악함
     if (imageFile.length + files.length > maxLength) {
-      showToast('error', `파일은 ${maxLength}개까지 등록할 수 있습니다.`);
-      return;
+      throw new UploadError('413', `파일은 ${maxLength}개까지 등록할 수 있습니다.`);
     }
 
     const allFiles = Array.from(files);
     const onlyImages = allFiles.filter((file) => file.type.startsWith('image/'));
 
     if (onlyImages.length !== allFiles.length) {
-      setUploadError('415');
-      return;
+      throw new UploadError('415', '이미지 파일만 업로드할 수 있습니다.');
     }
 
-    const uploadedFile: string[] = [...imageFile];
+    const uploadedFiles: string[] = [...imageFile];
 
-    for (let i = 0; i < files.length; i += 1) {
-      const file = files[i];
+    for (const file of allFiles) {
+      let processedFile: Blob = file;
 
-      let resizedFile: Blob = file;
-      try {
-        if (typeof resize === 'function') {
-          resizedFile = await resize(file);
+      if (resize) {
+        try {
+          processedFile = await resize(file);
+        } catch {
+          throw new UploadError('422', '이미지 리사이즈에 실패했습니다.');
         }
-      } catch {
-        setUploadError('422');
-        return;
       }
 
-      if (resizedFile.size > MAXSIZE) {
-        setUploadError('413'); // 파일 사이즈가 너무 큰 경우
-        return;
+      if (processedFile.size > MAX_SIZE) {
+        throw new UploadError('413', '파일 크기가 10MB를 초과합니다.');
       }
 
       const formData = new FormData();
-      formData.append('multipartFile', resizedFile);
+      formData.append('multipartFile', processedFile);
 
       try {
         const data = await uploadFn(token, formData);
         if (data.file_url) {
-          uploadedFile.push(data.file_url);
+          uploadedFiles.push(data.file_url);
         }
       } catch (error: unknown) {
-        setImageFile([]);
         const errorMessage = error instanceof Error ? error.message : String(error);
-        if (errorMessage.includes('415')) {
-          setUploadError('415');
-        } else if (errorMessage.includes('404')) {
-          setUploadError('404');
-        } else if (errorMessage.includes('422')) {
-          setUploadError('422');
-        } else if (errorMessage.includes('Network Error')) {
-          setUploadError('networkError');
-        } else {
-          setUploadError('401');
-        }
-        return;
+
+        if (errorMessage.includes('415')) throw new UploadError('415');
+        if (errorMessage.includes('404')) throw new UploadError('404');
+        if (errorMessage.includes('422')) throw new UploadError('422');
+        if (errorMessage.includes('Network Error')) throw new UploadError('network');
+        throw new UploadError('401');
       }
     }
 
-    setImageFile(uploadedFile);
-    setUploadError('');
-
-    return uploadedFile;
+    setImageFile(uploadedFiles);
+    return uploadedFiles;
   };
 
   return {
     imageFile,
     imgRef,
     saveImgFile,
-    uploadError,
     setImageFile,
   };
 }
