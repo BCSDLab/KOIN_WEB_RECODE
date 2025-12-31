@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { DiningType } from 'api/dinings/entity';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
-import RightArrow from 'assets/svg/right-arrow.svg';
+import ArrowBackIcon from 'assets/svg/arrow-back.svg';
 import StoreCtaIcon from 'assets/svg/store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import useCoopshopCafeteria from 'components/cafeteria/hooks/useCoopshopCafeteria';
@@ -107,7 +107,7 @@ export default function MobileCafeteriaPage({ diningType, setDiningType }: Mobil
               <p className={styles['recommend-banner__text-sub']}>내 주변 음식점 보기</p>
             </div>
             <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
-              <RightArrow className={styles['recommend-banner__arrow']} />
+              <ArrowBackIcon className={styles['recommend-banner__arrow']} />
             </button>
           </div>
           <MobileDiningBlocks diningType={diningType} />
