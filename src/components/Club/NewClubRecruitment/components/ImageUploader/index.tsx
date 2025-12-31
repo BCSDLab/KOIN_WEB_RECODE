@@ -5,7 +5,7 @@ import { ClubRecruitment } from 'api/club/entity';
 import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import imageResize from 'utils/ts/imageResize';
 import showToast from 'utils/ts/showToast';
 import styles from './ImageUploader.module.scss';
@@ -27,8 +27,10 @@ export default function ClubImageUploader({ formData, setFormData }: ClubImageUp
     try {
       const images = await saveImgFile();
       if (images) setFormData({ ...formData, image_url: images[0] });
-    } catch {
-      showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch (error: unknown) {
+      if (error instanceof UploadError) {
+        showToast('error', error.message);
+      }
     }
   };
 

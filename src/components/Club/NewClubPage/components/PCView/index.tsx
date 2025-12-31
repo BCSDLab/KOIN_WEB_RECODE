@@ -12,7 +12,7 @@ import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
 import ClubInputErrorCondition from 'components/Club/components/ClubInputErrorCondition';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import { addHyphen } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
 import styles from './NewClubPCView.module.scss';
@@ -38,8 +38,10 @@ export default function PCView({ formData, setFormData, openModal, isEdit, setTy
       if (images) {
         setFormData({ ...formData, image_url: images[0] });
       }
-    } catch {
-      showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch (error: unknown) {
+      if (error instanceof UploadError) {
+        showToast('error', error.message);
+      }
     }
   };
   const categoryOptions = [
@@ -73,8 +75,10 @@ export default function PCView({ formData, setFormData, openModal, isEdit, setTy
       if (images) {
         setFormData({ ...formData, image_url: images[0] });
       }
-    } catch {
-      showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch (error: unknown) {
+      if (error instanceof UploadError) {
+        showToast('error', error.message);
+      }
     }
   };
 

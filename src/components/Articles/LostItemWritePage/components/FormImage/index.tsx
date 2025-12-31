@@ -3,7 +3,7 @@ import { uploadLostItemFile } from 'api/uploadFile';
 import PhotoIcon from 'assets/svg/Articles/photo.svg';
 import RemoveImageIcon from 'assets/svg/Articles/remove-image.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
 import styles from './FormImage.module.scss';
 
@@ -29,9 +29,14 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
       return;
     }
 
-    saveImgFile().then((res) => {
-      setImages([...images, ...res!]);
-    });
+    try {
+      const uploadFile = await saveImgFile();
+      setImages([...images, ...uploadFile]);
+    } catch (error: unknown) {
+      if (error instanceof UploadError) {
+        showToast('error', error.message);
+      }
+    }
   };
 
   const deleteImage = (url: string) => {

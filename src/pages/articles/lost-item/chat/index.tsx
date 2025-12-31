@@ -32,7 +32,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMount from 'utils/hooks/state/useMount';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
 import type { LostItemChatroomDetailMessage, LostItemChatroomListResponse } from 'api/articles/entity';
 import styles from './LostItemChatPage.module.scss';
@@ -133,8 +133,10 @@ function LostItemChatPage({ token }: { token: string }) {
           body: JSON.stringify(newMessage),
         });
       }
-    } catch {
-      showToast('error', '이미지 업로드에 실패했습니다.');
+    } catch (error) {
+      if (error instanceof UploadError) {
+        showToast('error', error.message);
+      }
     }
   };
 

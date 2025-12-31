@@ -5,7 +5,7 @@ import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import imageResize from 'utils/ts/imageResize';
 import showToast from 'utils/ts/showToast';
 import styles from './ImagesUploadSlider.module.scss';
@@ -36,8 +36,10 @@ export default function ImagesUploadSlider({ imageUrls, addImageUrls }: ClubImag
       }
 
       if (imgRef.current) imgRef.current.value = '';
-    } catch {
-      showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch (error: unknown) {
+      if (error instanceof UploadError) {
+        showToast('error', error.message);
+      }
     }
   };
 
