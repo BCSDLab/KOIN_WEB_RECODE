@@ -99,16 +99,14 @@ export default function MobileCafeteriaPage({ diningType, setDiningType }: Mobil
         ))}
       </div>
       <div className={styles.blocks}>
-        <div className={styles['recommend-banner']}>
+        <button type="button" className={styles['recommend-banner']} onClick={handleDiningToStore}>
           <StoreCtaIcon />
           <div className={styles['recommend-banner__text']}>
             <p className={styles['recommend-banner__text-main']}>오늘의 학식이 별로라면?</p>
             <p className={styles['recommend-banner__text-sub']}>내 주변 음식점 보기</p>
           </div>
-          <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
-            <ArrowBackIcon className={styles['recommend-banner__arrow']} />
-          </button>
-        </div>
+          <ArrowBackIcon className={styles['recommend-banner__arrow']} />
+        </button>
         <MobileDiningBlocks diningType={diningType} />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>

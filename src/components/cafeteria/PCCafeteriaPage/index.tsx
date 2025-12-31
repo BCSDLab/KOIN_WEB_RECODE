@@ -104,21 +104,18 @@ function PCCafeteriaComponent({ diningType, setDiningType }: PCCafeteriaPageProp
       <div>
         <DateNavigator />
       </div>
-      <div className={styles['recommend-banner']}>
-        <div className={styles['recommend-banner__left']}>
-          <StoreCtaIcon />
-          <p className={styles['recommend-banner__text-left']}>오늘의 학식이 별로라면?</p>
-        </div>
-        <button
-          type="button"
-          className={styles['recommend-banner__right']}
-          onClick={handleDiningToStore}
-          aria-label="내 주변 음식점 보기"
-        >
-          <p className={styles['recommend-banner__text-right']}>내 주변 음식점 보기</p>
-          <ArrowBackIcon className={styles['recommend-banner__arrow']} />
+      <>
+        <button type="button" className={styles['recommend-banner']} onClick={handleDiningToStore}>
+          <div className={styles['recommend-banner__left']}>
+            <StoreCtaIcon />
+            <p className={styles['recommend-banner__text-left']}>오늘의 학식이 별로라면?</p>
+          </div>
+          <div className={styles['recommend-banner__right']}>
+            <p className={styles['recommend-banner__text-right']}>내 주변 음식점 보기</p>
+            <ArrowBackIcon className={styles['recommend-banner__arrow']} />
+          </div>
         </button>
-      </div>
+      </>
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
           <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />

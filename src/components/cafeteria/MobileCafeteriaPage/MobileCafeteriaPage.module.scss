@@ -92,15 +92,9 @@
     font-weight: 600;
   }
 
-  &__button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-  }
-
   &__arrow {
     transform: rotate(180deg);
     color: #4b4b4b;
+    margin-left: auto;
   }
 }
