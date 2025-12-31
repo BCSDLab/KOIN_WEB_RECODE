@@ -5,16 +5,10 @@
 @import "react-quill/dist/quill.snow.css";
 @import "react-toastify/dist/ReactToastify.css";
 
-#root {
-  display: flex;
-  flex-direction: column;
-  min-width: 1148px;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-
+body {
   /* https://css-tricks.com/snippets/css/system-font-stack/ */
   font-family:
-    Pretendard,
+    var(--font-pretendard),
     system-ui,
     "Segoe UI",
     Roboto,
@@ -24,6 +18,14 @@
     "Apple Color Emoji",
     "Segoe UI Emoji",
     "Segoe UI Symbol";
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-width: 1148px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 
   @include media.media-breakpoint(mobile) {
     min-width: 360px;
@@ -33,7 +35,7 @@
 a,
 button {
   color: #000;
-  font-family: Pretendard, sans-serif;
+  font-family: var(--font-pretendard), sans-serif;
 }
 
 a {
