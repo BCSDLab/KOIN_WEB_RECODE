@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { DiningType } from 'api/dinings/entity';
+import ArrowBackIcon from 'assets/svg/arrow-back.svg';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
-import RightArrow from 'assets/svg/right-arrow.svg';
 import StoreCtaIcon from 'assets/svg/store/store-cta-icon.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
@@ -116,7 +116,7 @@ function PCCafeteriaComponent({ diningType, setDiningType }: PCCafeteriaPageProp
           aria-label="내 주변 음식점 보기"
         >
           <p className={styles['recommend-banner__text-right']}>내 주변 음식점 보기</p>
-          <RightArrow className={styles['recommend-banner__arrow']} />
+          <ArrowBackIcon className={styles['recommend-banner__arrow']} />
         </button>
       </div>
       <div className={styles['pc-menu-blocks']}>
