@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { DiningType } from 'api/dinings/entity';
-import ArrowBackIcon from 'assets/svg/arrow-back.svg';
+import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
 import StoreCtaIcon from 'assets/svg/store/store-cta-icon.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
@@ -112,7 +112,7 @@ function PCCafeteriaComponent({ diningType, setDiningType }: PCCafeteriaPageProp
           </div>
           <div className={styles['recommend-banner__right']}>
             <p className={styles['recommend-banner__text-right']}>내 주변 음식점 보기</p>
-            <ArrowBackIcon className={styles['recommend-banner__arrow']} />
+            <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
           </div>
         </button>
       </>

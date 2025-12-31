@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { DiningType } from 'api/dinings/entity';
-import ArrowBackIcon from 'assets/svg/arrow-back.svg';
+import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
 import StoreCtaIcon from 'assets/svg/store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
@@ -105,7 +105,7 @@ export default function MobileCafeteriaPage({ diningType, setDiningType }: Mobil
             <p className={styles['recommend-banner__text-main']}>오늘의 학식이 별로라면?</p>
             <p className={styles['recommend-banner__text-sub']}>내 주변 음식점 보기</p>
           </div>
-          <ArrowBackIcon className={styles['recommend-banner__arrow']} />
+          <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
         </button>
         <MobileDiningBlocks diningType={diningType} />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
