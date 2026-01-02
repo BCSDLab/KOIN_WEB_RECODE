@@ -1,8 +1,10 @@
-import { Suspense, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { DiningType } from 'api/dinings/entity';
+import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
+import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import useCoopshopCafeteria from 'components/cafeteria/hooks/useCoopshopCafeteria';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
@@ -19,10 +21,9 @@ import styles from './MobileCafeteriaPage.module.scss';
 interface MobileCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
-  designVariant: string;
 }
 
-export default function MobileCafeteriaPage({ diningType, setDiningType, designVariant }: MobileCafeteriaPageProps) {
+export default function MobileCafeteriaPage({ diningType, setDiningType }: MobileCafeteriaPageProps) {
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();
@@ -98,17 +99,15 @@ export default function MobileCafeteriaPage({ diningType, setDiningType, designV
         ))}
       </div>
       <div className={styles.blocks}>
-        <Suspense fallback={<div />}>
-          <MobileDiningBlocks diningType={diningType} />
-        </Suspense>
-        {designVariant === 'variant' && (
-          <div className={styles['recommend-banner']}>
-            <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
-            <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
-              <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
-            </button>
+        <button type="button" className={styles['recommend-banner']} onClick={handleDiningToStore}>
+          <StoreCtaIcon />
+          <div className={styles['recommend-banner__text']}>
+            <p className={styles['recommend-banner__text-main']}>오늘의 학식이 별로라면?</p>
+            <p className={styles['recommend-banner__text-sub']}>내 주변 음식점 보기</p>
           </div>
-        )}
+          <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
+        </button>
+        <MobileDiningBlocks diningType={diningType} />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
       <div

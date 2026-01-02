@@ -35,9 +35,9 @@ function CafeteriaPage() {
     <div className={styles.page}>
       <div className={styles.page__content} key={currentDate().toISOString()}>
         {isMobile ? (
-          <MobileCafeteriaPage diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
+          <MobileCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
         ) : (
-          <PCCafeteriaPage diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
+          <PCCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
         )}
       </div>
     </div>

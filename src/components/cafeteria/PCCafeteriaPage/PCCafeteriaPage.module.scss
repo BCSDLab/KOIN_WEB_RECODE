@@ -102,41 +102,41 @@
 }
 
 .recommend-banner {
-  width: 400px;
-  padding: 8px 8px 8px 20px;
-  margin: 36px 0;
-  background-color: #f1f8ff;
-  color: #175c8e;
-  border-radius: 8px;
+  padding: 8px 32px;
+  background-color: #fff;
+  color: #4b4b4b;
+  border: 1px solid #f7941e;
+  border-radius: 16px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  align-self: flex-end;
+  justify-content: space-between;
+  margin-top: 6px;
+  margin-bottom: 16px;
   box-shadow:
-    0 4px 10px rgb(0 0 0 / 8%),
-    0 1px 4px rgb(0 0 0 / 4%);
+    0 2px 4px rgb(0 0 0 / 4%),
+    0 1px 1px rgb(0 0 0 / 2%);
 
-  &__text-main {
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    line-height: 160%;
-    font-weight: 500;
-  }
-
-  &__button {
+  &__left {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 4px 8px;
-    border-radius: 8px;
-    background-color: #175c8e;
-    color: #fff;
+    gap: 14px;
   }
 
-  &__text-button {
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    line-height: 160%;
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    cursor: pointer;
+  }
+
+  &__text-left {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  &__text-right {
+    font-size: 22px;
+    color: #d47415;
     font-weight: 500;
   }
 }
