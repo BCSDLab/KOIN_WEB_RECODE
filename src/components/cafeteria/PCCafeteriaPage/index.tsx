@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
-import StoreCtaIcon from 'assets/svg/store/store-cta-icon.svg';
+import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import Suspense from 'components/ssr/SSRSuspense';

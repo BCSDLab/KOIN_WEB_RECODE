@@ -4,7 +4,7 @@ import { cn } from '@bcsdlab/utils';
 import { DiningType } from 'api/dinings/entity';
 import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import InformationIcon from 'assets/svg/common/information/information-icon-white.svg';
-import StoreCtaIcon from 'assets/svg/store/store-cta-icon.svg';
+import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import CafeteriaInfo from 'components/cafeteria/components/CafeteriaInfo';
 import useCoopshopCafeteria from 'components/cafeteria/hooks/useCoopshopCafeteria';
 import { DINING_TYPES, DINING_TYPE_MAP } from 'static/cafeteria';
