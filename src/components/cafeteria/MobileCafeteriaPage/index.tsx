@@ -14,11 +14,9 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import { useHeaderButtonStore } from 'utils/zustand/headerButtonStore';
-import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import MobileDiningBlocks from './components/MobileDiningBlocks';
 import WeeklyDatePicker from './components/WeeklyDatePicker';
 import styles from './MobileCafeteriaPage.module.scss';
-
 interface MobileCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
@@ -28,13 +26,10 @@ export default function MobileCafeteriaPage({ diningType, setDiningType }: Mobil
   const logger = useLogger();
   const router = useRouter();
   const sessionLogger = useSessionLogger();
-
   const { cafeteriaInfo } = useCoopshopCafeteria();
   const lastLoggedDiningTypeRef = useRef<DiningType | null>(null);
   const [isCafeteriaInfoOpen, openCafeteriaInfo, closeCafeteriaInfo] = useBooleanState(false);
   const setButtonContent = useHeaderButtonStore((state) => state.setButtonContent);
-  const token = useTokenState();
-  const designVariant = useABTestView('dining_store', token);
   useBodyScrollLock(isCafeteriaInfoOpen);
 
   useEffect(() => {
@@ -56,13 +51,11 @@ export default function MobileCafeteriaPage({ diningType, setDiningType }: Mobil
       const scrolled = doc.scrollTop;
       const maxHeight = doc.scrollHeight - doc.clientHeight;
       const scrollPercentage = (scrolled / maxHeight) * 100;
-
       if (scrollPercentage > 70 && lastLoggedDiningTypeRef.current !== diningType) {
         logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[diningType] });
         lastLoggedDiningTypeRef.current = diningType;
       }
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -79,7 +72,6 @@ export default function MobileCafeteriaPage({ diningType, setDiningType }: Mobil
     });
     router.push('/store');
   };
-
   useScrollToTop();
 
   return (
@@ -101,21 +93,15 @@ export default function MobileCafeteriaPage({ diningType, setDiningType }: Mobil
         ))}
       </div>
       <div className={styles.blocks}>
-        <Suspense fallback={<div />}>
-          <MobileDiningBlocks diningType={diningType} />
-        </Suspense>
-        {designVariant === 'variant' && (
-          <div className={styles['recommend-banner']}>
-            <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
-            <button
-              type="button"
-              className={styles['recommend-banner__button']}
-              onClick={handleDiningToStore}
-            >
-              <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
-            </button>
+        <button type="button" className={styles['recommend-banner']} onClick={handleDiningToStore}>
+          <StoreCtaIcon />
+          <div className={styles['recommend-banner__text']}>
+            <p className={styles['recommend-banner__text-main']}>오늘의 학식이 별로라면?</p>
+            <p className={styles['recommend-banner__text-sub']}>내 주변 음식점 보기</p>
           </div>
-        )}
+          <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
+        </button>
+        <MobileDiningBlocks diningType={diningType} />
         <span className={styles.blocks__caution}>식단 정보는 운영 상황 따라 변동될 수 있습니다.</span>
       </div>
       <div

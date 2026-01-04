@@ -25,7 +25,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useLocalStorage } from 'utils/hooks/state/useLocalStorage';
 import useMount from 'utils/hooks/state/useMount';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
-import type { StoreSorterType, StoreFilterType } from 'api/store/entity';
+import type { StoreSorterType, StoreFilterType, StoreCategory } from 'api/store/entity';
 import styles from './StorePage.module.scss';
 
 type StoreSearchQueryType = {
@@ -157,7 +157,7 @@ function Store() {
   };
 
   const handleCategoryClick = (category: StoreCategory) => {
-    const { id: categoryId, name: categoryName } = category;
+    const { id: categoryId } = category;
     logger.actionEventClick({
       team: 'BUSINESS',
       event_label: 'shop_categories',

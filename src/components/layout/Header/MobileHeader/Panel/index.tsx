@@ -10,7 +10,11 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLogout } from 'utils/hooks/auth/useLogout';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { IS_STAGE, ORDER_BASE_URL } from 'static/url';
+import { useUser } from 'utils/hooks/state/useUser';
+import { useBodyScrollLock } from 'utils/hooks/ui/useBodyScrollLock';
+import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
+import { useMobileSidebar } from 'utils/zustand/mobileSidebar';
+import type { Portal } from 'components/modal/Modal/PortalProvider';
 import styles from './Panel.module.scss';
 
 interface PanelProps {
@@ -92,7 +96,7 @@ export default function Panel({ openModal }: PanelProps) {
 
     if (submenu.title === '주변상점') {
       const targetUrl = `${ORDER_BASE_URL}/shops/?category=1`;
-      window.location.href = targetUrl;
+      router.push(targetUrl);
       closeSidebar();
       return;
     }
@@ -100,7 +104,7 @@ export default function Panel({ openModal }: PanelProps) {
     if (submenu.openInNewTab) {
       window.open(IS_STAGE && submenu.stageLink ? submenu.stageLink : submenu.link, '_blank');
     } else {
-      navigate(submenu.link);
+      router.push(submenu.link);
     }
 
     closeSidebar();
