@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { dehydrate, DehydratedState, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { cafeteria, coopshop } from 'api';
 import { DiningType } from 'api/dinings/entity';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
@@ -75,7 +75,7 @@ function Cafeteria() {
   );
 }
 
-export default function CafeteriaPage({ dehydratedState }: { dehydratedState: unknown }) {
+export default function CafeteriaPage({ dehydratedState }: { dehydratedState: DehydratedState }) {
   return (
     <HydrationBoundary state={dehydratedState}>
       <Cafeteria />
