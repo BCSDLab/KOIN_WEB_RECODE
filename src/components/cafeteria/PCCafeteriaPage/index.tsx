@@ -13,6 +13,7 @@ import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
+import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import DateNavigator from './components/DateNavigator';
 import PCDiningBlocks from './components/PCDiningBlocks';
 import styles from './PCCafeteriaPage.module.scss';
@@ -39,6 +40,8 @@ function PCCafeteriaComponent({ diningType, setDiningType }: PCCafeteriaPageProp
   const router = useRouter();
   const sessionLogger = useSessionLogger();
   const { containerRef } = useOutsideClick({ onOutsideClick: closeDropdown });
+  const token = useTokenState();
+  const designVariant = useABTestView('dining_store', token);
 
   const handleDiningTypeChange = (value: DiningType) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'menu_time', value: DINING_TYPE_MAP[value] });
@@ -104,18 +107,18 @@ function PCCafeteriaComponent({ diningType, setDiningType }: PCCafeteriaPageProp
       <div>
         <DateNavigator />
       </div>
-      <>
-        <button type="button" className={styles['recommend-banner']} onClick={handleDiningToStore}>
-          <div className={styles['recommend-banner__left']}>
-            <StoreCtaIcon />
-            <p className={styles['recommend-banner__text-left']}>오늘의 학식이 별로라면?</p>
-          </div>
-          <div className={styles['recommend-banner__right']}>
-            <p className={styles['recommend-banner__text-right']}>내 주변 음식점 보기</p>
-            <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
-          </div>
-        </button>
-      </>
+      {designVariant === 'variant' && (
+        <div className={styles['recommend-banner']}>
+          <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
+          <button
+            type="button"
+            className={styles['recommend-banner__button']}
+            onClick={handleDiningToStore}
+          >
+            <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
+          </button>
+        </div>
+      )}
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
           <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />

@@ -39,8 +39,8 @@ export const useLogin = (state: IsAutoLogin) => {
         setRefreshToken(data.refresh_token);
       }
       queryClient.invalidateQueries();
-      setCookie('AUTH_TOKEN_KEY', data.token, { domain: domain });
-      setCookie('AUTH_USER_TYPE', data.user_type, { domain: domain });
+      setCookie('AUTH_TOKEN_KEY', data.token, { domain });
+      setCookie('AUTH_USER_TYPE', data.user_type, { domain });
       setToken(data.token);
       setUserType(data.user_type);
       redirectAfterLogin();

@@ -1,6 +1,16 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
+import { useEffect, useState, useRef } from 'react';
+import RightArrow from 'assets/svg/right-arrow.svg';
+import NotServed from 'assets/svg/not-served.svg';
+import Close from 'assets/svg/close-icon-grey.svg';
+import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import { cn } from '@bcsdlab/utils';
+import useDinings from 'pages/Cafeteria/hooks/useDinings';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import { DiningTime } from 'pages/Cafeteria/utils/time';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
+import ROUTES from 'static/routes';
 import { DiningPlace } from 'api/dinings/entity';
 import BubbleTailBottom from 'assets/svg/bubble-tail-bottom.svg';
 import Close from 'assets/svg/close-icon-grey.svg';
@@ -22,26 +32,38 @@ function IndexCafeteria() {
   const router = useRouter();
   const isMobile = useMediaQuery();
   const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const { dinings } = useDinings(diningTime.generateDiningDate());
+  const designVariant = useRef(Math.random() < 0 ? 'design_A' : 'design_B');
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
-  const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
+  const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(isomorphicLocalStorage.getItem('cafeteria-tooltip') === null);
 
   const selectedDining = dinings.find(
     (dining) => dining.place === selectedPlace && dining.type === diningTime.getType(),
   );
 
   const handleMoreClick = () => {
-    logger.actionEventClick({
-      team: 'CAMPUS',
-      event_label: 'main_menu_moveDetailView',
-      value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`,
+    logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_menu_moveDetailView', value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단` });
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining2shop_1',
+      value: designVariant.current,
+      event_category: 'a/b test 로깅(메인화면 식단 진입)',
+      session_name: 'dining2shop',
+      session_lifetime_minutes: 30,
     });
     router.push(ROUTES.Cafeteria());
   };
 
   const handlePlaceClick = (place: DiningPlace) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_menu_corner', value: place });
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining2shop_1',
+      value: designVariant.current,
+      event_category: 'a/b test 로깅(메인화면 식단 진입)',
+      session_name: 'dining2shop',
+      session_lifetime_minutes: 30,
+    });
     setSelectedPlace(place);
   };
 

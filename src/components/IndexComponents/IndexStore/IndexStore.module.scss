@@ -75,6 +75,12 @@
   &__image {
     width: 48px;
     height: 48px;
-    border-radius: 50%;
+    border-width: 50%;
+    object-fit: contain;
+
+    @media (max-width: 576px) {
+      width: 48px;
+      height: 48px;
+    }
   }
 }
