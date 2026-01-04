@@ -1,4 +1,4 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { APIRequest, HTTP_METHOD, QueryParams } from 'interfaces/APIRequest';
 import {
   CourseResponse,
   BusResponse,
@@ -54,14 +54,16 @@ export class BusTimetableInfo<R extends BusTimetableResponse> implements APIRequ
 export class CityBusTimetableInfo<R extends CityInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path: string;
+  path = '/bus/timetable/city';
+
+  params: QueryParams;
 
   response!: R;
 
   auth = false;
 
   constructor({ bus_number, direction }: CityBusParams) {
-    this.path = `/bus/timetable/city?bus_number=${bus_number}&direction=${direction}`;
+    this.params = { bus_number, direction };
   }
 }
 
