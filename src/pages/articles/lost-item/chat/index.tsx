@@ -3,7 +3,7 @@
 // NOTE: 이 페이지는 이미지가 동적으로 바뀌고(채팅/썸네일/메시지), 크기·비율이 제각각입니다.
 // next/image 도입 시 sizes/fill 등 설정·관리 비용이 커지는데 비해(특히 작은/반복 이미지) 체감 이득이 작아 <img>를 유지합니다.
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Client } from '@stomp/stompjs';
 
@@ -34,7 +34,7 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
-import type { LostItemChatroomDetailMessage, LostItemChatroomListResponse } from 'api/articles/entity';
+import type { LostItemChatroomDetailMessage } from 'api/articles/entity';
 import styles from './LostItemChatPage.module.scss';
 
 function LostItemChatPage({ token }: { token: string }) {
@@ -50,7 +50,6 @@ function LostItemChatPage({ token }: { token: string }) {
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [chatroomListState, setChatroomListState] = useState<LostItemChatroomListResponse | null>(null);
   const { logMessageListSelcetClick } = useChatLogger();
 
   const {
@@ -59,13 +58,10 @@ function LostItemChatPage({ token }: { token: string }) {
     messages,
     defaultChatroomId: chatroomId,
     defaultArticleId: articleId,
+    invalidateChatroomList,
   } = useChatroomQuery(token, searchParams.get('articleId'), searchParams.get('chatroomId'));
 
-  const connectChatroom = () => {
-    if (!chatroomList || chatroomList.length === 0) {
-      return;
-    }
-
+  const connectChatroom = useCallback(() => {
     if (!articleId || !chatroomId || !userInfo) {
       showToast('error', '채팅방 정보를 불러오는데 실패했습니다.');
       return;
@@ -75,8 +71,6 @@ function LostItemChatPage({ token }: { token: string }) {
       clientRef.current.deactivate();
     }
 
-    setCurrentMessageList([]);
-
     const stompClient = new Client({
       brokerURL: `${process.env.NEXT_PUBLIC_API_PATH}/ws-stomp`,
       connectHeaders: { Authorization: token },
@@ -84,14 +78,14 @@ function LostItemChatPage({ token }: { token: string }) {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
-        stompClient.subscribe(`/topic/chatroom/list/${userInfo.id}`, (message) => {
-          const receivedMessage = JSON.parse(message.body);
-          setChatroomListState(receivedMessage);
+        stompClient.subscribe(`/topic/chatroom/list/${userInfo.id}`, () => {
+          invalidateChatroomList();
         });
 
-        stompClient.subscribe(`/topic/chat/${articleId}/${chatroomId}`, async (message) => {
+        stompClient.subscribe(`/topic/chat/${articleId}/${chatroomId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           setCurrentMessageList((prev) => [...prev, receivedMessage]);
+          invalidateChatroomList();
         });
       },
       onStompError: () => {
@@ -101,14 +95,14 @@ function LostItemChatPage({ token }: { token: string }) {
 
     stompClient.activate();
     clientRef.current = stompClient;
-  };
+  }, [articleId, chatroomId, userInfo, token, invalidateChatroomList]);
 
-  const disconnectChatroom = () => {
+  const disconnectChatroom = useCallback(() => {
     if (clientRef.current) {
       clientRef.current.deactivate();
       clientRef.current = null;
     }
-  };
+  }, []);
 
   const uploadImage = async () => {
     try {
@@ -184,8 +178,7 @@ function LostItemChatPage({ token }: { token: string }) {
     return () => {
       disconnectChatroom();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatroomId, articleId]);
+  }, [connectChatroom, disconnectChatroom]);
 
   /**
    * @description
@@ -195,7 +188,7 @@ function LostItemChatPage({ token }: { token: string }) {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [currentMessageList]);
+  }, [currentMessageList, messages]);
 
   /**
    * @description
@@ -209,8 +202,6 @@ function LostItemChatPage({ token }: { token: string }) {
     }
   }, [inputValue]);
 
-  const realChatroomList = chatroomListState ?? chatroomList;
-
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>쪽지</h1>
@@ -218,8 +209,8 @@ function LostItemChatPage({ token }: { token: string }) {
       <section className={styles['chat-container']}>
         {!isMobile && (
           <div className={styles['chat-list']}>
-            {realChatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
-            {realChatroomList?.map(
+            {chatroomList?.length === 0 && <div className={styles.chat__empty}>채팅방이 없습니다.🧐</div>}
+            {chatroomList?.map(
               ({
                 article_id,
                 chat_room_id,
@@ -230,7 +221,7 @@ function LostItemChatPage({ token }: { token: string }) {
                 unread_message_count,
               }) => (
                 <Link
-                  key={`${chat_room_id}${article_id}`}
+                  key={`${chat_room_id}-${article_id}`}
                   href={`${ROUTES.LostItemChat()}?chatroomId=${chat_room_id}&articleId=${article_id}`}
                   className={styles['chat-list--item']}
                   onClick={() => logMessageListSelcetClick()}
@@ -315,7 +306,7 @@ function LostItemChatPage({ token }: { token: string }) {
                       </div>
                     ),
                     isMe ? (
-                      <div key={index} className={styles['message-item__right']}>
+                      <div key={`msg-${index}`} className={styles['message-item__right']}>
                         <span className={styles['message-item--time']}>{messageTime}</span>
                         <span className={styles['message-item--content__right']}>
                           {message.is_image && (
@@ -329,7 +320,7 @@ function LostItemChatPage({ token }: { token: string }) {
                         </span>
                       </div>
                     ) : (
-                      <div key={index} className={styles['message-item-container']}>
+                      <div key={`msg-${index}`} className={styles['message-item-container']}>
                         {(isSenderChanged || messageTime !== prevTime) && (
                           <div className={styles['message-item--header']}>
                             <div className={styles['message-item--profile']}>
@@ -377,12 +368,12 @@ function LostItemChatPage({ token }: { token: string }) {
 
                     return acc.concat(
                       messageDate !== prevDate && (
-                        <div key={`date-${index}`} className={styles['message-date-header']}>
+                        <div key={`current-date-${index}`} className={styles['message-date-header']}>
                           {messageDate}
                         </div>
                       ),
                       isMe ? (
-                        <div key={index} className={styles['message-item__right']}>
+                        <div key={`current-msg-${index}`} className={styles['message-item__right']}>
                           <span className={styles['message-item--time']}>{formatISODateToTime(message.timestamp)}</span>
                           <span className={styles['message-item--content__right']}>
                             {message.is_image && (
@@ -396,7 +387,7 @@ function LostItemChatPage({ token }: { token: string }) {
                           </span>
                         </div>
                       ) : (
-                        <div key={index} className={styles['message-item-container']}>
+                        <div key={`current-msg-${index}`} className={styles['message-item-container']}>
                           {(isSenderChanged || messageTime !== prevTime) && (
                             <div className={styles['message-item--header']}>
                               <div className={styles['message-item--profile']}>
@@ -477,12 +468,15 @@ function LostItemChatPage({ token }: { token: string }) {
 
 export default function LostItemChatPageWrapper() {
   const token = useTokenState();
-
   const mounted = useMount();
+
+  const { searchParams } = useParamsHandler();
+  const articleId = searchParams.get('articleId') ?? 'none';
+  const chatroomId = searchParams.get('chatroomId') ?? 'none';
 
   if (!mounted || !token) return null;
 
-  return <LostItemChatPage token={token} />;
+  return <LostItemChatPage key={`${articleId}-~${chatroomId}`} token={token} />;
 }
 
 LostItemChatPageWrapper.requireAuth = true;
