@@ -71,8 +71,6 @@ function LostItemChatPage({ token }: { token: string }) {
       clientRef.current.deactivate();
     }
 
-    setCurrentMessageList([]);
-
     const stompClient = new Client({
       brokerURL: `${process.env.NEXT_PUBLIC_API_PATH}/ws-stomp`,
       connectHeaders: { Authorization: token },
@@ -97,8 +95,7 @@ function LostItemChatPage({ token }: { token: string }) {
 
     stompClient.activate();
     clientRef.current = stompClient;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [articleId, chatroomId, userInfo?.id, token, invalidateChatroomList]);
+  }, [articleId, chatroomId, userInfo, token, invalidateChatroomList]);
 
   const disconnectChatroom = useCallback(() => {
     if (clientRef.current) {
@@ -471,12 +468,15 @@ function LostItemChatPage({ token }: { token: string }) {
 
 export default function LostItemChatPageWrapper() {
   const token = useTokenState();
-
   const mounted = useMount();
+
+  const { searchParams } = useParamsHandler();
+  const articleId = searchParams.get('articleId') ?? 'none';
+  const chatroomId = searchParams.get('chatroomId') ?? 'none';
 
   if (!mounted || !token) return null;
 
-  return <LostItemChatPage token={token} />;
+  return <LostItemChatPage key={`${articleId}-~${chatroomId}`} token={token} />;
 }
 
 LostItemChatPageWrapper.requireAuth = true;
