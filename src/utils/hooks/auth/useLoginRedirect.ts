@@ -16,21 +16,6 @@ const isSafeExternalRedirect = (url: string) => {
   }
 };
 
-const isSafeExternalRedirect = (url: string) => {
-  try {
-    const u = new URL(url);
-
-    return (
-      u.hostname === 'order.koreatech.in'
-      || u.hostname === 'order.stage.koreatech.in'
-      || u.hostname === 'koreatech.in'
-      || u.hostname.endsWith('.koreatech.in')
-    );
-  } catch {
-    return false;
-  }
-};
-
 export function useLoginRedirect() {
   const router = useRouter();
 
