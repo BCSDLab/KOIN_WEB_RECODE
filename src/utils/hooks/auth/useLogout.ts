@@ -9,6 +9,7 @@ export const useLogout = () => {
     const domain = getCookieDomain();
 
     setRefreshToken('');
+    deleteCookie('AUTH_TOKEN_KEY'); // 배포 후 기존 도메인 없는 쿠키들의 하위 호환성을 위해 임시 유지
     deleteCookie('AUTH_TOKEN_KEY', domain ? { domain: domain } : undefined);
     sessionStorage.removeItem(STORAGE_KEY.MODAL_SESSION_SHOWN);
     setToken('');
