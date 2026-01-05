@@ -1,7 +1,7 @@
-import React, { ErrorInfo } from 'react';
-import showToast from 'utils/ts/showToast';
-import { AxiosError } from 'axios';
+import React from 'react';
 import { sendClientError } from '@bcsdlab/koin';
+import { AxiosError } from 'axios';
+import showToast from 'utils/ts/showToast';
 
 interface Props {
   fallbackClassName: string;
@@ -12,28 +12,36 @@ interface State {
   hasError: boolean;
 }
 
-function isAxiosError(error: AxiosError<any, any> | Error): error is AxiosError<any, any> {
-  return ('response' in error);
+interface AxiosErrorData {
+  error?: {
+    message?: string;
+  };
+}
+
+function isAxiosError(error: AxiosError<AxiosErrorData> | Error): error is AxiosError<AxiosErrorData> {
+  return 'response' in error;
 }
 
 export default class ErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     // 이후에 사용시 해제
-    // eslint-disable-next-line react/no-unused-state
     this.state = { hasError: false } as State;
   }
 
   // 이후에 사용시 해제
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  static getDerivedStateFromError(_: Error) {
+  // static getDerivedStateFromError(_: Error) {
+  static getDerivedStateFromError() {
     return { hasError: true };
   }
 
   // 이후에 사용시 해제
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  componentDidCatch(error: AxiosError<any, any> | Error, __: ErrorInfo) {
-    showToast('error', isAxiosError(error) ? error.response?.data.error.message : error.message);
+  // componentDidCatch(error: AxiosError<AxiosErrorData> | Error, __: ErrorInfo) {
+  componentDidCatch(error: AxiosError<AxiosErrorData> | Error) {
+    const errorMessage = isAxiosError(error)
+      ? (error.response?.data?.error?.message ?? '알 수 없는 오류가 발생했습니다.')
+      : error.message;
+    showToast('error', errorMessage);
     sendClientError(error);
   }
 
@@ -41,11 +49,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     const { children, fallbackClassName } = this.props;
     const { hasError } = this.state;
     if (hasError) {
-      return (
-        <div className={fallbackClassName}>
-          Error
-        </div>
-      );
+      return <div className={fallbackClassName}>Error</div>;
     }
     return children;
   }

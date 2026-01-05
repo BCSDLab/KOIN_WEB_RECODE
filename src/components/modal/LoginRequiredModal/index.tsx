@@ -1,8 +1,8 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { useRouter } from 'next/router';
 import CloseIcon from 'assets/svg/close-icon-grey.svg';
-import { setRedirectPath } from 'utils/ts/auth';
 import ROUTES from 'static/routes';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
+import { setRedirectPath } from 'utils/ts/auth';
 import styles from './LoginRequiredModal.module.scss';
 
 interface LoginRequiredProps {
@@ -21,17 +21,16 @@ export default function LoginRequiredModal({
   onCancelClick,
   enableRedirect = true,
 }: LoginRequiredProps) {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
   const { backgroundRef } = useOutsideClick({ onOutsideClick: onClose });
 
   const sentences = description.split('.');
 
   const goLogin = () => {
     if (onLoginClick) onLoginClick();
-    if (enableRedirect) setRedirectPath(`${location.pathname}${location.search}`);
+    if (enableRedirect) setRedirectPath(`${router.asPath}`);
     onClose();
-    navigate(ROUTES.Auth());
+    router.push(ROUTES.Auth());
   };
 
   const cancel = () => {
@@ -42,12 +41,7 @@ export default function LoginRequiredModal({
   return (
     <div className={styles.background} ref={backgroundRef}>
       <div className={styles.container}>
-        <button
-          className={styles.container__icon}
-          type="button"
-          aria-label="닫기 버튼"
-          onClick={onClose}
-        >
+        <button className={styles.container__icon} type="button" aria-label="닫기 버튼" onClick={onClose}>
           <CloseIcon />
         </button>
         <div className={styles.container__header}>
@@ -64,7 +58,6 @@ export default function LoginRequiredModal({
             ))}
           </div>
         </div>
-
         <div className={styles.container__button}>
           <button type="button" className={styles['container__button--login']} onClick={goLogin}>
             로그인하기

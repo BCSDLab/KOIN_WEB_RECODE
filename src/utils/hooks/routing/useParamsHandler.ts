@@ -1,35 +1,62 @@
-import { useSearchParams } from 'react-router-dom';
+import { useMemo, useCallback } from 'react';
+import { useRouter } from 'next/router';
 
 const useParamsHandler = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const params = Object.fromEntries(searchParams);
+  const router = useRouter();
 
-  const setParams = (
-    key: string,
-    value: string,
-    option: {
-      deleteBeforeParam?: boolean;
-      replacePage?: boolean;
-    } = {},
-  ) => {
-    const { deleteBeforeParam = false, replacePage = false } = option;
+  // URLSearchParams 형태로 제공
+  const searchParams = useMemo(() => {
+    const params = new URLSearchParams();
 
-    const newSearchParams = new URLSearchParams(searchParams);
+    Object.entries(router.query).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        params.set(key, value[0]);
+      } else if (value) {
+        params.set(key, value);
+      }
+    });
+    return params;
+  }, [router.query]);
 
-    if (deleteBeforeParam) {
-      newSearchParams.delete(key);
-    }
+  const params = useMemo(() => Object.fromEntries(searchParams.entries()), [searchParams]);
 
-    newSearchParams.set(key, value);
+  const setParams = useCallback(
+    (
+      newParams: Record<string, string | undefined>,
+      option: { deleteBeforeParam?: boolean; replacePage?: boolean } = {},
+    ) => {
+      const { deleteBeforeParam = false, replacePage = false } = option;
+      const updatedParams = new URLSearchParams(searchParams.toString());
 
-    setSearchParams(newSearchParams, { replace: replacePage });
-  };
+      if (deleteBeforeParam) {
+        Object.keys(newParams).forEach((key) => {
+          updatedParams.delete(key);
+        });
+      }
+
+      Object.entries(newParams).forEach(([key, value]) => {
+        if (value === undefined) {
+          updatedParams.delete(key);
+        } else {
+          updatedParams.set(key, value);
+        }
+      });
+
+      const method = replacePage ? router.replace : router.push;
+      const basePath = router.asPath.split('?')[0];
+
+      const queryString = updatedParams.toString();
+      method(queryString ? `${basePath}?${queryString}` : basePath, undefined, {
+        shallow: true,
+      });
+    },
+    [router, searchParams],
+  );
 
   return {
     params,
     searchParams,
     setParams,
-    setSearchParams,
   };
 };
 

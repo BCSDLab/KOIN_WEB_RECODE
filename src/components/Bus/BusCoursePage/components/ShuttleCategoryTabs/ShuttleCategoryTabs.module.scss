@@ -1,0 +1,42 @@
+@use "src/utils/scss/media" as media;
+
+.course-category {
+  width: 795px;
+  background-color: #f5f5f5;
+  display: flex;
+  gap: 8px;
+  box-sizing: border-box;
+  padding: 8px 24px;
+  border-radius: 0 0 12px 12px;
+
+  &__button {
+    display: flex;
+    padding: 6px 16px;
+    justify-content: center;
+    align-items: center;
+    color: #727272;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: Pretendard, sans-serif;
+
+    &--selected {
+      border-radius: 50px;
+      background: #175c8e;
+      color: #fff;
+      font-weight: 600;
+      line-height: 160%;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    border-radius: 0;
+    padding: 8px 24px;
+    gap: 0;
+  }
+}

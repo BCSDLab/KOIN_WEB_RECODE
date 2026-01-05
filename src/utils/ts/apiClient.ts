@@ -1,22 +1,21 @@
 // reference: https://github.com/16Yongjin/tutoring-app/tree/main/src/api
+import { Refresh } from 'api/auth/APIDetail';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { APIResponse } from 'interfaces/APIResponse';
-import { CustomAxiosError, KoinError } from 'interfaces/APIError';
 import qsStringify from 'utils/ts/qsStringfy';
-import { Refresh } from 'api/auth/APIDetail';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
-import { deleteCookie, getCookieDomain, setCookie } from './cookie';
 import { redirectToClub, redirectToLogin } from './auth';
+import { deleteCookie, getCookieDomain, setCookie } from './cookie';
 import { saveTokensToNative } from './iosBridge';
 
-const API_URL = import.meta.env.VITE_API_PATH;
+const API_URL = process.env.NEXT_PUBLIC_API_PATH;
 
-type Constructor<T> = new (...args: any[]) => T;
+type Constructor<T> = new (...args: never[]) => T;
 
-// eslint-disable-next-line
-type ResponseType<T> = T extends APIRequest<infer T> ? T : never
+type ResponseType<T> = T extends APIRequest<infer U> ? U : never;
 
 export default class APIClient {
   // API Client Singleton
@@ -27,13 +26,11 @@ export default class APIClient {
   }
 
   /** API를 받아서 호출할 수 있는 함수로 변환합니다. */
-  static toCallable<
-    T extends Constructor<any>,
-    U extends InstanceType<T>,
-    R extends ResponseType<U>,
-  >(api: T) {
-    // eslint-disable-next-line new-cap
-    return (...args: ConstructorParameters<T>) => APIClient.request<R>(new api(...args));
+  static toCallable<T extends Constructor<APIRequest<APIResponse>>>(api: T) {
+    return (...args: ConstructorParameters<T>) =>
+      APIClient.request<ResponseType<InstanceType<T>>>(
+        new api(...args) as unknown as APIRequest<ResponseType<InstanceType<T>>>,
+      );
   }
 
   /** API를 호출할 수 있는 함수로 변환합니다. `toCallable`의 alias */
@@ -52,8 +49,8 @@ export default class APIClient {
           url: request.path,
           method: request.method,
           params: request.params,
-          data: request.data instanceof FormData
-            ? request.data : (request.convertBody || this.convertBody)(request.data),
+          data:
+            request.data instanceof FormData ? request.data : (request.convertBody || this.convertBody)(request.data),
           paramsSerializer: (params) => qsStringify(params),
           timeout: this.timeout,
           baseURL: request.baseURL || this.baseURL,
@@ -61,12 +58,10 @@ export default class APIClient {
           responseType: 'json',
         })
         .then((data: AxiosResponse<U>) => {
-          const response = request.parse
-            ? request.parse(data)
-            : this.parse<U>(data);
+          const response = request.parse ? request.parse(data) : this.parse<U>(data);
           resolve(response);
         })
-        .catch(async (err) => {
+        .catch(async (err: unknown) => {
           if (axios.isAxiosError(err) && err.response?.status === 503) {
             useServerStateStore.getState().setMaintenance(true);
             reject(err);
@@ -77,18 +72,16 @@ export default class APIClient {
               const handledResponse = await this.errorMiddleware(err);
 
               if (handledResponse) {
-                const response = request.parse
-                  ? request.parse(handledResponse)
-                  : this.parse<U>(handledResponse);
+                const response = request.parse ? request.parse(handledResponse) : this.parse<U>(handledResponse);
                 resolve(response);
                 return;
               }
             }
 
-            const apiError = this.createKoinErrorFromAxiosError(err);
+            const apiError = this.createKoinErrorFromAxiosError(err as AxiosError<KoinError>);
             reject(apiError);
-          } catch (middlewareError) {
-            const apiError = this.createKoinErrorFromAxiosError(err);
+          } catch {
+            const apiError = this.createKoinErrorFromAxiosError(err as AxiosError<KoinError>);
             reject(apiError);
           }
         });
@@ -109,7 +102,9 @@ export default class APIClient {
     // 새 refresh 요청을 진행
     this.refreshPromise = APIClient.refresh({ refresh_token: refreshToken })
       .then((result) => {
-        setCookie('AUTH_TOKEN_KEY', result.token);
+        const domain = getCookieDomain();
+
+        setCookie('AUTH_TOKEN_KEY', result.token, domain ? { domain: domain } : undefined);
         useTokenStore.getState().setToken(result.token);
 
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
@@ -135,7 +130,7 @@ export default class APIClient {
     await this.refreshPromise;
   }
 
-  private convertBody(data: any) {
+  private convertBody(data: unknown) {
     return JSON.stringify(data);
   }
 
@@ -150,78 +145,77 @@ export default class APIClient {
       const originalRequest = error.config;
       const newToken = useTokenStore.getState().token;
 
-      if (originalRequest.headers) {
+      if (originalRequest?.headers) {
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
       }
 
       // 재요청 실행 및 결과 반환
-      return await axios(originalRequest);
+      return await axios(originalRequest!);
     } catch (retryError) {
       return Promise.reject(retryError);
     }
   }
 
   private async errorMiddleware(error: AxiosError): Promise<AxiosResponse | null> {
+    if (typeof window === 'undefined') return null;
+
     if (error.response?.status === 401) {
       const domain = getCookieDomain();
-      deleteCookie('AUTH_TOKEN_KEY', { domain });
-      deleteCookie('AUTH_TOKEN_KEY'); // 하위 호환성 유지
+      deleteCookie('AUTH_TOKEN_KEY'); // 배포 후 기존 도메인 없는 쿠키들의 하위 호환성을 위해 임시 유지
+      deleteCookie('AUTH_TOKEN_KEY', domain ? { domain } : undefined);
 
-      const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
-      if (refreshTokenStorage) {
-        const refreshToken = JSON.parse(refreshTokenStorage);
-        // refreshToken이 존재할 시 accessToken 재발급 요청
-        if (refreshToken.state.refreshToken !== '') {
-          try {
-            await this.refreshAccessToken(refreshToken.state.refreshToken);
-            const retryResponse = await this.retryRequest(error);
-            return retryResponse;
-          } catch (retryError) {
-            useTokenStore.getState().setToken('');
-            useTokenStore.getState().setRefreshToken('');
+      try {
+        const storage = window.localStorage.getItem('refresh-token-storage');
+        const refreshToken = storage
+          ? (JSON.parse(storage) as { state: { refreshToken: string } }).state.refreshToken
+          : null;
 
-            if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
-              saveTokensToNative('', ''); // 네이티브 상태도 동기화
-            }
-            return null;
-          }
+        if (refreshToken) {
+          await this.refreshAccessToken(refreshToken);
+          return await this.retryRequest(error);
         }
-        redirectToLogin();
+      } catch {
+        useTokenStore.getState().setToken('');
+        useTokenStore.getState().setRefreshToken('');
+        if (window.webkit?.messageHandlers != null) {
+          saveTokensToNative('', '');
+        }
       }
+
+      redirectToLogin();
+      return null;
     }
 
-    if (error.response?.status === 403 && useTokenStore.getState().token) {
+    if (error.response?.status === 403) {
       const currentToken = useTokenStore.getState().token;
       if (currentToken) {
         try {
-          const response = await axios.get(`${this.baseURL}/user/auth`, {
-            headers: {
-              Authorization: `Bearer ${currentToken}`,
-            },
+          const response = await axios.get<{ user_type: 'STUDENT' | 'GENERAL' }>(`${this.baseURL}/user/auth`, {
+            headers: { Authorization: `Bearer ${currentToken}` },
           });
           useTokenStore.getState().setUserType(response.data.user_type);
-          const retryResponse = await this.retryRequest(error);
-          return retryResponse;
-        } catch (retryError) {
+          return await this.retryRequest(error);
+        } catch {
           return null;
         }
       }
     }
+
     return null;
   }
 
   private isAxiosErrorWithResponseData(error: AxiosError<KoinError>) {
     const { response } = error;
-    return response?.status !== undefined
-      && response?.data !== undefined
-      && response.data.code !== undefined
-      && response.data.message !== undefined;
+    return (
+      response?.status !== undefined &&
+      response?.data !== undefined &&
+      response.data.code !== undefined &&
+      response.data.message !== undefined
+    );
   }
 
   // error 를 경우에 따라 KoinError와 AxiosError로 반환
-  private createKoinErrorFromAxiosError(
-    error: AxiosError<KoinError>,
-  ): KoinError | CustomAxiosError {
+  private createKoinErrorFromAxiosError(error: AxiosError<KoinError>): KoinError | CustomAxiosError {
     if (this.isAxiosErrorWithResponseData(error)) {
       const koinError = error.response!;
       return {
@@ -238,7 +232,7 @@ export default class APIClient {
   }
 
   // Create headers
-  private createHeaders<U extends APIResponse>(request: APIRequest<U>): any {
+  private createHeaders<U extends APIResponse>(request: APIRequest<U>): Record<string, string> {
     const headers: Record<string, string> = {};
     // 인증 토큰 삽입
     if (request.authorization) {
@@ -246,10 +240,7 @@ export default class APIClient {
     }
 
     // json body 사용
-    if (
-      request.method === HTTP_METHOD.POST
-      || request.method === HTTP_METHOD.PUT
-    ) {
+    if (request.method === HTTP_METHOD.POST || request.method === HTTP_METHOD.PUT) {
       headers['Content-Type'] = 'application/json';
     }
 

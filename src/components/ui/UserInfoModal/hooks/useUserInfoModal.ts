@@ -1,62 +1,60 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 import { useUser } from 'utils/hooks/state/useUser';
+import { useLocalStorage, useSessionStorage } from 'utils/hooks/state/useWebStorage';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useTokenStore } from 'utils/zustand/auth';
-import { STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
+
+type Completion = (typeof COMPLETION_STATUS)[keyof typeof COMPLETION_STATUS];
 
 export default function useUserInfoModal() {
   const { token } = useTokenStore();
   const { data: userInfo } = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showCloseButton, setShowCloseButton] = useState(false);
+
+  const [completion, setCompletion] = useLocalStorage<Completion | null>(STORAGE_KEY.USER_INFO_COMPLETION, null);
+
+  const [sessionShown, setSessionShown] = useSessionStorage<boolean>(STORAGE_KEY.MODAL_SESSION_SHOWN, false);
+
+  const isStudent = isStudentUser(userInfo);
+
+  const isInfoMissing = useMemo(() => {
+    if (!isStudent) return false;
+    const requiredFields: (keyof typeof userInfo)[] = [
+      'login_id',
+      'gender',
+      'major',
+      'name',
+      'phone_number',
+      'student_number',
+    ];
+    return requiredFields.some((field) => {
+      const v = userInfo?.[field] as unknown;
+      return v === undefined || v === null || v === '';
+    });
+  }, [isStudent, userInfo]);
+
+  const canOpen = !!token && isStudent && completion !== COMPLETION_STATUS.COMPLETED && isInfoMissing && !sessionShown;
+
+  const isFirstTime = completion !== COMPLETION_STATUS.SKIPPED;
+  const isModalOpen = canOpen;
+  const showCloseButton = canOpen ? !isFirstTime : false;
 
   useEffect(() => {
-    if (!token || !isStudentUser(userInfo)) {
-      return;
+    if (!token || !isStudent) return;
+    if (!isInfoMissing && completion !== COMPLETION_STATUS.COMPLETED) {
+      setCompletion(COMPLETION_STATUS.COMPLETED);
     }
-
-    const persistentState = localStorage.getItem(STORAGE_KEY.USER_INFO_COMPLETION);
-
-    if (persistentState === COMPLETION_STATUS.COMPLETED) {
-      return;
-    }
-
-    const requiredFields: (keyof typeof userInfo)[] = [
-      'login_id', 'gender', 'major', 'name', 'phone_number', 'student_number',
-    ];
-
-    const isInfoMissing = requiredFields.some(
-      (field) => userInfo[field] === undefined || userInfo[field] === null || userInfo[field] === '',
-    );
-
-    if (!isInfoMissing) {
-      localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.COMPLETED);
-      return;
-    }
-
-    const hasShownThisSession = sessionStorage.getItem(STORAGE_KEY.MODAL_SESSION_SHOWN) === 'true';
-    if (hasShownThisSession) {
-      return;
-    }
-
-    const isFirstTime = persistentState !== COMPLETION_STATUS.SKIPPED;
-
-    if (isFirstTime) {
-      localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.SKIPPED);
-    }
-
-    setShowCloseButton(!isFirstTime);
-    setIsModalOpen(true);
-    sessionStorage.setItem(STORAGE_KEY.MODAL_SESSION_SHOWN, 'true');
-  }, [token, userInfo]);
+  }, [token, isStudent, isInfoMissing, completion, setCompletion]);
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setSessionShown(true);
   };
 
   const handleSkipModal = () => {
-    localStorage.setItem(STORAGE_KEY.USER_INFO_COMPLETION, COMPLETION_STATUS.SKIPPED);
-    closeModal();
+    if (completion !== COMPLETION_STATUS.SKIPPED) {
+      setCompletion(COMPLETION_STATUS.SKIPPED);
+    }
+    setSessionShown(true);
   };
 
   return {

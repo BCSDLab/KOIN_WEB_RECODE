@@ -1,33 +1,28 @@
-import { useEffect, useRef, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 const MOBILE_QUERY = '(max-width: 576px)';
 
-export default function useMediaQuery(query = MOBILE_QUERY): boolean {
-  const getMatches = (matchedQuery: string): boolean => {
-    // Prevents SSR issues
-    if (typeof window !== 'undefined') {
-      return window.matchMedia(matchedQuery).matches;
-    }
-    return false;
-  };
-  const [matches, setMatches] = useState(() => getMatches(query));
-  const matchMediaRef = useRef<MediaQueryList | null>(null);
+function subscribeToMediaQuery(query: string) {
+  return (onStoreChange: () => void) => {
+    if (typeof window === 'undefined') return () => {};
 
-  useEffect(() => {
     const matchMedia = window.matchMedia(query);
-    matchMediaRef.current = matchMedia;
-    function handleChange() {
-      setMatches(getMatches(query));
-    }
-    handleChange();
+    const handleChange = () => onStoreChange();
+
     matchMedia.addEventListener('change', handleChange);
-
     return () => {
-      matchMediaRef.current?.removeEventListener('change', handleChange);
+      matchMedia.removeEventListener('change', handleChange);
     };
+  };
+}
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
-
-  return matches;
+export default function useMediaQuery(query: string = MOBILE_QUERY): boolean {
+  return useSyncExternalStore(
+    subscribeToMediaQuery(query),
+    () => {
+      if (typeof window === 'undefined') return false;
+      return window.matchMedia(query).matches;
+    },
+    () => false, // SSR 시 기본값
+  );
 }

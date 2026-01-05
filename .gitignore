@@ -39,3 +39,6 @@ yarn-error.log*
 tsconfig.tsbuildinfo
 
 .idea/*
+.next
+
+tsconfig.tsbuildinfo

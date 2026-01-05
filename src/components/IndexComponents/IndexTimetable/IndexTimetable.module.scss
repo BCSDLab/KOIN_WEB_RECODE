@@ -1,0 +1,57 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  height: 405px;
+  position: relative;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
+
+  &__loading-spinner {
+    margin: 125px 75px;
+    background-color: white;
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.title {
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #175c8e;
+  margin-bottom: 16px;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.needLogin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  z-index: 4;
+  width: calc(100% + 1px);
+  height: 100%;
+  background-color: #f4f4f4;
+  color: #aaa;
+  font-size: 12px;
+  text-decoration: none;
+
+  &::before {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 16px;
+    background: url("http://static.koreatech.in/assets/img/ic-calendar.png") center/36px 36px no-repeat;
+    content: "";
+  }
+
+  &::after {
+    content: "로그인을 해주세요";
+  }
+}

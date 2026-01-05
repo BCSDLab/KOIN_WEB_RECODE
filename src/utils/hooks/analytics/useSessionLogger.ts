@@ -14,21 +14,19 @@ export const LOGIN_STATUS = {
   LOGOUT: 0,
   LOGIN: 1,
 } as const;
-export type LoginStatus = typeof LOGIN_STATUS[keyof typeof LOGIN_STATUS];
+export type LoginStatus = (typeof LOGIN_STATUS)[keyof typeof LOGIN_STATUS];
 
 const PLATFORM = 'WEB';
 
 const generateAlphaString = (length: number): string => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-  const result = Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
+  const result = Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join(
+    '',
+  );
   return result;
 };
 
-const getSessionId = (
-  session_name: string,
-  is_login: LoginStatus,
-  sessionLifetime: number,
-): string => {
+const getSessionId = (session_name: string, is_login: LoginStatus, sessionLifetime: number): string => {
   const existedSessionId = getCookie(`custom_session_id_${session_name}`);
   if (existedSessionId) {
     return existedSessionId;

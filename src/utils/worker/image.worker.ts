@@ -1,8 +1,5 @@
-/* eslint-disable no-restricted-globals */
 self.onmessage = async (e) => {
-  const {
-    file, maxWidth = 1200, maxHeight = 1200, quality = 0.8,
-  } = e.data;
+  const { file, maxWidth = 1200, maxHeight = 1200, quality = 0.8 } = e.data;
 
   const bmp = await createImageBitmap(file);
 

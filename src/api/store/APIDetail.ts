@@ -1,5 +1,5 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import { DeleteResponse } from 'api/auth/entity';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import {
   StoreListResponse,
   StoreListV2Response,
@@ -34,9 +34,9 @@ export class StoreListV2<R extends StoreListV2Response> implements APIRequest<R>
   response!: R;
 
   params: {
-    sorter?: StoreSorterType,
-    filter?: StoreFilterType[],
-    query?: string,
+    sorter?: StoreSorterType;
+    filter?: StoreFilterType[];
+    query?: string;
   };
 
   constructor(sorter: StoreSorterType, filter: StoreFilterType[], query: string | undefined) {
@@ -122,7 +122,7 @@ export class StoreEventList<R extends StoreEventListResponse> implements APIRequ
 
   path = 'shops/:id/events';
 
-  constructor(id:string) {
+  constructor(id: string) {
     this.path = `shops/${id}/events`;
   }
 }
@@ -134,7 +134,12 @@ export class ReviewList<R extends ReviewListResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(id: number, pageParam: number, sorter: string, public authorization?: string) {
+  constructor(
+    id: number,
+    pageParam: number,
+    sorter: string,
+    public authorization?: string,
+  ) {
     this.path = `shops/${id}/reviews?page=${pageParam}&limit=10&sorter=${sorter}`;
   }
 }
@@ -146,7 +151,11 @@ export class DeleteReview<R extends DeleteResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(reviewId: number, shopId: string, public authorization: string) {
+  constructor(
+    reviewId: number,
+    shopId: string,
+    public authorization: string,
+  ) {
     this.path = `shops/${shopId}/reviews/${reviewId}`;
   }
 }
@@ -158,7 +167,11 @@ export class GetMyReviews<R extends MyReviewResponse> implements APIRequest<R> {
 
   response!: R;
 
-  constructor(shopId: string, sorter: string, public authorization: string) {
+  constructor(
+    shopId: string,
+    sorter: string,
+    public authorization: string,
+  ) {
     this.path = `shops/${shopId}/reviews/me?sorter=${sorter}`;
   }
 }

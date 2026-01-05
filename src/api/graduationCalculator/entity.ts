@@ -1,6 +1,6 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
-export interface GraduationAgree extends APIResponse { }
+export type GraduationAgree = APIResponse;
 
 export interface GeneralEducationArea {
   course_type: string;
@@ -32,7 +32,7 @@ export interface CourseTypeResponse extends APIResponse {
   lectures: LectureInfo[];
 }
 
-export interface GraduationExcelUploadResponse extends APIResponse { }
+export type GraduationExcelUploadResponse = APIResponse;
 
 export interface GraduationExcelUploadRequest {
   file: File;

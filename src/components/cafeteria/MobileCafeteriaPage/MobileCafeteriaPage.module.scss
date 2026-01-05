@@ -1,0 +1,94 @@
+.type-select {
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+  border-top: 8px solid #f5f5f5;
+  border-bottom: 1px solid #e1e1e1;
+  background-color: #fff;
+
+  &__button {
+    width: 100%;
+    height: 100%;
+    padding: 16px 16px 12px;
+    border-radius: 0;
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    color: #e1e1e1;
+
+    &--selected {
+      border-bottom: 1px solid #10477a;
+      color: #175c8e;
+    }
+  }
+}
+
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &--empty {
+    display: flex;
+    height: 40vh;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  &__caution {
+    margin: 8px 24px 16px;
+    color: #cacaca;
+    font-family: Pretendard, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 15.51px;
+  }
+}
+
+.cafeteria-info {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  z-index: 20;
+  transform: translateX(100%);
+  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+
+  &--open {
+    transform: translateX(0);
+  }
+}
+
+.recommend-banner {
+  padding: 8px 24px;
+  background-color: #fff;
+  color: #4b4b4b;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  box-shadow:
+    0 2px 4px rgb(0 0 0 / 4%),
+    0 1px 1px rgb(0 0 0 / 2%);
+
+  &__text {
+    margin-left: 16px;
+  }
+
+  &__text-main {
+    font-size: 12px;
+    line-height: 160%;
+    font-weight: 500;
+  }
+
+  &__text-sub {
+    color: #d47415;
+    line-height: 160%;
+    font-weight: 600;
+  }
+}

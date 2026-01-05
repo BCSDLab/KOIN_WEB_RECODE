@@ -14,7 +14,6 @@ import {
   CheckPasswordResponse,
   CheckPasswordRequest,
   UpdateAcademicInfoResponse,
-  UpdateAcademicInfoRequest,
   CheckPhoneResponse,
   SmsSendRequest,
   SmsSendResponse,
@@ -50,6 +49,7 @@ import {
   ResetPasswordEmailResponse,
   ResetPasswordEmailRequest,
   GeneralUserUpdateRequest,
+  UpdateAcademicInfoRequest,
 } from './entity';
 
 export class Login<R extends LoginResponse> implements APIRequest<R> {
@@ -61,11 +61,10 @@ export class Login<R extends LoginResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: LoginRequest) { }
+  constructor(public data: LoginRequest) {}
 }
 
-export class NicknameDuplicateCheck<R extends NicknameDuplicateCheckResponse> implements
-  APIRequest<R> {
+export class NicknameDuplicateCheck<R extends NicknameDuplicateCheckResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -88,7 +87,7 @@ export class SignupStudent<R extends SignupStudentResponse> implements APIReques
 
   auth = false;
 
-  constructor(public data: LoginStudentRequest) { }
+  constructor(public data: LoginStudentRequest) {}
 }
 
 export class SignupGeneral<R extends SignupGeneralResponse> implements APIRequest<R> {
@@ -100,7 +99,7 @@ export class SignupGeneral<R extends SignupGeneralResponse> implements APIReques
 
   auth = false;
 
-  constructor(public data: LoginGeneralRequest) { }
+  constructor(public data: LoginGeneralRequest) {}
 }
 
 export class Refresh<R extends RefreshResponse> implements APIRequest<R> {
@@ -112,7 +111,7 @@ export class Refresh<R extends RefreshResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: RefreshRequest) { }
+  constructor(public data: RefreshRequest) {}
 }
 
 export class User<R extends UserResponse> implements APIRequest<R> {
@@ -124,7 +123,7 @@ export class User<R extends UserResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public authorization: string) { }
+  constructor(public authorization: string) {}
 }
 
 export class GeneralUser<R extends GeneralUserResponse> implements APIRequest<R> {
@@ -136,7 +135,7 @@ export class GeneralUser<R extends GeneralUserResponse> implements APIRequest<R>
 
   auth = false;
 
-  constructor(public authorization: string) { }
+  constructor(public authorization: string) {}
 }
 
 // 추후 User 클래스명으로 아래 API로 통일할 것
@@ -149,7 +148,7 @@ export class UserAcademicInfo<R extends UserAcademicInfoResponse> implements API
 
   auth = true;
 
-  constructor(public authorization: string) { }
+  constructor(public authorization: string) {}
 }
 
 export class UpdateUser<R extends UserResponse> implements APIRequest<R> {
@@ -163,7 +162,10 @@ export class UpdateUser<R extends UserResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(public authorization: string, data: UserUpdateRequest) {
+  constructor(
+    public authorization: string,
+    data: UserUpdateRequest,
+  ) {
     this.data = data;
   }
 }
@@ -179,7 +181,10 @@ export class UpdateGeneralUser<R extends GeneralUserResponse> implements APIRequ
 
   auth = true;
 
-  constructor(public authorization: string, data: GeneralUserUpdateRequest) {
+  constructor(
+    public authorization: string,
+    data: GeneralUserUpdateRequest,
+  ) {
     this.data = data;
   }
 }
@@ -193,7 +198,7 @@ export class DeleteUser<R extends DeleteResponse> implements APIRequest<R> {
 
   auth = true;
 
-  constructor(public authorization: string) { }
+  constructor(public authorization: string) {}
 }
 
 export class CheckId<R extends CheckIdResponse> implements APIRequest<R> {
@@ -219,7 +224,7 @@ export class FindPassword<R extends FindPasswordResponse> implements APIRequest<
 
   auth = false;
 
-  constructor(public data: FindPasswordRequest) { }
+  constructor(public data: FindPasswordRequest) {}
 }
 
 export class CheckPassword<R extends CheckPasswordResponse> implements APIRequest<R> {
@@ -233,7 +238,10 @@ export class CheckPassword<R extends CheckPasswordResponse> implements APIReques
 
   data: CheckPasswordRequest;
 
-  constructor(public authorization: string, data: CheckPasswordRequest) {
+  constructor(
+    public authorization: string,
+    data: CheckPasswordRequest,
+  ) {
     this.data = data;
   }
 }
@@ -247,7 +255,10 @@ export class UpdateAcademicInfo<R extends UpdateAcademicInfoResponse> implements
 
   auth = true;
 
-  constructor(public authorization: string, public data: UpdateAcademicInfoRequest) { }
+  constructor(
+    public authorization: string,
+    public data: UpdateAcademicInfoRequest,
+  ) {}
 }
 
 export class CheckPhone<R extends CheckPhoneResponse> implements APIRequest<R> {
@@ -273,7 +284,7 @@ export class SmsSend<R extends SmsSendResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: SmsSendRequest) { }
+  constructor(public data: SmsSendRequest) {}
 }
 
 export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
@@ -285,7 +296,7 @@ export class SmsVerify<R extends SmsVerifyResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: SmsVerifyRequest) { }
+  constructor(public data: SmsVerifyRequest) {}
 }
 
 export class EmailDuplicateCheck<R extends EmailDuplicateCheckResponse> implements APIRequest<R> {
@@ -310,11 +321,10 @@ export class EmailExists<R extends EmailExistsResponse> implements APIRequest<R>
 
   auth = false;
 
-  constructor(public data: EmailExistsRequest) { }
+  constructor(public data: EmailExistsRequest) {}
 }
 
-export class VerificationEmailSend<
-  R extends VerificationEmailSendResponse> implements APIRequest<R> {
+export class VerificationEmailSend<R extends VerificationEmailSendResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/users/verification/email/send';
@@ -323,11 +333,10 @@ export class VerificationEmailSend<
 
   auth = false;
 
-  constructor(public data: VerificationEmailSendRequest) { }
+  constructor(public data: VerificationEmailSendRequest) {}
 }
 
-export class VerificationEmailVerify<
-  R extends VerificationEmailVerifyResponse> implements APIRequest<R> {
+export class VerificationEmailVerify<R extends VerificationEmailVerifyResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
 
   path = '/users/verification/email/verify';
@@ -336,7 +345,7 @@ export class VerificationEmailVerify<
 
   auth = false;
 
-  constructor(public data: VerificationEmailVerifyRequest) { }
+  constructor(public data: VerificationEmailVerifyRequest) {}
 }
 
 export class IdFindEmail<R extends IdFindEmailResponse> implements APIRequest<R> {
@@ -348,7 +357,7 @@ export class IdFindEmail<R extends IdFindEmailResponse> implements APIRequest<R>
 
   auth = false;
 
-  constructor(public data: IdFindEmailRequest) { }
+  constructor(public data: IdFindEmailRequest) {}
 }
 
 export class PhoneExists<R extends PhoneExistsResponse> implements APIRequest<R> {
@@ -360,7 +369,7 @@ export class PhoneExists<R extends PhoneExistsResponse> implements APIRequest<R>
 
   auth = false;
 
-  constructor(public data: PhoneExistsRequest) { }
+  constructor(public data: PhoneExistsRequest) {}
 }
 
 export class IdFindSms<R extends IdFindSmsResponse> implements APIRequest<R> {
@@ -372,7 +381,7 @@ export class IdFindSms<R extends IdFindSmsResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: IdFindSmsRequest) { }
+  constructor(public data: IdFindSmsRequest) {}
 }
 
 export class IdExists<R extends IdExistsResponse> implements APIRequest<R> {
@@ -384,7 +393,7 @@ export class IdExists<R extends IdExistsResponse> implements APIRequest<R> {
 
   auth = false;
 
-  constructor(public data: IdExistsRequest) { }
+  constructor(public data: IdExistsRequest) {}
 }
 
 export class IdMatchPhone<R extends IdMatchPhoneResponse> implements APIRequest<R> {
@@ -396,7 +405,7 @@ export class IdMatchPhone<R extends IdMatchPhoneResponse> implements APIRequest<
 
   auth = false;
 
-  constructor(public data: IdMatchPhoneRequest) { }
+  constructor(public data: IdMatchPhoneRequest) {}
 }
 
 export class IdMatchEmail<R extends IdMatchEmailResponse> implements APIRequest<R> {
@@ -408,7 +417,7 @@ export class IdMatchEmail<R extends IdMatchEmailResponse> implements APIRequest<
 
   auth = false;
 
-  constructor(public data: IdMatchEmailRequest) { }
+  constructor(public data: IdMatchEmailRequest) {}
 }
 
 export class ResetPasswordSms<R extends ResetPasswordSmsResponse> implements APIRequest<R> {
@@ -420,7 +429,7 @@ export class ResetPasswordSms<R extends ResetPasswordSmsResponse> implements API
 
   auth = false;
 
-  constructor(public data: ResetPasswordSmsRequest) { }
+  constructor(public data: ResetPasswordSmsRequest) {}
 }
 
 export class ResetPasswordEmail<R extends ResetPasswordEmailResponse> implements APIRequest<R> {
@@ -432,5 +441,5 @@ export class ResetPasswordEmail<R extends ResetPasswordEmailResponse> implements
 
   auth = false;
 
-  constructor(public data: ResetPasswordEmailRequest) { }
+  constructor(public data: ResetPasswordEmailRequest) {}
 }

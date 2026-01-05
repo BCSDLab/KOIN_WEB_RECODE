@@ -1,34 +1,34 @@
 import { APIResponse } from 'interfaces/APIResponse';
 
 export interface GetArticlesRequest {
-  boardId: string
-  page: string
+  boardId: string;
+  page: string;
 }
 
 export interface Article {
-  id: number
-  board_id: number
-  title: string
-  author: string
-  hit: number
-  registered_at: string // yyyy-MM-dd 아우누리에 게시판에 등록된 날짜
-  updated_at: string // yyyy-MM-dd HH:mm:ss 이하 형식 동일
-  is_reported: boolean
+  id: number;
+  board_id: number;
+  title: string;
+  author: string;
+  hit: number;
+  registered_at: string; // yyyy-MM-dd 아우누리에 게시판에 등록된 날짜
+  updated_at: string; // yyyy-MM-dd HH:mm:ss 이하 형식 동일
+  is_reported: boolean;
 }
 
 export interface Attachment {
-  id: 1,
-  name: string,
-  url: string,
-  created_at: string,
-  updated_at: string,
+  id: 1;
+  name: string;
+  url: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface PaginationInfo {
-  total_count: number
-  current_count: number
-  total_page: number
-  current_page: number
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
 }
 
 export interface PaginatedResponse<T> extends PaginationInfo, APIResponse {
@@ -45,7 +45,7 @@ export interface ArticleResponse extends Article, APIResponse {
   next_id: number;
 }
 
-export interface HotArticle extends Article { }
+export type HotArticle = Article;
 
 export type HotArticlesResponse = HotArticle[];
 
@@ -87,7 +87,7 @@ export interface SingleLostItemArticleResponseDTO extends APIResponse {
   content: string;
   author: string;
   is_council: boolean;
-  is_mine: boolean
+  is_mine: boolean;
   images: ImageDTO[];
   prev_id: number | null;
   next_id: number | null;
@@ -161,7 +161,7 @@ export interface ReportItemArticleRequestDTO {
   }>;
 }
 
-export interface ReportItemArticleResponseDTO extends APIResponse { }
+export type ReportItemArticleResponseDTO = APIResponse;
 
 export interface ItemArticleRequestDTO {
   boardId: number;

@@ -1,0 +1,114 @@
+import { startTransition } from 'react';
+import { cn } from '@bcsdlab/utils';
+import { GradesByCourseType } from 'api/graduationCalculator/entity';
+import useCalculateCredits from 'components/GraduationCalculatorPage/hooks/useCalculateCredits';
+import { Portal } from 'components/modal/Modal/PortalProvider';
+import useGetMultiMajorLecture from 'components/TimetablePage/hooks/useGetMultiMajorLecture';
+import { motion, AnimatePresence } from 'framer-motion';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useModalPortal from 'utils/hooks/layout/useModalPortal';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
+import SemesterLectureListModal from './SemesterLectureListModal';
+import styles from './CreditChart.module.scss';
+
+function CreditChart({ totalGrades }: { totalGrades: number }) {
+  const logger = useLogger();
+  const token = useTokenState();
+  const portalManager = useModalPortal();
+  const { lock, unlock } = useScrollLock(false);
+  const { data: calculateCredits } = useCalculateCredits(token);
+  const { data: multiMajorLecture } = useGetMultiMajorLecture(token);
+
+  const onClickBar = (courseType: string) => {
+    logger.actionEventClick({
+      team: 'USER',
+      event_label: 'graduation_calculator_lectures_list',
+      value: `강의 개설 목록_${courseType}`,
+    });
+    lock();
+    startTransition(() =>
+      portalManager.open((portalOption: Portal) => (
+        <SemesterLectureListModal
+          onClose={() => {
+            portalOption.close();
+            unlock();
+          }}
+          initialCourse={courseType}
+        />
+      )),
+    );
+  };
+
+  const multiMajorGrades = multiMajorLecture?.reduce((sum, item) => sum + Number(item.grades), 0) ?? null;
+
+  const creditList: GradesByCourseType[] = calculateCredits
+    ? [
+        ...calculateCredits.course_types,
+        ...(multiMajorGrades ? [{ course_type: '다전공', required_grades: 0, grades: multiMajorGrades }] : []),
+      ]
+    : [];
+
+  const barsNumber = creditList.length;
+
+  return (
+    <div className={styles['credit-chart']}>
+      <div className={styles['credit-chart__total-grades']}>{`총 학점: ${totalGrades}`}</div>
+      <div className={styles['credit-chart__y-axis']}>
+        {Array.from({ length: 13 }, (_, index) => 60 - index * 5).map((credit, idx) => (
+          <div key={`y-axis-${idx}`} className={styles['credit-chart__y-axis--value']}>
+            <div>{credit}</div>
+            <div className={styles['credit-chart__contour']} />
+          </div>
+        ))}
+      </div>
+      <motion.div
+        layout
+        className={styles['credit-chart__x-axis']}
+        style={{ gridTemplateColumns: `repeat(${barsNumber}, 1fr)` }}
+      >
+        <AnimatePresence>
+          {creditList.map((credit) => (
+            <motion.div
+              key={credit.course_type}
+              className={styles['credit-chart__course']}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              layout
+              onClick={() => onClickBar(credit.course_type)}
+            >
+              <div
+                style={{
+                  height: `${Number(credit.required_grades) * 5}px`,
+                }}
+                className={styles['credit-chart__total-credit']}
+              >
+                <motion.div
+                  style={{
+                    height: `${Number(credit.grades) * 5}px`,
+                  }}
+                  className={cn({
+                    [styles['credit-chart__earned-credit']]: true,
+                    [styles['credit-chart__earned-credit--full']]: credit.required_grades - credit.grades < 2,
+                  })}
+                  initial={{ height: '0%' }}
+                  animate={{ height: `${credit.grades * 5}px` }}
+                  transition={{ duration: 0.5 }}
+                  layout
+                />
+                <div className={styles['credit-chart__credit-status']}>
+                  {`${credit.grades} ${credit.required_grades ? `/ ${credit.required_grades}` : ''}`}
+                </div>
+              </div>
+              <div className={styles['credit-chart__x-axis--name']}>{credit.course_type}</div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+      <div className={styles['credit-chart__description']}>다전공은 학점계산에 적용되지 않아요.</div>
+    </div>
+  );
+}
+
+export default CreditChart;

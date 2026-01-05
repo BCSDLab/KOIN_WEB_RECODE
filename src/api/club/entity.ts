@@ -25,7 +25,7 @@ export interface Club {
   likes: number;
   image_url: string;
   is_liked: boolean;
-  is_like_hidden:boolean;
+  is_like_hidden: boolean;
   recruitment_info: {
     status: 'NONE' | 'BEFORE' | 'RECRUITING' | 'CLOSED' | 'ALWAYS';
     dday: number;
@@ -55,12 +55,11 @@ export interface NewClubData {
   google_form?: string;
   open_chat?: string;
   phone_number?: string;
-  role:string;
-  is_like_hidden:boolean;
+  role: string;
+  is_like_hidden: boolean;
 }
 
-export interface PostClubResponse extends APIResponse {
-}
+export type PostClubResponse = APIResponse;
 
 export interface ClubDetailResponse extends APIResponse {
   id: number;
@@ -77,6 +76,7 @@ export interface ClubDetailResponse extends APIResponse {
   phone_number: string | null;
   manager: boolean;
   is_liked: boolean;
+  is_recruit_subscribed: boolean;
   updated_at: string;
   is_like_hidden: boolean;
   hot_status?: {
@@ -86,12 +86,12 @@ export interface ClubDetailResponse extends APIResponse {
   } | null;
 }
 
-export type PutClubLikeResonse = APIResponse;
+export type PutClubLikeResponse = APIResponse;
 
-export type DeleteClubLikeResonse = APIResponse;
+export type DeleteClubLikeResponse = APIResponse;
 
-export interface ClubInroductionData {
-  introduction : string;
+export interface ClubIntroductionData {
+  introduction: string;
 }
 
 export interface ClubQnAData {
@@ -112,8 +112,8 @@ export interface ClubQnAItem {
 }
 
 export interface ClubNewQnA {
-  parent_id: number | null,
-  content: string
+  parent_id: number | null;
+  content: string;
 }
 
 export type PostClubQnAResponse = APIResponse;

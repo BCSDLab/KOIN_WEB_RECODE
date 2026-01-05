@@ -30,11 +30,7 @@ export function getCalendarDates(year: number, month: number): CalendarCell[] {
   const nextMonthStart = new Date(year, month + 1, 1);
   while (dates.length % 7 !== 0) {
     dates.push({
-      date: new Date(
-        nextMonthStart.getFullYear(),
-        nextMonthStart.getMonth(),
-        dates.length - lastDate - startDay + 1,
-      ),
+      date: new Date(nextMonthStart.getFullYear(), nextMonthStart.getMonth(), dates.length - lastDate - startDay + 1),
       currentMonth: false,
     });
   }
@@ -58,9 +54,11 @@ export function formatISODateTime(date: Date, hour: number, minute: number) {
 }
 
 export function isSameDate(date1: Date, date2: Date): boolean {
-  return date1.getFullYear() === date2.getFullYear()
-    && date1.getMonth() === date2.getMonth()
-    && date1.getDate() === date2.getDate();
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
 }
 
 export function getYyyyMmDd(date: Date): string {

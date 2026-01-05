@@ -5,7 +5,7 @@ interface OptionCategory {
   img_code: string;
 }
 
-const OPTION_CATEGORY:OptionCategory[] = [
+const OPTION_CATEGORY: OptionCategory[] = [
   {
     id: 1,
     name: '에어컨',
@@ -102,7 +102,6 @@ const OPTION_CATEGORY:OptionCategory[] = [
     img_url: 'https://static.koreatech.in/assets/ic-room/ic-elevator.png',
     img_code: 'opt_elevator',
   },
-
 ];
 
 export default OPTION_CATEGORY;

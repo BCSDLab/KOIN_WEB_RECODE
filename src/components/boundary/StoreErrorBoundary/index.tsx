@@ -1,7 +1,7 @@
-import React, { ErrorInfo } from 'react';
-import { AxiosError } from 'axios';
-import showToast from 'utils/ts/showToast';
+import React from 'react';
 import { isKoinError } from '@bcsdlab/koin';
+import axios, { AxiosError } from 'axios';
+import showToast from 'utils/ts/showToast';
 import styles from './StoreErrorBoundary.module.scss';
 
 interface Props {
@@ -14,8 +14,10 @@ interface State {
   status?: number;
 }
 
-function isAxiosError(error: AxiosError<any, any> | Error): error is AxiosError<any, any> {
-  return ('response' in error);
+type AppError = Error | AxiosError<unknown, unknown>;
+
+function isAxiosError(error: AppError): error is AxiosError<unknown, unknown> {
+  return axios.isAxiosError(error);
 }
 
 export default class StoreErrorBoundary extends React.Component<Props, State> {
@@ -24,18 +26,17 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
     this.state = { hasError: false };
   }
 
-  // 이후에 사용시 해제
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static getDerivedStateFromError(error: Error) {
     if (isKoinError(error) || isAxiosError(error)) {
-      return { hasError: true, status: error.status };
+      // AxiosError는 status가 response?.status에 있음
+      const status = isAxiosError(error) ? error.response?.status : (error as unknown as { status?: number }).status;
+
+      return { hasError: true, status };
     }
     return { hasError: true };
   }
 
-  // 이후에 사용시 해제
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  componentDidCatch(error: Error, __: ErrorInfo) {
+  componentDidCatch(error: Error) {
     showToast('error', error.message);
   }
 
@@ -47,11 +48,7 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
       return (
         <div className={styles.container}>
           <h1>존재하지 않는 상점입니다.</h1>
-          <button
-            className={styles.button}
-            type="button"
-            onClick={onErrorClick}
-          >
+          <button className={styles.button} type="button" onClick={onErrorClick}>
             상점 목록
           </button>
         </div>

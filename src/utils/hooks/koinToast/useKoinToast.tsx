@@ -11,9 +11,7 @@ export const useKoinToast = () => {
   const portalManager = useModalPortal();
 
   const openToast = ({ message, ms }: Props) => {
-    portalManager.open((portal: Portal) => (
-      <KoinToast close={portal.close} message={message} ms={ms} />
-    ));
+    portalManager.open((portal: Portal) => <KoinToast close={portal.close} message={message} ms={ms} />);
   };
 
   return openToast;

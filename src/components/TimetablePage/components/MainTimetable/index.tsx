@@ -1,0 +1,116 @@
+import React from 'react';
+import { useRouter } from 'next/router';
+import DownloadIcon from 'assets/svg/download-icon.svg';
+import GraduationIcon from 'assets/svg/graduation-icon.svg';
+import EditIcon from 'assets/svg/pen-icon.svg';
+import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
+import Curriculum from 'components/TimetablePage/components/Curriculum';
+import Timetable from 'components/TimetablePage/components/Timetable';
+import TotalGrades from 'components/TimetablePage/components/TotalGrades';
+import useMyLectures from 'components/TimetablePage/hooks/useMyLectures';
+import useSemesterCheck from 'components/TimetablePage/hooks/useMySemester';
+import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
+import { toast } from 'react-toastify';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
+import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import { useSemester } from 'utils/zustand/semester';
+import DownloadTimetableModal from './DownloadTimetableModal';
+import styles from './MyLectureTimetable.module.scss';
+
+function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
+  const [isModalOpen, openModal, closeModal] = useBooleanState(false);
+  const token = useTokenState();
+  const semester = useSemester();
+  const logger = useLogger();
+  const router = useRouter();
+  const { data: timeTableFrameList } = useTimetableFrameList(token, semester);
+  const { myLectures } = useMyLectures(timetableFrameId);
+  const { data: deptList } = useDeptList();
+  const { data: mySemester } = useSemesterCheck(token);
+
+  const isSemesterAndTimetableExist = () => {
+    if (mySemester?.semesters.length === 0) {
+      toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
+      return false;
+    }
+
+    if (timeTableFrameList.length === 0) {
+      toast.error('시간표가 존재하지 않습니다. 시간표를 추가해주세요.');
+      return false;
+    }
+
+    return true;
+  };
+
+  const onClickDownloadImage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+
+    if (isSemesterAndTimetableExist()) {
+      logger.actionEventClick({
+        team: 'USER',
+        event_label: 'timetable',
+        value: '이미지저장',
+        duration_time: (new Date().getTime() - Number(sessionStorage.getItem('enterTimetablePage'))) / 1000,
+      });
+      openModal();
+    }
+  };
+
+  const onClickEdit = () => {
+    if (isSemesterAndTimetableExist()) {
+      router.push(
+        `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'regular', isLink: true })}&year=${semester?.year}&term=${semester?.term}`,
+      );
+    }
+  };
+
+  return (
+    <div className={styles['page__timetable-wrap']}>
+      <div className={styles.page__filter}>
+        <div className={styles['page__total-grades']}>
+          <TotalGrades myLectureList={myLectures} />
+        </div>
+        <button
+          type="button"
+          className={styles.page__button}
+          onClick={() => {
+            router.push('/graduation');
+            logger.actionEventClick({
+              team: 'USER',
+              event_label: 'graduation_calculator',
+              value: '졸업학점 계산기',
+            });
+          }}
+        >
+          <GraduationIcon />
+          졸업학점 계산기
+        </button>
+        <Curriculum list={deptList} />
+        <button type="button" className={styles.page__button} onClick={onClickDownloadImage}>
+          <DownloadIcon />
+          이미지 저장
+        </button>
+        <button type="button" className={styles.page__button} onClick={onClickEdit}>
+          <div className={styles['page__edit-icon']}>
+            <EditIcon />
+          </div>
+          시간표 수정
+        </button>
+      </div>
+      <div className={styles.page__timetable}>
+        <Timetable
+          timetableFrameId={timetableFrameId}
+          columnWidth={140}
+          firstColumnWidth={70}
+          rowHeight={33}
+          totalHeight={700}
+        />
+      </div>
+      <div>{isModalOpen && <DownloadTimetableModal onClose={closeModal} timetableFrameId={timetableFrameId} />}</div>
+    </div>
+  );
+}
+
+export default MainTimetable;

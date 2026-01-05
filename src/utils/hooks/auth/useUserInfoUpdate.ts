@@ -1,13 +1,10 @@
-import { AxiosError } from 'axios';
-import * as api from 'api';
-import showToast from 'utils/ts/showToast';
-import {
-  UserUpdateRequest,
-  GeneralUserUpdateRequest,
-} from 'api/auth/entity';
-import useTokenState from 'utils/hooks/state/useTokenState';
 import { useMutation } from '@tanstack/react-query';
+import * as api from 'api';
+import { UserUpdateRequest, GeneralUserUpdateRequest } from 'api/auth/entity';
+import { AxiosError } from 'axios';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import useTokenState from 'utils/hooks/state/useTokenState';
+import showToast from 'utils/ts/showToast';
 
 interface UserUpdateOption {
   onSuccess?: () => void;
@@ -16,22 +13,18 @@ interface UserUpdateOption {
 
 type UserType = 'STUDENT' | 'GENERAL';
 
-const useUserInfoUpdate = <T = unknown>(
-  userType: UserType,
-  options: UserUpdateOption = {},
-) => {
+const useUserInfoUpdate = <T = unknown>(userType: UserType, options: UserUpdateOption = {}) => {
   const token = useTokenState();
   const logger = useLogger();
   const { status, mutate } = useMutation<
-  T,
-  AxiosError<{ message?: string }>,
-  UserUpdateRequest | GeneralUserUpdateRequest
+    T,
+    AxiosError<{ message?: string }>,
+    UserUpdateRequest | GeneralUserUpdateRequest
   >({
-    mutationFn: (data) => (
+    mutationFn: (data) =>
       userType === 'STUDENT'
-        ? api.auth.updateUser(token, data as UserUpdateRequest) as Promise<T>
-        : api.auth.updateGeneralUser(token, data as GeneralUserUpdateRequest) as Promise<T>
-    ),
+        ? (api.auth.updateUser(token, data as UserUpdateRequest) as Promise<T>)
+        : (api.auth.updateGeneralUser(token, data as GeneralUserUpdateRequest) as Promise<T>),
     onSuccess: () => {
       options.onSuccess?.();
       logger.actionEventClick({

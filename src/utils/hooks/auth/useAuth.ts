@@ -1,23 +1,27 @@
 import { useMutation } from '@tanstack/react-query';
 import { refresh } from 'api/auth';
-import { setCookie } from 'utils/ts/cookie';
+import { getCookieDomain, setCookie } from 'utils/ts/cookie';
+import { isomorphicLocalStorage } from 'utils/ts/env';
 import { useTokenStore } from 'utils/zustand/auth';
 
 const useAuth = () => {
   const { setToken, setRefreshToken } = useTokenStore.getState();
 
   const getRefreshToken = () => {
-    const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
+    const refreshTokenStorage = isomorphicLocalStorage.getItem('refresh-token-storage');
     return refreshTokenStorage && JSON.parse(refreshTokenStorage).state.refreshToken;
   };
 
   const { mutateAsync: refreshAccessToken } = useMutation({
-    mutationFn: async (refresh_token : string) => {
+    mutationFn: async (refresh_token: string) => {
       const response = await refresh({ refresh_token });
       return response;
     },
     onSuccess: (response) => {
-      setCookie('AUTH_TOKEN_KEY', response.token);
+      const domain = getCookieDomain();
+      const options = domain ? ({ domain, path: '/' } as const) : ({ path: '/' } as const);
+
+      setCookie('AUTH_TOKEN_KEY', response.token, options);
       setToken(response.token);
     },
     onError: () => {

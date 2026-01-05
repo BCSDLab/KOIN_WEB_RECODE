@@ -23,7 +23,6 @@
     float: right;
     text-align: right;
     text-decoration: none;
-    font-family: NanumSquare, serif;
     line-height: 1.35;
     font-size: 15px;
     color: #a0d2f6;
@@ -48,7 +47,6 @@
     border: none;
     color: #a0d2f6;
     text-decoration: none;
-    font-family: NanumSquare, serif;
     line-height: 1.35;
     font-size: 15px;
     cursor: pointer;
@@ -79,7 +77,6 @@
     font-weight: 700;
     font-size: 17px;
     text-align: left;
-    font-family: NanumSquare, serif;
     line-height: 1;
     color: #fff;
     cursor: pointer;
@@ -87,6 +84,7 @@
 
     & > span {
       padding: 31px 0 30px;
+      font-family: Pretendard, sans-serif;
     }
 
     &:hover,

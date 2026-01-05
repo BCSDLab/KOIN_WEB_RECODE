@@ -2,25 +2,25 @@ import { useRef } from 'react';
 import * as gtag from 'lib/gtag';
 
 type ActionLoggerProps = {
-  team: string,
-  event_label: string,
-  value: string,
-  event_category?: string,
-  previous_page?: string,
-  current_page?: string,
-  duration_time?: number,
-  custom_session_id?: string,
+  team: string;
+  event_label: string;
+  value: string;
+  event_category?: string;
+  previous_page?: string;
+  current_page?: string;
+  duration_time?: number;
+  custom_session_id?: string;
 };
 
 type LoggerEventProps = {
-  team: string,
-  event_category: string,
-  event_label: string,
-  value: string,
-  duration_time?: number,
-  previous_page?: string,
-  current_page?: string,
-  custom_session_id?: string,
+  team: string;
+  event_category: string;
+  event_label: string;
+  value: string;
+  duration_time?: number;
+  previous_page?: string;
+  current_page?: string;
+  custom_session_id?: string;
 };
 
 const useLogger = () => {
@@ -61,7 +61,14 @@ const useLogger = () => {
     custom_session_id,
   }: ActionLoggerProps) => {
     logEvent({
-      team, event_category: event_category || 'click', event_label, value, duration_time, previous_page, current_page, custom_session_id,
+      team,
+      event_category: event_category || 'click',
+      event_label,
+      value,
+      duration_time,
+      previous_page,
+      current_page,
+      custom_session_id,
     });
   };
 
@@ -74,7 +81,13 @@ const useLogger = () => {
     current_page,
   }: ActionLoggerProps) => {
     logEvent({
-      team, event_category: 'swipe', event_label, value, duration_time, previous_page, current_page,
+      team,
+      event_category: 'swipe',
+      event_label,
+      value,
+      duration_time,
+      previous_page,
+      current_page,
     });
   };
 
@@ -89,7 +102,14 @@ const useLogger = () => {
     custom_session_id,
   }: ActionLoggerProps) => {
     logEvent({
-      team, event_category: event_category || 'entry', event_label, value, duration_time, previous_page, current_page, custom_session_id,
+      team,
+      event_category: event_category || 'entry',
+      event_label,
+      value,
+      duration_time,
+      previous_page,
+      current_page,
+      custom_session_id,
     });
   };
 

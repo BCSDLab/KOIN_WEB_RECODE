@@ -7,8 +7,8 @@ type State = {
 
 type Action = {
   action: {
-    updateTempLecture: (tempLecture: State['tempLecture']) => void
-  }
+    updateTempLecture: (tempLecture: State['tempLecture']) => void;
+  };
 };
 
 const useTempLectureStore = create<State & Action>((set, get) => ({

@@ -1,5 +1,5 @@
-import CloseIcon from 'assets/svg/close-icon-black.svg';
 import { useEffect } from 'react';
+import CloseIcon from 'assets/svg/close-icon-black.svg';
 import styles from './AlertModal.module.scss';
 
 interface AlertModalProps {
@@ -9,9 +9,7 @@ interface AlertModalProps {
   onConfirm: () => void;
 }
 
-export default function AlertModal({
-  title, description, onClose, onConfirm,
-}: AlertModalProps) {
+export default function AlertModal({ title, description, onClose, onConfirm }: AlertModalProps) {
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -38,18 +36,15 @@ export default function AlertModal({
       <div className={styles.modal}>
         <div className={styles.modal__header}>
           <h1 className={styles.modal__title}>{title}</h1>
-          <div
-            className={styles['modal__close-icon']}
-            onClick={onClose}
-            role="button"
-            aria-hidden
-          >
+          <div className={styles['modal__close-icon']} onClick={onClose} role="button" aria-hidden>
             <CloseIcon />
           </div>
         </div>
         <p className={styles.modal__description}>{description}</p>
         <div className={styles['modal__button-group']}>
-          <button type="button" className={styles['modal__close-button']} onClick={onClose}>취소</button>
+          <button type="button" className={styles['modal__close-button']} onClick={onClose}>
+            취소
+          </button>
           <button
             type="button"
             className={styles['modal__confirm-button']}

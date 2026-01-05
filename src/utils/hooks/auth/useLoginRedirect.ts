@@ -1,20 +1,15 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  setRedirectPath,
-  getRedirectPath,
-  clearRedirectPath,
-  redirectToLogin,
-} from 'utils/ts/auth';
+import { useRouter } from 'next/router';
+import { setRedirectPath, getRedirectPath, clearRedirectPath, redirectToLogin } from 'utils/ts/auth';
 
 const isSafeExternalRedirect = (url: string) => {
   try {
     const u = new URL(url);
 
     return (
-      u.hostname === 'order.koreatech.in'
-      || u.hostname === 'order.stage.koreatech.in'
-      || u.hostname === 'koreatech.in'
-      || u.hostname.endsWith('.koreatech.in')
+      u.hostname === 'order.koreatech.in' ||
+      u.hostname === 'order.stage.koreatech.in' ||
+      u.hostname === 'koreatech.in' ||
+      u.hostname.endsWith('.koreatech.in')
     );
   } catch {
     return false;
@@ -22,36 +17,32 @@ const isSafeExternalRedirect = (url: string) => {
 };
 
 export function useLoginRedirect() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
 
   const navigateToFallback = () => {
     const redirectPath = getRedirectPath() || '/';
     clearRedirectPath();
-    navigate(redirectPath, { replace: true });
+    router.replace(redirectPath);
   };
 
   const redirectAfterLogin = () => {
-    const searchParams = new URLSearchParams(location.search);
-    const redirect = searchParams.get('redirect');
+    const { redirect } = router.query;
 
-    if (!redirect) {
+    if (typeof redirect !== 'string' || redirect.length === 0) {
       navigateToFallback();
       return;
     }
 
     const isAbsoluteUrl = redirect.startsWith('http://') || redirect.startsWith('https://');
 
-    if (isAbsoluteUrl) {
-      if (isSafeExternalRedirect(redirect)) {
-        window.location.href = redirect;
-      } else {
-        navigateToFallback();
-      }
-      return;
+    if (!isAbsoluteUrl) return;
+    if (isSafeExternalRedirect(redirect)) {
+      window.location.href = redirect;
+    } else {
+      navigateToFallback();
     }
 
-    navigate(redirect, { replace: true });
+    router.replace(redirect);
   };
 
   return {

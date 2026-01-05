@@ -8,7 +8,7 @@ export type DepartArrivalPlace = 'KOREATECH' | 'STATION' | 'TERMINAL';
 export type Depart = DepartArrivalPlace;
 export type Arrival = DepartArrivalPlace;
 
-export type Direction = 'from' | 'to';
+export type DirectionType = 'from' | 'to';
 
 export type CourseBusType = 'shuttle' | 'commuting' | 'express';
 
@@ -22,14 +22,20 @@ export interface ExpressCourse extends Course {
 
 export interface Course {
   bus_type: CourseBusType;
-  direction: Direction;
+  direction: DirectionType;
   region: string;
 }
 
-export interface CityBusParams {
+export interface CityBusParams {   // API 요청용
   bus_number: number;
   direction: string;
 }
+
+export type CityCourse = {         // UI용
+  bus_number: number;              // ex. 400
+  direction: string;               // ex. 병천3리
+  direction_type: DirectionType;   // ex. to
+};
 
 export type CourseResponse = Course[];
 
@@ -53,7 +59,7 @@ export interface RouteInfo {
   bus_timetables: {
     route_name: string;
     arrival_info: ArrivalInfo[];
-  }[],
+  }[];
   updated_at: string;
 }
 
@@ -75,7 +81,7 @@ export interface BusRouteInfo {
   bus_timetables: {
     route_name: string;
     arrival_info: ArrivalInfo[];
-  }[],
+  }[];
   updated_at: string;
 }
 
@@ -121,24 +127,24 @@ export interface ShuttleCourseResponse {
     name: string;
     from: string;
     to: string;
-  }
+  };
 }
 
 export interface ShuttleTimetableDetailInfoResponse {
-  id: string,
-  region: string,
-  route_type: string,
-  route_name: string,
-  sub_name: null,
+  id: string;
+  region: string;
+  route_type: string;
+  route_name: string;
+  sub_name: null;
   node_info: {
-    name: string,
-    detail: string,
-  }[],
+    name: string;
+    detail: string;
+  }[];
   route_info: {
-    name: string,
-    detail: string,
-    arrival_time: string[],
-  }[],
+    name: string;
+    detail: string;
+    arrival_time: string[];
+  }[];
 }
 
 export interface BusRouteParams {
