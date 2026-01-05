@@ -10,22 +10,27 @@ import useDinings from 'components/cafeteria/hooks/useDinings';
 import { DiningTime } from 'components/cafeteria/utils/time';
 import { DINING_TYPE_MAP, PLACE_ORDER } from 'static/cafeteria';
 import ROUTES from 'static/routes';
+import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import useLogger from 'utils/hooks/analytics/useLogger';
+import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
+import useTokenState from 'utils/hooks/state/useTokenState';
 import { isomorphicLocalStorage } from 'utils/ts/env';
 import styles from './IndexCafeteria.module.scss';
 
 function IndexCafeteria() {
   const diningTime = new DiningTime();
-
   const router = useRouter();
   const isMobile = useMediaQuery();
   const logger = useLogger();
+  const sessionLogger = useSessionLogger();
   const { dinings } = useDinings(diningTime.generateDiningDate());
 
   const [selectedPlace, setSelectedPlace] = useState<DiningPlace>('A코너');
   const [isTooltipOpen, openTooltip, closeTooltip] = useBooleanState(false);
+  const token = useTokenState();
+  const designVariant = useABTestView('dining_store', token);
 
   const selectedDining = dinings.find(
     (dining) => dining.place === selectedPlace && dining.type === diningTime.getType(),
@@ -37,11 +42,25 @@ function IndexCafeteria() {
       event_label: 'main_menu_moveDetailView',
       value: `${diningTime.isTodayDining() ? '오늘' : '내일'} 식단`,
     });
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining2shop_1',
+      value: designVariant,
+      event_category: 'a/b test 로깅(메인화면 식단 진입)',
+      session_name: 'dining2shop',
+      session_lifetime_minutes: 30,
+    });
     router.push(ROUTES.Cafeteria());
   };
 
   const handlePlaceClick = (place: DiningPlace) => {
     logger.actionEventClick({ team: 'CAMPUS', event_label: 'main_menu_corner', value: place });
+    sessionLogger.actionSessionEvent({
+      event_label: 'dining2shop_1',
+      value: designVariant,
+      event_category: 'a/b test 로깅(메인화면 식단 진입)',
+      session_name: 'dining2shop',
+      session_lifetime_minutes: 30,
+    });
     setSelectedPlace(place);
   };
 

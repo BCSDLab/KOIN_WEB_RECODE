@@ -1197,7 +1197,7 @@ function ModifyInfoDefaultPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      openModal();
+      navigate(ROUTES.Main(), { replace: true });
     }
   }, [isAuthenticated, openModal]);
 

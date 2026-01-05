@@ -20,6 +20,11 @@ export default function RouteList({ timeSelect, busType, depart, arrival }: Rout
     depart,
     arrival,
   });
+  const isReady = Boolean(depart) && Boolean(arrival);
+
+  if (!isReady) {
+    return null;
+  }
 
   if (!data) return null;
 
