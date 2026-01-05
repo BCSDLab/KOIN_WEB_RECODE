@@ -28,9 +28,10 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
       return;
     }
 
-    saveImgFile().then((res) => {
-      setImages([...images, ...res!]);
-    });
+    const res = await saveImgFile();
+    if (res && res.length > 0) {
+      setImages([...images, ...res]);
+    }
   };
 
   const deleteImage = (url: string) => {

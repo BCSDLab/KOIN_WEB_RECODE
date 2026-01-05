@@ -1,38 +1,77 @@
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { UploadImage } from './entity';
+import axios from 'axios';
+import { HTTP_METHOD } from 'interfaces/APIRequest';
+import APIClient from 'utils/ts/apiClient';
+import { FileData, UploadURLResponse } from './entity';
 
-export class BaseUploadFile<R extends UploadImage> implements APIRequest<R> {
-  method = HTTP_METHOD.POST;
+const API_DOMAIN = process.env.NEXT_PUBLIC_API_PATH ?? '';
 
-  response!: R;
+type UploadableFile = File | Blob;
 
-  auth = true;
+export const getPresignedUrl = (domain: string, fileData: FileData, path: string, authorization?: string) =>
+  APIClient.request({
+    method: HTTP_METHOD.POST,
+    path: path,
+    baseURL: domain,
+    data: fileData,
+    headers: authorization ? { Authorization: `Bearer ${authorization}` } : {},
+    response: {} as UploadURLResponse,
+  });
 
-  data: FormData;
+export const uploadToS3 = async (presignedUrl: string, file: Blob) => {
+  await axios.put(presignedUrl, file, {
+    headers: { 'Content-Type': file.type },
+    withCredentials: false,
+  });
+};
 
-  constructor(
-    public authorization: string,
-    formData: FormData,
-    public path: string,
-  ) {
-    this.data = formData;
+export const uploadFile = async (
+  domain: string,
+  file: UploadableFile,
+  path: string,
+  authorization?: string,
+): Promise<{
+  file_url: string;
+  expiration_date: string;
+}> => {
+  const fileName = file instanceof File && file.name ? file.name : 'blob';
+  const fileData: FileData = {
+    content_length: file.size,
+    content_type: file.type || 'application/octet-stream',
+    file_name: fileName,
+  };
+
+  const { pre_signed_url, file_url, expiration_date } = await getPresignedUrl(domain, fileData, path, authorization);
+
+  await uploadToS3(pre_signed_url, file);
+
+  return { file_url, expiration_date };
+};
+
+const getFileNameFromType = (type: string | undefined) => {
+  if (!type) return 'blob';
+  const extension = type.split('/')[1] || 'blob';
+  return `upload.${extension}`;
+};
+
+const uploadWithPresignedUrl = async (authorization: string, formData: FormData, path: string) => {
+  const file = formData.get('multipartFile');
+  if (!(file instanceof Blob)) {
+    throw new Error('File not found in formData');
   }
-}
 
-export class ShopUploadFile<R extends UploadImage> extends BaseUploadFile<R> {
-  constructor(authorization: string, formData: FormData) {
-    super(authorization, formData, 'SHOPS/upload/file');
-  }
-}
+  const normalizedFile =
+    file instanceof File && file.name
+      ? file
+      : new File([file], getFileNameFromType(file.type), { type: file.type || 'application/octet-stream' });
 
-export class LostItemUploadFile<R extends UploadImage> extends BaseUploadFile<R> {
-  constructor(authorization: string, formData: FormData) {
-    super(authorization, formData, 'LOST_ITEMS/upload/file');
-  }
-}
+  return uploadFile(API_DOMAIN, normalizedFile, path, authorization);
+};
 
-export class ClubUploadFile<R extends UploadImage> extends BaseUploadFile<R> {
-  constructor(authorization: string, formData: FormData) {
-    super(authorization, formData, 'CLUB/upload/file');
-  }
-}
+export const uploadShopFile = async (authorization: string, formData: FormData) =>
+  uploadWithPresignedUrl(authorization, formData, 'SHOPS/upload/url');
+
+export const uploadLostItemFile = async (authorization: string, formData: FormData) =>
+  uploadWithPresignedUrl(authorization, formData, 'ITEMS/upload/url');
+
+export const uploadClubFile = async (authorization: string, formData: FormData) =>
+  uploadWithPresignedUrl(authorization, formData, 'CLUB/upload/url');
