@@ -95,7 +95,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     props: {
       dehydratedState: dehydrate(queryClient),
       initialQuery: params,
-      serverToken: token,
+      serverToken: token ?? null,
     },
   };
 };
