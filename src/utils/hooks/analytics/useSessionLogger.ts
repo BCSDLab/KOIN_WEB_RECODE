@@ -14,7 +14,7 @@ export const LOGIN_STATUS = {
   LOGOUT: 0,
   LOGIN: 1,
 } as const;
-export type LoginStatus = typeof LOGIN_STATUS[keyof typeof LOGIN_STATUS];
+export type LoginStatus = (typeof LOGIN_STATUS)[keyof typeof LOGIN_STATUS];
 
 const PLATFORM = 'WEB';
 
