@@ -35,7 +35,7 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
         setImages([...images, ...res]);
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
+      if (error instanceof UploadError) {
         showToast('error', error.message);
       }
     }
