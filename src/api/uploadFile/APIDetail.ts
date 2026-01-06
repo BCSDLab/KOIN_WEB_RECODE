@@ -40,9 +40,19 @@ export const uploadFile = async (
     file_name: fileName,
   };
 
-  const { pre_signed_url, file_url, expiration_date } = await getPresignedUrl(domain, fileData, path, authorization);
+  const response = await getPresignedUrl(domain, fileData, path, authorization);
 
-  await uploadToS3(pre_signed_url, file);
+  if (!response.pre_signed_url || !response.file_url || !response.expiration_date) {
+    throw new Error('업로드에 필요한 presigned URL을 받아오지 못했습니다.');
+  }
+
+  const { pre_signed_url, file_url, expiration_date } = response;
+
+  try {
+    await uploadToS3(pre_signed_url, file);
+  } catch {
+    throw new Error('업로드에 실패했습니다.');
+  }
 
   return { file_url, expiration_date };
 };
