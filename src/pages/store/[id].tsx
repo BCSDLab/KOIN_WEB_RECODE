@@ -43,7 +43,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       notFound: true,
     };
   }
-  // 리뷰는 토큰(클라이언트 상태)에 의존하고 있어 prefetch 불가
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ['storeDetail', storeId],
@@ -52,6 +51,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     queryClient.prefetchQuery({
       queryKey: ['storeDetailMenu', storeId],
       queryFn: () => getStoreDetailMenu(storeId),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['review', storeId, 'LATEST'],
+      queryFn: () => getReviewList(Number(storeId), 1, 'LATEST'),
     }),
   ]);
 
@@ -90,7 +93,7 @@ function StoreDetailPage({ id }: Props) {
           queryFn: () => getStoreDetailMenu(id),
         }),
         queryClient.fetchQuery({
-          queryKey: ['review'],
+          queryKey: ['review', id, 'LATEST'],
           queryFn: () => getReviewList(Number(id), 1, 'LATEST', token),
         }),
       ]),
