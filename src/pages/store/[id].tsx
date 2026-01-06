@@ -53,6 +53,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       queryKey: ['storeDetailMenu', storeId],
       queryFn: () => getStoreDetailMenu(storeId),
     }),
+    queryClient.prefetchQuery({
+      queryKey: ['review', storeId, 'LATEST'],
+      queryFn: () => getReviewList(Number(storeId), 1, 'LATEST'),
+    }),
   ]);
 
   await queryClient.prefetchQuery({
@@ -90,8 +94,8 @@ function StoreDetailPage({ id }: Props) {
           queryFn: () => getStoreDetailMenu(id),
         }),
         queryClient.fetchQuery({
-          queryKey: ['review'],
-          queryFn: () => getReviewList(Number(id), 1, 'LATEST', token),
+          queryKey: ['review', id, 'LATEST'],
+          queryFn: () => getReviewList(Number(id), 1, 'LATEST'),
         }),
       ]),
   });
