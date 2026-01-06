@@ -28,9 +28,15 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
       return;
     }
 
-    const res = await saveImgFile();
-    if (res && res.length > 0) {
-      setImages([...images, ...res]);
+    try {
+      const res = await saveImgFile();
+      if (res && res.length > 0) {
+        setImages([...images, ...res]);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        showToast('error', error.message);
+      }
     }
   };
 
