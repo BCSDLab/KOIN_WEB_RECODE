@@ -1,10 +1,11 @@
 import { type Dispatch, type SetStateAction, useState } from 'react';
+import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import { ClubRecruitment } from 'api/club/entity';
 import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import imageResize from 'utils/ts/imageResize';
 import showToast from 'utils/ts/showToast';
 import styles from './ImageUploader.module.scss';
@@ -26,8 +27,10 @@ export default function ClubImageUploader({ formData, setFormData }: ClubImageUp
     try {
       const images = await saveImgFile();
       if (images) setFormData({ ...formData, image_url: images[0] });
-    } catch {
-      showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch (error: unknown) {
+      if (error instanceof UploadError) {
+        showToast('error', error.message);
+      }
     }
   };
 
@@ -60,11 +63,20 @@ export default function ClubImageUploader({ formData, setFormData }: ClubImageUp
       <div className={styles['form-image__preview']}>
         <button
           type="button"
-          className={styles['form-image__img__box']}
+          className={styles['form-image__img-box']}
           onClick={clearImage}
           aria-label="이미지 클릭 시 삭제"
         >
-          <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
+          <span className={styles['form-image__img-wrapper']}>
+            <Image
+              className={styles['form-image__img']}
+              key={formData.image_url}
+              src={formData.image_url}
+              alt="동아리 이미지 미리보기"
+              fill
+              priority
+            />
+          </span>
         </button>
       </div>
     );

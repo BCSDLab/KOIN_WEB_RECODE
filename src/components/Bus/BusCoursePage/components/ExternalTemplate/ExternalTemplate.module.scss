@@ -41,8 +41,20 @@
   }
 }
 
+.timetable-exception {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+
+  @include media.media-breakpoint(mobile) {
+    justify-content: left;
+    margin-left: 24px;
+  }
+}
+
 .timetable-content {
   width: 100%;
+  min-height: 32px;
   display: flex;
   gap: 16px;
   justify-content: center;
@@ -61,6 +73,7 @@
   &__am {
     flex: 1;
     width: 100%;
+    min-height: 20px;
     color: #ffc62b;
     text-align: center;
     padding: 16px 0;
@@ -79,6 +92,7 @@
   &__pm {
     flex: 1;
     width: 100%;
+    min-height: 20px;
     color: #3a70e2;
     text-align: center;
     padding: 16px 0;

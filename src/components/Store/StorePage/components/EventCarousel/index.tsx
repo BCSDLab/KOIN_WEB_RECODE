@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import LeftBracket from 'assets/svg/left-angle-bracket.svg';
 import RightBracket from 'assets/svg/right-angle-bracket.svg';
@@ -8,6 +9,8 @@ import useLogger from 'utils/hooks/analytics/useLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useCarouselController } from './hooks/useCarouselController';
 import styles from './EventCarousel.module.scss';
+
+const PLACEHOLDER_IMAGE = 'https://static.koreatech.in/assets/img/rectangle_icon.png';
 
 interface CardProps {
   shop_id: number;
@@ -29,6 +32,8 @@ function Card({ shop_id, event_id, shop_name, thumbnail_images }: CardProps) {
     router.push(`${ROUTES.StoreDetail({ id: String(shop_id), isLink: true })}?state=이벤트/공지`);
   };
 
+  const hasThumbnail = thumbnail_images && thumbnail_images.length > 0;
+
   return (
     <button
       type="button"
@@ -37,13 +42,15 @@ function Card({ shop_id, event_id, shop_name, thumbnail_images }: CardProps) {
       onClick={() => handleClick()}
       disabled={shop_id === 0}
     >
-      {thumbnail_images && thumbnail_images.length > 0 ? (
+      {hasThumbnail ? (
         <div className={styles['swipe-item__image']}>
-          <img src={thumbnail_images[0]} alt="가게 이미지" />
+          <div className={styles['swipe-item__imageInner']}>
+            <Image src={thumbnail_images[0]} alt="가게 이미지" fill />
+          </div>
         </div>
       ) : (
         <div className={styles['swipe-item__empty-image']}>
-          <img src="http://static.koreatech.in/assets/img/rectangle_icon.png" alt="썸네일 없음" />
+          <Image src={PLACEHOLDER_IMAGE} alt="썸네일 없음" width={90} height={90} />
         </div>
       )}
       <div className={styles['swipe-item__text']}>
@@ -68,7 +75,7 @@ export default function EventCarousel() {
     shop_id: 0,
     event_id: 0,
     shop_name: '코인',
-    thumbnail_images: ['http://static.koreatech.in/assets/img/rectangle_icon.png'],
+    thumbnail_images: [PLACEHOLDER_IMAGE],
   };
 
   const editedEvents = (() => {

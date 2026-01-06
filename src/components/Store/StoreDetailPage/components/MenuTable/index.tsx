@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import { MenuCategory } from 'api/store/entity';
 import EmptyImageIcon from 'assets/svg/empty-thumbnail.svg';
@@ -48,8 +49,8 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
   const scrollToTarget = (name: string) => {
     const element = document.getElementById(name);
     if (element) {
-      const elementPosistion = element.getBoundingClientRect().top;
-      const categoryPosition = elementPosistion + window.scrollY - headerOffset;
+      const elementPosition = element.getBoundingClientRect().top;
+      const categoryPosition = elementPosition + window.scrollY - headerOffset;
 
       window.scrollTo({
         top: categoryPosition,
@@ -88,7 +89,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
             (category) =>
               category.name === menuCategories.name && (
                 <div className={styles.menu__title} key={category.id}>
-                  <img src={category.img} alt={category.name} />
+                  <Image src={category.img} alt={category.name} width={24} height={24} />
                   {menuCategories.name}
                 </div>
               ),
@@ -109,7 +110,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                       type="button"
                       onClick={() => onClickImage(menu.image_urls, 0)}
                     >
-                      <img src={`${menu.image_urls[0]}`} alt={`${menu.name}`} />
+                      <Image src={menu.image_urls[0]} alt={menu.name} width={75} height={80} />
                     </button>
                   </div>
                 ) : (
@@ -134,7 +135,7 @@ function MenuTable({ storeMenuCategories, onClickImage }: MenuTableProps) {
                         type="button"
                         onClick={() => onClickImage(menu.image_urls, 0)}
                       >
-                        <img src={`${menu.image_urls[0]}`} alt={`${menu.name}`} />
+                        <Image src={menu.image_urls[0]} alt={menu.name} width={75} height={80} />
                       </button>
                     </div>
                   )}

@@ -16,6 +16,8 @@
 }
 
 .event-thumbnail {
+  position: relative;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,6 +35,18 @@
     @include media.media-breakpoint(mobile) {
       width: 100%;
     }
+  }
+
+  &__img--cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__img--contain {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 }
 
@@ -79,6 +93,7 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 
   &--nonHidden {
     display: block;
@@ -113,9 +128,10 @@
 }
 
 .default-event-thumbnail-img {
+  position: relative;
   margin: 0 auto;
   width: 50%;
-  height: auto;
+  aspect-ratio: 11 / 9;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;

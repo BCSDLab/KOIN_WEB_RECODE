@@ -1,19 +1,22 @@
 import { useEffect, useRef } from 'react';
 
-function useNaverMap(latitude: number, longitude: number) {
+function useNaverMap(latitude: number, longitude: number, isLoaded: boolean = true) {
   const mapRef = useRef<naver.maps.Map | null>(null);
 
   useEffect(() => {
+    if (!isLoaded || !window.naver?.maps) return;
+    if (!document.getElementById('map')) return;
+
     if (!mapRef.current) {
-      const mapInstance = new naver.maps.Map('map', {
-        center: new naver.maps.LatLng(latitude, longitude),
+      const mapInstance = new window.naver.maps.Map('map', {
+        center: new window.naver.maps.LatLng(latitude, longitude),
         maxZoom: 20,
         minZoom: 15,
         logoControl: false,
         zoomControl: true,
         scrollWheel: false,
         draggable: true,
-        zoomControlOptions: { position: naver.maps.Position.TOP_LEFT },
+        zoomControlOptions: { position: window.naver.maps.Position.TOP_LEFT },
       });
       mapRef.current = mapInstance;
 
@@ -23,8 +26,8 @@ function useNaverMap(latitude: number, longitude: number) {
       };
     }
 
-    mapRef.current.setCenter(new naver.maps.LatLng(latitude, longitude));
-  }, [latitude, longitude]);
+    mapRef.current.setCenter(new window.naver.maps.LatLng(latitude, longitude));
+  }, [isLoaded, latitude, longitude]);
 
   const getMap = () => mapRef.current;
 

@@ -1,6 +1,19 @@
 @use "src/utils/scss/media" as media;
 
 .form-image {
+  &__img__wrapper {
+    position: relative;
+    width: 100%;
+    height: 270px;
+  }
+
+  &__img__button {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
   &__input {
     display: none;
   }

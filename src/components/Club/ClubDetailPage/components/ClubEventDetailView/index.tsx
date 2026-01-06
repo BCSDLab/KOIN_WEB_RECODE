@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import NextImageIcon from 'assets/svg/Club/next-image-icon.svg';
@@ -134,27 +135,35 @@ export default function ClubEventDetailView({ clubId, eventId, setEventId, isMan
           {formatDateTimeByDevice(clubEventDetail.end_date, isMobile)} 까지
         </div>
       )}
-      <div {...(isMobile ? swipeHandlers : {})} className={styles['event-detail__image__container']}>
+      <div {...(isMobile ? swipeHandlers : {})} className={styles['event-detail__image-container']}>
         {clubEventDetail.image_urls.length > 0 && (
           <>
             {!isMobile && (
-              <div
-                className={styles['event-detail__image__counter']}
-              >{`${selectImage + 1} / ${clubEventDetail.image_urls.length}`}</div>
+              <div className={styles['event-detail__image-counter']}>
+                {`${selectImage + 1} / ${clubEventDetail.image_urls.length}`}
+              </div>
             )}
-            <img
-              className={styles['event-detail__image']}
-              src={clubEventDetail.image_urls[selectImage]}
-              alt={clubEventDetail.name}
-            />
+
+            <div className={styles['event-detail__image-wrapper']}>
+              <Image
+                className={styles['event-detail__image']}
+                key={clubEventDetail.image_urls[selectImage]}
+                src={clubEventDetail.image_urls[selectImage]}
+                alt={clubEventDetail.name}
+                fill
+                sizes={isMobile ? '100vw' : '800px'}
+                priority={selectImage === 0}
+              />
+            </div>
+
             {isMobile ? (
-              <div className={styles['event-detail__image__marker__container']}>
+              <div className={styles['event-detail__image-marker-container']}>
                 {clubEventDetail.image_urls.map((_, index) => (
                   <div
                     key={clubEventDetail.image_urls[index]}
                     className={cn({
-                      [styles['event-detail__image__marker']]: true,
-                      [styles['event-detail__image__marker--active']]: selectImage === index,
+                      [styles['event-detail__image-marker']]: true,
+                      [styles['event-detail__image-marker--active']]: selectImage === index,
                     })}
                   />
                 ))}
@@ -163,7 +172,7 @@ export default function ClubEventDetailView({ clubId, eventId, setEventId, isMan
               <>
                 <button
                   type="button"
-                  className={styles['event-detail__image__pre-button']}
+                  className={styles['event-detail__image-pre-button']}
                   aria-label="이전 이미지"
                   onClick={handlePrevButtonClick}
                 >
@@ -171,7 +180,7 @@ export default function ClubEventDetailView({ clubId, eventId, setEventId, isMan
                 </button>
                 <button
                   type="button"
-                  className={styles['event-detail__image__next-button']}
+                  className={styles['event-detail__image-next-button']}
                   aria-label="다음 이미지"
                   onClick={handleNextButtonClick}
                 >

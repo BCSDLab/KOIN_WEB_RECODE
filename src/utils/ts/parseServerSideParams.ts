@@ -1,16 +1,19 @@
 import type { GetServerSidePropsContext } from 'next';
+import { getValidToken } from './auth';
+import type { ParsedUrlQuery } from 'querystring';
 
 interface ParsedParams {
-  token: string;
-  query: Record<string, any>;
+  token: string | undefined;
+  query: ParsedUrlQuery;
 }
 
 export const parseServerSideParams = (context: GetServerSidePropsContext): ParsedParams => {
   const { req } = context;
-  const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+  const token = req.cookies['AUTH_TOKEN_KEY'] || undefined;
+  const validToken = getValidToken(token);
 
   return {
-    token,
+    token: validToken,
     query: context.query,
   };
 };
@@ -25,7 +28,7 @@ export const parseQueryNumber = (
 ): number | null => {
   if (!value) return defaultValue;
   const parsed = Number(value);
-  return isNaN(parsed) ? defaultValue : parsed;
+  return Number.isNaN(parsed) ? defaultValue : parsed;
 };
 
 export const parseQueryBoolean = (value: string | string[] | undefined, defaultValue: boolean = false): boolean => {
@@ -40,12 +43,14 @@ type QueryParserConfig<T> = {
   };
 };
 
-export const createQueryParser = <T extends Record<string, any>>(config: QueryParserConfig<T>) => {
-  return (query: GetServerSidePropsContext['query']): T => {
+export const createQueryParser = <T extends object>(config: QueryParserConfig<T>) => {
+  return (query: ParsedUrlQuery): T => {
     const result = {} as T;
 
-    for (const [key, { parser, defaultValue }] of Object.entries(config)) {
-      result[key as keyof T] = query[key] ? parser(query[key]) : (defaultValue ?? parser(undefined));
+    for (const [key, configValue] of Object.entries(config)) {
+      const { parser, defaultValue } = configValue as QueryParserConfig<T>[keyof T];
+      const queryValue = query[key];
+      result[key as keyof T] = queryValue ? parser(queryValue) : (defaultValue ?? parser(undefined));
     }
 
     return result;

@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* 푸터 로고/아이콘은 작은 정적 이미지라 Next/Image 최적화 이득이 작아 img 유지 */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
@@ -83,7 +85,14 @@ function Footer(): JSX.Element {
         )}
         <div className={styles.sitemap}>
           <Link className={styles.sitemap__logo} href={ROUTES.Main()}>
-            <img src="https://static.koreatech.in/assets/img/logo_white.png" alt="KOIN service logo" />
+            <img
+              src="https://static.koreatech.in/assets/img/logo_white.png"
+              alt="KOIN service logo"
+              width={72}
+              height={41}
+              loading="lazy"
+              decoding="async"
+            />
           </Link>
           {!isMobile ? (
             <ul className={styles.sitemap__content}>
@@ -145,10 +154,24 @@ function Footer(): JSX.Element {
               target="_blank"
               rel="noreferrer"
             >
-              <img src="https://static.koreatech.in/upload/fead6221d535ff547d4801081ee8f2e3.png" alt="facebook" />
+              <img
+                src="https://static.koreatech.in/upload/fead6221d535ff547d4801081ee8f2e3.png"
+                alt="facebook"
+                width={14}
+                height={30}
+                loading="lazy"
+                decoding="async"
+              />
             </a>
             <Link className={styles['sitemap__icon-link']} href={ROUTES.Main()}>
-              <img src="https://static.koreatech.in/upload/1aae9a021f0338527c28e5c3d0518fa1.png" alt="home" />
+              <img
+                src="https://static.koreatech.in/upload/1aae9a021f0338527c28e5c3d0518fa1.png"
+                alt="home"
+                width={25}
+                height={30}
+                loading="lazy"
+                decoding="async"
+              />
             </Link>
           </div>
           <span className={styles.sitemap__copyright}>

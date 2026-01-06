@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { getRelateSearch } from 'api/store';
 import { RelatedSearchResponse } from 'api/store/entity';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
+import DesktopSearchIcon from 'assets/svg/Store/search-icon.svg';
 import RelateSearchItem from 'components/Store/StorePage/components/RelateSearchItem';
 import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -73,13 +74,17 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
               }
             }}
             onFocus={() => {
-              const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
-              if (categories)
-                logger.actionEventClick({
-                  team: 'BUSINESS',
-                  event_label: 'shop_categories_search',
-                  value: `search in ${categories.shop_categories[currentCategoryId]?.name || '전체보기'}`,
-                });
+              const currentCategoryId = Number(params.category); // 검색창에 포커스되면 로깅
+              if (categories) {
+                logger.actionEventClick(
+                  {
+                    team: 'BUSINESS',
+                    event_label: 'shop_categories_search',
+                    value: `search in ${categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기'
+                    }`,
+                  },
+                );
+              }
             }}
           />
           <button className={styles['search-bar-modal__icon']} type="button" onClick={handleSearch}>
@@ -88,11 +93,7 @@ export default function SearchBarModal({ onClose }: SearchBarModalProps) {
                 <MobileSearchIcon />
               </div>
             ) : (
-              <img
-                className={styles['search-icon']}
-                src="https://static.koreatech.in/assets/img/search.png"
-                alt="store_icon"
-              />
+              <DesktopSearchIcon />
             )}
           </button>
         </div>

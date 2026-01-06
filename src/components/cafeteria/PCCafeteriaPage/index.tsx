@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
 import { DiningType } from 'api/dinings/entity';
+import ArrowBackNewIcon from 'assets/svg/arrow-back-new.svg';
 import LowerArrow from 'assets/svg/lower-angle-bracket.svg';
+import StoreCtaIcon from 'assets/svg/Store/store-cta-icon.svg';
 import UpperArrow from 'assets/svg/upper-angle-bracket.svg';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import Suspense from 'components/ssr/SSRSuspense';
@@ -28,10 +30,9 @@ const getWeekAgo = () => {
 interface PCCafeteriaPageProps {
   diningType: DiningType;
   setDiningType: (diningType: DiningType) => void;
-  designVariant: string;
 }
 
-function PCCafeteriaComponent({ diningType, setDiningType, designVariant }: PCCafeteriaPageProps) {
+function PCCafeteriaComponent({ diningType, setDiningType }: PCCafeteriaPageProps) {
   const { currentDate, checkToday, checkTomorrow } = useDatePicker();
   const [dropdownOpen, , closeDropdown, toggleDropdown] = useBooleanState(false);
   const logger = useLogger();
@@ -103,14 +104,18 @@ function PCCafeteriaComponent({ diningType, setDiningType, designVariant }: PCCa
       <div>
         <DateNavigator />
       </div>
-      {designVariant === 'variant' && (
-        <div className={styles['recommend-banner']}>
-          <p className={styles['recommend-banner__text-main']}>오늘 학식 메뉴가 별로라면?</p>
-          <button type="button" className={styles['recommend-banner__button']} onClick={handleDiningToStore}>
-            <p className={styles['recommend-banner__text-button']}>주변상점 보기</p>
-          </button>
-        </div>
-      )}
+      <>
+        <button type="button" className={styles['recommend-banner']} onClick={handleDiningToStore}>
+          <div className={styles['recommend-banner__left']}>
+            <StoreCtaIcon />
+            <p className={styles['recommend-banner__text-left']}>오늘의 학식이 별로라면?</p>
+          </div>
+          <div className={styles['recommend-banner__right']}>
+            <p className={styles['recommend-banner__text-right']}>내 주변 음식점 보기</p>
+            <ArrowBackNewIcon className={styles['recommend-banner__arrow']} />
+          </div>
+        </button>
+      </>
       <div className={styles['pc-menu-blocks']}>
         <Suspense fallback={<div />}>
           <PCDiningBlocks diningType={diningType} isThisWeek={isThisWeek} />
@@ -121,10 +126,10 @@ function PCCafeteriaComponent({ diningType, setDiningType, designVariant }: PCCa
   );
 }
 
-export default function PCCafeteriaPage({ diningType, setDiningType, designVariant }: PCCafeteriaPageProps) {
+export default function PCCafeteriaPage({ diningType, setDiningType }: PCCafeteriaPageProps) {
   return (
     <Suspense fallback={<div />}>
-      <PCCafeteriaComponent diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
+      <PCCafeteriaComponent diningType={diningType} setDiningType={setDiningType} />
     </Suspense>
   );
 }

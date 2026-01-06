@@ -20,7 +20,7 @@ export interface LostItemArticlesForGet {
   currentPage: number;
 }
 
-export interface Image {
+export interface ArticleImage {
   id: number;
   imageUrl: string;
 }
@@ -36,7 +36,7 @@ export interface SingleLostItemArticle {
   author: string;
   is_council: boolean;
   is_mine: boolean;
-  images: Image[];
+  images: ArticleImage[];
   prevId: number | null;
   nextId: number | null;
   registeredAt: string; // yyyy-MM-dd

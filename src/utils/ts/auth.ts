@@ -31,3 +31,18 @@ export function redirectToClub(currentPath?: string) {
   setRedirectPath(pathToSave);
   window.location.href = ROUTES.Club();
 }
+
+export function isTokenExpired(token: string): boolean {
+  try {
+    const payload = token.split('.')[1];
+    const decoded = JSON.parse(atob(payload));
+    return decoded.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+
+export function getValidToken(token: string | null | undefined): string | undefined {
+  if (!token) return undefined;
+  return isTokenExpired(token) ? undefined : token;
+}

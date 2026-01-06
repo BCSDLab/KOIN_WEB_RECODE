@@ -13,7 +13,7 @@ function useDinings(date: Date) {
 
   const { data: dinings } = useSuspenseQuery({
     queryKey: [DININGS_KEY, convertedDate],
-    queryFn: async () => cafeteria.default(convertedDate, token),
+    queryFn: async () => cafeteria.default(convertedDate),
     select: (data) => {
       if ('status' in data || !Array.isArray(data)) {
         return [];

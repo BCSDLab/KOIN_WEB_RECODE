@@ -8,15 +8,14 @@ import qsStringify from 'utils/ts/qsStringfy';
 import { useTokenStore } from 'utils/zustand/auth';
 import { useServerStateStore } from 'utils/zustand/serverState';
 import { redirectToClub, redirectToLogin } from './auth';
-import { deleteCookie, setCookie } from './cookie';
+import { deleteCookie, getCookieDomain, setCookie } from './cookie';
 import { saveTokensToNative } from './iosBridge';
 
 const API_URL = process.env.NEXT_PUBLIC_API_PATH;
 
-type Constructor<T> = new (...args: any[]) => T;
+type Constructor<T> = new (...args: never[]) => T;
 
-// eslint-disable-next-line
-type ResponseType<T> = T extends APIRequest<infer T> ? T : never;
+type ResponseType<T> = T extends APIRequest<infer U> ? U : never;
 
 export default class APIClient {
   // API Client Singleton
@@ -27,8 +26,11 @@ export default class APIClient {
   }
 
   /** API를 받아서 호출할 수 있는 함수로 변환합니다. */
-  static toCallable<T extends Constructor<any>, U extends InstanceType<T>, R extends ResponseType<U>>(api: T) {
-    return (...args: ConstructorParameters<T>) => APIClient.request<R>(new api(...args));
+  static toCallable<T extends Constructor<APIRequest<APIResponse>>>(api: T) {
+    return (...args: ConstructorParameters<T>) =>
+      APIClient.request<ResponseType<InstanceType<T>>>(
+        new api(...args) as unknown as APIRequest<ResponseType<InstanceType<T>>>,
+      );
   }
 
   /** API를 호출할 수 있는 함수로 변환합니다. `toCallable`의 alias */
@@ -59,7 +61,7 @@ export default class APIClient {
           const response = request.parse ? request.parse(data) : this.parse<U>(data);
           resolve(response);
         })
-        .catch(async (err) => {
+        .catch(async (err: unknown) => {
           if (axios.isAxiosError(err) && err.response?.status === 503) {
             useServerStateStore.getState().setMaintenance(true);
             reject(err);
@@ -76,10 +78,10 @@ export default class APIClient {
               }
             }
 
-            const apiError = this.createKoinErrorFromAxiosError(err);
+            const apiError = this.createKoinErrorFromAxiosError(err as AxiosError<KoinError>);
             reject(apiError);
           } catch {
-            const apiError = this.createKoinErrorFromAxiosError(err);
+            const apiError = this.createKoinErrorFromAxiosError(err as AxiosError<KoinError>);
             reject(apiError);
           }
         });
@@ -100,7 +102,9 @@ export default class APIClient {
     // 새 refresh 요청을 진행
     this.refreshPromise = APIClient.refresh({ refresh_token: refreshToken })
       .then((result) => {
-        setCookie('AUTH_TOKEN_KEY', result.token);
+        const domain = getCookieDomain();
+
+        setCookie('AUTH_TOKEN_KEY', result.token, domain ? { domain: domain } : undefined);
         useTokenStore.getState().setToken(result.token);
 
         if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
@@ -126,7 +130,7 @@ export default class APIClient {
     await this.refreshPromise;
   }
 
-  private convertBody(data: any) {
+  private convertBody(data: unknown) {
     return JSON.stringify(data);
   }
 
@@ -141,59 +145,62 @@ export default class APIClient {
       const originalRequest = error.config;
       const newToken = useTokenStore.getState().token;
 
-      if (originalRequest.headers) {
+      if (originalRequest?.headers) {
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
       }
 
       // 재요청 실행 및 결과 반환
-      return await axios(originalRequest);
+      return await axios(originalRequest!);
     } catch (retryError) {
       return Promise.reject(retryError);
     }
   }
 
   private async errorMiddleware(error: AxiosError): Promise<AxiosResponse | null> {
+    if (typeof window === 'undefined') return null;
+
     if (error.response?.status === 401) {
-      deleteCookie('AUTH_TOKEN_KEY');
-      const refreshTokenStorage = localStorage.getItem('refresh-token-storage');
-      if (refreshTokenStorage) {
-        const refreshToken = JSON.parse(refreshTokenStorage);
-        // refreshToken이 존재할 시 accessToken 재발급 요청
-        if (refreshToken.state.refreshToken !== '') {
-          try {
-            await this.refreshAccessToken(refreshToken.state.refreshToken);
-            const retryResponse = await this.retryRequest(error);
-            return retryResponse;
-          } catch {
-            if (typeof window !== 'undefined' && window.webkit?.messageHandlers != null) {
-              useTokenStore.getState().setToken('');
-              useTokenStore.getState().setRefreshToken('');
-              saveTokensToNative('', ''); // 네이티브 상태도 동기화
-            }
-            return null;
-          }
+      const domain = getCookieDomain();
+      deleteCookie('AUTH_TOKEN_KEY'); // 배포 후 기존 도메인 없는 쿠키들의 하위 호환성을 위해 임시 유지
+      deleteCookie('AUTH_TOKEN_KEY', domain ? { domain } : undefined);
+
+      try {
+        const storage = window.localStorage.getItem('refresh-token-storage');
+        const refreshToken = storage
+          ? (JSON.parse(storage) as { state: { refreshToken: string } }).state.refreshToken
+          : null;
+
+        if (refreshToken) {
+          await this.refreshAccessToken(refreshToken);
+          return await this.retryRequest(error);
         }
-        redirectToLogin();
+      } catch {
+        useTokenStore.getState().setToken('');
+        useTokenStore.getState().setRefreshToken('');
+        if (window.webkit?.messageHandlers != null) {
+          saveTokensToNative('', '');
+        }
       }
+
+      redirectToLogin();
+      return null;
     }
 
-    if (error.response?.status === 403 && useTokenStore.getState().token) {
+    if (error.response?.status === 403) {
       const currentToken = useTokenStore.getState().token;
       if (currentToken) {
         try {
-          const response = await axios.get(`${this.baseURL}/user/auth`, {
-            headers: {
-              Authorization: `Bearer ${currentToken}`,
-            },
+          const response = await axios.get<{ user_type: 'STUDENT' | 'GENERAL' }>(`${this.baseURL}/user/auth`, {
+            headers: { Authorization: `Bearer ${currentToken}` },
           });
           useTokenStore.getState().setUserType(response.data.user_type);
-          const retryResponse = await this.retryRequest(error);
-          return retryResponse;
+          return await this.retryRequest(error);
         } catch {
           return null;
         }
       }
     }
+
     return null;
   }
 
@@ -225,7 +232,7 @@ export default class APIClient {
   }
 
   // Create headers
-  private createHeaders<U extends APIResponse>(request: APIRequest<U>): any {
+  private createHeaders<U extends APIResponse>(request: APIRequest<U>): Record<string, string> {
     const headers: Record<string, string> = {};
     // 인증 토큰 삽입
     if (request.authorization) {

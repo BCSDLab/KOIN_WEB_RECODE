@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
+import { GetServerSidePropsContext } from 'next';
+import { dehydrate, DehydratedState, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { cafeteria, coopshop } from 'api';
 import { DiningType } from 'api/dinings/entity';
 import { useDatePicker } from 'components/cafeteria/hooks/useDatePicker';
 import MobileCafeteriaPage from 'components/cafeteria/MobileCafeteriaPage';
 import PCCafeteriaPage from 'components/cafeteria/PCCafeteriaPage';
-import { DiningTime } from 'components/cafeteria/utils/time';
+import { convertDateToSimpleString, DiningTime } from 'components/cafeteria/utils/time';
 import { useABTestView } from 'utils/hooks/abTest/useABTestView';
 import { useSessionLogger } from 'utils/hooks/analytics/useSessionLogger';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -11,7 +14,35 @@ import useTokenState from 'utils/hooks/state/useTokenState';
 import useScrollToTop from 'utils/hooks/ui/useScrollToTop';
 import styles from './Cafeteria.module.scss';
 
-function CafeteriaPage() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const queryClient = new QueryClient();
+  const { date } = context.query;
+
+  const currentDate = date ? new Date(Array.isArray(date) ? date[0] : date) : new Date();
+
+  const convertedDate = convertDateToSimpleString(currentDate);
+
+  await queryClient.prefetchQuery({
+    queryKey: ['DININGS_KEY', convertedDate],
+    queryFn: async () => {
+      const data = await cafeteria.default(convertedDate);
+      return data;
+    },
+  });
+
+  await queryClient.prefetchQuery({
+    queryKey: ['COOPSHOP_CAFETERIA_KEY'],
+    queryFn: () => coopshop.getCafeteriaInfo(),
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+}
+
+function Cafeteria() {
   const isMobile = useMediaQuery();
   const [diningType, setDiningType] = useState<DiningType>(new DiningTime().getType());
   const { currentDate } = useDatePicker();
@@ -35,13 +66,19 @@ function CafeteriaPage() {
     <div className={styles.page}>
       <div className={styles.page__content} key={currentDate().toISOString()}>
         {isMobile ? (
-          <MobileCafeteriaPage diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
+          <MobileCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
         ) : (
-          <PCCafeteriaPage diningType={diningType} setDiningType={setDiningType} designVariant={designVariant} />
+          <PCCafeteriaPage diningType={diningType} setDiningType={setDiningType} />
         )}
       </div>
     </div>
   );
 }
 
-export default CafeteriaPage;
+export default function CafeteriaPage({ dehydratedState }: { dehydratedState: DehydratedState }) {
+  return (
+    <HydrationBoundary state={dehydratedState}>
+      <Cafeteria />
+    </HydrationBoundary>
+  );
+}

@@ -182,9 +182,9 @@ export default function ClubDetailPage({ initialClubId, initialTab, initialEvent
 
   const syncUrlQuery = (nextLabel: TabLabel, extra?: Record<string, string | number | undefined>) => {
     const tabKey = TAB[nextLabel] ?? 'intro';
-    const nextQuery = { ...router.query, tab: tabKey, ...extra };
+    const nextQuery: Record<string, string | number | undefined> = { ...router.query, tab: tabKey, ...extra };
 
-    if (tabKey !== 'event') delete (nextQuery as any).eventId;
+    if (tabKey !== 'event') delete nextQuery.eventId;
 
     router.replace({ pathname: router.pathname, query: nextQuery }, undefined, {
       shallow: true,

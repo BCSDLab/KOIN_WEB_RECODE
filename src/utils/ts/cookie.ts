@@ -1,3 +1,5 @@
+import { COOKIE_DOMAIN } from 'static/url';
+
 type SameSite = 'lax' | 'strict' | 'none';
 
 export interface CookieOptions {
@@ -9,6 +11,8 @@ export interface CookieOptions {
   sameSite?: SameSite;
   secure?: boolean;
 }
+
+type CookieValue = string | number | boolean;
 
 const isBrowser = () => typeof document !== 'undefined';
 
@@ -46,7 +50,7 @@ function buildCookieString(name: string, value: string, options: CookieOptions =
   return parts.join('; ');
 }
 
-export function setCookie(name: string, val: any, dayOrOptions?: number | CookieOptions) {
+export function setCookie(name: string, val: CookieValue, dayOrOptions?: number | CookieOptions) {
   if (!isBrowser()) return;
 
   const value = String(val);
@@ -81,3 +85,12 @@ export function deleteCookie(name: string, opts?: Pick<CookieOptions, 'path' | '
   };
   document.cookie = buildCookieString(name, '', options);
 }
+
+export const getCookieDomain = () => {
+  if (typeof window === 'undefined') return undefined;
+
+  const { hostname } = window.location;
+  if (hostname === 'localhost') return undefined;
+
+  return COOKIE_DOMAIN;
+};

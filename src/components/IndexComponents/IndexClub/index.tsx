@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { HotClubResponse } from 'api/club/entity';
 import AddIcon from 'assets/svg/Club/add-icon.svg';
@@ -81,7 +82,17 @@ function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
             {clubLinkCardData.slice(0, 2).map(({ key, title, subtitle, link, icon, img }) => (
               <Link href={link} key={key} className={styles.card} onClick={() => handleClickLog(key)}>
                 <div className={styles.card__segment}>
-                  {icon ?? <img src={img} alt="title" />}
+                  {icon ?? (
+                    <Image
+                      src={img}
+                      alt={title}
+                      width={60}
+                      height={60}
+                      sizes="60px"
+                      className={styles.card__thumb}
+                      priority={key === 'popularClub'}
+                    />
+                  )}
                   <div className={styles.card__guide}>
                     <span className={styles.card__title}>{title}</span>
                     <span className={styles.card__subtitle}>{subtitle}</span>
@@ -111,7 +122,16 @@ function IndexClub({ hotClubInfo }: { hotClubInfo: HotClubResponse }) {
               }}
             >
               <div className={styles.card__segment}>
-                {icon ?? <img src={img} alt="title" />}
+                {icon ?? (
+                  <Image
+                    className={styles.card__thumb}
+                    src={img}
+                    alt={title}
+                    width={60}
+                    height={60}
+                    priority={key === 'popularClub'}
+                  />
+                )}
                 <div className={styles.card__guide}>
                   <span className={styles.card__title}>{title}</span>
                   <span className={styles.card__subtitle}>{subtitle}</span>

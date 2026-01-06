@@ -1,3 +1,5 @@
+// 리팩토링 작업중이라 임시로 비활성화
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Suspense, useEffect, useImperativeHandle, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -23,6 +25,7 @@ import CustomSelector from 'components/Auth/SignupPage/components/CustomSelector
 import useDeptList from 'components/Auth/SignupPage/hooks/useDeptList';
 import useNicknameDuplicateCheck from 'components/Auth/SignupPage/hooks/useNicknameDuplicateCheck';
 import LoadingSpinner from 'components/feedback/LoadingSpinner';
+import Layout from 'components/layout';
 import { Portal } from 'components/modal/Modal/PortalProvider';
 import { REGEX, STORAGE_KEY, COMPLETION_STATUS } from 'static/auth';
 import ROUTES from 'static/routes';
@@ -1194,7 +1197,7 @@ function ModifyInfoDefaultPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      openModal();
+      router.replace(ROUTES.Main());
     }
   }, [isAuthenticated, openModal]);
 
@@ -1314,5 +1317,6 @@ function ModifyInfoPage() {
 }
 
 ModifyInfoPage.requireAuth = true;
+ModifyInfoPage.getLayout = (page: React.ReactNode) => <Layout hideLayout>{page}</Layout>;
 
 export default ModifyInfoPage;

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import { Dining } from 'api/dinings/entity';
 import NoMeals from 'assets/svg/no-meals-pc.svg';
@@ -32,7 +33,18 @@ export default function PCMealImage({ dining, isThisWeek, handleImageClick }: PC
           품절된 메뉴입니다.
         </span>
       )}
-      {hasImage ? <img src={dining.image_url!} alt="식단 상세" /> : <NoPhoto />}
+      {hasImage ? (
+        <Image
+          src={dining.image_url!}
+          alt="식단 상세"
+          width={252}
+          height={158}
+          sizes="252px"
+          className={styles.image__img}
+        />
+      ) : (
+        <NoPhoto />
+      )}
     </button>
   );
 }

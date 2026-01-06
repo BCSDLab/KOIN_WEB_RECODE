@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { refresh } from 'api/auth';
-import { setCookie } from 'utils/ts/cookie';
+import { getCookieDomain, setCookie } from 'utils/ts/cookie';
 import { isomorphicLocalStorage } from 'utils/ts/env';
 import { useTokenStore } from 'utils/zustand/auth';
 
@@ -18,7 +18,10 @@ const useAuth = () => {
       return response;
     },
     onSuccess: (response) => {
-      setCookie('AUTH_TOKEN_KEY', response.token);
+      const domain = getCookieDomain();
+      const options = domain ? ({ domain, path: '/' } as const) : ({ path: '/' } as const);
+
+      setCookie('AUTH_TOKEN_KEY', response.token, options);
       setToken(response.token);
     },
     onError: () => {

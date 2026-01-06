@@ -1,58 +1,40 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getBusTimetableInfo, getCityBusTimetableInfo } from 'api/bus';
 import {
-  BusRouteInfo as ShuttleInfo,
   CityBusParams,
   CityInfo,
-  Course,
   ExpressCourse,
-  ExpressInfo,
   ShuttleCourse,
 } from 'api/bus/entity';
+import useMount from 'utils/hooks/state/useMount';
 
 const TIMETABLE_KEY = 'timetable';
-
-interface ShuttleTimetable {
-  info: ShuttleInfo;
-  type: 'shuttle';
-}
-
-interface ExpressTimetable {
-  info: ExpressInfo;
-  type: 'express';
-}
 
 interface CityTimetable {
   info: CityInfo;
   type: 'city';
 }
 
-function useBusTimetable(course: ShuttleCourse): ShuttleTimetable;
+export function useClientShuttleTimetable(course: ShuttleCourse) {
+  const isMount = useMount();
 
-function useBusTimetable(course: ExpressCourse): ExpressTimetable;
-
-function useBusTimetable(course: Course): ShuttleTimetable | ExpressTimetable | undefined {
-  const { bus_type: busType, direction: busDirection, region: busRegion } = course;
-
-  const { data } = useSuspenseQuery({
-    queryKey: [TIMETABLE_KEY, busType, busDirection, busRegion] as const,
-    queryFn: ({ queryKey: [, bus_type, direction, region] }) => getBusTimetableInfo({ bus_type, direction, region }),
-    select: (response) => {
-      if (busType === 'express') {
-        return {
-          info: response as ExpressInfo,
-          type: 'express' as const,
-        };
-      }
-
-      return {
-        info: response as ShuttleInfo,
-        type: 'shuttle' as const,
-      };
-    },
+  return useQuery({
+    queryKey: ['timetable', 'shuttle', course.direction, course.region],
+    queryFn: () => getBusTimetableInfo(course),
+    enabled: isMount,
   });
+}
 
-  return data;
+export function useExpressTimetable(course: ExpressCourse) {
+  return useQuery({
+    queryKey: ['timetable', 'express', course.direction, course.region],
+    queryFn: () =>
+      getBusTimetableInfo({
+        bus_type: course.bus_type,
+        direction: course.direction,
+        region: course.region,
+      }),
+  });
 }
 
 export function useCityBusTimetable(course: CityBusParams): CityTimetable {
@@ -69,5 +51,3 @@ export function useCityBusTimetable(course: CityBusParams): CityTimetable {
 
   return data;
 }
-
-export default useBusTimetable;

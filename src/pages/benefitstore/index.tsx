@@ -94,11 +94,16 @@ function StoreBenefit() {
           >
             <div className={styles.tab__content}>
               <div className={styles['tab__content--logo']}>
-                {selectedCategory === item.id ? (
-                  <img src={benefitCategory[item.id - 1]?.on_image_url ?? ''} alt="off_img" />
-                ) : (
-                  <img src={benefitCategory[item.id - 1]?.off_image_url ?? ''} alt="off_img" />
-                )}
+                {/* 이미지 크기가 작고 개별 크기가 모두 다르기에 img 태그 유지 */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={
+                    selectedCategory === item.id
+                      ? (benefitCategory[item.id - 1]?.on_image_url ?? '')
+                      : (benefitCategory[item.id - 1]?.off_image_url ?? '')
+                  }
+                  alt={`${item.title} 아이콘`}
+                />
               </div>
               <div className={styles['tab__content--text']}>{item.title}</div>
             </div>

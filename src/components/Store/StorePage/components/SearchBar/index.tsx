@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MobileSearchIcon from 'assets/svg/mobile-store-search-icon.svg';
+import DesktopSearchIcon from 'assets/svg/Store/search-icon.svg';
 import SearchBarModal from 'components/Store/StorePage/components/SearchBarModal';
 import { useStoreCategories } from 'components/Store/StorePage/hooks/useCategoryList';
 import useLogger from 'utils/hooks/analytics/useLogger';
@@ -17,24 +18,28 @@ export default function SearchBar() {
   const [toggle, setToggle] = useState(true);
   return (
     <div className={styles.search_bar}>
-      {toggle && (
-        <button
-          className={styles.search_bar__input}
-          type="button"
-          onClick={() => {
-            if (!isMobile) setToggle(false);
-            const currentCategoryId = Number(params.category) - 1; // 검색창에 포커스되면 로깅
-            if (categories)
-              logger.actionEventClick({
+      {toggle
+      && (
+      <button
+        className={styles.search_bar__input}
+        type="button"
+        onClick={() => {
+          if (!isMobile) setToggle(false);
+          const currentCategoryId = Number(params.category); // 검색창에 포커스되면 로깅
+          if (categories) {
+            logger.actionEventClick(
+              {
                 team: 'BUSINESS',
                 event_label: 'shop_categories_search',
-                value: `search in ${categories.shop_categories[currentCategoryId]?.name || '전체보기'}`,
-              });
-            openModal();
-          }}
-        >
-          {searchParams.get('storeName') || '검색어를 입력하세요'}
-        </button>
+                value: `search in ${categories.shop_categories.find((category) => category.id === currentCategoryId)?.name || '전체보기'}`,
+              },
+            );
+          }
+          openModal();
+        }}
+      >
+        {searchParams.get('storeName') || '검색어를 입력하세요'}
+      </button>
       )}
       {/* <input
         ref={storeRef}
@@ -73,11 +78,7 @@ export default function SearchBar() {
             <MobileSearchIcon />
           </div>
         ) : (
-          <img
-            className={styles['search-icon']}
-            src="https://static.koreatech.in/assets/img/search.png"
-            alt="store_icon"
-          />
+          <DesktopSearchIcon />
         )}
       </button>
       {isModalOpen && <SearchBarModal onClose={closeModal} />}

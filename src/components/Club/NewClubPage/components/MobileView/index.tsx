@@ -1,5 +1,5 @@
-/* MobileView.tsx */
 import { Dispatch, SetStateAction, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { NewClubData } from 'api/club/entity';
@@ -12,7 +12,7 @@ import UndisplayIcon from 'assets/svg/Club/undisplay-icon.svg';
 import ClubInputErrorCondition from 'components/Club/components/ClubInputErrorCondition';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import { addHyphen } from 'utils/ts/formatPhoneNumber';
 import showToast from 'utils/ts/showToast';
 import styles from './NewClubMobileView.module.scss';
@@ -49,8 +49,10 @@ export default function MobileView({ formData, setFormData, openModal, isEdit, s
     try {
       const images = await saveImgFile();
       if (images) setFormData({ ...formData, image_url: images[0] });
-    } catch {
-      showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch (error: unknown) {
+      if (error instanceof UploadError) {
+        showToast('error', error.message);
+      }
     }
   };
 
@@ -112,7 +114,15 @@ export default function MobileView({ formData, setFormData, openModal, isEdit, s
       <div className={styles['form-container']}>
         {formData.image_url ? (
           <div className={styles['form-image__preview']}>
-            <img className={styles['form-image__img']} src={formData.image_url} alt="동아리 이미지 미리보기" />
+            <Image
+              className={styles['form-image__img']}
+              src={formData.image_url}
+              alt="동아리 이미지 미리보기"
+              width={200}
+              height={200}
+              sizes="200px"
+              priority
+            />
           </div>
         ) : (
           <div className={styles['form-image']}>

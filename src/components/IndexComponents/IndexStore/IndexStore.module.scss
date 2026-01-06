@@ -12,7 +12,6 @@
   }
 
   &__title {
-    font-family: Pretendard, sans-serif;
     font-size: 18px;
     font-weight: 500;
     line-height: 1.6;
@@ -77,6 +76,7 @@
     width: 48px;
     height: 48px;
     border-width: 50%;
+    object-fit: contain;
 
     @media (max-width: 576px) {
       width: 48px;

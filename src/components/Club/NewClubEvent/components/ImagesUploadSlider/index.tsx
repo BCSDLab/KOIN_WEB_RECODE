@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
-import useImageUpload from 'utils/hooks/ui/useImageUpload';
+import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import imageResize from 'utils/ts/imageResize';
 import showToast from 'utils/ts/showToast';
 import styles from './ImagesUploadSlider.module.scss';
@@ -35,8 +36,10 @@ export default function ImagesUploadSlider({ imageUrls, addImageUrls }: ClubImag
       }
 
       if (imgRef.current) imgRef.current.value = '';
-    } catch {
-      showToast('error', '이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    } catch (error: unknown) {
+      if (error instanceof UploadError) {
+        showToast('error', error.message);
+      }
     }
   };
 
@@ -143,11 +146,16 @@ export default function ImagesUploadSlider({ imageUrls, addImageUrls }: ClubImag
                 className={styles['form-image__img__button']}
                 aria-label="이미지 삭제"
               >
-                <img
-                  className={styles['form-image__img']}
-                  src={imageUrls[currentIdx]}
-                  alt={`동아리 이미지 미리보기 ${currentIdx + 1}`}
-                />
+                <div className={styles['form-image__img__wrapper']}>
+                  <Image
+                    className={styles['form-image__img']}
+                    src={imageUrls[currentIdx]}
+                    alt={`동아리 이미지 미리보기 ${currentIdx + 1}`}
+                    fill
+                    sizes={isMobile ? '100vw' : '500px'}
+                    priority={currentIdx === 0}
+                  />
+                </div>
               </button>
             </div>
           )}

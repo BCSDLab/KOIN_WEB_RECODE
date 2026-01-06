@@ -1,6 +1,6 @@
 import React from 'react';
 import { isKoinError } from '@bcsdlab/koin';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import showToast from 'utils/ts/showToast';
 import styles from './StoreErrorBoundary.module.scss';
 
@@ -14,8 +14,10 @@ interface State {
   status?: number;
 }
 
-function isAxiosError(error: AxiosError<any, any> | Error): error is AxiosError<any, any> {
-  return 'response' in error;
+type AppError = Error | AxiosError<unknown, unknown>;
+
+function isAxiosError(error: AppError): error is AxiosError<unknown, unknown> {
+  return axios.isAxiosError(error);
 }
 
 export default class StoreErrorBoundary extends React.Component<Props, State> {
@@ -24,16 +26,16 @@ export default class StoreErrorBoundary extends React.Component<Props, State> {
     this.state = { hasError: false };
   }
 
-  // 이후에 사용시 해제
   static getDerivedStateFromError(error: Error) {
     if (isKoinError(error) || isAxiosError(error)) {
-      return { hasError: true, status: error.status };
+      // AxiosError는 status가 response?.status에 있음
+      const status = isAxiosError(error) ? error.response?.status : (error as unknown as { status?: number }).status;
+
+      return { hasError: true, status };
     }
     return { hasError: true };
   }
 
-  // 이후에 사용시 해제
-  // componentDidCatch(error: Error, __: ErrorInfo) {
   componentDidCatch(error: Error) {
     showToast('error', error.message);
   }

@@ -15,11 +15,11 @@ export type APIRequest<R extends APIResponse> = {
   response: R;
   path: string;
   method: HTTPMethod;
-  params?: any;
-  data?: any;
+  params?: Record<string, unknown>;
+  data?: unknown;
   baseURL?: string;
   authorization?: string;
   headers?: Record<string, string | number>;
   parse?: (data: AxiosResponse<R>) => R;
-  convertBody?: (data: any) => any;
+  convertBody?: (data: unknown) => string;
 };

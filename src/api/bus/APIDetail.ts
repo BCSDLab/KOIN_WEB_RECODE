@@ -11,6 +11,9 @@ import {
   BusNoticeInfoResponse,
   ShuttleCourseResponse,
   ShuttleTimetableDetailInfoResponse,
+  BusTypeRequest,
+  Depart,
+  Arrival,
 } from './entity';
 
 export class CourseList<R extends CourseResponse> implements APIRequest<R> {
@@ -26,42 +29,48 @@ export class CourseList<R extends CourseResponse> implements APIRequest<R> {
 export class BusInfo<R extends BusResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path: string;
+  path = '/bus';
+
+  params: { bus_type: string; depart: string; arrival: string };
 
   response!: R;
 
   auth = false;
 
   constructor(type: string, depart: string, arrival: string) {
-    this.path = `/bus?bus_type=${type}&depart=${depart}&arrival=${arrival}`;
+    this.params = { bus_type: type, depart, arrival };
   }
 }
 
 export class BusTimetableInfo<R extends BusTimetableResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path: string;
+  path = '/bus/timetable/v2';
+
+  params: { bus_type: string; direction: string; region: string };
 
   response!: R;
 
   auth = false;
 
   constructor({ bus_type, direction, region }: Course) {
-    this.path = `/bus/timetable/v2?bus_type=${bus_type}&direction=${direction}&region=${region}`;
+    this.params = { bus_type, direction, region };
   }
 }
 
 export class CityBusTimetableInfo<R extends CityInfoResponse> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path: string;
+  path = '/bus/timetable/city';
+
+  params: { bus_number: number; direction: string };
 
   response!: R;
 
   auth = false;
 
   constructor({ bus_number, direction }: CityBusParams) {
-    this.path = `/bus/timetable/city?bus_number=${bus_number}&direction=${direction}`;
+    this.params = { bus_number, direction };
   }
 }
 
@@ -92,14 +101,16 @@ export class ShuttleTimetableDetailInfo<R extends ShuttleTimetableDetailInfoResp
 export class BusRouteInfo<R extends BusRouteInfoResponseDTO> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
-  path: string;
+  path = '/bus/route';
+
+  params: { date: string; time: string; busType: BusTypeRequest; depart?: Depart; arrival?: Arrival };
 
   response!: R;
 
   auth = false;
 
   constructor({ dayOfMonth: date, time, busType, depart, arrival }: BusRouteParams) {
-    this.path = `/bus/route?date=${date}&time=${time}&bus_type=${busType}&depart=${depart}&arrival=${arrival}`;
+    this.params = { date, time, busType, depart, arrival };
   }
 }
 
