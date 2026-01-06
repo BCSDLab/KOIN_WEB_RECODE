@@ -18,10 +18,19 @@ export const getPresignedUrl = (domain: string, fileData: FileData, path: string
   });
 
 export const uploadToS3 = async (presignedUrl: string, file: Blob) => {
-  await axios.put(presignedUrl, file, {
-    headers: { 'Content-Type': file.type },
-    withCredentials: false,
-  });
+  {
+    try {
+      await axios.put(presignedUrl, file, {
+        headers: { 'Content-Type': file.type },
+        withCredentials: false,
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error('서버 응답 오류가 발생했습니다.');
+      }
+      throw new Error('오류가 발생했습니다.');
+    }
+  }
 };
 
 export const uploadFile = async (
