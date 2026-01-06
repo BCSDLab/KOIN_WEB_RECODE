@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { PaginationInfo } from 'api/articles/entity';
+import { ArticleWithNew, PaginationInfo } from 'api/articles/entity';
 import { articles as articlesApi } from 'api/index';
+import { isNewArticle } from 'components/Articles/utils/setArticleRegisteredDate';
 import useTokenState from 'utils/hooks/state/useTokenState';
 
 const useArticles = (page = '1') => {
@@ -26,6 +27,12 @@ const useArticles = (page = '1') => {
         current_page,
       } = data;
 
+      const currentDate = new Date();
+      const articlesWithNew: ArticleWithNew[] = articles.map((article) => ({
+        ...article,
+        isNew: isNewArticle(article.registered_at, currentDate),
+      }));
+
       const paginationInfo: PaginationInfo = {
         total_count,
         current_count,
@@ -33,7 +40,7 @@ const useArticles = (page = '1') => {
         current_page,
       };
 
-      return { articles, paginationInfo };
+      return { articles: articlesWithNew, paginationInfo };
     },
   });
 
