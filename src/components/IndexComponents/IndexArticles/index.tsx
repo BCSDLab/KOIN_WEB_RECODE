@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { isArticleWithNew } from 'api/articles/entity';
 import RightArrow from 'assets/svg/right-arrow.svg';
 import useArticles from 'components/Articles/hooks/useArticles';
 import { convertArticlesTag } from 'components/Articles/utils/convertArticlesTag';
@@ -48,7 +47,7 @@ export default function IndexArticles() {
             <Link href={getLink(String(article.id), article.board_id)} className={styles['list__item-link']}>
               <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
               <span className={styles['list__item-title']}>{article.title}</span>
-              {isArticleWithNew(article) && article.isNew && (
+              {article.isNew && (
                 // NOTE: NEW 아이콘은 98x98 고정 크기의 소형 정적 이미지라 next/image 최적화 이점이 거의 없어 <img> 유지
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
