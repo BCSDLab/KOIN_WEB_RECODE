@@ -5,7 +5,7 @@ const convertDate = (time: string) => {
   return time.split(' ')[0].replaceAll('-', '.');
 };
 
-export const isNewArticle = (registeredAt: string, currentDate: Date): boolean => {
+export const isNewArticle = (registeredAt: string, currentDate: Date) => {
   const registered = convertDate(registeredAt)
     .split('.')
     .map((item: string) => parseInt(item, 10));
