@@ -16,6 +16,14 @@ export interface Article {
   is_reported: boolean;
 }
 
+export interface ArticleWithNew extends Article {
+  isNew: boolean;
+}
+
+export function isArticleWithNew(article: Article | ArticleWithNew): article is ArticleWithNew {
+  return 'isNew' in article && typeof (article as ArticleWithNew).isNew === 'boolean';
+}
+
 export interface Attachment {
   id: 1;
   name: string;
@@ -43,6 +51,10 @@ export interface ArticleResponse extends Article, APIResponse {
   attachments: Attachment[];
   prev_id: number;
   next_id: number;
+}
+
+export interface ArticleResponseWithNew extends ArticleResponse {
+  isNew: boolean;
 }
 
 export type HotArticle = Article;
