@@ -43,7 +43,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       notFound: true,
     };
   }
-  // 리뷰는 토큰(클라이언트 상태)에 의존하고 있어 prefetch 불가
   await Promise.all([
     queryClient.prefetchQuery({
       queryKey: ['storeDetail', storeId],
