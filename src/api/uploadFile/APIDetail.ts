@@ -71,7 +71,7 @@ export const uploadShopFile = async (authorization: string, formData: FormData) 
   uploadWithPresignedUrl(authorization, formData, 'SHOPS/upload/url');
 
 export const uploadLostItemFile = async (authorization: string, formData: FormData) =>
-  uploadWithPresignedUrl(authorization, formData, 'ITEMS/upload/url');
+  uploadWithPresignedUrl(authorization, formData, 'LOST_ITEMS/upload/url');
 
 export const uploadClubFile = async (authorization: string, formData: FormData) =>
   uploadWithPresignedUrl(authorization, formData, 'CLUB/upload/url');
