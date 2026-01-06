@@ -1,8 +1,8 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { ArticleWithNew, PaginationInfo } from 'api/articles/entity';
 import { articles as articlesApi } from 'api/index';
 import { isNewArticle } from 'components/Articles/utils/setArticleRegisteredDate';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import type { ArticleWithNew, PaginationInfo } from 'api/articles/entity';
 
 const useArticles = (page = '1') => {
   const token = useTokenState();
