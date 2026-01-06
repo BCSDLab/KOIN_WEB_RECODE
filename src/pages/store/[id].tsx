@@ -94,7 +94,7 @@ function StoreDetailPage({ id }: Props) {
         }),
         queryClient.fetchQuery({
           queryKey: ['review', id, 'LATEST'],
-          queryFn: () => getReviewList(Number(id), 1, 'LATEST'),
+          queryFn: () => getReviewList(Number(id), 1, 'LATEST', token),
         }),
       ]),
   });
