@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { FileData, UploadDomain, UploadURLResponse } from './entity';
+import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import type { FileData, UploadDomain, UploadURLResponse } from './entity';
 
 export class GetPresignedUrl<R extends UploadURLResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
