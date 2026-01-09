@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { cn } from '@bcsdlab/utils';
 import { NewClubData } from 'api/club/entity';
-import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import DisplayIcon from 'assets/svg/Club/display-icon.svg';
 import DropDownIcon from 'assets/svg/Club/dropdown-icon.svg';
@@ -28,7 +27,7 @@ interface MobileViewProps {
 export default function MobileView({ formData, setFormData, openModal, isEdit, setType }: MobileViewProps) {
   const router = useRouter();
   const logger = useLogger();
-  const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadClubFile });
+  const { imgRef, saveImgFile } = useImageUpload({ domain: 'CLUB' });
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const [isTried, setIsTried] = useState(false);
 

@@ -2,7 +2,6 @@ import { type Dispatch, type SetStateAction, useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
 import { ClubRecruitment } from 'api/club/entity';
-import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
@@ -19,7 +18,7 @@ export default function ClubImageUploader({ formData, setFormData }: ClubImageUp
   const isMobile = useMediaQuery();
   const [isDragOver, setIsDragOver] = useState(false);
   const { imgRef, saveImgFile, setImageFile } = useImageUpload({
-    uploadFn: uploadClubFile,
+    domain: 'CLUB',
     resize: (file) => imageResize(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.8 }),
   });
 

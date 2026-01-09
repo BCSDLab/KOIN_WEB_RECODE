@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useCallback, useMemo, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { uploadClubFile } from 'api/uploadFile';
+import { uploadFile } from 'api/uploadFile';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import type ReactQuillType from 'react-quill-new';
 import styles from './ClubIntrodution.module.scss';
@@ -24,7 +24,7 @@ export default function ClubIntroduction({ isEdit, introduction, setIntroduction
     async (file: File) => {
       const formData = new FormData();
       formData.append('multipartFile', file);
-      const res = await uploadClubFile(token, formData);
+      const res = await uploadFile(token, 'CLUB', formData);
       return res.file_url; // 서버에서 돌아오는 URL
     },
     [token],
