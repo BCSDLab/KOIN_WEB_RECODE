@@ -14,6 +14,7 @@ function DeptListbox({ value, onChange, dropDownMaxHeight, isWhiteBackground }: 
     { label: '전기ㆍ전자ㆍ통신공학부', value: '전기ㆍ전자ㆍ통신공학부' },
     { label: '컴퓨터공학부', value: '컴퓨터공학부' },
     { label: '에너지신소재화학공학부', value: '에너지신소재화학공학부' },
+    { label: 'HRD학과', value: 'HRD학과' },
     { label: '교양학부', value: '교양학부' },
   ];
 

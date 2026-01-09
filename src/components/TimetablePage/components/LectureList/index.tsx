@@ -69,8 +69,8 @@ function CurrentSemesterLectureList({
 
     return false;
   };
-  const findOverlappingLecture = (myLecturess: MyLectureInfo[], clickedLecture: Lecture) => {
-    const overlappingLecture = myLecturess.find((myLecture) =>
+  const findOverlappingLecture = (myLectures: MyLectureInfo[], clickedLecture: Lecture) => {
+    const overlappingLecture = myLectures.find((myLecture) =>
       myLecture.lecture_infos.some((myLectureInfo) =>
         clickedLecture.lecture_infos.some((clickedLectureInfo) => isOverlapping(clickedLectureInfo, myLectureInfo)),
       ),
