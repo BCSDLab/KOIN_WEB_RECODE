@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
-import { uploadFile, UploadDomain } from 'api/uploadFile';
+import { uploadFile } from 'api/uploadFile';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import type { UploadDomain } from 'api/uploadFile/entity';
 
 export type UploadErrorCode = '413' | '415' | '404' | '422' | 'network' | '401' | '403';
 
