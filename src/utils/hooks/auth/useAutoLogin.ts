@@ -7,10 +7,15 @@ const useAutoLogin = () => {
 
   useEffect(() => {
     const autoLogin = async () => {
-      if (refreshToken) await refreshAccessToken(refreshToken);
+      if (!refreshToken) return;
+      try {
+        await refreshAccessToken(refreshToken);
+      } catch (error) {
+        console.error('[useAutoLogin] Failed to refresh access token:', error);
+      }
     };
 
-    autoLogin();
+    void autoLogin();
   }, [refreshAccessToken, refreshToken]);
 };
 
