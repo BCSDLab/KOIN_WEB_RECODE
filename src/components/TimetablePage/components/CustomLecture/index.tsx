@@ -444,11 +444,11 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
       return;
     }
 
-    if (selectedEditLecture && customTempLecture) {
-      editMyLecture({
-        id: selectedEditLecture.id,
+    if (!selectedEditLecture || !customTempLecture) {
+      addMyLecture({
         class_title: lectureName,
-        lecture_infos: customTempLecture.lecture_infos.flatMap((info) =>
+        professor: professorName,
+        lecture_infos: customTempLecture!.lecture_infos.flatMap((info) =>
           info.days.map((day) => ({
             ...info,
             start_time: info.start_time + timeOffsets[day] * 100,
@@ -456,15 +456,43 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
             place: info.place,
           })),
         ),
-        professor: professorName,
+      });
+
+      setLectureName('');
+      setProfessorName('');
+      const newId = uuidv4();
+      setTimeSpaceComponents([{ id: newId }]);
+      updateCustomTempLecture({
+        class_title: '',
+        professor: '',
+        lecture_infos: [
+          {
+            id: newId,
+            days: ['월'],
+            start_time: 0,
+            end_time: 1,
+            place: '',
+          },
+        ],
+      });
+      setIsFirstSubmit(true);
+      return;
+    }
+
+    if (selectedEditLecture.lecture_id) {
+      editMyLecture({
+        id: selectedEditLecture.id,
+        lecture_id: selectedEditLecture.lecture_id,
+        class_title: lectureName,
+        class_places: customTempLecture.lecture_infos.map((info) => ({ class_place: info.place })),
       });
       return;
     }
 
-    addMyLecture({
+    editMyLecture({
+      id: selectedEditLecture.id,
       class_title: lectureName,
-      professor: professorName,
-      lecture_infos: customTempLecture!.lecture_infos.flatMap((info) =>
+      lecture_infos: customTempLecture.lecture_infos.flatMap((info) =>
         info.days.map((day) => ({
           ...info,
           start_time: info.start_time + timeOffsets[day] * 100,
@@ -472,26 +500,8 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
           place: info.place,
         })),
       ),
+      professor: professorName,
     });
-
-    setLectureName('');
-    setProfessorName('');
-    const newId = uuidv4();
-    setTimeSpaceComponents([{ id: newId }]);
-    updateCustomTempLecture({
-      class_title: '',
-      professor: '',
-      lecture_infos: [
-        {
-          id: newId,
-          days: ['월'],
-          start_time: 0,
-          end_time: 1,
-          place: '',
-        },
-      ],
-    });
-    setIsFirstSubmit(true);
   };
 
   const handleScroll = () => {
