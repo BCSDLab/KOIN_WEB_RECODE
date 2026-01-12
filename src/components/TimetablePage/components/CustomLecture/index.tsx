@@ -445,6 +445,15 @@ function CustomLecture({ timetableFrameId }: { timetableFrameId: number }) {
     }
 
     if (selectedEditLecture && customTempLecture) {
+      if (selectedEditLecture.lecture_id) {
+        editMyLecture({
+          id: selectedEditLecture.id,
+          lecture_id: selectedEditLecture.lecture_id,
+          class_title: lectureName,
+          class_places: customTempLecture.lecture_infos.map((info) => ({ class_place: info.place })),
+        });
+        return;
+      }
       editMyLecture({
         id: selectedEditLecture.id,
         class_title: lectureName,
