@@ -7,8 +7,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Client } from '@stomp/stompjs';
 
-import { uploadLostItemFile } from 'api/uploadFile';
-
 import BlockIcon from 'assets/svg/Articles/block.svg';
 import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
 import DefaultPhotoUrl from 'assets/svg/Articles/default-photo.svg';
@@ -42,7 +40,7 @@ function LostItemChatPage({ token }: { token: string }) {
   const { searchParams } = useParamsHandler();
   const { data: userInfo } = useUser();
 
-  const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadLostItemFile });
+  const { imgRef, saveImgFile } = useImageUpload({ domain: 'LOST_ITEMS' });
 
   const clientRef = useRef<Client | null>(null);
   const [inputValue, setInputValue] = useState('');

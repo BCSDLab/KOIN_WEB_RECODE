@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@bcsdlab/utils';
-import { uploadClubFile } from 'api/uploadFile';
 import UploadIcon from 'assets/svg/Club/add-image.svg';
 import ArrowIcon from 'assets/svg/previous-arrow-icon.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -20,7 +19,7 @@ export default function ImagesUploadSlider({ imageUrls, addImageUrls }: ClubImag
   const [isDragOver, setIsDragOver] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
   const { imgRef, saveImgFile, setImageFile } = useImageUpload({
-    uploadFn: uploadClubFile,
+    domain: 'CLUB',
     maxLength: 7,
     resize: (file) => imageResize(file, { maxWidth: 1200, maxHeight: 1200, quality: 0.8 }),
   });

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
-import { uploadClubFile, uploadLostItemFile, uploadShopFile } from 'api/uploadFile';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
+import type { UploadDomain } from 'api/uploadFile/entity';
 
 export type UploadErrorCode = '413' | '415' | '404' | '422' | 'network' | '401' | '403';
 
@@ -28,12 +28,12 @@ const MAX_SIZE = 1024 * 1024 * 10;
 
 interface UseImageUploadOptions {
   maxLength?: number;
-  uploadFn: typeof uploadShopFile | typeof uploadLostItemFile | typeof uploadClubFile;
+  domain: UploadDomain;
   resize?: (file: File) => Promise<Blob>;
 }
 
-export default function useImageUpload({ maxLength = 3, uploadFn, resize }: UseImageUploadOptions) {
-  const token = useTokenState();
+export default function useImageUpload({ maxLength = 3, domain, resize }: UseImageUploadOptions) {
+  const { uploadFile } = useUploadFile();
   const [imageFile, setImageFile] = useState<string[]>([]);
   const imgRef = useRef<HTMLInputElement>(null);
 
@@ -69,11 +69,8 @@ export default function useImageUpload({ maxLength = 3, uploadFn, resize }: UseI
         throw new UploadError('413');
       }
 
-      const formData = new FormData();
-      formData.append('multipartFile', processedFile);
-
       try {
-        const data = await uploadFn(token, formData);
+        const data = await uploadFile({ domain, file: processedFile });
         if (data.file_url) {
           uploadedFiles.push(data.file_url);
         }
