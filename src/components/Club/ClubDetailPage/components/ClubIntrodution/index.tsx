@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useCallback, useMemo, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { uploadFile } from 'api/uploadFile';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import type ReactQuillType from 'react-quill-new';
 import styles from './ClubIntrodution.module.scss';
 
@@ -16,18 +15,16 @@ interface Props {
 }
 
 export default function ClubIntroduction({ isEdit, introduction, setIntroduction }: Props) {
-  const token = useTokenState();
+  const { uploadFile } = useUploadFile();
   const quillRef = useRef<ReactQuillType>(null);
 
   // 이미지를 서버에 업로드하고 URL 리턴
   const uploadImage = useCallback(
     async (file: File) => {
-      const formData = new FormData();
-      formData.append('multipartFile', file);
-      const res = await uploadFile(token, 'CLUB', formData);
+      const res = await uploadFile({ domain: 'CLUB', file });
       return res.file_url; // 서버에서 돌아오는 URL
     },
-    [token],
+    [uploadFile],
   );
 
   // 툴바의 image 버튼을 눌렀을 때 동작

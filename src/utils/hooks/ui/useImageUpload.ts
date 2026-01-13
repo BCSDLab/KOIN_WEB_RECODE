@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
-import { uploadFile } from 'api/uploadFile';
-import useTokenState from 'utils/hooks/state/useTokenState';
+import useUploadFile from 'utils/hooks/uploadFile/useUploadFile';
 import type { UploadDomain } from 'api/uploadFile/entity';
 
 export type UploadErrorCode = '413' | '415' | '404' | '422' | 'network' | '401' | '403';
@@ -34,7 +33,7 @@ interface UseImageUploadOptions {
 }
 
 export default function useImageUpload({ maxLength = 3, domain, resize }: UseImageUploadOptions) {
-  const token = useTokenState();
+  const { uploadFile } = useUploadFile();
   const [imageFile, setImageFile] = useState<string[]>([]);
   const imgRef = useRef<HTMLInputElement>(null);
 
@@ -70,11 +69,8 @@ export default function useImageUpload({ maxLength = 3, domain, resize }: UseIma
         throw new UploadError('413');
       }
 
-      const formData = new FormData();
-      formData.append('multipartFile', processedFile);
-
       try {
-        const data = await uploadFile(token, domain, formData);
+        const data = await uploadFile({ domain, file: processedFile });
         if (data.file_url) {
           uploadedFiles.push(data.file_url);
         }
