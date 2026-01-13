@@ -32,7 +32,6 @@ const useUploadFile = () => {
 
       return {
         file_url: presignedResponse.file_url,
-        expiration_date: presignedResponse.expiration_date,
       };
     },
     onError: (err) => {
