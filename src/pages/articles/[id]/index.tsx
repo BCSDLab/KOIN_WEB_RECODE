@@ -25,7 +25,7 @@ export default function ArticlesDetailPage({ article }: { article: ArticleRespon
         author={article.author}
         hit={article.hit}
       />
-      <ArticleContent content={article.content} />
+      <ArticleContent content={article.content} attachments={article.attachments} />
     </ArticlesPageLayout>
   );
 }
