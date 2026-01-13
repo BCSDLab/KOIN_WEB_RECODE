@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { type APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
+import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
 import type { FileData, UploadDomain, UploadURLResponse } from './entity';
+import type { APIResponse } from 'interfaces/APIResponse';
 
 export class GetPresignedUrl<R extends UploadURLResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
@@ -10,8 +10,6 @@ export class GetPresignedUrl<R extends UploadURLResponse> implements APIRequest<
   data: FileData;
 
   response!: R;
-
-  auth = true;
 
   constructor(
     public authorization: string,
@@ -23,18 +21,26 @@ export class GetPresignedUrl<R extends UploadURLResponse> implements APIRequest<
   }
 }
 
-export class UploadToS3 {
-  static async execute(presignedUrl: string, file: Blob): Promise<void> {
-    try {
-      await axios.put(presignedUrl, file, {
-        headers: { 'Content-Type': file.type },
-        withCredentials: false,
-      });
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error('서버 응답 오류가 발생했습니다.');
-      }
-      throw new Error('오류가 발생했습니다.');
-    }
+export class UploadToS3<R extends APIResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  data: Blob;
+
+  response!: R;
+
+  baseURL = '';
+
+  headers: Record<string, string>;
+
+  convertBody = (data: unknown) => data as unknown as string;
+
+  constructor(presignedUrl: string, file: Blob) {
+    this.path = presignedUrl;
+    this.data = file;
+    this.headers = {
+      'Content-Type': file.type,
+    };
   }
 }
