@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { uploadLostItemFile } from 'api/uploadFile';
 import PhotoIcon from 'assets/svg/Articles/photo.svg';
 import RemoveImageIcon from 'assets/svg/Articles/remove-image.svg';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -18,7 +17,7 @@ interface FormImageProps {
 
 export default function FormImage({ images, setImages, type, formIndex }: FormImageProps) {
   const isMobile = useMediaQuery();
-  const { imgRef, saveImgFile } = useImageUpload({ uploadFn: uploadLostItemFile });
+  const { imgRef, saveImgFile } = useImageUpload({ domain: 'LOST_ITEMS' });
 
   const imageCounter = `${images.length}/${MAX_IMAGES_LENGTH}`;
   const inputId = `image-file-${formIndex}`;
@@ -30,8 +29,10 @@ export default function FormImage({ images, setImages, type, formIndex }: FormIm
     }
 
     try {
-      const uploadFile = await saveImgFile();
-      setImages([...images, ...uploadFile]);
+      const res = await saveImgFile();
+      if (res && res.length > 0) {
+        setImages([...images, ...res]);
+      }
     } catch (error: unknown) {
       if (error instanceof UploadError) {
         showToast('error', error.message);

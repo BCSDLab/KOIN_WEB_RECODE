@@ -4,7 +4,6 @@ import { cn } from '@bcsdlab/utils';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { ReviewRequest } from 'api/review/entity';
 import { StoreDetailResponse } from 'api/store/entity';
-import { uploadShopFile } from 'api/uploadFile';
 import DeleteImageIcon from 'assets/svg/delete-icon.svg';
 import StarIcon from 'assets/svg/empty-star.svg';
 import DeleteMenuIcon from 'assets/svg/trash-can-icon.svg';
@@ -38,7 +37,7 @@ function ReviewForm({ storeDetail, mutate, initialData = {} }: Props) {
 
   const { imageFile, imgRef, saveImgFile, setImageFile } = useImageUpload({
     maxLength: MAX_IMAGE_LENGTH,
-    uploadFn: uploadShopFile,
+    domain: 'SHOPS',
   });
 
   useEffect(() => {

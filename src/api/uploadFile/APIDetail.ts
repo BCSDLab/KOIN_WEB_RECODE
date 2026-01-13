@@ -1,38 +1,46 @@
 import { APIRequest, HTTP_METHOD } from 'interfaces/APIRequest';
-import { UploadImage } from './entity';
+import type { FileData, UploadDomain, UploadURLResponse } from './entity';
+import type { APIResponse } from 'interfaces/APIResponse';
 
-export class BaseUploadFile<R extends UploadImage> implements APIRequest<R> {
+export class GetPresignedUrl<R extends UploadURLResponse> implements APIRequest<R> {
   method = HTTP_METHOD.POST;
+
+  path: string;
+
+  data: FileData;
 
   response!: R;
 
-  auth = true;
-
-  data: FormData;
-
   constructor(
     public authorization: string,
-    formData: FormData,
-    public path: string,
+    domain: UploadDomain,
+    fileData: FileData,
   ) {
-    this.data = formData;
+    this.path = `${domain}/upload/url`;
+    this.data = fileData;
   }
 }
 
-export class ShopUploadFile<R extends UploadImage> extends BaseUploadFile<R> {
-  constructor(authorization: string, formData: FormData) {
-    super(authorization, formData, 'SHOPS/upload/file');
-  }
-}
+export class UploadToS3<R extends APIResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
 
-export class LostItemUploadFile<R extends UploadImage> extends BaseUploadFile<R> {
-  constructor(authorization: string, formData: FormData) {
-    super(authorization, formData, 'LOST_ITEMS/upload/file');
-  }
-}
+  path: string;
 
-export class ClubUploadFile<R extends UploadImage> extends BaseUploadFile<R> {
-  constructor(authorization: string, formData: FormData) {
-    super(authorization, formData, 'CLUB/upload/file');
+  data: Blob;
+
+  response!: R;
+
+  baseURL = '';
+
+  headers: Record<string, string>;
+
+  convertBody = (data: unknown) => data as unknown as string;
+
+  constructor(presignedUrl: string, file: Blob) {
+    this.path = presignedUrl;
+    this.data = file;
+    this.headers = {
+      'Content-Type': file.type,
+    };
   }
 }
