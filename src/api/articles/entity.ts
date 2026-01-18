@@ -49,7 +49,7 @@ export type HotArticle = Article;
 
 export type HotArticlesResponse = HotArticle[];
 
-// GET /articles/lost-item
+// GET /articles/lost-item/v2
 interface LostItemArticleForGetDTO {
   id: number;
   board_id: number;
@@ -60,8 +60,8 @@ interface LostItemArticleForGetDTO {
   content: string;
   author: string;
   registered_at: string;
-  updated_at: string;
   is_reported: boolean;
+  is_found: boolean;
 }
 
 export interface LostItemArticlesResponseDTO extends APIResponse {
@@ -72,7 +72,24 @@ export interface LostItemArticlesResponseDTO extends APIResponse {
   current_page: number;
 }
 
-interface ImageDTO {
+export type LostItemType = 'LOST' | 'FOUND';
+export type LostItemCategory = 'ALL' | 'CARD' | 'ID' | 'WALLET' | 'ELECTRONICS' | 'ETC';
+export type LostItemFoundStatus = 'ALL' | 'FOUND' | 'NOT_FOUND';
+export type LostItemSort = 'LATEST' | 'OLDEST';
+export type LostItemAuthor = 'ALL' | 'MY';
+
+export interface LostItemArticlesRequest {
+  type?: LostItemType;
+  page?: number;
+  limit?: number;
+  category?: LostItemCategory;
+  foundStatus?: LostItemFoundStatus;
+  sort?: LostItemSort;
+  author?: LostItemAuthor;
+  title?: string;
+}
+
+export interface LostItemImageDTO {
   id: number;
   image_url: string;
 }
@@ -88,7 +105,8 @@ export interface SingleLostItemArticleResponseDTO extends APIResponse {
   author: string;
   is_council: boolean;
   is_mine: boolean;
-  images: ImageDTO[];
+  is_found: boolean;
+  images: LostItemImageDTO[];
   prev_id: number | null;
   next_id: number | null;
   registered_at: string; // yyyy-MM-dd
@@ -103,7 +121,7 @@ export interface LostItemResponse extends APIResponse {
   found_date: string;
   content: string;
   author: string;
-  images: ImageDTO[];
+  images: LostItemImageDTO[];
   prev_id: number | null;
   next_id: number | null;
   registered_at: string;
@@ -144,11 +162,6 @@ export interface LostItemArticlesPostResponseDTO {
   updated_at: string;
 }
 
-interface LostItemImageDTO {
-  id: number;
-  image_url: string;
-}
-
 export interface LostItemArticleResponse {
   article: LostItemArticlesPostResponseDTO;
 }
@@ -162,12 +175,6 @@ export interface ReportItemArticleRequestDTO {
 }
 
 export type ReportItemArticleResponseDTO = APIResponse;
-
-export interface ItemArticleRequestDTO {
-  boardId: number;
-  page: number;
-  limit: number;
-}
 export interface LostItemChatroomDetailResponse {
   article_id: number;
   chat_room_id: number;
