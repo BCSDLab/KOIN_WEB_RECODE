@@ -92,9 +92,9 @@ export default function LostItemWritePage() {
     const articles = lostItems.map((article) => ({
       type,
       category: article.category,
-      foundPlace:
+      found_place:
         type === 'LOST' && (!article.foundPlace || article.foundPlace.trim() === '') ? '장소 미상' : article.foundPlace,
-      foundDate: getyyyyMMdd(article.foundDate),
+      found_date: getyyyyMMdd(article.foundDate),
       content: article.content,
       images: article.images,
       registered_at: article.registered_at,
