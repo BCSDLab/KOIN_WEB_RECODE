@@ -38,7 +38,7 @@ const ROUTES = {
   Articles: () => '/articles',
   ArticlesDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/${id}` : '/articles/:id'),
   ArtilesReport: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/report/${id}` : '/articles/report/:id'),
-  LostItems: () => '/lost-items',
+  LostItems: () => '/lost-item',
   LostItemRedirect: () => '/articles/lost-item',
   LostItemDetail: ({ id, isLink }: ROUTESParams<'id'>) =>
     isLink ? `/articles/lost-item/${id}` : '/articles/lost-item/:id',
