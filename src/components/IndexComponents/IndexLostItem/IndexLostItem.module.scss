@@ -1,0 +1,132 @@
+@use "src/utils/scss/media" as media;
+
+.template {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @include media.media-breakpoint(mobile) {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 8px;
+    margin-bottom: 33px;
+    gap: 12px;
+  }
+
+  &__header {
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &__title {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    margin-top: 32px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 160%;
+    color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      height: auto;
+      margin-top: 0;
+      margin-left: 11px;
+      font-weight: 700;
+    }
+  }
+}
+
+.card {
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-radius: 16px;
+
+  @include media.media-breakpoint(mobile) {
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 8px;
+  }
+
+  &__info {
+    font-size: 18px;
+    line-height: 160%;
+
+    @include media.media-breakpoint(mobile) {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
+  &__info-static {
+    > span {
+      font-weight: 500;
+      font-size: 20px;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+      }
+    }
+  }
+
+  &__info-slider {
+    position: relative;
+    display: grid;
+    height: 29px;
+    overflow: hidden;
+
+    @include media.media-breakpoint(mobile) {
+      height: 22px;
+    }
+  }
+
+  &__info-placeholder {
+    grid-area: 1 / 1;
+    visibility: hidden;
+
+    > span {
+      font-weight: 500;
+      font-size: 20px;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+      }
+    }
+  }
+
+  &__info-item {
+    position: absolute;
+    inset: 0;
+    white-space: nowrap;
+    opacity: 0;
+    translate: 0 -100%;
+    transition:
+      translate 0.5s ease-in-out,
+      opacity 0.5s ease-in-out;
+
+    > span {
+      font-weight: 500;
+      font-size: 20px;
+
+      @include media.media-breakpoint(mobile) {
+        font-size: 14px;
+      }
+    }
+
+    &--active {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}
