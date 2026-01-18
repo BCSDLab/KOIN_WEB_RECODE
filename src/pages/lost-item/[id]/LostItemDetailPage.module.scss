@@ -1,73 +1,91 @@
 @use "src/utils/scss/media" as media;
 
-.container {
+.page {
+  margin: 61px auto 0;
+  width: 1132px;
+
   @include media.media-breakpoint(mobile) {
-    width: calc(100vw - 24px);
+    width: 100%;
+    margin-top: 0;
+  }
+
+  &__title {
+    width: 100%;
+    margin-bottom: 32px;
+    font-size: 32px;
+    font-weight: 500;
+    color: #175c8e;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__content {
+    width: 834px;
+    float: left;
+    margin-right: 40px;
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      min-height: calc(100vh - 115px);
+      margin: 0;
+    }
   }
 }
 
 .header {
-  border-top: 2px solid #175c8e;
-  border-bottom: 1px solid #175c8e;
+  border-top: 3px solid #10477a;
+  border-bottom: 1px solid #10477a;
   width: 834px;
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 26px 0 29px;
-  font-family: Pretendard, sans-serif;
-  font-size: 32px;
+  padding: 24px 0;
+  font-size: 28px;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 160%;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
     box-sizing: border-box;
     border-top: 0;
     padding: 15px 24px;
-    border-bottom: 1px solid #ececec;
-  }
-}
-
-.title {
-  width: 794px;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  font-family: Pretendard, sans-serif;
-  font-size: 32px;
-  font-weight: 500;
-  line-height: 1.2;
-
-  @include media.media-breakpoint(mobile) {
-    gap: 2px;
-    width: 100%;
-    padding: 0;
-    font-size: 14px;
-    line-height: 1.6;
+    border-bottom: 6px solid #f5f5f5;
   }
 
-  &__category {
+  &__top {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    height: 46px;
-    box-sizing: border-box;
-    padding: 2px 12px 0;
-    border-radius: 23px;
-    background-color: #175c8e;
-    color: #fff;
 
     @include media.media-breakpoint(mobile) {
-      height: 22px;
-      padding: 1px 8px 0;
-      margin-right: 6px;
+      align-items: flex-end;
     }
   }
 
-  &__board-id {
-    font-weight: 500;
+  &__title {
+    width: 794px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
+    @include media.media-breakpoint(mobile) {
+      flex-wrap: wrap;
+      gap: 8px;
+      width: 100%;
+      padding: 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  }
+
+  &__type {
     @include media.media-breakpoint(mobile) {
       width: 100%;
       color: #10477a;
@@ -75,22 +93,35 @@
     }
   }
 
-  &__content {
+  &__category {
+    font-size: 24px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background-color: #175c8e;
+    color: #fff;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 500;
+      padding: 0 8px;
+    }
+  }
+
+  &__location {
     word-break: break-all;
   }
-}
 
-.info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: Pretendard, sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1.6;
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    line-height: 1.6;
 
-  @include media.media-breakpoint(mobile) {
-    font-size: 12px;
+    @include media.media-breakpoint(mobile) {
+      font-size: 12px;
+    }
   }
 
   &__author {
@@ -101,12 +132,12 @@
     }
   }
 
-  &__registered-at {
+  &__date {
     color: #727272;
   }
 }
 
-.contents {
+.article {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -123,7 +154,6 @@
     margin-top: 64px;
     white-space: pre-wrap;
     word-break: break-all;
-    font-family: Pretendard, sans-serif;
     font-size: 20px;
     line-height: 1.6;
     align-items: center;
@@ -146,7 +176,6 @@
     align-items: center;
     background-color: #f5f5f5;
     color: #727272;
-    font-family: Pretendard, sans-serif;
     font-size: 18px;
     line-height: 1.6;
     text-align: center;
@@ -164,33 +193,104 @@
       line-height: 1.6;
     }
   }
+}
 
-  &__buttons {
-    width: 100%;
-    display: flex;
-    margin-top: 64px;
-    justify-content: flex-end;
+.found-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: 100%;
+
+  @include media.media-breakpoint(mobile) {
+    gap: 8px;
+  }
+
+  &__label {
+    font-size: 18px;
+    font-weight: 500;
+    color: #4b4b4b;
 
     @include media.media-breakpoint(mobile) {
-      width: 100%;
-      margin-top: 40px;
-      justify-content: space-between;
+      font-size: 14px;
     }
+  }
+
+  &__button {
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__track {
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background-color: #e1e1e1;
+    position: relative;
+    transition: background-color 0.2s ease;
+
+    &--active {
+      background-color: #ffa928;
+    }
+  }
+
+  &__thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: transform 0.2s ease;
+
+    .found-toggle__track--active & {
+      transform: translateX(20px);
+    }
+  }
+}
+
+.actions-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin-top: 64px;
+
+  @include media.media-breakpoint(mobile) {
+    margin-top: 24px;
+    gap: 12px;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  &__group {
+    display: flex;
+    gap: 12px;
   }
 
   &__button {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 4px;
     gap: 4px;
     padding: 10px 16px;
+    border-radius: 4px;
     background-color: #e1e1e1;
     color: #4b4b4b;
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
-    line-height: 1.6;
 
     & path {
       fill: #4b4b4b;
@@ -200,113 +300,6 @@
       width: 24px;
       height: 24px;
     }
-
-    @include media.media-breakpoint(mobile) {
-      font-size: 12px;
-      padding: 6px 12px;
-
-      & svg {
-        width: 16px;
-        height: 16px;
-      }
-    }
-  }
-}
-
-.button-container {
-  display: flex;
-  gap: 12px;
-  margin-top: 64px;
-  width: 100%;
-
-  &__list-button {
-    display: flex;
-    align-items: center;
-    margin-right: auto;
-    border-radius: 4px;
-    padding: 10px 16px;
-    background-color: #e1e1e1;
-    color: #4b4b4b;
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1.6;
-
-    & path {
-      fill: #4b4b4b;
-    }
-
-    & svg {
-      width: 24px;
-      height: 24px;
-    }
-
-    @include media.media-breakpoint(mobile) {
-      font-size: 12px;
-      padding: 6px 12px;
-
-      & svg {
-        width: 16px;
-        height: 16px;
-      }
-    }
-  }
-
-  &__delete-button {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    border-radius: 4px;
-    gap: 2px;
-    padding: 10px 16px;
-    background-color: #e1e1e1;
-    color: #4b4b4b;
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1.6;
-
-    & path {
-      fill: #4b4b4b;
-    }
-
-    & svg {
-      width: 24px;
-      height: 24px;
-    }
-
-    @include media.media-breakpoint(mobile) {
-      font-size: 12px;
-      padding: 6px 12px;
-
-      & svg {
-        width: 16px;
-        height: 16px;
-      }
-    }
-  }
-
-  &__buttons {
-    display: flex;
-    gap: 12px;
-    margin-left: auto;
-  }
-
-  &__message-button,
-  &__report-button {
-    display: flex;
-    padding: 6px 10px;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    border-radius: 4px;
-    color: #4b4b4b;
-    background-color: #e1e1e1;
-    font-family: Pretendard, sans-serif;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 160%;
 
     @include media.media-breakpoint(mobile) {
       font-size: 12px;
