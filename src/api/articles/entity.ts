@@ -199,3 +199,8 @@ export interface LostItemChatroomDetailMessage {
 }
 
 export type LostItemChatroomDetailMessagesResponse = LostItemChatroomDetailMessage[];
+
+export interface LostItemStatResponse {
+  found_count: number;
+  not_found_count: number;
+}
