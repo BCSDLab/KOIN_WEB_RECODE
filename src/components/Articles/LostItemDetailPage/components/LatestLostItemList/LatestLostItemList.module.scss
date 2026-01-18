@@ -1,0 +1,89 @@
+@use "src/utils/scss/media" as media;
+
+.container {
+  display: none;
+
+  @include media.media-breakpoint(mobile) {
+    display: block;
+    width: 100%;
+    padding: 14px 24px;
+    box-sizing: border-box;
+    border-top: 6px solid #f5f5f5;
+  }
+}
+
+.title {
+  font-weight: 600;
+  padding-bottom: 14px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 160%;
+
+  &__content {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__type {
+    flex-shrink: 0;
+    color: #10477a;
+    font-weight: 600;
+  }
+
+  &__info {
+    display: flex;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__category {
+    flex-shrink: 0;
+    padding: 0 8px;
+    border-radius: 999px;
+    background-color: #175c8e;
+    color: #fff;
+  }
+
+  &__place {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__date {
+    flex-shrink: 0;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+  color: #727272;
+  font-size: 14px;
+}
+
+.empty {
+  text-align: center;
+  padding: 24px 0;
+  color: #727272;
+  font-size: 14px;
+}
