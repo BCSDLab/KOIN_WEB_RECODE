@@ -1,0 +1,55 @@
+.viewport {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.page {
+  width: calc(100vw / 0.8);
+  height: calc(100vh / 0.8);
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  font-size: 14px;
+  color: #4d4d4d;
+  transform: scale(0.8);
+  transform-origin: top left;
+  overflow-y: hidden;
+}
+
+.content {
+  display: flex;
+  gap: 20px;
+  flex-grow: 1;
+  overflow: hidden;
+
+  &__left {
+    flex: 3;
+    min-width: 550px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &__right {
+    flex: 2;
+    min-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+  border: 1px solid #dcdcdc;
+  background-color: #f9f9f9;
+  color: #4d4d4d;
+  font-size: 14px;
+}
