@@ -1,0 +1,76 @@
+.search {
+  border: 1px solid #dcdcdc;
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+
+  &__form {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px 20px;
+    align-items: center;
+  }
+
+  &__group {
+    display: flex;
+    align-items: center;
+    height: 30px;
+  }
+
+  &__label {
+    flex-shrink: 0;
+    width: 110px;
+    height: 100%;
+    font-weight: bold;
+    box-sizing: border-box;
+    text-align: right;
+    padding: 0 10px;
+    line-height: 28px;
+    font-size: 9pt;
+
+    &--required {
+      color: #9723e8;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #a9a9a9;
+    box-sizing: border-box;
+    padding: 0 8px;
+    font: inherit;
+    color: inherit;
+    background-color: #fff;
+    outline: none;
+
+    &:disabled {
+      background-color: #f0f0f0;
+      color: #555;
+    }
+  }
+
+  &__select {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #a9a9a9;
+    box-sizing: border-box;
+    padding: 0 8px;
+    padding-right: 30px;
+    font: inherit;
+    color: inherit;
+    background-color: #fff;
+    background-image: url("https://kut90.koreatech.ac.kr/nxweb/images/common/Combo/img_drop_N.png");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    outline: none;
+    appearance: none;
+
+    &:disabled {
+      background-color: #f0f0f0;
+      background-image: url("https://kut90.koreatech.ac.kr/nxweb/images/common/Combo/img_drop_D.png");
+      color: #555;
+    }
+  }
+}
