@@ -14,6 +14,7 @@ import {
   LostItemChatroomListResponse,
   LostItemChatroomDetailResponse,
   LostItemChatroomDetailMessagesResponse,
+  LostItemStatResponse,
   LostItemArticlesRequest,
 } from './entity';
 
@@ -29,8 +30,9 @@ export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
   constructor(
     public authorization: string,
     page: string | undefined,
+    boardId: number = 4,
   ) {
-    this.path = `/articles?page=${page}&limit=10`;
+    this.path = `/articles?boardId=${boardId}&page=${page}&limit=10`;
   }
 }
 
@@ -229,6 +231,16 @@ export class PostBlockLostItemChatroom<R extends object> implements APIRequest<R
   ) {
     this.path = `/chatroom/lost-item/${articleId}/${chatroomId}/block`;
   }
+}
+
+export class GetLostItemStat<R extends LostItemStatResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/articles/lost-item/stats';
+
+  response!: R;
+
+  auth = false;
 }
 
 export class PostFoundLostItem<R extends object> implements APIRequest<R> {

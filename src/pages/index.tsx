@@ -2,6 +2,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next/dis
 import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { club, articles as articlesApi, banner, timetable } from 'api';
+import { getLostItemStat } from 'api/articles';
 import { getBannerCategoryList } from 'api/banner';
 import { HotClubResponse } from 'api/club/entity';
 import { getStoreCategories } from 'api/store';
@@ -9,6 +10,7 @@ import IndexArticles from 'components/IndexComponents/IndexArticles';
 import IndexBus from 'components/IndexComponents/IndexBus';
 import IndexCafeteria from 'components/IndexComponents/IndexCafeteria';
 import IndexClub from 'components/IndexComponents/IndexClub';
+import IndexLostItem from 'components/IndexComponents/IndexLostItem';
 import IndexStore from 'components/IndexComponents/IndexStore';
 import IndexTimetable from 'components/IndexComponents/IndexTimetable';
 import { SSRLayout } from 'components/layout';
@@ -41,16 +43,18 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
   const userType = context.req.cookies['AUTH_USER_TYPE'] || '';
 
-  const datas = await Promise.all([
-    getBannerCategoryList(),
-    getStoreCategories(),
-    getHotClub(),
-    token && userType === 'STUDENT'
-      ? queryClient.fetchQuery({
-          queryKey: [MY_SEMESTER_INFO_KEY],
-          queryFn: () => timetable.getMySemester(token),
-        })
-      : Promise.resolve(null),
+  const [[banners, categories, hotClubInfo, mySemester]] = await Promise.all([
+    Promise.all([
+      getBannerCategoryList(),
+      getStoreCategories(),
+      getHotClub(),
+      token && userType === 'STUDENT'
+        ? queryClient.fetchQuery({
+            queryKey: [MY_SEMESTER_INFO_KEY],
+            queryFn: () => timetable.getMySemester(token),
+          })
+        : null,
+    ]),
     queryClient.prefetchQuery({
       queryKey: ['articles', '1'],
       queryFn: () => articlesApi.getArticles(token, '1'),
@@ -59,11 +63,13 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       queryKey: [SEMESTER_INFO_KEY],
       queryFn: timetable.getSemesterInfoList,
     }),
+    queryClient.prefetchQuery({
+      queryKey: ['lostItemStat'],
+      queryFn: getLostItemStat,
+    }),
   ]);
-  const banners = datas[0];
-  const categories = datas[1];
-  const hotClubInfo = datas[2];
-  const userSemester = datas[3]?.semesters?.[0] || getRecentSemester();
+
+  const userSemester = mySemester?.semesters?.[0] || getRecentSemester();
 
   const bannerCategoryId = Number(banners.banner_categories[0].id);
   const bannersList = await banner.getBanners(bannerCategoryId);
@@ -113,6 +119,7 @@ function Index({
         <IndexStore categories={categories} />
         <IndexBus />
         <IndexClub hotClubInfo={hotClubInfo} />
+        <IndexLostItem />
         <IndexArticles />
       </div>
       <div className={styles['right-container']}>
