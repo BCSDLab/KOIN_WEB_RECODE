@@ -127,7 +127,7 @@ export default function LostItemDetailPage({
             {isMobile && (
               <button
                 className={styles['button-container__list-button']}
-                onClick={() => navigate(ROUTES.Articles())}
+                onClick={() => navigate(ROUTES.LostItems())}
                 type="button"
               >
                 목록
