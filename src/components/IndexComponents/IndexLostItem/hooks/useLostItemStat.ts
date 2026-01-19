@@ -4,10 +4,7 @@ import { getLostItemStat } from 'api/articles';
 const useLostItemStat = () => {
   const { data: lostItemStat } = useSuspenseQuery({
     queryKey: ['lostItemStat'],
-    queryFn: async () => {
-      const response = await getLostItemStat();
-      return response;
-    },
+    queryFn: getLostItemStat,
   });
 
   return { lostItemStat };
