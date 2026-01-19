@@ -27,8 +27,6 @@
  * - Worker → Tab: port.postMessage({ type: 'NEW_MESSAGE', payload: {...} })
  */
 
-import { Client } from '@stomp/stompjs';
-// IndexedDB 함수들을 chatDB.ts에서 import
 import {
   type ChatMessage,
   addMessage,
@@ -38,12 +36,29 @@ import {
   mergeMessages,
   cleanupOldMessages,
 } from 'utils/db/chatDB';
+import { Client } from '@stomp/stompjs';
+// IndexedDB 함수들을 chatDB.ts에서 import
 
 // ============================================
 // Types (메시지 타입 정의)
 // ============================================
 
+// 공통 Payload 타입
+interface ChatroomPayload {
+  articleId: number;
+  chatroomId: number;
+}
+
+interface ChatMessageData {
+  user_id: number;
+  user_nickname: string;
+  content: string;
+  timestamp: string;
+  is_image: boolean;
+}
+
 /**
+ * Tab → Worker 명령 타입 (Discriminated Union)
  * @type CONNECT - WebSocket 연결 요청
  * @type DISCONNECT - WebSocket 연결 해제
  * @type SEND_MESSAGE - 채팅 메시지 전송
@@ -54,63 +69,58 @@ import {
  * @type MERGE_MESSAGES - API 메시지를 IndexedDB에 병합 (새 메시지만 추가)
  * @type CLEAR_MESSAGES - 특정 채팅방의 캐시 삭제
  */
-interface WorkerMessage {
-  type:
-    | 'CONNECT'
-    | 'DISCONNECT'
-    | 'SEND_MESSAGE'
-    | 'GET_MESSAGES'
-    | 'SUBSCRIBE_CHATROOM'
-    | 'UNSUBSCRIBE_CHATROOM'
-    | 'SYNC_MESSAGES'
-    | 'MERGE_MESSAGES'
-    | 'CLEAR_MESSAGES';
-  payload?: unknown;
-}
+type WorkerCommand =
+  | { type: 'CONNECT'; payload: { token: string; userId: number; wsUrl: string } }
+  | { type: 'DISCONNECT' }
+  | { type: 'SEND_MESSAGE'; payload: ChatroomPayload & { message: ChatMessageData } }
+  | { type: 'GET_MESSAGES'; payload: ChatroomPayload }
+  | { type: 'SUBSCRIBE_CHATROOM'; payload: ChatroomPayload }
+  | { type: 'UNSUBSCRIBE_CHATROOM'; payload: ChatroomPayload }
+  | { type: 'SYNC_MESSAGES'; payload: ChatroomPayload & { messages: ChatMessageData[] } }
+  | { type: 'MERGE_MESSAGES'; payload: ChatroomPayload & { messages: ChatMessageData[] } }
+  | { type: 'CLEAR_MESSAGES'; payload: ChatroomPayload };
 
-interface ConnectPayload {
-  token: string;
-  userId: number;
-  wsUrl: string;
-}
-
-interface SendMessagePayload {
-  articleId: number;
-  chatroomId: number;
-  message: {
-    user_nickname: string;
-    user_id: number;
-    content: string;
-    timestamp: string;
-    is_image: boolean;
-  };
-}
-
-interface SubscribeChatroomPayload {
-  articleId: number;
-  chatroomId: number;
-}
-
-interface GetMessagesPayload {
-  articleId: number;
-  chatroomId: number;
-}
-
-interface SyncMessagesPayload {
-  articleId: number;
-  chatroomId: number;
-  messages: Array<{
-    user_id: number;
-    user_nickname: string;
-    content: string;
-    timestamp: string;
-    is_image: boolean;
-  }>;
-}
+/**
+ * Worker → Tab 이벤트 타입 (Discriminated Union)
+ * @type CONNECTED - WebSocket 연결 성공
+ * @type DISCONNECTED - WebSocket 연결 해제
+ * @type RECONNECTING - 재연결 시도 중
+ * @type ERROR - 에러 발생
+ * @type NEW_MESSAGE - 새 채팅 메시지 수신
+ * @type MESSAGES - IndexedDB에서 조회한 메시지 목록
+ * @type MESSAGES_MERGED - 메시지 병합 완료
+ * @type SYNC_COMPLETE - 메시지 동기화 완료
+ * @type CLEAR_COMPLETE - 메시지 삭제 완료
+ * @type CHATROOM_LIST_UPDATED - 채팅방 목록 업데이트
+ */
+type WorkerEvent =
+  | { type: 'CONNECTED'; payload?: { portsCount: number } }
+  | { type: 'DISCONNECTED'; payload?: { portsCount: number } }
+  | { type: 'RECONNECTING'; payload: { attempt: number; maxAttempts: number; delay: number } }
+  | { type: 'ERROR'; payload: { message: string; code?: string } }
+  | { type: 'NEW_MESSAGE'; payload: ChatroomPayload & { message: ChatMessageData } }
+  | { type: 'MESSAGES'; payload: ChatroomPayload & { messages: ChatMessage[] } }
+  | {
+      type: 'MESSAGES_MERGED';
+      payload: ChatroomPayload & { messages: ChatMessage[] | null; added: number; total: number };
+    }
+  | { type: 'SYNC_COMPLETE'; payload: ChatroomPayload }
+  | { type: 'CLEAR_COMPLETE'; payload: ChatroomPayload }
+  | { type: 'CHATROOM_LIST_UPDATED' };
 
 // ============================================
 // WebSocket & STOMP
 // ============================================
+
+// 재연결 설정
+const RECONNECT_CONFIG = {
+  maxAttempts: 3, // 최대 재연결 시도 횟수
+  baseDelay: 1000, // 기본 딜레이 (1초)
+  maxDelay: 30000, // 최대 딜레이 (30초)
+} as const;
+
+let reconnectAttempts = 0;
+let reconnectTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
 const ports: MessagePort[] = [];
 
@@ -143,6 +153,64 @@ function withWriteLock<T>(fn: () => Promise<T>): Promise<T> {
 // ============================================
 // STOMP helpers
 // ============================================
+function getReconnectDelay(): number {
+  const delay = Math.min(RECONNECT_CONFIG.baseDelay * 2 ** reconnectAttempts, RECONNECT_CONFIG.maxDelay);
+  return delay;
+}
+
+function canReconnect(): boolean {
+  const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+  const hasCredentials = currentWsUrl !== null && currentToken !== null;
+  const withinAttemptLimit = reconnectAttempts < RECONNECT_CONFIG.maxAttempts;
+  const hasActivePorts = ports.length > 0;
+  return isOnline && hasCredentials && withinAttemptLimit && hasActivePorts;
+}
+
+function attemptReconnect(): void {
+  if (reconnectTimeoutId) {
+    clearTimeout(reconnectTimeoutId);
+    reconnectTimeoutId = null;
+  }
+
+  if (!canReconnect()) {
+    if (reconnectAttempts >= RECONNECT_CONFIG.maxAttempts) {
+      broadcast({
+        type: 'ERROR',
+        payload: {
+          message: '채팅 서버 연결에 실패했습니다. 페이지를 새로고침해 주세요.',
+          code: 'MAX_RECONNECT_ATTEMPTS',
+        },
+      });
+    }
+    return;
+  }
+
+  const delay = getReconnectDelay();
+  reconnectAttempts += 1;
+
+  broadcast({
+    type: 'RECONNECTING',
+    payload: {
+      attempt: reconnectAttempts,
+      maxAttempts: RECONNECT_CONFIG.maxAttempts,
+      delay,
+    },
+  });
+
+  reconnectTimeoutId = setTimeout(() => {
+    if (currentToken && currentWsUrl) {
+      connectStomp(currentToken, currentWsUrl);
+    }
+  }, delay);
+}
+
+function resetReconnectState(): void {
+  reconnectAttempts = 0;
+  if (reconnectTimeoutId) {
+    clearTimeout(reconnectTimeoutId);
+    reconnectTimeoutId = null;
+  }
+}
 
 /** WebSocket 연결 및 STOMP 활성화 */
 function connectStomp(token: string, wsUrl: string): void {
@@ -157,10 +225,11 @@ function connectStomp(token: string, wsUrl: string): void {
     },
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
-    reconnectDelay: 5000,
+    reconnectDelay: 0, // 자체 재연결 로직 사용
 
     onConnect: () => {
       stompConnected = true;
+      resetReconnectState(); // 연결 성공 시 재연결 상태 초기화
       broadcast({ type: 'CONNECTED' });
 
       // 연결 전에 대기 중이던 구독 처리
@@ -174,6 +243,9 @@ function connectStomp(token: string, wsUrl: string): void {
       stompConnected = false;
       activeSubscriptions.clear();
       broadcast({ type: 'DISCONNECTED' });
+
+      // 재연결 시도
+      attemptReconnect();
     },
 
     onStompError: () => {
@@ -182,6 +254,13 @@ function connectStomp(token: string, wsUrl: string): void {
 
     onWebSocketError: (event) => {
       console.error('[Worker] WebSocket error:', event);
+      broadcast({
+        type: 'ERROR',
+        payload: {
+          message: '채팅 연결에 문제가 발생했습니다.',
+          code: 'WEBSOCKET_ERROR',
+        },
+      });
     },
   });
 
@@ -189,6 +268,7 @@ function connectStomp(token: string, wsUrl: string): void {
 }
 
 function disconnectStomp(): void {
+  resetReconnectState();
   if (stompClient) {
     stompClient.deactivate();
     stompClient = null;
@@ -214,7 +294,15 @@ function stompSubscribe(destination: string): void {
     try {
       const body = JSON.parse(message.body);
       handleIncomingMessage(destination, body);
-    } catch {}
+    } catch {
+      broadcast({
+        type: 'ERROR',
+        payload: {
+          message: '메시지를 처리하는 중 오류가 발생했습니다.',
+          code: 'MESSAGE_PARSE_ERROR',
+        },
+      });
+    }
   });
 
   activeSubscriptions.set(destination, subscription);
@@ -297,7 +385,7 @@ async function handleIncomingMessage(destination: string, message: unknown): Pro
 }
 
 /** 모든 탭에 메시지 전송 */
-function broadcast(message: unknown): void {
+function broadcast(message: WorkerEvent): void {
   ports.forEach((port) => port.postMessage(message));
 }
 
@@ -328,10 +416,10 @@ function removePort(port: MessagePort): void {
 // Tab → Worker 메시지 핸들러
 // ============================================
 
-async function handleMessage(port: MessagePort, data: WorkerMessage): Promise<void> {
+async function handleMessage(port: MessagePort, data: WorkerCommand): Promise<void> {
   switch (data.type) {
     case 'CONNECT': {
-      const { token, userId, wsUrl } = data.payload as ConnectPayload;
+      const { token, userId, wsUrl } = data.payload;
 
       const shouldReconnect = (currentToken && currentToken !== token) || (currentWsUrl && currentWsUrl !== wsUrl);
 
@@ -365,13 +453,13 @@ async function handleMessage(port: MessagePort, data: WorkerMessage): Promise<vo
     }
 
     case 'SEND_MESSAGE': {
-      const { articleId, chatroomId, message } = data.payload as SendMessagePayload;
+      const { articleId, chatroomId, message } = data.payload;
       stompSend(`/app/chat/${articleId}/${chatroomId}`, JSON.stringify(message));
       break;
     }
 
     case 'SUBSCRIBE_CHATROOM': {
-      const { articleId, chatroomId } = data.payload as SubscribeChatroomPayload;
+      const { articleId, chatroomId } = data.payload;
       const key = `${articleId}:${chatroomId}`;
       const dest = `/topic/chat/${articleId}/${chatroomId}`;
 
@@ -389,7 +477,7 @@ async function handleMessage(port: MessagePort, data: WorkerMessage): Promise<vo
     }
 
     case 'UNSUBSCRIBE_CHATROOM': {
-      const { articleId, chatroomId } = data.payload as SubscribeChatroomPayload;
+      const { articleId, chatroomId } = data.payload;
       const key = `${articleId}:${chatroomId}`;
       const dest = `/topic/chat/${articleId}/${chatroomId}`;
 
@@ -406,7 +494,7 @@ async function handleMessage(port: MessagePort, data: WorkerMessage): Promise<vo
     }
 
     case 'GET_MESSAGES': {
-      const { articleId, chatroomId } = data.payload as GetMessagesPayload;
+      const { articleId, chatroomId } = data.payload;
       const messages = await getMessagesByChatroom(articleId, chatroomId);
       port.postMessage({
         type: 'MESSAGES',
@@ -416,7 +504,7 @@ async function handleMessage(port: MessagePort, data: WorkerMessage): Promise<vo
     }
 
     case 'SYNC_MESSAGES': {
-      const { articleId, chatroomId, messages } = data.payload as SyncMessagesPayload;
+      const { articleId, chatroomId, messages } = data.payload;
 
       const chatMessages: Omit<ChatMessage, 'id'>[] = messages.map((msg) => ({
         articleId,
@@ -442,7 +530,7 @@ async function handleMessage(port: MessagePort, data: WorkerMessage): Promise<vo
     }
 
     case 'MERGE_MESSAGES': {
-      const { articleId, chatroomId, messages } = data.payload as SyncMessagesPayload;
+      const { articleId, chatroomId, messages } = data.payload;
 
       const chatMessages: Omit<ChatMessage, 'id'>[] = messages.map((msg) => ({
         articleId,
@@ -474,7 +562,7 @@ async function handleMessage(port: MessagePort, data: WorkerMessage): Promise<vo
     }
 
     case 'CLEAR_MESSAGES': {
-      const { articleId, chatroomId } = data.payload as GetMessagesPayload;
+      const { articleId, chatroomId } = data.payload;
 
       await withWriteLock(async () => {
         await clearChatroomMessages(articleId, chatroomId);
