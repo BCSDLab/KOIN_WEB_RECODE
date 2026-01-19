@@ -12,7 +12,7 @@ const useInfiniteScroll = (
   options: UseInfiniteScrollOptions = {},
 ) => {
   const { threshold = 0.3, enabled = true } = options;
-  const observerRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!enabled || !hasNextPage || isFetchingNextPage) return undefined;
