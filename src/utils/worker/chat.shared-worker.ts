@@ -337,7 +337,7 @@ function stompSend(destination: string, body: string): void {
  * - IndexedDB에 저장 (chatDB.ts 사용)
  * - 해당 채팅방을 구독 중인 탭에 전달
  */
-async function handleIncomingMessage(destination: string, message: unknown): Promise<void> {
+async function handleIncomingMessage(destination: string, message: ChatMessageData): Promise<void> {
   const chatMatch = destination.match(/\/topic\/chat\/(\d+)\/(\d+)/);
 
   if (chatMatch) {
@@ -345,23 +345,15 @@ async function handleIncomingMessage(destination: string, message: unknown): Pro
     const chatroomId = parseInt(chatMatch[2], 10);
     const key = `${articleId}:${chatroomId}`;
 
-    const msg = message as {
-      user_id: number;
-      user_nickname: string;
-      content: string;
-      timestamp: string;
-      is_image: boolean;
-    };
-
     await withWriteLock(async () => {
       await addMessage({
         articleId,
         chatroomId,
-        userId: msg.user_id,
-        userNickname: msg.user_nickname,
-        content: msg.content,
-        timestamp: msg.timestamp,
-        isImage: msg.is_image,
+        userId: message.user_id,
+        userNickname: message.user_nickname,
+        content: message.content,
+        timestamp: message.timestamp,
+        isImage: message.is_image,
         isSynced: 1,
       });
     });
@@ -372,7 +364,7 @@ async function handleIncomingMessage(destination: string, message: unknown): Pro
       subscribedPorts.forEach((port) => {
         port.postMessage({
           type: 'NEW_MESSAGE',
-          payload: { articleId, chatroomId, message: msg },
+          payload: { articleId, chatroomId, message },
         });
       });
     }
