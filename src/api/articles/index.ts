@@ -14,6 +14,7 @@ import {
   GetLostItemChatroomDetail,
   GetLostItemChatroomDetailMessages,
   GetLostItemStat,
+  PostFoundLostItem,
 } from './APIDetail';
 
 export const getArticles = (token: string, page: string) => APIClient.of(GetArticles)(token, page);
@@ -43,3 +44,5 @@ export const getLostItemChatroomDetailMessages = APIClient.of(GetLostItemChatroo
 export const postBlockLostItemChatroom = APIClient.of(PostBlockLostItemChatroom);
 
 export const getLostItemStat = APIClient.of(GetLostItemStat);
+
+export const postFoundLostItem = APIClient.of(PostFoundLostItem);
