@@ -87,11 +87,11 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   const requireLogin = (modalTitle: string, onSuccess: () => void) => {
     if (token) {
       onSuccess();
-    } else {
-      portalManager.open((portalOption) => (
-        <LoginRequiredModal title={modalTitle} description="로그인 후 이용해주세요." onClose={portalOption.close} />
-      ));
+      return;
     }
+    portalManager.open((portalOption) => (
+      <LoginRequiredModal title={modalTitle} description="로그인 후 이용해주세요." onClose={portalOption.close} />
+    ));
   };
 
   const handleToggleFound = () => {
@@ -108,9 +108,9 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
       logItemPostReportClick();
       if (isMobile) {
         navigate(ROUTES.ArticlesReport({ id: String(articleId), isLink: true }));
-      } else {
-        openReportModal();
+        return;
       }
+      openReportModal();
     });
   };
 
