@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Client } from '@stomp/stompjs';
+import showToast from 'utils/ts/showToast';
 import type { LostItemChatroomDetailMessage } from 'api/articles/entity';
 
 interface WorkerMessage {
@@ -48,6 +50,10 @@ interface UseChatWorkerReturn {
   clearRealtimeMessages: () => void;
 }
 
+function isSharedWorkerSupported(): boolean {
+  return typeof window !== 'undefined' && 'SharedWorker' in window;
+}
+
 // ============================================
 // SharedWorker 싱글톤
 // ============================================
@@ -55,10 +61,7 @@ interface UseChatWorkerReturn {
 let sharedWorker: SharedWorker | null = null;
 
 function getSharedWorker(): SharedWorker | null {
-  if (typeof window === 'undefined') return null;
-
-  if (!('SharedWorker' in window)) {
-    console.warn('[useChatWorker] SharedWorker is not supported in this browser');
+  if (!isSharedWorkerSupported()) {
     return null;
   }
 
@@ -69,16 +72,20 @@ function getSharedWorker(): SharedWorker | null {
         name: 'koin-chat-worker',
       });
 
-      sharedWorker.onerror = (e) => {
-        console.error('[useChatWorker] SharedWorker error:', e);
+      sharedWorker.onerror = () => {
+        showToast('error', '채팅 연결에 문제가 발생했습니다.');
       };
-    } catch (error) {
-      console.error('[useChatWorker] Failed to create SharedWorker:', error);
+    } catch {
+      showToast('error', '채팅 서비스를 시작할 수 없습니다.');
       return null;
     }
   }
 
   return sharedWorker;
+}
+
+function getWebSocketUrl(): string {
+  return `${process.env.NEXT_PUBLIC_API_PATH?.replace('https', 'wss').replace('http', 'ws')}/ws-stomp`;
 }
 
 export default function useChatWorker({
@@ -93,6 +100,10 @@ export default function useChatWorker({
 
   const portRef = useRef<MessagePort | null>(null);
 
+  const stompClientRef = useRef<Client | null>(null);
+  const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null);
+  const listSubscriptionRef = useRef<{ unsubscribe: () => void } | null>(null);
+
   const onChatroomListUpdatedRef = useRef(onChatroomListUpdated);
   useEffect(() => {
     onChatroomListUpdatedRef.current = onChatroomListUpdated;
@@ -104,6 +115,8 @@ export default function useChatWorker({
   }, [articleId, chatroomId]);
 
   useEffect(() => {
+    if (!isSharedWorkerSupported()) return undefined;
+
     const worker = getSharedWorker();
     if (!worker || !userId) return undefined;
 
@@ -154,9 +167,15 @@ export default function useChatWorker({
           onChatroomListUpdatedRef.current?.();
           break;
 
-        case 'ERROR':
-          console.error('Chat worker error:', payload);
+        case 'ERROR': {
+          const errorPayload = payload as { message?: string; code?: string } | undefined;
+          if (errorPayload?.code === 'MAX_RECONNECT_ATTEMPTS') {
+            showToast('error', '채팅 서버 연결에 실패했습니다. 페이지를 새로고침해 주세요.');
+          } else {
+            showToast('error', errorPayload?.message || '채팅 중 오류가 발생했습니다.');
+          }
           break;
+        }
 
         default:
           break;
@@ -166,7 +185,7 @@ export default function useChatWorker({
     port.addEventListener('message', handleMessage);
     port.start();
 
-    const wsUrl = `${process.env.NEXT_PUBLIC_API_PATH?.replace('https', 'wss').replace('http', 'ws')}/ws-stomp`;
+    const wsUrl = getWebSocketUrl();
 
     port.postMessage({
       type: 'CONNECT',
@@ -176,7 +195,9 @@ export default function useChatWorker({
     const onPageHide = () => {
       try {
         port.postMessage({ type: 'DISCONNECT' });
-      } catch {}
+      } catch {
+        // ignore
+      }
     };
     window.addEventListener('pagehide', onPageHide);
 
@@ -186,8 +207,62 @@ export default function useChatWorker({
     };
   }, [token, userId]);
 
-  // ========== Effect: 채팅방 구독 ==========
+  // ============================================
+  // 폴백 : 직접 STOMP 연결 (모바일 브라우저 SharedWorker 미지원 시)
+  // ============================================
   useEffect(() => {
+    if (isSharedWorkerSupported()) return undefined;
+    if (!userId || !token) return undefined;
+
+    const wsUrl = getWebSocketUrl();
+
+    const client = new Client({
+      brokerURL: wsUrl,
+      connectHeaders: {
+        Authorization: token,
+      },
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+      reconnectDelay: 5000,
+
+      onConnect: () => {
+        setIsConnected(true);
+
+        // 채팅방 목록 업데이트 구독
+        if (userId) {
+          listSubscriptionRef.current = client.subscribe(`/topic/chatroom/list/${userId}`, () => {
+            onChatroomListUpdatedRef.current?.();
+          });
+        }
+      },
+
+      onDisconnect: () => {
+        setIsConnected(false);
+      },
+
+      onStompError: () => {
+        showToast('error', '채팅 서버 연결 중 오류가 발생했습니다.');
+      },
+
+      onWebSocketError: () => {
+        showToast('error', '채팅 연결에 문제가 발생했습니다.');
+      },
+    });
+
+    client.activate();
+    stompClientRef.current = client;
+
+    return () => {
+      listSubscriptionRef.current?.unsubscribe();
+      listSubscriptionRef.current = null;
+      client.deactivate();
+      stompClientRef.current = null;
+    };
+  }, [token, userId]);
+
+  useEffect(() => {
+    if (!isSharedWorkerSupported()) return undefined;
+
     const port = portRef.current;
     if (!port || articleId == null || chatroomId == null) return undefined;
 
@@ -210,21 +285,74 @@ export default function useChatWorker({
     };
   }, [articleId, chatroomId]);
 
+  // ============================================
+  // 폴백: 채팅방 구독
+  // ============================================
+  useEffect(() => {
+    if (isSharedWorkerSupported()) return undefined;
+
+    const client = stompClientRef.current;
+    if (!client?.connected || articleId == null || chatroomId == null) return undefined;
+
+    const destination = `/topic/chat/${articleId}/${chatroomId}`;
+
+    subscriptionRef.current = client.subscribe(destination, (message) => {
+      try {
+        const body = JSON.parse(message.body);
+        const formattedMessage: LostItemChatroomDetailMessage = {
+          user_id: body.user_id,
+          user_nickname: body.user_nickname,
+          content: body.content,
+          timestamp: body.timestamp,
+          is_image: body.is_image,
+        };
+
+        const { articleId: currentArticleId, chatroomId: currentChatroomId } = currentRoomRef.current;
+        if (articleId === currentArticleId && chatroomId === currentChatroomId) {
+          setRealtimeMessages((prev) => [...prev, formattedMessage]);
+        }
+      } catch {
+        showToast('error', '메시지를 불러오는 중 오류가 발생했습니다.');
+      }
+    });
+
+    return () => {
+      subscriptionRef.current?.unsubscribe();
+      subscriptionRef.current = null;
+      setRealtimeMessages([]);
+    };
+  }, [articleId, chatroomId, isConnected]);
+
   const sendMessage = useCallback(
     (message: { user_nickname: string; user_id: number; content: string; timestamp: string; is_image: boolean }) => {
-      const port = portRef.current;
-      if (!port || articleId == null || chatroomId == null) return;
+      if (articleId == null || chatroomId == null) return;
 
-      port.postMessage({
-        type: 'SEND_MESSAGE',
-        payload: { articleId, chatroomId, message },
-      });
+      if (isSharedWorkerSupported()) {
+        const port = portRef.current;
+        if (!port) return;
+
+        port.postMessage({
+          type: 'SEND_MESSAGE',
+          payload: { articleId, chatroomId, message },
+        });
+      } else {
+        const client = stompClientRef.current;
+        if (!client?.connected) return;
+
+        client.publish({
+          destination: `/app/chat/${articleId}/${chatroomId}`,
+          body: JSON.stringify(message),
+          headers: { 'content-type': 'application/json' },
+        });
+      }
     },
     [articleId, chatroomId],
   );
 
   const syncMessages = useCallback(
     (messages: LostItemChatroomDetailMessage[]) => {
+      if (!isSharedWorkerSupported()) return;
+
       const port = portRef.current;
       if (!port || articleId == null || chatroomId == null) return;
 
@@ -238,6 +366,8 @@ export default function useChatWorker({
 
   const mergeMessages = useCallback(
     (messages: LostItemChatroomDetailMessage[]) => {
+      if (!isSharedWorkerSupported()) return;
+
       const port = portRef.current;
       if (!port || articleId == null || chatroomId == null) return;
 
