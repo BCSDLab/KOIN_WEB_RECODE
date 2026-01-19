@@ -6,10 +6,8 @@
   gap: 8px;
 
   @include media.media-breakpoint(mobile) {
-    display: flex;
     box-sizing: border-box;
     width: 100%;
-    flex-direction: column;
     align-items: flex-start;
     padding: 0 8px;
     margin-bottom: 33px;
