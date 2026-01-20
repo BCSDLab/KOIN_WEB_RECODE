@@ -2,6 +2,8 @@ import { cn } from '@bcsdlab/utils';
 import ChevronDown from 'assets/svg/Articles/chevron-down.svg';
 import WarnIcon from 'assets/svg/Articles/warn.svg';
 import Calendar from 'components/Articles/LostItemWritePage/components/Calendar';
+import MobileDatePicker from 'components/Articles/LostItemWritePage/components/MobileDatePicker/MobileDatePicker';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -32,11 +34,17 @@ export default function FormDate({
   type,
 }: FormDateProps) {
   const [calendarOpen, , closeCalendar, toggleCalendar] = useBooleanState(false);
+  const isMobile = useMediaQuery();
 
   const handleDateSelect = (date: Date) => {
     setFoundDate(date);
     setHasDateBeenSelected();
     closeCalendar();
+  };
+
+  const handleMobileDateSelect = (date: Date) => {
+    setFoundDate(date);
+    setHasDateBeenSelected();
   };
 
   const { containerRef } = useOutsideClick({ onOutsideClick: closeCalendar });
@@ -82,7 +90,11 @@ export default function FormDate({
           </button>
           {calendarOpen && (
             <div className={styles.date__calendar}>
-              <Calendar selectedDate={foundDate} setSelectedDate={handleDateSelect} />
+              {isMobile ? (
+                <MobileDatePicker selectedDate={foundDate} setSelectedDate={handleMobileDateSelect} />
+              ) : (
+                <Calendar selectedDate={foundDate} setSelectedDate={handleDateSelect} />
+              )}
             </div>
           )}
         </div>
