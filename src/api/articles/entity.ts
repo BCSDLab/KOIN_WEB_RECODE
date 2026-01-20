@@ -211,3 +211,13 @@ export interface LostItemStatResponse {
   found_count: number;
   not_found_count: number;
 }
+
+// PUT /articles/lost-item/{id}
+export interface UpdateLostItemArticleRequestDTO {
+  category: string;
+  found_place: string;
+  found_date: string; // yyyy-MM-dd
+  content: string;
+  new_images: string[];
+  delete_image_ids: number[];
+}

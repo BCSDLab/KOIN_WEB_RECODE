@@ -16,6 +16,7 @@ import {
   LostItemChatroomDetailMessagesResponse,
   LostItemStatResponse,
   LostItemArticlesRequest,
+  UpdateLostItemArticleRequestDTO,
 } from './entity';
 
 export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
@@ -195,9 +196,9 @@ export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse>
   }
 }
 
-export class GetLostItemChatroomDetailMessages<R extends LostItemChatroomDetailMessagesResponse>
-  implements APIRequest<R>
-{
+export class GetLostItemChatroomDetailMessages<
+  R extends LostItemChatroomDetailMessagesResponse,
+> implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -257,5 +258,23 @@ export class PostFoundLostItem<R extends object> implements APIRequest<R> {
     id: number,
   ) {
     this.path = `/articles/lost-item/${id}/found`;
+  }
+}
+
+export class PutLostItemArticle<R extends SingleLostItemArticleResponseDTO> implements APIRequest<R> {
+  method = HTTP_METHOD.PUT;
+
+  path: string;
+
+  response!: R;
+
+  auth = true;
+
+  constructor(
+    public authorization: string,
+    id: number,
+    public data: UpdateLostItemArticleRequestDTO,
+  ) {
+    this.path = `/articles/lost-item/${id}`;
   }
 }
