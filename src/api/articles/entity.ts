@@ -50,7 +50,7 @@ export type HotArticle = Article;
 export type HotArticlesResponse = HotArticle[];
 
 // GET /articles/lost-item/v2
-interface LostItemArticleForGetDTO {
+export interface LostItemArticleForGetDTO {
   id: number;
   board_id: number;
   type: string;
