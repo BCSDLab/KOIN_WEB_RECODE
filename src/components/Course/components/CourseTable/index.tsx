@@ -6,6 +6,7 @@ type TableVariant = 'open' | 'pre' | 'selected';
 interface Column<T> {
   key: string;
   header: string;
+  className?: string;
   render: (item: T, index: number) => React.ReactNode;
 }
 
@@ -49,7 +50,7 @@ export default function CourseTable<T>({ variant, title, data, columns, getRowKe
               {data.map((item, index) => (
                 <tr key={getRowKey(item, index)} className={styles.table__row}>
                   {columns.map((col) => (
-                    <td key={col.key} className={styles.table__td}>
+                    <td key={col.key} className={`${styles.table__td} ${col.className || ''}`}>
                       {col.render(item, index)}
                     </td>
                   ))}
@@ -91,6 +92,7 @@ const col = {
   lectureName: <T extends { lecture_info?: { lecture_name: string } | null }>(): Column<T> => ({
     key: 'name',
     header: '교과목명',
+    className: styles['table__text-left'],
     render: (item) => item.lecture_info?.lecture_name ?? '사용자 지정',
   }),
   section: <T extends { class_number?: string | null }>(): Column<T> => ({
@@ -122,11 +124,21 @@ export function createOpenCoursesColumns(onAddCourse: (course: PreCourse) => voi
       ),
     },
     { key: 'code', header: '강의코드', render: (course) => course.lecture_info.lecture_code },
-    { key: 'name', header: '교과목명', render: (course) => course.lecture_info.lecture_name },
+    {
+      key: 'name',
+      header: '교과목명',
+      className: styles['table__text-left'],
+      render: (course) => course.lecture_info.lecture_name,
+    },
     col.section(),
     { key: 'professor', header: '담당교수', render: (course) => course.professor },
     col.grades(),
-    { key: 'time', header: '수업교시', render: (course) => course.class_time },
+    {
+      key: 'time',
+      header: '수업교시',
+      className: styles['table__text-left'],
+      render: (course) => course.class_time,
+    },
     { key: 'capacity', header: '수강정원', render: (course) => course.regular_number },
     { key: 'enrolled', header: '신청인원', render: () => '-' },
   ];
