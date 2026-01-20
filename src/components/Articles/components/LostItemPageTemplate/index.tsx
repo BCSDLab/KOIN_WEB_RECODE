@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import AddIcon from 'assets/svg/Articles/add.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
@@ -29,6 +30,11 @@ export default function LostItemPageTemplate({
   onAddButtonClick,
 }: LostItemPageTemplateProps) {
   const isMobile = useMediaQuery();
+  const router = useRouter();
+
+  const handleCancelClick = () => {
+    router.back();
+  };
 
   return (
     <div className={styles.container}>
@@ -59,7 +65,7 @@ export default function LostItemPageTemplate({
               <button
                 className={`${styles['buttons__button']} ${styles['buttons__button--cancel']}`}
                 type="button"
-                onClick={onBottomButtonClick}
+                onClick={handleCancelClick}
                 disabled={isBottomButtonDisabled}
               >
                 취소하기
