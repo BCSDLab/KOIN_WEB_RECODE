@@ -13,8 +13,6 @@ import useCourseSearchForm from 'components/Course/hooks/useCourseSearchForm';
 import useSelectedCourses, { getCourseKey } from 'components/Course/hooks/useSelectedCourses';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
 import useTokenState from 'utils/hooks/state/useTokenState';
-import { useUser } from 'utils/hooks/state/useUser';
-import { isStudentUser } from 'utils/ts/userTypeGuards';
 import { useSemester } from 'utils/zustand/semester';
 import styles from './CoursePage.module.scss';
 
@@ -64,12 +62,6 @@ function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCou
 function CoursePage() {
   const token = useTokenState();
   const semester = useSemester();
-  const { data: user } = useUser();
-
-  const studentInfo = {
-    studentNumber: isStudentUser(user) ? user.student_number : '',
-    name: user?.name ?? '',
-  };
 
   const { formInputs, searchParams, handleSearch, handleDepartmentChange, handleNameChange } = useCourseSearchForm({
     initialYear: semester.year,
@@ -93,7 +85,6 @@ function CoursePage() {
         <CourseSearchForm
           formInputs={formInputs}
           semester={semester}
-          studentInfo={studentInfo}
           onSearch={handleSearch}
           onDepartmentChange={handleDepartmentChange}
           onNameChange={handleNameChange}
