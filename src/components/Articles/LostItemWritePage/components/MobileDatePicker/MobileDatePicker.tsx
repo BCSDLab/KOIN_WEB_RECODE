@@ -17,37 +17,47 @@ export default function MobileDatePicker({ selectedDate, setSelectedDate }: Mobi
 
   const today = useMemo(() => new Date(), []);
 
-  const {
-    years, months, days, currentYear, currentMonth, currentDay,
-  } = useMemo(() => getDateRange({ selectedDate, maxDate: today }), [selectedDate, today]);
+  const { years, months, days, currentYear, currentMonth, currentDay } = useMemo(
+    () => getDateRange({ selectedDate, maxDate: today }),
+    [selectedDate, today],
+  );
 
   const { syncScrollPosition, createScrollHandler } = useScrollPicker({ itemHeight: ITEM_HEIGHT });
 
-  const handleYearChange = (year: number) => {
-    const clamped = clampDate(year, currentMonth, currentDay, today);
-    setSelectedDate(new Date(clamped.year, clamped.month - 1, clamped.day));
+  const handleDateChange = (type: 'year' | 'month' | 'day', value: number) => {
+    const newDate =
+      type === 'year'
+        ? clampDate(value, currentMonth, currentDay, today)
+        : type === 'month'
+          ? clampDate(currentYear, value, currentDay, today)
+          : { year: currentYear, month: currentMonth, day: value };
+
+    setSelectedDate(new Date(newDate.year, newDate.month - 1, newDate.day));
   };
 
-  const handleMonthChange = (month: number) => {
-    const clamped = clampDate(currentYear, month, currentDay, today);
-    setSelectedDate(new Date(clamped.year, clamped.month - 1, clamped.day));
-  };
-
-  const handleDayChange = (day: number) => {
-    setSelectedDate(new Date(currentYear, currentMonth - 1, day));
-  };
-
-  const handleYearScroll = () => {
-    createScrollHandler(years, currentYear, handleYearChange, () => yearRef.current)();
-  };
-
-  const handleMonthScroll = () => {
-    createScrollHandler(months, currentMonth, handleMonthChange, () => monthRef.current)();
-  };
-
-  const handleDayScroll = () => {
-    createScrollHandler(days, currentDay, handleDayChange, () => dayRef.current)();
-  };
+  const columns = [
+    {
+      ref: yearRef,
+      items: years,
+      current: currentYear,
+      suffix: '년',
+      type: 'year' as const,
+    },
+    {
+      ref: monthRef,
+      items: months,
+      current: currentMonth,
+      suffix: '월',
+      type: 'month' as const,
+    },
+    {
+      ref: dayRef,
+      items: days,
+      current: currentDay,
+      suffix: '일',
+      type: 'day' as const,
+    },
+  ];
 
   useLayoutEffect(() => {
     syncScrollPosition(yearRef, years, currentYear);
@@ -59,62 +69,30 @@ export default function MobileDatePicker({ selectedDate, setSelectedDate }: Mobi
     <div className={styles.picker}>
       <div className={styles.highlight} />
       <div className={styles.columns}>
-        <div
-          className={styles.column}
-          ref={yearRef}
-          onScroll={handleYearScroll}
-        >
-          <div className={styles.padding} />
-          {years.map((year) => (
-            <div
-              key={year}
-              className={styles.item}
-              data-selected={year === currentYear}
-            >
-              {year}
-              년
-            </div>
-          ))}
-          <div className={styles.padding} />
-        </div>
-
-        <div
-          className={styles.column}
-          ref={monthRef}
-          onScroll={handleMonthScroll}
-        >
-          <div className={styles.padding} />
-          {months.map((month) => (
-            <div
-              key={month}
-              className={styles.item}
-              data-selected={month === currentMonth}
-            >
-              {month}
-              월
-            </div>
-          ))}
-          <div className={styles.padding} />
-        </div>
-
-        <div
-          className={styles.column}
-          ref={dayRef}
-          onScroll={handleDayScroll}
-        >
-          <div className={styles.padding} />
-          {days.map((day) => (
-            <div
-              key={day}
-              className={styles.item}
-              data-selected={day === currentDay}
-            >
-              {day}
-              일
-            </div>
-          ))}
-          <div className={styles.padding} />
-        </div>
+        {columns.map(({ ref, items, current, suffix, type }) => (
+          <div
+            key={type}
+            className={styles.column}
+            ref={ref}
+            onScroll={() =>
+              createScrollHandler(
+                items,
+                current,
+                (value: number) => handleDateChange(type, value),
+                () => ref.current,
+              )()
+            }
+          >
+            <div className={styles.padding} />
+            {items.map((item) => (
+              <div key={item} className={styles.item} data-selected={item === current}>
+                {item}
+                {suffix}
+              </div>
+            ))}
+            <div className={styles.padding} />
+          </div>
+        ))}
       </div>
     </div>
   );
