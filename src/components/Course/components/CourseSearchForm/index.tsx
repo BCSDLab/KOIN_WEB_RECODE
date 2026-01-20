@@ -43,83 +43,109 @@ export default function CourseSearchForm({
   onNameChange,
 }: CourseSearchFormProps) {
   return (
-    <div className={styles.search}>
-      <form className={styles.search__form} onSubmit={onSearch}>
-        <div className={styles.search__group}>
-          <label htmlFor="course-type" className={styles.search__label}>
-            이수구분
-          </label>
-          <select id="course-type" className={styles.search__select}>
-            <option>(전체)</option>
-          </select>
-        </div>
-
-        <div className={styles.search__group}>
-          <label htmlFor="department" className={styles.search__label}>
-            개설학부(과)
-          </label>
-          <select
-            id="department"
-            className={styles.search__select}
-            value={formInputs.department || '(전체)'}
-            onChange={onDepartmentChange}
-          >
-            {DEPARTMENTS.map((dept) => (
-              <option key={dept}>{dept}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className={styles.search__group}>
-          <label htmlFor="year" className={`${styles.search__label} ${styles['search__label--required']}`}>
-            학년도
-          </label>
-          <input id="year" className={styles.search__input} type="text" value={semester.year} disabled />
-        </div>
-
-        <div className={styles.search__group}>
-          <label htmlFor="semester" className={`${styles.search__label} ${styles['search__label--required']}`}>
-            학기구분
-          </label>
-          <input id="semester" className={styles.search__input} type="text" value={semester.term} disabled />
-        </div>
-
-        <div className={styles.search__group}>
-          <label htmlFor="course-name" className={styles.search__label}>
-            개설과목
-          </label>
-          <input
-            id="course-name"
-            className={styles.search__input}
-            type="text"
-            placeholder="과목명 또는 코드"
-            value={formInputs.name}
-            onChange={onNameChange}
+    <form onSubmit={onSearch}>
+      <div className={styles.header}>
+        <button type="submit" className={styles.header__button}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className={styles.header__icon}
+            src="https://kut90.koreatech.ac.kr/nxweb/images/common/Button/btn_search.png"
+            alt="조회"
           />
-        </div>
-
-        <div className={styles.search__group} aria-hidden="true" />
-
-        <div className={styles.search__group}>
-          <label htmlFor="student-id" className={`${styles.search__label} ${styles['search__label--required']}`}>
-            학번
-          </label>
-          <input
-            id="student-id"
-            className={styles.search__input}
-            type="text"
-            value={studentInfo.studentNumber}
-            disabled
+          조회
+        </button>
+        <button type="button" className={styles.header__button}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className={styles.header__icon}
+            src="https://kut90.koreatech.ac.kr/nxweb/images/common/Button/btn_help.png"
+            alt="도움말"
           />
-        </div>
+          도움말
+        </button>
+        <button type="button" className={styles.header__button}>
+          메인으로
+        </button>
+      </div>
 
-        <div className={styles.search__group}>
-          <label htmlFor="student-name" className={`${styles.search__label} ${styles['search__label--required']}`}>
-            이름
-          </label>
-          <input id="student-name" className={styles.search__input} type="text" value={studentInfo.name} disabled />
+      <div className={styles.search}>
+        <div className={styles.search__form}>
+          <div className={styles.search__group}>
+            <label htmlFor="course-type" className={styles.search__label}>
+              이수구분
+            </label>
+            <select id="course-type" className={styles.search__select}>
+              <option>(전체)</option>
+            </select>
+          </div>
+
+          <div className={styles.search__group}>
+            <label htmlFor="department" className={styles.search__label}>
+              개설학부(과)
+            </label>
+            <select
+              id="department"
+              className={styles.search__select}
+              value={formInputs.department || '(전체)'}
+              onChange={onDepartmentChange}
+            >
+              {DEPARTMENTS.map((dept) => (
+                <option key={dept}>{dept}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.search__group}>
+            <label htmlFor="year" className={`${styles.search__label} ${styles['search__label--required']}`}>
+              학년도
+            </label>
+            <input id="year" className={styles.search__input} type="text" value={semester.year} disabled />
+          </div>
+
+          <div className={styles.search__group}>
+            <label htmlFor="semester" className={`${styles.search__label} ${styles['search__label--required']}`}>
+              학기구분
+            </label>
+            <input id="semester" className={styles.search__input} type="text" value={semester.term} disabled />
+          </div>
+
+          <div className={styles.search__group}>
+            <label htmlFor="course-name" className={styles.search__label}>
+              개설과목
+            </label>
+            <input
+              id="course-name"
+              className={styles.search__input}
+              type="text"
+              placeholder="과목명 또는 코드"
+              value={formInputs.name}
+              onChange={onNameChange}
+            />
+          </div>
+
+          <div className={styles.search__group} aria-hidden="true" />
+
+          <div className={styles.search__group}>
+            <label htmlFor="student-id" className={`${styles.search__label} ${styles['search__label--required']}`}>
+              학번
+            </label>
+            <input
+              id="student-id"
+              className={styles.search__input}
+              type="text"
+              value={studentInfo.studentNumber}
+              disabled
+            />
+          </div>
+
+          <div className={styles.search__group}>
+            <label htmlFor="student-name" className={`${styles.search__label} ${styles['search__label--required']}`}>
+              이름
+            </label>
+            <input id="student-name" className={styles.search__input} type="text" value={studentInfo.name} disabled />
+          </div>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
