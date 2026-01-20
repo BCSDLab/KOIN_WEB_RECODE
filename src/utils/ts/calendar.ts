@@ -67,3 +67,87 @@ export function getYyyyMmDd(date: Date): string {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+
+export function getDaysInMonth(year: number, month: number): number {
+  return new Date(year, month, 0).getDate();
+}
+
+interface DateRangeOptions {
+  selectedDate: Date;
+  minDate?: Date;
+  maxDate?: Date;
+}
+
+interface DateRangeResult {
+  years: number[];
+  months: number[];
+  days: number[];
+  currentYear: number;
+  currentMonth: number;
+  currentDay: number;
+}
+
+export function getDateRange({ selectedDate, minDate, maxDate }: DateRangeOptions): DateRangeResult {
+  const today = maxDate ?? new Date();
+  const startDate = minDate ?? new Date(today.getFullYear() - 1, 0, 1);
+
+  const currentYear = selectedDate.getFullYear();
+  const currentMonth = selectedDate.getMonth() + 1;
+  const currentDay = selectedDate.getDate();
+
+  const years: number[] = [];
+  const startYear = startDate.getFullYear();
+  const endYear = today.getFullYear();
+  for (let y = startYear; y <= endYear; y += 1) {
+    years.push(y);
+  }
+
+  const months: number[] = [];
+  const startMonth = currentYear === startDate.getFullYear() ? startDate.getMonth() + 1 : 1;
+  const endMonth = currentYear === today.getFullYear() ? today.getMonth() + 1 : 12;
+  for (let m = startMonth; m <= endMonth; m += 1) {
+    months.push(m);
+  }
+
+  const days: number[] = [];
+  const startDay =
+    currentYear === startDate.getFullYear() && currentMonth === startDate.getMonth() + 1 ? startDate.getDate() : 1;
+  let endDay = getDaysInMonth(currentYear, currentMonth);
+  if (currentYear === today.getFullYear() && currentMonth === today.getMonth() + 1) {
+    endDay = Math.min(endDay, today.getDate());
+  }
+  for (let d = startDay; d <= endDay; d += 1) {
+    days.push(d);
+  }
+
+  return {
+    years,
+    months,
+    days,
+    currentYear,
+    currentMonth,
+    currentDay,
+  };
+}
+
+export function clampDate(
+  year: number,
+  month: number,
+  day: number,
+  maxDate: Date,
+): { year: number; month: number; day: number } {
+  const newYear = year;
+  let newMonth = month;
+  let newDay = day;
+
+  const maxMonth = newYear === maxDate.getFullYear() ? maxDate.getMonth() + 1 : 12;
+  if (newMonth > maxMonth) newMonth = maxMonth;
+
+  let maxDay = getDaysInMonth(newYear, newMonth);
+  if (newYear === maxDate.getFullYear() && newMonth === maxDate.getMonth() + 1) {
+    maxDay = Math.min(maxDay, maxDate.getDate());
+  }
+  if (newDay > maxDay) newDay = maxDay;
+
+  return { year: newYear, month: newMonth, day: newDay };
+}
