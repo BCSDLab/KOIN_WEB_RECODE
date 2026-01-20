@@ -1,26 +1,15 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import AddIcon from 'assets/svg/Articles/add.svg';
-import FoundIcon from 'assets/svg/Articles/found.svg';
-import LostIcon from 'assets/svg/Articles/lost.svg';
+import LostItemPageTemplate from 'components/Articles/components/LostItemPageTemplate';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { useLostItemForm } from 'components/Articles/hooks/useLostItemForm';
 import usePostLostItemArticles from 'components/Articles/hooks/usePostLostItemArticles';
 import LostItemForm from 'components/Articles/LostItemWritePage/components/LostItemForm';
 import ROUTES from 'static/routes';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import { useUser } from 'utils/hooks/state/useUser';
+import { getYyyyMmDd } from 'utils/ts/calendar';
 import showToast from 'utils/ts/showToast';
 import uuidv4 from 'utils/ts/uuidGenerater';
-import styles from './LostItemWritePage.module.scss';
-
-const getyyyyMMdd = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-};
 
 const TITLES = {
   FOUND: {
@@ -34,18 +23,16 @@ const TITLES = {
     description: '분실한 물건을 자세히 설명해주세요!',
   },
 };
-
 type LostItemType = 'FOUND' | 'LOST';
 
 export default function LostItemWritePage() {
   const { data: user } = useUser();
   const router = useRouter();
-  const isMobile = useMediaQuery();
   const type: LostItemType = router.asPath.includes('/found') ? 'FOUND' : 'LOST';
   const isFound = type === 'FOUND';
   const { title, subtitle, description } = TITLES[type];
   const { lostItems, lostItemHandler, addLostItem, removeLostItem, validateAndUpdateItems, checkArticleFormFull } =
-    useLostItemForm(type);
+    useLostItemForm({ defaultType: type });
 
   useEffect(() => {
     if (user?.name) {
@@ -94,7 +81,7 @@ export default function LostItemWritePage() {
       category: article.category,
       found_place:
         type === 'LOST' && (!article.foundPlace || article.foundPlace.trim() === '') ? '장소 미상' : article.foundPlace,
-      found_date: getyyyyMMdd(article.foundDate),
+      found_date: getYyyyMmDd(article.foundDate),
       content: article.content,
       images: article.images,
       registered_at: article.registered_at,
@@ -106,44 +93,26 @@ export default function LostItemWritePage() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <div className={styles.header}>
-          <span className={styles.header__title}>
-            {isMobile ? subtitle : title}
-            {isMobile && <span>{isFound ? <FoundIcon /> : <LostIcon />}</span>}
-          </span>
-          <span className={styles.header__description}>{description}</span>
-        </div>
-        <div className={styles.forms}>
-          {lostItems.map((lostItem, index) => (
-            <LostItemForm
-              key={uuidv4()}
-              type={type}
-              count={index}
-              lostItem={lostItem}
-              lostItemHandler={lostItemHandler(index)}
-              removeLostItem={removeLostItem}
-            />
-          ))}
-        </div>
-        <div className={styles.add}>
-          <button className={styles.add__button} type="button" onClick={handleItemAddClick}>
-            <AddIcon />
-            물품 추가
-          </button>
-        </div>
-        <div className={styles.complete}>
-          <button
-            className={styles.complete__button}
-            type="button"
-            onClick={handleCompleteClick}
-            disabled={status === 'pending'}
-          >
-            작성 완료
-          </button>
-        </div>
-      </div>
-    </div>
+    <LostItemPageTemplate
+      title={title}
+      subtitle={subtitle}
+      description={description}
+      isFound={isFound}
+      bottomButtonText="작성 완료"
+      onBottomButtonClick={handleCompleteClick}
+      isBottomButtonDisabled={status === 'pending'}
+      onAddButtonClick={handleItemAddClick}
+    >
+      {lostItems.map((lostItem, index) => (
+        <LostItemForm
+          key={uuidv4()}
+          type={type}
+          count={index}
+          lostItem={lostItem}
+          lostItemHandler={lostItemHandler(index)}
+          removeLostItem={removeLostItem}
+        />
+      ))}
+    </LostItemPageTemplate>
   );
 }
