@@ -33,19 +33,17 @@ export default function CourseTable<T>({ variant, title, data, columns, getRowKe
         {headerExtra}
       </div>
       <div className={styles.table__container}>
-        <table className={styles.table__grid}>
-          <thead className={styles.table__head}>
-            <tr>
-              {columns.map((col) => (
-                <th key={col.key} className={styles.table__th}>
-                  {col.header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-        </table>
         <div className={styles['table__body-wrapper']}>
           <table className={styles['table__body-table']}>
+            <thead>
+              <tr>
+                {columns.map((col) => (
+                  <th key={col.key} className={styles.table__th}>
+                    {col.header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
             <tbody>
               {data.map((item, index) => (
                 <tr key={getRowKey(item, index)} className={styles.table__row}>
