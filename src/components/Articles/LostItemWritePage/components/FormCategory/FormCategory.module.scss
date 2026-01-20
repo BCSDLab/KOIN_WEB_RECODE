@@ -20,6 +20,17 @@
   &__text {
     display: flex;
     flex-direction: column;
+
+    @include media.media-breakpoint(mobile) {
+      justify-content: space-between;
+      flex-direction: row;
+    }
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 
   &__buttons {
@@ -39,7 +50,6 @@
     background-color: #fff;
     border: 1px solid #175c8e;
     color: #175c8e;
-    font-family: Pretendard, sans-serif;
     font-size: 14px;
     font-weight: 500;
 
@@ -48,50 +58,35 @@
       color: #fff;
     }
   }
-}
 
-.title {
-  font-family: Pretendard, sans-serif;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1.2;
+  &__required {
+    color: #f00;
 
-  @include media.media-breakpoint(mobile) {
-    font-size: 14px;
-    line-height: 1.6;
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+    }
   }
 
-  &__description {
-    color: #727272;
-    font-family: Pretendard, sans-serif;
+  &__title {
+    font-size: 20px;
+    font-weight: 500;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  }
+
+  &__warning {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #f7941e;
     font-size: 14px;
     line-height: 1.6;
 
     @include media.media-breakpoint(mobile) {
-      margin-bottom: 12px;
       font-size: 12px;
-      line-height: 1.6;
     }
-  }
-}
-
-.warning {
-  position: absolute;
-  left: 0;
-  bottom: -32px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #f7941e;
-  font-family: Pretendard, sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.6;
-
-  @include media.media-breakpoint(mobile) {
-    left: initial;
-    bottom: initial;
-    right: 0;
-    top: -53px;
   }
 }

@@ -48,7 +48,18 @@ export default function FormDate({
 
   return (
     <div className={styles.date}>
-      <span className={styles.title}>{getDate}</span>
+      <div className={styles.date__text}>
+        <div className={styles.date__label}>
+          <span className={styles['date__title']}>{getDate}</span>
+          <span className={styles['date__required']}>*</span>
+        </div>
+        {!isDateSelected && (
+          <span className={styles['date__warning']}>
+            <WarnIcon />
+            {warningText}
+          </span>
+        )}
+      </div>
       <div className={styles.date__wrapper} ref={containerRef}>
         <div className={styles.date__wrapper}>
           <button className={styles.date__toggle} type="button" onClick={toggleCalendar}>
@@ -73,12 +84,6 @@ export default function FormDate({
             <div className={styles.date__calendar}>
               <Calendar selectedDate={foundDate} setSelectedDate={handleDateSelect} />
             </div>
-          )}
-          {!isDateSelected && (
-            <span className={styles.warning}>
-              <WarnIcon />
-              {warningText}
-            </span>
           )}
         </div>
       </div>
