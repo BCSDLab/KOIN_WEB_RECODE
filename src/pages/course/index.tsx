@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
 import { Course, PreCourse } from 'api/course/entity';
-import CourseHeader from 'components/Course/components/CourseHeader';
 import CourseSearchForm from 'components/Course/components/CourseSearchForm';
 import CourseTable, {
   CreditDisplay,
@@ -80,8 +79,6 @@ function CoursePage() {
   return (
     <div className={styles.viewport}>
       <div className={styles.page}>
-        <CourseHeader onSearch={handleSearch} />
-
         <CourseSearchForm
           formInputs={formInputs}
           semester={semester}
