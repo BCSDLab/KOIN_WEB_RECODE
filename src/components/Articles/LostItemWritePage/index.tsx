@@ -9,7 +9,6 @@ import ROUTES from 'static/routes';
 import { useUser } from 'utils/hooks/state/useUser';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 import showToast from 'utils/ts/showToast';
-import uuidv4 from 'utils/ts/uuidGenerater';
 
 const TITLES = {
   FOUND: {
@@ -105,7 +104,7 @@ export default function LostItemWritePage() {
     >
       {lostItems.map((lostItem, index) => (
         <LostItemForm
-          key={uuidv4()}
+          key={lostItem.id}
           type={type}
           count={index}
           lostItem={lostItem}
