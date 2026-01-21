@@ -27,6 +27,7 @@
  * - Worker → Tab: port.postMessage({ type: 'NEW_MESSAGE', payload: {...} })
  */
 
+import { Client } from '@stomp/stompjs';
 import {
   type ChatMessage,
   addMessage,
@@ -36,7 +37,6 @@ import {
   mergeMessages,
   cleanupOldMessages,
 } from 'utils/db/chatDB';
-import { Client } from '@stomp/stompjs';
 // IndexedDB 함수들을 chatDB.ts에서 import
 
 // ============================================
