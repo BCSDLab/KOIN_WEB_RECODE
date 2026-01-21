@@ -17,6 +17,7 @@
     "framer-motion": "^12.4.4",
     "html-react-parser": "^5.1.10",
     "html2canvas": "^1.4.1",
+    "idb": "^8.0.3",
     "lottie-react": "^2.4.1",
     "next": "15.4.10",
     "react": "19.2.3",
