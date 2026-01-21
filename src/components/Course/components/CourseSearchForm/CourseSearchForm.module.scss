@@ -61,7 +61,7 @@
     font: inherit;
     color: inherit;
     background-color: #fff;
-    background-image: url('https://kut90.koreatech.ac.kr/nxweb/images/common/Combo/img_drop_N.png');
+    background-image: url("https://kut90.koreatech.ac.kr/nxweb/images/common/Combo/img_drop_N.png");
     background-repeat: no-repeat;
     background-position: right 8px center;
     outline: none;
@@ -69,7 +69,7 @@
 
     &:disabled {
       background-color: #f0f0f0;
-      background-image: url('https://kut90.koreatech.ac.kr/nxweb/images/common/Combo/img_drop_D.png');
+      background-image: url("https://kut90.koreatech.ac.kr/nxweb/images/common/Combo/img_drop_D.png");
       color: #555;
     }
   }
