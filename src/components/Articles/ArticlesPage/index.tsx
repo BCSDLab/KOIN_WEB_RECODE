@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import HotArticles from 'components/Articles/components/HotArticle';
 import LostItemRouteButton from 'components/Articles/components/LostItemRouteButton';
 import ROUTES from 'static/routes';
@@ -16,12 +17,17 @@ export default function ArticlesPageLayout({ children }: { children: React.React
 
   // const { logItemWriteClick } = useArticlesLogger();
 
+  const router = useRouter();
+
+  const currentPath = router.pathname;
+  const headerTitle = currentPath === '/lost-item' ? '분실물' : '공지사항';
+
   return (
     <div className={styles.template}>
       <div className={styles.content}>
         <div className={styles.header}>
           <Link href={ROUTES.Articles()}>
-            <h1 className={styles.header__title}>공지사항</h1>
+            <h1 className={styles.header__title}>{headerTitle}</h1>
           </Link>
           <div />
           <LostItemRouteButton />
