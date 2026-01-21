@@ -56,9 +56,7 @@ interface UseLostItemFormOptions {
 
 export const useLostItemForm = ({ defaultType, initialItems }: UseLostItemFormOptions) => {
   const idCounter = useRef(initialItems?.length ?? 1);
-  const [lostItems, setLostItems] = useState<Array<LostItem>>(
-    initialItems ?? [createInitialForm(0, defaultType)],
-  );
+  const [lostItems, setLostItems] = useState<Array<LostItem>>(initialItems ?? [createInitialForm(0, defaultType)]);
 
   const updateItem = (index: number, updates: Partial<LostItem>) => {
     setLostItems((prev) => {
