@@ -11,8 +11,8 @@ import {
   LostItemType,
 } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
-import ArticlesHeader from 'components/Articles/components/ArticlesHeader';
 import LostItemList from 'components/Articles/components/LostItemList';
+import LostItemsHeader from 'components/Articles/components/LostItemsHeader';
 import Pagination from 'components/Articles/components/Pagination';
 import useLostItemPagination from 'components/Articles/hooks/useLostItemPagination';
 import { SSRLayout } from 'components/layout';
@@ -76,7 +76,7 @@ export default function LostItemArticleListPage({
 
   return (
     <ArticlesPageLayout>
-      <ArticlesHeader />
+      <LostItemsHeader />
       <LostItemList articles={articles} />
       <Pagination totalPageNum={paginationInfo?.total_page ?? 0} />
     </ArticlesPageLayout>
