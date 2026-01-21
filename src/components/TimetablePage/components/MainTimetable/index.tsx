@@ -76,7 +76,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           type="button"
           className={styles.page__button}
           onClick={() => {
-            router.push('/graduation');
+            router.push('/course');
             logger.actionEventClick({
               team: 'USER',
               event_label: 'graduation_calculator',
@@ -85,7 +85,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           }}
         >
           <GraduationIcon />
-          졸업학점 계산기
+          모의 수강신청
         </button>
         <Curriculum list={deptList} />
         <button type="button" className={styles.page__button} onClick={onClickDownloadImage}>
