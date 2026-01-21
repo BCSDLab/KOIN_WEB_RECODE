@@ -1,5 +1,7 @@
 import React from 'react';
 import { Semester } from 'api/timetable/entity';
+import { useUser } from 'utils/hooks/state/useUser';
+import { isStudentUser } from 'utils/ts/userTypeGuards';
 import styles from './CourseSearchForm.module.scss';
 
 const DEPARTMENTS = [
@@ -17,18 +19,12 @@ const DEPARTMENTS = [
   'HRD학과',
 ];
 
-interface StudentInfo {
-  studentNumber: string;
-  name: string;
-}
-
 interface CourseSearchFormProps {
   formInputs: {
     name: string;
     department: string;
   };
   semester: Semester;
-  studentInfo: StudentInfo;
   onSearch: (e?: React.FormEvent) => void;
   onDepartmentChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -37,11 +33,17 @@ interface CourseSearchFormProps {
 export default function CourseSearchForm({
   formInputs,
   semester,
-  studentInfo,
   onSearch,
   onDepartmentChange,
   onNameChange,
 }: CourseSearchFormProps) {
+  const { data: user } = useUser();
+
+  const studentInfo = {
+    studentNumber: isStudentUser(user) ? user.student_number : '',
+    name: user?.name ?? '',
+  };
+
   return (
     <form onSubmit={onSearch}>
       <div className={styles.header}>
