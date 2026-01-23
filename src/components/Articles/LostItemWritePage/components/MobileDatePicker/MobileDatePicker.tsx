@@ -74,14 +74,7 @@ export default function MobileDatePicker({ selectedDate, setSelectedDate }: Mobi
             key={type}
             className={styles.column}
             ref={ref}
-            onScroll={() =>
-              createScrollHandler(
-                items,
-                current,
-                (value: number) => handleDateChange(type, value),
-                () => ref.current,
-              )()
-            }
+            onScroll={createScrollHandler(items, current, (value: number) => handleDateChange(type, value))}
           >
             <div className={styles.padding} />
             {items.map((item) => (

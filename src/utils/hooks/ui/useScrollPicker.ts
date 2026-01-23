@@ -33,29 +33,32 @@ export function useScrollPicker({ itemHeight, debounceMs = 100 }: UseScrollPicke
     [itemHeight],
   );
 
-  const createScrollHandler =
-    <T>(items: T[], currentValue: T, onValueChange: (value: T) => void, getElement: () => HTMLDivElement | null) =>
-    () => {
-      if (Date.now() - lastProgrammaticScrollTime.current < PROGRAMMATIC_SCROLL_THRESHOLD) return;
+  const createScrollHandler = useCallback(
+    <T>(items: T[], currentValue: T, onValueChange: (value: T) => void) =>
+      (e: React.UIEvent<HTMLDivElement>) => {
+        const element = e.currentTarget;
 
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
+        if (Date.now() - lastProgrammaticScrollTime.current < PROGRAMMATIC_SCROLL_THRESHOLD) return;
 
-      scrollTimeoutRef.current = setTimeout(() => {
-        const element = getElement();
-        if (!element) return;
-
-        const { scrollTop } = element;
-        const index = Math.round(scrollTop / itemHeight);
-        const clampedIndex = Math.max(0, Math.min(index, items.length - 1));
-        const value = items[clampedIndex];
-
-        if (value !== undefined && value !== currentValue) {
-          onValueChange(value);
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
         }
-      }, debounceMs);
-    };
+
+        scrollTimeoutRef.current = setTimeout(() => {
+          if (!element) return;
+
+          const { scrollTop } = element;
+          const index = Math.round(scrollTop / itemHeight);
+          const clampedIndex = Math.max(0, Math.min(index, items.length - 1));
+          const value = items[clampedIndex];
+
+          if (value !== undefined && value !== currentValue) {
+            onValueChange(value);
+          }
+        }, debounceMs);
+      },
+    [debounceMs, itemHeight],
+  );
 
   return {
     syncScrollPosition,
