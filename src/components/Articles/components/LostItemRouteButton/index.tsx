@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
@@ -15,8 +14,6 @@ import styles from './LostItemRouteButton.module.scss';
 export default function LostItemRouteButton() {
   const { logItemWriteClick, logFindUserWriteClick, logLostItemWriteClick, logLoginRequire } = useArticlesLogger();
   const [isWriting, setIsWriting] = useState(false);
-  const router = useRouter();
-  const { pathname } = router;
   const portalManager = useModalPortal();
   const { data: userInfo } = useUser();
 
@@ -77,12 +74,10 @@ export default function LostItemRouteButton() {
           </div>
         )}
 
-        {pathname.endsWith('articles') && (
-          <button className={styles.links__write} type="button" onClick={handleWritingButtonClick}>
-            {isWriting ? <CloseIcon /> : <PencilIcon />}
-            글쓰기
-          </button>
-        )}
+        <button className={styles.links__write} type="button" onClick={handleWritingButtonClick}>
+          {isWriting ? <CloseIcon /> : <PencilIcon />}
+          글쓰기
+        </button>
       </div>
     </>
   );
