@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+const PROGRAMMATIC_SCROLL_THRESHOLD = 100;
+
 interface UseScrollPickerOptions {
   itemHeight: number;
   debounceMs?: number;
 }
 
 export function useScrollPicker({ itemHeight, debounceMs = 100 }: UseScrollPickerOptions) {
-  const isProgrammaticScroll = useRef(false);
+  const lastProgrammaticScrollTime = useRef(0);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -19,7 +21,7 @@ export function useScrollPicker({ itemHeight, debounceMs = 100 }: UseScrollPicke
 
   const syncScrollPosition = useCallback(
     <T>(ref: React.RefObject<HTMLDivElement | null>, items: T[], currentValue: T) => {
-      isProgrammaticScroll.current = true;
+      lastProgrammaticScrollTime.current = Date.now();
 
       const index = items.indexOf(currentValue);
       const targetIndex = index >= 0 ? index : items.length - 1;
@@ -27,10 +29,6 @@ export function useScrollPicker({ itemHeight, debounceMs = 100 }: UseScrollPicke
       if (ref.current) {
         ref.current.scrollTop = targetIndex * itemHeight;
       }
-
-      requestAnimationFrame(() => {
-        isProgrammaticScroll.current = false;
-      });
     },
     [itemHeight],
   );
@@ -38,7 +36,7 @@ export function useScrollPicker({ itemHeight, debounceMs = 100 }: UseScrollPicke
   const createScrollHandler =
     <T>(items: T[], currentValue: T, onValueChange: (value: T) => void, getElement: () => HTMLDivElement | null) =>
     () => {
-      if (isProgrammaticScroll.current) return;
+      if (Date.now() - lastProgrammaticScrollTime.current < PROGRAMMATIC_SCROLL_THRESHOLD) return;
 
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
