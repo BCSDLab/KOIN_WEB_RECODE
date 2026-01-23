@@ -5,6 +5,7 @@ import FilterIcon from 'assets/svg/Articles/filter.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
+import LostItemFilterModal from 'components/Articles/components/LostItemFilterModal';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
@@ -14,7 +15,10 @@ import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
   const { logItemWriteClick, logFindUserWriteClick, logLostItemWriteClick, logLoginRequire } = useArticlesLogger();
+
   const [isWriting, setIsWriting] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
   const portalManager = useModalPortal();
   const { data: userInfo } = useUser();
 
@@ -38,10 +42,16 @@ export default function LostItemRouteButton() {
 
   return (
     <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
-      <button type="button" className={styles.links__filter} onClick={() => {}}>
+      <button type="button" className={styles.links__filter} onClick={() => setIsFilterOpen((p) => !p)}>
         필터
         <FilterIcon />
       </button>
+
+      {isFilterOpen && (
+        <div className={styles.filterPopover}>
+          <LostItemFilterModal onClose={() => setIsFilterOpen(false)} />
+        </div>
+      )}
 
       {isWriting && (
         <div

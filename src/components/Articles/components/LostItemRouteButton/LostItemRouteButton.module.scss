@@ -110,3 +110,13 @@
     z-index: 1000;
   }
 }
+
+.filterAnchor {
+  position: relative;
+}
+
+.filterPopover {
+  position: absolute;
+  right: 100px;
+  z-index: 1100;
+}
