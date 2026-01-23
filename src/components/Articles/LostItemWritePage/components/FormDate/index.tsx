@@ -50,7 +50,7 @@ export default function FormDate({
   const { containerRef } = useOutsideClick({ onOutsideClick: closeCalendar });
   useEscapeKeyDown({ onEscape: closeCalendar });
 
-  const getDate = type === 'FOUND' ? '습득 일자' : '분실 일자';
+  const dateLabel = type === 'FOUND' ? '습득 일자' : '분실 일자';
   const placeholderText = type === 'FOUND' ? '습득 일자를 선택해주세요.' : '분실 일자를 선택해주세요.';
   const warningText = type === 'FOUND' ? '습득 일자가 입력되지 않았습니다.' : '분실 일자가 입력되지 않았습니다.';
 
@@ -58,7 +58,7 @@ export default function FormDate({
     <div className={styles.date}>
       <div className={styles.date__text}>
         <div className={styles.date__label}>
-          <span className={styles['date__title']}>{getDate}</span>
+          <span className={styles['date__title']}>{dateLabel}</span>
           <span className={styles['date__required']}>*</span>
         </div>
         {!isDateSelected && (
