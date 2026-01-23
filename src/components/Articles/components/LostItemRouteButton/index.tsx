@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import CloseIcon from 'assets/svg/Articles/close.svg';
+import FilterIcon from 'assets/svg/Articles/filter.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
@@ -36,7 +37,12 @@ export default function LostItemRouteButton() {
   };
 
   return (
-    <>
+    <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
+      <button type="button" className={styles.links__filter} onClick={() => {}}>
+        필터
+        <FilterIcon />
+      </button>
+
       {isWriting && (
         <div
           className={styles.overlay}
@@ -79,6 +85,6 @@ export default function LostItemRouteButton() {
           글쓰기
         </button>
       </div>
-    </>
+    </div>
   );
 }

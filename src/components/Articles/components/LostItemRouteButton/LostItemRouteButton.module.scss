@@ -1,9 +1,36 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 
 .links {
   display: flex;
   justify-content: flex-end;
-  gap: 20px;
+  gap: 16px;
+
+  &__filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: none;
+    background-color: #e4f2ff;
+    color: #4b4b4b;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      display: none; // 모바일에서 숨길 거면
+      // 필요하면 fixed로 바꿔도 됨
+    }
+  }
 
   &__writing-options {
     display: flex;
