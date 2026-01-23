@@ -94,6 +94,11 @@ export interface LostItemImageDTO {
   image_url: string;
 }
 
+interface Organization {
+  name: string;
+  location: string;
+}
+
 export interface SingleLostItemArticleResponseDTO extends APIResponse {
   id: number;
   board_id: number;
@@ -103,7 +108,7 @@ export interface SingleLostItemArticleResponseDTO extends APIResponse {
   found_date: string;
   content: string;
   author: string;
-  is_council: boolean;
+  organization: Organization | null;
   is_mine: boolean;
   is_found: boolean;
   images: LostItemImageDTO[];

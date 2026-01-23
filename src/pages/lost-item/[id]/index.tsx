@@ -80,8 +80,19 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
   const [isFoundModalOpen, openFoundModal, closeFoundModal] = useBooleanState(false);
 
-  const { category, found_place, found_date, content, author, images, registered_at, type, is_found, is_mine } =
-    article;
+  const {
+    category,
+    found_place,
+    found_date,
+    content,
+    author,
+    images,
+    registered_at,
+    type,
+    is_found,
+    is_mine,
+    organization,
+  } = article;
   const typeLabel = type === 'FOUND' ? '[습득물]' : '[분실물]';
 
   const requireLogin = (modalTitle: string, onSuccess: () => void) => {
@@ -149,11 +160,11 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
           <div className={styles.article}>
             <DisplayImage images={images} />
             <div className={styles.article__content}>{content}</div>
-            {author === '총학생회' && (
+            {organization && (
               <div className={styles.article__guide}>
                 <p>분실물 수령을 희망하시는 분은 재실 시간 내에</p>
                 <p>
-                  <strong>학생회관 320호 총학생회 사무실</strong>로 방문해 주시기 바랍니다.
+                  <strong>{organization.location}</strong>해 주시기 바랍니다.
                 </p>
                 <p>재실 시간은 공지 사항을 참고해 주시기 바랍니다.</p>
               </div>
