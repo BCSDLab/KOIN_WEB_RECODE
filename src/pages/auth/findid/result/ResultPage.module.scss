@@ -1,6 +1,14 @@
 @use "src/utils/scss/media" as media;
 
 .container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  width: 320px;
+  margin: 160px auto 0;
+  font-family: Pretendard, sans-serif;
+  gap: 24px;
+
   @include media.media-breakpoint(mobile) {
     display: flex;
     flex-direction: column;
@@ -13,6 +21,11 @@
 }
 
 .title {
+  color: #175c8e;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+
   @include media.media-breakpoint(mobile) {
     color: #175c8e;
     text-align: center;
@@ -22,6 +35,21 @@
 }
 
 .description {
+  color: #8e8e8e;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 160%;
+  margin-bottom: 40px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  strong {
+    color: #000;
+    font-size: 20px;
+    margin: 0 6px;
+  }
+
   @include media.media-breakpoint(mobile) {
     color: #8e8e8e;
     font-size: 16px;
@@ -37,6 +65,11 @@
 }
 
 .button-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+
   @include media.media-breakpoint(mobile) {
     display: flex;
     flex-direction: column;
