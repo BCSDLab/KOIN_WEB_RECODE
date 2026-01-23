@@ -30,7 +30,7 @@ export default function ArticlesPageLayout({ children }: { children: React.React
             <h1 className={styles.header__title}>{headerTitle}</h1>
           </Link>
           <div />
-          <LostItemRouteButton />
+          {currentPath === '/lost-item' && <LostItemRouteButton />}
           {/* isBoard && isCouncil && <LostItemRouteButton /> */}
         </div>
         {children}
