@@ -1,4 +1,4 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 
 .chip {
   display: inline-flex;
@@ -13,6 +13,12 @@
   &--found {
     background-color: #f5f5f5;
     color: #cacaca;
+  }
+
+  &--xs {
+    width: 47px;
+    height: 21px;
+    font-size: 14px;
   }
 
   &--small {

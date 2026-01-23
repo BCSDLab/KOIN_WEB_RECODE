@@ -10,7 +10,6 @@
     grid-template-columns: grid.$lost-items-columns;
     height: 68px;
     align-items: center;
-
     border-bottom: 1px solid #d2dae2;
     text-decoration: none;
     background: transparent;
@@ -35,12 +34,16 @@
 
   &__rowDisabled {
     cursor: pointer;
-    border: none;
     width: 100%;
     text-align: left;
 
     &:hover {
       background: #f8fafb;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      border: none;
+      padding: 12px 24px;
     }
   }
 
@@ -68,21 +71,22 @@
   &__title {
     justify-content: flex-start;
     overflow: hidden;
-    padding-right: 10px;
+    padding: 0 12px;
     color: #252525;
 
     @include media.media-breakpoint(mobile) {
       width: 100%;
-      height: 50%;
+      height: 100%;
       box-sizing: border-box;
       display: block !important;
+      padding: 0;
     }
   }
 
   &__titleMeta {
     min-width: 0;
     display: flex;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
     white-space: nowrap;
     overflow: hidden;
@@ -96,6 +100,10 @@
     font-weight: 500;
     flex: 0 0 auto;
     font-size: 14px;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 4px 8px;
+    }
   }
 
   &__place,
@@ -123,11 +131,8 @@
     overflow: hidden;
 
     @include media.media-breakpoint(mobile) {
-      display: inline;
+      // display: inline;
       font-size: 13px;
-      font-weight: normal;
-      line-height: 1.54;
-      letter-spacing: -0.7px;
       color: #a1a1a1;
       white-space: nowrap;
       overflow: hidden;
@@ -139,10 +144,8 @@
     color: #727272;
 
     @include media.media-breakpoint(mobile) {
-      display: inline;
+      // display: inline;
       font-size: 13px;
-      line-height: 1.54;
-      letter-spacing: -0.7px;
       color: #a1a1a1;
       float: right;
       height: 50%;
@@ -161,5 +164,72 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &__chip {
+    display: flex;
+    justify-content: center;
+
+    @include media.media-breakpoint(mobile) {
+      justify-content: none;
+    }
+  }
+
+  &__content {
+  }
+}
+
+.lostItemListMobile {
+  font-size: 12px;
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 24px;
+  }
+
+  &__type {
+    color: #175c8e;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__titleMeta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  &__badge {
+    padding: 4px 8px;
+    background-color: #175c8e;
+    color: #fff;
+    border-radius: 999px;
+    font-weight: 500;
+    align-content: center;
+  }
+
+  &__content {
+    font-size: 12px;
+    line-height: 160%;
+  }
+
+  &__writeMeta {
+    display: flex;
+    gap: 2px;
+  }
+
+  &__author,
+  &__dot,
+  &__date {
+    color: #727272;
+    font-size: 12px;
   }
 }
