@@ -98,6 +98,10 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
     openFoundModal();
   };
 
+  const handleModifyButtonClick = () => {
+    navigate(ROUTES.LostItemEdit({ id: String(articleId), isLink: true }));
+  };
+
   const handleDeleteButtonClick = () => {
     logFindUserDeleteClick();
     openDeleteModal();
@@ -163,7 +167,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
                 <div className={styles.actions__group}>
                   {is_mine ? (
                     <>
-                      <button className={styles.actions__button} onClick={handleDeleteButtonClick} type="button">
+                      <button className={styles.actions__button} onClick={handleModifyButtonClick} type="button">
                         수정
                       </button>
                       <button className={styles.actions__button} onClick={handleDeleteButtonClick} type="button">

@@ -18,7 +18,7 @@ interface LostItemFormProps {
   count: number;
   lostItem: LostItem;
   lostItemHandler: LostItemHandler;
-  removeLostItem: (index: number) => void;
+  removeLostItem?: (index: number) => void;
 }
 
 export default function LostItemForm({ type, count, lostItem, lostItemHandler, removeLostItem }: LostItemFormProps) {
@@ -47,7 +47,7 @@ export default function LostItemForm({ type, count, lostItem, lostItemHandler, r
             [styles['tag__delete--visible']]: count > 0,
           })}
           type="button"
-          onClick={() => removeLostItem(count)}
+          onClick={() => removeLostItem && removeLostItem(count)}
           aria-label="분실물 삭제"
         >
           <GarbageCanIcon />

@@ -47,93 +47,59 @@ const initialForm: LostItem = {
   isFoundPlaceSelected: true,
 };
 
-export const useLostItemForm = (defaultType: 'FOUND' | 'LOST') => {
-  const [lostItems, setLostItems] = useState<Array<LostItem>>([{ ...initialForm, type: defaultType }]);
+interface UseLostItemFormOptions {
+  defaultType: 'FOUND' | 'LOST';
+  initialItems?: LostItem[];
+}
 
-  const lostItemHandler = (key: number) => ({
-    setType: (type: 'FOUND' | 'LOST') => {
-      setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].type = type;
-        return newLostItems;
-      });
-    },
-    setCategory: (category: FindUserCategory) => {
-      setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].category = category;
-        return newLostItems;
-      });
-    },
-    setFoundDate: (date: Date) => {
-      setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].foundDate = date;
-        return newLostItems;
-      });
-    },
-    setFoundPlace: (foundPlace: string) => {
-      setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].foundPlace = foundPlace;
-        return newLostItems;
-      });
-    },
-    setContent: (content: string) => {
-      setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].content = content;
-        return newLostItems;
-      });
-    },
-    setAuthor: (author: string) => {
-      setLostItems((prev) => {
-        const newLostItems = [...prev];
-        if (newLostItems[key].author !== author) {
-          newLostItems[key].author = author;
-        }
-        return newLostItems;
-      });
-    },
-    setImages: (images: Array<string>) => {
-      setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].images = images;
-        return newLostItems;
-      });
-    },
-    setHasDateBeenSelected: () => {
-      setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].hasDateBeenSelected = true;
-        return newLostItems;
-      });
-    },
+export const useLostItemForm = ({ defaultType, initialItems }: UseLostItemFormOptions) => {
+  const [lostItems, setLostItems] = useState<Array<LostItem>>(initialItems ?? [{ ...initialForm, type: defaultType }]);
+
+  const updateItem = (index: number, updates: Partial<LostItem>) => {
+    setLostItems((prev) => {
+      const newItems = [...prev];
+      newItems[index] = { ...newItems[index], ...updates };
+      return newItems;
+    });
+  };
+
+  const lostItemHandler = (key: number): LostItemHandler => ({
+    setType: (type) => updateItem(key, { type }),
+    setCategory: (category) => updateItem(key, { category }),
+    setFoundDate: (foundDate) => updateItem(key, { foundDate }),
+    setFoundPlace: (foundPlace) => updateItem(key, { foundPlace }),
+    setContent: (content) => updateItem(key, { content }),
+    setAuthor: (author) => updateItem(key, { author }),
+    setImages: (images) => updateItem(key, { images }),
+    setHasDateBeenSelected: () => updateItem(key, { hasDateBeenSelected: true }),
     checkIsCategorySelected: () => {
       setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].isCategorySelected = newLostItems[key].category.trim() !== '';
-        return newLostItems;
+        const newItems = [...prev];
+        const item = newItems[key];
+        newItems[key] = { ...item, isCategorySelected: item.category.trim() !== '' };
+        return newItems;
       });
     },
     checkIsDateSelected: () => {
       setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].isDateSelected = newLostItems[key].hasDateBeenSelected;
-        return newLostItems;
+        const newItems = [...prev];
+        const item = newItems[key];
+        newItems[key] = { ...item, isDateSelected: item.hasDateBeenSelected };
+        return newItems;
       });
     },
     checkIsFoundPlaceSelected: () => {
       setLostItems((prev) => {
-        const newLostItems = [...prev];
-        newLostItems[key].isFoundPlaceSelected = newLostItems[key].foundPlace.trim() !== '';
-        return newLostItems;
+        const newItems = [...prev];
+        const item = newItems[key];
+        newItems[key] = { ...item, isFoundPlaceSelected: item.foundPlace.trim() !== '' };
+        return newItems;
       });
     },
   });
 
   const addLostItem = () => {
-    setLostItems((prev) => [...prev, { ...initialForm }]);
+    setLostItems((prev) => [...prev, { ...initialForm, type: defaultType }]);
   };
 
   const removeLostItem = (key: number) => {
