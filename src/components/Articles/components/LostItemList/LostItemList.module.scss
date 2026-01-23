@@ -127,11 +127,9 @@
 
   &__author {
     color: #175c8e;
-
     overflow: hidden;
 
     @include media.media-breakpoint(mobile) {
-      // display: inline;
       font-size: 13px;
       color: #a1a1a1;
       white-space: nowrap;
@@ -144,7 +142,6 @@
     color: #727272;
 
     @include media.media-breakpoint(mobile) {
-      // display: inline;
       font-size: 13px;
       color: #a1a1a1;
       float: right;
@@ -175,61 +172,58 @@
     }
   }
 
-  &__content {
-  }
-}
-
-.lostItemListMobile {
-  font-size: 12px;
-
-  &__row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 12px 24px;
-  }
-
-  &__type {
-    color: #175c8e;
-    font-weight: 600;
+  .lostItemListMobile {
     font-size: 12px;
-  }
 
-  &__title {
-    display: flex;
-    justify-content: space-between;
-  }
+    &__row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 24px;
+    }
 
-  &__titleMeta {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    font-size: 14px;
-  }
+    &__type {
+      color: #175c8e;
+      font-weight: 600;
+      font-size: 12px;
+    }
 
-  &__badge {
-    padding: 4px 8px;
-    background-color: #175c8e;
-    color: #fff;
-    border-radius: 999px;
-    font-weight: 500;
-    align-content: center;
-  }
+    &__title {
+      display: flex;
+      justify-content: space-between;
+    }
 
-  &__content {
-    font-size: 12px;
-    line-height: 160%;
-  }
+    &__titleMeta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-size: 14px;
+    }
 
-  &__writeMeta {
-    display: flex;
-    gap: 2px;
-  }
+    &__badge {
+      padding: 4px 8px;
+      background-color: #175c8e;
+      color: #fff;
+      border-radius: 999px;
+      font-weight: 500;
+      align-content: center;
+    }
 
-  &__author,
-  &__dot,
-  &__date {
-    color: #727272;
-    font-size: 12px;
+    &__content {
+      font-size: 12px;
+      line-height: 160%;
+    }
+
+    &__writeMeta {
+      display: flex;
+      gap: 2px;
+    }
+
+    &__author,
+    &__dot,
+    &__date {
+      color: #727272;
+      font-size: 12px;
+    }
   }
 }
