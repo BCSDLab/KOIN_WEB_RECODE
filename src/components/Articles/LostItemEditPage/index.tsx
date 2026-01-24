@@ -67,9 +67,7 @@ export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
     ...baseHandler,
     setImages: (images: Array<string>) => {
       const removedUrls = lostItem.images.filter((url) => !images.includes(url));
-      const newDeleteIds = originalImages
-        .filter((img) => removedUrls.includes(img.image_url))
-        .map((img) => img.id);
+      const newDeleteIds = originalImages.filter((img) => removedUrls.includes(img.image_url)).map((img) => img.id);
       setDeleteImageIds((prev: number[]) => Array.from(new Set([...prev, ...newDeleteIds])));
       baseHandler.setImages(images);
     },

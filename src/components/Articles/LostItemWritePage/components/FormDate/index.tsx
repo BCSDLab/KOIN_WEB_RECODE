@@ -2,6 +2,8 @@ import { cn } from '@bcsdlab/utils';
 import ChevronDown from 'assets/svg/Articles/chevron-down.svg';
 import WarnIcon from 'assets/svg/Articles/warn.svg';
 import Calendar from 'components/Articles/LostItemWritePage/components/Calendar';
+import MobileDatePicker from 'components/Articles/LostItemWritePage/components/MobileDatePicker/MobileDatePicker';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import { useEscapeKeyDown } from 'utils/hooks/ui/useEscapeKeyDown';
 import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
@@ -32,6 +34,7 @@ export default function FormDate({
   type,
 }: FormDateProps) {
   const [calendarOpen, , closeCalendar, toggleCalendar] = useBooleanState(false);
+  const isMobile = useMediaQuery();
 
   const handleDateSelect = (date: Date) => {
     setFoundDate(date);
@@ -39,16 +42,32 @@ export default function FormDate({
     closeCalendar();
   };
 
+  const handleMobileDateSelect = (date: Date) => {
+    setFoundDate(date);
+    setHasDateBeenSelected();
+  };
+
   const { containerRef } = useOutsideClick({ onOutsideClick: closeCalendar });
   useEscapeKeyDown({ onEscape: closeCalendar });
 
-  const getDate = type === 'FOUND' ? '습득 일자' : '분실 일자';
+  const dateLabel = type === 'FOUND' ? '습득 일자' : '분실 일자';
   const placeholderText = type === 'FOUND' ? '습득 일자를 선택해주세요.' : '분실 일자를 선택해주세요.';
   const warningText = type === 'FOUND' ? '습득 일자가 입력되지 않았습니다.' : '분실 일자가 입력되지 않았습니다.';
 
   return (
     <div className={styles.date}>
-      <span className={styles.title}>{getDate}</span>
+      <div className={styles.date__text}>
+        <div className={styles.date__label}>
+          <span className={styles['date__title']}>{dateLabel}</span>
+          <span className={styles['date__required']}>*</span>
+        </div>
+        {!isDateSelected && (
+          <span className={styles['date__warning']}>
+            <WarnIcon />
+            {warningText}
+          </span>
+        )}
+      </div>
       <div className={styles.date__wrapper} ref={containerRef}>
         <div className={styles.date__wrapper}>
           <button className={styles.date__toggle} type="button" onClick={toggleCalendar}>
@@ -71,14 +90,12 @@ export default function FormDate({
           </button>
           {calendarOpen && (
             <div className={styles.date__calendar}>
-              <Calendar selectedDate={foundDate} setSelectedDate={handleDateSelect} />
+              {isMobile ? (
+                <MobileDatePicker selectedDate={foundDate} setSelectedDate={handleMobileDateSelect} />
+              ) : (
+                <Calendar selectedDate={foundDate} setSelectedDate={handleDateSelect} />
+              )}
             </div>
-          )}
-          {!isDateSelected && (
-            <span className={styles.warning}>
-              <WarnIcon />
-              {warningText}
-            </span>
           )}
         </div>
       </div>

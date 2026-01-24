@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FindUserCategory } from './useArticlesLogger';
 
 export interface LostItem {
+  id: number;
   type: 'FOUND' | 'LOST';
   category: FindUserCategory | '';
   foundDate: Date;
@@ -31,8 +32,9 @@ export interface LostItemHandler {
   checkIsFoundPlaceSelected: () => void;
 }
 
-const initialForm: LostItem = {
-  type: 'FOUND',
+const createInitialForm = (id: number, type: 'FOUND' | 'LOST'): LostItem => ({
+  id,
+  type,
   category: '',
   foundDate: new Date(),
   foundPlace: '',
@@ -45,7 +47,7 @@ const initialForm: LostItem = {
   isCategorySelected: true,
   isDateSelected: true,
   isFoundPlaceSelected: true,
-};
+});
 
 interface UseLostItemFormOptions {
   defaultType: 'FOUND' | 'LOST';
@@ -53,7 +55,8 @@ interface UseLostItemFormOptions {
 }
 
 export const useLostItemForm = ({ defaultType, initialItems }: UseLostItemFormOptions) => {
-  const [lostItems, setLostItems] = useState<Array<LostItem>>(initialItems ?? [{ ...initialForm, type: defaultType }]);
+  const idCounter = useRef(initialItems?.length ?? 1);
+  const [lostItems, setLostItems] = useState<Array<LostItem>>(initialItems ?? [createInitialForm(0, defaultType)]);
 
   const updateItem = (index: number, updates: Partial<LostItem>) => {
     setLostItems((prev) => {
@@ -99,7 +102,9 @@ export const useLostItemForm = ({ defaultType, initialItems }: UseLostItemFormOp
   });
 
   const addLostItem = () => {
-    setLostItems((prev) => [...prev, { ...initialForm, type: defaultType }]);
+    const newId = idCounter.current;
+    idCounter.current += 1;
+    setLostItems((prev) => [...prev, createInitialForm(newId, defaultType)]);
   };
 
   const removeLostItem = (key: number) => {

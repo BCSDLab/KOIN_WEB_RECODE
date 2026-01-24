@@ -96,7 +96,7 @@ export class GetSingleLostItemArticle<R extends SingleLostItemArticleResponseDTO
     public authorization: string,
     id: number,
   ) {
-    this.path = `/articles/lost-item/${id}`;
+    this.path = `/articles/lost-item/v2/${id}`;
   }
 }
 
@@ -196,9 +196,9 @@ export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse>
   }
 }
 
-export class GetLostItemChatroomDetailMessages<
-  R extends LostItemChatroomDetailMessagesResponse,
-> implements APIRequest<R> {
+export class GetLostItemChatroomDetailMessages<R extends LostItemChatroomDetailMessagesResponse>
+  implements APIRequest<R>
+{
   method = HTTP_METHOD.GET;
 
   path: string;
