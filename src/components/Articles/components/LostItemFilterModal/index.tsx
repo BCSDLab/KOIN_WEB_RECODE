@@ -7,26 +7,26 @@ import styles from './LostItemFilterModal.module.scss';
 interface LostItemFilterModalProps {
   onClose: () => void;
   onReset?: () => void;
-  onApply?: (filter: FilterState) => void;
+  onApply: (filter: FilterState) => void;
 }
 
-type ListType = 'MY';
-type Category = 'FOUND' | 'LOST';
-type ItemType = 'CARD' | 'ID' | 'WALLET' | 'ELECTRONICS' | 'ETC';
-type Status = 'SEARCHING' | 'FOUND';
+export type Author = 'MY';
+export type Type = 'FOUND' | 'LOST';
+export type Category = 'CARD' | 'ID' | 'WALLET' | 'ELECTRONICS' | 'ETC';
+export type FoundStatus = 'FOUND' | 'NOT_FOUND';
 
-type FilterState = {
-  listTypes: ListType[];
-  categories: Category[];
-  itemTypes: ItemType[];
-  statuses: Status[];
+export type FilterState = {
+  author: Author[];
+  type: Type[];
+  category: Category[];
+  foundStatus: FoundStatus[];
 };
 
 const DEFAULT_FILTER: FilterState = {
-  listTypes: [],
-  categories: [],
-  itemTypes: [],
-  statuses: [],
+  author: [],
+  type: [],
+  category: [],
+  foundStatus: [],
 };
 
 function toggleInArray<T>(arr: T[], value: T) {
@@ -42,9 +42,10 @@ interface ChipGroupProps<T extends string> {
   value: T[];
   options: readonly ChipOption<T>[];
   onChange: (next: T[]) => void;
+  allLabel?: string;
 }
 
-function ChipGroup<T extends string>({ value, options, onChange }: ChipGroupProps<T>) {
+function ChipGroup<T extends string>({ value, options, onChange, allLabel = '전체' }: ChipGroupProps<T>) {
   return (
     <div className={styles.chips}>
       <button
@@ -52,7 +53,7 @@ function ChipGroup<T extends string>({ value, options, onChange }: ChipGroupProp
         className={`${styles.chip} ${value.length === 0 ? styles.active : ''}`}
         onClick={() => onChange([])}
       >
-        전체
+        {allLabel}
       </button>
 
       {options.map((opt) => (
@@ -68,7 +69,6 @@ function ChipGroup<T extends string>({ value, options, onChange }: ChipGroupProp
     </div>
   );
 }
-
 export default function LostItemFilterModal({ onClose, onReset, onApply }: LostItemFilterModalProps) {
   const [filter, setFilter] = useState<FilterState>(DEFAULT_FILTER);
 
@@ -89,9 +89,9 @@ export default function LostItemFilterModal({ onClose, onReset, onApply }: LostI
       <div className={styles.section}>
         <div className={styles.label}>목록</div>
         <ChipGroup
-          value={filter.listTypes}
+          value={filter.author}
           options={LIST_OPTIONS}
-          onChange={(listTypes) => setFilter((p) => ({ ...p, listTypes }))}
+          onChange={(author) => setFilter((p) => ({ ...p, author }))}
         />
       </div>
 
@@ -100,9 +100,9 @@ export default function LostItemFilterModal({ onClose, onReset, onApply }: LostI
       <div className={styles.section}>
         <div className={styles.label}>물품 카테고리</div>
         <ChipGroup
-          value={filter.categories}
+          value={filter.type}
           options={CATEGORY_OPTIONS}
-          onChange={(categories) => setFilter((p) => ({ ...p, categories }))}
+          onChange={(type) => setFilter((p) => ({ ...p, type }))}
         />
       </div>
 
@@ -111,9 +111,9 @@ export default function LostItemFilterModal({ onClose, onReset, onApply }: LostI
       <div className={styles.section}>
         <div className={styles.label}>물품 종류</div>
         <ChipGroup
-          value={filter.itemTypes}
+          value={filter.category}
           options={ITEM_TYPE_OPTIONS}
-          onChange={(itemTypes) => setFilter((p) => ({ ...p, itemTypes }))}
+          onChange={(category) => setFilter((p) => ({ ...p, category }))}
         />
       </div>
 
@@ -122,9 +122,9 @@ export default function LostItemFilterModal({ onClose, onReset, onApply }: LostI
       <div className={styles.section}>
         <div className={styles.label}>물품 상태</div>
         <ChipGroup
-          value={filter.statuses}
+          value={filter.foundStatus}
           options={STATUS_OPTIONS}
-          onChange={(statuses) => setFilter((p) => ({ ...p, statuses }))}
+          onChange={(foundStatus) => setFilter((p) => ({ ...p, foundStatus }))}
         />
       </div>
 
@@ -133,7 +133,7 @@ export default function LostItemFilterModal({ onClose, onReset, onApply }: LostI
           초기화
           <RefreshIcon />
         </button>
-        <button type="button" className={styles.apply} onClick={() => onApply?.(filter)}>
+        <button type="button" className={styles.apply} onClick={() => onApply(filter)}>
           적용하기
         </button>
       </div>

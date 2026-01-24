@@ -14,6 +14,6 @@ export const ITEM_TYPE_OPTIONS = [
 ] as const;
 
 export const STATUS_OPTIONS = [
-  { key: 'SEARCHING', label: '찾는중' },
+  { key: 'NOT_FOUND', label: '찾는중' },
   { key: 'FOUND', label: '찾음' },
 ] as const;

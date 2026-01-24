@@ -106,7 +106,7 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0 0 0 / 40%);
-    z-index: 900;
+    z-index: 10;
   }
 }
 
@@ -117,5 +117,5 @@
 .filterPopover {
   position: absolute;
   right: 100px;
-  z-index: 1100;
+  z-index: 11;
 }

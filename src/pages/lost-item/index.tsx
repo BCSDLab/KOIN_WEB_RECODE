@@ -19,7 +19,14 @@ import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const { page = '1', type = 'LOST', category = 'ALL', foundStatus = 'ALL', sort = 'LATEST' } = context.query;
+  const {
+    page = '1',
+    type = 'LOST',
+    category = 'ALL',
+    foundStatus = 'ALL',
+    sort = 'LATEST',
+    author = 'ALL',
+  } = context.query;
 
   const queryClient = new QueryClient();
   const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
@@ -30,12 +37,15 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     category: category as LostItemCategory,
     foundStatus: foundStatus as LostItemFoundStatus,
     sort: sort as LostItemSort,
+    author: author as 'ALL' | 'MY',
   };
 
   await queryClient.prefetchQuery({
     queryKey: ['lostItemPagination', params],
     queryFn: () => getLostItemArticles(token, params),
   });
+
+  console.log('SSR cookies keys:', Object.keys(context.req.cookies || {}));
 
   return {
     props: {
@@ -52,7 +62,7 @@ function useLostItemParams(initialParams: LostItemArticlesRequest) {
   return useMemo(() => {
     if (!mounted) return initialParams;
 
-    const { page, type, category, foundStatus, sort } = router.query;
+    const { page, type, category, foundStatus, sort, author } = router.query;
 
     return {
       page: Number(page) || initialParams.page,
@@ -60,6 +70,7 @@ function useLostItemParams(initialParams: LostItemArticlesRequest) {
       category: (category as LostItemCategory) || initialParams.category,
       foundStatus: (foundStatus as LostItemFoundStatus) || initialParams.foundStatus,
       sort: (sort as LostItemSort) || initialParams.sort,
+      author: (author as 'ALL' | 'MY') || initialParams.author || 'ALL',
     };
   }, [mounted, router.query, initialParams]);
 }
