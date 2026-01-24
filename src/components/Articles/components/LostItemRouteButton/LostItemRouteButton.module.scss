@@ -27,8 +27,7 @@
     }
 
     @include media.media-breakpoint(mobile) {
-      display: none; // 모바일에서 숨길 거면
-      // 필요하면 fixed로 바꿔도 됨
+      display: none;
     }
   }
 
@@ -107,7 +106,7 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0 0 0 / 40%);
-    z-index: 1000;
+    z-index: 900;
   }
 }
 
