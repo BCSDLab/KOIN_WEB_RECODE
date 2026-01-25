@@ -8,6 +8,7 @@ interface LostItemFilterModalProps {
   onClose: () => void;
   onReset?: () => void;
   onApply: (filter: FilterState) => void;
+  initialFilter?: FilterState;
 }
 
 export type Author = 'ALL' | 'MY';
@@ -111,8 +112,8 @@ function ChipMulti<T extends string>({
   );
 }
 
-export default function LostItemFilterModal({ onClose, onReset, onApply }: LostItemFilterModalProps) {
-  const [filter, setFilter] = useState<FilterState>(DEFAULT_FILTER);
+export default function LostItemFilterModal({ onClose, onReset, onApply, initialFilter }: LostItemFilterModalProps) {
+  const [filter, setFilter] = useState<FilterState>(initialFilter ?? DEFAULT_FILTER);
 
   const handleReset = () => {
     setFilter(DEFAULT_FILTER);

@@ -6,8 +6,9 @@ import FilterIcon from 'assets/svg/Articles/filter.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
-import LostItemFilterModal from 'components/Articles/components/LostItemFilterModal';
+import LostItemFilterModal, { FilterState } from 'components/Articles/components/LostItemFilterModal';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
+import { buildQueryFromFilter, LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
@@ -42,6 +43,24 @@ export default function LostItemRouteButton() {
     }
   };
 
+  const fallback: LostItemParams = {
+    page: 1,
+    type: null,
+    category: [],
+    foundStatus: 'ALL',
+    sort: 'LATEST',
+    author: 'ALL',
+  };
+
+  const params = parseLostItemQuery(router.query, fallback);
+
+  const initialFilter: FilterState = {
+    author: params.author,
+    type: params.type ?? 'ALL',
+    category: params.category,
+    foundStatus: params.foundStatus,
+  };
+
   return (
     <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
       <button type="button" className={styles.links__filter} onClick={() => setIsFilterOpen((p) => !p)}>
@@ -52,20 +71,29 @@ export default function LostItemRouteButton() {
       {isFilterOpen && (
         <div className={styles.filterPopover}>
           <LostItemFilterModal
+            initialFilter={initialFilter}
             onClose={() => setIsFilterOpen(false)}
             onApply={(filter) => {
-              router.push({
-                pathname: router.pathname,
-                query: {
-                  ...router.query,
-                  page: 1,
-                  type: filter.type,
-                  category: filter.category,
-                  foundStatus: filter.foundStatus,
-                  author: filter.author,
-                },
+              if (filter.author === 'MY' && !userInfo) {
+                portalManager.open((portalOption) => (
+                  <LoginRequiredModal
+                    title="내 게시물을 보기"
+                    description="내가 작성한 게시물을 보려면 로그인이 필요해요."
+                    onClose={portalOption.close}
+                  />
+                ));
+                return;
+              }
+
+              const nextQuery = buildQueryFromFilter(filter, {
+                page: 1,
+                sort:
+                  (Array.isArray(router.query.sort) ? router.query.sort[0] : router.query.sort) === 'OLDEST'
+                    ? 'OLDEST'
+                    : 'LATEST',
               });
 
+              router.push({ pathname: router.pathname, query: nextQuery });
               setIsFilterOpen(false);
             }}
           />
