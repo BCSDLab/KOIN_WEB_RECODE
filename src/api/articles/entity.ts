@@ -82,7 +82,7 @@ export interface LostItemArticlesRequest {
   type?: LostItemType;
   page?: number;
   limit?: number;
-  category?: LostItemCategory;
+  category?: LostItemCategory[];
   foundStatus?: LostItemFoundStatus;
   sort?: LostItemSort;
   author?: LostItemAuthor;

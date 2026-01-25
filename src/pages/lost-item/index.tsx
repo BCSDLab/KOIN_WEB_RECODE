@@ -5,6 +5,7 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getLostItemArticles } from 'api/articles';
 import {
   LostItemArticlesRequest,
+  LostItemAuthor,
   LostItemCategory,
   LostItemFoundStatus,
   LostItemSort,
@@ -19,33 +20,31 @@ import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const {
-    page = '1',
-    type = 'LOST',
-    category = 'ALL',
-    foundStatus = 'ALL',
-    sort = 'LATEST',
-    author = 'ALL',
-  } = context.query;
+  const { page = '1', type = 'LOST', category, foundStatus = 'ALL', sort = 'LATEST', author = 'ALL' } = context.query;
 
   const queryClient = new QueryClient();
   const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
 
+  const CATEGORY_VALUES = ['ALL', 'CARD', 'ID', 'WALLET', 'ELECTRONICS', 'ETC'] as const;
+
+  const isLostItemCategory = (v: string): v is LostItemCategory => (CATEGORY_VALUES as readonly string[]).includes(v);
+
+  const parsedCategory = toArray(category).filter(isLostItemCategory);
+  const finalCategory: LostItemCategory[] = parsedCategory.length ? parsedCategory : ['ALL'];
+
   const params: LostItemArticlesRequest = {
     page: Number(page),
     type: type as LostItemType,
-    category: category as LostItemCategory,
+    category: finalCategory,
     foundStatus: foundStatus as LostItemFoundStatus,
     sort: sort as LostItemSort,
-    author: author as 'ALL' | 'MY',
+    author: author as LostItemAuthor,
   };
 
   await queryClient.prefetchQuery({
     queryKey: ['lostItemPagination', params],
     queryFn: () => getLostItemArticles(token, params),
   });
-
-  console.log('SSR cookies keys:', Object.keys(context.req.cookies || {}));
 
   return {
     props: {
@@ -54,6 +53,11 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     },
   };
 };
+
+function toArray(v: string | string[] | undefined): string[] {
+  if (!v) return [];
+  return Array.isArray(v) ? v : [v];
+}
 
 function useLostItemParams(initialParams: LostItemArticlesRequest) {
   const router = useRouter();
@@ -64,10 +68,13 @@ function useLostItemParams(initialParams: LostItemArticlesRequest) {
 
     const { page, type, category, foundStatus, sort, author } = router.query;
 
+    const parsedCategory = toArray(category) as LostItemCategory[];
+    const finalCategory = parsedCategory.length > 0 ? parsedCategory : (initialParams.category ?? ['ALL']);
+
     return {
       page: Number(page) || initialParams.page,
       type: (type as LostItemType) || initialParams.type,
-      category: (category as LostItemCategory) || initialParams.category,
+      category: finalCategory,
       foundStatus: (foundStatus as LostItemFoundStatus) || initialParams.foundStatus,
       sort: (sort as LostItemSort) || initialParams.sort,
       author: (author as 'ALL' | 'MY') || initialParams.author || 'ALL',

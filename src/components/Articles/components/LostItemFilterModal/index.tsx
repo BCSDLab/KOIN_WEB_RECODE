@@ -10,42 +10,83 @@ interface LostItemFilterModalProps {
   onApply: (filter: FilterState) => void;
 }
 
-export type Author = 'MY';
-export type Type = 'FOUND' | 'LOST';
+export type Author = 'ALL' | 'MY';
+export type Type = 'ALL' | 'LOST' | 'FOUND';
 export type Category = 'CARD' | 'ID' | 'WALLET' | 'ELECTRONICS' | 'ETC';
-export type FoundStatus = 'FOUND' | 'NOT_FOUND';
+export type FoundStatus = 'ALL' | 'FOUND' | 'NOT_FOUND';
 
 export type FilterState = {
-  author: Author[];
-  type: Type[];
+  author: Author;
+  type: Type;
   category: Category[];
-  foundStatus: FoundStatus[];
+  foundStatus: FoundStatus;
 };
 
 const DEFAULT_FILTER: FilterState = {
-  author: [],
-  type: [],
+  author: 'ALL',
+  type: 'ALL',
   category: [],
-  foundStatus: [],
+  foundStatus: 'ALL',
 };
 
-function toggleInArray<T>(arr: T[], value: T) {
-  return arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
-}
-
-interface ChipOption<T extends string> {
+// 단일 선택 Chip --------------------
+interface ChipSingleOption<T extends string> {
   key: T;
   label: string;
 }
 
-interface ChipGroupProps<T extends string> {
-  value: T[];
-  options: readonly ChipOption<T>[];
-  onChange: (next: T[]) => void;
+function ChipSingle<T extends string>({
+  value,
+  options,
+  onChange,
+  allKey,
+  allLabel = '전체',
+}: {
+  value: T | null;
+  options: readonly ChipSingleOption<T>[];
+  onChange: (next: T) => void;
+  allKey: T;
   allLabel?: string;
+}) {
+  return (
+    <div className={styles.chips}>
+      <button
+        type="button"
+        className={`${styles.chip} ${value === allKey ? styles.active : ''}`}
+        onClick={() => onChange(allKey)}
+      >
+        {allLabel}
+      </button>
+      {options.map((opt) => (
+        <button
+          key={opt.key}
+          type="button"
+          className={`${styles.chip} ${value === opt.key ? styles.active : ''}`}
+          onClick={() => onChange(opt.key)}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
 }
 
-function ChipGroup<T extends string>({ value, options, onChange, allLabel = '전체' }: ChipGroupProps<T>) {
+// 복수 선택 Chip --------------------
+function toggleInArray<T>(arr: T[], value: T) {
+  return arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
+}
+
+function ChipMulti<T extends string>({
+  value,
+  options,
+  onChange,
+  allLabel = '전체',
+}: {
+  value: T[];
+  options: readonly ChipSingleOption<T>[];
+  onChange: (next: T[]) => void;
+  allLabel?: string;
+}) {
   return (
     <div className={styles.chips}>
       <button
@@ -69,6 +110,7 @@ function ChipGroup<T extends string>({ value, options, onChange, allLabel = '전
     </div>
   );
 }
+
 export default function LostItemFilterModal({ onClose, onReset, onApply }: LostItemFilterModalProps) {
   const [filter, setFilter] = useState<FilterState>(DEFAULT_FILTER);
 
@@ -88,9 +130,10 @@ export default function LostItemFilterModal({ onClose, onReset, onApply }: LostI
 
       <div className={styles.section}>
         <div className={styles.label}>목록</div>
-        <ChipGroup
+        <ChipSingle
           value={filter.author}
           options={LIST_OPTIONS}
+          allKey="ALL"
           onChange={(author) => setFilter((p) => ({ ...p, author }))}
         />
       </div>
@@ -99,9 +142,10 @@ export default function LostItemFilterModal({ onClose, onReset, onApply }: LostI
 
       <div className={styles.section}>
         <div className={styles.label}>물품 카테고리</div>
-        <ChipGroup
+        <ChipSingle
           value={filter.type}
           options={CATEGORY_OPTIONS}
+          allKey="ALL"
           onChange={(type) => setFilter((p) => ({ ...p, type }))}
         />
       </div>
@@ -110,7 +154,7 @@ export default function LostItemFilterModal({ onClose, onReset, onApply }: LostI
 
       <div className={styles.section}>
         <div className={styles.label}>물품 종류</div>
-        <ChipGroup
+        <ChipMulti
           value={filter.category}
           options={ITEM_TYPE_OPTIONS}
           onChange={(category) => setFilter((p) => ({ ...p, category }))}
@@ -121,9 +165,10 @@ export default function LostItemFilterModal({ onClose, onReset, onApply }: LostI
 
       <div className={styles.section}>
         <div className={styles.label}>물품 상태</div>
-        <ChipGroup
+        <ChipSingle
           value={filter.foundStatus}
           options={STATUS_OPTIONS}
+          allKey="ALL"
           onChange={(foundStatus) => setFilter((p) => ({ ...p, foundStatus }))}
         />
       </div>

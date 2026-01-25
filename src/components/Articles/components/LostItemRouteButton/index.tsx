@@ -12,35 +12,7 @@ import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
-import type { FilterState } from 'components/Articles/components/LostItemFilterModal';
 import styles from './LostItemRouteButton.module.scss';
-
-// 단수 전용 =========================================================
-function pickSingleOrAll<T extends string>(arr: T[], fallbackAll: string) {
-  return arr.length === 0 ? fallbackAll : arr[0];
-}
-
-function buildLostItemQueryForSingleAPI(filter: FilterState) {
-  return {
-    author: pickSingleOrAll(filter.author, 'ALL'),
-    type: pickSingleOrAll(filter.type, 'LOST'), // 페이지 기본 LOST 유지
-    category: pickSingleOrAll(filter.category, 'ALL'),
-    foundStatus: pickSingleOrAll(filter.foundStatus, 'ALL'),
-  };
-}
-// 복수 전용 =========================================================
-// function buildLostItemQueryForMultiAPI(filter: FilterState) {
-//   const norm = <T extends string>(arr: T[]) => normalizeAll(arr);
-
-//   return {
-//     author: norm(filter.author),
-//     type: norm(filter.type),
-//     category: norm(filter.category),
-//     foundStatus: norm(filter.foundStatus),
-//     sort: filter.sort,
-//     title: filter.title,
-//   };
-// }
 
 export default function LostItemRouteButton() {
   const { logItemWriteClick, logFindUserWriteClick, logLostItemWriteClick, logLoginRequire } = useArticlesLogger();
@@ -82,17 +54,15 @@ export default function LostItemRouteButton() {
           <LostItemFilterModal
             onClose={() => setIsFilterOpen(false)}
             onApply={(filter) => {
-              const next = buildLostItemQueryForSingleAPI(filter);
-
               router.push({
                 pathname: router.pathname,
                 query: {
                   ...router.query,
                   page: 1,
-                  type: next.type,
-                  category: next.category,
-                  foundStatus: next.foundStatus,
-                  author: next.author,
+                  type: filter.type,
+                  category: filter.category,
+                  foundStatus: filter.foundStatus,
+                  author: filter.author,
                 },
               });
 
