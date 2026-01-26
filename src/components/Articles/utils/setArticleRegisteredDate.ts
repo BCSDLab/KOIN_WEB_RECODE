@@ -19,3 +19,11 @@ export const isNewArticle = (registeredAt: string, currentDate: Date) => {
   }
   return false;
 };
+
+const setArticleRegisteredDate = (registeredAt: string): [string, boolean] => {
+  const formattedDate = convertDate(registeredAt);
+  const isNew = isNewArticle(registeredAt, new Date());
+  return [formattedDate, isNew];
+};
+
+export default setArticleRegisteredDate;
