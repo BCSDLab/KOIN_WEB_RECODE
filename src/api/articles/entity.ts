@@ -226,3 +226,18 @@ export interface UpdateLostItemArticleRequestDTO {
   new_images: string[];
   delete_image_ids: number[];
 }
+
+// GET /articles/lost-item/search
+export interface SearchLostItemArticleRequest {
+  query: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface SearchLostItemArticleResponse {
+  articles: LostItemArticleForGetDTO[];
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
+}
