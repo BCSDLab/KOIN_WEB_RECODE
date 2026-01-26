@@ -17,6 +17,8 @@ import {
   LostItemStatResponse,
   LostItemArticlesRequest,
   UpdateLostItemArticleRequestDTO,
+  SearchLostItemArticleResponse,
+  SearchLostItemArticleRequest,
 } from './entity';
 
 export class GetArticles<R extends ArticlesResponse> implements APIRequest<R> {
@@ -112,7 +114,7 @@ export class PostLostItemArticles<R extends LostItemArticlesPostResponseDTO> imp
   constructor(
     public authorization: string,
     public data: LostItemArticlesRequestDTO,
-  ) {}
+  ) { }
 }
 
 export class DeleteLostItemArticle<R extends LostItemResponse> implements APIRequest<R> {
@@ -175,7 +177,7 @@ export class GetLostItemChatroomList<R extends LostItemChatroomListResponse> imp
 
   auth = true;
 
-  constructor(public authorization: string) {}
+  constructor(public authorization: string) { }
 }
 
 export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse> implements APIRequest<R> {
@@ -197,8 +199,7 @@ export class GetLostItemChatroomDetail<R extends LostItemChatroomDetailResponse>
 }
 
 export class GetLostItemChatroomDetailMessages<R extends LostItemChatroomDetailMessagesResponse>
-  implements APIRequest<R>
-{
+  implements APIRequest<R> {
   method = HTTP_METHOD.GET;
 
   path: string;
@@ -276,5 +277,25 @@ export class PutLostItemArticle<R extends SingleLostItemArticleResponseDTO> impl
     public data: UpdateLostItemArticleRequestDTO,
   ) {
     this.path = `/articles/lost-item/${id}`;
+  }
+}
+
+export class GetLostItemSearch<R extends SearchLostItemArticleResponse> implements APIRequest<R> {
+  method = HTTP_METHOD.GET;
+
+  path = '/articles/lost-item/search';
+
+  params: {
+    query: string;
+    page?: number;
+    limit?: number;
+  };
+
+  response!: R;
+
+  auth = false;
+
+  constructor(params: SearchLostItemArticleRequest) {
+    this.params = params;
   }
 }

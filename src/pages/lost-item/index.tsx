@@ -9,6 +9,7 @@ import LostItemList from 'components/Articles/components/LostItemList';
 import LostItemsHeader from 'components/Articles/components/LostItemsHeader';
 import Pagination from 'components/Articles/components/Pagination';
 import useLostItemPagination from 'components/Articles/hooks/useLostItemPagination';
+import { useLostItemSearch } from 'components/Articles/hooks/useLostItemSearch';
 import { LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
@@ -65,19 +66,32 @@ function toLostItemArticlesRequest(params: LostItemParams): LostItemArticlesRequ
 export default function LostItemArticleListPage({
   initialParams,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const params = useLostItemParams(initialParams);
+  const router = useRouter();
 
+  const params = useLostItemParams(initialParams);
   const apiParams = toLostItemArticlesRequest(params);
+
+  const keywordFromQuery = (Array.isArray(router.query.keyword) ? router.query.keyword[0] : router.query.keyword) ?? '';
+  const keyword = String(keywordFromQuery).trim();
+
+  const isSearching = keyword.length > 0;
+
   const { data: lostItemData } = useLostItemPagination(apiParams);
 
-  const articles = lostItemData?.articles ?? [];
-  const paginationInfo = lostItemData?.paginationInfo;
+  const { data: searchData } = useLostItemSearch({
+    query: keyword,
+    page: params.page,
+    limit: 10,
+  });
+
+  const articles = isSearching ? (searchData?.articles ?? []) : (lostItemData?.articles ?? []);
+  const totalPageNum = isSearching ? (searchData?.total_page ?? 0) : (lostItemData?.paginationInfo?.total_page ?? 0);
 
   return (
     <ArticlesPageLayout>
       <LostItemsHeader />
       <LostItemList articles={articles} />
-      <Pagination totalPageNum={paginationInfo?.total_page ?? 0} />
+      <Pagination totalPageNum={totalPageNum} />
     </ArticlesPageLayout>
   );
 }
