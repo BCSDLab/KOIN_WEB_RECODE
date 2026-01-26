@@ -98,6 +98,85 @@ export default function LostItemRouteButton() {
     setIsFilterOpen(false);
   };
 
+  // 필터 버튼 렌더 --------------------------
+  const renderFilter = () => {
+    if (isMobile) {
+      return (
+        <LostItemFilterBottomSheet
+          isOpen={isFilterOpen}
+          initialFilter={initialFilter}
+          onClose={() => setIsFilterOpen(false)}
+          onApply={handleApply}
+        />
+      );
+    }
+
+    if (!isFilterOpen) return null;
+
+    return (
+      <div className={styles.filterPopover}>
+        <LostItemFilterModal
+          initialFilter={initialFilter}
+          onClose={() => setIsFilterOpen(false)}
+          onApply={handleApply}
+        />
+      </div>
+    );
+  };
+
+  // 글쓰기 버튼 렌더 --------------------------
+  const renderWriteMenu = () => {
+    if (isMobile) {
+      return (
+        <LostItemWriteBottomSheet
+          isOpen={isWriting}
+          onClose={() => setIsWriting(false)}
+          onFoundClick={logFindUserWriteClick}
+          onLostClick={logLostItemWriteClick}
+        />
+      );
+    }
+
+    if (!isWriting) return null;
+
+    return (
+      <div ref={writeContainerRef} className={styles.writePopover} role="dialog" aria-label="글쓰기 메뉴">
+        <div className={styles.writeHeader}>
+          <div className={styles.writeTitle}>글쓰기</div>
+          <button type="button" className={styles.writeClose} aria-label="닫기" onClick={() => setIsWriting(false)}>
+            <CloseIcon />
+          </button>
+        </div>
+
+        <div className={styles.writeBody}>
+          <Link
+            className={styles.writeOptionButton}
+            href={ROUTES.LostItemFound()}
+            onClick={() => {
+              logFindUserWriteClick();
+              setIsWriting(false);
+            }}
+          >
+            <FoundIcon />
+            <span className={styles.writeOptionText}>주인을 찾아요</span>
+          </Link>
+
+          <Link
+            className={styles.writeOptionButton}
+            href={ROUTES.LostItemLost()}
+            onClick={() => {
+              logLostItemWriteClick();
+              setIsWriting(false);
+            }}
+          >
+            <LostIcon />
+            <span className={styles.writeOptionText}>잃어버렸어요</span>
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
       <button type="button" className={styles.links__filter} onClick={() => setIsFilterOpen((p) => !p)}>
@@ -105,24 +184,7 @@ export default function LostItemRouteButton() {
         <FilterIcon />
       </button>
 
-      {isMobile ? (
-        <LostItemFilterBottomSheet
-          isOpen={isFilterOpen}
-          initialFilter={initialFilter}
-          onClose={() => setIsFilterOpen(false)}
-          onApply={handleApply}
-        />
-      ) : (
-        isFilterOpen && (
-          <div className={styles.filterPopover}>
-            <LostItemFilterModal
-              initialFilter={initialFilter}
-              onClose={() => setIsFilterOpen(false)}
-              onApply={handleApply}
-            />
-          </div>
-        )
-      )}
+      {renderFilter()}
 
       <div className={styles.writeAnchor}>
         {!isWriting && (
@@ -132,56 +194,7 @@ export default function LostItemRouteButton() {
           </button>
         )}
 
-        {isMobile ? (
-          <LostItemWriteBottomSheet
-            isOpen={isWriting}
-            onClose={() => setIsWriting(false)}
-            onFoundClick={() => logFindUserWriteClick()}
-            onLostClick={() => logLostItemWriteClick()}
-          />
-        ) : (
-          isWriting && (
-            <div ref={writeContainerRef} className={styles.writePopover} role="dialog" aria-label="글쓰기 메뉴">
-              <div className={styles.writeHeader}>
-                <div className={styles.writeTitle}>글쓰기</div>
-                <button
-                  type="button"
-                  className={styles.writeClose}
-                  aria-label="닫기"
-                  onClick={() => setIsWriting(false)}
-                >
-                  <CloseIcon />
-                </button>
-              </div>
-
-              <div className={styles.writeBody}>
-                <Link
-                  className={styles.writeOptionButton}
-                  href={ROUTES.LostItemFound()}
-                  onClick={() => {
-                    logFindUserWriteClick();
-                    setIsWriting(false);
-                  }}
-                >
-                  <FoundIcon />
-                  <span className={styles.writeOptionText}>주인을 찾아요</span>
-                </Link>
-
-                <Link
-                  className={styles.writeOptionButton}
-                  href={ROUTES.LostItemLost()}
-                  onClick={() => {
-                    logLostItemWriteClick();
-                    setIsWriting(false);
-                  }}
-                >
-                  <LostIcon />
-                  <span className={styles.writeOptionText}>잃어버렸어요</span>
-                </Link>
-              </div>
-            </div>
-          )
-        )}
+        {renderWriteMenu()}
       </div>
     </div>
   );
