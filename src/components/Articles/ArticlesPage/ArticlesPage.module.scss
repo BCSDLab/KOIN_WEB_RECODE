@@ -34,6 +34,10 @@
   justify-content: space-between;
   align-items: center;
 
+  @include media.media-breakpoint(mobile) {
+    margin: 4px 0;
+  }
+
   &__title {
     font-family: Pretendard, sans-serif;
     font-size: 32px;
