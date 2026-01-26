@@ -79,6 +79,7 @@ export type LostItemSort = 'LATEST' | 'OLDEST';
 export type LostItemAuthor = 'ALL' | 'MY';
 
 export interface LostItemArticlesRequest {
+  [key: string]: unknown;
   type?: LostItemType;
   page?: number;
   limit?: number;

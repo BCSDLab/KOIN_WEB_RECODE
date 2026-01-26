@@ -21,7 +21,13 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
-  const { logItemWriteClick, logFindUserWriteClick, logLostItemWriteClick, logLoginRequire } = useArticlesLogger();
+  const {
+    logItemWriteClick,
+    logFindUserWriteClick,
+    logLostItemWriteClick,
+    logLostItemWriteLoginRequest,
+    logLostItemFilter,
+  } = useArticlesLogger();
   const router = useRouter();
 
   const [isWriting, setIsWriting] = useState(false);
@@ -50,7 +56,8 @@ export default function LostItemRouteButton() {
           title="게시글을 작성하기"
           description="로그인 후 분실물 주인을 찾아주세요!"
           onClose={portalOption.close}
-          onLoginClick={() => logLoginRequire('게시글 작성 팝업')}
+          onLoginClick={() => logLostItemWriteLoginRequest('로그인하기')}
+          onCancelClick={() => logLostItemWriteLoginRequest('닫기')}
         />
       ));
     }
@@ -96,6 +103,13 @@ export default function LostItemRouteButton() {
 
     router.push({ pathname: router.pathname, query: nextQuery });
     setIsFilterOpen(false);
+  };
+
+  const handleFilterButtonClick = () => {
+    setIsFilterOpen((prev) => !prev);
+    if (!isFilterOpen) {
+      logLostItemFilter();
+    }
   };
 
   // 필터 버튼 렌더 --------------------------
@@ -196,7 +210,7 @@ export default function LostItemRouteButton() {
   return (
     <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
       <div className={styles.filterAnchor}>
-        <button type="button" className={styles.links__filter} onClick={() => setIsFilterOpen((p) => !p)}>
+        <button type="button" className={styles.links__filter} onClick={handleFilterButtonClick}>
           필터
           <FilterIcon />
         </button>

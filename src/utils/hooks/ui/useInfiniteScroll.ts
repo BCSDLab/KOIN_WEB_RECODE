@@ -5,14 +5,14 @@ interface UseInfiniteScrollOptions {
   enabled?: boolean;
 }
 
-const useInfiniteScroll = (
+const useInfiniteScroll = <T extends HTMLElement = HTMLDivElement>(
   fetchNextPage: () => void,
   hasNextPage: boolean | undefined,
   isFetchingNextPage: boolean,
   options: UseInfiniteScrollOptions = {},
 ) => {
   const { threshold = 0.3, enabled = true } = options;
-  const observerRef = useRef<HTMLElement>(null);
+  const observerRef = useRef<T>(null);
 
   useEffect(() => {
     if (!enabled || !hasNextPage || isFetchingNextPage) return undefined;

@@ -64,16 +64,7 @@ export class GetLostItemArticles<R extends LostItemArticlesResponseDTO> implemen
 
   path = '/articles/lost-item/v2';
 
-  params: {
-    type?: string;
-    page?: number;
-    limit?: number;
-    category?: string;
-    foundStatus?: string;
-    sort?: string;
-    author?: string;
-    title?: string;
-  };
+  params: LostItemArticlesRequest;
 
   response!: R;
 

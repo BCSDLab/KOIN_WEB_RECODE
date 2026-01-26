@@ -1,5 +1,5 @@
-@use 'src/utils/scss/media' as media;
-@use 'src/components/Articles/utils/scss/lostItemsGrid' as grid;
+@use "src/utils/scss/media" as media;
+@use "src/components/Articles/utils/scss/lostItemsGrid" as grid;
 
 .lostItemList {
   width: 100%;
@@ -114,7 +114,7 @@
   }
 
   &__foundDate::before {
-    content: '|';
+    content: "|";
     margin-right: 8px;
   }
 

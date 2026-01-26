@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { LostItemImageDTO } from 'api/articles/entity';
 import LostItemPageTemplate from 'components/Articles/components/LostItemPageTemplate';
-import { FindUserCategory } from 'components/Articles/hooks/useArticlesLogger';
+import { FindUserCategory, useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { useLostItemForm } from 'components/Articles/hooks/useLostItemForm';
 import useSingleLostItemArticle from 'components/Articles/LostItemDetailPage/hooks/useSingleLostItemArticle';
 import usePutLostItemArticle from 'components/Articles/LostItemEditPage/hooks/usePutLostItemArticle';
@@ -29,6 +29,7 @@ const EDIT_TITLES = {
 
 export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
   const router = useRouter();
+  const { logLostItemModifyComplete } = useArticlesLogger();
   const { article } = useSingleLostItemArticle(articleId);
   const { status, mutateAsync: putLostItem } = usePutLostItemArticle(articleId);
 
@@ -43,6 +44,7 @@ export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
     defaultType: type,
     initialItems: [
       {
+        id: article.id,
         type,
         category: article.category as FindUserCategory,
         foundDate: new Date(article.found_date),
@@ -93,6 +95,7 @@ export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
     };
 
     await putLostItem(data);
+    logLostItemModifyComplete(type === 'LOST' ? '분실물' : '습득물');
     router.replace(ROUTES.LostItemDetail({ id: String(articleId), isLink: true }));
   };
 
