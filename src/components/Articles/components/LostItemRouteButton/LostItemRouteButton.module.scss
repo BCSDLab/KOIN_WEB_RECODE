@@ -55,24 +55,6 @@
       z-index: 15;
     }
   }
-
-  &--active {
-    @include media.media-breakpoint(mobile) {
-      z-index: 1003;
-    }
-  }
-}
-
-.overlay {
-  @include media.media-breakpoint(mobile) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0 0 0 / 40%);
-    z-index: 10;
-  }
 }
 
 .filterAnchor {
