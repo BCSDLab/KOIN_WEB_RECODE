@@ -17,6 +17,7 @@ import ROUTES from 'static/routes';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import styles from './LostItemRouteButton.module.scss';
 
 export default function LostItemRouteButton() {
@@ -30,6 +31,12 @@ export default function LostItemRouteButton() {
   const { data: userInfo } = useUser();
 
   const isMobile = useMediaQuery();
+
+  const { containerRef: writeContainerRef } = useOutsideClick<HTMLDivElement>({
+    onOutsideClick: () => {
+      setIsWriting(false);
+    },
+  });
 
   const handleWritingButtonClick = () => {
     if (userInfo) {
@@ -134,7 +141,7 @@ export default function LostItemRouteButton() {
           />
         ) : (
           isWriting && (
-            <div className={styles.writePopover} role="dialog" aria-label="글쓰기 메뉴">
+            <div ref={writeContainerRef} className={styles.writePopover} role="dialog" aria-label="글쓰기 메뉴">
               <div className={styles.writeHeader}>
                 <div className={styles.writeTitle}>글쓰기</div>
                 <button
