@@ -17,9 +17,7 @@ function ResultPage() {
     <div className={styles.container}>
       <h1 className={styles.title}>아이디 조회 결과</h1>
       <span className={styles.description}>
-        아이디는
-        <strong> {userId}</strong>
-        입니다.
+        아이디는 <strong>{userId}</strong> 입니다.
       </span>
       <div className={styles['button-wrapper']}>
         <button type="button" className={styles['button-wrapper__login-button']} onClick={onClickLogin}>

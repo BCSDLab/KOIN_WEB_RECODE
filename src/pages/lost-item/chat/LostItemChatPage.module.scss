@@ -397,3 +397,22 @@
   border-radius: 8px;
   object-fit: cover;
 }
+
+.offline-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background-color: #f5a623;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.message-button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

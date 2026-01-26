@@ -3,9 +3,8 @@
 // NOTE: 이 페이지는 이미지가 동적으로 바뀌고(채팅/썸네일/메시지), 크기·비율이 제각각입니다.
 // next/image 도입 시 sizes/fill 등 설정·관리 비용이 커지는데 비해(특히 작은/반복 이미지) 체감 이득이 작아 <img>를 유지합니다.
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Client } from '@stomp/stompjs';
 
 import BlockIcon from 'assets/svg/Articles/block.svg';
 import DefaultPhotoIcon from 'assets/svg/Articles/default-photo.svg';
@@ -24,27 +23,27 @@ import {
   getKoreaISODate,
 } from 'components/Articles/LostItemChatPage/utils/date';
 import ROUTES from 'static/routes';
+import useChatWorker from 'utils/hooks/chat/useChatWorker';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
 import useMount from 'utils/hooks/state/useMount';
+import useNetworkStatus from 'utils/hooks/state/useNetworkStatus';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useUser } from 'utils/hooks/state/useUser';
 import useImageUpload, { UploadError } from 'utils/hooks/ui/useImageUpload';
 import showToast from 'utils/ts/showToast';
-import type { LostItemChatroomDetailMessage } from 'api/articles/entity';
 import styles from './LostItemChatPage.module.scss';
 
 function LostItemChatPage({ token }: { token: string }) {
   const isMobile = useMediaQuery();
+  const isOnline = useNetworkStatus();
   const { searchParams } = useParamsHandler();
   const { data: userInfo } = useUser();
 
   const { imgRef, saveImgFile } = useImageUpload({ domain: 'LOST_ITEMS' });
 
-  const clientRef = useRef<Client | null>(null);
   const [inputValue, setInputValue] = useState('');
-  const [currentMessageList, setCurrentMessageList] = useState<LostItemChatroomDetailMessage[]>([]);
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -57,50 +56,27 @@ function LostItemChatPage({ token }: { token: string }) {
     defaultChatroomId: chatroomId,
     defaultArticleId: articleId,
     invalidateChatroomList,
-  } = useChatroomQuery(token, searchParams.get('articleId'), searchParams.get('chatroomId'));
+  } = useChatroomQuery(token, searchParams.get('articleId'), searchParams.get('chatroomId'), isOnline);
 
-  const connectChatroom = useCallback(() => {
-    if (!articleId || !chatroomId || !userInfo) {
-      showToast('error', '채팅방 정보를 불러오는데 실패했습니다.');
-      return;
+  const {
+    realtimeMessages,
+    sendMessage: workerSendMessage,
+    mergeMessages,
+    setMessagesFromAPI,
+  } = useChatWorker({
+    token,
+    userId: userInfo?.id ?? 0,
+    articleId: articleId ? Number(articleId) : null,
+    chatroomId: chatroomId ? Number(chatroomId) : null,
+    onChatroomListUpdated: invalidateChatroomList,
+  });
+
+  useEffect(() => {
+    if (messages && messages.length > 0) {
+      setMessagesFromAPI(messages);
+      mergeMessages(messages);
     }
-
-    if (clientRef.current) {
-      clientRef.current.deactivate();
-    }
-
-    const stompClient = new Client({
-      brokerURL: `${process.env.NEXT_PUBLIC_API_PATH}/ws-stomp`,
-      connectHeaders: { Authorization: token },
-      reconnectDelay: 1000000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-      onConnect: () => {
-        stompClient.subscribe(`/topic/chatroom/list/${userInfo.id}`, () => {
-          invalidateChatroomList();
-        });
-
-        stompClient.subscribe(`/topic/chat/${articleId}/${chatroomId}`, (message) => {
-          const receivedMessage = JSON.parse(message.body);
-          setCurrentMessageList((prev) => [...prev, receivedMessage]);
-          invalidateChatroomList();
-        });
-      },
-      onStompError: () => {
-        showToast('error', '채팅 서버와 연결 중 오류가 발생했습니다.');
-      },
-    });
-
-    stompClient.activate();
-    clientRef.current = stompClient;
-  }, [articleId, chatroomId, userInfo, token, invalidateChatroomList]);
-
-  const disconnectChatroom = useCallback(() => {
-    if (clientRef.current) {
-      clientRef.current.deactivate();
-      clientRef.current = null;
-    }
-  }, []);
+  }, [messages, setMessagesFromAPI, mergeMessages]);
 
   const uploadImage = async () => {
     try {
@@ -117,13 +93,9 @@ function LostItemChatPage({ token }: { token: string }) {
           content: imageUrlList[0],
           timestamp: getKoreaISODate(),
           is_image: true,
-          isSentByMe: true,
         };
 
-        clientRef.current?.publish({
-          destination: `/app/chat/${articleId}/${chatroomId}`,
-          body: JSON.stringify(newMessage),
-        });
+        workerSendMessage(newMessage);
       }
     } catch (error) {
       if (error instanceof UploadError) {
@@ -144,14 +116,9 @@ function LostItemChatPage({ token }: { token: string }) {
         content: inputValue,
         timestamp: getKoreaISODate(),
         is_image: false,
-        isSentByMe: true,
       };
 
-      clientRef.current?.publish({
-        destination: `/app/chat/${articleId}/${chatroomId}`,
-        body: JSON.stringify(newMessage),
-      });
-
+      workerSendMessage(newMessage);
       setInputValue('');
     } catch {
       showToast('error', '메세지 전송에 실패했습니다.');
@@ -170,14 +137,6 @@ function LostItemChatPage({ token }: { token: string }) {
     e.currentTarget.src = DefaultPhotoUrl;
   };
 
-  useEffect(() => {
-    connectChatroom();
-
-    return () => {
-      disconnectChatroom();
-    };
-  }, [connectChatroom, disconnectChatroom]);
-
   /**
    * @description
    * 채팅방의 메세지를 받아온 후, 스크롤을 맨 아래로 내립니다.
@@ -186,7 +145,7 @@ function LostItemChatPage({ token }: { token: string }) {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [currentMessageList, messages]);
+  }, [realtimeMessages, messages]);
 
   /**
    * @description
@@ -289,12 +248,12 @@ function LostItemChatPage({ token }: { token: string }) {
               </div>
 
               <div className={styles['message-container']} ref={chatContainerRef}>
-                {messages.reduce((acc, message, index) => {
+                {realtimeMessages.reduce((acc, message, index) => {
                   const messageDate = formatISODateToMonthAndDay(message.timestamp);
-                  const prevDate = formatISODateToMonthAndDay(messages[index - 1]?.timestamp);
+                  const prevDate = formatISODateToMonthAndDay(realtimeMessages[index - 1]?.timestamp);
                   const messageTime = formatISODateToTime(message.timestamp);
-                  const prevTime = formatISODateToTime(messages[index - 1]?.timestamp);
-                  const isSenderChanged = message.user_id !== messages[index - 1]?.user_id;
+                  const prevTime = formatISODateToTime(realtimeMessages[index - 1]?.timestamp);
+                  const isSenderChanged = message.user_id !== realtimeMessages[index - 1]?.user_id;
                   const isMe = message.user_id === userInfo?.id;
 
                   return acc.concat(
@@ -346,78 +305,17 @@ function LostItemChatPage({ token }: { token: string }) {
                     ),
                   );
                 }, [] as React.ReactNode[])}
-                {currentMessageList.length > 0 &&
-                  currentMessageList.reduce((acc, message, index) => {
-                    const messageDate = formatISODateToMonthAndDay(message.timestamp);
-                    const prevDate =
-                      index === 0
-                        ? formatISODateToMonthAndDay(messages[messages.length - 1]?.timestamp)
-                        : formatISODateToMonthAndDay(currentMessageList[index - 1].timestamp);
-                    const messageTime = formatISODateToTime(message.timestamp);
-                    const prevTime =
-                      index === 0
-                        ? formatISODateToTime(messages[messages.length - 1]?.timestamp)
-                        : formatISODateToTime(currentMessageList[index - 1].timestamp);
-                    const isSenderChanged =
-                      index === 0
-                        ? message.user_id !== messages[messages.length - 1]?.user_id
-                        : message.user_id !== currentMessageList[index - 1]?.user_id;
-                    const isMe = message.user_id === userInfo?.id;
-
-                    return acc.concat(
-                      messageDate !== prevDate && (
-                        <div key={`current-date-${index}`} className={styles['message-date-header']}>
-                          {messageDate}
-                        </div>
-                      ),
-                      isMe ? (
-                        <div key={`current-msg-${index}`} className={styles['message-item__right']}>
-                          <span className={styles['message-item--time']}>{formatISODateToTime(message.timestamp)}</span>
-                          <span className={styles['message-item--content__right']}>
-                            {message.is_image && (
-                              <img
-                                src={message.content}
-                                alt="메세지 이미지"
-                                className={styles['message-item--content-image']}
-                              />
-                            )}
-                            {!message.is_image && message.content}
-                          </span>
-                        </div>
-                      ) : (
-                        <div key={`current-msg-${index}`} className={styles['message-item-container']}>
-                          {(isSenderChanged || messageTime !== prevTime) && (
-                            <div className={styles['message-item--header']}>
-                              <div className={styles['message-item--profile']}>
-                                <PersonIcon />
-                              </div>
-                              <div className={styles['message-item--name']}>
-                                {message.user_nickname || userInfo?.anonymous_nickname || '익명'}
-                              </div>
-                            </div>
-                          )}
-                          <div className={styles['message-item']}>
-                            <span className={styles['message-item--content']}>
-                              {message.is_image && (
-                                <img
-                                  src={message.content}
-                                  alt="메세지 이미지"
-                                  className={styles['message-item--content-image']}
-                                />
-                              )}
-                              {!message.is_image && message.content}
-                            </span>
-                            <span className={styles['message-item--time']}>{messageTime}</span>
-                          </div>
-                        </div>
-                      ),
-                    );
-                  }, [] as React.ReactNode[])}
               </div>
               <div className={styles['chat-input-container-wrapper']}>
+                {!isOnline && (
+                  <div className={styles['offline-banner']}>오프라인 상태입니다. 저장된 메시지만 볼 수 있습니다.</div>
+                )}
                 <div className={styles['chat-input-container']}>
                   <div className={styles['chat-input--photo']}>
-                    <label htmlFor="image-file" className={styles['message-button']}>
+                    <label
+                      htmlFor="image-file"
+                      className={`${styles['message-button']} ${!isOnline ? styles['message-button--disabled'] : ''}`}
+                    >
                       <AddPhotoIcon />
                       <input
                         type="file"
@@ -426,6 +324,7 @@ function LostItemChatPage({ token }: { token: string }) {
                         id="image-file"
                         multiple
                         onChange={uploadImage}
+                        disabled={!isOnline}
                         aria-label="사진 전송"
                       />
                     </label>
@@ -436,12 +335,14 @@ function LostItemChatPage({ token }: { token: string }) {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={sendMessageToEnterKeyDown}
-                    placeholder="메세지 보내기"
+                    placeholder={isOnline ? '메세지 보내기' : '오프라인 상태입니다'}
+                    disabled={!isOnline}
                   />
                   <button
                     type="button"
                     onClick={sendMessage}
-                    className={styles['message-button']}
+                    className={`${styles['message-button']} ${!isOnline ? styles['message-button--disabled'] : ''}`}
+                    disabled={!isOnline}
                     aria-label="문자 전송"
                   >
                     <SendIcon />
@@ -468,13 +369,9 @@ export default function LostItemChatPageWrapper() {
   const token = useTokenState();
   const mounted = useMount();
 
-  const { searchParams } = useParamsHandler();
-  const articleId = searchParams.get('articleId') ?? 'none';
-  const chatroomId = searchParams.get('chatroomId') ?? 'none';
-
   if (!mounted || !token) return null;
 
-  return <LostItemChatPage key={`${articleId}-~${chatroomId}`} token={token} />;
+  return <LostItemChatPage token={token} />;
 }
 
 LostItemChatPageWrapper.requireAuth = true;
