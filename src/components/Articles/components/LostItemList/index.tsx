@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { LostItemArticleForGetDTO } from 'api/articles/entity';
+import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import FoundChip from 'components/Articles/LostItemDetailPage/components/FoundChip';
 import setArticleRegisteredDate from 'components/Articles/utils/setArticleRegisteredDate';
 import ROUTES from 'static/routes';
@@ -14,6 +15,7 @@ interface LostItemListProps {
 
 export default function LostItemList({ articles }: LostItemListProps) {
   const isMobile = useMediaQuery();
+  const { logLostItemPostEntry } = useArticlesLogger();
 
   const handleReportedClick = () => showToast('error', '신고된 게시글은 볼 수 없습니다.');
 
@@ -55,7 +57,12 @@ export default function LostItemList({ articles }: LostItemListProps) {
     }
 
     return (
-      <Link key={article.id} className={styles.lostItemListMobile__row} href={detailLink}>
+      <Link
+        key={article.id}
+        className={styles.lostItemListMobile__row}
+        href={detailLink}
+        onClick={() => logLostItemPostEntry(article.type === 'LOST' ? '분실물' : '습득물')}
+      >
         <div className={styles.lostItemListMobile__type}>{typeText}</div>
 
         <div className={styles.lostItemListMobile__title}>
@@ -106,7 +113,12 @@ export default function LostItemList({ articles }: LostItemListProps) {
     }
 
     return (
-      <Link key={article.id} className={styles.lostItemList__row} href={detailLink}>
+      <Link
+        key={article.id}
+        className={styles.lostItemList__row}
+        href={detailLink}
+        onClick={() => logLostItemPostEntry(article.type === 'LOST' ? '분실물' : '습득물')}
+      >
         <div className={styles.lostItemList__type}>{typeText}</div>
 
         <div className={styles.lostItemList__title}>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import RefreshIcon from 'assets/svg/Articles/refresh.svg';
+import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { LIST_OPTIONS, CATEGORY_OPTIONS, ITEM_TYPE_OPTIONS, STATUS_OPTIONS } from 'static/filterOptions';
 import styles from './LostItemFilterContent.module.scss';
 
@@ -118,7 +119,13 @@ export default function LostItemFilterContent({
   onApply,
   initialFilter,
 }: LostItemFilterContentProps) {
+  const { logLostItemFilterApply } = useArticlesLogger();
   const [filter, setFilter] = useState<FilterState>(initialFilter ?? DEFAULT_FILTER);
+
+  const handleApply = () => {
+    logLostItemFilterApply();
+    onApply(filter);
+  };
 
   const handleReset = () => {
     setFilter(DEFAULT_FILTER);
@@ -186,7 +193,7 @@ export default function LostItemFilterContent({
           초기화
           <RefreshIcon />
         </button>
-        <button type="button" className={styles.apply} onClick={() => onApply(filter)}>
+        <button type="button" className={styles.apply} onClick={handleApply}>
           적용하기
         </button>
       </div>

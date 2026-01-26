@@ -74,7 +74,14 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   const { article } = useSingleLostItemArticle(articleId);
   const { mutateAsync: searchChatroom } = usePostLostItemChatroom();
   const { mutate: toggleFound, isPending: isToggling } = usePostFoundLostItem(articleId);
-  const { logFindUserDeleteClick, logItemPostReportClick } = useArticlesLogger();
+  const {
+    logFindUserDeleteClick,
+    logItemPostReportClick,
+    logLostItemMessageLoginRequest,
+    logLostItemStateChange,
+    logLostItemFound,
+    logLostItemModify,
+  } = useArticlesLogger();
 
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
   const [isReportModalOpen, openReportModal, closeReportModal] = useBooleanState(false);
@@ -95,26 +102,44 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   } = article;
   const typeLabel = type === 'FOUND' ? '[습득물]' : '[분실물]';
 
-  const requireLogin = (modalTitle: string, onSuccess: () => void) => {
+  const requireLogin = (
+    modalTitle: string,
+    onSuccess: () => void,
+    logCallbacks?: { onLogin?: () => void; onCancel?: () => void },
+  ) => {
     if (token) {
       onSuccess();
       return;
     }
     portalManager.open((portalOption) => (
-      <LoginRequiredModal title={modalTitle} description="로그인 후 이용해주세요." onClose={portalOption.close} />
+      <LoginRequiredModal
+        title={modalTitle}
+        description="로그인 후 이용해주세요."
+        onClose={portalOption.close}
+        onLoginClick={logCallbacks?.onLogin}
+        onCancelClick={logCallbacks?.onCancel}
+      />
     ));
   };
 
   const handleToggleFound = () => {
+    logLostItemStateChange(type === 'FOUND' ? '습득물' : '분실물');
     openFoundModal();
   };
 
+  const handleFoundModalConfirm = () => {
+    logLostItemFound(type === 'FOUND' ? '습득물' : '분실물');
+    toggleFound();
+    closeFoundModal();
+  };
+
   const handleModifyButtonClick = () => {
+    logLostItemModify(type === 'FOUND' ? '습득물' : '분실물');
     navigate(ROUTES.LostItemEdit({ id: String(articleId), isLink: true }));
   };
 
   const handleDeleteButtonClick = () => {
-    logFindUserDeleteClick();
+    logFindUserDeleteClick(type === 'FOUND' ? '습득물' : '분실물');
     openDeleteModal();
   };
 
@@ -130,10 +155,17 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   };
 
   const handleChatroomButtonClick = () => {
-    requireLogin('쪽지를 보내려면', async () => {
-      const chatroomInfo = await searchChatroom(articleId);
-      navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
-    });
+    requireLogin(
+      '쪽지를 보내려면',
+      async () => {
+        const chatroomInfo = await searchChatroom(articleId);
+        navigate(`${ROUTES.LostItemChat()}?chatroomId=${chatroomInfo.chat_room_id}&articleId=${articleId}`);
+      },
+      {
+        onLogin: () => logLostItemMessageLoginRequest('로그인하기'),
+        onCancel: () => logLostItemMessageLoginRequest('닫기'),
+      },
+    );
   };
 
   return (
@@ -210,7 +242,9 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
         <HotArticles />
         {isReportModalOpen && <ReportModal articleId={articleId} closeReportModal={closeReportModal} />}
         {isDeleteModalOpen && <DeleteModal articleId={articleId} closeDeleteModal={closeDeleteModal} />}
-        {isFoundModalOpen && <FoundModal onConfirm={toggleFound} onClose={closeFoundModal} isPending={isToggling} />}
+        {isFoundModalOpen && (
+          <FoundModal onConfirm={handleFoundModalConfirm} onClose={closeFoundModal} isPending={isToggling} />
+        )}
       </div>
     </>
   );
