@@ -20,6 +20,19 @@ export default function ArticlesPageLayout({ children }: { children: React.React
   const keywordFromQuery = (Array.isArray(router.query.keyword) ? router.query.keyword[0] : router.query.keyword) ?? '';
   const [keyword, setKeyword] = useState(String(keywordFromQuery));
 
+  const applySearch = () => {
+    const next = keyword.trim();
+
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        keyword: next || undefined,
+        page: 1,
+      },
+    });
+  };
+
   return (
     <div className={styles.template}>
       <div className={styles.content}>
@@ -38,6 +51,9 @@ export default function ArticlesPageLayout({ children }: { children: React.React
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 placeholder="검색어를 입력해주세요."
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') applySearch();
+                }}
               />
             </div>
           )}
