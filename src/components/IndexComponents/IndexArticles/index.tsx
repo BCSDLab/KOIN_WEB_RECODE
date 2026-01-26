@@ -10,15 +10,6 @@ export default function IndexArticles() {
   const articlesData = useArticles();
   const logger = useLogger();
 
-  const getLink = (id: string, boardId: number) => {
-    switch (boardId) {
-      case 14:
-        return ROUTES.LostItemDetail({ id, isLink: true });
-      default:
-        return ROUTES.ArticlesDetail({ id, isLink: true });
-    }
-  };
-
   return (
     <section className={styles.template}>
       <div className={styles.template__header}>
@@ -44,7 +35,7 @@ export default function IndexArticles() {
       <ul className={styles.list}>
         {articlesData?.articles.slice(0, 7).map((article) => (
           <li key={article.id} className={styles.list__item}>
-            <Link href={getLink(String(article.id), article.board_id)} className={styles['list__item-link']}>
+            <Link href={ROUTES.ArticlesDetail({ id: String(article.id), isLink: true })} className={styles['list__item-link']}>
               <span className={styles['list__item-type']}>{convertArticlesTag(article.board_id)}</span>
               <span className={styles['list__item-title']}>{article.title}</span>
               {article.isNew && (

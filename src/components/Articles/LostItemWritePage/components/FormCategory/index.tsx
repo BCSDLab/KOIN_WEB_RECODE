@@ -27,8 +27,16 @@ export default function FormCategory({ category, setCategory, isCategorySelected
   return (
     <div className={styles.category}>
       <div className={styles.category__text}>
-        <span className={styles.title}>품목</span>
-        <span className={styles.title__description}>품목을 선택해주세요.</span>
+        <div className={styles.category__label}>
+          <span className={styles['category__title']}>품목</span>
+          <span className={styles['category__required']}>*</span>
+        </div>
+        {!isCategorySelected && (
+          <span className={styles['category__warning']}>
+            <WarnIcon />
+            품목이 선택되지 않았습니다.
+          </span>
+        )}
       </div>
       <div className={styles.category__wrapper}>
         <div className={styles.category__buttons}>
@@ -46,12 +54,6 @@ export default function FormCategory({ category, setCategory, isCategorySelected
             </button>
           ))}
         </div>
-        {!isCategorySelected && (
-          <span className={styles.warning}>
-            <WarnIcon />
-            품목이 선택되지 않았습니다.
-          </span>
-        )}
       </div>
     </div>
   );

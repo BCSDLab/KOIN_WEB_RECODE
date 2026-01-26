@@ -1,0 +1,230 @@
+@use "src/utils/scss/media" as media;
+@use "src/components/Articles/utils/scss/lostItemsGrid" as grid;
+
+.lostItemList {
+  width: 100%;
+
+  &__row,
+  &__rowDisabled {
+    display: grid;
+    grid-template-columns: grid.$lost-items-columns;
+    height: 68px;
+    align-items: center;
+    border-bottom: 1px solid #d2dae2;
+    text-decoration: none;
+    background: transparent;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      height: 75px;
+      display: block;
+      border-bottom: 1px solid #ececec;
+      box-sizing: border-box;
+      padding: 16px 16px 14.5px;
+    }
+  }
+
+  &__row {
+    cursor: pointer;
+
+    &:hover {
+      background: #f8fafb;
+    }
+  }
+
+  &__rowDisabled {
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+
+    &:hover {
+      background: #f8fafb;
+    }
+
+    @include media.media-breakpoint(mobile) {
+      border: none;
+      padding: 12px 24px;
+    }
+  }
+
+  &__type,
+  &__title,
+  &__author,
+  &__date,
+  &__status {
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  &__type {
+    color: #252525;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__title {
+    justify-content: flex-start;
+    overflow: hidden;
+    padding: 0 12px;
+    color: #252525;
+
+    @include media.media-breakpoint(mobile) {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      display: block;
+      padding: 0;
+    }
+  }
+
+  &__titleMeta {
+    min-width: 0;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &__badge {
+    padding: 4px 12px;
+    background-color: #175c8e;
+    color: #fff;
+    border-radius: 999px;
+    font-weight: 500;
+    flex: 0 0 auto;
+    font-size: 14px;
+
+    @include media.media-breakpoint(mobile) {
+      padding: 4px 8px;
+    }
+  }
+
+  &__place,
+  &__foundDate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__foundDate::before {
+    content: "|";
+    margin-right: 8px;
+  }
+
+  &__newIcon {
+    flex: 0 0 auto;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__author {
+    color: #175c8e;
+    overflow: hidden;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 13px;
+      color: #a1a1a1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__date {
+    color: #727272;
+
+    @include media.media-breakpoint(mobile) {
+      font-size: 13px;
+      color: #a1a1a1;
+      float: right;
+      height: 50%;
+    }
+  }
+
+  &__status {
+    color: #252525;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__reportedText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__chip {
+    display: flex;
+    justify-content: center;
+
+    @include media.media-breakpoint(mobile) {
+      justify-content: none;
+    }
+  }
+
+  .lostItemListMobile {
+    font-size: 12px;
+
+    &__row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 24px;
+    }
+
+    &__type {
+      color: #175c8e;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    &__title {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__titleMeta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    &__badge {
+      padding: 4px 8px;
+      background-color: #175c8e;
+      color: #fff;
+      border-radius: 999px;
+      font-weight: 500;
+      align-content: center;
+    }
+
+    &__content {
+      font-size: 12px;
+      line-height: 160%;
+    }
+
+    &__writeMeta {
+      display: flex;
+      gap: 2px;
+    }
+
+    &__author,
+    &__dot,
+    &__date {
+      color: #727272;
+      font-size: 12px;
+    }
+  }
+}

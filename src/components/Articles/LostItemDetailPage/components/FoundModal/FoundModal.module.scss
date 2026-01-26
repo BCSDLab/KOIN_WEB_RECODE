@@ -1,0 +1,126 @@
+@use "src/utils/scss/media" as media;
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(23 23 23 / 30%);
+}
+
+.modal {
+  width: 431px;
+  margin-bottom: 100px;
+  padding: 32px 24px 24px;
+  border-radius: 16px;
+  background-color: #fff;
+
+  @include media.media-breakpoint(mobile) {
+    width: 301px;
+    padding: 24px 32px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+
+    @include media.media-breakpoint(mobile) {
+      height: auto;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.6;
+    }
+  }
+
+  &__warning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 16px;
+    color: #f7941e;
+    line-height: 1.6;
+
+    @include media.media-breakpoint(mobile) {
+      margin-top: 0;
+      font-size: 12px;
+    }
+  }
+
+  &__buttons {
+    margin-top: 32px;
+    height: 105px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+
+    @include media.media-breakpoint(mobile) {
+      height: auto;
+      margin: 0;
+      flex-direction: row-reverse;
+      gap: 12px;
+    }
+
+    & button {
+      width: 383px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      gap: 8px;
+      line-height: 1.6;
+
+      @include media.media-breakpoint(mobile) {
+        width: 105px;
+        height: 46px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.buttons {
+  &__confirm {
+    background-color: #175c8e;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__cancel {
+    background-color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+
+    @include media.media-breakpoint(mobile) {
+      border: 1px solid #cacaca;
+      color: #4b4b4b;
+    }
+  }
+}

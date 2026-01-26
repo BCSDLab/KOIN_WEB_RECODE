@@ -39,7 +39,7 @@ export default function useImageUpload({ maxLength = 3, domain, resize }: UseIma
 
   const saveImgFile = async (): Promise<string[]> => {
     const files = imgRef.current?.files;
-    if (!files || !files.length) return imageFile;
+    if (!files || !files.length) return [];
 
     if (imageFile.length + files.length > maxLength) {
       throw new UploadError('413', `파일은 ${maxLength}개까지 등록할 수 있습니다.`);
@@ -52,7 +52,7 @@ export default function useImageUpload({ maxLength = 3, domain, resize }: UseIma
       throw new UploadError('415');
     }
 
-    const uploadedFiles: string[] = [...imageFile];
+    const newUploadedFiles: string[] = [];
 
     for (const file of allFiles) {
       let processedFile: Blob = file;
@@ -72,7 +72,7 @@ export default function useImageUpload({ maxLength = 3, domain, resize }: UseIma
       try {
         const data = await uploadFile({ domain, file: processedFile });
         if (data.file_url) {
-          uploadedFiles.push(data.file_url);
+          newUploadedFiles.push(data.file_url);
         }
       } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : String(error);
@@ -85,8 +85,13 @@ export default function useImageUpload({ maxLength = 3, domain, resize }: UseIma
       }
     }
 
-    setImageFile(uploadedFiles);
-    return uploadedFiles;
+    setImageFile([...imageFile, ...newUploadedFiles]);
+
+    if (imgRef.current) {
+      imgRef.current.value = '';
+    }
+
+    return newUploadedFiles;
   };
 
   return {

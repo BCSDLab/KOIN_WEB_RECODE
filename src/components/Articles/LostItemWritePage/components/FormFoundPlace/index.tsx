@@ -23,7 +23,18 @@ export default function FormFoundPlace({ foundPlace, setFoundPlace, isFoundPlace
 
   return (
     <div className={styles['found-place']}>
-      <span className={styles.title}>{placeLabel}</span>
+      <div className={styles['found-place__text']}>
+        <div className={styles['found-place__label']}>
+          <span className={styles['found-place__title']}>{placeLabel}</span>
+          <span className={styles['found-place__required']}>*</span>
+        </div>
+        {type === 'FOUND' && !isFoundPlaceSelected && (
+          <span className={styles['found-place__warning']}>
+            <WarnIcon />
+            {warningText}
+          </span>
+        )}
+      </div>
       <div className={styles['found-place__wrapper']}>
         <input
           className={styles['found-place__input']}
@@ -32,12 +43,6 @@ export default function FormFoundPlace({ foundPlace, setFoundPlace, isFoundPlace
           maxLength={MAX_LENGTH}
           placeholder={placeholderText}
         />
-        {type === 'FOUND' && !isFoundPlaceSelected && (
-          <span className={styles.warning}>
-            <WarnIcon />
-            {warningText}
-          </span>
-        )}
       </div>
     </div>
   );
