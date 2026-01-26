@@ -1,7 +1,6 @@
 import type { ReactNode, HTMLAttributes } from 'react';
-import { useRef } from 'react';
 import Portal from 'components/Portal';
-import useHandleOutside from 'utils/hooks/ui/useHandleOutside';
+import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import styles from './BottomModal.module.scss';
 
@@ -12,15 +11,10 @@ type BottomModalProps = HTMLAttributes<HTMLDialogElement> & {
 };
 
 export default function BottomModal({ isOpen, onClose, children, className, ...rest }: BottomModalProps) {
-  const containerRef = useRef<HTMLDialogElement>(null);
-  const backgroundRef = useRef<HTMLDivElement>(null);
-
   useScrollLock(isOpen);
 
-  useHandleOutside<HTMLDialogElement, HTMLDivElement>({
-    containerRef,
-    backgroundRef,
-    onOutsideClick: (e) => {
+  const { containerRef, backgroundRef } = useOutsideClick<HTMLDialogElement>({
+    onOutsideClick: (e: MouseEvent) => {
       e.preventDefault?.();
       onClose();
     },

@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react';
 
 interface UseOutsideClickOptions {
-  onOutsideClick: () => void;
+  onOutsideClick: (e: MouseEvent) => void;
 }
 
-export const useOutsideClick = ({ onOutsideClick }: UseOutsideClickOptions) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+export const useOutsideClick = <TContainer extends HTMLElement = HTMLDivElement>({
+  onOutsideClick,
+}: UseOutsideClickOptions) => {
+  const containerRef = useRef<TContainer>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -14,17 +16,22 @@ export const useOutsideClick = ({ onOutsideClick }: UseOutsideClickOptions) => {
       const container = containerRef.current;
       const background = backgroundRef.current;
 
-      if (container && !container.contains(clickedElement)) {
-        onOutsideClick();
-      } else if (background && background === clickedElement) {
-        onOutsideClick();
+      if (!container || !background) return;
+
+      if (clickedElement === background) {
+        onOutsideClick(e);
+        return;
+      }
+
+      if (!container.contains(clickedElement)) {
+        onOutsideClick(e);
       }
     };
 
-    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('mousedown', handleOutsideClick, true);
 
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('mousedown', handleOutsideClick, true);
     };
   }, [onOutsideClick]);
 
