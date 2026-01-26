@@ -1,5 +1,5 @@
 import { LostItemAuthor, LostItemCategory, LostItemFoundStatus, LostItemSort, LostItemType } from 'api/articles/entity';
-import { Category, FilterState } from 'components/Articles/components/LostItemFilterModal';
+import { Category, FilterState } from 'components/Articles/components/LostItemFilterContent';
 import type { ParsedUrlQuery, ParsedUrlQueryInput } from 'querystring';
 
 /*
