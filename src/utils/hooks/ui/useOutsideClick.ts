@@ -16,7 +16,7 @@ export const useOutsideClick = <TContainer extends HTMLElement = HTMLDivElement>
       const container = containerRef.current;
       const background = backgroundRef.current;
 
-      if (!container || !background) return;
+      if (!container) return;
 
       if (clickedElement === background) {
         onOutsideClick(e);
