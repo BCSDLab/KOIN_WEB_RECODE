@@ -1,5 +1,3 @@
-'use client';
-
 import LostItemFilterContent from 'components/Articles/components/LostItemFilterContent';
 import BottomModal from 'components/ui/BottomModal';
 import type { FilterState } from 'components/Articles/components/LostItemFilterContent';

@@ -1,5 +1,3 @@
-'use client';
-
 import type { ReactNode, HTMLAttributes } from 'react';
 import { useRef } from 'react';
 import Portal from 'components/Portal';

@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import CloseIcon from 'assets/svg/Articles/close.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
