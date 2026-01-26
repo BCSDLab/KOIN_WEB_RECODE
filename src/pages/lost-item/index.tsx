@@ -3,38 +3,36 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getLostItemArticles } from 'api/articles';
-import {
-  LostItemArticlesRequest,
-  LostItemCategory,
-  LostItemFoundStatus,
-  LostItemSort,
-  LostItemType,
-} from 'api/articles/entity';
+import { LostItemArticlesRequest } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import LostItemList from 'components/Articles/components/LostItemList';
 import LostItemsHeader from 'components/Articles/components/LostItemsHeader';
 import Pagination from 'components/Articles/components/Pagination';
 import useLostItemPagination from 'components/Articles/hooks/useLostItemPagination';
+import { LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const { page = '1', type = 'LOST', category = 'ALL', foundStatus = 'ALL', sort = 'LATEST' } = context.query;
-
   const queryClient = new QueryClient();
   const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
 
-  const params: LostItemArticlesRequest = {
-    page: Number(page),
-    type: type as LostItemType,
-    category: category as LostItemCategory,
-    foundStatus: foundStatus as LostItemFoundStatus,
-    sort: sort as LostItemSort,
+  const fallback: LostItemParams = {
+    page: 1,
+    type: null,
+    category: [],
+    foundStatus: 'ALL',
+    sort: 'LATEST',
+    author: 'ALL',
   };
 
+  const params = parseLostItemQuery(context.query, fallback);
+
+  const apiParams = toLostItemArticlesRequest(params);
+
   await queryClient.prefetchQuery({
-    queryKey: ['lostItemPagination', params],
-    queryFn: () => getLostItemArticles(token, params),
+    queryKey: ['lostItemPagination', apiParams],
+    queryFn: () => getLostItemArticles(token, apiParams),
   });
 
   return {
@@ -45,23 +43,23 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   };
 };
 
-function useLostItemParams(initialParams: LostItemArticlesRequest) {
+function useLostItemParams(initialParams: LostItemParams) {
   const router = useRouter();
   const mounted = useMount();
 
   return useMemo(() => {
     if (!mounted) return initialParams;
-
-    const { page, type, category, foundStatus, sort } = router.query;
-
-    return {
-      page: Number(page) || initialParams.page,
-      type: (type as LostItemType) || initialParams.type,
-      category: (category as LostItemCategory) || initialParams.category,
-      foundStatus: (foundStatus as LostItemFoundStatus) || initialParams.foundStatus,
-      sort: (sort as LostItemSort) || initialParams.sort,
-    };
+    return parseLostItemQuery(router.query, initialParams);
   }, [mounted, router.query, initialParams]);
+}
+
+function toLostItemArticlesRequest(params: LostItemParams): LostItemArticlesRequest {
+  const { type, ...rest } = params;
+
+  return {
+    ...rest,
+    ...(type ? { type } : {}),
+  };
 }
 
 export default function LostItemArticleListPage({
@@ -69,7 +67,8 @@ export default function LostItemArticleListPage({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const params = useLostItemParams(initialParams);
 
-  const { data: lostItemData } = useLostItemPagination(params);
+  const apiParams = toLostItemArticlesRequest(params);
+  const { data: lostItemData } = useLostItemPagination(apiParams);
 
   const articles = lostItemData?.articles ?? [];
   const paginationInfo = lostItemData?.paginationInfo;

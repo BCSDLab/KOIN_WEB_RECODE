@@ -1,4 +1,4 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 
 .template {
   margin: 61px auto 0;
@@ -28,11 +28,15 @@
 
 .header {
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 24px;
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @include media.media-breakpoint(mobile) {
+    margin: 4px 0;
+  }
 
   &__title {
     font-family: Pretendard, sans-serif;
