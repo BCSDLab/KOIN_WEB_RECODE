@@ -6,11 +6,14 @@ import FilterIcon from 'assets/svg/Articles/filter.svg';
 import FoundIcon from 'assets/svg/Articles/found.svg';
 import LostIcon from 'assets/svg/Articles/lost.svg';
 import PencilIcon from 'assets/svg/Articles/pencil.svg';
-import LostItemFilterModal, { FilterState } from 'components/Articles/components/LostItemFilterModal';
+import LostItemFilterBottomSheet from 'components/Articles/components/LostItemFilterBottomSheet';
+import { FilterState } from 'components/Articles/components/LostItemFilterContent';
+import LostItemFilterModal from 'components/Articles/components/LostItemFilterModal';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { buildQueryFromFilter, LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
+import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import { useUser } from 'utils/hooks/state/useUser';
 import styles from './LostItemRouteButton.module.scss';
@@ -24,6 +27,8 @@ export default function LostItemRouteButton() {
 
   const portalManager = useModalPortal();
   const { data: userInfo } = useUser();
+
+  const isMobile = useMediaQuery();
 
   const handleWritingButtonClick = () => {
     if (userInfo) {
@@ -61,6 +66,30 @@ export default function LostItemRouteButton() {
     foundStatus: params.foundStatus,
   };
 
+  const handleApply = (filter: FilterState) => {
+    if (filter.author === 'MY' && !userInfo) {
+      portalManager.open((portalOption) => (
+        <LoginRequiredModal
+          title="내 게시물을 보기"
+          description="내가 작성한 게시물을 보려면 로그인이 필요해요."
+          onClose={portalOption.close}
+        />
+      ));
+      return;
+    }
+
+    const nextQuery = buildQueryFromFilter(filter, {
+      page: 1,
+      sort:
+        (Array.isArray(router.query.sort) ? router.query.sort[0] : router.query.sort) === 'OLDEST'
+          ? 'OLDEST'
+          : 'LATEST',
+    });
+
+    router.push({ pathname: router.pathname, query: nextQuery });
+    setIsFilterOpen(false);
+  };
+
   return (
     <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
       <button type="button" className={styles.links__filter} onClick={() => setIsFilterOpen((p) => !p)}>
@@ -68,36 +97,23 @@ export default function LostItemRouteButton() {
         <FilterIcon />
       </button>
 
-      {isFilterOpen && (
-        <div className={styles.filterPopover}>
-          <LostItemFilterModal
-            initialFilter={initialFilter}
-            onClose={() => setIsFilterOpen(false)}
-            onApply={(filter) => {
-              if (filter.author === 'MY' && !userInfo) {
-                portalManager.open((portalOption) => (
-                  <LoginRequiredModal
-                    title="내 게시물을 보기"
-                    description="내가 작성한 게시물을 보려면 로그인이 필요해요."
-                    onClose={portalOption.close}
-                  />
-                ));
-                return;
-              }
-
-              const nextQuery = buildQueryFromFilter(filter, {
-                page: 1,
-                sort:
-                  (Array.isArray(router.query.sort) ? router.query.sort[0] : router.query.sort) === 'OLDEST'
-                    ? 'OLDEST'
-                    : 'LATEST',
-              });
-
-              router.push({ pathname: router.pathname, query: nextQuery });
-              setIsFilterOpen(false);
-            }}
-          />
-        </div>
+      {isMobile ? (
+        <LostItemFilterBottomSheet
+          isOpen={isFilterOpen}
+          initialFilter={initialFilter}
+          onClose={() => setIsFilterOpen(false)}
+          onApply={handleApply}
+        />
+      ) : (
+        isFilterOpen && (
+          <div className={styles.filterPopover}>
+            <LostItemFilterModal
+              initialFilter={initialFilter}
+              onClose={() => setIsFilterOpen(false)}
+              onApply={handleApply}
+            />
+          </div>
+        )
       )}
 
       {isWriting && (
