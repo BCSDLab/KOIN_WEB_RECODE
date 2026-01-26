@@ -9,6 +9,7 @@ import PencilIcon from 'assets/svg/Articles/pencil.svg';
 import LostItemFilterBottomSheet from 'components/Articles/components/LostItemFilterBottomSheet';
 import { FilterState } from 'components/Articles/components/LostItemFilterContent';
 import LostItemFilterModal from 'components/Articles/components/LostItemFilterModal';
+import LostItemWriteBottomSheet from 'components/Articles/components/LostItemWriteBottomSheet';
 import { useArticlesLogger } from 'components/Articles/hooks/useArticlesLogger';
 import { buildQueryFromFilter, LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
@@ -116,47 +117,64 @@ export default function LostItemRouteButton() {
         )
       )}
 
-      {isWriting && (
-        <div
-          className={styles.overlay}
-          role="button"
-          tabIndex={0}
-          aria-label="오버레이"
-          onClick={() => setIsWriting(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              setIsWriting(false);
-            }
-          }}
-        />
-      )}
-      <div className={`${styles.links} ${isWriting ? styles['links--active'] : ''}`}>
-        {isWriting && (
-          <div className={styles['links__writing-options']}>
-            <Link
-              className={styles['links__option-button']}
-              href={ROUTES.LostItemFound()}
-              onClick={() => logFindUserWriteClick()}
-            >
-              <FoundIcon />
-              <div className={styles['links__option-text']}>주인을 찾아요</div>
-            </Link>
-
-            <Link
-              className={styles['links__option-button']}
-              href={ROUTES.LostItemLost()}
-              onClick={() => logLostItemWriteClick()}
-            >
-              <LostIcon />
-              <div className={styles['links__option-text']}>잃어버렸어요</div>
-            </Link>
-          </div>
+      <div className={styles.writeAnchor}>
+        {!isWriting && (
+          <button className={styles.links__write} type="button" onClick={handleWritingButtonClick}>
+            <PencilIcon />
+            글쓰기
+          </button>
         )}
 
-        <button className={styles.links__write} type="button" onClick={handleWritingButtonClick}>
-          {isWriting ? <CloseIcon /> : <PencilIcon />}
-          글쓰기
-        </button>
+        {isMobile ? (
+          <LostItemWriteBottomSheet
+            isOpen={isWriting}
+            onClose={() => setIsWriting(false)}
+            onFoundClick={() => logFindUserWriteClick()}
+            onLostClick={() => logLostItemWriteClick()}
+          />
+        ) : (
+          isWriting && (
+            <div className={styles.writePopover} role="dialog" aria-label="글쓰기 메뉴">
+              <div className={styles.writeHeader}>
+                <div className={styles.writeTitle}>글쓰기</div>
+                <button
+                  type="button"
+                  className={styles.writeClose}
+                  aria-label="닫기"
+                  onClick={() => setIsWriting(false)}
+                >
+                  <CloseIcon />
+                </button>
+              </div>
+
+              <div className={styles.writeBody}>
+                <Link
+                  className={styles.writeOptionButton}
+                  href={ROUTES.LostItemFound()}
+                  onClick={() => {
+                    logFindUserWriteClick();
+                    setIsWriting(false);
+                  }}
+                >
+                  <FoundIcon />
+                  <span className={styles.writeOptionText}>주인을 찾아요</span>
+                </Link>
+
+                <Link
+                  className={styles.writeOptionButton}
+                  href={ROUTES.LostItemLost()}
+                  onClick={() => {
+                    logLostItemWriteClick();
+                    setIsWriting(false);
+                  }}
+                >
+                  <LostIcon />
+                  <span className={styles.writeOptionText}>잃어버렸어요</span>
+                </Link>
+              </div>
+            </div>
+          )
+        )}
       </div>
     </div>
   );

@@ -31,39 +31,6 @@
     }
   }
 
-  &__writing-options {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-
-    @include media.media-breakpoint(mobile) {
-      flex-direction: column;
-      position: fixed;
-      right: 24px;
-      bottom: 100px;
-      gap: 12px;
-      z-index: 1001;
-    }
-  }
-
-  &__option-button {
-    display: flex;
-    padding: 8px 12px;
-    border: 1px solid #e1e1e1;
-    background-color: #fafafa;
-    border-radius: 999px;
-    align-items: center;
-    gap: 8px;
-  }
-
-  &__option-text {
-    font-family: Pretendard, sans-serif;
-    color: #4b4b4b;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.2;
-  }
-
   &__write {
     padding: 8px 12px;
     box-sizing: border-box;
@@ -118,4 +85,71 @@
   position: absolute;
   right: 100px;
   z-index: 11;
+}
+
+.writeAnchor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.writePopover {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 220px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 10px 24px rgba(0 0 0 / 12%);
+  overflow: hidden;
+  z-index: 50;
+}
+
+.writeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.writeTitle {
+  font-family: Pretendard, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #175c8e;
+}
+
+.writeClose {
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.writeBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 32px;
+}
+
+.writeOptionButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid #e1e1e1;
+  background: #fafafa;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.writeOptionText {
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4b4b4b;
 }
