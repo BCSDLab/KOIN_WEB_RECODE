@@ -1,10 +1,6 @@
 {
   "reviewers": [
     {
-      "name": "정해성",
-      "githubName": "junghaesung79"
-    },
-    {
       "name": "김혜준",
       "githubName": "hyejun0228"
     },
@@ -21,8 +17,12 @@
       "githubName": "ff1451"
     },
     {
-      "name": "김민재",
-      "githubName": "D0Dam"
+      "name": "곽승주",
+      "githubName": "Gwak-Seungju"
+    },
+    {
+      "name": "서예진",
+      "githubName": "Yejin0070"
     }
   ]
 }
