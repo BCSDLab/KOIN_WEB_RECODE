@@ -180,7 +180,13 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
               <div className={styles.header__title}>
                 <span className={styles.header__type}>{typeLabel}</span>
                 <span className={styles.header__category}>{category}</span>
-                <span className={styles.header__location}>{[found_place, found_date].join(' | ')}</span>
+                <span className={styles.header__location}>
+                  <span className={styles.header__place} title={found_place}>
+                    {found_place}
+                  </span>
+                  <span className={styles.header__divider}> | </span>
+                  <span className={styles.header__dateText}>{found_date}</span>
+                </span>
               </div>
               <FoundChip isFound={is_found} />
             </div>

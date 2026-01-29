@@ -86,6 +86,8 @@
   }
 
   &__type {
+    white-space: nowrap;
+
     @include media.media-breakpoint(mobile) {
       width: 100%;
       color: #10477a;
@@ -98,6 +100,7 @@
     padding: 0 12px;
     border-radius: 999px;
     background-color: #175c8e;
+    white-space: nowrap;
     color: #fff;
 
     @include media.media-breakpoint(mobile) {
@@ -108,8 +111,29 @@
     }
   }
 
-  &__location {
-    word-break: break-all;
+  .header {
+    &__location {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    &__place {
+      max-width: 340px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__divider {
+      flex: 0 0 auto;
+    }
+
+    &__dateText {
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
   }
 
   &__info {
@@ -146,6 +170,7 @@
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
+    margin-bottom: 30px;
     padding: 0 24px;
   }
 
