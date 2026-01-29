@@ -1,4 +1,4 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 
 .pagination {
   background: #fff;
@@ -26,8 +26,13 @@
     letter-spacing: -0.7px;
     cursor: pointer;
 
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
     @media (hover: hover) {
-      &:hover {
+      &:not(:disabled):hover {
         background-color: #175c8e;
         color: white;
       }
