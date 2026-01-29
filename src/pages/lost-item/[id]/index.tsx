@@ -147,7 +147,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
     requireLogin('게시글을 신고 하려면', () => {
       logItemPostReportClick();
       if (isMobile) {
-        navigate(ROUTES.ArticlesReport({ id: String(articleId), isLink: true }));
+        navigate(ROUTES.LostItemReport({ id: String(articleId), isLink: true }));
         return;
       }
       openReportModal();

@@ -47,7 +47,7 @@ export default function ReportForm({ articleId, onClose, isModal }: ReportFormPr
       if (isModal) {
         onClose();
       } else {
-        navigate(ROUTES.Articles());
+        navigate(ROUTES.LostItems());
       }
     } catch {
       toast.error('신고 중 오류가 발생했습니다. 다시 시도해주세요.');
@@ -57,7 +57,7 @@ export default function ReportForm({ articleId, onClose, isModal }: ReportFormPr
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.title}>신고 이유를 선택해주세요.</div>
         <div className={styles.subtitle__container}>
