@@ -109,7 +109,7 @@ export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
       onBottomButtonClick={handleCompleteClick}
       isBottomButtonDisabled={status === 'pending'}
     >
-      <LostItemForm type={type} count={0} lostItem={lostItem} lostItemHandler={customLostItemHandler} />
+      <LostItemForm type={type} count={0} totalCount={1} lostItem={lostItem} lostItemHandler={customLostItemHandler} />
     </LostItemPageTemplate>
   );
 }
