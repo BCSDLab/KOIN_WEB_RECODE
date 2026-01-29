@@ -184,7 +184,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
                   <span className={styles.header__place} title={found_place}>
                     {found_place}
                   </span>
-                  <span className={styles.header__divider}> | </span>
+                  <span className={styles.header__divider}>|</span>
                   <span className={styles.header__dateText}>{found_date}</span>
                 </span>
               </div>
