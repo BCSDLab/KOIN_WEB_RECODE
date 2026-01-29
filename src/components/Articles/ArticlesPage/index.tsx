@@ -38,7 +38,7 @@ export default function ArticlesPageLayout({ children }: { children: React.React
     <div className={cn({ [styles.template]: !isLostItem, [styles['lostItem-template']]: isLostItem })}>
       <div className={cn({ [styles.content]: !isLostItem, [styles['lostItem-content']]: isLostItem })}>
         <div className={styles.header}>
-          <Link href={ROUTES.Articles()}>
+          <Link href={ROUTES.LostItems()}>
             <h1 className={styles.header__title}>{headerTitle}</h1>
           </Link>
         </div>
