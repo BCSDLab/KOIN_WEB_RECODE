@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { cn } from '@bcsdlab/utils';
 import SearchIcon from 'assets/svg/Articles/search.svg';
 import HotArticles from 'components/Articles/components/HotArticle';
 import LostItemRouteButton from 'components/Articles/components/LostItemRouteButton';
@@ -34,15 +35,15 @@ export default function ArticlesPageLayout({ children }: { children: React.React
   };
 
   return (
-    <div className={styles.template}>
-      <div className={styles.content}>
+    <div className={cn({ [styles.template]: !isLostItem, [styles['lostItem-template']]: isLostItem })}>
+      <div className={cn({ [styles.content]: !isLostItem, [styles['lostItem-content']]: isLostItem })}>
         <div className={styles.header}>
           <Link href={ROUTES.Articles()}>
             <h1 className={styles.header__title}>{headerTitle}</h1>
           </Link>
         </div>
 
-        <div className={styles.header__right}>
+        <div className={styles.header__container}>
           {isLostItem && (
             <div className={styles.search}>
               <SearchIcon className={styles.search__icon} />
@@ -59,7 +60,11 @@ export default function ArticlesPageLayout({ children }: { children: React.React
             </div>
           )}
 
-          {isLostItem && <LostItemRouteButton />}
+          {isLostItem && (
+            <div className={styles.header__rightButton}>
+              <LostItemRouteButton />
+            </div>
+          )}
         </div>
         {children}
       </div>

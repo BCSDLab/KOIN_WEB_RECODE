@@ -1,4 +1,4 @@
-@use "src/utils/scss/media" as media;
+@use 'src/utils/scss/media' as media;
 
 .template {
   margin: 61px auto 0;
@@ -10,10 +10,39 @@
   }
 }
 
+.lostItem-template {
+  display: flex;
+  margin-top: 60px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 40px;
+  gap: 40px;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    margin-top: 0;
+    padding: 0;
+  }
+}
+
 .content {
   width: 834px;
   float: left;
   margin-right: 40px;
+  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    min-height: calc(100vh - 115px);
+    margin: 0;
+  }
+}
+
+.lostItem-content {
+  width: 100%;
   margin-bottom: 60px;
   display: flex;
   flex-direction: column;
@@ -50,12 +79,12 @@
     }
   }
 
-  &__right {
+  &__container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     width: 100%;
     margin-bottom: 24px;
+    gap: 8px;
 
     @include media.media-breakpoint(mobile) {
       margin-bottom: 4px;
@@ -63,12 +92,16 @@
       box-sizing: border-box;
     }
   }
+
+  &__rightButton {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
 }
 
 .search {
   display: flex;
   align-items: center;
-  width: 550px;
   gap: 8px;
   padding: 12px 16px;
   color: #4b4b4b;
@@ -80,6 +113,10 @@
   border: 1px solid #eee;
   background: #fff;
   box-shadow: 0 1px 9px 1px rgba(0 0 0 / 6%);
+  max-width: 550px;
+  flex: 1;
+  min-width: 0;
+  width: auto;
 
   @include media.media-breakpoint(mobile) {
     width: 230px;
@@ -110,4 +147,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @include media.media-breakpoint(mobile) {
+    display: none;
+  }
 }
