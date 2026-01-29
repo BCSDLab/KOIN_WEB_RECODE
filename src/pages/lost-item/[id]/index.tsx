@@ -208,17 +208,19 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
               </div>
             )}
             <div className={styles['actions-wrapper']}>
-              {is_mine && !is_found && <FoundToggle onToggle={handleToggleFound} disabled={isToggling} />}
+              {is_mine && !is_found && <FoundToggle onToggle={handleToggleFound} disabled={isToggling} type={type} />}
               <div className={styles.actions}>
-                <button className={styles.actions__button} onClick={() => navigate(ROUTES.LostItems())} type="button">
+                <button className={styles.actions__button} onClick={() => router.back()} type="button">
                   목록
                 </button>
                 <div className={styles.actions__group}>
                   {is_mine ? (
                     <>
-                      <button className={styles.actions__button} onClick={handleModifyButtonClick} type="button">
-                        수정
-                      </button>
+                      {!is_found && (
+                        <button className={styles.actions__button} onClick={handleModifyButtonClick} type="button">
+                          수정
+                        </button>
+                      )}
                       <button className={styles.actions__button} onClick={handleDeleteButtonClick} type="button">
                         삭제
                       </button>

@@ -116,14 +116,12 @@
     &__location {
       display: flex;
       align-items: center;
-      flex: 1;
       min-width: 0;
       white-space: nowrap;
       gap: 4px;
     }
 
     &__place {
-      flex: 1;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
