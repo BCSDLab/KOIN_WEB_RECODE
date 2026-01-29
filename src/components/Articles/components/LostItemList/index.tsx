@@ -35,14 +35,14 @@ export default function LostItemList({ articles }: LostItemListProps) {
         <button
           key={article.id}
           type="button"
-          className={styles.lostItemList__rowDisabled}
+          className={styles.lostItemListMobile__rowDisabled}
           onClick={handleReportedClick}
         >
           <div className={styles.lostItemListMobile__type}>{typeText}</div>
 
           <div className={styles.lostItemListMobile__title}>
             <div className={styles.lostItemListMobile__titleMeta}>
-              <div className={styles.lostItemList__reportedText}>신고에 의해 숨김 처리 되었습니다.</div>
+              <div className={styles.lostItemListMobile__reportedText}>신고에 의해 숨김 처리 되었습니다.</div>
             </div>
             <FoundChip isFound={article.is_found} size="xs" />
           </div>
@@ -69,6 +69,7 @@ export default function LostItemList({ articles }: LostItemListProps) {
           <div className={styles.lostItemListMobile__titleMeta}>
             <span className={styles.lostItemListMobile__badge}>{article.category}</span>
             <div className={styles.lostItemListMobile__place}>{article.found_place}</div>
+            <div>|</div>
             <div className={styles.lostItemListMobile__foundDate}>{article.found_date}</div>
           </div>
           <FoundChip isFound={article.is_found} size="xs" />
@@ -125,6 +126,7 @@ export default function LostItemList({ articles }: LostItemListProps) {
           <div className={styles.lostItemList__titleMeta}>
             <span className={styles.lostItemList__badge}>{article.category}</span>
             <div className={styles.lostItemList__place}>{article.found_place}</div>
+            <div>|</div>
             <div className={styles.lostItemList__foundDate}>{article.found_date}</div>
 
             {isNewArticle && (
