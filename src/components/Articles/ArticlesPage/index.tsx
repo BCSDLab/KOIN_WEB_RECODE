@@ -49,6 +49,7 @@ export default function ArticlesPageLayout({ children }: { children: React.React
               <input
                 className={styles.search__input}
                 value={keyword}
+                maxLength={100}
                 onChange={(e) => setKeyword(e.target.value)}
                 placeholder="검색어를 입력해주세요."
                 onKeyDown={(e) => {
