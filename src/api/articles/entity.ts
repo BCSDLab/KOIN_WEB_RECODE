@@ -69,7 +69,7 @@ export interface LostItemArticleForGetDTO {
   category: string;
   found_place: string;
   found_date: string;
-  content: string;
+  content: string | null;
   author: string;
   registered_at: string;
   is_reported: boolean;
@@ -119,7 +119,7 @@ export interface SingleLostItemArticleResponseDTO extends APIResponse {
   category: string;
   found_place: string;
   found_date: string;
-  content: string;
+  content: string | null;
   author: string;
   organization: Organization | null;
   is_mine: boolean;
