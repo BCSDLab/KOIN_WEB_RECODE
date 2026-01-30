@@ -9,6 +9,7 @@ const ROUTES = {
   TimetableModify: ({ id, type }: ROUTESParams<'id' | 'type'>) =>
     `timetable/modify?id=${id}${type ? `&type=${type}` : ''}`,
   GraduationCalculator: () => '/graduation',
+  Course: () => '/course',
   Store: () => '/store',
   BenefitStore: () => '/benefitstore',
   StoreDetail: ({ id }: ROUTESParams<'id'>) => `/store/${id}`,
@@ -23,8 +24,7 @@ const ROUTES = {
   NewClubRecruitment: ({ id }: ROUTESParams<'id'>) => `/clubs/recruitment/${id}`,
   ClubRecruitmentEdit: ({ id }: ROUTESParams<'id'>) => `/clubs/recruitment/edit/${id}`,
   NewClubEvent: ({ id }: ROUTESParams<'id'>) => `/clubs/event/${id}`,
-  ClubEventEdit: ({ id, eventId }: ROUTESParams<'id' | 'eventId'>) =>
-    `/clubs/${id}/event/edit/${eventId}`,
+  ClubEventEdit: ({ id, eventId }: ROUTESParams<'id' | 'eventId'>) => `/clubs/${id}/event/edit/${eventId}`,
   Cafeteria: () => '/cafeteria',
   Articles: () => '/articles',
   ArticlesDetail: ({ id }: ROUTESParams<'id'>) => `/articles/${id}`,
@@ -40,8 +40,7 @@ const ROUTES = {
   RoomDetail: ({ id }: ROUTESParams<'id'>) => `/room/${id}`,
   CampusInfo: () => '/campusinfo',
   Auth: () => '/auth',
-  AuthSignup: ({ currentStep }: ROUTESParams<'currentStep'>) =>
-    `/auth/signup/${currentStep}`,
+  AuthSignup: ({ currentStep }: ROUTESParams<'currentStep'>) => `/auth/signup/${currentStep}`,
   AuthFindPW: ({ step }: ROUTESParams<'step'>) => `/auth/findpw/${step}`,
   // AuthFindPW: () => '/auth/findpw',
   AuthFindID: () => '/auth/findid',
@@ -50,8 +49,7 @@ const ROUTES = {
   IDResult: () => '/auth/findid/result',
   AuthModifyInfo: () => '/auth/modifyinfo',
   Review: ({ id }: ROUTESParams<'id'>) => `/store/review/${id}`,
-  ReviewEdit: ({ id, reviewId }: ROUTESParams<'id' | 'reviewId'>) =>
-    `/store/review/edit/${id}/${reviewId}`,
+  ReviewEdit: ({ id, reviewId }: ROUTESParams<'id' | 'reviewId'>) => `/store/review/edit/${id}/${reviewId}`,
   ReviewReport: ({ shopid, reviewid }: ROUTESParams<'shopid' | 'reviewid'>) =>
     `/report/review/shopid/${shopid}/reviewid/${reviewid}`,
   Webview: () => '/webview',

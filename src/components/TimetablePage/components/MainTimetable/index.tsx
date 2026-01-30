@@ -76,7 +76,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           type="button"
           className={styles.page__button}
           onClick={() => {
-            router.push('/course');
+            router.push(ROUTES.GraduationCalculator());
             logger.actionEventClick({
               team: 'USER',
               event_label: 'graduation_calculator',
