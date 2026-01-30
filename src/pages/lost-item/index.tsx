@@ -13,6 +13,7 @@ import { useLostItemSearch } from 'components/Articles/hooks/useLostItemSearch';
 import { LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
+import styles from './LostItemArticleListPage.module.scss';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
@@ -91,7 +92,9 @@ export default function LostItemArticleListPage({
     <ArticlesPageLayout>
       <LostItemsHeader />
       <LostItemList articles={articles} />
-      <Pagination totalPageNum={totalPageNum} />
+      <div className={styles.pagination}>
+        <Pagination totalPageNum={totalPageNum} />
+      </div>
     </ArticlesPageLayout>
   );
 }

@@ -66,7 +66,7 @@ export default function ArticlesPageLayout({ children }: { children: React.React
             </div>
           )}
         </div>
-        {children}
+        <div className={styles.listScroll}>{children}</div>
       </div>
       <div className={styles.aside}>
         <HotArticles />
