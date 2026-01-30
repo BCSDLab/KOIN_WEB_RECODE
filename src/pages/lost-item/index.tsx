@@ -6,7 +6,6 @@ import { getLostItemArticles } from 'api/articles';
 import { LostItemArticlesRequest } from 'api/articles/entity';
 import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import LostItemList from 'components/Articles/components/LostItemList';
-import LostItemsHeader from 'components/Articles/components/LostItemsHeader';
 import Pagination from 'components/Articles/components/Pagination';
 import useLostItemPagination from 'components/Articles/hooks/useLostItemPagination';
 import { useLostItemSearch } from 'components/Articles/hooks/useLostItemSearch';
@@ -90,7 +89,6 @@ export default function LostItemArticleListPage({
 
   return (
     <ArticlesPageLayout>
-      <LostItemsHeader />
       <LostItemList articles={articles} />
       <div className={styles.pagination}>
         <Pagination totalPageNum={totalPageNum} />

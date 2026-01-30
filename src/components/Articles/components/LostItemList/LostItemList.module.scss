@@ -1,5 +1,44 @@
 @use 'src/utils/scss/media' as media;
-@use 'src/components/Articles/utils/scss/lostItemsGrid' as grid;
+
+$lost-items-columns: 1fr 5.5fr 1.5fr 1.5fr 1fr;
+
+.header {
+  border-top: 2px solid #175c8e;
+  width: 100%;
+
+  @include media.media-breakpoint(mobile) {
+    width: 100%;
+    border: none;
+  }
+
+  &__container {
+    width: 100%;
+    height: 44px;
+    font-weight: bold;
+
+    @include media.media-breakpoint(mobile) {
+      display: none;
+    }
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: $lost-items-columns;
+    height: 100%;
+    align-items: center;
+    border-bottom: 1px solid #175c8e;
+  }
+}
+
+.info {
+  min-width: 0;
+  height: 100%;
+  font-size: 15px;
+  color: #175c8e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .lostItemList {
   width: 100%;
@@ -7,7 +46,7 @@
   &__row,
   &__rowDisabled {
     display: grid;
-    grid-template-columns: grid.$lost-items-columns;
+    grid-template-columns: $lost-items-columns;
     height: 68px;
     align-items: center;
     border-bottom: 1px solid #d2dae2;

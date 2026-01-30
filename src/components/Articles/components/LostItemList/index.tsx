@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { LostItemArticleForGetDTO } from 'api/articles/entity';
@@ -12,6 +13,18 @@ import styles from './LostItemList.module.scss';
 interface LostItemListProps {
   articles: LostItemArticleForGetDTO[];
 }
+
+type HeaderRowInfo = {
+  [key: string]: string;
+};
+
+const HEADER_ROW: HeaderRowInfo = {
+  classification: '분류',
+  title: '제목',
+  author: '작성자',
+  date: '날짜',
+  stat: '물품 상태',
+};
 
 export default function LostItemList({ articles }: LostItemListProps) {
   const isMobile = useMediaQuery();
@@ -152,8 +165,21 @@ export default function LostItemList({ articles }: LostItemListProps) {
   };
 
   return (
-    <div className={styles.lostItemList}>
-      {articles.map((article) => (isMobile ? mobileRow(article) : desktopRow(article)))}
-    </div>
+    <React.Fragment>
+      <div className={styles.header}>
+        <div className={styles.header__container}>
+          <div className={styles.header__row}>
+            {Object.keys(HEADER_ROW).map((key) => (
+              <div key={key} className={styles.info}>
+                {HEADER_ROW[key]}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className={styles.lostItemList}>
+        {articles.map((article) => (isMobile ? mobileRow(article) : desktopRow(article)))}
+      </div>
+    </React.Fragment>
   );
 }
