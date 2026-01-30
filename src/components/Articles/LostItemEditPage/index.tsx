@@ -96,7 +96,7 @@ export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
 
     await putLostItem(data);
     logLostItemModifyComplete(type === 'LOST' ? '분실물' : '습득물');
-    router.replace(ROUTES.LostItemDetail({ id: String(articleId), isLink: true }));
+    router.replace(ROUTES.LostItemDetail({ id: String(articleId) }));
   };
 
   return (

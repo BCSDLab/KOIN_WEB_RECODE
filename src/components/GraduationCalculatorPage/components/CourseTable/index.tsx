@@ -67,7 +67,7 @@ function CourseTable({ frameId }: { frameId: number }) {
       toast.error('학기가 존재하지 않습니다. 학기를 추가해주세요.');
     } else {
       navigate(
-        `/${ROUTES.TimetableModify({ id: String(frameId), type: 'regular', isLink: true })}&year=${semester?.year}&term=${semester?.term}`,
+        `/${ROUTES.TimetableModify({ id: String(frameId), type: 'regular' })}&year=${semester?.year}&term=${semester?.term}`,
       );
     }
   };

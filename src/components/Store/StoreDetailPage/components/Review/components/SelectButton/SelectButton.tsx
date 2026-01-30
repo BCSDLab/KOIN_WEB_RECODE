@@ -80,7 +80,7 @@ export default function SelectButton({ is_mine, review_id, is_reported, store_id
             <button
               type="button"
               onClick={() =>
-                router.push(ROUTES.ReviewEdit({ id: store_id, reviewId: String(review_id), isLink: true }))
+                router.push(ROUTES.ReviewEdit({ id: store_id, reviewId: String(review_id) }))
               }
               className={styles.section}
             >
@@ -105,7 +105,6 @@ export default function SelectButton({ is_mine, review_id, is_reported, store_id
                   ROUTES.ReviewReport({
                     shopid: store_id,
                     reviewid: String(review_id),
-                    isLink: true,
                   }),
                 );
               } else {

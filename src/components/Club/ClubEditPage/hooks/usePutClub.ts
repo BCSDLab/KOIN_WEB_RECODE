@@ -22,7 +22,7 @@ export default function usePutClub(clubId: number | string | undefined) {
     onSuccess: () => {
       showToast('success', '동아리 정보 수정 요청이 완료되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['clubDetail'] });
-      navigate(ROUTES.ClubDetail({ id: String(clubId), isLink: true }));
+      navigate(ROUTES.ClubDetail({ id: String(clubId) }));
     },
     onError: (e) => {
       if (isKoinError(e)) {

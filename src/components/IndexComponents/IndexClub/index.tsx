@@ -21,7 +21,7 @@ const getClubLinkCardData = (hotClubInfo: HotClubResponse) => [
     subtitle: '바로가기',
     link:
       hotClubInfo.club_id !== -1
-        ? ROUTES.ClubDetail({ id: hotClubInfo.club_id.toString(), isLink: true, hot: 'true' })
+        ? ROUTES.ClubDetail({ id: hotClubInfo.club_id.toString(), hot: 'true' })
         : ROUTES.Club(),
     img: hotClubInfo?.image_url || 'https://placehold.co/60.jpg?text=Coming+soon...',
   },

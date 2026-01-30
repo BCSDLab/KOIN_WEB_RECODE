@@ -80,7 +80,6 @@ export default function ClubSearchContainer() {
     router.push(
       ROUTES.ClubDetail({
         id: String(item.club_id),
-        isLink: true,
       }),
     );
   };

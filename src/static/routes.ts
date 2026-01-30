@@ -1,70 +1,59 @@
 type ROUTESParams<T extends string = string> = {
   [key in T]?: string;
-} & {
-  /**
-   * 경로가 네비게이션(ex. `Link`, `navigate`)에 사용되는지 여부를 나타냅니다.
-   * - `true`일 경우, `Link`나 `navigate`를 사용할 때 동적 링크 생성을 의미합니다.
-   * - `false`일 경우, `App.tsx`에서 경로를 정의할 때 사용됩니다.
-   */
-  isLink: boolean;
 };
 
 const ROUTES = {
   Main: () => '/',
   NotFound: () => '*',
   Timetable: () => '/timetable',
-  TimetableModify: ({ id, type, isLink }: ROUTESParams<'id' | 'type'>) =>
-    isLink ? `timetable/modify?id=${id}${type ? `&type=${type}` : ''}` : 'timetable/modify',
+  TimetableModify: ({ id, type }: ROUTESParams<'id' | 'type'>) =>
+    `timetable/modify?id=${id}${type ? `&type=${type}` : ''}`,
   GraduationCalculator: () => '/graduation',
   Store: () => '/store',
   BenefitStore: () => '/benefitstore',
-  StoreDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/store/${id}` : '/store/:id'),
+  StoreDetail: ({ id }: ROUTESParams<'id'>) => `/store/${id}`,
   BusRoute: () => '/bus/route',
   BusCourseShuttle: () => '/bus/shuttle',
   BusCourseExpress: () => '/bus/express',
   BusCourseCity: () => '/bus/city',
   Club: () => '/clubs',
-  ClubDetail: ({ id, isLink, hot }: ROUTESParams<'id' | 'hot'>) => (isLink ? `/clubs/${id}?hot=${hot}` : '/clubs/:id'),
+  ClubDetail: ({ id, hot }: ROUTESParams<'id' | 'hot'>) => `/clubs/${id}?hot=${hot}`,
   NewClub: () => '/clubs/new',
-  ClubEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/edit/${id}` : '/clubs/edit/:id'),
-  NewClubRecruitment: ({ id, isLink }: ROUTESParams<'id'>) =>
-    isLink ? `/clubs/recruitment/${id}` : '/clubs/recruitment/:id',
-  ClubRecruitmentEdit: ({ id, isLink }: ROUTESParams<'id'>) =>
-    isLink ? `/clubs/recruitment/edit/${id}` : '/clubs/recruitment/edit/:id',
-  NewClubEvent: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/clubs/event/${id}` : '/clubs/event/:id'),
-  ClubEventEdit: ({ id, eventId, isLink }: ROUTESParams<'id' | 'eventId'>) =>
-    isLink ? `/clubs/${id}/event/edit/${eventId}` : '/clubs/:id/event/edit/:eventId',
+  ClubEdit: ({ id }: ROUTESParams<'id'>) => `/clubs/edit/${id}`,
+  NewClubRecruitment: ({ id }: ROUTESParams<'id'>) => `/clubs/recruitment/${id}`,
+  ClubRecruitmentEdit: ({ id }: ROUTESParams<'id'>) => `/clubs/recruitment/edit/${id}`,
+  NewClubEvent: ({ id }: ROUTESParams<'id'>) => `/clubs/event/${id}`,
+  ClubEventEdit: ({ id, eventId }: ROUTESParams<'id' | 'eventId'>) =>
+    `/clubs/${id}/event/edit/${eventId}`,
   Cafeteria: () => '/cafeteria',
   Articles: () => '/articles',
-  ArticlesDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/articles/${id}` : '/articles/:id'),
+  ArticlesDetail: ({ id }: ROUTESParams<'id'>) => `/articles/${id}`,
   LostItems: () => '/lost-item',
   LostItemRedirect: () => '/lost-item',
-  LostItemDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/lost-item/${id}` : '/lost-item/:id'),
+  LostItemDetail: ({ id }: ROUTESParams<'id'>) => `/lost-item/${id}`,
   LostItemFound: () => '/lost-item/found',
   LostItemLost: () => '/lost-item/lost',
   LostItemChat: () => '/lost-item/chat',
-  LostItemEdit: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/lost-item/edit/${id}` : '/lost-item/edit/:id'),
-  LostItemReport: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/lost-item/report/${id}` : '/lost-item/report/:id'),
+  LostItemEdit: ({ id }: ROUTESParams<'id'>) => `/lost-item/edit/${id}`,
+  LostItemReport: ({ id }: ROUTESParams<'id'>) => `/lost-item/report/${id}`,
   Room: () => '/room',
-  RoomDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/room/${id}` : '/room/:id'),
+  RoomDetail: ({ id }: ROUTESParams<'id'>) => `/room/${id}`,
   CampusInfo: () => '/campusinfo',
   Auth: () => '/auth',
-  AuthSignup: ({ currentStep, isLink }: ROUTESParams<'currentStep'>) =>
-    isLink ? `/auth/signup/${currentStep}` : '/auth/signup/:currentStep',
-  AuthFindPW: ({ step, isLink }: ROUTESParams<'step'>) => (isLink ? `/auth/findpw/${step}` : '/auth/findpw/:step'),
+  AuthSignup: ({ currentStep }: ROUTESParams<'currentStep'>) =>
+    `/auth/signup/${currentStep}`,
+  AuthFindPW: ({ step }: ROUTESParams<'step'>) => `/auth/findpw/${step}`,
   // AuthFindPW: () => '/auth/findpw',
   AuthFindID: () => '/auth/findid',
   Phone: () => '/auth/findid/phone',
   Email: () => '/auth/findid/email',
   IDResult: () => '/auth/findid/result',
   AuthModifyInfo: () => '/auth/modifyinfo',
-  Review: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/store/review/${id}` : '/review/:id'),
-  ReviewEdit: ({ id, reviewId, isLink }: ROUTESParams<'id' | 'reviewId'>) =>
-    isLink ? `/store/review/edit/${id}/${reviewId}` : '/store/review/edit/:id/:reviewId',
-  ReviewReport: ({ shopid, reviewid, isLink }: ROUTESParams<'shopid' | 'reviewid'>) =>
-    isLink
-      ? `/report/review/shopid/${shopid}/reviewid/${reviewid}`
-      : '/report/review/shopid/:shopid/reviewid/:reviewid',
+  Review: ({ id }: ROUTESParams<'id'>) => `/store/review/${id}`,
+  ReviewEdit: ({ id, reviewId }: ROUTESParams<'id' | 'reviewId'>) =>
+    `/store/review/edit/${id}/${reviewId}`,
+  ReviewReport: ({ shopid, reviewid }: ROUTESParams<'shopid' | 'reviewid'>) =>
+    `/report/review/shopid/${shopid}/reviewid/${reviewid}`,
   Webview: () => '/webview',
   WebviewCampusInfo: () => '/webview/campusinfo',
   PrivatePolicy: () => '/policy',

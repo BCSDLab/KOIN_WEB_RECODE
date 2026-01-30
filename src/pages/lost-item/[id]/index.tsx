@@ -135,7 +135,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
 
   const handleModifyButtonClick = () => {
     logLostItemModify(type === 'FOUND' ? '습득물' : '분실물');
-    navigate(ROUTES.LostItemEdit({ id: String(articleId), isLink: true }));
+    navigate(ROUTES.LostItemEdit({ id: String(articleId) }));
   };
 
   const handleDeleteButtonClick = () => {
@@ -147,7 +147,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
     requireLogin('게시글을 신고 하려면', () => {
       logItemPostReportClick();
       if (isMobile) {
-        navigate(ROUTES.LostItemReport({ id: String(articleId), isLink: true }));
+        navigate(ROUTES.LostItemReport({ id: String(articleId) }));
         return;
       }
       openReportModal();
