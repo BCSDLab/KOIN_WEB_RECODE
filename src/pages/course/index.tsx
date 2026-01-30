@@ -11,6 +11,7 @@ import { useSuspenseCourseSearch, useSuspensePreCourseList } from 'components/Co
 import useCourseSearchForm from 'components/Course/hooks/useCourseSearchForm';
 import useSelectedCourses, { getCourseKey } from 'components/Course/hooks/useSelectedCourses';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useSemester } from 'utils/zustand/semester';
 import styles from './CoursePage.module.scss';
@@ -21,8 +22,15 @@ interface OpenCoursesTableContentProps {
 }
 
 function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTableContentProps) {
+  const logger = useLogger();
   const { data: courses } = useSuspenseCourseSearch(searchParams);
-  const columns = createOpenCoursesColumns(onAddCourse);
+
+  const handleAddOpenCourse = (course: PreCourse) => {
+    logger.actionEventClick({ team: 'User', event_label: 'application_training_apply', value: '' });
+    onAddCourse(course);
+  };
+
+  const columns = createOpenCoursesColumns(handleAddOpenCourse);
 
   return (
     <CourseTable<Course>
@@ -42,8 +50,15 @@ interface PreCoursesTableContentProps {
 }
 
 function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCoursesTableContentProps) {
+  const logger = useLogger();
   const { data: preCourses } = useSuspensePreCourseList(token, timetableFrameId);
-  const columns = createPreCoursesColumns(onAddCourse);
+
+  const handleAddPreCourse = (course: PreCourse) => {
+    logger.actionEventClick({ team: 'User', event_label: 'application_training_pre_apply', value: '' });
+    onAddCourse(course);
+  };
+
+  const columns = createPreCoursesColumns(handleAddPreCourse);
 
   return (
     <CourseTable<PreCourse>
