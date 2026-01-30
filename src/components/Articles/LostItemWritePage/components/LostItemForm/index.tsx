@@ -16,12 +16,13 @@ const MAX_LOST_ITEM_TYPE = {
 interface LostItemFormProps {
   type: 'FOUND' | 'LOST';
   count: number;
+  totalCount: number;
   lostItem: LostItem;
   lostItemHandler: LostItemHandler;
   removeLostItem?: (index: number) => void;
 }
 
-export default function LostItemForm({ type, count, lostItem, lostItemHandler, removeLostItem }: LostItemFormProps) {
+export default function LostItemForm({ type, count, totalCount, lostItem, lostItemHandler, removeLostItem }: LostItemFormProps) {
   const {
     category,
     foundDate,
@@ -44,7 +45,7 @@ export default function LostItemForm({ type, count, lostItem, lostItemHandler, r
         <button
           className={cn({
             [styles.tag__delete]: true,
-            [styles['tag__delete--visible']]: count > 0,
+            [styles['tag__delete--visible']]: totalCount > 1,
           })}
           type="button"
           onClick={() => removeLostItem && removeLostItem(count)}

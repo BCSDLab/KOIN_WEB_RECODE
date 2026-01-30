@@ -45,6 +45,7 @@ export default function FormDate({
   const handleMobileDateSelect = (date: Date) => {
     setFoundDate(date);
     setHasDateBeenSelected();
+    closeCalendar();
   };
 
   const { containerRef } = useOutsideClick({ onOutsideClick: closeCalendar });

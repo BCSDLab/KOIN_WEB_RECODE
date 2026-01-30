@@ -10,6 +10,8 @@ import { useUser } from 'utils/hooks/state/useUser';
 import { getYyyyMmDd } from 'utils/ts/calendar';
 import showToast from 'utils/ts/showToast';
 
+const MAX_ITEMS = 10;
+
 const TITLES = {
   FOUND: {
     title: '습득물 신고',
@@ -100,13 +102,14 @@ export default function LostItemWritePage() {
       bottomButtonText="작성 완료"
       onBottomButtonClick={handleCompleteClick}
       isBottomButtonDisabled={status === 'pending'}
-      onAddButtonClick={handleItemAddClick}
+      onAddButtonClick={lostItems.length < MAX_ITEMS ? handleItemAddClick : undefined}
     >
       {lostItems.map((lostItem, index) => (
         <LostItemForm
           key={lostItem.id}
           type={type}
           count={index}
+          totalCount={lostItems.length}
           lostItem={lostItem}
           lostItemHandler={lostItemHandler(index)}
           removeLostItem={removeLostItem}

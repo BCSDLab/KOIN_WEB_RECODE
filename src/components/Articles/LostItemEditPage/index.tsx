@@ -49,7 +49,7 @@ export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
         category: article.category as FindUserCategory,
         foundDate: new Date(article.found_date),
         foundPlace: article.found_place,
-        content: article.content,
+        content: article.content ?? '',
         author: article.author,
         images: article.images.map((img) => img.image_url),
         registered_at: article.registered_at,
@@ -109,7 +109,7 @@ export default function LostItemEditPage({ articleId }: LostItemEditPageProps) {
       onBottomButtonClick={handleCompleteClick}
       isBottomButtonDisabled={status === 'pending'}
     >
-      <LostItemForm type={type} count={0} lostItem={lostItem} lostItemHandler={customLostItemHandler} />
+      <LostItemForm type={type} count={0} totalCount={1} lostItem={lostItem} lostItemHandler={customLostItemHandler} />
     </LostItemPageTemplate>
   );
 }

@@ -147,7 +147,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
     requireLogin('게시글을 신고 하려면', () => {
       logItemPostReportClick();
       if (isMobile) {
-        navigate(ROUTES.ArticlesReport({ id: String(articleId), isLink: true }));
+        navigate(ROUTES.LostItemReport({ id: String(articleId), isLink: true }));
         return;
       }
       openReportModal();
@@ -180,7 +180,13 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
               <div className={styles.header__title}>
                 <span className={styles.header__type}>{typeLabel}</span>
                 <span className={styles.header__category}>{category}</span>
-                <span className={styles.header__location}>{[found_place, found_date].join(' | ')}</span>
+                <span className={styles.header__location}>
+                  <span className={styles.header__place} title={found_place}>
+                    {found_place}
+                  </span>
+                  <span className={styles.header__divider}>|</span>
+                  <span className={styles.header__dateText}>{found_date}</span>
+                </span>
               </div>
               <FoundChip isFound={is_found} />
             </div>
@@ -202,17 +208,19 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
               </div>
             )}
             <div className={styles['actions-wrapper']}>
-              {is_mine && !is_found && <FoundToggle onToggle={handleToggleFound} disabled={isToggling} />}
+              {is_mine && !is_found && <FoundToggle onToggle={handleToggleFound} disabled={isToggling} type={type} />}
               <div className={styles.actions}>
-                <button className={styles.actions__button} onClick={() => navigate(ROUTES.LostItems())} type="button">
+                <button className={styles.actions__button} onClick={() => router.back()} type="button">
                   목록
                 </button>
                 <div className={styles.actions__group}>
                   {is_mine ? (
                     <>
-                      <button className={styles.actions__button} onClick={handleModifyButtonClick} type="button">
-                        수정
-                      </button>
+                      {!is_found && (
+                        <button className={styles.actions__button} onClick={handleModifyButtonClick} type="button">
+                          수정
+                        </button>
+                      )}
                       <button className={styles.actions__button} onClick={handleDeleteButtonClick} type="button">
                         삭제
                       </button>

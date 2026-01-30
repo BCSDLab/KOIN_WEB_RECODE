@@ -43,7 +43,7 @@ const createInitialForm = (id: number, type: 'FOUND' | 'LOST'): LostItem => ({
   images: [],
   registered_at: '',
   updated_at: '',
-  hasDateBeenSelected: false,
+  hasDateBeenSelected: true,
   isCategorySelected: true,
   isDateSelected: true,
   isFoundPlaceSelected: true,

@@ -112,6 +112,15 @@
     }
   }
 
+  .icon {
+    display: flex;
+    transition: transform 0.2s ease;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
   &__warning {
     display: flex;
     align-items: center;

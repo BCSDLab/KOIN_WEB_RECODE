@@ -1,10 +1,13 @@
+import { useRouter } from 'next/router';
 import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postReportLostItemArticle } from 'api/articles';
+import ROUTES from 'static/routes';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import showToast from 'utils/ts/showToast';
 
 export default function useReportLostItemArticle() {
+  const router = useRouter();
   const token = useTokenState();
   const queryClient = useQueryClient();
 
@@ -12,6 +15,7 @@ export default function useReportLostItemArticle() {
     mutationFn: ({ articleId, reports }: { articleId: number; reports: { title: string; content: string }[] }) =>
       postReportLostItemArticle(token, articleId, { reports }),
     onSuccess: () => {
+      router.push(ROUTES.LostItems());
       showToast('success', '게시글이 신고되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['articles'] });
       queryClient.invalidateQueries({ queryKey: ['lostitem'] });

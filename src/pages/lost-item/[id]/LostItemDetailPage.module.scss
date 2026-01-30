@@ -63,6 +63,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
 
     @include media.media-breakpoint(mobile) {
       align-items: flex-end;
@@ -70,7 +71,8 @@
   }
 
   &__title {
-    width: 794px;
+    flex: 1;
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -78,7 +80,6 @@
     @include media.media-breakpoint(mobile) {
       flex-wrap: wrap;
       gap: 8px;
-      width: 100%;
       padding: 0;
       font-size: 14px;
       line-height: 1.6;
@@ -86,6 +87,8 @@
   }
 
   &__type {
+    white-space: nowrap;
+
     @include media.media-breakpoint(mobile) {
       width: 100%;
       color: #10477a;
@@ -98,6 +101,7 @@
     padding: 0 12px;
     border-radius: 999px;
     background-color: #175c8e;
+    white-space: nowrap;
     color: #fff;
 
     @include media.media-breakpoint(mobile) {
@@ -108,8 +112,30 @@
     }
   }
 
-  &__location {
-    word-break: break-all;
+  .header {
+    &__location {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      white-space: nowrap;
+      gap: 4px;
+    }
+
+    &__place {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__divider {
+      flex: 0 0 auto;
+    }
+
+    &__dateText {
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
   }
 
   &__info {
@@ -146,6 +172,7 @@
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
+    margin-bottom: 30px;
     padding: 0 24px;
   }
 

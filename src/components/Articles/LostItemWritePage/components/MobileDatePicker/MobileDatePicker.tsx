@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useScrollPicker } from 'utils/hooks/ui/useScrollPicker';
 import { clampDate, getDateRange } from 'utils/ts/calendar';
 import styles from './MobileDatePicker.module.scss';
@@ -16,10 +16,11 @@ export default function MobileDatePicker({ selectedDate, setSelectedDate }: Mobi
   const dayRef = useRef<HTMLDivElement>(null);
 
   const today = useMemo(() => new Date(), []);
+  const [pendingDate, setPendingDate] = useState<Date>(selectedDate);
 
   const { years, months, days, currentYear, currentMonth, currentDay } = useMemo(
-    () => getDateRange({ selectedDate, maxDate: today }),
-    [selectedDate, today],
+    () => getDateRange({ selectedDate: pendingDate, maxDate: today }),
+    [pendingDate, today],
   );
 
   const { syncScrollPosition, createScrollHandler } = useScrollPicker({ itemHeight: ITEM_HEIGHT });
@@ -32,7 +33,15 @@ export default function MobileDatePicker({ selectedDate, setSelectedDate }: Mobi
           ? clampDate(currentYear, value, currentDay, today)
           : { year: currentYear, month: currentMonth, day: value };
 
-    setSelectedDate(new Date(newDate.year, newDate.month - 1, newDate.day));
+    setPendingDate(new Date(newDate.year, newDate.month - 1, newDate.day));
+  };
+
+  const handleConfirm = () => {
+    setSelectedDate(pendingDate);
+  };
+
+  const handleReset = () => {
+    setPendingDate(new Date());
   };
 
   const columns = [
@@ -66,26 +75,47 @@ export default function MobileDatePicker({ selectedDate, setSelectedDate }: Mobi
   }, [syncScrollPosition, years, months, days, currentYear, currentMonth, currentDay]);
 
   return (
-    <div className={styles.picker}>
-      <div className={styles.highlight} />
-      <div className={styles.columns}>
-        {columns.map(({ ref, items, current, suffix, type }) => (
-          <div
-            key={type}
-            className={styles.column}
-            ref={ref}
-            onScroll={createScrollHandler(items, current, (value: number) => handleDateChange(type, value))}
-          >
-            <div className={styles.padding} />
-            {items.map((item) => (
-              <div key={item} className={styles.item} data-selected={item === current}>
-                {item}
-                {suffix}
-              </div>
-            ))}
-            <div className={styles.padding} />
-          </div>
-        ))}
+    <div className={styles.container}>
+      <div className={styles.picker}>
+        <div className={styles.highlight} />
+        <div className={styles.columns}>
+          {columns.map(({ ref, items, current, suffix, type }) => (
+            <div
+              key={type}
+              className={styles.column}
+              ref={ref}
+              onScroll={createScrollHandler(items, current, (value: number) => handleDateChange(type, value))}
+            >
+              <div className={styles.padding} />
+              {items.map((item) => (
+                <div
+                  key={item}
+                  className={styles.item}
+                  data-selected={item === current}
+                  onClick={() => handleDateChange(type, item)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') handleDateChange(type, item);
+                  }}
+                >
+                  {item}
+                  {suffix}
+                </div>
+              ))}
+              <div className={styles.padding} />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className={styles.divider} />
+      <div className={styles.actions}>
+        <button type="button" className={styles['action-button']} onClick={handleReset}>
+          초기화
+        </button>
+        <button type="button" className={styles['action-button']} onClick={handleConfirm}>
+          확인
+        </button>
       </div>
     </div>
   );

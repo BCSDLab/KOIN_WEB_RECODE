@@ -3,7 +3,6 @@ import Link from 'next/link';
 import ChevronRightIcon from 'assets/svg/IndexPage/Bus/chevron-right.svg';
 import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
-import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useLostItemStat from './hooks/useLostItemStat';
 import styles from './IndexLostItem.module.scss';
 
@@ -12,7 +11,6 @@ const MIN_FOUND_COUNT = 50;
 
 function IndexLostItem() {
   const logger = useLogger();
-  const isMobile = useMediaQuery();
   const { lostItemStat } = useLostItemStat();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -58,7 +56,6 @@ function IndexLostItem() {
         >
           분실물
         </Link>
-        {isMobile && <ChevronRightIcon />}
       </div>
       <Link
         href={ROUTES.LostItemRedirect()}
@@ -94,7 +91,7 @@ function IndexLostItem() {
             </div>
           )}
         </div>
-        {!isMobile && <ChevronRightIcon />}
+        <ChevronRightIcon />
       </Link>
     </section>
   );

@@ -92,19 +92,22 @@
     }
   }
 
-  & svg {
-    @include media.media-breakpoint(mobile) {
-      width: 20px;
-      height: 20px;
-      padding-top: 4px;
-    }
-  }
-
   &__delete {
     display: none;
 
     &--visible {
       display: flex;
+      align-items: center;
+
+      @include media.media-breakpoint(mobile) {
+        padding-top: 4px;
+
+        svg {
+          display: block;
+          width: 20px;
+          height: 20px;
+        }
+      }
     }
   }
 }
