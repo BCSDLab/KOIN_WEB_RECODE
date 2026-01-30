@@ -3,8 +3,8 @@
 $lost-items-columns: 1fr 5.5fr 1.5fr 1.5fr 1fr;
 
 .header {
-  border-top: 2px solid #175c8e;
   width: 100%;
+  border-top: 2px solid #175c8e;
 
   @include media.media-breakpoint(mobile) {
     width: 100%;
@@ -212,7 +212,7 @@ $lost-items-columns: 1fr 5.5fr 1.5fr 1.5fr 1fr;
       flex-direction: column;
       gap: 4px;
       width: 100%;
-      padding: 12px 24px;
+      padding: 12px 8px;
       box-sizing: border-box;
     }
 

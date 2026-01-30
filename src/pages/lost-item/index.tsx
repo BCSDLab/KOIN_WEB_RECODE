@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getLostItemArticles } from 'api/articles';
 import { LostItemArticlesRequest } from 'api/articles/entity';
-import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import LostItemList from 'components/Articles/components/LostItemList';
+import LostItemPageLayout from 'components/Articles/components/LostItemPageLayout';
 import Pagination from 'components/Articles/components/Pagination';
 import useLostItemPagination from 'components/Articles/hooks/useLostItemPagination';
 import { useLostItemSearch } from 'components/Articles/hooks/useLostItemSearch';
@@ -88,12 +88,12 @@ export default function LostItemArticleListPage({
   const totalPageNum = isSearching ? (searchData?.total_page ?? 0) : (lostItemData?.paginationInfo?.total_page ?? 0);
 
   return (
-    <ArticlesPageLayout>
+    <LostItemPageLayout>
       <LostItemList articles={articles} />
       <div className={styles.pagination}>
         <Pagination totalPageNum={totalPageNum} />
       </div>
-    </ArticlesPageLayout>
+    </LostItemPageLayout>
   );
 }
 
