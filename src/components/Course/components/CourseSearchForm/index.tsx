@@ -61,6 +61,11 @@ export default function CourseSearchForm({
     onSearch();
   };
 
+  const handleGoMain = () => {
+    logger.actionEventClick({ team: 'User', event_label: 'application_training_back', value: '' });
+    router.push(ROUTES.Main());
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className={styles.header}>
@@ -82,7 +87,7 @@ export default function CourseSearchForm({
           />
           도움말
         </button>
-        <button type="button" className={styles.header__button} onClick={() => router.push(ROUTES.Main())}>
+        <button type="button" className={styles.header__button} onClick={handleGoMain}>
           메인으로
         </button>
       </div>
