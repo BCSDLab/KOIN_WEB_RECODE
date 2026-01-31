@@ -141,7 +141,7 @@ export default function CourseSearchForm({
               id="course-name"
               className={styles.search__input}
               type="text"
-              placeholder="과목명 또는 코드"
+              placeholder="과목명"
               value={formInputs.name}
               onChange={onNameChange}
             />
