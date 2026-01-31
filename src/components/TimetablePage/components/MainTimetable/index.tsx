@@ -85,7 +85,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           }}
         >
           <GraduationIcon />
-          모의 수강신청
+          졸업학점 계산기
         </button>
         <Curriculum list={deptList} />
         <button type="button" className={styles.page__button} onClick={onClickDownloadImage}>

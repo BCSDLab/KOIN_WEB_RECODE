@@ -38,7 +38,7 @@ function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTable
       title="개설강좌 정보"
       data={courses}
       columns={columns}
-      getRowKey={(course) => `${course.lecture_info.lecture_code}-${course.class_number}`}
+      getRowKey={(course) => `${course.lecture_info.lecture_code}-${course.class_number}-${course.professor}-${course.class_time_raw.join(',')}`}
     />
   );
 }
@@ -66,9 +66,7 @@ function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCou
       title="예비수강과목"
       data={preCourses}
       columns={columns}
-      getRowKey={(course, index) =>
-        course.lecture_info ? `${course.lecture_info.lecture_code}-${course.class_number}` : `custom-${index}`
-      }
+      getRowKey={(course) => getCourseKey(course)}
     />
   );
 }
