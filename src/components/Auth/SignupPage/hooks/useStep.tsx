@@ -9,9 +9,9 @@ function useStep<T extends string>(steps: T[]) {
   const nextStep = useCallback(
     (next: T, options?: { replace: boolean }) => {
       if (options?.replace) {
-        router.replace(ROUTES.AuthSignup({ currentStep: next, isLink: true }));
+        router.replace(ROUTES.AuthSignup({ currentStep: next }));
       } else {
-        router.push(ROUTES.AuthSignup({ currentStep: next, isLink: true }));
+        router.push(ROUTES.AuthSignup({ currentStep: next }));
       }
     },
     [router],

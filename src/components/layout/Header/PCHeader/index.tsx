@@ -256,7 +256,7 @@ export default function PCHeader({ openModal }: PCHeaderProps) {
           <>
             <li className={styles['header__auth-link']}>
               <Link
-                href={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
+                href={ROUTES.AuthSignup({ currentStep: '약관동의' })}
                 onClick={() => {
                   sessionLogger.actionSessionEvent({
                     session_name: 'sign_up',

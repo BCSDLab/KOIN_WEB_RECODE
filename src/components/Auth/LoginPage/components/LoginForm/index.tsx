@@ -80,7 +80,7 @@ export default function LoginForm() {
         {isMobile && (
           <Link
             className={styles.loginform__button}
-            href={ROUTES.AuthSignup({ currentStep: '약관동의', isLink: true })}
+            href={ROUTES.AuthSignup({ currentStep: '약관동의' })}
             onClick={() => {
               sessionLogger.actionSessionEvent({
                 session_name: 'sign_up',

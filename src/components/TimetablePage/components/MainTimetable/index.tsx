@@ -61,7 +61,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
   const onClickEdit = () => {
     if (isSemesterAndTimetableExist()) {
       router.push(
-        `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'regular', isLink: true })}&year=${semester?.year}&term=${semester?.term}`,
+        `/${ROUTES.TimetableModify({ id: String(timetableFrameId), type: 'regular' })}&year=${semester?.year}&term=${semester?.term}`,
       );
     }
   };
@@ -76,7 +76,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           type="button"
           className={styles.page__button}
           onClick={() => {
-            router.push('/course');
+            router.push(ROUTES.GraduationCalculator());
             logger.actionEventClick({
               team: 'USER',
               event_label: 'graduation_calculator',
@@ -85,7 +85,7 @@ function MainTimetable({ timetableFrameId }: { timetableFrameId: number }) {
           }}
         >
           <GraduationIcon />
-          모의 수강신청
+          졸업학점 계산기
         </button>
         <Curriculum list={deptList} />
         <button type="button" className={styles.page__button} onClick={onClickDownloadImage}>

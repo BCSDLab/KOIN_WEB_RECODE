@@ -79,7 +79,7 @@ function ReviewReportingPage({ shopid, reviewid }: { shopid: string; reviewid: s
     const reportData = { reports: requestOptions };
     mutate(reportData);
     loggingReportDone();
-    router.replace(`${ROUTES.StoreDetail({ id: shopid, isLink: true })}?state=리뷰`);
+    router.replace(`${ROUTES.StoreDetail({ id: shopid })}?state=리뷰`);
   };
 
   useEffect(() => {

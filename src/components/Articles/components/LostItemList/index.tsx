@@ -21,7 +21,7 @@ export default function LostItemList({ articles }: LostItemListProps) {
 
   const getCommon = (article: LostItemArticleForGetDTO) => {
     const [registeredDate, isNewArticle] = setArticleRegisteredDate(article.registered_at);
-    const detailLink = ROUTES.LostItemDetail({ id: String(article.id), isLink: true });
+    const detailLink = ROUTES.LostItemDetail({ id: String(article.id) });
     const typeText = article.type === 'LOST' ? '분실물' : '습득물';
 
     return { registeredDate, isNewArticle, detailLink, typeText };

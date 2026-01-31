@@ -20,7 +20,7 @@ export default function usePostNewRecruitment(clubId: number | undefined) {
     onSuccess: () => {
       showToast('success', '동아리 모집이 생성되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['clubRecruitment'] });
-      router.push(ROUTES.ClubDetail({ id: String(clubId), isLink: true }));
+      router.push(ROUTES.ClubDetail({ id: String(clubId) }));
     },
     onError: (e) => {
       if (isKoinError(e)) {

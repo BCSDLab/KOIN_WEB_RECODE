@@ -92,7 +92,6 @@ export default function ClubEventDetailView({ clubId, eventId, setEventId, isMan
       ROUTES.ClubEventEdit({
         id: String(clubId),
         eventId: String(eventId),
-        isLink: true,
       }),
     );
   };

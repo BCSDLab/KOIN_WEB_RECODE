@@ -11,6 +11,7 @@ import { useSuspenseCourseSearch, useSuspensePreCourseList } from 'components/Co
 import useCourseSearchForm from 'components/Course/hooks/useCourseSearchForm';
 import useSelectedCourses, { getCourseKey } from 'components/Course/hooks/useSelectedCourses';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
 import { useSemester } from 'utils/zustand/semester';
 import styles from './CoursePage.module.scss';
@@ -21,8 +22,15 @@ interface OpenCoursesTableContentProps {
 }
 
 function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTableContentProps) {
+  const logger = useLogger();
   const { data: courses } = useSuspenseCourseSearch(searchParams);
-  const columns = createOpenCoursesColumns(onAddCourse);
+
+  const handleAddOpenCourse = (course: PreCourse) => {
+    logger.actionEventClick({ team: 'User', event_label: 'application_training_apply', value: '' });
+    onAddCourse(course);
+  };
+
+  const columns = createOpenCoursesColumns(handleAddOpenCourse);
 
   return (
     <CourseTable<Course>
@@ -30,7 +38,7 @@ function OpenCoursesTableContent({ searchParams, onAddCourse }: OpenCoursesTable
       title="개설강좌 정보"
       data={courses}
       columns={columns}
-      getRowKey={(course) => `${course.lecture_info.lecture_code}-${course.class_number}`}
+      getRowKey={(course) => `${course.lecture_info.lecture_code}-${course.class_number}-${course.professor}-${course.class_time_raw.join(',')}`}
     />
   );
 }
@@ -42,8 +50,15 @@ interface PreCoursesTableContentProps {
 }
 
 function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCoursesTableContentProps) {
+  const logger = useLogger();
   const { data: preCourses } = useSuspensePreCourseList(token, timetableFrameId);
-  const columns = createPreCoursesColumns(onAddCourse);
+
+  const handleAddPreCourse = (course: PreCourse) => {
+    logger.actionEventClick({ team: 'User', event_label: 'application_training_pre_apply', value: '' });
+    onAddCourse(course);
+  };
+
+  const columns = createPreCoursesColumns(handleAddPreCourse);
 
   return (
     <CourseTable<PreCourse>
@@ -51,9 +66,7 @@ function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCou
       title="예비수강과목"
       data={preCourses}
       columns={columns}
-      getRowKey={(course, index) =>
-        course.lecture_info ? `${course.lecture_info.lecture_code}-${course.class_number}` : `custom-${index}`
-      }
+      getRowKey={(course) => getCourseKey(course)}
     />
   );
 }

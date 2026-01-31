@@ -1,5 +1,8 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Semester } from 'api/timetable/entity';
+import ROUTES from 'static/routes';
+import useLogger from 'utils/hooks/analytics/useLogger';
 import { useUser } from 'utils/hooks/state/useUser';
 import { isStudentUser } from 'utils/ts/userTypeGuards';
 import styles from './CourseSearchForm.module.scss';
@@ -37,6 +40,8 @@ export default function CourseSearchForm({
   onDepartmentChange,
   onNameChange,
 }: CourseSearchFormProps) {
+  const logger = useLogger();
+  const router = useRouter();
   const { data: user } = useUser();
 
   const studentInfo = {
@@ -44,8 +49,25 @@ export default function CourseSearchForm({
     name: user?.name ?? '',
   };
 
+  const handleChangeDropdown = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    logger.actionEventClick({ team: 'User', event_label: 'application_training_all', value: selectedValue });
+    onDepartmentChange(e);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    logger.actionEventClick({ team: 'User', event_label: 'application_training_check', value: '' });
+    onSearch();
+  };
+
+  const handleGoMain = () => {
+    logger.actionEventClick({ team: 'User', event_label: 'application_training_back', value: '' });
+    router.push(ROUTES.Main());
+  };
+
   return (
-    <form onSubmit={onSearch}>
+    <form onSubmit={handleSubmit}>
       <div className={styles.header}>
         <button type="submit" className={styles.header__button}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -65,7 +87,7 @@ export default function CourseSearchForm({
           />
           도움말
         </button>
-        <button type="button" className={styles.header__button}>
+        <button type="button" className={styles.header__button} onClick={handleGoMain}>
           메인으로
         </button>
       </div>
@@ -89,7 +111,7 @@ export default function CourseSearchForm({
               id="department"
               className={styles.search__select}
               value={formInputs.department || '(전체)'}
-              onChange={onDepartmentChange}
+              onChange={handleChangeDropdown}
             >
               {DEPARTMENTS.map((dept) => (
                 <option key={dept}>{dept}</option>
@@ -119,7 +141,7 @@ export default function CourseSearchForm({
               id="course-name"
               className={styles.search__input}
               type="text"
-              placeholder="과목명 또는 코드"
+              placeholder="과목명"
               value={formInputs.name}
               onChange={onNameChange}
             />

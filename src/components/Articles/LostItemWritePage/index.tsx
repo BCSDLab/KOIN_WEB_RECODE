@@ -90,7 +90,7 @@ export default function LostItemWritePage() {
     }));
 
     const id = await postLostItem({ articles });
-    router.replace(ROUTES.LostItemDetail({ id: String(id), isLink: true }));
+    router.replace(ROUTES.LostItemDetail({ id: String(id) }));
   };
 
   return (

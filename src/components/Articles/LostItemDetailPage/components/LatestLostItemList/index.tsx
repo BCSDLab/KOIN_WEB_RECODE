@@ -24,7 +24,7 @@ function LatestLostItemList() {
           articles.map((article) => (
             <Link
               key={article.id}
-              href={ROUTES.LostItemDetail({ id: String(article.id), isLink: true })}
+              href={ROUTES.LostItemDetail({ id: String(article.id) })}
               className={styles.item}
             >
               <div className={styles.item__content}>
