@@ -16,6 +16,7 @@ const ROUTES = {
   TimetableModify: ({ id, type, isLink }: ROUTESParams<'id' | 'type'>) =>
     isLink ? `timetable/modify?id=${id}${type ? `&type=${type}` : ''}` : 'timetable/modify',
   GraduationCalculator: () => '/graduation',
+  Course: () => '/course',
   Store: () => '/store',
   BenefitStore: () => '/benefitstore',
   StoreDetail: ({ id, isLink }: ROUTESParams<'id'>) => (isLink ? `/store/${id}` : '/store/:id'),
