@@ -45,11 +45,32 @@
 
 .placeholder {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   min-height: 150px;
   border: 1px solid #dcdcdc;
   background-color: #f9f9f9;
   color: #4d4d4d;
   font-size: 14px;
+
+  &__sub {
+    font-size: 13px;
+    color: #888;
+  }
+
+  &__link {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #175c8e;
+    text-decoration: underline;
+    font-size: 13px;
+
+    &:hover {
+      color: #0e3d5e;
+    }
+  }
 }
