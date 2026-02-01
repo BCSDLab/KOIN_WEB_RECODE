@@ -15,5 +15,6 @@ export const useSuspensePreCourseList = (token: string, timetableFrameId: number
   return useSuspenseQuery({
     queryKey: ['course', 'pre-course-list', timetableFrameId],
     queryFn: () => getPreCourseList(token, timetableFrameId),
+    gcTime: 0,
   });
 };
