@@ -1,4 +1,6 @@
 import React, { Suspense } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Course, PreCourse } from 'api/course/entity';
 import CourseSearchForm from 'components/Course/components/CourseSearchForm';
 import CourseTable, {
@@ -11,8 +13,11 @@ import { useSuspenseCourseSearch, useSuspensePreCourseList } from 'components/Co
 import useCourseSearchForm from 'components/Course/hooks/useCourseSearchForm';
 import useSelectedCourses, { getCourseKey } from 'components/Course/hooks/useSelectedCourses';
 import useTimetableFrameList from 'components/TimetablePage/hooks/useTimetableFrameList';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import useTokenState from 'utils/hooks/state/useTokenState';
+import { getRecentSemester } from 'utils/timetable/semester';
+import { setRedirectPath } from 'utils/ts/auth';
 import { useSemester } from 'utils/zustand/semester';
 import styles from './CoursePage.module.scss';
 
@@ -60,6 +65,18 @@ function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCou
 
   const columns = createPreCoursesColumns(handleAddPreCourse);
 
+  if (preCourses.length === 0) {
+    return (
+      <div className={styles.placeholder}>
+        시간표에 추가된 과목이 없습니다.
+        <span className={styles.placeholder__sub}>개설강좌에서 과목을 추가해주세요.</span>
+        <Link href={ROUTES.Timetable()} className={styles.placeholder__link}>
+          시간표 페이지로 이동
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <CourseTable<PreCourse>
       variant="pre"
@@ -72,15 +89,17 @@ function PreCoursesTableContent({ token, timetableFrameId, onAddCourse }: PreCou
 }
 
 function CoursePage() {
+  const router = useRouter();
   const token = useTokenState();
   const semester = useSemester();
+  const currentSemester = getRecentSemester();
 
   const { formInputs, searchParams, handleSearch, handleDepartmentChange, handleNameChange } = useCourseSearchForm({
     initialYear: semester.year,
     initialSemester: semester.term,
   });
 
-  const { data: timetableFrameList } = useTimetableFrameList(token, semester);
+  const { data: timetableFrameList } = useTimetableFrameList(token, currentSemester);
   const mainFrame = timetableFrameList?.find((frame) => frame.is_main);
   const timetableFrameId = mainFrame?.id ?? 0;
   const hasValidFrameId = !!mainFrame?.id;
@@ -117,7 +136,30 @@ function CoursePage() {
                 />
               </Suspense>
             ) : (
-              <div className={styles.placeholder}>로그인 후 예비수강과목을 확인할 수 있습니다.</div>
+              <div className={styles.placeholder}>
+                {token ? (
+                  <>
+                    현재 학기 시간표가 없습니다.
+                    <Link href={ROUTES.Timetable()} className={styles.placeholder__link}>
+                      시간표 만들러 가기
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    로그인 후 예비수강과목을 확인할 수 있습니다.
+                    <button
+                      type="button"
+                      className={styles.placeholder__link}
+                      onClick={() => {
+                        setRedirectPath(router.asPath);
+                        router.push(ROUTES.Auth());
+                      }}
+                    >
+                      로그인하러 가기
+                    </button>
+                  </>
+                )}
+              </div>
             )}
 
             <CourseTable<PreCourse>

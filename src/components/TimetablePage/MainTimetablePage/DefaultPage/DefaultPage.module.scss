@@ -1,7 +1,7 @@
 @use "utils/scss/media.scss" as media;
 
 .page {
-  width: 1150px;
+  width: 1123px;
   margin: 80px auto 0;
 
   &__content {
@@ -12,15 +12,45 @@
 
 .timetable-header {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: space-between;
   height: 40px;
   margin-bottom: 40px;
-  gap: 6px;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
   &__title {
     font-size: 32px;
     font-weight: 500;
     color: #175c8e;
+  }
+
+  &__button {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    border: 1px solid #175c8e;
+    border-radius: 20px;
+    padding: 6px 14px;
+    background-color: transparent;
+    font-family: Pretendard, sans-serif;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    color: #175c8e;
+
+    &:hover {
+      background-color: #175c8e;
+      color: #fff;
+
+      svg path {
+        fill: #fff;
+      }
+    }
   }
 }
 

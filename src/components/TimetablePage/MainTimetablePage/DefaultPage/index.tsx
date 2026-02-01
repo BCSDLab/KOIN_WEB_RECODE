@@ -1,8 +1,11 @@
 import React from 'react';
+import { useRouter } from 'next/router';
+import GraduationIcon from 'assets/svg/graduation-icon.svg';
 import TimetableIcon from 'assets/svg/timetable-icon.svg';
 import Suspense from 'components/ssr/SSRSuspense';
 import MainTimetable from 'components/TimetablePage/components/MainTimetable';
 import TimetableList from 'components/TimetablePage/components/TimetableList';
+import ROUTES from 'static/routes';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import styles from './DefaultPage.module.scss';
 
@@ -12,6 +15,7 @@ interface DefaultPageProps {
 }
 
 export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: DefaultPageProps) {
+  const router = useRouter();
   const logger = useLogger();
   const handlePopState = React.useCallback(() => {
     // swipe로 뒤로가기 시
@@ -63,8 +67,25 @@ export default function DefaultPage({ timetableFrameId, setCurrentFrameId }: Def
   return (
     <div className={styles.page}>
       <div className={styles['timetable-header']}>
-        <TimetableIcon />
-        <h1 className={styles['timetable-header__title']}>시간표</h1>
+        <div className={styles['timetable-header__left']}>
+          <TimetableIcon />
+          <h1 className={styles['timetable-header__title']}>시간표</h1>
+        </div>
+        <button
+          type="button"
+          className={styles['timetable-header__button']}
+          onClick={() => {
+            router.push(ROUTES.Course());
+            logger.actionEventClick({
+              team: 'USER',
+              event_label: 'application_training',
+              value: '',
+            });
+          }}
+        >
+          <GraduationIcon />
+          모의 수강신청
+        </button>
       </div>
       <Suspense>
         <div className={styles.page__content}>
