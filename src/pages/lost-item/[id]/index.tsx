@@ -81,6 +81,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
     logLostItemStateChange,
     logLostItemFound,
     logLostItemModify,
+    logItemMessageSend,
   } = useArticlesLogger();
 
   const [isDeleteModalOpen, openDeleteModal, closeDeleteModal] = useBooleanState(false);
@@ -155,6 +156,7 @@ export default function LostItemDetailPage({ articleId }: LostItemDetailPageProp
   };
 
   const handleChatroomButtonClick = () => {
+    logItemMessageSend(type === 'FOUND' ? '습득물 쪽지 보내기' : '분실물 쪽지 보내기');
     requireLogin(
       '쪽지를 보내려면',
       async () => {

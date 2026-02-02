@@ -93,6 +93,10 @@ const CLICK_EVENTS = [
     label: 'lost_item_modify_complete',
     value: '',
   },
+  {
+    label: 'item_message_send',
+    value: '', // {"분실물 쪽지 보내기", "습득물 쪽지 보내기"}
+  },
 ] as const;
 
 export type ClickEventLabel = (typeof CLICK_EVENTS)[number]['label'];
@@ -143,6 +147,7 @@ export const useArticlesLogger = () => {
   const logLostItemFound = (value: '분실물' | '습득물') => logEvent('lost_item_found', value);
   const logLostItemModify = (value: '분실물' | '습득물') => logEvent('lost_item_modify', value);
   const logLostItemModifyComplete = (value: '분실물' | '습득물') => logEvent('lost_item_modify_complete', value);
+  const logItemMessageSend = (value: '분실물 쪽지 보내기' | '습득물 쪽지 보내기') => logEvent('item_message_send', value);
 
   return {
     logItemWriteClick,
@@ -168,5 +173,6 @@ export const useArticlesLogger = () => {
     logLostItemFound,
     logLostItemModify,
     logLostItemModifyComplete,
+    logItemMessageSend,
   };
 };
