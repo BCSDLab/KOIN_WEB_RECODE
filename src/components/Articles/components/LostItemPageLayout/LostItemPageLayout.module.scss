@@ -17,6 +17,7 @@
 
 .lostItem-content {
   width: 100%;
+  max-width: 1500px; // MacBook Pro 14" 기준
   margin-bottom: 60px;
   display: flex;
   flex-direction: column;
