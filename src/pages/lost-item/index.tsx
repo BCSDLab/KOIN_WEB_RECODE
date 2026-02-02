@@ -4,15 +4,15 @@ import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getLostItemArticles } from 'api/articles';
 import { LostItemArticlesRequest } from 'api/articles/entity';
-import ArticlesPageLayout from 'components/Articles/ArticlesPage';
 import LostItemList from 'components/Articles/components/LostItemList';
-import LostItemsHeader from 'components/Articles/components/LostItemsHeader';
+import LostItemPageLayout from 'components/Articles/components/LostItemPageLayout';
 import Pagination from 'components/Articles/components/Pagination';
 import useLostItemPagination from 'components/Articles/hooks/useLostItemPagination';
 import { useLostItemSearch } from 'components/Articles/hooks/useLostItemSearch';
 import { LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import { SSRLayout } from 'components/layout';
 import useMount from 'utils/hooks/state/useMount';
+import styles from './LostItemArticleListPage.module.scss';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
@@ -88,11 +88,12 @@ export default function LostItemArticleListPage({
   const totalPageNum = isSearching ? (searchData?.total_page ?? 0) : (lostItemData?.paginationInfo?.total_page ?? 0);
 
   return (
-    <ArticlesPageLayout>
-      <LostItemsHeader />
+    <LostItemPageLayout>
       <LostItemList articles={articles} />
-      <Pagination totalPageNum={totalPageNum} />
-    </ArticlesPageLayout>
+      <div className={styles.pagination}>
+        <Pagination totalPageNum={totalPageNum} />
+      </div>
+    </LostItemPageLayout>
   );
 }
 

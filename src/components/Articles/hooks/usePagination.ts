@@ -1,66 +1,41 @@
+import { useMemo } from 'react';
 import useParamsHandler from 'utils/hooks/routing/useParamsHandler';
-import showToast from 'utils/ts/showToast';
 
 const PAGE_LIMIT = 5;
 
-const displayCorrectionNum = (totalPageNum: number, nowPageNum: number) => {
-  if (totalPageNum <= PAGE_LIMIT) return 0;
-
-  if (nowPageNum <= Math.ceil(PAGE_LIMIT / 2)) {
-    return 0;
-  }
-  if (totalPageNum - nowPageNum <= Math.floor(PAGE_LIMIT / 2)) {
-    return totalPageNum - PAGE_LIMIT;
-  }
-
-  return nowPageNum - Math.ceil(PAGE_LIMIT / 2);
-};
-
-type MoveType = string | 'prev' | 'next';
-
-const usePagination = () => {
+const usePagination = (totalPageNum: number) => {
   const { params, setParams } = useParamsHandler();
 
-  const calcIndexPage = (limit: number, totalPageNum: number, page: string) =>
-    String(limit + 1 + displayCorrectionNum(totalPageNum, Number(page)));
+  const raw = Number(params.page) || 1;
+  const currentPage = Math.min(Math.max(raw, 1), Math.max(totalPageNum, 1));
 
-  const onClickMove = (move: MoveType, totalPageNum?: number) => () => {
-    const currentPage = Number(params.page) || 1;
-    let targetPage = currentPage;
+  const pages = useMemo(() => {
+    const half = Math.floor(PAGE_LIMIT / 2);
+    const maxStart = Math.max(1, totalPageNum - PAGE_LIMIT + 1);
+    const startPage = Math.min(Math.max(1, currentPage - half), maxStart);
+    const length = Math.min(PAGE_LIMIT, totalPageNum);
 
-    if (move === 'prev') {
-      if (currentPage <= 1) {
-        showToast('error', '첫 페이지입니다.');
-        targetPage = 1;
-      } else {
-        targetPage = currentPage - 1;
-      }
-    } else if (move === 'next') {
-      const maxPage = totalPageNum || 1;
-      if (currentPage >= maxPage) {
-        showToast('error', '마지막 페이지입니다.');
-        targetPage = maxPage;
-      } else {
-        targetPage = currentPage + 1;
-      }
-    } else {
-      targetPage = Number(move);
-    }
+    return Array.from({ length }, (_, i) => startPage + i);
+  }, [currentPage, totalPageNum]);
 
-    setParams(
-      {
-        page: String(targetPage),
-      },
-      {
-        deleteBeforeParam: false,
-        replacePage: true,
-      },
-    );
+  const movePage = (target: number | 'prev' | 'next') => {
+    let nextPage = currentPage;
+
+    if (target === 'prev') nextPage = Math.max(1, currentPage - 1);
+    else if (target === 'next') nextPage = Math.min(totalPageNum, currentPage + 1);
+    else nextPage = target;
+
+    if (nextPage === currentPage) return;
+
+    setParams({ page: String(nextPage) }, { replacePage: true });
   };
 
   return {
-    calcIndexPage,
-    onClickMove,
+    pages,
+    currentPage,
+    isFirst: currentPage <= 1,
+    isLast: currentPage >= totalPageNum,
+    movePage,
   };
 };
 

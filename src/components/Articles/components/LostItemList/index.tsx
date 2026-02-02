@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { LostItemArticleForGetDTO } from 'api/articles/entity';
@@ -12,6 +13,18 @@ import styles from './LostItemList.module.scss';
 interface LostItemListProps {
   articles: LostItemArticleForGetDTO[];
 }
+
+type HeaderRowInfo = {
+  [key: string]: string;
+};
+
+const HEADER_ROW: HeaderRowInfo = {
+  classification: '분류',
+  title: '제목',
+  author: '작성자',
+  date: '날짜',
+  stat: '물품 상태',
+};
 
 export default function LostItemList({ articles }: LostItemListProps) {
   const isMobile = useMediaQuery();
@@ -35,14 +48,14 @@ export default function LostItemList({ articles }: LostItemListProps) {
         <button
           key={article.id}
           type="button"
-          className={styles.lostItemList__rowDisabled}
+          className={styles.lostItemListMobile__rowDisabled}
           onClick={handleReportedClick}
         >
           <div className={styles.lostItemListMobile__type}>{typeText}</div>
 
           <div className={styles.lostItemListMobile__title}>
             <div className={styles.lostItemListMobile__titleMeta}>
-              <div className={styles.lostItemList__reportedText}>신고에 의해 숨김 처리 되었습니다.</div>
+              <div className={styles.lostItemListMobile__reportedText}>신고에 의해 숨김 처리 되었습니다.</div>
             </div>
             <FoundChip isFound={article.is_found} size="xs" />
           </div>
@@ -69,6 +82,7 @@ export default function LostItemList({ articles }: LostItemListProps) {
           <div className={styles.lostItemListMobile__titleMeta}>
             <span className={styles.lostItemListMobile__badge}>{article.category}</span>
             <div className={styles.lostItemListMobile__place}>{article.found_place}</div>
+            <div>|</div>
             <div className={styles.lostItemListMobile__foundDate}>{article.found_date}</div>
           </div>
           <FoundChip isFound={article.is_found} size="xs" />
@@ -125,6 +139,7 @@ export default function LostItemList({ articles }: LostItemListProps) {
           <div className={styles.lostItemList__titleMeta}>
             <span className={styles.lostItemList__badge}>{article.category}</span>
             <div className={styles.lostItemList__place}>{article.found_place}</div>
+            <div>|</div>
             <div className={styles.lostItemList__foundDate}>{article.found_date}</div>
 
             {isNewArticle && (
@@ -150,8 +165,21 @@ export default function LostItemList({ articles }: LostItemListProps) {
   };
 
   return (
-    <div className={styles.lostItemList}>
-      {articles.map((article) => (isMobile ? mobileRow(article) : desktopRow(article)))}
-    </div>
+    <React.Fragment>
+      <div className={styles.header}>
+        <div className={styles.header__container}>
+          <div className={styles.header__row}>
+            {Object.keys(HEADER_ROW).map((key) => (
+              <div key={key} className={styles.info}>
+                {HEADER_ROW[key]}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className={styles.lostItemList}>
+        {articles.map((article) => (isMobile ? mobileRow(article) : desktopRow(article)))}
+      </div>
+    </React.Fragment>
   );
 }

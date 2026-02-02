@@ -4,7 +4,7 @@ import { useOutsideClick } from 'utils/hooks/ui/useOutsideClick';
 import { useScrollLock } from 'utils/hooks/ui/useScrollLock';
 import styles from './BottomModal.module.scss';
 
-type BottomModalProps = HTMLAttributes<HTMLDialogElement> & {
+type BottomModalProps = HTMLAttributes<HTMLDivElement> & {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
@@ -13,7 +13,7 @@ type BottomModalProps = HTMLAttributes<HTMLDialogElement> & {
 export default function BottomModal({ isOpen, onClose, children, className, ...rest }: BottomModalProps) {
   useScrollLock(isOpen);
 
-  const { containerRef, backgroundRef } = useOutsideClick<HTMLDialogElement>({
+  const { containerRef, backgroundRef } = useOutsideClick<HTMLDivElement>({
     onOutsideClick: (e: MouseEvent) => {
       e.preventDefault?.();
       onClose();
@@ -25,14 +25,16 @@ export default function BottomModal({ isOpen, onClose, children, className, ...r
   return (
     <Portal>
       <div ref={backgroundRef} className={styles.backdrop}>
-        <dialog
+        <div
           ref={containerRef}
           className={[styles.modal, className].filter(Boolean).join(' ')}
-          open={isOpen}
+          role="dialog"
+          aria-modal="true"
+          aria-label="bottom sheet"
           {...rest}
         >
           {children}
-        </dialog>
+        </div>
       </div>
     </Portal>
   );

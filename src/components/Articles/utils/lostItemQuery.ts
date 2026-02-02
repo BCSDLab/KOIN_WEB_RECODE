@@ -47,6 +47,18 @@ const isLostItemAuthor = (v: string): v is LostItemAuthor => (AUTHOR_VALUES as r
 const isSelectableCategory = (v: string): v is LostItemSelectableCategory =>
   (CATEGORY_VALUES as readonly string[]).includes(v);
 
+const MAX_PAGE = 9999;
+
+function parsePage(v: QueryValue, fallback: number) {
+  const raw = Array.isArray(v) ? v[0] : v;
+  const n = Number(raw);
+
+  if (!Number.isFinite(n)) return fallback;
+
+  const int = Math.floor(n);
+  return Math.min(Math.max(int, 1), MAX_PAGE);
+}
+
 export function parseLostItemQuery(query: ParsedUrlQuery, fallback: LostItemParams): LostItemParams {
   const pageRaw = query.page;
   const typeRaw = query.type;
@@ -55,7 +67,7 @@ export function parseLostItemQuery(query: ParsedUrlQuery, fallback: LostItemPara
   const sortRaw = query.sort;
   const authorRaw = query.author;
 
-  const page = Number(Array.isArray(pageRaw) ? pageRaw[0] : pageRaw) || fallback.page;
+  const page = parsePage(pageRaw, fallback.page);
 
   const typeCandidate = Array.isArray(typeRaw) ? typeRaw[0] : typeRaw;
   const type = typeCandidate && isLostItemType(typeCandidate) ? typeCandidate : fallback.type;
