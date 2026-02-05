@@ -14,7 +14,7 @@ import PortalProvider from 'components/modal/Modal/PortalProvider';
 import ROUTES from 'static/routes';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
-import { getCookie } from 'utils/ts/cookie';
+import { cleanupLegacyAuthCookies, getCookie } from 'utils/ts/cookie';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
@@ -81,6 +81,11 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
     if (!Component.title) return 'KOIN';
     return typeof Component.title === 'function' ? Component.title(router.asPath) : Component.title;
   }, [Component, router.asPath]);
+
+  // 레거시 쿠키 정리 (도메인 변경 마이그레이션: .koreatech.in → koreatech.in)
+  useEffect(() => {
+    cleanupLegacyAuthCookies();
+  }, []);
 
   // ios 브릿지
   useEffect(() => {

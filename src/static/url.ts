@@ -3,7 +3,7 @@ export const IS_STAGE = process.env.NEXT_PUBLIC_API_PATH?.includes('stage');
 const BASE_DOMAIN = 'koreatech.in';
 const STAGE_DOMAIN = `stage.${BASE_DOMAIN}`;
 
-export const COOKIE_DOMAIN = IS_STAGE ? `.${STAGE_DOMAIN}` : `.${BASE_DOMAIN}`;
+export const COOKIE_DOMAIN = IS_STAGE ? STAGE_DOMAIN : BASE_DOMAIN;
 
 const ORDER_URL = `https://order.${BASE_DOMAIN}`;
 const ORDER_STAGE_URL = `https://order.${STAGE_DOMAIN}`;

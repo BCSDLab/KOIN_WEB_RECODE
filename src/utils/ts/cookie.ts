@@ -1,6 +1,9 @@
-import { COOKIE_DOMAIN } from 'static/url';
+import { COOKIE_DOMAIN, IS_STAGE } from 'static/url';
 
 type SameSite = 'lax' | 'strict' | 'none';
+
+// 기존 점(.)으로 시작하는 도메인 (마이그레이션용)
+const LEGACY_COOKIE_DOMAIN = IS_STAGE ? '.stage.koreatech.in' : '.koreatech.in';
 
 export interface CookieOptions {
   days?: number;
@@ -93,4 +96,22 @@ export const getCookieDomain = () => {
   if (hostname === 'localhost') return undefined;
 
   return COOKIE_DOMAIN;
+};
+
+/**
+ * 기존 점(.)으로 시작하는 도메인의 쿠키를 삭제합니다.
+ * 쿠키 도메인 변경(.koreatech.in → koreatech.in) 마이그레이션용
+ */
+export const deleteLegacyCookie = (name: string) => {
+  if (!isBrowser()) return;
+
+  const { hostname } = window.location;
+  if (hostname === 'localhost') return;
+
+  deleteCookie(name, { domain: LEGACY_COOKIE_DOMAIN });
+};
+
+export const cleanupLegacyAuthCookies = () => {
+  deleteLegacyCookie('AUTH_TOKEN_KEY');
+  deleteLegacyCookie('AUTH_USER_TYPE');
 };
