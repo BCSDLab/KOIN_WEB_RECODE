@@ -1,5 +1,4 @@
 import type { GetServerSidePropsContext } from 'next';
-import { COOKIE_KEY } from 'static/url';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { articles } from 'api';
@@ -21,6 +20,7 @@ import useSingleLostItemArticle from 'components/Articles/LostItemDetailPage/hoo
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
+import { COOKIE_KEY } from 'static/url';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';

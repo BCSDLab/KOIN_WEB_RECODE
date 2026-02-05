@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
-import { COOKIE_KEY } from 'static/url';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
@@ -31,6 +30,7 @@ import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmM
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
+import { COOKIE_KEY } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
