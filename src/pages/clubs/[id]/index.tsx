@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSidePropsContext } from 'next';
+import { COOKIE_KEY } from 'static/url';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { isKoinError } from '@bcsdlab/koin';
@@ -82,7 +83,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   }
 
   const clubId = Number(id);
-  const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+  const token = req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
   const tab = query.tab as TabType | undefined;
   const eventId = query.eventId as string | undefined;
   const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;

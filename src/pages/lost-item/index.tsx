@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { COOKIE_KEY } from 'static/url';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getLostItemArticles } from 'api/articles';
@@ -16,7 +17,7 @@ import styles from './LostItemArticleListPage.module.scss';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
-  const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
+  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
 
   const fallback: LostItemParams = {
     page: 1,

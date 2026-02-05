@@ -7,6 +7,7 @@ import { MY_SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useMySemest
 import { SEMESTER_INFO_KEY } from 'components/TimetablePage/hooks/useSemesterOptionList';
 import { TIMETABLE_INFO_LIST } from 'components/TimetablePage/hooks/useTimetableInfoList';
 import ModifyTimetablePage from 'components/TimetablePage/ModifyTimetablePage';
+import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
 import { parseServerSideParams } from 'utils/ts/parseServerSideParams';
 import type { Term } from 'api/timetable/entity';
@@ -15,7 +16,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
 
   const { token, query } = parseServerSideParams(context);
-  const userType = context.req.cookies['AUTH_USER_TYPE'];
+  const userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE];
   const timetableFrameId = Number(query.id);
 
   if (token && userType === 'STUDENT') {

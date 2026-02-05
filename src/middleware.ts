@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { COOKIE_DOMAIN } from 'static/url';
+import { COOKIE_DOMAIN, COOKIE_KEY } from 'static/url';
 import { isTokenExpired } from 'utils/ts/auth';
 
 function isLocalhost(hostname: string): boolean {
@@ -7,7 +7,7 @@ function isLocalhost(hostname: string): boolean {
 }
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('AUTH_TOKEN_KEY')?.value;
+  const token = request.cookies.get(COOKIE_KEY.AUTH_TOKEN)?.value;
 
   if (token && isTokenExpired(token)) {
     const response = NextResponse.next();
@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
       options.domain = COOKIE_DOMAIN;
     }
 
-    response.cookies.set('AUTH_TOKEN_KEY', '', options);
+    response.cookies.set(COOKIE_KEY.AUTH_TOKEN, '', options);
     return response;
   }
 

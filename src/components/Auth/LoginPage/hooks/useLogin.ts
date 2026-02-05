@@ -2,6 +2,7 @@ import { isKoinError, sendClientError } from '@bcsdlab/koin';
 import { sha256 } from '@bcsdlab/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { auth } from 'api';
+import { COOKIE_KEY } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useLoginRedirect } from 'utils/hooks/auth/useLoginRedirect';
 import { getCookieDomain, setCookie } from 'utils/ts/cookie';
@@ -39,8 +40,8 @@ export const useLogin = (state: IsAutoLogin) => {
         setRefreshToken(data.refresh_token);
       }
       queryClient.invalidateQueries();
-      setCookie('AUTH_TOKEN_KEY', data.token, { domain });
-      setCookie('AUTH_USER_TYPE', data.user_type, { domain });
+      setCookie(COOKIE_KEY.AUTH_TOKEN, data.token, { domain });
+      setCookie(COOKIE_KEY.AUTH_USER_TYPE, data.user_type, { domain });
       setToken(data.token);
       setUserType(data.user_type);
       redirectAfterLogin();

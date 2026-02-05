@@ -12,9 +12,10 @@ import Layout from 'components/layout';
 import MaintenancePage from 'components/Maintenance';
 import PortalProvider from 'components/modal/Modal/PortalProvider';
 import ROUTES from 'static/routes';
+import { COOKIE_KEY } from 'static/url';
 import useAutoLogin from 'utils/hooks/auth/useAutoLogin';
 import useMount from 'utils/hooks/state/useMount';
-import { cleanupLegacyAuthCookies, getCookie } from 'utils/ts/cookie';
+import { getCookie } from 'utils/ts/cookie';
 import { requestTokensFromNative, setTokensFromNative } from 'utils/ts/iosBridge';
 import { useServerStateStore } from 'utils/zustand/serverState';
 
@@ -61,7 +62,7 @@ const useAuthGuard = (requireAuth: boolean | undefined) => {
   useEffect(() => {
     if (!requireAuth) return;
     if (!isMount) return;
-    const token = getCookie('AUTH_TOKEN_KEY');
+    const token = getCookie(COOKIE_KEY.AUTH_TOKEN);
     if (!token) {
       // 하이드레이션 경합 방지
       router.replace(ROUTES.Main());
@@ -81,11 +82,6 @@ export default function App({ Component, pageProps }: AppPropsWithAuth) {
     if (!Component.title) return 'KOIN';
     return typeof Component.title === 'function' ? Component.title(router.asPath) : Component.title;
   }, [Component, router.asPath]);
-
-  // 레거시 쿠키 정리 (도메인 변경 마이그레이션: .koreatech.in → koreatech.in)
-  useEffect(() => {
-    cleanupLegacyAuthCookies();
-  }, []);
 
   // ios 브릿지
   useEffect(() => {
