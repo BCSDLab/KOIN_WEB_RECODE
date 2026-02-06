@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { articles as articlesApi } from 'api/index';
@@ -9,6 +9,7 @@ import ArticlesHeader from 'components/Articles/components/ArticlesHeader';
 import Pagination from 'components/Articles/components/Pagination';
 import useArticles from 'components/Articles/hooks/useArticles';
 import { SSRLayout } from 'components/layout';
+import { COOKIE_KEY } from 'static/url';
 import useMount from 'utils/hooks/state/useMount';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -16,7 +17,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   const pageNumber = typeof page === 'string' ? page : '1';
 
   const queryClient = new QueryClient();
-  const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
+  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
 
   await Promise.all([
     queryClient.prefetchQuery({

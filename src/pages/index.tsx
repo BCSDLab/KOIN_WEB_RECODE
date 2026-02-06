@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next/dist/types';
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { isKoinError } from '@bcsdlab/koin';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { club, articles as articlesApi, banner, timetable } from 'api';
@@ -20,6 +20,7 @@ import { TIMETABLE_FRAME_KEY } from 'components/TimetablePage/hooks/useTimetable
 import { TIMETABLE_INFO_LIST } from 'components/TimetablePage/hooks/useTimetableInfoList';
 import Banner from 'components/ui/Banner';
 import UserInfoModal from 'components/ui/UserInfoModal';
+import { COOKIE_KEY } from 'static/url';
 import { getRecentSemester } from 'utils/timetable/semester';
 import styles from './IndexPage.module.scss';
 
@@ -40,8 +41,8 @@ const getHotClub = async () => {
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
-  const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
-  const userType = context.req.cookies['AUTH_USER_TYPE'] || '';
+  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
+  const userType = context.req.cookies[COOKIE_KEY.AUTH_USER_TYPE] || '';
 
   const [[banners, categories, hotClubInfo, mySemester]] = await Promise.all([
     Promise.all([

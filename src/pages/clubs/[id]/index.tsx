@@ -30,6 +30,7 @@ import ConfirmModal from 'components/Club/NewClubRecruitment/components/ConfirmM
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
+import { COOKIE_KEY } from 'static/url';
 import useLogger from 'utils/hooks/analytics/useLogger';
 import { useDebounce } from 'utils/hooks/debounce/useDebounce';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
@@ -82,7 +83,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   }
 
   const clubId = Number(id);
-  const token = req.cookies['AUTH_TOKEN_KEY'] || '';
+  const token = req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
   const tab = query.tab as TabType | undefined;
   const eventId = query.eventId as string | undefined;
   const numericEventId = eventId ? Number(eventId) : NO_SELECTED_EVENT_ID;

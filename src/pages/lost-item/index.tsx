@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getLostItemArticles } from 'api/articles';
@@ -11,12 +11,13 @@ import useLostItemPagination from 'components/Articles/hooks/useLostItemPaginati
 import { useLostItemSearch } from 'components/Articles/hooks/useLostItemSearch';
 import { LostItemParams, parseLostItemQuery } from 'components/Articles/utils/lostItemQuery';
 import { SSRLayout } from 'components/layout';
+import { COOKIE_KEY } from 'static/url';
 import useMount from 'utils/hooks/state/useMount';
 import styles from './LostItemArticleListPage.module.scss';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const queryClient = new QueryClient();
-  const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
+  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
 
   const fallback: LostItemParams = {
     page: 1,

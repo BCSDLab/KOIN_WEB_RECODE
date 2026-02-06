@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from 'next';
+import type { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { articles } from 'api';
@@ -20,6 +20,7 @@ import useSingleLostItemArticle from 'components/Articles/LostItemDetailPage/hoo
 import { SSRLayout } from 'components/layout';
 import LoginRequiredModal from 'components/modal/LoginRequiredModal';
 import ROUTES from 'static/routes';
+import { COOKIE_KEY } from 'static/url';
 import useMediaQuery from 'utils/hooks/layout/useMediaQuery';
 import useModalPortal from 'utils/hooks/layout/useModalPortal';
 import useBooleanState from 'utils/hooks/state/useBooleanState';
@@ -32,7 +33,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   if (typeof id !== 'string') {
     return { notFound: true };
   }
-  const token = context.req.cookies['AUTH_TOKEN_KEY'] || '';
+  const token = context.req.cookies[COOKIE_KEY.AUTH_TOKEN] || '';
   const articleId = Number(id);
 
   const queryClient = new QueryClient();
